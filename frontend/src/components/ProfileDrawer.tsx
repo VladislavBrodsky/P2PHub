@@ -13,10 +13,10 @@ import {
     Monitor,
     Globe,
     Bell,
-    ExternalLink,
     MessageCircle,
     Copy,
-    Check
+    Check,
+    X // Added Close icon
 } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
 import { useUser } from '../context/UserContext';
@@ -161,6 +161,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                         exit={{ opacity: 0 }}
                         onClick={onClose}
                         className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-[2px]"
+                        style={{ willChange: 'opacity' }}
                     />
 
                     {/* Drawer Content */}
@@ -169,12 +170,24 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                             initial={{ x: '-100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '-100%' }}
-                            transition={{ type: 'spring', damping: 25, stiffness: 200, mass: 0.8 }}
+                            transition={{ type: 'tween', ease: 'circOut', duration: 0.3 }} // Optimized animation
                             className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-5 overflow-y-auto bg-[var(--color-bg-app)] p-6 pt-[max(2rem,calc(env(safe-area-inset-top)+32px))] shadow-[20px_0_60px_rgba(0,0,0,0.1)] ml-0 mr-auto"
-                            style={{ marginLeft: 'max(0px, calc(50% - 32rem / 2))', left: 0 }}
+                            style={{
+                                marginLeft: 'max(0px, calc(50% - 32rem / 2))',
+                                left: 0,
+                                willChange: 'transform' // GPU hint
+                            }}
                         >
+                            {/* Close Button */}
+                            <button
+                                onClick={onClose}
+                                className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-[var(--color-text-secondary)]"
+                            >
+                                <X className="h-5 w-5" />
+                            </button>
+
                             {/* User Profile Header */}
-                            <div className="flex flex-col items-center gap-4 px-2">
+                            <div className="flex flex-col items-center gap-4 px-2 mt-4">
                                 <div className="group relative">
                                     <div className="relative h-20 w-20 overflow-hidden rounded-full border-4 border-white shadow-xl bg-white">
                                         <img
@@ -240,7 +253,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                 ))}
                             </div>
 
-                            {/* Wallet Integration (Moved to Bottom) */}
+                            {/* Wallet Integration */}
                             <div className="px-1 mt-auto">
                                 <motion.button
                                     whileTap={{ scale: 0.98 }}
