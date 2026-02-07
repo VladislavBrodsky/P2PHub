@@ -5,43 +5,49 @@ import CardsPage from './pages/Cards';
 import CommunityPage from './pages/Community';
 import ReferralPage from './pages/Referral';
 import LeaderboardPage from './pages/Leaderboard';
-import { miniApp, useLaunchParams, backButton } from '@telegram-apps/sdk-react';
+import { miniApp, backButton, viewport } from '@telegram-apps/sdk-react';
 import { UserProvider } from './context/UserContext';
 
 function App() {
     const [activeTab, setActiveTab] = useState('home');
 
     useEffect(() => {
-        try {
-            // Initialize SDK
-            if (miniApp.mount.isAvailable()) miniApp.mount();
-            if (miniApp.ready.isAvailable()) miniApp.ready();
+        const initTMA = async () => {
+            try {
+                // Initialize SDK components
+                if (miniApp.mount.isAvailable()) miniApp.mount();
+                if (miniApp.ready.isAvailable()) miniApp.ready();
 
-            // Expand app for better UX
-            const expandApp = () => {
+                // Use Viewport for true full-screen/expanded state
+                if (viewport.mount.isAvailable()) {
+                    try {
+                        await viewport.mount();
+                        if (viewport.expand.isAvailable()) {
+                            viewport.expand();
+                        }
+                    } catch (e) {
+                        console.error('Viewport mount error:', e);
+                    }
+                }
+
                 if (window.Telegram?.WebApp) {
                     window.Telegram.WebApp.ready();
                     window.Telegram.WebApp.expand();
                 }
-            };
-            expandApp();
-            setTimeout(expandApp, 500);
-            setTimeout(expandApp, 2000);
 
-            // Handle back button visibility
-            if (backButton.mount.isAvailable()) {
-                backButton.mount();
-                if (activeTab === 'home') {
-                    backButton.hide();
-                } else {
-                    backButton.show();
-                    backButton.onClick(() => setActiveTab('home'));
+                if (backButton.mount.isAvailable()) {
+                    backButton.mount();
+                    if (activeTab === 'home') {
+                        backButton.hide();
+                    } else {
+                        backButton.show();
+                        backButton.onClick(() => setActiveTab('home'));
+                    }
                 }
+            } catch (e) {
+                console.log('Not in TMA environment or SDK error:', e);
             }
-        } catch (e) {
-            console.log('Not in TMA environment or SDK error:', e);
-        }
-    }, [activeTab]);
+        }, [activeTab]);
 
     return (
         <UserProvider>
