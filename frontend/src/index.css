@@ -98,6 +98,16 @@
       transform: translateY(-10px);
     }
   }
+
+  @keyframes text-shimmer {
+    0% {
+      background-position: 0% center;
+    }
+
+    100% {
+      background-position: 200% center;
+    }
+  }
 }
 
 @utility content-main-padding {
@@ -366,6 +376,11 @@ html {
     animation: shimmer 2s infinite linear;
     background: linear-gradient(to right, #f1f5f9 4%, #e2e8f0 25%, #f1f5f9 36%);
     background-size: 1000px 100%;
+  }
+
+  .text-animate-shimmer {
+    background-size: 200% auto;
+    animation: text-shimmer 4s linear infinite;
   }
 
   .dark .animate-shimmer {
