@@ -27,10 +27,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     const refreshUser = async () => {
         try {
-            // In a real TMA environment, this header would be populated
-            // For local dev, we might need a fallback or mock
             const initData = window.Telegram?.WebApp?.initData || '';
-            const res = await axios.get('http://localhost:8000/api/partner/me', {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            const res = await axios.get(`${apiUrl}/api/partner/me`, {
                 headers: {
                     'X-Telegram-Init-Data': initData
                 }
