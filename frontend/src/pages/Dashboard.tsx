@@ -65,7 +65,33 @@ export default function Dashboard() {
                         <h1 className="text-4xl font-extrabold tracking-tighter text-[var(--color-text-primary)] leading-[1.1]">
                             Together,<br />
                             Let's Build a Brand<br />
-                            <span className="text-[var(--color-brand-blue)]">That Truly Connects</span>
+                            <motion.span
+                                className="inline-block"
+                                style={{
+                                    background: 'linear-gradient(to right, #3B82F6, #8B5CF6, #3B82F6)',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    backgroundSize: '200% auto'
+                                }}
+                                animate={{
+                                    backgroundPosition: ['0% center', '200% center'],
+                                    scale: [1, 1.05, 1],
+                                }}
+                                transition={{
+                                    backgroundPosition: {
+                                        duration: 3,
+                                        repeat: Infinity,
+                                        ease: "linear"
+                                    },
+                                    scale: {
+                                        duration: 2,
+                                        repeat: Infinity,
+                                        ease: "easeInOut"
+                                    }
+                                }}
+                            >
+                                That Truly Connects
+                            </motion.span>
                         </h1>
                     </div>
 
