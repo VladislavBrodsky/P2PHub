@@ -4,6 +4,7 @@ import { useHaptic } from '../hooks/useHaptic';
 import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 import { Button } from '../components/ui/Button';
 import { useUser } from '../context/UserContext';
+import { PersonalizationCard } from '../components/PersonalizationCard';
 
 // Mock translation function for now, replace with actual i18n if needed
 const t = (key: string, defaultValue: string) => defaultValue;
@@ -39,6 +40,10 @@ export default function CommunityPage() {
 
     return (
         <div className="flex flex-col min-h-[85vh] px-4 pt-4 pb-32">
+            {/* 0. Personalization Section */}
+            <div className="mb-6">
+                <PersonalizationCard />
+            </div>
 
             {/* 1. Invitation Method */}
             <div className="mb-8">
@@ -122,16 +127,21 @@ export default function CommunityPage() {
                 </div>
             </div>
 
-            {/* 3. Sticky Bottom Button */}
-            <div className="fixed bottom-24 left-0 right-0 px-4 z-50">
+            {/* 3. Integrated Action Button */}
+            <div className="pt-8 mb-4">
                 <Button
                     variant="primary"
-                    className="w-full text-base h-16 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] bg-action-black font-black uppercase tracking-widest"
+                    className="w-full h-16 bg-action-black text-white rounded-2xl font-black text-lg shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)] flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
                     onClick={() => notification('success')}
                 >
-                    Expand Network
+                    <span>Expand Network</span>
+                    <div className="w-1 h-1 rounded-full bg-white/20" />
+                    <span className="text-white/60 text-xs font-bold tracking-widest">PRO</span>
                 </Button>
             </div>
+
+            {/* Extra Spacing at bottom */}
+            <div className="h-24 pointer-events-none" />
 
         </div>
     );

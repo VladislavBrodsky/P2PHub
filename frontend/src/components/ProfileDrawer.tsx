@@ -22,6 +22,7 @@ import {
 import { useHaptic } from '../hooks/useHaptic';
 import { useUser } from '../context/UserContext';
 import { useTonConnectUI, useTonAddress, useTonWallet } from '@tonconnect/ui-react';
+import { PersonalizationCard } from './PersonalizationCard';
 
 interface ProfileDrawerProps {
     isOpen: boolean;
@@ -208,33 +209,10 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                             </button> */}
 
                             {/* Scrollable Content */}
-                            <div className="flex-1 overflow-y-auto px-6 pb-10 flex flex-col gap-5">
-                                {/* User Profile Header */}
-                                <div className="flex flex-col items-center gap-4 px-2 mt-4">
-                                    <div className="group relative">
-                                        <div className="relative h-20 w-20 overflow-hidden rounded-full border-4 border-white shadow-xl bg-white">
-                                            <img
-                                                src={user?.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username || 'partner'}`}
-                                                alt="Avatar"
-                                                className="h-full w-full object-cover"
-                                            />
-                                        </div>
-                                        <div className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-[var(--color-text-primary)] ring-4 ring-[var(--color-bg-app)]">
-                                            <span className="text-[10px] font-black text-[var(--color-bg-surface)]">
-                                                {stats.level}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div className="text-center space-y-1">
-                                        <h3 className="text-lg font-black tracking-tight text-[var(--color-text-primary)]">
-                                            {user?.first_name || 'Partner'} {user?.last_name || ''}
-                                        </h3>
-                                        <div className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[var(--color-text-secondary)] shadow-sm border border-[var(--color-brand-border)]">
-                                            <Trophy className="h-3 w-3 text-amber-500" />
-                                            {stats.rank}
-                                        </div>
-                                    </div>
+                            <div className="flex-1 overflow-y-auto px-5 pb-10 flex flex-col gap-5">
+                                {/* User Profile Header - Standardized */}
+                                <div className="mt-4">
+                                    <PersonalizationCard variant="compact" />
                                 </div>
 
                                 {/* Menu Sections */}

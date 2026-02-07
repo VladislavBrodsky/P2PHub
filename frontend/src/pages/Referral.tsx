@@ -164,17 +164,20 @@ export default function ReferralPage() {
                 </div>
             </Section>
 
-            {/* Sticky Action */}
-            <div className="fixed bottom-24 left-0 right-0 px-4 z-50">
+            {/* 3. Integrated Action Button */}
+            <div className="mt-8 mb-4">
                 <Button
                     variant="primary"
-                    className="w-full h-14 text-base shadow-xl"
+                    className="w-full h-16 bg-action-black text-white rounded-2xl font-black text-lg shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)] flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
                     onClick={handleInvite}
-                    leftIcon={<DollarSign className="w-5 h-5" />}
                 >
-                    Invite Friends & Earn
+                    <DollarSign className="w-5 h-5" />
+                    <span>Invite Friends & Earn</span>
                 </Button>
             </div>
+
+            {/* Extra Spacing at bottom */}
+            <div className="h-24 pointer-events-none" />
         </div>
     );
 }
