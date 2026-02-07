@@ -130,21 +130,23 @@ export default function Dashboard() {
                         </h1>
                     </div>
 
-                    <div className="space-y-1 px-4">
-                        <h2 className="text-xl font-black text-[var(--color-text-secondary)] tracking-tight leading-tight max-w-[320px] mx-auto">
-                            Join the Global Financial Shift and <span className="text-[var(--color-text-primary)] uppercase tracking-wider block mt-1">Digital Gold Rush</span>
-                        </h2>
+                    {/* Ticker moved here with padding */}
+                    <motion.div variants={item} className="-rotate-1 py-8 scale-[1.05]">
+                        <Ticker />
+                    </motion.div>
+
+                    <div className="space-y-6">
+                        <div className="space-y-1 px-4">
+                            <h2 className="text-xl font-black text-[var(--color-text-secondary)] tracking-tight leading-tight max-w-[320px] mx-auto">
+                                Join the Global Financial Shift and <span className="text-[var(--color-text-primary)] uppercase tracking-wider block mt-1">Digital Gold Rush</span>
+                            </h2>
+                        </div>
+
+                        <p className="text-[var(--color-text-secondary)] mx-auto max-w-[340px] text-xs font-medium leading-relaxed opacity-80 px-4">
+                            The global market is shifting. Traditional finance is slow, closed, and filled with friction. <strong className="text-[var(--color-text-primary)] font-bold">Pintopay</strong> is the bridge to a borderless era. We're not just building an app; we're launching a movement.
+                        </p>
                     </div>
-
-                    <p className="text-[var(--color-text-secondary)] mx-auto max-w-[340px] text-xs font-medium leading-relaxed opacity-80">
-                        The global market is shifting. Traditional finance is slow, closed, and filled with friction. <strong className="text-[var(--color-text-primary)] font-bold">Pintopay</strong> is the bridge to a borderless era. We're not just building an app; we're launching a movement.
-                    </p>
                 </div>
-            </motion.div>
-
-            {/* 2. Ticker */}
-            <motion.div variants={item} className="-rotate-1 my-1 scale-[1.02]">
-                <Ticker />
             </motion.div>
 
 
