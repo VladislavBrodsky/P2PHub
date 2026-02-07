@@ -1,5 +1,5 @@
 # Frontend Dockerfile
-FROM node:20-slim AS build
+FROM node:20 AS build
 
 WORKDIR /app
 
@@ -13,18 +13,14 @@ COPY . .
 RUN npm run build
 
 # Serving stage using Node.js 'serve'
-FROM node:20-slim
+FROM node:20
 
 WORKDIR /app
-
-# Install serve globally
-RUN npm install -g serve
 
 # Copy built app
 COPY --from=build /app/dist ./dist
 
-# Expose Railway's PORT (default 80)
 # Start serve
 # -s: Single-page application (rewrites all not-found requests to index.html)
 # -l: Listen on specific port (default to 80 if PORT is not set)
-CMD ["/bin/sh", "-c", "serve -s dist -l ${PORT:-80}"]
+CMD ["/bin/sh", "-c", "npx serve -s dist -l ${PORT:-80}"]
