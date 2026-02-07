@@ -34,10 +34,15 @@ function App() {
                     }
                 }
 
-                // Fallback for older environments
+                // Fallback for older environments and newer Fullscreen API
                 if (window.Telegram?.WebApp) {
                     window.Telegram.WebApp.ready();
-                    window.Telegram.WebApp.expand();
+                    // New Fullscreen API (v8.0+)
+                    if ((window.Telegram.WebApp as any).requestFullscreen) {
+                        (window.Telegram.WebApp as any).requestFullscreen();
+                    } else {
+                        window.Telegram.WebApp.expand();
+                    }
                 }
 
                 // Handle back button

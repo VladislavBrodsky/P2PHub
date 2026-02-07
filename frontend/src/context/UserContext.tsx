@@ -39,14 +39,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 initDataRaw = window.Telegram?.WebApp?.initData || '';
             }
 
-            const apiUrl = import.meta.env.VITE_API_URL || 'https://p2phub-production.up.railway.app';
-            console.log('[DEBUG] refreshUser: Fetching with initData length:', initDataRaw.length);
-            console.log('[DEBUG] refreshUser: API URL:', apiUrl);
+            const PROD_URL = 'https://p2phub-backend-production.up.railway.app';
+            const apiUrl = import.meta.env.VITE_API_URL || PROD_URL;
+            console.log('[DEBUG] refreshUser: Fetching from:', apiUrl);
 
             const res = await axios.get(`${apiUrl}/api/partner/me`, {
                 headers: {
                     'X-Telegram-Init-Data': initDataRaw
-                }
+                },
+                timeout: 5000 // Add timeout to avoid hanging
             });
             console.log('[DEBUG] refreshUser: Success:', res.data.first_name);
             setUser(res.data);
