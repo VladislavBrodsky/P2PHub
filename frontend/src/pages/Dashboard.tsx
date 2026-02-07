@@ -121,7 +121,7 @@ export default function Dashboard() {
 
                             {/* XP Progress Bar */}
                             <div className="w-full space-y-1.5 mt-2">
-                                <div className="flex justify-between items-center px-1">
+                                <div className="flex justify-center items-center px-1 gap-10">
                                     <span className="text-[10px] font-black text-slate-400/80 tracking-widest uppercase">XP BALANCE</span>
                                     <span className="text-[11px] font-black text-[var(--color-text-primary)]">
                                         {xpProgress.current} <span className="text-slate-300 font-medium">/</span> {xpProgress.total}
