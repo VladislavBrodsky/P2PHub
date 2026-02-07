@@ -9,15 +9,10 @@ const AVATARS = [
 ];
 
 const CRYPTO_ICONS = [
-    { name: 'BTC', color: '#F7931A' }, // Bitcoin Orange
-    { name: 'ETH', color: '#627EEA' }, // Ethereum Blue
-    { name: 'USDT', color: '#26A17B' } // Tether Green
+    { name: 'BTC', color: '#F7931A', gradientStart: '#FFAB40', gradientEnd: '#E67E00' },
+    { name: 'ETH', color: '#627EEA', gradientStart: '#8CA5FF', gradientEnd: '#4559B5' },
+    { name: 'USDT', color: '#26A17B', gradientStart: '#50C9A3', gradientEnd: '#1A7D5E' }
 ];
-
-// Helper to adjust color brightness without extra dependencies
-const adjustColor = (color: string, amount: number) => {
-    return '#' + color.replace(/^#/, '').replace(/../g, color => ('0' + Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
-}
 
 // Crypto SVG Icons
 const CryptoIcon = ({ name }: { name: string }) => {
@@ -62,7 +57,7 @@ export const CommunityOrbit = () => {
     ];
 
     return (
-        <div className="relative flex h-[360px] w-full items-center justify-center overflow-hidden">
+        <div className="relative flex h-[400px] w-full items-center justify-center overflow-visible"> {/* overflow-visible fix */}
             {/* Background Particles/Stars */}
             {[...Array(6)].map((_, i) => (
                 <motion.div
@@ -157,7 +152,7 @@ const CentralLogo = () => (
 
 type OrbitItem =
     | { type: 'avatar'; src: string }
-    | { type: 'crypto'; name: string; color: string };
+    | { type: 'crypto'; name: string; color: string; gradientStart?: string; gradientEnd?: string };
 
 const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; total: number }) => {
     const radius = 135; // Fine-tuned radius
@@ -209,11 +204,11 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
                                 style={{ backgroundColor: item.color }}
                             />
 
-                            {/* Vibrant Glass Token */}
+                            {/* Vibrant Glass Token with Defined Gradient */}
                             <div
-                                className="relative flex h-full w-full items-center justify-center rounded-full border-2 border-white/90 shadow-lg transition-transform duration-300 group-hover:scale-110"
+                                className="relative flex h-full w-full items-center justify-center rounded-full border-2 border-white/90 shadow-lg transition-transform duration-300 group-hover:scale-110 cursor-pointer"
                                 style={{
-                                    background: `linear-gradient(135deg, ${item.color}, ${adjustColor(item.color, -40)})`,
+                                    background: `linear-gradient(135deg, ${item.gradientStart || item.color}, ${item.gradientEnd || item.color})`,
                                     boxShadow: `0 8px 16px -4px ${item.color}80`
                                 }}
                             >
