@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from '../Header';
 import ProfileDrawer from '../ProfileDrawer';
 import BottomNav from '../BottomNav';
 import { motion, AnimatePresence } from 'framer-motion';
+import { backButton } from '@telegram-apps/sdk-react';
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -14,13 +14,27 @@ interface LayoutProps {
 export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    // Handle Back Button for Drawer
+    useEffect(() => {
+        let cleanup: VoidFunction | undefined;
+        if (isMenuOpen) {
+            backButton.show();
+            cleanup = backButton.onClick(() => setIsMenuOpen(false));
+        } else if (activeTab === 'home') {
+            backButton.hide();
+        }
+        return () => {
+            if (cleanup) cleanup();
+        };
+    }, [isMenuOpen, activeTab]);
+
     const isStaging = import.meta.env.VITE_APP_ENV === 'staging';
 
     return (
         <div className="selection:bg-brand-blue/10 relative min-h-dvh overflow-x-hidden bg-[var(--color-bg-app)] text-[var(--color-text-primary)]">
             {/* Staging Ribbon */}
             {isStaging && (
-                <div className="fixed top-0 left-0 z-100 w-full bg-yellow-400 text-center text-xs font-bold text-slate-900 shadow-sm py-1">
+                <div className="fixed top-0 left-0 z-[100] w-full bg-yellow-400 text-center text-xs font-bold text-slate-900 shadow-sm py-1">
                     🚧 STAGING ENVIRONMENT 🚧
                 </div>
             )}

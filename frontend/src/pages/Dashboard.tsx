@@ -4,11 +4,10 @@ import axios from 'axios';
 import { Section } from '../components/Section';
 import { CommunityOrbit } from '../components/Marketing/CommunityOrbit';
 import { Ticker } from '../components/Marketing/Ticker';
-import { BentoFeature } from '../components/Marketing/BentoFeature';
 import { Skeleton } from '../components/Skeleton';
 import { Button } from '../components/ui/Button';
 import { useHaptic } from '../hooks/useHaptic';
-import { Star, Users, Zap, Globe, Shield, Wallet, ChevronRight, Sparkles } from 'lucide-react';
+import { Star, Users, Zap, Wallet, ChevronRight, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { useUser } from '../context/UserContext';
 
@@ -67,7 +66,7 @@ export default function Dashboard() {
             animate="show"
         >
             {/* 0. Personalization Section */}
-            <motion.div variants={item} className="px-5">
+            <motion.div variants={item} className="px-4">
                 <div className="flex items-center gap-4">
                     <div className="relative group">
                         <div className="h-16 w-16 overflow-hidden rounded-2xl border border-[var(--color-brand-border)] bg-white shadow-premium transition-all duration-300 group-hover:scale-105 group-hover:rotate-2">
@@ -94,7 +93,7 @@ export default function Dashboard() {
                                 <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">
                                     LVL {user?.level || 1}
                                 </span>
-                                <div className="h-2 w-[1px] bg-slate-300" />
+                                <div className="h-2 w-px bg-slate-300" />
                                 <span className="text-[9px] font-black uppercase tracking-widest text-[var(--color-brand-blue)]">
                                     {user?.level && user.level > 10 ? 'Elite' : 'Pioneer'}
                                 </span>
