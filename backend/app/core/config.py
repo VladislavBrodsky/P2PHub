@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     # Optional with sensible defaults
     REDIS_URL: str = "redis://localhost:6379/0"
     PORT: int = 8000
+    FRONTEND_URL: str = "https://p2phub-frontend.up.railway.app"
     
     class Config:
         env_file = ".env"

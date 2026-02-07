@@ -14,7 +14,7 @@ bot = Bot(token=settings.BOT_TOKEN)
 dp = Dispatcher()
 
 # TMA URL (Railway URL or local tunnel)
-WEB_APP_URL = "https://p2phub-frontend.up.railway.app" # Placeholder for Railway
+WEB_APP_URL = settings.FRONTEND_URL
 
 from app.core.keyboards import get_main_menu_keyboard
 
