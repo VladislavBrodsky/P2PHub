@@ -11,6 +11,7 @@ interface User {
     photo_url: string | null;
     balance: number;
     level: number;
+    xp: number;
     referral_code: string;
 }
 
@@ -68,6 +69,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     photo_url: null,
                     balance: 0,
                     level: 1,
+                    xp: 0,
                     referral_code: 'P2P-DEV'
                 });
             }
@@ -90,6 +92,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     photo_url: null,
                     balance: 5000,
                     level: 5,
+                    xp: 150,
                     referral_code: 'DEV-TEST'
                 });
                 setIsLoading(false);

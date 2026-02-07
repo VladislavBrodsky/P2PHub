@@ -10,6 +10,7 @@ import { useHaptic } from '../hooks/useHaptic';
 import { Wallet, ChevronRight, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { useUser } from '../context/UserContext';
+import { getRank, getXPProgress } from '../utils/ranking';
 
 const PROD_URL = 'https://p2phub-backend-production.up.railway.app';
 const API_BASE = (import.meta.env.VITE_API_URL || PROD_URL) + '/api';
@@ -31,8 +32,12 @@ export default function Dashboard() {
     const stats = user || {
         balance: 0,
         level: 1,
+        xp: 0,
         referral_code: 'P2P-DEV'
     };
+
+    const currentRank = getRank(stats.level || 1);
+    const xpProgress = getXPProgress(stats.level || 1, stats.xp || 0);
 
     const referralLink = `https://t.me/pintopay_bot?start=${stats.referral_code}`;
 
@@ -65,11 +70,15 @@ export default function Dashboard() {
             initial="hidden"
             animate="show"
         >
-            {/* 0. Personalization Section */}
-            <motion.div variants={item} className="px-4">
-                <div className="flex items-center gap-4">
+            {/* 0. Personalization Section - Centered & Premium */}
+            <motion.div variants={item} className="px-4 pt-4">
+                <div className="flex flex-col items-center text-center gap-5">
+                    {/* Centered Avatar with Level Badge */}
                     <div className="relative group">
-                        <div className="h-16 w-16 overflow-hidden rounded-2xl border border-[var(--color-brand-border)] bg-white shadow-premium transition-all duration-300 group-hover:scale-105 group-hover:rotate-2">
+                        <motion.div
+                            whileHover={{ scale: 1.05, rotate: 2 }}
+                            className="h-24 w-24 overflow-hidden rounded-[2rem] border-2 border-[var(--color-brand-border)] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] transition-all duration-300"
+                        >
                             {isUserLoading ? (
                                 <div className="h-full w-full bg-slate-100 animate-pulse" />
                             ) : (
@@ -79,24 +88,60 @@ export default function Dashboard() {
                                     className="h-full w-full object-cover"
                                 />
                             )}
-                        </div>
-                        <div className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-brand-blue)] text-white shadow-premium ring-2 ring-[var(--color-bg-app)]">
-                            <Sparkles className="h-3 w-3 fill-current" />
+                        </motion.div>
+
+                        {/* Level Badge Integrated into Avatar */}
+                        <div className="absolute -bottom-2 -right-2 flex h-8 w-8 items-center justify-center rounded-xl bg-[var(--color-brand-blue)] text-white shadow-premium ring-4 ring-[var(--color-bg-app)]">
+                            <span className="text-[10px] font-black">{user?.level || 1}</span>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-0.5">
-                        <h2 className="text-2xl font-black tracking-tighter text-[var(--color-text-primary)] leading-none">
-                            Hi, {user?.first_name ? (user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name) : 'Partner'}!
+
+                    <div className="flex flex-col items-center gap-2">
+                        <h2 className="text-3xl font-black tracking-tight text-[var(--color-text-primary)]">
+                            Hi, {user?.first_name || 'Partner'}!
                         </h2>
-                        <div className="flex items-center gap-2 mt-1">
-                            <div className="flex items-center gap-2 rounded-lg bg-slate-50 px-2.5 py-1 border border-slate-100">
-                                <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">
-                                    LVL {user?.level || 1}
+
+                        {/* Ranking & XP Section */}
+                        <div className="flex flex-col items-center gap-3 w-full max-w-[280px]">
+                            {/* Rank Badge */}
+                            <motion.div
+                                whileHover={{ scale: 1.05 }}
+                                className="flex items-center gap-2 px-5 py-2 rounded-2xl border-2 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.1)] backdrop-blur-xl transition-all duration-500"
+                                style={{
+                                    backgroundColor: `${currentRank.badgeColor}10`,
+                                    borderColor: `${currentRank.badgeColor}30`,
+                                    color: currentRank.badgeColor
+                                }}
+                            >
+                                <Sparkles className="h-4 w-4" style={{ color: currentRank.badgeColor }} />
+                                <span className="text-[11px] font-black uppercase tracking-[0.2em]">
+                                    {currentRank.name}
                                 </span>
-                                <div className="h-2 w-px bg-slate-300" />
-                                <span className="text-[9px] font-black uppercase tracking-widest text-[var(--color-brand-blue)]">
-                                    {user?.level && user.level > 10 ? 'Elite' : 'Pioneer'}
-                                </span>
+                            </motion.div>
+
+                            {/* XP Progress Bar */}
+                            <div className="w-full space-y-1.5 mt-2">
+                                <div className="flex justify-between items-center px-1">
+                                    <span className="text-[10px] font-black text-slate-400/80 tracking-widest uppercase">XP BALANCE</span>
+                                    <span className="text-[11px] font-black text-[var(--color-text-primary)]">
+                                        {xpProgress.current} <span className="text-slate-300 font-medium">/</span> {xpProgress.total}
+                                    </span>
+                                </div>
+                                <div className="h-3.5 w-full bg-slate-100/50 rounded-full overflow-hidden p-1 border border-slate-200/40 backdrop-blur-sm shadow-inner">
+                                    <motion.div
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${xpProgress.percent}%` }}
+                                        transition={{ duration: 1.5, ease: 'circOut' }}
+                                        className="h-full rounded-full shadow-[0_2px_10px_-2px_rgba(0,0,0,0.1)] relative overflow-hidden"
+                                        style={{ backgroundColor: currentRank.badgeColor }}
+                                    >
+                                        <motion.div
+                                            animate={{ x: ['-100%', '200%'] }}
+                                            transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+                                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                                        />
+                                    </motion.div>
+                                </div>
                             </div>
                         </div>
                     </div>
