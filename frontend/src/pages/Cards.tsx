@@ -122,7 +122,7 @@ export default function CardsPage() {
                     <div className="bg-white rounded-[2rem] p-3 pl-3 pr-4 flex items-center justify-between shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] border border-slate-100/60">
                         <div className="flex items-center gap-4">
                             {/* Black Tag Icon with Bonus */}
-                            <div className="relative group overflow-hidden bg-[#0F172A] rounded-[0.75rem] px-3 py-2 flex items-center gap-1.5 shadow-md transition-all active:scale-95">
+                            <div className="relative group overflow-hidden bg-text-primary rounded-[0.75rem] px-3 py-2 flex items-center gap-1.5 shadow-md transition-all active:scale-95">
                                 <div className="w-1.5 h-1.5 rounded-full bg-white opacity-90 shrink-0" />
                                 <span className="text-[11px] font-black text-white whitespace-nowrap tracking-wider">
                                     {currentCard.bonus}
@@ -139,7 +139,7 @@ export default function CardsPage() {
                         {/* Pay Pill */}
                         <div className="bg-white px-3.5 py-2 rounded-[1rem] border border-slate-100 shadow-sm flex items-center gap-2 active:bg-slate-50 transition-colors">
                             <Apple size={16} strokeWidth={0} fill="black" />
-                            <span className="text-[13px] font-extrabold text-[#0F172A]">Pay</span>
+                            <span className="text-[13px] font-extrabold text-text-primary">Pay</span>
                         </div>
                     </div>
 
@@ -199,7 +199,7 @@ export default function CardsPage() {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={handleGetCard}
-                            className="w-full h-16 bg-[#1C1C1E] text-white rounded-2xl font-black text-lg shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)] flex items-center justify-center gap-3 transition-transform"
+                            className="w-full h-16 bg-action-black text-white rounded-2xl font-black text-lg shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)] flex items-center justify-center gap-3 transition-transform"
                         >
                             <span>Issue card</span>
                             <div className="w-1 h-1 rounded-full bg-white/20" />

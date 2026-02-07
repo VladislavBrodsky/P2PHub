@@ -46,15 +46,15 @@ export default function CommunityPage() {
 
                 <div className="space-y-3">
                     {/* QR Code Row */}
-                    <div className="rounded-lg border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-4 shadow-sm flex items-center justify-between hover:bg-[var(--color-bg-glass)] transition-colors">
+                    <div className="rounded-2xl border border-white/60 bg-white/40 backdrop-blur-md p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex items-center justify-between hover:bg-white/60 transition-all active:scale-[0.98]">
                         <div className="flex items-center gap-3">
-                            <div className="bg-[var(--color-bg-glass)] p-2 rounded-xl border border-[var(--color-brand-border)]">
-                                <QrCode className="w-6 h-6 text-[var(--color-text-primary)]" />
+                            <div className="bg-white p-2 rounded-xl border border-slate-100 shadow-sm">
+                                <QrCode className="w-5 h-5 text-text-primary" />
                             </div>
-                            <span className="font-bold text-[var(--color-text-primary)] text-sm">Personal QR Portfolio</span>
+                            <span className="font-bold text-text-primary text-sm tracking-tight">Personal QR Portfolio</span>
                         </div>
                         <button
-                            className="text-[var(--color-text-primary)] text-sm font-black uppercase tracking-widest px-2"
+                            className="text-brand-blue text-[10px] font-black uppercase tracking-widest px-2"
                             onClick={() => selection()}
                         >
                             Generate
@@ -62,17 +62,17 @@ export default function CommunityPage() {
                     </div>
 
                     {/* Referral Link Row */}
-                    <div className="rounded-lg border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-4 shadow-sm flex items-center justify-between hover:bg-[var(--color-bg-glass)] transition-colors">
+                    <div className="rounded-2xl border border-white/60 bg-white/40 backdrop-blur-md p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex items-center justify-between hover:bg-white/60 transition-all active:scale-[0.98]">
                         <div className="flex items-center gap-3 overflow-hidden">
-                            <div className="bg-[var(--color-bg-glass)] p-2 rounded-xl border border-[var(--color-brand-border)] shrink-0">
-                                <div className="w-6 h-6 flex items-center justify-center font-bold text-[var(--color-text-primary)]">🔗</div>
+                            <div className="bg-white p-2 rounded-xl border border-slate-100 shadow-sm shrink-0">
+                                <div className="w-5 h-5 flex items-center justify-center text-lg">🔗</div>
                             </div>
                             <div className="flex flex-col overflow-hidden">
-                                <span className="font-bold text-[var(--color-text-primary)] text-sm">Referral Network Link</span>
-                                <span className="text-xs text-[var(--color-text-secondary)] truncate max-w-[150px] font-mono">{referralLink}</span>
+                                <span className="font-bold text-text-primary text-sm tracking-tight">Referral Network Link</span>
+                                <span className="text-[10px] text-slate-400 truncate max-w-[150px] font-mono leading-none mt-1">{referralLink}</span>
                             </div>
                         </div>
-                        <button onClick={copyLink} className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] p-2 active:scale-90 transition-all">
+                        <button onClick={copyLink} className="text-slate-400 hover:text-text-primary p-2 active:scale-90 transition-all">
                             <Copy className="w-5 h-5" />
                         </button>
                     </div>
@@ -126,7 +126,7 @@ export default function CommunityPage() {
             <div className="fixed bottom-24 left-0 right-0 px-4 z-50">
                 <Button
                     variant="primary"
-                    className="w-full text-lg h-16 shadow-2xl shadow-[var(--color-brand-dark)]/20"
+                    className="w-full text-base h-16 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] bg-action-black font-black uppercase tracking-widest"
                     onClick={() => notification('success')}
                 >
                     Expand Network

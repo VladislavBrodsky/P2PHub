@@ -67,33 +67,33 @@ export default function ReferralPage() {
                             {isUserLoading ? (
                                 <Skeleton className="h-10 w-32" />
                             ) : (
-                                <div className="flex items-baseline gap-1">
+                                <div className="flex items-baseline gap-2">
                                     <span className="text-[var(--color-text-primary)] text-5xl font-black tracking-tighter">
                                         ${(stats.balance || 0).toLocaleString()}
                                     </span>
-                                    <span className="text-sm font-bold text-[var(--color-text-secondary)]">USD</span>
+                                    <span className="text-sm font-black text-brand-blue tracking-wider">USD</span>
                                 </div>
                             )}
                         </div>
-                        <div className="bg-white border-[var(--color-brand-border)] flex h-12 w-12 items-center justify-center rounded-2xl border shadow-premium transition-transform hover:rotate-12">
-                            <Star className="text-[var(--color-brand-blue)] fill-[var(--color-brand-blue)] h-6 w-6" />
+                        <div className="bg-white border-[var(--color-brand-border)] flex h-14 w-14 items-center justify-center rounded-2xl border shadow-premium transition-all hover:rotate-12 hover:scale-110">
+                            <Star className="text-[var(--color-brand-blue)] fill-[var(--color-brand-blue)] h-7 w-7" />
                         </div>
                     </div>
 
-                    <div className="relative mt-10 flex gap-4">
+                    <div className="relative mt-12 flex gap-4">
                         <Button
                             variant="primary"
-                            className="h-12 flex-1 rounded-2xl font-bold shadow-premium bg-[var(--color-text-primary)] text-white hover:scale-[1.02] active:scale-[0.98] transition-all"
+                            className="h-14 flex-1 rounded-2xl font-black text-[13px] uppercase tracking-widest shadow-[0_15px_30px_-10px_rgba(0,0,0,0.2)] bg-action-black text-white hover:scale-[1.02] active:scale-[0.98] transition-all"
                             onClick={() => selection()}
                         >
                             Withdraw
                         </Button>
                         <Button
                             variant="secondary"
-                            className="h-12 flex-1 rounded-2xl font-bold border-[var(--color-brand-border)] bg-transparent text-[var(--color-text-primary)] hover:bg-[var(--color-bg-app)] active:scale-[0.98] transition-all"
+                            className="h-14 flex-1 rounded-2xl font-black text-[13px] uppercase tracking-widest border border-[var(--color-brand-border)] bg-white text-[var(--color-text-primary)] hover:bg-slate-50 active:scale-[0.98] transition-all"
                             onClick={() => selection()}
                         >
-                            Activity
+                            History
                         </Button>
                     </div>
                 </div>
