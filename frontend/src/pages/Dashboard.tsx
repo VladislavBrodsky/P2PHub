@@ -12,7 +12,7 @@ import { Star, Users, Zap, Globe, Shield, Wallet, ChevronRight, Sparkles } from 
 import { useState } from 'react';
 import { useUser } from '../context/UserContext';
 
-const API_BASE = 'http://localhost:8000/api';
+const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:8000') + '/api';
 
 export default function Dashboard() {
     const { selection } = useHaptic();
