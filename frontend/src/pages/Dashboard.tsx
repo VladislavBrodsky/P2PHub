@@ -7,7 +7,7 @@ import { Ticker } from '../components/Marketing/Ticker';
 import { Skeleton } from '../components/Skeleton';
 import { Button } from '../components/ui/Button';
 import { useHaptic } from '../hooks/useHaptic';
-import { Star, Users, Zap, Wallet, ChevronRight, Sparkles } from 'lucide-react';
+import { Wallet, ChevronRight, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { useUser } from '../context/UserContext';
 
@@ -147,69 +147,6 @@ export default function Dashboard() {
                 <Ticker />
             </motion.div>
 
-            {/* 3. Main Stats - Earning Focus */}
-            <motion.div variants={item} className="px-4">
-                <div className="relative overflow-hidden rounded-3xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-8 shadow-premium transition-all duration-300 hover:shadow-float">
-                    <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[var(--color-brand-blue)]/5 blur-[80px]" />
-                    <div className="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[var(--color-success)]/5 blur-[80px]" />
-
-                    <div className="relative flex items-start justify-between">
-                        <div>
-                            <p className="text-[10px] mb-2 font-black uppercase tracking-[0.2em] text-[var(--color-text-secondary)]">
-                                Total Balance
-                            </p>
-                            {isUserLoading ? (
-                                <Skeleton className="h-10 w-32" />
-                            ) : (
-                                <div className="flex items-baseline gap-1">
-                                    <span className="text-[var(--color-text-primary)] text-5xl font-black tracking-tighter">
-                                        ${(stats.balance || 0).toLocaleString()}
-                                    </span>
-                                    <span className="text-sm font-bold text-[var(--color-text-secondary)]">USD</span>
-                                </div>
-                            )}
-                        </div>
-                        <div className="bg-white border-[var(--color-brand-border)] flex h-12 w-12 items-center justify-center rounded-2xl border shadow-premium transition-transform hover:rotate-12">
-                            <Star className="text-[var(--color-brand-blue)] fill-[var(--color-brand-blue)] h-6 w-6" />
-                        </div>
-                    </div>
-
-                    <div className="relative mt-10 flex gap-4">
-                        <Button
-                            variant="primary"
-                            className="h-12 flex-1 rounded-2xl font-bold shadow-premium bg-[var(--color-text-primary)] text-white hover:scale-[1.02] active:scale-[0.98] transition-all"
-                            onClick={() => selection()}
-                        >
-                            Withdraw
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            className="h-12 flex-1 rounded-2xl font-bold border-[var(--color-brand-border)] bg-transparent text-[var(--color-text-primary)] hover:bg-[var(--color-bg-app)] active:scale-[0.98] transition-all"
-                            onClick={() => selection()}
-                        >
-                            Activity
-                        </Button>
-                    </div>
-                </div>
-            </motion.div>
-
-            {/* 4. Secondary Stats Grid */}
-            <motion.div variants={item} className="grid grid-cols-2 gap-4 px-4">
-                <div className="group rounded-3xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-5 shadow-premium transition-all hover:shadow-float hover:-translate-y-1">
-                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white">
-                        <Users className="h-5 w-5" />
-                    </div>
-                    <p className="text-[var(--color-text-primary)] text-3xl font-black tracking-tight">12</p>
-                    <p className="mt-1 text-[10px] font-black uppercase tracking-widest text-[var(--color-text-secondary)]">Partners</p>
-                </div>
-                <div className="group rounded-3xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-5 shadow-premium transition-all hover:shadow-float hover:-translate-y-1">
-                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-orange-500/10 text-orange-600 transition-colors group-hover:bg-orange-600 group-hover:text-white">
-                        <Zap className="h-5 w-5" />
-                    </div>
-                    <p className="text-[var(--color-text-primary)] text-3xl font-black tracking-tight">850</p>
-                    <p className="mt-1 text-[10px] font-black uppercase tracking-widest text-[var(--color-text-secondary)]">Network XP</p>
-                </div>
-            </motion.div>
 
             {/* 6. Referral Link */}
             <motion.div variants={item} className="px-4">
