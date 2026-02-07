@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
+import { retrieveLaunchParams } from '@telegram-apps/sdk-react';
 
 interface User {
     id: number;
@@ -28,25 +29,29 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const refreshUser = async () => {
         try {
             // Use SDK to get initData more reliably
-            let initData = '';
+            let initDataRaw = '';
             try {
-                const { initDataRaw } = window.Telegram?.WebApp ? { initDataRaw: window.Telegram.WebApp.initData } : { initDataRaw: '' };
-                initData = initDataRaw || '';
+                // Try SDK retrieveLaunchParams first
+                const lp = retrieveLaunchParams();
+                initDataRaw = lp.initDataRaw || '';
             } catch (e) {
-                console.error('Failed to get launch params:', e);
+                // Fallback to window.Telegram
+                initDataRaw = window.Telegram?.WebApp?.initData || '';
             }
 
-            const apiUrl = import.meta.env.VITE_API_URL || 'https://p2phub-production.up.railway.app' || 'http://localhost:8000';
-            console.log('Fetching user from:', `${apiUrl}/api/partner/me`);
+            const apiUrl = import.meta.env.VITE_API_URL || 'https://p2phub-production.up.railway.app';
+            console.log('[DEBUG] refreshUser: Fetching with initData length:', initDataRaw.length);
+            console.log('[DEBUG] refreshUser: API URL:', apiUrl);
 
             const res = await axios.get(`${apiUrl}/api/partner/me`, {
                 headers: {
-                    'X-Telegram-Init-Data': initData
+                    'X-Telegram-Init-Data': initDataRaw
                 }
             });
+            console.log('[DEBUG] refreshUser: Success:', res.data.first_name);
             setUser(res.data);
         } catch (error) {
-            console.error('Failed to fetch user:', error);
+            console.error('[DEBUG] refreshUser: Failed:', error);
             // Fallback mock for local development if backend fails or initData is missing
             if (!user) {
                 setUser({
@@ -68,9 +73,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         const init = async () => {
-            // Wait for Telegram to be ready if it's not yet
-            if (!window.Telegram?.WebApp?.initData) {
+            // More aggressive waiting for Telegram environment
+            let attempts = 0;
+            while (attempts < 5 && !window.Telegram?.WebApp?.initData) {
+                console.log('[DEBUG] Waiting for Telegram initData...', attempts);
                 await new Promise(r => setTimeout(r, 500));
+                attempts++;
             }
             refreshUser();
         };

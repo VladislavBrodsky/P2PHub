@@ -22,9 +22,13 @@ function App() {
                 if (viewport.mount.isAvailable()) {
                     try {
                         await viewport.mount();
-                        if (viewport.expand.isAvailable()) {
-                            viewport.expand();
-                        }
+                        // Small delay to ensure mount is settled
+                        setTimeout(() => {
+                            if (viewport.expand.isAvailable()) {
+                                viewport.expand();
+                                console.log('[DEBUG] Viewport expanded');
+                            }
+                        }, 300);
                     } catch (e) {
                         console.error('Viewport mount error:', e);
                     }
