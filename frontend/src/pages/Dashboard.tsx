@@ -110,14 +110,14 @@ export default function Dashboard() {
                 <div className="text-center space-y-8 px-2">
                     <div className="space-y-2">
                         <motion.div
-                            className="inline-block mb-2 rounded-full border border-lime-400/30 bg-lime-400/5 backdrop-blur-sm px-4 py-1.5"
+                            className="inline-block mb-2 rounded-full border border-blue-500/30 bg-blue-500/5 backdrop-blur-sm px-4 py-1.5"
                             animate={{
-                                boxShadow: ["0 0 0px rgba(163, 230, 53, 0)", "0 0 15px rgba(163, 230, 53, 0.3)", "0 0 0px rgba(163, 230, 53, 0)"],
-                                borderColor: ["rgba(163, 230, 53, 0.3)", "rgba(163, 230, 53, 0.8)", "rgba(163, 230, 53, 0.3)"]
+                                boxShadow: ["0 0 0px rgba(59, 130, 246, 0)", "0 0 15px rgba(59, 130, 246, 0.4)", "0 0 0px rgba(59, 130, 246, 0)"],
+                                borderColor: ["rgba(59, 130, 246, 0.3)", "rgba(59, 130, 246, 0.8)", "rgba(59, 130, 246, 0.3)"]
                             }}
-                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                         >
-                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-cyan-400">
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--color-brand-blue)]">
                                 Our Mission
                             </p>
                         </motion.div>
