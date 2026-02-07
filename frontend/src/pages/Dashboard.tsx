@@ -68,7 +68,7 @@ export default function Dashboard() {
                             <motion.span
                                 className="inline-block"
                                 style={{
-                                    background: 'linear-gradient(to right, #3B82F6, #8B5CF6, #3B82F6)',
+                                    background: 'linear-gradient(to right, #3B82F6, #FFFFFF, #3B82F6)',
                                     WebkitBackgroundClip: 'text',
                                     WebkitTextFillColor: 'transparent',
                                     backgroundSize: '200% auto'
