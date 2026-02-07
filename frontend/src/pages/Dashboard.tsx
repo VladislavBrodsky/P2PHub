@@ -61,79 +61,123 @@ export default function Dashboard() {
 
     return (
         <motion.div
-            className="flex w-full flex-col gap-6 pb-32 px-0"
+            className="flex w-full flex-col gap-8 pb-32 px-0 animate-spring"
             variants={container}
             initial="hidden"
             animate="show"
         >
             {/* 0. Personalization Section */}
-            <motion.div variants={item} className="px-5 pt-4">
-                <div className="flex items-center gap-4">
-                    <div className="relative">
-                        <div className="h-16 w-16 overflow-hidden rounded-2xl border-2 border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] shadow-inner">
-                            <img
-                                src={user?.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username || 'partner'}`}
-                                alt="Avatar"
-                                className="h-full w-full object-cover"
-                            />
+            <motion.div variants={item} className="px-5">
+                <div className="flex items-center gap-5">
+                    <div className="relative group">
+                        <div className="h-20 w-20 overflow-hidden rounded-3xl border-2 border-[var(--color-brand-border)] bg-white shadow-premium transition-all duration-300 group-hover:scale-105 group-hover:rotate-2">
+                            {isUserLoading ? (
+                                <div className="h-full w-full bg-slate-100 animate-pulse" />
+                            ) : (
+                                <img
+                                    src={user?.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username || 'partner'}`}
+                                    alt="Avatar"
+                                    className="h-full w-full object-cover"
+                                />
+                            )}
                         </div>
-                        <div className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-brand-blue)] text-white shadow-sm ring-2 ring-[var(--color-bg-app)]">
-                            <Sparkles className="h-3 w-3 fill-current" />
+                        <div className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-[var(--color-brand-blue)] text-white shadow-premium ring-2 ring-[var(--color-bg-app)]">
+                            <Sparkles className="h-4 w-4 fill-current" />
                         </div>
                     </div>
-                    <div>
-                        <h2 className="text-2xl font-black tracking-tight text-[var(--color-text-primary)]">
+                    <div className="flex flex-col gap-1">
+                        <h2 className="text-3xl font-black tracking-tighter text-[var(--color-text-primary)] leading-none">
                             Hi, {user?.first_name || 'Partner'}!
                         </h2>
-                        <p className="text-xs font-bold uppercase tracking-widest text-[var(--color-text-secondary)]">
-                            Level {user?.level || 1} • {user?.level && user.level > 10 ? 'Elite' : 'Pioneer'} Partner
-                        </p>
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--color-text-secondary)] bg-slate-100 px-2 py-0.5 rounded-md">
+                                Level {user?.level || 1}
+                            </span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--color-brand-blue)]">
+                                {user?.level && user.level > 10 ? 'Elite' : 'Pioneer'} Partner
+                            </span>
+                        </div>
                     </div>
                 </div>
             </motion.div>
 
-            {/* 1. Hero Section - Visual Impact */}
-            <motion.div variants={item} className="px-3">
-                <CommunityOrbit />
+            {/* 1. Hero Section - Seamless Integration */}
+            <motion.div variants={item} className="px-4 space-y-4">
+                <div className="relative overflow-visible">
+                    <CommunityOrbit />
+                </div>
+
+                <div className="text-center space-y-8 px-2">
+                    <div className="space-y-2">
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--color-text-secondary)] opacity-60">
+                            Our Mission
+                        </p>
+                        <h1 className="text-5xl font-extrabold tracking-tighter text-[var(--color-text-primary)] leading-[0.95]">
+                            Together,<br />
+                            Let's Build a Brand<br />
+                            <span className="text-[var(--color-brand-blue)]">That Truly Connects</span>
+                        </h1>
+                    </div>
+
+                    <div className="space-y-1">
+                        <h2 className="text-xl font-black text-[var(--color-text-secondary)] tracking-tight leading-tight">
+                            Join the Global<br />
+                            Financial Shift and<br />
+                            <span className="text-[var(--color-text-primary)] uppercase tracking-wider">Digital Gold Rush</span>
+                        </h2>
+                    </div>
+
+                    <p className="text-[var(--color-text-secondary)] mx-auto max-w-[280px] text-xs font-medium leading-relaxed opacity-80">
+                        The global market is shifting. Traditional finance is slow, closed, and filled with friction. <strong className="text-[var(--color-text-primary)] font-bold">Pintopay</strong> is the bridge to a borderless era. We're not just building an app; we're launching a movement.
+                    </p>
+                </div>
             </motion.div>
 
             {/* 2. Ticker */}
-            <motion.div variants={item} className="-rotate-1 my-2 scale-105">
+            <motion.div variants={item} className="-rotate-1 my-1 scale-[1.02]">
                 <Ticker />
             </motion.div>
 
             {/* 3. Main Stats - Earning Focus */}
-            <motion.div variants={item} className="px-3">
-                <div className="relative overflow-hidden rounded-xl border border-[var(--color-brand-border)]/20 bg-[var(--color-bg-surface)] p-6 shadow-xl">
-                    <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[var(--color-brand-blue)]/10 blur-3xl" />
+            <motion.div variants={item} className="px-4">
+                <div className="relative overflow-hidden rounded-3xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-8 shadow-premium transition-all duration-300 hover:shadow-float">
+                    <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[var(--color-brand-blue)]/5 blur-[80px]" />
+                    <div className="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[var(--color-success)]/5 blur-[80px]" />
 
-                    <div className="flex items-start justify-between">
+                    <div className="relative flex items-start justify-between">
                         <div>
-                            <p className="text-[var(--color-text-secondary)] mb-1 text-sm font-bold uppercase tracking-widest">
+                            <p className="text-[10px] mb-2 font-black uppercase tracking-[0.2em] text-[var(--color-text-secondary)]">
                                 Total Balance
                             </p>
                             {isUserLoading ? (
                                 <Skeleton className="h-10 w-32" />
                             ) : (
-                                <span className="text-[var(--color-text-primary)] text-4xl font-black tracking-tight drop-shadow-lg">
-                                    ${(stats.balance || 0).toLocaleString()}
-                                </span>
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-[var(--color-text-primary)] text-5xl font-black tracking-tighter">
+                                        ${(stats.balance || 0).toLocaleString()}
+                                    </span>
+                                    <span className="text-sm font-bold text-[var(--color-text-secondary)]">USD</span>
+                                </div>
                             )}
                         </div>
-                        <div className="bg-gradient-to-br from-[var(--color-brand-blue)]/20 to-[var(--color-brand-blue)]/5 border-[var(--color-brand-blue)]/20 flex h-10 w-10 items-center justify-center rounded-xl border shadow-[0_0_15px_rgba(56,189,248,0.2)]">
-                            <Star className="text-[var(--color-brand-blue)] fill-[var(--color-brand-blue)] h-5 w-5" />
+                        <div className="bg-white border-[var(--color-brand-border)] flex h-12 w-12 items-center justify-center rounded-2xl border shadow-premium transition-transform hover:rotate-12">
+                            <Star className="text-[var(--color-brand-blue)] fill-[var(--color-brand-blue)] h-6 w-6" />
                         </div>
                     </div>
 
-                    <div className="mt-8 flex gap-3">
+                    <div className="relative mt-10 flex gap-4">
                         <Button
                             variant="primary"
-                            className="flex-1 shadow-lg"
+                            className="h-12 flex-1 rounded-2xl font-bold shadow-premium bg-[var(--color-text-primary)] text-white hover:scale-[1.02] active:scale-[0.98] transition-all"
                             onClick={() => selection()}
                         >
                             Withdraw
                         </Button>
-                        <Button variant="secondary" className="flex-1" onClick={() => selection()}>
+                        <Button
+                            variant="secondary"
+                            className="h-12 flex-1 rounded-2xl font-bold border-[var(--color-brand-border)] bg-transparent text-[var(--color-text-primary)] hover:bg-[var(--color-bg-app)] active:scale-[0.98] transition-all"
+                            onClick={() => selection()}
+                        >
                             Activity
                         </Button>
                     </div>
@@ -141,67 +185,39 @@ export default function Dashboard() {
             </motion.div>
 
             {/* 4. Secondary Stats Grid */}
-            <motion.div variants={item} className="grid grid-cols-2 gap-3 px-3">
-                <div className="rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-4 transition-all hover:bg-[var(--color-bg-glass)]">
-                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/10 text-blue-500">
+            <motion.div variants={item} className="grid grid-cols-2 gap-4 px-4">
+                <div className="group rounded-3xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-5 shadow-premium transition-all hover:shadow-float hover:-translate-y-1">
+                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white">
                         <Users className="h-5 w-5" />
                     </div>
-                    <p className="text-[var(--color-text-primary)] text-2xl font-black">12</p>
-                    <p className="text-[var(--color-text-secondary)] text-xs font-bold uppercase tracking-wider">Partners</p>
+                    <p className="text-[var(--color-text-primary)] text-3xl font-black tracking-tight">12</p>
+                    <p className="mt-1 text-[10px] font-black uppercase tracking-widest text-[var(--color-text-secondary)]">Partners</p>
                 </div>
-                <div className="rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-4 transition-all hover:bg-[var(--color-bg-glass)]">
-                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-orange-500/10 text-orange-500">
+                <div className="group rounded-3xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-5 shadow-premium transition-all hover:shadow-float hover:-translate-y-1">
+                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-orange-500/10 text-orange-600 transition-colors group-hover:bg-orange-600 group-hover:text-white">
                         <Zap className="h-5 w-5" />
                     </div>
-                    <p className="text-[var(--color-text-primary)] text-2xl font-black">850</p>
-                    <p className="text-[var(--color-text-secondary)] text-xs font-bold uppercase tracking-wider">Network XP</p>
-                </div>
-            </motion.div>
-
-            {/* 5. Benefits Grid (Bento) */}
-            <motion.div variants={item} className="px-3">
-                <h3 className="mb-4 pl-1 text-lg font-black tracking-tight text-[var(--color-text-primary)]">
-                    Why Partner?
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
-                    <BentoFeature
-                        title="Global Access"
-                        description="Earn from anywhere."
-                        icon={Globe}
-                        delay={0.1}
-                        featured={true}
-                    />
-                    <BentoFeature
-                        title="Instant"
-                        description="Crypto payouts."
-                        icon={Zap}
-                        delay={0.2}
-                    />
-                    <BentoFeature
-                        title="Secure"
-                        description="Bank-grade security."
-                        icon={Shield}
-                        delay={0.3}
-                    />
+                    <p className="text-[var(--color-text-primary)] text-3xl font-black tracking-tight">850</p>
+                    <p className="mt-1 text-[10px] font-black uppercase tracking-widest text-[var(--color-text-secondary)]">Network XP</p>
                 </div>
             </motion.div>
 
             {/* 6. Referral Link */}
-            <motion.div variants={item} className="px-3">
-                <div className="space-y-3 rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-4 shadow-sm">
+            <motion.div variants={item} className="px-4">
+                <div className="space-y-4 rounded-3xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-6 shadow-premium">
                     <div className="flex items-center gap-2">
                         <Wallet className="h-4 w-4 text-[var(--color-text-secondary)]" />
-                        <span className="text-[var(--color-text-secondary)] text-xs font-black uppercase tracking-widest">Invitation Link</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--color-text-secondary)]">Invitation Link</span>
                     </div>
                     <div
-                        className="group flex cursor-pointer items-center justify-between rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-bg-glass)] p-3 transition-all hover:bg-[var(--color-bg-surface)] active:scale-[0.98]"
+                        className="group flex cursor-pointer items-center justify-between rounded-2xl border border-[var(--color-brand-border)] bg-[var(--color-bg-app)] p-4 transition-all hover:bg-white hover:shadow-soft active:scale-[0.98]"
                         onClick={handleCopy}
                     >
                         <span className="max-w-[200px] truncate font-mono text-xs font-bold text-[var(--color-text-secondary)] transition-colors group-hover:text-[var(--color-text-primary)]">
                             {referralLink}
                         </span>
-                        <div className="flex items-center gap-1.5 rounded-lg bg-[var(--color-bg-surface)] px-2 py-1 shadow-sm">
-                            <span className="text-[var(--color-text-primary)] text-xs font-black uppercase">
+                        <div className="flex items-center gap-2 rounded-xl bg-white px-3 py-1.5 shadow-sm border border-[var(--color-brand-border)]">
+                            <span className="text-[var(--color-text-primary)] text-[10px] font-black uppercase tracking-wider">
                                 {copied ? 'COPIED' : 'COPY'}
                             </span>
                         </div>
@@ -210,40 +226,42 @@ export default function Dashboard() {
             </motion.div>
 
             {/* 7. Recent Activity */}
-            <motion.div variants={item} className="px-3">
+            <motion.div variants={item} className="px-4">
                 <Section
                     title="Recent Earnings"
                     headerAction={
-                        <button className="text-[var(--color-text-secondary)] flex items-center gap-0.5 text-[10px] font-black uppercase tracking-widest transition-colors hover:text-[var(--color-text-primary)]">
+                        <button className="text-[var(--color-text-secondary)] flex items-center gap-1 text-[10px] font-black uppercase tracking-widest transition-colors hover:text-[var(--color-text-primary)]">
                             VIEW ALL <ChevronRight className="h-3 w-3" />
                         </button>
                     }
                 >
-                    <div className="flex flex-col gap-2.5">
+                    <div className="flex flex-col gap-3 mt-4">
                         {earnings?.map((e: any) => (
                             <div
                                 key={e.id}
-                                className="flex cursor-pointer items-center justify-between rounded-lg border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-3 shadow-sm transition-all hover:bg-[var(--color-bg-glass)]"
+                                className="group flex cursor-pointer items-center justify-between rounded-2xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-4 shadow-premium transition-all hover:shadow-float hover:-translate-y-0.5"
                             >
-                                <div className="flex items-center gap-3">
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-lg font-bold text-blue-500">
+                                <div className="flex items-center gap-4">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-lg font-bold text-slate-600 transition-colors group-hover:bg-[var(--color-brand-blue)]/10 group-hover:text-[var(--color-brand-blue)]">
                                         {e.description[0]}
                                     </div>
                                     <div>
                                         <p className="text-[var(--color-text-primary)] text-sm font-bold">
                                             {e.description}
                                         </p>
-                                        <p className="text-[var(--color-text-secondary)] text-[10px] font-black uppercase tracking-widest">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--color-success)] mt-0.5">
                                             Success
                                         </p>
                                     </div>
                                 </div>
-                                <span className="rounded-lg border border-emerald-100 bg-emerald-50 px-2 py-1 text-xs font-black text-emerald-600">
+                                <span className="rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-xs font-black text-emerald-600 shadow-sm">
                                     +${e.amount}
                                 </span>
                             </div>
                         )) || (
-                                <div className="text-center py-8 text-[var(--color-text-secondary)] font-bold italic">No recent earnings</div>
+                                <div className="text-center py-10 rounded-2xl border border-dashed border-[var(--color-brand-border)] text-sm text-[var(--color-text-secondary)] font-bold italic">
+                                    No recent earnings yet
+                                </div>
                             )}
                     </div>
                 </Section>

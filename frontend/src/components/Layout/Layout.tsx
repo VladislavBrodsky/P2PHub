@@ -48,7 +48,6 @@ export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
                 {/* Main Content Area */}
                 <main
                     className={`safe-pb relative z-10 px-4 ${isStaging ? 'staging-offset' : 'content-main-padding'}`}
-                    style={{ paddingTop: 'calc(env(safe-area-inset-top) + 90px)' }}
                 >
                     <AnimatePresence mode="wait">
                         <motion.div

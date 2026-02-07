@@ -41,7 +41,7 @@ export default function CardsPage() {
     const currentCard = cardData[selectedTab];
 
     return (
-        <div className="flex flex-col h-full relative min-h-screen pt-4">
+        <div className="flex flex-col h-full relative min-h-screen">
             {/* Header */}
             <div className="px-6 pb-6 text-center">
                 <h2 className="text-[var(--color-text-primary)] text-lg font-bold">Choose Card</h2>

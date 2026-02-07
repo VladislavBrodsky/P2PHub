@@ -9,18 +9,21 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Create non-root user for security
+RUN groupadd -r appuser && useradd -r -g appuser appuser && \
+    chown -R appuser:appuser /app
+
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
-# Install dependencies using uv
+# Install dependencies
 COPY pyproject.toml .
-RUN uv pip install --system -r pyproject.toml
+RUN uv pip install --system --no-cache -r pyproject.toml
 
 # Copy source code
-COPY . .
+COPY --chown=appuser:appuser . .
 
-# Expose port
+USER appuser
+
 EXPOSE 8000
-
-# Run the application (Railway provides PORT env var)
 CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

@@ -58,7 +58,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 setUser({
                     id: 0,
                     telegram_id: '0',
-                    username: 'partner_dev',
+                    username: 'partner',
                     first_name: 'Partner',
                     last_name: 'Dev',
                     photo_url: null,

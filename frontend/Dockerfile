@@ -2,25 +2,25 @@
 FROM node:20 AS build
 
 WORKDIR /app
-
-# Enable npm cache bypass if needed
-ENV NPM_CONFIG_CACHE=/tmp/.npm-cache
-
 COPY package*.json ./
 RUN npm install
-
 COPY . .
 RUN npm run build
 
-# Serving stage using custom Node.js server
-FROM node:20
+# Serving stage
+FROM node:20-slim
 
 WORKDIR /app
 
-# Copy built app and server script
-COPY --from=build /app/dist ./dist
-COPY server.cjs ./
+# Create non-root user for security
+RUN groupadd -r nodejs && useradd -r -g nodejs nodejs && \
+    chown -R nodejs:nodejs /app
 
-# Start the custom server
-# Explicitly handles PORT and SPA routing
+# Copy built app and server
+COPY --from=build --chown=nodejs:nodejs /app/dist ./dist
+COPY --from=build --chown=nodejs:nodejs /app/server.cjs ./
+
+USER nodejs
+
+EXPOSE 80
 CMD ["node", "server.cjs"]
