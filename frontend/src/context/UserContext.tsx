@@ -78,6 +78,24 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         const init = async () => {
+            // Fast path for local development
+            if (import.meta.env.DEV && !window.Telegram?.WebApp?.initData) {
+                console.log('[DEBUG] Dev mode detected, mocking user immediately');
+                setUser({
+                    id: 999,
+                    telegram_id: '123456789',
+                    username: 'dev_partner',
+                    first_name: 'Dev',
+                    last_name: 'User',
+                    photo_url: null,
+                    balance: 5000,
+                    level: 5,
+                    referral_code: 'DEV-TEST'
+                });
+                setIsLoading(false);
+                return;
+            }
+
             // More aggressive waiting for Telegram environment
             let attempts = 0;
             while (attempts < 5 && !window.Telegram?.WebApp?.initData) {

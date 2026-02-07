@@ -17,11 +17,16 @@ export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
     // Handle Back Button for Drawer
     useEffect(() => {
         let cleanup: VoidFunction | undefined;
-        if (isMenuOpen) {
-            backButton.show();
-            cleanup = backButton.onClick(() => setIsMenuOpen(false));
-        } else if (activeTab === 'home') {
-            backButton.hide();
+        try {
+            if (isMenuOpen) {
+                backButton.show();
+                cleanup = backButton.onClick(() => setIsMenuOpen(false));
+            } else if (activeTab === 'home') {
+                backButton.hide();
+            }
+        } catch (e) {
+            // Ignore SDK errors in non-Telegram environment
+            console.warn('BackButton not available:', e);
         }
         return () => {
             if (cleanup) cleanup();
