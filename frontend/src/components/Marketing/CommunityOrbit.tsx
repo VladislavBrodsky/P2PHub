@@ -63,22 +63,29 @@ export const CommunityOrbit = () => {
             <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{
-                    scale: [1, 1.05, 1, 1.03, 1],
+                    scale: 1,
                     opacity: 1
                 }}
                 transition={{
-                    duration: 1.8, // 33 BPM ≈ 1.8s per beat
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    times: [0, 0.2, 0.4, 0.6, 1],
-                    ease: "easeInOut"
+                    duration: 0.8,
+                    ease: "easeOut"
                 }}
                 className="relative z-10 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-700 shadow-2xl shadow-blue-500/40"
             >
-                <img
+                <motion.img
+                    animate={{
+                        scale: [1, 1.05, 1, 1.03, 1],
+                    }}
+                    transition={{
+                        duration: 1.8, // 33 BPM ≈ 1.8s per beat
+                        repeat: Infinity,
+                        repeatType: "loop",
+                        times: [0, 0.2, 0.4, 0.6, 1],
+                        ease: "easeInOut"
+                    }}
                     src="/logo.png"
                     alt="Pintopay Logo"
-                    className="w-12 h-12 object-contain brightness-0 invert"
+                    className="relative z-10 w-12 h-12 object-contain brightness-0 invert"
                 />
 
                 {/* Heartbeat Pulse Ripples */}
