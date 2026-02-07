@@ -86,7 +86,7 @@ function App() {
             <UserProvider>
                 <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
                     {activeTab === 'home' && <Dashboard />}
-                    {activeTab === 'cards' && <CardsPage />}
+                    {activeTab === 'cards' && <CardsPage setActiveTab={setActiveTab} />}
                     {activeTab === 'partner' && <CommunityPage />}
                     {activeTab === 'earn' && <ReferralPage />}
                     {activeTab === 'league' && <LeaderboardPage />}

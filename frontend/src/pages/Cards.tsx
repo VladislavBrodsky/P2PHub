@@ -1,17 +1,35 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PintopayCard, CardVariant } from '../components/PintopayCard';
-import { Apple, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { Apple, ChevronRight, CheckCircle2, Crown, X, ArrowRight } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
 
-export default function CardsPage() {
+interface CardsPageProps {
+    setActiveTab?: (tab: string) => void;
+}
+
+export default function CardsPage({ setActiveTab }: CardsPageProps) {
     const [selectedTab, setSelectedTab] = useState<CardVariant>('virtual');
     const [isTermsOpen, setIsTermsOpen] = useState(false);
-    const { selection } = useHaptic();
+    const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
+    const { selection, notification } = useHaptic();
 
     const handleGetCard = () => {
         selection();
+        if (selectedTab === 'platinum') {
+            setIsPremiumModalOpen(true);
+            notification('warning');
+            return;
+        }
         window.open('https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3', '_blank');
+    };
+
+    const handleUpgradeSelect = () => {
+        selection();
+        setIsPremiumModalOpen(false);
+        if (setActiveTab) {
+            setActiveTab('earn');
+        }
     };
 
     const cardData = {
@@ -199,11 +217,23 @@ export default function CardsPage() {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={handleGetCard}
-                            className="w-full h-16 bg-action-black text-white rounded-2xl font-black text-lg shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)] flex items-center justify-center gap-3 transition-transform"
+                            className={`w-full h-16 rounded-2xl font-black text-lg shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)] flex items-center justify-center gap-3 transition-transform ${selectedTab === 'platinum'
+                                ? 'bg-linear-to-r from-indigo-600 to-purple-600 text-white'
+                                : 'bg-action-black text-white'
+                                }`}
                         >
-                            <span>Issue card</span>
-                            <div className="w-1 h-1 rounded-full bg-white/20" />
-                            <span className="text-white/80">{currentCard.price}</span>
+                            {selectedTab === 'platinum' ? (
+                                <>
+                                    <Crown size={20} className="text-amber-300" />
+                                    <span>Only for Premium Partner</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span>Issue card</span>
+                                    <div className="w-1 h-1 rounded-full bg-white/20" />
+                                    <span className="text-white/80">{currentCard.price}</span>
+                                </>
+                            )}
                         </motion.button>
 
                         <p className="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 opacity-60">
@@ -215,7 +245,107 @@ export default function CardsPage() {
 
             {/* Extra Spacing at bottom */}
             <div className="h-32 pointer-events-none" />
+
+            {/* Premium Modal */}
+            <AnimatePresence>
+                {isPremiumModalOpen && (
+                    <div className="fixed inset-0 z-100 flex items-center justify-center p-6">
+                        {/* Overlay */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsPremiumModalOpen(false)}
+                            className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm"
+                        />
+
+                        {/* Modal Content */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="relative w-full max-w-sm rounded-[2.5rem] bg-white border border-slate-100 p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] overflow-hidden"
+                        >
+                            {/* Decorative Background Elements */}
+                            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-indigo-50 rounded-full blur-3xl opacity-60" />
+                            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-purple-50 rounded-full blur-3xl opacity-60" />
+
+                            <button
+                                onClick={() => setIsPremiumModalOpen(false)}
+                                className="absolute right-6 top-6 p-2 rounded-full hover:bg-slate-50 transition-colors"
+                            >
+                                <X size={20} className="text-slate-400" />
+                            </button>
+
+                            <div className="relative flex flex-col items-center text-center">
+                                {/* Premium Icon Badge */}
+                                <div className="mb-6 relative">
+                                    <div className="h-20 w-20 rounded-[2rem] bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                                        <Crown size={40} className="text-white fill-white/20" />
+                                    </div>
+                                    <motion.div
+                                        animate={{ rotate: 360 }}
+                                        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                                        className="absolute -inset-2 border-2 border-dashed border-indigo-200 rounded-full opacity-50"
+                                    />
+                                </div>
+
+                                <h2 className="text-2xl font-black text-slate-900 mb-3 tracking-tight">
+                                    Premium Status Required
+                                </h2>
+
+                                <p className="text-sm font-medium text-slate-500 leading-relaxed mb-8 px-2">
+                                    Platinum cards are exclusively reserved for our most active partners. Upgrade your network value to unlock legendary status and concierge services.
+                                </p>
+
+                                {/* Instruction List */}
+                                <div className="w-full space-y-3 mb-8 text-left">
+                                    {[
+                                        'Reach Global Partner rank',
+                                        'Earn 5,000+ Network XP',
+                                        'Activate 10+ active referrals'
+                                    ].map((step, i) => (
+                                        <div key={step} className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100/50">
+                                            <div className="h-6 w-6 rounded-lg bg-white shadow-sm flex items-center justify-center text-[10px] font-black text-indigo-600 border border-indigo-100">
+                                                {i + 1}
+                                            </div>
+                                            <span className="text-xs font-bold text-slate-700">{step}</span>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <Button
+                                    onClick={handleUpgradeSelect}
+                                    className="w-full h-16 rounded-2xl bg-indigo-600 text-white font-black text-lg shadow-[0_15px_30px_-5px_rgba(79,70,229,0.3)] hover:bg-indigo-700 flex items-center justify-center gap-2 group"
+                                >
+                                    <span>Upgrade My Status</span>
+                                    <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
+                                </Button>
+
+                                <button
+                                    onClick={() => setIsPremiumModalOpen(false)}
+                                    className="mt-4 text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
+                                >
+                                    Maybe Later
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
+    );
+}
+
+// Subcomponent for uniformity (or import if shared)
+function Button({ children, className, onClick }: any) {
+    return (
+        <button
+            onClick={onClick}
+            className={`transition-all active:scale-[0.98] ${className}`}
+        >
+            {children}
+        </button>
     );
 }
 
