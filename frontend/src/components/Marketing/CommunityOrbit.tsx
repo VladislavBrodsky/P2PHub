@@ -53,7 +53,7 @@ export const CommunityOrbit = () => {
     ];
 
     return (
-        <div className="relative flex h-[380px] w-full items-center justify-center overflow-hidden">
+        <div className="relative flex h-[300px] w-full items-center justify-center overflow-hidden">
             {/* Background Orbiting Rings */}
             <div className="absolute h-[240px] w-[240px] rounded-full border border-slate-100 opacity-30 dark:border-white/5" />
             <div className="absolute h-[190px] w-[190px] rounded-full border border-slate-100 opacity-50 dark:border-white/10" />
@@ -129,7 +129,7 @@ type OrbitItem =
     | { type: 'crypto'; name: string; color: string };
 
 const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; total: number }) => {
-    const radius = 95;
+    const radius = 80;
     const duration = 25;
     const startAngle = (index / total) * 360;
 
