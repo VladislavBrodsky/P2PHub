@@ -9,6 +9,8 @@ const TICKER_ITEMS = [
     "•",
     "BECOME A PARTNER",
     "•",
+    "$1+ PER MIN 24/7",
+    "•",
     "EARN PINTOPAY TOKENS",
     "•",
     "GLOBAL PAYMENTS",
@@ -16,6 +18,8 @@ const TICKER_ITEMS = [
     "INSTANT WITHDRAWALS",
     "•",
     "BECOME A PARTNER",
+    "•",
+    "$1+ PER MIN 24/7",
     "•",
 ];
 

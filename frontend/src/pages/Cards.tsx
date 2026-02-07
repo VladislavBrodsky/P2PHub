@@ -11,7 +11,7 @@ export default function CardsPage() {
 
     const handleGetCard = () => {
         selection();
-        window.open('https://t.me/pintopaybot?start=p_card', '_blank');
+        window.open('https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3', '_blank');
     };
 
     const cardData = {
@@ -84,7 +84,7 @@ export default function CardsPage() {
             <div className="flex-1 px-6 pb-48 flex flex-col items-center">
                 {/* 3D Card Visual */}
                 <div className="mb-8 w-full max-w-[320px] flex justify-center relative min-h-[200px]">
-                    <AnimatePresence initial={false}>
+                    <AnimatePresence initial={false} mode="wait">
                         <motion.div
                             key={selectedTab}
                             initial={{ opacity: 0, scale: 0.95, x: 20 }}
@@ -192,13 +192,13 @@ export default function CardsPage() {
             </div>
 
             {/* Sticky Bottom Action Button */}
-            <div className="fixed bottom-24 left-0 right-0 p-6 bg-gradient-to-t from-[var(--color-bg-app)] via-[var(--color-bg-app)] to-transparent z-40">
+            <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+120px)] left-0 right-0 p-6 bg-gradient-to-t from-[var(--color-bg-app)] via-[var(--color-bg-app)] to-transparent z-40">
                 <div className="max-w-md mx-auto">
                     <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={handleGetCard}
-                        className="w-full py-4 bg-[var(--color-brand-dark)] text-[var(--color-bg-surface)] rounded-lg font-bold text-lg shadow-xl shadow-[var(--color-brand-dark)]/10 flex items-center justify-center gap-2"
+                        className="w-full py-4 bg-[var(--color-action-black)] text-white rounded-lg font-bold text-lg shadow-xl shadow-[var(--color-action-black)]/10 flex items-center justify-center gap-2"
                     >
                         <span>Issue card</span>
                         <span className="text-[var(--color-bg-surface)]/30">•</span>

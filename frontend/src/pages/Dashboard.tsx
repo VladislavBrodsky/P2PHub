@@ -61,7 +61,7 @@ export default function Dashboard() {
 
     return (
         <motion.div
-            className="flex w-full flex-col gap-8 pb-32 px-0 animate-spring"
+            className="flex w-full flex-col gap-8 pb-32 px-0 min-h-[100dvh]"
             variants={container}
             initial="hidden"
             animate="show"
@@ -87,7 +87,7 @@ export default function Dashboard() {
                     </div>
                     <div className="flex flex-col gap-1">
                         <h2 className="text-3xl font-black tracking-tighter text-[var(--color-text-primary)] leading-none">
-                            Hi, {user?.first_name || 'Partner'}!
+                            Hi, {user?.first_name ? (user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name) : 'Partner'}!
                         </h2>
                         <div className="flex items-center gap-2">
                             <span className="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--color-text-secondary)] bg-slate-100 px-2 py-0.5 rounded-md">
@@ -109,9 +109,18 @@ export default function Dashboard() {
 
                 <div className="text-center space-y-8 px-2">
                     <div className="space-y-2">
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--color-text-secondary)] opacity-60">
-                            Our Mission
-                        </p>
+                        <motion.div
+                            className="inline-block mb-2 rounded-full border border-lime-400/30 bg-lime-400/5 backdrop-blur-sm px-4 py-1.5"
+                            animate={{
+                                boxShadow: ["0 0 0px rgba(163, 230, 53, 0)", "0 0 15px rgba(163, 230, 53, 0.3)", "0 0 0px rgba(163, 230, 53, 0)"],
+                                borderColor: ["rgba(163, 230, 53, 0.3)", "rgba(163, 230, 53, 0.8)", "rgba(163, 230, 53, 0.3)"]
+                            }}
+                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                        >
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-cyan-400">
+                                Our Mission
+                            </p>
+                        </motion.div>
                         <h1 className="text-5xl font-extrabold tracking-tighter text-[var(--color-text-primary)] leading-[0.95]">
                             Together,<br />
                             Let's Build a Brand<br />
@@ -119,15 +128,13 @@ export default function Dashboard() {
                         </h1>
                     </div>
 
-                    <div className="space-y-1">
-                        <h2 className="text-xl font-black text-[var(--color-text-secondary)] tracking-tight leading-tight">
-                            Join the Global<br />
-                            Financial Shift and<br />
-                            <span className="text-[var(--color-text-primary)] uppercase tracking-wider">Digital Gold Rush</span>
+                    <div className="space-y-1 px-4">
+                        <h2 className="text-xl font-black text-[var(--color-text-secondary)] tracking-tight leading-tight max-w-[320px] mx-auto">
+                            Join the Global Financial Shift and <span className="text-[var(--color-text-primary)] uppercase tracking-wider block mt-1">Digital Gold Rush</span>
                         </h2>
                     </div>
 
-                    <p className="text-[var(--color-text-secondary)] mx-auto max-w-[280px] text-xs font-medium leading-relaxed opacity-80">
+                    <p className="text-[var(--color-text-secondary)] mx-auto max-w-[340px] text-xs font-medium leading-relaxed opacity-80">
                         The global market is shifting. Traditional finance is slow, closed, and filled with friction. <strong className="text-[var(--color-text-primary)] font-bold">Pintopay</strong> is the bridge to a borderless era. We're not just building an app; we're launching a movement.
                     </p>
                 </div>

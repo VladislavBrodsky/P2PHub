@@ -29,15 +29,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const refreshUser = async () => {
         try {
             // Use SDK to get initData more reliably
-            let initDataRaw = '';
-            try {
-                // Try SDK retrieveLaunchParams first
-                const lp = retrieveLaunchParams();
-                initDataRaw = lp.initDataRaw || '';
-            } catch (e) {
-                // Fallback to window.Telegram
-                initDataRaw = window.Telegram?.WebApp?.initData || '';
-            }
+            const lp = retrieveLaunchParams();
+            const tgUser = lp.initData?.user;
+            const initDataRaw = lp.initDataRaw || '';
 
             const PROD_URL = 'https://p2phub-backend-production.up.railway.app';
             const apiUrl = import.meta.env.VITE_API_URL || PROD_URL;
@@ -47,10 +41,20 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 headers: {
                     'X-Telegram-Init-Data': initDataRaw
                 },
-                timeout: 5000 // Add timeout to avoid hanging
+                timeout: 5000
             });
-            console.log('[DEBUG] refreshUser: Success:', res.data.first_name);
-            setUser(res.data);
+
+            const userData = res.data;
+
+            // Enrich with Telegram SDK data if backend is missing details
+            if (tgUser) {
+                if (!userData.photo_url && tgUser.photoUrl) userData.photo_url = tgUser.photoUrl;
+                if (!userData.first_name && tgUser.firstName) userData.first_name = tgUser.firstName;
+                if (!userData.last_name && tgUser.lastName) userData.last_name = tgUser.lastName;
+            }
+
+            console.log('[DEBUG] refreshUser: Success:', userData.first_name);
+            setUser(userData);
         } catch (error) {
             console.error('[DEBUG] refreshUser: Failed:', error);
             // Fallback mock for local development if backend fails or initData is missing

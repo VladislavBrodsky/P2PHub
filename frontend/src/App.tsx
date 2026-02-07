@@ -11,6 +11,7 @@ import { UserProvider } from './context/UserContext';
 function App() {
     const [activeTab, setActiveTab] = useState('home');
 
+    // Initialize TMA SDK once
     useEffect(() => {
         const initTMA = async () => {
             try {
@@ -21,23 +22,24 @@ function App() {
                 // Use Viewport for true full-screen/expanded state
                 if (viewport.mount.isAvailable()) {
                     try {
-                        await viewport.mount();
-                        // Small delay to ensure mount is settled
+                        if (!viewport.isMounted()) {
+                            await viewport.mount();
+                        }
+
+                        // Small delay then expand
                         setTimeout(() => {
-                            if (viewport.expand.isAvailable()) {
+                            if (viewport.expand.isAvailable() && !viewport.isExpanded()) {
                                 viewport.expand();
-                                console.log('[DEBUG] Viewport expanded');
                             }
-                        }, 300);
+                        }, 100);
                     } catch (e) {
                         console.error('Viewport mount error:', e);
                     }
                 }
 
-                // Fallback for older environments and newer Fullscreen API
+                // Fallback for older environments
                 if (window.Telegram?.WebApp) {
                     window.Telegram.WebApp.ready();
-                    // New Fullscreen API (v8.0+)
                     if ((window.Telegram.WebApp as any).requestFullscreen) {
                         (window.Telegram.WebApp as any).requestFullscreen();
                     } else {
@@ -45,15 +47,9 @@ function App() {
                     }
                 }
 
-                // Handle back button
+                // Mount back button once
                 if (backButton.mount.isAvailable()) {
                     backButton.mount();
-                    if (activeTab === 'home') {
-                        backButton.hide();
-                    } else {
-                        backButton.show();
-                        backButton.onClick(() => setActiveTab('home'));
-                    }
                 }
             } catch (e) {
                 console.log('Not in TMA environment or SDK error:', e);
@@ -61,6 +57,27 @@ function App() {
         };
 
         initTMA();
+    }, []);
+
+    // Handle Back Button state based on active tab
+    useEffect(() => {
+        let cleanup: VoidFunction | undefined;
+
+        try {
+            if (activeTab === 'home') {
+                backButton.hide();
+            } else {
+                backButton.show();
+                const handleBack = () => setActiveTab('home');
+                cleanup = backButton.onClick(handleBack);
+            }
+        } catch (e) {
+            // Ignore errors if backButton not mounted/available
+        }
+
+        return () => {
+            if (cleanup) cleanup();
+        };
     }, [activeTab]);
 
     return (

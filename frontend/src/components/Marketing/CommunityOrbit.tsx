@@ -62,16 +62,50 @@ export const CommunityOrbit = () => {
             {/* Central Logo */}
             <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
+                animate={{
+                    scale: [1, 1.05, 1, 1.03, 1],
+                    opacity: 1
+                }}
+                transition={{
+                    duration: 1.8, // 33 BPM ≈ 1.8s per beat
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    times: [0, 0.2, 0.4, 0.6, 1],
+                    ease: "easeInOut"
+                }}
                 className="relative z-10 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-700 shadow-2xl shadow-blue-500/40"
             >
-                <span className="text-4xl font-black text-white">P</span>
-                {/* Pulse effect */}
+                <img
+                    src="/logo.png"
+                    alt="Pintopay Logo"
+                    className="w-12 h-12 object-contain brightness-0 invert"
+                />
+
+                {/* Heartbeat Pulse Ripples */}
                 <motion.div
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.1, 0.3] }}
-                    transition={{ duration: 3, repeat: Infinity }}
+                    animate={{
+                        scale: [1, 1.4],
+                        opacity: [0.3, 0]
+                    }}
+                    transition={{
+                        duration: 1.8,
+                        repeat: Infinity,
+                        ease: "easeOut"
+                    }}
                     className="absolute inset-0 rounded-full bg-blue-400"
+                />
+                <motion.div
+                    animate={{
+                        scale: [1, 1.8],
+                        opacity: [0.15, 0]
+                    }}
+                    transition={{
+                        duration: 1.8,
+                        delay: 0.2,
+                        repeat: Infinity,
+                        ease: "easeOut"
+                    }}
+                    className="absolute inset-0 rounded-full bg-blue-300"
                 />
             </motion.div>
 
