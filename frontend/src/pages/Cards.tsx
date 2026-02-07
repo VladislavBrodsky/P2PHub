@@ -118,23 +118,28 @@ export default function CardsPage() {
                         </p>
                     </div>
 
-                    {/* Promo/Bonus Pill */}
-                    <div className="bg-[var(--color-bg-surface)] rounded-2xl p-4 flex items-center justify-between shadow-sm border border-[var(--color-brand-border)]">
-                        <div className="flex items-center gap-3">
-                            <div className="bg-[var(--color-brand-dark)] text-[var(--color-bg-surface)] text-xs font-bold px-2.5 py-1.5 rounded-full whitespace-nowrap">
-                                {currentCard.bonus}
+                    {/* Promo/Bonus Pill - Premium Look */}
+                    <div className="bg-white rounded-[2rem] p-3 pl-3 pr-4 flex items-center justify-between shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] border border-slate-100/60">
+                        <div className="flex items-center gap-4">
+                            {/* Black Tag Icon with Bonus */}
+                            <div className="relative group overflow-hidden bg-[#0F172A] rounded-[0.75rem] px-3 py-2 flex items-center gap-1.5 shadow-md transition-all active:scale-95">
+                                <div className="w-1.5 h-1.5 rounded-full bg-white opacity-90 shrink-0" />
+                                <span className="text-[11px] font-black text-white whitespace-nowrap tracking-wider">
+                                    {currentCard.bonus}
+                                </span>
                             </div>
+
                             <div className="text-left">
-                                <p className="text-xs font-semibold text-[var(--color-text-secondary)] leading-tight">
-                                    {currentCard.bonusText}
+                                <p className="text-[11px] font-bold text-slate-800 leading-[1.3] max-w-[140px]">
+                                    {currentCard.bonus} {currentCard.bonusText}
                                 </p>
                             </div>
                         </div>
-                        <div className="bg-[var(--color-bg-app)] px-3 py-2 rounded-lg border border-[var(--color-brand-border)] shadow-sm">
-                            <span className="flex items-center gap-1.5">
-                                <Apple size={16} strokeWidth={0} fill="currentColor" className="text-[var(--color-text-primary)]" />
-                                <span className="text-sm font-semibold text-[var(--color-text-primary)]">Pay</span>
-                            </span>
+
+                        {/* Pay Pill */}
+                        <div className="bg-white px-3.5 py-2 rounded-[1rem] border border-slate-100 shadow-sm flex items-center gap-2 active:bg-slate-50 transition-colors">
+                            <Apple size={16} strokeWidth={0} fill="black" />
+                            <span className="text-[13px] font-extrabold text-[#0F172A]">Pay</span>
                         </div>
                     </div>
 
@@ -145,16 +150,16 @@ export default function CardsPage() {
                                 setIsTermsOpen(!isTermsOpen);
                                 selection();
                             }}
-                            className="w-full py-4 flex items-center justify-between border-t border-[var(--color-brand-border)] group cursor-pointer"
+                            className="w-full py-4 flex items-center justify-between border-t border-slate-100 group cursor-pointer"
                         >
-                            <span className="text-xs font-bold text-[var(--color-text-secondary)] uppercase tracking-wider group-hover:text-[var(--color-text-primary)] transition-colors">
+                            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider group-hover:text-slate-800 transition-colors">
                                 Card Issuance Terms
                             </span>
                             <motion.div
                                 animate={{ rotate: isTermsOpen ? 90 : 0 }}
                                 transition={{ duration: 0.2 }}
                             >
-                                <ChevronRight size={16} className="text-[var(--color-text-secondary)] opacity-30 group-hover:opacity-100 transition-colors" />
+                                <ChevronRight size={16} className="text-slate-400 opacity-30 group-hover:opacity-100 transition-colors" />
                             </motion.div>
                         </button>
 
@@ -167,7 +172,7 @@ export default function CardsPage() {
                                     transition={{ duration: 0.3 }}
                                     className="overflow-hidden"
                                 >
-                                    <div className="pb-4 space-y-6 text-left">
+                                    <div className="pb-6 space-y-6 text-left">
                                         <div className="space-y-3">
                                             {[
                                                 { label: `${currentCard.price} issue price` },
@@ -175,9 +180,9 @@ export default function CardsPage() {
                                                 { label: '$0.25 authorization fee' }
                                             ].map((term, i) => (
                                                 <div key={i} className="flex items-center gap-3">
-                                                    <CheckCircle2 size={18} className="text-[var(--color-brand-primary)] shrink-0" />
-                                                    <span className="text-sm text-[var(--color-text-secondary)]">
-                                                        <strong className="text-[var(--color-text-primary)]">{term.label}</strong>
+                                                    <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
+                                                    <span className="text-sm text-slate-600">
+                                                        <strong className="text-slate-900">{term.label}</strong>
                                                     </span>
                                                 </div>
                                             ))}
@@ -188,24 +193,28 @@ export default function CardsPage() {
                         </AnimatePresence>
                     </div>
 
+                    {/* Action Button - Integrated into flow */}
+                    <div className="pt-2 w-full">
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={handleGetCard}
+                            className="w-full h-16 bg-[#1C1C1E] text-white rounded-2xl font-black text-lg shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)] flex items-center justify-center gap-3 transition-transform"
+                        >
+                            <span>Issue card</span>
+                            <div className="w-1 h-1 rounded-full bg-white/20" />
+                            <span className="text-white/80">{currentCard.price}</span>
+                        </motion.button>
+
+                        <p className="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 opacity-60">
+                            Instant Delivery Worldwide
+                        </p>
+                    </div>
                 </motion.div>
             </div>
 
-            {/* Sticky Bottom Action Button */}
-            <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+120px)] left-0 right-0 p-6 bg-gradient-to-t from-[var(--color-bg-app)] via-[var(--color-bg-app)] to-transparent z-40">
-                <div className="max-w-md mx-auto">
-                    <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={handleGetCard}
-                        className="w-full py-4 bg-[var(--color-action-black)] text-white rounded-lg font-bold text-lg shadow-xl shadow-[var(--color-action-black)]/10 flex items-center justify-center gap-2"
-                    >
-                        <span>Issue card</span>
-                        <span className="text-[var(--color-bg-surface)]/30">•</span>
-                        <span>{currentCard.price}</span>
-                    </motion.button>
-                </div>
-            </div>
+            {/* Extra Spacing at bottom */}
+            <div className="h-32 pointer-events-none" />
         </div>
     );
 }

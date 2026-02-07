@@ -16,7 +16,8 @@ import {
     MessageCircle,
     Copy,
     Check,
-    X // Added Close icon
+    X, // Added Close icon
+    ArrowLeft
 } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
 import { useUser } from '../context/UserContext';
@@ -171,158 +172,181 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                             animate={{ x: 0 }}
                             exit={{ x: '-100%' }}
                             transition={{ type: 'tween', ease: 'circOut', duration: 0.3 }} // Optimized animation
-                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-5 overflow-y-auto bg-[var(--color-bg-app)] p-6 pt-[max(2rem,calc(env(safe-area-inset-top)+32px))] shadow-[20px_0_60px_rgba(0,0,0,0.1)] ml-0 mr-auto"
+                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-[var(--color-bg-app)] pt-[env(safe-area-inset-top)] shadow-[20px_0_60px_rgba(0,0,0,0.1)] ml-0 mr-auto"
                             style={{
                                 marginLeft: 'max(0px, calc(50% - 32rem / 2))',
                                 left: 0,
                                 willChange: 'transform' // GPU hint
                             }}
                         >
-                            {/* Close Button */}
-                            <button
+                            {/* Header / Back Button Area */}
+                            <div
+                                className="flex h-14 items-center px-4 shrink-0"
+                                style={{
+                                    marginTop: 'calc(var(--spacing-telegram-header) + 8px)'
+                                }}
+                            >
+                                <button
+                                    onClick={onClose}
+                                    className="group -ml-1 rounded-2xl transition-all hover:bg-slate-100/50 active:scale-95 pointer-events-auto"
+                                >
+                                    <div className="flex items-center gap-2 rounded-2xl border border-[var(--color-brand-border)] bg-white px-3 py-1.5 shadow-sm">
+                                        <ArrowLeft className="text-[var(--color-text-primary)] h-5 w-5 transition-transform group-hover:-translate-x-1" />
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-[var(--color-text-primary)] pr-0.5">
+                                            Back
+                                        </span>
+                                    </div>
+                                </button>
+                            </div>
+
+                            {/* Close Button (Legacy X) - Optional to keep, but user asked for Back button in Menu position */}
+                            {/* <button
                                 onClick={onClose}
                                 className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-[var(--color-text-secondary)]"
                             >
                                 <X className="h-5 w-5" />
-                            </button>
+                            </button> */}
 
-                            {/* User Profile Header */}
-                            <div className="flex flex-col items-center gap-4 px-2 mt-4">
-                                <div className="group relative">
-                                    <div className="relative h-20 w-20 overflow-hidden rounded-full border-4 border-white shadow-xl bg-white">
-                                        <img
-                                            src={user?.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username || 'partner'}`}
-                                            alt="Avatar"
-                                            className="h-full w-full object-cover"
-                                        />
+                            {/* Scrollable Content */}
+                            <div className="flex-1 overflow-y-auto px-6 pb-10 flex flex-col gap-5">
+                                {/* User Profile Header */}
+                                <div className="flex flex-col items-center gap-4 px-2 mt-4">
+                                    <div className="group relative">
+                                        <div className="relative h-20 w-20 overflow-hidden rounded-full border-4 border-white shadow-xl bg-white">
+                                            <img
+                                                src={user?.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username || 'partner'}`}
+                                                alt="Avatar"
+                                                className="h-full w-full object-cover"
+                                            />
+                                        </div>
+                                        <div className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-[var(--color-text-primary)] ring-4 ring-[var(--color-bg-app)]">
+                                            <span className="text-[10px] font-black text-[var(--color-bg-surface)]">
+                                                {stats.level}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-[var(--color-text-primary)] ring-4 ring-[var(--color-bg-app)]">
-                                        <span className="text-[10px] font-black text-[var(--color-bg-surface)]">
-                                            {stats.level}
-                                        </span>
+
+                                    <div className="text-center space-y-1">
+                                        <h3 className="text-lg font-black tracking-tight text-[var(--color-text-primary)]">
+                                            {user?.first_name || 'Partner'} {user?.last_name || ''}
+                                        </h3>
+                                        <div className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[var(--color-text-secondary)] shadow-sm border border-[var(--color-brand-border)]">
+                                            <Trophy className="h-3 w-3 text-amber-500" />
+                                            {stats.rank}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="text-center space-y-1">
-                                    <h3 className="text-lg font-black tracking-tight text-[var(--color-text-primary)]">
-                                        {user?.first_name || 'Partner'} {user?.last_name || ''}
-                                    </h3>
-                                    <div className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[var(--color-text-secondary)] shadow-sm border border-[var(--color-brand-border)]">
-                                        <Trophy className="h-3 w-3 text-amber-500" />
-                                        {stats.rank}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Menu Sections */}
-                            <div className="flex flex-1 flex-col gap-2">
-                                {menuItems.map((item) => (
-                                    <div key={item.id} className="rounded-2xl bg-white border border-[var(--color-brand-border)] overflow-hidden shadow-sm">
-                                        <button
-                                            onClick={() => toggleSection(item.id)}
-                                            className="w-full flex items-center justify-between p-4 bg-white active:bg-slate-50 transition-colors"
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                <div className={`p-2 rounded-xl bg-slate-50 text-slate-600`}>
-                                                    {React.cloneElement(item.icon as React.ReactElement, { className: "h-4 w-4" })}
-                                                </div>
-                                                <span className="text-sm font-bold text-[var(--color-text-primary)]">{item.label}</span>
-                                            </div>
-                                            <motion.div
-                                                animate={{ rotate: expandedItem === item.id ? 90 : 0 }}
-                                                transition={{ duration: 0.2 }}
+                                {/* Menu Sections */}
+                                <div className="flex flex-1 flex-col gap-2">
+                                    {menuItems.map((item) => (
+                                        <div key={item.id} className="rounded-2xl bg-white border border-[var(--color-brand-border)] overflow-hidden shadow-sm">
+                                            <button
+                                                onClick={() => toggleSection(item.id)}
+                                                className="w-full flex items-center justify-between p-4 bg-white active:bg-slate-50 transition-colors"
                                             >
-                                                <ChevronRight className="h-4 w-4 text-slate-400" />
-                                            </motion.div>
-                                        </button>
-                                        <AnimatePresence>
-                                            {expandedItem === item.id && (
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`p-2 rounded-xl bg-slate-50 text-slate-600`}>
+                                                        {React.cloneElement(item.icon as React.ReactElement, { className: "h-4 w-4" })}
+                                                    </div>
+                                                    <span className="text-sm font-bold text-[var(--color-text-primary)]">{item.label}</span>
+                                                </div>
                                                 <motion.div
-                                                    initial={{ height: 0, opacity: 0 }}
-                                                    animate={{ height: 'auto', opacity: 1 }}
-                                                    exit={{ height: 0, opacity: 0 }}
+                                                    animate={{ rotate: expandedItem === item.id ? 90 : 0 }}
                                                     transition={{ duration: 0.2 }}
                                                 >
-                                                    <div className="px-4 pb-4 border-t border-slate-50">
-                                                        {renderSectionContent(item.id)}
-                                                    </div>
+                                                    <ChevronRight className="h-4 w-4 text-slate-400" />
                                                 </motion.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* Wallet Integration */}
-                            <div className="px-1 mt-auto">
-                                <motion.button
-                                    whileTap={{ scale: 0.98 }}
-                                    onClick={() => {
-                                        selection();
-                                        if (wallet) {
-                                            tonConnectUI.disconnect();
-                                        } else {
-                                            tonConnectUI.openModal();
-                                        }
-                                    }}
-                                    className={`relative overflow-hidden w-full rounded-2xl p-4 shadow-sm transition-all border ${wallet
-                                        ? 'bg-emerald-500 text-white border-transparent'
-                                        : 'bg-white text-[var(--color-text-primary)] border-[var(--color-brand-border)]'
-                                        }`}
-                                >
-                                    <div className="flex items-center justify-between relative z-10">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`rounded-xl p-2 ${wallet ? 'bg-white/20' : 'bg-slate-100'}`}>
-                                                <Wallet className={`h-5 w-5 ${wallet ? 'text-white' : 'text-slate-600'}`} />
-                                            </div>
-                                            <div className="text-left">
-                                                <div className={`text-[10px] font-black uppercase tracking-widest ${wallet ? 'text-emerald-100' : 'text-[var(--color-text-secondary)]'}`}>
-                                                    Wallet
-                                                </div>
-                                                <div className="font-bold text-sm">
-                                                    {wallet ? formattedAddress : 'Connect Wallet'}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {wallet ? (
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); handleCopy(formattedAddress); }}
-                                                className="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
-                                            >
-                                                {copied ? <Check className="h-4 w-4 text-white" /> : <Copy className="h-4 w-4 text-white" />}
                                             </button>
-                                        ) : (
-                                            <ChevronRight className="h-4 w-4 opacity-50" />
-                                        )}
-                                    </div>
-                                </motion.button>
-                            </div>
-
-                            {/* Theme Selector */}
-                            <div className="mt-auto space-y-4 pt-4">
-                                <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-white border border-[var(--color-brand-border)]">
-                                    {[
-                                        { id: 'system', icon: Monitor, label: 'System' },
-                                        { id: 'light', icon: Sun, label: 'Light' },
-                                        { id: 'dark', icon: Moon, label: 'Dark' },
-                                    ].map((option) => (
-                                        <button
-                                            key={option.id}
-                                            onClick={() => { setTheme(option.id); selection(); }}
-                                            className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 transition-all ${theme === option.id
-                                                ? 'bg-[var(--color-text-primary)] text-[var(--color-bg-surface)] shadow-md'
-                                                : 'text-[var(--color-text-secondary)] hover:bg-slate-50'
-                                                }`}
-                                        >
-                                            <option.icon className="h-3.5 w-3.5" />
-                                            <span className="text-[10px] font-bold">{option.label}</span>
-                                        </button>
+                                            <AnimatePresence>
+                                                {expandedItem === item.id && (
+                                                    <motion.div
+                                                        initial={{ height: 0, opacity: 0 }}
+                                                        animate={{ height: 'auto', opacity: 1 }}
+                                                        exit={{ height: 0, opacity: 0 }}
+                                                        transition={{ duration: 0.2 }}
+                                                    >
+                                                        <div className="px-4 pb-4 border-t border-slate-50">
+                                                            {renderSectionContent(item.id)}
+                                                        </div>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
                                     ))}
                                 </div>
 
-                                <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-[var(--color-text-secondary)] opacity-50">
-                                    P2PHub v1.0.0
-                                </p>
+                                {/* Wallet Integration */}
+                                <div className="px-1 mt-auto">
+                                    <motion.button
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={() => {
+                                            selection();
+                                            if (wallet) {
+                                                tonConnectUI.disconnect();
+                                            } else {
+                                                tonConnectUI.openModal();
+                                            }
+                                        }}
+                                        className={`relative overflow-hidden w-full rounded-2xl p-4 shadow-sm transition-all border ${wallet
+                                            ? 'bg-emerald-500 text-white border-transparent'
+                                            : 'bg-white text-[var(--color-text-primary)] border-[var(--color-brand-border)]'
+                                            }`}
+                                    >
+                                        <div className="flex items-center justify-between relative z-10">
+                                            <div className="flex items-center gap-3">
+                                                <div className={`rounded-xl p-2 ${wallet ? 'bg-white/20' : 'bg-slate-100'}`}>
+                                                    <Wallet className={`h-5 w-5 ${wallet ? 'text-white' : 'text-slate-600'}`} />
+                                                </div>
+                                                <div className="text-left">
+                                                    <div className={`text-[10px] font-black uppercase tracking-widest ${wallet ? 'text-emerald-100' : 'text-[var(--color-text-secondary)]'}`}>
+                                                        Wallet
+                                                    </div>
+                                                    <div className="font-bold text-sm">
+                                                        {wallet ? formattedAddress : 'Connect Wallet'}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {wallet ? (
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); handleCopy(formattedAddress); }}
+                                                    className="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
+                                                >
+                                                    {copied ? <Check className="h-4 w-4 text-white" /> : <Copy className="h-4 w-4 text-white" />}
+                                                </button>
+                                            ) : (
+                                                <ChevronRight className="h-4 w-4 opacity-50" />
+                                            )}
+                                        </div>
+                                    </motion.button>
+                                </div>
+
+                                {/* Theme Selector */}
+                                <div className="mt-auto space-y-4 pt-4">
+                                    <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-white border border-[var(--color-brand-border)]">
+                                        {[
+                                            { id: 'system', icon: Monitor, label: 'System' },
+                                            { id: 'light', icon: Sun, label: 'Light' },
+                                            { id: 'dark', icon: Moon, label: 'Dark' },
+                                        ].map((option) => (
+                                            <button
+                                                key={option.id}
+                                                onClick={() => { setTheme(option.id); selection(); }}
+                                                className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 transition-all ${theme === option.id
+                                                    ? 'bg-[var(--color-text-primary)] text-[var(--color-bg-surface)] shadow-md'
+                                                    : 'text-[var(--color-text-secondary)] hover:bg-slate-50'
+                                                    }`}
+                                            >
+                                                <option.icon className="h-3.5 w-3.5" />
+                                                <span className="text-[10px] font-bold">{option.label}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-[var(--color-text-secondary)] opacity-50">
+                                        P2PHub v1.0.0
+                                    </p>
+                                </div>
                             </div>
                         </motion.div>
                     </div>
