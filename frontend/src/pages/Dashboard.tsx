@@ -123,7 +123,7 @@ export default function Dashboard() {
                                 Our Mission
                             </p>
                         </motion.div>
-                        <h1 className="text-3xl font-extrabold tracking-tighter text-[var(--color-text-primary)] leading-[1.1]">
+                        <h1 className="text-4xl font-extrabold tracking-tighter text-[var(--color-text-primary)] leading-[1.1]">
                             Together,<br />
                             Let's Build a Brand<br />
                             <span className="text-[var(--color-brand-blue)]">That Truly Connects</span>
