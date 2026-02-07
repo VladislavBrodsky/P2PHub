@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
 import { useUser } from '../context/UserContext';
+import { useTonConnectUI, useTonAddress, useTonWallet } from '@tonconnect/ui-react';
 
 interface ProfileDrawerProps {
     isOpen: boolean;
@@ -40,8 +41,16 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
         level: user?.level || 1,
         rank: user?.level ? (user.level > 10 ? 'Elite' : 'Beginner') : 'Beginner'
     };
-    const connected = false;
-    const address = 'UQ...93d2';
+
+    // TON Connect
+    const [tonConnectUI] = useTonConnectUI();
+    const wallet = useTonWallet();
+    const friendlyAddress = useTonAddress();
+
+    // Format address for display (e.g. UQ...93d2)
+    const formattedAddress = friendlyAddress
+        ? `${friendlyAddress.slice(0, 4)}...${friendlyAddress.slice(-4)}`
+        : '';
 
     // Prevent body scroll when open
     React.useEffect(() => {
@@ -192,44 +201,6 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                 </div>
                             </div>
 
-                            {/* Wallet Integration */}
-                            <div className="px-1">
-                                <motion.button
-                                    whileTap={{ scale: 0.98 }}
-                                    onClick={() => selection()}
-                                    className={`relative overflow-hidden w-full rounded-2xl p-4 shadow-sm transition-all border ${connected
-                                        ? 'bg-emerald-500 text-white border-transparent'
-                                        : 'bg-white text-[var(--color-text-primary)] border-[var(--color-brand-border)]'
-                                        }`}
-                                >
-                                    <div className="flex items-center justify-between relative z-10">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`rounded-xl p-2 ${connected ? 'bg-white/20' : 'bg-slate-100'}`}>
-                                                <Wallet className={`h-5 w-5 ${connected ? 'text-white' : 'text-slate-600'}`} />
-                                            </div>
-                                            <div className="text-left">
-                                                <div className={`text-[10px] font-black uppercase tracking-widest ${connected ? 'text-emerald-100' : 'text-[var(--color-text-secondary)]'}`}>
-                                                    Wallet
-                                                </div>
-                                                <div className="font-bold text-sm">
-                                                    {connected ? address : 'Connect Wallet'}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {connected ? (
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); handleCopy(address); }}
-                                                className="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
-                                            >
-                                                {copied ? <Check className="h-4 w-4 text-white" /> : <Copy className="h-4 w-4 text-white" />}
-                                            </button>
-                                        ) : (
-                                            <ChevronRight className="h-4 w-4 opacity-50" />
-                                        )}
-                                    </div>
-                                </motion.button>
-                            </div>
-
                             {/* Menu Sections */}
                             <div className="flex flex-1 flex-col gap-2">
                                 {menuItems.map((item) => (
@@ -269,6 +240,51 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                 ))}
                             </div>
 
+                            {/* Wallet Integration (Moved to Bottom) */}
+                            <div className="px-1 mt-auto">
+                                <motion.button
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={() => {
+                                        selection();
+                                        if (wallet) {
+                                            tonConnectUI.disconnect();
+                                        } else {
+                                            tonConnectUI.openModal();
+                                        }
+                                    }}
+                                    className={`relative overflow-hidden w-full rounded-2xl p-4 shadow-sm transition-all border ${wallet
+                                        ? 'bg-emerald-500 text-white border-transparent'
+                                        : 'bg-white text-[var(--color-text-primary)] border-[var(--color-brand-border)]'
+                                        }`}
+                                >
+                                    <div className="flex items-center justify-between relative z-10">
+                                        <div className="flex items-center gap-3">
+                                            <div className={`rounded-xl p-2 ${wallet ? 'bg-white/20' : 'bg-slate-100'}`}>
+                                                <Wallet className={`h-5 w-5 ${wallet ? 'text-white' : 'text-slate-600'}`} />
+                                            </div>
+                                            <div className="text-left">
+                                                <div className={`text-[10px] font-black uppercase tracking-widest ${wallet ? 'text-emerald-100' : 'text-[var(--color-text-secondary)]'}`}>
+                                                    Wallet
+                                                </div>
+                                                <div className="font-bold text-sm">
+                                                    {wallet ? formattedAddress : 'Connect Wallet'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {wallet ? (
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); handleCopy(formattedAddress); }}
+                                                className="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
+                                            >
+                                                {copied ? <Check className="h-4 w-4 text-white" /> : <Copy className="h-4 w-4 text-white" />}
+                                            </button>
+                                        ) : (
+                                            <ChevronRight className="h-4 w-4 opacity-50" />
+                                        )}
+                                    </div>
+                                </motion.button>
+                            </div>
+
                             {/* Theme Selector */}
                             <div className="mt-auto space-y-4 pt-4">
                                 <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-white border border-[var(--color-brand-border)]">
@@ -281,8 +297,8 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                             key={option.id}
                                             onClick={() => { setTheme(option.id); selection(); }}
                                             className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 transition-all ${theme === option.id
-                                                    ? 'bg-[var(--color-text-primary)] text-[var(--color-bg-surface)] shadow-md'
-                                                    : 'text-[var(--color-text-secondary)] hover:bg-slate-50'
+                                                ? 'bg-[var(--color-text-primary)] text-[var(--color-bg-surface)] shadow-md'
+                                                : 'text-[var(--color-text-secondary)] hover:bg-slate-50'
                                                 }`}
                                         >
                                             <option.icon className="h-3.5 w-3.5" />

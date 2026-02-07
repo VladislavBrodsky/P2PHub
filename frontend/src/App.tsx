@@ -7,6 +7,7 @@ import ReferralPage from './pages/Referral';
 import LeaderboardPage from './pages/Leaderboard';
 import { miniApp, backButton, viewport } from '@telegram-apps/sdk-react';
 import { UserProvider } from './context/UserContext';
+import { TonConnectUIProvider } from '@tonconnect/ui-react';
 
 function App() {
     const [activeTab, setActiveTab] = useState('home');
@@ -81,24 +82,26 @@ function App() {
     }, [activeTab]);
 
     return (
-        <UserProvider>
-            <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
-                {activeTab === 'home' && <Dashboard />}
-                {activeTab === 'cards' && <CardsPage />}
-                {activeTab === 'partner' && <CommunityPage />}
-                {activeTab === 'earn' && <ReferralPage />}
-                {activeTab === 'league' && <LeaderboardPage />}
-                {['coming_soon'].includes(activeTab) && (
-                    <div className="flex flex-col items-center justify-center h-[60vh] text-center px-10">
-                        <div className="text-4xl mb-4">🚀</div>
-                        <h2 className="text-2xl font-black mb-2 uppercase">Coming Soon</h2>
-                        <p className="text-[var(--color-text-secondary)] font-medium">
-                            We're building something amazing for our partners. Stay tuned!
-                        </p>
-                    </div>
-                )}
-            </Layout>
-        </UserProvider>
+        <TonConnectUIProvider manifestUrl="https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json">
+            <UserProvider>
+                <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
+                    {activeTab === 'home' && <Dashboard />}
+                    {activeTab === 'cards' && <CardsPage />}
+                    {activeTab === 'partner' && <CommunityPage />}
+                    {activeTab === 'earn' && <ReferralPage />}
+                    {activeTab === 'league' && <LeaderboardPage />}
+                    {['coming_soon'].includes(activeTab) && (
+                        <div className="flex flex-col items-center justify-center h-[60vh] text-center px-10">
+                            <div className="text-4xl mb-4">🚀</div>
+                            <h2 className="text-2xl font-black mb-2 uppercase">Coming Soon</h2>
+                            <p className="text-[var(--color-text-secondary)] font-medium">
+                                We're building something amazing for our partners. Stay tuned!
+                            </p>
+                        </div>
+                    )}
+                </Layout>
+            </UserProvider>
+        </TonConnectUIProvider>
     );
 }
 
