@@ -27,8 +27,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     const refreshUser = async () => {
         try {
-            const initData = window.Telegram?.WebApp?.initData || '';
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            // Use SDK to get initData more reliably
+            let initData = '';
+            try {
+                const { initDataRaw } = window.Telegram?.WebApp ? { initDataRaw: window.Telegram.WebApp.initData } : { initDataRaw: '' };
+                initData = initDataRaw || '';
+            } catch (e) {
+                console.error('Failed to get launch params:', e);
+            }
+
+            const apiUrl = import.meta.env.VITE_API_URL || 'https://p2phub-production.up.railway.app' || 'http://localhost:8000';
+            console.log('Fetching user from:', `${apiUrl}/api/partner/me`);
+
             const res = await axios.get(`${apiUrl}/api/partner/me`, {
                 headers: {
                     'X-Telegram-Init-Data': initData
