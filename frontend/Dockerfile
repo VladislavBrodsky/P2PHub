@@ -24,10 +24,7 @@ RUN npm install -g serve
 COPY --from=build /app/dist ./dist
 
 # Expose Railway's PORT (default 80)
-ENV PORT=80
-EXPOSE ${PORT}
-
 # Start serve
 # -s: Single-page application (rewrites all not-found requests to index.html)
-# -l: Listen on specific port
-CMD serve -s dist -l tcp://0.0.0.0:${PORT}
+# -l: Listen on specific port (default to 80 if PORT is not set)
+CMD ["/bin/sh", "-c", "serve -s dist -l ${PORT:-80}"]
