@@ -68,9 +68,9 @@ export default function Dashboard() {
         >
             {/* 0. Personalization Section */}
             <motion.div variants={item} className="px-5">
-                <div className="flex items-center gap-5">
+                <div className="flex items-center gap-4">
                     <div className="relative group">
-                        <div className="h-20 w-20 overflow-hidden rounded-3xl border-2 border-[var(--color-brand-border)] bg-white shadow-premium transition-all duration-300 group-hover:scale-105 group-hover:rotate-2">
+                        <div className="h-16 w-16 overflow-hidden rounded-2xl border border-[var(--color-brand-border)] bg-white shadow-premium transition-all duration-300 group-hover:scale-105 group-hover:rotate-2">
                             {isUserLoading ? (
                                 <div className="h-full w-full bg-slate-100 animate-pulse" />
                             ) : (
@@ -81,21 +81,24 @@ export default function Dashboard() {
                                 />
                             )}
                         </div>
-                        <div className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-[var(--color-brand-blue)] text-white shadow-premium ring-2 ring-[var(--color-bg-app)]">
-                            <Sparkles className="h-4 w-4 fill-current" />
+                        <div className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-brand-blue)] text-white shadow-premium ring-2 ring-[var(--color-bg-app)]">
+                            <Sparkles className="h-3 w-3 fill-current" />
                         </div>
                     </div>
-                    <div className="flex flex-col gap-1">
-                        <h2 className="text-3xl font-black tracking-tighter text-[var(--color-text-primary)] leading-none">
+                    <div className="flex flex-col gap-0.5">
+                        <h2 className="text-2xl font-black tracking-tighter text-[var(--color-text-primary)] leading-none">
                             Hi, {user?.first_name ? (user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name) : 'Partner'}!
                         </h2>
-                        <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--color-text-secondary)] bg-slate-100 px-2 py-0.5 rounded-md">
-                                Level {user?.level || 1}
-                            </span>
-                            <span className="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--color-brand-blue)]">
-                                {user?.level && user.level > 10 ? 'Elite' : 'Pioneer'} Partner
-                            </span>
+                        <div className="flex items-center gap-2 mt-1">
+                            <div className="flex items-center gap-2 rounded-lg bg-slate-50 px-2.5 py-1 border border-slate-100">
+                                <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">
+                                    LVL {user?.level || 1}
+                                </span>
+                                <div className="h-2 w-[1px] bg-slate-300" />
+                                <span className="text-[9px] font-black uppercase tracking-widest text-[var(--color-brand-blue)]">
+                                    {user?.level && user.level > 10 ? 'Elite' : 'Pioneer'}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
