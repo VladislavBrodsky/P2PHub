@@ -18,8 +18,10 @@ function App() {
             if (miniApp.ready.isAvailable()) miniApp.ready();
 
             // Expand app for better UX
-            if (miniApp.expand.isAvailable()) {
-                miniApp.expand();
+            // Using standard WebApp API for reliable expansion
+            if (window.Telegram?.WebApp) {
+                window.Telegram.WebApp.ready();
+                window.Telegram.WebApp.expand();
             }
 
             // Handle back button visibility
