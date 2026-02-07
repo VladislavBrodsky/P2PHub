@@ -12,15 +12,15 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Serving stage using Node.js 'serve'
+# Serving stage using custom Node.js server
 FROM node:20
 
 WORKDIR /app
 
-# Copy built app
+# Copy built app and server script
 COPY --from=build /app/dist ./dist
+COPY server.cjs ./
 
-# Start serve
-# -s: Single-page application (rewrites all not-found requests to index.html)
-# -l: Listen on specific port (default to 80 if PORT is not set)
-CMD ["/bin/sh", "-c", "npx serve -s dist -l ${PORT:-80}"]
+# Start the custom server
+# Explicitly handles PORT and SPA routing
+CMD ["node", "server.cjs"]
