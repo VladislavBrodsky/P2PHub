@@ -18,11 +18,15 @@ function App() {
             if (miniApp.ready.isAvailable()) miniApp.ready();
 
             // Expand app for better UX
-            // Using standard WebApp API for reliable expansion
-            if (window.Telegram?.WebApp) {
-                window.Telegram.WebApp.ready();
-                window.Telegram.WebApp.expand();
-            }
+            const expandApp = () => {
+                if (window.Telegram?.WebApp) {
+                    window.Telegram.WebApp.ready();
+                    window.Telegram.WebApp.expand();
+                }
+            };
+            expandApp();
+            setTimeout(expandApp, 500);
+            setTimeout(expandApp, 2000);
 
             // Handle back button visibility
             if (backButton.mount.isAvailable()) {
