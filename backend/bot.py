@@ -21,9 +21,11 @@ from app.core.keyboards import get_main_menu_keyboard
 @dp.message(CommandStart())
 async def cmd_start(message: types.Message):
     await message.answer(
-        f"👋 *Hi {message.from_user.first_name}!*\n\n"
-        "Welcome to the *PinToPay Partner Hub*.\n\n"
-        "Manage your virtual cards, track earnings, and grow your network all in one place.",
+        "💎 *Welcome to Pintopay Partner*\n\n"
+        "You are early! 🚀\n"
+        "Join the revolution in decentralized payments.\n"
+        "Earn XP, invite friends, and unlock exclusive rewards.\n\n"
+        "👇 *Start your journey below*",
         parse_mode="Markdown",
         reply_markup=get_main_menu_keyboard(WEB_APP_URL)
     )
