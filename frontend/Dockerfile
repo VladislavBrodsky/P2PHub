@@ -27,6 +27,7 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # Expose Railway's PORT (default 80 for local)
 EXPOSE ${PORT:-80}
 ENV PORT=80
+ENV NGINX_ENVSUBST_FILTER=PORT
 
 # Use envsubst to replace ${PORT} in nginx config, then start nginx
 CMD ["nginx", "-g", "daemon off;"]
