@@ -7,6 +7,8 @@ class Partner(SQLModel, table=True):
     telegram_id: str = Field(index=True, unique=True)
     username: Optional[str] = None
     first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    photo_url: Optional[str] = None
     balance: float = Field(default=0.0)
     level: int = Field(default=1)
     referral_code: str = Field(unique=True)

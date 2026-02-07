@@ -4,12 +4,14 @@ import { useHaptic } from '../hooks/useHaptic';
 import { Button } from '../components/ui/Button';
 import { Section } from '../components/Section';
 import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
+import { useUser } from '../context/UserContext';
 
 export default function ReferralPage() {
     const [isLoading, setIsLoading] = useState(true);
     const { notification, selection } = useHaptic();
+    const { user } = useUser();
 
-    const referralLink = 'https://t.me/pintopay_bot?start=ref123';
+    const referralLink = `https://t.me/pintopay_bot?start=${user?.referral_code || 'ref_dev'}`;
 
     useEffect(() => {
         // Simulate loading

@@ -3,6 +3,7 @@ import { QrCode, Copy, Gift, DollarSign } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
 import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 import { Button } from '../components/ui/Button';
+import { useUser } from '../context/UserContext';
 
 // Mock translation function for now, replace with actual i18n if needed
 const t = (key: string, defaultValue: string) => defaultValue;
@@ -10,8 +11,9 @@ const t = (key: string, defaultValue: string) => defaultValue;
 export default function CommunityPage() {
     const [isLoading, setIsLoading] = useState(true);
     const { notification, selection } = useHaptic();
+    const { user } = useUser();
 
-    const referralLink = 'https://t.me/pintopay_bot?start=ref123';
+    const referralLink = `https://t.me/pintopay_bot?start=${user?.referral_code || 'ref_dev'}`;
 
     useEffect(() => {
         const fetchData = async () => {

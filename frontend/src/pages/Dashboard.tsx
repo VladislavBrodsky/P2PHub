@@ -8,24 +8,18 @@ import { BentoFeature } from '../components/Marketing/BentoFeature';
 import { Skeleton } from '../components/Skeleton';
 import { Button } from '../components/ui/Button';
 import { useHaptic } from '../hooks/useHaptic';
-import { Star, Users, Zap, Globe, Shield, Wallet, ChevronRight } from 'lucide-react';
+import { Star, Users, Zap, Globe, Shield, Wallet, ChevronRight, Sparkles } from 'lucide-react';
 import { useState } from 'react';
+import { useUser } from '../context/UserContext';
 
 const API_BASE = 'http://localhost:8000/api';
 
 export default function Dashboard() {
     const { selection } = useHaptic();
+    const { user, isLoading: isUserLoading } = useUser();
     const [copied, setCopied] = useState(false);
 
-    const { data: partner, isLoading } = useQuery({
-        queryKey: ['partner'],
-        queryFn: async () => {
-            const res = await axios.get(`${API_BASE}/partner/me`);
-            return res.data;
-        }
-    });
-
-    const { data: earnings } = useQuery({
+    const { data: earnings, isLoading: isEarningsLoading } = useQuery({
         queryKey: ['earnings'],
         queryFn: async () => {
             const res = await axios.get(`${API_BASE}/earnings/`);
@@ -34,21 +28,19 @@ export default function Dashboard() {
     });
 
     // Fallback if no stats
-    const stats = partner || {
+    const stats = user || {
         balance: 0,
-        referral_count: 0,
-        network_xp: 0,
         level: 1,
-        referral_link: 'https://t.me/pintopay_bot'
+        referral_code: 'P2P-DEV'
     };
 
+    const referralLink = `https://t.me/pintopay_bot?start=${stats.referral_code}`;
+
     const handleCopy = () => {
-        if (stats.referral_link) {
-            navigator.clipboard.writeText(stats.referral_link);
-            selection();
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        }
+        navigator.clipboard.writeText(referralLink);
+        selection();
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
     };
 
     const container = {
@@ -73,8 +65,34 @@ export default function Dashboard() {
             initial="hidden"
             animate="show"
         >
+            {/* 0. Personalization Section */}
+            <motion.div variants={item} className="px-5 pt-4">
+                <div className="flex items-center gap-4">
+                    <div className="relative">
+                        <div className="h-16 w-16 overflow-hidden rounded-2xl border-2 border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] shadow-inner">
+                            <img
+                                src={user?.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username || 'partner'}`}
+                                alt="Avatar"
+                                className="h-full w-full object-cover"
+                            />
+                        </div>
+                        <div className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-brand-blue)] text-white shadow-sm ring-2 ring-[var(--color-bg-app)]">
+                            <Sparkles className="h-3 w-3 fill-current" />
+                        </div>
+                    </div>
+                    <div>
+                        <h2 className="text-2xl font-black tracking-tight text-[var(--color-text-primary)]">
+                            Hi, {user?.first_name || 'Partner'}!
+                        </h2>
+                        <p className="text-xs font-bold uppercase tracking-widest text-[var(--color-text-secondary)]">
+                            Level {user?.level || 1} • {user?.level && user.level > 10 ? 'Elite' : 'Pioneer'} Partner
+                        </p>
+                    </div>
+                </div>
+            </motion.div>
+
             {/* 1. Hero Section - Visual Impact */}
-            <motion.div variants={item} className="px-3 pt-2">
+            <motion.div variants={item} className="px-3">
                 <CommunityOrbit />
             </motion.div>
 
@@ -85,15 +103,15 @@ export default function Dashboard() {
 
             {/* 3. Main Stats - Earning Focus */}
             <motion.div variants={item} className="px-3">
-                <div className="relative overflow-hidden rounded-xl border border-[var(--color-brand-primary)]/20 bg-[var(--color-bg-surface)] p-6 shadow-xl">
-                    <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[var(--color-brand-primary)]/10 blur-3xl" />
+                <div className="relative overflow-hidden rounded-xl border border-[var(--color-brand-border)]/20 bg-[var(--color-bg-surface)] p-6 shadow-xl">
+                    <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[var(--color-brand-blue)]/10 blur-3xl" />
 
                     <div className="flex items-start justify-between">
                         <div>
                             <p className="text-[var(--color-text-secondary)] mb-1 text-sm font-bold uppercase tracking-widest">
                                 Total Balance
                             </p>
-                            {isLoading ? (
+                            {isUserLoading ? (
                                 <Skeleton className="h-10 w-32" />
                             ) : (
                                 <span className="text-[var(--color-text-primary)] text-4xl font-black tracking-tight drop-shadow-lg">
@@ -101,8 +119,8 @@ export default function Dashboard() {
                                 </span>
                             )}
                         </div>
-                        <div className="bg-gradient-to-br from-[var(--color-brand-primary)]/20 to-[var(--color-brand-primary)]/5 border-[var(--color-brand-primary)]/20 flex h-10 w-10 items-center justify-center rounded-xl border shadow-[0_0_15px_rgba(56,189,248,0.2)]">
-                            <Star className="text-[var(--color-brand-primary)] fill-[var(--color-brand-primary)] h-5 w-5" />
+                        <div className="bg-gradient-to-br from-[var(--color-brand-blue)]/20 to-[var(--color-brand-blue)]/5 border-[var(--color-brand-blue)]/20 flex h-10 w-10 items-center justify-center rounded-xl border shadow-[0_0_15px_rgba(56,189,248,0.2)]">
+                            <Star className="text-[var(--color-brand-blue)] fill-[var(--color-brand-blue)] h-5 w-5" />
                         </div>
                     </div>
 
@@ -127,14 +145,14 @@ export default function Dashboard() {
                     <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/10 text-blue-500">
                         <Users className="h-5 w-5" />
                     </div>
-                    <p className="text-[var(--color-text-primary)] text-2xl font-black">{stats.referral_count}</p>
+                    <p className="text-[var(--color-text-primary)] text-2xl font-black">12</p>
                     <p className="text-[var(--color-text-secondary)] text-xs font-bold uppercase tracking-wider">Partners</p>
                 </div>
                 <div className="rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-4 transition-all hover:bg-[var(--color-bg-glass)]">
                     <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-orange-500/10 text-orange-500">
                         <Zap className="h-5 w-5" />
                     </div>
-                    <p className="text-[var(--color-text-primary)] text-2xl font-black">{stats.network_xp}</p>
+                    <p className="text-[var(--color-text-primary)] text-2xl font-black">850</p>
                     <p className="text-[var(--color-text-secondary)] text-xs font-bold uppercase tracking-wider">Network XP</p>
                 </div>
             </motion.div>
@@ -179,7 +197,7 @@ export default function Dashboard() {
                         onClick={handleCopy}
                     >
                         <span className="max-w-[200px] truncate font-mono text-xs font-bold text-[var(--color-text-secondary)] transition-colors group-hover:text-[var(--color-text-primary)]">
-                            {stats.referral_link}
+                            {referralLink}
                         </span>
                         <div className="flex items-center gap-1.5 rounded-lg bg-[var(--color-bg-surface)] px-2 py-1 shadow-sm">
                             <span className="text-[var(--color-text-primary)] text-xs font-black uppercase">

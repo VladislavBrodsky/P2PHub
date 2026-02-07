@@ -1,18 +1,13 @@
 import * as React from 'react';
 import { Menu } from 'lucide-react';
+import { useUser } from '../context/UserContext';
 
 interface HeaderProps {
     onOpenMenu: () => void;
 }
 
 export const Header = ({ onOpenMenu }: HeaderProps) => {
-    // Placeholder for user data until UserContext is implemented
-    const user = {
-        first_name: 'Partner',
-        photo_url: null,
-        is_premium: false,
-        username: 'partner'
-    };
+    const { user } = useUser();
 
     return (
         <header
@@ -31,7 +26,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                 <div className="flex items-center gap-2 rounded-full border border-[var(--color-brand-border)] bg-[var(--color-brand-bg)] px-2 py-1 pl-2.5 shadow-sm">
                     <div className="flex flex-col items-end">
                         <span className="text-[var(--color-text-primary)] whitespace-nowrap text-xs font-bold leading-tight tracking-tight">
-                            {user.first_name}
+                            {user?.first_name || 'Partner'}
                         </span>
                         <div className="text-emerald-500 flex items-center gap-1">
                             <span className="text-xs font-bold uppercase tracking-wider opacity-80">
@@ -53,7 +48,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         style={{ width: '32px', height: '32px', minWidth: '32px' }}
                     >
                         <img
-                            src={user.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username}`}
+                            src={user?.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username || 'partner'}`}
                             alt="Avatar"
                             className="h-full w-full object-cover"
                             style={{ width: '100%', height: '100%' }}

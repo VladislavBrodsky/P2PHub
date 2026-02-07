@@ -51,9 +51,13 @@ export default function LeaderboardPage() {
                                     #{index + 1}
                                 </span>
                                 <div className="flex items-center gap-3">
-                                    <div className={`h-10 w-10 rounded-full border-2 ${index < 3 ? 'border-amber-500' : 'border-[var(--color-brand-border)]'}`}
-                                        style={{ backgroundColor: `hsl(${Math.random() * 360}, 70%, 50%)` }}
-                                    />
+                                    <div className={`h-10 w-10 overflow-hidden rounded-full border-2 ${index < 3 ? 'border-amber-500 shadow-sm' : 'border-[var(--color-brand-border)]'}`}>
+                                        <img
+                                            src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`}
+                                            alt={user.name}
+                                            className="h-full w-full object-cover"
+                                        />
+                                    </div>
                                     <div>
                                         <p className="text-sm font-bold text-[var(--color-text-primary)]">{user.name}</p>
                                         <p className="text-[10px] font-bold text-[var(--color-text-secondary)] uppercase">{user.league}</p>

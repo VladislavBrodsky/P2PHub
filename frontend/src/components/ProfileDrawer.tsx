@@ -13,6 +13,7 @@ import {
     Monitor,
 } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
+import { useUser } from '../context/UserContext';
 
 interface ProfileDrawerProps {
     isOpen: boolean;
@@ -21,10 +22,10 @@ interface ProfileDrawerProps {
 
 export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
     const { selection } = useHaptic();
+    const { user } = useUser();
 
-    // Mock data/state
-    const user = { first_name: 'Partner', photo_url: null, username: 'partner' };
-    const stats = { level: 1, rank: 'Beginner' };
+    // Mock stats for now
+    const stats = { level: user?.level || 1, rank: user?.level ? (user.level > 10 ? 'Elite' : 'Beginner') : 'Beginner' };
     const connected = false;
     const address = '';
     const [theme, setTheme] = React.useState('system');
@@ -86,7 +87,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                 <div className="group relative">
                                     <div className="relative h-16 w-16 overflow-hidden rounded-2xl border-4 border-[var(--color-brand-bg)] shadow-lg transition-transform active:scale-95">
                                         <img
-                                            src={user.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username}`}
+                                            src={user?.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username || 'partner'}`}
                                             alt="Avatar"
                                             className="h-full w-full bg-[var(--color-brand-bg)] object-cover"
                                         />
@@ -97,7 +98,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                 </div>
                                 <div className="text-center">
                                     <h3 className="text-base font-bold leading-tight text-[var(--color-text-primary)]">
-                                        {user.first_name}
+                                        {user?.first_name || 'Partner'} {user?.last_name || ''}
                                     </h3>
                                     <div
                                         className="mt-1 inline-flex items-center gap-1 rounded bg-[var(--color-brand-dark)] px-1.5 py-0.5 text-[8px] font-black uppercase tracking-widest text-[var(--color-brand-bg)] shadow-sm"
