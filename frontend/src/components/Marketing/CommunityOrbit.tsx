@@ -1,17 +1,17 @@
 import { motion } from 'framer-motion';
 
 const AVATARS = [
-    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-    "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop",
-    "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop",
-    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&h=100&fit=crop"
+    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&fm=webp",
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&fm=webp",
+    "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop&fm=webp",
+    "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop&fm=webp",
+    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&h=100&fit=crop&fm=webp"
 ];
 
 const CRYPTO_ICONS = [
-    { name: 'BTC', color: '#F7931A', gradientStart: '#FFAB40', gradientEnd: '#E67E00' },
-    { name: 'ETH', color: '#627EEA', gradientStart: '#8CA5FF', gradientEnd: '#4559B5' },
-    { name: 'USDT', color: '#26A17B', gradientStart: '#50C9A3', gradientEnd: '#1A7D5E' }
+    { name: 'BTC', color: '#F7931A', gradientStart: '#FF9900', gradientEnd: '#F7931A' },
+    { name: 'ETH', color: '#627EEA', gradientStart: '#7CA0FF', gradientEnd: '#5570F1' },
+    { name: 'USDT', color: '#26A17B', gradientStart: '#53D3AC', gradientEnd: '#219672' }
 ];
 
 // Crypto SVG Icons
@@ -57,7 +57,7 @@ export const CommunityOrbit = () => {
     ];
 
     return (
-        <div className="relative flex h-[400px] w-full items-center justify-center overflow-visible"> {/* overflow-visible fix */}
+        <div className="relative flex h-[400px] w-full items-center justify-center overflow-visible">
             {/* Background Particles/Stars */}
             {[...Array(6)].map((_, i) => (
                 <motion.div
@@ -66,6 +66,7 @@ export const CommunityOrbit = () => {
                     style={{
                         top: `${Math.random() * 100}%`,
                         left: `${Math.random() * 100}%`,
+                        willChange: 'transform, opacity' // GPU hint
                     }}
                     animate={{
                         opacity: [0.2, 0.8, 0.2],
@@ -88,6 +89,7 @@ export const CommunityOrbit = () => {
                 animate={{ rotate: 360 }}
                 transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
                 className="absolute h-[260px] w-[260px] rounded-full border border-dashed border-slate-200/50 opacity-40 dark:border-white/10"
+                style={{ willChange: 'transform' }} // GPU hint
             />
 
             <div className="absolute h-[180px] w-[180px] rounded-full border border-slate-100/60 opacity-60 dark:border-white/10" />
@@ -109,6 +111,7 @@ const CentralLogo = () => (
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-700 shadow-premium shadow-blue-500/40"
+        style={{ willChange: 'transform' }} // GPU hint
     >
         {/* Glow effect behind logo */}
         <div className="absolute inset-0 z-0 rounded-full bg-blue-500 blur-2xl opacity-40" />
@@ -168,13 +171,19 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
                 width: radius * 2,
                 height: radius * 2,
                 transformOrigin: "center center",
+                willChange: 'transform' // GPU hint
             }}
         >
             <motion.div
                 animate={{ rotate: [-(startAngle), -(startAngle + 360)] }} // Counter-rotate to keep upright
                 transition={{ duration, repeat: Infinity, ease: "linear" }}
                 className="absolute right-0"
-                style={{ width: 56, height: 56, x: "50%" }}
+                style={{
+                    width: 56,
+                    height: 56,
+                    x: "50%",
+                    willChange: 'transform' // GPU hint
+                }}
             >
                 {/* Float Animation */}
                 <motion.div
@@ -185,6 +194,7 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
                         ease: "easeInOut",
                         delay: index * 0.5,
                     }}
+                    style={{ willChange: 'transform' }} // GPU hint
                 >
                     {item.type === 'avatar' ? (
                         <div className="group relative h-14 w-14 cursor-pointer">
@@ -192,7 +202,12 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
                             <div className="absolute inset-0 rounded-full bg-white blur-md opacity-40 transition-opacity group-hover:opacity-70 dark:bg-blue-400" />
 
                             {/* Glass Container */}
-                            <div className="relative h-full w-full overflow-hidden rounded-full border-2 border-white/80 bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110 shadow-lg">
+                            <div
+                                className="relative h-full w-full overflow-hidden rounded-full border-2 border-white/80 bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110"
+                                style={{
+                                    boxShadow: '0 10px 20px -5px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.3)'
+                                }}
+                            >
                                 <img src={item.src} alt="Member" className="h-full w-full object-cover" />
                             </div>
                         </div>
@@ -209,15 +224,15 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
                                 className="relative flex h-full w-full items-center justify-center rounded-full border-2 border-white/90 shadow-lg transition-transform duration-300 group-hover:scale-110 cursor-pointer"
                                 style={{
                                     background: `linear-gradient(135deg, ${item.gradientStart || item.color}, ${item.gradientEnd || item.color})`,
-                                    boxShadow: `0 8px 16px -4px ${item.color}80`
+                                    boxShadow: `0 10px 20px -5px ${item.color}60, inset 0 2px 4px rgba(255,255,255,0.3)`
                                 }}
                             >
+                                {/* Inner Ring for Premium Feel */}
+                                <div className="absolute inset-0 rounded-full border border-white/20" />
                                 <div className="relative z-10 h-7 w-7 text-white drop-shadow-md">
                                     <CryptoIcon name={item.name} />
                                 </div>
 
-                                {/* Shine effect */}
-                                <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 rounded-t-full" />
                             </div>
                         </div>
                     )}
