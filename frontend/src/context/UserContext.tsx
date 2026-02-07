@@ -57,7 +57,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     };
 
     useEffect(() => {
-        refreshUser();
+        const init = async () => {
+            // Wait for Telegram to be ready if it's not yet
+            if (!window.Telegram?.WebApp?.initData) {
+                await new Promise(r => setTimeout(r, 500));
+            }
+            refreshUser();
+        };
+        init();
     }, []);
 
     return (
