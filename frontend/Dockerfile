@@ -33,5 +33,5 @@ RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-# Use envsubst to replace ${PORT} in nginx config, then start nginx
+# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
