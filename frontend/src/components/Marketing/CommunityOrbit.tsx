@@ -120,9 +120,9 @@ const CentralLogo = () => (
         <div className="absolute inset-0 z-10 rounded-full border border-white/20" />
 
         <motion.img
-            animate={{ scale: [1, 1.05, 1, 1.03, 1] }}
+            animate={{ scale: [1, 1.04, 1, 1.02, 1] }}
             transition={{
-                duration: 2,
+                duration: 4, // Slower breathing
                 repeat: Infinity,
                 times: [0, 0.2, 0.4, 0.6, 1],
                 ease: "easeInOut"
@@ -132,22 +132,23 @@ const CentralLogo = () => (
             className="relative z-20 w-14 h-14 object-contain brightness-0 invert"
         />
 
-        {/* Shockwave Ripples */}
+        {/* Shockwave Ripples - Slowed down significantly */}
         {[0, 1, 2].map((i) => (
             <motion.div
                 key={i}
                 animate={{
-                    scale: [1, 2],
-                    opacity: [0.5, 0],
+                    scale: [1, 2.2],
+                    opacity: [0.4, 0],
                     borderWidth: ["2px", "0px"]
                 }}
                 transition={{
-                    duration: 2,
+                    duration: 5, // Much slower waves
                     repeat: Infinity,
-                    delay: i * 0.6,
+                    delay: i * 1.6, // Staggered for continuity
                     ease: "easeOut"
                 }}
-                className="absolute inset-0 z-0 rounded-full border border-blue-400/50"
+                className="absolute inset-0 z-0 rounded-full border border-blue-400/40"
+                style={{ willChange: 'transform, opacity' }}
             />
         ))}
     </motion.div>
