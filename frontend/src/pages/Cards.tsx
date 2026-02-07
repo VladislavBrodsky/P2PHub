@@ -217,15 +217,21 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={handleGetCard}
-                            className={`w-full h-16 rounded-2xl font-black text-lg shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)] flex items-center justify-center gap-3 transition-transform ${selectedTab === 'platinum'
-                                ? 'bg-linear-to-r from-indigo-600 to-purple-600 text-white'
+                            className={`w-full h-16 rounded-2xl font-black text-lg shadow-[0_20px_40px_-12px_rgba(0,0,0,0.15)] flex items-center justify-center gap-3 transition-transform relative overflow-hidden ${selectedTab === 'platinum'
+                                ? 'bg-linear-to-br from-slate-100 via-white to-slate-300 text-slate-900 border border-white/50'
                                 : 'bg-action-black text-white'
                                 }`}
                         >
                             {selectedTab === 'platinum' ? (
                                 <>
-                                    <Crown size={20} className="text-amber-300" />
-                                    <span>Only for Premium Partner</span>
+                                    {/* Crystal Shimmer Effect */}
+                                    <motion.div
+                                        animate={{ x: ['-150%', '150%'] }}
+                                        transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+                                        className="absolute inset-0 bg-linear-to-r from-transparent via-white/80 to-transparent -skew-x-12"
+                                    />
+                                    <Crown size={22} className="text-amber-500 fill-amber-100 relative z-10" />
+                                    <span className="relative z-10">Only for Premium Partner</span>
                                 </>
                             ) : (
                                 <>
