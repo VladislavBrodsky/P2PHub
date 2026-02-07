@@ -16,7 +16,7 @@ RUN npm run build
 FROM nginx:stable-alpine
 
 # Install gettext for envsubst
-RUN apk add --no-cache gettext
+
 
 # Copy nginx template
 COPY nginx.conf /etc/nginx/templates/default.conf.template
