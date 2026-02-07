@@ -192,7 +192,7 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
                             <div className="absolute inset-0 rounded-full bg-white blur-md opacity-40 transition-opacity group-hover:opacity-70 dark:bg-blue-400" />
 
                             {/* Glass Container */}
-                            <div className="relative h-full w-full overflow-hidden rounded-full border-2 border-white/80 bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+                            <div className="relative h-full w-full overflow-hidden rounded-full border-2 border-white/80 bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110 shadow-lg">
                                 <img src={item.src} alt="Member" className="h-full w-full object-cover" />
                             </div>
                         </div>
