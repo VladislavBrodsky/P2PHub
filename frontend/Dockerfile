@@ -12,26 +12,22 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Serving stage with envsubst support for PORT variable
-FROM nginx:stable-alpine
+# Serving stage using Node.js 'serve'
+FROM node:20-slim
 
-# Install gettext for envsubst
+WORKDIR /app
 
-
-# Copy nginx template
-COPY nginx.conf /etc/nginx/templates/default.conf.template
+# Install serve globally
+RUN npm install -g serve
 
 # Copy built app
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist ./dist
 
-# Expose Railway's PORT (default 80 for local)
-EXPOSE ${PORT:-80}
+# Expose Railway's PORT (default 80)
 ENV PORT=80
-# Copy custom entrypoint
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+EXPOSE ${PORT}
 
-ENTRYPOINT ["/entrypoint.sh"]
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start serve
+# -s: Single-page application (rewrites all not-found requests to index.html)
+# -l: Listen on specific port
+CMD serve -s dist -l tcp://0.0.0.0:${PORT}
