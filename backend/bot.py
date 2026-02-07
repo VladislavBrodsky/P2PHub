@@ -5,8 +5,10 @@ from aiogram.filters import CommandStart
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from app.core.config import settings
 
+import sys
+
 # Setup logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
 bot = Bot(token=settings.BOT_TOKEN)
 dp = Dispatcher()
