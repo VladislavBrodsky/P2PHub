@@ -183,7 +183,26 @@ export default function Dashboard() {
                     <div className="space-y-6">
                         <div className="space-y-1 px-4">
                             <h2 className="text-xl font-black text-[var(--color-text-secondary)] tracking-tight leading-tight max-w-[320px] mx-auto">
-                                Join the Global Financial Shift and <span className="text-[var(--color-text-primary)] uppercase tracking-wider block mt-1">Digital Gold Rush</span>
+                                Join the Global Financial Shift and <br />
+                                <motion.span
+                                    className="inline-block uppercase tracking-[0.15em] mt-2 font-black text-2xl"
+                                    style={{
+                                        background: 'linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C)',
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                        backgroundSize: '200% auto'
+                                    }}
+                                    animate={{
+                                        backgroundPosition: ['0% center', '200% center']
+                                    }}
+                                    transition={{
+                                        duration: 4,
+                                        repeat: Infinity,
+                                        ease: "linear"
+                                    }}
+                                >
+                                    Digital Gold Rush
+                                </motion.span>
                             </h2>
                         </div>
 
