@@ -1,8 +1,24 @@
+from contextlib import asynccontextmanager
+import asyncio
 from fastapi import FastAPI, Depends, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.endpoints import partner, earnings
+from bot import bot, dp
 
-app = FastAPI(title="Pintopay Partner Hub API")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Start bot polling
+    polling_task = asyncio.create_task(dp.start_polling(bot))
+    yield
+    # Shutdown
+    await bot.session.close()
+    polling_task.cancel()
+    try:
+        await polling_task
+    except asyncio.CancelledError:
+        pass
+
+app = FastAPI(title="Pintopay Partner Hub API", lifespan=lifespan)
 
 # Configure CORS for TMA
 app.add_middleware(
@@ -19,7 +35,3 @@ app.include_router(earnings.router, prefix="/api/earnings", tags=["earnings"])
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
