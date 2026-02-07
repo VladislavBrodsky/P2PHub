@@ -12,7 +12,8 @@ import { Star, Users, Zap, Globe, Shield, Wallet, ChevronRight, Sparkles } from 
 import { useState } from 'react';
 import { useUser } from '../context/UserContext';
 
-const API_BASE = (import.meta.env.VITE_API_URL || 'https://p2phub-production.up.railway.app') + '/api';
+const PROD_URL = 'https://p2phub-backend-production.up.railway.app';
+const API_BASE = (import.meta.env.VITE_API_URL || PROD_URL) + '/api';
 
 export default function Dashboard() {
     const { selection } = useHaptic();
