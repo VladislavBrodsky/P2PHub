@@ -11,6 +11,12 @@ import {
     Sun,
     Moon,
     Monitor,
+    Globe,
+    Bell,
+    ExternalLink,
+    MessageCircle,
+    Copy,
+    Check
 } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
 import { useUser } from '../context/UserContext';
@@ -24,36 +30,115 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
     const { selection } = useHaptic();
     const { user } = useUser();
 
-    // Mock stats for now
-    const stats = { level: user?.level || 1, rank: user?.level ? (user.level > 10 ? 'Elite' : 'Beginner') : 'Beginner' };
-    const connected = false;
-    const address = '';
+    // State
     const [theme, setTheme] = React.useState('system');
+    const [expandedItem, setExpandedItem] = React.useState<string | null>(null);
+    const [copied, setCopied] = React.useState(false);
 
+    // Mock stats
+    const stats = {
+        level: user?.level || 1,
+        rank: user?.level ? (user.level > 10 ? 'Elite' : 'Beginner') : 'Beginner'
+    };
+    const connected = false;
+    const address = 'UQ...93d2';
+
+    // Prevent body scroll when open
     React.useEffect(() => {
         if (isOpen) {
             const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
             document.body.style.overflow = 'hidden';
-            if (scrollBarWidth > 0) {
-                document.body.style.paddingRight = `${scrollBarWidth}px`;
-            }
+            if (scrollBarWidth > 0) document.body.style.paddingRight = `${scrollBarWidth}px`;
             selection();
         } else {
             document.body.style.overflow = 'unset';
             document.body.style.paddingRight = '0px';
         }
-
         return () => {
             document.body.style.overflow = 'unset';
             document.body.style.paddingRight = '0px';
         };
     }, [isOpen]);
 
+    const handleCopy = (text: string) => {
+        navigator.clipboard.writeText(text);
+        selection();
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    const toggleSection = (id: string) => {
+        selection();
+        setExpandedItem(expandedItem === id ? null : id);
+    };
+
+    const renderSectionContent = (id: string) => {
+        switch (id) {
+            case 'settings':
+                return (
+                    <div className="space-y-3 pt-2">
+                        <div className="flex items-center justify-between p-2 rounded-lg bg-[var(--color-bg-app)]">
+                            <div className="flex items-center gap-2">
+                                <Globe className="h-3.5 w-3.5 text-[var(--color-text-secondary)]" />
+                                <span className="text-xs font-bold text-[var(--color-text-primary)]">Language</span>
+                            </div>
+                            <span className="text-[10px] font-black uppercase text-[var(--color-text-secondary)]">English</span>
+                        </div>
+                        <div className="flex items-center justify-between p-2 rounded-lg bg-[var(--color-bg-app)]">
+                            <div className="flex items-center gap-2">
+                                <Bell className="h-3.5 w-3.5 text-[var(--color-text-secondary)]" />
+                                <span className="text-xs font-bold text-[var(--color-text-primary)]">Notifications</span>
+                            </div>
+                            <div className="h-4 w-7 rounded-full bg-[var(--color-success)] relative">
+                                <div className="absolute right-0.5 top-0.5 h-3 w-3 rounded-full bg-white shadow-sm" />
+                            </div>
+                        </div>
+                    </div>
+                );
+            case 'community':
+                return (
+                    <div className="grid grid-cols-2 gap-2 pt-2">
+                        <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[var(--color-bg-app)] hover:bg-[var(--color-brand-blue)]/5 transition-colors border border-[var(--color-brand-border)]">
+                            <MessageCircle className="h-5 w-5 text-[#0088cc]" />
+                            <span className="text-[10px] font-black uppercase">Channel</span>
+                        </button>
+                        <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[var(--color-bg-app)] hover:bg-[var(--color-brand-blue)]/5 transition-colors border border-[var(--color-brand-border)]">
+                            <Users className="h-5 w-5 text-[#0088cc]" />
+                            <span className="text-[10px] font-black uppercase">Chat</span>
+                        </button>
+                    </div>
+                );
+            case 'faq':
+                return (
+                    <div className="space-y-2 pt-2">
+                        {['How to withdraw?', 'What is Partner Level?', 'Card limits'].map((q, i) => (
+                            <div key={i} className="p-2 rounded-lg bg-[var(--color-bg-app)] text-xs font-medium text-[var(--color-text-secondary)] flex justify-between items-center">
+                                {q}
+                                <ChevronRight className="h-3 w-3 opacity-50" />
+                            </div>
+                        ))}
+                    </div>
+                );
+            case 'support':
+                return (
+                    <div className="pt-2 text-center">
+                        <p className="text-xs text-[var(--color-text-secondary)] mb-3">Our support team is available 24/7 to help you with any issues.</p>
+                        <button className="w-full py-3 rounded-xl bg-[var(--color-text-primary)] text-[var(--color-bg-surface)] text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2">
+                            <Headphones className="h-3.5 w-3.5" />
+                            Contact Support
+                        </button>
+                    </div>
+                );
+            default:
+                return null;
+        }
+    };
+
     const menuItems = [
-        { id: 'settings', icon: <Settings className="h-4 w-4" />, label: 'Settings' },
-        { id: 'community', icon: <Users className="h-4 w-4" />, label: 'Community' },
-        { id: 'faq', icon: <HelpCircle className="h-4 w-4" />, label: 'FAQ' },
-        { id: 'support', icon: <Headphones className="h-4 w-4" />, label: 'Support' },
+        { id: 'settings', icon: <Settings />, label: 'Settings' },
+        { id: 'community', icon: <Users />, label: 'Community' },
+        { id: 'faq', icon: <HelpCircle />, label: 'FAQ' },
+        { id: 'support', icon: <Headphones />, label: 'Support' },
     ];
 
     return (
@@ -69,42 +154,40 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                         className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-[2px]"
                     />
 
-                    {/* Drawer Content Wrapper for Centering */}
+                    {/* Drawer Content */}
                     <div className="fixed inset-0 z-[101] pointer-events-none flex justify-center">
                         <motion.div
                             initial={{ x: '-100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '-100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200, mass: 0.8 }}
-                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-4 overflow-y-auto bg-[var(--color-bg-app)] p-5 pt-[max(1.5rem,calc(env(safe-area-inset-top)+32px))] shadow-[20px_0_60px_rgba(0,0,0,0.1)] ml-0 mr-auto will-change-transform"
-                            style={{
-                                marginLeft: 'max(0px, calc(50% - 32rem / 2))',
-                                left: 0
-                            }}
+                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-5 overflow-y-auto bg-[var(--color-bg-app)] p-6 pt-[max(2rem,calc(env(safe-area-inset-top)+32px))] shadow-[20px_0_60px_rgba(0,0,0,0.1)] ml-0 mr-auto"
+                            style={{ marginLeft: 'max(0px, calc(50% - 32rem / 2))', left: 0 }}
                         >
                             {/* User Profile Header */}
-                            <div className="flex flex-col items-center gap-3 px-2">
+                            <div className="flex flex-col items-center gap-4 px-2">
                                 <div className="group relative">
-                                    <div className="relative h-16 w-16 overflow-hidden rounded-2xl border-4 border-[var(--color-brand-bg)] shadow-lg transition-transform active:scale-95">
+                                    <div className="relative h-20 w-20 overflow-hidden rounded-full border-4 border-white shadow-xl bg-white">
                                         <img
                                             src={user?.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username || 'partner'}`}
                                             alt="Avatar"
-                                            className="h-full w-full bg-[var(--color-brand-bg)] object-cover"
+                                            className="h-full w-full object-cover"
                                         />
                                     </div>
-                                    <div className="absolute -bottom-1 -right-1 rounded-md border border-[var(--color-brand-bg)] bg-[var(--color-brand-dark)] px-1 py-0.5 text-[8px] font-black text-[var(--color-brand-bg)]">
-                                        LVL {stats.level}
+                                    <div className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-[var(--color-text-primary)] ring-4 ring-[var(--color-bg-app)]">
+                                        <span className="text-[10px] font-black text-[var(--color-bg-surface)]">
+                                            {stats.level}
+                                        </span>
                                     </div>
                                 </div>
-                                <div className="text-center">
-                                    <h3 className="text-base font-bold leading-tight text-[var(--color-text-primary)]">
+
+                                <div className="text-center space-y-1">
+                                    <h3 className="text-lg font-black tracking-tight text-[var(--color-text-primary)]">
                                         {user?.first_name || 'Partner'} {user?.last_name || ''}
                                     </h3>
-                                    <div
-                                        className="mt-1 inline-flex items-center gap-1 rounded bg-[var(--color-brand-dark)] px-1.5 py-0.5 text-[8px] font-black uppercase tracking-widest text-[var(--color-brand-bg)] shadow-sm"
-                                    >
-                                        <Trophy className="h-2.5 w-2.5" />
-                                        {stats.rank} Partner
+                                    <div className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[var(--color-text-secondary)] shadow-sm border border-[var(--color-brand-border)]">
+                                        <Trophy className="h-3 w-3 text-amber-500" />
+                                        {stats.rank}
                                     </div>
                                 </div>
                             </div>
@@ -114,64 +197,81 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                 <motion.button
                                     whileTap={{ scale: 0.98 }}
                                     onClick={() => selection()}
-                                    className={`flex w-full items-center justify-between rounded-lg border p-2.5 shadow-sm transition-all ${connected
-                                        ? 'border-emerald-100 bg-emerald-50 text-emerald-600'
-                                        : 'bg-[var(--color-brand-dark)] border-transparent text-[var(--color-brand-bg)]'
+                                    className={`relative overflow-hidden w-full rounded-2xl p-4 shadow-sm transition-all border ${connected
+                                        ? 'bg-emerald-500 text-white border-transparent'
+                                        : 'bg-white text-[var(--color-text-primary)] border-[var(--color-brand-border)]'
                                         }`}
                                 >
-                                    <div className="flex items-center gap-2.5">
-                                        <div className={`rounded-md p-1 ${connected ? 'bg-white' : 'bg-white/10'}`}>
-                                            <Wallet
-                                                className={`h-3.5 w-3.5 ${connected ? 'text-emerald-500' : 'text-white'}`}
-                                            />
+                                    <div className="flex items-center justify-between relative z-10">
+                                        <div className="flex items-center gap-3">
+                                            <div className={`rounded-xl p-2 ${connected ? 'bg-white/20' : 'bg-slate-100'}`}>
+                                                <Wallet className={`h-5 w-5 ${connected ? 'text-white' : 'text-slate-600'}`} />
+                                            </div>
+                                            <div className="text-left">
+                                                <div className={`text-[10px] font-black uppercase tracking-widest ${connected ? 'text-emerald-100' : 'text-[var(--color-text-secondary)]'}`}>
+                                                    Wallet
+                                                </div>
+                                                <div className="font-bold text-sm">
+                                                    {connected ? address : 'Connect Wallet'}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="text-left leading-tight">
-                                            <div
-                                                className={`text-[9px] font-black uppercase tracking-widest ${connected ? 'text-emerald-600/80' : 'text-white/60'}`}
+                                        {connected ? (
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); handleCopy(address); }}
+                                                className="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
                                             >
-                                                {connected ? 'Connected' : 'TON Wallet'}
-                                            </div>
-                                            <div className="max-w-[140px] truncate text-[11px] font-bold">
-                                                {connected ? address : 'Connect Wallet'}
-                                            </div>
-                                        </div>
+                                                {copied ? <Check className="h-4 w-4 text-white" /> : <Copy className="h-4 w-4 text-white" />}
+                                            </button>
+                                        ) : (
+                                            <ChevronRight className="h-4 w-4 opacity-50" />
+                                        )}
                                     </div>
-                                    {!connected && <ChevronRight className="h-3.5 w-3.5 text-white/60" />}
                                 </motion.button>
                             </div>
 
-                            {/* Menu Items */}
-                            <div className="flex flex-1 flex-col gap-1.5">
-                                {menuItems.map((item, i) => (
-                                    <motion.button
-                                        key={item.id}
-                                        onClick={() => {
-                                            selection();
-                                            onClose();
-                                        }}
-                                        initial={{ opacity: 0, x: -10 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{
-                                            delay: 0.2 + i * 0.04,
-                                            duration: 0.4,
-                                            ease: [0.22, 1, 0.36, 1]
-                                        }}
-                                        className="group glass-panel flex items-center justify-between rounded-lg p-2.5 shadow-sm transition-all hover:bg-[var(--color-bg-glass)] active:scale-[0.98]"
-                                    >
-                                        <div className="flex items-center gap-2.5 text-[var(--color-text-primary)]">
-                                            <div className="text-[var(--color-text-secondary)] p-1 transition-colors group-hover:text-[var(--color-text-primary)]">
-                                                {React.cloneElement(item.icon, { className: "h-3.5 w-3.5" })}
+                            {/* Menu Sections */}
+                            <div className="flex flex-1 flex-col gap-2">
+                                {menuItems.map((item) => (
+                                    <div key={item.id} className="rounded-2xl bg-white border border-[var(--color-brand-border)] overflow-hidden shadow-sm">
+                                        <button
+                                            onClick={() => toggleSection(item.id)}
+                                            className="w-full flex items-center justify-between p-4 bg-white active:bg-slate-50 transition-colors"
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div className={`p-2 rounded-xl bg-slate-50 text-slate-600`}>
+                                                    {React.cloneElement(item.icon as React.ReactElement, { className: "h-4 w-4" })}
+                                                </div>
+                                                <span className="text-sm font-bold text-[var(--color-text-primary)]">{item.label}</span>
                                             </div>
-                                            <span className="text-xs font-bold tracking-tight">{item.label}</span>
-                                        </div>
-                                        <ChevronRight className="h-3.5 w-3.5 text-[var(--color-text-secondary)] transition-all group-hover:translate-x-1" />
-                                    </motion.button>
+                                            <motion.div
+                                                animate={{ rotate: expandedItem === item.id ? 90 : 0 }}
+                                                transition={{ duration: 0.2 }}
+                                            >
+                                                <ChevronRight className="h-4 w-4 text-slate-400" />
+                                            </motion.div>
+                                        </button>
+                                        <AnimatePresence>
+                                            {expandedItem === item.id && (
+                                                <motion.div
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: 'auto', opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    transition={{ duration: 0.2 }}
+                                                >
+                                                    <div className="px-4 pb-4 border-t border-slate-50">
+                                                        {renderSectionContent(item.id)}
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
                                 ))}
                             </div>
 
                             {/* Theme Selector */}
-                            <div className="mt-auto space-y-3">
-                                <div className="flex items-center justify-between gap-1 rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-bg-glass)] p-1">
+                            <div className="mt-auto space-y-4 pt-4">
+                                <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-white border border-[var(--color-brand-border)]">
                                     {[
                                         { id: 'system', icon: Monitor, label: 'System' },
                                         { id: 'light', icon: Sun, label: 'Light' },
@@ -179,13 +279,10 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                     ].map((option) => (
                                         <button
                                             key={option.id}
-                                            onClick={() => {
-                                                setTheme(option.id);
-                                                selection();
-                                            }}
-                                            className={`flex flex-1 items-center justify-center gap-2 rounded-lg py-2 transition-all ${theme === option.id
-                                                ? 'bg-[var(--color-brand-bg)] text-[var(--color-text-primary)] shadow-sm ring-1 ring-[var(--color-brand-border)]'
-                                                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                                            onClick={() => { setTheme(option.id); selection(); }}
+                                            className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 transition-all ${theme === option.id
+                                                    ? 'bg-[var(--color-text-primary)] text-[var(--color-bg-surface)] shadow-md'
+                                                    : 'text-[var(--color-text-secondary)] hover:bg-slate-50'
                                                 }`}
                                         >
                                             <option.icon className="h-3.5 w-3.5" />
@@ -194,7 +291,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                     ))}
                                 </div>
 
-                                <p className="text-center text-[8px] font-black uppercase tracking-[0.4em] text-slate-300">
+                                <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-[var(--color-text-secondary)] opacity-50">
                                     P2PHub v1.0.0
                                 </p>
                             </div>
