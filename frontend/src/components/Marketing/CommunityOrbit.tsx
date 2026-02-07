@@ -47,17 +47,24 @@ const CryptoIcon = ({ name, color }: { name: string; color: string }) => {
 };
 
 export const CommunityOrbit = () => {
+    // Interleave avatars and crypto icons for a balanced mix
     const orbitItems = [
-        ...AVATARS.map(src => ({ type: 'avatar' as const, src })),
-        ...CRYPTO_ICONS.map(crypto => ({ type: 'crypto' as const, ...crypto }))
+        { type: 'avatar' as const, src: AVATARS[0] },
+        { type: 'crypto' as const, ...CRYPTO_ICONS[0] },
+        { type: 'avatar' as const, src: AVATARS[1] },
+        { type: 'avatar' as const, src: AVATARS[2] },
+        { type: 'crypto' as const, ...CRYPTO_ICONS[1] },
+        { type: 'avatar' as const, src: AVATARS[3] },
+        { type: 'crypto' as const, ...CRYPTO_ICONS[2] },
+        { type: 'avatar' as const, src: AVATARS[4] },
     ];
 
     return (
-        <div className="relative flex h-[300px] w-full items-center justify-center overflow-hidden">
-            {/* Background Orbiting Rings */}
-            <div className="absolute h-[240px] w-[240px] rounded-full border border-slate-100 opacity-30 dark:border-white/5" />
-            <div className="absolute h-[190px] w-[190px] rounded-full border border-slate-100 opacity-50 dark:border-white/10" />
-            <div className="absolute h-[120px] w-[120px] rounded-full border border-slate-100 opacity-80 dark:border-white/10" />
+        <div className="relative flex h-[360px] w-full items-center justify-center overflow-hidden">
+            {/* Background Orbiting Rings - Subtle Depth */}
+            <div className="absolute h-[340px] w-[340px] rounded-full border border-slate-100/50 opacity-20 dark:border-white/5" />
+            <div className="absolute h-[260px] w-[260px] rounded-full border border-slate-100/60 opacity-40 dark:border-white/10" />
+            <div className="absolute h-[180px] w-[180px] rounded-full border border-slate-100/80 opacity-60 dark:border-white/10" />
 
             {/* Central Logo */}
             <motion.div
@@ -70,8 +77,10 @@ export const CommunityOrbit = () => {
                     duration: 0.8,
                     ease: "easeOut"
                 }}
-                className="relative z-10 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-700 shadow-2xl shadow-blue-500/40"
+                className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-700 shadow-premium shadow-blue-500/40"
             >
+                <div className="absolute inset-0 rounded-full bg-blue-400/20 blur-xl" />
+
                 <motion.img
                     animate={{
                         scale: [1, 1.05, 1, 1.03, 1],
@@ -85,7 +94,7 @@ export const CommunityOrbit = () => {
                     }}
                     src="/logo.png"
                     alt="Pintopay Logo"
-                    className="relative z-10 w-12 h-12 object-contain brightness-0 invert"
+                    className="relative z-10 w-14 h-14 object-contain brightness-0 invert"
                 />
 
                 {/* Heartbeat Pulse Ripples */}
@@ -129,8 +138,8 @@ type OrbitItem =
     | { type: 'crypto'; name: string; color: string };
 
 const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; total: number }) => {
-    const radius = 80;
-    const duration = 25;
+    const radius = 130; // Increased radius for more space
+    const duration = 40; // Slower, more elegant rotation
     const startAngle = (index / total) * 360;
 
     return (
@@ -166,25 +175,35 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
                     x: "50%",
                 }}
             >
-                {item.type === 'avatar' ? (
-                    <div className="h-11 w-11 overflow-hidden rounded-full border-2 border-white bg-slate-100 shadow-lg dark:border-slate-800">
-                        <img src={item.src} alt="Member" className="h-full w-full object-cover" />
-                    </div>
-                ) : (
-                    <motion.div
-                        animate={{
-                            scale: [1, 1.1, 1],
-                        }}
-                        transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                        }}
-                        className="h-11 w-11 rounded-full border-2 border-white shadow-lg dark:border-slate-800"
-                    >
-                        <CryptoIcon name={item.name} color={item.color} />
-                    </motion.div>
-                )}
+                {/* Float Animation Wrapper */}
+                <motion.div
+                    animate={{
+                        y: [-2, 2, -2],
+                    }}
+                    transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: index * 0.5, // Staggered float
+                    }}
+                >
+                    {item.type === 'avatar' ? (
+                        <div className="h-12 w-12 overflow-hidden rounded-full border-[3px] border-white bg-slate-100 shadow-lg dark:border-slate-800 transition-transform hover:scale-110">
+                            <img src={item.src} alt="Member" className="h-full w-full object-cover" />
+                        </div>
+                    ) : (
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full border-[3px] border-white bg-white shadow-lg dark:border-slate-800 transition-transform hover:scale-110">
+                            <div
+                                className="flex h-full w-full items-center justify-center rounded-full opacity-90"
+                                style={{ backgroundColor: item.color }}
+                            >
+                                <div className="h-7 w-7">
+                                    <CryptoIcon name={item.name} color="white" />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </motion.div>
             </motion.div>
         </motion.div>
     );
