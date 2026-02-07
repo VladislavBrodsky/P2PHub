@@ -42,16 +42,16 @@ export default function Dashboard() {
             animate="show"
         >
             {/* 0. Personalization Section - Centered & Premium & Compact */}
-            <motion.div variants={item} className="px-4 pt-4 relative">
+            <motion.div variants={item} className="px-6 pt-2 relative">
                 {/* Premium Background Glow */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[var(--color-brand-blue)]/5 blur-[80px] rounded-full -z-10" />
+                <div className="absolute top-1/2 left-10 -translate-y-1/2 w-32 h-32 bg-[var(--color-brand-blue)]/10 blur-[60px] rounded-full -z-10" />
 
-                <div className="flex flex-col items-center text-center gap-4">
-                    {/* Centered Avatar with Level Badge */}
-                    <div className="relative group">
+                <div className="flex items-center gap-5 p-4 rounded-[2rem] bg-white/40 backdrop-blur-md border border-white/60 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)]">
+                    {/* Left: Avatar */}
+                    <div className="relative shrink-0">
                         <motion.div
                             whileHover={{ scale: 1.05, rotate: 2 }}
-                            className="h-20 w-20 overflow-hidden rounded-[1.75rem] border-2 border-[var(--color-brand-border)] bg-white shadow-[0_15px_40px_rgba(0,0,0,0.08)] transition-all duration-300"
+                            className="h-16 w-16 overflow-hidden rounded-2xl border-2 border-white bg-white shadow-soft transition-all duration-300"
                         >
                             {isUserLoading ? (
                                 <div className="h-full w-full bg-slate-100 animate-pulse" />
@@ -65,57 +65,55 @@ export default function Dashboard() {
                         </motion.div>
 
                         {/* Level Badge Integrated into Avatar */}
-                        <div className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--color-brand-blue)] text-white shadow-premium ring-4 ring-[var(--color-bg-app)]">
-                            <span className="text-[9px] font-black">{user?.level || 1}</span>
+                        <div className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-lg bg-[var(--color-brand-blue)] text-white shadow-premium ring-2 ring-white">
+                            <span className="text-[8px] font-black">{user?.level || 1}</span>
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-center gap-1.5">
-                        <h2 className="text-2xl font-black tracking-tight text-[var(--color-text-primary)]">
-                            Hi, {user?.first_name || 'Partner'}!
-                        </h2>
-
-                        {/* Ranking & XP Section */}
-                        <div className="flex flex-col items-center gap-2.5 w-full max-w-[240px]">
-                            {/* Rank Badge - Compact */}
+                    {/* Right: Stats Vertical Stack */}
+                    <div className="flex flex-col items-start gap-1 flex-1 overflow-hidden">
+                        <div className="flex items-center gap-2">
+                            <h2 className="text-lg font-black tracking-tight text-[var(--color-text-primary)] truncate">
+                                Hi, {user?.first_name || 'Partner'}!
+                            </h2>
+                            {/* Compact Rank Badge */}
                             <motion.div
-                                whileHover={{ scale: 1.05 }}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 shadow-[0_8px_20px_-8px_rgba(0,0,0,0.08)] backdrop-blur-xl transition-all duration-500"
+                                className="flex items-center gap-1 px-2 py-0.5 rounded-lg border shadow-sm backdrop-blur-xl"
                                 style={{
                                     backgroundColor: `${currentRank.badgeColor}08`,
-                                    borderColor: `${currentRank.badgeColor}25`,
+                                    borderColor: `${currentRank.badgeColor}20`,
                                     color: currentRank.badgeColor
                                 }}
                             >
-                                <Sparkles className="h-3.5 w-3.5" style={{ color: currentRank.badgeColor }} />
-                                <span className="text-[10px] font-black uppercase tracking-[0.2em]">
+                                <Sparkles className="h-3 w-3" style={{ color: currentRank.badgeColor }} />
+                                <span className="text-[8px] font-black uppercase tracking-widest leading-none">
                                     {currentRank.name}
                                 </span>
                             </motion.div>
+                        </div>
 
-                            {/* XP Progress Bar - Compact */}
-                            <div className="w-full space-y-1 mt-1">
-                                <div className="flex justify-center items-center px-1 gap-8">
-                                    <span className="text-[9px] font-black text-slate-400/70 tracking-widest uppercase">XP BALANCE</span>
-                                    <span className="text-[10px] font-black text-[var(--color-text-primary)]">
-                                        {xpProgress.current} <span className="text-slate-300 font-medium">/</span> {xpProgress.total}
-                                    </span>
-                                </div>
-                                <div className="h-3 w-full bg-slate-100/50 rounded-full overflow-hidden p-0.5 border border-slate-200/40 backdrop-blur-sm shadow-inner">
+                        {/* XP Progress Bar - Horizontal Fit */}
+                        <div className="w-full space-y-1">
+                            <div className="flex justify-between items-center px-0.5">
+                                <span className="text-[8px] font-black text-slate-400/70 tracking-widest uppercase">XP BALANCE</span>
+                                <span className="text-[9px] font-black text-[var(--color-text-primary)]">
+                                    {xpProgress.current} <span className="text-slate-300 font-medium">/</span> {xpProgress.total}
+                                </span>
+                            </div>
+                            <div className="h-2 w-full bg-slate-100/50 rounded-full overflow-hidden p-0.5 border border-slate-200/40 backdrop-blur-sm shadow-inner relative">
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${xpProgress.percent}%` }}
+                                    transition={{ duration: 1.5, ease: 'circOut' }}
+                                    className="h-full rounded-full shadow-sm relative overflow-hidden"
+                                    style={{ backgroundColor: currentRank.badgeColor }}
+                                >
                                     <motion.div
-                                        initial={{ width: 0 }}
-                                        animate={{ width: `${xpProgress.percent}%` }}
-                                        transition={{ duration: 1.5, ease: 'circOut' }}
-                                        className="h-full rounded-full shadow-[0_1px_6px_-1px_rgba(0,0,0,0.08)] relative overflow-hidden"
-                                        style={{ backgroundColor: currentRank.badgeColor }}
-                                    >
-                                        <motion.div
-                                            animate={{ x: ['-100%', '200%'] }}
-                                            transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-                                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
-                                        />
-                                    </motion.div>
-                                </div>
+                                        animate={{ x: ['-100%', '200%'] }}
+                                        transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+                                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                                    />
+                                </motion.div>
                             </div>
                         </div>
                     </div>
