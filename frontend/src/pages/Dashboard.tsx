@@ -1,52 +1,23 @@
 import { motion } from 'framer-motion';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { Section } from '../components/Section';
 import { CommunityOrbit } from '../components/Marketing/CommunityOrbit';
 import { Ticker } from '../components/Marketing/Ticker';
-import { Skeleton } from '../components/Skeleton';
-import { Button } from '../components/ui/Button';
 import { useHaptic } from '../hooks/useHaptic';
-import { Wallet, ChevronRight, Sparkles } from 'lucide-react';
-import { useState } from 'react';
+import { Sparkles } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { getRank, getXPProgress } from '../utils/ranking';
-
-const PROD_URL = 'https://p2phub-backend-production.up.railway.app';
-const API_BASE = (import.meta.env.VITE_API_URL || PROD_URL) + '/api';
 
 export default function Dashboard() {
     const { selection } = useHaptic();
     const { user, isLoading: isUserLoading } = useUser();
-    const [copied, setCopied] = useState(false);
 
-    const { data: earnings, isLoading: isEarningsLoading } = useQuery({
-        queryKey: ['earnings'],
-        queryFn: async () => {
-            const res = await axios.get(`${API_BASE}/earnings/`);
-            return res.data;
-        }
-    });
-
-    // Fallback if no stats
     const stats = user || {
         balance: 0,
         level: 1,
-        xp: 0,
-        referral_code: 'P2P-DEV'
+        xp: 0
     };
 
     const currentRank = getRank(stats.level || 1);
     const xpProgress = getXPProgress(stats.level || 1, stats.xp || 0);
-
-    const referralLink = `https://t.me/pintopay_bot?start=${stats.referral_code}`;
-
-    const handleCopy = () => {
-        navigator.clipboard.writeText(referralLink);
-        selection();
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
 
     const container = {
         hidden: { opacity: 0 },
@@ -213,71 +184,6 @@ export default function Dashboard() {
                 </div>
             </motion.div>
 
-
-            {/* 6. Referral Link */}
-            <motion.div variants={item} className="px-4">
-                <div className="space-y-4 rounded-3xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-6 shadow-premium">
-                    <div className="flex items-center gap-2">
-                        <Wallet className="h-4 w-4 text-[var(--color-text-secondary)]" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--color-text-secondary)]">Invitation Link</span>
-                    </div>
-                    <div
-                        className="group flex cursor-pointer items-center justify-between rounded-2xl border border-[var(--color-brand-border)] bg-[var(--color-bg-app)] p-4 transition-all hover:bg-white hover:shadow-soft active:scale-[0.98]"
-                        onClick={handleCopy}
-                    >
-                        <span className="max-w-[200px] truncate font-mono text-xs font-bold text-[var(--color-text-secondary)] transition-colors group-hover:text-[var(--color-text-primary)]">
-                            {referralLink}
-                        </span>
-                        <div className="flex items-center gap-2 rounded-xl bg-white px-3 py-1.5 shadow-sm border border-[var(--color-brand-border)]">
-                            <span className="text-[var(--color-text-primary)] text-[10px] font-black uppercase tracking-wider">
-                                {copied ? 'COPIED' : 'COPY'}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </motion.div>
-
-            {/* 7. Recent Activity */}
-            <motion.div variants={item} className="px-4">
-                <Section
-                    title="Recent Earnings"
-                    headerAction={
-                        <button className="text-[var(--color-text-secondary)] flex items-center gap-1 text-[10px] font-black uppercase tracking-widest transition-colors hover:text-[var(--color-text-primary)]">
-                            VIEW ALL <ChevronRight className="h-3 w-3" />
-                        </button>
-                    }
-                >
-                    <div className="flex flex-col gap-3 mt-4">
-                        {earnings?.map((e: any) => (
-                            <div
-                                key={e.id}
-                                className="group flex cursor-pointer items-center justify-between rounded-2xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] p-4 shadow-premium transition-all hover:shadow-float hover:-translate-y-0.5"
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-lg font-bold text-slate-600 transition-colors group-hover:bg-[var(--color-brand-blue)]/10 group-hover:text-[var(--color-brand-blue)]">
-                                        {e.description[0]}
-                                    </div>
-                                    <div>
-                                        <p className="text-[var(--color-text-primary)] text-sm font-bold">
-                                            {e.description}
-                                        </p>
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--color-success)] mt-0.5">
-                                            Success
-                                        </p>
-                                    </div>
-                                </div>
-                                <span className="rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-xs font-black text-emerald-600 shadow-sm">
-                                    +${e.amount}
-                                </span>
-                            </div>
-                        )) || (
-                                <div className="text-center py-10 rounded-2xl border border-dashed border-[var(--color-brand-border)] text-sm text-[var(--color-text-secondary)] font-bold italic">
-                                    No recent earnings yet
-                                </div>
-                            )}
-                    </div>
-                </Section>
-            </motion.div>
 
         </motion.div>
     );
