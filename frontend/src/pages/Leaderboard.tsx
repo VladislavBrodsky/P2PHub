@@ -4,7 +4,7 @@ import { Section } from '../components/Section';
 import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { retrieveLaunchParams } from '@telegram-apps/sdk';
+import { retrieveLaunchParams } from '@telegram-apps/sdk-react';
 
 interface LeaderboardUser {
     id: number;

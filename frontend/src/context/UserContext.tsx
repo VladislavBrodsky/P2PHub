@@ -28,8 +28,14 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(() => {
-        const saved = localStorage.getItem('p2p_user_cache');
-        return saved ? JSON.parse(saved) : null;
+        try {
+            const saved = localStorage.getItem('p2p_user_cache');
+            return saved ? JSON.parse(saved) : null;
+        } catch (e) {
+            console.error('[DEBUG] Corrupted User Cache:', e);
+            localStorage.removeItem('p2p_user_cache');
+            return null;
+        }
     });
     const [isLoading, setIsLoading] = useState(!user);
     const lastRefresh = React.useRef(0);

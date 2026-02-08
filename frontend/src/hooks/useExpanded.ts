@@ -1,4 +1,4 @@
-import { viewport } from '@telegram-apps/sdk';
+import { viewport } from '@telegram-apps/sdk-react';
 import { useEffect } from 'react';
 
 export function useExpanded() {

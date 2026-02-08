@@ -12,7 +12,7 @@ import { useUser } from '../context/UserContext';
 import { Confetti } from '../components/ui/Confetti';
 import { CheckCircle2, Trophy, QrCode, X, Share2, Download, Copy, ExternalLink } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
-import { retrieveLaunchParams } from '@telegram-apps/sdk';
+import { retrieveLaunchParams } from '@telegram-apps/sdk-react';
 import axios from 'axios';
 
 export default function ReferralPage() {
