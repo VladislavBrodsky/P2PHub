@@ -104,14 +104,13 @@ export const EARN_TASKS: Task[] = [
 ];
 
 export const MILESTONES = [
-    { level: 5, reward: 'Pioneer Badge', icon: CheckCircle2, color: 'text-blue-500' },
-    { level: 10, reward: '500 XP Boost', icon: Gift, color: 'text-emerald-500' },
-    { level: 20, reward: 'Ambassador Status', icon: Star, color: 'text-blue-400' },
-    { level: 30, reward: '10% Card Fee Discount', icon: Zap, color: 'text-yellow-400' },
-    { level: 40, reward: 'Black Physical Card', icon: CreditCard, color: 'text-neutral-950 dark:text-white' }, // High contrast Black
-    { level: 50, reward: 'VIP Support', icon: Star, color: 'text-rose-500' },
-    { level: 65, reward: 'Elite Dashboard', icon: Trophy, color: 'text-indigo-400' },
-    { level: 80, reward: 'Governance Vote', icon: Send, color: 'text-purple-500' },
-    { level: 90, reward: 'Founder Access', icon: Lock, color: 'text-emerald-400' },
-    { level: 100, reward: 'Physical Platinum Card', icon: Crown, color: 'text-slate-200' } // Platinum feel
+    { level: 12, reward: 'Pioneer Badge', icon: CheckCircle2, color: 'text-blue-500' },
+    { level: 24, reward: 'Ambassador Status', icon: Star, color: 'text-blue-400' },
+    { level: 35, reward: '500 XP Boost', icon: Gift, color: 'text-emerald-500' },
+    { level: 44, reward: '10% Card Fee Discount', icon: Zap, color: 'text-yellow-400' },
+    { level: 56, reward: 'Black Physical Card', icon: CreditCard, color: 'text-neutral-950 dark:text-white' },
+    { level: 68, reward: 'VIP Support', icon: Star, color: 'text-rose-500' },
+    { level: 80, reward: 'Elite Dashboard', icon: Trophy, color: 'text-indigo-400' },
+    { level: 92, reward: 'Founder Access', icon: Lock, color: 'text-emerald-400' },
+    { level: 100, reward: 'Physical Platinum Card', icon: Crown, color: 'text-slate-200' }
 ];

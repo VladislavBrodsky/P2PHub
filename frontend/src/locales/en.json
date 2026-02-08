@@ -308,15 +308,14 @@
     "milestones": {
         "title": "Road to Glory",
         "level": "Level",
-        "5": "Pioneer Badge",
-        "10": "500 XP Boost",
-        "20": "Ambassador Status",
-        "30": "10% Card Fee Discount",
-        "40": "Black Physical Card",
-        "50": "VIP Support",
-        "65": "Elite Dashboard",
-        "80": "Governance Vote",
-        "90": "Founder Access",
+        "12": "Pioneer Badge",
+        "24": "Ambassador Status",
+        "35": "500 XP Boost",
+        "44": "10% Card Fee Discount",
+        "56": "Black Physical Card",
+        "68": "VIP Support",
+        "80": "Elite Dashboard",
+        "92": "Founder Access",
         "100": "Physical Platinum Card"
     },
     "ranks": {
