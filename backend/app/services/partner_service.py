@@ -122,3 +122,31 @@ async def process_referral_notifications(bot, session: AsyncSession, partner: Pa
 
         # Move up the chain
         current_partner = referrer
+
+async def get_referral_tree_stats(session: AsyncSession, partner_id: int, max_depth: int = 9) -> dict[int, int]:
+    """
+    Calculates the number of partners at each level of the referral tree.
+    Returns a dict {level: count}.
+    """
+    stats = {i: 0 for i in range(1, max_depth + 1)}
+    
+    # We need to find all partners where referrer_id is in the previous level's IDs
+    current_level_ids = [partner_id]
+    
+    for level in range(1, max_depth + 1):
+        if not current_level_ids:
+            break
+            
+        # Find all partners whose referrer_id is in current_level_ids
+        statement = select(Partner.id).where(Partner.referrer_id.in_(current_level_ids))
+        result = await session.exec(statement)
+        next_level_ids = result.all()
+        
+        count = len(next_level_ids)
+        if count == 0:
+            break
+            
+        stats[level] = count
+        current_level_ids = next_level_ids
+        
+    return stats

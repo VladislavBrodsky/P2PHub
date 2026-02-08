@@ -16,9 +16,18 @@ export const PartnerDashboard = () => {
         ? `${import.meta.env.VITE_API_URL || 'https://p2phub-production.up.railway.app'}/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=10&dark=%23000000`
         : '';
 
-    const copyLink = () => {
-        navigator.clipboard.writeText(referralLink);
-        notification('success');
+    const [copied, setCopied] = React.useState(false);
+
+    const copyLink = async () => {
+        try {
+            await navigator.clipboard.writeText(referralLink);
+            notification('success');
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (e) {
+            console.error('Failed to copy', e);
+            // Fallback for some browsers if needed, but usually navigator.clipboard works in secure context
+        }
     };
 
     return (
@@ -77,8 +86,14 @@ export const PartnerDashboard = () => {
                                     <span className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[180px] font-mono leading-none mt-1 opacity-60">{referralLink}</span>
                                 </div>
                             </div>
-                            <button onClick={(e) => { e.stopPropagation(); copyLink(); }} className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-2 active:scale-90 transition-all bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-xl">
-                                <Copy className="w-3.5 h-3.5" />
+                            <button onClick={(e) => { e.stopPropagation(); copyLink(); }} className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-2 active:scale-90 transition-all bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-xl relative group">
+                                {copied ? (
+                                    <div className="absolute inset-0 flex items-center justify-center text-emerald-500 animate-in zoom-in spin-in-180 duration-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    </div>
+                                ) : (
+                                    <Copy className="w-3.5 h-3.5 transition-all group-active:scale-90" />
+                                )}
                             </button>
                         </div>
                     </div>

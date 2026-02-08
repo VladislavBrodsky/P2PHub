@@ -67,6 +67,39 @@ async def cmd_start(message: types.Message):
         logging.error(f"Error in cmd_start: {e}")
         await message.answer(f"⚠️ Error: {str(e)}")
 
+from app.services.partner_service import get_partner_by_telegram_id, get_referral_tree_stats
+from aiogram.filters import Command
+
+@dp.message(Command("my_network", "tree", "stats"))
+async def cmd_my_network(message: types.Message):
+    try:
+        async for session in get_session():
+            partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
+            if not partner:
+                await message.answer("⚠️ You are not registered yet. Type /start to join!")
+                return
+
+            stats = await get_referral_tree_stats(session, partner.id)
+            
+            total_network = sum(stats.values())
+            
+            lines = [f"🌳 *Your Referral Network*"]
+            lines.append(f"Total Partners: *{total_network}*")
+            lines.append("")
+            
+            for level, count in stats.items():
+                if count > 0:
+                    lines.append(f"Level {level}: {count} partners")
+            
+            if total_network == 0:
+                lines.append("\n_You haven't invited anyone yet. Share your link to start earning!_")
+            
+            await message.answer("\n".join(lines), parse_mode="Markdown")
+            break
+    except Exception as e:
+        logging.error(f"Error in cmd_my_network: {e}")
+        await message.answer(f"⚠️ Error fetching stats: {str(e)}")
+
 async def main():
     logging.info("Starting bot...")
     await dp.start_polling(bot)
