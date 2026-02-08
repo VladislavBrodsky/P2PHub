@@ -41,7 +41,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             tgUser = lp.initData?.user;
             const initDataRaw = lp.initDataRaw || '';
 
-            const PROD_URL = 'https://p2phub-backend-production.up.railway.app';
+            // Try simpler URL structure first (often safer default)
+            const PROD_URL = 'https://p2phub-production.up.railway.app';
+            // Also try the specific backend one as fallback if needed, but let's try main one first
+            // const PROD_URL = 'https://p2phub-backend-production.up.railway.app';
+
             const apiUrl = import.meta.env.VITE_API_URL || PROD_URL;
             console.log('[DEBUG] refreshUser: Fetching from:', apiUrl);
 
