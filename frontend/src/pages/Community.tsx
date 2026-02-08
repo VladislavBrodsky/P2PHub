@@ -39,7 +39,11 @@ export default function CommunityPage() {
     if (isLoading) return <div className="p-4"><ListSkeleton /></div>;
 
     return (
-        <div className="flex flex-col min-h-[85vh] px-4 pt-4 pb-32">
+        <div className="flex flex-col min-h-[85vh] px-4 pt-4 pb-32 relative overflow-hidden">
+            {/* Mesh Background Overlay */}
+            <div className="mesh-gradient-dark absolute inset-0 opacity-30 pointer-events-none" />
+            <div className="absolute top-20 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full pointer-events-none" />
+            <div className="absolute bottom-40 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none" />
             {/* 0. Personalization Section */}
             <div className="mb-6">
                 <PersonalizationCard />
@@ -51,15 +55,15 @@ export default function CommunityPage() {
 
                 <div className="space-y-3">
                     {/* QR Code Row */}
-                    <div className="rounded-2xl border border-white/60 bg-white/40 backdrop-blur-md p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex items-center justify-between hover:bg-white/60 transition-all active:scale-[0.98]">
+                    <div className="rounded-2xl border border-(--color-border-glass) bg-(--color-bg-surface)/40 backdrop-blur-md p-4 shadow-premium flex items-center justify-between hover:bg-white/5 transition-all active:scale-[0.98]">
                         <div className="flex items-center gap-3">
-                            <div className="bg-white p-2 rounded-xl border border-slate-100 shadow-sm">
-                                <QrCode className="w-5 h-5 text-text-primary" />
+                            <div className="bg-slate-900/50 p-2 rounded-xl border border-white/5 shadow-inner">
+                                <QrCode className="w-5 h-5 text-blue-500" />
                             </div>
-                            <span className="font-bold text-text-primary text-sm tracking-tight">Personal QR Portfolio</span>
+                            <span className="font-bold text-(--color-text-primary) text-sm tracking-tight uppercase">Personal QR Portfolio</span>
                         </div>
                         <button
-                            className="text-brand-blue text-[10px] font-black uppercase tracking-widest px-2"
+                            className="text-blue-500 text-[10px] font-black uppercase tracking-widest px-2 hover:brightness-125 transition-all"
                             onClick={() => selection()}
                         >
                             Generate
@@ -67,17 +71,17 @@ export default function CommunityPage() {
                     </div>
 
                     {/* Referral Link Row */}
-                    <div className="rounded-2xl border border-white/60 bg-white/40 backdrop-blur-md p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex items-center justify-between hover:bg-white/60 transition-all active:scale-[0.98]">
+                    <div className="rounded-2xl border border-(--color-border-glass) bg-(--color-bg-surface)/40 backdrop-blur-md p-4 shadow-premium flex items-center justify-between hover:bg-white/5 transition-all active:scale-[0.98]">
                         <div className="flex items-center gap-3 overflow-hidden">
-                            <div className="bg-white p-2 rounded-xl border border-slate-100 shadow-sm shrink-0">
+                            <div className="bg-slate-900/50 p-2 rounded-xl border border-white/5 shadow-inner shrink-0">
                                 <div className="w-5 h-5 flex items-center justify-center text-lg">🔗</div>
                             </div>
                             <div className="flex flex-col overflow-hidden">
-                                <span className="font-bold text-text-primary text-sm tracking-tight">Referral Network Link</span>
-                                <span className="text-[10px] text-slate-400 truncate max-w-[150px] font-mono leading-none mt-1">{referralLink}</span>
+                                <span className="font-bold text-(--color-text-primary) text-sm tracking-tight uppercase">Referral Network Link</span>
+                                <span className="text-[10px] text-(--color-text-secondary) truncate max-w-[150px] font-mono leading-none mt-1">{referralLink}</span>
                             </div>
                         </div>
-                        <button onClick={copyLink} className="text-slate-400 hover:text-text-primary p-2 active:scale-90 transition-all">
+                        <button onClick={copyLink} className="text-(--color-text-secondary) hover:text-(--color-text-primary) p-2 active:scale-90 transition-all bg-white/5 rounded-lg">
                             <Copy className="w-5 h-5" />
                         </button>
                     </div>
@@ -131,12 +135,13 @@ export default function CommunityPage() {
             <div className="pt-8 mb-4">
                 <Button
                     variant="primary"
-                    className="w-full h-16 bg-action-black text-white rounded-2xl font-black text-lg shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)] flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
+                    className="w-full h-16 bg-(--color-text-primary) text-(--color-bg-surface) rounded-2xl font-black text-lg shadow-premium flex items-center justify-center gap-3 active:scale-[0.98] transition-all relative overflow-hidden group"
                     onClick={() => notification('success')}
                 >
-                    <span>Expand Network</span>
-                    <div className="w-1 h-1 rounded-full bg-white/20" />
-                    <span className="text-white/60 text-xs font-bold tracking-widest">PRO</span>
+                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                    <span className="relative z-10">Expand Network</span>
+                    <div className="w-1 h-1 rounded-full bg-current/20 relative z-10" />
+                    <span className="opacity-60 text-xs font-bold tracking-widest relative z-10">PRO</span>
                 </Button>
             </div>
 

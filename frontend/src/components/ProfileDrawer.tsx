@@ -172,13 +172,16 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                             animate={{ x: 0 }}
                             exit={{ x: '-100%' }}
                             transition={{ type: 'tween', ease: 'circOut', duration: 0.3 }} // Optimized animation
-                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-[var(--color-bg-app)] pt-[env(safe-area-inset-top)] shadow-[20px_0_60px_rgba(0,0,0,0.1)] ml-0 mr-auto"
+                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-(--color-bg-deep) border-r border-(--color-border-glass) pt-[env(safe-area-inset-top)] shadow-[20px_0_60px_rgba(0,0,0,0.5)] ml-0 mr-auto"
                             style={{
                                 marginLeft: 'max(0px, calc(50% - 32rem / 2))',
                                 left: 0,
                                 willChange: 'transform' // GPU hint
                             }}
                         >
+                            {/* Mesh Background Overlay */}
+                            <div className="mesh-gradient-dark absolute inset-0 opacity-40 pointer-events-none" />
+                            <div className="absolute inset-0 bg-linear-to-b from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
                             {/* Header / Back Button Area */}
                             <div
                                 className="flex h-14 items-center px-4 shrink-0"
@@ -188,9 +191,9 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                             >
                                 <button
                                     onClick={onClose}
-                                    className="group -ml-1 rounded-2xl transition-all hover:bg-slate-100/50 active:scale-95 pointer-events-auto"
+                                    className="group -ml-1 rounded-2xl transition-all hover:bg-white/5 active:scale-95 pointer-events-auto"
                                 >
-                                    <div className="flex items-center gap-2 rounded-2xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] px-3 py-1.5 shadow-sm">
+                                    <div className="flex items-center gap-2 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-surface)/80 backdrop-blur-md px-3 py-1.5 shadow-premium">
                                         <ArrowLeft className="text-[var(--color-text-primary)] h-5 w-5 transition-transform group-hover:-translate-x-1" />
                                         <span className="text-[10px] font-black uppercase tracking-widest text-[var(--color-text-primary)] pr-0.5">
                                             Back
@@ -217,16 +220,16 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                 {/* Menu Sections */}
                                 <div className="flex flex-1 flex-col gap-2">
                                     {menuItems.map((item) => (
-                                        <div key={item.id} className="rounded-2xl bg-[var(--color-bg-surface)] border border-[var(--color-brand-border)] overflow-hidden shadow-sm">
+                                        <div key={item.id} className="rounded-2xl bg-(--color-bg-surface)/60 backdrop-blur-sm border border-(--color-border-glass) overflow-hidden shadow-sm group">
                                             <button
                                                 onClick={() => toggleSection(item.id)}
-                                                className="w-full flex items-center justify-between p-4 bg-[var(--color-bg-surface)] active:bg-[var(--color-bg-app)]/50 transition-colors"
+                                                className="w-full flex items-center justify-between p-4 bg-transparent active:bg-white/5 transition-colors"
                                             >
                                                 <div className="flex items-center gap-3">
-                                                    <div className={`p-2 rounded-xl bg-[var(--color-bg-app)] text-[var(--color-text-secondary)]`}>
+                                                    <div className={`p-2 rounded-xl bg-(--color-bg-app)/50 border border-(--color-border-glass) text-(--color-text-secondary) group-hover:text-(--color-text-primary) transition-colors`}>
                                                         {React.cloneElement(item.icon as React.ReactElement, { className: "h-4 w-4" })}
                                                     </div>
-                                                    <span className="text-sm font-bold text-[var(--color-text-primary)]">{item.label}</span>
+                                                    <span className="text-sm font-bold text-(--color-text-primary) group-hover:translate-x-0.5 transition-transform">{item.label}</span>
                                                 </div>
                                                 <motion.div
                                                     animate={{ rotate: expandedItem === item.id ? 90 : 0 }}
@@ -265,15 +268,15 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                                 tonConnectUI.openModal();
                                             }
                                         }}
-                                        className={`relative overflow-hidden w-full rounded-2xl p-4 shadow-sm transition-all border ${wallet
+                                        className={`relative overflow-hidden w-full rounded-2xl p-4 shadow-premium transition-all border ${wallet
                                             ? 'bg-emerald-500 text-white border-transparent'
-                                            : 'bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] border-[var(--color-brand-border)]'
+                                            : 'bg-(--color-bg-surface)/80 backdrop-blur-md text-(--color-text-primary) border-(--color-border-glass)'
                                             }`}
                                     >
                                         <div className="flex items-center justify-between relative z-10">
                                             <div className="flex items-center gap-3">
-                                                <div className={`rounded-xl p-2 ${wallet ? 'bg-white/20' : 'bg-slate-100'}`}>
-                                                    <Wallet className={`h-5 w-5 ${wallet ? 'text-white' : 'text-slate-600'}`} />
+                                                <div className={`rounded-xl p-2 ${wallet ? 'bg-white/20' : 'bg-slate-900/50 border border-white/5'}`}>
+                                                    <Wallet className={`h-5 w-5 ${wallet ? 'text-white' : 'text-blue-500'}`} />
                                                 </div>
                                                 <div className="text-left">
                                                     <div className={`text-[10px] font-black uppercase tracking-widest ${wallet ? 'text-emerald-100' : 'text-[var(--color-text-secondary)]'}`}>
@@ -300,21 +303,29 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
 
                                 {/* Theme Selector */}
                                 <div className="mt-auto space-y-4 pt-4">
-                                    <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-[var(--color-bg-surface)] border border-[var(--color-brand-border)]">
+                                    <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-(--color-bg-surface)/80 backdrop-blur-md border border-(--color-border-glass) relative overflow-hidden">
+                                        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.2),transparent)] pointer-events-none" />
                                         {[
-                                            { id: 'light' as const, icon: Sun, label: 'Light' },
-                                            { id: 'dark' as const, icon: Moon, label: 'Dark' },
+                                            { id: 'light' as const, icon: Sun, label: 'Light', activeColor: 'rgba(251,191,36,0.1)', iconColor: '#FBBF24' },
+                                            { id: 'dark' as const, icon: Moon, label: 'Dark', activeColor: 'rgba(59,130,246,0.1)', iconColor: '#3B82F6' },
                                         ].map((option) => (
                                             <button
                                                 key={option.id}
                                                 onClick={() => { setTheme(option.id); selection(); }}
-                                                className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 transition-all ${theme === option.id
-                                                    ? 'bg-[var(--color-text-primary)] text-[var(--color-bg-surface)] shadow-md'
-                                                    : 'text-[var(--color-text-secondary)] hover:bg-slate-50'
+                                                className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 transition-all relative z-10 ${theme === option.id
+                                                    ? 'bg-white/10 dark:bg-white/5 border border-white/10 shadow-lg text-(--color-text-primary) overflow-hidden'
+                                                    : 'text-[var(--color-text-secondary)] hover:bg-white/5'
                                                     }`}
                                             >
-                                                <option.icon className="h-3.5 w-3.5" />
-                                                <span className="text-[10px] font-bold">{option.label}</span>
+                                                {theme === option.id && (
+                                                    <motion.div
+                                                        layoutId="theme-glow"
+                                                        className="absolute inset-0 bg-white/5 blur-md"
+                                                        style={{ backgroundColor: option.activeColor }}
+                                                    />
+                                                )}
+                                                <option.icon className="h-3.5 w-3.5 relative z-10" style={{ color: theme === option.id ? option.iconColor : undefined }} />
+                                                <span className="text-[10px] font-black uppercase tracking-widest relative z-10">{option.label}</span>
                                             </button>
                                         ))}
                                     </div>
