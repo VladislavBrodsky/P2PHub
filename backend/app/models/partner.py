@@ -11,20 +11,20 @@ class Partner(SQLModel, table=True):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     photo_url: Optional[str] = None
-    language_code: Optional[str] = Field(default="en") # Store user language preference
+    language_code: Optional[str] = Field(default="en") 
     balance: float = Field(default=0.0)
     xp: float = Field(default=0.0)
     level: int = Field(default=1)
-    referral_code: str = Field(unique=True)
-    referrer_id: Optional[int] = Field(default=None, foreign_key="partner.id")
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    referral_code: str = Field(unique=True, index=True) # Optimized for lookups
+    referrer_id: Optional[int] = Field(default=None, foreign_key="partner.id", index=True) # Optimized for joins
+    created_at: datetime = Field(default_factory=datetime.utcnow, index=True) # Optimized for sorting
 
 class Earning(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    partner_id: int = Field(foreign_key="partner.id")
+    partner_id: int = Field(foreign_key="partner.id", index=True) # Optimized for user history
     amount: float
     description: str
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
 
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession

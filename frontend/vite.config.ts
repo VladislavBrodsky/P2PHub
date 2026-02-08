@@ -15,5 +15,16 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'framer-motion', 'zustand'],
+          'vendor-tma': ['@telegram-apps/sdk', '@telegram-apps/sdk-react'],
+          'vendor-ton': ['@tonconnect/ui-react'],
+          'vendor-utils': ['axios', 'lucide-react', 'i18next', 'react-i18next']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000,
   },
 })
