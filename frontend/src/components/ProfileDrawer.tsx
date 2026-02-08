@@ -10,7 +10,6 @@ import {
     Wallet,
     Sun,
     Moon,
-    Monitor,
     Globe,
     Bell,
     MessageCircle,
@@ -23,6 +22,7 @@ import { useHaptic } from '../hooks/useHaptic';
 import { useUser } from '../context/UserContext';
 import { useTonConnectUI, useTonAddress, useTonWallet } from '@tonconnect/ui-react';
 import { PersonalizationCard } from './PersonalizationCard';
+import { useTheme } from '../context/ThemeContext';
 
 interface ProfileDrawerProps {
     isOpen: boolean;
@@ -33,8 +33,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
     const { selection } = useHaptic();
     const { user } = useUser();
 
-    // State
-    const [theme, setTheme] = React.useState('system');
+    const { theme, setTheme } = useTheme();
     const [expandedItem, setExpandedItem] = React.useState<string | null>(null);
     const [copied, setCopied] = React.useState(false);
 
@@ -88,14 +87,14 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
             case 'settings':
                 return (
                     <div className="space-y-3 pt-2">
-                        <div className="flex items-center justify-between p-2 rounded-lg bg-[var(--color-bg-app)]">
+                        <div className="flex items-center justify-between p-2 rounded-lg bg-[var(--color-bg-app)]/50">
                             <div className="flex items-center gap-2">
                                 <Globe className="h-3.5 w-3.5 text-[var(--color-text-secondary)]" />
                                 <span className="text-xs font-bold text-[var(--color-text-primary)]">Language</span>
                             </div>
                             <span className="text-[10px] font-black uppercase text-[var(--color-text-secondary)]">English</span>
                         </div>
-                        <div className="flex items-center justify-between p-2 rounded-lg bg-[var(--color-bg-app)]">
+                        <div className="flex items-center justify-between p-2 rounded-lg bg-[var(--color-bg-app)]/50">
                             <div className="flex items-center gap-2">
                                 <Bell className="h-3.5 w-3.5 text-[var(--color-text-secondary)]" />
                                 <span className="text-xs font-bold text-[var(--color-text-primary)]">Notifications</span>
@@ -109,13 +108,13 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
             case 'community':
                 return (
                     <div className="grid grid-cols-2 gap-2 pt-2">
-                        <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[var(--color-bg-app)] hover:bg-[var(--color-brand-blue)]/5 transition-colors border border-[var(--color-brand-border)]">
+                        <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[var(--color-bg-app)]/50 hover:bg-[var(--color-brand-blue)]/10 transition-colors border border-[var(--color-brand-border)]">
                             <MessageCircle className="h-5 w-5 text-[#0088cc]" />
-                            <span className="text-[10px] font-black uppercase">Channel</span>
+                            <span className="text-[10px] font-black uppercase text-[var(--color-text-primary)]">Channel</span>
                         </button>
-                        <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[var(--color-bg-app)] hover:bg-[var(--color-brand-blue)]/5 transition-colors border border-[var(--color-brand-border)]">
+                        <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[var(--color-bg-app)]/50 hover:bg-[var(--color-brand-blue)]/10 transition-colors border border-[var(--color-brand-border)]">
                             <Users className="h-5 w-5 text-[#0088cc]" />
-                            <span className="text-[10px] font-black uppercase">Chat</span>
+                            <span className="text-[10px] font-black uppercase text-[var(--color-text-primary)]">Chat</span>
                         </button>
                     </div>
                 );
@@ -123,9 +122,9 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                 return (
                     <div className="space-y-2 pt-2">
                         {['How to withdraw?', 'What is Partner Level?', 'Card limits'].map((q, i) => (
-                            <div key={i} className="p-2 rounded-lg bg-[var(--color-bg-app)] text-xs font-medium text-[var(--color-text-secondary)] flex justify-between items-center">
+                            <div key={i} className="p-2 rounded-lg bg-[var(--color-bg-app)]/50 text-xs font-medium text-[var(--color-text-secondary)] flex justify-between items-center group active:bg-[var(--color-brand-blue)]/10 transition-colors">
                                 {q}
-                                <ChevronRight className="h-3 w-3 opacity-50" />
+                                <ChevronRight className="h-3 w-3 opacity-50 text-[var(--color-text-primary)]" />
                             </div>
                         ))}
                     </div>
@@ -191,7 +190,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                     onClick={onClose}
                                     className="group -ml-1 rounded-2xl transition-all hover:bg-slate-100/50 active:scale-95 pointer-events-auto"
                                 >
-                                    <div className="flex items-center gap-2 rounded-2xl border border-[var(--color-brand-border)] bg-white px-3 py-1.5 shadow-sm">
+                                    <div className="flex items-center gap-2 rounded-2xl border border-[var(--color-brand-border)] bg-[var(--color-bg-surface)] px-3 py-1.5 shadow-sm">
                                         <ArrowLeft className="text-[var(--color-text-primary)] h-5 w-5 transition-transform group-hover:-translate-x-1" />
                                         <span className="text-[10px] font-black uppercase tracking-widest text-[var(--color-text-primary)] pr-0.5">
                                             Back
@@ -218,13 +217,13 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                 {/* Menu Sections */}
                                 <div className="flex flex-1 flex-col gap-2">
                                     {menuItems.map((item) => (
-                                        <div key={item.id} className="rounded-2xl bg-white border border-[var(--color-brand-border)] overflow-hidden shadow-sm">
+                                        <div key={item.id} className="rounded-2xl bg-[var(--color-bg-surface)] border border-[var(--color-brand-border)] overflow-hidden shadow-sm">
                                             <button
                                                 onClick={() => toggleSection(item.id)}
-                                                className="w-full flex items-center justify-between p-4 bg-white active:bg-slate-50 transition-colors"
+                                                className="w-full flex items-center justify-between p-4 bg-[var(--color-bg-surface)] active:bg-[var(--color-bg-app)]/50 transition-colors"
                                             >
                                                 <div className="flex items-center gap-3">
-                                                    <div className={`p-2 rounded-xl bg-slate-50 text-slate-600`}>
+                                                    <div className={`p-2 rounded-xl bg-[var(--color-bg-app)] text-[var(--color-text-secondary)]`}>
                                                         {React.cloneElement(item.icon as React.ReactElement, { className: "h-4 w-4" })}
                                                     </div>
                                                     <span className="text-sm font-bold text-[var(--color-text-primary)]">{item.label}</span>
@@ -268,7 +267,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                         }}
                                         className={`relative overflow-hidden w-full rounded-2xl p-4 shadow-sm transition-all border ${wallet
                                             ? 'bg-emerald-500 text-white border-transparent'
-                                            : 'bg-white text-[var(--color-text-primary)] border-[var(--color-brand-border)]'
+                                            : 'bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] border-[var(--color-brand-border)]'
                                             }`}
                                     >
                                         <div className="flex items-center justify-between relative z-10">
@@ -301,11 +300,10 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
 
                                 {/* Theme Selector */}
                                 <div className="mt-auto space-y-4 pt-4">
-                                    <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-white border border-[var(--color-brand-border)]">
+                                    <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-[var(--color-bg-surface)] border border-[var(--color-brand-border)]">
                                         {[
-                                            { id: 'system', icon: Monitor, label: 'System' },
-                                            { id: 'light', icon: Sun, label: 'Light' },
-                                            { id: 'dark', icon: Moon, label: 'Dark' },
+                                            { id: 'light' as const, icon: Sun, label: 'Light' },
+                                            { id: 'dark' as const, icon: Moon, label: 'Dark' },
                                         ].map((option) => (
                                             <button
                                                 key={option.id}

@@ -13,12 +13,14 @@ interface User {
     level: number;
     xp: number;
     referral_code: string;
+    referrals: any[]; // Extended for Earn Hub
 }
 
 interface UserContextType {
     user: User | null;
     isLoading: boolean;
     refreshUser: () => Promise<void>;
+    updateUser: (updates: Partial<User>) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -26,6 +28,10 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    const updateUser = (updates: Partial<User>) => {
+        setUser(prev => prev ? { ...prev, ...updates } : null);
+    };
 
     const refreshUser = async () => {
         try {
@@ -70,7 +76,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     balance: 0,
                     level: 1,
                     xp: 0,
-                    referral_code: 'P2P-DEV'
+                    referral_code: 'P2P-DEV',
+                    referrals: []
                 });
             }
         } finally {
@@ -93,7 +100,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     balance: 5000,
                     level: 5,
                     xp: 150,
-                    referral_code: 'DEV-TEST'
+                    referral_code: 'DEV-TEST',
+                    referrals: [] // Mock referrals
                 });
                 setIsLoading(false);
                 return;
@@ -112,7 +120,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, isLoading, refreshUser }}>
+        <UserContext.Provider value={{ user, isLoading, refreshUser, updateUser }}>
             {children}
         </UserContext.Provider>
     );

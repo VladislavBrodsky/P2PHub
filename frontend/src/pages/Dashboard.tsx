@@ -40,11 +40,16 @@ export default function Dashboard() {
 
     return (
         <motion.div
-            className="flex w-full flex-col gap-0 pb-32 px-0 min-h-[100dvh]"
+            className="flex w-full flex-col gap-0 pb-32 px-0 min-h-[100dvh] transition-colors duration-500 relative"
             variants={container}
             initial="hidden"
             animate="show"
         >
+            {/* Dark Mode Specific Background Textures */}
+            <div className="fixed inset-0 pointer-events-none opacity-0 dark:opacity-100 transition-opacity duration-1000">
+                <div className="absolute inset-0 mesh-gradient-dark" />
+                <div className="absolute top-0 left-0 w-full h-[50vh] bg-linear-to-b from-blue-500/5 to-transparent" />
+            </div>
 
             {/* 1. Hero Section - Seamless Integration */}
             <motion.div variants={item} className="px-4 space-y-4 pt-4">
@@ -74,11 +79,12 @@ export default function Dashboard() {
                                     background: 'linear-gradient(to right, #3B82F6, #FFFFFF, #3B82F6)',
                                     WebkitBackgroundClip: 'text',
                                     WebkitTextFillColor: 'transparent',
-                                    backgroundSize: '200% auto'
+                                    backgroundSize: '200% auto',
+                                    fontWeight: 900
                                 }}
                                 animate={{
                                     backgroundPosition: ['0% center', '200% center'],
-                                    scale: [1, 1.05, 1],
+                                    filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)'],
                                 }}
                                 transition={{
                                     backgroundPosition: {
@@ -86,7 +92,7 @@ export default function Dashboard() {
                                         repeat: Infinity,
                                         ease: "linear"
                                     },
-                                    scale: {
+                                    filter: {
                                         duration: 2,
                                         repeat: Infinity,
                                         ease: "easeInOut"
@@ -145,6 +151,6 @@ export default function Dashboard() {
                 </p>
             </motion.div>
 
-        </motion.div>
+        </motion.div >
     );
 }

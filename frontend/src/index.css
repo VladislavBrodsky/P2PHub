@@ -4,36 +4,6 @@
   /* === PINTOPAY DESIGN SYSTEM 2026 - v1.1.0 === */
   /* Apple-esque Aesthetic - High Fidelity, Depth, Micro-interactions */
 
-  /* Core Surface Colors */
-  --color-surface: #FFFFFF;
-  --color-bg-app: #F8FAFC;
-  /* Slightly cooler background */
-  --color-text-primary: #0F172A;
-  /* Slate 900 for better depth */
-  --color-text-secondary: #64748B;
-  /* Slate 500 */
-
-  /* Brand & Action Colors */
-  --color-brand-blue: #0066FF;
-  /* Slightly more vibrant blue */
-  --color-brand-blue-deep: #0052D9;
-  --color-action-black: #1C1C1E;
-  --color-success: #10B981;
-  /* Emerald 500 */
-  --color-warning: #F59E0B;
-  /* Amber 500 */
-  --color-error: #EF4444;
-  /* Red 500 */
-
-  /* Semantic Mappings */
-  --color-brand-border: rgba(226, 232, 240, 0.8);
-  /* Refined soft border */
-
-  /* Glassmorphism Refined */
-  --color-bg-glass: rgba(255, 255, 255, 0.75);
-  --color-border-glass: rgba(255, 255, 255, 0.4);
-  --color-glass-highlight: rgba(255, 255, 255, 0.5);
-
   /* Spacing & Safe Areas */
   --spacing-safe-top: env(safe-area-inset-top, 20px);
   --spacing-safe-bottom: env(safe-area-inset-bottom, 20px);
@@ -63,9 +33,7 @@
 
   /* Spacing Radii */
   --radius-xl: 1.5rem;
-  /* 24px */
   --radius-2xl: 2rem;
-  /* 32px */
 
   /* Shadows - Layered for Depth */
   --shadow-premium: 0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 5px 15px -5px rgba(0, 0, 0, 0.02);
@@ -108,6 +76,35 @@
       background-position: 200% center;
     }
   }
+
+  @keyframes pulse-glow {
+
+    0%,
+    100% {
+      opacity: 0.5;
+      filter: blur(40px);
+    }
+
+    50% {
+      opacity: 0.8;
+      filter: blur(60px);
+    }
+  }
+}
+
+@utility mesh-gradient-dark {
+  background-image:
+    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+}
+
+@utility glass-panel-premium {
+  background: var(--color-bg-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border-glass);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
 }
 
 @utility content-main-padding {
@@ -118,48 +115,49 @@
   padding-top: calc(var(--header-total-height) + 32px) !important;
 }
 
-/* Light Mode & Root Defaults */
+/* Base Variable Definitions & Light Mode (Default) */
 :root {
-  --color-bg-deep: var(--color-bg-app);
+  /* Core Colors */
+  --color-surface: #FFFFFF;
+  --color-bg-app: #F8FAFC;
+  --color-bg-deep: #F8FAFC;
   --color-text-primary: #1C1C1E;
   --color-text-secondary: #8E8E93;
 
-  --color-bg-surface: var(--color-surface);
+  /* Brand Colors */
+  --color-brand-blue: #0066FF;
+  --color-brand-blue-deep: #0052D9;
+  --color-action-black: #1C1C1E;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+
+  /* Semantic */
+  --color-brand-border: rgba(226, 232, 240, 0.8);
+  --color-bg-surface: #FFFFFF;
   --color-bg-glass: rgba(255, 255, 255, 0.85);
   --color-border-glass: rgba(0, 0, 0, 0.05);
+  --color-glass-highlight: rgba(255, 255, 255, 0.5);
 
   --nav-active: #1C1C1E;
   --nav-inactive: #8E8E93;
   --bg-image: none;
 }
 
-#root {
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-}
-
 /* Dark Mode Overrides - Subtle & High Fidelity */
 .dark {
-  --color-bg-deep: #030712;
-  /* Neutral Deep Black/Gray */
+  --color-bg-deep: #020617;
+  /* Deeper slate for elite feel */
   --color-bg-app: #030712;
-  --color-surface: #111827;
-  /* Gray 900 */
-  --color-bg-surface: #111827;
-
+  --color-surface: #0f172a;
+  --color-bg-surface: #0f172a;
   --color-text-primary: #F9FAFB;
-  /* Gray 50 */
-  --color-text-secondary: #9CA3AF;
-  /* Gray 400 */
-
-  --color-bg-glass: rgba(17, 24, 39, 0.85);
-  --color-border-glass: rgba(255, 255, 255, 0.05);
-
+  --color-text-secondary: #94a3b8;
+  --color-bg-glass: rgba(15, 23, 42, 0.8);
+  --color-border-glass: rgba(255, 255, 255, 0.03);
+  --color-glass-highlight: rgba(255, 255, 255, 0.05);
   --nav-active: #FFFFFF;
-  --nav-inactive: #9CA3AF;
-
+  --nav-inactive: #64748b;
   --color-brand-primary: #FFFFFF;
   --bg-image: none;
 }
@@ -383,8 +381,54 @@ html {
     animation: text-shimmer 4s linear infinite;
   }
 
-  .dark .animate-shimmer {
-    background: linear-gradient(to right, #1e293b 4%, #0f172a 25%, #1e293b 36%);
+  /* Premium Shimmers */
+  .shimmer-platinum {
+    background: linear-gradient(-45deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0) 40%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0) 60%,
+        rgba(255, 255, 255, 0) 100%);
+    background-size: 200% 200%;
+    animation: shimmer-swipe 3s infinite;
+  }
+
+  .shimmer-gold {
+    background: linear-gradient(-45deg,
+        rgba(255, 215, 0, 0) 0%,
+        rgba(255, 215, 0, 0) 40%,
+        rgba(255, 215, 0, 0.4) 50%,
+        rgba(255, 215, 0, 0) 60%,
+        rgba(255, 215, 0, 0) 100%);
+    background-size: 200% 200%;
+    animation: shimmer-swipe 3s infinite;
+  }
+
+  @keyframes shimmer-swipe {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .glow-pulse-blue {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    animation: pulse-glow-blue 2s infinite ease-in-out;
+  }
+
+  @keyframes pulse-glow-blue {
+
+    0%,
+    100% {
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+    }
+
+    50% {
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.6);
+    }
   }
 }
 

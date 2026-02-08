@@ -84,14 +84,14 @@ export const BentoGrid = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1 }}
-                        whileHover={{ y: -5, scale: 1.02 }}
-                        className={`relative group overflow-hidden rounded-[2.5rem] border border-border-glass p-6 glass-panel ${step.size} ${step.featured ? 'border-blue-500/50 bg-blue-500/2' : ''}`}
+                        whileHover={{ y: -8, scale: 1.01, transition: { type: "spring", stiffness: 400, damping: 20 } }}
+                        className={`relative group overflow-hidden rounded-[2.5rem] border border-[var(--color-border-glass)] p-6 glass-panel-premium transition-all duration-300 ${step.size} ${step.featured ? 'border-blue-500/30' : ''}`}
                     >
-                        <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-30 group-hover:opacity-60 transition-opacity`} />
+                        <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
 
                         <div className="relative z-10 space-y-4">
                             <div className="flex items-center justify-between">
-                                <div className="p-3 w-fit rounded-2xl bg-white/20 dark:bg-black/20 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-lg">
+                                <div className="p-3 w-fit rounded-2xl bg-[var(--color-bg-app)]/50 dark:bg-black/40 backdrop-blur-xl border border-[var(--color-border-glass)] shadow-lg transition-transform group-hover:scale-110">
                                     {step.icon}
                                 </div>
                                 <span className={`text-[9px] font-black px-2.5 py-1 rounded-full ${step.statusColor} tracking-widest`}>

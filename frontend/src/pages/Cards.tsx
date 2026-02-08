@@ -139,10 +139,10 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                     {/* Promo/Bonus Pill - Premium Look */}
                     <div className="bg-white rounded-[2rem] p-3 pl-3 pr-4 flex items-center justify-between shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] border border-slate-100/60">
                         <div className="flex items-center gap-4">
-                            {/* Black Tag Icon with Bonus */}
-                            <div className="relative group overflow-hidden bg-text-primary rounded-[0.75rem] px-3 py-2 flex items-center gap-1.5 shadow-md transition-all active:scale-95">
-                                <div className="w-1.5 h-1.5 rounded-full bg-white opacity-90 shrink-0" />
-                                <span className="text-[11px] font-black text-white whitespace-nowrap tracking-wider">
+                            {/* Premium Icon Badge with Theme-Aware Background */}
+                            <div className="relative group overflow-hidden bg-[var(--color-text-primary)] rounded-[0.75rem] px-3 py-2 flex items-center gap-1.5 shadow-md transition-all active:scale-95">
+                                <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-bg-surface)] opacity-90 shrink-0" />
+                                <span className="text-[11px] font-black text-[var(--color-bg-surface)] whitespace-nowrap tracking-wider">
                                     {currentCard.bonus}
                                 </span>
                             </div>
@@ -311,11 +311,11 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                         'Earn 5,000+ Network XP',
                                         'Activate 10+ active referrals'
                                     ].map((step, i) => (
-                                        <div key={step} className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100/50">
-                                            <div className="h-6 w-6 rounded-lg bg-white shadow-sm flex items-center justify-center text-[10px] font-black text-indigo-600 border border-indigo-100">
+                                        <div key={step} className="flex items-center gap-3 p-3 rounded-2xl bg-[var(--color-bg-app)]/50 border border-[var(--color-border-glass)]">
+                                            <div className="h-6 w-6 rounded-lg bg-[var(--color-bg-surface)] shadow-sm flex items-center justify-center text-[10px] font-black text-indigo-500 border border-[var(--color-border-glass)]">
                                                 {i + 1}
                                             </div>
-                                            <span className="text-xs font-bold text-slate-700">{step}</span>
+                                            <span className="text-xs font-bold text-[var(--color-text-secondary)]">{step}</span>
                                         </div>
                                     ))}
                                 </div>

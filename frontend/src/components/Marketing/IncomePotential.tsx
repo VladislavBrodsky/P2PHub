@@ -9,7 +9,7 @@ export const IncomePotential = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.01 }}
-                className="relative overflow-hidden rounded-[3.5rem] bg-neutral-950 text-white p-10 space-y-10 border border-white/10 shadow-[0_20px_50px_-12px_rgba(0,102,255,0.3)]"
+                className="relative overflow-hidden rounded-[3.5rem] bg-[var(--color-bg-surface)] dark:bg-neutral-950 text-[var(--color-text-primary)] dark:text-white p-10 space-y-10 border border-[var(--color-border-glass)] shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
             >
                 {/* Background Glow */}
                 <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/30 blur-[120px] pointer-events-none animate-pulse" />
@@ -32,15 +32,15 @@ export const IncomePotential = () => {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 relative z-10">
-                    <div className="p-6 rounded-[2.5rem] bg-white/5 border border-white/10 space-y-2 group transition-all hover:bg-white/10">
-                        <Users className="w-5 h-5 text-neutral-400 mb-1 group-hover:text-blue-400 transition-colors" />
-                        <div className="text-3xl font-black tabular-nums tracking-tighter">1.2B</div>
-                        <div className="text-[9px] font-black text-neutral-500 uppercase tracking-widest">Global Target</div>
+                    <div className="p-6 rounded-[2.5rem] bg-[var(--color-bg-app)]/50 border border-[var(--color-border-glass)] space-y-2 group transition-all hover:bg-[var(--color-brand-blue)]/10">
+                        <Users className="w-5 h-5 text-[var(--color-text-secondary)] mb-1 group-hover:text-blue-400 transition-colors" />
+                        <div className="text-3xl font-black tabular-nums tracking-tighter text-[var(--color-text-primary)] dark:text-white">1.2B</div>
+                        <div className="text-[9px] font-black text-[var(--color-text-secondary)] uppercase tracking-widest opacity-60">Global Target</div>
                     </div>
-                    <div className="p-6 rounded-[2.5rem] bg-white/5 border border-white/10 space-y-2 group transition-all hover:bg-white/10">
-                        <DollarSign className="w-5 h-5 text-emerald-400 mb-1 group-hover:animate-bounce" />
-                        <div className="text-3xl font-black tabular-nums tracking-tighter">24/7</div>
-                        <div className="text-[9px] font-black text-neutral-500 uppercase tracking-widest">Revenue Flow</div>
+                    <div className="p-6 rounded-[2.5rem] bg-[var(--color-bg-app)]/50 border border-[var(--color-border-glass)] space-y-2 group transition-all hover:bg-[var(--color-brand-blue)]/10">
+                        <DollarSign className="w-5 h-5 text-emerald-500 mb-1 group-hover:animate-bounce" />
+                        <div className="text-3xl font-black tabular-nums tracking-tighter text-[var(--color-text-primary)] dark:text-white transition-transform group-hover:scale-110">24/7</div>
+                        <div className="text-[9px] font-black text-[var(--color-text-secondary)] uppercase tracking-widest opacity-60">Revenue Flow</div>
                     </div>
                 </div>
 
