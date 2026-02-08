@@ -49,16 +49,25 @@ export const ReferralGraph = () => {
     ], []);
 
     return (
-        <div className="relative w-full h-[450px] flex items-center justify-center overflow-hidden bg-[#020617] rounded-[3.5rem] border border-white/5 shadow-2xl perspective-1000">
+        <div className={clsx(
+            "relative w-full h-[450px] flex items-center justify-center overflow-hidden rounded-[3.5rem] border transition-colors duration-500 shadow-2xl perspective-1000",
+            "bg-[#020617] border-white/5", // Dark mode default
+            "dark:bg-[#020617] dark:border-white/5",
+            "bg-linear-to-b from-blue-50/80 to-indigo-50/50 border-blue-500/10" // Light mode
+        )}>
             {/* 1. Starfield / Global Context */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-blue-500)_0%,transparent_70%)] opacity-5" />
+            <div className={clsx(
+                "absolute inset-0 opacity-10 transition-opacity duration-700",
+                "bg-[radial-gradient(circle_at_center,var(--color-blue-500)_0%,transparent_70%)]",
+                "dark:opacity-10 opacity-30"
+            )} />
 
             <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
                 <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 180, repeat: Infinity, ease: "linear" }}
                 >
-                    <Globe className="w-[800px] h-[800px] text-blue-500" strokeWidth={0.2} />
+                    <Globe className={clsx("w-[800px] h-[800px]", "text-blue-500 dark:text-blue-500/50")} strokeWidth={0.2} />
                 </motion.div>
             </div>
 
@@ -67,7 +76,11 @@ export const ReferralGraph = () => {
                 {atomicOrbits.map((orbit) => (
                     <motion.div
                         key={orbit.id}
-                        className={clsx("absolute rounded-full border border-dashed", orbit.color)}
+                        className={clsx(
+                            "absolute rounded-full border border-dashed transition-colors duration-700",
+                            orbit.color,
+                            "dark:opacity-100 opacity-60"
+                        )}
                         style={{
                             width: orbit.radius * 2,
                             height: orbit.radius * 2,
@@ -87,7 +100,11 @@ export const ReferralGraph = () => {
                                     key={j}
                                     initial={{ scale: 0, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
-                                    className="absolute top-1/2 left-1/2 w-4 h-4 -ml-2 -mt-2 bg-white rounded-full shadow-[0_0_15px_rgba(255,255,255,0.8)] flex items-center justify-center"
+                                    className={clsx(
+                                        "absolute top-1/2 left-1/2 w-4 h-4 -ml-2 -mt-2 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.8)] flex items-center justify-center",
+                                        "bg-white dark:bg-white",
+                                        "shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+                                    )}
                                     style={{
                                         transform: `rotate(${(360 / orbit.nodes) * j}deg) translate(${orbit.radius}px) rotate(-${(360 / orbit.nodes) * j}deg)`
                                     }}
@@ -105,7 +122,7 @@ export const ReferralGraph = () => {
                                             className="absolute w-full h-full"
                                         >
                                             <div
-                                                className="w-1 h-1 bg-white/40 rounded-full"
+                                                className="w-1 h-1 bg-white/40 dark:bg-white/40 rounded-full bg-blue-500/40"
                                                 style={{ transform: `rotate(${k * 180}deg) translate(8px)` }}
                                             />
                                         </motion.div>
@@ -143,7 +160,11 @@ export const ReferralGraph = () => {
                     transition={{ type: "spring", bounce: 0.5, duration: 1 }}
                     className="relative w-28 h-28 rounded-full p-[4px] bg-linear-to-tr from-blue-600 via-emerald-500 to-indigo-600 shadow-[0_0_80px_rgba(59,130,246,0.3)]"
                 >
-                    <div className="w-full h-full rounded-full overflow-hidden bg-black border-4 border-[#020617] relative">
+                    <div className={clsx(
+                        "w-full h-full rounded-full overflow-hidden border-4 relative",
+                        "bg-black border-[#020617] dark:bg-black dark:border-[#020617]",
+                        "border-white"
+                    )}>
                         {user?.photo_url ? (
                             <img src={user.photo_url} alt="You" className="w-full h-full object-cover" />
                         ) : (
@@ -163,10 +184,18 @@ export const ReferralGraph = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.8 }}
-                    className="mt-6 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-xl flex items-center gap-2"
+                    className={clsx(
+                        "mt-6 px-4 py-1.5 rounded-full border backdrop-blur-xl flex items-center gap-2",
+                        "bg-emerald-500/10 border-emerald-500/20",
+                        "bg-emerald-500/5 border-emerald-500/10"
+                    )}
                 >
                     <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400">Viral Network Core</span>
+                    <span className={clsx(
+                        "text-[10px] font-black uppercase tracking-[0.2em]",
+                        "text-emerald-400 dark:text-emerald-400",
+                        "text-emerald-600"
+                    )}>Viral Network Core</span>
                 </motion.div>
             </div>
 
@@ -189,14 +218,24 @@ export const ReferralGraph = () => {
                             repeatDelay: 2
                         }}
                         className={clsx(
-                            "absolute z-30 flex items-center gap-2 px-3 py-2 rounded-2xl backdrop-blur-2xl border border-white/10 shadow-2xl bg-black/40",
+                            "absolute z-30 flex items-center gap-2 px-3 py-2 rounded-2xl backdrop-blur-2xl border shadow-2xl transition-colors duration-500",
+                            "border-white/10 bg-black/40 dark:border-white/10 dark:bg-black/40",
+                            "border-blue-500/20 bg-white/60",
                             pop.style
                         )}
                     >
                         <USDTLogo className="w-5 h-5 shadow-inner" />
                         <div className="flex flex-col">
-                            <span className="text-[10px] font-bold text-emerald-400/60 leading-none">RECEIVED</span>
-                            <span className="font-black text-sm text-white tracking-tighter">${pop.amount}</span>
+                            <span className={clsx(
+                                "text-[10px] font-bold leading-none",
+                                "text-emerald-400/60 dark:text-emerald-400/60",
+                                "text-emerald-600/60"
+                            )}>RECEIVED</span>
+                            <span className={clsx(
+                                "font-black text-sm tracking-tighter",
+                                "text-white dark:text-white",
+                                "text-slate-900"
+                            )}>${pop.amount}</span>
                         </div>
                     </motion.div>
                 ))}
@@ -210,15 +249,31 @@ export const ReferralGraph = () => {
                     className="relative w-full max-w-[320px]"
                 >
                     <div className="absolute inset-0 bg-linear-to-r from-blue-600/20 to-emerald-600/20 blur-2xl opacity-50" />
-                    <div className="relative px-6 py-4 bg-slate-900/40 backdrop-blur-2xl border border-white/10 rounded-3xl flex flex-col items-center gap-0.5 shadow-premium">
-                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Estimated Network Yield</span>
+                    <div className={clsx(
+                        "relative px-6 py-4 backdrop-blur-2xl border rounded-3xl flex flex-col items-center gap-0.5 shadow-premium transition-colors duration-500",
+                        "bg-slate-900/40 border-white/10 dark:bg-slate-900/40 dark:border-white/10",
+                        "bg-white/60 border-blue-500/10"
+                    )}>
+                        <span className={clsx(
+                            "text-[9px] font-black uppercase tracking-[0.3em]",
+                            "text-slate-400 dark:text-slate-400",
+                            "text-slate-500"
+                        )}>Estimated Network Yield</span>
                         <div className="flex items-baseline gap-1.5">
-                            <span className="text-4xl font-black text-white tracking-tighter">
+                            <span className={clsx(
+                                "text-4xl font-black tracking-tighter",
+                                "text-white dark:text-white",
+                                "text-slate-900"
+                            )}>
                                 ${count.toLocaleString()}
                             </span>
                             <span className="text-lg font-black text-emerald-500 italic">.00</span>
                         </div>
-                        <div className="w-full h-1 bg-white/5 rounded-full mt-2 overflow-hidden">
+                        <div className={clsx(
+                            "w-full h-1 rounded-full mt-2 overflow-hidden",
+                            "bg-white/5 dark:bg-white/5",
+                            "bg-slate-200"
+                        )}>
                             <motion.div
                                 className="h-full bg-linear-to-r from-blue-500 to-emerald-500"
                                 initial={{ width: "0%" }}
@@ -230,6 +285,7 @@ export const ReferralGraph = () => {
                 </motion.div>
             </div>
         </div>
+
     );
 };
 
