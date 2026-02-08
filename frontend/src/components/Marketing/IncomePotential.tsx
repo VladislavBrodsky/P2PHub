@@ -70,9 +70,14 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         Earn $1 <br />
                         <span className="text-blue-500 dark:text-transparent dark:bg-clip-text dark:bg-linear-to-r dark:from-blue-400 dark:via-emerald-400 dark:to-blue-400 dark:text-animate-shimmer">Per Minute</span>
                     </h3>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium leading-relaxed max-w-[320px]">
-                        Traditional finance is a walled garden. As a <span className="text-black dark:text-white font-bold">Pintopay Partner</span>, you are the bridge. Every global transaction becomes your dividends.
-                    </p>
+                    <div className="relative">
+                        <div className="absolute -left-4 top-0 w-1 h-full bg-linear-to-b from-blue-500 to-transparent opacity-50 rounded-full" />
+                        <p className="text-sm text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-w-[340px] pl-2">
+                            Traditional finance is a <span className="text-blue-600 dark:text-blue-400 font-bold">walled garden</span>.
+                            As a <span className="text-slate-900 dark:text-white font-black underline decoration-blue-500/30 underline-offset-4">Pintopay Partner</span>, you are the bridge.
+                            Every global transaction becomes your dividends.
+                        </p>
+                    </div>
                 </div>
 
                 {/* Dual Mode Calculator */}
@@ -246,50 +251,61 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 relative z-10">
-                    <div className="p-5 rounded-[2rem] bg-white/50 dark:bg-(--color-bg-app)/50 border border-(--color-border-glass) space-y-3 group transition-all hover:bg-(--color-brand-blue)/5 relative overflow-hidden">
+                    <div className="p-5 rounded-[2rem] bg-slate-50/50 dark:bg-slate-900/40 border border-blue-500/10 dark:border-white/5 backdrop-blur-xl space-y-3 group transition-all hover:bg-blue-500/5 relative overflow-hidden shadow-sm dark:shadow-[0_10px_30px_-15px_rgba(59,130,246,0.3)]">
+                        {/* Glow effect for dark mode */}
+                        <div className="absolute -top-10 -right-10 w-20 h-20 bg-blue-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+
                         <div className="flex justify-between items-start">
-                            <Users className="w-5 h-5 text-slate-500 dark:text-(--color-text-secondary) group-hover:text-blue-400 transition-colors" />
+                            <Users className="w-5 h-5 text-slate-400 dark:text-blue-400/60 group-hover:text-blue-500 transition-colors" />
                             <div className="flex items-center gap-1 bg-emerald-500/10 px-1.5 py-0.5 rounded-md border border-emerald-500/20">
-                                <TrendingUp className="w-3 h-3 text-emerald-500" />
-                                <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400">+17% YoY</span>
+                                <TrendingUp className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                                <span className="text-[9px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-tighter">+17% YoY</span>
                             </div>
                         </div>
 
                         <div>
-                            <div className="text-3xl font-black tabular-nums tracking-tighter text-slate-900 dark:text-white">1.2B</div>
-                            <div className="text-[9px] font-black text-slate-500 dark:text-(--color-text-secondary) uppercase tracking-widest opacity-80 mb-1">Global Target</div>
-                            <div className="text-[9px] font-medium text-slate-400 leading-tight">
-                                Growing x2 faster than the internet
+                            <div className="text-3xl font-black tabular-nums tracking-tighter text-slate-900 dark:text-white dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">1.2B</div>
+                            <div className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mb-1">Global Target</div>
+                            <div className="text-[9px] font-medium text-slate-400 dark:text-slate-500 leading-tight">
+                                Scaling x2 faster than TradFi
                             </div>
                         </div>
 
-                        {/* Info Icon / Tooltip Trigger */}
-                        <div className="absolute bottom-3 right-3 text-slate-300 dark:text-slate-700">
-                            <AlertCircle className="w-3 h-3 opacity-50" />
+                        <div className="absolute bottom-3 right-3 text-slate-300 dark:text-white/10">
+                            <AlertCircle className="w-3 h-3" />
                         </div>
                     </div>
 
-                    <div className="p-5 rounded-[2rem] bg-white/50 dark:bg-(--color-bg-app)/50 border border-(--color-border-glass) space-y-2 group transition-all hover:bg-(--color-brand-blue)/5">
-                        <DollarSign className="w-5 h-5 text-emerald-500 mb-1 group-hover:animate-bounce" />
-                        <div className="text-3xl font-black tabular-nums tracking-tighter text-slate-900 dark:text-white transition-transform group-hover:scale-110">24/7</div>
-                        <div className="text-[9px] font-black text-slate-500 dark:text-(--color-text-secondary) uppercase tracking-widest opacity-80">Revenue Flow</div>
+                    <div className="p-5 rounded-[2rem] bg-slate-50/50 dark:bg-slate-900/40 border border-blue-500/10 dark:border-white/5 backdrop-blur-xl space-y-2 group transition-all hover:bg-blue-500/5 shadow-sm dark:shadow-[0_10px_30px_-15px_rgba(16,185,129,0.3)]">
+                        <DollarSign className="w-5 h-5 text-emerald-500 dark:text-emerald-400 mb-1 group-hover:scale-110 transition-transform" />
+                        <div className="text-3xl font-black tabular-nums tracking-tighter text-slate-900 dark:text-white dark:drop-shadow-[0_0_15px_rgba(52,211,153,0.2)]">24/7</div>
+                        <div className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">Revenue Flow</div>
+                        <div className="text-[9px] font-medium text-slate-400 dark:text-slate-500 leading-tight">
+                            Non-stop dividends
+                        </div>
                     </div>
                 </div>
 
-                <div className="relative z-10 mx-2 p-4 rounded-2xl bg-slate-100/50 dark:bg-white/5 border border-(--color-border-glass) backdrop-blur-sm mt-2">
-                    <div className="flex gap-3">
-                        <div className="shrink-0 mt-0.5">
-                            <div className="w-1 h-full min-h-[40px] rounded-full bg-linear-to-b from-rose-500 to-purple-600" />
+                <div className="relative z-10 mx-2 p-5 rounded-[2rem] bg-slate-50/80 dark:bg-slate-950/40 border border-rose-500/10 dark:border-rose-500/5 backdrop-blur-2xl mt-4 overflow-hidden group shadow-sm dark:shadow-[0_20px_40px_-20px_rgba(244,63,94,0.15)]">
+                    {/* Inner Accent Glow */}
+                    <div className="absolute top-0 right-0 w-32 h-full bg-rose-500/5 blur-3xl rounded-full" />
+
+                    <div className="flex gap-4 relative z-10">
+                        <div className="shrink-0 pt-1">
+                            <div className="w-1.5 h-12 rounded-full bg-linear-to-b from-rose-500 via-rose-600 to-indigo-600 shadow-[0_0_15px_rgba(244,63,94,0.4)] animate-pulse" />
                         </div>
-                        <div className="space-y-1">
-                            <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">
+                        <div className="space-y-1.5">
+                            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-rose-500" />
                                 The Cost of Waiting
                             </h4>
                             <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-400 font-medium">
                                 While you trade hours for a fixed wage, the Digital Economy generates value 24/7.
-                                <span className="text-rose-500 font-bold ml-1">Every minute you wait is a minute you're paying a "tax" on inaction.</span>
+                                <span className="text-rose-500 font-black ml-1.5 inline-block dark:drop-shadow-[0_0_8px_rgba(244,63,94,0.3)]">
+                                    Every minute you wait is a tax on your potential.
+                                </span>
                                 <br />
-                                Stop calculating the loss. Start capturing the value.
+                                <span className="opacity-60">Unlock the strategy to stop calculating loss and start capturing value.</span>
                             </p>
                         </div>
                     </div>

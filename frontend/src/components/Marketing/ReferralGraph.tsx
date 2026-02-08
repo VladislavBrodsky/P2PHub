@@ -50,16 +50,15 @@ export const ReferralGraph = () => {
 
     return (
         <div className={clsx(
-            "relative w-full h-[450px] flex items-center justify-center overflow-hidden rounded-[3.5rem] border transition-colors duration-500 shadow-2xl perspective-1000",
-            "bg-[#020617] border-white/5", // Dark mode default
-            "dark:bg-[#020617] dark:border-white/5",
-            "bg-linear-to-b from-blue-50/80 to-indigo-50/50 border-blue-500/10" // Light mode
+            "relative w-full h-[450px] flex items-center justify-center overflow-hidden rounded-[3.5rem] border transition-all duration-500 shadow-2xl perspective-1000",
+            "bg-linear-to-b from-blue-50/80 to-indigo-50/50 border-blue-500/10", // Light mode (Base)
+            "dark:bg-[#020617] dark:border-white/5" // Dark mode
         )}>
             {/* 1. Starfield / Global Context */}
             <div className={clsx(
-                "absolute inset-0 opacity-10 transition-opacity duration-700",
+                "absolute inset-0 transition-opacity duration-700 pointer-events-none",
                 "bg-[radial-gradient(circle_at_center,var(--color-blue-500)_0%,transparent_70%)]",
-                "dark:opacity-10 opacity-30"
+                "opacity-20 dark:opacity-10" // Adjusted for light/dark
             )} />
 
             <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
