@@ -166,42 +166,34 @@
   --bg-image: none;
 }
 
+html {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body {
   margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
   font-family:
     'Onest',
     system-ui,
     -apple-system,
     sans-serif;
-  /* Dynamic Background with DVH Fallback */
-  min-height: 100vh;
-  min-height: 100dvh;
   background-color: var(--color-bg-deep);
   color: var(--color-text-primary);
-
-  /* Mobile Best Practices 2026 */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
-  overscroll-behavior-y: none;
-  /* Prevents pull-to-refresh / rubber-banding */
   touch-action: manipulation;
-  /* Improves touch response */
-
-  overflow-x: hidden;
-
-  /* Dynamic Background */
   background-image: var(--bg-image);
   background-attachment: fixed;
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
-}
-
-/* Ensure HTML takes full height for overscroll prevention */
-html {
-  height: 100%;
-  overscroll-behavior-y: none;
 }
 
 @layer utilities {

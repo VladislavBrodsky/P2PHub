@@ -49,7 +49,7 @@ export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
     const isStaging = import.meta.env.VITE_APP_ENV === 'staging';
 
     return (
-        <div className="selection:bg-brand-blue/10 relative min-h-dvh overflow-x-hidden bg-(--color-bg-app) text-(--color-text-primary)">
+        <div className="selection:bg-brand-blue/10 fixed inset-0 flex flex-col overflow-hidden bg-(--color-bg-app) text-(--color-text-primary)">
             {/* Staging Ribbon */}
             {isStaging && (
                 <div className="fixed top-0 left-0 z-100 w-full bg-yellow-400 text-center text-xs font-bold text-slate-900 shadow-sm py-1">
@@ -57,30 +57,23 @@ export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
                 </div>
             )}
 
-            {/* Subtle Depth Effects - Full Width */}
+            {/* Subtle Depth Effects - Background remain fixed */}
             <div className="pointer-events-none fixed right-[-10%] top-[-20%] z-0 aspect-square w-[80%] rounded-full bg-slate-100/50 blur-[120px] dark:bg-slate-900/20" />
             <div className="pointer-events-none fixed bottom-[-10%] left-[-20%] z-0 aspect-square w-[60%] rounded-full bg-emerald-500/5 blur-[100px] dark:bg-emerald-500/10" />
 
-            {/* Grainy Texture for Premium Feel - Full Width */}
+            {/* Grainy Texture */}
             <div className="pointer-events-none fixed inset-0 z-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay" />
 
-            {/* Centered Mobile Container */}
-            <div className="relative mx-auto w-full max-w-lg">
-                {/* Header */}
-                <div className={`relative z-50 ${isStaging ? 'mt-6' : ''}`}>
-                    <Header onOpenMenu={() => setIsMenuOpen(true)} />
-                </div>
+            {/* Main Content Area - THE SCROLL LAYER */}
+            <main
+                className={`flex-1 overflow-x-hidden overflow-y-auto scroll-smooth relative z-10 [-webkit-overflow-scrolling:touch] ${isStaging ? 'staging-offset' : 'content-main-padding'}`}
+            >
+                <div className="relative mx-auto w-full max-w-lg px-4 safe-pb">
+                    {/* Header */}
+                    <div className="relative z-50 mb-4">
+                        <Header onOpenMenu={() => setIsMenuOpen(true)} />
+                    </div>
 
-                {/* Side Menu / Profile Drawer */}
-                <ProfileDrawer
-                    isOpen={isMenuOpen}
-                    onClose={() => setIsMenuOpen(false)}
-                />
-
-                {/* Main Content Area */}
-                <main
-                    className={`safe-pb relative z-10 px-4 ${isStaging ? 'staging-offset' : 'content-main-padding'}`}
-                >
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeTab}
@@ -93,13 +86,19 @@ export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
                             {children}
                         </motion.div>
                     </AnimatePresence>
-                </main>
+                </div>
+            </main>
 
-                {/* Integrated Footer Stack */}
-                <div className="pb-safe-bottom fixed bottom-0 left-1/2 z-50 flex w-full max-w-lg -translate-x-1/2 flex-col items-center pointer-events-none">
-                    <div className="flex w-full justify-center pb-4 pointer-events-auto">
-                        <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
-                    </div>
+            {/* Side Menu / Profile Drawer - Portaled out, so safe */}
+            <ProfileDrawer
+                isOpen={isMenuOpen}
+                onClose={() => setIsMenuOpen(false)}
+            />
+
+            {/* Integrated Footer Stack */}
+            <div className="fixed bottom-0 left-1/2 z-50 flex w-full max-w-lg -translate-x-1/2 flex-col items-center pointer-events-none pb-safe-bottom">
+                <div className="flex w-full justify-center pb-4 pointer-events-auto">
+                    <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
                 </div>
             </div>
         </div>

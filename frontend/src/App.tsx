@@ -28,20 +28,21 @@ function App() {
                     console.log('[DEBUG] initTMA: miniApp ready');
                 }
 
-                // Handle Swipe Behavior - Disable pull-to-close
-                if (swipeBehavior.mount.isAvailable()) {
-                    try {
-                        if (!swipeBehavior.isMounted()) {
-                            await swipeBehavior.mount();
+                // Handle Swipe Behavior - Disable pull-to-close IMMEDIATELY
+                const lockSwipe = async () => {
+                    if (swipeBehavior.mount.isAvailable()) {
+                        try {
+                            if (!swipeBehavior.isMounted()) await swipeBehavior.mount();
+                            if (swipeBehavior.disableVertical.isAvailable()) {
+                                swipeBehavior.disableVertical();
+                                console.log('[DEBUG] initTMA: Vertical swipe disabled (Primary)');
+                            }
+                        } catch (e) {
+                            console.error('Swipe behavior error:', e);
                         }
-                        if (swipeBehavior.disableVertical.isAvailable()) {
-                            swipeBehavior.disableVertical();
-                            console.log('[DEBUG] initTMA: Vertical swipe disabled');
-                        }
-                    } catch (e) {
-                        console.error('Swipe behavior error:', e);
                     }
-                }
+                };
+                await lockSwipe();
 
                 // Use Viewport for true full-screen/expanded state
                 if (viewport.mount.isAvailable()) {
@@ -52,12 +53,15 @@ function App() {
                         }
 
                         // Small delay then expand
-                        setTimeout(() => {
+                        setTimeout(async () => {
                             if (viewport.expand.isAvailable() && !viewport.isExpanded()) {
                                 viewport.expand();
                                 console.log('[DEBUG] initTMA: viewport expanded');
                             }
-                        }, 100);
+                            // Re-lock swipe after expansion just in case
+                            await lockSwipe();
+                            console.log('[DEBUG] initTMA: Vertical swipe re-locked after expand');
+                        }, 150);
                     } catch (e) {
                         console.error('Viewport mount error:', e);
                     }
