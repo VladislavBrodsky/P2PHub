@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { MoreHorizontal, Sparkles } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import { useUser } from '../context/UserContext';
+import { getRank } from '../utils/ranking';
 
 interface HeaderProps {
     onOpenMenu: () => void;
@@ -8,6 +9,7 @@ interface HeaderProps {
 
 export const Header = ({ onOpenMenu }: HeaderProps) => {
     const { user } = useUser();
+    const currentRank = getRank(user?.level || 1);
 
     return (
         <header
@@ -26,12 +28,21 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                     </div>
                 </button>
 
-                <div className="flex items-center gap-2 rounded-xl border border-(--color-border-glass) bg-(--color-bg-surface)/80 dark:bg-slate-900/50 px-3 py-1.5 shadow-premium backdrop-blur-md">
-                    <div className="text-(--color-success) flex items-center gap-1.5">
-                        <span className="text-[10px] font-black uppercase tracking-widest">
-                            {user?.level && user.level > 10 ? 'Elite' : 'Verified'}
-                        </span>
-                        <Sparkles className="h-3 w-3 fill-current" />
+                <div className="flex items-center gap-3 rounded-xl border border-(--color-border-glass) bg-(--color-bg-surface)/80 dark:bg-slate-900/50 px-3 py-1.5 shadow-premium backdrop-blur-md">
+                    <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1">
+                            <span className="text-[10px] font-black uppercase tracking-tight text-(--color-text-secondary)">Lvl</span>
+                            <span className="text-[11px] font-black" style={{ color: currentRank.badgeColor }}>
+                                {user?.level || 1}
+                            </span>
+                        </div>
+                        <div className="w-px h-3 bg-white/10" />
+                        <div className="flex items-center gap-1">
+                            <span className="text-[11px] font-black text-(--color-text-primary)">
+                                {user?.xp || 0}
+                            </span>
+                            <span className="text-[10px] font-black uppercase tracking-tight text-(--color-text-secondary)">XP</span>
+                        </div>
                     </div>
                 </div>
             </div>
