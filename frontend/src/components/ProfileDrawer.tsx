@@ -339,7 +339,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                     </div>
 
                                     <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-(--color-text-secondary) opacity-50">
-                                        P2PHub v1.2.0
+                                        P2PHub v1.3.0 (Stable)
                                     </p>
                                 </div>
                             </div>

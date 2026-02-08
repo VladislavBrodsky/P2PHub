@@ -4,9 +4,12 @@ This document tracks the detailed version history and improvements for each spec
 Use this to see the evolution of individual components.
 
 ## 🎡 Ecosystem & Orbit
-**Current Status**: v1.2.0 (Solar System)
+**Current Status**: v1.3.0 (Stable)
 
-### v1.2.0 (2026-02-08)
+### v1.3.0 (2026-02-08)
+-   **HERO ROTATION**: Implemented daily rotating headlines on the Dashboard for fresh, psychologically compelling marketing.
+-   **RECOVERY**: Set up "Smart Fallback" for the Telegram Bot. If webhooks fail, it automatically switches to Long Polling, ensuring 100% uptime.
+-   **STABILITY**: Fixed bot unresponsiveness due to malformed webhook URLs.
 -   **PLANETARY SYSTEM**: Completely refactored the orbit into a 3D-feeling Solar System.
 -   **LAYERS**:
     -   **Inner (Ecosystem)**: Pay, NFC, QR icons orbiting fast with glass sheen.
@@ -67,9 +70,12 @@ Use this to see the evolution of individual components.
 --------------------------------------------------------------------------------
 
 ## 🟡 Earn Header
-**Current Status**: v1.2.0 (Crystal Overhaul)
+**Current Status**: v1.3.0 (Stable - Liquid Silver)
 
-### v1.2.0 (2026-02-08)
+### v1.3.0 (2026-02-08)
+-   **LIQUID SILVER BAR**: Upgraded XP Progress Bar to a premium silver liquid animation with custom gradients and sweeping highlight pulses.
+-   **BADGE STABILITY**: Rebuilt Rank Badge edges with a solid "bridge" layer to eliminate transparency glitches on rounded corners.
+-   **LAYOUT**: Centered the "Earn & Level Up" main title for a more balanced aesthetic.
 -   **CRYSTAL UPGRADE**: Applied the "Crystal" glass effect to the circular level display and all XP progress bars.
 -   **VISUALS**: Added glossy top-down overlays, deep inner shadows, and a moving shimmer beam (`animate-shimmer`) to create a high-fidelity reflective aesthetic.
 

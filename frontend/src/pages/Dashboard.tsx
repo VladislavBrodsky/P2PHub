@@ -45,6 +45,11 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
         show: { opacity: 1, y: 0 },
     };
 
+    // Calculate rotation index (0, 1, or 2) based on current day
+    const rotationIndex = Math.floor(Date.now() / (1000 * 60 * 60 * 24)) % 3;
+    const heroTitle1 = t(`dashboard.hero_rotation.${rotationIndex}.title_1`, { defaultValue: "Slow Money Is Dead" });
+    const heroTitle2 = t(`dashboard.hero_rotation.${rotationIndex}.title_2`, { defaultValue: "Welcome to Web3 Finance" });
+
     return (
         <motion.div
             className="flex w-full flex-col gap-0 pb-32 px-0 min-h-dvh transition-colors duration-500 relative"
@@ -75,7 +80,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                             </p>
                         </motion.div>
                         <h1 className="text-4xl font-extrabold tracking-tighter text-text-primary leading-[1.1]">
-                            {t('dashboard.hero_title_1')}<br />
+                            {heroTitle1}<br />
                             <motion.span
                                 className="inline-block mt-1"
                                 style={{
@@ -102,7 +107,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                     }
                                 }}
                             >
-                                {t('dashboard.hero_title_2')}
+                                {heroTitle2}
                             </motion.span>
                         </h1>
                     </div>

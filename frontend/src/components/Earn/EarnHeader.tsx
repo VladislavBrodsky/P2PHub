@@ -97,51 +97,77 @@ export const EarnHeader = () => {
                     </div>
 
                     {/* Rank Badge - Compact & Separated (Refactored for Clean Borders) */}
-                    <div className={`relative mt-4 px-4 py-1.5 rounded-full border border-white/20 shadow-lg shadow-slate-200/50 dark:shadow-black/50 group backdrop-blur-md z-20 transition-transform hover:scale-105
-                        ${level >= 50 ? 'bg-linear-to-r from-amber-300/90 via-yellow-400/90 to-amber-500/90' : 'bg-linear-to-r from-slate-200/90 via-slate-300/90 to-slate-400/90'}
+                    <div className={`relative mt-4 px-6 py-2.5 rounded-full border border-white/40 shadow-2xl group backdrop-blur-2xl z-20 transition-all hover:scale-105 overflow-hidden
+                        ${level >= 50
+                            ? 'bg-amber-400 text-yellow-950'
+                            : 'bg-slate-300 text-slate-900'}
                     `}>
+                        {/* High-End Gradient Overlay to fix edge glitches */}
+                        <div className={`absolute inset-0 
+                            ${level >= 50
+                                ? 'bg-linear-to-r from-amber-500 via-amber-200 to-amber-500'
+                                : 'bg-linear-to-r from-slate-400 via-slate-100 to-slate-400'}
+                        `} />
+
                         {/* Shimmer Container - Inner Clipping Only */}
                         <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
-                            <div className={`absolute inset-0 ${level >= 50 ? 'shimmer-gold' : 'shimmer-platinum'} opacity-60`} />
-                            {/* Crystal Glint */}
-                            <div className="absolute top-0 left-0 w-full h-px bg-white/50" />
+                            <div className={`absolute inset-0 ${level >= 50 ? 'shimmer-gold' : 'shimmer-platinum'} opacity-40`} />
+                            {/* High-End Crystal Glint */}
+                            <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-white/80 to-transparent" />
                         </div>
 
-                        <div className="relative flex items-center gap-2 z-10">
-                            <Trophy className={`w-3 h-3 ${level >= 50 ? 'text-yellow-900' : 'text-slate-700'} drop-shadow-sm`} />
-                            <span className={`text-[9px] font-black uppercase tracking-[0.15em] ${level >= 50 ? 'text-yellow-950' : 'text-slate-800'} text-shadow-sm`}>
+                        <div className="relative flex items-center justify-center gap-2 z-10">
+                            <Trophy className={`w-3.5 h-3.5 ${level >= 50 ? 'text-yellow-900' : 'text-slate-800'} drop-shadow-sm`} />
+                            <span className="text-[10px] font-black uppercase tracking-[0.25em] text-shadow-sm">
                                 {t(`ranks.${rank.name}`)}
                             </span>
                         </div>
                     </div>
                 </div>
 
-                {/* XP Stats - Sleek Bar */}
+                {/* XP Stats - Premium Liquid Bar */}
                 <div className="space-y-3 w-full max-w-[300px] pt-4">
                     <div className="flex justify-between items-end px-1">
-                        <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">{t('earn_header.xp_progress')}</span>
+                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.25em]">{t('earn_header.xp_progress')}</span>
                         <div className="flex items-baseline gap-1">
-                            <span className="text-sm font-black text-text-primary">{progress.current}</span>
-                            <span className="text-[10px] font-bold text-brand-muted">/ {progress.total}</span>
+                            <span className="text-sm font-black text-text-primary italic tracking-tighter">{progress.current}</span>
+                            <span className="text-[10px] font-bold text-brand-muted opacity-50">/ {progress.total} XP</span>
                         </div>
                     </div>
-                    <div className="h-3 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden border border-white/5 p-[2px] relative shadow-inner">
+                    <div className="h-4 w-full bg-slate-200/30 dark:bg-white/5 rounded-full overflow-hidden border border-white/10 p-[2px] relative shadow-inner backdrop-blur-sm">
                         <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${progress.percent}%` }}
                             transition={{ duration: 1.5, ease: "backOut" }}
-                            className="h-full rounded-full relative overflow-hidden"
+                            className="h-full rounded-full relative overflow-hidden shadow-[0_0_20px_rgba(255,255,255,0.2)]"
                             style={{
-                                backgroundColor: '#3b82f6', // Solid brand blue for crystal effect
-                                boxShadow: `0 0 15px rgba(59, 130, 246, 0.5)`
+                                background: level >= 50
+                                    ? 'linear-gradient(90deg, #F59E0B, #FEF3C7, #F59E0B)'
+                                    : 'linear-gradient(90deg, #94A3B8, #F1F5F9, #94A3B8)',
+                                backgroundSize: '200% 100%'
                             }}
                         >
-                            {/* Personalization Crystal Effect Layers */}
-                            <div className="absolute inset-0 bg-linear-to-b from-white/40 to-transparent" />
+                            {/* Pro Liquid Animation Effect */}
                             <motion.div
-                                animate={{ x: ['-100%', '200%'] }}
+                                animate={{
+                                    backgroundPosition: ['100% 0%', '0% 0%']
+                                }}
                                 transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-                                className="absolute inset-0 bg-linear-to-r from-transparent via-white/50 to-transparent"
+                                className="absolute inset-0 opacity-90"
+                                style={{
+                                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent)',
+                                    backgroundSize: '200% 100%'
+                                }}
+                            />
+
+                            {/* Crystal Reflection Overlay */}
+                            <div className="absolute inset-x-0 top-0 h-[45%] bg-linear-to-b from-white/40 to-transparent" />
+
+                            {/* Fast Shimmer Pulse */}
+                            <motion.div
+                                animate={{ x: ['-200%', '200%'] }}
+                                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                                className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent w-1/2"
                             />
                         </motion.div>
                     </div>

@@ -293,7 +293,7 @@ export default function ReferralPage() {
                 )}
             </AnimatePresence>
 
-            <h1 className="text-3xl font-black mb-6 tracking-tighter text-gradient-primary">
+            <h1 className="text-3xl font-black mb-6 tracking-tighter text-gradient-primary text-center">
                 {t('referral.title')}
             </h1>
 
