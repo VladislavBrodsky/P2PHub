@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 import asyncio
 from fastapi import FastAPI, Depends, HTTPException, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.endpoints import partner, earnings, tools
+from app.api.endpoints import partner, earnings, tools, leaderboard
 from app.core.config import settings
 from bot import bot, dp
 from aiogram import types
@@ -69,6 +69,7 @@ app.add_middleware(
 
 app.include_router(partner.router, prefix="/api/partner", tags=["partner"])
 app.include_router(earnings.router, prefix="/api/earnings", tags=["earnings"])
+app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderboard"])
 app.include_router(tools.router, prefix="/api/tools", tags=["tools"])
 from app.api.endpoints import health
 app.include_router(health.router, tags=["health"])

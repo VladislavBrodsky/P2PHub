@@ -281,6 +281,9 @@
         "levelup": {
             "title": "LEVEL UP!",
             "reached": "You reached Level {{level}}"
+        },
+        "tree": {
+            "title": "Your Partner Matrix"
         }
     },
     "tasks": {

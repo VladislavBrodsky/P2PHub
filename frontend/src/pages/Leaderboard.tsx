@@ -3,29 +3,58 @@ import { LeagueCard, LeagueTier } from '../components/League/LeagueCard';
 import { Section } from '../components/Section';
 import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import { retrieveLaunchParams } from '@telegram-apps/sdk';
 
-// Mock data
-const MOCK_LEADERBOARD = Array.from({ length: 15 }, (_, i) => ({
-    id: i + 1,
-    name: `Partner_${Math.floor(Math.random() * 1000)}`,
-    score: Math.floor(10000 - i * 500),
-    league: i < 3 ? 'platinum' : i < 8 ? 'gold' : 'silver'
-}));
+interface LeaderboardUser {
+    id: number;
+    username: string;
+    first_name: string;
+    xp: number;
+    level: number;
+}
+
+interface UserStats {
+    rank: number;
+    xp: number;
+    level: number;
+    referrals: number;
+}
 
 export default function LeaderboardPage() {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(true);
+    const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>([]);
+    const [userStats, setUserStats] = useState<UserStats | null>(null);
 
     useEffect(() => {
-        setIsLoading(false);
+        const fetchData = async () => {
+            try {
+                const { initDataRaw } = retrieveLaunchParams();
+                const headers = { 'X-Telegram-Init-Data': initDataRaw };
+
+                // Parallel fetch for speed
+                const [leaderboardRes, statsRes] = await Promise.all([
+                    axios.get(`${import.meta.env.VITE_API_URL}/api/leaderboard/global?limit=50`, { headers }),
+                    axios.get(`${import.meta.env.VITE_API_URL}/api/leaderboard/me`, { headers })
+                ]);
+
+                setLeaderboard(leaderboardRes.data);
+                setUserStats(statsRes.data);
+            } catch (error) {
+                console.error('Failed to fetch leaderboard data:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
     }, []);
 
-    // Current user mock stats
-    const userStats = {
-        league: 'gold' as LeagueTier,
-        rank: 42,
-        score: 4520,
-        referrals: 12
+    const getLeague = (level: number): LeagueTier => {
+        if (level >= 30) return 'platinum';
+        if (level >= 15) return 'gold';
+        return 'silver';
     };
 
     if (isLoading) return <div className="p-4"><ListSkeleton /></div>;
@@ -35,14 +64,21 @@ export default function LeaderboardPage() {
             <h1 className="text-2xl font-bold text-(--color-text-primary) mb-6">{t('leaderboard.title')}</h1>
 
             {/* 1. Your Card */}
-            <div className="mb-8">
-                <LeagueCard {...userStats} />
-            </div>
+            {userStats && (
+                <div className="mb-8">
+                    <LeagueCard
+                        league={getLeague(userStats.level)}
+                        rank={userStats.rank}
+                        score={userStats.xp}
+                        referrals={userStats.referrals}
+                    />
+                </div>
+            )}
 
             {/* 2. Leaderboard List */}
             <Section title={t('leaderboard.top_partners')}>
                 <div className="space-y-3">
-                    {MOCK_LEADERBOARD.map((user, index) => (
+                    {leaderboard.map((user, index) => (
                         <div
                             key={user.id}
                             className="flex items-center justify-between rounded-xl border border-(--color-brand-border) bg-(--color-bg-surface) p-3 shadow-sm"
@@ -54,19 +90,19 @@ export default function LeaderboardPage() {
                                 <div className="flex items-center gap-3">
                                     <div className={`h-10 w-10 overflow-hidden rounded-full border-2 ${index < 3 ? 'border-amber-500 shadow-sm' : 'border-(--color-brand-border)'}`}>
                                         <img
-                                            src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`}
-                                            alt={user.name}
+                                            src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username || user.first_name}`}
+                                            alt={user.username || user.first_name}
                                             className="h-full w-full object-cover"
                                         />
                                     </div>
                                     <div>
-                                        <p className="text-sm font-bold text-(--color-text-primary)">{user.name}</p>
-                                        <p className="text-[10px] font-bold text-(--color-text-secondary) uppercase">{t(`leaderboard.levels.${user.league}`)}</p>
+                                        <p className="text-sm font-bold text-(--color-text-primary)">{user.first_name || user.username}</p>
+                                        <p className="text-[10px] font-bold text-(--color-text-secondary) uppercase">{t(`leaderboard.levels.${getLeague(user.level)}`)}</p>
                                     </div>
                                 </div>
                             </div>
                             <span className="text-sm font-black text-(--color-text-primary) font-mono">
-                                {user.score.toLocaleString()} {t('leaderboard.xp')}
+                                {user.xp.toLocaleString()} {t('leaderboard.xp')}
                             </span>
                         </div>
                     ))}

@@ -72,10 +72,10 @@ async def get_my_profile(
         await session.commit()
         await session.refresh(partner)
         
-        # Offload notifications
-        from app.services.partner_service import process_referral_notifications
+        # Offload notifications & high-scale referral logic
+        from app.services.partner_service import process_referral_logic
         from bot import bot
-        background_tasks.add_task(process_referral_notifications, bot, partner, True)
+        background_tasks.add_task(process_referral_logic, bot, session, partner)
     else:
         # Update existing profile check
         has_changed = False
@@ -137,3 +137,33 @@ async def get_recent_partners(
         pass
         
     return partners_data
+@router.get("/tree")
+async def get_my_referral_tree(
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Fetches the 9-level referral tree stats for the current user.
+    Uses hyper-optimized Recursive CTE service logic.
+    """
+    try:
+        if "user" in user_data:
+            tg_data = json.loads(user_data["user"])
+            tg_id = str(tg_data.get("id"))
+        else:
+            tg_id = str(user_data.get("id"))
+    except:
+        return {str(i): 0 for i in range(1, 10)}
+
+    # Get partner
+    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    result = await session.exec(statement)
+    partner = result.first()
+    
+    if not partner:
+        return {str(i): 0 for i in range(1, 10)}
+
+    from app.services.partner_service import get_referral_tree_stats
+    stats = await get_referral_tree_stats(session, partner.id)
+    
+    return stats
