@@ -34,34 +34,38 @@ async def cmd_start(message: types.Message):
     if lang not in ["en", "ru"]:
         lang = "en"
 
-    async for session in get_session():
-        # Get or create partner
-        partner, is_new = await create_partner(
-            session=session,
-            telegram_id=str(message.from_user.id),
-            username=message.from_user.username,
-            first_name=message.from_user.first_name,
-            last_name=message.from_user.last_name,
-            language_code=lang,
-            referrer_code=referrer_code
-        )
-        
-        await process_referral_notifications(bot, session, partner, is_new)
-        
-        # Personal referral link
-        bot_info = await bot.get_me()
-        referral_link = f"https://t.me/{bot_info.username}?start={partner.referral_code}"
+    try:
+        async for session in get_session():
+            # Get or create partner
+            partner, is_new = await create_partner(
+                session=session,
+                telegram_id=str(message.from_user.id),
+                username=message.from_user.username,
+                first_name=message.from_user.first_name,
+                last_name=message.from_user.last_name,
+                language_code=lang,
+                referrer_code=referrer_code
+            )
+            
+            await process_referral_notifications(bot, session, partner, is_new)
+            
+            # Personal referral link
+            bot_info = await bot.get_me()
+            referral_link = f"https://t.me/{bot_info.username}?start={partner.referral_code}"
 
-        # Get localized messages
-        welcome_text = get_msg(lang, "welcome", referral_link=referral_link)
-        share_text = get_msg(lang, "share_text")
+            # Get localized messages
+            welcome_text = get_msg(lang, "welcome", referral_link=referral_link)
+            share_text = get_msg(lang, "share_text")
 
-        await message.answer(
-            welcome_text,
-            parse_mode="Markdown",
-            reply_markup=get_main_menu_keyboard(WEB_APP_URL, referral_link, share_text)
-        )
-        break # We only need one session
+            await message.answer(
+                welcome_text,
+                parse_mode="Markdown",
+                reply_markup=get_main_menu_keyboard(WEB_APP_URL, referral_link, share_text)
+            )
+            break # We only need one session
+    except Exception as e:
+        logging.error(f"Error in cmd_start: {e}")
+        await message.answer("⚠️ An error occurred. Please try again later.")
 
 async def main():
     logging.info("Starting bot...")
