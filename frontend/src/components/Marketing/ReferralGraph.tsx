@@ -12,7 +12,7 @@ export const ReferralGraph = () => {
     const [count, setCount] = useState(0);
     const [visibleNodes, setVisibleNodes] = useState(0);
 
-    // Fast counter animation for income
+    // Optimized counter animation for income - reduced frequency
     useEffect(() => {
         const interval = setInterval(() => {
             setCount(prev => {
@@ -20,9 +20,10 @@ export const ReferralGraph = () => {
                     clearInterval(interval);
                     return 43200;
                 }
+                // Human eye can't track 20ms updates clearly. 100ms is much better for CPU.
                 return prev + 432;
             });
-        }, 20);
+        }, 100);
         return () => clearInterval(interval);
     }, []);
 
@@ -65,7 +66,9 @@ export const ReferralGraph = () => {
 
             <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
                 <motion.div
-                    animate={{ rotate: 360 }}
+                    initial={{ rotate: 0 }}
+                    whileInView={{ rotate: 360 }}
+                    viewport={{ once: false }}
                     transition={{ duration: 180, repeat: Infinity, ease: "linear" }}
                 >
                     <Globe className={clsx("w-[800px] h-[800px]", "text-blue-500 dark:text-blue-500/50")} strokeWidth={0.2} />
@@ -88,7 +91,9 @@ export const ReferralGraph = () => {
                             rotateX: orbit.rx,
                             rotateZ: orbit.rz
                         }}
-                        animate={{ rotateY: 360 }}
+                        initial={{ rotateY: 0 }}
+                        whileInView={{ rotateY: 360 }}
+                        viewport={{ margin: "200px" }}
                         transition={{ duration: orbit.duration, repeat: Infinity, ease: "linear" }}
                     >
                         {/* Nodes on this orbital path */}
@@ -100,7 +105,8 @@ export const ReferralGraph = () => {
                                 <motion.div
                                     key={j}
                                     initial={{ scale: 0, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
+                                    whileInView={{ scale: 1, opacity: 1 }}
+                                    viewport={{ once: true }}
                                     className={clsx(
                                         "absolute top-1/2 left-1/2 w-4 h-4 -ml-2 -mt-2 rounded-full flex items-center justify-center",
                                         "bg-white dark:bg-white",
@@ -118,7 +124,7 @@ export const ReferralGraph = () => {
                                     {[...Array(2)].map((_, k) => (
                                         <motion.div
                                             key={k}
-                                            animate={{ rotate: 360 }}
+                                            whileInView={{ rotate: 360 }}
                                             transition={{ duration: 3 + k, repeat: Infinity, ease: "linear" }}
                                             className="absolute w-full h-full"
                                         >
@@ -140,7 +146,7 @@ export const ReferralGraph = () => {
                 {[...Array(3)].map((_, i) => (
                     <motion.div
                         key={`team-${i}`}
-                        animate={{ rotate: 360 }}
+                        whileInView={{ rotate: 360 }}
                         transition={{ duration: 10 + i * 5, repeat: Infinity, ease: "linear" }}
                         className="absolute"
                         style={{ width: 80, height: 80 }}

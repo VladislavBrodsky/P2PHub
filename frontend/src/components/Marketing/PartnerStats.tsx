@@ -2,10 +2,9 @@ import { motion } from 'framer-motion';
 import { Users, Zap, Globe2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
+import { getApiUrl } from '../../utils/api';
 
-const PROD_URL = 'https://p2phub-backend-production.up.railway.app';
-const DEV_URL = 'http://localhost:8000';
-const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? DEV_URL : PROD_URL);
+const API_URL = getApiUrl();
 
 interface PartnerStatsProps {
     onNavigateToEarn?: () => void;
@@ -93,21 +92,20 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 <div className="flex -space-x-2">
                     {recentPartners.length > 0 ? (
                         recentPartners.slice(0, 4).map((partner, i) => (
-                            <div key={partner.id || i} className="w-7 h-7 rounded-full border-2 border-(--color-bg-deep) bg-slate-800 flex items-center justify-center overflow-hidden shadow-lg">
+                            <div key={partner.id || i} className="w-7 h-7 rounded-full border-2 border-(--color-bg-deep) bg-slate-800 flex items-center justify-center overflow-hidden shadow-lg transition-transform hover:scale-110">
                                 {partner.photo_url ? (
                                     <img src={partner.photo_url} alt={partner.first_name} className="w-full h-full object-cover" />
                                 ) : (
-                                    <span className="text-[10px] font-black text-white uppercase">
-                                        {(partner.first_name?.[0] || 'P')}
-                                    </span>
+                                    <div className={`w-full h-full flex items-center justify-center text-[10px] font-black text-white uppercase bg-linear-to-br ${['from-blue-500 to-indigo-600', 'from-purple-500 to-pink-600', 'from-emerald-500 to-teal-600', 'from-amber-500 to-orange-600'][i % 4]}`}>
+                                        {(partner.first_name?.[0] || partner.username?.[0] || '?')}
+                                    </div>
                                 )}
                             </div>
                         ))
                     ) : (
+                        // Skeleton/Fallback when no data yet
                         [1, 2, 3, 4].map((i) => (
-                            <div key={i} className="w-6 h-6 rounded-full border-2 border-(--color-bg-deep) bg-slate-900 flex items-center justify-center text-[10px] font-black text-white">
-                                {String.fromCharCode(64 + i)}
-                            </div>
+                            <div key={i} className="w-7 h-7 rounded-full border-2 border-(--color-bg-deep) bg-slate-100/10 dark:bg-white/5 animate-pulse" />
                         ))
                     )}
                 </div>

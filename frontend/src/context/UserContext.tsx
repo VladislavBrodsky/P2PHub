@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
 import { retrieveLaunchParams } from '@telegram-apps/sdk-react';
+import { getApiUrl } from '../utils/api';
 
 interface User {
     id: number;
@@ -41,12 +42,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             tgUser = lp.initData?.user;
             const initDataRaw = lp.initDataRaw || '';
 
-            // Try simpler URL structure first (often safer default)
-            const PROD_URL = 'https://p2phub-production.up.railway.app';
-            // Also try the specific backend one as fallback if needed, but let's try main one first
-            // const PROD_URL = 'https://p2phub-backend-production.up.railway.app';
-
-            const apiUrl = import.meta.env.VITE_API_URL || PROD_URL;
+            // Centralized API configuration
+            const apiUrl = getApiUrl();
             console.log('[DEBUG] refreshUser: Fetching from:', apiUrl);
 
             const res = await axios.get(`${apiUrl}/api/partner/me`, {
@@ -129,14 +126,21 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 return;
             }
 
-            // More aggressive waiting for Telegram environment
+            // More robust waiting for Telegram environment using recursive timeout
             let attempts = 0;
-            while (attempts < 5 && !window.Telegram?.WebApp?.initData) {
-                console.log('[DEBUG] Waiting for Telegram initData...', attempts);
-                await new Promise(r => setTimeout(r, 500));
-                attempts++;
-            }
-            refreshUser();
+            const checkData = async () => {
+                if (window.Telegram?.WebApp?.initData) {
+                    refreshUser();
+                } else if (attempts < 10) {
+                    attempts++;
+                    setTimeout(checkData, 500);
+                } else {
+                    console.log('[DEBUG] Max attempts reached, proceeding with refresh anyway');
+                    refreshUser();
+                }
+            };
+
+            checkData();
         };
         init();
     }, []);

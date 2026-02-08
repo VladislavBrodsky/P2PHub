@@ -68,7 +68,8 @@ export const CommunityOrbit = () => {
     return (
         <div className="relative flex h-[400px] w-full items-center justify-center overflow-visible">
             {/* Background Particles/Stars */}
-            {[...Array(6)].map((_, i) => (
+            {/* Background Particles/Stars - Reduced count and simplified */}
+            {[...Array(3)].map((_, i) => (
                 <motion.div
                     key={`star-${i}`}
                     className="absolute h-1 w-1 rounded-full bg-blue-400/30"
@@ -77,14 +78,14 @@ export const CommunityOrbit = () => {
                         left: `${Math.random() * 100}%`,
                         willChange: 'transform, opacity' // GPU hint
                     }}
-                    animate={{
-                        opacity: [0.2, 0.8, 0.2],
-                        scale: [1, 1.5, 1],
+                    whileInView={{
+                        opacity: [0.2, 0.6, 0.2],
+                        scale: [1, 1.2, 1],
                     }}
                     transition={{
-                        duration: 3 + Math.random() * 2,
+                        duration: 4 + Math.random() * 2,
                         repeat: Infinity,
-                        ease: "easeInOut",
+                        ease: "linear",
                         delay: Math.random() * 2,
                     }}
                 />
@@ -95,7 +96,7 @@ export const CommunityOrbit = () => {
 
             {/* Inner Rotating Dashed Ring */}
             <motion.div
-                animate={{ rotate: 360 }}
+                whileInView={{ rotate: 360 }}
                 transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
                 className="absolute h-[260px] w-[260px] rounded-full border border-dashed border-slate-200/50 opacity-40 dark:border-white/10"
                 style={{ willChange: 'transform' }} // GPU hint
@@ -119,7 +120,7 @@ const CentralLogo = () => (
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-700 shadow-premium shadow-blue-500/40"
+        className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-premium shadow-blue-500/40"
         style={{ willChange: 'transform' }} // GPU hint
     >
         {/* Glow effect behind logo */}
@@ -129,7 +130,7 @@ const CentralLogo = () => (
         <div className="absolute inset-0 z-10 rounded-full border border-white/20" />
 
         <motion.img
-            animate={{ scale: [1, 1.04, 1, 1.02, 1] }}
+            whileInView={{ scale: [1, 1.04, 1, 1.02, 1] }}
             transition={{
                 duration: 4, // Slower breathing
                 repeat: Infinity,
@@ -142,18 +143,18 @@ const CentralLogo = () => (
         />
 
         {/* Shockwave Ripples - Slowed down significantly */}
-        {[0, 1, 2].map((i) => (
+        {[0, 1].map((i) => (
             <motion.div
                 key={i}
-                animate={{
+                whileInView={{
                     scale: [1, 2.2],
-                    opacity: [0.4, 0],
-                    borderWidth: ["2px", "0px"]
+                    opacity: [0.3, 0],
+                    borderWidth: ["1px", "0px"]
                 }}
                 transition={{
-                    duration: 5, // Much slower waves
+                    duration: 6, // Even slower waves
                     repeat: Infinity,
-                    delay: i * 1.6, // Staggered for continuity
+                    delay: i * 3, // Staggered for continuity
                     ease: "easeOut"
                 }}
                 className="absolute inset-0 z-0 rounded-full border border-blue-400/40"
@@ -174,7 +175,8 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
 
     return (
         <motion.div
-            animate={{ rotate: [startAngle, startAngle + 360] }}
+            whileInView={{ rotate: [startAngle, startAngle + 360] }}
+            viewport={{ margin: "100px" }}
             transition={{ duration, repeat: Infinity, ease: "linear" }}
             className="absolute flex items-center justify-center p-4" // Added padding for touch target/glow space
             style={{
@@ -185,7 +187,8 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
             }}
         >
             <motion.div
-                animate={{ rotate: [-(startAngle), -(startAngle + 360)] }} // Counter-rotate to keep upright
+                whileInView={{ rotate: [-(startAngle), -(startAngle + 360)] }} // Counter-rotate to keep upright
+                viewport={{ margin: "100px" }}
                 transition={{ duration, repeat: Infinity, ease: "linear" }}
                 className="absolute right-0"
                 style={{
@@ -197,9 +200,9 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
             >
                 {/* Float Animation */}
                 <motion.div
-                    animate={{ y: [-3, 3, -3] }}
+                    whileInView={{ y: [-2, 2, -2] }}
                     transition={{
-                        duration: 3 + Math.random(), // Randomized float speed
+                        duration: 4, // Balanced float
                         repeat: Infinity,
                         ease: "easeInOut",
                         delay: index * 0.5,
