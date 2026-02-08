@@ -51,7 +51,7 @@ export const BentoGrid = () => {
 
     return (
         <section className="px-4 py-8 space-y-8">
-            <div className="space-y-3">
+            <div className="space-y-3 flex flex-col items-center text-center">
                 <div className="flex items-center gap-2">
                     <motion.div
                         className="w-2 h-2 rounded-full bg-blue-500"
@@ -63,7 +63,7 @@ export const BentoGrid = () => {
                 <h3 className="text-3xl font-black tracking-tight text-(--color-text-primary) leading-[1.1] whitespace-pre-line">
                     {t('evolution.title')}
                 </h3>
-                <p className="text-sm text-(--color-text-secondary) font-medium max-w-[280px]">
+                <p className="text-sm text-(--color-text-secondary) font-medium max-w-[280px] mx-auto">
                     {t('evolution.desc')}
                 </p>
             </div>
