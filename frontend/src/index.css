@@ -508,3 +508,37 @@ html {
   background: linear-gradient(135deg, #10b981 0%, #059669 50%, #10b981 100%);
   color: #ffffff;
 }
+
+/* Acid Blue Theme */
+.acid-blue-gradient {
+  background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 50%, #00d2ff 100%);
+  color: #ffffff;
+}
+
+/* Neon Glass Theme */
+.neon-glass-yellow {
+  background: rgba(223, 255, 0, 0.05);
+  backdrop-filter: blur(12px);
+  border: 2.5px solid #dfff00;
+  box-shadow: 0 0 20px rgba(223, 255, 0, 0.2), inset 0 0 10px rgba(223, 255, 0, 0.1);
+  color: #000000;
+}
+
+.neon-glass-yellow:hover {
+  background: rgba(223, 255, 0, 0.1);
+  box-shadow: 0 0 30px rgba(223, 255, 0, 0.4), inset 0 0 15px rgba(223, 255, 0, 0.2);
+}
+
+/* Refined Acid Blue Liquid */
+.acid-blue-liquid {
+  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #00f2fe 100%);
+  background-size: 200% 200%;
+  animation: liquid 4s linear infinite;
+  color: #020617;
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+}
+
+.acid-blue-liquid:hover {
+  box-shadow: 0 0 30px rgba(0, 242, 254, 0.6);
+  filter: brightness(1.1);
+}

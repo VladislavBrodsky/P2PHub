@@ -128,13 +128,13 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 <span className="text-2xl font-black text-emerald-500">${estimatedMonthly}</span>
                                             </div>
 
-                                            {/* UNLOCK STRATEGY BUTTON REDESIGN */}
+                                            {/* UNLOCK STRATEGY BUTTON REDESIGN (v3 - ACID BLUE LIQUID) */}
                                             <button
                                                 onClick={handleUnlock}
-                                                className="w-full group relative flex items-center justify-center gap-2 acid-yellow-gradient h-11 rounded-full font-black text-[11px] tracking-widest shadow-xl shadow-lime-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid animate-vibing"
+                                                className="w-full group relative flex items-center justify-center gap-2 acid-blue-liquid h-11 rounded-full font-black text-[11px] tracking-widest active:scale-[0.98] transition-all overflow-hidden animate-vibing"
                                             >
-                                                <Lock className="w-3.5 h-3.5 mb-0.5" />
-                                                UNLOCK $1 STRATEGY
+                                                <Lock className="w-3.5 h-3.5 mb-0.5 text-[#020617]" />
+                                                <span className="text-[#020617]">UNLOCK $1 STRATEGY</span>
                                                 <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/30 to-white/0 -translate-x-full group-hover:animate-shimmer" />
                                             </button>
                                         </div>
