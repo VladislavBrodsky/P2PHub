@@ -3,6 +3,30 @@
 This document tracks the detailed version history and improvements for each specific section of the P2P Partner Hub.
 Use this to see the evolution of individual components.
 
+## 🟢 Earn Hub & Missions
+**Current Status**: v1.4.0 (Stable)
+
+### v1.4.0 (2026-02-08)
+-   **MISSION FLOW**: Implemented a mandatory 15-second verification timer for all social missions.
+    -   **Sequence**: START -> Verifying... (15s) -> Claim XP.
+    -   **UI**: Added a pulsing loader and countdown directly on the task button.
+-   **GESTURE PROTECTION**: Blocked the native "swipe-down-to-close" gesture using the Telegram SDK's `swipeBehavior`. This prevents users from accidentally closing the app while scrolling long lists.
+-   **STABILITY**:
+    -   **ERROR BOUNDARY**: Wrapped the entire application in a global Error Boundary. If a crash occurs, users now see a recovery screen with a "Reload" button instead of a white screen.
+    -   **RESILIENCY**: Refactored `UserContext` to ensure loading states always clear. Added a focus listener to automatically refresh user data when the app returns from the background.
+    -   **SDK v4 COMPATIBILITY**: Refactored `index.css` to eliminate over 50 `@apply` errors, future-proofing the build system.
+
+--------------------------------------------------------------------------------
+
+## 🚀 Performance & Infrastructure
+**Current Status**: v1.4.0 (Stable)
+
+### v1.4.0 (2026-02-08)
+-   **SDK OPTIMIZATION**: Removed `React.StrictMode` from production entry points to eliminate double-initialization conflicts with the Telegram SDK.
+-   **CSS REFACTOR**: Converted arbitrary Tailwind logic in global styles to standard CSS properties for better browser performance and IDE stability.
+
+--------------------------------------------------------------------------------
+
 ## 🎡 Ecosystem & Orbit
 **Current Status**: v1.3.0 (Stable)
 
