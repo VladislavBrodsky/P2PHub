@@ -44,12 +44,12 @@ Use this to see the evolution of individual components.
 
 --------------------------------------------------------------------------------
 
-## 🟣 Footer
-**Current Status**: v1.1.0 (High Contrast)
+## 🟡 Earn Header
+**Current Status**: v1.1.0 (Crystal Liquid UI)
 
 ### v1.1.0 (2026-02-08)
--   **VISIBILITY FIX**: Addressed poor contrast issue by switching background from transparent `bg-slate-900/50` to solid `bg-(--color-bg-deep)` and brightening text colors (`slate-500` → `slate-400/white`).
--   **DESIGN**: Added an animated pulse effect to the "Risk Disclosure" box for better visibility.
+-   **VISUAL OVERHAUL**: Implemented a "Liquid Crystal" effect on the Level Progress Circle using `animate-liquid-slow`, glassmorphism (`backdrop-blur-xl`), and internal gradient reflects.
+-   **SPACING**: Increased vertical separation between the Level Circle and Rank Badge (offset `-bottom-8`) to prevent visual crowding.
 
 ### v1.0.0 (2026-02-07)
 -   Implemented responsive footer with legal links (Terms, Privacy).

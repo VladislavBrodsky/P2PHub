@@ -56,23 +56,33 @@ export const EarnHeader = () => {
                         />
                     </svg>
 
-                    {/* Level Display Center */}
-                    <div className="flex flex-col items-center justify-center bg-bg-app w-20 h-20 rounded-full border-4 border-white/5 shadow-[inset_0_2px_10px_rgba(0,0,0,0.1)] relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-linear-to-b from-white/5 to-transparent pointer-events-none" />
-                        <span className="text-[8px] font-black text-brand-muted uppercase tracking-[0.2em] mb-0.5">{t('earn_header.level')}</span>
-                        <span className="text-3xl font-black text-text-primary leading-none tracking-tighter drop-shadow-sm">{level}</span>
+                    {/* Level Display Center - Liquid Crystal Effect */}
+                    <div className="flex flex-col items-center justify-center w-24 h-24 rounded-full relative overflow-hidden group shadow-[0_0_30px_rgba(59,130,246,0.15)] bg-slate-100/50 dark:bg-black/20 backdrop-blur-xl border border-white/20">
+                        {/* Liquid Gradient Background */}
+                        <div className="absolute inset-0 bg-linear-to-br from-blue-400/10 via-purple-400/10 to-transparent animate-liquid-slow pointer-events-none" />
+
+                        {/* Crystal Reflection Overlay */}
+                        <div className="absolute inset-0 bg-linear-to-tr from-white/20 via-transparent to-transparent opacity-50 pointer-events-none rounded-full" />
+
+                        <div className="relative z-10 flex flex-col items-center">
+                            <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mb-0.5 drop-shadow-sm">{t('earn_header.level')}</span>
+                            <span className="text-4xl font-black bg-linear-to-b from-slate-800 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent leading-none tracking-tighter drop-shadow-sm filter">{level}</span>
+                        </div>
                     </div>
 
-                    {/* Rank Badge - Metallic Shimmer */}
-                    <div className={`absolute -bottom-4 px-4 py-1.5 rounded-2xl border border-white/10 shadow-float overflow-hidden group
-                        ${level >= 50 ? 'bg-linear-to-r from-amber-400/90 to-yellow-600/90' : 'bg-linear-to-r from-slate-200/90 to-slate-400/90'}
+                    {/* Rank Badge - Metallic Shimmer with More Spacing */}
+                    <div className={`absolute -bottom-8 px-5 py-2 rounded-2xl border border-white/20 shadow-xl shadow-slate-200/50 dark:shadow-black/50 overflow-hidden group backdrop-blur-md z-20
+                        ${level >= 50 ? 'bg-linear-to-r from-amber-300/90 via-yellow-400/90 to-amber-500/90' : 'bg-linear-to-r from-slate-200/90 via-slate-300/90 to-slate-400/90'}
                     `}>
                         {/* Shimmer Layer */}
-                        <div className={`absolute inset-0 ${level >= 50 ? 'shimmer-gold' : 'shimmer-platinum'} opacity-50`} />
+                        <div className={`absolute inset-0 ${level >= 50 ? 'shimmer-gold' : 'shimmer-platinum'} opacity-60`} />
+
+                        {/* Crystal Glint */}
+                        <div className="absolute top-0 left-0 w-full h-px bg-white/50" />
 
                         <div className="relative flex items-center gap-2">
-                            <Trophy className={`w-4 h-4 ${level >= 50 ? 'text-yellow-100' : 'text-slate-800'}`} />
-                            <span className={`text-[11px] font-black uppercase tracking-widest ${level >= 50 ? 'text-white' : 'text-slate-900'}`}>
+                            <Trophy className={`w-3.5 h-3.5 ${level >= 50 ? 'text-yellow-900' : 'text-slate-700'} drop-shadow-sm`} />
+                            <span className={`text-[10px] font-black uppercase tracking-[0.15em] ${level >= 50 ? 'text-yellow-950' : 'text-slate-800'} text-shadow-sm`}>
                                 {t(`ranks.${rank.name}`)}
                             </span>
                         </div>
