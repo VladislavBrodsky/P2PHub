@@ -11,7 +11,8 @@ const AVATARS = [
 const CRYPTO_ICONS = [
     { name: 'BTC', color: '#F7931A', gradientStart: '#FF9900', gradientEnd: '#F7931A' },
     { name: 'ETH', color: '#627EEA', gradientStart: '#7CA0FF', gradientEnd: '#5570F1' },
-    { name: 'USDT', color: '#26A17B', gradientStart: '#53D3AC', gradientEnd: '#219672' }
+    { name: 'USDT', color: '#26A17B', gradientStart: '#53D3AC', gradientEnd: '#219672' },
+    { name: 'TON', color: '#0098EA', gradientStart: '#0098EA', gradientEnd: '#00C2FF' }
 ];
 
 // Crypto SVG Icons
@@ -20,6 +21,13 @@ const CryptoIcon = ({ name }: { name: string }) => {
         return (
             <svg viewBox="0 0 32 32" className="h-full w-full drop-shadow-md">
                 <path d="M23.189 14.02c.314-2.096-1.283-3.223-3.465-3.975l.708-2.84-1.728-.43-.69 2.765c-.454-.114-.92-.22-1.385-.326l.695-2.783L15.596 6l-.708 2.839c-.376-.086-.746-.17-1.104-.26l.002-.009-2.384-.595-.46 1.846s1.283.294 1.256.312c.7.175.826.638.805 1.006l-.806 3.235c.048.012.11.03.18.057l-.183-.045-1.13 4.532c-.086.212-.303.531-.793.41.018.025-1.256-.313-1.256-.313l-.858 1.978 2.25.561c.418.105.828.215 1.231.318l-.715 2.872 1.727.43.708-2.84c.472.127.93.245 1.378.357l-.706 2.828 1.728.43.715-2.866c2.948.558 5.164.333 6.097-2.333.752-2.146-.037-3.385-1.588-4.192 1.13-.26 1.98-1.003 2.207-2.538zm-3.95 5.538c-.533 2.147-4.148.986-5.32.695l.95-3.805c1.172.293 4.929.872 4.37 3.11zm.535-5.569c-.487 1.953-3.495.96-4.47.717l.86-3.45c.975.243 4.118.696 3.61 2.733z" fill="white" />
+            </svg>
+        );
+    }
+    if (name === 'TON') {
+        return (
+            <svg viewBox="0 0 56 56" className="h-full w-full drop-shadow-md">
+                <path d="M37.6,15.6H18.4c-3.5,0-5.7,3.8-4,6.9l11.8,20.5c0.8,1.3,2.7,1.3,3.5,0l11.8-20.5 C43.3,19.4,41.1,15.6,37.6,15.6L37.6,15.6z M26.3,36.8l-2.6-5l-6.2-11.1c-0.4-0.7,0.1-1.6,1-1.6h7.8L26.3,36.8L26.3,36.8z M38.5,20.7l-6.2,11.1l-2.6,5V19.1h7.8C38.4,19.1,38.9,20,38.5,20.7z" fill="white" />
             </svg>
         );
     }
@@ -47,12 +55,13 @@ export const CommunityOrbit = () => {
     // Interleave avatars and crypto icons
     const orbitItems = [
         { type: 'avatar' as const, src: AVATARS[0] },
-        { type: 'crypto' as const, ...CRYPTO_ICONS[0] },
+        { type: 'crypto' as const, ...CRYPTO_ICONS[0] }, // BTC
         { type: 'avatar' as const, src: AVATARS[1] },
+        { type: 'crypto' as const, ...CRYPTO_ICONS[3] }, // TON
         { type: 'avatar' as const, src: AVATARS[2] },
-        { type: 'crypto' as const, ...CRYPTO_ICONS[1] },
+        { type: 'crypto' as const, ...CRYPTO_ICONS[1] }, // ETH
         { type: 'avatar' as const, src: AVATARS[3] },
-        { type: 'crypto' as const, ...CRYPTO_ICONS[2] },
+        { type: 'crypto' as const, ...CRYPTO_ICONS[2] }, // USDT
         { type: 'avatar' as const, src: AVATARS[4] },
     ];
 
