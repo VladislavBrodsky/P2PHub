@@ -131,7 +131,7 @@ export const CommunityOrbit = () => {
 
 const EcosystemIcon = ({ item, index, total }: { item: any, index: number, total: number }) => {
     const radius = 68; // Closer to the logo
-    const duration = 25; // Faster rotation
+    const duration = 60; // Slow rotation: 1 turn per minute
     const angle = (index / total) * 360;
 
     return (
@@ -238,23 +238,25 @@ const FractalProfits = () => {
                     key={i}
                     initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
                     animate={{
-                        scale: [0, 1.5, 2],
-                        opacity: [0, 1, 0],
-                        x: (i - 2) * 40,
-                        y: -80 - (Math.random() * 40)
+                        scale: [0, 1.2, 1.5],
+                        opacity: [0, 0.8, 0],
+                        x: (i - 2) * 50,
+                        y: -100 - (Math.random() * 60)
                     }}
                     transition={{
-                        duration: 3,
+                        duration: 6.5, // Slow and attractive
                         repeat: Infinity,
-                        delay: i * 0.8,
+                        delay: i * 1.5,
                         ease: "easeOut"
                     }}
-                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-1"
+                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 whitespace-nowrap"
                 >
-                    <div className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50">
+                    <div className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]">
                         <CryptoIcon name="USDT" />
                     </div>
-                    <span className="text-[10px] font-black text-emerald-400 drop-shadow-md">+$1.00</span>
+                    <span className="text-[12px] font-black text-emerald-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                        +${Math.floor(Math.random() * 33) + 1}.00
+                    </span>
                 </motion.div>
             ))}
         </div>
