@@ -32,7 +32,5 @@ app.add_middleware(
 app.include_router(partner.router, prefix="/api/partner", tags=["partner"])
 app.include_router(earnings.router, prefix="/api/earnings", tags=["earnings"])
 app.include_router(tools.router, prefix="/api/tools", tags=["tools"])
-
-@app.get("/health")
-async def health_check():
-    return {"status": "healthy"}
+from app.api.endpoints import health
+app.include_router(health.router, tags=["health"])
