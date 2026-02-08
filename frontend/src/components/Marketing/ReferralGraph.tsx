@@ -53,25 +53,23 @@ export const ReferralGraph = () => {
 
     return (
         <div className={clsx(
-            "relative w-full h-[450px] flex items-center justify-center overflow-hidden rounded-[3.5rem] border transition-all duration-500 shadow-2xl perspective-1000",
-            "bg-linear-to-b from-blue-50/80 to-indigo-50/50 border-blue-500/10", // Light mode (Base)
-            "dark:bg-[#020617] dark:border-white/5" // Dark mode
+            "relative w-full h-[400px] flex items-center justify-center overflow-hidden rounded-[2.5rem] border transition-all duration-500 shadow-xl perspective-1000",
+            "bg-linear-to-b from-blue-50/50 to-indigo-50/30 border-blue-500/10",
+            "dark:bg-[#020617] dark:border-white/5"
         )}>
             {/* 1. Starfield / Global Context */}
             <div className={clsx(
                 "absolute inset-0 transition-opacity duration-700 pointer-events-none",
                 "bg-[radial-gradient(circle_at_center,var(--color-blue-500)_0%,transparent_70%)]",
-                "opacity-20 dark:opacity-10" // Adjusted for light/dark
+                "opacity-10 dark:opacity-5"
             )} />
 
             <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
                 <motion.div
-                    initial={{ rotate: 0 }}
-                    whileInView={{ rotate: 360 }}
-                    viewport={{ once: false }}
+                    animate={{ rotate: 360 }}
                     transition={{ duration: 180, repeat: Infinity, ease: "linear" }}
                 >
-                    <Globe className={clsx("w-[800px] h-[800px]", "text-blue-500 dark:text-blue-500/50")} strokeWidth={0.2} />
+                    <Globe className="w-[600px] h-[600px] text-blue-500 dark:text-blue-500/30" strokeWidth={0.2} />
                 </motion.div>
             </div>
 
@@ -83,17 +81,15 @@ export const ReferralGraph = () => {
                         className={clsx(
                             "absolute rounded-full border border-dashed transition-colors duration-700",
                             orbit.color,
-                            "dark:opacity-100 opacity-60"
+                            "opacity-40 dark:opacity-20"
                         )}
                         style={{
-                            width: orbit.radius * 2,
-                            height: orbit.radius * 2,
+                            width: orbit.radius * 1.8,
+                            height: orbit.radius * 1.8,
                             rotateX: orbit.rx,
                             rotateZ: orbit.rz
                         }}
-                        initial={{ rotateY: 0 }}
-                        whileInView={{ rotateY: 360 }}
-                        viewport={{ margin: "200px" }}
+                        animate={{ rotateY: 360 }}
                         transition={{ duration: orbit.duration, repeat: Infinity, ease: "linear" }}
                     >
                         {/* Nodes on this orbital path */}
@@ -105,35 +101,13 @@ export const ReferralGraph = () => {
                                 <motion.div
                                     key={j}
                                     initial={{ scale: 0, opacity: 0 }}
-                                    whileInView={{ scale: 1, opacity: 1 }}
-                                    viewport={{ once: true }}
-                                    className={clsx(
-                                        "absolute top-1/2 left-1/2 w-4 h-4 -ml-2 -mt-2 rounded-full flex items-center justify-center",
-                                        "bg-white dark:bg-white",
-                                        "shadow-[0_0_15px_rgba(59,130,246,0.5)]"
-                                    )}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    className="absolute top-1/2 left-1/2 w-3 h-3 -ml-1.5 -mt-1.5 rounded-full flex items-center justify-center bg-white shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                                     style={{
-                                        transform: `rotate(${(360 / orbit.nodes) * j}deg) translate(${orbit.radius}px) rotate(-${(360 / orbit.nodes) * j}deg)`
+                                        transform: `rotate(${(360 / orbit.nodes) * j}deg) translate(${orbit.radius * 0.9}px) rotate(-${(360 / orbit.nodes) * j}deg)`
                                     }}
                                 >
-                                    {/* Sub-Orbital "Fractal" dots */}
-                                    <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-40" />
-                                    <div className="absolute -inset-2 border border-blue-500/20 rounded-full animate-spin-slow" />
-
-                                    {/* Micro-orbital fractal dots */}
-                                    {[...Array(2)].map((_, k) => (
-                                        <motion.div
-                                            key={k}
-                                            whileInView={{ rotate: 360 }}
-                                            transition={{ duration: 3 + k, repeat: Infinity, ease: "linear" }}
-                                            className="absolute w-full h-full"
-                                        >
-                                            <div
-                                                className="w-1 h-1 bg-white/40 dark:bg-white/40 rounded-full bg-blue-500/40"
-                                                style={{ transform: `rotate(${k * 180}deg) translate(8px)` }}
-                                            />
-                                        </motion.div>
-                                    ))}
+                                    <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30" />
                                 </motion.div>
                             );
                         })}
@@ -146,67 +120,58 @@ export const ReferralGraph = () => {
                 {[...Array(3)].map((_, i) => (
                     <motion.div
                         key={`team-${i}`}
-                        whileInView={{ rotate: 360 }}
+                        animate={{ rotate: 360 }}
                         transition={{ duration: 10 + i * 5, repeat: Infinity, ease: "linear" }}
                         className="absolute"
-                        style={{ width: 80, height: 80 }}
+                        style={{ width: 70, height: 70 }}
                     >
                         <div
-                            className="w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_10px_rgba(52,211,153,0.8)]"
-                            style={{ transform: `rotate(${i * 120}deg) translate(40px)` }}
+                            className="w-1.5 h-1.5 bg-emerald-400 rounded-full shadow-[0_0_8px_rgba(52,211,153,0.8)]"
+                            style={{ transform: `rotate(${i * 120}deg) translate(35px)` }}
                         />
                     </motion.div>
                 ))}
             </div>
 
-            {/* 3. Center Nucleus (User) */}
+            {/* 3. Center Nucleus (User) - Compacted */}
             <div className="relative z-20 flex flex-col items-center">
                 <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", bounce: 0.5, duration: 1 }}
-                    className="relative w-28 h-28 rounded-full p-[4px] bg-linear-to-tr from-blue-600 via-emerald-500 to-indigo-600 shadow-[0_0_80px_rgba(59,130,246,0.3)]"
+                    className="relative w-24 h-24 rounded-full p-[3px] bg-linear-to-tr from-blue-600 via-emerald-500 to-indigo-600 shadow-2xl"
                 >
-                    <div className={clsx(
-                        "w-full h-full rounded-full overflow-hidden border-4 relative",
-                        "bg-black border-[#020617] dark:bg-black dark:border-[#020617]",
-                        "border-white"
-                    )}>
+                    <div className="w-full h-full rounded-full overflow-hidden border-2 border-white dark:border-[#020617] bg-slate-900 relative">
                         {user && user.photo_url ? (
                             <img src={user.photo_url} alt="You" className="w-full h-full object-cover" />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-slate-900">
-                                <User className="w-10 h-10 text-white opacity-50" />
+                            <div className="w-full h-full flex items-center justify-center">
+                                <User className="w-8 h-8 text-white opacity-50" />
                             </div>
                         )}
                         <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/10 to-transparent animate-shimmer" />
                     </div>
-
-                    {/* Nucleus Glow */}
-                    <div className="absolute -inset-10 bg-blue-500/10 blur-3xl animate-pulse rounded-full" />
                 </motion.div>
 
-                {/* Viral Label */}
+                {/* Viral Label - High Contrast */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.8 }}
                     className={clsx(
-                        "mt-6 px-4 py-1.5 rounded-full border backdrop-blur-xl flex items-center gap-2",
-                        "bg-emerald-500/10 border-emerald-500/20",
-                        "dark:bg-emerald-500/5 dark:border-emerald-500/10"
+                        "mt-4 px-3 py-1 rounded-full border backdrop-blur-xl flex items-center gap-2",
+                        "bg-emerald-500/10 border-emerald-500/30",
+                        "dark:bg-emerald-500/5 dark:border-emerald-500/20"
                     )}
                 >
-                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className={clsx(
-                        "text-[10px] font-black uppercase tracking-[0.2em]",
-                        "text-emerald-400 dark:text-emerald-400",
-                        "text-emerald-600"
-                    )}>{t('income.network.core')}</span>
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">
+                        {t('income.network.core')}
+                    </span>
                 </motion.div>
             </div>
 
-            {/* 4. USDT Income Pops (The "Earnings" Layer) */}
+            {/* 4. USDT Income Pops - Fixed Contrast */}
             <AnimatePresence>
                 {pops.map((pop) => (
                     <motion.div
@@ -214,9 +179,9 @@ export const ReferralGraph = () => {
                         initial={{ opacity: 0, scale: 0, y: 0 }}
                         animate={{
                             opacity: [0, 1, 1, 0],
-                            scale: [0, pop.scale, pop.scale, 0],
-                            y: [-20, -60, -80, -100],
-                            x: [0, Math.random() * 40 - 20, Math.random() * 80 - 40, 0]
+                            scale: [0, pop.scale * 0.9, pop.scale * 0.9, 0],
+                            y: [-10, -40, -60, -80],
+                            x: [0, Math.random() * 30 - 15, Math.random() * 60 - 30, 0]
                         }}
                         transition={{
                             duration: 4,
@@ -225,62 +190,48 @@ export const ReferralGraph = () => {
                             repeatDelay: 2
                         }}
                         className={clsx(
-                            "absolute z-30 flex items-center gap-2 px-3 py-2 rounded-2xl backdrop-blur-2xl border shadow-2xl transition-colors duration-500",
-                            "border-white/10 bg-black/40 dark:border-white/10 dark:bg-black/40",
-                            "border-blue-500/20 bg-white/60",
+                            "absolute z-30 flex items-center gap-2 px-2.5 py-1.5 rounded-xl backdrop-blur-2xl border shadow-xl transition-colors duration-500",
+                            "bg-white/80 border-blue-500/20",
+                            "dark:bg-black/40 dark:border-white/10",
                             pop.style
                         )}
                     >
-                        <USDTLogo className="w-5 h-5 shadow-inner" />
+                        <USDTLogo className="w-4 h-4 shadow-inner" />
                         <div className="flex flex-col">
-                            <span className={clsx(
-                                "text-[10px] font-bold leading-none",
-                                "text-emerald-400/60 dark:text-emerald-400/60",
-                                "text-emerald-600/60"
-                            )}>{t('income.network.received')}</span>
-                            <span className={clsx(
-                                "font-black text-sm tracking-tighter",
-                                "text-white dark:text-white",
-                                "text-slate-900"
-                            )}>${pop.amount}</span>
+                            <span className="text-[8px] font-bold leading-none text-emerald-600/80 dark:text-emerald-400/60">
+                                {t('income.network.received')}
+                            </span>
+                            <span className="font-black text-xs tracking-tighter text-slate-900 dark:text-white">
+                                ${pop.amount}
+                            </span>
                         </div>
                     </motion.div>
                 ))}
             </AnimatePresence>
 
-            {/* 5. Passive Income Counter (Glass Panel) */}
-            <div className="absolute bottom-6 z-40 w-full flex justify-center px-4">
+            {/* 5. Passive Income Counter - Minimalist & Fixed Contrast */}
+            <div className="absolute bottom-4 z-40 w-full flex justify-center px-4">
                 <motion.div
-                    initial={{ y: 50, opacity: 0 }}
+                    initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    className="relative w-full max-w-[320px]"
+                    className="relative w-full max-w-[280px]"
                 >
-                    <div className="absolute inset-0 bg-linear-to-r from-blue-600/20 to-emerald-600/20 blur-2xl opacity-50" />
+                    <div className="absolute inset-0 bg-linear-to-r from-blue-600/20 to-emerald-600/20 blur-2xl opacity-40" />
                     <div className={clsx(
-                        "relative px-6 py-4 backdrop-blur-2xl border rounded-3xl flex flex-col items-center gap-0.5 shadow-premium transition-colors duration-500",
-                        "bg-slate-900/40 border-white/10 dark:bg-slate-900/40 dark:border-white/10",
-                        "bg-white/60 border-blue-500/10"
+                        "relative px-4 py-3 backdrop-blur-2xl border rounded-2xl flex flex-col items-center gap-0.5 shadow-premium transition-colors duration-500",
+                        "bg-white/70 border-blue-500/10",
+                        "dark:bg-slate-900/50 dark:border-white/5"
                     )}>
-                        <span className={clsx(
-                            "text-[9px] font-black uppercase tracking-[0.3em]",
-                            "text-slate-400 dark:text-slate-400",
-                            "text-slate-500"
-                        )}>{t('income.network.yield')}</span>
-                        <div className="flex items-baseline gap-1.5">
-                            <span className={clsx(
-                                "text-4xl font-black tracking-tighter",
-                                "text-white dark:text-white",
-                                "text-slate-900"
-                            )}>
+                        <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                            {t('income.network.yield')}
+                        </span>
+                        <div className="flex items-baseline gap-1">
+                            <span className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white">
                                 ${count.toLocaleString()}
                             </span>
-                            <span className="text-lg font-black text-emerald-500 italic">.00</span>
+                            <span className="text-sm font-black text-emerald-500 italic">.00</span>
                         </div>
-                        <div className={clsx(
-                            "w-full h-1 rounded-full mt-2 overflow-hidden",
-                            "bg-white/5 dark:bg-white/5",
-                            "bg-slate-200"
-                        )}>
+                        <div className="w-full h-1 rounded-full mt-1.5 overflow-hidden bg-slate-200 dark:bg-white/5">
                             <motion.div
                                 className="h-full bg-linear-to-r from-blue-500 to-emerald-500"
                                 initial={{ width: "0%" }}
@@ -294,4 +245,5 @@ export const ReferralGraph = () => {
         </div>
     );
 };
+
 
