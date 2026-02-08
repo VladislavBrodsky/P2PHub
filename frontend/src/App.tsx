@@ -5,7 +5,7 @@ import CardsPage from './pages/Cards';
 import CommunityPage from './pages/Community';
 import ReferralPage from './pages/Referral';
 import LeaderboardPage from './pages/Leaderboard';
-import { miniApp, backButton, viewport } from '@telegram-apps/sdk-react';
+import { miniApp, backButton, viewport, swipeBehavior } from '@telegram-apps/sdk-react';
 import { UserProvider } from './context/UserContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
@@ -26,6 +26,21 @@ function App() {
                 if (miniApp.ready.isAvailable()) {
                     miniApp.ready();
                     console.log('[DEBUG] initTMA: miniApp ready');
+                }
+
+                // Handle Swipe Behavior - Disable pull-to-close
+                if (swipeBehavior.mount.isAvailable()) {
+                    try {
+                        if (!swipeBehavior.isMounted()) {
+                            await swipeBehavior.mount();
+                        }
+                        if (swipeBehavior.disableVertical.isAvailable()) {
+                            swipeBehavior.disableVertical();
+                            console.log('[DEBUG] initTMA: Vertical swipe disabled');
+                        }
+                    } catch (e) {
+                        console.error('Swipe behavior error:', e);
+                    }
                 }
 
                 // Use Viewport for true full-screen/expanded state
