@@ -165,7 +165,7 @@ export const ReferralGraph = () => {
                         "bg-black border-[#020617] dark:bg-black dark:border-[#020617]",
                         "border-white"
                     )}>
-                        {user?.photo_url ? (
+                        {user && user.photo_url ? (
                             <img src={user.photo_url} alt="You" className="w-full h-full object-cover" />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center bg-slate-900">

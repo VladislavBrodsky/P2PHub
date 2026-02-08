@@ -309,17 +309,18 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </p>
                     </div>
                 ) : (
-                    /* Post-Unlock Content: "Lead the Market" Button */
-                    <div className="pt-4 relative z-10">
+                    /* Post-Unlock Content: "Lead the Market" Button Redesign */
+                    <div className="pt-4 relative z-10 text-center">
                         <motion.button
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            className="group relative w-full flex items-center justify-center gap-2 bg-linear-to-r from-emerald-500 to-teal-600 text-white h-14 px-8 rounded-2xl font-black text-sm hover:from-emerald-400 hover:to-teal-500 transition-all active:scale-[0.98] shadow-lg shadow-emerald-500/30"
+                            className="group relative w-full flex items-center justify-center gap-2 emerald-liquid-gradient h-11 px-8 rounded-full font-black text-[11px] tracking-widest shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid"
                         >
                             LEAD THE MARKET
-                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
+                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                            <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer" />
                         </motion.button>
-                        <p className="text-center mt-6 text-[10px] font-bold text-emerald-500/60 uppercase tracking-[0.2em]">
+                        <p className="mt-4 text-[10px] font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80">
                             Strategy Unlocked • Access Granted
                         </p>
                     </div>

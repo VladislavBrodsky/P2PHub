@@ -502,3 +502,9 @@ html {
   background: linear-gradient(135deg, #dfff00 0%, #a3ff00 50%, #dfff00 100%);
   color: #020617;
 }
+
+/* Emerald Liquid Theme */
+.emerald-liquid-gradient {
+  background: linear-gradient(135deg, #10b981 0%, #059669 50%, #10b981 100%);
+  color: #ffffff;
+}
