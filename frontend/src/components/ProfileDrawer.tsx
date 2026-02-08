@@ -58,23 +58,6 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
         ? `${friendlyAddress.slice(0, 4)}...${friendlyAddress.slice(-4)}`
         : '';
 
-    // Prevent body scroll when open
-    React.useEffect(() => {
-        if (isOpen) {
-            const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-            document.body.style.overflow = 'hidden';
-            if (scrollBarWidth > 0) document.body.style.paddingRight = `${scrollBarWidth}px`;
-            selection();
-        } else {
-            document.body.style.overflow = 'unset';
-            document.body.style.paddingRight = '0px';
-        }
-        return () => {
-            document.body.style.overflow = 'unset';
-            document.body.style.paddingRight = '0px';
-        };
-    }, [isOpen]);
-
     const handleCopy = (text: string) => {
         navigator.clipboard.writeText(text);
         selection();
@@ -158,12 +141,12 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                     {/* Backdrop */}
                     <motion.div
                         key="drawer-backdrop"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                        initial={{ opacity: 0, pointerEvents: 'none' }}
+                        animate={{ opacity: 1, pointerEvents: 'auto' }}
+                        exit={{ opacity: 0, pointerEvents: 'none' }}
                         transition={{ duration: 0.2 }}
                         onClick={onClose}
-                        className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-[2px]" // Increased z-index
+                        className="fixed inset-0 z-[9998] bg-black/40 backdrop-blur-[2px]"
                         style={{ willChange: 'opacity' }}
                     />
 

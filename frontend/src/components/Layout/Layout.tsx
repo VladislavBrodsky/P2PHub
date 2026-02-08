@@ -14,22 +14,35 @@ interface LayoutProps {
 export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    // Handle Back Button for Drawer
+    // Handle Back Button and Scroll Lock for Drawer
     useEffect(() => {
         let cleanup: VoidFunction | undefined;
         try {
             if (isMenuOpen) {
+                // Scroll Lock logic centralized in parent
+                const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+                document.body.style.overflow = 'hidden';
+                if (scrollBarWidth > 0) document.body.style.paddingRight = `${scrollBarWidth}px`;
+
                 backButton.show();
                 cleanup = backButton.onClick(() => setIsMenuOpen(false));
-            } else if (activeTab === 'home') {
-                backButton.hide();
+            } else {
+                // Release Scroll Lock
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+
+                if (activeTab === 'home') {
+                    backButton.hide();
+                }
             }
         } catch (e) {
-            // Ignore SDK errors in non-Telegram environment
-            console.warn('BackButton not available:', e);
+            console.warn('SDK interaction error:', e);
         }
         return () => {
             if (cleanup) cleanup();
+            // Safety release on unmount
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
         };
     }, [isMenuOpen, activeTab]);
 
