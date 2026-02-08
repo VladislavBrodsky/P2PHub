@@ -34,10 +34,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const refreshUser = async () => {
+        let tgUser: any = null;
         try {
             // Use SDK to get initData more reliably
             const lp = retrieveLaunchParams();
-            const tgUser = lp.initData?.user;
+            tgUser = lp.initData?.user;
             const initDataRaw = lp.initDataRaw || '';
 
             const PROD_URL = 'https://p2phub-backend-production.up.railway.app';
@@ -65,7 +66,24 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         } catch (error) {
             console.error('[DEBUG] refreshUser: Failed:', error);
             // Fallback mock for local development if backend fails or initData is missing
-            if (!user) {
+            // Fallback: If backend fails, use Telegram SDK data for UI personalization (Optimistic UI)
+            if (tgUser) {
+                console.log('[DEBUG] refreshUser: Backend failed, using Telegram SDK data for UI');
+                setUser({
+                    id: tgUser.id,
+                    telegram_id: String(tgUser.id),
+                    username: tgUser.username || null,
+                    first_name: tgUser.firstName,
+                    last_name: tgUser.lastName || null,
+                    photo_url: tgUser.photoUrl || null,
+                    balance: 0, // Default for offline/unverified state
+                    level: 1,
+                    xp: 0,
+                    referral_code: 'UNVERIFIED',
+                    referrals: []
+                });
+            } else if (!user) {
+                // Only use "Partner Dev" if NO Telegram data is available (e.g. browser testing)
                 setUser({
                     id: 0,
                     telegram_id: '0',
