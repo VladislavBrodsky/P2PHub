@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Apple, CreditCard, QrCode, Globe, TrendingUp, Zap } from 'lucide-react';
 
 const AVATARS = [
     "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&fm=webp",
@@ -13,6 +14,15 @@ const CRYPTO_ICONS = [
     { name: 'ETH', color: '#627EEA', gradientStart: '#7CA0FF', gradientEnd: '#5570F1' },
     { name: 'USDT', color: '#26A17B', gradientStart: '#53D3AC', gradientEnd: '#219672' },
     { name: 'TON', color: '#0098EA', gradientStart: '#0098EA', gradientEnd: '#00C2FF' }
+];
+
+const ECOSYSTEM_ICONS = [
+    { name: 'ApplePay', icon: Apple, color: '#FFFFFF', gradient: 'linear-gradient(135deg, #000, #333)' },
+    { name: 'GooglePay', icon: CreditCard, color: '#4285F4', gradient: 'linear-gradient(135deg, #4285F4, #34A853)' },
+    { name: 'NFC', icon: Zap, color: '#FFD700', gradient: 'linear-gradient(135deg, #FFD700, #FFA500)' },
+    { name: 'QR', icon: QrCode, color: '#00FFCC', gradient: 'linear-gradient(135deg, #00FFCC, #0099FF)' },
+    { name: 'Globe', icon: Globe, color: '#0098EA', gradient: 'linear-gradient(135deg, #0098EA, #00C2FF)' },
+    { name: 'Earning', icon: TrendingUp, color: '#53D3AC', gradient: 'linear-gradient(135deg, #53D3AC, #219672)' }
 ];
 
 // Crypto SVG Icons
@@ -106,11 +116,64 @@ export const CommunityOrbit = () => {
             {/* Central Logic */}
             <CentralLogo />
 
+            {/* Ecosystem Inner Orbit */}
+            {ECOSYSTEM_ICONS.map((item, i) => (
+                <EcosystemIcon key={i} item={item} index={i} total={ECOSYSTEM_ICONS.length} />
+            ))}
+
             {/* Orbiting Avatars & Crypto Icons */}
             {orbitItems.map((item, i) => (
                 <OrbitingItem key={i} item={item} index={i} total={orbitItems.length} />
             ))}
         </div>
+    );
+};
+
+const EcosystemIcon = ({ item, index, total }: { item: any, index: number, total: number }) => {
+    const radius = 68; // Closer to the logo
+    const duration = 25; // Faster rotation
+    const angle = (index / total) * 360;
+
+    return (
+        <motion.div
+            className="absolute z-20"
+            style={{
+                width: 24,
+                height: 24,
+                willChange: 'transform'
+            }}
+            animate={{
+                x: [
+                    Math.cos((angle) * (Math.PI / 180)) * radius,
+                    Math.cos((angle + 360) * (Math.PI / 180)) * radius
+                ],
+                y: [
+                    Math.sin((angle) * (Math.PI / 180)) * radius,
+                    Math.sin((angle + 360) * (Math.PI / 180)) * radius
+                ],
+            }}
+            transition={{
+                duration,
+                repeat: Infinity,
+                ease: "linear"
+            }}
+        >
+            <motion.div
+                animate={{
+                    scale: [0.9, 1.1, 0.9],
+                    opacity: [0.7, 1, 0.7]
+                }}
+                transition={{
+                    duration: 3 + index,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                className="flex items-center justify-center h-full w-full rounded-full border border-white/40 shadow-[0_0_10px_rgba(255,255,255,0.2)] backdrop-blur-sm"
+                style={{ background: item.gradient }}
+            >
+                <item.icon className="w-3 h-3 text-white" />
+            </motion.div>
+        </motion.div>
     );
 };
 
@@ -122,6 +185,9 @@ const CentralLogo = () => (
         className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.5)]"
         style={{ willChange: 'transform' }}
     >
+        {/* Fractal Profits Emergence */}
+        <FractalProfits />
+
         {/* Glow effect behind logo */}
         <div className="absolute inset-0 z-0 rounded-full bg-blue-500 blur-3xl opacity-40 animate-pulse" />
 
@@ -163,6 +229,37 @@ const CentralLogo = () => (
         ))}
     </motion.div>
 );
+
+const FractalProfits = () => {
+    return (
+        <div className="absolute inset-0 pointer-events-none z-0">
+            {[...Array(5)].map((_, i) => (
+                <motion.div
+                    key={i}
+                    initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
+                    animate={{
+                        scale: [0, 1.5, 2],
+                        opacity: [0, 1, 0],
+                        x: (i - 2) * 40,
+                        y: -80 - (Math.random() * 40)
+                    }}
+                    transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        delay: i * 0.8,
+                        ease: "easeOut"
+                    }}
+                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-1"
+                >
+                    <div className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50">
+                        <CryptoIcon name="USDT" />
+                    </div>
+                    <span className="text-[10px] font-black text-emerald-400 drop-shadow-md">+$1.00</span>
+                </motion.div>
+            ))}
+        </div>
+    );
+};
 
 type OrbitItem =
     | { type: 'avatar'; src: string }
