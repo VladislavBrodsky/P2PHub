@@ -146,8 +146,18 @@ async def process_referral_notifications(bot, session: AsyncSession, partner: Pa
 async def get_referral_tree_stats(session: AsyncSession, partner_id: int, max_depth: int = 9) -> dict[int, int]:
     """
     Calculates the number of partners at each level of the referral tree.
-    Returns a dict {level: count}.
+    Uses Redis caching to avoid heavy recursive queries.
     """
+    from app.services.redis_service import redis_service
+    
+    cache_key = f"ref_tree_stats:{partner_id}"
+    
+    # Try cache
+    cached_stats = await redis_service.get_json(cache_key)
+    if cached_stats:
+        # Convert keys back to int if they were strings in JSON
+        return {int(k): v for k, v in cached_stats.items()}
+        
     stats = {i: 0 for i in range(1, max_depth + 1)}
     
     # We need to find all partners where referrer_id is in the previous level's IDs
@@ -169,4 +179,7 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int, max_de
         stats[level] = count
         current_level_ids = next_level_ids
         
+    # Cache result for 5 minutes (300s)
+    await redis_service.set_json(cache_key, stats, expire=300)
+    
     return stats

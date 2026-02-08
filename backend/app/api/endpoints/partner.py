@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.security import get_current_user
 from app.models.partner import Partner, get_session
@@ -10,6 +10,7 @@ router = APIRouter()
 
 @router.get("/me", response_model=Partner)
 async def get_my_profile(
+    background_tasks: BackgroundTasks,
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
@@ -60,21 +61,33 @@ async def get_my_profile(
         )
         session.add(partner)
         await session.commit()
+        await session.refresh(partner)
+        
+        # OFFLOAD Notifications to Background
+        from app.services.partner_service import process_referral_notifications
+        from bot import bot
+        background_tasks.add_task(process_referral_notifications, bot, partner, True)
     else:
         # Update existing profile
+        has_changed = False
         if tg_user.get("username") != partner.username:
             partner.username = tg_user.get("username")
+            has_changed = True
         if tg_user.get("first_name") != partner.first_name:
             partner.first_name = tg_user.get("first_name")
+            has_changed = True
         if tg_user.get("last_name") != partner.last_name:
             partner.last_name = tg_user.get("last_name")
+            has_changed = True
         if tg_user.get("photo_url") != partner.photo_url:
             partner.photo_url = tg_user.get("photo_url")
+            has_changed = True
             
-        session.add(partner)
-        await session.commit()
+        if has_changed:
+            session.add(partner)
+            await session.commit()
+            await session.refresh(partner)
         
-    await session.refresh(partner)
     return partner
 
 @router.get("/recent")

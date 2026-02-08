@@ -1,29 +1,55 @@
 from contextlib import asynccontextmanager
 import asyncio
-from fastapi import FastAPI, Depends, HTTPException, Header
+from fastapi import FastAPI, Depends, HTTPException, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.endpoints import partner, earnings, tools
+from app.core.config import settings
 from bot import bot, dp
+from aiogram import types
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: Start bot polling
-    polling_task = asyncio.create_task(dp.start_polling(bot))
+    # Startup
+    if settings.WEBHOOK_URL:
+        webhook_url = f"{settings.WEBHOOK_URL}{settings.WEBHOOK_PATH}"
+        await bot.set_webhook(
+            url=webhook_url,
+            secret_token=settings.WEBHOOK_SECRET
+        )
+        print(f"Webhook set to: {webhook_url}")
+    else:
+        # Fallback to polling for local development
+        polling_task = asyncio.create_task(dp.start_polling(bot))
+        app.state.polling_task = polling_task
+        print("Bot started with Long Polling")
+    
     yield
+    
     # Shutdown
     await bot.session.close()
-    polling_task.cancel()
-    try:
-        await polling_task
-    except asyncio.CancelledError:
-        pass
+    if not settings.WEBHOOK_URL and hasattr(app.state, "polling_task"):
+        app.state.polling_task.cancel()
+        try:
+            await app.state.polling_task
+        except asyncio.CancelledError:
+            pass
 
 app = FastAPI(title="Pintopay Partner Hub API", lifespan=lifespan)
+
+# Webhook Endpoint
+@app.post(settings.WEBHOOK_PATH)
+async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = Header(None)):
+    if x_telegram_bot_api_secret_token != settings.WEBHOOK_SECRET:
+        raise HTTPException(status_code=401, detail="Invalid secret token")
+    
+    update = types.Update.model_validate(await request.json(), context={"bot": bot})
+    await dp.feed_update(bot, update)
+    return {"status": "ok"}
 
 # Configure CORS for TMA
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify the actual frontend URL
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

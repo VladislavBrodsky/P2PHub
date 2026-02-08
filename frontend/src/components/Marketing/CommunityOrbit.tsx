@@ -134,11 +134,11 @@ const EcosystemIcon = ({ item, index, total }: { item: any, index: number, total
 
     return (
         <motion.div
-            className="absolute z-20"
+            className="absolute z-20 will-change-transform"
             style={{
                 width: 32, // More premium size
                 height: 32,
-                willChange: 'transform'
+                transform: 'translateZ(0)' // Force GPU layer
             }}
             animate={{
                 x: [
@@ -156,6 +156,7 @@ const EcosystemIcon = ({ item, index, total }: { item: any, index: number, total
                 ease: "linear"
             }}
         >
+            {/* Float & Breathing Animation Layer */}
             <motion.div
                 animate={{
                     scale: [0.98, 1.05, 0.98],
@@ -168,7 +169,7 @@ const EcosystemIcon = ({ item, index, total }: { item: any, index: number, total
                     ease: "easeInOut",
                     delay: index * 0.5
                 }}
-                className="group relative flex items-center justify-center h-full w-full rounded-full border border-white/40 shadow-2xl backdrop-blur-xl overflow-hidden preserve-3d"
+                className="group relative flex items-center justify-center h-full w-full rounded-full border border-white/40 shadow-2xl backdrop-blur-xl overflow-hidden preserve-3d will-change-transform"
                 style={{
                     background: item.gradient,
                     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.2)'
