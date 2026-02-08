@@ -30,7 +30,12 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
-engine = create_async_engine(settings.DATABASE_URL, echo=True, future=True)
+# Fix for Railway providing postgresql:// but SQLAlchemy requiring postgresql+asyncpg://
+database_url = settings.DATABASE_URL
+if database_url and database_url.startswith("postgresql://"):
+    database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
+engine = create_async_engine(database_url, echo=True, future=True)
 
 async def create_db_and_tables():
     async with engine.begin() as conn:

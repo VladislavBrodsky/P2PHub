@@ -71,8 +71,12 @@ async def run_migrations_online() -> None:
     """
     from sqlalchemy.ext.asyncio import create_async_engine
     
+    url = settings.DATABASE_URL
+    if url and url.startswith("postgresql://"):
+        url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
     connectable = create_async_engine(
-        settings.DATABASE_URL,
+        url,
         poolclass=pool.NullPool,
         future=True
     )

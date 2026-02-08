@@ -65,7 +65,7 @@ async def cmd_start(message: types.Message):
             break # We only need one session
     except Exception as e:
         logging.error(f"Error in cmd_start: {e}")
-        await message.answer("⚠️ An error occurred. Please try again later.")
+        await message.answer(f"⚠️ Error: {str(e)}")
 
 async def main():
     logging.info("Starting bot...")
