@@ -6,34 +6,39 @@ const shiftSteps = [
     {
         id: 0,
         icon: <Coins className="w-6 h-6 text-amber-500" />,
-        color: "from-amber-500/10 via-transparent to-transparent",
+        watermark: <Coins className="w-40 h-40 text-amber-500" fill="currentColor" />,
+        color: "from-amber-500/20 via-amber-500/5 to-transparent",
         size: "col-span-1",
         statusColor: "text-amber-500 bg-amber-500/10"
     },
     {
         id: 1,
         icon: <CreditCard className="w-6 h-6 text-blue-500" />,
-        color: "from-blue-500/10 via-transparent to-transparent",
+        watermark: <CreditCard className="w-40 h-40 text-blue-500" fill="currentColor" />,
+        color: "from-blue-500/20 via-blue-500/5 to-transparent",
         size: "col-span-1",
         statusColor: "text-blue-500 bg-blue-500/10"
     },
     {
         id: 2,
         icon: <Smartphone className="w-6 h-6 text-purple-500" />,
-        color: "from-purple-500/10 via-transparent to-transparent",
+        watermark: <Smartphone className="w-40 h-40 text-purple-500" fill="currentColor" />,
+        color: "from-purple-500/20 via-purple-500/5 to-transparent",
         size: "col-span-2",
         statusColor: "text-purple-500 bg-purple-500/10"
     },
     {
         id: 3,
         icon: <Globe className="w-6 h-6 text-emerald-500" />,
-        color: "from-emerald-500/10 via-transparent to-transparent",
+        watermark: <Globe className="w-40 h-40 text-emerald-500" fill="currentColor" />,
+        color: "from-emerald-500/20 via-emerald-500/5 to-transparent",
         size: "col-span-2",
         statusColor: "text-emerald-500 bg-emerald-500/10"
     },
     {
         id: 4,
         icon: <QrCode className="w-6 h-6 text-blue-400" />,
+        watermark: <Zap className="w-40 h-40 text-blue-500" fill="currentColor" />,
         color: "from-blue-600/30 via-blue-400/5 to-transparent",
         size: "col-span-2",
         featured: true,
@@ -73,7 +78,7 @@ export const BentoGrid = () => {
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
-                            className={`relative group flex-shrink-0 w-[85vw] md:w-[400px] snap-center overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) p-6 glass-panel-premium transition-all duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
+                            className={`relative group shrink-0 w-[85vw] md:w-[400px] snap-center overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) p-6 glass-panel-premium transition-all duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
                         >
                             <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
 
@@ -96,33 +101,30 @@ export const BentoGrid = () => {
                                     </h4>
                                 </div>
 
-                                <p className="text-xs font-semibold leading-relaxed text-(--color-text-secondary) opacity-80 flex-grow">
+                                <p className="text-xs font-semibold leading-relaxed text-(--color-text-secondary) opacity-80 grow">
                                     {t(`evolution.steps.${step.id}.desc`)}
                                 </p>
                             </div>
 
-                            {step.featured && (
-                                <motion.div
-                                    className="absolute -right-2 -bottom-2 opacity-5 pointer-events-none"
-                                    animate={{ rotate: 360 }}
-                                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                                >
-                                    <Zap className="w-40 h-40 text-blue-500" fill="currentColor" />
-                                </motion.div>
-                            )}
+                            <motion.div
+                                className="absolute -right-2 -bottom-2 opacity-5 pointer-events-none"
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                            >
+                                {step.watermark}
+                            </motion.div>
                         </motion.div>
                     ))}
                 </div>
 
                 {/* Progress Slider */}
-                <div className="mt-8 px-4">
-                    <div className="h-1.5 w-full max-w-xs mx-auto bg-slate-900/5 dark:bg-white/5 rounded-full overflow-hidden">
+                <div className="mt-5 px-4">
+                    <div className="h-1 w-32 mx-auto bg-slate-900/5 dark:bg-white/5 rounded-full overflow-hidden">
                         <motion.div
                             className="h-full bg-blue-500 rounded-full"
-                            style={{ width: '20%' }} // Placeholder for scroll progress logic if needed, but simple layout for now.
+                            style={{ width: '30%' }}
                             animate={{
-                                x: [0, 100, 0],
-                                width: ['20%', '20%', '20%']
+                                x: [-30, 100, -30],
                             }}
                             transition={{
                                 repeat: Infinity,
@@ -131,7 +133,7 @@ export const BentoGrid = () => {
                             }}
                         />
                     </div>
-                    <p className="text-center text-[10px] font-bold text-brand-muted mt-2 uppercase tracking-widest opacity-60">
+                    <p className="text-center text-[9px] font-bold text-brand-muted mt-1.5 uppercase tracking-widest opacity-50">
                         Swipe to Explore
                     </p>
                 </div>
