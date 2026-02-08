@@ -10,6 +10,7 @@ import { Sparkles } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { getRank, getXPProgress } from '../utils/ranking';
 import { useTranslation, Trans } from 'react-i18next';
+import { Footer } from '../components/Layout/Footer';
 
 interface DashboardProps {
     setActiveTab?: (tab: string) => void;
@@ -153,6 +154,9 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                     {t('dashboard.cta_desc')}
                 </p>
             </motion.div>
+
+            {/* 7. Footer - Legal & Disclaimer */}
+            <Footer />
 
         </motion.div >
     );
