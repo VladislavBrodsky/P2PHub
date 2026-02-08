@@ -101,9 +101,29 @@ async def process_referral_notifications(bot, session: AsyncSession, partner: Pa
                 )
                 # Credit XP
                 referrer.xp += 35
+                
+                # Check for Level Up
+                # Formula: Next Level Threshold = Current Level * 100
+                leveled_up = False
+                while referrer.xp >= referrer.level * 100:
+                    referrer.level += 1
+                    leveled_up = True
+                
                 session.add(referrer)
                 await session.commit()
                 await session.refresh(referrer)
+                
+                if leveled_up:
+                    try:
+                        levelup_msg = f"🏆 *Level Up!* 🚀\n\nYou've reached *Level {referrer.level}*!\nKeep growing your network to unlock more rewards."
+                        await bot.send_message(
+                            chat_id=int(referrer.telegram_id),
+                            text=levelup_msg,
+                            parse_mode="Markdown"
+                        )
+                    except Exception as e:
+                        logger.error(f"Failed to send levelup msg: {e}")
+
             else:
                 # Activity in referral line for L2-L9
                 msg = get_msg(

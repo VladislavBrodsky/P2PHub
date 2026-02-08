@@ -130,14 +130,14 @@ export default function ReferralPage() {
                             initial={{ y: 100, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: 100, opacity: 0 }}
-                            className="w-full max-w-sm bg-(--color-bg-surface) border border-white/10 rounded-[2.5rem] p-6 relative shadow-2xl overflow-hidden"
+                            className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-[2.5rem] p-6 relative shadow-2xl overflow-hidden max-h-[85vh] overflow-y-auto"
                         >
                             {/* Decorative Background for Viral Feel */}
                             <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-b from-blue-600/20 to-transparent pointer-events-none" />
 
                             <button
                                 onClick={() => setShowShareModal(false)}
-                                className="absolute top-4 right-4 p-2 bg-slate-800/50 backdrop-blur-sm rounded-full text-white/70 hover:text-white z-10"
+                                className="absolute top-4 right-4 p-2 bg-slate-800/80 backdrop-blur-sm rounded-full text-white/70 hover:text-white z-20"
                             >
                                 <X className="w-5 h-5" />
                             </button>
