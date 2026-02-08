@@ -131,15 +131,15 @@ export const CommunityOrbit = () => {
 
 const EcosystemIcon = ({ item, index, total }: { item: any, index: number, total: number }) => {
     const radius = 68; // Closer to the logo
-    const duration = 60; // Slow rotation: 1 turn per minute
+    const duration = 60; // Steady 1 turn per minute
     const angle = (index / total) * 360;
 
     return (
         <motion.div
             className="absolute z-20"
             style={{
-                width: 24,
-                height: 24,
+                width: 28, // Slightly bigger for visibility
+                height: 28,
                 willChange: 'transform'
             }}
             animate={{
@@ -160,18 +160,35 @@ const EcosystemIcon = ({ item, index, total }: { item: any, index: number, total
         >
             <motion.div
                 animate={{
-                    scale: [0.9, 1.1, 0.9],
-                    opacity: [0.7, 1, 0.7]
+                    scale: [0.95, 1.05, 0.95],
+                    opacity: [0.8, 1, 0.8]
                 }}
                 transition={{
-                    duration: 3 + index,
+                    duration: 4,
                     repeat: Infinity,
-                    ease: "easeInOut"
+                    ease: "easeInOut",
+                    delay: index * 0.2
                 }}
-                className="flex items-center justify-center h-full w-full rounded-full border border-white/40 shadow-[0_0_10px_rgba(255,255,255,0.2)] backdrop-blur-sm"
-                style={{ background: item.gradient }}
+                className="group relative flex items-center justify-center h-full w-full rounded-full border border-white/40 shadow-xl backdrop-blur-md overflow-hidden"
+                style={{
+                    background: item.gradient,
+                    boxShadow: '0 4px 15px -5px rgba(0,0,0,0.5)'
+                }}
             >
-                <item.icon className="w-3 h-3 text-white" />
+                {/* Premium Glass Sheen */}
+                <div className="absolute inset-0 bg-linear-to-tr from-white/30 to-transparent opacity-40" />
+
+                {/* Inner Glow */}
+                <div className="absolute inset-[1px] rounded-full border border-white/20" />
+
+                <item.icon className="relative z-10 w-3.5 h-3.5 text-white drop-shadow-sm" />
+
+                {/* Fractal Shine Animation */}
+                <motion.div
+                    animate={{ x: [-40, 40] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: index }}
+                    className="absolute inset-0 w-1/2 h-full bg-white/20 -skew-x-12 blur-sm"
+                />
             </motion.div>
         </motion.div>
     );
@@ -233,32 +250,35 @@ const CentralLogo = () => (
 const FractalProfits = () => {
     return (
         <div className="absolute inset-0 pointer-events-none z-0">
-            {[...Array(5)].map((_, i) => (
-                <motion.div
-                    key={i}
-                    initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
-                    animate={{
-                        scale: [0, 1.2, 1.5],
-                        opacity: [0, 0.8, 0],
-                        x: (i - 2) * 50,
-                        y: -100 - (Math.random() * 60)
-                    }}
-                    transition={{
-                        duration: 6.5, // Slow and attractive
-                        repeat: Infinity,
-                        delay: i * 1.5,
-                        ease: "easeOut"
-                    }}
-                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 whitespace-nowrap"
-                >
-                    <div className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]">
-                        <CryptoIcon name="USDT" />
-                    </div>
-                    <span className="text-[12px] font-black text-emerald-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                        +${Math.floor(Math.random() * 33) + 1}.00
-                    </span>
-                </motion.div>
-            ))}
+            {[...Array(6)].map((_, i) => {
+                const direction = i % 2 === 0 ? 1 : -1; // 1 for down, -1 for up
+                return (
+                    <motion.div
+                        key={i}
+                        initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
+                        animate={{
+                            scale: [0, 1.2, 1.5],
+                            opacity: [0, 0.8, 0],
+                            x: (i - 2.5) * 60,
+                            y: (100 + Math.random() * 60) * direction // Bidirectional: Top and Bottom
+                        }}
+                        transition={{
+                            duration: 7, // Slow and attractive
+                            repeat: Infinity,
+                            delay: i * 1.2,
+                            ease: "easeOut"
+                        }}
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 whitespace-nowrap"
+                    >
+                        <div className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                            <CryptoIcon name="USDT" />
+                        </div>
+                        <span className="text-[12px] font-black text-emerald-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                            +${Math.floor(Math.random() * 33) + 1}.00
+                        </span>
+                    </motion.div>
+                );
+            })}
         </div>
     );
 };
