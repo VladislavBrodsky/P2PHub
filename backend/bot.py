@@ -17,7 +17,8 @@ dp = Dispatcher()
 WEB_APP_URL = settings.FRONTEND_URL
 
 from app.core.keyboards import get_main_menu_keyboard
-from app.services.partner_service import get_session, create_partner, process_referral_notifications
+from app.models.partner import get_session
+from app.services.partner_service import create_partner, process_referral_notifications
 from app.core.i18n import get_msg
 
 @dp.message(CommandStart())

@@ -1,5 +1,6 @@
+import secrets
 import logging
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Tuple
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.models.partner import Partner
@@ -8,6 +9,64 @@ from app.services.leaderboard_service import leaderboard_service
 from app.services.redis_service import redis_service
 
 logger = logging.getLogger(__name__)
+
+async def create_partner(
+    session: AsyncSession,
+    telegram_id: str,
+    username: Optional[str] = None,
+    first_name: Optional[str] = None,
+    last_name: Optional[str] = None,
+    language_code: Optional[str] = "en",
+    referrer_code: Optional[str] = None
+) -> Tuple[Partner, bool]:
+    """
+    Creates a new partner or retrieves an existing one.
+    Handles referral linkage via referral_code.
+    """
+    # 1. Check if partner exists
+    statement = select(Partner).where(Partner.telegram_id == telegram_id)
+    result = await session.exec(statement)
+    partner = result.first()
+    
+    if partner:
+        return partner, False
+        
+    # 2. Assign Referrer if code exists
+    referrer_id = None
+    if referrer_code:
+        try:
+            ref_stmt = select(Partner).where(Partner.referral_code == referrer_code)
+            ref_res = await session.exec(ref_stmt)
+            referrer = ref_res.first()
+            if referrer:
+                referrer_id = referrer.id
+        except Exception as e:
+            logger.error(f"Error resolving referrer_code {referrer_code}: {e}")
+
+    # 3. Create fresh partner
+    partner = Partner(
+        telegram_id=telegram_id,
+        username=username,
+        first_name=first_name,
+        last_name=last_name,
+        language_code=language_code,
+        referral_code=f"P2P-{secrets.token_hex(4).upper()}",
+        referrer_id=referrer_id
+    )
+    session.add(partner)
+    await session.commit()
+    await session.refresh(partner)
+    
+    return partner, True
+
+async def process_referral_notifications(bot, session: AsyncSession, partner: Partner, is_new: bool):
+    """
+    Wrapper to trigger the recursive referral logic for new signups.
+    """
+    if is_new and partner.referrer_id:
+        # Offload to the optimized recursive logic
+        await process_referral_logic(bot, session, partner)
+
 
 async def get_partner_by_telegram_id(session: AsyncSession, telegram_id: str) -> Optional[Partner]:
     statement = select(Partner).where(Partner.telegram_id == telegram_id)
