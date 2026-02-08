@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Trophy, Star, Zap } from 'lucide-react';
+import { Trophy, Star, Zap, Users } from 'lucide-react';
 import { getRank, getXPProgress } from '../../utils/ranking';
 import { useUser } from '../../context/UserContext';
 import { useTranslation, Trans } from 'react-i18next';
@@ -114,10 +114,10 @@ export const EarnHeader = () => {
                 {/* Premium Stats Grid */}
                 <div className="grid grid-cols-2 gap-4 w-full">
                     <div className="group relative overflow-hidden bg-white/5 border border-white/10 rounded-2xl p-4 transition-all hover:bg-white/10 active:scale-95">
-                        <div className="absolute top-0 right-0 p-2 opacity-5 scale-150 rotate-12 transition-transform group-hover:scale-[2] group-hover:rotate-0">
-                            <Star className="w-12 h-12" />
+                        <div className="absolute -top-2 -right-2 p-2 opacity-20 scale-150 rotate-12 transition-transform group-hover:scale-[1.8] group-hover:rotate-6">
+                            <Users className="w-12 h-12 text-yellow-400/50 drop-shadow-[0_0_10px_rgba(250,204,21,0.3)]" />
                         </div>
-                        <div className="flex flex-col items-start gap-1">
+                        <div className="flex flex-col items-start gap-1 relative z-10">
                             <div className="flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 shadow-[0_0_5px_rgba(250,204,21,0.5)]" />
                                 <span className="text-[9px] font-black text-brand-muted uppercase tracking-[0.1em]">{t('earn_header.partners')}</span>
@@ -129,10 +129,10 @@ export const EarnHeader = () => {
                     </div>
 
                     <div className="group relative overflow-hidden bg-white/5 border border-white/10 rounded-2xl p-4 transition-all hover:bg-white/10 active:scale-95">
-                        <div className="absolute top-0 right-0 p-2 opacity-5 scale-150 -rotate-12 transition-transform group-hover:scale-[2] group-hover:rotate-0">
-                            <Zap className="w-12 h-12" />
+                        <div className="absolute -top-2 -right-2 p-2 opacity-20 scale-150 -rotate-12 transition-transform group-hover:scale-[1.8] group-hover:rotate-0">
+                            <Zap className="w-12 h-12 text-emerald-400/50 drop-shadow-[0_0_10px_rgba(52,211,153,0.3)]" />
                         </div>
-                        <div className="flex flex-col items-start gap-1">
+                        <div className="flex flex-col items-start gap-1 relative z-10">
                             <div className="flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_5px_rgba(52,211,153,0.5)]" />
                                 <span className="text-[9px] font-black text-brand-muted uppercase tracking-[0.1em]">{t('earn_header.total_xp')}</span>

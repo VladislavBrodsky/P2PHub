@@ -50,6 +50,9 @@ Use this to see the evolution of individual components.
 ### v1.1.0 (2026-02-08)
 -   **VISUAL OVERHAUL**: Implemented a "Liquid Crystal" effect on the Level Progress Circle using `animate-liquid-slow`, glassmorphism (`backdrop-blur-xl`), and internal gradient reflects.
 -   **SPACING**: Increased vertical separation between the Level Circle and Rank Badge (offset `-bottom-8`) to prevent visual crowding.
+-   **WATERMARKS**:
+    -   replaced `Star` icon with `Users` (Referrals) for the Partners card.
+    -   Updated both `Users` and `Zap` (XP) watermarks to be **Colorful** (Yellow/Emerald) with specific drop-shadows `drop-shadow-[0_0_10px_...]`, replacing the faint opacity style.
 
 ### v1.0.0 (2026-02-07)
 -   Implemented responsive footer with legal links (Terms, Privacy).
