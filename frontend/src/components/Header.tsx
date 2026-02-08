@@ -61,26 +61,35 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                     </div>
                 </button>
 
-                <motion.div
+                <motion.button
                     animate={controls}
-                    className="flex items-center gap-3 rounded-xl border border-(--color-border-glass) bg-(--color-bg-surface)/80 dark:bg-slate-900/50 px-3 py-1.5 shadow-premium backdrop-blur-md"
+                    whileHover={{ scale: 1.05, borderColor: "rgba(59, 130, 246, 0.5)" }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => console.log("Navigate to Levels/Rewards")} // Placeholder for future navigation
+                    className="group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 dark:bg-slate-900/60 px-4 py-2 shadow-premium backdrop-blur-2xl transition-all hover:bg-slate-50/10 dark:hover:bg-slate-800/80 cursor-pointer overflow-hidden"
                 >
-                    <div className="flex items-center gap-2">
-                        <div className="flex items-center gap-1">
-                            <span className="text-[10px] font-black uppercase tracking-tight text-(--color-text-secondary)">Lvl</span>
-                            <span className="text-[11px] font-black" style={{ color: currentRank.badgeColor }}>
-                                {user?.level || 1}
+                    {/* Ambient Glow */}
+                    <div className="absolute inset-0 bg-blue-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                    <div className="relative z-10 flex items-center gap-3">
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 group-hover:text-blue-500 transition-colors">Lvl</span>
+                            <span className="text-xl font-black text-slate-900 dark:text-white dark:drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
+                                {user?.level || 5}
                             </span>
                         </div>
-                        <div className="w-px h-3 bg-white/10" />
-                        <div className="flex items-center gap-1">
-                            <span className="text-[11px] font-black text-(--color-text-primary)">
-                                {user?.xp || 0}
+
+                        {/* Divider */}
+                        <div className="h-4 w-px bg-slate-200 dark:bg-white/10" />
+
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-bold text-slate-700 dark:text-slate-200">
+                                {user?.xp || 150}
                             </span>
-                            <span className="text-[10px] font-black uppercase tracking-tight text-(--color-text-secondary)">XP</span>
+                            <span className="text-[9px] font-black uppercase tracking-wider text-emerald-500 dark:text-emerald-400">XP</span>
                         </div>
                     </div>
-                </motion.div>
+                </motion.button>
             </div>
         </header>
     );
