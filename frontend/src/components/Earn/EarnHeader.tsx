@@ -24,54 +24,64 @@ export const EarnHeader = () => {
             <div className="relative z-10 flex flex-col items-center text-center space-y-6 bg-white/[0.02] backdrop-blur-3xl rounded-[2.3rem] p-6 border border-white/5">
 
                 {/* Level Circle - Quantum Design */}
-                <div className="relative w-28 h-28 flex items-center justify-center">
-                    {/* Outer Glow Ring */}
-                    <div className="absolute inset-0 rounded-full border border-blue-500/20 shadow-[0_0_40px_rgba(59,130,246,0.1)] active:scale-95 transition-transform duration-500" />
+                <div className="relative flex flex-col items-center justify-center pt-4 pb-8">
+                    <div className="relative w-32 h-32 flex items-center justify-center">
+                        {/* Outer Glow Ring */}
+                        <div className="absolute inset-0 rounded-full border border-blue-500/20 shadow-[0_0_50px_rgba(59,130,246,0.15)] active:scale-95 transition-transform duration-500" />
 
-                    {/* Progress Ring Background */}
-                    <svg className="absolute inset-0 w-full h-full -rotate-90 scale-95 opacity-50">
-                        <circle
-                            cx="56"
-                            cy="56"
-                            r="48"
-                            fill="none"
-                            stroke="rgba(255,255,255,0.05)"
-                            strokeWidth="8"
-                        />
-                        {/* Progress Ring Value with Glow */}
-                        <motion.circle
-                            cx="56"
-                            cy="56"
-                            r="48"
-                            fill="none"
-                            stroke={rank.badgeColor}
-                            strokeWidth="8"
-                            strokeDasharray="302"
-                            strokeDashoffset={302 - (302 * progress.percent) / 100}
-                            strokeLinecap="round"
-                            initial={{ strokeDashoffset: 302 }}
-                            animate={{ strokeDashoffset: 302 - (302 * progress.percent) / 100 }}
-                            transition={{ duration: 2, ease: "circOut" }}
-                            className="drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
-                        />
-                    </svg>
+                        {/* Progress Ring Background */}
+                        <svg className="absolute inset-0 w-full h-full -rotate-90 scale-95">
+                            <defs>
+                                <linearGradient id="liquid-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stopColor="#3b82f6" />
+                                    <stop offset="50%" stopColor="#8b5cf6" />
+                                    <stop offset="100%" stopColor="#06b6d4" />
+                                </linearGradient>
+                            </defs>
+                            <circle
+                                cx="64"
+                                cy="64"
+                                r="56"
+                                fill="none"
+                                stroke="rgba(255,255,255,0.05)"
+                                strokeWidth="8"
+                                strokeLinecap="round"
+                            />
+                            {/* Progress Ring Value with Liquid Gradient */}
+                            <motion.circle
+                                cx="64"
+                                cy="64"
+                                r="56"
+                                fill="none"
+                                stroke="url(#liquid-gradient)"
+                                strokeWidth="8"
+                                strokeDasharray="351"
+                                strokeDashoffset={351 - (351 * progress.percent) / 100}
+                                strokeLinecap="round"
+                                initial={{ strokeDashoffset: 351 }}
+                                animate={{ strokeDashoffset: 351 - (351 * progress.percent) / 100 }}
+                                transition={{ duration: 2, ease: "circOut" }}
+                                className="drop-shadow-[0_0_15px_rgba(59,130,246,0.4)]"
+                            />
+                        </svg>
 
-                    {/* Level Display Center - Liquid Crystal Effect */}
-                    <div className="flex flex-col items-center justify-center w-24 h-24 rounded-full relative overflow-hidden group shadow-[0_0_30px_rgba(59,130,246,0.15)] bg-slate-100/50 dark:bg-black/20 backdrop-blur-xl border border-white/20">
-                        {/* Liquid Gradient Background */}
-                        <div className="absolute inset-0 bg-linear-to-br from-blue-400/10 via-purple-400/10 to-transparent animate-liquid-slow pointer-events-none" />
+                        {/* Level Display Center - Liquid Crystal Effect */}
+                        <div className="flex flex-col items-center justify-center w-24 h-24 rounded-full relative overflow-hidden group shadow-[0_0_30px_rgba(59,130,246,0.15)] bg-slate-100/50 dark:bg-black/40 backdrop-blur-xl border border-white/10 z-10">
+                            {/* Liquid Gradient Background */}
+                            <div className="absolute inset-0 bg-linear-to-br from-blue-400/10 via-purple-400/10 to-transparent animate-liquid-slow pointer-events-none" />
 
-                        {/* Crystal Reflection Overlay */}
-                        <div className="absolute inset-0 bg-linear-to-tr from-white/20 via-transparent to-transparent opacity-50 pointer-events-none rounded-full" />
+                            {/* Crystal Reflection Overlay */}
+                            <div className="absolute inset-0 bg-linear-to-tr from-white/20 via-transparent to-transparent opacity-50 pointer-events-none rounded-full" />
 
-                        <div className="relative z-10 flex flex-col items-center">
-                            <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mb-0.5 drop-shadow-sm">{t('earn_header.level')}</span>
-                            <span className="text-4xl font-black bg-linear-to-b from-slate-800 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent leading-none tracking-tighter drop-shadow-sm filter">{level}</span>
+                            <div className="relative z-10 flex flex-col items-center">
+                                <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.25em] mb-0.5 drop-shadow-sm">{t('earn_header.level')}</span>
+                                <span className="text-5xl font-black bg-linear-to-b from-slate-800 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent leading-none tracking-tighter drop-shadow-sm filter">{level}</span>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Rank Badge - Metallic Shimmer with More Spacing */}
-                    <div className={`absolute -bottom-8 px-5 py-2 rounded-2xl border border-white/20 shadow-xl shadow-slate-200/50 dark:shadow-black/50 overflow-hidden group backdrop-blur-md z-20
+                    {/* Rank Badge - Floating below with negative margin */}
+                    <div className={`relative -mt-5 px-6 py-2 rounded-2xl border border-white/10 shadow-float overflow-hidden group backdrop-blur-md z-20 transform transition-transform hover:scale-105
                         ${level >= 50 ? 'bg-linear-to-r from-amber-300/90 via-yellow-400/90 to-amber-500/90' : 'bg-linear-to-r from-slate-200/90 via-slate-300/90 to-slate-400/90'}
                     `}>
                         {/* Shimmer Layer */}
@@ -80,9 +90,9 @@ export const EarnHeader = () => {
                         {/* Crystal Glint */}
                         <div className="absolute top-0 left-0 w-full h-px bg-white/50" />
 
-                        <div className="relative flex items-center gap-2">
-                            <Trophy className={`w-3.5 h-3.5 ${level >= 50 ? 'text-yellow-900' : 'text-slate-700'} drop-shadow-sm`} />
-                            <span className={`text-[10px] font-black uppercase tracking-[0.15em] ${level >= 50 ? 'text-yellow-950' : 'text-slate-800'} text-shadow-sm`}>
+                        <div className="relative flex items-center gap-2.5">
+                            <Trophy className={`w-4 h-4 ${level >= 50 ? 'text-yellow-900' : 'text-slate-700'} drop-shadow-sm`} />
+                            <span className={`text-xs font-black uppercase tracking-[0.2em] ${level >= 50 ? 'text-yellow-950' : 'text-slate-800'} text-shadow-sm`}>
                                 {t(`ranks.${rank.name}`)}
                             </span>
                         </div>

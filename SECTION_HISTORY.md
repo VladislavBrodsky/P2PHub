@@ -66,6 +66,9 @@ Use this to see the evolution of individual components.
 -   **OVERHEATING FIX**: Rewrote heavy CSS animations (`pulse-glow`, `shimmer`) in `index.css`. Replaced CPU-intensive `box-shadow` and `filter: blur` animations with GPU-accelerated `transform` and `opacity` transitions.
 -   **LOAD SPEED FIX**: Removed artificial 1-second delays (`setTimeout`) from `LeaderboardPage` and `CommunityPage`, resulting in instant navigation.
 -   **CACHING**: Configured `QueryClient` with a 5-minute `staleTime` policy to prevent redundant network requests on tab switching.
+-   **VISUALS**:
+    -   Implemented SVG Linear Gradient (`#3b82f6` -> `#8b5cf6` -> `#06b6d4`) for the Level Progress Ring to create a true "Liquid" effect.
+    -   Refactored Earn Header layout to use Flexbox with negative margins (`-mt-5`) instead of absolute positioning. This fixes the Rank Badge clipping/"glitch" issue where it was being cut off by the parent container.
 
 ### v1.0.0 (2026-02-07)
 -   Implemented responsive footer with legal links (Terms, Privacy).
