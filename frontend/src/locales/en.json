@@ -1,0 +1,35 @@
+{
+    "common": {
+        "dashboard": "Dashboard",
+        "academy": "Academy",
+        "wallet": "Wallet",
+        "connect_wallet": "Connect Wallet",
+        "language": "Language",
+        "theme": "Theme",
+        "light": "Light",
+        "dark": "Dark",
+        "back": "Back",
+        "copy": "Copy",
+        "copied": "Copied"
+    },
+    "menu": {
+        "settings": "Settings",
+        "community": "Community",
+        "faq": "FAQ",
+        "support": "Support",
+        "notifications": "Notifications",
+        "channel": "Channel",
+        "chat": "Chat"
+    },
+    "faq": {
+        "withdraw": "How to withdraw?",
+        "level": "What is Partner Level?",
+        "limits": "Card limits"
+    },
+    "onboarding": {
+        "welcome": "Welcome to Pintopay Partner",
+        "early": "You are early!",
+        "join": "Join the revolution",
+        "start": "Start your journey"
+    }
+}

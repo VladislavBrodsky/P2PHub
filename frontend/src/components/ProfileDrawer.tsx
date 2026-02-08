@@ -29,9 +29,14 @@ interface ProfileDrawerProps {
     onClose: () => void;
 }
 
+import { useTranslation } from 'react-i18next'; // Import hook
+
+// ... imports remain the same
+
 export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
     const { selection } = useHaptic();
     const { user } = useUser();
+    const { t, i18n } = useTranslation(); // Init hook
 
     const { theme, setTheme } = useTheme();
     const [expandedItem, setExpandedItem] = React.useState<string | null>(null);
@@ -87,17 +92,11 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
             case 'settings':
                 return (
                     <div className="space-y-3 pt-2">
-                        <div className="flex items-center justify-between p-2 rounded-lg bg-[var(--color-bg-app)]/50">
-                            <div className="flex items-center gap-2">
-                                <Globe className="h-3.5 w-3.5 text-[var(--color-text-secondary)]" />
-                                <span className="text-xs font-bold text-[var(--color-text-primary)]">Language</span>
-                            </div>
-                            <span className="text-[10px] font-black uppercase text-[var(--color-text-secondary)]">English</span>
-                        </div>
+                        {/* Settings content updated to use real switcher */}
                         <div className="flex items-center justify-between p-2 rounded-lg bg-[var(--color-bg-app)]/50">
                             <div className="flex items-center gap-2">
                                 <Bell className="h-3.5 w-3.5 text-[var(--color-text-secondary)]" />
-                                <span className="text-xs font-bold text-[var(--color-text-primary)]">Notifications</span>
+                                <span className="text-xs font-bold text-[var(--color-text-primary)]">{t('menu.notifications')}</span>
                             </div>
                             <div className="h-4 w-7 rounded-full bg-[var(--color-success)] relative">
                                 <div className="absolute right-0.5 top-0.5 h-3 w-3 rounded-full bg-white shadow-sm" />
@@ -110,18 +109,18 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                     <div className="grid grid-cols-2 gap-2 pt-2">
                         <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[var(--color-bg-app)]/50 hover:bg-[var(--color-brand-blue)]/10 transition-colors border border-[var(--color-brand-border)]">
                             <MessageCircle className="h-5 w-5 text-[#0088cc]" />
-                            <span className="text-[10px] font-black uppercase text-[var(--color-text-primary)]">Channel</span>
+                            <span className="text-[10px] font-black uppercase text-[var(--color-text-primary)]">{t('menu.channel')}</span>
                         </button>
                         <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[var(--color-bg-app)]/50 hover:bg-[var(--color-brand-blue)]/10 transition-colors border border-[var(--color-brand-border)]">
                             <Users className="h-5 w-5 text-[#0088cc]" />
-                            <span className="text-[10px] font-black uppercase text-[var(--color-text-primary)]">Chat</span>
+                            <span className="text-[10px] font-black uppercase text-[var(--color-text-primary)]">{t('menu.chat')}</span>
                         </button>
                     </div>
                 );
             case 'faq':
                 return (
                     <div className="space-y-2 pt-2">
-                        {['How to withdraw?', 'What is Partner Level?', 'Card limits'].map((q, i) => (
+                        {[t('faq.withdraw'), t('faq.level'), t('faq.limits')].map((q, i) => (
                             <div key={i} className="p-2 rounded-lg bg-[var(--color-bg-app)]/50 text-xs font-medium text-[var(--color-text-secondary)] flex justify-between items-center group active:bg-[var(--color-brand-blue)]/10 transition-colors">
                                 {q}
                                 <ChevronRight className="h-3 w-3 opacity-50 text-[var(--color-text-primary)]" />
@@ -132,10 +131,10 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
             case 'support':
                 return (
                     <div className="pt-2 text-center">
-                        <p className="text-xs text-[var(--color-text-secondary)] mb-3">Our support team is available 24/7 to help you with any issues.</p>
+                        <p className="text-xs text-[var(--color-text-secondary)] mb-3">Our support team is available 24/7.</p>
                         <button className="w-full py-3 rounded-xl bg-[var(--color-text-primary)] text-[var(--color-bg-surface)] text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2">
                             <Headphones className="h-3.5 w-3.5" />
-                            Contact Support
+                            {t('menu.support')}
                         </button>
                     </div>
                 );
@@ -145,10 +144,10 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
     };
 
     const menuItems = [
-        { id: 'settings', icon: <Settings />, label: 'Settings' },
-        { id: 'community', icon: <Users />, label: 'Community' },
-        { id: 'faq', icon: <HelpCircle />, label: 'FAQ' },
-        { id: 'support', icon: <Headphones />, label: 'Support' },
+        { id: 'settings', icon: <Settings />, label: t('menu.settings') },
+        { id: 'community', icon: <Users />, label: t('menu.community') },
+        { id: 'faq', icon: <HelpCircle />, label: t('menu.faq') },
+        { id: 'support', icon: <Headphones />, label: t('menu.support') },
     ];
 
     return (
@@ -196,19 +195,11 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                     <div className="flex items-center gap-2 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-surface)/80 backdrop-blur-md px-3 py-1.5 shadow-premium">
                                         <ArrowLeft className="text-[var(--color-text-primary)] h-5 w-5 transition-transform group-hover:-translate-x-1" />
                                         <span className="text-[10px] font-black uppercase tracking-widest text-[var(--color-text-primary)] pr-0.5">
-                                            Back
+                                            {t('common.back')}
                                         </span>
                                     </div>
                                 </button>
                             </div>
-
-                            {/* Close Button (Legacy X) - Optional to keep, but user asked for Back button in Menu position */}
-                            {/* <button
-                                onClick={onClose}
-                                className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-[var(--color-text-secondary)]"
-                            >
-                                <X className="h-5 w-5" />
-                            </button> */}
 
                             {/* Scrollable Content */}
                             <div className="flex-1 overflow-y-auto px-5 pb-10 flex flex-col gap-5">
@@ -280,10 +271,10 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                                 </div>
                                                 <div className="text-left">
                                                     <div className={`text-[10px] font-black uppercase tracking-widest ${wallet ? 'text-emerald-100' : 'text-[var(--color-text-secondary)]'}`}>
-                                                        Wallet
+                                                        {t('common.wallet')}
                                                     </div>
                                                     <div className="font-bold text-sm">
-                                                        {wallet ? formattedAddress : 'Connect Wallet'}
+                                                        {wallet ? formattedAddress : t('common.connect_wallet')}
                                                     </div>
                                                 </div>
                                             </div>
@@ -301,8 +292,35 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                     </motion.button>
                                 </div>
 
+                                {/* Language Selector */}
+                                <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-(--color-bg-surface)/80 backdrop-blur-md border border-(--color-border-glass) relative overflow-hidden">
+                                    <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.2),transparent)] pointer-events-none" />
+                                    {[
+                                        { id: 'en', icon: Globe, label: 'English', activeColor: 'rgba(59,130,246,0.1)', iconColor: '#3B82F6' },
+                                        { id: 'ru', icon: Globe, label: 'Russian', activeColor: 'rgba(239,68,68,0.1)', iconColor: '#EF4444' },
+                                    ].map((option) => (
+                                        <button
+                                            key={option.id}
+                                            onClick={() => { i18n.changeLanguage(option.id); selection(); }}
+                                            className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 transition-all relative z-10 ${i18n.language.startsWith(option.id)
+                                                ? 'bg-white/10 dark:bg-white/5 border border-white/10 shadow-lg text-(--color-text-primary) overflow-hidden'
+                                                : 'text-[var(--color-text-secondary)] hover:bg-white/5'
+                                                }`}
+                                        >
+                                            {i18n.language.startsWith(option.id) && (
+                                                <motion.div
+                                                    layoutId="lang-glow"
+                                                    className="absolute inset-0 bg-white/5 blur-md"
+                                                    style={{ backgroundColor: option.activeColor }}
+                                                />
+                                            )}
+                                            <span className="text-[10px] font-black uppercase tracking-widest relative z-10">{option.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+
                                 {/* Theme Selector */}
-                                <div className="mt-auto space-y-4 pt-4">
+                                <div className="mt-0 space-y-4 pt-1">
                                     <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-(--color-bg-surface)/80 backdrop-blur-md border border-(--color-border-glass) relative overflow-hidden">
                                         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.2),transparent)] pointer-events-none" />
                                         {[

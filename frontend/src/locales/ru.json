@@ -1,0 +1,35 @@
+{
+    "common": {
+        "dashboard": "Панель",
+        "academy": "Академия",
+        "wallet": "Кошелек",
+        "connect_wallet": "Подключить",
+        "language": "Язык",
+        "theme": "Тема",
+        "light": "Светлая",
+        "dark": "Темная",
+        "back": "Назад",
+        "copy": "Копировать",
+        "copied": "Скопировано"
+    },
+    "menu": {
+        "settings": "Настройки",
+        "community": "Сообщество",
+        "faq": "FAQ",
+        "support": "Поддержка",
+        "notifications": "Уведомления",
+        "channel": "Канал",
+        "chat": "Чат"
+    },
+    "faq": {
+        "withdraw": "Как вывести средства?",
+        "level": "Что такое Уровень Партнера?",
+        "limits": "Лимиты карт"
+    },
+    "onboarding": {
+        "welcome": "Добро пожаловать в Pintopay Partner",
+        "early": "Вы в числе первых!",
+        "join": "Присоединяйтесь к революции",
+        "start": "Начните свой путь"
+    }
+}
