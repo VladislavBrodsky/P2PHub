@@ -143,8 +143,8 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 onClick={handleUnlock}
                                                 className="w-full group relative flex items-center justify-center gap-2 acid-blue-liquid h-11 rounded-full font-black text-[11px] tracking-widest active:scale-[0.98] transition-all overflow-hidden animate-vibing"
                                             >
-                                                <Lock className="w-3.5 h-3.5 mb-0.5 text-[#020617]" />
-                                                <span className="text-[#020617]">{t('income.profit.unlock_btn')}</span>
+                                                <Lock className="w-3.5 h-3.5 mb-0.5 text-white" />
+                                                <span className="text-white">{t('income.profit.unlock_btn')}</span>
                                                 <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/30 to-white/0 -translate-x-full group-hover:animate-shimmer" />
                                             </button>
                                         </div>
