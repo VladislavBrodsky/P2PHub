@@ -57,5 +57,15 @@ Use this to see the evolution of individual components.
     -   Redesigned XP badge positioning in `TaskCard` component. Moved from inline flex to absolute top-right (`top-3 right-3`) to prevent text wrapping issues.
     -   Added padding (`pr-16`) to task titles to accommodate the new badge position.
 
+--------------------------------------------------------------------------------
+
+## 🚀 Performance
+**Current Status**: Optimized (v1.1.1)
+
+### v1.1.1 (2026-02-08)
+-   **OVERHEATING FIX**: Rewrote heavy CSS animations (`pulse-glow`, `shimmer`) in `index.css`. Replaced CPU-intensive `box-shadow` and `filter: blur` animations with GPU-accelerated `transform` and `opacity` transitions.
+-   **LOAD SPEED FIX**: Removed artificial 1-second delays (`setTimeout`) from `LeaderboardPage` and `CommunityPage`, resulting in instant navigation.
+-   **CACHING**: Configured `QueryClient` with a 5-minute `staleTime` policy to prevent redundant network requests on tab switching.
+
 ### v1.0.0 (2026-02-07)
 -   Implemented responsive footer with legal links (Terms, Privacy).

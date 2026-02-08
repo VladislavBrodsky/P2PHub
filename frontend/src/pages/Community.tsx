@@ -14,8 +14,7 @@ export default function CommunityPage() {
     const { selection } = useHaptic();
 
     useEffect(() => {
-        // Simulate initial data load
-        setTimeout(() => setIsLoading(false), 800);
+        setIsLoading(false);
     }, []);
 
     const handleTabChange = (tab: 'dashboard' | 'academy') => {
