@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Enable Class-Based Dark Mode for v4 */
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* === PINTOPAY DESIGN SYSTEM 2026 - v1.1.0 === */
   /* Apple-esque Aesthetic - High Fidelity, Depth, Micro-interactions */
@@ -474,11 +477,20 @@ html {
 .animate-scan {
   animation: scan 2s linear infinite;
 }
+
 /* Liquid Gradient Animation */
 @keyframes liquid {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .animate-liquid {
@@ -488,9 +500,20 @@ html {
 
 /* Vibing Pulse Animation */
 @keyframes vibing {
-  0% { transform: scale(1); filter: brightness(1); }
-  50% { transform: scale(1.02); filter: brightness(1.1); }
-  100% { transform: scale(1); filter: brightness(1); }
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+    filter: brightness(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
 }
 
 .animate-vibing {

@@ -66,7 +66,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                     whileHover={{ scale: 1.05, borderColor: "rgba(59, 130, 246, 0.5)" }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => console.log("Navigate to Levels/Rewards")}
-                    className="group relative pointer-events-auto z-50 flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/5 dark:bg-slate-800/90 px-3 py-1.5 shadow-premium backdrop-blur-2xl transition-all hover:bg-slate-50/10 dark:hover:bg-slate-700 cursor-pointer overflow-hidden"
+                    className="group relative pointer-events-auto z-50 flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/5 dark:bg-[#0f172a] px-3 py-1.5 shadow-premium backdrop-blur-2xl transition-all hover:bg-slate-50/10 dark:hover:bg-slate-800 cursor-pointer overflow-hidden"
                 >
                     {/* Ambient Glow */}
                     <div className="absolute inset-0 bg-blue-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
