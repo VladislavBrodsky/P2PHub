@@ -19,7 +19,7 @@ export const EarnHeader = () => {
             {/* Immersive Mesh Background */}
             <div className="absolute inset-0 bg-linear-to-br from-blue-600/10 via-purple-600/5 to-transparent pointer-events-none" />
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full animate-pulse pointer-events-none" />
-            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/20 blur-[100px] rounded-full animate-pulse delay-1000 pointer-events-none" />
+            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-cyan-500/20 blur-[100px] rounded-full animate-pulse delay-1000 pointer-events-none" />
 
             <div className="relative z-10 flex flex-col items-center text-center space-y-6 bg-white/2 backdrop-blur-3xl rounded-[2.3rem] p-6 border border-white/5">
 
@@ -33,16 +33,16 @@ export const EarnHeader = () => {
                         <svg className="absolute inset-0 w-full h-full -rotate-90 scale-95">
                             <defs>
                                 <linearGradient id="liquid-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stopColor="#3b82f6" />
-                                    <stop offset="50%" stopColor="#8b5cf6" />
-                                    <stop offset="100%" stopColor="#06b6d4" />
+                                    <stop offset="0%" stopColor={rank.badgeColor} />
+                                    <stop offset="50%" stopColor={level >= 50 ? '#FEF3C7' : '#F8FAFC'} />
+                                    <stop offset="100%" stopColor={rank.badgeColor} />
                                     {/* Rotate the gradient for "vibing" liquid effect */}
                                     <animateTransform
                                         attributeName="gradientTransform"
                                         type="rotate"
                                         from="0 0.5 0.5"
                                         to="360 0.5 0.5"
-                                        dur="4s"
+                                        dur="3s"
                                         repeatCount="indefinite"
                                     />
                                 </linearGradient>
@@ -77,7 +77,7 @@ export const EarnHeader = () => {
                         {/* Level Display Center - Liquid Crystal Effect */}
                         <div className="flex flex-col items-center justify-center w-24 h-24 rounded-full relative overflow-hidden group shadow-[0_0_30px_rgba(59,130,246,0.15)] bg-slate-100/50 dark:bg-black/40 backdrop-blur-xl border border-white/10 z-10">
                             {/* Liquid Gradient Background */}
-                            <div className="absolute inset-0 bg-linear-to-br from-blue-400/20 via-purple-400/20 to-transparent animate-liquid-slow pointer-events-none" />
+                            <div className="absolute inset-0 bg-linear-to-br from-blue-400/20 via-cyan-400/20 to-transparent animate-liquid-slow pointer-events-none" />
 
                             {/* Crystal Reflection Overlay (Personalization Style) */}
                             <div className="absolute inset-0 bg-linear-to-b from-white/30 to-transparent pointer-events-none rounded-full" />

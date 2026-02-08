@@ -88,9 +88,9 @@ export const Footer = () => {
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 onClick={() => setActiveDoc(null)}
-                                className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md"
+                                className="fixed inset-0 z-9999 bg-black/80 backdrop-blur-md"
                             />
-                            <div className="fixed inset-0 z-[10000] flex items-end sm:items-center justify-center pointer-events-none">
+                            <div className="fixed inset-0 z-10000 flex items-end sm:items-center justify-center pointer-events-none">
                                 <motion.div
                                     initial={{ y: "100%" }}
                                     animate={{ y: 0 }}

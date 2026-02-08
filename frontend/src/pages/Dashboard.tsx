@@ -56,7 +56,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
             {/* 1. Hero Section - Seamless Integration */}
             <motion.div variants={item} className="px-4 space-y-4 pt-4">
-                <div className="relative overflow-visible">
+                <div className="relative overflow-hidden -mx-4">
                     <CommunityOrbit />
                 </div>
 
