@@ -64,7 +64,14 @@ export default function ReferralPage() {
 
         const fetchTreeData = async () => {
             try {
-                const { initDataRaw } = retrieveLaunchParams();
+                let initDataRaw = '';
+                try {
+                    const params = retrieveLaunchParams();
+                    initDataRaw = params.initDataRaw || '';
+                } catch (e) {
+                    console.warn('Telegram environment not detected');
+                }
+
                 const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/partner/tree`, {
                     headers: { 'X-Telegram-Init-Data': initDataRaw }
                 });
@@ -229,8 +236,96 @@ export default function ReferralPage() {
                 )}
             </AnimatePresence>
 
-            {/* QR Code Modal (Omitted for brevity, kept same) */}
-            {/* ... */}
+            {/* QR Code Modal */}
+            <AnimatePresence>
+                {showQR && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="w-full max-w-sm bg-(--color-bg-surface) border border-white/10 rounded-[2.5rem] p-6 relative shadow-2xl"
+                        >
+                            <button
+                                onClick={() => setShowQR(false)}
+                                className="absolute top-4 right-4 p-2 bg-(--color-bg-app) rounded-full text-slate-400 hover:text-white"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+
+                            <div className="text-center space-y-6">
+                                <div className="space-y-2 pt-2">
+                                    <h3 className="text-2xl font-black text-white leading-none tracking-tight">
+                                        <Trans i18nKey="referral.qr.title">
+                                            Claim Your <br />
+                                            <span className="text-blue-500 uppercase italic">Financial Sovereignty</span>
+                                        </Trans>
+                                    </h3>
+                                    <p className="text-sm font-medium text-slate-400">
+                                        <Trans i18nKey="referral.qr.desc">
+                                            Earn <span className="text-emerald-500 font-bold">$1/minute</span> for every active partner. <br />
+                                            Build your empire now.
+                                        </Trans>
+                                    </p>
+                                </div>
+
+                                <div className="mx-auto w-64 h-64 bg-white p-4 rounded-3xl shadow-[0_0_40px_rgba(59,130,246,0.1)] border border-slate-100 relative overflow-hidden group">
+                                    <div className="absolute inset-0 bg-linear-to-b from-blue-500/0 via-blue-500/10 to-blue-500/0 w-full h-8 blur-md animate-scan pointer-events-none" />
+                                    <img
+                                        src={`${import.meta.env.VITE_API_URL}/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=10`}
+                                        alt="Your Referral QR Code"
+                                        className="w-full h-full object-contain relative z-10"
+                                    />
+                                    <div className="absolute top-3 left-3 w-8 h-8 border-t-4 border-l-4 border-blue-500 rounded-tl-xl" />
+                                    <div className="absolute top-3 right-3 w-8 h-8 border-t-4 border-r-4 border-blue-500 rounded-tr-xl" />
+                                    <div className="absolute bottom-3 left-3 w-8 h-8 border-b-4 border-l-4 border-blue-500 rounded-bl-xl" />
+                                    <div className="absolute bottom-3 right-3 w-8 h-8 border-b-4 border-r-4 border-blue-500 rounded-br-xl" />
+                                </div>
+
+                                <div className="flex gap-3">
+                                    <button
+                                        className="flex-1 py-3 bg-white/5 border border-white/10 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                        onClick={handleCopyLink}
+                                    >
+                                        <Copy className="w-4 h-4" /> {t('referral.qr.copy')}
+                                    </button>
+                                    <button
+                                        className="flex-1 py-3 bg-blue-600 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
+                                        onClick={() => {
+                                            const link = document.createElement('a');
+                                            link.href = `${import.meta.env.VITE_API_URL}/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=20`;
+                                            link.download = 'Pintopay_Invite.png';
+                                            link.click();
+                                        }}
+                                    >
+                                        <Download className="w-4 h-4" /> {t('referral.qr.save')}
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Level Up Overlay */}
+            <AnimatePresence>
+                {levelUp && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                        <motion.div
+                            initial={{ scale: 0.5, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            className="bg-(--color-bg-surface) border border-yellow-500/20 p-8 rounded-[2.5rem] text-center space-y-4 shadow-float"
+                        >
+                            <Trophy className="w-16 h-16 text-yellow-400 mx-auto animate-bounce" />
+                            <h2 className="text-3xl font-black text-transparent bg-clip-text bg-linear-to-r from-yellow-400 to-orange-500">
+                                {t('referral.levelup.title')}
+                            </h2>
+                            <p className="text-slate-400 font-bold italic">{t('referral.levelup.reached', { level: currentLevel + 1 })}</p>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
             <h1 className="text-3xl font-black mb-6 tracking-tighter text-gradient-primary text-center">{t('referral.title')}</h1>
 

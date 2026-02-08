@@ -10,6 +10,9 @@ from aiogram import types
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
+    from app.services.warmup_service import warmup_redis
+    asyncio.create_task(warmup_redis())
+    
     webhook_base = settings.WEBHOOK_URL
     
     if webhook_base and "your-backend-url" not in webhook_base:

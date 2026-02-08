@@ -30,7 +30,13 @@ export default function LeaderboardPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const { initDataRaw } = retrieveLaunchParams();
+                let initDataRaw = '';
+                try {
+                    const params = retrieveLaunchParams();
+                    initDataRaw = params.initDataRaw || '';
+                } catch (e) {
+                    console.warn('Telegram environment not detected');
+                }
                 const headers = { 'X-Telegram-Init-Data': initDataRaw };
 
                 // Parallel fetch for speed
