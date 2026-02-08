@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-02-08
+
+### Added
+- **Crystal Progress System**: Rebuilt XP bars and circular level displays with high-fidelity glass/shiver effects.
+- **Bento Carousel Refinement**: Compact pagination dots and a premium glassmorphic swipe hint.
+- **Technical Audit**: Performance audit and optimization roadmap for TWA compliance.
+
+### Changed
+- **UI Fidelity**: Standardized gloss and shimmer across the entire dashboard.
+- **Maintenance**: Reverted Community Orbit to stable single-ring version for cleaner brand presentation.
+
+### Fixed
+- **Module Errors**: Resolved React UMD global conflicts and Tailwind v4 variable syntax lints.
+
 ## [1.1.0] - 2026-02-08
 
 ### Added

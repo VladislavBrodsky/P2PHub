@@ -1,3 +1,4 @@
+import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { CreditCard, Smartphone, Zap, Globe, Coins, QrCode } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -48,6 +49,17 @@ const shiftSteps = [
 
 export const BentoGrid = () => {
     const { t } = useTranslation();
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    const handleScroll = () => {
+        if (!scrollRef.current) return;
+        const width = scrollRef.current.clientWidth;
+        const scrollLeft = scrollRef.current.scrollLeft;
+        const index = Math.round(scrollLeft / (width * 0.85)); // 0.85 is the card width factor
+        const clampedIndex = Math.max(0, Math.min(index, shiftSteps.length - 1));
+        if (clampedIndex !== activeIndex) setActiveIndex(clampedIndex);
+    };
 
     return (
         <section className="px-4 py-8 space-y-8">
@@ -70,7 +82,11 @@ export const BentoGrid = () => {
 
             {/* Carousel Container */}
             <div className="relative">
-                <div className="flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory no-scrollbar px-4 -mx-4 md:mx-0 md:px-0">
+                <div
+                    ref={scrollRef}
+                    onScroll={handleScroll}
+                    className="flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory no-scrollbar px-4 -mx-4 md:mx-0 md:px-0"
+                >
                     {shiftSteps.map((step, index) => (
                         <motion.div
                             key={index}
@@ -117,25 +133,47 @@ export const BentoGrid = () => {
                     ))}
                 </div>
 
-                {/* Progress Slider */}
-                <div className="mt-5 px-4">
-                    <div className="h-1 w-32 mx-auto bg-slate-900/5 dark:bg-white/5 rounded-full overflow-hidden">
-                        <motion.div
-                            className="h-full bg-blue-500 rounded-full"
-                            style={{ width: '30%' }}
-                            animate={{
-                                x: [-30, 100, -30],
-                            }}
-                            transition={{
-                                repeat: Infinity,
-                                duration: 3,
-                                ease: "easeInOut"
-                            }}
-                        />
+                {/* Premium Pagination Indicator */}
+                <div className="flex flex-col items-center gap-4 mt-2">
+                    {/* Compact Pagination Dots */}
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/5 dark:bg-white/5 border border-white/5 backdrop-blur-md shadow-inner">
+                        {shiftSteps.map((_, i) => (
+                            <motion.div
+                                key={i}
+                                initial={false}
+                                animate={{
+                                    width: i === activeIndex ? 16 : 4,
+                                    opacity: i === activeIndex ? 1 : 0.3,
+                                    backgroundColor: i === activeIndex ? '#3b82f6' : '#94a3b8'
+                                }}
+                                className="h-1 rounded-full transition-all duration-300"
+                                style={{
+                                    boxShadow: i === activeIndex ? '0 0 8px rgba(59, 130, 246, 0.5)' : 'none'
+                                }}
+                            />
+                        ))}
                     </div>
-                    <p className="text-center text-[9px] font-bold text-brand-muted mt-1.5 uppercase tracking-widest opacity-50">
-                        Swipe to Explore
-                    </p>
+
+                    {/* Premium Swipe Hint */}
+                    <div className="relative group overflow-hidden">
+                        <motion.div
+                            animate={{ x: [0, 5, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                            className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-500/10 bg-blue-500/5 backdrop-blur-sm shadow-sm"
+                        >
+                            <span className="text-[8px] font-black uppercase tracking-[0.25em] text-blue-500/80">
+                                {t('evolution.swipe_hint') || 'Swipe to Explore'}
+                            </span>
+                            <div className="flex items-center -space-x-1">
+                                <div className="w-1 h-1 rounded-full bg-blue-500/40" />
+                                <div className="w-1 h-1 rounded-full bg-blue-500/60" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+                            </div>
+                        </motion.div>
+
+                        {/* Interactive Aura */}
+                        <div className="absolute inset-0 bg-blue-500/10 blur-xl rounded-full -z-10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
                 </div>
             </div>
         </section>

@@ -77,10 +77,17 @@ export const EarnHeader = () => {
                         {/* Level Display Center - Liquid Crystal Effect */}
                         <div className="flex flex-col items-center justify-center w-24 h-24 rounded-full relative overflow-hidden group shadow-[0_0_30px_rgba(59,130,246,0.15)] bg-slate-100/50 dark:bg-black/40 backdrop-blur-xl border border-white/10 z-10">
                             {/* Liquid Gradient Background */}
-                            <div className="absolute inset-0 bg-linear-to-br from-blue-400/10 via-purple-400/10 to-transparent animate-liquid-slow pointer-events-none" />
+                            <div className="absolute inset-0 bg-linear-to-br from-blue-400/20 via-purple-400/20 to-transparent animate-liquid-slow pointer-events-none" />
 
-                            {/* Crystal Reflection Overlay */}
-                            <div className="absolute inset-0 bg-linear-to-tr from-white/20 via-transparent to-transparent opacity-50 pointer-events-none rounded-full" />
+                            {/* Crystal Reflection Overlay (Personalization Style) */}
+                            <div className="absolute inset-0 bg-linear-to-b from-white/30 to-transparent pointer-events-none rounded-full" />
+
+                            {/* Shimmer Animation */}
+                            <motion.div
+                                animate={{ x: ['-100%', '200%'] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+                                className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent pointer-events-none"
+                            />
 
                             <div className="relative z-10 flex flex-col items-center">
                                 <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.25em] mb-0.5 drop-shadow-sm">{t('earn_header.level')}</span>
@@ -118,13 +125,25 @@ export const EarnHeader = () => {
                             <span className="text-[10px] font-bold text-brand-muted">/ {progress.total}</span>
                         </div>
                     </div>
-                    <div className="h-3 w-full bg-slate-900/5 dark:bg-white/5 rounded-full overflow-hidden border border-white/5 p-[2px]">
+                    <div className="h-3 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden border border-white/5 p-[2px] relative shadow-inner">
                         <motion.div
-                            className="h-full rounded-full bg-linear-to-r from-blue-600 via-indigo-500 to-blue-600 bg-[length:200%_100%] animate-liquid shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                             initial={{ width: 0 }}
                             animate={{ width: `${progress.percent}%` }}
                             transition={{ duration: 1.5, ease: "backOut" }}
-                        />
+                            className="h-full rounded-full relative overflow-hidden"
+                            style={{
+                                backgroundColor: '#3b82f6', // Solid brand blue for crystal effect
+                                boxShadow: `0 0 15px rgba(59, 130, 246, 0.5)`
+                            }}
+                        >
+                            {/* Personalization Crystal Effect Layers */}
+                            <div className="absolute inset-0 bg-linear-to-b from-white/40 to-transparent" />
+                            <motion.div
+                                animate={{ x: ['-100%', '200%'] }}
+                                transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+                                className="absolute inset-0 bg-linear-to-r from-transparent via-white/50 to-transparent"
+                            />
+                        </motion.div>
                     </div>
                     <p className="text-[10px] text-brand-muted font-bold italic tracking-tight opacity-70">
                         {t('earn_header.xp_to_next', { xp: progress.total - progress.current })}

@@ -386,4 +386,3 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
         </motion.div>
     );
 };
-

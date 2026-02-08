@@ -3,6 +3,28 @@
 This document tracks the detailed version history and improvements for each specific section of the P2P Partner Hub.
 Use this to see the evolution of individual components.
 
+## 🎡 Ecosystem & Orbit
+**Current Status**: v1.2.0 (Solar System)
+
+### v1.2.0 (2026-02-08)
+-   **PLANETARY SYSTEM**: Completely refactored the orbit into a 3D-feeling Solar System.
+-   **LAYERS**:
+    -   **Inner (Ecosystem)**: Pay, NFC, QR icons orbiting fast with glass sheen.
+    -   **Middle (Tokens)**: BTC, ETH, TON orbiting with vibrant glows.
+    -   **Outer (Community)**: Members orbiting in a grand, slow motion.
+-   **SOLAR CORE**: Upgraded logo with rotating beams, halftones, and pulse shockwaves.
+
+--------------------------------------------------------------------------------
+
+## 🎢 Marketing & Evolution (Bento)
+**Current Status**: v1.2.0 (Premium Navigation)
+
+### v1.2.0 (2026-02-08)
+-   **CAROUSEL INDICATORS**: Replaced the progress bar with reactive pagination dots.
+-   **SWIPE HINT**: Redesigned as a glassmorphic animated badge for better UX guidance.
+
+--------------------------------------------------------------------------------
+
 ## 🟢 Income Potential Section
 **Current Status**: v1.1.0 (Premium & Compacted)
 
@@ -45,7 +67,11 @@ Use this to see the evolution of individual components.
 --------------------------------------------------------------------------------
 
 ## 🟡 Earn Header
-**Current Status**: v1.1.0 (Crystal Liquid UI)
+**Current Status**: v1.2.0 (Crystal Overhaul)
+
+### v1.2.0 (2026-02-08)
+-   **CRYSTAL UPGRADE**: Applied the "Crystal" glass effect to the circular level display and all XP progress bars.
+-   **VISUALS**: Added glossy top-down overlays, deep inner shadows, and a moving shimmer beam (`animate-shimmer`) to create a high-fidelity reflective aesthetic.
 
 ### v1.1.0 (2026-02-08)
 -   **VISUAL OVERHAUL**: Implemented a "Liquid Crystal" effect on the Level Progress Circle using `animate-liquid-slow`, glassmorphism (`backdrop-blur-xl`), and internal gradient reflects.
