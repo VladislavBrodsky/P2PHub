@@ -31,7 +31,7 @@ export default function CommunityPage() {
             <div className="absolute bottom-40 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none fixed" />
 
             {/* Top Navigation / Switcher */}
-            <div className="relative z-20 mb-6 flex justify-center">
+            <div className="relative z-20 mb-3 flex justify-center">
                 <div className="p-1 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/5 backdrop-blur-xl flex items-center relative gap-1 shadow-sm">
                     {/* Sliding Background */}
                     <motion.div
@@ -51,7 +51,7 @@ export default function CommunityPage() {
 
                     <button
                         className={cn(
-                            "relative z-10 px-6 py-2.5 text-xs font-black uppercase tracking-widest transition-colors w-32 text-center",
+                            "relative z-10 px-4 py-2 text-xs font-black uppercase tracking-widest transition-colors w-28 text-center",
                             activeTab === 'dashboard' ? "text-white" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
                         )}
                     >
@@ -60,7 +60,7 @@ export default function CommunityPage() {
                     <button
                         onClick={() => handleTabChange('academy')}
                         className={cn(
-                            "relative z-10 px-6 py-2.5 text-xs font-black uppercase tracking-widest transition-colors w-32 text-center",
+                            "relative z-10 px-4 py-2 text-xs font-black uppercase tracking-widest transition-colors w-28 text-center",
                             activeTab === 'academy' ? "text-white" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
                         )}
                     >
