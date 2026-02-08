@@ -74,5 +74,18 @@ Use this to see the evolution of individual components.
         -   **Level Circle**: Implemented `<animateTransform>` to rotate the gradient, creating a swirling liquid effect.
         -   **XP Bar**: Added `animate-liquid` with a flowing gradient background (Blue -> Indigo -> Blue) for a dynamic "charging" look.
 
+--------------------------------------------------------------------------------
+
+## 🌐 API & Integration
+**Current Status**: v1.1.2 (Standardized)
+
+### v1.1.2 (2026-02-08)
+-   **CENTRALIZATION**: Created `frontend/src/utils/api.ts` to manage the base API URL. This ensures all components consistently point to the same production backend (`https://p2phub-production.up.railway.app`).
+-   **AVATAR STACK**: Refactored "Recent Partners" in `PartnerStats.tsx`.
+    -   Replaced hardcoded "A B C D" placeholders with dynamic user data.
+    -   Implemented a "Glass-Glow" avatar stack with colorful initial fallbacks (`blue`, `purple`, `emerald`, `amber`).
+    -   Added pulsing skeletons during the loading state for a smoother UI experience.
+-   **GIT**: Pushed all recent source updates to the main repository.
+
 ### v1.0.0 (2026-02-07)
 -   Implemented responsive footer with legal links (Terms, Privacy).
