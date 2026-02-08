@@ -33,6 +33,20 @@ async def get_my_profile(
     partner = result.first()
     
     if not partner:
+        # Check for referrer
+        referrer_id = None
+        start_param = user_data.get("start_param")
+        if start_param:
+            try:
+                # Look up referrer by code
+                ref_stmt = select(Partner).where(Partner.referral_code == start_param)
+                ref_res = await session.exec(ref_stmt)
+                referrer = ref_res.first()
+                if referrer:
+                    referrer_id = referrer.id
+            except Exception as e:
+                print(f"Error looking up referrer: {e}")
+
         # Auto-register new partner
         partner = Partner(
             telegram_id=tg_id,
@@ -40,7 +54,8 @@ async def get_my_profile(
             first_name=tg_user.get("first_name"),
             last_name=tg_user.get("last_name"),
             photo_url=tg_user.get("photo_url"),
-            referral_code=f"P2P-{secrets.token_hex(4).upper()}"
+            referral_code=f"P2P-{secrets.token_hex(4).upper()}",
+            referrer_id=referrer_id
         )
         session.add(partner)
         await session.commit()

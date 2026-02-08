@@ -14,6 +14,7 @@ class Partner(SQLModel, table=True):
     balance: float = Field(default=0.0)
     level: int = Field(default=1)
     referral_code: str = Field(unique=True)
+    referrer_id: Optional[int] = Field(default=None, foreign_key="partner.id")
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 class Earning(SQLModel, table=True):

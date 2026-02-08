@@ -49,11 +49,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             initial="hidden"
             animate="show"
         >
-            {/* Dark Mode Specific Background Textures */}
-            <div className="fixed inset-0 pointer-events-none opacity-0 dark:opacity-100 transition-opacity duration-1000">
-                <div className="absolute inset-0 mesh-gradient-dark" />
-                <div className="absolute top-0 left-0 w-full h-[50vh] bg-linear-to-b from-blue-500/5 to-transparent" />
-            </div>
+
 
             {/* 1. Hero Section - Seamless Integration */}
             <motion.div variants={item} className="px-4 space-y-4 pt-4">

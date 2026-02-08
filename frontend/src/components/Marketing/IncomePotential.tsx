@@ -259,7 +259,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <Users className="w-5 h-5 text-slate-400 dark:text-blue-400 group-hover:text-blue-500 transition-colors" />
                             <div className="flex items-center gap-1 bg-emerald-500/10 px-1.5 py-0.5 rounded-md border border-emerald-500/20">
                                 <TrendingUp className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                                <span className="text-[9px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-tighter">+17% YoY</span>
+                                <span className="text-[9px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-tighter whitespace-nowrap">+17% YoY</span>
                             </div>
                         </div>
 
