@@ -30,10 +30,12 @@ try {
 }
 */
 
+import { ErrorBoundary } from './components/ErrorBoundary'
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
+    <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
             <App />
         </QueryClientProvider>
-    </React.StrictMode>,
+    </ErrorBoundary>,
 )

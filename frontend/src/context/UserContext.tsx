@@ -106,43 +106,66 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         const init = async () => {
-            // Fast path for local development
-            if (import.meta.env.DEV && !window.Telegram?.WebApp?.initData) {
-                console.log('[DEBUG] Dev mode detected, mocking user immediately');
-                setUser({
-                    id: 999,
-                    telegram_id: '123456789',
-                    username: 'dev_partner',
-                    first_name: 'Dev',
-                    last_name: 'User',
-                    photo_url: null,
-                    balance: 5000,
-                    level: 5,
-                    xp: 150,
-                    referral_code: 'DEV-TEST',
-                    referrals: [] // Mock referrals
-                });
-                setIsLoading(false);
-                return;
-            }
-
-            // More robust waiting for Telegram environment using recursive timeout
-            let attempts = 0;
-            const checkData = async () => {
-                if (window.Telegram?.WebApp?.initData) {
-                    refreshUser();
-                } else if (attempts < 10) {
-                    attempts++;
-                    setTimeout(checkData, 500);
-                } else {
-                    console.log('[DEBUG] Max attempts reached, proceeding with refresh anyway');
-                    refreshUser();
+            setIsLoading(true);
+            try {
+                // Fast path for local development
+                if (import.meta.env.DEV && !window.Telegram?.WebApp?.initData) {
+                    console.log('[DEBUG] Dev mode detected, mocking user immediately');
+                    setUser({
+                        id: 999,
+                        telegram_id: '123456789',
+                        username: 'dev_partner',
+                        first_name: 'Dev',
+                        last_name: 'User',
+                        photo_url: null,
+                        balance: 5000,
+                        level: 5,
+                        xp: 150,
+                        referral_code: 'DEV-TEST',
+                        referrals: []
+                    });
+                    setIsLoading(false);
+                    return;
                 }
-            };
 
-            checkData();
+                // Wait for Telegram environment
+                let attempts = 0;
+                const checkData = async () => {
+                    try {
+                        if (window.Telegram?.WebApp?.initData) {
+                            await refreshUser();
+                        } else if (attempts < 10) {
+                            attempts++;
+                            setTimeout(checkData, 500);
+                        } else {
+                            console.log('[DEBUG] Max attempts reached, proceeding with refresh anyway');
+                            await refreshUser();
+                        }
+                    } catch (e) {
+                        console.error('[DEBUG] checkData failed:', e);
+                        setIsLoading(false);
+                    }
+                };
+
+                checkData();
+            } catch (e) {
+                console.error('[DEBUG] init failed:', e);
+                setIsLoading(false);
+            }
         };
+
         init();
+
+        // Listen for window focus to potentially refresh user state when returning from background
+        const handleFocus = () => {
+            console.log('[DEBUG] Window focused, checking user state');
+            if (window.Telegram?.WebApp?.initData) {
+                refreshUser();
+            }
+        };
+
+        window.addEventListener('focus', handleFocus);
+        return () => window.removeEventListener('focus', handleFocus);
     }, []);
 
     return (

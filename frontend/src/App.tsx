@@ -18,20 +18,29 @@ function App() {
         const initTMA = async () => {
             try {
                 // Initialize SDK components
-                if (miniApp.mount.isAvailable()) miniApp.mount();
-                if (miniApp.ready.isAvailable()) miniApp.ready();
+                console.log('[DEBUG] initTMA: Starting...');
+                if (miniApp.mount.isAvailable()) {
+                    miniApp.mount();
+                    console.log('[DEBUG] initTMA: miniApp mounted');
+                }
+                if (miniApp.ready.isAvailable()) {
+                    miniApp.ready();
+                    console.log('[DEBUG] initTMA: miniApp ready');
+                }
 
                 // Use Viewport for true full-screen/expanded state
                 if (viewport.mount.isAvailable()) {
                     try {
                         if (!viewport.isMounted()) {
                             await viewport.mount();
+                            console.log('[DEBUG] initTMA: viewport mounted');
                         }
 
                         // Small delay then expand
                         setTimeout(() => {
                             if (viewport.expand.isAvailable() && !viewport.isExpanded()) {
                                 viewport.expand();
+                                console.log('[DEBUG] initTMA: viewport expanded');
                             }
                         }, 100);
                     } catch (e) {
@@ -42,6 +51,7 @@ function App() {
                 // Fallback for older environments
                 if (window.Telegram?.WebApp) {
                     window.Telegram.WebApp.ready();
+                    console.log('[DEBUG] initTMA: WebApp ready (fallback)');
                     if ((window.Telegram.WebApp as any).requestFullscreen) {
                         (window.Telegram.WebApp as any).requestFullscreen();
                     } else {
@@ -52,7 +62,9 @@ function App() {
                 // Mount back button once
                 if (backButton.mount.isAvailable()) {
                     backButton.mount();
+                    console.log('[DEBUG] initTMA: backButton mounted');
                 }
+                console.log('[DEBUG] initTMA: Complete');
             } catch (e) {
                 console.log('Not in TMA environment or SDK error:', e);
             }
