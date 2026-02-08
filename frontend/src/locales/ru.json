@@ -44,7 +44,7 @@
             "global_partners": "Глобальных партнеров",
             "volume_shifted": "Объем оборота",
             "countries_active": "стран активно",
-            "recent_join": "<span className=\"text-(--color-text-primary) font-black\">+{{count}} новых партнеров</span> присоединились к движению за последние 60м"
+            "recent_join": "<0>+{{count}} новых партнеров</0> присоединились к движению за последние 60м"
         },
         "ticker": [
             "ЗАРАБАТЫВАЙ ТОКЕНЫ PINTOPAY",
