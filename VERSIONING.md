@@ -6,10 +6,10 @@ This project follows [Semantic Versioning (SemVer)](https://semver.org/) and use
 
 1.  **Code Modifications**: Make your changes in the codebase.
 2.  **Test**: Ensure changes are stable (verify locally).
-3.  **Update Changelog**:
-    -   Edit `CHANGELOG.md` under the `[Unreleased]` section (or create a new version header if releasing).
-    -   Describe changes under: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`.
-4.  **Bump Version**:
+4.  **Update Changelog & Section History**:
+    -   **Global Changes**: Edit `CHANGELOG.md` under the `[Unreleased]` section.
+    -   **Detailed Section Changes**: Edit `SECTION_HISTORY.md` under the specific component header (e.g., "Income Potential"). Add detailed comments about design decisions, bug fixes, and specific lines of code if necessary.
+5.  **Bump Version**:
     -   Update `version` in `frontend/package.json`.
     -   Update `version` in `backend/pyproject.toml`.
 5.  **Commit**:
