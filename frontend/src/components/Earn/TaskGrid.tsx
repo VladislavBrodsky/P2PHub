@@ -4,6 +4,8 @@ import { TaskCard } from './TaskCard';
 interface TaskGridProps {
     tasks: Task[];
     completedTaskIds: string[];
+    verifyingTasks: Record<string, number>;
+    claimableTasks: string[];
     currentLevel: number;
     referrals: number;
     onTaskClick: (task: Task) => void;
@@ -13,6 +15,8 @@ interface TaskGridProps {
 export const TaskGrid = ({
     tasks,
     completedTaskIds,
+    verifyingTasks,
+    claimableTasks,
     currentLevel,
     referrals,
     onTaskClick,
@@ -44,11 +48,15 @@ export const TaskGrid = ({
                 {sortedTasks.map((task) => {
                     const isLocked = currentLevel < task.minLevel;
                     const isCompleted = completedTaskIds.includes(task.id);
+                    const isVerifying = !!verifyingTasks[task.id];
+                    const isClaimableTimed = claimableTasks.includes(task.id);
 
-                    let status: 'LOCKED' | 'AVAILABLE' | 'CLAIMABLE' | 'COMPLETED' = 'AVAILABLE';
+                    let status: 'LOCKED' | 'AVAILABLE' | 'VERIFYING' | 'CLAIMABLE' | 'COMPLETED' = 'AVAILABLE';
 
                     if (isCompleted) status = 'COMPLETED';
                     else if (isLocked) status = 'LOCKED';
+                    else if (isVerifying) status = 'VERIFYING';
+                    else if (isClaimableTimed) status = 'CLAIMABLE';
                     else if (task.type === 'referral') {
                         if (referrals >= (task.requirement || 0)) status = 'CLAIMABLE';
                         else status = 'AVAILABLE';
@@ -60,6 +68,7 @@ export const TaskGrid = ({
                             task={task}
                             status={status}
                             userReferrals={referrals}
+                            countdown={verifyingTasks[task.id]}
                             onClick={() => onTaskClick(task)}
                             onClaim={() => onClaim(task)}
                         />

@@ -20,6 +20,8 @@ export default function ReferralPage() {
     // Local State for Instant Feedback
     const [tasksList, setTasksList] = useState<Task[]>(EARN_TASKS);
     const [completedTaskIds, setCompletedTaskIds] = useState<string[]>([]);
+    const [verifyingTasks, setVerifyingTasks] = useState<Record<string, number>>({});
+    const [claimableTasks, setClaimableTasks] = useState<string[]>([]);
     const [levelUp, setLevelUp] = useState(false);
     const [confettiActive, setConfettiActive] = useState(false);
     const [showQR, setShowQR] = useState(false);
@@ -45,12 +47,49 @@ export default function ReferralPage() {
     const VIRAL_SUBTITLE = t('referral.viral.subtitle');
     const VIRAL_TEXT = t('referral.viral.text');
 
-    // Load completed tasks from storage on mount
+    // Load states from storage on mount
     useEffect(() => {
         const stored = localStorage.getItem('p2p_completed_tasks');
         if (stored) {
             setCompletedTaskIds(JSON.parse(stored));
         }
+        const storedClaimable = localStorage.getItem('p2p_claimable_tasks');
+        if (storedClaimable) {
+            setClaimableTasks(JSON.parse(storedClaimable));
+        }
+    }, []);
+
+    // Timer Logic for Verification
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setVerifyingTasks(prev => {
+                const next = { ...prev };
+                let changed = false;
+
+                Object.keys(next).forEach(taskId => {
+                    if (next[taskId] > 1) {
+                        next[taskId] -= 1;
+                        changed = true;
+                    } else {
+                        // Move to claimable
+                        delete next[taskId];
+                        setClaimableTasks(p => {
+                            if (!p.includes(taskId)) {
+                                const updated = [...p, taskId];
+                                localStorage.setItem('p2p_claimable_tasks', JSON.stringify(updated));
+                                return updated;
+                            }
+                            return p;
+                        });
+                        changed = true;
+                    }
+                });
+
+                return changed ? next : prev;
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
     }, []);
 
     // Handle Task Claiming Logic
@@ -65,10 +104,15 @@ export default function ReferralPage() {
         setCompletedTaskIds(newCompleted);
         localStorage.setItem('p2p_completed_tasks', JSON.stringify(newCompleted));
 
-        // 2. Award XP
+        // 2. Remove from claimable
+        const newClaimable = claimableTasks.filter(id => id !== task.id);
+        setClaimableTasks(newClaimable);
+        localStorage.setItem('p2p_claimable_tasks', JSON.stringify(newClaimable));
+
+        // 3. Award XP
         updateUser?.({ xp: currentXP + task.reward });
 
-        // 3. Check Level Up
+        // 4. Check Level Up
         const nextLevelXP = currentLevel * 100;
         if ((currentXP + task.reward) >= nextLevelXP) {
             setLevelUp(true);
@@ -85,6 +129,11 @@ export default function ReferralPage() {
         if (task.link) {
             selection();
             window.open(task.link, '_blank');
+
+            // Start verification if not already completed or verifying
+            if (!completedTaskIds.includes(task.id) && !verifyingTasks[task.id] && !claimableTasks.includes(task.id)) {
+                setVerifyingTasks(prev => ({ ...prev, [task.id]: 15 }));
+            }
         }
     };
     const handleCopyLink = () => {
@@ -311,6 +360,8 @@ export default function ReferralPage() {
             <TaskGrid
                 tasks={localizedTasks}
                 completedTaskIds={completedTaskIds}
+                verifyingTasks={verifyingTasks}
+                claimableTasks={claimableTasks}
                 currentLevel={currentLevel}
                 referrals={referrals}
                 onTaskClick={handleTaskClick}

@@ -5,13 +5,14 @@ import { useTranslation } from 'react-i18next';
 
 interface TaskCardProps {
     task: Task;
-    status: 'LOCKED' | 'AVAILABLE' | 'CLAIMABLE' | 'COMPLETED';
+    status: 'LOCKED' | 'AVAILABLE' | 'VERIFYING' | 'CLAIMABLE' | 'COMPLETED';
     userReferrals: number;
+    countdown?: number;
     onClick?: () => void;
     onClaim?: () => void;
 }
 
-export const TaskCard = ({ task, status, userReferrals, onClick, onClaim }: TaskCardProps) => {
+export const TaskCard = ({ task, status, userReferrals, countdown, onClick, onClaim }: TaskCardProps) => {
     const { t } = useTranslation();
 
     // Status Logic
@@ -24,6 +25,7 @@ export const TaskCard = ({ task, status, userReferrals, onClick, onClaim }: Task
     const variants = {
         LOCKED: 'opacity-50 grayscale cursor-not-allowed border-white/10 bg-black/20',
         AVAILABLE: 'glass-panel hover:border-blue-500/50 hover:bg-white/5 cursor-pointer text-(--color-text-primary)',
+        VERIFYING: 'glass-panel border-blue-500/30 bg-blue-500/5 cursor-wait',
         CLAIMABLE: 'glass-panel border-emerald-500/50 bg-emerald-500/10 shadow-[0_0_20px_rgba(16,185,129,0.2)] animate-pulse',
         COMPLETED: 'glass-panel border-green-500/20 bg-green-500/5 cursor-default'
     };
@@ -49,7 +51,11 @@ export const TaskCard = ({ task, status, userReferrals, onClick, onClaim }: Task
             <div className="flex items-start justify-between gap-4">
                 {/* Icon */}
                 <div className={`p-3 rounded-xl border ${isClaimable ? 'bg-emerald-500 text-white border-emerald-400' : 'bg-brand-muted/10 border-brand-muted/5 text-brand-muted'}`}>
-                    <task.icon className="w-5 h-5" />
+                    {status === 'VERIFYING' ? (
+                        <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                        <task.icon className="w-5 h-5" />
+                    )}
                 </div>
 
                 {/* Content */}
@@ -109,6 +115,11 @@ export const TaskCard = ({ task, status, userReferrals, onClick, onClaim }: Task
                             <CheckCircle2 className="w-4 h-4" />
                             {t('tasks.claim')}
                         </button>
+                    ) : status === 'VERIFYING' ? (
+                        <div className="flex items-center gap-2 text-[10px] font-bold text-blue-400 uppercase tracking-wider">
+                            <span className="animate-pulse">Verifying...</span>
+                            <span className="font-mono bg-blue-500/10 px-1.5 py-0.5 rounded text-[9px]">{countdown}s</span>
+                        </div>
                     ) : (
                         <div className="flex items-center gap-1 text-[10px] font-bold text-blue-400 uppercase tracking-wider group-hover:gap-2 transition-all">
                             {t('tasks.start')} <ArrowRight className="w-3 h-3" />
