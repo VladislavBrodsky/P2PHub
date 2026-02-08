@@ -9,12 +9,14 @@ import { useHaptic } from '../hooks/useHaptic';
 import { Sparkles } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { getRank, getXPProgress } from '../utils/ranking';
+import { useTranslation, Trans } from 'react-i18next';
 
 interface DashboardProps {
     setActiveTab?: (tab: string) => void;
 }
 
 export default function Dashboard({ setActiveTab }: DashboardProps) {
+    const { t } = useTranslation();
     const { selection } = useHaptic();
     const { user, isLoading: isUserLoading } = useUser();
 
@@ -68,11 +70,11 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                         >
                             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">
-                                The Financial Reset
+                                {t('dashboard.hero_badge')}
                             </p>
                         </motion.div>
                         <h1 className="text-4xl font-extrabold tracking-tighter text-text-primary leading-[1.1]">
-                            The World is Shifting.<br />
+                            {t('dashboard.hero_title_1')}<br />
                             <motion.span
                                 className="inline-block mt-1"
                                 style={{
@@ -99,7 +101,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                     }
                                 }}
                             >
-                                Own the Future.
+                                {t('dashboard.hero_title_2')}
                             </motion.span>
                         </h1>
                     </div>
@@ -111,7 +113,9 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
                     <div className="space-y-6">
                         <p className="text-text-secondary mx-auto max-w-[340px] text-xs font-semibold leading-relaxed opacity-80 px-4">
-                            Traditional finance is slow, closed, and failing. <strong className="text-text-primary font-black">Pintopay</strong> is the bridge to a borderless era where you earn from the flow of global money.
+                            <Trans i18nKey="dashboard.hero_desc">
+                                Traditional finance is slow, closed, and failing. <strong className="text-text-primary font-black">Pintopay</strong> is the bridge to a borderless era where you earn from the flow of global money.
+                            </Trans>
                         </p>
                     </div>
                 </div>
@@ -140,14 +144,13 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             {/* 6. Final CTA */}
             <motion.div variants={item} className="px-6 text-center py-12 space-y-6">
                 <div className="p-2 px-6 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-[0.3em] w-fit mx-auto border border-blue-500/20 shadow-lg">
-                    Movement Active: 142 Countries
+                    {t('dashboard.movement_active')}
                 </div>
-                <h4 className="text-2xl font-black tracking-tight text-text-primary">
-                    Ready to build your <br />
-                    global infrastructure?
+                <h4 className="text-2xl font-black tracking-tight text-text-primary whitespace-pre-line">
+                    {t('dashboard.cta_title')}
                 </h4>
                 <p className="text-xs font-bold text-text-secondary max-w-[240px] mx-auto leading-relaxed">
-                    Join the elite network of partners reclaiming financial sovereignty.
+                    {t('dashboard.cta_desc')}
                 </p>
             </motion.div>
 

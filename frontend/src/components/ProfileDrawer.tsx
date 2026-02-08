@@ -10,7 +10,6 @@ import {
     Wallet,
     Sun,
     Moon,
-    Globe,
     Bell,
     MessageCircle,
     Copy,
@@ -296,8 +295,8 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                 <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-(--color-bg-surface)/80 backdrop-blur-md border border-(--color-border-glass) relative overflow-hidden">
                                     <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.2),transparent)] pointer-events-none" />
                                     {[
-                                        { id: 'en', icon: Globe, label: 'English', activeColor: 'rgba(59,130,246,0.1)', iconColor: '#3B82F6' },
-                                        { id: 'ru', icon: Globe, label: 'Russian', activeColor: 'rgba(239,68,68,0.1)', iconColor: '#EF4444' },
+                                        { id: 'en', flag: '🇺🇸', label: 'English', activeColor: 'rgba(59,130,246,0.1)' },
+                                        { id: 'ru', flag: '🇷🇺', label: 'Russian', activeColor: 'rgba(239,68,68,0.1)' },
                                     ].map((option) => (
                                         <button
                                             key={option.id}
@@ -314,6 +313,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                                     style={{ backgroundColor: option.activeColor }}
                                                 />
                                             )}
+                                            <span className="text-xl filter drop-shadow-sm">{option.flag}</span>
                                             <span className="text-[10px] font-black uppercase tracking-widest relative z-10">{option.label}</span>
                                         </button>
                                     ))}

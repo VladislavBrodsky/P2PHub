@@ -31,5 +31,21 @@
         "early": "You are early!",
         "join": "Join the revolution",
         "start": "Start your journey"
+    },
+    "dashboard": {
+        "hero_badge": "The Financial Reset",
+        "hero_title_1": "The World is Shifting.",
+        "hero_title_2": "Own the Future.",
+        "hero_desc": "Traditional finance is slow, closed, and failing. <1>Pintopay</1> is the bridge to a borderless era where you earn from the flow of global money.",
+        "movement_active": "Movement Active: 142 Countries",
+        "cta_title": "Ready to build your \nglobal infrastructure?",
+        "cta_desc": "Join the elite network of partners reclaiming financial sovereignty."
+    },
+    "nav": {
+        "home": "Home",
+        "cards": "Cards",
+        "partner": "Partner",
+        "league": "League",
+        "earn": "Earn"
     }
 }
