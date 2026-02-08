@@ -24,43 +24,43 @@ export const EarnHeader = () => {
             <div className="relative z-10 flex flex-col items-center text-center space-y-6 bg-white/[0.02] backdrop-blur-3xl rounded-[2.3rem] p-6 border border-white/5">
 
                 {/* Level Circle - Quantum Design */}
-                <div className="relative w-36 h-36 flex items-center justify-center">
+                <div className="relative w-28 h-28 flex items-center justify-center">
                     {/* Outer Glow Ring */}
                     <div className="absolute inset-0 rounded-full border border-blue-500/20 shadow-[0_0_40px_rgba(59,130,246,0.1)] active:scale-95 transition-transform duration-500" />
 
                     {/* Progress Ring Background */}
                     <svg className="absolute inset-0 w-full h-full -rotate-90 scale-95 opacity-50">
                         <circle
-                            cx="72"
-                            cy="72"
-                            r="64"
+                            cx="56"
+                            cy="56"
+                            r="48"
                             fill="none"
                             stroke="rgba(255,255,255,0.05)"
-                            strokeWidth="10"
+                            strokeWidth="8"
                         />
                         {/* Progress Ring Value with Glow */}
                         <motion.circle
-                            cx="72"
-                            cy="72"
-                            r="64"
+                            cx="56"
+                            cy="56"
+                            r="48"
                             fill="none"
                             stroke={rank.badgeColor}
-                            strokeWidth="10"
-                            strokeDasharray="402"
-                            strokeDashoffset={402 - (402 * progress.percent) / 100}
+                            strokeWidth="8"
+                            strokeDasharray="302"
+                            strokeDashoffset={302 - (302 * progress.percent) / 100}
                             strokeLinecap="round"
-                            initial={{ strokeDashoffset: 402 }}
-                            animate={{ strokeDashoffset: 402 - (402 * progress.percent) / 100 }}
+                            initial={{ strokeDashoffset: 302 }}
+                            animate={{ strokeDashoffset: 302 - (302 * progress.percent) / 100 }}
                             transition={{ duration: 2, ease: "circOut" }}
                             className="drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
                         />
                     </svg>
 
                     {/* Level Display Center */}
-                    <div className="flex flex-col items-center justify-center bg-bg-app w-28 h-28 rounded-full border-4 border-white/5 shadow-[inset_0_2px_10px_rgba(0,0,0,0.1)] relative overflow-hidden group">
+                    <div className="flex flex-col items-center justify-center bg-bg-app w-20 h-20 rounded-full border-4 border-white/5 shadow-[inset_0_2px_10px_rgba(0,0,0,0.1)] relative overflow-hidden group">
                         <div className="absolute inset-0 bg-linear-to-b from-white/5 to-transparent pointer-events-none" />
-                        <span className="text-[10px] font-black text-brand-muted uppercase tracking-[0.2em] mb-1">{t('earn_header.level')}</span>
-                        <span className="text-5xl font-black text-text-primary leading-none tracking-tighter drop-shadow-sm">{level}</span>
+                        <span className="text-[8px] font-black text-brand-muted uppercase tracking-[0.2em] mb-0.5">{t('earn_header.level')}</span>
+                        <span className="text-3xl font-black text-text-primary leading-none tracking-tighter drop-shadow-sm">{level}</span>
                     </div>
 
                     {/* Rank Badge - Metallic Shimmer */}

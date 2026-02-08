@@ -56,7 +56,7 @@ export const TaskCard = ({ task, status, userReferrals, onClick, onClaim }: Task
                 <div className="flex-1 space-y-1">
                     <div className="flex justify-between items-start">
                         <h4 className="text-sm font-bold text-(--color-text-primary) line-clamp-1">{task.title}</h4>
-                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${isClaimable ? 'bg-white text-emerald-600' : 'bg-brand-muted/10 text-brand-muted'}`}>
+                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${isClaimable ? 'bg-white text-emerald-600' : 'bg-yellow-500/10 text-yellow-500'}`}>
                             +{task.reward} XP
                         </span>
                     </div>
