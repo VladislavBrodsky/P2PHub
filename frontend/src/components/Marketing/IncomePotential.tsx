@@ -58,15 +58,15 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                 <div className="space-y-6 relative z-10">
                     <motion.div
-                        className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/5 backdrop-blur-sm px-4 py-2"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/30 bg-blue-500/5 backdrop-blur-sm px-3 py-1.5"
                         animate={{
                             boxShadow: ["0 0 0px rgba(59, 130, 246, 0)", "0 0 15px rgba(59, 130, 246, 0.4)", "0 0 0px rgba(59, 130, 246, 0)"],
                             borderColor: ["rgba(59, 130, 246, 0.3)", "rgba(59, 130, 246, 0.8)", "rgba(59, 130, 246, 0.3)"]
                         }}
                         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                     >
-                        <TrendingUp className="w-4 h-4 text-blue-500" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">
+                        <TrendingUp className="w-3.5 h-3.5 text-blue-500" />
+                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500">
                             {t('income.badge')}
                         </span>
                     </motion.div>
