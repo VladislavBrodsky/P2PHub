@@ -23,30 +23,11 @@ export const EarnHeader = () => {
 
             <div className="relative z-10 flex flex-col items-center text-center space-y-6 bg-white/2 backdrop-blur-3xl rounded-[2.3rem] p-6 border border-white/5">
 
-                {/* Level Circle - Quantum Design */}
+                {/* Level Circle - Simplified Design */}
                 <div className="relative flex flex-col items-center justify-center pt-4 pb-8">
                     <div className="relative w-32 h-32 flex items-center justify-center">
-                        {/* Outer Glow Ring */}
-                        <div className="absolute inset-0 rounded-full border border-blue-500/20 shadow-[0_0_50px_rgba(59,130,246,0.15)] active:scale-95 transition-transform duration-500" />
-
                         {/* Progress Ring Background */}
                         <svg className="absolute inset-0 w-full h-full -rotate-90 scale-95">
-                            <defs>
-                                <linearGradient id="liquid-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stopColor={rank.badgeColor} />
-                                    <stop offset="50%" stopColor={level >= 50 ? '#FEF3C7' : '#F8FAFC'} />
-                                    <stop offset="100%" stopColor={rank.badgeColor} />
-                                    {/* Rotate the gradient for "vibing" liquid effect */}
-                                    <animateTransform
-                                        attributeName="gradientTransform"
-                                        type="rotate"
-                                        from="0 0.5 0.5"
-                                        to="360 0.5 0.5"
-                                        dur="3s"
-                                        repeatCount="indefinite"
-                                    />
-                                </linearGradient>
-                            </defs>
                             <circle
                                 cx="64"
                                 cy="64"
@@ -56,40 +37,26 @@ export const EarnHeader = () => {
                                 strokeWidth="8"
                                 strokeLinecap="round"
                             />
-                            {/* Progress Ring Value with Liquid Gradient */}
+                            {/* Progress Ring Value (Simple Gray) */}
                             <motion.circle
                                 cx="64"
                                 cy="64"
                                 r="56"
                                 fill="none"
-                                stroke="url(#liquid-gradient)"
+                                stroke="#94A3B8"
                                 strokeWidth="8"
                                 strokeDasharray="351"
                                 strokeDashoffset={351 - (351 * progress.percent) / 100}
                                 strokeLinecap="round"
                                 initial={{ strokeDashoffset: 351 }}
                                 animate={{ strokeDashoffset: 351 - (351 * progress.percent) / 100 }}
-                                transition={{ duration: 2, ease: "circOut" }}
-                                className="drop-shadow-[0_0_15px_rgba(59,130,246,0.4)]"
+                                transition={{ duration: 1.5, ease: "easeOut" }}
                             />
                         </svg>
 
-                        {/* Level Display Center - Liquid Crystal Effect */}
-                        <div className="flex flex-col items-center justify-center w-24 h-24 rounded-full relative overflow-hidden group shadow-[0_0_30px_rgba(59,130,246,0.15)] bg-slate-100/50 dark:bg-black/40 backdrop-blur-xl border border-white/10 z-10">
-                            {/* Liquid Gradient Background */}
-                            <div className="absolute inset-0 bg-linear-to-br from-blue-400/20 via-cyan-400/20 to-transparent animate-liquid-slow pointer-events-none" />
-
-                            {/* Crystal Reflection Overlay (Personalization Style) */}
-                            <div className="absolute inset-0 bg-linear-to-b from-white/30 to-transparent pointer-events-none rounded-full" />
-
-                            {/* Shimmer Animation */}
-                            <motion.div
-                                animate={{ x: ['-100%', '200%'] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                                className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent pointer-events-none"
-                            />
-
-                            <div className="relative z-10 flex flex-col items-center">
+                        {/* Level Display Center - Clean (No Background) */}
+                        <div className="relative z-10 flex flex-col items-center justify-center w-24 h-24">
+                            <div className="flex flex-col items-center">
                                 <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.25em] mb-0.5 drop-shadow-sm">{t('earn_header.level')}</span>
                                 <span className="text-5xl font-black bg-linear-to-b from-slate-800 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent leading-none tracking-tighter drop-shadow-sm filter">{level}</span>
                             </div>
