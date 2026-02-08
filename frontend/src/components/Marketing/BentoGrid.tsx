@@ -63,54 +63,78 @@ export const BentoGrid = () => {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {shiftSteps.map((step, index) => (
-                    <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.1 }}
-                        whileHover={{ y: -8, scale: 1.01, transition: { type: "spring", stiffness: 400, damping: 20 } }}
-                        className={`relative group overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) p-6 glass-panel-premium transition-all duration-300 md:${step.size} ${step.featured ? 'border-blue-500/30' : ''}`}
-                    >
-                        <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
+            {/* Carousel Container */}
+            <div className="relative">
+                <div className="flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory no-scrollbar px-4 -mx-4 md:mx-0 md:px-0">
+                    {shiftSteps.map((step, index) => (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, x: 50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.1 }}
+                            className={`relative group flex-shrink-0 w-[85vw] md:w-[400px] snap-center overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) p-6 glass-panel-premium transition-all duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
+                        >
+                            <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
 
-                        <div className="relative z-10 space-y-4">
-                            <div className="flex items-center justify-between">
-                                <div className="p-3 w-fit rounded-2xl bg-(--color-bg-app)/50 dark:bg-black/40 backdrop-blur-xl border border-(--color-border-glass) shadow-lg transition-transform group-hover:scale-110">
-                                    {step.icon}
+                            <div className="relative z-10 space-y-4 h-full flex flex-col">
+                                <div className="flex items-center justify-between">
+                                    <div className="p-3 w-fit rounded-2xl bg-(--color-bg-app)/50 dark:bg-black/40 backdrop-blur-xl border border-(--color-border-glass) shadow-lg transition-transform group-hover:scale-110">
+                                        {step.icon}
+                                    </div>
+                                    <span className={`text-[9px] font-black px-2.5 py-1 rounded-full ${step.statusColor} tracking-widest`}>
+                                        {t(`evolution.steps.${step.id}.status`)}
+                                    </span>
                                 </div>
-                                <span className={`text-[9px] font-black px-2.5 py-1 rounded-full ${step.statusColor} tracking-widest`}>
-                                    {t(`evolution.steps.${step.id}.status`)}
-                                </span>
-                            </div>
 
-                            <div className="space-y-1">
-                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary) opacity-60">
-                                    {t(`evolution.steps.${step.id}.title`)}
+                                <div className="space-y-1">
+                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary) opacity-60">
+                                        {t(`evolution.steps.${step.id}.title`)}
+                                    </p>
+                                    <h4 className={`text-xl font-black leading-tight ${step.featured ? 'text-blue-500' : 'text-(--color-text-primary)'}`}>
+                                        {t(`evolution.steps.${step.id}.subtitle`)}
+                                    </h4>
+                                </div>
+
+                                <p className="text-xs font-semibold leading-relaxed text-(--color-text-secondary) opacity-80 flex-grow">
+                                    {t(`evolution.steps.${step.id}.desc`)}
                                 </p>
-                                <h4 className={`text-xl font-black leading-tight ${step.featured ? 'text-blue-500' : 'text-(--color-text-primary)'}`}>
-                                    {t(`evolution.steps.${step.id}.subtitle`)}
-                                </h4>
                             </div>
 
-                            <p className="text-xs font-semibold leading-relaxed text-(--color-text-secondary) opacity-80">
-                                {t(`evolution.steps.${step.id}.desc`)}
-                            </p>
-                        </div>
+                            {step.featured && (
+                                <motion.div
+                                    className="absolute -right-2 -bottom-2 opacity-5 pointer-events-none"
+                                    animate={{ rotate: 360 }}
+                                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                                >
+                                    <Zap className="w-40 h-40 text-blue-500" fill="currentColor" />
+                                </motion.div>
+                            )}
+                        </motion.div>
+                    ))}
+                </div>
 
-                        {step.featured && (
-                            <motion.div
-                                className="absolute -right-2 -bottom-2 opacity-5 pointer-events-none"
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                            >
-                                <Zap className="w-40 h-40 text-blue-500" fill="currentColor" />
-                            </motion.div>
-                        )}
-                    </motion.div>
-                ))}
+                {/* Progress Slider */}
+                <div className="mt-8 px-4">
+                    <div className="h-1.5 w-full max-w-xs mx-auto bg-slate-900/5 dark:bg-white/5 rounded-full overflow-hidden">
+                        <motion.div
+                            className="h-full bg-blue-500 rounded-full"
+                            style={{ width: '20%' }} // Placeholder for scroll progress logic if needed, but simple layout for now.
+                            animate={{
+                                x: [0, 100, 0],
+                                width: ['20%', '20%', '20%']
+                            }}
+                            transition={{
+                                repeat: Infinity,
+                                duration: 3,
+                                ease: "easeInOut"
+                            }}
+                        />
+                    </div>
+                    <p className="text-center text-[10px] font-bold text-brand-muted mt-2 uppercase tracking-widest opacity-60">
+                        Swipe to Explore
+                    </p>
+                </div>
             </div>
         </section>
     );
