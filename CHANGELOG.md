@@ -1,0 +1,27 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.1.0] - 2026-02-08
+
+### Added
+- **Premium Modals**: Redesigned "Market Opportunity" and "24/7 Revenue" modals with viral/FOMO content gradients.
+- **Commission Details**: Added specific breakdown (30% Card Sales, 0.3% Top-ups, 30% Network) to Revenue modal.
+- **Database Seeding**: Added `backend/seed_partners.py` to populate initial partner data.
+
+### Changed
+- **UI Compactness**: Reduced size of "Profit Potential" toggle and "Partner Advantage" badge for a sleeker look.
+- **Bot Logic**: Confirmed bot referrals use the shared database; seeding fixed empty feed issues.
+
+### Fixed
+- **Invisible Text**: Fixed "Cost of Waiting" text visibility on white backgrounds by replacing `animate-shimmer` with `text-animate-shimmer`.
+- **Feed**: "Recent Partners" section now correctly displays data instead of placeholders.
+
+## [1.0.0] - 2026-02-07
+### Initial Release
+- Core P2P Partner Hub functionality.
+- Dashboard, Earnings, and Profile sections.
+- Telegram Mini App integration.
