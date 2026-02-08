@@ -275,7 +275,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                     >
                                         <div className="flex items-center justify-between relative z-10">
                                             <div className="flex items-center gap-3">
-                                                <div className={`rounded-xl p-2 ${wallet ? 'bg-white/20' : 'bg-slate-900/50 border border-white/5'}`}>
+                                                <div className={`rounded-xl p-2 ${wallet ? 'bg-white/20' : 'bg-blue-500/10 border border-blue-500/20'}`}>
                                                     <Wallet className={`h-5 w-5 ${wallet ? 'text-white' : 'text-blue-500'}`} />
                                                 </div>
                                                 <div className="text-left">
