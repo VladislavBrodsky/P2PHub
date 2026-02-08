@@ -87,18 +87,22 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 {xpProgress.current} <span className="text-(--color-text-secondary) font-medium">/</span> {xpProgress.total}
                             </span>
                         </div>
-                        <div className="h-2 w-full bg-slate-900/50 rounded-full overflow-hidden p-0.5 border border-white/5 backdrop-blur-sm shadow-inner relative">
+                        <div className="h-3 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-black/5 dark:border-white/5 shadow-inner relative">
                             <motion.div
                                 initial={{ width: 0 }}
                                 animate={{ width: `${xpProgress.percent}%` }}
                                 transition={{ duration: 1.5, ease: 'circOut' }}
-                                className="h-full rounded-full shadow-sm relative overflow-hidden"
-                                style={{ backgroundColor: currentRank.badgeColor }}
+                                className="h-full rounded-full relative overflow-hidden"
+                                style={{
+                                    backgroundColor: currentRank.badgeColor,
+                                    boxShadow: `0 0 12px ${currentRank.badgeColor}60`
+                                }}
                             >
+                                <div className="absolute inset-0 bg-linear-to-b from-white/30 to-transparent" />
                                 <motion.div
                                     animate={{ x: ['-100%', '200%'] }}
                                     transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-                                    className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent"
+                                    className="absolute inset-0 bg-linear-to-r from-transparent via-white/50 to-transparent"
                                 />
                             </motion.div>
                         </div>
