@@ -128,16 +128,14 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 <span className="text-2xl font-black text-emerald-500">${estimatedMonthly}</span>
                                             </div>
 
-                                            {/* UNLOCK STRATEGY BUTTON */}
+                                            {/* UNLOCK STRATEGY BUTTON REDESIGN */}
                                             <button
                                                 onClick={handleUnlock}
-                                                className="w-full group relative flex items-center justify-center gap-3 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white h-14 rounded-2xl font-black text-xs tracking-widest shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all overflow-hidden"
+                                                className="w-full group relative flex items-center justify-center gap-2 acid-yellow-gradient h-11 rounded-full font-black text-[11px] tracking-widest shadow-xl shadow-lime-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid animate-vibing"
                                             >
-                                                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                                                <Lock className="w-4 h-4 group-hover:unlock transition-all" />
+                                                <Lock className="w-3.5 h-3.5 mb-0.5" />
                                                 UNLOCK $1 STRATEGY
-                                                <div className="absolute inset-0 rounded-2xl ring-2 ring-white/20 group-hover:ring-white/40 transition-all" />
-                                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                                                <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/30 to-white/0 -translate-x-full group-hover:animate-shimmer" />
                                             </button>
                                         </div>
                                     </motion.div>
