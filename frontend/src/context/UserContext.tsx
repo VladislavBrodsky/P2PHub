@@ -27,14 +27,27 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [user, setUser] = useState<User | null>(() => {
+        const saved = localStorage.getItem('p2p_user_cache');
+        return saved ? JSON.parse(saved) : null;
+    });
+    const [isLoading, setIsLoading] = useState(!user);
+    const lastRefresh = React.useRef(0);
 
     const updateUser = (updates: Partial<User>) => {
-        setUser(prev => prev ? { ...prev, ...updates } : null);
+        setUser(prev => {
+            const next = prev ? { ...prev, ...updates } : null;
+            if (next) localStorage.setItem('p2p_user_cache', JSON.stringify(next));
+            return next;
+        });
     };
 
     const refreshUser = async () => {
+        const now = Date.now();
+        // Throttle refreshes to once every 10 seconds unless forced
+        if (now - lastRefresh.current < 10000) return;
+        lastRefresh.current = now;
+
         let tgUser: any = null;
         try {
             // Use SDK to get initData more reliably
@@ -64,40 +77,25 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
             console.log('[DEBUG] refreshUser: Success:', userData.first_name);
             setUser(userData);
+            localStorage.setItem('p2p_user_cache', JSON.stringify(userData));
         } catch (error) {
             console.error('[DEBUG] refreshUser: Failed:', error);
-            // Fallback mock for local development if backend fails or initData is missing
             // Fallback: If backend fails, use Telegram SDK data for UI personalization (Optimistic UI)
-            if (tgUser) {
-                console.log('[DEBUG] refreshUser: Backend failed, using Telegram SDK data for UI');
-                setUser({
+            if (tgUser && !user) {
+                const fallbackUser = {
                     id: tgUser.id,
                     telegram_id: String(tgUser.id),
                     username: tgUser.username || null,
                     first_name: tgUser.firstName,
                     last_name: tgUser.lastName || null,
                     photo_url: tgUser.photoUrl || null,
-                    balance: 0, // Default for offline/unverified state
+                    balance: 0,
                     level: 1,
                     xp: 0,
                     referral_code: 'UNVERIFIED',
                     referrals: []
-                });
-            } else if (!user) {
-                // Only use "Partner Dev" if NO Telegram data is available (e.g. browser testing)
-                setUser({
-                    id: 0,
-                    telegram_id: '0',
-                    username: 'partner',
-                    first_name: 'Partner',
-                    last_name: 'Dev',
-                    photo_url: null,
-                    balance: 0,
-                    level: 1,
-                    xp: 0,
-                    referral_code: 'P2P-DEV',
-                    referrals: []
-                });
+                };
+                setUser(fallbackUser);
             }
         } finally {
             setIsLoading(false);
@@ -106,12 +104,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         const init = async () => {
-            setIsLoading(true);
             try {
                 // Fast path for local development
                 if (import.meta.env.DEV && !window.Telegram?.WebApp?.initData) {
                     console.log('[DEBUG] Dev mode detected, mocking user immediately');
-                    setUser({
+                    const devUser = {
                         id: 999,
                         telegram_id: '123456789',
                         username: 'dev_partner',
@@ -123,7 +120,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         xp: 150,
                         referral_code: 'DEV-TEST',
                         referrals: []
-                    });
+                    };
+                    setUser(devUser);
                     setIsLoading(false);
                     return;
                 }
@@ -134,34 +132,30 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     try {
                         if (window.Telegram?.WebApp?.initData) {
                             await refreshUser();
-                        } else if (attempts < 10) {
+                        } else if (attempts < 5) { // Reduced attempts to avoid long hangs
                             attempts++;
                             setTimeout(checkData, 500);
                         } else {
-                            console.log('[DEBUG] Max attempts reached, proceeding with refresh anyway');
+                            console.log('[DEBUG] Proceeding with refresh anyway');
                             await refreshUser();
                         }
                     } catch (e) {
-                        console.error('[DEBUG] checkData failed:', e);
                         setIsLoading(false);
                     }
                 };
 
                 checkData();
             } catch (e) {
-                console.error('[DEBUG] init failed:', e);
                 setIsLoading(false);
             }
         };
 
         init();
 
-        // Listen for window focus to potentially refresh user state when returning from background
+        // Throttled focus listener
         const handleFocus = () => {
             console.log('[DEBUG] Window focused, checking user state');
-            if (window.Telegram?.WebApp?.initData) {
-                refreshUser();
-            }
+            refreshUser();
         };
 
         window.addEventListener('focus', handleFocus);

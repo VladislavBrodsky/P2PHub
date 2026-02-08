@@ -3,6 +3,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.security import get_current_user
 from app.models.partner import Partner, get_session
 from sqlmodel import select
+from app.services.redis_service import redis_service
 import json
 import secrets
 
@@ -17,10 +18,8 @@ async def get_my_profile(
     # Parse Telegram user data
     try:
         if "user" in user_data:
-            # InitData from Mini App often has 'user' as a JSON string
             tg_user = json.loads(user_data["user"])
         else:
-            # Fallback or direct testing
             tg_user = user_data
             
         tg_id = str(tg_user.get("id"))
@@ -30,6 +29,17 @@ async def get_my_profile(
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to parse user data: {str(e)}")
 
+    # 1. Try Redis Cache first
+    cache_key = f"partner:profile:{tg_id}"
+    try:
+        cached_partner = await redis_service.get_json(cache_key)
+        if cached_partner:
+            print(f"[DEBUG] get_my_profile: Cache Hit for {tg_id}")
+            return cached_partner
+    except Exception as e:
+        print(f"[DEBUG] Redis Error (get): {e}")
+
+    # 2. Query DB
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
     partner = result.first()
@@ -40,7 +50,6 @@ async def get_my_profile(
         start_param = user_data.get("start_param")
         if start_param:
             try:
-                # Look up referrer by code
                 ref_stmt = select(Partner).where(Partner.referral_code == start_param)
                 ref_res = await session.exec(ref_stmt)
                 referrer = ref_res.first()
@@ -63,30 +72,32 @@ async def get_my_profile(
         await session.commit()
         await session.refresh(partner)
         
-        # OFFLOAD Notifications to Background
+        # Offload notifications
         from app.services.partner_service import process_referral_notifications
         from bot import bot
         background_tasks.add_task(process_referral_notifications, bot, partner, True)
     else:
-        # Update existing profile
+        # Update existing profile check
         has_changed = False
         if tg_user.get("username") != partner.username:
-            partner.username = tg_user.get("username")
-            has_changed = True
+            partner.username = tg_user.get("username"); has_changed = True
         if tg_user.get("first_name") != partner.first_name:
-            partner.first_name = tg_user.get("first_name")
-            has_changed = True
+            partner.first_name = tg_user.get("first_name"); has_changed = True
         if tg_user.get("last_name") != partner.last_name:
-            partner.last_name = tg_user.get("last_name")
-            has_changed = True
+            partner.last_name = tg_user.get("last_name"); has_changed = True
         if tg_user.get("photo_url") != partner.photo_url:
-            partner.photo_url = tg_user.get("photo_url")
-            has_changed = True
+            partner.photo_url = tg_user.get("photo_url"); has_changed = True
             
         if has_changed:
             session.add(partner)
             await session.commit()
             await session.refresh(partner)
+
+    # 3. Store in Redis Cache (expires in 5 minutes)
+    try:
+        await redis_service.set_json(cache_key, partner.dict(), expire=300)
+    except Exception:
+        pass
         
     return partner
 
@@ -94,6 +105,16 @@ async def get_my_profile(
 async def get_recent_partners(
     session: AsyncSession = Depends(get_session)
 ):
+    # 1. Try Redis Cache first
+    cache_key = "partners:recent"
+    try:
+        cached_partners = await redis_service.get_json(cache_key)
+        if cached_partners:
+            return cached_partners
+    except Exception:
+        pass
+
+    # 2. Query DB
     from datetime import datetime, timedelta
     one_hour_ago = datetime.utcnow() - timedelta(minutes=60)
     
@@ -101,10 +122,18 @@ async def get_recent_partners(
     result = await session.exec(statement)
     partners = result.all()
     
-    # If no partners in last hour, just return the last 4 registered anyway so the UI isn't empty
     if not partners:
         statement = select(Partner).order_by(Partner.created_at.desc()).limit(4)
         result = await session.exec(statement)
         partners = result.all()
+    
+    # Transform to dict for JSON serialization
+    partners_data = [p.dict() for p in partners]
+    
+    # 3. Cache in Redis (expires in 60 seconds)
+    try:
+        await redis_service.set_json(cache_key, partners_data, expire=60)
+    except Exception:
+        pass
         
-    return partners
+    return partners_data
