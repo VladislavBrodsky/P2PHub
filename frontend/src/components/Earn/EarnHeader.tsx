@@ -80,17 +80,18 @@ export const EarnHeader = () => {
                         </div>
                     </div>
 
-                    {/* Rank Badge - Compact & Separated */}
-                    <div className={`relative mt-3 px-4 py-1.5 rounded-full border border-white/20 shadow-lg shadow-slate-200/50 dark:shadow-black/50 overflow-hidden group backdrop-blur-md z-20 transition-transform hover:scale-105
+                    {/* Rank Badge - Compact & Separated (Refactored for Clean Borders) */}
+                    <div className={`relative mt-4 px-4 py-1.5 rounded-full border border-white/20 shadow-lg shadow-slate-200/50 dark:shadow-black/50 group backdrop-blur-md z-20 transition-transform hover:scale-105
                         ${level >= 50 ? 'bg-linear-to-r from-amber-300/90 via-yellow-400/90 to-amber-500/90' : 'bg-linear-to-r from-slate-200/90 via-slate-300/90 to-slate-400/90'}
                     `}>
-                        {/* Shimmer Layer */}
-                        <div className={`absolute inset-0 ${level >= 50 ? 'shimmer-gold' : 'shimmer-platinum'} opacity-60`} />
+                        {/* Shimmer Container - Inner Clipping Only */}
+                        <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+                            <div className={`absolute inset-0 ${level >= 50 ? 'shimmer-gold' : 'shimmer-platinum'} opacity-60`} />
+                            {/* Crystal Glint */}
+                            <div className="absolute top-0 left-0 w-full h-px bg-white/50" />
+                        </div>
 
-                        {/* Crystal Glint */}
-                        <div className="absolute top-0 left-0 w-full h-px bg-white/50" />
-
-                        <div className="relative flex items-center gap-2">
+                        <div className="relative flex items-center gap-2 z-10">
                             <Trophy className={`w-3 h-3 ${level >= 50 ? 'text-yellow-900' : 'text-slate-700'} drop-shadow-sm`} />
                             <span className={`text-[9px] font-black uppercase tracking-[0.15em] ${level >= 50 ? 'text-yellow-950' : 'text-slate-800'} text-shadow-sm`}>
                                 {t(`ranks.${rank.name}`)}

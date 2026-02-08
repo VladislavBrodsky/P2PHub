@@ -69,7 +69,7 @@ Use this to see the evolution of individual components.
 -   **VISUALS**:
     -   Implemented SVG Linear Gradient (`#3b82f6` -> `#8b5cf6` -> `#06b6d4`) for the Level Progress Ring to create a true "Liquid" effect.
     -   Refactored Earn Header layout to use Flexbox with negative margins (`-mt-5`) instead of absolute positioning. This fixes the Rank Badge clipping/"glitch" issue where it was being cut off by the parent container.
-    -   **Update**: Separated ("Split") the Rank Badge from the Level Circle (`mt-3` instead of negative margin) and reduced its size (`px-4 py-1.5`, smaller font) to fit better and avoid border clipping.
+    -   **Update**: Separated ("Split") the Rank Badge from the Level Circle (`mt-4` increased spacing) and refactored HTML structure. Moved `overflow-hidden` to an inner container to prevent border clipping/glitches on the rounded edges while keeping the shimmer effect contained.
 
 ### v1.0.0 (2026-02-07)
 -   Implemented responsive footer with legal links (Terms, Privacy).
