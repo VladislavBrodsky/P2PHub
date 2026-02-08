@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useHaptic } from '../hooks/useHaptic';
 import { EarnHeader } from '../components/Earn/EarnHeader';
@@ -6,17 +6,19 @@ import { TaskCard } from '../components/Earn/TaskCard';
 import { MilestonePath } from '../components/Earn/MilestonePath';
 import { ReferralWidget } from '../components/Earn/ReferralWidget';
 import { TaskGrid } from '../components/Earn/TaskGrid';
-import { EARN_TASKS, Task } from '../data/earnData';
+import { EARN_TASKS, Task, MILESTONES } from '../data/earnData';
 import { useUser } from '../context/UserContext';
 import { Confetti } from '../components/ui/Confetti';
 import { CheckCircle2, Trophy, QrCode, X, Share2, Download, Copy, ExternalLink } from 'lucide-react';
+import { useTranslation, Trans } from 'react-i18next';
 
 export default function ReferralPage() {
+    const { t } = useTranslation();
     const { notification, selection } = useHaptic();
     const { user, updateUser } = useUser();
 
     // Local State for Instant Feedback
-    const [tasks, setTasks] = useState<Task[]>(EARN_TASKS);
+    const [tasksList, setTasksList] = useState<Task[]>(EARN_TASKS);
     const [completedTaskIds, setCompletedTaskIds] = useState<string[]>([]);
     const [levelUp, setLevelUp] = useState(false);
     const [confettiActive, setConfettiActive] = useState(false);
@@ -27,11 +29,21 @@ export default function ReferralPage() {
     const currentLevel = user?.level || 1;
     const currentXP = user?.xp || 0;
     const referrals = user?.referrals?.length || 0;
-    const referralLink = `https://t.me/pintopay_probot?start=${user?.referral_code || 'ref_dev'}`;
+    const referralCode = user?.referral_code || 'ref_dev';
+    const referralLink = `https://t.me/pintopay_probot?start=${referralCode}`;
 
-    const VIRAL_HOOK = "🛑 STOP BLEEDING MONEY TO BANKS! 🛑";
-    const VIRAL_SUBTITLE = "Start earning like a bank. $1 Every Minute. 🚀";
-    const VIRAL_TEXT = `${VIRAL_HOOK}\n\nEverything you know about money is changing. While others lose, the 1% are profiting. 🦅\n\nJoin the Pintopay Partner Hub and start earning $1/minute in passive income.\n\n🔥 NO Bureaucracy\n🔥 NO Restrictions\n🔥 100% Financial Sovereignty\n\nBuild your empire now. 👇`;
+    // Translate tasks dynamically
+    const localizedTasks = useMemo(() => {
+        return EARN_TASKS.map(task => ({
+            ...task,
+            title: t(`tasks.${task.id}.title`),
+            description: t(`tasks.${task.id}.desc`)
+        }));
+    }, [t]);
+
+    const VIRAL_HOOK = t('referral.viral.hook');
+    const VIRAL_SUBTITLE = t('referral.viral.subtitle');
+    const VIRAL_TEXT = t('referral.viral.text');
 
     // Load completed tasks from storage on mount
     useEffect(() => {
@@ -118,39 +130,39 @@ export default function ReferralPage() {
                             initial={{ y: 100, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: 100, opacity: 0 }}
-                            className="w-full max-w-sm bg-(--color-bg-surface) border-border-glass rounded-[2.5rem] p-6 relative shadow-premium overflow-hidden"
+                            className="w-full max-w-sm bg-(--color-bg-surface) border border-white/10 rounded-[2.5rem] p-6 relative shadow-2xl overflow-hidden"
                         >
                             {/* Decorative Background for Viral Feel */}
                             <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-b from-blue-600/20 to-transparent pointer-events-none" />
 
                             <button
                                 onClick={() => setShowShareModal(false)}
-                                className="absolute top-4 right-4 p-2 bg-bg-app/50 backdrop-blur-sm rounded-full text-text-secondary hover:text-text-primary z-10"
+                                className="absolute top-4 right-4 p-2 bg-slate-800/50 backdrop-blur-sm rounded-full text-white/70 hover:text-white z-10"
                             >
                                 <X className="w-5 h-5" />
                             </button>
 
                             <div className="relative z-10 space-y-6 pt-2">
                                 {/* Viral Preview Card */}
-                                <div className="glass-panel-premium overflow-hidden rounded-3xl border-[var(--color-border-glass)] shadow-lg">
+                                <div className="bg-slate-900/40 backdrop-blur-md overflow-hidden rounded-3xl border border-white/10 shadow-lg">
                                     <img
                                         src="/viral-invite.jpg"
-                                        alt="Passive Income Empire"
+                                        alt={t('referral.modal.invite_image_alt')}
                                         className="w-full h-40 object-cover"
                                     />
                                     <div className="p-4 space-y-1">
-                                        <p className="text-[10px] font-black text-blue-500 uppercase tracking-tighter">Limited Access Tier</p>
-                                        <h4 className="text-sm font-black text-[var(--color-text-primary)] leading-snug">
+                                        <p className="text-[10px] font-black text-blue-500 uppercase tracking-tighter">{t('referral.modal.limited_tier')}</p>
+                                        <h4 className="text-sm font-black text-white leading-snug">
                                             {VIRAL_HOOK}
                                         </h4>
-                                        <p className="text-[10px] font-bold text-[var(--color-text-secondary)] italic opacity-60">
+                                        <p className="text-[10px] font-bold text-slate-400 italic opacity-60">
                                             {VIRAL_SUBTITLE}
                                         </p>
                                     </div>
                                 </div>
 
                                 <div className="space-y-3">
-                                    <h3 className="text-xl font-black text-center text-text-primary tracking-tight">Recruit Your Inner Circle</h3>
+                                    <h3 className="text-xl font-black text-center text-white tracking-tight">{t('referral.modal.recruit_title')}</h3>
 
                                     <div className="grid grid-cols-1 gap-3">
                                         <button
@@ -158,28 +170,30 @@ export default function ReferralPage() {
                                             className="w-full h-14 bg-[#0088cc] text-white rounded-2xl font-black flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg shadow-blue-500/20"
                                         >
                                             <Share2 className="w-5 h-5" />
-                                            Share to Telegram
+                                            {t('referral.modal.share_telegram')}
                                         </button>
 
                                         <div className="grid grid-cols-2 gap-3">
                                             <button
                                                 onClick={handleNativeShare}
-                                                className="h-14 glass-panel rounded-2xl font-bold text-text-primary flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                                className="h-14 bg-white/5 border border-white/10 rounded-2xl font-bold text-white flex items-center justify-center gap-2 active:scale-95 transition-all"
                                             >
-                                                <ExternalLink className="w-4 h-4 opacity-60" /> Share...
+                                                <ExternalLink className="w-4 h-4 opacity-60" /> {t('referral.modal.share_more')}
                                             </button>
                                             <button
                                                 onClick={handleCopyLink}
-                                                className="h-14 glass-panel rounded-2xl font-bold text-text-primary flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                                className="h-14 bg-white/5 border border-white/10 rounded-2xl font-bold text-white flex items-center justify-center gap-2 active:scale-95 transition-all"
                                             >
-                                                <Copy className="w-4 h-4 opacity-60" /> Copy Link
+                                                <Copy className="w-4 h-4 opacity-60" /> {t('referral.modal.copy_link')}
                                             </button>
                                         </div>
                                     </div>
                                 </div>
 
-                                <p className="text-[10px] text-center text-brand-muted font-bold px-4">
-                                    Each referral boosts your XP and moves you closer to the **Physical Platinum Card**.
+                                <p className="text-[10px] text-center text-slate-500 font-bold px-4">
+                                    <Trans i18nKey="referral.modal.boost_desc">
+                                        Each referral boosts your XP and moves you closer to the <strong className="text-white">Physical Platinum Card</strong>.
+                                    </Trans>
                                 </p>
                             </div>
                         </motion.div>
@@ -195,24 +209,28 @@ export default function ReferralPage() {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className="w-full max-w-sm bg-(--color-bg-surface) border-border-glass rounded-[2.5rem] p-6 relative shadow-premium"
+                            className="w-full max-w-sm bg-(--color-bg-surface) border border-white/10 rounded-[2.5rem] p-6 relative shadow-2xl"
                         >
                             <button
                                 onClick={() => setShowQR(false)}
-                                className="absolute top-4 right-4 p-2 bg-[var(--color-bg-app)] rounded-full text-text-secondary hover:text-text-primary"
+                                className="absolute top-4 right-4 p-2 bg-(--color-bg-app) rounded-full text-slate-400 hover:text-white"
                             >
                                 <X className="w-5 h-5" />
                             </button>
 
                             <div className="text-center space-y-6">
                                 <div className="space-y-2 pt-2">
-                                    <h3 className="text-2xl font-black text-[var(--color-text-primary)] leading-none tracking-tight">
-                                        Claim Your <br />
-                                        <span className="text-blue-500 uppercase italic">Financial Sovereignty</span>
+                                    <h3 className="text-2xl font-black text-white leading-none tracking-tight">
+                                        <Trans i18nKey="referral.qr.title">
+                                            Claim Your <br />
+                                            <span className="text-blue-500 uppercase italic">Financial Sovereignty</span>
+                                        </Trans>
                                     </h3>
-                                    <p className="text-sm font-medium text-[var(--color-text-secondary)]">
-                                        Earn <span className="text-emerald-500 font-bold">$1/minute</span> for every active partner. <br />
-                                        Build your empire now.
+                                    <p className="text-sm font-medium text-slate-400">
+                                        <Trans i18nKey="referral.qr.desc">
+                                            Earn <span className="text-emerald-500 font-bold">$1/minute</span> for every active partner. <br />
+                                            Build your empire now.
+                                        </Trans>
                                     </p>
                                 </div>
 
@@ -232,10 +250,10 @@ export default function ReferralPage() {
 
                                 <div className="flex gap-3">
                                     <button
-                                        className="flex-1 py-3 glass-panel rounded-xl font-bold text-sm text-text-primary flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                        className="flex-1 py-3 bg-white/5 border border-white/10 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 active:scale-95 transition-all"
                                         onClick={handleCopyLink}
                                     >
-                                        <Copy className="w-4 h-4" /> Copy Link
+                                        <Copy className="w-4 h-4" /> {t('referral.qr.copy')}
                                     </button>
                                     <button
                                         className="flex-1 py-3 bg-blue-600 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
@@ -246,7 +264,7 @@ export default function ReferralPage() {
                                             link.click();
                                         }}
                                     >
-                                        <Download className="w-4 h-4" /> Save QR
+                                        <Download className="w-4 h-4" /> {t('referral.qr.save')}
                                     </button>
                                 </div>
                             </div>
@@ -263,20 +281,20 @@ export default function ReferralPage() {
                             initial={{ scale: 0.5, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.8, opacity: 0 }}
-                            className="bg-[var(--color-bg-surface)] border border-yellow-500/20 p-8 rounded-[2.5rem] text-center space-y-4 shadow-float"
+                            className="bg-(--color-bg-surface) border border-yellow-500/20 p-8 rounded-[2.5rem] text-center space-y-4 shadow-float"
                         >
                             <Trophy className="w-16 h-16 text-yellow-400 mx-auto animate-bounce" />
                             <h2 className="text-3xl font-black text-transparent bg-clip-text bg-linear-to-r from-yellow-400 to-orange-500">
-                                LEVEL UP!
+                                {t('referral.levelup.title')}
                             </h2>
-                            <p className="text-text-secondary font-bold italic">You reached Level {currentLevel + 1}</p>
+                            <p className="text-slate-400 font-bold italic">{t('referral.levelup.reached', { level: currentLevel + 1 })}</p>
                         </motion.div>
                     </div>
                 )}
             </AnimatePresence>
 
             <h1 className="text-3xl font-black mb-6 tracking-tighter text-gradient-primary">
-                Earn & Level Up
+                {t('referral.title')}
             </h1>
 
             <EarnHeader />
@@ -291,7 +309,7 @@ export default function ReferralPage() {
 
             {/* Task Grid */}
             <TaskGrid
-                tasks={tasks}
+                tasks={localizedTasks}
                 completedTaskIds={completedTaskIds}
                 currentLevel={currentLevel}
                 referrals={referrals}

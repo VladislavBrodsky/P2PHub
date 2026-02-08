@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Users, Zap, Globe2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 
 const PROD_URL = 'https://p2phub-backend-production.up.railway.app';
 const DEV_URL = 'http://localhost:8000';
@@ -11,6 +12,7 @@ interface PartnerStatsProps {
 }
 
 export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
+    const { t } = useTranslation();
     const [recentPartners, setRecentPartners] = useState<any[]>([]);
     const [stats, setStats] = useState({ total: '12.4k', volume: '$84.2M', countries: '142', lastHourCount: 342 });
 
@@ -33,6 +35,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
         // Refresh every 60 minutes as requested
         const interval = setInterval(fetchRecentPartners, 60 * 60 * 1000);
         return () => clearInterval(interval);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -46,7 +49,9 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 >
                     <Users className="w-4 h-4 text-blue-500" />
                     <span className="text-lg font-black text-(--color-text-primary) uppercase leading-none">{stats.total}</span>
-                    <span className="text-[8px] font-bold text-(--color-text-secondary) uppercase tracking-widest leading-none">Global Partners</span>
+                    <span className="text-[8px] font-bold text-(--color-text-secondary) uppercase tracking-widest leading-none">
+                        {t('dashboard.stats.global_partners')}
+                    </span>
                 </motion.div>
 
                 <motion.div
@@ -54,11 +59,13 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 }}
-                    className="flex flex-col items-center justify-center p-4 rounded-[2rem] bg-emerald-500/10 border border-emerald-500/20 shadow-[0_0_20_rgba(16,185,129,0.1)] text-center space-y-1"
+                    className="flex flex-col items-center justify-center p-4 rounded-[2rem] bg-emerald-500/10 border border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.1)] text-center space-y-1"
                 >
                     <Zap className="w-4 h-4 text-emerald-500" />
                     <span className="text-lg font-black text-(--color-text-primary) uppercase leading-none">{stats.volume}</span>
-                    <span className="text-[8px] font-bold text-(--color-text-secondary) uppercase tracking-widest leading-none">Volume Shifted</span>
+                    <span className="text-[8px] font-bold text-(--color-text-secondary) uppercase tracking-widest leading-none">
+                        {t('dashboard.stats.volume_shifted')}
+                    </span>
                 </motion.div>
 
                 <motion.div
@@ -70,7 +77,9 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 >
                     <Globe2 className="w-4 h-4 text-purple-500" />
                     <span className="text-lg font-black text-(--color-text-primary) uppercase leading-none">{stats.countries}</span>
-                    <span className="text-[8px] font-bold text-(--color-text-secondary) uppercase tracking-widest leading-none">Countries Active</span>
+                    <span className="text-[8px] font-bold text-(--color-text-secondary) uppercase tracking-widest leading-none">
+                        {t('dashboard.stats.countries_active')}
+                    </span>
                 </motion.div>
             </div>
 
@@ -103,7 +112,9 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     )}
                 </div>
                 <p className="text-[10px] font-bold text-(--color-text-secondary)">
-                    <span className="text-(--color-text-primary) font-black">+{stats.lastHourCount} new partners</span> joined the movement in the last 60m
+                    <Trans i18nKey="dashboard.stats.recent_join" values={{ count: stats.lastHourCount }}>
+                        <span className="text-(--color-text-primary) font-black">+{stats.lastHourCount} new partners</span> joined the movement in the last 60m
+                    </Trans>
                 </p>
             </motion.div>
         </section>

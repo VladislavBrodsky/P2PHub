@@ -2,8 +2,10 @@ import { motion } from 'framer-motion';
 import { Trophy, Star, Zap } from 'lucide-react';
 import { getRank, getXPProgress } from '../../utils/ranking';
 import { useUser } from '../../context/UserContext';
+import { useTranslation, Trans } from 'react-i18next';
 
 export const EarnHeader = () => {
+    const { t } = useTranslation();
     const { user } = useUser();
 
     // Fallback or use real user data
@@ -13,7 +15,7 @@ export const EarnHeader = () => {
     const progress = getXPProgress(level, xp);
 
     return (
-        <section className="mb-8 relative overflow-hidden rounded-[2.5rem] glass-panel border-white/10 p-1 shadow-2xl">
+        <section className="mb-8 relative overflow-hidden rounded-[2.5rem] glass-panel border border-white/10 p-1 shadow-2xl">
             {/* Immersive Mesh Background */}
             <div className="absolute inset-0 bg-linear-to-br from-blue-600/10 via-purple-600/5 to-transparent pointer-events-none" />
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full animate-pulse pointer-events-none" />
@@ -57,10 +59,8 @@ export const EarnHeader = () => {
                     {/* Level Display Center */}
                     <div className="flex flex-col items-center justify-center bg-bg-app w-28 h-28 rounded-full border-4 border-white/5 shadow-[inset_0_2px_10px_rgba(0,0,0,0.1)] relative overflow-hidden group">
                         <div className="absolute inset-0 bg-linear-to-b from-white/5 to-transparent pointer-events-none" />
-                        <span className="text-[10px] font-black text-brand-muted uppercase tracking-[0.2em] mb-1">Level</span>
+                        <span className="text-[10px] font-black text-brand-muted uppercase tracking-[0.2em] mb-1">{t('earn_header.level')}</span>
                         <span className="text-5xl font-black text-text-primary leading-none tracking-tighter drop-shadow-sm">{level}</span>
-
-                        {/* Subtle floating particles animation could go here */}
                     </div>
 
                     {/* Rank Badge - Metallic Shimmer */}
@@ -73,7 +73,7 @@ export const EarnHeader = () => {
                         <div className="relative flex items-center gap-2">
                             <Trophy className={`w-4 h-4 ${level >= 50 ? 'text-yellow-100' : 'text-slate-800'}`} />
                             <span className={`text-[11px] font-black uppercase tracking-widest ${level >= 50 ? 'text-white' : 'text-slate-900'}`}>
-                                {rank.name}
+                                {t(`ranks.${rank.name}`)}
                             </span>
                         </div>
                     </div>
@@ -82,7 +82,7 @@ export const EarnHeader = () => {
                 {/* XP Stats - Sleek Bar */}
                 <div className="space-y-3 w-full max-w-[300px] pt-4">
                     <div className="flex justify-between items-end px-1">
-                        <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">XP Progress</span>
+                        <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">{t('earn_header.xp_progress')}</span>
                         <div className="flex items-baseline gap-1">
                             <span className="text-sm font-black text-text-primary">{progress.current}</span>
                             <span className="text-[10px] font-bold text-brand-muted">/ {progress.total}</span>
@@ -97,20 +97,20 @@ export const EarnHeader = () => {
                         />
                     </div>
                     <p className="text-[10px] text-brand-muted font-bold italic tracking-tight opacity-70">
-                        {progress.total - progress.current} XP to next rank rewards
+                        {t('earn_header.xp_to_next', { xp: progress.total - progress.current })}
                     </p>
                 </div>
 
                 {/* Premium Stats Grid */}
                 <div className="grid grid-cols-2 gap-4 w-full">
-                    <div className="group relative overflow-hidden bg-white/5 border border-white/5 rounded-2xl p-4 transition-all hover:bg-white/10 active:scale-95">
+                    <div className="group relative overflow-hidden bg-white/5 border border-white/10 rounded-2xl p-4 transition-all hover:bg-white/10 active:scale-95">
                         <div className="absolute top-0 right-0 p-2 opacity-5 scale-150 rotate-12 transition-transform group-hover:scale-[2] group-hover:rotate-0">
                             <Star className="w-12 h-12" />
                         </div>
                         <div className="flex flex-col items-start gap-1">
                             <div className="flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 shadow-[0_0_5px_rgba(250,204,21,0.5)]" />
-                                <span className="text-[9px] font-black text-brand-muted uppercase tracking-[0.1em]">Partners</span>
+                                <span className="text-[9px] font-black text-brand-muted uppercase tracking-[0.1em]">{t('earn_header.partners')}</span>
                             </div>
                             <div className="text-2xl font-black text-text-primary mt-1">
                                 {user?.referrals?.length || 0}
@@ -118,14 +118,14 @@ export const EarnHeader = () => {
                         </div>
                     </div>
 
-                    <div className="group relative overflow-hidden bg-white/5 border border-white/5 rounded-2xl p-4 transition-all hover:bg-white/10 active:scale-95">
+                    <div className="group relative overflow-hidden bg-white/5 border border-white/10 rounded-2xl p-4 transition-all hover:bg-white/10 active:scale-95">
                         <div className="absolute top-0 right-0 p-2 opacity-5 scale-150 -rotate-12 transition-transform group-hover:scale-[2] group-hover:rotate-0">
                             <Zap className="w-12 h-12" />
                         </div>
                         <div className="flex flex-col items-start gap-1">
                             <div className="flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_5px_rgba(52,211,153,0.5)]" />
-                                <span className="text-[9px] font-black text-brand-muted uppercase tracking-[0.1em]">Total XP</span>
+                                <span className="text-[9px] font-black text-brand-muted uppercase tracking-[0.1em]">{t('earn_header.total_xp')}</span>
                             </div>
                             <div className="text-2xl font-black text-text-primary mt-1">
                                 {xp}

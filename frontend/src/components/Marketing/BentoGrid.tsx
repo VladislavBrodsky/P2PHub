@@ -1,61 +1,49 @@
 import { motion } from 'framer-motion';
 import { CreditCard, Smartphone, Zap, Globe, Coins, QrCode } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const shiftSteps = [
     {
-        title: "Primitive Era",
-        subtitle: "Traditional Cash",
-        description: "Physical, slow, and restricted by borders. Prone to inflation and theft.",
+        id: 0,
         icon: <Coins className="w-6 h-6 text-amber-500" />,
         color: "from-amber-500/10 via-transparent to-transparent",
         size: "col-span-1",
-        status: "OBSOLETE",
         statusColor: "text-amber-500 bg-amber-500/10"
     },
     {
-        title: "The Friction Gap",
-        subtitle: "TradFi & Cards",
-        description: "Hidden fees and 3-5 day delays. You don't own your money.",
+        id: 1,
         icon: <CreditCard className="w-6 h-6 text-blue-500" />,
         color: "from-blue-500/10 via-transparent to-transparent",
         size: "col-span-1",
-        status: "VULNERABLE",
         statusColor: "text-blue-500 bg-blue-500/10"
     },
     {
-        title: "The Digital Proxy",
-        subtitle: "Mobile Wallets",
-        description: "Apple/Google Pay. Convenient, but still tied to failing legacy rails.",
+        id: 2,
         icon: <Smartphone className="w-6 h-6 text-purple-500" />,
         color: "from-purple-500/10 via-transparent to-transparent",
         size: "col-span-2",
-        status: "STABLE",
         statusColor: "text-purple-500 bg-purple-500/10"
     },
     {
-        title: "The Financial Reset",
-        subtitle: "Crypto & Web3",
-        description: "True ownership and 24/7 global liquidity. The bridge to freedom.",
+        id: 3,
         icon: <Globe className="w-6 h-6 text-emerald-500" />,
         color: "from-emerald-500/10 via-transparent to-transparent",
         size: "col-span-2",
-        status: "FREEDOM",
         statusColor: "text-emerald-500 bg-emerald-500/10"
     },
     {
-        title: "ELITE VELOCITY",
-        subtitle: "Pintopay QR",
-        description: "Instant, global, P2P settlements at $1/minute velocity. The ultimate infrastructure.",
+        id: 4,
         icon: <QrCode className="w-6 h-6 text-blue-400" />,
         color: "from-blue-600/30 via-blue-400/5 to-transparent",
         size: "col-span-2",
         featured: true,
-        status: "ELITE",
         statusColor: "text-white bg-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.4)]"
     }
 ];
 
 export const BentoGrid = () => {
+    const { t } = useTranslation();
+
     return (
         <section className="px-4 py-8 space-y-8">
             <div className="space-y-3">
@@ -65,14 +53,13 @@ export const BentoGrid = () => {
                         animate={{ opacity: [1, 0.4, 1] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
                     />
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">Live Evolution</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">{t('evolution.badge')}</span>
                 </div>
-                <h3 className="text-3xl font-black tracking-tight text-text-primary leading-[1.1]">
-                    The Great <br />
-                    Financial Shift
+                <h3 className="text-3xl font-black tracking-tight text-(--color-text-primary) leading-[1.1] whitespace-pre-line">
+                    {t('evolution.title')}
                 </h3>
-                <p className="text-sm text-text-secondary font-medium max-w-[280px]">
-                    The world is upgrading. Move from physical limits to digital light velocity.
+                <p className="text-sm text-(--color-text-secondary) font-medium max-w-[280px]">
+                    {t('evolution.desc')}
                 </p>
             </div>
 
@@ -85,31 +72,31 @@ export const BentoGrid = () => {
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1 }}
                         whileHover={{ y: -8, scale: 1.01, transition: { type: "spring", stiffness: 400, damping: 20 } }}
-                        className={`relative group overflow-hidden rounded-[2.5rem] border border-[var(--color-border-glass)] p-6 glass-panel-premium transition-all duration-300 md:${step.size} ${step.featured ? 'border-blue-500/30' : ''}`}
+                        className={`relative group overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) p-6 glass-panel-premium transition-all duration-300 md:${step.size} ${step.featured ? 'border-blue-500/30' : ''}`}
                     >
                         <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
 
                         <div className="relative z-10 space-y-4">
                             <div className="flex items-center justify-between">
-                                <div className="p-3 w-fit rounded-2xl bg-[var(--color-bg-app)]/50 dark:bg-black/40 backdrop-blur-xl border border-[var(--color-border-glass)] shadow-lg transition-transform group-hover:scale-110">
+                                <div className="p-3 w-fit rounded-2xl bg-(--color-bg-app)/50 dark:bg-black/40 backdrop-blur-xl border border-(--color-border-glass) shadow-lg transition-transform group-hover:scale-110">
                                     {step.icon}
                                 </div>
                                 <span className={`text-[9px] font-black px-2.5 py-1 rounded-full ${step.statusColor} tracking-widest`}>
-                                    {step.status}
+                                    {t(`evolution.steps.${step.id}.status`)}
                                 </span>
                             </div>
 
                             <div className="space-y-1">
-                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-secondary opacity-60">
-                                    {step.title}
+                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary) opacity-60">
+                                    {t(`evolution.steps.${step.id}.title`)}
                                 </p>
-                                <h4 className={`text-xl font-black leading-tight ${step.featured ? 'text-blue-500' : 'text-text-primary'}`}>
-                                    {step.subtitle}
+                                <h4 className={`text-xl font-black leading-tight ${step.featured ? 'text-blue-500' : 'text-(--color-text-primary)'}`}>
+                                    {t(`evolution.steps.${step.id}.subtitle`)}
                                 </h4>
                             </div>
 
-                            <p className="text-xs font-semibold leading-relaxed text-text-secondary opacity-80">
-                                {step.description}
+                            <p className="text-xs font-semibold leading-relaxed text-(--color-text-secondary) opacity-80">
+                                {t(`evolution.steps.${step.id}.desc`)}
                             </p>
                         </div>
 

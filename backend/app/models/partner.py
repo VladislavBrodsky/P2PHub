@@ -11,7 +11,9 @@ class Partner(SQLModel, table=True):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     photo_url: Optional[str] = None
+    language_code: Optional[str] = Field(default="en") # Store user language preference
     balance: float = Field(default=0.0)
+    xp: float = Field(default=0.0)
     level: int = Field(default=1)
     referral_code: str = Field(unique=True)
     referrer_id: Optional[int] = Field(default=None, foreign_key="partner.id")

@@ -4,9 +4,11 @@ import { useHaptic } from '../hooks/useHaptic';
 import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 import { PartnerDashboard } from '../components/Partner/PartnerDashboard';
 import { PartnerAcademy } from '../components/Partner/PartnerAcademy';
-import { cn } from '../lib/utils'; // Assuming generic utils are here, or remove if not
+import { cn } from '../lib/utils';
+import { useTranslation } from 'react-i18next';
 
 export default function CommunityPage() {
+    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'dashboard' | 'academy'>('dashboard');
     const { selection } = useHaptic();
@@ -24,11 +26,11 @@ export default function CommunityPage() {
     if (isLoading) return <div className="p-4"><ListSkeleton /></div>;
 
     return (
-        <div className="flex flex-col min-h-[100vh] px-4 pt-safe-top pb-32 relative overflow-hidden bg-[var(--color-bg-deep)] transition-colors duration-300">
+        <div className="flex flex-col min-h-screen px-4 pt-safe-top pb-32 relative overflow-hidden bg-(--color-bg-deep) transition-colors duration-300">
             {/* Mesh Background Overlay - Dark Mode Only */}
-            <div className="mesh-gradient-dark absolute inset-0 opacity-30 pointer-events-none fixed dark:block hidden" />
-            <div className="absolute top-20 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full pointer-events-none fixed" />
-            <div className="absolute bottom-40 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none fixed" />
+            <div className="mesh-gradient-dark fixed inset-0 opacity-30 pointer-events-none dark:block hidden" />
+            <div className="fixed top-20 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full pointer-events-none" />
+            <div className="fixed bottom-40 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none" />
 
             {/* Top Navigation / Switcher */}
             <div className="relative z-20 mb-3 flex justify-center">
@@ -50,12 +52,13 @@ export default function CommunityPage() {
                     />
 
                     <button
+                        onClick={() => handleTabChange('dashboard')}
                         className={cn(
                             "relative z-10 px-4 py-2 text-xs font-black uppercase tracking-widest transition-colors w-28 text-center",
                             activeTab === 'dashboard' ? "text-white" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
                         )}
                     >
-                        Dashboard
+                        {t('community.tabs.dashboard')}
                     </button>
                     <button
                         onClick={() => handleTabChange('academy')}
@@ -64,7 +67,7 @@ export default function CommunityPage() {
                             activeTab === 'academy' ? "text-white" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
                         )}
                     >
-                        Academy
+                        {t('community.tabs.academy')}
                     </button>
                 </div>
             </div>

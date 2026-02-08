@@ -1,33 +1,17 @@
 import { motion } from 'framer-motion';
-
-const TICKER_ITEMS = [
-    "EARN PINTOPAY TOKENS",
-    "•",
-    "GLOBAL PAYMENTS",
-    "•",
-    "INSTANT WITHDRAWALS",
-    "•",
-    "BECOME A PARTNER",
-    "•",
-    "$1+ PER MIN 24/7",
-    "•",
-    "EARN PINTOPAY TOKENS",
-    "•",
-    "GLOBAL PAYMENTS",
-    "•",
-    "INSTANT WITHDRAWALS",
-    "•",
-    "BECOME A PARTNER",
-    "•",
-    "$1+ PER MIN 24/7",
-    "•",
-];
+import { useTranslation } from 'react-i18next';
 
 export const Ticker = () => {
+    const { t } = useTranslation();
+    const tickerItems = t('dashboard.ticker', { returnObjects: true }) as string[];
+
+    // Create a long repeated array for smooth infinite scroll
+    const items = [...tickerItems, "•", ...tickerItems, "•", ...tickerItems, "•"];
+
     return (
-        <div className="relative flex w-full overflow-hidden border-y border-[var(--color-brand-border)] bg-[var(--color-brand-bg)] py-3 backdrop-blur-sm">
-            <div className="absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-[var(--color-bg-app)] to-transparent" />
-            <div className="absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-[var(--color-bg-app)] to-transparent" />
+        <div className="relative flex w-full overflow-hidden border-y border-(--color-brand-border) bg-(--color-brand-bg) py-3 backdrop-blur-sm">
+            <div className="absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-(--color-bg-app) to-transparent" />
+            <div className="absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-(--color-bg-app) to-transparent" />
 
             <motion.div
                 className="flex whitespace-nowrap"
@@ -35,13 +19,13 @@ export const Ticker = () => {
                 transition={{
                     repeat: Infinity,
                     ease: "linear",
-                    duration: 20,
+                    duration: 30,
                 }}
             >
-                {TICKER_ITEMS.map((item, index) => (
+                {items.map((item, index) => (
                     <span
                         key={index}
-                        className="mx-4 text-xs font-black tracking-widest text-[var(--color-text-primary)] opacity-80"
+                        className="mx-4 text-xs font-black tracking-widest text-(--color-text-primary) opacity-80"
                     >
                         {item}
                     </span>

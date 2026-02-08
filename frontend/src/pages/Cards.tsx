@@ -3,12 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { PintopayCard, CardVariant } from '../components/PintopayCard';
 import { Apple, ChevronRight, CheckCircle2, Crown, X, ArrowRight } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
+import { useTranslation } from 'react-i18next';
 
 interface CardsPageProps {
     setActiveTab?: (tab: string) => void;
 }
 
 export default function CardsPage({ setActiveTab }: CardsPageProps) {
+    const { t } = useTranslation();
     const [selectedTab, setSelectedTab] = useState<CardVariant>('virtual');
     const [isTermsOpen, setIsTermsOpen] = useState(false);
     const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
@@ -34,25 +36,25 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
 
     const cardData = {
         virtual: {
-            title: 'Mastercard Virtual USD',
-            description: 'Pay contactless in-store or online in 180+ countries',
+            title: t('cards.virtual.title'),
+            description: t('cards.virtual.desc'),
             price: '$35',
             bonus: '+$10',
-            bonusText: 'on your balance after card activation',
+            bonusText: t('cards.virtual.bonus_text'),
         },
         physical: {
-            title: 'Mastercard Physical',
-            description: 'Premium soft-touch PVC card with worldwide delivery',
+            title: t('cards.physical.title'),
+            description: t('cards.physical.desc'),
             price: '$85',
             bonus: 'Free',
-            bonusText: 'Standard Shipping included',
+            bonusText: t('cards.physical.bonus_text'),
         },
         platinum: {
-            title: 'Platinum Metal',
-            description: 'Solid metal construction with concierge service',
+            title: t('cards.platinum.title'),
+            description: t('cards.platinum.desc'),
             price: '$199',
             bonus: 'VIP',
-            bonusText: 'Access to premium lounges',
+            bonusText: t('cards.platinum.bonus_text'),
         }
     };
 
@@ -62,16 +64,16 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
         <div className="flex flex-col h-full relative min-h-screen">
             {/* Header */}
             <div className="px-6 pb-6 text-center">
-                <h2 className="text-[var(--color-text-primary)] text-lg font-bold">Choose Card</h2>
+                <h2 className="text-(--color-text-primary) text-lg font-bold">{t('cards.title')}</h2>
             </div>
 
             {/* Switcher */}
             <div className="px-6 mb-8 flex justify-center">
-                <div className="bg-[var(--color-brand-border)]/30 p-1 rounded-xl flex gap-1 w-full max-w-sm relative">
+                <div className="bg-(--color-brand-border)/30 p-1 rounded-xl flex gap-1 w-full max-w-sm relative">
                     {/* Active Indicator Background */}
                     <div className="absolute inset-1 flex pointer-events-none" aria-hidden="true">
                         <motion.div
-                            className="bg-[var(--color-bg-surface)] rounded-lg shadow-sm w-1/3 h-full"
+                            className="bg-(--color-bg-surface) rounded-lg shadow-sm w-1/3 h-full"
                             layoutId="activeTabIndicator"
                             transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                             style={{
@@ -89,10 +91,10 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                 setSelectedTab(tab);
                                 selection();
                             }}
-                            className={`relative z-10 flex-1 py-1.5 text-xs font-semibold rounded-lg capitalize transition-colors duration-200 ${selectedTab === tab ? 'text-[var(--color-text-primary)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                            className={`relative z-10 flex-1 py-1.5 text-xs font-semibold rounded-lg capitalize transition-colors duration-200 ${selectedTab === tab ? 'text-(--color-text-primary)' : 'text-(--color-text-secondary) hover:text-(--color-text-primary)'
                                 }`}
                         >
-                            {tab}
+                            {t(`cards.tabs.${tab}`)}
                         </button>
                     ))}
                 </div>
@@ -128,10 +130,10 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                     className="w-full max-w-sm space-y-6 text-center"
                 >
                     <div className="space-y-2">
-                        <h3 className="text-2xl font-bold text-[var(--color-text-primary)] leading-tight">
+                        <h3 className="text-2xl font-bold text-(--color-text-primary) leading-tight">
                             {currentCard.title}
                         </h3>
-                        <p className="text-[var(--color-text-secondary)] font-medium text-sm px-4 leading-relaxed">
+                        <p className="text-(--color-text-secondary) font-medium text-sm px-4 leading-relaxed">
                             {currentCard.description}
                         </p>
                     </div>
@@ -140,9 +142,9 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                     <div className="bg-white rounded-[2rem] p-3 pl-3 pr-4 flex items-center justify-between shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] border border-slate-100/60">
                         <div className="flex items-center gap-4">
                             {/* Premium Icon Badge with Theme-Aware Background */}
-                            <div className="relative group overflow-hidden bg-[var(--color-text-primary)] rounded-[0.75rem] px-3 py-2 flex items-center gap-1.5 shadow-md transition-all active:scale-95">
-                                <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-bg-surface)] opacity-90 shrink-0" />
-                                <span className="text-[11px] font-black text-[var(--color-bg-surface)] whitespace-nowrap tracking-wider">
+                            <div className="relative group overflow-hidden bg-(--color-text-primary) rounded-[0.75rem] px-3 py-2 flex items-center gap-1.5 shadow-md transition-all active:scale-95">
+                                <div className="w-1.5 h-1.5 rounded-full bg-(--color-bg-surface) opacity-90 shrink-0" />
+                                <span className="text-[11px] font-black text-(--color-bg-surface) whitespace-nowrap tracking-wider">
                                     {currentCard.bonus}
                                 </span>
                             </div>
@@ -171,7 +173,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             className="w-full py-4 flex items-center justify-between border-t border-slate-100 group cursor-pointer"
                         >
                             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider group-hover:text-slate-800 transition-colors">
-                                Card Issuance Terms
+                                {t('cards.terms')}
                             </span>
                             <motion.div
                                 animate={{ rotate: isTermsOpen ? 90 : 0 }}
@@ -193,9 +195,9 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                     <div className="pb-6 space-y-6 text-left">
                                         <div className="space-y-3">
                                             {[
-                                                { label: `${currentCard.price} issue price` },
-                                                { label: '2.5% topup fee' },
-                                                { label: '$0.25 authorization fee' }
+                                                { label: `${currentCard.price} ${t('cards.fees.issue')}` },
+                                                { label: `2.5% ${t('cards.fees.topup')}` },
+                                                { label: `$0.25 ${t('cards.fees.auth')}` }
                                             ].map((term, i) => (
                                                 <div key={i} className="flex items-center gap-3">
                                                     <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
@@ -219,7 +221,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             onClick={handleGetCard}
                             className={`w-full h-16 rounded-2xl font-black text-lg shadow-[0_20px_40px_-12px_rgba(0,0,0,0.15)] flex items-center justify-center gap-3 transition-transform relative overflow-hidden ${selectedTab === 'platinum'
                                 ? 'bg-linear-to-br from-slate-100 via-white to-slate-300 text-slate-900 border border-white/50'
-                                : 'bg-slate-900 text-white' // Removed dark: variants to ensure contrast vs light background mismatch
+                                : 'bg-slate-900 text-white'
                                 }`
                             }
                         >
@@ -232,11 +234,11 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                         className="absolute inset-0 bg-linear-to-r from-transparent via-white/80 to-transparent -skew-x-12"
                                     />
                                     <Crown size={22} className="text-amber-500 fill-amber-100 relative z-10" />
-                                    <span className="relative z-10">Only for Premium Partner</span>
+                                    <span className="relative z-10">{t('cards.premium_only')}</span>
                                 </>
                             ) : (
                                 <>
-                                    <span>Issue card</span>
+                                    <span>{t('cards.action')}</span>
                                     <div className="w-1 h-1 rounded-full bg-white/20" />
                                     <span className="text-white/80">{currentCard.price}</span>
                                 </>
@@ -244,7 +246,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                         </motion.button>
 
                         <p className="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 opacity-60">
-                            Instant Delivery Worldwide
+                            {t('cards.instant_delivery')}
                         </p>
                     </div>
                 </motion.div>
@@ -298,25 +300,21 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                 </div>
 
                                 <h2 className="text-2xl font-black text-slate-900 mb-3 tracking-tight">
-                                    Premium Status Required
+                                    {t('cards.modal.title')}
                                 </h2>
 
                                 <p className="text-sm font-medium text-slate-500 leading-relaxed mb-8 px-2">
-                                    Platinum cards are exclusively reserved for our most active partners. Upgrade your network value to unlock legendary status and concierge services.
+                                    {t('cards.modal.desc')}
                                 </p>
 
                                 {/* Instruction List */}
                                 <div className="w-full space-y-3 mb-8 text-left">
-                                    {[
-                                        'Reach Global Partner rank',
-                                        'Earn 5,000+ Network XP',
-                                        'Activate 10+ active referrals'
-                                    ].map((step, i) => (
-                                        <div key={step} className="flex items-center gap-3 p-3 rounded-2xl bg-[var(--color-bg-app)]/50 border border-[var(--color-border-glass)]">
-                                            <div className="h-6 w-6 rounded-lg bg-[var(--color-bg-surface)] shadow-sm flex items-center justify-center text-[10px] font-black text-indigo-500 border border-[var(--color-border-glass)]">
+                                    {(t('cards.modal.steps', { returnObjects: true }) as string[]).map((step, i) => (
+                                        <div key={step} className="flex items-center gap-3 p-3 rounded-2xl bg-(--color-bg-app)/50 border border-(--color-border-glass)">
+                                            <div className="h-6 w-6 rounded-lg bg-(--color-bg-surface) shadow-sm flex items-center justify-center text-[10px] font-black text-indigo-500 border border-(--color-border-glass)">
                                                 {i + 1}
                                             </div>
-                                            <span className="text-xs font-bold text-[var(--color-text-secondary)]">{step}</span>
+                                            <span className="text-xs font-bold text-(--color-text-secondary)">{step}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -325,7 +323,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                     onClick={handleUpgradeSelect}
                                     className="w-full h-16 rounded-2xl bg-indigo-600 text-white font-black text-lg shadow-[0_15px_30px_-5px_rgba(79,70,229,0.3)] hover:bg-indigo-700 flex items-center justify-center gap-2 group"
                                 >
-                                    <span>Upgrade My Status</span>
+                                    <span>{t('cards.modal.upgrade')}</span>
                                     <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
                                 </Button>
 
@@ -333,7 +331,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                     onClick={() => setIsPremiumModalOpen(false)}
                                     className="mt-4 text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
                                 >
-                                    Maybe Later
+                                    {t('cards.modal.later')}
                                 </button>
                             </div>
                         </motion.div>

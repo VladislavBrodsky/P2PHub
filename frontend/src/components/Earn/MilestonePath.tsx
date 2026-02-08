@@ -1,17 +1,19 @@
 import { motion } from 'framer-motion';
 import { MILESTONES } from '../../data/earnData';
-import { Lock, Unlock } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import { useUser } from '../../context/UserContext';
+import { useTranslation } from 'react-i18next';
 
 export const MilestonePath = () => {
+    const { t } = useTranslation();
     const { user } = useUser();
     const currentLevel = user?.level || 1;
 
     return (
         <section className="mb-8">
-            <h3 className="text-lg font-black text-[var(--color-text-primary)] mb-4 px-4 uppercase tracking-widest flex items-center gap-2">
+            <h3 className="text-lg font-black text-(--color-text-primary) mb-4 px-4 uppercase tracking-widest flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
-                Road to Glory
+                {t('milestones.title')}
             </h3>
 
             <div className="flex gap-4 overflow-x-auto px-4 pb-4 no-scrollbar snap-x snap-mandatory">
@@ -30,7 +32,7 @@ export const MilestonePath = () => {
                                 ${isUnlocked
                                     ? 'glass-panel bg-blue-500/10 border-blue-500/30 shadow-[0_0_20px_rgba(59,130,246,0.15)]'
                                     : 'glass-panel opacity-60 grayscale'}
-                                ${isNext && 'border-yellow-500/50 shadow-[0_0_15px_rgba(234,179,8,0.2)] animate-pulse ring-1 ring-yellow-500/30'}
+                                ${isNext ? 'border-yellow-500/50 shadow-[0_0_15px_rgba(234,179,8,0.2)] animate-pulse ring-1 ring-yellow-500/30' : ''}
                             `}
                         >
                             <div className={`
@@ -41,9 +43,9 @@ export const MilestonePath = () => {
                             </div>
 
                             <div className="space-y-0.5">
-                                <span className="text-[9px] font-black uppercase text-brand-muted tracking-wider">Level {milestone.level}</span>
-                                <h4 className={`text-xs font-bold leading-tight ${isUnlocked ? 'text-[var(--color-text-primary)]' : 'text-brand-muted'}`}>
-                                    {milestone.reward}
+                                <span className="text-[9px] font-black uppercase text-brand-muted tracking-wider">{t('milestones.level')} {milestone.level}</span>
+                                <h4 className={`text-xs font-bold leading-tight ${isUnlocked ? 'text-(--color-text-primary)' : 'text-brand-muted'}`}>
+                                    {t(`milestones.${milestone.level}`)}
                                 </h4>
                             </div>
 

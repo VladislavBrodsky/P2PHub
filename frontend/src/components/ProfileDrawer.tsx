@@ -269,7 +269,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                                     <Wallet className={`h-5 w-5 ${wallet ? 'text-white' : 'text-blue-500'}`} />
                                                 </div>
                                                 <div className="text-left">
-                                                    <div className={`text-[10px] font-black uppercase tracking-widest ${wallet ? 'text-emerald-100' : 'text-[var(--color-text-secondary)]'}`}>
+                                                    <div className={`text-[10px] font-black uppercase tracking-widest ${wallet ? 'text-emerald-100' : 'text-(--color-text-secondary)'}`}>
                                                         {t('common.wallet')}
                                                     </div>
                                                     <div className="font-bold text-sm">

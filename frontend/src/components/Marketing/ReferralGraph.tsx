@@ -3,9 +3,11 @@ import { User, Globe } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import { useUser } from '../../context/UserContext';
 import { USDTLogo } from '../ui/USDTLogo';
+import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
 export const ReferralGraph = () => {
+    const { t } = useTranslation();
     const { user } = useUser();
     const [count, setCount] = useState(0);
     const [visibleNodes, setVisibleNodes] = useState(0);
@@ -100,7 +102,7 @@ export const ReferralGraph = () => {
                                     initial={{ scale: 0, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     className={clsx(
-                                        "absolute top-1/2 left-1/2 w-4 h-4 -ml-2 -mt-2 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.8)] flex items-center justify-center",
+                                        "absolute top-1/2 left-1/2 w-4 h-4 -ml-2 -mt-2 rounded-full flex items-center justify-center",
                                         "bg-white dark:bg-white",
                                         "shadow-[0_0_15px_rgba(59,130,246,0.5)]"
                                     )}
@@ -186,7 +188,7 @@ export const ReferralGraph = () => {
                     className={clsx(
                         "mt-6 px-4 py-1.5 rounded-full border backdrop-blur-xl flex items-center gap-2",
                         "bg-emerald-500/10 border-emerald-500/20",
-                        "bg-emerald-500/5 border-emerald-500/10"
+                        "dark:bg-emerald-500/5 dark:border-emerald-500/10"
                     )}
                 >
                     <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -194,7 +196,7 @@ export const ReferralGraph = () => {
                         "text-[10px] font-black uppercase tracking-[0.2em]",
                         "text-emerald-400 dark:text-emerald-400",
                         "text-emerald-600"
-                    )}>Viral Network Core</span>
+                    )}>{t('income.network.core')}</span>
                 </motion.div>
             </div>
 
@@ -229,7 +231,7 @@ export const ReferralGraph = () => {
                                 "text-[10px] font-bold leading-none",
                                 "text-emerald-400/60 dark:text-emerald-400/60",
                                 "text-emerald-600/60"
-                            )}>RECEIVED</span>
+                            )}>{t('income.network.received')}</span>
                             <span className={clsx(
                                 "font-black text-sm tracking-tighter",
                                 "text-white dark:text-white",
@@ -257,7 +259,7 @@ export const ReferralGraph = () => {
                             "text-[9px] font-black uppercase tracking-[0.3em]",
                             "text-slate-400 dark:text-slate-400",
                             "text-slate-500"
-                        )}>Estimated Network Yield</span>
+                        )}>{t('income.network.yield')}</span>
                         <div className="flex items-baseline gap-1.5">
                             <span className={clsx(
                                 "text-4xl font-black tracking-tighter",
@@ -284,7 +286,6 @@ export const ReferralGraph = () => {
                 </motion.div>
             </div>
         </div>
-
     );
 };
 

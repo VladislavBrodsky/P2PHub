@@ -33,19 +33,329 @@
         "start": "Start your journey"
     },
     "dashboard": {
-        "hero_badge": "The Financial Reset",
-        "hero_title_1": "The World is Shifting.",
-        "hero_title_2": "Own the Future.",
-        "hero_desc": "Traditional finance is slow, closed, and failing. <1>Pintopay</1> is the bridge to a borderless era where you earn from the flow of global money.",
-        "movement_active": "Movement Active: 142 Countries",
-        "cta_title": "Ready to build your \nglobal infrastructure?",
-        "cta_desc": "Join the elite network of partners reclaiming financial sovereignty."
+        "hero_badge": "Partner Network 2.0",
+        "hero_title_1": "Financial Freedom",
+        "hero_title_2": "Through Velocity",
+        "hero_desc": "Traditional finance is slow, closed, and failing. <strong className=\"text-text-primary font-black\">Pintopay</strong> is the bridge to a borderless era where you earn from the flow of global money.",
+        "movement_active": "Movement Active",
+        "cta_title": "Become a Partner\nand Lead the Shift",
+        "cta_desc": "Don't just watch the future unfold. Own a piece of the new global financial infrastructure.",
+        "stats": {
+            "global_partners": "Global Partners",
+            "volume_shifted": "Volume Shifted",
+            "countries_active": "Countries Active",
+            "recent_join": "<span className=\"text-(--color-text-primary) font-black\">+{{count}} new partners</span> joined the movement in the last 60m"
+        },
+        "ticker": [
+            "EARN PINTOPAY TOKENS",
+            "GLOBAL PAYMENTS",
+            "INSTANT WITHDRAWALS",
+            "BECOME A PARTNER",
+            "$1+ PER MIN 24/7"
+        ]
+    },
+    "evolution": {
+        "badge": "Live Evolution",
+        "title": "The Great\nFinancial Shift",
+        "desc": "The world is upgrading. Move from physical limits to digital light velocity.",
+        "steps": {
+            "0": {
+                "title": "Primitive Era",
+                "subtitle": "Traditional Cash",
+                "desc": "Physical, slow, and restricted by borders. Prone to inflation and theft.",
+                "status": "OBSOLETE"
+            },
+            "1": {
+                "title": "The Friction Gap",
+                "subtitle": "TradFi & Cards",
+                "desc": "Hidden fees and 3-5 day delays. You don't own your money.",
+                "status": "VULNERABLE"
+            },
+            "2": {
+                "title": "The Digital Proxy",
+                "subtitle": "Mobile Wallets",
+                "desc": "Apple/Google Pay. Convenient, but still tied to failing legacy rails.",
+                "status": "STABLE"
+            },
+            "3": {
+                "title": "The Financial Reset",
+                "subtitle": "Crypto & Web3",
+                "desc": "True ownership and 24/7 global liquidity. The bridge to freedom.",
+                "status": "FREEDOM"
+            },
+            "4": {
+                "title": "ELITE VELOCITY",
+                "subtitle": "Pintopay QR",
+                "desc": "Instant, global, P2P settlements at $1/minute velocity. The ultimate infrastructure.",
+                "status": "ELITE"
+            }
+        }
+    },
+    "income": {
+        "badge": "The Partner Advantage",
+        "title": "Earn $1 ",
+        "title_highlight": "Per Minute",
+        "desc": "Traditional finance is a <strong className=\"text-blue-600 dark:text-blue-400\">walled garden</strong>. As a <strong className=\"text-slate-900 dark:text-white font-black underline decoration-blue-500/30 underline-offset-4\">Pintopay Partner</strong>, you are the bridge. Every global transaction becomes your dividends.",
+        "modes": {
+            "profit": "Profit Potential",
+            "inaction": "Cost of Inaction"
+        },
+        "profit": {
+            "projector": "Revenue Projector",
+            "active_partners": "Active Partners",
+            "monthly_income": "Est. Monthly Income",
+            "unlock_btn": "UNLOCK $1 STRATEGY"
+        },
+        "inaction": {
+            "projector": "Daily Opportunity Cost",
+            "status": "Current Status",
+            "hours": "Hours You Work / Day",
+            "value_per_min": "Your Value Per Minute",
+            "daily_loss": "Potential Daily Loss"
+        },
+        "levels": {
+            "student": "Student / Unemployed",
+            "entry": "Entry Level",
+            "pro": "Professional",
+            "manager": "Manager",
+            "exec": "Executive"
+        },
+        "network": {
+            "title": "Viral Network Effect",
+            "desc": "When you build a network, your income disconnects from time.",
+            "close": "CLOSE",
+            "core": "Viral Network Core",
+            "received": "RECEIVED",
+            "yield": "Estimated Network Yield"
+        },
+        "stats": {
+            "global_target": "Global Target",
+            "scaling": "Scaling x2 faster than TradFi",
+            "revenue": "Revenue Flow",
+            "dividends": "Non-stop dividends"
+        },
+        "waiting": {
+            "title": "The Cost of Waiting",
+            "desc": "While you trade hours for a fixed wage, the Digital Economy generates value 24/7. <strong className=\"text-rose-500 font-black ml-1.5 inline-block dark:drop-shadow-[0_0_8px_rgba(244,63,94,0.3)]\">Every minute you wait is a tax on your potential.</strong><br /><span className=\"opacity-80 dark:text-slate-300\">Unlock the strategy to stop calculating loss and start capturing value.</span>"
+        },
+        "cta": {
+            "join": "JOIN THE MOVEMENT",
+            "beta": "Limited Beta Slots Available",
+            "lead": "LEAD THE MARKET",
+            "unlocked": "Strategy Unlocked • Access Granted"
+        }
     },
     "nav": {
         "home": "Home",
         "cards": "Cards",
         "partner": "Partner",
         "league": "League",
-        "earn": "Earn"
+        "earn": "Growth"
+    },
+    "cards": {
+        "title": "Choose Card",
+        "tabs": {
+            "virtual": "Virtual",
+            "physical": "Physical",
+            "platinum": "Platinum"
+        },
+        "virtual": {
+            "title": "Mastercard Virtual USD",
+            "desc": "Pay contactless in-store or online in 180+ countries",
+            "bonus_text": "on your balance after card activation"
+        },
+        "physical": {
+            "title": "Mastercard Physical",
+            "desc": "Premium soft-touch PVC card with worldwide delivery",
+            "bonus_text": "Standard Shipping included"
+        },
+        "platinum": {
+            "title": "Platinum Metal",
+            "desc": "Solid metal construction with concierge service",
+            "bonus_text": "Access to premium lounges"
+        },
+        "terms": "Card Issuance Terms",
+        "fees": {
+            "issue": "issue price",
+            "topup": "topup fee",
+            "auth": "authorization fee"
+        },
+        "action": "Issue card",
+        "premium_only": "Only for Premium Partner",
+        "instant_delivery": "Instant Delivery Worldwide",
+        "modal": {
+            "title": "Premium Status Required",
+            "desc": "Platinum cards are exclusively reserved for our most active partners. Upgrade your network value to unlock legendary status and concierge services.",
+            "steps": [
+                "Reach Global Partner rank",
+                "Earn 5,000+ Network XP",
+                "Activate 10+ active referrals"
+            ],
+            "upgrade": "Upgrade My Status",
+            "later": "Maybe Later"
+        }
+    },
+    "community": {
+        "tabs": {
+            "dashboard": "Dashboard",
+            "academy": "Academy"
+        }
+    },
+    "blog": {
+        "title": "Intelligence Hub",
+        "latest": "Latest Insights",
+        "view_all": "View All",
+        "by": "By",
+        "posts": {
+            "1": {
+                "title": "The $1 Per Minute Strategy: How Top Partners Scale",
+                "excerpt": "Discover the exact mechanics of high-velocity P2P settlements and why speed is the ultimate currency of 2026.",
+                "category": "Wealth Strategy"
+            },
+            "2": {
+                "title": "Why Traditional Banks are Losing the War Against QR",
+                "excerpt": "Old systems are collapsing under their own weight. We explore the frictionless future of QR-based payments.",
+                "category": "Financial Shift"
+            },
+            "3": {
+                "title": "From Cash to Crypto: The Psychological Shift",
+                "excerpt": "Understanding the mindset shift required to move from physical hoarding to digital liquidity and ownership.",
+                "category": "Growth Mindset"
+            },
+            "4": {
+                "title": "Building Borderless Wealth in a Closed Economy",
+                "excerpt": "How Pintopay is bypassing geographic restrictions to provide equal access to global markets for everyone.",
+                "category": "Freedom"
+            }
+        }
+    },
+    "leaderboard": {
+        "title": "Global Leaderboard",
+        "top_partners": "Top Partners",
+        "xp": "XP",
+        "levels": {
+            "platinum": "Platinum",
+            "gold": "Gold",
+            "silver": "Silver"
+        }
+    },
+    "referral": {
+        "title": "Earn & Level Up",
+        "viral": {
+            "hook": "🛑 STOP BLEEDING MONEY TO BANKS! 🛑",
+            "subtitle": "Start earning like a bank. $1 Every Minute. 🚀",
+            "text": "🛑 STOP BLEEDING MONEY TO BANKS! 🛑\n\nEverything you know about money is changing. While others lose, the 1% are profiting. 🦅\n\nJoin the Pintopay Partner Hub and start earning $1/minute in passive income.\n\n🔥 NO Bureaucracy\n🔥 NO Restrictions\n🔥 100% Financial Sovereignty\n\nBuild your empire now. 👇"
+        },
+        "modal": {
+            "invite_image_alt": "Passive Income Empire",
+            "limited_tier": "Limited Access Tier",
+            "recruit_title": "Recruit Your Inner Circle",
+            "share_telegram": "Share to Telegram",
+            "share_more": "Share...",
+            "copy_link": "Copy Link",
+            "boost_desc": "Each referral boosts your XP and moves you closer to the **Physical Platinum Card**."
+        },
+        "qr": {
+            "title": "Claim Your \nFinancial Sovereignty",
+            "sovereignty": "Financial Sovereignty",
+            "desc": "Earn <1>$1/minute</1> for every active partner. <br />\nBuild your empire now.",
+            "copy": "Copy Link",
+            "save": "Save QR"
+        },
+        "widget": {
+            "invite": "Invite Friend",
+            "qr": "Show QR"
+        },
+        "levelup": {
+            "title": "LEVEL UP!",
+            "reached": "You reached Level {{level}}"
+        }
+    },
+    "tasks": {
+        "progress": "Progress",
+        "claim": "Claim Reward",
+        "start": "Start Mission",
+        "level_short": "Lvl",
+        "telegram_bot": {
+            "title": "Open Pintopay Bot",
+            "desc": "Start your journey with our official bot."
+        },
+        "banking_app": {
+            "title": "Join Banking Super App",
+            "desc": "Connect with the future of finance."
+        },
+        "community_chat": {
+            "title": "Join Community",
+            "desc": "Meet other partners and share strategies."
+        },
+        "ambassador_hub": {
+            "title": "Web3 Ambassador Hub",
+            "desc": "Follow for growth tips and updates."
+        },
+        "invite_3_friends": {
+            "title": "Invite 3 Friends",
+            "desc": "Build your initial network to unlock Level 2."
+        },
+        "daily_checkin_5": {
+            "title": "5 Day Streak",
+            "desc": "Open the app 5 days in a row."
+        },
+        "invite_10_friends": {
+            "title": "Network Builder",
+            "desc": "Expand your team to 10 partners."
+        }
+    },
+    "milestones": {
+        "title": "Road to Glory",
+        "level": "Level",
+        "5": "Pioneer Badge",
+        "10": "500 XP Boost",
+        "20": "Ambassador Status",
+        "30": "10% Card Fee Discount",
+        "40": "Black Physical Card",
+        "50": "VIP Support",
+        "65": "Elite Dashboard",
+        "80": "Governance Vote",
+        "90": "Founder Access",
+        "100": "Physical Platinum Card"
+    },
+    "ranks": {
+        "Beginner": "Beginner",
+        "Novice": "Novice",
+        "Apprentice": "Apprentice",
+        "Contributor": "Contributor",
+        "Pioneer": "Pioneer",
+        "Pathbreaker": "Pathbreaker",
+        "Adventurer": "Adventurer",
+        "Voyager": "Voyager",
+        "Ambassador": "Ambassador",
+        "Leader": "Leader",
+        "Senior Leader": "Senior Leader",
+        "Executive": "Executive",
+        "Director": "Director",
+        "President": "President",
+        "Global Partner": "Global Partner",
+        "World Partner": "World Partner",
+        "Elite": "Elite",
+        "Master": "Master",
+        "Grandmaster": "Grandmaster",
+        "Legend": "Legend",
+        "VIP": "VIP",
+        "VIP II": "VIP II",
+        "VIP III": "VIP III",
+        "VIP Elite": "VIP Elite",
+        "Premium": "Premium",
+        "Premium Plus": "Premium Plus",
+        "PRO": "PRO",
+        "PRO Max": "PRO Max",
+        "Immortal": "Immortal",
+        "Eternal": "Eternal"
+    },
+    "earn_header": {
+        "level": "Level",
+        "xp_progress": "XP Progress",
+        "xp_to_next": "{{xp}} XP to next rank rewards",
+        "partners": "Partners",
+        "total_xp": "Total XP"
     }
 }

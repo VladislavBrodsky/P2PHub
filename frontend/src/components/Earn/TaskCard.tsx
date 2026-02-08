@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
-import { Lock, Unlock, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Lock, CheckCircle2, ArrowRight } from 'lucide-react';
 import { Task } from '../../data/earnData';
+import { useTranslation } from 'react-i18next';
 
 interface TaskCardProps {
     task: Task;
@@ -11,6 +12,7 @@ interface TaskCardProps {
 }
 
 export const TaskCard = ({ task, status, userReferrals, onClick, onClaim }: TaskCardProps) => {
+    const { t } = useTranslation();
 
     // Status Logic
     const isLocked = status === 'LOCKED';
@@ -21,7 +23,7 @@ export const TaskCard = ({ task, status, userReferrals, onClick, onClaim }: Task
     // Visual Variations
     const variants = {
         LOCKED: 'opacity-50 grayscale cursor-not-allowed border-white/10 bg-black/20',
-        AVAILABLE: 'glass-panel hover:border-blue-500/50 hover:bg-white/5 cursor-pointer text-[var(--color-text-primary)]',
+        AVAILABLE: 'glass-panel hover:border-blue-500/50 hover:bg-white/5 cursor-pointer text-(--color-text-primary)',
         CLAIMABLE: 'glass-panel border-emerald-500/50 bg-emerald-500/10 shadow-[0_0_20px_rgba(16,185,129,0.2)] animate-pulse',
         COMPLETED: 'glass-panel border-green-500/20 bg-green-500/5 cursor-default'
     };
@@ -36,10 +38,10 @@ export const TaskCard = ({ task, status, userReferrals, onClick, onClaim }: Task
         >
             {/* Locked Overlay */}
             {isLocked && (
-                <div className="absolute inset-0 z-20 flex items-center justify-center bg-[var(--color-bg-app)]/60 backdrop-blur-[1px] rounded-2xl">
-                    <div className="bg-[var(--color-bg-surface)] px-4 py-2 rounded-full border border-[var(--color-border-glass)] flex items-center gap-2 shadow-sm">
+                <div className="absolute inset-0 z-20 flex items-center justify-center bg-(--color-bg-app)/60 backdrop-blur-[1px] rounded-2xl">
+                    <div className="bg-(--color-bg-surface) px-4 py-2 rounded-full border border-(--color-border-glass) flex items-center gap-2 shadow-sm">
                         <Lock className="w-4 h-4 text-brand-muted" />
-                        <span className="text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Lvl {task.minLevel}</span>
+                        <span className="text-[10px] font-bold text-(--color-text-secondary) uppercase tracking-wider">{t('tasks.level_short')} {task.minLevel}</span>
                     </div>
                 </div>
             )}
@@ -53,7 +55,7 @@ export const TaskCard = ({ task, status, userReferrals, onClick, onClaim }: Task
                 {/* Content */}
                 <div className="flex-1 space-y-1">
                     <div className="flex justify-between items-start">
-                        <h4 className="text-sm font-bold text-[var(--color-text-primary)] line-clamp-1">{task.title}</h4>
+                        <h4 className="text-sm font-bold text-(--color-text-primary) line-clamp-1">{task.title}</h4>
                         <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${isClaimable ? 'bg-white text-emerald-600' : 'bg-brand-muted/10 text-brand-muted'}`}>
                             +{task.reward} XP
                         </span>
@@ -66,8 +68,8 @@ export const TaskCard = ({ task, status, userReferrals, onClick, onClaim }: Task
                     {task.type === 'referral' && (
                         <div className="pt-2 space-y-1">
                             <div className="flex justify-between text-[10px] font-bold uppercase text-brand-muted/80">
-                                <span>Progress</span>
-                                <span>{Math.min(userReferrals, task.requirement || 0)} / {task.requirement}</span>
+                                <span>{t('tasks.progress')}</span>
+                                <span className="font-mono">{Math.min(userReferrals, task.requirement || 0)} / {task.requirement}</span>
                             </div>
                             <div className="h-1.5 w-full bg-brand-muted/10 rounded-full overflow-hidden">
                                 <motion.div
@@ -90,11 +92,11 @@ export const TaskCard = ({ task, status, userReferrals, onClick, onClaim }: Task
                             onClick={(e) => { e.stopPropagation(); onClaim?.(); }}
                         >
                             <CheckCircle2 className="w-4 h-4" />
-                            Claim Reward
+                            {t('tasks.claim')}
                         </button>
                     ) : (
                         <div className="flex items-center gap-1 text-[10px] font-bold text-blue-400 uppercase tracking-wider group-hover:gap-2 transition-all">
-                            Start Mission <ArrowRight className="w-3 h-3" />
+                            {t('tasks.start')} <ArrowRight className="w-3 h-3" />
                         </div>
                     )}
                 </div>
