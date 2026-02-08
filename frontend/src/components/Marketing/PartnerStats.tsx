@@ -10,6 +10,27 @@ interface PartnerStatsProps {
     onNavigateToEarn?: () => void;
 }
 
+const PartnerAvatar = ({ partner, index }: { partner: any; index: number }) => {
+    const [imgError, setImgError] = useState(false);
+
+    if (partner.photo_url && !imgError) {
+        return (
+            <img
+                src={partner.photo_url}
+                alt={partner.first_name}
+                className="w-full h-full object-cover"
+                onError={() => setImgError(true)}
+            />
+        );
+    }
+
+    return (
+        <div className={`w-full h-full flex items-center justify-center text-[10px] font-black text-white uppercase bg-linear-to-br ${['from-blue-500 to-indigo-600', 'from-purple-500 to-pink-600', 'from-emerald-500 to-teal-600', 'from-amber-500 to-orange-600'][index % 4]}`}>
+            {(partner.first_name?.[0] || partner.username?.[0] || '?')}
+        </div>
+    );
+};
+
 export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
     const { t } = useTranslation();
     const [recentPartners, setRecentPartners] = useState<any[]>([]);
@@ -93,13 +114,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     {recentPartners.length > 0 ? (
                         recentPartners.slice(0, 4).map((partner, i) => (
                             <div key={partner.id || i} className="w-7 h-7 rounded-full border-2 border-(--color-bg-deep) bg-slate-800 flex items-center justify-center overflow-hidden shadow-lg transition-transform hover:scale-110">
-                                {partner.photo_url ? (
-                                    <img src={partner.photo_url} alt={partner.first_name} className="w-full h-full object-cover" />
-                                ) : (
-                                    <div className={`w-full h-full flex items-center justify-center text-[10px] font-black text-white uppercase bg-linear-to-br ${['from-blue-500 to-indigo-600', 'from-purple-500 to-pink-600', 'from-emerald-500 to-teal-600', 'from-amber-500 to-orange-600'][i % 4]}`}>
-                                        {(partner.first_name?.[0] || partner.username?.[0] || '?')}
-                                    </div>
-                                )}
+                                <PartnerAvatar partner={partner} index={i} />
                             </div>
                         ))
                     ) : (

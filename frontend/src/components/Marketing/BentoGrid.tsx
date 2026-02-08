@@ -153,27 +153,6 @@ export const BentoGrid = () => {
                             />
                         ))}
                     </div>
-
-                    {/* Premium Swipe Hint */}
-                    <div className="relative group overflow-hidden">
-                        <motion.div
-                            animate={{ x: [0, 5, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                            className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-500/10 bg-blue-500/5 backdrop-blur-sm shadow-sm"
-                        >
-                            <span className="text-[8px] font-black uppercase tracking-[0.25em] text-blue-500/80">
-                                {t('evolution.swipe_hint') || 'Swipe to Explore'}
-                            </span>
-                            <div className="flex items-center -space-x-1">
-                                <div className="w-1 h-1 rounded-full bg-blue-500/40" />
-                                <div className="w-1 h-1 rounded-full bg-blue-500/60" />
-                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
-                            </div>
-                        </motion.div>
-
-                        {/* Interactive Aura */}
-                        <div className="absolute inset-0 bg-blue-500/10 blur-xl rounded-full -z-10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
                 </div>
             </div>
         </section>
