@@ -35,45 +35,46 @@ export const Footer = () => {
     };
 
     return (
-        <footer className="px-6 pb-24 pt-8 border-t border-slate-800/50 bg-slate-900/50 backdrop-blur-xl mt-12">
+        <footer className="px-6 pb-28 pt-10 border-t border-slate-800 bg-(--color-bg-deep) relative z-50">
             <div className="max-w-md mx-auto space-y-8">
                 {/* Disclaimer Section */}
-                <div className="space-y-3">
-                    <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
+                <div className="space-y-4">
+                    <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
                         Legal Disclaimer
                     </h5>
-                    <p className="text-[10px] leading-relaxed text-slate-400 font-medium">
-                        We are a community of digital nomads and online entrepreneurs who search for global trends. We act as a <span className="text-slate-200 font-bold">Third-Party Ambassador Agency</span> and do not have an official corporate connection to Pintopay.
+                    <p className="text-[11px] leading-relaxed text-slate-400 font-medium">
+                        We are a community of digital nomads and online entrepreneurs who search for global trends. We act as a <span className="text-white font-bold">Third-Party Ambassador Agency</span> and do not have an official corporate connection to Pintopay.
                     </p>
-                    <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl flex gap-3 items-start">
-                        <Shield className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                        <p className="text-[9px] text-rose-200/80 leading-relaxed font-semibold">
+                    <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl flex gap-3 items-start relative overflow-hidden">
+                        <div className="absolute inset-0 bg-rose-500/5 animate-pulse pointer-events-none" />
+                        <Shield className="w-4 h-4 text-rose-500 shrink-0 mt-0.5 relative z-10" />
+                        <p className="text-[10px] text-rose-200 leading-relaxed font-bold relative z-10">
                             All fast-growing trends include risks. Please conduct your own due diligence.
                         </p>
                     </div>
                 </div>
 
                 {/* Links */}
-                <div className="flex flex-wrap gap-4 justify-center items-center pt-4 border-t border-white/5">
+                <div className="flex flex-wrap gap-6 justify-center items-center pt-6 border-t border-slate-800/50">
                     <button
                         onClick={() => setActiveDoc('terms')}
-                        className="text-[10px] font-bold text-slate-500 hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1.5"
+                        className="text-[10px] font-bold text-slate-400 hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1.5"
                     >
-                        <Scale className="w-3 h-3" />
+                        <Scale className="w-3.5 h-3.5" />
                         Terms of Use
                     </button>
-                    <span className="text-slate-700">•</span>
                     <button
                         onClick={() => setActiveDoc('privacy')}
-                        className="text-[10px] font-bold text-slate-500 hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1.5"
+                        className="text-[10px] font-bold text-slate-400 hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1.5"
                     >
-                        <FileText className="w-3 h-3" />
+                        <FileText className="w-3.5 h-3.5" />
                         Privacy Policy
                     </button>
                 </div>
 
-                <div className="text-center">
-                    <p className="text-[9px] text-slate-600 font-bold tracking-widest uppercase">
+                <div className="text-center space-y-2">
+                    <div className="w-8 h-1 bg-slate-800 mx-auto rounded-full" />
+                    <p className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">
                         © 2026 Ambassador Agency. All rights reserved.
                     </p>
                 </div>
