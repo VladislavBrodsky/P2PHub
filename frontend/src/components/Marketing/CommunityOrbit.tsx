@@ -17,12 +17,10 @@ const CRYPTO_ICONS = [
 ];
 
 const ECOSYSTEM_ICONS = [
-    { name: 'ApplePay', icon: Apple, color: '#FFFFFF', gradient: 'linear-gradient(135deg, #000, #333)' },
-    { name: 'GooglePay', icon: CreditCard, color: '#4285F4', gradient: 'linear-gradient(135deg, #4285F4, #34A853)' },
-    { name: 'NFC', icon: Zap, color: '#FFD700', gradient: 'linear-gradient(135deg, #FFD700, #FFA500)' },
-    { name: 'QR', icon: QrCode, color: '#00FFCC', gradient: 'linear-gradient(135deg, #00FFCC, #0099FF)' },
-    { name: 'Globe', icon: Globe, color: '#0098EA', gradient: 'linear-gradient(135deg, #0098EA, #00C2FF)' },
-    { name: 'Earning', icon: TrendingUp, color: '#53D3AC', gradient: 'linear-gradient(135deg, #53D3AC, #219672)' }
+    { name: 'ApplePay', icon: Apple, color: '#FFFFFF', gradient: 'linear-gradient(135deg, rgba(0,0,0,0.8), rgba(60,60,60,0.4))' },
+    { name: 'GooglePay', icon: CreditCard, color: '#4285F4', gradient: 'linear-gradient(135deg, rgba(66,133,244,0.8), rgba(52,168,83,0.4))' },
+    { name: 'NFC', icon: Zap, color: '#FFD700', gradient: 'linear-gradient(135deg, rgba(255,215,0,0.8), rgba(255,165,0,0.4))' },
+    { name: 'QR', icon: QrCode, color: '#00FFCC', gradient: 'linear-gradient(135deg, rgba(0,255,204,0.8), rgba(0,153,255,0.4))' }
 ];
 
 // Crypto SVG Icons
@@ -130,16 +128,16 @@ export const CommunityOrbit = () => {
 };
 
 const EcosystemIcon = ({ item, index, total }: { item: any, index: number, total: number }) => {
-    const radius = 68; // Closer to the logo
-    const duration = 60; // Steady 1 turn per minute
+    const radius = 68; // Steady radius
+    const duration = 60; // 1 turn every 1 minute
     const angle = (index / total) * 360;
 
     return (
         <motion.div
             className="absolute z-20"
             style={{
-                width: 28, // Slightly bigger for visibility
-                height: 28,
+                width: 32, // More premium size
+                height: 32,
                 willChange: 'transform'
             }}
             animate={{
@@ -160,34 +158,42 @@ const EcosystemIcon = ({ item, index, total }: { item: any, index: number, total
         >
             <motion.div
                 animate={{
-                    scale: [0.95, 1.05, 0.95],
-                    opacity: [0.8, 1, 0.8]
+                    scale: [0.98, 1.05, 0.98],
+                    rotateY: [-5, 5, -5], // Gentle 3D tilt
+                    rotateX: [-5, 5, -5]
                 }}
                 transition={{
-                    duration: 4,
+                    duration: 5,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: index * 0.2
+                    delay: index * 0.5
                 }}
-                className="group relative flex items-center justify-center h-full w-full rounded-full border border-white/40 shadow-xl backdrop-blur-md overflow-hidden"
+                className="group relative flex items-center justify-center h-full w-full rounded-full border border-white/40 shadow-2xl backdrop-blur-xl overflow-hidden preserve-3d"
                 style={{
                     background: item.gradient,
-                    boxShadow: '0 4px 15px -5px rgba(0,0,0,0.5)'
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.2)'
                 }}
             >
+                {/* 3D Depth Layer */}
+                <div className="absolute inset-0 rounded-full bg-linear-to-b from-white/10 to-black/20 pointer-events-none" />
+
                 {/* Premium Glass Sheen */}
-                <div className="absolute inset-0 bg-linear-to-tr from-white/30 to-transparent opacity-40" />
-
-                {/* Inner Glow */}
-                <div className="absolute inset-[1px] rounded-full border border-white/20" />
-
-                <item.icon className="relative z-10 w-3.5 h-3.5 text-white drop-shadow-sm" />
-
-                {/* Fractal Shine Animation */}
                 <motion.div
-                    animate={{ x: [-40, 40] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: index }}
-                    className="absolute inset-0 w-1/2 h-full bg-white/20 -skew-x-12 blur-sm"
+                    animate={{ rotate: [0, 360] }}
+                    transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                    className="absolute -inset-full bg-linear-to-tr from-transparent via-white/10 to-transparent rotate-45 opacity-20 pointer-events-none"
+                />
+
+                {/* Inner Bezel Glow */}
+                <div className="absolute inset-px rounded-full border border-white/30" />
+
+                <item.icon className="relative z-10 w-4 h-4 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] filter brightness-110" />
+
+                {/* Animated Shine Streak */}
+                <motion.div
+                    animate={{ x: [-100, 100], opacity: [0, 0.5, 0] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: index }}
+                    className="absolute inset-0 w-1/3 h-full bg-linear-to-r from-transparent via-white/30 to-transparent -skew-x-20 blur-md pointer-events-none"
                 />
             </motion.div>
         </motion.div>
