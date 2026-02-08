@@ -213,7 +213,7 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
 
                             {/* Glass Container */}
                             <div
-                                className="relative h-full w-full overflow-hidden rounded-full border-2 border-white/80 bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110"
+                                className="relative h-full w-full overflow-hidden rounded-full border-2 border-black/40 bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110"
                                 style={{
                                     boxShadow: '0 10px 20px -5px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.3)'
                                 }}
@@ -231,7 +231,7 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
 
                             {/* Vibrant Glass Token with Defined Gradient */}
                             <div
-                                className="relative flex h-full w-full items-center justify-center rounded-full border-2 border-white/90 shadow-lg transition-transform duration-300 group-hover:scale-110 cursor-pointer"
+                                className="relative flex h-full w-full items-center justify-center rounded-full border-2 border-black/40 shadow-lg transition-transform duration-300 group-hover:scale-110 cursor-pointer"
                                 style={{
                                     background: `linear-gradient(135deg, ${item.gradientStart || item.color}, ${item.gradientEnd || item.color})`,
                                     boxShadow: `0 10px 20px -5px ${item.color}60, inset 0 2px 4px rgba(255,255,255,0.3)`
