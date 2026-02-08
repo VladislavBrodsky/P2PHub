@@ -66,14 +66,14 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                     whileHover={{ scale: 1.05, borderColor: "rgba(59, 130, 246, 0.5)" }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => console.log("Navigate to Levels/Rewards")}
-                    className="group relative pointer-events-auto z-50 flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/5 dark:bg-slate-900/60 px-3 py-1.5 shadow-premium backdrop-blur-2xl transition-all hover:bg-slate-50/10 dark:hover:bg-slate-800/80 cursor-pointer overflow-hidden"
+                    className="group relative pointer-events-auto z-50 flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/5 dark:bg-slate-800/90 px-3 py-1.5 shadow-premium backdrop-blur-2xl transition-all hover:bg-slate-50/10 dark:hover:bg-slate-700 cursor-pointer overflow-hidden"
                 >
                     {/* Ambient Glow */}
                     <div className="absolute inset-0 bg-blue-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                     <div className="relative z-10 flex items-center gap-2">
                         <div className="flex items-center gap-1.5">
-                            <span className="text-[9px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 group-hover:text-blue-500 transition-colors">Lvl</span>
+                            <span className="text-[9px] font-black uppercase tracking-wider text-slate-500 dark:text-blue-400 group-hover:text-blue-500 transition-colors">Lvl</span>
                             <span className="text-sm font-black text-slate-900 dark:text-white dark:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]">
                                 {user?.level || 5}
                             </span>
@@ -83,7 +83,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         <div className="h-3 w-px bg-slate-200 dark:bg-white/10" />
 
                         <div className="flex items-center gap-1.5">
-                            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200">
+                            <span className="text-[11px] font-bold text-slate-700 dark:text-white">
                                 {user?.xp || 150}
                             </span>
                             <span className="text-[9px] font-black uppercase tracking-wider text-emerald-500 dark:text-emerald-400">XP</span>
