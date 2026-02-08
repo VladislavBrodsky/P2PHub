@@ -17,8 +17,9 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser && \
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 # Install dependencies
-COPY pyproject.toml .
-RUN uv pip install --system --no-cache -r pyproject.toml
+# Install dependencies
+COPY requirements.txt .
+RUN uv pip install --system --no-cache -r requirements.txt
 
 # Copy source code
 COPY --chown=appuser:appuser . .
