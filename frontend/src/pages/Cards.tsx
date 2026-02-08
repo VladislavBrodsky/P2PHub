@@ -219,8 +219,9 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             onClick={handleGetCard}
                             className={`w-full h-16 rounded-2xl font-black text-lg shadow-[0_20px_40px_-12px_rgba(0,0,0,0.15)] flex items-center justify-center gap-3 transition-transform relative overflow-hidden ${selectedTab === 'platinum'
                                 ? 'bg-linear-to-br from-slate-100 via-white to-slate-300 text-slate-900 border border-white/50'
-                                : 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
-                                }`}
+                                : 'bg-slate-900 text-white' // Removed dark: variants to ensure contrast vs light background mismatch
+                                }`
+                            }
                         >
                             {selectedTab === 'platinum' ? (
                                 <>
