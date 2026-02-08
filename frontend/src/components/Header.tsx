@@ -18,16 +18,16 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                     onClick={onOpenMenu}
                     className="group -ml-1 rounded-2xl transition-all hover:bg-slate-100/50 active:scale-95"
                 >
-                    <div className="flex items-center gap-2 rounded-2xl border border-[var(--color-border-glass)] bg-[var(--color-bg-surface)]/80 dark:bg-slate-900/50 px-3 py-1.5 shadow-sm backdrop-blur-md transition-colors">
-                        <MoreHorizontal className="text-[var(--color-text-primary)] h-5 w-5 transition-transform group-hover:scale-110" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-[var(--color-text-primary)] pr-0.5">
+                    <div className="flex items-center gap-2 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-surface)/80 dark:bg-slate-900/50 px-3 py-1.5 shadow-premium backdrop-blur-md transition-colors">
+                        <MoreHorizontal className="text-(--color-text-primary) h-5 w-5 transition-transform group-hover:scale-110" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-(--color-text-primary) pr-0.5">
                             Menu
                         </span>
                     </div>
                 </button>
 
-                <div className="flex items-center gap-2 rounded-xl border border-[var(--color-border-glass)] bg-[var(--color-bg-surface)]/80 dark:bg-slate-900/50 px-3 py-1.5 shadow-sm backdrop-blur-md">
-                    <div className="text-[var(--color-success)] flex items-center gap-1.5">
+                <div className="flex items-center gap-2 rounded-xl border border-(--color-border-glass) bg-(--color-bg-surface)/80 dark:bg-slate-900/50 px-3 py-1.5 shadow-premium backdrop-blur-md">
+                    <div className="text-(--color-success) flex items-center gap-1.5">
                         <span className="text-[10px] font-black uppercase tracking-widest">
                             {user?.level && user.level > 10 ? 'Elite' : 'Verified'}
                         </span>
