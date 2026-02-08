@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Apple, CreditCard, QrCode, Globe, TrendingUp, Zap } from 'lucide-react';
+import { Globe, TrendingUp } from 'lucide-react';
 
 const AVATARS = [
     "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&fm=webp",
@@ -16,12 +16,6 @@ const CRYPTO_ICONS = [
     { name: 'TON', color: '#0098EA', gradientStart: '#0098EA', gradientEnd: '#00C2FF' }
 ];
 
-const ECOSYSTEM_ICONS = [
-    { name: 'ApplePay', icon: Apple, color: '#FFFFFF', gradient: 'linear-gradient(135deg, rgba(0,0,0,0.8), rgba(60,60,60,0.4))' },
-    { name: 'GooglePay', icon: CreditCard, color: '#4285F4', gradient: 'linear-gradient(135deg, rgba(66,133,244,0.8), rgba(52,168,83,0.4))' },
-    { name: 'NFC', icon: Zap, color: '#FFD700', gradient: 'linear-gradient(135deg, rgba(255,215,0,0.8), rgba(255,165,0,0.4))' },
-    { name: 'QR', icon: QrCode, color: '#00FFCC', gradient: 'linear-gradient(135deg, rgba(0,255,204,0.8), rgba(0,153,255,0.4))' }
-];
 
 // Crypto SVG Icons
 const CryptoIcon = ({ name }: { name: string }) => {
@@ -114,10 +108,6 @@ export const CommunityOrbit = () => {
             {/* Central Logic */}
             <CentralLogo />
 
-            {/* Ecosystem Inner Orbit */}
-            {ECOSYSTEM_ICONS.map((item, i) => (
-                <EcosystemIcon key={i} item={item} index={i} total={ECOSYSTEM_ICONS.length} />
-            ))}
 
             {/* Orbiting Avatars & Crypto Icons */}
             {orbitItems.map((item, i) => (
@@ -127,79 +117,6 @@ export const CommunityOrbit = () => {
     );
 };
 
-const EcosystemIcon = ({ item, index, total }: { item: any, index: number, total: number }) => {
-    const radius = 68; // Steady radius
-    const duration = 60; // 1 turn every 1 minute
-    const angle = (index / total) * 360;
-
-    return (
-        <motion.div
-            className="absolute z-20 will-change-transform"
-            style={{
-                width: 32, // More premium size
-                height: 32,
-                transform: 'translateZ(0)' // Force GPU layer
-            }}
-            animate={{
-                x: [
-                    Math.cos((angle) * (Math.PI / 180)) * radius,
-                    Math.cos((angle + 360) * (Math.PI / 180)) * radius
-                ],
-                y: [
-                    Math.sin((angle) * (Math.PI / 180)) * radius,
-                    Math.sin((angle + 360) * (Math.PI / 180)) * radius
-                ],
-            }}
-            transition={{
-                duration,
-                repeat: Infinity,
-                ease: "linear"
-            }}
-        >
-            {/* Float & Breathing Animation Layer */}
-            <motion.div
-                animate={{
-                    scale: [0.98, 1.05, 0.98],
-                    rotateY: [-5, 5, -5], // Gentle 3D tilt
-                    rotateX: [-5, 5, -5]
-                }}
-                transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: index * 0.5
-                }}
-                className="group relative flex items-center justify-center h-full w-full rounded-full border border-white/40 shadow-2xl backdrop-blur-xl overflow-hidden preserve-3d will-change-transform"
-                style={{
-                    background: item.gradient,
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.2)'
-                }}
-            >
-                {/* 3D Depth Layer */}
-                <div className="absolute inset-0 rounded-full bg-linear-to-b from-white/10 to-black/20 pointer-events-none" />
-
-                {/* Premium Glass Sheen */}
-                <motion.div
-                    animate={{ rotate: [0, 360] }}
-                    transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                    className="absolute -inset-full bg-linear-to-tr from-transparent via-white/10 to-transparent rotate-45 opacity-20 pointer-events-none"
-                />
-
-                {/* Inner Bezel Glow */}
-                <div className="absolute inset-px rounded-full border border-white/30" />
-
-                <item.icon className="relative z-10 w-4 h-4 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] filter brightness-110" />
-
-                {/* Animated Shine Streak */}
-                <motion.div
-                    animate={{ x: [-100, 100], opacity: [0, 0.5, 0] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: index }}
-                    className="absolute inset-0 w-1/3 h-full bg-linear-to-r from-transparent via-white/30 to-transparent -skew-x-20 blur-md pointer-events-none"
-                />
-            </motion.div>
-        </motion.div>
-    );
-};
 
 const CentralLogo = () => (
     <motion.div

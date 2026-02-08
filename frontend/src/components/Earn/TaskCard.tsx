@@ -74,7 +74,7 @@ export const TaskCard = ({ task, status, userReferrals, onClick, onClaim }: Task
                                 <span>{t('tasks.progress')}</span>
                                 <span className="font-mono">{Math.min(userReferrals, task.requirement || 0)} / {task.requirement}</span>
                             </div>
-                            <div className="h-1.5 w-full bg-brand-muted/10 rounded-full overflow-hidden p-[1px] relative">
+                            <div className="h-1.5 w-full bg-brand-muted/10 rounded-full overflow-hidden p-px relative">
                                 <motion.div
                                     className="h-full rounded-full relative overflow-hidden"
                                     style={{

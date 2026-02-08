@@ -21,8 +21,8 @@ export const NavButton = ({ active, onClick, icon, label }: NavButtonProps) => {
         <button
             onClick={handleClick}
             className={`relative flex h-full min-w-0 flex-1 flex-col items-center justify-center gap-1 transition-all duration-300 active:scale-90 ${active
-                ? 'text-[var(--nav-active)]'
-                : 'text-[var(--nav-inactive)] hover:text-[var(--color-text-primary)]'
+                ? 'text-(--nav-active)'
+                : 'text-(--nav-inactive) hover:text-(--color-text-primary)'
                 }`}
         >
             <div
@@ -38,7 +38,7 @@ export const NavButton = ({ active, onClick, icon, label }: NavButtonProps) => {
             {active && (
                 <motion.div
                     layoutId="nav-dot"
-                    className="bg-[var(--color-brand-blue)] absolute bottom-2 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full"
+                    className="bg-(--color-brand-blue) absolute bottom-2 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full"
                     transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
             )}

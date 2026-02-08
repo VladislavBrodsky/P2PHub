@@ -21,7 +21,7 @@ export const EarnHeader = () => {
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full animate-pulse pointer-events-none" />
             <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/20 blur-[100px] rounded-full animate-pulse delay-1000 pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col items-center text-center space-y-6 bg-white/[0.02] backdrop-blur-3xl rounded-[2.3rem] p-6 border border-white/5">
+            <div className="relative z-10 flex flex-col items-center text-center space-y-6 bg-white/2 backdrop-blur-3xl rounded-[2.3rem] p-6 border border-white/5">
 
                 {/* Level Circle - Quantum Design */}
                 <div className="relative flex flex-col items-center justify-center pt-4 pb-8">
@@ -159,7 +159,7 @@ export const EarnHeader = () => {
                         <div className="flex flex-col items-start gap-1 relative z-10">
                             <div className="flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 shadow-[0_0_5px_rgba(250,204,21,0.5)]" />
-                                <span className="text-[9px] font-black text-brand-muted uppercase tracking-[0.1em]">{t('earn_header.partners')}</span>
+                                <span className="text-[9px] font-black text-brand-muted uppercase tracking-widest">{t('earn_header.partners')}</span>
                             </div>
                             <div className="text-2xl font-black text-text-primary mt-1">
                                 {user?.referrals?.length || 0}
@@ -174,7 +174,7 @@ export const EarnHeader = () => {
                         <div className="flex flex-col items-start gap-1 relative z-10">
                             <div className="flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_5px_rgba(52,211,153,0.5)]" />
-                                <span className="text-[9px] font-black text-brand-muted uppercase tracking-[0.1em]">{t('earn_header.total_xp')}</span>
+                                <span className="text-[9px] font-black text-brand-muted uppercase tracking-widest">{t('earn_header.total_xp')}</span>
                             </div>
                             <div className="text-2xl font-black text-text-primary mt-1">
                                 {xp}

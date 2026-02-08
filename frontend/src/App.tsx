@@ -96,7 +96,7 @@ function App() {
                             <div className="flex flex-col items-center justify-center h-[60vh] text-center px-10">
                                 <div className="text-4xl mb-4">🚀</div>
                                 <h2 className="text-2xl font-black mb-2 uppercase">Coming Soon</h2>
-                                <p className="text-[var(--color-text-secondary)] font-medium">
+                                <p className="text-(--color-text-secondary) font-medium">
                                     We're building something amazing for our partners. Stay tuned!
                                 </p>
                             </div>
