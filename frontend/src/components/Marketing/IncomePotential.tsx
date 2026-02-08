@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import ReactDOM from 'react-dom';
 import { TrendingUp, Users, DollarSign, ArrowRight, Calculator, Clock, AlertCircle, Lock } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { ReferralGraph } from './ReferralGraph';
@@ -22,6 +23,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
     ], [t]);
 
     const [mode, setMode] = useState<CalculatorMode>('profit');
+    const [activeModal, setActiveModal] = useState<'market' | 'revenue' | null>(null);
     const [activePartners, setActivePartners] = useState(50);
     const [selectedLevel, setSelectedLevel] = useState(JOB_LEVELS[2]); // Default to Professional
     const [hoursWorked, setHoursWorked] = useState(8);
@@ -260,15 +262,11 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         {/* Glow effect for dark mode */}
                         <div className="absolute -top-10 -right-10 w-20 h-20 bg-blue-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                        <div className="flex justify-between items-start">
+                        <div className="flex justify-between items-start mb-2">
                             <Users className="w-5 h-5 text-slate-400 dark:text-blue-400 group-hover:text-blue-500 transition-colors" />
-                            <div className="flex items-center gap-1 bg-emerald-500/10 px-1.5 py-0.5 rounded-md border border-emerald-500/20">
-                                <TrendingUp className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                                <span className="text-[9px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-tighter whitespace-nowrap">+17% YoY</span>
-                            </div>
                         </div>
 
-                        <div>
+                        <div className="mb-4">
                             <div className="text-3xl font-black tabular-nums tracking-tighter text-slate-900 dark:text-white dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">1.2B</div>
                             <div className="text-[9px] font-black text-slate-500 dark:text-blue-300/80 uppercase tracking-[0.2em] mb-1">{t('income.stats.global_target')}</div>
                             <div className="text-[9px] font-medium text-slate-400 dark:text-slate-300 leading-tight">
@@ -276,18 +274,27 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             </div>
                         </div>
 
-                        <div className="absolute bottom-3 right-3 text-slate-300 dark:text-white/20">
-                            <AlertCircle className="w-3 h-3" />
+                        <div className="flex items-center justify-between mt-auto">
+                            <div className="flex items-center gap-1 bg-emerald-500/10 px-1.5 py-0.5 rounded-md border border-emerald-500/20">
+                                <TrendingUp className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                                <span className="text-[9px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-tighter whitespace-nowrap">+17% YoY</span>
+                            </div>
+                            <button onClick={() => setActiveModal('market')} className="text-slate-300 dark:text-white/20 hover:text-blue-400 transition-colors">
+                                <AlertCircle className="w-4 h-4" />
+                            </button>
                         </div>
                     </div>
 
-                    <div className="p-5 rounded-[2rem] bg-slate-50/50 dark:bg-slate-900/80 border border-blue-500/10 dark:border-white/10 backdrop-blur-xl space-y-2 group transition-all hover:bg-blue-500/5 shadow-sm dark:shadow-[0_10px_30px_-15px_rgba(16,185,129,0.3)]">
+                    <div className="p-5 rounded-[2rem] bg-slate-50/50 dark:bg-slate-900/80 border border-blue-500/10 dark:border-white/10 backdrop-blur-xl space-y-2 group transition-all hover:bg-blue-500/5 shadow-sm dark:shadow-[0_10px_30px_-15px_rgba(16,185,129,0.3)] relative overflow-hidden">
                         <DollarSign className="w-5 h-5 text-emerald-500 dark:text-emerald-400 mb-1 group-hover:scale-110 transition-transform" />
                         <div className="text-3xl font-black tabular-nums tracking-tighter text-slate-900 dark:text-white dark:drop-shadow-[0_0_15px_rgba(52,211,153,0.2)]">24/7</div>
                         <div className="text-[9px] font-black text-slate-500 dark:text-emerald-300/80 uppercase tracking-[0.2em]">{t('income.stats.revenue')}</div>
                         <div className="text-[9px] font-medium text-slate-400 dark:text-slate-300 leading-tight">
                             {t('income.stats.dividends')}
                         </div>
+                        <button onClick={() => setActiveModal('revenue')} className="absolute bottom-3 right-3 text-slate-300 dark:text-white/20 hover:text-emerald-400 transition-colors">
+                            <AlertCircle className="w-4 h-4" />
+                        </button>
                     </div>
                 </div>
 
@@ -349,6 +356,80 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     </div>
                 )}
             </motion.div>
+            {/* Info Modals Portal */}
+            {typeof document !== 'undefined' && ReactDOM.createPortal(
+                <AnimatePresence>
+                    {activeModal && (
+                        <>
+                            <motion.div
+                                key="modal-backdrop"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setActiveModal(null)}
+                                className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm"
+                            />
+                            <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 pointer-events-none">
+                                <motion.div
+                                    key="modal-content"
+                                    initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                                    exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                                    className="pointer-events-auto bg-slate-900 border border-slate-800 p-6 rounded-3xl max-w-sm w-full shadow-2xl relative overflow-hidden"
+                                >
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
+                                    <div className="relative z-10 space-y-4">
+                                        {activeModal === 'market' && (
+                                            <>
+                                                <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mb-2">
+                                                    <TrendingUp className="w-5 h-5 text-blue-400" />
+                                                </div>
+                                                <h3 className="text-lg font-black text-white">Market Opportunity</h3>
+                                                <p className="text-sm text-slate-300 leading-relaxed">
+                                                    The market of crypto users is growing faster than the Internet 20 years ago. We are in the right place at the right time.
+                                                </p>
+                                                <button
+                                                    onClick={() => setActiveModal(null)}
+                                                    className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-colors text-xs tracking-wider uppercase"
+                                                >
+                                                    Close
+                                                </button>
+                                            </>
+                                        )}
+
+                                        {activeModal === 'revenue' && (
+                                            <>
+                                                <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center mb-2">
+                                                    <DollarSign className="w-5 h-5 text-emerald-400" />
+                                                </div>
+                                                <h3 className="text-lg font-black text-white">24/7 Revenue</h3>
+                                                <p className="text-sm text-slate-300 leading-relaxed">
+                                                    Income Streams available for everyone with a real product.
+                                                </p>
+                                                <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                                                    <p className="text-xs font-bold text-emerald-400 text-center">
+                                                        Stop trading time for money. Start building equity.
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => {
+                                                        setActiveModal(null);
+                                                        onNavigateToPartner?.();
+                                                    }}
+                                                    className="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-colors text-xs tracking-wider uppercase flex items-center justify-center gap-2"
+                                                >
+                                                    Start Earning <ArrowRight className="w-4 h-4" />
+                                                </button>
+                                            </>
+                                        )}
+                                    </div>
+                                </motion.div>
+                            </div>
+                        </>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
         </section>
     );
 };
