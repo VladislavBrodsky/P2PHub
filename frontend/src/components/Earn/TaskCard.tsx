@@ -55,11 +55,14 @@ export const TaskCard = ({ task, status, userReferrals, onClick, onClaim }: Task
                 {/* Content */}
                 <div className="flex-1 space-y-1">
                     <div className="flex justify-between items-start">
-                        <h4 className="text-sm font-bold text-(--color-text-primary) line-clamp-1">{task.title}</h4>
-                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${isClaimable ? 'bg-white text-emerald-600' : 'bg-yellow-500/10 text-yellow-500'}`}>
-                            +{task.reward} XP
-                        </span>
+                        <h4 className="text-sm font-bold text-(--color-text-primary) line-clamp-1 pr-16">{task.title}</h4>
                     </div>
+                    {/* Absolute XP Badge */}
+                    {!isCompleted && (
+                        <div className={`absolute top-3 right-3 z-10 text-[10px] font-black px-2.5 py-1 rounded-full ${isClaimable ? 'bg-white text-emerald-600 shadow-sm' : 'bg-yellow-500/10 text-yellow-500'}`}>
+                            +{task.reward} XP
+                        </div>
+                    )}
                     <p className="text-xs text-brand-muted line-clamp-2 leading-relaxed">
                         {task.description}
                     </p>

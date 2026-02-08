@@ -53,6 +53,9 @@ Use this to see the evolution of individual components.
 -   **WATERMARKS**:
     -   replaced `Star` icon with `Users` (Referrals) for the Partners card.
     -   Updated both `Users` and `Zap` (XP) watermarks to be **Colorful** (Yellow/Emerald) with specific drop-shadows `drop-shadow-[0_0_10px_...]`, replacing the faint opacity style.
+-   **TASK CARDS**:
+    -   Redesigned XP badge positioning in `TaskCard` component. Moved from inline flex to absolute top-right (`top-3 right-3`) to prevent text wrapping issues.
+    -   Added padding (`pr-16`) to task titles to accommodate the new badge position.
 
 ### v1.0.0 (2026-02-07)
 -   Implemented responsive footer with legal links (Terms, Privacy).
