@@ -170,12 +170,12 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                             initial={{ x: '-100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '-100%' }}
-                            transition={{ type: 'tween', ease: 'circOut', duration: 0.3 }} // Optimized animation
-                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-(--color-bg-deep) border-r border-(--color-border-glass) pt-[env(safe-area-inset-top)] shadow-[20px_0_60px_rgba(0,0,0,0.5)] ml-0 mr-auto"
+                            transition={{ type: 'tween', ease: 'circOut', duration: 0.3 }}
+                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-(--color-bg-deep) border-r border-(--color-border-glass) pt-[env(safe-area-inset-top)] shadow-2xl ml-0 mr-auto"
                             style={{
                                 marginLeft: 'max(0px, calc(50% - 32rem / 2))',
                                 left: 0,
-                                willChange: 'transform' // GPU hint
+                                willChange: 'transform'
                             }}
                         >
                             {/* Mesh Background Overlay */}
