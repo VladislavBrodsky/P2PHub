@@ -10,18 +10,30 @@ from aiogram import types
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    if settings.WEBHOOK_URL:
-        webhook_url = f"{settings.WEBHOOK_URL}{settings.WEBHOOK_PATH}"
-        await bot.set_webhook(
-            url=webhook_url,
-            secret_token=settings.WEBHOOK_SECRET
-        )
-        print(f"Webhook set to: {webhook_url}")
+    webhook_base = settings.WEBHOOK_URL
+    
+    if webhook_base and "your-backend-url" not in webhook_base:
+        # Avoid double-appending the path
+        path = settings.WEBHOOK_PATH
+        webhook_url = webhook_base if webhook_base.endswith(path) else f"{webhook_base.rstrip('/')}{path}"
+        
+        try:
+            await bot.set_webhook(
+                url=webhook_url,
+                secret_token=settings.WEBHOOK_SECRET,
+                drop_pending_updates=True
+            )
+            print(f"🚀 Webhook set to: {webhook_url}")
+        except Exception as e:
+            print(f"❌ Failed to set webhook: {e}. Falling back to polling...")
+            asyncio.create_task(dp.start_polling(bot))
     else:
-        # Fallback to polling for local development
+        # Fallback to polling for local development or if URL is placeholder
+        print("💡 WEBHOOK_URL is not set or is a placeholder. Starting Long Polling...")
+        await bot.delete_webhook(drop_pending_updates=True)
         polling_task = asyncio.create_task(dp.start_polling(bot))
         app.state.polling_task = polling_task
-        print("Bot started with Long Polling")
+        print("✅ Bot started with Long Polling")
     
     yield
     
