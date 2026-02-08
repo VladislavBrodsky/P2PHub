@@ -314,7 +314,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-200 font-medium">
                                 <Trans i18nKey="income.waiting.desc">
                                     While you trade hours for a fixed wage, the Digital Economy generates value 24/7.
-                                    <span className="block my-3 bg-linear-to-r from-rose-500 via-fuchsia-500 to-rose-500 bg-clip-text text-transparent font-black bg-[length:200%_auto] animate-shimmer dark:drop-shadow-[0_0_8px_rgba(244,63,94,0.3)]">
+                                    <span className="block my-3 bg-linear-to-r from-rose-500 via-fuchsia-500 to-rose-500 bg-clip-text text-transparent font-black bg-[length:200%_auto] text-animate-shimmer dark:drop-shadow-[0_0_8px_rgba(244,63,94,0.3)]">
                                         Every minute you wait is a tax on your potential
                                     </span>
                                     <span className="block opacity-80 dark:text-slate-300">
