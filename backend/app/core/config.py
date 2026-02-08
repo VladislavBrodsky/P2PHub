@@ -1,5 +1,8 @@
 from pydantic_settings import BaseSettings
 from typing import Optional
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Settings(BaseSettings):
     # Required environment variables (no defaults for security)
@@ -12,8 +15,8 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = "https://p2phub-frontend.up.railway.app"
     
     class Config:
-        env_file = None
+        env_file = ".env"
         # Allow extra fields from Railway/environment
-        extra = "allow"
+        extra = "ignore"
 
 settings = Settings()

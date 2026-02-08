@@ -4,6 +4,8 @@ import { useHaptic } from '../hooks/useHaptic';
 import { EarnHeader } from '../components/Earn/EarnHeader';
 import { TaskCard } from '../components/Earn/TaskCard';
 import { MilestonePath } from '../components/Earn/MilestonePath';
+import { ReferralWidget } from '../components/Earn/ReferralWidget';
+import { TaskGrid } from '../components/Earn/TaskGrid';
 import { EARN_TASKS, Task } from '../data/earnData';
 import { useUser } from '../context/UserContext';
 import { Confetti } from '../components/ui/Confetti';
@@ -274,66 +276,22 @@ export default function ReferralPage() {
             <EarnHeader />
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-2 gap-3 mb-8">
-                <button
-                    onClick={() => setShowShareModal(true)}
-                    className="h-14 bg-linear-to-r from-blue-600 to-blue-500 rounded-xl flex items-center justify-center gap-2 font-black text-white shadow-lg shadow-blue-500/20 active:scale-95 transition-transform"
-                >
-                    <Share2 className="w-5 h-5" />
-                    Invite Friend
-                </button>
-                <button
-                    onClick={() => setShowQR(true)}
-                    className="h-14 glass-panel hover:bg-white/5 rounded-xl flex items-center justify-center gap-2 font-bold text-text-primary active:scale-95 transition-all"
-                >
-                    <QrCode className="w-5 h-5 opacity-60" />
-                    Show QR
-                </button>
-            </div>
+            <ReferralWidget
+                onInvite={() => setShowShareModal(true)}
+                onShowQR={() => setShowQR(true)}
+            />
 
             <MilestonePath />
 
-            {/* ... tasks list ... */}
-            <div className="space-y-6">
-                <div className="flex items-center justify-between px-2">
-                    <h3 className="text-lg font-bold flex items-center gap-2 text-text-primary">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        Active Missions
-                    </h3>
-                    <span className="text-xs font-semibold text-brand-muted glass-panel px-3 py-1 rounded-lg">
-                        {tasks.filter(t => !completedTaskIds.includes(t.id)).length} Available
-                    </span>
-                </div>
-
-                <div className="grid grid-cols-1 gap-3">
-                    {tasks.map((task) => {
-                        const isLocked = currentLevel < task.minLevel;
-                        const isCompleted = completedTaskIds.includes(task.id);
-
-                        let status: 'LOCKED' | 'AVAILABLE' | 'CLAIMABLE' | 'COMPLETED' = 'AVAILABLE';
-
-                        // Determine Status Priority
-                        if (isCompleted) status = 'COMPLETED';
-                        else if (isLocked) status = 'LOCKED';
-                        else if (task.type === 'referral') {
-                            if (referrals >= (task.requirement || 0)) status = 'CLAIMABLE';
-                            else status = 'AVAILABLE';
-                        }
-
-                        // Build props
-                        return (
-                            <TaskCard
-                                key={task.id}
-                                task={task}
-                                status={status}
-                                userReferrals={referrals}
-                                onClick={() => handleTaskClick(task)}
-                                onClaim={() => handleClaim(task)}
-                            />
-                        );
-                    })}
-                </div>
-            </div>
+            {/* Task Grid */}
+            <TaskGrid
+                tasks={tasks}
+                completedTaskIds={completedTaskIds}
+                currentLevel={currentLevel}
+                referrals={referrals}
+                onTaskClick={handleTaskClick}
+                onClaim={handleClaim}
+            />
 
             {/* Safe Area Spacer */}
             <div className="h-24" />

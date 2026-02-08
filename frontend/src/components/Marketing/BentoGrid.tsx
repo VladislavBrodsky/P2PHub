@@ -76,7 +76,7 @@ export const BentoGrid = () => {
                 </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {shiftSteps.map((step, index) => (
                     <motion.div
                         key={index}
@@ -85,7 +85,7 @@ export const BentoGrid = () => {
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1 }}
                         whileHover={{ y: -8, scale: 1.01, transition: { type: "spring", stiffness: 400, damping: 20 } }}
-                        className={`relative group overflow-hidden rounded-[2.5rem] border border-[var(--color-border-glass)] p-6 glass-panel-premium transition-all duration-300 ${step.size} ${step.featured ? 'border-blue-500/30' : ''}`}
+                        className={`relative group overflow-hidden rounded-[2.5rem] border border-[var(--color-border-glass)] p-6 glass-panel-premium transition-all duration-300 md:${step.size} ${step.featured ? 'border-blue-500/30' : ''}`}
                     >
                         <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
 

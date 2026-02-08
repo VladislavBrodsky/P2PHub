@@ -23,11 +23,19 @@ class Earning(SQLModel, table=True):
     description: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
-engine = create_engine(settings.DATABASE_URL)
+from sqlalchemy.ext.asyncio import create_async_engine
+from sqlmodel.ext.asyncio.session import AsyncSession
+from sqlalchemy.orm import sessionmaker
 
-def create_db_and_tables():
-    SQLModel.metadata.create_all(engine)
+engine = create_async_engine(settings.DATABASE_URL, echo=True, future=True)
 
-def get_session():
-    with Session(engine) as session:
+async def create_db_and_tables():
+    async with engine.begin() as conn:
+        await conn.run_sync(SQLModel.metadata.create_all)
+
+async def get_session():
+    async_session = sessionmaker(
+        engine, class_=AsyncSession, expire_on_commit=False
+    )
+    async with async_session() as session:
         yield session

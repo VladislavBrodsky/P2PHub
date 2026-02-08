@@ -70,10 +70,11 @@ async def run_migrations_online() -> None:
 
     """
     from sqlalchemy.ext.asyncio import create_async_engine
-
+    
     connectable = create_async_engine(
         settings.DATABASE_URL,
         poolclass=pool.NullPool,
+        future=True
     )
 
     async with connectable.connect() as connection:
