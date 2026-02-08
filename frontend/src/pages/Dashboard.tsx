@@ -10,7 +10,11 @@ import { Sparkles } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { getRank, getXPProgress } from '../utils/ranking';
 
-export default function Dashboard() {
+interface DashboardProps {
+    setActiveTab?: (tab: string) => void;
+}
+
+export default function Dashboard({ setActiveTab }: DashboardProps) {
     const { selection } = useHaptic();
     const { user, isLoading: isUserLoading } = useUser();
 
@@ -119,7 +123,7 @@ export default function Dashboard() {
 
             {/* 2. Viral Proof - Partner Stats */}
             <motion.div variants={item}>
-                <PartnerStats />
+                <PartnerStats onNavigateToEarn={() => setActiveTab?.('earn')} />
             </motion.div>
 
             {/* 3. The Evolution - Bento Grid */}

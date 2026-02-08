@@ -87,7 +87,7 @@ function App() {
             <ThemeProvider>
                 <UserProvider>
                     <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
-                        {activeTab === 'home' && <Dashboard />}
+                        {activeTab === 'home' && <Dashboard setActiveTab={setActiveTab} />}
                         {activeTab === 'cards' && <CardsPage setActiveTab={setActiveTab} />}
                         {activeTab === 'partner' && <CommunityPage />}
                         {activeTab === 'earn' && <ReferralPage />}

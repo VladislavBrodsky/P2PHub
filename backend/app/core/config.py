@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = "https://p2phub-frontend.up.railway.app"
     
     class Config:
-        env_file = ".env"
+        env_file = None
         # Allow extra fields from Railway/environment
         extra = "allow"
 

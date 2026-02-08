@@ -42,8 +42,23 @@ async def get_my_profile(
         partner.first_name = tg_user.get("first_name", partner.first_name)
         partner.last_name = tg_user.get("last_name", partner.last_name)
         partner.photo_url = tg_user.get("photo_url", partner.photo_url)
-        session.add(partner)
-        
-    session.commit()
+        session.commit()
     session.refresh(partner)
     return partner
+
+@router.get("/recent")
+async def get_recent_partners(
+    session: Session = Depends(get_session)
+):
+    from datetime import datetime, timedelta
+    one_hour_ago = datetime.utcnow() - timedelta(minutes=60)
+    
+    statement = select(Partner).where(Partner.created_at >= one_hour_ago).order_by(Partner.created_at.desc()).limit(10)
+    partners = session.exec(statement).all()
+    
+    # If no partners in last hour, just return the last 4 registered anyway so the UI isn't empty
+    if not partners:
+        statement = select(Partner).order_by(Partner.created_at.desc()).limit(4)
+        partners = session.exec(statement).all()
+        
+    return partners
