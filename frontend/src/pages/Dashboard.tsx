@@ -133,7 +133,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
             {/* 4. The Opportunity - Income Potential */}
             <motion.div variants={item}>
-                <IncomePotential />
+                <IncomePotential onNavigateToPartner={() => setActiveTab?.('partner')} />
             </motion.div>
 
             {/* 5. Intelligence Hub - Blog Carousel */}

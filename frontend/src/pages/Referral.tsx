@@ -216,12 +216,18 @@ export default function ReferralPage() {
                                     </p>
                                 </div>
 
-                                <div className="mx-auto w-64 h-64 bg-white p-4 rounded-3xl shadow-[0_0_40px_rgba(59,130,246,0.1)] border border-slate-100">
+                                <div className="mx-auto w-64 h-64 bg-white p-4 rounded-3xl shadow-[0_0_40px_rgba(59,130,246,0.1)] border border-slate-100 relative overflow-hidden group">
+                                    <div className="absolute inset-0 bg-linear-to-b from-blue-500/0 via-blue-500/10 to-blue-500/0 w-full h-8 blur-md animate-scan pointer-events-none" />
                                     <img
-                                        src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(referralLink)}`}
+                                        src={`http://localhost:8000/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=10`}
                                         alt="Your Referral QR Code"
-                                        className="w-full h-full object-contain"
+                                        className="w-full h-full object-contain relative z-10"
                                     />
+                                    {/* Corner Markers */}
+                                    <div className="absolute top-3 left-3 w-8 h-8 border-t-4 border-l-4 border-blue-500 rounded-tl-xl" />
+                                    <div className="absolute top-3 right-3 w-8 h-8 border-t-4 border-r-4 border-blue-500 rounded-tr-xl" />
+                                    <div className="absolute bottom-3 left-3 w-8 h-8 border-b-4 border-l-4 border-blue-500 rounded-bl-xl" />
+                                    <div className="absolute bottom-3 right-3 w-8 h-8 border-b-4 border-r-4 border-blue-500 rounded-br-xl" />
                                 </div>
 
                                 <div className="flex gap-3">
@@ -234,10 +240,10 @@ export default function ReferralPage() {
                                     <button
                                         className="flex-1 py-3 bg-blue-600 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
                                         onClick={() => {
-                                            const a = document.createElement('a');
-                                            a.href = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(referralLink)}`;
-                                            a.download = 'Pintopay_Invite.png';
-                                            a.click();
+                                            const link = document.createElement('a');
+                                            link.href = `http://localhost:8000/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=20`;
+                                            link.download = 'Pintopay_Invite.png';
+                                            link.click();
                                         }}
                                     >
                                         <Download className="w-4 h-4" /> Save QR

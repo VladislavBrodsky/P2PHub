@@ -52,9 +52,18 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                 {/* Right: Stats Vertical Stack */}
                 <div className="flex flex-col items-start gap-1 flex-1 overflow-hidden">
                     <div className="flex items-center gap-2">
-                        <h2 className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-black tracking-tight text-(--color-text-primary) truncate`}>
-                            Hi, {user?.first_name || 'Partner'}!
-                        </h2>
+                        {(() => {
+                            const firstName = user?.first_name || 'Partner';
+                            const lastName = user?.last_name || '';
+                            const fullName = `${firstName} ${lastName}`.trim();
+                            const displayName = fullName.length > 20 ? firstName : fullName;
+
+                            return (
+                                <h2 className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-black tracking-tight text-(--color-text-primary) truncate`}>
+                                    Hi, {displayName}!
+                                </h2>
+                            );
+                        })()}
                         <motion.div
                             className="flex items-center gap-1 px-2 py-0.5 rounded-lg border border-(--color-border-glass) shadow-premium backdrop-blur-xl relative overflow-hidden"
                             style={{

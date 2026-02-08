@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 import asyncio
 from fastapi import FastAPI, Depends, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.endpoints import partner, earnings
+from app.api.endpoints import partner, earnings, tools
 from bot import bot, dp
 
 @asynccontextmanager
@@ -31,6 +31,7 @@ app.add_middleware(
 
 app.include_router(partner.router, prefix="/api/partner", tags=["partner"])
 app.include_router(earnings.router, prefix="/api/earnings", tags=["earnings"])
+app.include_router(tools.router, prefix="/api/tools", tags=["tools"])
 
 @app.get("/health")
 async def health_check():
