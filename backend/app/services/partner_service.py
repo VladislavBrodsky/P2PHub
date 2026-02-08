@@ -2,7 +2,7 @@ import logging
 from typing import Optional
 from sqlmodel import select, Session
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.models.partner import Partner, engine
+from app.models.partner import Partner, engine, get_session
 from app.core.i18n import get_msg
 import uuid
 
