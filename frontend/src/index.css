@@ -474,3 +474,31 @@ html {
 .animate-scan {
   animation: scan 2s linear infinite;
 }
+/* Liquid Gradient Animation */
+@keyframes liquid {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-liquid {
+  background-size: 200% 200%;
+  animation: liquid 4s linear infinite;
+}
+
+/* Vibing Pulse Animation */
+@keyframes vibing {
+  0% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.02); filter: brightness(1.1); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+.animate-vibing {
+  animation: vibing 3s ease-in-out infinite;
+}
+
+/* Acid Yellow Theme */
+.acid-yellow-gradient {
+  background: linear-gradient(135deg, #dfff00 0%, #a3ff00 50%, #dfff00 100%);
+  color: #020617;
+}
