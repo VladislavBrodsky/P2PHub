@@ -382,44 +382,102 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     <div className="relative z-10 space-y-4">
                                         {activeModal === 'market' && (
                                             <>
-                                                <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mb-2">
-                                                    <TrendingUp className="w-5 h-5 text-blue-400" />
+                                                <div className="relative">
+                                                    <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/25">
+                                                        <TrendingUp className="w-6 h-6 text-white" />
+                                                    </div>
+                                                    <div className="absolute -top-1 -right-1">
+                                                        <span className="relative flex h-3 w-3">
+                                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                                <h3 className="text-lg font-black text-white">Market Opportunity</h3>
-                                                <p className="text-sm text-slate-300 leading-relaxed">
-                                                    The market of crypto users is growing faster than the Internet 20 years ago. We are in the right place at the right time.
-                                                </p>
+
+                                                <h3 className="text-xl font-black text-white leading-tight">
+                                                    The Largest Wealth Transfer inside the <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-400">Digital Economy</span>
+                                                </h3>
+
+                                                <div className="space-y-3 py-2">
+                                                    <p className="text-sm text-slate-300 leading-relaxed">
+                                                        Crypto adoption is growing <span className="text-white font-bold">2x faster</span> than the Internet did in the 90s.
+                                                    </p>
+                                                    <div className="p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                                                        <div className="flex justify-between items-center text-xs mb-1">
+                                                            <span className="text-slate-400">Adoption Curve</span>
+                                                            <span className="text-emerald-400 font-bold">You are here (Early)</span>
+                                                        </div>
+                                                        <div className="h-1.5 w-full bg-slate-700/50 rounded-full overflow-hidden">
+                                                            <div className="h-full w-[15%] bg-blue-500 rounded-full relative">
+                                                                <div className="absolute right-0 top-0 bottom-0 w-1 bg-white/50 animate-pulse"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 <button
                                                     onClick={() => setActiveModal(null)}
-                                                    className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-colors text-xs tracking-wider uppercase"
+                                                    className="w-full py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-all hover:scale-[1.02] text-xs tracking-wider uppercase border border-slate-700"
                                                 >
-                                                    Close
+                                                    Maximize This Opportunity
                                                 </button>
                                             </>
                                         )}
 
                                         {activeModal === 'revenue' && (
                                             <>
-                                                <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center mb-2">
-                                                    <DollarSign className="w-5 h-5 text-emerald-400" />
+                                                <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/25">
+                                                    <DollarSign className="w-6 h-6 text-white" />
                                                 </div>
-                                                <h3 className="text-lg font-black text-white">24/7 Revenue</h3>
-                                                <p className="text-sm text-slate-300 leading-relaxed">
-                                                    Income Streams available for everyone with a real product.
+
+                                                <h3 className="text-xl font-black text-white leading-tight">
+                                                    Unlock <span className="text-emerald-400">True Passive Income</span>
+                                                </h3>
+
+                                                <p className="text-xs text-slate-400 font-medium">
+                                                    Earn lifetime commissions from every action in your network:
                                                 </p>
-                                                <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
-                                                    <p className="text-xs font-bold text-emerald-400 text-center">
-                                                        Stop trading time for money. Start building equity.
-                                                    </p>
+
+                                                <div className="space-y-2.5 my-2">
+                                                    <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                                                        <div className="mt-0.5 p-1 rounded-full bg-emerald-500/10">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                                        </div>
+                                                        <div>
+                                                            <h5 className="text-sm font-bold text-white">Up to 30%</h5>
+                                                            <p className="text-[10px] text-slate-400 uppercase tracking-wide">From Pintopay Card Sales</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                                                        <div className="mt-0.5 p-1 rounded-full bg-blue-500/10">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                                                        </div>
+                                                        <div>
+                                                            <h5 className="text-sm font-bold text-white">Up to 0.3% (Lifetime)</h5>
+                                                            <p className="text-[10px] text-slate-400 uppercase tracking-wide">From All Network Top-ups</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                                                        <div className="mt-0.5 p-1 rounded-full bg-purple-500/10">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-purple-500" />
+                                                        </div>
+                                                        <div>
+                                                            <h5 className="text-sm font-bold text-white">30% Rewards</h5>
+                                                            <p className="text-[10px] text-slate-400 uppercase tracking-wide">From Partner Network</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
+
                                                 <button
                                                     onClick={() => {
                                                         setActiveModal(null);
                                                         onNavigateToPartner?.();
                                                     }}
-                                                    className="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-colors text-xs tracking-wider uppercase flex items-center justify-center gap-2"
+                                                    className="w-full py-3.5 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
                                                 >
-                                                    Start Earning <ArrowRight className="w-4 h-4" />
+                                                    Start Earning Dividends <ArrowRight className="w-4 h-4" />
                                                 </button>
                                             </>
                                         )}
