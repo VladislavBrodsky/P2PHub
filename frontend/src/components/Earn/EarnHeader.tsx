@@ -36,6 +36,15 @@ export const EarnHeader = () => {
                                     <stop offset="0%" stopColor="#3b82f6" />
                                     <stop offset="50%" stopColor="#8b5cf6" />
                                     <stop offset="100%" stopColor="#06b6d4" />
+                                    {/* Rotate the gradient for "vibing" liquid effect */}
+                                    <animateTransform
+                                        attributeName="gradientTransform"
+                                        type="rotate"
+                                        from="0 0.5 0.5"
+                                        to="360 0.5 0.5"
+                                        dur="4s"
+                                        repeatCount="indefinite"
+                                    />
                                 </linearGradient>
                             </defs>
                             <circle
@@ -111,7 +120,7 @@ export const EarnHeader = () => {
                     </div>
                     <div className="h-3 w-full bg-slate-900/5 dark:bg-white/5 rounded-full overflow-hidden border border-white/5 p-[2px]">
                         <motion.div
-                            className="h-full rounded-full bg-linear-to-r from-blue-600 via-indigo-500 to-purple-600 shadow-[0_0_10px_rgba(59,130,246,0.3)]"
+                            className="h-full rounded-full bg-linear-to-r from-blue-600 via-indigo-500 to-blue-600 bg-[length:200%_100%] animate-liquid shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                             initial={{ width: 0 }}
                             animate={{ width: `${progress.percent}%` }}
                             transition={{ duration: 1.5, ease: "backOut" }}

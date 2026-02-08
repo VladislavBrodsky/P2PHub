@@ -70,6 +70,9 @@ Use this to see the evolution of individual components.
     -   Implemented SVG Linear Gradient (`#3b82f6` -> `#8b5cf6` -> `#06b6d4`) for the Level Progress Ring to create a true "Liquid" effect.
     -   Refactored Earn Header layout to use Flexbox with negative margins (`-mt-5`) instead of absolute positioning. This fixes the Rank Badge clipping/"glitch" issue where it was being cut off by the parent container.
     -   **Update**: Separated ("Split") the Rank Badge from the Level Circle (`mt-4` increased spacing) and refactored HTML structure. Moved `overflow-hidden` to an inner container to prevent border clipping/glitches on the rounded edges while keeping the shimmer effect contained.
+    -   **ANIMATIONS**: Added "Vibing" effects.
+        -   **Level Circle**: Implemented `<animateTransform>` to rotate the gradient, creating a swirling liquid effect.
+        -   **XP Bar**: Added `animate-liquid` with a flowing gradient background (Blue -> Indigo -> Blue) for a dynamic "charging" look.
 
 ### v1.0.0 (2026-02-07)
 -   Implemented responsive footer with legal links (Terms, Privacy).
