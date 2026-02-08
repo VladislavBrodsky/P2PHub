@@ -92,16 +92,16 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     {!isStrategyUnlocked ? (
                         <>
                             {/* Mode Toggle */}
-                            <div className="flex p-1 bg-(--color-bg-surface) rounded-xl border border-(--color-border-glass)">
+                            <div className="flex p-0.5 bg-(--color-bg-surface) rounded-lg border border-(--color-border-glass)">
                                 <button
                                     onClick={() => setMode('profit')}
-                                    className={`flex-1 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${mode === 'profit' ? 'bg-blue-500 text-white shadow-lg' : 'text-(--color-text-secondary) hover:bg-white/5'}`}
+                                    className={`flex-1 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wide transition-all ${mode === 'profit' ? 'bg-blue-500 text-white shadow-md' : 'text-(--color-text-secondary) hover:bg-white/5'}`}
                                 >
                                     {t('income.modes.profit')}
                                 </button>
                                 <button
                                     onClick={() => setMode('inaction')}
-                                    className={`flex-1 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${mode === 'inaction' ? 'bg-rose-500 text-white shadow-lg' : 'text-(--color-text-secondary) hover:bg-white/5'}`}
+                                    className={`flex-1 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wide transition-all ${mode === 'inaction' ? 'bg-rose-500 text-white shadow-md' : 'text-(--color-text-secondary) hover:bg-white/5'}`}
                                 >
                                     {t('income.modes.inaction')}
                                 </button>
