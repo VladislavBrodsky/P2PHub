@@ -102,6 +102,11 @@ async def get_my_profile(
                 await session.commit()
                 await session.refresh(partner)
 
+    # 2.0 Hydrate completed_tasks from association table for frontend compatibility BEFORE any commit/refresh
+    # We populate the legacy 'completed_tasks' JSON string field temporarily for the response or sync
+    task_ids = [pt.task_id for pt in partner.completed_task_records]
+    partner.completed_tasks = json.dumps(task_ids)
+
     # 2.1 Self-healing: Correct level if inconsistent with XP
     correct_level = get_level(partner.xp)
     if partner.level != correct_level:
@@ -112,11 +117,6 @@ async def get_my_profile(
         await session.refresh(partner)
         # Invalidate cache again since we updated the profile
         await redis_service.client.delete(f"partner:profile:{tg_id}")
-
-    # 3. Hydrate completed_tasks from association table for frontend compatibility
-    # We populate the legacy 'completed_tasks' JSON string field temporarily for the response
-    task_ids = [pt.task_id for pt in partner.completed_task_records]
-    partner.completed_tasks = json.dumps(task_ids)
 
     # 4. Store in Redis Cache (expires in 5 minutes)
     try:

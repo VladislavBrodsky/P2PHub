@@ -25,14 +25,14 @@ export default function CommunityPage() {
     if (isLoading) return <div className="p-4"><ListSkeleton /></div>;
 
     return (
-        <div className="flex flex-col min-h-screen px-4 pt-safe-top pb-32 relative overflow-hidden bg-(--color-bg-deep) transition-colors duration-300">
+        <div className="flex flex-col min-h-screen px-4 pb-32 relative overflow-hidden bg-(--color-bg-deep) transition-colors duration-300">
             {/* Mesh Background Overlay - Dark Mode Only */}
             <div className="mesh-gradient-dark fixed inset-0 opacity-30 pointer-events-none dark:block hidden" />
             <div className="fixed top-20 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full pointer-events-none" />
             <div className="fixed bottom-40 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none" />
 
             {/* Top Navigation / Switcher */}
-            <div className="relative z-20 mb-3 flex justify-center">
+            <div className="relative z-20 mb-3 flex justify-center mt-[-24px]">
                 <div className="p-1 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/5 backdrop-blur-xl flex items-center relative gap-1 shadow-sm">
                     {/* Sliding Background */}
                     <motion.div

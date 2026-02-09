@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useId } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, Users, Calendar, Filter, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -95,6 +95,7 @@ interface ReferralGrowthChartProps {
 export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe, setTimeframe }: ReferralGrowthChartProps) => {
     const { t } = useTranslation();
     const { selection } = useHaptic();
+    const gradientId = useId();
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -210,7 +211,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
 
                 <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full overflow-visible">
                     <defs>
-                        <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
                             <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
                         </linearGradient>
@@ -219,7 +220,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                     {/* Area Fill */}
                     <motion.path
                         d={getPath(chartData)}
-                        fill="url(#chartGradient)"
+                        fill={`url(#${gradientId})`}
                         initial={{ opacity: 0, d: `M 0,100 L 100,100 Z` }}
                         animate={{ opacity: 1, d: getPath(chartData) }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
