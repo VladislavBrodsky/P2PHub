@@ -36,24 +36,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
     return (
         <header className="fixed left-1/2 z-50 w-full max-w-lg -translate-x-1/2 pt-[calc(env(safe-area-inset-top)+8px)] transition-all duration-300 top-0 pointer-events-none">
             <div className="flex flex-col gap-4 px-4 pointer-events-auto">
-                {/* Row 1: System Buttons */}
-                <div className="flex items-center justify-between">
-                    <button className="flex items-center gap-1.5 rounded-full border border-slate-200/50 bg-white/60 px-4 py-1.5 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-slate-900/60 transition-all active:scale-95">
-                        <X className="h-4 w-4 text-slate-500" />
-                        <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400">Close</span>
-                    </button>
-
-                    <button className="flex items-center gap-1.5 rounded-full border border-slate-200/50 bg-white/60 px-3 py-1.5 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-slate-900/60 transition-all active:scale-95">
-                        <ChevronDown className="h-4 w-4 text-slate-500" />
-                        <div className="flex gap-0.5">
-                            <div className="h-1 w-1 rounded-full bg-slate-400" />
-                            <div className="h-1 w-1 rounded-full bg-slate-400" />
-                            <div className="h-1 w-1 rounded-full bg-slate-400" />
-                        </div>
-                    </button>
-                </div>
-
-                {/* Row 2: Navigation & Stats */}
+                {/* Navigation & Stats */}
                 <div className="flex items-center justify-between">
                     <button
                         onClick={onOpenMenu}

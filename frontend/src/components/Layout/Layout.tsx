@@ -70,7 +70,7 @@ export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
             >
                 <div className="relative mx-auto w-full max-w-lg px-4 safe-pb">
                     {/* Header */}
-                    <div className="relative z-50 mb-4">
+                    <div className="relative z-50">
                         <Header onOpenMenu={() => setIsMenuOpen(true)} />
                     </div>
 
