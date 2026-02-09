@@ -8,6 +8,12 @@ declare global {
                 initDataUnsafe: any;
                 expand: () => void;
                 ready: () => void;
+                switchInlineQuery: (query: string, choose_types?: string[]) => void;
+                HapticFeedback: {
+                    impactOccurred: (style: 'light' | 'medium' | 'heavy' | 'rigid' | 'soft') => void;
+                    notificationOccurred: (type: 'error' | 'success' | 'warning') => void;
+                    selectionChanged: () => void;
+                };
             };
         };
     }

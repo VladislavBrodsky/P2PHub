@@ -135,8 +135,13 @@ export default function ReferralPage() {
 
     const handleShareTelegram = () => {
         selection();
-        const url = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(VIRAL_TEXT)}`;
-        window.open(url, '_blank');
+        if (window.Telegram?.WebApp) {
+            // Open user picker and trigger inline query with the referral code
+            window.Telegram.WebApp.switchInlineQuery(user?.referral_code || '', ['users', 'groups', 'channels']);
+        } else {
+            const url = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(VIRAL_TEXT)}`;
+            window.open(url, '_blank');
+        }
         setShowShareModal(false);
     };
 

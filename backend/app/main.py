@@ -2,6 +2,8 @@ from contextlib import asynccontextmanager
 import asyncio
 from fastapi import FastAPI, Depends, HTTPException, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+import os
 from app.api.endpoints import partner, earnings, tools, leaderboard
 from app.core.config import settings
 from bot import bot, dp
@@ -90,3 +92,9 @@ app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderb
 app.include_router(tools.router, prefix="/api/tools", tags=["tools"])
 from app.api.endpoints import health
 app.include_router(health.router, tags=["health"])
+
+# Serve promo images
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+images_dir = os.path.join(base_dir, "app_images")
+if os.path.exists(images_dir):
+    app.mount("/images", StaticFiles(directory=images_dir), name="images")

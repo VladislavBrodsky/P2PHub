@@ -1,9 +1,10 @@
 import asyncio
 import logging
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import CommandStart
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from app.core.config import settings
+from app.models.partner import get_session
 
 import sys
 
@@ -22,7 +23,7 @@ from app.core.i18n import get_msg
 async def cmd_start(message: types.Message):
     from app.services.partner_service import create_partner, process_referral_notifications
     from app.core.keyboards import get_main_menu_keyboard
-    from app.models.partner import get_session
+    
     # Extract referral code from /start link if any
     referrer_code = None
     args = message.text.split()
@@ -101,6 +102,59 @@ async def cmd_my_network(message: types.Message):
     except Exception as e:
         logging.error(f"Error in cmd_my_network: {e}")
         await message.answer(f"⚠️ Error fetching stats: {str(e)}")
+
+@dp.inline_query()
+async def inline_handler(inline_query: types.InlineQuery):
+    # The query is the referral code passed from the Mini App
+    ref_code = inline_query.query or "dev"
+    bot_info = await bot.get_me()
+    ref_link = f"https://t.me/{bot_info.username}?start={ref_code}"
+    
+    # Base URL for photos (using WEBHOOK_URL if set, or FRONTEND_URL as fallback)
+    base_url = settings.WEBHOOK_URL or settings.FRONTEND_URL
+    if not base_url:
+        return
+        
+    base_url = base_url.rstrip('/')
+    
+    # Images the user requested
+    # Note: Telegram requires encoded URLs or direct file IDs
+    photo1_url = f"{base_url}/images/2026-02-05%2003.35.36.jpg"
+    photo2_url = f"{base_url}/images/2026-02-05%2003.35.03.jpg"
+
+    # Viral marketing text
+    caption = (
+        "🛑 STOP BLEEDING MONEY TO BANKS! 🛑\n\n"
+        "Everything you know about money is changing. While others lose, the 1% are profiting. 🦅\n\n"
+        "Join the Pintopay Partner Hub and start earning $1/minute in passive income.\n\n"
+        "🔥 NO Bureaucracy\n"
+        "🔥 NO Restrictions\n"
+        "🔥 100% Financial Sovereignty\n\n"
+        "Build your empire now. 👇"
+    )
+
+    results = [
+        types.InlineQueryResultPhoto(
+            id="share_1",
+            photo_url=photo1_url,
+            thumbnail_url=photo1_url,
+            caption=caption,
+            reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
+                [types.InlineKeyboardButton(text="Get Your Card Now 🚀", url=ref_link)]
+            ])
+        ),
+        types.InlineQueryResultPhoto(
+            id="share_2",
+            photo_url=photo2_url,
+            thumbnail_url=photo2_url,
+            caption=caption,
+            reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
+                [types.InlineKeyboardButton(text="Start Building Your Empire 🏗️", url=ref_link)]
+            ])
+        )
+    ]
+    
+    await inline_query.answer(results, is_personal=True, cache_time=300)
 
 async def main():
     logging.info("Starting bot...")
