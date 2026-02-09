@@ -14,6 +14,7 @@ interface User {
     xp: number;
     referral_code: string;
     referrals: any[]; // Extended for Earn Hub
+    completed_tasks: string;
 }
 
 interface UserContextType {
@@ -92,7 +93,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     level: 1,
                     xp: 0,
                     referral_code: 'UNVERIFIED',
-                    referrals: []
+                    referrals: [],
+                    completed_tasks: "[]"
                 };
                 setUser(fallbackUser);
             }
@@ -118,7 +120,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         level: 5,
                         xp: 150,
                         referral_code: 'DEV-TEST',
-                        referrals: []
+                        referrals: [],
+                        completed_tasks: "[]"
                     };
                     setUser(devUser);
                     setIsLoading(false);

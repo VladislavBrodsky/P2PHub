@@ -250,3 +250,50 @@ async def get_growth_chart(
 
     from app.services.partner_service import get_network_time_series
     return await get_network_time_series(session, partner.id, timeframe)
+
+@router.post("/tasks/{task_id}/claim")
+async def claim_task_reward(
+    task_id: str,
+    xp_reward: float,
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    try:
+        if "user" in user_data:
+            tg_id = str(json.loads(user_data["user"]).get("id"))
+        else:
+            tg_id = str(user_data.get("id"))
+    except:
+        raise HTTPException(status_code=400, detail="Invalid user data")
+
+    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    result = await session.exec(statement)
+    partner = result.first()
+    
+    if not partner:
+        raise HTTPException(status_code=404, detail="Partner not found")
+
+    # Update completed tasks
+    try:
+        completed = json.loads(partner.completed_tasks or "[]")
+    except:
+        completed = []
+        
+    if task_id not in completed:
+        completed.append(task_id)
+        partner.completed_tasks = json.dumps(completed)
+        partner.xp += xp_reward
+        
+        # Simple level up logic
+        next_level_xp = partner.level * 100
+        if partner.xp >= next_level_xp:
+            partner.level += 1
+            
+        session.add(partner)
+        await session.commit()
+        await session.refresh(partner)
+        
+        # Invalidate profile cache
+        await redis_service.client.delete(f"partner:profile:{tg_id}")
+
+    return partner

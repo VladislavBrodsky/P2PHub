@@ -13,6 +13,7 @@ import { Confetti } from '../components/ui/Confetti';
 import { CheckCircle2, Trophy, QrCode, X, Share2, Download, Copy, ExternalLink, Send } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { getSafeLaunchParams } from '../utils/tma';
+import { apiClient } from '../api/client';
 
 
 export default function ReferralPage() {
@@ -54,14 +55,23 @@ export default function ReferralPage() {
 
     // Load states and fetch tree data on mount
     useEffect(() => {
-        const stored = localStorage.getItem('p2p_completed_tasks');
-        if (stored) setCompletedTaskIds(JSON.parse(stored));
+        // Sync with server if user data is available
+        if (user?.completed_tasks) {
+            try {
+                const serverCompleted = JSON.parse(user.completed_tasks);
+                setCompletedTaskIds(serverCompleted);
+                localStorage.setItem('p2p_completed_tasks', user.completed_tasks);
+            } catch (e) {
+                console.error("Failed to parse server completed tasks", e);
+            }
+        } else {
+            const stored = localStorage.getItem('p2p_completed_tasks');
+            if (stored) setCompletedTaskIds(JSON.parse(stored));
+        }
 
         const storedClaimable = localStorage.getItem('p2p_claimable_tasks');
         if (storedClaimable) setClaimableTasks(JSON.parse(storedClaimable));
-
-
-    }, []);
+    }, [user?.completed_tasks]);
 
     // Timer Logic for Verification
     useEffect(() => {
@@ -95,25 +105,42 @@ export default function ReferralPage() {
         return () => clearInterval(timer);
     }, []);
 
-    const handleClaim = (task: Task) => {
+    const handleClaim = async (task: Task) => {
         if (completedTaskIds.includes(task.id)) return;
         selection();
         notification('success');
-        const newCompleted = [...completedTaskIds, task.id];
-        setCompletedTaskIds(newCompleted);
-        localStorage.setItem('p2p_completed_tasks', JSON.stringify(newCompleted));
-        const newClaimable = claimableTasks.filter(id => id !== task.id);
-        setClaimableTasks(newClaimable);
-        localStorage.setItem('p2p_claimable_tasks', JSON.stringify(newClaimable));
-        updateUser?.({ xp: currentXP + task.reward });
-        const nextLevelXP = currentLevel * 100;
-        if ((currentXP + task.reward) >= nextLevelXP) {
-            setLevelUp(true);
-            setConfettiActive(true);
-            setTimeout(() => {
-                setLevelUp(false);
-                setConfettiActive(false);
-            }, 4000);
+
+        try {
+            // Persist to backend
+            await apiClient.post(`/api/partner/tasks/${task.id}/claim`, null, {
+                params: { xp_reward: task.reward }
+            });
+
+            const newCompleted = [...completedTaskIds, task.id];
+            setCompletedTaskIds(newCompleted);
+            localStorage.setItem('p2p_completed_tasks', JSON.stringify(newCompleted));
+
+            const newClaimable = claimableTasks.filter(id => id !== task.id);
+            setClaimableTasks(newClaimable);
+            localStorage.setItem('p2p_claimable_tasks', JSON.stringify(newClaimable));
+
+            // Update local user state immediately for UI feedback
+            updateUser?.({
+                xp: currentXP + task.reward,
+                completed_tasks: JSON.stringify(newCompleted)
+            });
+
+            const nextLevelXP = currentLevel * 100;
+            if ((currentXP + task.reward) >= nextLevelXP) {
+                setLevelUp(true);
+                setConfettiActive(true);
+                setTimeout(() => {
+                    setLevelUp(false);
+                    setConfettiActive(false);
+                }, 4000);
+            }
+        } catch (e) {
+            console.error("Failed to claim task reward", e);
         }
     };
 

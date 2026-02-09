@@ -19,6 +19,7 @@ class Partner(SQLModel, table=True):
     referrer_id: Optional[int] = Field(default=None, foreign_key="partner.id", index=True) # Optimized for joins
     path: Optional[str] = Field(default=None, index=True) # Materialized path (e.g. "1.5.23")
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True) # Optimized for sorting
+    completed_tasks: str = Field(default="[]") # Store task IDs as JSON string
     
     # Relationships
     referrals: list["Partner"] = Relationship(
