@@ -75,7 +75,7 @@ export const PartnerDashboard = () => {
                 <div className="grid grid-cols-2 gap-2">
                     <div className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm">
                         <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Total Earned</div>
-                        <div className="text-2xl font-black text-slate-900 dark:text-white">$45.20</div>
+                        <div className="text-2xl font-black text-slate-900 dark:text-white">${user?.balance?.toFixed(2) || '0.00'}</div>
                     </div>
                     <div
                         className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm active:scale-95 transition-transform cursor-pointer relative group overflow-hidden"
@@ -179,35 +179,7 @@ export const PartnerDashboard = () => {
                         <button className="text-slate-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors">View All</button>
                     </div>
 
-                    <div className="space-y-3">
-                        {/* Reward Item 1 */}
-                        <div className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                            <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                                    <Gift className="w-5 h-5" />
-                                </div>
-                                <div className='flex flex-col'>
-                                    <span className="font-bold text-slate-900 dark:text-white text-sm">Card Top Up Reward</span>
-                                    <span className="text-[10px] text-slate-500">Today, 10:23 AM</span>
-                                </div>
-                            </div>
-                            <span className="font-black text-emerald-600 dark:text-emerald-400 text-sm tracking-tight">+1.516 USDT</span>
-                        </div>
-
-                        {/* Reward Item 2 */}
-                        <div className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                            <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                                    <DollarSign className="w-5 h-5" />
-                                </div>
-                                <div className='flex flex-col'>
-                                    <span className="font-bold text-slate-900 dark:text-white text-sm">Transfer Fee Reward</span>
-                                    <span className="text-[10px] text-slate-500">Yesterday, 4:15 PM</span>
-                                </div>
-                            </div>
-                            <span className="font-black text-emerald-600 dark:text-emerald-400 text-sm tracking-tight">+0.113 USDT</span>
-                        </div>
-                    </div>
+                    <EarningsList />
                 </div>
 
                 {/* 4. Integrated Action Button */}
@@ -280,5 +252,63 @@ export const PartnerDashboard = () => {
                 </div>
             )}
         </>
+    );
+};
+
+const EarningsList = () => {
+    const [earnings, setEarnings] = React.useState<any[]>([]);
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        const fetchEarnings = async () => {
+            try {
+                const res = await apiClient.get('/api/partner/earnings');
+                setEarnings(res.data);
+            } catch (error) {
+                console.error('Failed to fetch earnings:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchEarnings();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="space-y-3">
+                <div className="h-16 w-full bg-slate-200 dark:bg-white/5 rounded-2xl animate-pulse" />
+                <div className="h-16 w-full bg-slate-200 dark:bg-white/5 rounded-2xl animate-pulse" />
+            </div>
+        );
+    }
+
+    if (earnings.length === 0) {
+        return (
+            <div className="py-8 text-center bg-white/40 dark:bg-white/5 rounded-2xl border border-dashed border-slate-300 dark:border-white/10">
+                <Gift className="w-8 h-8 mx-auto text-slate-300 dark:text-white/20 mb-2" />
+                <p className="text-xs font-bold text-slate-500 dark:text-slate-400">No earnings yet</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="space-y-3">
+            {earnings.map((earning) => (
+                <div key={earning.id} className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                    <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                            <DollarSign className="w-5 h-5" />
+                        </div>
+                        <div className='flex flex-col'>
+                            <span className="font-bold text-slate-900 dark:text-white text-sm">{earning.description}</span>
+                            <span className="text-[10px] text-slate-500">
+                                {new Date(earning.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                        </div>
+                    </div>
+                    <span className="font-black text-emerald-600 dark:text-emerald-400 text-sm tracking-tight">+{earning.amount.toFixed(3)} USDT</span>
+                </div>
+            ))}
+        </div>
     );
 };

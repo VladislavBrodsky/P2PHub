@@ -332,3 +332,36 @@ async def claim_task_reward(
             print(f"Failed to send task notification: {e}")
 
     return partner
+
+@router.get("/earnings")
+async def get_my_earnings(
+    limit: int = 10,
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Fetches the recent earnings history for the current user.
+    """
+    try:
+        if "user" in user_data:
+            tg_id = str(json.loads(user_data["user"]).get("id"))
+        else:
+            tg_id = str(user_data.get("id"))
+    except:
+        return []
+
+    # Get partner ID first
+    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    result = await session.exec(statement)
+    partner = result.first()
+    
+    if not partner:
+        return []
+
+    from app.models.partner import Earning
+    # Query Earnings table
+    stmt = select(Earning).where(Earning.partner_id == partner.id).order_by(Earning.created_at.desc()).limit(limit)
+    result = await session.exec(stmt)
+    earnings = result.all()
+    
+    return earnings
