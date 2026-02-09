@@ -205,10 +205,10 @@ export const MilestonePath = () => {
                                 </div>
 
                                 {/* Instruction Section */}
-                                <div className="p-6 rounded-3xl bg-slate-50 dark:bg-white/2 border border-slate-100 dark:border-white/5 space-y-3">
+                                <div className="p-6 rounded-3xl bg-slate-50 dark:bg-white/2 border border-slate-100 dark:border-white/5 space-y-3 text-left">
                                     <div className="flex items-center gap-2">
-                                        <Info className="w-4 h-4 text-brand-blue" />
-                                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">HOW TO UNLOCK</span>
+                                        <Info className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                                        <span className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">HOW TO UNLOCK</span>
                                     </div>
                                     <p className="text-sm font-bold text-slate-800 dark:text-slate-200 leading-relaxed">
                                         {selectedItem.instruction || `Achieve Level ${selectedItem.level} to unlock this unique recognition and its associated rewards.`}
@@ -219,14 +219,31 @@ export const MilestonePath = () => {
                                 {currentLevel < selectedItem.level && (
                                     <div className="space-y-4">
                                         <div className="flex items-center gap-3 px-2">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
-                                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">PRO TIP: VIRAL GROWTH</p>
+                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
+                                            <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">PRO TIP: VIRAL GROWTH</p>
                                         </div>
                                         <div className="grid grid-cols-2 gap-3">
-                                            <button className="h-14 rounded-2xl bg-brand-blue text-white font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-blue-500/20">
+                                            <button
+                                                onClick={() => {
+                                                    const link = `https://t.me/pintopay_probot?start=${user?.referral_code || ''}`;
+                                                    if (navigator.share) {
+                                                        navigator.share({ title: 'P2PHub', url: link });
+                                                    } else {
+                                                        navigator.clipboard.writeText(link);
+                                                    }
+                                                }}
+                                                className="h-14 rounded-2xl bg-blue-600 text-white font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-blue-500/20 forced-colors:bg-blue-600"
+                                            >
                                                 <Share2 className="w-4 h-4" /> SHARE LINK
                                             </button>
-                                            <button className="h-14 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all">
+                                            <button
+                                                onClick={() => {
+                                                    if (window.Telegram?.WebApp) {
+                                                        window.Telegram.WebApp.switchInlineQuery(user?.referral_code || '');
+                                                    }
+                                                }}
+                                                className="h-14 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                            >
                                                 <UserPlus className="w-4 h-4" /> INVITE FRIENDS
                                             </button>
                                         </div>

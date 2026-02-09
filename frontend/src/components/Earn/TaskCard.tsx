@@ -24,7 +24,7 @@ export const TaskCard = ({ task, status, userReferrals, countdown, onClick, onCl
     // Visual Variations
     const variants = {
         LOCKED: 'opacity-50 grayscale cursor-not-allowed border-white/10 bg-black/20',
-        AVAILABLE: 'glass-panel hover:border-blue-500/50 hover:bg-white/5 cursor-pointer text-(--color-text-primary)',
+        AVAILABLE: 'glass-panel hover:border-blue-500/50 hover:bg-white/5 cursor-pointer text-slate-900 dark:text-white',
         VERIFYING: 'glass-panel border-blue-500/30 bg-blue-500/5 cursor-wait',
         CLAIMABLE: 'glass-panel border-emerald-500/50 bg-emerald-500/10 shadow-[0_0_20px_rgba(16,185,129,0.2)] animate-pulse',
         COMPLETED: 'glass-panel border-green-500/20 bg-green-500/5 cursor-default'
@@ -41,16 +41,16 @@ export const TaskCard = ({ task, status, userReferrals, countdown, onClick, onCl
             {/* Locked Overlay */}
             {isLocked && (
                 <div className="absolute inset-0 z-20 flex items-center justify-center bg-(--color-bg-app)/60 backdrop-blur-[1px] rounded-2xl">
-                    <div className="bg-(--color-bg-surface) px-4 py-2 rounded-full border border-(--color-border-glass) flex items-center gap-2 shadow-sm">
-                        <Lock className="w-4 h-4 text-brand-muted" />
-                        <span className="text-[10px] font-bold text-(--color-text-secondary) uppercase tracking-wider">{t('tasks.level_short')} {task.minLevel}</span>
+                    <div className="bg-white dark:bg-slate-900 px-4 py-2 rounded-full border border-slate-200 dark:border-white/10 flex items-center gap-2 shadow-sm">
+                        <Lock className="w-4 h-4 text-slate-400" />
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('tasks.level_short')} {task.minLevel}</span>
                     </div>
                 </div>
             )}
 
             <div className="flex items-start justify-between gap-4">
                 {/* Icon */}
-                <div className={`p-3 rounded-xl border ${isClaimable ? 'bg-emerald-500 text-white border-emerald-400' : 'bg-brand-muted/10 border-brand-muted/5 text-brand-muted'}`}>
+                <div className={`p-3 rounded-xl border ${isClaimable ? 'bg-emerald-500 text-white border-emerald-400' : 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400'}`}>
                     {status === 'VERIFYING' ? (
                         <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                     ) : (
@@ -61,7 +61,7 @@ export const TaskCard = ({ task, status, userReferrals, countdown, onClick, onCl
                 {/* Content */}
                 <div className="flex-1 space-y-1">
                     <div className="flex justify-between items-start">
-                        <h4 className="text-sm font-bold text-(--color-text-primary) line-clamp-1 pr-16">{task.title}</h4>
+                        <h4 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-1 pr-16">{task.title}</h4>
                     </div>
                     {/* Absolute XP Badge */}
                     {!isCompleted && (
@@ -69,14 +69,14 @@ export const TaskCard = ({ task, status, userReferrals, countdown, onClick, onCl
                             +{task.reward} XP
                         </div>
                     )}
-                    <p className="text-xs text-brand-muted line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
                         {task.description}
                     </p>
 
                     {/* Progress Bar for Referrals */}
                     {task.type === 'referral' && (
                         <div className="pt-2 space-y-1">
-                            <div className="flex justify-between text-[10px] font-bold uppercase text-brand-muted/80">
+                            <div className="flex justify-between text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400">
                                 <span>{t('tasks.progress')}</span>
                                 <span className="font-mono">{Math.min(userReferrals, task.requirement || 0)} / {task.requirement}</span>
                             </div>

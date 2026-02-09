@@ -110,10 +110,10 @@ export const EarnHeader = () => {
                 {/* XP Stats - Premium Liquid Bar */}
                 <div className="space-y-3 w-full max-w-[300px] pt-4">
                     <div className="flex justify-between items-end px-1">
-                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.25em]">{t('earn_header.xp_progress')}</span>
+                        <span className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.25em]">{t('earn_header.xp_progress')}</span>
                         <div className="flex items-baseline gap-1">
-                            <span className="text-sm font-black text-text-primary italic tracking-tighter">{progress.current}</span>
-                            <span className="text-[10px] font-bold text-brand-muted opacity-50">/ {progress.total} XP</span>
+                            <span className="text-sm font-black text-slate-900 dark:text-white italic tracking-tighter">{progress.current}</span>
+                            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">/ {progress.total} XP</span>
                         </div>
                     </div>
                     <div className="h-4 w-full bg-slate-200/30 dark:bg-white/5 rounded-full overflow-hidden border border-white/10 p-[2px] relative shadow-inner backdrop-blur-sm">
@@ -149,7 +149,7 @@ export const EarnHeader = () => {
                             <div className="absolute inset-x-0 top-0 h-[40%] bg-linear-to-b from-white/30 to-transparent pointer-events-none" />
                         </motion.div>
                     </div>
-                    <p className="text-[10px] text-brand-muted font-bold italic tracking-tight opacity-70">
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold italic tracking-tight">
                         {t('earn_header.xp_to_next', { xp: progress.total - progress.current })}
                     </p>
                 </div>
@@ -163,9 +163,9 @@ export const EarnHeader = () => {
                         <div className="flex flex-col items-start gap-1 relative z-10">
                             <div className="flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 shadow-[0_0_5px_rgba(250,204,21,0.5)]" />
-                                <span className="text-[9px] font-black text-brand-muted uppercase tracking-widest">{t('earn_header.partners')}</span>
+                                <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('earn_header.partners')}</span>
                             </div>
-                            <div className="text-2xl font-black text-text-primary mt-1">
+                            <div className="text-2xl font-black text-slate-900 dark:text-white mt-1">
                                 {user?.referrals?.length || 0}
                             </div>
                         </div>
@@ -178,9 +178,9 @@ export const EarnHeader = () => {
                         <div className="flex flex-col items-start gap-1 relative z-10">
                             <div className="flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_5px_rgba(52,211,153,0.5)]" />
-                                <span className="text-[9px] font-black text-brand-muted uppercase tracking-widest">{t('earn_header.total_xp')}</span>
+                                <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('earn_header.total_xp')}</span>
                             </div>
-                            <div className="text-2xl font-black text-text-primary mt-1">
+                            <div className="text-2xl font-black text-slate-900 dark:text-white mt-1">
                                 {xp}
                             </div>
                         </div>
