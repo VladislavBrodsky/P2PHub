@@ -14,6 +14,7 @@ import { CheckCircle2, Trophy, QrCode, X, Share2, Download, Copy, ExternalLink, 
 import { useTranslation, Trans } from 'react-i18next';
 import { getSafeLaunchParams } from '../utils/tma';
 import { apiClient } from '../api/client';
+import { getLevel } from '../utils/ranking';
 
 
 export default function ReferralPage() {
@@ -27,6 +28,7 @@ export default function ReferralPage() {
     const [verifyingTasks, setVerifyingTasks] = useState<Record<string, number>>({});
     const [claimableTasks, setClaimableTasks] = useState<string[]>([]);
     const [levelUp, setLevelUp] = useState(false);
+    const [reachedLevel, setReachedLevel] = useState(1);
     const [confettiActive, setConfettiActive] = useState(false);
     const [showQR, setShowQR] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
@@ -124,14 +126,18 @@ export default function ReferralPage() {
             setClaimableTasks(newClaimable);
             localStorage.setItem('p2p_claimable_tasks', JSON.stringify(newClaimable));
 
+            const newXP = currentXP + task.reward;
+            const newLevel = getLevel(newXP);
+
             // Update local user state immediately for UI feedback
             updateUser?.({
-                xp: currentXP + task.reward,
+                xp: newXP,
+                level: newLevel,
                 completed_tasks: JSON.stringify(newCompleted)
             });
 
-            const nextLevelXP = currentLevel * 100;
-            if ((currentXP + task.reward) >= nextLevelXP) {
+            if (newLevel > currentLevel) {
+                setReachedLevel(newLevel);
                 setLevelUp(true);
                 setConfettiActive(true);
                 setTimeout(() => {
@@ -391,7 +397,7 @@ export default function ReferralPage() {
                             <h2 className="text-3xl font-black text-transparent bg-clip-text bg-linear-to-r from-yellow-400 to-orange-500">
                                 {t('referral.levelup.title')}
                             </h2>
-                            <p className="text-slate-400 font-bold italic">{t('referral.levelup.reached', { level: currentLevel + 1 })}</p>
+                            <p className="text-slate-400 font-bold italic">{t('referral.levelup.reached', { level: reachedLevel })}</p>
                         </motion.div>
                     </div>
                 )}

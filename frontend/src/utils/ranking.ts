@@ -42,10 +42,24 @@ export function getRank(level: number): Rank {
     return [...RANKS].reverse().find(r => level >= r.minLevel) || RANKS[0];
 }
 
+/**
+ * Calculates current level based on total XP.
+ * Formula: Total XP to reach Level L = 50 * (L-1) * L
+ */
+export function getLevel(totalXP: number): number {
+    let level = 1;
+    while (totalXP >= (50 * level * (level + 1))) {
+        level++;
+    }
+    return level;
+}
+
 export function getXPProgress(level: number, totalXP: number) {
     // XP at start of current level: sum(i=1 to level-1) of i*100
+    // L=1 -> 0, L=2 -> 100, L=3 -> 300
     const startXP = 50 * (level - 1) * level;
-    // XP needed to complete current level
+
+    // XP needed to complete current level and reach L+1
     const levelXP = level * 100;
 
     // XP earned within current level
@@ -53,7 +67,7 @@ export function getXPProgress(level: number, totalXP: number) {
     const progress = Math.min(100, (currentLevelXP / levelXP) * 100);
 
     return {
-        current: currentLevelXP,
+        current: Math.round(currentLevelXP),
         total: levelXP,
         percent: progress
     };
