@@ -92,52 +92,66 @@ from app.services.partner_service import create_partner, process_referral_logic
 
 async def create_real_user():
     print("🚀 Connecting to Production DB...")
-    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
-    async with async_session() as session:
-        # 1. Verify Referrer
+    async with async_session_factory() as session:
+        # REFERRER: @uslincoln (ID 1)
         referrer_code = "P2P-425DA3DB"
-        stmt = select(Partner).where(Partner.referral_code == referrer_code)
-        res = await session.exec(stmt)
-        referrer = res.first()
-        
-        if not referrer:
-            print(f"❌ Referrer {referrer_code} not found!")
+        print(f"🚀 Starting 3-Level Notification Test for code: {referrer_code}...")
+
+        # 1. Fetch Root (User A)
+        res = await session.exec(select(Partner).where(Partner.referral_code == referrer_code))
+        root_user = res.first()
+        if not res:
+            print(f"❌ Error: Partner with code {referrer_code} not found.")
             return
 
-        print(f"👤 Found Referrer: @{referrer.username} (ID: {referrer.id}) - XP: {referrer.xp}")
-        initial_xp = referrer.xp
-
-        # 2. Create New User
-        ts = int(time.time())
-        username = f"test_user_final_{ts}"
-        tg_id = f"TEST_{ts}"
+        print(f"👤 Root User Found: @{root_user.username} (ID: {root_user.id}) - XP: {root_user.xp}")
         
-        print(f"🆕 Creating New Partner: @{username}...")
-        partner, is_new = await create_partner(
-            session=session,
-            telegram_id=tg_id,
-            username=username,
-            first_name="Test User Final",
+        # 2. Level 1: User B joins under User A
+        user_b_id = f"TEST_L1_{secrets.token_hex(4)}"
+        user_b_username = f"User_B_{user_b_id}"
+        print(f"\n🆕 Registering Level 1 User: @{user_b_username} under {referrer_code}...")
+        
+        user_b, is_new_b = await ps.create_partner(
+            session,
+            telegram_id=user_b_id,
+            username=user_b_username,
+            first_name="User",
+            last_name="B",
             referrer_code=referrer_code
         )
         
-        if is_new:
-            print("✅ Partner Created! Processing Referral Logic...")
-            # Run simulation logic (updates DB XP, logs transactions)
-            # Note: Notifications are mocked here, but DB effects happen
-            await process_referral_logic(partner.id)
-            
-            await session.refresh(referrer)
-            gain = referrer.xp - initial_xp
-            print(f"💰 XP Update: {initial_xp} -> {referrer.xp} (+{gain} XP)")
-            
-            if gain == 35:
-                print("✅ SUCCESS: +35 XP awarded correctly!")
-            else:
-                print(f"⚠️ WARNING: Gain was {gain} (Expected 35)")
-        else:
-            print("⚠️ User already existed.")
+        await ps.process_referral_logic(user_b.id)
+        
+        # Refresh Root to check L1 XP
+        session.expire(root_user)
+        await session.refresh(root_user)
+        print(f"💰 Root User XP after L1: {root_user.xp} (+35 XP Expected)")
+
+        # 3. Level 2: User C joins under User B
+        referrer_code_b = user_b.referral_code
+        user_c_id = f"TEST_L2_{secrets.token_hex(4)}"
+        user_c_username = f"User_C_{user_c_id}"
+        print(f"\n🆕 Registering Level 2 User: @{user_c_username} under {referrer_code_b}...")
+
+        user_c, is_new_c = await ps.create_partner(
+            session,
+            telegram_id=user_c_id,
+            username=user_c_username,
+            first_name="User",
+            last_name="C",
+            referrer_code=referrer_code_b
+        )
+
+        await ps.process_referral_logic(user_c.id)
+
+        # Refresh Root to check L2 XP and Notification Context
+        session.expire(root_user)
+        await session.refresh(root_user)
+        print(f"💰 Root User XP after L2: {root_user.xp} (+10 XP Expected)")
+        
+        print("\n✅ Simulation Complete!")
 
     await engine.dispose()
 

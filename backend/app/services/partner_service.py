@@ -193,13 +193,28 @@ async def process_referral_logic(partner_id: int):
             # 5. Send Notification
             try:
                 lang = referrer.language_code or "en"
+                new_partner_name = f"{partner.first_name}"
+                if partner.username:
+                    new_partner_name += f" (@{partner.username})"
+                
                 if level == 1:
-                    name = partner.first_name or partner.username or "Partner"
-                    msg = get_msg(lang, "referral_l1_congrats", name=name, username=f" (@{partner.username})" if partner.username else "")
-                elif level == 2:
-                    msg = get_msg(lang, "referral_l2_congrats")
+                    msg = get_msg(lang, "referral_l1_congrats", name=new_partner_name)
                 else:
-                    msg = get_msg(lang, "referral_deep_activity", level=level)
+                    # For L2+, show who invited them
+                    # The immediate referrer of the new partner is partner.referrer_id
+                    # We can fetch this from the ancestor map
+                    direct_inviter = ancestor_map.get(partner.referrer_id)
+                    inviter_name = "Unknown"
+                    if direct_inviter:
+                         inviter_name = f"{direct_inviter.first_name}"
+                         if direct_inviter.username:
+                             inviter_name += f" (@{direct_inviter.username})"
+                    
+                    if level == 2:
+                        msg = get_msg(lang, "referral_l2_congrats", name=new_partner_name, referrer_name=inviter_name)
+                    else:
+                        msg = get_msg(lang, "referral_deep_activity", level=level, name=new_partner_name, referrer_name=inviter_name)
+                
                 await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
             except Exception: pass
 

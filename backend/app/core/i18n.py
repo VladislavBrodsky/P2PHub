@@ -10,20 +10,22 @@ MESSAGES = {
         ),
         "referral_l1_congrats": (
             "🤝 *New Direct Partner!* (L1)\n\n"
-            "👤 {name}{username}\n"
+            "👤 {name}\n"
             "📈 *Status:* Just joined your first line!\n"
             "💰 *Reward:* `+35 XP` credited.\n\n"
             "🚀 *Keep going!* Every direct invite builds your foundation."
         ),
         "referral_l2_congrats": (
             "👥 *Team Expansion!* (L2)\n\n"
-            "Someone just joined your *2nd level*!\n"
+            "🔥 Your partner *{referrer_name}* just invited a new member!\n\n"
+            "👤 *New:* {name}\n"
             "💰 *Reward:* `+10 XP` credited.\n"
             "📊 Your network is starting to scale! 🚀"
         ),
         "referral_deep_activity": (
             "🌐 *Network Pulse* (L{level})\n\n"
-            "Movement in your deep network! A new partner joined at *Level {level}*.\n"
+            "New activity down the line! ⚡\n"
+            "🔸 *{referrer_name}* invited *{name}*\n\n"
             "💰 *Reward:* `+1 XP` credited.\n"
             "🏰 Brick by brick, your empire grows! 🌍"
         ),
@@ -50,20 +52,22 @@ MESSAGES = {
         ),
         "referral_l1_congrats": (
             "🤝 *Новый прямой партнер!* (L1)\n\n"
-            "👤 {name}{username}\n"
+            "👤 {name}\n"
             "📈 *Статус:* Присоединился к вашей первой линии!\n"
             "💰 *Награда:* `+35 XP` зачислено.\n\n"
             "🚀 *Так держать!* Каждое приглашение укрепляет ваш фундамент."
         ),
         "referral_l2_congrats": (
             "👥 *Расширение команды!* (L2)\n\n"
-            "Кто-то присоединился на ваш *2-й уровень*!\n"
+            "🔥 Ваш партнер *{referrer_name}* только что пригласил нового участника!\n\n"
+            "👤 *Новый:* {name}\n"
             "💰 *Награда:* `+10 XP` зачислено.\n"
             "📊 Ваша сеть начинает масштабироваться! 🚀"
         ),
         "referral_deep_activity": (
             "🌐 *Пульс Сети* (L{level})\n\n"
-            "Движение в глубине вашей сети! Новый партнер на *Уровне {level}*.\n"
+            "Движение в глубине вашей сети! ⚡\n"
+            "🔸 *{referrer_name}* пригласил *{name}*\n\n"
             "💰 *Награда:* `+1 XP` зачислено.\n"
             "🏰 Кирпичик за кирпичиком, ваша империя растет! 🌍"
         ),
