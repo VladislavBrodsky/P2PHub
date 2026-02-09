@@ -227,7 +227,6 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                     />
 
                     {/* Stroke Line */}
-                    {/* Stroke Line */}
                     <motion.path
                         d={getLinePath(chartData)}
                         fill="none"
@@ -240,44 +239,61 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                         animate={{ pathLength: 1, opacity: 1, d: getLinePath(chartData) }}
                         transition={{ duration: 1, ease: "easeOut" }}
                     />
+                </svg>
 
-                    {/* Interactive Circles */}
+                {/* HTML Overlay for Interactive Points - Fixes aspect ratio distortion */}
+                <div className="absolute inset-0">
                     {chartData.map((point: ChartDataPoint, index: number) => {
                         const width = 100;
                         const height = 100;
                         const stepX = width / (chartData.length - 1);
-                        const x = index * stepX;
-                        const y = height - (point.total / maxValue) * height * 0.8;
+                        const x = index * stepX; // percentage 0-100
+                        const y = (1 - (point.total / maxValue) * 0.8) * 100; // percentage 0-100 (inverted for CSS top)
+
+                        // If maxValue is 0 or NaN, default y to bottom
+                        const safeY = isNaN(y) ? 100 : y;
 
                         return (
-                            <motion.g
+                            <div
                                 key={index}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.5 + (index * 0.02) }}
+                                className="absolute top-0 bottom-0 flex flex-col items-center justify-end z-10 group/point"
+                                style={{
+                                    left: `${x}%`,
+                                    width: `${100 / chartData.length}%`,
+                                    transform: 'translateX(-50%)'
+                                }}
+                                onMouseEnter={() => { selection(); setHoveredIndex(index); }}
+                                onMouseLeave={() => setHoveredIndex(null)}
                             >
-                                {/* Invisible hit area for better UX */}
-                                <rect
-                                    x={x - (width / chartData.length) / 2}
-                                    y={0}
-                                    width={width / chartData.length}
-                                    height={100}
-                                    fill="transparent"
-                                    onMouseEnter={() => { selection(); setHoveredIndex(index); }}
-                                    onMouseLeave={() => setHoveredIndex(null)}
-                                    className="cursor-crosshair"
+                                {/* Hit Area (Full Height) */}
+                                <div className="absolute inset-0 bg-transparent cursor-crosshair" />
+
+                                {/* Dotted Line (Visual only on hover) */}
+                                <div
+                                    className={cn(
+                                        "w-px bg-blue-500/50 border-r border-dashed border-blue-500 absolute bottom-0 transition-opacity duration-200 pointer-events-none",
+                                        hoveredIndex === index ? "opacity-100 h-full" : "opacity-0 h-0"
+                                    )}
+                                    style={{
+                                        height: `${100 - safeY}%`
+                                    }}
                                 />
 
-                                {hoveredIndex === index && (
-                                    <>
-                                        <circle cx={x} cy={y} r="1.5" fill="#3b82f6" stroke="white" strokeWidth="0.5" />
-                                        <line x1={x} y1={y} x2={x} y2={100} stroke="#3b82f6" strokeWidth="0.2" strokeDasharray="1 1" opacity="0.5" />
-                                    </>
-                                )}
-                            </motion.g>
+                                {/* The Dot */}
+                                <div
+                                    className={cn(
+                                        "absolute w-3 h-3 rounded-full bg-blue-500 border-2 border-white shadow-sm transition-all duration-200 pointer-events-none",
+                                        hoveredIndex === index ? "scale-125 opacity-100 ring-4 ring-blue-500/20" : "scale-0 opacity-0"
+                                    )}
+                                    style={{
+                                        top: `${safeY}%`,
+                                        transform: 'translateY(-50%)'
+                                    }}
+                                />
+                            </div>
                         );
                     })}
-                </svg>
+                </div>
 
                 {/* Tooltip Overhead */}
                 <AnimatePresence>
