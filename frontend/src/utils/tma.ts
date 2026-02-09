@@ -13,3 +13,11 @@ export const getSafeLaunchParams = () => {
         };
     }
 };
+export const isTMA = () => {
+    try {
+        retrieveLaunchParams();
+        return true;
+    } catch (e) {
+        return false;
+    }
+};

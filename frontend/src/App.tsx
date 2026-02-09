@@ -9,6 +9,7 @@ import { miniApp, backButton, viewport, swipeBehavior } from '@telegram-apps/sdk
 import { UserProvider } from './context/UserContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
+import { isTMA } from './utils/tma';
 
 function App() {
     const [activeTab, setActiveTab] = useState('home');
@@ -16,6 +17,10 @@ function App() {
     // Initialize TMA SDK once
     useEffect(() => {
         const initTMA = async () => {
+            if (!isTMA()) {
+                console.log('[DEBUG] initTMA: Not in TMA, skipping SDK initialization');
+                return;
+            }
             try {
                 // Initialize SDK components
                 console.log('[DEBUG] initTMA: Starting...');
