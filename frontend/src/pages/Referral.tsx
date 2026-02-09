@@ -15,6 +15,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { getSafeLaunchParams } from '../utils/tma';
 import { apiClient } from '../api/client';
 import { getLevel } from '../utils/ranking';
+import { getApiUrl } from '../utils/api';
 
 
 export default function ReferralPage() {
@@ -348,7 +349,7 @@ export default function ReferralPage() {
                                 <div className="mx-auto w-64 h-64 bg-white p-4 rounded-3xl shadow-[0_0_40px_rgba(59,130,246,0.1)] border border-slate-100 relative overflow-hidden group">
                                     <div className="absolute inset-0 bg-linear-to-b from-blue-500/0 via-blue-500/10 to-blue-500/0 w-full h-8 blur-md animate-scan pointer-events-none" />
                                     <img
-                                        src={`${import.meta.env.VITE_API_URL}/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=10`}
+                                        src={`${getApiUrl()}/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=10`}
                                         alt="Your Referral QR Code"
                                         className="w-full h-full object-contain relative z-10"
                                     />
@@ -369,7 +370,7 @@ export default function ReferralPage() {
                                         className="flex-1 py-3 bg-blue-600 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
                                         onClick={() => {
                                             const link = document.createElement('a');
-                                            link.href = `${import.meta.env.VITE_API_URL}/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=20`;
+                                            link.href = `${getApiUrl()}/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=20`;
                                             link.download = 'Pintopay_Invite.png';
                                             link.click();
                                         }}

@@ -8,6 +8,7 @@ import { PersonalizationCard } from '../PersonalizationCard';
 import { NetworkExplorer } from './NetworkExplorer';
 import { ReferralGrowthChart } from './ReferralGrowthChart';
 import { apiClient } from '../../api/client';
+import { getApiUrl } from '../../utils/api';
 
 export const PartnerDashboard = () => {
     const { notification, selection } = useHaptic();
@@ -18,7 +19,7 @@ export const PartnerDashboard = () => {
     // Correct bot username as requested
     const referralLink = `https://t.me/pintopay_probot?start=${user?.referral_code || 'ref_dev'}`;
     const qrImageUrl = user?.referral_code
-        ? `${import.meta.env.VITE_API_URL || 'https://p2phub-production.up.railway.app'}/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=10&dark=%23000000`
+        ? `${getApiUrl()}/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=10&dark=%23000000`
         : '';
 
     const [copied, setCopied] = React.useState(false);
