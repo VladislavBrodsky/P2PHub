@@ -47,13 +47,13 @@ export const MilestonePath = () => {
     };
 
     const renderGrid = (items: any[], typeLabel: string, color: string) => (
-        <div className="space-y-3">
+        <div className="space-y-2">
             <div className="flex items-center gap-2 px-1 opacity-70">
                 <div className={`w-1 h-3 rounded-full ${color}`} />
-                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap dark:text-slate-400">{typeLabel}</span>
+                <span className="text-[7.5px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap dark:text-slate-400">{typeLabel}</span>
                 <div className="h-px w-full bg-slate-200 dark:bg-white/5" />
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-2">
                 {items.map((item) => {
                     const isUnlocked = currentLevel >= item.level;
                     const isLocked = !isUnlocked;
@@ -65,21 +65,21 @@ export const MilestonePath = () => {
                             animate={{ opacity: 1, y: 0 }}
                             onClick={() => handleItemClick(item)}
                             className={`
-                                relative flex flex-col items-center p-3 rounded-[1.5rem] border transition-all duration-300 active:scale-95 cursor-pointer
+                                relative flex flex-col items-center p-2 rounded-2xl border transition-all duration-300 active:scale-95 cursor-pointer
                                 ${isUnlocked
                                     ? 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 shadow-premium backdrop-blur-xl'
                                     : 'bg-slate-200/50 dark:bg-slate-900/10 border-slate-300 dark:border-white/5'}
                             `}
                         >
                             <div className={`
-                                relative w-10 h-10 rounded-2xl flex items-center justify-center mb-2.5
+                                relative w-8 h-8 rounded-xl flex items-center justify-center mb-1.5
                                 ${isUnlocked ? 'bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10' : 'bg-slate-200 dark:bg-black/20'}
                             `}>
                                 <div className={`relative z-10 ${isUnlocked ? item.color : 'text-slate-400'}`}>
                                     {isUnlocked ? (
-                                        <item.icon className="w-4 h-4" />
+                                        <item.icon className="w-3.5 h-3.5" />
                                     ) : (
-                                        <Lock className="w-3.5 h-3.5 opacity-40" />
+                                        <Lock className="w-3 h-3 opacity-40" />
                                     )}
                                 </div>
                             </div>
@@ -106,9 +106,9 @@ export const MilestonePath = () => {
     );
 
     return (
-        <section className="mt-6 mb-12 space-y-12 px-4 pb-20">
+        <section className="mt-4 mb-8 space-y-8 px-4 pb-20">
             {groupedChapters.slice(0, visibleChapters).map((chapter, idx) => (
-                <div key={chapter.title} className="relative space-y-6">
+                <div key={chapter.title} className="relative space-y-5">
                     {/* Chapter Header */}
                     <div className="flex items-center gap-3 mb-4 px-1">
                         <div className={`p-2.5 rounded-[1.25rem] border ${chapter.isPartiallyComplete ? 'bg-brand-blue/10 border-brand-blue/20 text-brand-blue shadow-[0_0_15px_rgba(59,130,246,0.1)]' : 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400'}`}>
@@ -136,7 +136,7 @@ export const MilestonePath = () => {
 
                     {/* Progress Connecting Line between Chapters */}
                     {idx < visibleChapters - 1 && (
-                        <div className="absolute left-6 -bottom-10 w-px h-8 bg-linear-to-b from-slate-200 dark:from-white/10 to-transparent" />
+                        <div className="absolute left-6 -bottom-6 w-px h-5 bg-linear-to-b from-slate-200 dark:from-white/10 to-transparent" />
                     )}
                 </div>
             ))}
