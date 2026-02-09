@@ -9,6 +9,9 @@ import json
 
 router = APIRouter()
 
+import logging
+logger = logging.getLogger(__name__)
+
 @router.get("/global")
 async def get_global_leaderboard(
     limit: int = 20,
@@ -22,20 +25,32 @@ async def get_global_leaderboard(
     
     # Check cache first
     cache_key = f"leaderboard:global_hydrated:{limit}"
-    cached = await redis_service.get_json(cache_key)
-    if cached:
-        return cached
+    try:
+        cached = await redis_service.get_json(cache_key)
+        if cached:
+            return cached
+    except Exception as e:
+        logger.warning(f"Leaderboard Cache Read Failed: {e}")
 
     # 1. Get IDs from Redis
-    top_data = await leaderboard_service.get_top_partners(limit)
+    top_data = None
+    try:
+        top_data = await leaderboard_service.get_top_partners(limit)
+    except Exception as e:
+        logger.error(f"Redis Leaderboard Read Failed: {e}")
+
     if not top_data:
-        # Fallback to DB if Redis is cold
+        # Fallback to DB if Redis is cold or down
         statement = select(Partner).order_by(Partner.xp.desc()).limit(limit)
         result = await session.exec(statement)
         partners = result.all()
         from app.schemas.leaderboard import LeaderboardPartner
         data = [LeaderboardPartner(**p.dict()).model_dump() for p in partners]
-        await redis_service.set_json(cache_key, data, expire=60)
+        
+        try:
+            await redis_service.set_json(cache_key, data, expire=60)
+        except Exception: pass
+        
         return data
 
     # 2. Extract IDs and Scores
@@ -46,7 +61,9 @@ async def get_global_leaderboard(
     data = await leaderboard_service.hydrate_leaderboard(partner_ids, scores, session)
     
     # 4. Cache for 60 seconds
-    await redis_service.set_json(cache_key, data, expire=60)
+    try:
+        await redis_service.set_json(cache_key, data, expire=60)
+    except Exception: pass
     
     return data
 
@@ -76,7 +93,12 @@ async def get_my_leaderboard_stats(
         return {"rank": -1, "xp": 0}
 
     # Get rank from Redis (0-indexed, so add 1)
-    rank = await leaderboard_service.get_partner_rank(partner.id)
+    try:
+        rank = await leaderboard_service.get_partner_rank(partner.id)
+        rank_val = (rank + 1) if rank is not None else -1
+    except Exception as e:
+        logger.error(f"Rank Read Failed: {e}")
+        rank_val = -1
     
     # Get total referral count
     from sqlmodel import func
@@ -84,7 +106,7 @@ async def get_my_leaderboard_stats(
     referral_count = (await session.exec(count_stmt)).one()
     
     return {
-        "rank": (rank + 1) if rank is not None else -1,
+        "rank": rank_val,
         "xp": partner.xp,
         "level": partner.level,
         "referrals": referral_count

@@ -19,8 +19,10 @@ class Settings(BaseSettings):
     # Required environment variables (no defaults for security)
     BOT_TOKEN: str
     DATABASE_URL: str
+    WEBHOOK_SECRET: str
     
     # Optional with sensible defaults
+    DEBUG: bool = False
     REDIS_URL: str = "redis://localhost:6379/0"
     PORT: int = 8000
     FRONTEND_URL: str = "https://p2phub-frontend.up.railway.app"
@@ -28,7 +30,6 @@ class Settings(BaseSettings):
     # Webhook settings
     WEBHOOK_URL: Optional[str] = None # e.g. https://p2phub-api.up.railway.app
     WEBHOOK_PATH: str = "/api/bot/webhook"
-    WEBHOOK_SECRET: str = "p2p_secret_aura"
     
     class Config:
         # env_file = ".env"  <-- Removed to prevent PermissionError in sandbox

@@ -42,7 +42,10 @@ async def get_my_profile(
         print(f"[DEBUG] Redis Error (get): {e}")
 
     # 2. Query DB
-    statement = select(Partner).where(Partner.telegram_id == tg_id).options(selectinload(Partner.referrals))
+    statement = select(Partner).where(Partner.telegram_id == tg_id).options(
+        selectinload(Partner.referrals),
+        selectinload(Partner.completed_task_records)
+    )
     result = await session.exec(statement)
     partner = result.first()
     
@@ -79,21 +82,25 @@ async def get_my_profile(
         from bot import bot
         background_tasks.add_task(process_referral_logic, bot, session, partner)
     else:
-        # Update existing profile check
+        # Update existing profile check (Throttled to once per hour)
+        from datetime import datetime, timedelta
         has_changed = False
-        if tg_user.get("username") != partner.username:
-            partner.username = tg_user.get("username"); has_changed = True
-        if tg_user.get("first_name") != partner.first_name:
-            partner.first_name = tg_user.get("first_name"); has_changed = True
-        if tg_user.get("last_name") != partner.last_name:
-            partner.last_name = tg_user.get("last_name"); has_changed = True
-        if tg_user.get("photo_url") != partner.photo_url:
-            partner.photo_url = tg_user.get("photo_url"); has_changed = True
-            
-        if has_changed:
-            session.add(partner)
-            await session.commit()
-            await session.refresh(partner)
+        now = datetime.utcnow()
+        if not partner.updated_at or partner.updated_at < (now - timedelta(hours=1)):
+            if tg_user.get("username") != partner.username:
+                partner.username = tg_user.get("username"); has_changed = True
+            if tg_user.get("first_name") != partner.first_name:
+                partner.first_name = tg_user.get("first_name"); has_changed = True
+            if tg_user.get("last_name") != partner.last_name:
+                partner.last_name = tg_user.get("last_name"); has_changed = True
+            if tg_user.get("photo_url") != partner.photo_url:
+                partner.photo_url = tg_user.get("photo_url"); has_changed = True
+                
+            if has_changed:
+                partner.updated_at = now
+                session.add(partner)
+                await session.commit()
+                await session.refresh(partner)
 
     # 2.1 Self-healing: Correct level if inconsistent with XP
     correct_level = get_level(partner.xp)
@@ -106,7 +113,12 @@ async def get_my_profile(
         # Invalidate cache again since we updated the profile
         await redis_service.client.delete(f"partner:profile:{tg_id}")
 
-    # 3. Store in Redis Cache (expires in 5 minutes)
+    # 3. Hydrate completed_tasks from association table for frontend compatibility
+    # We populate the legacy 'completed_tasks' JSON string field temporarily for the response
+    task_ids = [pt.task_id for pt in partner.completed_task_records]
+    partner.completed_tasks = json.dumps(task_ids)
+
+    # 4. Store in Redis Cache (expires in 5 minutes)
     try:
         await redis_service.set_json(cache_key, partner.dict(), expire=300)
     except Exception:
@@ -278,32 +290,35 @@ async def claim_task_reward(
     except:
         raise HTTPException(status_code=400, detail="Invalid user data")
 
-    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    statement = select(Partner).where(Partner.telegram_id == tg_id).options(selectinload(Partner.completed_task_records))
     result = await session.exec(statement)
     partner = result.first()
     
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
 
-    # Update completed tasks
-    try:
-        completed = json.loads(partner.completed_tasks or "[]")
-    except:
-        completed = []
+    # Check if task already completed in the new table
+    already_completed = any(pt.task_id == task_id for pt in partner.completed_task_records)
         
-    if task_id not in completed:
-        completed.append(task_id)
-        partner.completed_tasks = json.dumps(completed)
+    if not already_completed:
+        # 1. Add record to PartnerTask table
+        from app.models.partner import PartnerTask
+        new_task_completion = PartnerTask(
+            partner_id=partner.id,
+            task_id=task_id,
+            reward_xp=xp_reward
+        )
+        session.add(new_task_completion)
+
+        # 2. Update partner stats
         partner.xp += xp_reward
-        
-        # Standardized level up logic
         partner.level = get_level(partner.xp)
             
         session.add(partner)
         await session.commit()
         await session.refresh(partner)
         
-        # Invalidate profile cache
+        # 3. Invalidate profile cache
         await redis_service.client.delete(f"partner:profile:{tg_id}")
 
     return partner

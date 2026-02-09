@@ -77,10 +77,14 @@ async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = H
     await dp.feed_update(bot, update)
     return {"status": "ok"}
 
-# Configure CORS for TMA
+# Configure CORS
+origins = [settings.FRONTEND_URL]
+if settings.DEBUG:
+    origins = ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

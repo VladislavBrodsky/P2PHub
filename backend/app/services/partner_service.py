@@ -103,21 +103,34 @@ async def process_referral_logic(bot, session: AsyncSession, partner: Partner):
     """
     Optimized 9-level referral logic.
     Tracks lineage, distributes XP, updates Redis leaderboards, and sends notifications.
+    Reduced DB roundtrips by fetching entire lineage in bulk.
     """
     if not partner.referrer_id:
         return
 
-    # XP distribution configuration (XP per level)
-    # L1: 35 XP, L2: 10 XP, L3-L9: 1 XP
+    # 1. Reconstruct Lineage IDs (L1 to L9)
+    # The 'path' contains parents like "GGrand.Grand.Parent"
+    path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+    # Lineage is [..., L3, L2] + [L1]
+    lineage_ids = (path_ids + [partner.referrer_id])[-9:]
+    
+    # 2. Bulk Fetch all ancestors
+    statement = select(Partner).where(Partner.id.in_(lineage_ids))
+    result = await session.exec(statement)
+    ancestor_map = {p.id: p for p in result.all()}
+
+    # XP distribution configuration
     XP_MAP = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
     
-    current = partner
+    current_referrer_id = partner.referrer_id
     for level in range(1, 10):
-        if not current.referrer_id: break
-        
-        referrer = await session.get(Partner, current.referrer_id)
-        if not referrer: break
-        
+        if not current_referrer_id:
+            break
+            
+        referrer = ancestor_map.get(current_referrer_id)
+        if not referrer:
+            break
+            
         # 1. Distribute XP
         xp_gain = XP_MAP.get(level, 0)
         referrer.xp += xp_gain
@@ -125,12 +138,10 @@ async def process_referral_logic(bot, session: AsyncSession, partner: Partner):
         # 2. Handle Level Up Logic (Standardized)
         new_level = get_level(referrer.xp)
         if new_level > referrer.level:
-            # Level Up! - Could potentially be multiple levels if high XP gain
+            # Level Up!
             for l in range(referrer.level + 1, new_level + 1):
                 try:
                     msg = f"🏆 *Level Up!* 🏆\n\nYou've reached *Level {l}*!\n\nKeep going to unlock the Platinum Tier."
-                    # We might skip intermediate notifications or send one big one
-                    # For now keep it consistent with original intent
                     await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
                 except Exception: pass
             referrer.level = new_level
@@ -153,7 +164,7 @@ async def process_referral_logic(bot, session: AsyncSession, partner: Partner):
         except Exception: pass
 
         session.add(referrer)
-        current = referrer  # Move up the chain
+        current_referrer_id = referrer.referrer_id  # Move up the chain
 
     await session.commit()
 
@@ -176,20 +187,22 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
     
     base_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
     
+    base_dots = base_path.count('.') if base_path else -1
+    
     # Query: Count partners where path starts with base_path
-    # We calculate level by counting dots in the path relative to base_path
+    # We calculate level by counting dots in the path relative to base_path dots
     query = text("""
         SELECT 
-            (length(path) - length(:base_path) - length(replace(substring(path from length(:base_path) + 1), '.', '')) + 1) as tree_level,
+            (length(path) - length(replace(path, '.', ''))) - :base_dots as tree_level,
             COUNT(*) as count
         FROM partner
         WHERE path = :base_path OR path LIKE :base_path || '.%'
         GROUP BY tree_level
-        HAVING (length(path) - length(:base_path) - length(replace(substring(path from length(:base_path) + 1), '.', '')) + 1) <= 9
+        HAVING ((length(path) - length(replace(path, '.', ''))) - :base_dots) <= 9
         ORDER BY tree_level;
     """)
     
-    result = await session.execute(query, {"base_path": base_path})
+    result = await session.execute(query, {"base_path": base_path, "base_dots": base_dots})
     stats = {i: 0 for i in range(1, 10)}
     for row in result:
         lvl = int(row[0])

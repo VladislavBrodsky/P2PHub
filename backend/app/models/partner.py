@@ -19,6 +19,7 @@ class Partner(SQLModel, table=True):
     referrer_id: Optional[int] = Field(default=None, foreign_key="partner.id", index=True) # Optimized for joins
     path: Optional[str] = Field(default=None, index=True) # Materialized path (e.g. "1.5.23")
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True) # Optimized for sorting
+    updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}, index=True)
     completed_tasks: str = Field(default="[]") # Store task IDs as JSON string
     
     # Relationships
@@ -30,6 +31,16 @@ class Partner(SQLModel, table=True):
         back_populates="referrals",
         sa_relationship_kwargs={"remote_side": "Partner.id"}
     )
+    completed_task_records: list["PartnerTask"] = Relationship(back_populates="partner")
+
+class PartnerTask(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    partner_id: int = Field(foreign_key="partner.id", index=True)
+    task_id: str = Field(index=True)
+    completed_at: datetime = Field(default_factory=datetime.utcnow)
+    reward_xp: float = Field(default=0.0)
+    
+    partner: Partner = Relationship(back_populates="completed_task_records")
 
 class Earning(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
