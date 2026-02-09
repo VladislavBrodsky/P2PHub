@@ -52,83 +52,65 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
     return (
         <motion.div
-            className="flex w-full flex-col gap-0 pb-32 px-0 min-h-dvh transition-colors duration-500 relative"
+            className="flex w-full flex-col pb-32 px-0 min-h-dvh transition-colors duration-500 relative"
             variants={container}
             initial="hidden"
             animate="show"
         >
-
-
-            {/* 1. Hero Section - Seamless Integration */}
-            <motion.div variants={item} className="px-4 space-y-4 pt-4">
-                <div className="relative overflow-hidden -mx-4">
+            {/* 1. Hero Section - Spacious & Centered Layout */}
+            <motion.div variants={item} className="px-4 space-y-12 pt-6">
+                {/* Orbit Container */}
+                <div className="relative overflow-visible -mx-4 h-[440px] flex items-center justify-center">
                     <CommunityOrbit />
                 </div>
 
-                <div className="text-center space-y-8 px-2">
-                    <div className="space-y-4">
-                        <motion.div
-                            className="inline-block rounded-full border border-blue-500/30 bg-blue-500/5 backdrop-blur-sm px-4 py-1.5"
-                            animate={{
-                                boxShadow: ["0 0 0px rgba(59, 130, 246, 0)", "0 0 15px rgba(59, 130, 246, 0.4)", "0 0 0px rgba(59, 130, 246, 0)"],
-                                borderColor: ["rgba(59, 130, 246, 0.3)", "rgba(59, 130, 246, 0.8)", "rgba(59, 130, 246, 0.3)"]
-                            }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                        >
-                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">
-                                {t('dashboard.hero_badge')}
-                            </p>
-                        </motion.div>
-                        <h1 className="text-4xl font-extrabold tracking-tighter text-text-primary leading-[1.1]">
-                            {heroTitle1}<br />
-                            <motion.span
-                                className="inline-block mt-1"
-                                style={{
-                                    background: 'linear-gradient(to right, #3B82F6, #FFFFFF, #3B82F6)',
-                                    WebkitBackgroundClip: 'text',
-                                    WebkitTextFillColor: 'transparent',
-                                    backgroundSize: '200% auto',
-                                    fontWeight: 900
-                                }}
-                                animate={{
-                                    backgroundPosition: ['0% center', '200% center'],
-                                    filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)'],
-                                }}
-                                transition={{
-                                    backgroundPosition: {
-                                        duration: 3,
-                                        repeat: Infinity,
-                                        ease: "linear"
-                                    },
-                                    filter: {
-                                        duration: 2,
-                                        repeat: Infinity,
-                                        ease: "easeInOut"
-                                    }
-                                }}
-                            >
-                                {heroTitle2}
-                            </motion.span>
-                        </h1>
-                    </div>
-
-                    {/* Ticker Section */}
-                    <motion.div variants={item} className="-rotate-1 py-4 scale-[1.05]">
-                        <Ticker />
+                {/* Sub-Hero Text Section */}
+                <div className="text-center space-y-10 px-2 flex flex-col items-center">
+                    {/* Badge */}
+                    <motion.div
+                        className="inline-block rounded-full border border-blue-200/50 bg-blue-50 px-6 py-2 shadow-sm"
+                        animate={{
+                            scale: [1, 1.02, 1],
+                        }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                        <p className="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600">
+                            {t('dashboard.hero_badge', { defaultValue: 'PARTNER NETWORK 2.0' })}
+                        </p>
                     </motion.div>
 
-                    <div className="space-y-6">
-                        <p className="text-text-secondary mx-auto max-w-[340px] text-xs font-semibold leading-relaxed opacity-80 px-4">
-                            <Trans i18nKey="dashboard.hero_desc">
-                                Traditional finance is slow, closed, and failing. <strong className="text-text-primary font-black">Pintopay</strong> is the bridge to a borderless era where you earn from the flow of global money.
-                            </Trans>
-                        </p>
+                    {/* Main Titles */}
+                    <div className="space-y-4">
+                        <h1 className="text-[44px] font-extrabold tracking-tighter text-slate-900 dark:text-white leading-[0.95] flex flex-col items-center">
+                            <span>Slow Money Is</span>
+                            <span>Dead</span>
+                        </h1>
+                        <motion.div
+                            className="text-[42px] font-extrabold tracking-tighter leading-[0.95] flex flex-col items-center"
+                            style={{
+                                background: 'linear-gradient(to right, #3B82F6, #60A5FA, #3B82F6)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                backgroundSize: '200% auto',
+                            }}
+                            animate={{
+                                backgroundPosition: ['0% center', '200% center'],
+                            }}
+                            transition={{
+                                duration: 8,
+                                repeat: Infinity,
+                                ease: "linear"
+                            }}
+                        >
+                            <span>Welcome to Web3</span>
+                            <span>Finance</span>
+                        </motion.div>
                     </div>
                 </div>
             </motion.div>
 
             {/* 2. Viral Proof - Partner Stats */}
-            <motion.div variants={item}>
+            <motion.div variants={item} className="mt-8">
                 <PartnerStats onNavigateToEarn={() => setActiveTab?.('earn')} />
             </motion.div>
 
@@ -157,6 +139,15 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                 </h4>
                 <p className="text-xs font-bold text-text-secondary max-w-[240px] mx-auto leading-relaxed">
                     {t('dashboard.cta_desc')}
+                </p>
+            </motion.div>
+
+            {/* Description Text - Moved to Bottom per Image */}
+            <motion.div variants={item} className="px-8 pb-12">
+                <p className="text-text-secondary text-center text-[10px] font-bold leading-relaxed opacity-60 uppercase tracking-widest">
+                    <Trans i18nKey="dashboard.hero_desc">
+                        Traditional finance is slow, closed, and failing.
+                    </Trans>
                 </p>
             </motion.div>
 
