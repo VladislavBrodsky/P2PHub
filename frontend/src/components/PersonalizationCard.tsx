@@ -82,9 +82,9 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                     {/* XP Progress Bar - Horizontal Fit */}
                     <div className="w-full space-y-1">
                         <div className="flex justify-between items-center px-0.5">
-                            <span className="text-[8px] font-black text-(--color-text-secondary) tracking-widest uppercase">XP BALANCE</span>
+                            <span className="text-[8px] font-black text-(--color-text-secondary) tracking-widest uppercase">XP BALANCE <span className="text-(--color-text-primary)">{stats.xp}</span></span>
                             <span className="text-[9px] font-black text-(--color-text-primary)">
-                                {xpProgress.current} <span className="text-(--color-text-secondary) font-medium">/</span> {xpProgress.total}
+                                {xpProgress.current} <span className="text-(--color-text-secondary) font-medium">/</span> {xpProgress.total} <span className="text-[7px] text-(--color-text-secondary) uppercase ml-0.5">NEXT LVL</span>
                             </span>
                         </div>
                         <div className="h-3 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-black/5 dark:border-white/5 shadow-inner relative">

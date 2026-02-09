@@ -392,11 +392,11 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         # Normalize current time bucket
         if interval == 'hour':
             bucket = curr.replace(minute=0, second=0, microsecond=0)
-            label = f"{bucket.hour}:00"
+            label = f"{bucket.hour:02d}:00"
             next_step = timedelta(hours=1)
         elif interval == 'day':
             bucket = curr.replace(hour=0, minute=0, second=0, microsecond=0)
-            label = f"{bucket.day}/{bucket.month}"
+            label = f"{bucket.day:02d}/{bucket.month:02d}"
             next_step = timedelta(days=1)
         else:
             bucket = curr.replace(day=1, hour=0, minute=0, second=0, microsecond=0)

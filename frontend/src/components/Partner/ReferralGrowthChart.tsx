@@ -201,7 +201,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
             </div>
 
             {/* Main Chart Area - Reduced Height */}
-            <div className="h-32 w-full relative">
+            <div className="h-32 w-full relative px-2">
                 {/* Y-Axis Grid Lines */}
                 <div className="absolute inset-0 flex flex-col justify-between py-2 pointer-events-none opacity-10">
                     {[1, 0.75, 0.5, 0.25, 0].map((tick) => (
