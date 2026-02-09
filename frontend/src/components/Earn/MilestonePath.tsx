@@ -142,22 +142,22 @@ export const MilestonePath = () => {
             ))}
 
             {visibleChapters < CHAPTER_TIERS.length && (
-                <div className="flex justify-center flex-col items-center gap-4 pt-10">
+                <div className="flex justify-center flex-col items-center gap-2 pt-2">
                     <button
                         onClick={handleShowMore}
-                        className="group flex flex-col items-center gap-3 active:scale-95 transition-all"
+                        className="group flex flex-col items-center gap-1.5 active:scale-95 transition-all"
                     >
                         <div className="relative">
-                            <div className="absolute inset-0 bg-brand-blue/20 blur-xl animate-pulse rounded-full" />
-                            <div className="relative p-5 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 group-hover:bg-slate-50 dark:group-hover:bg-white/10 transition-all backdrop-blur-xl">
-                                <ChevronDown className="w-6 h-6 text-brand-blue" />
+                            <div className="absolute inset-0 bg-brand-blue/20 blur-lg animate-pulse rounded-full" />
+                            <div className="relative p-3 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 group-hover:bg-slate-50 dark:group-hover:bg-white/10 transition-all backdrop-blur-xl shadow-lg">
+                                <ChevronDown className="w-4 h-4 text-brand-blue" />
                             </div>
                         </div>
                         <div className="flex flex-col items-center text-center">
-                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.3em] mb-1">
+                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">
                                 Reveal Part {visibleChapters + 1}
                             </span>
-                            <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">
+                            <span className="text-[7px] font-bold text-slate-500 uppercase tracking-widest">
                                 Unlock next Level Horizons
                             </span>
                         </div>
