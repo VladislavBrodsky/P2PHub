@@ -13,6 +13,7 @@ interface LeaderboardUser {
     first_name: string;
     xp: number;
     level: number;
+    photo_url?: string;
 }
 
 interface UserStats {
@@ -89,12 +90,26 @@ export default function LeaderboardPage() {
                                     #{index + 1}
                                 </span>
                                 <div className="flex items-center gap-3">
-                                    <div className={`h-10 w-10 overflow-hidden rounded-full border-2 ${index < 3 ? 'border-amber-500 shadow-sm' : 'border-(--color-brand-border)'}`}>
-                                        <img
-                                            src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username || user.first_name}`}
-                                            alt={user.username || user.first_name}
-                                            className="h-full w-full object-cover"
-                                        />
+                                    <div className={`h-10 w-10 overflow-hidden rounded-full border-2 ${index < 3 ? 'border-amber-500 shadow-sm' : 'border-(--color-brand-border)'} bg-slate-200 dark:bg-slate-700`}>
+                                        {user.photo_url ? (
+                                            <img
+                                                src={user.photo_url}
+                                                alt={user.username || user.first_name}
+                                                className="h-full w-full object-cover"
+                                                onError={(e) => {
+                                                    // Fallback if the real photo fails to load
+                                                    const target = e.target as HTMLImageElement;
+                                                    target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username || user.first_name}`;
+                                                }}
+                                            />
+                                        ) : (
+                                            <img
+                                                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username || user.first_name}`}
+                                                alt={user.username || user.first_name}
+                                                className="h-full w-full object-cover"
+                                            />
+                                        )}
+
                                     </div>
                                     <div>
                                         <p className="text-sm font-bold text-(--color-text-primary)">{user.first_name || user.username}</p>

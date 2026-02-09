@@ -125,7 +125,7 @@ export const EarnHeader = () => {
                             style={{
                                 background: level >= 50
                                     ? 'linear-gradient(90deg, #F59E0B, #FEF3C7, #F59E0B)'
-                                    : 'linear-gradient(90deg, #94A3B8, #F1F5F9, #94A3B8)',
+                                    : 'linear-gradient(90deg, #3B82F6, #60A5FA, #2563EB)', // Electric Blue High Contrast
                                 backgroundSize: '200% 100%'
                             }}
                         >
@@ -137,7 +137,7 @@ export const EarnHeader = () => {
                                 transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
                                 className="absolute inset-0 opacity-90"
                                 style={{
-                                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent)',
+                                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)',
                                     backgroundSize: '200% 100%'
                                 }}
                             />

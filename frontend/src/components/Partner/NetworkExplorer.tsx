@@ -111,7 +111,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                                 key={l}
                                 onClick={() => { selection(); setLevel(l); }}
                                 className={cn(
-                                    "flex items-center justify-center min-w-[3rem] h-9 rounded-full text-xs font-black transition-all active:scale-95 border",
+                                    "flex items-center justify-center min-w-12 h-9 rounded-full text-xs font-black transition-all active:scale-95 border",
                                     level === l
                                         ? "bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-500/30"
                                         : "bg-white dark:bg-white/5 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/10"
