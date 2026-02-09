@@ -4,7 +4,8 @@ import { Section } from '../components/Section';
 import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { retrieveLaunchParams } from '@telegram-apps/sdk-react';
+import { getSafeLaunchParams } from '../utils/tma';
+import { getApiUrl } from '../utils/api';
 
 interface LeaderboardUser {
     id: number;
@@ -30,19 +31,15 @@ export default function LeaderboardPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let initDataRaw = '';
-                try {
-                    const params = retrieveLaunchParams();
-                    initDataRaw = params.initDataRaw || '';
-                } catch (e) {
-                    console.warn('Telegram environment not detected');
-                }
-                const headers = { 'X-Telegram-Init-Data': initDataRaw };
+                const lp = getSafeLaunchParams();
+                const initDataRaw = lp.initDataRaw || '';
 
-                // Parallel fetch for speed
+                const headers = { 'X-Telegram-Init-Data': initDataRaw };
+                const apiUrl = getApiUrl();
+
                 const [leaderboardRes, statsRes] = await Promise.all([
-                    axios.get(`${import.meta.env.VITE_API_URL}/api/leaderboard/global?limit=50`, { headers }),
-                    axios.get(`${import.meta.env.VITE_API_URL}/api/leaderboard/me`, { headers })
+                    axios.get(`${apiUrl}/api/leaderboard/global?limit=50`, { headers }),
+                    axios.get(`${apiUrl}/api/leaderboard/me`, { headers })
                 ]);
 
                 setLeaderboard(leaderboardRes.data);
@@ -69,7 +66,6 @@ export default function LeaderboardPage() {
         <div className="flex flex-col min-h-[85vh] px-4 pt-4 pb-32">
             <h1 className="text-2xl font-bold text-(--color-text-primary) mb-6">{t('leaderboard.title')}</h1>
 
-            {/* 1. Your Card */}
             {userStats && (
                 <div className="mb-8">
                     <LeagueCard
@@ -81,7 +77,6 @@ export default function LeaderboardPage() {
                 </div>
             )}
 
-            {/* 2. Leaderboard List */}
             <Section title={t('leaderboard.top_partners')}>
                 <div className="space-y-3">
                     {leaderboard.map((user, index) => (

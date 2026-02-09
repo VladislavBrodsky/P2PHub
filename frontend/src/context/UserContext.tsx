@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
-import { retrieveLaunchParams } from '@telegram-apps/sdk-react';
+import { getSafeLaunchParams } from '../utils/tma';
 import { getApiUrl } from '../utils/api';
 
 interface User {
@@ -56,8 +56,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
         let tgUser: any = null;
         try {
-            // Use SDK to get initData more reliably
-            const lp = retrieveLaunchParams();
+            // Use Safe SDK helper to get initData without crashing in browser
+            const lp = getSafeLaunchParams();
             tgUser = lp.initData?.user;
             const initDataRaw = lp.initDataRaw || '';
 
