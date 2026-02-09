@@ -19,70 +19,44 @@ function App() {
             try {
                 // Initialize SDK components
                 console.log('[DEBUG] initTMA: Starting...');
-                if (miniApp.mount.isAvailable()) {
-                    miniApp.mount();
-                    console.log('[DEBUG] initTMA: miniApp mounted');
-                }
-                if (miniApp.ready.isAvailable()) {
-                    miniApp.ready();
-                    console.log('[DEBUG] initTMA: miniApp ready');
-                }
 
-                // Handle Swipe Behavior - Disable pull-to-close IMMEDIATELY
-                const lockSwipe = async () => {
-                    if (swipeBehavior.mount.isAvailable()) {
-                        try {
-                            if (!swipeBehavior.isMounted()) await swipeBehavior.mount();
-                            if (swipeBehavior.disableVertical.isAvailable()) {
-                                swipeBehavior.disableVertical();
-                                console.log('[DEBUG] initTMA: Vertical swipe disabled (Primary)');
-                            }
-                        } catch (e) {
-                            console.error('Swipe behavior error:', e);
-                        }
-                    }
-                };
-                await lockSwipe();
+                // 1. Mount components (Safety first)
+                if (miniApp.mount.isAvailable() && !miniApp.isMounted()) miniApp.mount();
+                if (miniApp.ready.isAvailable()) miniApp.ready();
+                if (backButton.mount.isAvailable() && !backButton.isMounted()) backButton.mount();
 
-                // Use Viewport for true full-screen/expanded state
+                // 2. Expansion Logic (Single pass)
                 if (viewport.mount.isAvailable()) {
                     try {
-                        if (!viewport.isMounted()) {
-                            await viewport.mount();
-                            console.log('[DEBUG] initTMA: viewport mounted');
+                        if (!viewport.isMounted()) await viewport.mount();
+                        if (viewport.expand.isAvailable() && !viewport.isExpanded()) {
+                            viewport.expand();
                         }
-
-                        // Small delay then expand
-                        setTimeout(async () => {
-                            if (viewport.expand.isAvailable() && !viewport.isExpanded()) {
-                                viewport.expand();
-                                console.log('[DEBUG] initTMA: viewport expanded');
-                            }
-                            // Re-lock swipe after expansion just in case
-                            await lockSwipe();
-                            console.log('[DEBUG] initTMA: Vertical swipe re-locked after expand');
-                        }, 150);
                     } catch (e) {
-                        console.error('Viewport mount error:', e);
+                        console.warn('Viewport error:', e);
                     }
                 }
 
-                // Fallback for older environments
+                // 3. Swipe Locking (Single pass)
+                if (swipeBehavior.mount.isAvailable()) {
+                    try {
+                        if (!swipeBehavior.isMounted()) await swipeBehavior.mount();
+                        if (swipeBehavior.disableVertical.isAvailable()) {
+                            swipeBehavior.disableVertical();
+                        }
+                    } catch (e) {
+                        console.warn('Swipe error:', e);
+                    }
+                }
+
+                // 4. Fallback for older environments
                 if (window.Telegram?.WebApp) {
                     window.Telegram.WebApp.ready();
-                    console.log('[DEBUG] initTMA: WebApp ready (fallback)');
-                    if ((window.Telegram.WebApp as any).requestFullscreen) {
-                        (window.Telegram.WebApp as any).requestFullscreen();
-                    } else {
+                    if (!viewport.isMounted()) {
                         window.Telegram.WebApp.expand();
                     }
                 }
 
-                // Mount back button once
-                if (backButton.mount.isAvailable()) {
-                    backButton.mount();
-                    console.log('[DEBUG] initTMA: backButton mounted');
-                }
                 console.log('[DEBUG] initTMA: Complete');
             } catch (e) {
                 console.log('Not in TMA environment or SDK error:', e);
