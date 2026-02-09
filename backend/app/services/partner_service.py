@@ -169,3 +169,50 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
         
     await redis_service.set_json(cache_key, stats, expire=300)
     return stats
+
+async def get_referral_tree_members(session: AsyncSession, partner_id: int, target_level: int) -> List[dict]:
+    """
+    Fetches details of partners at a specific level in the 9-level matrix using Recursive CTE.
+    """
+    if not (1 <= target_level <= 9):
+        return []
+
+    query = text("""
+        WITH RECURSIVE referral_tree AS (
+            -- Base case: Level 1
+            SELECT id, telegram_id, username, first_name, last_name, xp, photo_url, 1 as level, created_at
+            FROM partner
+            WHERE referrer_id = :partner_id
+            
+            UNION ALL
+            
+            -- Recursive step
+            SELECT p.id, p.telegram_id, p.username, p.first_name, p.last_name, p.xp, p.photo_url, rt.level + 1, p.created_at
+            FROM partner p
+            JOIN referral_tree rt ON p.referrer_id = rt.id
+            WHERE rt.level < :target_level
+        )
+        SELECT telegram_id, username, first_name, last_name, xp, photo_url, created_at
+        FROM referral_tree
+        WHERE level = :target_level
+        ORDER BY xp DESC
+        LIMIT 100;
+    """)
+    
+    try:
+        result = await session.execute(query, {"partner_id": partner_id, "target_level": target_level})
+        members = []
+        for row in result:
+            members.append({
+                "telegram_id": row[0],
+                "username": row[1],
+                "first_name": row[2],
+                "last_name": row[3],
+                "xp": row[4],
+                "photo_url": row[5],
+                "joined_at": row[6].isoformat() if row[6] else None
+            })
+        return members
+    except Exception as e:
+        logger.error(f"Error fetching tree members: {e}")
+        return []

@@ -1,9 +1,9 @@
 import { Skeleton } from '../Skeleton';
 
-export const ListSkeleton = () => {
+export const ListSkeleton = ({ count = 5 }: { count?: number }) => {
     return (
         <div className="w-full space-y-4">
-            {[...Array(5)].map((_, i) => (
+            {[...Array(count)].map((_, i) => (
                 <div
                     key={i}
                     className="flex items-center gap-4 rounded-3xl border border-(--color-brand-border) bg-(--color-bg-surface) p-4"

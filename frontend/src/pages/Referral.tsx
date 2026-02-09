@@ -75,7 +75,12 @@ export default function ReferralPage() {
                 const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/partner/tree`, {
                     headers: { 'X-Telegram-Init-Data': initDataRaw }
                 });
-                setTreeStats(res.data);
+                // Validation to prevent HTML dump glitch
+                if (res.data && typeof res.data === 'object') {
+                    setTreeStats(res.data);
+                } else {
+                    console.warn('Invalid tree data received:', res.data);
+                }
             } catch (error) {
                 console.error('Failed to fetch tree data:', error);
             } finally {

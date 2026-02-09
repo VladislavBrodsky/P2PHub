@@ -167,3 +167,37 @@ async def get_my_referral_tree(
     stats = await get_referral_tree_stats(session, partner.id)
     
     return stats
+
+@router.get("/network/{level}")
+async def get_network_level_members(
+    level: int,
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Fetches the list of members for a specific level in the 9-level matrix.
+    """
+    try:
+        if "user" in user_data:
+            tg_data = json.loads(user_data["user"])
+            tg_id = str(tg_data.get("id"))
+        else:
+            tg_id = str(user_data.get("id"))
+    except:
+        raise HTTPException(status_code=400, detail="Invalid user data")
+
+    # Get partner
+    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    result = await session.exec(statement)
+    partner = result.first()
+    
+    if not partner:
+        raise HTTPException(status_code=404, detail="Partner not found")
+
+    if not (1 <= level <= 9):
+         raise HTTPException(status_code=400, detail="Level must be between 1 and 9")
+
+    from app.services.partner_service import get_referral_tree_members
+    members = await get_referral_tree_members(session, partner.id, level)
+    
+    return members

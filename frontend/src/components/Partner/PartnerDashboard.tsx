@@ -1,13 +1,19 @@
 import React from 'react';
-import { QrCode, Copy, Gift, DollarSign, ExternalLink } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { QrCode, Copy, Gift, DollarSign, ExternalLink, Users, ChevronRight } from 'lucide-react';
 import { useHaptic } from '../../hooks/useHaptic';
 import { useUser } from '../../context/UserContext';
 import { Button } from '../ui/Button';
 import { PersonalizationCard } from '../PersonalizationCard';
+import { NetworkExplorer } from './NetworkExplorer';
+import { ReferralTree } from '../Earn/ReferralTree';
+import axios from 'axios';
+import { getSafeLaunchParams } from '../../utils/tma';
 
 export const PartnerDashboard = () => {
     const { notification, selection } = useHaptic();
     const { user } = useUser();
+    const [isExplorerOpen, setIsExplorerOpen] = React.useState(false);
     const [isQrOpen, setIsQrOpen] = React.useState(false);
 
     // Correct bot username as requested
@@ -17,6 +23,27 @@ export const PartnerDashboard = () => {
         : '';
 
     const [copied, setCopied] = React.useState(false);
+
+    // Fetch Tree Stats for the Dashboard visualization
+    const [treeStats, setTreeStats] = React.useState<Record<string, number>>({});
+
+    React.useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const params = getSafeLaunchParams();
+                const initDataRaw = params.initDataRaw || '';
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/partner/tree`, {
+                    headers: { 'X-Telegram-Init-Data': initDataRaw }
+                });
+                if (res.data && typeof res.data === 'object') {
+                    setTreeStats(res.data);
+                }
+            } catch (e) {
+                console.error('Failed to fetch tree stats', e);
+            }
+        };
+        fetchStats();
+    }, []);
 
     const copyLink = async () => {
         try {
@@ -30,6 +57,8 @@ export const PartnerDashboard = () => {
         }
     };
 
+    // ... (existing code)
+
     return (
         <>
             <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -38,21 +67,53 @@ export const PartnerDashboard = () => {
                     <PersonalizationCard variant="compact" />
                 </div>
 
-                {/* Quick Stats Row (New) */}
+                {/* Quick Stats Row */}
                 <div className="grid grid-cols-2 gap-2">
                     <div className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm">
                         <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Total Earned</div>
                         <div className="text-2xl font-black text-slate-900 dark:text-white">$45.20</div>
                     </div>
-                    <div className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm">
-                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Network Size</div>
+                    <div
+                        className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm active:scale-95 transition-transform cursor-pointer relative group overflow-hidden"
+                        onClick={() => {
+                            selection();
+                            setIsExplorerOpen(true);
+                        }}
+                    >
+                        <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-colors" />
+                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1 flex items-center justify-between">
+                            <span>Network Size</span>
+                            <ExternalLink className="w-3 h-3 opacity-50" />
+                        </div>
                         <div className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                            128 <span className="text-[10px] bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-sm">+12%</span>
+                            {user?.referrals?.length || 0} <span className="text-[10px] bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-sm">+12%</span>
                         </div>
                     </div>
                 </div>
 
-                {/* 1. Invitation Method */}
+                {/* 1. Network Visualization (Inline Preview) */}
+                <div className="space-y-4">
+                    <ReferralTree stats={treeStats} />
+                    {/* Explorer is now an overlay, but we might want a teaser here or just hide it */}
+                    <div
+                        className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
+                        onClick={() => setIsExplorerOpen(true)}
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="bg-blue-500/10 p-2 rounded-xl text-blue-600 dark:text-blue-400">
+                                <Users className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-slate-900 dark:text-white text-sm">Explore Connectivity</h3>
+                                <p className="text-[10px] text-slate-500">View your 9-level deep downline</p>
+                            </div>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-slate-400" />
+                    </div>
+                </div>
+
+                {/* ... (Rest of dashboard) ... */}
+                {/* 2. Invitation Method */}
                 <div className="space-y-3">
                     <div className="flex items-center justify-between">
                         <h2 className="text-slate-900 dark:text-white text-base font-bold">Ambassador Tools</h2>
@@ -99,7 +160,7 @@ export const PartnerDashboard = () => {
                     </div>
                 </div>
 
-                {/* 2. Rewards List */}
+                {/* 3. Rewards List */}
                 <div className="space-y-4">
                     <div className="flex items-center justify-between">
                         <h2 className="text-lg font-bold text-slate-900 dark:text-white">Recent Earnings</h2>
@@ -137,7 +198,7 @@ export const PartnerDashboard = () => {
                     </div>
                 </div>
 
-                {/* 3. Integrated Action Button */}
+                {/* 4. Integrated Action Button */}
                 <div className="pt-2">
                     <Button
                         variant="primary"
@@ -151,7 +212,31 @@ export const PartnerDashboard = () => {
                 </div>
             </div>
 
-            {/* QR Code Modal */}
+            {/* Network Explorer Overlay */}
+            <AnimatePresence>
+                {isExplorerOpen && (
+                    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                            onClick={() => setIsExplorerOpen(false)}
+                        />
+                        <motion.div
+                            initial={{ y: '100%' }}
+                            animate={{ y: 0 }}
+                            exit={{ y: '100%' }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                            className="w-full max-w-lg h-[85vh] sm:h-[600px] relative z-10"
+                        >
+                            <NetworkExplorer onClose={() => setIsExplorerOpen(false)} />
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* QR Code Modal (existing code) */}
             {isQrOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setIsQrOpen(false)}>
                     <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 w-full max-w-xs space-y-4 shadow-2xl scale-100 animate-in zoom-in-95 duration-200 border border-slate-200 dark:border-white/10" onClick={e => e.stopPropagation()}>
