@@ -199,12 +199,12 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
     # We calculate level by counting dots in the path relative to base_path dots
     query = text("""
         SELECT 
-            (length(path) - length(replace(path, '.', ''))) - :base_dots as tree_level,
+            (length(COALESCE(path, '')) - length(replace(COALESCE(path, ''), '.', ''))) - :base_dots + 1 as tree_level,
             COUNT(*) as count
         FROM partner
-        WHERE path = :base_path OR path LIKE :base_path || '.%'
+        WHERE (path = :base_path OR path LIKE :base_path || '.%')
         GROUP BY tree_level
-        HAVING ((length(path) - length(replace(path, '.', ''))) - :base_dots) <= 9
+        HAVING tree_level BETWEEN 1 AND 9
         ORDER BY tree_level;
     """)
     
@@ -238,7 +238,7 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
     # Level 1 means path == base_path
     # Level 2 means path == base_path.child_id (one dot more than base_path)
     base_dots = base_path.count('.') if base_path else -1
-    target_dots = base_dots + target_level
+    target_dots = base_dots + target_level - 1
     
     query = text("""
         SELECT telegram_id, username, first_name, last_name, xp, photo_url, created_at, path

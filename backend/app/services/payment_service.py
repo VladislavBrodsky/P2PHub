@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.models.partner import Partner
-from app.models.transaction import Transaction
+from app.models.transaction import PartnerTransaction
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
@@ -24,8 +24,8 @@ class PaymentService:
         currency: str, 
         network: str,
         tx_hash: Optional[str] = None
-    ) -> Transaction:
-        transaction = Transaction(
+    ) -> PartnerTransaction:
+        transaction = PartnerTransaction(
             partner_id=partner_id,
             amount=amount,
             currency=currency,
@@ -49,7 +49,7 @@ class PaymentService:
         Checks if the destination address matches admin wallet and amount is correct.
         """
         # 1. Check if TX already processed
-        stmt = select(Transaction).where(Transaction.tx_hash == tx_hash)
+        stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
         res = await session.exec(stmt)
         existing = res.first()
         if existing and existing.status == "completed":
@@ -96,12 +96,12 @@ class PaymentService:
         session.add(partner)
 
         # 2. Update or Create Transaction
-        stmt = select(Transaction).where(Transaction.tx_hash == tx_hash)
+        stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
         res = await session.exec(stmt)
         transaction = res.first()
 
         if not transaction:
-            transaction = Transaction(
+            transaction = PartnerTransaction(
                 partner_id=partner.id,
                 amount=amount,
                 currency=currency,

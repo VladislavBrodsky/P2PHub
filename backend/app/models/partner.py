@@ -30,7 +30,7 @@ class Partner(SQLModel, table=True):
     subscription_plan: Optional[str] = Field(default=None) # e.g. "PRO_LIFETIME", "PRO_YEARLY"
     
     # Verification & Payment Details
-    last_transaction_id: Optional[int] = Field(default=None, foreign_key="transaction.id")
+    last_transaction_id: Optional[int] = Field(default=None, foreign_key="partnertransaction.id")
     payment_details: Optional[str] = Field(default=None) # Store JSON of extra details if needed
     
     # Relationships
@@ -43,11 +43,10 @@ class Partner(SQLModel, table=True):
         sa_relationship_kwargs={"remote_side": "Partner.id"}
     )
     completed_task_records: list["PartnerTask"] = Relationship(back_populates="partner")
-    transactions: list["Transaction"] = Relationship(
-        back_populates="partner",
-        sa_relationship_kwargs={"foreign_keys": "Transaction.partner_id"}
+    transactions: list["PartnerTransaction"] = Relationship(
+        back_populates="partner"
     )
-    last_transaction: Optional["Transaction"] = Relationship(
+    last_transaction: Optional["PartnerTransaction"] = Relationship(
         sa_relationship_kwargs={"foreign_keys": "Partner.last_transaction_id"}
     )
 

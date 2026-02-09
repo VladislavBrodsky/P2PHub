@@ -2,7 +2,7 @@ from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional
 from datetime import datetime
 
-class Transaction(SQLModel, table=True):
+class PartnerTransaction(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     partner_id: int = Field(foreign_key="partner.id", index=True)
     amount: float
@@ -15,6 +15,5 @@ class Transaction(SQLModel, table=True):
     
     # Optional relationship back to Partner
     partner: "Partner" = Relationship(
-        back_populates="transactions",
-        sa_relationship_kwargs={"foreign_keys": "Transaction.partner_id"}
+        back_populates="transactions"
     )

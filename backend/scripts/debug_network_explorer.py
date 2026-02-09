@@ -6,22 +6,20 @@ from dotenv import load_dotenv
 # Load environment variables from .env
 load_dotenv()
 
-print(f"Current Directory: {os.getcwd()}")
-print(f"DATABASE_URL from env: {os.getenv('DATABASE_URL')}")
+# Hardcoded for debugging since env might be restricted
+DATABASE_URL = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
+os.environ["DATABASE_URL"] = DATABASE_URL
 
 from sqlmodel import select, text
 from app.models.partner import Partner, get_session
+from app.models.transaction import PartnerTransaction
 from app.core.config import settings
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
 async def debug_network():
-    database_url = settings.DATABASE_URL
-    if database_url and database_url.startswith("postgresql://"):
-        database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
-    
-    engine = create_async_engine(database_url, echo=False, future=True)
+    engine = create_async_engine(DATABASE_URL, echo=True, future=True)
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
     async with async_session() as session:
