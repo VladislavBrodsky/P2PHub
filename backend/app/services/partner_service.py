@@ -518,27 +518,35 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
 
     await redis_service.set_json(cache_key, data, expire=300)
     return data
+
+async def migrate_paths(session: AsyncSession):
     """
     Utility to hydrate the 'path' column for all existing partners.
     Call this once to upgrade existing database.
     """
-    # Simple recursive approach for migration (since it's a one-time thing)
+    # Simple recursive approach
     async def update_children(parent_id: int, parent_path: str):
         stmt = select(Partner).where(Partner.referrer_id == parent_id)
         res = await session.exec(stmt)
         children = res.all()
         for child in children:
-            child.path = f"{parent_path}.{parent_id}".lstrip(".")
-            session.add(child)
-            await update_children(child.id, child.path)
+            if not child.path or child.path != f"{parent_path}.{parent_id}".lstrip("."):
+                child.path = f"{parent_path}.{parent_id}".lstrip(".")
+                session.add(child)
+                await update_children(child.id, child.path)
+            else:
+                 # Even if path is correct, recurse to check children? 
+                 # Optimization: Recurse anyway just in case deep children are broken
+                 await update_children(child.id, child.path)
 
     # Start from root partners (no referrer)
     stmt = select(Partner).where(Partner.referrer_id == None)
     res = await session.exec(stmt)
     roots = res.all()
     for root in roots:
-        root.path = None
-        session.add(root)
+        if root.path is not None:
+            root.path = None
+            session.add(root)
         await update_children(root.id, "")
     
     await session.commit()

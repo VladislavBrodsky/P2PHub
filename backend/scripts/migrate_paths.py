@@ -5,9 +5,53 @@ import os
 # Add parent dir to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# Hardcode production DB URL to avoid local env issues
+os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
+
+# MOCK BOT & AIOGRAM & TASKIQ
+from unittest.mock import MagicMock
+import sys
+
+# Bot Mocks
+sys.modules["aiogram"] = MagicMock()
+sys.modules["aiogram.client.bot"] = MagicMock()
+sys.modules["bot"] = MagicMock()
+sys.modules["bot"].bot = MagicMock()
+
+# TaskIQ Mocks
+def mock_task_decorator(*args, **kwargs):
+    def decorator(func):
+        return func
+    return decorator
+
+taskiq_mock = MagicMock()
+taskiq_mock.TaskiqScheduler = MagicMock()
+sys.modules["taskiq"] = taskiq_mock
+sys.modules["taskiq.schedule_sources"] = MagicMock()
+
+taskiq_fastapi_mock = MagicMock()
+taskiq_fastapi_mock.init = MagicMock()
+sys.modules["taskiq_fastapi"] = taskiq_fastapi_mock
+
+taskiq_redis_mock = MagicMock()
+broker_mock = MagicMock()
+broker_mock.task = mock_task_decorator
+taskiq_redis_mock.ListQueueBroker = MagicMock(return_value=broker_mock)
+sys.modules["taskiq_redis"] = taskiq_redis_mock
+
+worker_mock = MagicMock()
+worker_mock.broker = broker_mock
+sys.modules["app.worker"] = worker_mock
+
 # Load env vars
 from app.core.config import settings
-from app.models.partner import engine
+
+# Import ALL models to ensure relationships resolve
+from app.models.partner import Partner, XPTransaction, engine
+from app.models.transaction import PartnerTransaction 
+# (Add other models if needed, e.g. PartnerTask if it exists in a separate file, 
+# but usually it's in partner.py or imported there)
+
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
 from app.services.partner_service import migrate_paths
