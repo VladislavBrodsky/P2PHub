@@ -14,7 +14,7 @@ interface LayoutProps {
 export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    // Handle Back Button and Scroll Lock for Drawer
+    // Handle Back Button, Scroll Lock for Drawer, and Scroll Reset
     useEffect(() => {
         let cleanup: VoidFunction | undefined;
         try {
@@ -33,6 +33,12 @@ export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
 
                 if (activeTab === 'home') {
                     backButton.hide();
+                }
+
+                // Scroll Reset on Tab Change
+                const mainElement = document.querySelector('main');
+                if (mainElement) {
+                    mainElement.scrollTop = 0;
                 }
             }
         } catch (e) {

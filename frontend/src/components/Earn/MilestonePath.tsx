@@ -105,17 +105,19 @@ export const MilestonePath = () => {
         </div>
     );
 
+    const canRevealNext = visibleChapters < CHAPTER_TIERS.length && (groupedChapters[visibleChapters - 1]?.isUnlocked);
+
     return (
         <section className="mt-4 mb-8 space-y-8 px-4 pb-20">
             {groupedChapters.slice(0, visibleChapters).map((chapter, idx) => (
                 <div key={chapter.title} className="relative space-y-5">
                     {/* Chapter Header */}
                     <div className="flex items-center gap-3 mb-4 px-1">
-                        <div className={`p-2.5 rounded-[1.25rem] border ${chapter.isPartiallyComplete ? 'bg-brand-blue/10 border-brand-blue/20 text-brand-blue shadow-[0_0_15px_rgba(59,130,246,0.1)]' : 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400'}`}>
+                        <div className={`p-2.5 rounded-[1.25rem] border ${chapter.isPartiallyComplete || chapter.isUnlocked ? 'bg-brand-blue/10 border-brand-blue/20 text-brand-blue shadow-[0_0_15px_rgba(59,130,246,0.1)]' : 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400'}`}>
                             {chapter.icon}
                         </div>
                         <div className="flex flex-col">
-                            <h4 className={`text-[12px] font-black uppercase tracking-widest ${chapter.isPartiallyComplete ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-600'}`}>
+                            <h4 className={`text-[12px] font-black uppercase tracking-widest ${chapter.isPartiallyComplete || chapter.isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-600'}`}>
                                 PART {idx + 1}: {chapter.title}
                             </h4>
                             <span className="text-[8px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-0.5">
@@ -141,7 +143,7 @@ export const MilestonePath = () => {
                 </div>
             ))}
 
-            {visibleChapters < CHAPTER_TIERS.length && (
+            {canRevealNext && (
                 <div className="flex justify-center flex-col items-center gap-2 pt-2">
                     <button
                         onClick={handleShowMore}

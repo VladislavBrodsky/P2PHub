@@ -61,7 +61,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
     const currentCard = cardData[selectedTab];
 
     return (
-        <div className="flex flex-col h-full relative min-h-screen">
+        <div className="flex flex-col relative min-h-dvh">
             {/* Header */}
             <div className="px-6 pb-6 text-center">
                 <h2 className="text-(--color-text-primary) text-lg font-bold">{t('cards.title')}</h2>
@@ -103,8 +103,8 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
             {/* Card Display Area */}
             <div className="flex-1 px-6 pb-48 flex flex-col items-center">
                 {/* 3D Card Visual */}
-                <div className="mb-8 w-full max-w-[320px] flex justify-center relative min-h-[200px]">
-                    <AnimatePresence initial={false} mode="wait">
+                <div className="mb-8 w-full max-w-[320px] flex justify-center relative min-h-[220px]">
+                    <AnimatePresence initial={true} mode="wait">
                         <motion.div
                             key={selectedTab}
                             initial={{ opacity: 0, scale: 0.95, x: 20 }}
@@ -138,8 +138,8 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                         </p>
                     </div>
 
-                    {/* Promo/Bonus Pill - Premium Look */}
-                    <div className="bg-white rounded-[2rem] p-3 pl-3 pr-4 flex items-center justify-between shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] border border-slate-100/60">
+                    {/* Promo/Bonus Pill - Premium Look & Theme Aware */}
+                    <div className="bg-(--color-bg-surface) rounded-[2rem] p-3 pl-3 pr-4 flex items-center justify-between shadow-premium border border-(--color-border-glass)">
                         <div className="flex items-center gap-4">
                             {/* Premium Icon Badge with Theme-Aware Background */}
                             <div className="relative group overflow-hidden bg-(--color-text-primary) rounded-[0.75rem] px-3 py-2 flex items-center gap-1.5 shadow-md transition-all active:scale-95">
@@ -150,16 +150,16 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             </div>
 
                             <div className="text-left">
-                                <p className="text-[11px] font-bold text-slate-800 leading-[1.3] max-w-[140px]">
+                                <p className="text-[11px] font-bold text-(--color-text-primary) leading-[1.3] max-w-[140px]">
                                     {currentCard.bonus} {currentCard.bonusText}
                                 </p>
                             </div>
                         </div>
 
                         {/* Pay Pill */}
-                        <div className="bg-white px-3.5 py-2 rounded-[1rem] border border-slate-100 shadow-sm flex items-center gap-2 active:bg-slate-50 transition-colors">
-                            <Apple size={16} strokeWidth={0} fill="black" />
-                            <span className="text-[13px] font-extrabold text-text-primary">Pay</span>
+                        <div className="bg-(--color-bg-surface) px-3.5 py-2 rounded-[1rem] border border-(--color-border-glass) shadow-sm flex items-center gap-2 active:bg-(--color-bg-app) transition-colors">
+                            <Apple size={16} strokeWidth={0} className="fill-(--color-text-primary)" />
+                            <span className="text-[13px] font-extrabold text-(--color-text-primary)">Pay</span>
                         </div>
                     </div>
 
