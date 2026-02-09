@@ -7,6 +7,7 @@ import { MilestonePath } from '../components/Earn/MilestonePath';
 import { ReferralWidget } from '../components/Earn/ReferralWidget';
 
 import { TaskGrid } from '../components/Earn/TaskGrid';
+import { LevelUpModal } from '../components/Earn/LevelUpModal';
 import { EARN_TASKS, Task, MILESTONES } from '../data/earnData';
 import { useUser } from '../context/UserContext';
 import { Confetti } from '../components/ui/Confetti';
@@ -256,7 +257,7 @@ export default function ReferralPage() {
                                             </h4>
                                             <div className="flex items-center gap-2">
                                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)] animate-pulse" />
-                                                <p className="text-[11px] font-bold text-slate-400 tracking-wide uppercase">{VIRAL_SUBTITLE}</p>
+                                                <p className="text-[11px] font-bold text-text-secondary tracking-wide uppercase">{VIRAL_SUBTITLE}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -300,7 +301,7 @@ export default function ReferralPage() {
                                 {/* Footer Hint */}
                                 <div className="pt-2">
                                     <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-center">
-                                        <p className="text-[11px] text-slate-300 font-bold leading-relaxed px-2">
+                                        <p className="text-[11px] text-text-secondary font-bold leading-relaxed px-2">
                                             <Trans i18nKey="referral.modal.boost_desc">
                                                 Each referral boosts your XP and moves you closer to the <span className="text-white font-black underline decoration-blue-500 underline-offset-4">Physical Platinum Card</span>.
                                             </Trans>
@@ -338,7 +339,7 @@ export default function ReferralPage() {
                                             <span className="text-blue-500 uppercase italic">Financial Sovereignty</span>
                                         </Trans>
                                     </h3>
-                                    <p className="text-sm font-medium text-slate-400">
+                                    <p className="text-sm font-medium text-text-secondary">
                                         <Trans i18nKey="referral.qr.desc">
                                             Earn <span className="text-emerald-500 font-bold">$1/minute</span> for every active partner. <br />
                                             Build your empire now.
@@ -385,24 +386,14 @@ export default function ReferralPage() {
             </AnimatePresence>
 
             {/* Level Up Overlay */}
-            <AnimatePresence>
-                {levelUp && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-                        <motion.div
-                            initial={{ scale: 0.5, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.8, opacity: 0 }}
-                            className="bg-(--color-bg-surface) border border-yellow-500/20 p-8 rounded-[2.5rem] text-center space-y-4 shadow-float"
-                        >
-                            <Trophy className="w-16 h-16 text-yellow-400 mx-auto animate-bounce" />
-                            <h2 className="text-3xl font-black text-transparent bg-clip-text bg-linear-to-r from-yellow-400 to-orange-500">
-                                {t('referral.levelup.title')}
-                            </h2>
-                            <p className="text-slate-400 font-bold italic">{t('referral.levelup.reached', { level: reachedLevel })}</p>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
+            <LevelUpModal
+                isOpen={levelUp}
+                level={reachedLevel}
+                onClose={() => {
+                    setLevelUp(false);
+                    setConfettiActive(false);
+                }}
+            />
 
             <h1 className="text-3xl font-black mb-6 tracking-tighter text-gradient-primary text-center">{t('referral.title')}</h1>
 
