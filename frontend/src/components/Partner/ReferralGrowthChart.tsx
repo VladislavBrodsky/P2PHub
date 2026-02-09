@@ -227,11 +227,13 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                     />
 
                     {/* Stroke Line */}
+                    {/* Stroke Line */}
                     <motion.path
                         d={getLinePath(chartData)}
                         fill="none"
                         stroke="#3b82f6"
-                        strokeWidth="1"
+                        strokeWidth="2"
+                        vectorEffect="non-scaling-stroke"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         initial={{ pathLength: 0, opacity: 0 }}
