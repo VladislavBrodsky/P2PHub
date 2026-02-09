@@ -10,18 +10,20 @@ export const ReferralWidget = ({ onInvite, onShowQR }: ReferralWidgetProps) => {
     const { t } = useTranslation();
 
     return (
-        <div className="mb-8 relative">
+        <div className="mb-6 relative max-w-sm mx-auto">
             <button
                 onClick={onInvite}
-                className="w-full h-14 bg-linear-to-r from-blue-600 to-blue-500 rounded-full flex items-center justify-center gap-2 font-black text-white shadow-lg shadow-blue-500/20 active:scale-95 transition-transform relative overflow-hidden group"
+                className="w-full h-12 rounded-full flex items-center justify-center gap-2 font-black text-white active:scale-95 transition-all relative overflow-hidden group shadow-xl liquid-blue-premium"
             >
-                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                <Share2 className="w-5 h-5 relative z-10" />
-                <span className="relative z-10">{t('referral.widget.invite')}</span>
+                <Share2 className="w-5 h-5 relative z-10 opacity-90" />
+                <span className="relative z-10 text-sm tracking-tight">{t('referral.widget.invite')}</span>
+
+                {/* Subtle Glass Shimmer overlay */}
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
             </button>
             <button
                 onClick={onShowQR}
-                className="absolute right-2 top-2 bottom-2 aspect-square flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white/80 transition-colors"
+                className="absolute right-1 top-1 bottom-1 aspect-square flex items-center justify-center bg-black/10 hover:bg-black/20 rounded-full text-white/80 transition-all z-20 active:scale-90"
             >
                 <QrCode className="w-5 h-5" />
             </button>

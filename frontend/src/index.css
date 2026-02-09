@@ -645,3 +645,17 @@ body {
   box-shadow: 0 0 30px rgba(0, 242, 254, 0.6);
   filter: brightness(1.1);
 }
+
+/* Premium Liquid Blue for Action Buttons */
+.liquid-blue-premium {
+  background: linear-gradient(135deg, #0066FF 0%, #00d2ff 50%, #0066FF 100%);
+  background-size: 200% 200%;
+  animation: liquid 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.liquid-blue-premium:hover {
+  box-shadow: 0 8px 25px rgba(0, 102, 255, 0.5);
+  filter: brightness(1.05);
+}
