@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from sqlmodel import select
 from app.models.partner import Partner, get_session
 from app.services.notification_service import notification_service
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel.ext.asyncio.session import AsyncSession
 from contextlib import asynccontextmanager
 
 logger = logging.getLogger(__name__)
