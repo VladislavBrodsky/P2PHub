@@ -105,28 +105,28 @@ export const EARN_TASKS: Task[] = [
 
 export const ACHIEVEMENTS = [
     // Onboarding Tier
-    { id: 'onboard_1', level: 1, reward: 'Day 1 Vanguard', icon: CheckCircle2, color: 'text-emerald-400' },
-    { id: 'streak_3', level: 3, reward: '3 Day Warrior', icon: Zap, color: 'text-yellow-400' },
-    { id: 'streak_7', level: 7, reward: '7 Day Elite', icon: Zap, color: 'text-yellow-500' },
+    { id: 'onboard_1', level: 1, reward: 'referral.rewards.items.onboard_1', icon: CheckCircle2, color: 'text-emerald-400' },
+    { id: 'streak_3', level: 3, reward: 'referral.rewards.items.streak_3', icon: Zap, color: 'text-yellow-400' },
+    { id: 'streak_7', level: 7, reward: 'referral.rewards.items.streak_7', icon: Zap, color: 'text-yellow-500' },
 
     // Viral Tier
-    { id: 'viral_blitz', level: 2, reward: 'Blitz 10 (24h)', icon: Users, color: 'text-rose-500' },
-    { id: 'viral_tsunami', level: 15, reward: 'Viral Tsunami', icon: Shield, color: 'text-purple-500' },
+    { id: 'viral_blitz', level: 2, reward: 'referral.rewards.items.viral_blitz', icon: Users, color: 'text-rose-500' },
+    { id: 'viral_tsunami', level: 15, reward: 'referral.rewards.items.viral_tsunami', icon: Shield, color: 'text-purple-500' },
 
     // Referral Tier
-    { id: 'ref_node', level: 5, reward: 'Active Node', icon: UserPlus, color: 'text-blue-400' },
-    { id: 'ref_star', level: 12, reward: 'Rising Star', icon: Star, color: 'text-blue-300' },
-    { id: 'ref_ambassador', level: 24, reward: 'Global Ambassador', icon: Users, color: 'text-indigo-400' },
-    { id: 'ref_monarch', level: 50, reward: 'Network Monarch', icon: Crown, color: 'text-amber-500' },
+    { id: 'ref_node', level: 5, reward: 'referral.rewards.items.ref_node', icon: UserPlus, color: 'text-blue-400' },
+    { id: 'ref_star', level: 12, reward: 'referral.rewards.items.ref_star', icon: Star, color: 'text-blue-300' },
+    { id: 'ref_ambassador', level: 24, reward: 'referral.rewards.items.ref_ambassador', icon: Users, color: 'text-indigo-400' },
+    { id: 'ref_monarch', level: 50, reward: 'referral.rewards.items.ref_monarch', icon: Crown, color: 'text-amber-500' },
 ];
 
 export const MILESTONES = [
-    { level: 3, reward: 'Founder Access', icon: Lock, color: 'text-slate-400' },
-    { level: 10, reward: 'Silver Badge', icon: Shield, color: 'text-slate-300' },
-    { level: 25, reward: 'Card Fee -10%', icon: CreditCard, color: 'text-blue-400' },
-    { level: 50, reward: 'Black Card Ready', icon: CreditCard, color: 'text-neutral-900 dark:text-white' },
-    { level: 75, reward: 'Empire Status', icon: Trophy, color: 'text-amber-500' },
-    { level: 100, reward: 'Platinum Physical', icon: Crown, color: 'text-slate-100' },
+    { level: 3, reward: 'referral.rewards.items.founder_access', icon: Lock, color: 'text-slate-400' },
+    { level: 10, reward: 'referral.rewards.items.silver_badge', icon: Shield, color: 'text-slate-300' },
+    { level: 25, reward: 'referral.rewards.items.fee_discount', icon: CreditCard, color: 'text-blue-400' },
+    { level: 50, reward: 'referral.rewards.items.black_card', icon: CreditCard, color: 'text-neutral-900 dark:text-white' },
+    { level: 75, reward: 'referral.rewards.items.empire_status', icon: Trophy, color: 'text-amber-500' },
+    { level: 100, reward: 'referral.rewards.items.platinum_physical', icon: Crown, color: 'text-slate-100' },
 ];
 
 // Helper to generate a massive list of progression-based placeholders to reach 100+
@@ -138,7 +138,7 @@ export const getAllAchievements = () => {
             list.push({
                 id: `lvl_ach_${i}`,
                 level: i,
-                reward: `Level ${i} Elite`,
+                reward: 'referral.rewards.items.level_elite',
                 icon: Trophy,
                 color: 'text-slate-600'
             });

@@ -289,7 +289,25 @@
         },
         "rewards": {
             "achievements": "Exclusive Achievements",
-            "milestones": "Global Milestones"
+            "milestones": "Global Milestones",
+            "items": {
+                "onboard_1": "Day 1 Vanguard",
+                "streak_3": "3 Day Warrior",
+                "streak_7": "7 Day Elite",
+                "viral_blitz": "Blitz 10 (24h)",
+                "viral_tsunami": "Viral Tsunami",
+                "ref_node": "Active Node",
+                "ref_star": "Rising Star",
+                "ref_ambassador": "Global Ambassador",
+                "ref_monarch": "Network Monarch",
+                "founder_access": "Founder Access",
+                "silver_badge": "Silver Badge",
+                "fee_discount": "Card Fee -10%",
+                "black_card": "Black Card Ready",
+                "empire_status": "Empire Status",
+                "platinum_physical": "Platinum Physical",
+                "level_elite": "Level {{level}} Elite"
+            }
         }
     },
     "tasks": {

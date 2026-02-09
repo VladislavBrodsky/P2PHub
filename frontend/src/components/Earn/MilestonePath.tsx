@@ -75,7 +75,7 @@ export const MilestonePath = () => {
                                             LVL {item.level}
                                         </div>
                                         <h4 className={`text-[9px] font-black leading-tight line-clamp-1 tracking-tight ${isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-500'}`}>
-                                            {item.reward}
+                                            {t(item.reward, { level: item.level })}
                                         </h4>
                                     </div>
                                 </motion.div>

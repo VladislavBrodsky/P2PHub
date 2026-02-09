@@ -289,7 +289,25 @@
         },
         "rewards": {
             "achievements": "Эксклюзивные достижения",
-            "milestones": "Глобальные цели"
+            "milestones": "Глобальные цели",
+            "items": {
+                "onboard_1": "Авангард Дня 1",
+                "streak_3": "Воин 3 Дней",
+                "streak_7": "Элита Недели",
+                "viral_blitz": "Блиц 10 (24ч)",
+                "viral_tsunami": "Виральное Цунами",
+                "ref_node": "Активный Узел",
+                "ref_star": "Восходящая Звезда",
+                "ref_ambassador": "Глобальный Амбассадор",
+                "ref_monarch": "Монарх Сети",
+                "founder_access": "Доступ Фаундера",
+                "silver_badge": "Серебряный Значок",
+                "fee_discount": "Комиссия карты -10%",
+                "black_card": "Готовность Черной Карты",
+                "empire_status": "Статус Империи",
+                "platinum_physical": "Платиновая Карта",
+                "level_elite": "Элита Уровня {{level}}"
+            }
         }
     },
     "tasks": {
