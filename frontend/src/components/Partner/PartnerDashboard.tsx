@@ -25,6 +25,8 @@ export const PartnerDashboard = () => {
 
     // Fetch Tree Stats for the Dashboard visualization
     const [treeStats, setTreeStats] = React.useState<Record<string, number>>({});
+    const [timeframe, setTimeframe] = React.useState<'24H' | '7D' | '1M' | '3M' | '6M' | '1Y'>('7D');
+    const [growthPct, setGrowthPct] = React.useState<number>(0);
 
     React.useEffect(() => {
         const fetchStats = async () => {
@@ -87,14 +89,22 @@ export const PartnerDashboard = () => {
                             <ExternalLink className="w-3 h-3 opacity-50" />
                         </div>
                         <div className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                            {totalNetworkSize} <span className="text-[10px] bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-sm">+12%</span>
+                            {totalNetworkSize}
+                            <span className="text-[10px] bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-sm">
+                                {growthPct >= 0 ? '+' : ''}{growthPct}%
+                            </span>
                         </div>
                     </div>
                 </div>
 
                 {/* 1. Network Visualization (Inline Preview) */}
                 <div className="space-y-4">
-                    <ReferralGrowthChart onReportClick={() => setIsExplorerOpen(true)} />
+                    <ReferralGrowthChart
+                        timeframe={timeframe}
+                        setTimeframe={setTimeframe}
+                        onMetricsUpdate={(m) => setGrowthPct(m.growth_pct)}
+                        onReportClick={() => setIsExplorerOpen(true)}
+                    />
                     {/* Explorer is now an overlay, but we might want a teaser here or just hide it */}
                     <div
                         className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"

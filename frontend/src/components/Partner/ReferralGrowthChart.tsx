@@ -87,36 +87,45 @@ const generateMockData = (timeframe: Timeframe, endTotal: number): ChartDataPoin
 
 interface ReferralGrowthChartProps {
     onReportClick?: () => void;
+    onMetricsUpdate?: (metrics: { growth_pct: number; current_count: number }) => void;
+    timeframe: Timeframe;
+    setTimeframe: (tf: Timeframe) => void;
 }
 
-export const ReferralGrowthChart = ({ onReportClick }: ReferralGrowthChartProps) => {
+export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe, setTimeframe }: ReferralGrowthChartProps) => {
     const { t } = useTranslation();
     const { selection } = useHaptic();
-    const [timeframe, setTimeframe] = useState<Timeframe>('7D');
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-    const [realTotal, setRealTotal] = useState<number>(0);
+    const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [metrics, setMetrics] = useState({ growth_pct: 0, current_count: 0 });
 
     useEffect(() => {
-        const fetchStats = async () => {
+        const fetchData = async () => {
+            setIsLoading(true);
             try {
-                const res = await apiClient.get('/api/partner/tree');
-                const stats = res.data; // { "1": count, "2": count ... }
-                const total = Object.values(stats).reduce((acc: number, val: any) => acc + (Number(val) || 0), 0);
-                setRealTotal(total);
+                // 1. Fetch Chart Data
+                const chartRes = await apiClient.get(`/api/partner/growth/chart?timeframe=${timeframe}`);
+                if (Array.isArray(chartRes.data)) {
+                    setChartData(chartRes.data);
+                }
+
+                // 2. Fetch Metrics
+                const metricsRes = await apiClient.get(`/api/partner/growth/metrics?timeframe=${timeframe}`);
+                if (metricsRes.data) {
+                    setMetrics(metricsRes.data);
+                    onMetricsUpdate?.(metricsRes.data);
+                }
             } catch (e) {
-                console.error("Failed to fetch tree stats", e);
-                // Fallback to mock base if fail, or just 0
-                setRealTotal(124); // Fallback so chart isn't empty on error
+                console.error("Failed to fetch growth data", e);
             } finally {
                 setIsLoading(false);
             }
         };
-        fetchStats();
-    }, []);
+        fetchData();
+    }, [timeframe, onMetricsUpdate]);
 
-    const data = useMemo(() => generateMockData(timeframe, realTotal), [timeframe, realTotal]);
-    const maxValue = Math.max(...data.map(d => d.total), 1); // Avoid div by zero
+    const maxValue = useMemo(() => Math.max(...chartData.map(d => d.total), 1), [chartData]);
 
     // Calculate path for the area chart
     const getPath = (points: ChartDataPoint[]) => {
@@ -168,7 +177,7 @@ export const ReferralGrowthChart = ({ onReportClick }: ReferralGrowthChartProps)
                         <TrendingUp className="w-4 h-4 text-blue-500" />
                         Network Growth
                     </h3>
-                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400">Total Active Partners: <span className="text-blue-500">{realTotal}</span></p>
+                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400">Total Active Partners: <span className="text-blue-500">{metrics.current_count}</span></p>
                 </div>
 
                 {/* Timeframe Selector - Compact */}
@@ -209,31 +218,31 @@ export const ReferralGrowthChart = ({ onReportClick }: ReferralGrowthChartProps)
 
                     {/* Area Fill */}
                     <motion.path
-                        d={getPath(data)}
+                        d={getPath(chartData)}
                         fill="url(#chartGradient)"
                         initial={{ opacity: 0, d: `M 0,100 L 100,100 Z` }}
-                        animate={{ opacity: 1, d: getPath(data) }}
+                        animate={{ opacity: 1, d: getPath(chartData) }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     />
 
                     {/* Stroke Line */}
                     <motion.path
-                        d={getLinePath(data)}
+                        d={getLinePath(chartData)}
                         fill="none"
                         stroke="#3b82f6"
                         strokeWidth="1"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         initial={{ pathLength: 0, opacity: 0 }}
-                        animate={{ pathLength: 1, opacity: 1, d: getLinePath(data) }}
+                        animate={{ pathLength: 1, opacity: 1, d: getLinePath(chartData) }}
                         transition={{ duration: 1, ease: "easeOut" }}
                     />
 
                     {/* Interactive Circles */}
-                    {data.map((point, index) => {
+                    {chartData.map((point: ChartDataPoint, index: number) => {
                         const width = 100;
                         const height = 100;
-                        const stepX = width / (data.length - 1);
+                        const stepX = width / (chartData.length - 1);
                         const x = index * stepX;
                         const y = height - (point.total / maxValue) * height * 0.8;
 
@@ -246,9 +255,9 @@ export const ReferralGrowthChart = ({ onReportClick }: ReferralGrowthChartProps)
                             >
                                 {/* Invisible hit area for better UX */}
                                 <rect
-                                    x={x - (width / data.length) / 2}
+                                    x={x - (width / chartData.length) / 2}
                                     y={0}
-                                    width={width / data.length}
+                                    width={width / chartData.length}
                                     height={100}
                                     fill="transparent"
                                     onMouseEnter={() => { selection(); setHoveredIndex(index); }}
@@ -269,17 +278,17 @@ export const ReferralGrowthChart = ({ onReportClick }: ReferralGrowthChartProps)
 
                 {/* Tooltip Overhead */}
                 <AnimatePresence>
-                    {hoveredIndex !== null && (
+                    {hoveredIndex !== null && chartData[hoveredIndex] && (
                         <motion.div
                             initial={{ opacity: 0, y: 10, scale: 0.95 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
                             className="absolute top-2 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs rounded-xl py-2 px-3 shadow-xl border border-white/10 z-20 flex flex-col items-center pointer-events-none min-w-[100px]"
                         >
-                            <span className="font-bold mb-1 text-slate-300">{data[hoveredIndex].date}</span>
+                            <span className="font-bold mb-1 text-slate-300">{chartData[hoveredIndex].date}</span>
                             <div className="flex items-center gap-2">
                                 <Users className="w-3 h-3 text-blue-400" />
-                                <span className="font-black text-lg">{data[hoveredIndex].total.toLocaleString()}</span>
+                                <span className="font-black text-lg">{chartData[hoveredIndex].total.toLocaleString()}</span>
                             </div>
                         </motion.div>
                     )}
@@ -288,7 +297,7 @@ export const ReferralGrowthChart = ({ onReportClick }: ReferralGrowthChartProps)
 
             {/* X-Axis Labels */}
             <div className="flex justify-between mt-1 px-1">
-                {data.filter((_, i) => i % (timeframe === '24H' ? 4 : timeframe === '7D' ? 1 : 3) === 0).map((point, i) => (
+                {chartData.filter((_, i) => i % (timeframe === '24H' ? 4 : timeframe === '7D' ? 1 : 3) === 0).map((point, i) => (
                     <span key={i} className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{point.date}</span>
                 ))}
             </div>
@@ -301,7 +310,9 @@ export const ReferralGrowthChart = ({ onReportClick }: ReferralGrowthChartProps)
                     </div>
                     <div>
                         <div className="text-[9px] text-slate-500 dark:text-slate-400 font-bold leading-tight">Growth Rate</div>
-                        <div className="text-xs font-black text-emerald-500">+12.5%</div>
+                        <div className="text-xs font-black text-emerald-500">
+                            {metrics.growth_pct >= 0 ? '+' : ''}{metrics.growth_pct}%
+                        </div>
                     </div>
                 </div>
                 <button

@@ -202,3 +202,51 @@ async def get_network_level_members(
     members = await get_referral_tree_members(session, partner.id, level)
     
     return members
+
+@router.get("/growth/metrics")
+async def get_growth_metrics(
+    timeframe: str = "7D",
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    try:
+        if "user" in user_data:
+            tg_id = str(json.loads(user_data["user"]).get("id"))
+        else:
+            tg_id = str(user_data.get("id"))
+    except:
+        return {"growth_pct": 0, "current_count": 0, "previous_count": 0}
+
+    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    result = await session.exec(statement)
+    partner = result.first()
+    
+    if not partner:
+        return {"growth_pct": 0, "current_count": 0, "previous_count": 0}
+
+    from app.services.partner_service import get_network_growth_metrics
+    return await get_network_growth_metrics(session, partner.id, timeframe)
+
+@router.get("/growth/chart")
+async def get_growth_chart(
+    timeframe: str = "7D",
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    try:
+        if "user" in user_data:
+            tg_id = str(json.loads(user_data["user"]).get("id"))
+        else:
+            tg_id = str(user_data.get("id"))
+    except:
+        return []
+
+    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    result = await session.exec(statement)
+    partner = result.first()
+    
+    if not partner:
+        return []
+
+    from app.services.partner_service import get_network_time_series
+    return await get_network_time_series(session, partner.id, timeframe)

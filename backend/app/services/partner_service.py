@@ -4,6 +4,7 @@ from typing import Optional, List, Dict, Tuple
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.models.partner import Partner
+from datetime import datetime, timedelta
 from app.core.i18n import get_msg
 from app.services.leaderboard_service import leaderboard_service
 from app.services.redis_service import redis_service
@@ -243,7 +244,154 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
         logger.error(f"Error fetching tree members: {e}")
         return []
 
-async def migrate_paths(session: AsyncSession):
+async def get_network_growth_metrics(session: AsyncSession, partner_id: int, timeframe: str = '7D') -> dict:
+    """
+    Calculates partners joined in the current period vs the previous period.
+    Periods are defined by the timeframe (e.g., 7D = current 7 days vs previous 7 days).
+    """
+    partner = await session.get(Partner, partner_id)
+    if not partner: return {"growth_pct": 0, "previous_count": 0, "current_count": 0}
+
+    now = datetime.utcnow()
+    
+    # Define period length
+    if timeframe == '24H': delta = timedelta(hours=24)
+    elif timeframe == '7D': delta = timedelta(days=7)
+    elif timeframe == '1M': delta = timedelta(days=30)
+    elif timeframe == '3M': delta = timedelta(days=90)
+    elif timeframe == '6M': delta = timedelta(days=180)
+    elif timeframe == '1Y': delta = timedelta(days=365)
+    else: delta = timedelta(days=7)
+
+    current_start = now - delta
+    previous_start = now - (delta * 2)
+
+    base_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
+
+    # Query Current Period
+    stmt_curr = text("""
+        SELECT COUNT(*) FROM partner 
+        WHERE (path = :path OR path LIKE :path || '.%')
+        AND created_at >= :start AND created_at <= :end
+    """)
+    res_curr = await session.execute(stmt_curr, {"path": base_path, "start": current_start, "end": now})
+    current_count = res_curr.scalar() or 0
+
+    # Query Previous Period
+    stmt_prev = text("""
+        SELECT COUNT(*) FROM partner 
+        WHERE (path = :path OR path LIKE :path || '.%')
+        AND created_at >= :start AND created_at < :end
+    """)
+    res_prev = await session.execute(stmt_prev, {"path": base_path, "start": previous_start, "end": current_start})
+    previous_count = res_prev.scalar() or 0
+
+    # Calculate Growth %
+    if previous_count == 0:
+        growth_pct = 100.0 if current_count > 0 else 0.0
+    else:
+        growth_pct = ((current_count - previous_count) / previous_count) * 100.0
+
+    return {
+        "growth_pct": round(growth_pct, 1),
+        "current_count": current_count,
+        "previous_count": previous_count,
+        "timeframe": timeframe
+    }
+
+async def get_network_time_series(session: AsyncSession, partner_id: int, timeframe: str = '7D') -> List[dict]:
+    """
+    Returns data points for a growth chart, grouped by the appropriate interval.
+    """
+    partner = await session.get(Partner, partner_id)
+    if not partner: return []
+
+    now = datetime.utcnow()
+    
+    # Intervals: 24H -> Hour, 7D/1M -> Day, 3M/6M/1Y -> Month/Week
+    if timeframe == '24H':
+        interval = 'hour'
+        start_time = now - timedelta(hours=24)
+        points = 24
+    elif timeframe == '7D':
+        interval = 'day'
+        start_time = now - timedelta(days=7)
+        points = 7
+    elif timeframe == '1M':
+        interval = 'day'
+        start_time = now - timedelta(days=30)
+        points = 30
+    else:
+        interval = 'month' # Simple fallback for large periods
+        start_time = now - timedelta(days=365)
+        points = 12
+
+    base_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
+
+    # Query counts grouped by interval
+    # Note: date_trunc is Postgres specific
+    query = text(f"""
+        SELECT date_trunc('{interval}', created_at) as bucket, COUNT(*) 
+        FROM partner 
+        WHERE (path = :path OR path LIKE :path || '.%')
+        AND created_at >= :start
+        GROUP BY bucket
+        ORDER BY bucket ASC
+    """)
+    
+    result = await session.execute(query, {"path": base_path, "start": start_time})
+    
+    data_map = {row[0]: row[1] for row in result}
+    
+    # Fill gaps for a smooth chart
+    data = []
+    curr = start_time
+    running_total = 0 # If we want an area chart showing cumulative total, we need a base
+    
+    # Get base count (partners joined BEFORE start_time)
+    stmt_base = text("""
+        SELECT COUNT(*) FROM partner 
+        WHERE (path = :path OR path LIKE :path || '.%')
+        AND created_at < :start
+    """)
+    res_base = await session.execute(stmt_base, {"path": base_path, "start": start_time})
+    running_total = res_base.scalar() or 0
+
+    for i in range(points + 1):
+        # Normalize current time bucket
+        if interval == 'hour':
+            bucket = curr.replace(minute=0, second=0, microsecond=0)
+            label = f"{bucket.hour}:00"
+            next_step = timedelta(hours=1)
+        elif interval == 'day':
+            bucket = curr.replace(hour=0, minute=0, second=0, microsecond=0)
+            label = f"{bucket.day}/{bucket.month}"
+            next_step = timedelta(days=1)
+        else:
+            bucket = curr.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            label = bucket.strftime("%b")
+            next_step = timedelta(days=32) # approximate to hit next month
+            # Fix month logic
+            if bucket.month == 12: next_step_bucket = bucket.replace(year=bucket.year + 1, month=1)
+            else: next_step_bucket = bucket.replace(month=bucket.month + 1)
+            next_step = next_step_bucket - bucket
+
+        count = 0
+        # Check if we have data for this bucket in Postgres's format (timezone naive)
+        for b, c in data_map.items():
+             if b.replace(tzinfo=None) == bucket:
+                 count = c
+                 break
+        
+        running_total += count
+        data.append({
+            "date": label,
+            "total": running_total,
+            "joined": count
+        })
+        curr += next_step
+
+    return data
     """
     Utility to hydrate the 'path' column for all existing partners.
     Call this once to upgrade existing database.
