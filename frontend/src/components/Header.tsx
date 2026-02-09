@@ -2,7 +2,6 @@ import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
 import { MoreHorizontal, ChevronDown, X, Crown } from 'lucide-react';
 import { useUser } from '../context/UserContext';
-import { TonConnectButton } from '@tonconnect/ui-react';
 
 interface HeaderProps {
     onOpenMenu: () => void;
@@ -38,7 +37,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
         <header className="fixed left-1/2 z-50 w-full max-w-lg -translate-x-1/2 pt-[calc(env(safe-area-inset-top)+var(--spacing-telegram-header))] transition-all duration-300 top-0 pointer-events-none">
             <div className="flex flex-col gap-4 px-4 pointer-events-auto">
                 {/* Navigation & Stats */}
-                <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center justify-between gap-4">
                     <button
                         onClick={onOpenMenu}
                         className="group flex items-center gap-2 rounded-2xl border border-slate-200/50 bg-white/80 dark:bg-slate-900/50 px-4 py-2 shadow-premium backdrop-blur-md transition-all active:scale-95 flex-shrink-0"
@@ -49,9 +48,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         </span>
                     </button>
 
-                    <div className="flex-1 flex justify-center">
-                        <TonConnectButton />
-                    </div>
+                    <div className="flex-1" /> {/* Spacer */}
 
                     <motion.button
                         animate={controls}
