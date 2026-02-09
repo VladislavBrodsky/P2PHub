@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAllAchievements, getAllMilestones, Achievement } from '../../data/earnData';
-import { Lock, ChevronDown, Trophy, Sparkles, Zap, Star, Shield, Target, X, Info, Share2, UserPlus, Milestone } from 'lucide-react';
+import { Lock, ChevronDown, ChevronUp, Trophy, Sparkles, Zap, Star, Shield, Target, X, Info, Share2, UserPlus, Milestone } from 'lucide-react';
 import { useUser } from '../../context/UserContext';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
@@ -106,9 +106,13 @@ export const MilestonePath = () => {
     );
 
     const canRevealNext = visibleChapters < CHAPTER_TIERS.length && (groupedChapters[visibleChapters - 1]?.isUnlocked);
+    const canShowLess = visibleChapters > 1;
 
     return (
-        <section className="mt-4 mb-8 space-y-8 px-4 pb-20">
+        <motion.section
+            className="mt-4 mb-8 space-y-8 px-4 pb-20"
+            onViewportLeave={() => setVisibleChapters(1)}
+        >
             {groupedChapters.slice(0, visibleChapters).map((chapter, idx) => (
                 <div key={chapter.title} className="relative space-y-5">
                     {/* Chapter Header */}
@@ -143,27 +147,50 @@ export const MilestonePath = () => {
                 </div>
             ))}
 
-            {canRevealNext && (
-                <div className="flex justify-center flex-col items-center gap-2 pt-2">
-                    <button
-                        onClick={handleShowMore}
-                        className="group flex flex-col items-center gap-1.5 active:scale-95 transition-all"
-                    >
-                        <div className="relative">
-                            <div className="absolute inset-0 bg-brand-blue/20 blur-lg animate-pulse rounded-full" />
-                            <div className="relative p-3 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 group-hover:bg-slate-50 dark:group-hover:bg-white/10 transition-all backdrop-blur-xl shadow-lg">
-                                <ChevronDown className="w-4 h-4 text-brand-blue" />
+            {(canRevealNext || canShowLess) && (
+                <div className="flex flex-col items-center gap-6 pt-2">
+                    {canRevealNext && (
+                        <button
+                            onClick={handleShowMore}
+                            className="group flex flex-col items-center gap-1.5 active:scale-95 transition-all"
+                        >
+                            <div className="relative">
+                                <div className="absolute inset-0 bg-brand-blue/20 blur-lg animate-pulse rounded-full" />
+                                <div className="relative p-3 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 group-hover:bg-slate-50 dark:group-hover:bg-white/10 transition-all backdrop-blur-xl shadow-lg">
+                                    <ChevronDown className="w-4 h-4 text-brand-blue" />
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex flex-col items-center text-center">
-                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">
-                                Reveal Part {visibleChapters + 1}
-                            </span>
-                            <span className="text-[7px] font-bold text-slate-500 uppercase tracking-widest">
-                                Unlock next Level Horizons
-                            </span>
-                        </div>
-                    </button>
+                            <div className="flex flex-col items-center text-center">
+                                <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">
+                                    Reveal Part {visibleChapters + 1}
+                                </span>
+                                <span className="text-[7px] font-bold text-slate-500 uppercase tracking-widest">
+                                    Unlock next Level Horizons
+                                </span>
+                            </div>
+                        </button>
+                    )}
+
+                    {canShowLess && (
+                        <button
+                            onClick={() => {
+                                selection();
+                                setVisibleChapters(1);
+                            }}
+                            className="group flex flex-col items-center gap-1.5 active:scale-95 transition-all"
+                        >
+                            <div className="relative">
+                                <div className={`relative p-3 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 group-hover:bg-slate-50 dark:group-hover:bg-white/10 transition-all backdrop-blur-xl shadow-lg ${!canRevealNext ? '' : 'w-8 h-8 p-0 flex items-center justify-center'}`}>
+                                    <ChevronUp className={`text-slate-400 ${!canRevealNext ? 'w-4 h-4' : 'w-3 h-3'}`} />
+                                </div>
+                            </div>
+                            <div className="flex flex-col items-center text-center">
+                                <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">
+                                    Show Less
+                                </span>
+                            </div>
+                        </button>
+                    )}
                 </div>
             )}
 
@@ -269,6 +296,6 @@ export const MilestonePath = () => {
                     </div>
                 )}
             </AnimatePresence>
-        </section>
+        </motion.section>
     );
 };
