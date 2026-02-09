@@ -11,7 +11,8 @@ import { LevelUpModal } from '../components/Earn/LevelUpModal';
 import { EARN_TASKS, Task, MILESTONES } from '../data/earnData';
 import { useUser } from '../context/UserContext';
 import { Confetti } from '../components/ui/Confetti';
-import { CheckCircle2, Trophy, QrCode, X, Share2, Download, Copy, ExternalLink, Send } from 'lucide-react';
+import { CheckCircle2, Trophy, QrCode, X, Share2, Download, Copy, ExternalLink, Send, FileText } from 'lucide-react';
+import { BriefTermsModal } from '../components/Earn/BriefTermsModal';
 import { useTranslation, Trans } from 'react-i18next';
 import { getSafeLaunchParams } from '../utils/tma';
 import { apiClient } from '../api/client';
@@ -34,6 +35,7 @@ export default function ReferralPage() {
     const [confettiActive, setConfettiActive] = useState(false);
     const [showQR, setShowQR] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
+    const [showBriefModal, setShowBriefModal] = useState(false);
 
 
 
@@ -395,7 +397,19 @@ export default function ReferralPage() {
                 }}
             />
 
-            <h1 className="text-3xl font-black mb-6 tracking-tighter text-gradient-primary text-center">{t('referral.title')}</h1>
+            <h1 className="text-3xl font-black mb-2 tracking-tighter text-gradient-primary text-center">{t('referral.title')}</h1>
+
+            <div className="flex justify-center mb-6">
+                <button
+                    onClick={() => setShowBriefModal(true)}
+                    className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-blue-300 hover:bg-white/10 hover:text-white transition-all active:scale-95"
+                >
+                    <FileText className="w-3 h-3" />
+                    {t('referral.brief.btn')}
+                </button>
+            </div>
+
+            <BriefTermsModal isOpen={showBriefModal} onClose={() => setShowBriefModal(false)} />
 
             <EarnHeader />
 

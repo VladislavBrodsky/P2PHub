@@ -322,6 +322,25 @@
             },
             "all_unlocked": "Full Achievement List",
             "next_milestones": "Upcoming Goals"
+        },
+        "brief": {
+            "btn": "Brief & Terms",
+            "title": "Partner Briefing",
+            "goal_title": "Main Objective",
+            "goal_desc": "Our mission is to build the world's largest decentralized partner network. <1> Your goal is simple:</1> Expand the network, earn XP, and unlock the <3>$1/minute passive income stream.</3>",
+            "manual_title": "Field Manual",
+            "manual_step_1": "Share your unique invite link with potential partners.",
+            "manual_step_2": "Help them activate their account and complete tasks.",
+            "manual_step_3": "Earn XP for every active partner in your network (up to 5 levels deep).",
+            "rules_title": "Rules of Engagement",
+            "rule_1_title": "Zero Tolerance Policy",
+            "rule_1_desc": "Do not spam or invite fake accounts. Our Anti-Bot Detector is active 24/7. Fake invites will result in a permanent ban.",
+            "rule_2_title": "Quality over Quantity",
+            "rule_2_desc": "Focus on active users who want to build. Inactive bots degrade your network score.",
+            "antibot_active": "Anti-Bot System Active",
+            "motivation_title": "Why This Matters",
+            "motivation_desc": "The more XP you have, the higher your rank. Higher ranks unlock exclusive benefits, lower fees, and the legendary Physical Platinum Card. Don't just participate—dominate.",
+            "cta": "I Understand, Let's Build"
         }
     },
     "tasks": {
