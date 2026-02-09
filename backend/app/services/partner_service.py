@@ -255,6 +255,10 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
     Calculates partners joined in the current period vs the previous period.
     Periods are defined by the timeframe (e.g., 7D = current 7 days vs previous 7 days).
     """
+    cache_key = f"growth_metrics:{partner_id}:{timeframe}"
+    cached = await redis_service.get_json(cache_key)
+    if cached: return cached
+
     partner = await session.get(Partner, partner_id)
     if not partner: return {"growth_pct": 0, "previous_count": 0, "current_count": 0}
 
@@ -298,17 +302,24 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
     else:
         growth_pct = ((current_count - previous_count) / previous_count) * 100.0
 
-    return {
+    result_data = {
         "growth_pct": round(growth_pct, 1),
         "current_count": current_count,
         "previous_count": previous_count,
         "timeframe": timeframe
     }
+    
+    await redis_service.set_json(cache_key, result_data, expire=300)
+    return result_data
 
 async def get_network_time_series(session: AsyncSession, partner_id: int, timeframe: str = '7D') -> List[dict]:
     """
     Returns data points for a growth chart, grouped by the appropriate interval.
     """
+    cache_key = f"growth_chart:{partner_id}:{timeframe}"
+    cached = await redis_service.get_json(cache_key)
+    if cached: return cached
+
     partner = await session.get(Partner, partner_id)
     if not partner: return []
 
@@ -397,6 +408,7 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         })
         curr += next_step
 
+    await redis_service.set_json(cache_key, data, expire=300)
     return data
     """
     Utility to hydrate the 'path' column for all existing partners.
