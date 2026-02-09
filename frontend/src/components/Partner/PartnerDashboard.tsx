@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { QrCode, Copy, Gift, DollarSign, ExternalLink, Users, ChevronRight, Sparkles } from 'lucide-react';
+import { QrCode, Copy, Gift, DollarSign, ExternalLink, Users, ChevronRight } from 'lucide-react';
 import { useHaptic } from '../../hooks/useHaptic';
 import { useUser } from '../../context/UserContext';
 import { Button } from '../ui/Button';
@@ -9,7 +9,7 @@ import { NetworkExplorer } from './NetworkExplorer';
 import { ReferralGrowthChart } from './ReferralGrowthChart';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
-import { getRank, getLevel, RANKS } from '../../utils/ranking';
+
 import { PartnerBriefingModal } from './PartnerBriefingModal';
 import { TopPartnersList } from '../Community/TopPartnersList';
 
@@ -75,7 +75,7 @@ export const PartnerDashboard = () => {
                     <PersonalizationCard variant="compact" />
                 </div>
 
-                <MilestoneSection />
+
 
                 {/* Quick Stats Row */}
                 <div className="grid grid-cols-2 gap-2">
@@ -275,45 +275,6 @@ export const PartnerDashboard = () => {
     );
 };
 
-const MilestoneSection = () => {
-    const { user } = useUser();
-    const nextMilestoneLevel = [12, 24, 44, 60, 100].find(l => (user?.level || 1) < l) || 100;
-    const progress = Math.min(100, ((user?.level || 1) / nextMilestoneLevel) * 100);
-    const nextRankName = RANKS.find(r => r.minLevel === nextMilestoneLevel)?.name || 'Legend';
-
-    return (
-        <div className="p-4 rounded-[2rem] bg-linear-to-br from-slate-900 to-slate-800 dark:from-white/5 dark:to-white/[0.02] border border-white/10 shadow-premium relative overflow-hidden group active:scale-[0.99] transition-transform">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
-            <div className="relative z-10 flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <div className="p-1.5 rounded-lg bg-blue-500/20 text-blue-400">
-                            <Sparkles className="w-4 h-4" />
-                        </div>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-white/70">Next Milestone</span>
-                    </div>
-                    <span className="text-[10px] font-black text-blue-400">{Math.round(progress)}%</span>
-                </div>
-
-                <div className="space-y-1">
-                    <h3 className="text-sm font-black text-white flex items-center gap-2">
-                        Unlock {nextRankName}
-                        <ChevronRight className="w-3 h-3 opacity-50" />
-                    </h3>
-                    <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden p-0.5">
-                        <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${progress}%` }}
-                            className="h-full bg-linear-to-r from-blue-500 to-indigo-500 rounded-full relative"
-                        >
-                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent animate-shimmer" />
-                        </motion.div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
 
 const RecentPartnersSection = () => {
     const [recentPartners, setRecentPartners] = React.useState<any[]>([]);
