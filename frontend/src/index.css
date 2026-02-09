@@ -15,7 +15,7 @@
 
   --header-height: 64px;
   --bottom-nav-height: 80px;
-  --spacing-telegram-header: 24px;
+  --spacing-telegram-header: 48px;
   --header-total-height: calc(var(--header-height) + var(--spacing-safe-top) + var(--spacing-telegram-header));
 
   /* Typography Scale */
