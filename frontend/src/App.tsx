@@ -30,12 +30,21 @@ function App() {
                 if (miniApp.ready.isAvailable()) miniApp.ready();
                 if (backButton.mount.isAvailable() && !backButton.isMounted()) backButton.mount();
 
-                // 2. Expansion Logic (Single pass)
+                // 2. Expansion & Fullscreen (Immersive Mode)
                 if (viewport.mount.isAvailable()) {
                     try {
                         if (!viewport.isMounted()) await viewport.mount();
-                        if (viewport.expand.isAvailable() && !viewport.isExpanded()) {
+
+                        // Aggressive expansion
+                        if (viewport.expand.isAvailable()) {
                             viewport.expand();
+                            console.log('[DEBUG] initTMA: viewport expanded');
+                        }
+
+                        // Support for new Fullscreen API if available
+                        if ((viewport as any).requestFullscreen && (viewport as any).requestFullscreen.isAvailable?.()) {
+                            (viewport as any).requestFullscreen();
+                            console.log('[DEBUG] initTMA: Fullscreen requested via SDK');
                         }
                     } catch (e) {
                         console.warn('Viewport error:', e);
@@ -54,10 +63,12 @@ function App() {
                     }
                 }
 
-                // 4. Fallback for older environments
+                // 4. Fallback for older environments / direct JS
                 if (window.Telegram?.WebApp) {
                     window.Telegram.WebApp.ready();
-                    if (!viewport.isMounted()) {
+                    if ((window.Telegram.WebApp as any).requestFullscreen) {
+                        (window.Telegram.WebApp as any).requestFullscreen();
+                    } else {
                         window.Telegram.WebApp.expand();
                     }
                 }
