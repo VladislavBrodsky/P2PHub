@@ -375,6 +375,17 @@ async def claim_task_reward(
         )
         session.add(new_xp_tx)
 
+        # 1.2 Unified Transaction: Log Task XP as an Earning
+        from app.models.partner import Earning
+        task_earning = Earning(
+            partner_id=partner.id,
+            amount=xp_reward,
+            description=f"Task Reward: {task_id}",
+            type="TASK_XP",
+            currency="XP"
+        )
+        session.add(task_earning)
+
         # 2. Update partner stats
         partner.xp += xp_reward
         partner.level = get_level(partner.xp)

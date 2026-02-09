@@ -127,6 +127,10 @@ class PaymentService:
         
         session.add(partner)
         await session.commit()
+
+        # 3. Distribute Commissions to Ancestors
+        from app.services.partner_service import distribute_pro_commissions
+        await distribute_pro_commissions(session, partner.id, amount)
         
         logger.info(f"Partner {partner.telegram_id} upgraded to PRO via {currency}")
 

@@ -30,8 +30,8 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                 <div className="flex flex-col items-center gap-2 shrink-0">
                     <div className="relative">
                         <motion.div
-                            whileHover={{ scale: 1.05, rotate: 2 }}
-                            className={`${variant === 'compact' ? 'h-14 w-14 rounded-xl' : 'h-16 w-16 rounded-2xl'} overflow-hidden border-2 border-(--color-border-glass) bg-slate-900 shadow-premium transition-all duration-300 relative`}
+                            whileHover={variant === 'compact' ? {} : { scale: 1.05, rotate: 2 }}
+                            className={`${variant === 'compact' ? 'h-14 w-14 rounded-xl' : 'h-16 w-16 rounded-2xl'} overflow-hidden border-2 border-(--color-border-glass) bg-slate-900 shadow-premium transition-all duration-300 relative will-change-transform`}
                         >
                             {isUserLoading ? (
                                 <div className="h-full w-full bg-slate-900 animate-pulse" />
@@ -40,6 +40,10 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     src={user?.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username || 'partner'}`}
                                     alt="Avatar"
                                     className="h-full w-full object-cover"
+                                    loading="lazy"
+                                    decoding="async"
+                                    width={variant === 'compact' ? 56 : 64}
+                                    height={variant === 'compact' ? 56 : 64}
                                 />
                             )}
 

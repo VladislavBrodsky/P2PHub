@@ -138,8 +138,6 @@ async def process_referral_logic(partner_id: int):
             xp_gain = XP_MAP.get(level, 0)
             referrer.xp += xp_gain
             
-            # 1.1 Log XP Transaction
-            from app.models.partner import XPTransaction
             xp_tx = XPTransaction(
                 partner_id=referrer.id,
                 amount=xp_gain,
@@ -148,6 +146,18 @@ async def process_referral_logic(partner_id: int):
                 reference_id=str(partner.id)
             )
             session.add(xp_tx)
+
+            # 1.2 Unified Transaction: Log XP as an Earning
+            from app.models.partner import Earning
+            xp_earning = Earning(
+                partner_id=referrer.id,
+                amount=xp_gain,
+                description=f"Referral XP Reward (Level {level})",
+                type="REFERRAL_XP",
+                level=level,
+                currency="XP"
+            )
+            session.add(xp_earning)
             
             # 2. Handle Level Up Logic
             new_level = get_level(referrer.xp)
@@ -184,6 +194,71 @@ async def process_referral_logic(partner_id: int):
         await session.commit()
     
     await engine.dispose()
+
+async def distribute_pro_commissions(session: AsyncSession, partner_id: int, total_amount: float):
+    """
+    Distributes commissions for PRO subscription purchase across 9 levels.
+    L1: 30%, L2: 5%, L3: 3%, L4-9: 1%
+    """
+    from app.models.partner import Partner, Earning
+    
+    partner = await session.get(Partner, partner_id)
+    if not partner or not partner.referrer_id:
+        return
+
+    # COMMISSION MAP
+    COMMISSION_PCT = {1: 0.30, 2: 0.05, 3: 0.03, 4: 0.01, 5: 0.01, 6: 0.01, 7: 0.01, 8: 0.01, 9: 0.01}
+    
+    # Get Lineage
+    path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+    lineage_ids = (path_ids + [partner.referrer_id])[-9:]
+    
+    # Fetch ancestors
+    statement = select(Partner).where(Partner.id.in_(lineage_ids))
+    result = await session.exec(statement)
+    ancestor_map = {p.id: p for p in result.all()}
+    
+    current_referrer_id = partner.referrer_id
+    for level in range(1, 10):
+        if not current_referrer_id:
+            break
+            
+        referrer = ancestor_map.get(current_referrer_id)
+        if not referrer:
+            break
+            
+        pct = COMMISSION_PCT.get(level, 0)
+        commission = total_amount * pct
+        
+        if commission > 0:
+            referrer.balance += commission
+            
+            # Log Commission Earning
+            earning = Earning(
+                partner_id=referrer.id,
+                amount=commission,
+                description=f"PRO Commission (Level {level})",
+                type="PRO_COMMISSION",
+                level=level,
+                currency="USDT"
+            )
+            session.add(earning)
+            session.add(referrer)
+            
+            # Invalidate cache
+            await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
+            await redis_service.client.delete(f"partner:earnings:{referrer.telegram_id}")
+            
+            # Notify
+            try:
+                lang = referrer.language_code or "en"
+                msg = get_msg(lang, "commission_received", amount=round(commission, 2), level=level)
+                await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
+            except Exception: pass
+
+        current_referrer_id = referrer.referrer_id
+    
+    await session.commit()
 
 async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dict[int, int]:
     """

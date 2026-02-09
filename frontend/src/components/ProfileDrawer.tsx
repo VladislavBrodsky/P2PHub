@@ -142,28 +142,26 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                     {/* Backdrop */}
                     <motion.div
                         key="drawer-backdrop"
-                        initial={{ opacity: 0, pointerEvents: 'none' }}
-                        animate={{ opacity: 1, pointerEvents: 'auto' }}
-                        exit={{ opacity: 0, pointerEvents: 'none' }}
-                        transition={{ duration: 0.2 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
                         onClick={onClose}
-                        className="fixed inset-0 z-9998 bg-black/40 backdrop-blur-[2px]"
-                        style={{ willChange: 'opacity' }}
+                        className="fixed inset-0 z-9998 bg-black/40 backdrop-blur-[1px]"
                     />
 
                     {/* Drawer Content */}
-                    <div className="fixed inset-0 z-10000 pointer-events-none flex justify-center"> {/* Increased z-index */}
+                    <div className="fixed inset-0 z-10000 pointer-events-none flex justify-center">
                         <motion.div
                             key="drawer-content"
                             initial={{ x: '-100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '-100%' }}
-                            transition={{ type: 'tween', ease: 'circOut', duration: 0.3 }}
-                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-(--color-bg-deep) border-r border-(--color-border-glass) pt-[env(safe-area-inset-top)] shadow-2xl ml-0 mr-auto"
+                            transition={{ type: 'tween', ease: 'easeOut', duration: 0.25 }}
+                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-(--color-bg-deep) border-r border-(--color-border-glass) pt-[env(safe-area-inset-top)] shadow-2xl ml-0 mr-auto will-change-transform"
                             style={{
                                 marginLeft: 'max(0px, calc(50% - 32rem / 2))',
-                                left: 0,
-                                willChange: 'transform'
+                                left: 0
                             }}
                         >
                             {/* ... existing content internal */}

@@ -46,6 +46,9 @@ class GrowthMetrics(BaseModel):
 class EarningSchema(BaseModel):
     amount: float
     description: str
+    type: str
+    level: Optional[int] = None
+    currency: str
     created_at: datetime
     
     class Config:

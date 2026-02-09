@@ -349,24 +349,69 @@ const EarningsList = () => {
         );
     }
 
+    const getTypeStyles = (type: string) => {
+        switch (type) {
+            case 'PRO_COMMISSION':
+                return {
+                    icon: <DollarSign className="w-5 h-5" />,
+                    bg: 'bg-emerald-500/10',
+                    border: 'border-emerald-500/20',
+                    text: 'text-emerald-600 dark:text-emerald-400'
+                };
+            case 'TASK_XP':
+                return {
+                    icon: <Gift className="w-5 h-5" />,
+                    bg: 'bg-blue-500/10',
+                    border: 'border-blue-500/20',
+                    text: 'text-blue-600 dark:text-blue-400'
+                };
+            case 'REFERRAL_XP':
+                return {
+                    icon: <Users className="w-5 h-5" />,
+                    bg: 'bg-amber-500/10',
+                    border: 'border-amber-500/20',
+                    text: 'text-amber-600 dark:text-amber-400'
+                };
+            default:
+                return {
+                    icon: <DollarSign className="w-5 h-5" />,
+                    bg: 'bg-slate-500/10',
+                    border: 'border-slate-500/20',
+                    text: 'text-slate-600 dark:text-slate-400'
+                };
+        }
+    };
+
     return (
         <div className="space-y-3">
-            {earnings.map((earning) => (
-                <div key={earning.id} className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                    <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                            <DollarSign className="w-5 h-5" />
+            {earnings.map((earning, idx) => {
+                const styles = getTypeStyles(earning.type);
+                return (
+                    <div key={earning.id || idx} className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                        <div className="flex items-center gap-4">
+                            <div className={`w-10 h-10 rounded-xl ${styles.bg} ${styles.border} flex items-center justify-center ${styles.text}`}>
+                                {styles.icon}
+                            </div>
+                            <div className='flex flex-col'>
+                                <div className="flex items-center gap-2">
+                                    <span className="font-bold text-slate-900 dark:text-white text-sm">{earning.description}</span>
+                                    {earning.level && (
+                                        <span className="text-[9px] font-black bg-slate-100 dark:bg-white/10 px-1.5 py-0.5 rounded uppercase tracking-tighter">
+                                            Level {earning.level}
+                                        </span>
+                                    )}
+                                </div>
+                                <span className="text-[10px] text-slate-500 mt-0.5">
+                                    {new Date(earning.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                            </div>
                         </div>
-                        <div className='flex flex-col'>
-                            <span className="font-bold text-slate-900 dark:text-white text-sm">{earning.description}</span>
-                            <span className="text-[10px] text-slate-500">
-                                {new Date(earning.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                            </span>
-                        </div>
+                        <span className={`font-black ${styles.text} text-sm tracking-tight`}>
+                            +{earning.currency === 'XP' ? earning.amount : earning.amount.toFixed(earning.amount < 1 ? 3 : 2)} {earning.currency}
+                        </span>
                     </div>
-                    <span className="font-black text-emerald-600 dark:text-emerald-400 text-sm tracking-tight">+{earning.amount.toFixed(3)} USDT</span>
-                </div>
-            ))}
+                );
+            })}
         </div>
     );
 };

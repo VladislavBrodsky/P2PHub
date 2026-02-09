@@ -80,6 +80,9 @@ class Earning(SQLModel, table=True):
     partner_id: int = Field(foreign_key="partner.id", index=True) # Optimized for user history
     amount: float
     description: str
+    type: str = Field(default="COMMISSION", index=True) # COMMISSION, TASK_XP, REFERRAL_XP
+    level: Optional[int] = None # 1-9
+    currency: str = Field(default="USDT") # USDT, XP
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
 
 from sqlalchemy.ext.asyncio import create_async_engine
