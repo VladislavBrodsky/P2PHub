@@ -193,6 +193,8 @@ async def process_referral_logic(partner_id: int):
             # 5. Send Notification
             try:
                 lang = referrer.language_code or "en"
+                
+                # Format New Partner Name
                 new_partner_name = f"{partner.first_name}"
                 if partner.username:
                     new_partner_name += f" (@{partner.username})"
@@ -200,23 +202,54 @@ async def process_referral_logic(partner_id: int):
                 if level == 1:
                     msg = get_msg(lang, "referral_l1_congrats", name=new_partner_name)
                 else:
-                    # For L2+, show who invited them
-                    # The immediate referrer of the new partner is partner.referrer_id
-                    # We can fetch this from the ancestor map
-                    direct_inviter = ancestor_map.get(partner.referrer_id)
-                    inviter_name = "Unknown"
-                    if direct_inviter:
-                         inviter_name = f"{direct_inviter.first_name}"
-                         if direct_inviter.username:
-                             inviter_name += f" (@{direct_inviter.username})"
+                    # Construct Referral Chain for L2+
+                    # We want to show the path from (but excluding) the ancestor down to the new partner
+                    # Path: [Ancestor, Intermediary1, Intermediary2, ..., NewPartner]
+                    
+                    chain_names = []
+                    
+                    # 1. Get IDs between ancestor and new partner from the path
+                    # partner.path is like "root.child.grandchild" (contains IDs of ancestors)
+                    # We need to find where 'referrer.id' is and take everything after it
+                    
+                    path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+                    
+                    try:
+                        # Find index of current ancestor (referrer)
+                        start_idx = path_ids.index(referrer.id)
+                        # Get intermediaries (ids after referrer)
+                        intermediary_ids = path_ids[start_idx+1:]
+                        
+                        # Add intermediaries to chain
+                        for mid_id in intermediary_ids:
+                            mid_user = ancestor_map.get(mid_id)
+                            if mid_user:
+                                name = mid_user.first_name or "Unknown"
+                                if mid_user.username:
+                                    name += f" (@{mid_user.username})"
+                                chain_names.append(name)
+                                
+                    except ValueError:
+                        # Should not happen if logic is correct
+                        pass
+
+                    # Add the new partner at the end
+                    chain_names.append(new_partner_name)
+                    
+                    # Format as vertical list with arrows
+                    # ➜ User A
+                    # ➜ User B
+                    referral_chain = "\n".join([f"➜ {name}" for name in chain_names])
                     
                     if level == 2:
-                        msg = get_msg(lang, "referral_l2_congrats", name=new_partner_name, referrer_name=inviter_name)
+                        msg = get_msg(lang, "referral_l2_congrats", referral_chain=referral_chain)
                     else:
-                        msg = get_msg(lang, "referral_deep_activity", level=level, name=new_partner_name, referrer_name=inviter_name)
+                        msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=referral_chain)
                 
                 await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
-            except Exception: pass
+            except Exception as e: 
+                # logger.error(f"Notification error: {e}") 
+                pass
 
             session.add(referrer)
             current_referrer_id = referrer.referrer_id  # Move up the chain

@@ -151,6 +151,28 @@ async def create_real_user():
         await session.refresh(root_user)
         print(f"💰 Root User XP after L2: {root_user.xp} (+10 XP Expected)")
         
+        # 4. Level 3: User D joins under User C
+        referrer_code_c = user_c.referral_code
+        user_d_id = f"TEST_L3_{secrets.token_hex(4)}"
+        user_d_username = f"User_D_{user_d_id}"
+        print(f"\n🆕 Registering Level 3 User: @{user_d_username} under {referrer_code_c}...")
+        
+        user_d, is_new_d = await ps.create_partner(
+            session,
+            telegram_id=user_d_id,
+            username=user_d_username,
+            first_name="User",
+            last_name="D",
+            referrer_code=referrer_code_c
+        )
+        
+        await ps.process_referral_logic(user_d.id)
+        
+        # Refresh Root to check L3 XP and Chain Notification
+        session.expire(root_user)
+        await session.refresh(root_user)
+        print(f"💰 Root User XP after L3: {root_user.xp} (+1 XP Expected)")
+
         print("\n✅ Simulation Complete!")
 
     await engine.dispose()

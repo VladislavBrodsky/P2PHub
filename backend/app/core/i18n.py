@@ -17,17 +17,19 @@ MESSAGES = {
         ),
         "referral_l2_congrats": (
             "👥 *Team Expansion!* (L2)\n\n"
-            "🔥 Your partner *{referrer_name}* just invited a new member!\n\n"
-            "👤 *New:* {name}\n"
+            "Someone just joined your *2nd level*!\n\n"
+            "📊 *Referral Line:*\n"
+            "{referral_chain}\n\n"
             "💰 *Reward:* `+10 XP` credited.\n"
-            "📊 Your network is starting to scale! 🚀"
+            "🚀 Your network is growing automatically!"
         ),
         "referral_deep_activity": (
             "🌐 *Network Pulse* (L{level})\n\n"
-            "New activity down the line! ⚡\n"
-            "🔸 *{referrer_name}* invited *{name}*\n\n"
+            "New partner joined at *Level {level}*!\n\n"
+            "📊 *Referral Line:*\n"
+            "{referral_chain}\n\n"
             "💰 *Reward:* `+1 XP` credited.\n"
-            "🏰 Brick by brick, your empire grows! 🌍"
+            "🏰 Your empire is expanding deep! 🌍"
         ),
         "level_up": (
             "🏆 *Level Up!* 🏆\n\n"
@@ -59,17 +61,19 @@ MESSAGES = {
         ),
         "referral_l2_congrats": (
             "👥 *Расширение команды!* (L2)\n\n"
-            "🔥 Ваш партнер *{referrer_name}* только что пригласил нового участника!\n\n"
-            "👤 *Новый:* {name}\n"
+            "Кто-то присоединился на ваш *2-й уровень*!\n\n"
+            "📊 *Цепочка приглашений:*\n"
+            "{referral_chain}\n\n"
             "💰 *Награда:* `+10 XP` зачислено.\n"
-            "📊 Ваша сеть начинает масштабироваться! 🚀"
+            "🚀 Ваша сеть растет автоматически!"
         ),
         "referral_deep_activity": (
             "🌐 *Пульс Сети* (L{level})\n\n"
-            "Движение в глубине вашей сети! ⚡\n"
-            "🔸 *{referrer_name}* пригласил *{name}*\n\n"
+            "Новый партнер на *Уровне {level}*!\n\n"
+            "📊 *Цепочка приглашений:*\n"
+            "{referral_chain}\n\n"
             "💰 *Награда:* `+1 XP` зачислено.\n"
-            "🏰 Кирпичик за кирпичиком, ваша империя растет! 🌍"
+            "🏰 Ваша империя растет вглубь! 🌍"
         ),
         "share_text": "🚀 Присоединяйся ко мне в Pintopay и зарабатывай $1 в минуту! Стань частью революции децентрализованных платежей. 💎"
     }
