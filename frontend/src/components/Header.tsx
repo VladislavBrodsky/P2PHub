@@ -75,7 +75,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         <div className="flex items-center gap-1.5">
                             <span className="text-[9px] font-black uppercase tracking-wider text-slate-500 dark:text-blue-400 group-hover:text-blue-500 transition-colors">Lvl</span>
                             <span className="text-sm font-black text-slate-900 dark:text-white dark:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]">
-                                {user?.level || 5}
+                                {user?.level ?? 1}
                             </span>
                         </div>
 
@@ -84,7 +84,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
                         <div className="flex items-center gap-1.5">
                             <span className="text-[11px] font-bold text-slate-700 dark:text-white">
-                                {user?.xp || 150}
+                                {user?.xp ?? 0}
                             </span>
                             <span className="text-[9px] font-black uppercase tracking-wider text-emerald-500 dark:text-emerald-400">XP</span>
                         </div>
