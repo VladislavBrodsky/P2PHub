@@ -1,4 +1,4 @@
-import { LucideIcon, Users, MessageCircle, CreditCard, Send, CheckCircle2, Lock, Gift, Zap, Star, Trophy, Crown } from 'lucide-react';
+import { LucideIcon, Users, MessageCircle, CreditCard, Send, CheckCircle2, Lock, Gift, Zap, Star, Trophy, Crown, UserPlus, Shield } from 'lucide-react';
 
 export interface Task {
     id: string;
@@ -103,14 +103,52 @@ export const EARN_TASKS: Task[] = [
     }
 ];
 
-export const MILESTONES = [
-    { level: 12, reward: 'Pioneer Badge', icon: CheckCircle2, color: 'text-blue-500' },
-    { level: 24, reward: 'Ambassador Status', icon: Star, color: 'text-blue-400' },
-    { level: 35, reward: '500 XP Boost', icon: Gift, color: 'text-emerald-500' },
-    { level: 44, reward: '10% Card Fee Discount', icon: Zap, color: 'text-yellow-400' },
-    { level: 56, reward: 'Black Physical Card', icon: CreditCard, color: 'text-neutral-950 dark:text-white' },
-    { level: 68, reward: 'VIP Support', icon: Star, color: 'text-rose-500' },
-    { level: 80, reward: 'Elite Dashboard', icon: Trophy, color: 'text-indigo-400' },
-    { level: 92, reward: 'Founder Access', icon: Lock, color: 'text-emerald-400' },
-    { level: 100, reward: 'Physical Platinum Card', icon: Crown, color: 'text-slate-200' }
+export const ACHIEVEMENTS = [
+    // Onboarding Tier
+    { id: 'onboard_1', level: 1, reward: 'Day 1 Vanguard', icon: CheckCircle2, color: 'text-emerald-400' },
+    { id: 'streak_3', level: 3, reward: '3 Day Warrior', icon: Zap, color: 'text-yellow-400' },
+    { id: 'streak_7', level: 7, reward: '7 Day Elite', icon: Zap, color: 'text-yellow-500' },
+
+    // Viral Tier
+    { id: 'viral_blitz', level: 2, reward: 'Blitz 10 (24h)', icon: Users, color: 'text-rose-500' },
+    { id: 'viral_tsunami', level: 15, reward: 'Viral Tsunami', icon: Shield, color: 'text-purple-500' },
+
+    // Referral Tier
+    { id: 'ref_node', level: 5, reward: 'Active Node', icon: UserPlus, color: 'text-blue-400' },
+    { id: 'ref_star', level: 12, reward: 'Rising Star', icon: Star, color: 'text-blue-300' },
+    { id: 'ref_ambassador', level: 24, reward: 'Global Ambassador', icon: Users, color: 'text-indigo-400' },
+    { id: 'ref_monarch', level: 50, reward: 'Network Monarch', icon: Crown, color: 'text-amber-500' },
 ];
+
+export const MILESTONES = [
+    { level: 3, reward: 'Founder Access', icon: Lock, color: 'text-slate-400' },
+    { level: 10, reward: 'Silver Badge', icon: Shield, color: 'text-slate-300' },
+    { level: 25, reward: 'Card Fee -10%', icon: CreditCard, color: 'text-blue-400' },
+    { level: 50, reward: 'Black Card Ready', icon: CreditCard, color: 'text-neutral-900 dark:text-white' },
+    { level: 75, reward: 'Empire Status', icon: Trophy, color: 'text-amber-500' },
+    { level: 100, reward: 'Platinum Physical', icon: Crown, color: 'text-slate-100' },
+];
+
+// Helper to generate a massive list of progression-based placeholders to reach 100+
+export const getAllAchievements = () => {
+    const list = [...ACHIEVEMENTS];
+    // Add generated achievements for levels 1-100
+    for (let i = 1; i <= 100; i++) {
+        if (!list.find(a => a.level === i)) {
+            list.push({
+                id: `lvl_ach_${i}`,
+                level: i,
+                reward: `Level ${i} Elite`,
+                icon: Trophy,
+                color: 'text-slate-600'
+            });
+        }
+    }
+    return list.sort((a, b) => a.level - b.level);
+};
+
+export const getAllMilestones = () => {
+    const list = [...MILESTONES];
+    // Ensure we have something for every major step
+    return list.sort((a, b) => a.level - b.level);
+};

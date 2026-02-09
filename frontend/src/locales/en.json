@@ -10,7 +10,9 @@
         "dark": "Dark",
         "back": "Back",
         "copy": "Copy",
-        "copied": "Copied"
+        "copied": "Copied",
+        "show_more": "Show More",
+        "show_less": "Show Less"
     },
     "menu": {
         "settings": "Settings",
@@ -284,6 +286,10 @@
         },
         "tree": {
             "title": "Your Partner Matrix"
+        },
+        "rewards": {
+            "achievements": "Exclusive Achievements",
+            "milestones": "Global Milestones"
         }
     },
     "tasks": {
