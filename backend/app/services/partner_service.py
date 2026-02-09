@@ -167,7 +167,7 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
     partner = await session.get(Partner, partner_id)
     if not partner: return {i: 0 for i in range(1, 10)}
     
-    base_path = f"{partner.path}.{partner.id}".lstrip(".")
+    base_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
     
     # Query: Count partners where path starts with base_path
     # We calculate level by counting dots in the path relative to base_path
@@ -206,7 +206,7 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
     partner = await session.get(Partner, partner_id)
     if not partner: return []
     
-    base_path = f"{partner.path}.{partner.id}".lstrip(".")
+    base_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
     
     # Calculate exact path depth for the target level
     # Level 1 means path == base_path

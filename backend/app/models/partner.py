@@ -1,4 +1,4 @@
-from sqlmodel import SQLModel, Field, create_engine, Session, select
+from sqlmodel import SQLModel, Field, create_engine, Session, select, Relationship
 from typing import Optional
 from app.core.config import settings
 
@@ -19,6 +19,16 @@ class Partner(SQLModel, table=True):
     referrer_id: Optional[int] = Field(default=None, foreign_key="partner.id", index=True) # Optimized for joins
     path: Optional[str] = Field(default=None, index=True) # Materialized path (e.g. "1.5.23")
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True) # Optimized for sorting
+    
+    # Relationships
+    referrals: list["Partner"] = Relationship(
+        back_populates="referrer",
+        sa_relationship_kwargs={"foreign_keys": "Partner.referrer_id"}
+    )
+    referrer: Optional["Partner"] = Relationship(
+        back_populates="referrals",
+        sa_relationship_kwargs={"remote_side": "Partner.id"}
+    )
 
 class Earning(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

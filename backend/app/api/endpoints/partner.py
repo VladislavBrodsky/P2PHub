@@ -3,6 +3,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.security import get_current_user
 from app.models.partner import Partner, get_session
 from sqlmodel import select
+from sqlalchemy.orm import selectinload
 from app.services.redis_service import redis_service
 import json
 import secrets
@@ -40,7 +41,7 @@ async def get_my_profile(
         print(f"[DEBUG] Redis Error (get): {e}")
 
     # 2. Query DB
-    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    statement = select(Partner).where(Partner.telegram_id == tg_id).options(selectinload(Partner.referrals))
     result = await session.exec(statement)
     partner = result.first()
     
@@ -156,7 +157,7 @@ async def get_my_referral_tree(
         return {str(i): 0 for i in range(1, 10)}
 
     # Get partner
-    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    statement = select(Partner).where(Partner.telegram_id == tg_id).options(selectinload(Partner.referrals))
     result = await session.exec(statement)
     partner = result.first()
     
