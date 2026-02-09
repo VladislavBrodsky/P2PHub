@@ -7,8 +7,7 @@ import { Button } from '../ui/Button';
 import { PersonalizationCard } from '../PersonalizationCard';
 import { NetworkExplorer } from './NetworkExplorer';
 import { ReferralGrowthChart } from './ReferralGrowthChart';
-import axios from 'axios';
-import { getSafeLaunchParams } from '../../utils/tma';
+import { apiClient } from '../../api/client';
 
 export const PartnerDashboard = () => {
     const { notification, selection } = useHaptic();
@@ -30,11 +29,7 @@ export const PartnerDashboard = () => {
     React.useEffect(() => {
         const fetchStats = async () => {
             try {
-                const params = getSafeLaunchParams();
-                const initDataRaw = params.initDataRaw || '';
-                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/partner/tree`, {
-                    headers: { 'X-Telegram-Init-Data': initDataRaw }
-                });
+                const res = await apiClient.get('/api/partner/tree');
                 if (res.data && typeof res.data === 'object') {
                     setTreeStats(res.data);
                 }
@@ -44,6 +39,12 @@ export const PartnerDashboard = () => {
         };
         fetchStats();
     }, []);
+
+    // Valid "Network Size" calculation summing all levels from treeStats
+    const totalNetworkSize = React.useMemo(() => {
+        const sum = Object.values(treeStats).reduce((acc, val) => acc + (Number(val) || 0), 0);
+        return sum > 0 ? sum : (user?.referrals?.length || 0); // Fallback to direct referrals if tree is empty/loading but user has data
+    }, [treeStats, user?.referrals?.length]);
 
     const copyLink = async () => {
         try {
@@ -86,14 +87,14 @@ export const PartnerDashboard = () => {
                             <ExternalLink className="w-3 h-3 opacity-50" />
                         </div>
                         <div className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                            {user?.referrals?.length || 0} <span className="text-[10px] bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-sm">+12%</span>
+                            {totalNetworkSize} <span className="text-[10px] bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-sm">+12%</span>
                         </div>
                     </div>
                 </div>
 
                 {/* 1. Network Visualization (Inline Preview) */}
                 <div className="space-y-4">
-                    <ReferralGrowthChart />
+                    <ReferralGrowthChart onReportClick={() => setIsExplorerOpen(true)} />
                     {/* Explorer is now an overlay, but we might want a teaser here or just hide it */}
                     <div
                         className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"

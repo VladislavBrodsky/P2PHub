@@ -32,4 +32,12 @@ class RedisService:
     async def zrevrank(self, name: str, value: str):
         return await self.client.zrevrank(name, value)
 
+    # Queue Operations
+    async def lpush(self, name: str, value: str):
+        await self.client.lpush(name, value)
+
+    async def brpop(self, name: str, timeout: int = 0):
+        # Returns (key, value) tuple or None
+        return await self.client.brpop(name, timeout=timeout)
+
 redis_service = RedisService()

@@ -3,9 +3,8 @@ import { LeagueCard, LeagueTier } from '../components/League/LeagueCard';
 import { Section } from '../components/Section';
 import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
-import { getSafeLaunchParams } from '../utils/tma';
-import { getApiUrl } from '../utils/api';
+
+import { apiClient } from '../api/client';
 
 interface LeaderboardUser {
     id: number;
@@ -32,15 +31,9 @@ export default function LeaderboardPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const lp = getSafeLaunchParams();
-                const initDataRaw = lp.initDataRaw || '';
-
-                const headers = { 'X-Telegram-Init-Data': initDataRaw };
-                const apiUrl = getApiUrl();
-
                 const [leaderboardRes, statsRes] = await Promise.all([
-                    axios.get(`${apiUrl}/api/leaderboard/global?limit=50`, { headers }),
-                    axios.get(`${apiUrl}/api/leaderboard/me`, { headers })
+                    apiClient.get('/api/leaderboard/global?limit=50'),
+                    apiClient.get('/api/leaderboard/me')
                 ]);
 
                 setLeaderboard(leaderboardRes.data);

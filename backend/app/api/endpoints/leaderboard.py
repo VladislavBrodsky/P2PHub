@@ -18,6 +18,14 @@ async def get_global_leaderboard(
     Fetches the top partners from Redis for high-speed delivery.
     Hydrates with partner details from PostgreSQL.
     """
+    from app.services.redis_service import redis_service
+    
+    # Check cache first
+    cache_key = f"leaderboard:global_hydrated:{limit}"
+    cached = await redis_service.get_json(cache_key)
+    if cached:
+        return cached
+
     # 1. Get IDs from Redis
     top_data = await leaderboard_service.get_top_partners(limit)
     if not top_data:
@@ -25,22 +33,22 @@ async def get_global_leaderboard(
         statement = select(Partner).order_by(Partner.xp.desc()).limit(limit)
         result = await session.exec(statement)
         partners = result.all()
-        return [p.dict() for p in partners]
+        from app.schemas.leaderboard import LeaderboardPartner
+        data = [LeaderboardPartner(**p.dict()).model_dump() for p in partners]
+        await redis_service.set_json(cache_key, data, expire=60)
+        return data
 
     # 2. Extract IDs and Scores
-    # Redis format is list of (bytes, float) or (str, float)
     partner_ids = [int(p_id) for p_id, _ in top_data]
     scores = {int(p_id): score for p_id, score in top_data}
 
-    # 3. Hydrate from DB
-    statement = select(Partner).where(Partner.id.in_(partner_ids))
-    result = await session.exec(statement)
-    partners = result.all()
-
-    # 4. Sort by the Redis score to maintain order
-    partners.sort(key=lambda p: scores.get(p.id, 0), reverse=True)
-
-    return [p.dict() for p in partners]
+    # 3. Hydrate via Service
+    data = await leaderboard_service.hydrate_leaderboard(partner_ids, scores, session)
+    
+    # 4. Cache for 60 seconds
+    await redis_service.set_json(cache_key, data, expire=60)
+    
+    return data
 
 @router.get("/me")
 async def get_my_leaderboard_stats(
@@ -70,9 +78,14 @@ async def get_my_leaderboard_stats(
     # Get rank from Redis (0-indexed, so add 1)
     rank = await leaderboard_service.get_partner_rank(partner.id)
     
+    # Get total referral count
+    from sqlmodel import func
+    count_stmt = select(func.count()).where(Partner.referrer_id == partner.id)
+    referral_count = (await session.exec(count_stmt)).one()
+    
     return {
         "rank": (rank + 1) if rank is not None else -1,
         "xp": partner.xp,
         "level": partner.level,
-        "referrals": 0 # TODO: add referral count
+        "referrals": referral_count
     }

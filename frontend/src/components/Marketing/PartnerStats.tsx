@@ -2,9 +2,7 @@ import { motion } from 'framer-motion';
 import { Users, Zap, Globe2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { getApiUrl } from '../../utils/api';
-
-const API_URL = getApiUrl();
+import { apiClient } from '../../api/client';
 
 interface PartnerStatsProps {
     onNavigateToEarn?: () => void;
@@ -38,9 +36,9 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
 
     const fetchRecentPartners = async () => {
         try {
-            const response = await fetch(`${API_URL}/api/partner/recent`);
-            if (response.ok) {
-                const data = await response.json();
+            const response = await apiClient.get('/api/partner/recent');
+            if (response.status === 200) {
+                const data = response.data;
                 setRecentPartners(data);
                 // Dynamically update the count (just for visual flair, we can round it if data is small)
                 setStats(prev => ({ ...prev, lastHourCount: Math.max(data.length, prev.lastHourCount) }));

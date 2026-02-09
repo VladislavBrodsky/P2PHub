@@ -13,7 +13,7 @@ import { Confetti } from '../components/ui/Confetti';
 import { CheckCircle2, Trophy, QrCode, X, Share2, Download, Copy, ExternalLink } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { getSafeLaunchParams } from '../utils/tma';
-import axios from 'axios';
+
 
 export default function ReferralPage() {
     const { t } = useTranslation();

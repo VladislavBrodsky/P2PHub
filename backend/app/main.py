@@ -11,7 +11,12 @@ from aiogram import types
 async def lifespan(app: FastAPI):
     # Startup
     from app.services.warmup_service import warmup_redis
+    from app.services.notification_service import notification_service
+    
     asyncio.create_task(warmup_redis())
+    # Start the notification queue worker
+    worker_task = asyncio.create_task(notification_service.process_notifications_worker())
+    app.state.notification_worker = worker_task
     
     webhook_base = settings.WEBHOOK_URL
     
@@ -42,6 +47,15 @@ async def lifespan(app: FastAPI):
     
     # Shutdown
     await bot.session.close()
+    
+    # Stop background tasks
+    if hasattr(app.state, "notification_worker"):
+        app.state.notification_worker.cancel()
+        try:
+            await app.state.notification_worker
+        except asyncio.CancelledError:
+            pass
+
     if not settings.WEBHOOK_URL and hasattr(app.state, "polling_task"):
         app.state.polling_task.cancel()
         try:

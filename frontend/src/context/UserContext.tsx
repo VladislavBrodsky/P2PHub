@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import axios from 'axios';
+import { apiClient } from '../api/client';
 import { getSafeLaunchParams } from '../utils/tma';
-import { getApiUrl } from '../utils/api';
 
 interface User {
     id: number;
@@ -59,20 +58,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             // Use Safe SDK helper to get initData without crashing in browser
             const lp = getSafeLaunchParams();
             tgUser = lp.initData?.user;
-            const initDataRaw = lp.initDataRaw || '';
 
-            // Centralized API configuration
-            const apiUrl = getApiUrl();
-            console.log('[DEBUG] refreshUser: Fetching from:', apiUrl);
+            console.log('[DEBUG] refreshUser: Fetching profile...');
 
-            const res = await axios.get(`${apiUrl}/api/partner/me`, {
-                headers: {
-                    'X-Telegram-Init-Data': initDataRaw
-                },
-                timeout: 5000
-            });
+            const res = await apiClient.get('/api/partner/me');
 
             const userData = res.data;
+
+
 
             // Enrich with Telegram SDK data if backend is missing details
             if (tgUser) {

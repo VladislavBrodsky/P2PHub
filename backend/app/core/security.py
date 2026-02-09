@@ -22,6 +22,12 @@ def validate_telegram_data(init_data: str) -> dict:
         if hmac_hash != hash_str:
             raise HTTPException(status_code=401, detail="Invalid hash")
             
+        # Check for replay attacks (auth_date must be within 24 hours)
+        import time
+        auth_date = int(vals.get('auth_date', 0))
+        if time.time() - auth_date > 86400:
+            raise HTTPException(status_code=401, detail="Init data expired")
+            
         return vals
     except Exception as e:
         raise HTTPException(status_code=401, detail=str(e))

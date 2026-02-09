@@ -4,9 +4,8 @@ import { TrendingUp, Users, Calendar, Filter, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '../../lib/utils';
 import { useHaptic } from '../../hooks/useHaptic';
-import axios from 'axios';
-import { getApiUrl } from '../../utils/api';
-import { getSafeLaunchParams } from '../../utils/tma';
+
+import { apiClient } from '../../api/client';
 
 type Timeframe = '24H' | '7D' | '1M' | '3M' | '6M' | '1Y';
 
@@ -86,7 +85,11 @@ const generateMockData = (timeframe: Timeframe, endTotal: number): ChartDataPoin
     return data;
 };
 
-export const ReferralGrowthChart = () => {
+interface ReferralGrowthChartProps {
+    onReportClick?: () => void;
+}
+
+export const ReferralGrowthChart = ({ onReportClick }: ReferralGrowthChartProps) => {
     const { t } = useTranslation();
     const { selection } = useHaptic();
     const [timeframe, setTimeframe] = useState<Timeframe>('7D');
@@ -97,9 +100,7 @@ export const ReferralGrowthChart = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const lp = getSafeLaunchParams();
-                const headers = { 'X-Telegram-Init-Data': lp.initDataRaw || '' };
-                const res = await axios.get(`${getApiUrl()}/api/partner/tree`, { headers });
+                const res = await apiClient.get('/api/partner/tree');
                 const stats = res.data; // { "1": count, "2": count ... }
                 const total = Object.values(stats).reduce((acc: number, val: any) => acc + (Number(val) || 0), 0);
                 setRealTotal(total);
@@ -303,7 +304,10 @@ export const ReferralGrowthChart = () => {
                         <div className="text-xs font-black text-emerald-500">+12.5%</div>
                     </div>
                 </div>
-                <button className="text-[8px] font-bold text-blue-500 hover:text-blue-400 transition-colors uppercase tracking-wider flex items-center gap-1">
+                <button
+                    onClick={onReportClick}
+                    className="text-[8px] font-bold text-blue-500 hover:text-blue-400 transition-colors uppercase tracking-wider flex items-center gap-1"
+                >
                     Report <ChevronDown className="w-3 h-3 -rotate-90" />
                 </button>
             </div>

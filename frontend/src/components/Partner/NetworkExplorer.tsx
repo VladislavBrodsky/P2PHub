@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, Users, Shield, Calendar, Search, X, ChevronRight, UserPlus } from 'lucide-react';
-import axios from 'axios';
-import { getSafeLaunchParams } from '../../utils/tma';
+import { ChevronDown, Users, Shield, Calendar, Search, X, ChevronRight, UserPlus, AlertCircle } from 'lucide-react';
+import { apiClient } from '../../api/client';
 import { ListSkeleton } from '../Skeletons/ListSkeleton';
 import { cn } from '../../lib/utils';
 import { useHaptic } from '../../hooks/useHaptic';
+import { useUser } from '../../context/UserContext';
+import { ShareSheet } from '../ShareSheet';
 
 interface NetworkMember {
     telegram_id: string;
@@ -25,10 +26,12 @@ interface NetworkExplorerProps {
 export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
     const { t } = useTranslation();
     const { selection } = useHaptic();
+    const { user } = useUser();
     const [level, setLevel] = useState(1);
     const [members, setMembers] = useState<NetworkMember[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [isShareOpen, setIsShareOpen] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -36,13 +39,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
             setIsLoading(true);
             setError('');
             try {
-                const params = getSafeLaunchParams();
-                const initDataRaw = params.initDataRaw || '';
-
-                const res = await axios.get(
-                    `${import.meta.env.VITE_API_URL}/api/partner/network/${level}`,
-                    { headers: { 'X-Telegram-Init-Data': initDataRaw } }
-                );
+                const res = await apiClient.get(`/api/partner/network/${level}`);
 
                 if (Array.isArray(res.data)) {
                     setMembers(res.data);
@@ -98,20 +95,20 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                 </div>
 
                 {/* Compact Level Selector */}
-                <div className="relative">
-                    <div className="absolute left-0 top-0 bottom-0 w-4 bg-linear-to-r from-white dark:from-slate-900 to-transparent z-10 pointer-events-none" />
-                    <div className="absolute right-0 top-0 bottom-0 w-4 bg-linear-to-l from-white dark:from-slate-900 to-transparent z-10 pointer-events-none" />
+                <div className="relative mx-[-20px] px-[20px]"> {/* Negative margin hack to stretch full width but keep padding */}
+                    <div className="absolute left-0 top-0 bottom-0 w-8 bg-linear-to-r from-white dark:from-slate-900 to-transparent z-10 pointer-events-none" />
+                    <div className="absolute right-0 top-0 bottom-0 w-8 bg-linear-to-l from-white dark:from-slate-900 to-transparent z-10 pointer-events-none" />
 
                     <div
                         ref={scrollContainerRef}
-                        className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none px-1"
+                        className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none px-6" // Added px-6 to prevent first item clipping
                     >
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((l) => (
                             <button
                                 key={l}
                                 onClick={() => { selection(); setLevel(l); }}
                                 className={cn(
-                                    "flex items-center justify-center min-w-12 h-9 rounded-full text-xs font-black transition-all active:scale-95 border",
+                                    "flex items-center justify-center min-w-[48px] h-9 rounded-full text-xs font-black transition-all active:scale-95 border shrink-0", // Added shrink-0
                                     level === l
                                         ? "bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-500/30"
                                         : "bg-white dark:bg-white/5 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/10"
@@ -139,6 +136,25 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                             <div className="h-16 w-full bg-slate-200 dark:bg-white/5 rounded-2xl animate-pulse delay-75" />
                             <div className="h-16 w-full bg-slate-200 dark:bg-white/5 rounded-2xl animate-pulse delay-150" />
                         </motion.div>
+                    ) : error ? (
+                        <motion.div
+                            key="error"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="flex flex-col items-center justify-center h-[40vh] text-center px-6"
+                        >
+                            <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
+                                <AlertCircle className="w-8 h-8 text-red-500" />
+                            </div>
+                            <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Could not load network</h4>
+                            <p className="text-xs text-slate-500 max-w-[200px]">{error}</p>
+                            <button
+                                onClick={() => setLevel(level)} // Trigger re-fetch
+                                className="mt-4 px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl text-xs font-bold"
+                            >
+                                Try Again
+                            </button>
+                        </motion.div>
                     ) : members.length > 0 ? (
                         <motion.div
                             key="content"
@@ -165,7 +181,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                                             <img src={member.photo_url} alt={member.first_name} className="w-full h-full object-cover" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center text-slate-400 font-black text-sm">
-                                                {member.first_name.charAt(0)}
+                                                {member.first_name?.charAt(0)}
                                             </div>
                                         )}
                                     </div>
@@ -175,7 +191,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                                             <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
                                                 {member.first_name} {member.last_name}
                                             </h4>
-                                            {index < 3 && (
+                                            {member.xp > 1000 && ( // Simple mock logic for "TOP" badge
                                                 <span className="text-[9px] bg-amber-500/10 text-amber-600 dark:text-amber-400 px-1.5 rounded-md font-black">TOP</span>
                                             )}
                                         </div>
@@ -210,7 +226,12 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                             <h4 className="text-lg font-black text-slate-900 dark:text-white mb-2">Quiet on Level {level}</h4>
                             <p className="text-sm font-medium text-slate-500 dark:text-slate-400 max-w-[240px] leading-relaxed">
                                 No partners found in this tier yet. <br />
-                                <span className="text-blue-500">Share your link</span> to start growing!
+                                <button
+                                    onClick={() => setIsShareOpen(true)}
+                                    className="text-blue-500 hover:text-blue-400 font-bold hover:underline transition-all"
+                                >
+                                    Share your link
+                                </button> to start growing!
                             </p>
                         </motion.div>
                     )}
@@ -219,6 +240,13 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
 
             {/* Footer with Gradient Fade */}
             <div className="absolute bottom-0 left-0 right-0 h-12 bg-linear-to-t from-white dark:from-slate-900 to-transparent pointer-events-none z-10" />
+
+            {/* Share Sheet Modal */}
+            <ShareSheet
+                isOpen={isShareOpen}
+                onClose={() => setIsShareOpen(false)}
+                referralCode={user?.referral_code || ''}
+            />
         </div>
     );
 };

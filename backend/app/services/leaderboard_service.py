@@ -41,4 +41,31 @@ class LeaderboardService:
         except Exception:
             return None
 
+    async def hydrate_leaderboard(self, partner_ids: List[int], scores: Dict[int, float], session) -> List[Dict]:
+        """Hydrates partner IDs with details from DB and maps to privacy-safe schema."""
+        from app.schemas.leaderboard import LeaderboardPartner
+        
+        if not partner_ids:
+            return []
+            
+        statement = select(Partner).where(Partner.id.in_(partner_ids))
+        result = await session.exec(statement)
+        partners = result.all()
+        
+        # Map to schema and sort by score
+        hydrated = []
+        for p in partners:
+            item = LeaderboardPartner(
+                id=p.id,
+                username=p.username,
+                first_name=p.first_name,
+                photo_url=p.photo_url,
+                xp=scores.get(p.id, p.xp),
+                level=p.level
+            )
+            hydrated.append(item.model_dump())
+            
+        hydrated.sort(key=lambda x: x['xp'], reverse=True)
+        return hydrated
+
 leaderboard_service = LeaderboardService()

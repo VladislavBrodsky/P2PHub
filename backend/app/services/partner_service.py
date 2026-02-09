@@ -7,6 +7,7 @@ from app.models.partner import Partner
 from app.core.i18n import get_msg
 from app.services.leaderboard_service import leaderboard_service
 from app.services.redis_service import redis_service
+from app.services.notification_service import notification_service
 
 logger = logging.getLogger(__name__)
 
@@ -116,8 +117,8 @@ async def process_referral_logic(bot, session: AsyncSession, partner: Partner):
         while referrer.xp >= referrer.level * 100:
             referrer.level += 1
             try:
-                msg = f"🏆 *Level Up!* 🚀\n\nYou've reached *Level {referrer.level}*!\nKeep growing your network to unlock more rewards."
-                await bot.send_message(chat_id=int(referrer.telegram_id), text=msg, parse_mode="Markdown")
+                msg = f"🏆 *Level Up!* 🏆\n\nYou've reached *Level {referrer.level}*!\n\nKeep going to unlock the Platinum Tier."
+                await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
             except Exception: pass
             
         # 3. Sync to Redis Leaderboard
@@ -134,7 +135,7 @@ async def process_referral_logic(bot, session: AsyncSession, partner: Partner):
                 msg = get_msg(lang, "referral_l1_congrats", name=name, username=f" (@{partner.username})" if partner.username else "")
             else:
                 msg = get_msg(lang, "referral_deep_activity", level=level)
-            await bot.send_message(chat_id=int(referrer.telegram_id), text=msg, parse_mode="Markdown")
+            await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
         except Exception: pass
 
         session.add(referrer)
@@ -184,9 +185,16 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
 async def get_referral_tree_members(session: AsyncSession, partner_id: int, target_level: int) -> List[dict]:
     """
     Fetches details of partners at a specific level in the 9-level matrix using Recursive CTE.
+    Cached in Redis to avoid database load on repeated views.
     """
     if not (1 <= target_level <= 9):
         return []
+
+    # Check cache first
+    cache_key = f"ref_tree_members:{partner_id}:{target_level}"
+    cached = await redis_service.get_json(cache_key)
+    if cached:
+        return cached
 
     query = text("""
         WITH RECURSIVE referral_tree AS (
@@ -223,6 +231,9 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
                 "photo_url": row[5],
                 "joined_at": row[6].isoformat() if row[6] else None
             })
+        
+        # Cache the result
+        await redis_service.set_json(cache_key, members, expire=300)
         return members
     except Exception as e:
         logger.error(f"Error fetching tree members: {e}")

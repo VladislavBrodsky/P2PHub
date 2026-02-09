@@ -16,13 +16,13 @@ dp = Dispatcher()
 # TMA URL (Railway URL or local tunnel)
 WEB_APP_URL = settings.FRONTEND_URL
 
-from app.core.keyboards import get_main_menu_keyboard
-from app.models.partner import get_session
-from app.services.partner_service import create_partner, process_referral_notifications
 from app.core.i18n import get_msg
 
 @dp.message(CommandStart())
 async def cmd_start(message: types.Message):
+    from app.services.partner_service import create_partner, process_referral_notifications
+    from app.core.keyboards import get_main_menu_keyboard
+    from app.models.partner import get_session
     # Extract referral code from /start link if any
     referrer_code = None
     args = message.text.split()
@@ -68,11 +68,12 @@ async def cmd_start(message: types.Message):
         logging.error(f"Error in cmd_start: {e}")
         await message.answer(f"⚠️ Error: {str(e)}")
 
-from app.services.partner_service import get_partner_by_telegram_id, get_referral_tree_stats
+
 from aiogram.filters import Command
 
 @dp.message(Command("my_network", "tree", "stats"))
 async def cmd_my_network(message: types.Message):
+    from app.services.partner_service import get_partner_by_telegram_id, get_referral_tree_stats
     try:
         async for session in get_session():
             partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
