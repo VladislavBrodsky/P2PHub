@@ -9,9 +9,23 @@ MESSAGES = {
             "👇 *Start your journey below*"
         ),
         "referral_l1_congrats": (
-            "🎉 *Congratulations, your team is growing!*\n\n"
-            "➕ You’ve just invited {name}{username} (L1) to join the journey!\n"
-            "🚀 +35 XP credited to your balance! Keep up the great work!"
+            "🤝 *New Direct Partner!* (L1)\n\n"
+            "👤 {name}{username}\n"
+            "📈 *Status:* Just joined your first line!\n"
+            "💰 *Reward:* `+35 XP` credited.\n\n"
+            "🚀 *Keep going!* Every direct invite builds your foundation."
+        ),
+        "referral_l2_congrats": (
+            "👥 *Team Expansion!* (L2)\n\n"
+            "Someone just joined your *2nd level*!\n"
+            "💰 *Reward:* `+10 XP` credited.\n"
+            "📊 Your network is starting to scale! 🚀"
+        ),
+        "referral_deep_activity": (
+            "🌐 *Network Pulse* (L{level})\n\n"
+            "Movement in your deep network! A new partner joined at *Level {level}*.\n"
+            "💰 *Reward:* `+1 XP` credited.\n"
+            "🏰 Brick by brick, your empire grows! 🌍"
         ),
         "level_up": (
             "🏆 *Level Up!* 🏆\n\n"
@@ -22,11 +36,6 @@ MESSAGES = {
             "✅ *Task Completed!*\n\n"
             "You earned *+{reward} XP*.\n"
             "Your journey to the top continues! 🌟"
-        ),
-        "referral_deep_activity": (
-            "🔥 *Network on Fire!* 🔥\n\n"
-            "Someone in your downline just joined at *Level {level}*!\n"
-            "Your passive income empire is growing! 🌍"
         ),
         "share_text": "🚀 Join me on Pintopay and earn $1 per minute! Join the revolution in decentralized payments. 💎"
     },
@@ -40,24 +49,23 @@ MESSAGES = {
             "👇 *Начните свой путь ниже*"
         ),
         "referral_l1_congrats": (
-            "🎉 *Поздравляем, ваша команда растет!*\n\n"
-            "➕ Вы только что пригласили {name}{username} (L1) в это путешествие!\n"
-            "🚀 +35 XP зачислено на ваш баланс! Так держать!"
+            "🤝 *Новый прямой партнер!* (L1)\n\n"
+            "👤 {name}{username}\n"
+            "📈 *Статус:* Присоединился к вашей первой линии!\n"
+            "💰 *Награда:* `+35 XP` зачислено.\n\n"
+            "🚀 *Так держать!* Каждое приглашение укрепляет ваш фундамент."
         ),
-        "level_up": (
-            "🏆 *Новый Уровень!* 🏆\n\n"
-            "Вы достигли *Уровня {level}*!\n\n"
-            "Продолжайте, чтобы открыть Платиновый уровень и получить больше наград! 🚀"
-        ),
-        "task_completed": (
-            "✅ *Задание Выполнено!*\n\n"
-            "Вы заработали *+{reward} XP*.\n"
-            "Ваш путь к вершине продолжается! 🌟"
+        "referral_l2_congrats": (
+            "👥 *Расширение команды!* (L2)\n\n"
+            "Кто-то присоединился на ваш *2-й уровень*!\n"
+            "💰 *Награда:* `+10 XP` зачислено.\n"
+            "📊 Ваша сеть начинает масштабироваться! 🚀"
         ),
         "referral_deep_activity": (
-            "🔥 *Сеть в Огне!* 🔥\n\n"
-            "Кто-то в вашей структуре присоединился на *Уровне {level}*!\n"
-            "Ваша империя пассивного дохода растет! 🌍"
+            "🌐 *Пульс Сети* (L{level})\n\n"
+            "Движение в глубине вашей сети! Новый партнер на *Уровне {level}*.\n"
+            "💰 *Награда:* `+1 XP` зачислено.\n"
+            "🏰 Кирпичик за кирпичиком, ваша империя растет! 🌍"
         ),
         "share_text": "🚀 Присоединяйся ко мне в Pintopay и зарабатывай $1 в минуту! Стань частью революции децентрализованных платежей. 💎"
     }

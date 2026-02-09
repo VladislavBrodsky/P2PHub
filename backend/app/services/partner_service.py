@@ -3,7 +3,7 @@ import logging
 from typing import Optional, List, Dict, Tuple
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.models.partner import Partner
+from app.models.partner import Partner, XPTransaction
 from datetime import datetime, timedelta
 from app.core.i18n import get_msg
 from app.services.leaderboard_service import leaderboard_service
@@ -77,7 +77,7 @@ async def process_referral_notifications(bot, session: AsyncSession, partner: Pa
     """
     if is_new and partner.referrer_id:
         # Offload to the optimized recursive logic
-        await process_referral_logic(bot, session, partner)
+        await process_referral_logic.kiq(partner.id)
 
 
 async def get_partner_by_telegram_id(session: AsyncSession, telegram_id: str) -> Optional[Partner]:
@@ -98,7 +98,7 @@ async def process_referral_logic(partner_id: int):
     Optimized 9-level referral logic.
     Run as a background task via TaskIQ.
     """
-    from app.models.partner import Partner, get_session
+    from app.models.partner import Partner, XPTransaction, get_session
     from app.core.config import settings
     # We need a new session for the background task
     from sqlalchemy.ext.asyncio import create_async_engine
@@ -114,8 +114,9 @@ async def process_referral_logic(partner_id: int):
             return
 
         # 1. Reconstruct Lineage IDs (L1 to L9)
-        path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-        lineage_ids = (path_ids + [partner.referrer_id])[-9:]
+        # partner.path already includes the referrer_id as the last element.
+        lineage_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+        lineage_ids = lineage_ids[-9:]
         
         # 2. Bulk Fetch all ancestors
         statement = select(Partner).where(Partner.id.in_(lineage_ids))
@@ -183,6 +184,8 @@ async def process_referral_logic(partner_id: int):
                 if level == 1:
                     name = partner.first_name or partner.username or "Partner"
                     msg = get_msg(lang, "referral_l1_congrats", name=name, username=f" (@{partner.username})" if partner.username else "")
+                elif level == 2:
+                    msg = get_msg(lang, "referral_l2_congrats")
                 else:
                     msg = get_msg(lang, "referral_deep_activity", level=level)
                 await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
