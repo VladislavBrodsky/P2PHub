@@ -110,8 +110,7 @@ export const MilestonePath = () => {
 
     return (
         <motion.section
-            className="mt-4 mb-8 space-y-8 px-4 pb-20"
-            onViewportLeave={() => setVisibleChapters(1)}
+            className="mt-4 mb-8 space-y-8 px-4 pb-20 min-h-[300px]"
         >
             {groupedChapters.slice(0, visibleChapters).map((chapter, idx) => (
                 <div key={chapter.title} className="relative space-y-5">
