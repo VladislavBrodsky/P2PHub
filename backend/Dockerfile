@@ -3,25 +3,22 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies and uv in one layer to maximize cache and minimize image size
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Create non-root user for security
-RUN groupadd -r appuser && useradd -r -g appuser appuser && \
-    chown -R appuser:appuser /app
-
-# Install uv
+# Install uv from the official image
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
-# Install dependencies
-# Install dependencies
+# Install dependencies first for better caching
 COPY requirements.txt .
 RUN uv pip install --system --no-cache -r requirements.txt
 
-# Copy source code
+# Create non-root user and set permissions
+RUN groupadd -r appuser && useradd -r -g appuser appuser
 COPY --chown=appuser:appuser . .
 
 USER appuser

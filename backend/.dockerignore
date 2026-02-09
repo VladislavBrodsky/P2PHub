@@ -1,0 +1,11 @@
+# Backend .dockerignore
+venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+*.db
+scripts/*.log
+.env*
+!.env.example
