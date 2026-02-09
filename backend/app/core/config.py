@@ -16,10 +16,10 @@ except Exception as e:
     load_dotenv()
 
 class Settings(BaseSettings):
-    # Required environment variables (no defaults for security)
-    BOT_TOKEN: str
-    DATABASE_URL: str
-    WEBHOOK_SECRET: str
+    # Required environment variables (with defaults for local development/migrations)
+    BOT_TOKEN: str = ""
+    DATABASE_URL: str = "sqlite+aiosqlite:///dev.db"
+    WEBHOOK_SECRET: str = ""
     
     # Optional with sensible defaults
     DEBUG: bool = False

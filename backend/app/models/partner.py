@@ -25,7 +25,13 @@ class Partner(SQLModel, table=True):
     # PRO Subscription Status
     is_pro: bool = Field(default=False, index=True)
     pro_expires_at: Optional[datetime] = Field(default=None)
+    pro_purchased_at: Optional[datetime] = Field(default=None)
+    pro_started_at: Optional[datetime] = Field(default=None)
     subscription_plan: Optional[str] = Field(default=None) # e.g. "PRO_LIFETIME", "PRO_YEARLY"
+    
+    # Verification & Payment Details
+    last_transaction_id: Optional[int] = Field(default=None, foreign_key="transaction.id")
+    payment_details: Optional[str] = Field(default=None) # Store JSON of extra details if needed
     
     # Relationships
     referrals: list["Partner"] = Relationship(

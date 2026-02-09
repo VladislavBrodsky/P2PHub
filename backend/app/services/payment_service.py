@@ -84,16 +84,16 @@ class PaymentService:
         amount: float
     ):
         # 1. Update Partner
+        now = datetime.utcnow()
         partner.is_pro = True
-        partner.pro_expires_at = datetime.utcnow() + timedelta(days=30) # 1 month
+        partner.pro_expires_at = now + timedelta(days=30) # 1 month
+        partner.pro_started_at = now
+        if not partner.pro_purchased_at:
+            partner.pro_purchased_at = now
+            
         partner.subscription_plan = "PRO_MONTHLY"
         session.add(partner)
 
-        # 2. Update or Create Transaction
-        stmt = select(Transaction).where(Transaction.tx_hash == tx_hash)
-        res = await session.exec(stmt)
-        transaction = res.first()
-        
         if not transaction:
             transaction = Transaction(
                 partner_id=partner.id,
@@ -103,10 +103,23 @@ class PaymentService:
                 tx_hash=tx_hash,
                 status="completed"
             )
+            session.add(transaction)
+            await session.flush() # Get the ID
         else:
             transaction.status = "completed"
+            session.add(transaction)
             
-        session.add(transaction)
+        # Update Partner with verification details
+        partner.last_transaction_id = transaction.id
+        partner.payment_details = json.dumps({
+            "currency": currency,
+            "network": network,
+            "tx_hash": tx_hash,
+            "amount": amount,
+            "verified_at": now.isoformat()
+        })
+        
+        session.add(partner)
         await session.commit()
         
         logger.info(f"Partner {partner.telegram_id} upgraded to PRO via {currency}")

@@ -27,6 +27,7 @@ except Exception as e:
 
 
 from app.models.partner import Partner, get_session, engine
+from app.models.transaction import Transaction # Register Transaction for Relationships
 from app.services.partner_service import create_partner, process_referral_logic
 
 

@@ -44,15 +44,6 @@ async def create_partner(
             ref_res = await session.exec(ref_stmt)
             referrer = ref_res.first()
             
-            # 2b. Fallback: Try Telegram ID (e.g. user shared "P12345" or just "12345")
-            if not referrer:
-                # Strip potential 'P' prefix common in some formats or user assumption
-                potential_id = referrer_code.lstrip('P') if referrer_code.upper().startswith('P') else referrer_code
-                if potential_id.isdigit():
-                    ref_stmt = select(Partner).where(Partner.telegram_id == potential_id)
-                    ref_res = await session.exec(ref_stmt)
-                    referrer = ref_res.first()
-
             if referrer:
                 referrer_id = referrer.id
         except Exception as e:

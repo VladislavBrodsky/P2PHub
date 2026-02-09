@@ -20,11 +20,21 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     """Upgrade schema."""
-    op.add_column('partner', sa.Column('referrer_id', sa.Integer(), nullable=True))
-    op.create_foreign_key(None, 'partner', 'partner', ['referrer_id'], ['id'])
+    conn = op.get_bind()
+    inspector = sa.inspect(conn)
+    columns = [c['name'] for c in inspector.get_columns('partner')]
+    
+    if 'referrer_id' not in columns:
+        op.add_column('partner', sa.Column('referrer_id', sa.Integer(), nullable=True))
+        op.create_foreign_key(None, 'partner', 'partner', ['referrer_id'], ['id'])
 
 
 def downgrade() -> None:
     """Downgrade schema."""
-    op.drop_constraint(None, 'partner', type_='foreignkey')
-    op.drop_column('partner', 'referrer_id')
+    conn = op.get_bind()
+    inspector = sa.inspect(conn)
+    columns = [c['name'] for c in inspector.get_columns('partner')]
+
+    if 'referrer_id' in columns:
+        op.drop_constraint(None, 'partner', type_='foreignkey')
+        op.drop_column('partner', 'referrer_id')
