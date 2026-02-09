@@ -22,6 +22,7 @@ import { useUser } from '../context/UserContext';
 import { useTonConnectUI, useTonAddress, useTonWallet } from '@tonconnect/ui-react';
 import { PersonalizationCard } from './PersonalizationCard';
 import { useTheme } from '../context/ThemeContext';
+import { UpgradeButton } from './ui/UpgradeButton';
 
 interface ProfileDrawerProps {
     isOpen: boolean;
@@ -234,6 +235,16 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                             </AnimatePresence>
                                         </div>
                                     ))}
+                                </div>
+
+                                <div className="px-1">
+                                    <UpgradeButton
+                                        onClick={() => {
+                                            onClose();
+                                            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                                        }}
+                                        className="shadow-xl shadow-amber-500/10"
+                                    />
                                 </div>
 
                                 {/* Wallet Integration */}

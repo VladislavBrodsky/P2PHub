@@ -13,6 +13,7 @@ import { useUser } from '../context/UserContext';
 import { Confetti } from '../components/ui/Confetti';
 import { CheckCircle2, Trophy, QrCode, X, Share2, Download, Copy, ExternalLink, Send, FileText } from 'lucide-react';
 import { BriefTermsModal } from '../components/Earn/BriefTermsModal';
+import { UpgradeButton } from '../components/ui/UpgradeButton';
 import { useTranslation, Trans } from 'react-i18next';
 import { getSafeLaunchParams } from '../utils/tma';
 import { apiClient } from '../api/client';
@@ -435,6 +436,16 @@ export default function ReferralPage() {
                 onTaskClick={handleTaskClick}
                 onClaim={handleClaim}
             />
+
+            <div className="mt-8 mb-4">
+                <UpgradeButton
+                    onClick={() => {
+                        selection();
+                        window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                    }}
+                    className="shadow-xl shadow-amber-500/10"
+                />
+            </div>
 
             <div className="h-24" />
         </div>

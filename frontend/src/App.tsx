@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Layout } from './components/Layout/Layout';
-import Dashboard from './pages/Dashboard';
-import CardsPage from './pages/Cards';
-import CommunityPage from './pages/Community';
-import ReferralPage from './pages/Referral';
-import LeaderboardPage from './pages/Leaderboard';
-import SubscriptionPage from './pages/Subscription';
+// Lazy load pages
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const CardsPage = lazy(() => import('./pages/Cards'));
+const CommunityPage = lazy(() => import('./pages/Community'));
+const ReferralPage = lazy(() => import('./pages/Referral'));
+const LeaderboardPage = lazy(() => import('./pages/Leaderboard'));
+const SubscriptionPage = lazy(() => import('./pages/Subscription'));
+
 import { miniApp, backButton, viewport, swipeBehavior } from '@telegram-apps/sdk-react';
 import { UserProvider } from './context/UserContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -13,10 +15,19 @@ import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { isTMA } from './utils/tma';
 import { NotificationOverlay } from './components/ui/NotificationOverlay';
 import { useRealtimeAlerts } from './hooks/useRealtimeAlerts';
+import { Skeleton } from './components/Skeleton';
 
 function App() {
     const [activeTab, setActiveTab] = useState('home');
+    const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set(['home']));
     useRealtimeAlerts();
+
+    // Track visited tabs to keep components mounted after first load
+    useEffect(() => {
+        if (!visitedTabs.has(activeTab)) {
+            setVisitedTabs(prev => new Set(prev).add(activeTab));
+        }
+    }, [activeTab, visitedTabs]);
 
     // Initialize TMA SDK once
     useEffect(() => {
@@ -113,33 +124,35 @@ function App() {
                 <UserProvider>
                     <NotificationOverlay />
                     <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
-                        <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
-                            <Dashboard setActiveTab={setActiveTab} />
-                        </div>
-                        <div className={`h-full ${activeTab === 'cards' ? 'block' : 'hidden'}`}>
-                            <CardsPage setActiveTab={setActiveTab} />
-                        </div>
-                        <div className={`h-full ${activeTab === 'partner' ? 'block' : 'hidden'}`}>
-                            <CommunityPage />
-                        </div>
-                        <div className={`h-full ${activeTab === 'earn' ? 'block' : 'hidden'}`}>
-                            <ReferralPage />
-                        </div>
-                        <div className={`h-full ${activeTab === 'league' ? 'block' : 'hidden'}`}>
-                            <LeaderboardPage />
-                        </div>
-                        <div className={`h-full ${activeTab === 'subscription' ? 'block' : 'hidden'}`}>
-                            <SubscriptionPage />
-                        </div>
-                        {['coming_soon'].includes(activeTab) && (
-                            <div className="flex flex-col items-center justify-center text-center px-10 h-full">
-                                <div className="text-4xl mb-4">🚀</div>
-                                <h2 className="text-2xl font-black mb-2 uppercase">Coming Soon</h2>
-                                <p className="text-(--color-text-secondary) font-medium">
-                                    We're building something amazing for our partners. Stay tuned!
-                                </p>
+                        <Suspense fallback={<div className="h-full flex items-center justify-center"><Skeleton className="w-full h-full max-w-md max-h-96" /></div>}>
+                            <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
+                                {visitedTabs.has('home') && <Dashboard setActiveTab={setActiveTab} />}
                             </div>
-                        )}
+                            <div className={`h-full ${activeTab === 'cards' ? 'block' : 'hidden'}`}>
+                                {visitedTabs.has('cards') && <CardsPage setActiveTab={setActiveTab} />}
+                            </div>
+                            <div className={`h-full ${activeTab === 'partner' ? 'block' : 'hidden'}`}>
+                                {visitedTabs.has('partner') && <CommunityPage />}
+                            </div>
+                            <div className={`h-full ${activeTab === 'earn' ? 'block' : 'hidden'}`}>
+                                {visitedTabs.has('earn') && <ReferralPage />}
+                            </div>
+                            <div className={`h-full ${activeTab === 'league' ? 'block' : 'hidden'}`}>
+                                {visitedTabs.has('league') && <LeaderboardPage />}
+                            </div>
+                            <div className={`h-full ${activeTab === 'subscription' ? 'block' : 'hidden'}`}>
+                                {visitedTabs.has('subscription') && <SubscriptionPage />}
+                            </div>
+                            {['coming_soon'].includes(activeTab) && (
+                                <div className="flex flex-col items-center justify-center text-center px-10 h-full">
+                                    <div className="text-4xl mb-4">🚀</div>
+                                    <h2 className="text-2xl font-black mb-2 uppercase">Coming Soon</h2>
+                                    <p className="text-(--color-text-secondary) font-medium">
+                                        We're building something amazing for our partners. Stay tuned!
+                                    </p>
+                                </div>
+                            )}
+                        </Suspense>
                     </Layout>
                 </UserProvider>
             </ThemeProvider>

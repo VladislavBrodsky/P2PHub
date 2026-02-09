@@ -100,6 +100,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
     const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [metrics, setMetrics] = useState({ growth_pct: 0, current_count: 0 });
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -172,31 +173,58 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
             {/* Header - Compact */}
-            <div className="flex items-center justify-between mb-2 relative z-10">
+            <div className="flex items-center justify-between mb-2 relative z-20">
                 <div>
-                    <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2 whitespace-nowrap">
                         <TrendingUp className="w-4 h-4 text-blue-500" />
                         Network Growth
                     </h3>
                     <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400">Total Active Partners: <span className="text-blue-500">{metrics.current_count}</span></p>
                 </div>
 
-                {/* Timeframe Selector - Compact */}
-                <div className="flex p-0.5 bg-slate-100 dark:bg-black/20 rounded-lg border border-slate-200 dark:border-white/5 scale-90 origin-right">
-                    {(['24H', '7D', '1M', '3M', '6M', '1Y'] as Timeframe[]).map((tf) => (
-                        <button
-                            key={tf}
-                            onClick={() => { selection(); setTimeframe(tf); }}
-                            className={cn(
-                                "px-2 py-0.5 text-[9px] font-black rounded-md transition-all",
-                                timeframe === tf
-                                    ? "bg-white dark:bg-white/10 text-blue-600 dark:text-white shadow-sm"
-                                    : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
-                            )}
-                        >
-                            {tf}
-                        </button>
-                    ))}
+                {/* Timeframe Selector - Dropdown */}
+                <div className="relative">
+                    <button
+                        onClick={() => { selection(); setIsDropdownOpen(!isDropdownOpen); }}
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 text-[10px] font-black text-slate-900 dark:text-white transition-all active:scale-95"
+                    >
+                        {timeframe}
+                        <ChevronDown className={cn("w-3 h-3 transition-transform", isDropdownOpen ? "rotate-180" : "")} />
+                    </button>
+
+                    <AnimatePresence>
+                        {isDropdownOpen && (
+                            <>
+                                <div className="fixed inset-0 z-10" onClick={() => setIsDropdownOpen(false)} />
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                                    className="absolute right-0 top-full mt-2 w-20 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-white/10 shadow-xl z-20 overflow-hidden flex flex-col p-1"
+                                >
+                                    {(['24H', '7D', '1M', '3M', '6M', '1Y'] as Timeframe[]).map((tf) => (
+                                        <button
+                                            key={tf}
+                                            onClick={() => {
+                                                selection();
+                                                setTimeframe(tf);
+                                                setIsDropdownOpen(false);
+                                            }}
+                                            className={cn(
+                                                "w-full px-2 py-1.5 text-[10px] font-bold rounded-lg transition-colors text-left flex items-center justify-between",
+                                                timeframe === tf
+                                                    ? "bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                                                    : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5"
+                                            )}
+                                        >
+                                            {tf}
+                                            {timeframe === tf && <motion.div layoutId="active-tf" className="w-1 h-1 rounded-full bg-blue-500" />}
+                                        </button>
+                                    ))}
+                                </motion.div>
+                            </>
+                        )}
+                    </AnimatePresence>
                 </div>
             </div>
 

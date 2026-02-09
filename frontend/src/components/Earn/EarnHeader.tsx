@@ -187,32 +187,7 @@ export const EarnHeader = ({ onUpgrade }: { onUpgrade?: () => void }) => {
                     </div>
                 </div>
 
-                {/* PRO CTA / Badge */}
-                {!user?.is_pro ? (
-                    <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={onUpgrade}
-                        className="w-full h-14 rounded-2xl bg-linear-to-r from-amber-400 to-orange-600 p-[1px] relative overflow-hidden group shadow-lg shadow-orange-500/20"
-                    >
-                        <div className="absolute inset-0 bg-white/20 group-hover:bg-white/30 transition-colors" />
-                        <div className="relative h-full w-full bg-slate-900 rounded-[0.9rem] flex items-center justify-center gap-3">
-                            <Crown className="w-5 h-5 text-amber-400 fill-amber-400/20" />
-                            <span className="text-sm font-black text-white uppercase tracking-wider">Upgrade to PRO</span>
-                            <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                            <span className="text-xs font-bold text-amber-400/80">$39</span>
-                        </div>
-                    </motion.button>
-                ) : (
-                    <div className="w-full h-14 rounded-2xl bg-linear-to-r from-amber-400 via-orange-500 to-amber-400 p-[1px] shadow-lg shadow-orange-500/10">
-                        <div className="h-full w-full bg-slate-900 rounded-[0.9rem] flex items-center justify-center gap-3">
-                            <Crown className="w-5 h-5 text-amber-400 fill-amber-400/20" />
-                            <span className="text-sm font-black text-white uppercase tracking-wider">PRO MEMBER</span>
-                            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                        </div>
-                    </div>
-                )}
-
+                {/* PRO CTA / Badge removed - moved to page bottom */}
             </div>
         </section>
     );
