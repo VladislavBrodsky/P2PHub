@@ -3,6 +3,7 @@ from typing import Optional, List
 from datetime import datetime
 
 class PartnerBase(BaseModel):
+    id: Optional[int] = None
     telegram_id: str
     username: Optional[str] = None
     first_name: Optional[str] = None
@@ -10,7 +11,6 @@ class PartnerBase(BaseModel):
     photo_url: Optional[str] = None
 
 class PartnerResponse(PartnerBase):
-    id: int
     balance: float
     xp: float
     level: int
@@ -18,7 +18,7 @@ class PartnerResponse(PartnerBase):
     is_pro: bool
     created_at: datetime
     updated_at: datetime
-    referrals: List[PartnerBase] = []
+    referrals: Optional[List[PartnerBase]] = None
     
     class Config:
         from_attributes = True

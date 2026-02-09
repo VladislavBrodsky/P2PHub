@@ -213,12 +213,15 @@ async def get_recent_partners(
     result = await session.exec(statement)
     partners = result.all()
     
+    # Pre-serialize for cache and return clean models
+    partners_data = [p.model_dump() for p in partners]
+    
     try:
-        await redis_service.set_json(cache_key, [p.model_dump() for p in partners], expire=300)
+        await redis_service.set_json(cache_key, partners_data, expire=300)
     except Exception:
         pass
         
-    return partners
+    return partners_data
 
 @router.get("/tree", response_model=NetworkStats)
 async def get_my_referral_tree(
