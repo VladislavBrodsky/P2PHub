@@ -13,9 +13,9 @@
   --spacing-safe-left: env(safe-area-inset-left, 0px);
   --spacing-safe-right: env(safe-area-inset-right, 0px);
 
-  --header-height: 48px;
+  --header-height: 64px;
   --bottom-nav-height: 80px;
-  --spacing-telegram-header: 12px;
+  --spacing-telegram-header: 24px;
   --header-total-height: calc(var(--header-height) + var(--spacing-safe-top) + var(--spacing-telegram-header));
 
   /* Typography Scale */
