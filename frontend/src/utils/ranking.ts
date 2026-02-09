@@ -42,12 +42,19 @@ export function getRank(level: number): Rank {
     return [...RANKS].reverse().find(r => level >= r.minLevel) || RANKS[0];
 }
 
-export function getXPProgress(level: number, currentXP: number) {
-    const xpNeeded = level * 100;
-    const progress = Math.min(100, (currentXP / xpNeeded) * 100);
+export function getXPProgress(level: number, totalXP: number) {
+    // XP at start of current level: sum(i=1 to level-1) of i*100
+    const startXP = 50 * (level - 1) * level;
+    // XP needed to complete current level
+    const levelXP = level * 100;
+
+    // XP earned within current level
+    const currentLevelXP = Math.max(0, totalXP - startXP);
+    const progress = Math.min(100, (currentLevelXP / levelXP) * 100);
+
     return {
-        current: currentXP,
-        total: xpNeeded,
+        current: currentLevelXP,
+        total: levelXP,
         percent: progress
     };
 }

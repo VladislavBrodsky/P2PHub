@@ -12,7 +12,8 @@
         "copy": "Copy",
         "copied": "Copied",
         "show_more": "Show More",
-        "show_less": "Show Less"
+        "show_less": "Show Less",
+        "unlock": "Unlock"
     },
     "menu": {
         "settings": "Settings",
@@ -306,8 +307,20 @@
                 "black_card": "Black Card Ready",
                 "empire_status": "Empire Status",
                 "platinum_physical": "Platinum Physical",
-                "level_elite": "Level {{level}} Elite"
-            }
+                "level_elite": "Level {{level}} Elite",
+                "network_pro": "Network Pro",
+                "executive_access": "Executive Access",
+                "director_node": "Director Node",
+                "president_status": "President Status",
+                "global_partner": "Global Partner",
+                "grandmaster": "Grandmaster Status",
+                "vip_status": "VIP Status",
+                "premium_access": "Premium App Access",
+                "immortal_tier": "Immortal Tier",
+                "ambassador": "Ambassador Level"
+            },
+            "all_unlocked": "Full Achievement List",
+            "next_milestones": "Upcoming Goals"
         }
     },
     "tasks": {

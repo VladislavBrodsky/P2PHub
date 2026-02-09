@@ -107,8 +107,8 @@ async def process_referral_logic(bot, session: AsyncSession, partner: Partner):
         return
 
     # XP distribution configuration (XP per level)
-    # L1: 35 XP, L2: 15 XP, L3: 10 XP, L4-L9: 5 XP
-    XP_MAP = {1: 35, 2: 15, 3: 10, 4: 5, 5: 5, 6: 5, 7: 5, 8: 5, 9: 5}
+    # L1: 35 XP, L2: 10 XP, L3-L9: 1 XP
+    XP_MAP = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
     
     current = partner
     for level in range(1, 10):
@@ -121,8 +121,10 @@ async def process_referral_logic(bot, session: AsyncSession, partner: Partner):
         xp_gain = XP_MAP.get(level, 0)
         referrer.xp += xp_gain
         
-        # 2. Handle Level Up Logic
-        while referrer.xp >= referrer.level * 100:
+        # 2. Handle Level Up Logic (Cumulative Quadratic Curve)
+        # XP Req to finish current Level L = L * 100
+        # Total XP to reach Level L+1 = sum(i * 100 for i in 1..L) = 50 * L * (L + 1)
+        while referrer.xp >= (50 * referrer.level * (referrer.level + 1)):
             referrer.level += 1
             try:
                 msg = f"🏆 *Level Up!* 🏆\n\nYou've reached *Level {referrer.level}*!\n\nKeep going to unlock the Platinum Tier."

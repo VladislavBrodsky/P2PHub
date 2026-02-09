@@ -1,6 +1,6 @@
 {
     "common": {
-        "dashboard": "Панель",
+        "dashboard": "Дашборд",
         "academy": "Академия",
         "wallet": "Кошелек",
         "connect_wallet": "Подключить",
@@ -11,8 +11,9 @@
         "back": "Назад",
         "copy": "Копировать",
         "copied": "Скопировано",
-        "show_more": "Показать больше",
-        "show_less": "Свернуть"
+        "show_more": "Показать еще",
+        "show_less": "Скрыть",
+        "unlock": "Активировать"
     },
     "menu": {
         "settings": "Настройки",
@@ -306,8 +307,20 @@
                 "black_card": "Готовность Черной Карты",
                 "empire_status": "Статус Империи",
                 "platinum_physical": "Платиновая Карта",
-                "level_elite": "Элита Уровня {{level}}"
-            }
+                "level_elite": "Элита Уровня {{level}}",
+                "network_pro": "Про-Сеть",
+                "executive_access": "Доступ Руководителя",
+                "director_node": "Узел Директора",
+                "president_status": "Статус Президента",
+                "global_partner": "Глобальный Партнер",
+                "grandmaster": "Статус Грандмастера",
+                "vip_status": "VIP Статус",
+                "premium_access": "Премиум Доступ",
+                "immortal_tier": "Бессмертный Тир",
+                "ambassador": "Уровень Амбассадора"
+            },
+            "all_unlocked": "Полный Список Достижений",
+            "next_milestones": "Ближайшие Цели"
         }
     },
     "tasks": {
