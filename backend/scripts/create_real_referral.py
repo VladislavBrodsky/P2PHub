@@ -97,83 +97,68 @@ async def create_real_user():
     async with async_session_factory() as session:
         # REFERRER: @uslincoln (ID 1)
         referrer_code = "P2P-425DA3DB"
-        print(f"🚀 Starting 3-Level Notification Test for code: {referrer_code}...")
+        print(f"🚀 Starting 9-Level Deep Verification for code: {referrer_code}...")
 
         # 1. Fetch Root (User A)
         res = await session.exec(select(Partner).where(Partner.referral_code == referrer_code))
         root_user = res.first()
-        if not res:
+        if not root_user:
             print(f"❌ Error: Partner with code {referrer_code} not found.")
             return
 
-        print(f"👤 Root User Found: @{root_user.username} (ID: {root_user.id}) - XP: {root_user.xp}")
+        print(f"👤 Root User Found: @{root_user.username} (Level: {root_user.level}) - Start XP: {root_user.xp}")
         
-        # 2. Level 1: User B joins under User A
-        user_b_id = f"TEST_L1_{secrets.token_hex(4)}"
-        user_b_username = f"User_B_{user_b_id}"
-        print(f"\n🆕 Registering Level 1 User: @{user_b_username} under {referrer_code}...")
+        initial_xp = root_user.xp
+        current_referrer_code = referrer_code
         
-        user_b, is_new_b = await ps.create_partner(
-            session,
-            telegram_id=user_b_id,
-            username=user_b_username,
-            first_name="User",
-            last_name="B",
-            referrer_code=referrer_code
-        )
+        # Expected Rewards
+        XP_MAP = {1: 35.0, 2: 10.0, 3: 1.0, 4: 1.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0}
         
-        await ps.process_referral_logic(user_b.id)
-        
-        # Refresh Root to check L1 XP
-        session.expire(root_user)
-        await session.refresh(root_user)
-        print(f"💰 Root User XP after L1: {root_user.xp} (+35 XP Expected)")
+        for level in range(1, 10):
+            # Create User at this Level
+            new_id = f"TEST_LVL_{level}_{secrets.token_hex(3)}"
+            new_username = f"User_L{level}_{new_id}"
+            
+            print(f"\n--- Level {level} Joined ---")
+            print(f"🆕 Registering @{new_username} under {current_referrer_code}...")
+            
+            new_partner, is_new = await ps.create_partner(
+                session,
+                telegram_id=new_id,
+                username=new_username,
+                first_name=f"User L{level}",
+                referrer_code=current_referrer_code
+            )
+            
+            # Run Logic
+            await ps.process_referral_logic(new_partner.id)
+            
+            # Verify Root XP
+            session.expire(root_user)
+            await session.refresh(root_user)
+            
+            expected_gain = XP_MAP.get(level, 0)
+            # We can't easily track exact incremental gain without storing previous, 
+            # but we can check if it increased. 
+            # Better: Calculate "Total Expected so far"
+            
+            print(f"💰 Root User XP: {root_user.xp}")
+            
+            # Update referrer for next iteration (chaining down)
+            current_referrer_code = new_partner.referral_code
 
-        # 3. Level 2: User C joins under User B
-        referrer_code_b = user_b.referral_code
-        user_c_id = f"TEST_L2_{secrets.token_hex(4)}"
-        user_c_username = f"User_C_{user_c_id}"
-        print(f"\n🆕 Registering Level 2 User: @{user_c_username} under {referrer_code_b}...")
-
-        user_c, is_new_c = await ps.create_partner(
-            session,
-            telegram_id=user_c_id,
-            username=user_c_username,
-            first_name="User",
-            last_name="C",
-            referrer_code=referrer_code_b
-        )
-
-        await ps.process_referral_logic(user_c.id)
-
-        # Refresh Root to check L2 XP and Notification Context
-        session.expire(root_user)
-        await session.refresh(root_user)
-        print(f"💰 Root User XP after L2: {root_user.xp} (+10 XP Expected)")
+        final_xp = root_user.xp
+        total_gained = final_xp - initial_xp
+        expected_total = sum(XP_MAP.values())
         
-        # 4. Level 3: User D joins under User C
-        referrer_code_c = user_c.referral_code
-        user_d_id = f"TEST_L3_{secrets.token_hex(4)}"
-        user_d_username = f"User_D_{user_d_id}"
-        print(f"\n🆕 Registering Level 3 User: @{user_d_username} under {referrer_code_c}...")
+        print("\n=== FINAL VERIFICATION ===")
+        print(f"Total XP Gained: {total_gained}")
+        print(f"Expected Total:  {expected_total}")
         
-        user_d, is_new_d = await ps.create_partner(
-            session,
-            telegram_id=user_d_id,
-            username=user_d_username,
-            first_name="User",
-            last_name="D",
-            referrer_code=referrer_code_c
-        )
-        
-        await ps.process_referral_logic(user_d.id)
-        
-        # Refresh Root to check L3 XP and Chain Notification
-        session.expire(root_user)
-        await session.refresh(root_user)
-        print(f"💰 Root User XP after L3: {root_user.xp} (+1 XP Expected)")
-
-        print("\n✅ Simulation Complete!")
+        if abs(total_gained - expected_total) < 0.1:
+             print("✅ SUCCESS: 9-Level XP Sync Verified Perfectly!")
+        else:
+             print(f"❌ FAILURE: Mismatch! (Diff: {total_gained - expected_total})")
 
     await engine.dispose()
 

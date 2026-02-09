@@ -82,12 +82,12 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
                     {/* Main Titles */}
                     <div className="space-y-4">
-                        <h1 className="text-[44px] font-extrabold tracking-tighter text-slate-900 dark:text-white leading-[0.95] flex flex-col items-center">
+                        <h1 className="text-[36px] font-extrabold tracking-tighter text-slate-900 dark:text-white leading-[0.95] flex flex-col items-center">
                             <span>Slow Money Is</span>
                             <span>Dead</span>
                         </h1>
                         <motion.div
-                            className="text-[42px] font-extrabold tracking-tighter leading-[0.95] flex flex-col items-center"
+                            className="text-[34px] font-extrabold tracking-tighter leading-[0.95] flex flex-col items-center"
                             style={{
                                 background: 'linear-gradient(to right, #3B82F6, #60A5FA, #3B82F6)',
                                 WebkitBackgroundClip: 'text',
