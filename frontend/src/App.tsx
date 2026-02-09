@@ -11,9 +11,12 @@ import { UserProvider } from './context/UserContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { isTMA } from './utils/tma';
+import { NotificationOverlay } from './components/ui/NotificationOverlay';
+import { useRealtimeAlerts } from './hooks/useRealtimeAlerts';
 
 function App() {
     const [activeTab, setActiveTab] = useState('home');
+    useRealtimeAlerts();
 
     // Initialize TMA SDK once
     useEffect(() => {
@@ -108,15 +111,28 @@ function App() {
         <TonConnectUIProvider manifestUrl="https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json">
             <ThemeProvider>
                 <UserProvider>
+                    <NotificationOverlay />
                     <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
-                        {activeTab === 'home' && <Dashboard setActiveTab={setActiveTab} />}
-                        {activeTab === 'cards' && <CardsPage setActiveTab={setActiveTab} />}
-                        {activeTab === 'partner' && <CommunityPage />}
-                        {activeTab === 'earn' && <ReferralPage />}
-                        {activeTab === 'league' && <LeaderboardPage />}
-                        {activeTab === 'subscription' && <SubscriptionPage />}
+                        <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
+                            <Dashboard setActiveTab={setActiveTab} />
+                        </div>
+                        <div className={`h-full ${activeTab === 'cards' ? 'block' : 'hidden'}`}>
+                            <CardsPage setActiveTab={setActiveTab} />
+                        </div>
+                        <div className={`h-full ${activeTab === 'partner' ? 'block' : 'hidden'}`}>
+                            <CommunityPage />
+                        </div>
+                        <div className={`h-full ${activeTab === 'earn' ? 'block' : 'hidden'}`}>
+                            <ReferralPage />
+                        </div>
+                        <div className={`h-full ${activeTab === 'league' ? 'block' : 'hidden'}`}>
+                            <LeaderboardPage />
+                        </div>
+                        <div className={`h-full ${activeTab === 'subscription' ? 'block' : 'hidden'}`}>
+                            <SubscriptionPage />
+                        </div>
                         {['coming_soon'].includes(activeTab) && (
-                            <div className="flex flex-col items-center justify-center h-[60vh] text-center px-10">
+                            <div className="flex flex-col items-center justify-center text-center px-10 h-full">
                                 <div className="text-4xl mb-4">🚀</div>
                                 <h2 className="text-2xl font-black mb-2 uppercase">Coming Soon</h2>
                                 <p className="text-(--color-text-secondary) font-medium">

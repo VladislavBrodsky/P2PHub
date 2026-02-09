@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
-from app.core.security import get_current_user
+from app.core.security import get_current_user, get_tg_user
 from app.models.partner import Partner, get_session
 from app.services.leaderboard_service import leaderboard_service
 from typing import List, Dict
@@ -75,14 +75,8 @@ async def get_my_leaderboard_stats(
     """
     Returns the current user's rank and relative position.
     """
-    try:
-        if "user" in user_data:
-            tg_user = json.loads(user_data["user"])
-            tg_id = str(tg_user.get("id"))
-        else:
-            tg_id = str(user_data.get("id"))
-    except:
-        return {"rank": -1, "xp": 0}
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
 
     # Get partner from DB
     statement = select(Partner).where(Partner.telegram_id == tg_id)

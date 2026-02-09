@@ -40,4 +40,27 @@ class RedisService:
         # Returns (key, value) tuple or None
         return await self.client.brpop(name, timeout=timeout)
 
+    async def get_or_compute(self, key: str, coroutine, expire: int = 300):
+        """
+        Tries to get data from cache. If missing, awaits the coroutine,
+        caches the result, and returns it.
+        """
+        try:
+            cached = await self.get_json(key)
+            if cached is not None:
+                return cached
+        except Exception as e:
+            print(f"Cache Read Error: {e}")
+
+        # Compute
+        data = await coroutine
+        
+        if data:
+            try:
+                await self.set_json(key, data, expire=expire)
+            except Exception as e:
+                print(f"Cache Write Error: {e}")
+        
+        return data
+
 redis_service = RedisService()

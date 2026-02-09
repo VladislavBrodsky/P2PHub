@@ -207,6 +207,38 @@ body {
     box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.05);
   }
 
+  /* Premium Glass Utilities */
+  .glass-panel-premium {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+
+  .glass-button {
+    @apply bg-linear-to-r from-blue-500/80 to-purple-600/80 backdrop-blur-sm border border-white/30 shadow-lg hover:shadow-blue-500/50 transition-all duration-300 active:scale-95;
+  }
+
+  .neon-text {
+    @apply text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-400 drop-shadow-[0_0_10px_#3b82f680];
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .card-shine {
+    background: linear-gradient(115deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.4) 45%,
+        rgba(255, 255, 255, 0.5) 50%,
+        rgba(255, 255, 255, 0.4) 55%,
+        transparent 100%);
+    background-size: 250% 100%;
+    animation: shine 4s infinite linear;
+  }
+
   .pt-safe-top {
     padding-top: var(--spacing-safe-top);
   }

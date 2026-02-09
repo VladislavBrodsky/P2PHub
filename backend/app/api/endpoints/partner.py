@@ -1,35 +1,27 @@
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.core.security import get_current_user
+from app.core.security import get_current_user, get_tg_user
 from app.models.partner import Partner, get_session
+from app.models.schemas import PartnerResponse, TaskClaimRequest, GrowthMetrics, NetworkStats, EarningSchema
 from sqlmodel import select
 from sqlalchemy.orm import selectinload
 from app.services.redis_service import redis_service
 import json
 import secrets
 from app.utils.ranking import get_level
+from typing import List
 
 router = APIRouter()
 
-@router.get("/me", response_model=Partner)
+@router.get("/me", response_model=PartnerResponse)
 async def get_my_profile(
     background_tasks: BackgroundTasks,
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
-    # Parse Telegram user data
-    try:
-        if "user" in user_data:
-            tg_user = json.loads(user_data["user"])
-        else:
-            tg_user = user_data
-            
-        tg_id = str(tg_user.get("id"))
-        if not tg_id or tg_id == "None":
-             raise HTTPException(status_code=400, detail="Invalid Telegram ID")
-
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Failed to parse user data: {str(e)}")
+    # Parse Telegram user data securely
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
 
     # 1. Try Redis Cache first
     cache_key = f"partner:profile:{tg_id}"
@@ -79,8 +71,7 @@ async def get_my_profile(
         
         # Offload notifications & high-scale referral logic
         from app.services.partner_service import process_referral_logic
-        from bot import bot
-        background_tasks.add_task(process_referral_logic, bot, session, partner)
+        await process_referral_logic.kiq(partner.id)
     else:
         # Update existing profile check (Throttled to once per hour)
         from datetime import datetime, timedelta
@@ -101,6 +92,39 @@ async def get_my_profile(
                 session.add(partner)
                 await session.commit()
                 await session.refresh(partner)
+
+    # 2.0.1 Lazy Migration: Fix Referral Code & Path
+    migration_needed = False
+    
+    # Check 1: Fix Legacy Referral Code (if it's just numbers)
+    if partner.referral_code and partner.referral_code.isdigit():
+        new_code = f"P2P-{secrets.token_hex(4).upper()}"
+        print(f"[MIGRATION] Upgrading User {tg_id} code: {partner.referral_code} -> {new_code}")
+        partner.referral_code = new_code
+        migration_needed = True
+
+    # Check 2: Fix Missing Path (for Tree Stats)
+    if not partner.path and partner.referrer_id:
+        # We need to fetch referrer to build path
+        try:
+            r_stmt = select(Partner).where(Partner.id == partner.referrer_id)
+            r_res = await session.exec(r_stmt)
+            referrer = r_res.first()
+            if referrer:
+                parent_path = referrer.path or ""
+                # Path format: "ancestor.parent"
+                partner.path = f"{parent_path}.{referrer.id}".lstrip(".")
+                print(f"[MIGRATION] Fixed path for {tg_id}: {partner.path}")
+                migration_needed = True
+        except Exception as e:
+            print(f"[MIGRATION] Path fix failed: {e}")
+
+    if migration_needed:
+        session.add(partner)
+        await session.commit()
+        await session.refresh(partner)
+        # Invalidate cache again
+        await redis_service.client.delete(f"partner:profile:{tg_id}")
 
     # 2.0 Hydrate completed_tasks from association table for frontend compatibility BEFORE any commit/refresh
     # We populate the legacy 'completed_tasks' JSON string field temporarily for the response or sync
@@ -162,23 +186,16 @@ async def get_recent_partners(
         pass
         
     return partners_data
-@router.get("/tree")
+@router.get("/tree", response_model=NetworkStats)
 async def get_my_referral_tree(
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
     """
     Fetches the 9-level referral tree stats for the current user.
-    Uses hyper-optimized Recursive CTE service logic.
     """
-    try:
-        if "user" in user_data:
-            tg_data = json.loads(user_data["user"])
-            tg_id = str(tg_data.get("id"))
-        else:
-            tg_id = str(user_data.get("id"))
-    except:
-        return {str(i): 0 for i in range(1, 10)}
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
 
     # Get partner
     statement = select(Partner).where(Partner.telegram_id == tg_id).options(selectinload(Partner.referrals))
@@ -189,11 +206,16 @@ async def get_my_referral_tree(
         return {str(i): 0 for i in range(1, 10)}
 
     from app.services.partner_service import get_referral_tree_stats
-    stats = await get_referral_tree_stats(session, partner.id)
     
-    return stats
+    # 2. Use Intelligent Caching (300s TTL)
+    cache_key = f"ref_tree_stats:{partner.id}"
+    return await redis_service.get_or_compute(
+        cache_key,
+        get_referral_tree_stats(session, partner.id),
+        expire=300
+    )
 
-@router.get("/network/{level}")
+@router.get("/network/{level}", response_model=List[PartnerResponse])
 async def get_network_level_members(
     level: int,
     user_data: dict = Depends(get_current_user),
@@ -202,14 +224,8 @@ async def get_network_level_members(
     """
     Fetches the list of members for a specific level in the 9-level matrix.
     """
-    try:
-        if "user" in user_data:
-            tg_data = json.loads(user_data["user"])
-            tg_id = str(tg_data.get("id"))
-        else:
-            tg_id = str(user_data.get("id"))
-    except:
-        raise HTTPException(status_code=400, detail="Invalid user data")
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
 
     # Get partner
     statement = select(Partner).where(Partner.telegram_id == tg_id)
@@ -223,23 +239,22 @@ async def get_network_level_members(
          raise HTTPException(status_code=400, detail="Level must be between 1 and 9")
 
     from app.services.partner_service import get_referral_tree_members
-    members = await get_referral_tree_members(session, partner.id, level)
     
-    return members
+    cache_key = f"ref_tree_members:{partner.id}:{level}"
+    return await redis_service.get_or_compute(
+        cache_key,
+        get_referral_tree_members(session, partner.id, level),
+        expire=300
+    )
 
-@router.get("/growth/metrics")
+@router.get("/growth/metrics", response_model=GrowthMetrics)
 async def get_growth_metrics(
     timeframe: str = "7D",
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
-    try:
-        if "user" in user_data:
-            tg_id = str(json.loads(user_data["user"]).get("id"))
-        else:
-            tg_id = str(user_data.get("id"))
-    except:
-        return {"growth_pct": 0, "current_count": 0, "previous_count": 0}
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
 
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
@@ -249,7 +264,13 @@ async def get_growth_metrics(
         return {"growth_pct": 0, "current_count": 0, "previous_count": 0}
 
     from app.services.partner_service import get_network_growth_metrics
-    return await get_network_growth_metrics(session, partner.id, timeframe)
+    
+    cache_key = f"growth_metrics:{partner.id}:{timeframe}"
+    return await redis_service.get_or_compute(
+        cache_key,
+        get_network_growth_metrics(session, partner.id, timeframe),
+        expire=300
+    )
 
 @router.get("/growth/chart")
 async def get_growth_chart(
@@ -257,13 +278,8 @@ async def get_growth_chart(
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
-    try:
-        if "user" in user_data:
-            tg_id = str(json.loads(user_data["user"]).get("id"))
-        else:
-            tg_id = str(user_data.get("id"))
-    except:
-        return []
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
 
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
@@ -273,22 +289,24 @@ async def get_growth_chart(
         return []
 
     from app.services.partner_service import get_network_time_series
-    return await get_network_time_series(session, partner.id, timeframe)
+    
+    cache_key = f"growth_chart:{partner.id}:{timeframe}"
+    return await redis_service.get_or_compute(
+        cache_key,
+        get_network_time_series(session, partner.id, timeframe),
+        expire=300
+    )
 
-@router.post("/tasks/{task_id}/claim")
+@router.post("/tasks/{task_id}/claim", response_model=PartnerResponse)
 async def claim_task_reward(
     task_id: str,
-    xp_reward: float,
+    payload: TaskClaimRequest,
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
-    try:
-        if "user" in user_data:
-            tg_id = str(json.loads(user_data["user"]).get("id"))
-        else:
-            tg_id = str(user_data.get("id"))
-    except:
-        raise HTTPException(status_code=400, detail="Invalid user data")
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
+    xp_reward = payload.xp_reward
 
     statement = select(Partner).where(Partner.telegram_id == tg_id).options(selectinload(Partner.completed_task_records))
     result = await session.exec(statement)
@@ -333,7 +351,7 @@ async def claim_task_reward(
 
     return partner
 
-@router.get("/earnings")
+@router.get("/earnings", response_model=List[EarningSchema])
 async def get_my_earnings(
     limit: int = 10,
     user_data: dict = Depends(get_current_user),
@@ -342,13 +360,8 @@ async def get_my_earnings(
     """
     Fetches the recent earnings history for the current user.
     """
-    try:
-        if "user" in user_data:
-            tg_id = str(json.loads(user_data["user"]).get("id"))
-        else:
-            tg_id = str(user_data.get("id"))
-    except:
-        return []
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
 
     # Get partner ID first
     statement = select(Partner).where(Partner.telegram_id == tg_id)

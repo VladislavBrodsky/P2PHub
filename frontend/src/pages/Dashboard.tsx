@@ -5,6 +5,7 @@ import { BentoGrid } from '../components/Marketing/BentoGrid';
 import { BlogCarousel } from '../components/Marketing/BlogCarousel';
 import { IncomePotential } from '../components/Marketing/IncomePotential';
 import { PartnerStats } from '../components/Marketing/PartnerStats';
+import { AnalyticsChart } from '../components/Dashboard/AnalyticsChart';
 import { useHaptic } from '../hooks/useHaptic';
 import { Sparkles } from 'lucide-react';
 import { useUser } from '../context/UserContext';
@@ -109,8 +110,13 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                 </div>
             </motion.div>
 
+            {/* 1.5 Analytics Chart (New) */}
+            <motion.div variants={item} className="px-4 mt-8">
+                <AnalyticsChart />
+            </motion.div>
+
             {/* 2. Viral Proof - Partner Stats */}
-            <motion.div variants={item} className="mt-8">
+            <motion.div variants={item} className="mt-4">
                 <PartnerStats onNavigateToEarn={() => setActiveTab?.('earn')} />
             </motion.div>
 

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Header } from '../Header';
 import ProfileDrawer from '../ProfileDrawer';
 import BottomNav from '../BottomNav';
-import { motion, AnimatePresence } from 'framer-motion';
 import { backButton } from '@telegram-apps/sdk-react';
 
 interface LayoutProps {
@@ -88,18 +87,9 @@ export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
                         <Header onOpenMenu={() => setIsMenuOpen(true)} />
                     </div>
 
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={activeTab}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="mx-auto w-full"
-                        >
-                            {children}
-                        </motion.div>
-                    </AnimatePresence>
+                    <div className="mx-auto w-full">
+                        {children}
+                    </div>
                 </div>
             </main>
 

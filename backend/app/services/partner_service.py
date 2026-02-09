@@ -90,75 +90,89 @@ async def get_partner_by_referral_code(session: AsyncSession, code: str) -> Opti
     result = await session.exec(statement)
     return result.first()
 
-async def process_referral_logic(bot, session: AsyncSession, partner: Partner):
+from app.worker import broker
+
+@broker.task(task_name="process_referral_logic")
+async def process_referral_logic(partner_id: int):
     """
     Optimized 9-level referral logic.
-    Tracks lineage, distributes XP, updates Redis leaderboards, and sends notifications.
-    Reduced DB roundtrips by fetching entire lineage in bulk.
+    Run as a background task via TaskIQ.
     """
-    if not partner.referrer_id:
-        return
+    from app.models.partner import Partner, get_session
+    from app.core.config import settings
+    # We need a new session for the background task
+    from sqlalchemy.ext.asyncio import create_async_engine
+    from sqlmodel.ext.asyncio.session import AsyncSession
+    from sqlalchemy.orm import sessionmaker
 
-    # 1. Reconstruct Lineage IDs (L1 to L9)
-    # The 'path' contains parents like "GGrand.Grand.Parent"
-    path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-    # Lineage is [..., L3, L2] + [L1]
-    lineage_ids = (path_ids + [partner.referrer_id])[-9:]
+    engine = create_async_engine(settings.DATABASE_URL, echo=False, future=True, pool_pre_ping=True)
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+
+    async with async_session() as session:
+        partner = await session.get(Partner, partner_id)
+        if not partner or not partner.referrer_id:
+            return
+
+        # 1. Reconstruct Lineage IDs (L1 to L9)
+        path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+        lineage_ids = (path_ids + [partner.referrer_id])[-9:]
+        
+        # 2. Bulk Fetch all ancestors
+        statement = select(Partner).where(Partner.id.in_(lineage_ids))
+        result = await session.exec(statement)
+        ancestor_map = {p.id: p for p in result.all()}
+
+        # XP distribution configuration
+        XP_MAP = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
+        
+        current_referrer_id = partner.referrer_id
+        for level in range(1, 10):
+            if not current_referrer_id:
+                break
+                
+            referrer = ancestor_map.get(current_referrer_id)
+            if not referrer:
+                break
+                
+            # 1. Distribute XP
+            xp_gain = XP_MAP.get(level, 0)
+            referrer.xp += xp_gain
+            
+            # 2. Handle Level Up Logic
+            new_level = get_level(referrer.xp)
+            if new_level > referrer.level:
+                # Level Up!
+                for l in range(referrer.level + 1, new_level + 1):
+                    try:
+                        lang = referrer.language_code or "en"
+                        msg = get_msg(lang, "level_up", level=l)
+                        await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
+                    except Exception: pass
+                referrer.level = new_level
+                
+            # 3. Sync to Redis Leaderboard
+            await leaderboard_service.update_score(referrer.id, referrer.xp)
+            
+            # 4. Invalidate Profile Cache
+            await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
+            
+            # 5. Send Notification
+            try:
+                lang = referrer.language_code or "en"
+                if level == 1:
+                    name = partner.first_name or partner.username or "Partner"
+                    msg = get_msg(lang, "referral_l1_congrats", name=name, username=f" (@{partner.username})" if partner.username else "")
+                else:
+                    msg = get_msg(lang, "referral_deep_activity", level=level)
+                await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
+            except Exception: pass
+
+            session.add(referrer)
+            current_referrer_id = referrer.referrer_id  # Move up the chain
+
+        await session.commit()
     
-    # 2. Bulk Fetch all ancestors
-    statement = select(Partner).where(Partner.id.in_(lineage_ids))
-    result = await session.exec(statement)
-    ancestor_map = {p.id: p for p in result.all()}
-
-    # XP distribution configuration
-    XP_MAP = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
-    
-    current_referrer_id = partner.referrer_id
-    for level in range(1, 10):
-        if not current_referrer_id:
-            break
-            
-        referrer = ancestor_map.get(current_referrer_id)
-        if not referrer:
-            break
-            
-        # 1. Distribute XP
-        xp_gain = XP_MAP.get(level, 0)
-        referrer.xp += xp_gain
-        
-        # 2. Handle Level Up Logic (Standardized)
-        new_level = get_level(referrer.xp)
-        if new_level > referrer.level:
-            # Level Up!
-            for l in range(referrer.level + 1, new_level + 1):
-                try:
-                    lang = referrer.language_code or "en"
-                    msg = get_msg(lang, "level_up", level=l)
-                    await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
-                except Exception: pass
-            referrer.level = new_level
-            
-        # 3. Sync to Redis Leaderboard
-        await leaderboard_service.update_score(referrer.id, referrer.xp)
-        
-        # 4. Invalidate Profile Cache
-        await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
-        
-        # 5. Send Notification
-        try:
-            lang = referrer.language_code or "en"
-            if level == 1:
-                name = partner.first_name or partner.username or "Partner"
-                msg = get_msg(lang, "referral_l1_congrats", name=name, username=f" (@{partner.username})" if partner.username else "")
-            else:
-                msg = get_msg(lang, "referral_deep_activity", level=level)
-            await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
-        except Exception: pass
-
-        session.add(referrer)
-        current_referrer_id = referrer.referrer_id  # Move up the chain
-
-    await session.commit()
+    await engine.dispose()
 
 async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dict[int, int]:
     """

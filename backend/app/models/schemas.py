@@ -18,6 +18,7 @@ class PartnerResponse(PartnerBase):
     is_pro: bool
     created_at: datetime
     updated_at: datetime
+    referrals: List[PartnerBase] = []
     
     class Config:
         from_attributes = True

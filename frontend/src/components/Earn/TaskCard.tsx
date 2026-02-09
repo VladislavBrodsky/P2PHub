@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Lock, CheckCircle2, ArrowRight } from 'lucide-react';
 import { Task } from '../../data/earnData';
 import { useTranslation } from 'react-i18next';
+import { Haptic } from '../../utils/tma';
 
 interface TaskCardProps {
     task: Task;
@@ -30,11 +31,21 @@ export const TaskCard = ({ task, status, userReferrals, countdown, onClick, onCl
         COMPLETED: 'glass-panel border-green-500/20 bg-green-500/5 cursor-default'
     };
 
+    const handleCardClick = () => {
+        if (isAvailable) {
+            Haptic.selection();
+            onClick?.();
+        } else if (isClaimable) {
+            Haptic.notification('success');
+            onClaim?.();
+        }
+    };
+
     return (
         <motion.div
             layout
             className={`relative rounded-2xl p-4 border transition-all duration-300 ${variants[status]}`}
-            onClick={isAvailable ? onClick : isClaimable ? onClaim : undefined}
+            onClick={handleCardClick}
             whileHover={isAvailable ? { scale: 1.02 } : {}}
             whileTap={isAvailable ? { scale: 0.98 } : {}}
         >
@@ -110,7 +121,11 @@ export const TaskCard = ({ task, status, userReferrals, countdown, onClick, onCl
                     {isClaimable ? (
                         <button
                             className="flex items-center gap-2 text-xs font-black text-emerald-400 uppercase tracking-wider hover:text-emerald-300 transition-colors"
-                            onClick={(e) => { e.stopPropagation(); onClaim?.(); }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                Haptic.notification('success');
+                                onClaim?.();
+                            }}
                         >
                             <CheckCircle2 className="w-4 h-4" />
                             {t('tasks.claim')}

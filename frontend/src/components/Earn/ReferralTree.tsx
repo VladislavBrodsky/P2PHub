@@ -32,21 +32,36 @@ export const ReferralTree = ({ stats }: ReferralTreeProps) => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-3">
+            <motion.div
+                className="grid grid-cols-3 gap-3"
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                variants={{
+                    hidden: { opacity: 0 },
+                    show: {
+                        opacity: 1,
+                        transition: {
+                            staggerChildren: 0.05
+                        }
+                    }
+                }}
+            >
                 {levels.map(({ level, count }) => (
                     <motion.div
                         key={level}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: level * 0.05 }}
-                        className="bg-white/5 border border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center relative group hover:bg-white/10 transition-colors"
+                        variants={{
+                            hidden: { opacity: 0, scale: 0.8, y: 10 },
+                            show: { opacity: 1, scale: 1, y: 0 }
+                        }}
+                        className="glass-panel border-0 bg-white/5 rounded-2xl p-3 flex flex-col items-center justify-center relative group hover:bg-white/10 transition-colors"
                     >
                         <span className="absolute top-2 left-2 text-[8px] font-black text-white/30 group-hover:text-blue-500 transition-colors">L{level}</span>
                         <span className="text-lg font-black text-white line-clamp-1">{count.toLocaleString()}</span>
                         <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">Partners</span>
                     </motion.div>
                 ))}
-            </div>
+            </motion.div>
 
             <div className="mt-6 flex items-center justify-between">
                 <p className="text-[9px] font-bold text-slate-500 max-w-[180px] leading-tight opacity-60 italic">

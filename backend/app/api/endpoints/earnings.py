@@ -1,27 +1,21 @@
 from fastapi import APIRouter, Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
-from app.core.security import get_current_user
+from app.core.security import get_current_user, get_tg_user
 from app.models.partner import Partner, Earning, get_session
+from app.models.schemas import EarningSchema
 from app.services.redis_service import redis_service
 from typing import List
-import json
 
 router = APIRouter()
 
-@router.get("/", response_model=List[Earning])
+@router.get("/", response_model=List[EarningSchema])
 async def get_my_earnings(
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
-    try:
-        if "user" in user_data:
-            tg_user = json.loads(user_data["user"])
-            tg_id = str(tg_user.get("id"))
-        else:
-            tg_id = str(user_data.get("id"))
-    except:
-        return []
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
 
     # 1. Try Redis Cache first
     cache_key = f"partner:earnings:{tg_id}"
@@ -59,14 +53,8 @@ async def create_mock_earning(
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
-    try:
-        if "user" in user_data:
-            tg_user = json.loads(user_data["user"])
-            tg_id = str(tg_user.get("id"))
-        else:
-            tg_id = str(user_data.get("id"))
-    except:
-        return {"status": "error", "message": "Invalid user data"}
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
 
     result = await session.exec(select(Partner).where(Partner.telegram_id == tg_id))
     partner = result.first()

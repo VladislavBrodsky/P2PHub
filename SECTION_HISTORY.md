@@ -21,7 +21,11 @@ Use this to see the evolution of individual components.
 ## 🚀 Performance & Infrastructure
 **Current Status**: v1.4.0 (Stable)
 
-### v1.4.0 (2026-02-08)
+### v1.4.1 (2026-02-09)
+-   **NAVIGATION FIX**: Implemented **Persistent Tab Rendering** (Keep-Alive).
+    -   **Problem**: Switching tabs caused a "White Screen" flash and reset component state (scroll, inputs) because the app was unmounting the previous tab.
+    -   **Solution**: Refactored `App.tsx` and `Layout.tsx` to use `display: none` for inactive tabs instead of conditional rendering.
+    -   **Result**: Instant tab switching with zero delay and full state preservation.
 -   **SDK OPTIMIZATION**: Removed `React.StrictMode` from production entry points to eliminate double-initialization conflicts with the Telegram SDK.
 -   **CSS REFACTOR**: Converted arbitrary Tailwind logic in global styles to standard CSS properties for better browser performance and IDE stability.
 
