@@ -1,5 +1,6 @@
 import logging
 import requests
+import json
 from typing import Optional, List
 from datetime import datetime, timedelta
 from sqlmodel import select
@@ -93,6 +94,11 @@ class PaymentService:
             
         partner.subscription_plan = "PRO_MONTHLY"
         session.add(partner)
+
+        # 2. Update or Create Transaction
+        stmt = select(Transaction).where(Transaction.tx_hash == tx_hash)
+        res = await session.exec(stmt)
+        transaction = res.first()
 
         if not transaction:
             transaction = Transaction(

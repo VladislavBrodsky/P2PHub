@@ -14,4 +14,7 @@ class Transaction(SQLModel, table=True):
     updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow})
     
     # Optional relationship back to Partner
-    partner: "Partner" = Relationship(back_populates="transactions")
+    partner: "Partner" = Relationship(
+        back_populates="transactions",
+        sa_relationship_kwargs={"foreign_keys": "Transaction.partner_id"}
+    )

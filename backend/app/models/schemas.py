@@ -1,0 +1,51 @@
+from pydantic import BaseModel, HttpUrl, Field
+from typing import Optional, List
+from datetime import datetime
+
+class PartnerBase(BaseModel):
+    telegram_id: str
+    username: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    photo_url: Optional[str] = None
+
+class PartnerResponse(PartnerBase):
+    id: int
+    balance: float
+    xp: float
+    level: int
+    referral_code: str
+    is_pro: bool
+    created_at: datetime
+    updated_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+class TaskClaimRequest(BaseModel):
+    xp_reward: float = Field(gt=0, description="XP reward must be greater than zero")
+
+class NetworkStats(BaseModel):
+    level_1: int = 0
+    level_2: int = 0
+    level_3: int = 0
+    level_4: int = 0
+    level_5: int = 0
+    level_6: int = 0
+    level_7: int = 0
+    level_8: int = 0
+    level_9: int = 0
+
+class GrowthMetrics(BaseModel):
+    growth_pct: float
+    current_count: int
+    previous_count: int
+    timeframe: str
+
+class EarningSchema(BaseModel):
+    amount: float
+    description: str
+    created_at: datetime
+    
+    class Config:
+        from_attributes = True
