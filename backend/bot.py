@@ -103,6 +103,8 @@ async def cmd_my_network(message: types.Message):
         logging.error(f"Error in cmd_my_network: {e}")
         await message.answer(f"⚠️ Error fetching stats: {str(e)}")
 
+import random
+
 @dp.inline_query()
 async def inline_handler(inline_query: types.InlineQuery):
     # The query is the referral code passed from the Mini App
@@ -117,10 +119,14 @@ async def inline_handler(inline_query: types.InlineQuery):
         
     base_url = base_url.rstrip('/')
     
-    # Images the user requested
-    # Note: Telegram requires encoded URLs or direct file IDs
-    photo1_url = f"{base_url}/images/2026-02-05%2003.35.36.jpg"
-    photo2_url = f"{base_url}/images/2026-02-05%2003.35.03.jpg"
+    # Available images
+    images = [
+        f"{base_url}/images/2026-02-05%2003.35.36.jpg",
+        f"{base_url}/images/2026-02-05%2003.35.03.jpg"
+    ]
+    
+    # Pick one randomly
+    chosen_photo = random.choice(images)
 
     # Viral marketing text
     caption = (
@@ -135,26 +141,18 @@ async def inline_handler(inline_query: types.InlineQuery):
 
     results = [
         types.InlineQueryResultPhoto(
-            id="share_1",
-            photo_url=photo1_url,
-            thumbnail_url=photo1_url,
+            id=f"share_{random.randint(1, 10000)}", # Unique ID to help bypass cache if needed
+            photo_url=chosen_photo,
+            thumbnail_url=chosen_photo,
             caption=caption,
             reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
                 [types.InlineKeyboardButton(text="Get Your Card Now 🚀", url=ref_link)]
             ])
-        ),
-        types.InlineQueryResultPhoto(
-            id="share_2",
-            photo_url=photo2_url,
-            thumbnail_url=photo2_url,
-            caption=caption,
-            reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
-                [types.InlineKeyboardButton(text="Start Building Your Empire 🏗️", url=ref_link)]
-            ])
         )
     ]
     
-    await inline_query.answer(results, is_personal=True, cache_time=300)
+    # Set cache_time=0 or low to ensured randomness
+    await inline_query.answer(results, is_personal=True, cache_time=5)
 
 async def main():
     logging.info("Starting bot...")
