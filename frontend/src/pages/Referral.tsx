@@ -412,19 +412,23 @@ export default function ReferralPage() {
 
             <BriefTermsModal isOpen={showBriefModal} onClose={() => setShowBriefModal(false)} />
 
-            <EarnHeader onUpgrade={() => {
-                selection();
-                // We need to set active tab to subscription. 
-                // Since this component doesn't have setActiveTab, we might need to use a hook or context.
-                // Looking at App.tsx, Layout handles it.
-                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
-            }} />
+            {/* Content Wrapper to enforce layout and stacking context */}
+            <div className="flex flex-col gap-0 relative isolate w-full">
+                <div className="z-30 relative">
+                    <EarnHeader onUpgrade={() => {
+                        selection();
+                        window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                    }} />
+                </div>
 
+                <div className="z-20 relative">
+                    <ReferralWidget onInvite={() => setShowShareModal(true)} onShowQR={() => setShowQR(true)} />
+                </div>
 
-
-            <ReferralWidget onInvite={() => setShowShareModal(true)} onShowQR={() => setShowQR(true)} />
-
-            <MilestonePath />
+                <div className="z-10 relative">
+                    <MilestonePath />
+                </div>
+            </div>
 
             <TaskGrid
                 tasks={localizedTasks}

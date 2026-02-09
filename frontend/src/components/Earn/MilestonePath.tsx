@@ -109,7 +109,7 @@ export const MilestonePath = () => {
 
     return (
         <motion.section
-            className="mt-4 mb-8 space-y-8 px-4 pb-20 min-h-[300px]"
+            className="mb-8 space-y-8 px-2 pb-20 min-h-[300px] relative z-10"
         >
             {groupedChapters.slice(0, visibleChapters).map((chapter, idx) => (
                 <div key={chapter.title} className="relative space-y-5">

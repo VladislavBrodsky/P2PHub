@@ -15,7 +15,7 @@ export const EarnHeader = ({ onUpgrade }: { onUpgrade?: () => void }) => {
     const progress = getXPProgress(level, xp);
 
     return (
-        <section className="mb-8 relative overflow-hidden rounded-[2.5rem] glass-panel border border-white/10 p-1 shadow-2xl">
+        <section className="mb-0 relative overflow-hidden rounded-[2.5rem] glass-panel border border-white/10 p-1 shadow-2xl z-30 transform-gpu">
             {/* Immersive Mesh Background */}
             <div className="absolute inset-0 bg-linear-to-br from-blue-600/10 via-purple-600/5 to-transparent pointer-events-none" />
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full animate-pulse pointer-events-none" />
