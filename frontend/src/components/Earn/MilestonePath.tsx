@@ -68,7 +68,7 @@ export const MilestonePath = () => {
                                 relative flex flex-col items-center p-3 rounded-[1.5rem] border transition-all duration-300 active:scale-95 cursor-pointer
                                 ${isUnlocked
                                     ? 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 shadow-premium backdrop-blur-xl'
-                                    : 'bg-slate-100 dark:bg-slate-900/10 border-slate-200 dark:border-white/5 opacity-60'}
+                                    : 'bg-slate-200/50 dark:bg-slate-900/10 border-slate-300 dark:border-white/5'}
                             `}
                         >
                             <div className={`
@@ -84,10 +84,10 @@ export const MilestonePath = () => {
                                 </div>
                             </div>
                             <div className="text-center space-y-0.5">
-                                <div className={`text-[7px] font-black uppercase tracking-tighter ${isUnlocked ? 'text-blue-500' : 'text-slate-500'}`}>
+                                <div className={`text-[7px] font-black uppercase tracking-tighter ${isUnlocked ? 'text-blue-500' : 'text-slate-600 dark:text-slate-500'}`}>
                                     {isLocked ? `Lvl ${item.level}` : `LVL ${item.level}`}
                                 </div>
-                                <h5 className={`text-[9px] font-black leading-tight line-clamp-1 h-3 ${isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
+                                <h5 className={`text-[9px] font-black leading-tight line-clamp-1 h-3 ${isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-600'}`}>
                                     {isLocked ? '???' : t(item.reward, { level: item.level })}
                                 </h5>
                             </div>
@@ -115,7 +115,7 @@ export const MilestonePath = () => {
                             {chapter.icon}
                         </div>
                         <div className="flex flex-col">
-                            <h4 className={`text-[12px] font-black uppercase tracking-widest ${chapter.isPartiallyComplete ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
+                            <h4 className={`text-[12px] font-black uppercase tracking-widest ${chapter.isPartiallyComplete ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-600'}`}>
                                 PART {idx + 1}: {chapter.title}
                             </h4>
                             <span className="text-[8px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-0.5">
