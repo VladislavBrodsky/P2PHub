@@ -99,7 +99,7 @@ export const MilestonePath = () => {
                                     {/* Label Stack */}
                                     <div className="text-center space-y-1 w-full">
                                         <div className={`text-[8px] font-black uppercase tracking-widest ${isUnlocked ? 'text-blue-400' : 'text-slate-500'}`}>
-                                            {isLocked ? `${t('common.unlock')} Lvl ${item.level}` : `LVL ${item.level}`}
+                                            {isLocked ? `${t('common.unlock_at')} ${item.level}` : `LVL ${item.level}`}
                                         </div>
                                         <h4 className={`text-[10px] font-black leading-tight line-clamp-2 px-1 ${isUnlocked ? 'text-white' : 'text-slate-600'}`}>
                                             {isLocked ? '???' : t(item.reward, { level: item.level })}
