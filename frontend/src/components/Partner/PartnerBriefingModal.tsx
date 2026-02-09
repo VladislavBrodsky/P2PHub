@@ -67,7 +67,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
     ];
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-3">
             {/* Backdrop */}
             <motion.div
                 initial={{ opacity: 0 }}
@@ -82,28 +82,28 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+                className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[85vh] sm:max-h-[90vh]"
             >
                 {/* Header */}
-                <div className="p-4 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-white dark:bg-slate-900 backdrop-blur-xl shrink-0">
-                    <div className="flex items-center gap-3">
-                        <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                            <BookOpen className="w-4 h-4" />
+                <div className="p-3 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-white dark:bg-slate-900 backdrop-blur-xl shrink-0">
+                    <div className="flex items-center gap-2">
+                        <div className="p-1 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                            <BookOpen className="w-3.5 h-3.5" />
                         </div>
-                        <h2 className="text-lg font-black tracking-tight text-slate-900 dark:text-white uppercase">
+                        <h2 className="text-base font-black tracking-tight text-slate-900 dark:text-white uppercase">
                             {t('referral.brief.title')}
                         </h2>
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 transition-colors"
+                        className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 transition-colors"
                     >
                         <X className="w-5 h-5" />
                     </button>
                 </div>
 
                 {/* Content */}
-                <div className="overflow-y-auto p-4 space-y-5 scrollbar-hide">
+                <div className="overflow-y-auto p-3 space-y-4 scrollbar-hide">
                     {sections.map((section) => {
                         const Icon = section.icon;
                         const colorClass =
@@ -113,38 +113,38 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                                         'text-emerald-500 bg-emerald-500/10';
 
                         return (
-                            <div key={section.id} className="space-y-3">
+                            <div key={section.id} className="space-y-2">
                                 <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2.5">
-                                        <div className={`p-1.5 rounded-lg ${colorClass}`}>
-                                            <Icon className="w-4 h-4" />
+                                    <div className="flex items-center gap-2">
+                                        <div className={`p-1 rounded-lg ${colorClass}`}>
+                                            <Icon className="w-3.5 h-3.5" />
                                         </div>
-                                        <h3 className="text-sm font-black text-slate-900 dark:text-white tracking-tight uppercase">
+                                        <h3 className="text-xs font-black text-slate-900 dark:text-white tracking-tight uppercase">
                                             {section.title}
                                         </h3>
                                     </div>
                                     {section.badge && (
-                                        <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md bg-red-500/10 text-red-500 border border-red-500/20">
+                                        <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md bg-red-500/10 text-red-500 border border-red-500/20">
                                             {section.badge}
                                         </span>
                                     )}
                                 </div>
 
-                                <div className="pl-11">
+                                <div className="pl-7">
                                     {section.content && (
-                                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
                                             {section.content}
                                         </p>
                                     )}
 
                                     {section.steps && (
-                                        <div className="space-y-2.5">
+                                        <div className="space-y-2">
                                             {section.steps.map((step, i) => (
-                                                <div key={i} className="flex items-start gap-3">
-                                                    <div className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-purple-500/20 text-[10px] font-black text-purple-600 dark:text-purple-400">
+                                                <div key={i} className="flex items-start gap-2.5">
+                                                    <div className="mt-0.5 flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-purple-500/20 text-[9px] font-black text-purple-600 dark:text-purple-400">
                                                         {i + 1}
                                                     </div>
-                                                    <p className="text-[13px] text-slate-600 dark:text-slate-400 font-medium leading-tight">
+                                                    <p className="text-[12px] text-slate-600 dark:text-slate-400 font-medium leading-tight">
                                                         {step}
                                                     </p>
                                                 </div>
@@ -153,16 +153,16 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                                     )}
 
                                     {section.points && (
-                                        <div className="space-y-3">
+                                        <div className="space-y-2.5">
                                             {section.points.map((point, i) => (
-                                                <div key={i} className="space-y-1">
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="w-1.5 h-1.5 rounded-full bg-red-500/50" />
-                                                        <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white/80">
+                                                <div key={i} className="space-y-0.5">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <div className="w-1 h-1 rounded-full bg-red-500/50" />
+                                                        <h4 className="text-[9px] font-black uppercase tracking-widest text-slate-900 dark:text-white/80">
                                                             {point.title}
                                                         </h4>
                                                     </div>
-                                                    <p className="text-[12px] text-slate-600 dark:text-slate-400 font-medium leading-snug">
+                                                    <p className="text-[11px] text-slate-600 dark:text-slate-400 font-medium leading-snug">
                                                         {point.desc}
                                                     </p>
                                                 </div>
@@ -176,10 +176,10 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/2 backdrop-blur-xl shrink-0">
+                <div className="p-3 border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/2 backdrop-blur-xl shrink-0">
                     <Button
                         onClick={onClose}
-                        className="w-full h-12 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-blue-50 rounded-xl font-black text-sm shadow-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
+                        className="w-full h-11 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-blue-50 rounded-xl font-black text-xs shadow-xl flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
                     >
                         <CheckCircle2 className="w-4 h-4" />
                         {t('referral.brief.cta')}
