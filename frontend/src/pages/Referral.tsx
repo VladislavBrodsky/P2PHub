@@ -10,7 +10,7 @@ import { TaskGrid } from '../components/Earn/TaskGrid';
 import { EARN_TASKS, Task, MILESTONES } from '../data/earnData';
 import { useUser } from '../context/UserContext';
 import { Confetti } from '../components/ui/Confetti';
-import { CheckCircle2, Trophy, QrCode, X, Share2, Download, Copy, ExternalLink } from 'lucide-react';
+import { CheckCircle2, Trophy, QrCode, X, Share2, Download, Copy, ExternalLink, Send } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { getSafeLaunchParams } from '../utils/tma';
 
@@ -162,51 +162,112 @@ export default function ReferralPage() {
         <div className="flex flex-col min-h-[90vh] px-4 pt-4 pb-32 relative">
             {confettiActive && <Confetti />}
 
-            {/* Share Modal */}
             <AnimatePresence>
                 {showShareModal && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                         <motion.div
-                            initial={{ y: 100, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: 100, opacity: 0 }}
-                            className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-[2.5rem] p-6 relative shadow-2xl overflow-hidden max-h-[85vh] overflow-y-auto"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setShowShareModal(false)}
+                            className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+                        />
+                        <motion.div
+                            initial={{ y: 100, opacity: 0, scale: 0.9 }}
+                            animate={{ y: 0, opacity: 1, scale: 1 }}
+                            exit={{ y: 100, opacity: 0, scale: 0.9 }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                            className="w-full max-w-sm bg-slate-900/40 border border-white/10 rounded-[3rem] p-7 relative shadow-2xl overflow-hidden max-h-[90vh] flex flex-col glass-panel-premium"
                         >
-                            <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-b from-blue-600/20 to-transparent pointer-events-none" />
+                            {/* Animated Background Glow */}
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-64 bg-blue-600/10 blur-[100px] animate-pulse pointer-events-none" />
+
                             <button
                                 onClick={() => setShowShareModal(false)}
-                                className="absolute top-4 right-4 p-2 bg-slate-800/80 backdrop-blur-sm rounded-full text-white/70 hover:text-white z-20"
+                                className="absolute top-5 right-5 w-10 h-10 bg-white/5 backdrop-blur-md rounded-full text-white/50 hover:text-white flex items-center justify-center z-50 transition-colors border border-white/5"
                             >
                                 <X className="w-5 h-5" />
                             </button>
-                            <div className="relative z-10 space-y-6 pt-2">
-                                <div className="bg-slate-900/40 backdrop-blur-md overflow-hidden rounded-3xl border border-white/10 shadow-lg">
-                                    <img src="/viral-invite.jpg" alt={t('referral.modal.invite_image_alt')} className="w-full h-40 object-cover" />
-                                    <div className="p-4 space-y-1">
-                                        <p className="text-[10px] font-black text-blue-500 uppercase tracking-tighter">{t('referral.modal.limited_tier')}</p>
-                                        <h4 className="text-sm font-black text-white leading-snug">{VIRAL_HOOK}</h4>
-                                        <p className="text-[10px] font-bold text-slate-400 italic opacity-60">{VIRAL_SUBTITLE}</p>
+
+                            <div className="relative z-10 flex flex-col gap-8">
+                                {/* Premium Invitation Card */}
+                                <div className="relative group perspective-1000">
+                                    <div className="absolute -inset-0.5 bg-linear-to-r from-blue-500 to-indigo-500 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                                    <div className="relative bg-black rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+                                        <div className="relative h-44">
+                                            <img src="/viral-invite.jpg" alt={t('referral.modal.invite_image_alt')} className="w-full h-full object-cover opacity-80" />
+                                            {/* Glossy Overlay */}
+                                            <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent" />
+                                            <div className="absolute inset-0 bg-linear-to-tr from-blue-500/10 to-transparent" />
+
+                                            {/* Floating Badge */}
+                                            <div className="absolute top-4 left-4">
+                                                <div className="px-2 py-1 bg-blue-500/20 backdrop-blur-md border border-blue-500/30 rounded-lg">
+                                                    <p className="text-[9px] font-black text-blue-400 uppercase tracking-widest">{t('referral.modal.limited_tier')}</p>
+                                                </div>
+                                            </div>
+
+                                            <button className="absolute top-4 right-14 w-8 h-8 rounded-full bg-white/10 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80">
+                                                <Share2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                        <div className="p-5 bg-linear-to-b from-slate-900/50 to-black/80 backdrop-blur-sm border-t border-white/5">
+                                            <h4 className="text-base font-black text-white leading-tight mb-2 tracking-tight">
+                                                {VIRAL_HOOK}
+                                            </h4>
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                                <p className="text-[11px] font-bold text-slate-400 tracking-wide uppercase">{VIRAL_SUBTITLE}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="space-y-3">
-                                    <h3 className="text-xl font-black text-center text-white tracking-tight">{t('referral.modal.recruit_title')}</h3>
-                                    <div className="grid grid-cols-1 gap-3">
-                                        <button onClick={handleShareTelegram} className="w-full h-14 bg-[#0088cc] text-white rounded-2xl font-black flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg shadow-blue-500/20">
-                                            <Share2 className="w-5 h-5" /> {t('referral.modal.share_telegram')}
+
+                                {/* Action Buttons */}
+                                <div className="space-y-6">
+                                    <div className="text-center">
+                                        <h3 className="text-2xl font-black text-white tracking-tighter mb-1">{t('referral.modal.recruit_title')}</h3>
+                                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">{t('referral.modal.limited_tier')}</p>
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <button
+                                            onClick={handleShareTelegram}
+                                            className="w-full h-14 rounded-2xl font-black text-white flex items-center justify-center gap-3 active:scale-[0.98] transition-all shadow-xl liquid-blue-premium text-lg"
+                                        >
+                                            <Send className="w-5 h-5 -rotate-45 translate-x-1" />
+                                            {t('referral.modal.share_telegram')}
                                         </button>
+
                                         <div className="grid grid-cols-2 gap-3">
-                                            <button onClick={handleNativeShare} className="h-14 bg-white/5 border border-white/10 rounded-2xl font-bold text-white flex items-center justify-center gap-2 active:scale-95 transition-all">
-                                                <ExternalLink className="w-4 h-4 opacity-60" /> {t('referral.modal.share_more')}
+                                            <button
+                                                onClick={handleNativeShare}
+                                                className="h-14 bg-white/5 border border-white/10 rounded-2xl font-black text-white text-sm flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-white/10"
+                                            >
+                                                <ExternalLink className="w-4 h-4 text-blue-400" />
+                                                {t('referral.modal.share_more')}
                                             </button>
-                                            <button onClick={handleCopyLink} className="h-14 bg-white/5 border border-white/10 rounded-2xl font-bold text-white flex items-center justify-center gap-2 active:scale-95 transition-all">
-                                                <Copy className="w-4 h-4 opacity-60" /> {t('referral.modal.copy_link')}
+                                            <button
+                                                onClick={handleCopyLink}
+                                                className="h-14 bg-white/5 border border-white/10 rounded-2xl font-black text-white text-sm flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-white/10"
+                                            >
+                                                <Copy className="w-4 h-4 text-blue-400" />
+                                                {t('referral.modal.copy_link')}
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                                <p className="text-[10px] text-center text-slate-500 font-bold px-4">
-                                    <Trans i18nKey="referral.modal.boost_desc">Each referral boosts your XP and moves you closer to the <strong className="text-white">Physical Platinum Card</strong>.</Trans>
-                                </p>
+
+                                {/* Footer Hint */}
+                                <div className="pt-2">
+                                    <div className="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/10 text-center">
+                                        <p className="text-[11px] text-slate-400 font-bold leading-relaxed px-2">
+                                            <Trans i18nKey="referral.modal.boost_desc">
+                                                Each referral boosts your XP and moves you closer to the <span className="text-white font-black underline decoration-blue-500 underline-offset-4">Physical Platinum Card</span>.
+                                            </Trans>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </motion.div>
                     </div>
