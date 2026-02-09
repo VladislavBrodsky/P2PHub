@@ -109,6 +109,23 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                             >
                                 {STORIES[index].desc}
                             </motion.p>
+
+                            {index === STORIES.length - 1 && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.6 }}
+                                    className="pt-4 space-y-3"
+                                >
+                                    <div className="h-px bg-white/10 w-12 mx-auto" />
+                                    <p className="text-[10px] text-white/40 font-medium leading-relaxed uppercase tracking-widest px-4">
+                                        By tapping get started, you confirm that you have read and agree to our{' '}
+                                        <span className="text-white/60 underline decoration-white/20 underline-offset-2 cursor-pointer hover:text-white transition-colors">Terms of Service</span>,{' '}
+                                        <span className="text-white/60 underline decoration-white/20 underline-offset-2 cursor-pointer hover:text-white transition-colors">Cookie Policy</span> and consent to our{' '}
+                                        <span className="text-white/60 underline decoration-white/20 underline-offset-2 cursor-pointer hover:text-white transition-colors">Marketing Activities</span>.
+                                    </p>
+                                </motion.div>
+                            )}
                         </div>
                     </div>
 

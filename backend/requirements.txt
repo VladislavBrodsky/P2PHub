@@ -146,3 +146,5 @@ yarl==1.20.1
 greenlet==3.0.3
 segno==1.6.6
 asyncpg==0.31.0
+taskiq==0.11.10
+taskiq-fastapi==0.3.3

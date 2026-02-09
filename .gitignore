@@ -17,3 +17,6 @@ frontend/local_npm_cache/
 # OS
 .DS_Store
 Thumbs.db
+
+# Logs
+archive_logs/

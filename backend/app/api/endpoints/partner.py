@@ -192,6 +192,34 @@ async def get_top_partners(
         pass
         
     return top_data
+
+@router.get("/recent", response_model=List[PartnerResponse])
+async def get_recent_partners(
+    limit: int = 10,
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Fetches the 10 most recently joined partners for social proof.
+    """
+    cache_key = "partners:recent"
+    try:
+        cached = await redis_service.get_json(cache_key)
+        if cached:
+            return cached
+    except Exception:
+        pass
+        
+    statement = select(Partner).order_by(Partner.created_at.desc()).limit(limit)
+    result = await session.exec(statement)
+    partners = result.all()
+    
+    try:
+        await redis_service.set_json(cache_key, [p.model_dump() for p in partners], expire=300)
+    except Exception:
+        pass
+        
+    return partners
+
 @router.get("/tree", response_model=NetworkStats)
 async def get_my_referral_tree(
     user_data: dict = Depends(get_current_user),
