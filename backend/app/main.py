@@ -16,9 +16,6 @@ async def lifespan(app: FastAPI):
     from app.services.notification_service import notification_service
     
     asyncio.create_task(warmup_redis())
-    # Start the notification queue worker
-    worker_task = asyncio.create_task(notification_service.process_notifications_worker())
-    app.state.notification_worker = worker_task
     
     # Start the subscription expiration checker
     from app.services.subscription_service import subscription_service
@@ -56,13 +53,6 @@ async def lifespan(app: FastAPI):
     await bot.session.close()
     
     # Stop background tasks
-    if hasattr(app.state, "notification_worker"):
-        app.state.notification_worker.cancel()
-        try:
-            await app.state.notification_worker
-        except asyncio.CancelledError:
-            pass
-
     if hasattr(app.state, "subscription_checker"):
         app.state.subscription_checker.cancel()
         try:

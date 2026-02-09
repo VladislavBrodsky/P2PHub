@@ -76,8 +76,9 @@ async def process_referral_notifications(bot, session: AsyncSession, partner: Pa
     Wrapper to trigger the recursive referral logic for new signups.
     """
     if is_new and partner.referrer_id:
-        # Offload to the optimized recursive logic
-        await process_referral_logic.kiq(partner.id)
+        # Run logic in background (fire and forget)
+        import asyncio
+        asyncio.create_task(process_referral_logic(partner.id))
 
 
 async def get_partner_by_telegram_id(session: AsyncSession, telegram_id: str) -> Optional[Partner]:
@@ -90,13 +91,13 @@ async def get_partner_by_referral_code(session: AsyncSession, code: str) -> Opti
     result = await session.exec(statement)
     return result.first()
 
-from app.worker import broker
 
-@broker.task(task_name="process_referral_logic")
+# from app.worker import broker
+# @broker.task(task_name="process_referral_logic")
 async def process_referral_logic(partner_id: int):
     """
     Optimized 9-level referral logic.
-    Run as a background task via TaskIQ.
+    Run as a standard asyncio background task (no external broker needed).
     """
     from app.models.partner import Partner, XPTransaction, get_session
     from app.core.config import settings
@@ -105,13 +106,14 @@ async def process_referral_logic(partner_id: int):
     from sqlmodel.ext.asyncio.session import AsyncSession
     from sqlalchemy.orm import sessionmaker
 
-    engine = create_async_engine(settings.DATABASE_URL, echo=False, future=True, pool_pre_ping=True)
-    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-
-    async with async_session() as session:
-        partner = await session.get(Partner, partner_id)
-        if not partner or not partner.referrer_id:
-            return
+    try:
+        engine = create_async_engine(settings.DATABASE_URL, echo=False, future=True, pool_pre_ping=True)
+        async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    
+        async with async_session() as session:
+            partner = await session.get(Partner, partner_id)
+            if not partner or not partner.referrer_id:
+                return
 
         # 1. Reconstruct Lineage IDs (L1 to L9)
         # partner.path already includes the referrer_id as the last element.
@@ -196,7 +198,8 @@ async def process_referral_logic(partner_id: int):
 
         await session.commit()
     
-    await engine.dispose()
+    finally:
+        await engine.dispose()
 
 async def distribute_pro_commissions(session: AsyncSession, partner_id: int, total_amount: float):
     """
