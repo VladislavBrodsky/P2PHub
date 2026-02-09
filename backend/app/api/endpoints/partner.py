@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.security import get_current_user, get_tg_user
 from app.models.partner import Partner, get_session
-from app.models.schemas import PartnerResponse, TaskClaimRequest, GrowthMetrics, NetworkStats, EarningSchema
+from app.models.schemas import PartnerResponse, TaskClaimRequest, GrowthMetrics, NetworkStats, EarningSchema, PartnerTopResponse
 from sqlmodel import select
 from sqlalchemy.orm import selectinload
 from app.services.redis_service import redis_service
@@ -150,42 +150,48 @@ async def get_my_profile(
         
     return partner
 
-@router.get("/recent")
-async def get_recent_partners(
+    return partners_data
+
+@router.get("/top", response_model=List[PartnerTopResponse])
+async def get_top_partners(
     session: AsyncSession = Depends(get_session)
 ):
-    # 1. Try Redis Cache first
-    cache_key = "partners:recent"
+    """
+    Fetches the top 5 partners by XP for social proof.
+    """
+    from app.utils.ranking import get_rank
+    
+    cache_key = "partners:top"
     try:
-        cached_partners = await redis_service.get_json(cache_key)
-        if cached_partners:
-            return cached_partners
-    except Exception:
-        pass
-
-    # 2. Query DB
-    from datetime import datetime, timedelta
-    one_hour_ago = datetime.utcnow() - timedelta(minutes=60)
-    
-    statement = select(Partner).where(Partner.created_at >= one_hour_ago).order_by(Partner.created_at.desc()).limit(10)
-    result = await session.exec(statement)
-    partners = result.all()
-    
-    if not partners:
-        statement = select(Partner).order_by(Partner.created_at.desc()).limit(4)
-        result = await session.exec(statement)
-        partners = result.all()
-    
-    # Transform to dict for JSON serialization
-    partners_data = [p.dict() for p in partners]
-    
-    # 3. Cache in Redis (expires in 60 seconds)
-    try:
-        await redis_service.set_json(cache_key, partners_data, expire=60)
+        cached = await redis_service.get_json(cache_key)
+        if cached:
+            return cached
     except Exception:
         pass
         
-    return partners_data
+    statement = select(Partner).order_by(Partner.xp.desc()).limit(5).options(selectinload(Partner.referrals))
+    result = await session.exec(statement)
+    partners = result.all()
+    
+    top_data = []
+    for p in partners:
+        top_data.append({
+            "id": p.id,
+            "first_name": p.first_name,
+            "last_name": p.last_name,
+            "username": p.username,
+            "photo_url": p.photo_url,
+            "xp": p.xp,
+            "referrals_count": len(p.referrals),
+            "rank": get_rank(p.xp)
+        })
+        
+    try:
+        await redis_service.set_json(cache_key, top_data, expire=600)
+    except Exception:
+        pass
+        
+    return top_data
 @router.get("/tree", response_model=NetworkStats)
 async def get_my_referral_tree(
     user_data: dict = Depends(get_current_user),

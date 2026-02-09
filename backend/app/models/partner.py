@@ -44,7 +44,8 @@ class Partner(SQLModel, table=True):
     )
     completed_task_records: list["PartnerTask"] = Relationship(back_populates="partner")
     transactions: list["PartnerTransaction"] = Relationship(
-        back_populates="partner"
+        back_populates="partner",
+        sa_relationship_kwargs={"foreign_keys": "PartnerTransaction.partner_id"}
     )
     last_transaction: Optional["PartnerTransaction"] = Relationship(
         sa_relationship_kwargs={"foreign_keys": "Partner.last_transaction_id"}

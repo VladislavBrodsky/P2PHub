@@ -1,4 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { Layout } from './components/Layout/Layout';
 // Lazy load pages
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -16,11 +17,21 @@ import { isTMA } from './utils/tma';
 import { NotificationOverlay } from './components/ui/NotificationOverlay';
 import { useRealtimeAlerts } from './hooks/useRealtimeAlerts';
 import { Skeleton } from './components/Skeleton';
+import { OnboardingStory } from './components/Onboarding/OnboardingStory';
 
 function App() {
     const [activeTab, setActiveTab] = useState('home');
     const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set(['home']));
+    const [showOnboarding, setShowOnboarding] = useState(false);
     useRealtimeAlerts();
+
+    // Check onboarding status
+    useEffect(() => {
+        const hasOnboarded = localStorage.getItem('p2p_onboarded');
+        if (!hasOnboarded) {
+            setShowOnboarding(true);
+        }
+    }, []);
 
     // Track visited tabs to keep components mounted after first load
     useEffect(() => {
@@ -123,6 +134,16 @@ function App() {
             <ThemeProvider>
                 <UserProvider>
                     <NotificationOverlay />
+                    <AnimatePresence>
+                        {showOnboarding && (
+                            <OnboardingStory
+                                onComplete={() => {
+                                    setShowOnboarding(false);
+                                    localStorage.setItem('p2p_onboarded', 'true');
+                                }}
+                            />
+                        )}
+                    </AnimatePresence>
                     <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
                         <Suspense fallback={<div className="h-full flex items-center justify-center"><Skeleton className="w-full h-full max-w-md max-h-96" /></div>}>
                             <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>

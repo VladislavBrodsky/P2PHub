@@ -23,11 +23,11 @@ export const NotificationOverlay = () => {
                     animate={{ opacity: 1, y: 20, scale: 1 }}
                     exit={{ opacity: 0, y: -20, scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className="fixed top-0 left-0 right-0 z-[100] flex justify-center pointer-events-none px-4"
+                    className="fixed top-0 left-0 right-0 z-100 flex justify-center pointer-events-none px-4"
                 >
                     <div className="glass-panel-premium rounded-full px-4 py-3 shadow-xl flex items-center gap-3 max-w-sm w-full pointer-events-auto backdrop-blur-xl bg-slate-900/80 border-slate-700/50">
                         {notification.icon && (
-                            <div className="flex-shrink-0 text-emerald-400">
+                            <div className="shrink-0 text-emerald-400">
                                 {notification.icon}
                             </div>
                         )}

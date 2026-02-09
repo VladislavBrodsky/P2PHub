@@ -11,6 +11,7 @@ import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
 import { getRank, getLevel, RANKS } from '../../utils/ranking';
 import { PartnerBriefingModal } from './PartnerBriefingModal';
+import { TopPartnersList } from '../Community/TopPartnersList';
 
 export const PartnerDashboard = () => {
     const { notification, selection } = useHaptic();
@@ -128,6 +129,9 @@ export const PartnerDashboard = () => {
                         <ChevronRight className="w-4 h-4 text-slate-400" />
                     </div>
                 </div>
+
+                {/* 1.5 Social Proof - Top Partners */}
+                <TopPartnersList />
 
                 {/* ... (Rest of dashboard) ... */}
                 {/* 2. Invitation Method */}

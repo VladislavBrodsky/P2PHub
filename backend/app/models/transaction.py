@@ -15,5 +15,6 @@ class PartnerTransaction(SQLModel, table=True):
     
     # Optional relationship back to Partner
     partner: "Partner" = Relationship(
-        back_populates="transactions"
+        back_populates="transactions",
+        sa_relationship_kwargs={"foreign_keys": "PartnerTransaction.partner_id"}
     )
