@@ -9,6 +9,7 @@ from app.core.i18n import get_msg
 from app.services.leaderboard_service import leaderboard_service
 from app.services.redis_service import redis_service
 from app.services.notification_service import notification_service
+from app.utils.ranking import get_level
 
 logger = logging.getLogger(__name__)
 
@@ -121,15 +122,18 @@ async def process_referral_logic(bot, session: AsyncSession, partner: Partner):
         xp_gain = XP_MAP.get(level, 0)
         referrer.xp += xp_gain
         
-        # 2. Handle Level Up Logic (Cumulative Quadratic Curve)
-        # XP Req to finish current Level L = L * 100
-        # Total XP to reach Level L+1 = sum(i * 100 for i in 1..L) = 50 * L * (L + 1)
-        while referrer.xp >= (50 * referrer.level * (referrer.level + 1)):
-            referrer.level += 1
-            try:
-                msg = f"🏆 *Level Up!* 🏆\n\nYou've reached *Level {referrer.level}*!\n\nKeep going to unlock the Platinum Tier."
-                await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
-            except Exception: pass
+        # 2. Handle Level Up Logic (Standardized)
+        new_level = get_level(referrer.xp)
+        if new_level > referrer.level:
+            # Level Up! - Could potentially be multiple levels if high XP gain
+            for l in range(referrer.level + 1, new_level + 1):
+                try:
+                    msg = f"🏆 *Level Up!* 🏆\n\nYou've reached *Level {l}*!\n\nKeep going to unlock the Platinum Tier."
+                    # We might skip intermediate notifications or send one big one
+                    # For now keep it consistent with original intent
+                    await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
+                except Exception: pass
+            referrer.level = new_level
             
         # 3. Sync to Redis Leaderboard
         await leaderboard_service.update_score(referrer.id, referrer.xp)

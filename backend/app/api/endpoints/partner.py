@@ -7,6 +7,7 @@ from sqlalchemy.orm import selectinload
 from app.services.redis_service import redis_service
 import json
 import secrets
+from app.utils.ranking import get_level
 
 router = APIRouter()
 
@@ -93,6 +94,17 @@ async def get_my_profile(
             session.add(partner)
             await session.commit()
             await session.refresh(partner)
+
+    # 2.1 Self-healing: Correct level if inconsistent with XP
+    correct_level = get_level(partner.xp)
+    if partner.level != correct_level:
+        print(f"[DEBUG] Correcting level for {tg_id}: {partner.level} -> {correct_level}")
+        partner.level = correct_level
+        session.add(partner)
+        await session.commit()
+        await session.refresh(partner)
+        # Invalidate cache again since we updated the profile
+        await redis_service.client.delete(f"partner:profile:{tg_id}")
 
     # 3. Store in Redis Cache (expires in 5 minutes)
     try:
@@ -284,10 +296,8 @@ async def claim_task_reward(
         partner.completed_tasks = json.dumps(completed)
         partner.xp += xp_reward
         
-        # Simple level up logic
-        next_level_xp = partner.level * 100
-        if partner.xp >= next_level_xp:
-            partner.level += 1
+        # Standardized level up logic
+        partner.level = get_level(partner.xp)
             
         session.add(partner)
         await session.commit()
