@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { QrCode, Copy, Gift, DollarSign, ExternalLink, Users, ChevronRight } from 'lucide-react';
+import { QrCode, Copy, Gift, DollarSign, ExternalLink, Users, ChevronRight, Sparkles } from 'lucide-react';
 import { useHaptic } from '../../hooks/useHaptic';
 import { useUser } from '../../context/UserContext';
 import { Button } from '../ui/Button';
@@ -9,12 +9,15 @@ import { NetworkExplorer } from './NetworkExplorer';
 import { ReferralGrowthChart } from './ReferralGrowthChart';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
+import { getRank, getLevel, RANKS } from '../../utils/ranking';
+import { PartnerBriefingModal } from './PartnerBriefingModal';
 
 export const PartnerDashboard = () => {
     const { notification, selection } = useHaptic();
     const { user } = useUser();
     const [isExplorerOpen, setIsExplorerOpen] = React.useState(false);
     const [isQrOpen, setIsQrOpen] = React.useState(false);
+    const [isBriefingOpen, setIsBriefingOpen] = React.useState(false);
 
     // Correct bot username as requested
     const referralLink = `https://t.me/pintopay_probot?start=${user?.referral_code || 'ref_dev'}`;
@@ -67,9 +70,11 @@ export const PartnerDashboard = () => {
         <>
             <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 {/* 0. Personalization Section */}
-                <div>
+                <div onClick={() => setIsBriefingOpen(true)} className="cursor-pointer">
                     <PersonalizationCard variant="compact" />
                 </div>
+
+                <MilestoneSection />
 
                 {/* Quick Stats Row */}
                 <div className="grid grid-cols-2 gap-2">
@@ -186,15 +191,26 @@ export const PartnerDashboard = () => {
                 <div className="pt-2">
                     <Button
                         variant="primary"
-                        className="w-full h-14 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-blue-50 rounded-2xl font-black text-sm shadow-premium flex items-center justify-center gap-3 active:scale-[0.98] transition-all relative overflow-hidden group"
-                        onClick={() => notification('success')}
+                        className="w-full h-15 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-blue-50 rounded-2xl font-black text-sm shadow-premium flex flex-col items-center justify-center gap-0.5 active:scale-[0.98] transition-all relative overflow-hidden group"
+                        onClick={() => {
+                            notification('success');
+                            setIsBriefingOpen(true);
+                        }}
                     >
-                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                        <span className="relative z-10">EXPAND YOUR NETWORK</span>
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 relative z-10 animate-pulse" />
+                        {/* Shimmer Effect */}
+                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 dark:via-blue-400/20 to-transparent -translate-x-full group-hover:animate-shimmer pointer-events-none" />
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-linear-to-r from-blue-500/5 via-purple-500/5 to-blue-500/5 transition-opacity duration-500" />
+
+                        <div className="flex items-center gap-3 relative z-10 pt-1">
+                            <span className="tracking-widest">EXPAND YOUR NETWORK</span>
+                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 relative z-10 animate-pulse" />
+                        </div>
+                        <span className="text-[9px] font-bold opacity-50 tracking-tight relative z-10 pb-1 italic">Reach $1/minute velocity</span>
                     </Button>
                 </div>
             </div>
+
+            <PartnerBriefingModal isOpen={isBriefingOpen} onClose={() => setIsBriefingOpen(false)} />
 
             {/* Network Explorer Overlay */}
             <AnimatePresence>
@@ -252,6 +268,83 @@ export const PartnerDashboard = () => {
                 </div>
             )}
         </>
+    );
+};
+
+const MilestoneSection = () => {
+    const { user } = useUser();
+    const nextMilestoneLevel = [12, 24, 44, 60, 100].find(l => (user?.level || 1) < l) || 100;
+    const progress = Math.min(100, ((user?.level || 1) / nextMilestoneLevel) * 100);
+    const nextRankName = RANKS.find(r => r.minLevel === nextMilestoneLevel)?.name || 'Legend';
+
+    return (
+        <div className="p-4 rounded-[2rem] bg-linear-to-br from-slate-900 to-slate-800 dark:from-white/5 dark:to-white/[0.02] border border-white/10 shadow-premium relative overflow-hidden group active:scale-[0.99] transition-transform">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
+            <div className="relative z-10 flex flex-col gap-3">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <div className="p-1.5 rounded-lg bg-blue-500/20 text-blue-400">
+                            <Sparkles className="w-4 h-4" />
+                        </div>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-white/70">Next Milestone</span>
+                    </div>
+                    <span className="text-[10px] font-black text-blue-400">{Math.round(progress)}%</span>
+                </div>
+
+                <div className="space-y-1">
+                    <h3 className="text-sm font-black text-white flex items-center gap-2">
+                        Unlock {nextRankName}
+                        <ChevronRight className="w-3 h-3 opacity-50" />
+                    </h3>
+                    <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden p-0.5">
+                        <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${progress}%` }}
+                            className="h-full bg-linear-to-r from-blue-500 to-indigo-500 rounded-full relative"
+                        >
+                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent animate-shimmer" />
+                        </motion.div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const RecentPartnersSection = () => {
+    const [recentPartners, setRecentPartners] = React.useState<any[]>([]);
+
+    React.useEffect(() => {
+        const fetchRecent = async () => {
+            try {
+                const res = await apiClient.get('/api/partner/recent');
+                setRecentPartners(res.data);
+            } catch (e) {
+                // Silently fail or use mocks
+            }
+        };
+        fetchRecent();
+    }, []);
+
+    if (recentPartners.length === 0) return null;
+
+    return (
+        <div className="flex items-center justify-between px-1 py-1">
+            <div className="flex -space-x-2">
+                {recentPartners.slice(0, 4).map((p, i) => (
+                    <div key={p.id || i} className="w-6 h-6 rounded-full border-2 border-slate-900 bg-slate-800 overflow-hidden">
+                        <img
+                            src={p.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.username || i}`}
+                            alt=""
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                ))}
+            </div>
+            <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 italic">
+                Social proof: {recentPartners.length}+ active partners joined recently
+            </p>
+        </div>
     );
 };
 

@@ -54,6 +54,14 @@ export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
 
     const isStaging = import.meta.env.VITE_APP_ENV === 'staging';
 
+    useEffect(() => {
+        const handleNav = (e: any) => {
+            if (e.detail) setActiveTab(e.detail);
+        };
+        window.addEventListener('nav-tab', handleNav);
+        return () => window.removeEventListener('nav-tab', handleNav);
+    }, [setActiveTab]);
+
     return (
         <div className="selection:bg-brand-blue/10 fixed inset-0 flex flex-col overflow-hidden bg-(--color-bg-app) text-(--color-text-primary)">
             {/* Staging Ribbon */}

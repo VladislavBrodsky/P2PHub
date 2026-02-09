@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Crown } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { getRank, getXPProgress } from '../utils/ranking';
 
@@ -41,6 +41,30 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 className="h-full w-full object-cover"
                             />
                         )}
+
+                        {/* Vibing Gold Crown for PRO Users */}
+                        {user?.is_pro && (
+                            <motion.div
+                                initial={{ rotate: -15, y: 0 }}
+                                animate={{
+                                    rotate: [-15, 15, -15],
+                                    y: [-2, 2, -2],
+                                    scale: [1, 1.1, 1]
+                                }}
+                                transition={{
+                                    duration: 3,
+                                    repeat: Infinity,
+                                    ease: "easeInOut"
+                                }}
+                                className="absolute -top-1 -left-1 z-20 drop-shadow-[0_2px_8px_rgba(245,158,11,0.5)]"
+                            >
+                                <Crown
+                                    size={variant === 'compact' ? 20 : 24}
+                                    className="text-amber-400 fill-amber-400/20"
+                                    strokeWidth={3}
+                                />
+                            </motion.div>
+                        )}
                     </motion.div>
 
                     {/* Level Badge Integrated into Avatar */}
@@ -81,10 +105,24 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
 
                     {/* XP Progress Bar - Horizontal Fit */}
                     <div className="w-full space-y-1">
-                        <div className="flex justify-between items-center px-0.5">
-                            <span className="text-[8px] font-black text-(--color-text-secondary) tracking-widest uppercase">XP BALANCE <span className="text-(--color-text-primary)">{stats.xp}</span></span>
+                        <div className="flex justify-between items-baseline px-0.5">
+                            <motion.div
+                                animate={{
+                                    scale: [1, 1.05, 1],
+                                    filter: ['drop-shadow(0 0 0px transparent)', 'drop-shadow(0 0 4px rgba(251, 191, 36, 0.4))', 'drop-shadow(0 0 0px transparent)']
+                                }}
+                                transition={{
+                                    duration: 2,
+                                    repeat: Infinity,
+                                    ease: "easeInOut"
+                                }}
+                                className="flex items-baseline gap-1"
+                            >
+                                <span className="text-[8px] font-black text-amber-400 tracking-tight uppercase">Total:</span>
+                                <span className="text-[9px] font-bold text-amber-300">{stats.xp} XP</span>
+                            </motion.div>
                             <span className="text-[9px] font-black text-(--color-text-primary)">
-                                {xpProgress.current} <span className="text-(--color-text-secondary) font-medium">/</span> {xpProgress.total} <span className="text-[7px] text-(--color-text-secondary) uppercase ml-0.5">NEXT LVL</span>
+                                {xpProgress.current}<span className="text-(--color-text-secondary) font-medium mx-0.5">/</span>{xpProgress.total} <span className="text-[7px] text-(--color-text-secondary) uppercase ml-0.5 whitespace-nowrap">NEXT LVL</span>
                             </span>
                         </div>
                         <div className="h-3 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-black/5 dark:border-white/5 shadow-inner relative">

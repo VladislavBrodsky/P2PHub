@@ -22,6 +22,11 @@ class Partner(SQLModel, table=True):
     updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}, index=True)
     completed_tasks: str = Field(default="[]") # Store task IDs as JSON string
     
+    # PRO Subscription Status
+    is_pro: bool = Field(default=False, index=True)
+    pro_expires_at: Optional[datetime] = Field(default=None)
+    subscription_plan: Optional[str] = Field(default=None) # e.g. "PRO_LIFETIME", "PRO_YEARLY"
+    
     # Relationships
     referrals: list["Partner"] = Relationship(
         back_populates="referrer",
@@ -32,6 +37,7 @@ class Partner(SQLModel, table=True):
         sa_relationship_kwargs={"remote_side": "Partner.id"}
     )
     completed_task_records: list["PartnerTask"] = Relationship(back_populates="partner")
+    transactions: list["Transaction"] = Relationship(back_populates="partner")
 
 class PartnerTask(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

@@ -31,6 +31,10 @@ class Settings(BaseSettings):
     WEBHOOK_URL: Optional[str] = None # e.g. https://p2phub-api.up.railway.app
     WEBHOOK_PATH: str = "/api/bot/webhook"
     
+    # Payment settings
+    ADMIN_TON_ADDRESS: str = "UQDCv0H3Hk5_1sQ6v7Z_L_c3v_Z_L_c3v_Z_L_c3v_P2PHUB"
+    ADMIN_USDT_ADDRESS: str = "Txxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    
     class Config:
         # env_file = ".env"  <-- Removed to prevent PermissionError in sandbox
         # Allow extra fields from Railway/environment

@@ -5,6 +5,7 @@ import CardsPage from './pages/Cards';
 import CommunityPage from './pages/Community';
 import ReferralPage from './pages/Referral';
 import LeaderboardPage from './pages/Leaderboard';
+import SubscriptionPage from './pages/Subscription';
 import { miniApp, backButton, viewport, swipeBehavior } from '@telegram-apps/sdk-react';
 import { UserProvider } from './context/UserContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -113,6 +114,7 @@ function App() {
                         {activeTab === 'partner' && <CommunityPage />}
                         {activeTab === 'earn' && <ReferralPage />}
                         {activeTab === 'league' && <LeaderboardPage />}
+                        {activeTab === 'subscription' && <SubscriptionPage />}
                         {['coming_soon'].includes(activeTab) && (
                             <div className="flex flex-col items-center justify-center h-[60vh] text-center px-10">
                                 <div className="text-4xl mb-4">🚀</div>

@@ -411,7 +411,13 @@ export default function ReferralPage() {
 
             <BriefTermsModal isOpen={showBriefModal} onClose={() => setShowBriefModal(false)} />
 
-            <EarnHeader />
+            <EarnHeader onUpgrade={() => {
+                selection();
+                // We need to set active tab to subscription. 
+                // Since this component doesn't have setActiveTab, we might need to use a hook or context.
+                // Looking at App.tsx, Layout handles it.
+                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+            }} />
 
 
 

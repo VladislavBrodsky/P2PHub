@@ -4,7 +4,7 @@ from fastapi import FastAPI, Depends, HTTPException, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
-from app.api.endpoints import partner, earnings, tools, leaderboard
+from app.api.endpoints import partner, earnings, tools, leaderboard, payment
 from app.core.config import settings
 from bot import bot, dp
 from aiogram import types
@@ -19,6 +19,11 @@ async def lifespan(app: FastAPI):
     # Start the notification queue worker
     worker_task = asyncio.create_task(notification_service.process_notifications_worker())
     app.state.notification_worker = worker_task
+    
+    # Start the subscription expiration checker
+    from app.services.subscription_service import subscription_service
+    checker_task = asyncio.create_task(subscription_service.run_checker_task())
+    app.state.subscription_checker = checker_task
     
     webhook_base = settings.WEBHOOK_URL
     
@@ -58,6 +63,13 @@ async def lifespan(app: FastAPI):
         except asyncio.CancelledError:
             pass
 
+    if hasattr(app.state, "subscription_checker"):
+        app.state.subscription_checker.cancel()
+        try:
+            await app.state.subscription_checker
+        except asyncio.CancelledError:
+            pass
+
     if not settings.WEBHOOK_URL and hasattr(app.state, "polling_task"):
         app.state.polling_task.cancel()
         try:
@@ -94,6 +106,7 @@ app.include_router(partner.router, prefix="/api/partner", tags=["partner"])
 app.include_router(earnings.router, prefix="/api/earnings", tags=["earnings"])
 app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderboard"])
 app.include_router(tools.router, prefix="/api/tools", tags=["tools"])
+app.include_router(payment.router, prefix="/api/payment", tags=["payment"])
 from app.api.endpoints import health
 app.include_router(health.router, tags=["health"])
 

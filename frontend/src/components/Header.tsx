@@ -1,6 +1,6 @@
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
-import { MoreHorizontal, ChevronDown, X } from 'lucide-react';
+import { MoreHorizontal, ChevronDown, X, Crown } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 
 interface HeaderProps {
@@ -57,6 +57,9 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                             <span className="text-sm font-black text-slate-900 dark:text-white leading-none">
                                 {user?.level ?? 2}
                             </span>
+                            {user?.is_pro && (
+                                <Crown size={12} className="text-amber-500 fill-amber-500/20" />
+                            )}
                         </div>
                         <div className="h-3 w-px bg-slate-200 dark:bg-white/10" />
                         <div className="flex items-center gap-1.5">
