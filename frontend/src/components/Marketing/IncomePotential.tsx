@@ -56,7 +56,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/30 blur-[120px] pointer-events-none animate-pulse" />
                 <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-purple-600/20 blur-[120px] pointer-events-none" />
 
-                <div className="space-y-6 relative z-10">
+                <div className="space-y-6 relative z-10 flex flex-col items-center text-center">
                     <motion.div
                         className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/30 bg-blue-500/5 backdrop-blur-sm px-3 py-1.5"
                         animate={{
@@ -71,13 +71,12 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </span>
                     </motion.div>
 
-                    <h3 className="text-4xl font-black tracking-tight leading-none max-w-[280px]">
+                    <h3 className="text-4xl font-black tracking-tight leading-none max-w-[280px] mx-auto">
                         {t('income.title')} <br />
                         <span className="text-blue-500 dark:text-transparent dark:bg-clip-text dark:bg-linear-to-r dark:from-blue-400 dark:via-emerald-400 dark:to-blue-400 dark:text-animate-shimmer">{t('income.title_highlight')}</span>
                     </h3>
                     <div className="relative">
-                        <div className="absolute -left-4 top-0 w-1 h-full bg-linear-to-b from-blue-500 to-transparent opacity-50 rounded-full" />
-                        <p className="text-sm text-slate-600 dark:text-white font-medium leading-relaxed max-w-[340px] pl-2">
+                        <p className="text-sm text-slate-600 dark:text-white font-medium leading-relaxed max-w-[340px] mx-auto">
                             <Trans i18nKey="income.desc">
                                 Traditional finance is a <span className="text-blue-600 dark:text-blue-400 font-bold">walled garden</span>.
                                 As a <span className="text-slate-900 dark:text-white font-black underline decoration-blue-500/30 underline-offset-4">Pintopay Partner</span>, you are the bridge.
