@@ -60,7 +60,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             {/* 1. Hero Section - Spacious & Centered Layout */}
             <motion.div variants={item} className="px-4 space-y-12">
                 {/* Orbit Container */}
-                <div className="relative overflow-visible -mx-4 h-[440px] flex items-center justify-center">
+                <div className="relative overflow-visible -mx-4 h-[400px] -mt-10 flex items-center justify-center">
                     <CommunityOrbit />
                 </div>
 
