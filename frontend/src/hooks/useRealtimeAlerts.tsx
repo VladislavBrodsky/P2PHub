@@ -38,12 +38,12 @@ export const useRealtimeAlerts = () => {
                 showNotification({
                     title,
                     message,
-                    icon: <Zap size={ 18} className = "text-yellow-400" />,
+                    icon: <Zap size={18} className="text-amber-500 dark:text-yellow-400" />,
                     type: 'info'
                 });
-    }
+            }
         }, 15000); // Check every 15 seconds
 
-return () => clearInterval(interval);
+        return () => clearInterval(interval);
     }, [showNotification]);
 };

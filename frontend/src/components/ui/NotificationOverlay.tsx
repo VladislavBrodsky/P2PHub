@@ -25,21 +25,21 @@ export const NotificationOverlay = () => {
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
                     className="fixed top-0 left-0 right-0 z-100 flex justify-center pointer-events-none px-4"
                 >
-                    <div className="glass-panel-premium rounded-full px-4 py-3 shadow-xl flex items-center gap-3 max-w-sm w-full pointer-events-auto backdrop-blur-xl bg-slate-900/80 border-slate-700/50">
+                    <div className="glass-panel-premium rounded-full px-4 py-3 shadow-xl flex items-center gap-3 max-w-sm w-full pointer-events-auto backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/50 dark:border-slate-700/50">
                         {notification.icon && (
-                            <div className="shrink-0 text-emerald-400">
+                            <div className="shrink-0 text-amber-500 dark:text-emerald-400">
                                 {notification.icon}
                             </div>
                         )}
                         <div className="flex-1 overflow-hidden">
-                            <h4 className="text-xs font-bold text-white truncate">{notification.title}</h4>
-                            <p className="text-[10px] text-slate-300 truncate">{notification.message}</p>
+                            <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">{notification.title}</h4>
+                            <p className="text-[10px] text-slate-600 dark:text-slate-300 truncate">{notification.message}</p>
                         </div>
                         <button
                             onClick={hideNotification}
-                            className="p-1 hover:bg-white/10 rounded-full transition-colors"
+                            className="p-1 hover:bg-slate-200/50 dark:hover:bg-white/10 rounded-full transition-colors"
                         >
-                            <X size={14} className="text-slate-400" />
+                            <X size={14} className="text-slate-400 dark:text-slate-500" />
                         </button>
                     </div>
                 </motion.div>
