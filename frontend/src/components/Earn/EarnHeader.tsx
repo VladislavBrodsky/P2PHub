@@ -129,28 +129,24 @@ export const EarnHeader = () => {
                                 backgroundSize: '200% 100%'
                             }}
                         >
-                            {/* Pro Liquid Animation Effect */}
+                            {/* Single High-End Liquid Flow Animation */}
                             <motion.div
                                 animate={{
-                                    backgroundPosition: ['100% 0%', '0% 0%']
+                                    x: ['-100%', '100%'],
                                 }}
-                                transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-                                className="absolute inset-0 opacity-90"
+                                transition={{
+                                    duration: 3,
+                                    repeat: Infinity,
+                                    ease: "linear",
+                                }}
+                                className="absolute inset-0 w-1/2 pointer-events-none"
                                 style={{
-                                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)',
-                                    backgroundSize: '200% 100%'
+                                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
                                 }}
                             />
 
-                            {/* Crystal Reflection Overlay */}
-                            <div className="absolute inset-x-0 top-0 h-[45%] bg-linear-to-b from-white/40 to-transparent" />
-
-                            {/* Fast Shimmer Pulse */}
-                            <motion.div
-                                animate={{ x: ['-200%', '200%'] }}
-                                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                                className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent w-1/2"
-                            />
+                            {/* Static Glass Reflection (Constant) */}
+                            <div className="absolute inset-x-0 top-0 h-[40%] bg-linear-to-b from-white/30 to-transparent pointer-events-none" />
                         </motion.div>
                     </div>
                     <p className="text-[10px] text-brand-muted font-bold italic tracking-tight opacity-70">
