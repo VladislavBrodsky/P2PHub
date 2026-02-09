@@ -2,6 +2,7 @@ import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
 import { MoreHorizontal, ChevronDown, X, Crown } from 'lucide-react';
 import { useUser } from '../context/UserContext';
+import { TonConnectButton } from '@tonconnect/ui-react';
 
 interface HeaderProps {
     onOpenMenu: () => void;
@@ -37,20 +38,24 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
         <header className="fixed left-1/2 z-50 w-full max-w-lg -translate-x-1/2 pt-[calc(env(safe-area-inset-top)+var(--spacing-telegram-header))] transition-all duration-300 top-0 pointer-events-none">
             <div className="flex flex-col gap-4 px-4 pointer-events-auto">
                 {/* Navigation & Stats */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                     <button
                         onClick={onOpenMenu}
-                        className="group flex items-center gap-2 rounded-2xl border border-slate-200/50 bg-white/80 dark:bg-slate-900/50 px-4 py-2 shadow-premium backdrop-blur-md transition-all active:scale-95"
+                        className="group flex items-center gap-2 rounded-2xl border border-slate-200/50 bg-white/80 dark:bg-slate-900/50 px-4 py-2 shadow-premium backdrop-blur-md transition-all active:scale-95 flex-shrink-0"
                     >
                         <MoreHorizontal className="text-slate-900 h-5 w-5 dark:text-white transition-transform group-hover:scale-110" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white hidden sm:block">
                             Menu
                         </span>
                     </button>
 
+                    <div className="flex-1 flex justify-center">
+                        <TonConnectButton />
+                    </div>
+
                     <motion.button
                         animate={controls}
-                        className="flex items-center gap-3 rounded-2xl border border-white/20 bg-white/90 dark:bg-[#0f172a] px-4 py-2 shadow-premium backdrop-blur-2xl transition-all"
+                        className="flex items-center gap-3 rounded-2xl border border-white/20 bg-white/90 dark:bg-[#0f172a] px-4 py-2 shadow-premium backdrop-blur-2xl transition-all flex-shrink-0"
                     >
                         <div className="flex items-center gap-1.5">
                             <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-blue-400">Lvl</span>

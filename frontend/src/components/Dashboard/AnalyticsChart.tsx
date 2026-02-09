@@ -67,7 +67,7 @@ export const AnalyticsChart = ({ data = mockData }: AnalyticsChartProps) => {
                                 fontWeight: 'bold'
                             }}
                             itemStyle={{ color: isDark ? '#fff' : '#0f172a' }}
-                            formatter={(value: number) => [`$${value}`, 'Earned']}
+                            formatter={(value: number | undefined) => [`$${value ?? 0}`, 'Earned']}
                         />
                         <Area
                             type="monotone"
