@@ -5,7 +5,7 @@ import { EarnHeader } from '../components/Earn/EarnHeader';
 import { TaskCard } from '../components/Earn/TaskCard';
 import { MilestonePath } from '../components/Earn/MilestonePath';
 import { ReferralWidget } from '../components/Earn/ReferralWidget';
-import { ReferralTree } from '../components/Earn/ReferralTree';
+
 import { TaskGrid } from '../components/Earn/TaskGrid';
 import { EARN_TASKS, Task, MILESTONES } from '../data/earnData';
 import { useUser } from '../context/UserContext';
@@ -30,9 +30,7 @@ export default function ReferralPage() {
     const [showQR, setShowQR] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
 
-    // 9-Level Tree State
-    const [treeStats, setTreeStats] = useState<Record<string, number>>({});
-    const [isTreeLoading, setIsTreeLoading] = useState(true);
+
 
     // Derived User State (with defaults)
     const currentLevel = user?.level || 1;
@@ -62,33 +60,7 @@ export default function ReferralPage() {
         const storedClaimable = localStorage.getItem('p2p_claimable_tasks');
         if (storedClaimable) setClaimableTasks(JSON.parse(storedClaimable));
 
-        const fetchTreeData = async () => {
-            try {
-                let initDataRaw = '';
-                try {
-                    const params = getSafeLaunchParams();
-                    initDataRaw = params.initDataRaw || '';
-                } catch (e) {
-                    console.warn('Telegram environment not detected');
-                }
 
-                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/partner/tree`, {
-                    headers: { 'X-Telegram-Init-Data': initDataRaw }
-                });
-                // Validation to prevent HTML dump glitch
-                if (res.data && typeof res.data === 'object') {
-                    setTreeStats(res.data);
-                } else {
-                    console.warn('Invalid tree data received:', res.data);
-                }
-            } catch (error) {
-                console.error('Failed to fetch tree data:', error);
-            } finally {
-                setIsTreeLoading(false);
-            }
-        };
-
-        fetchTreeData();
     }, []);
 
     // Timer Logic for Verification
@@ -336,10 +308,7 @@ export default function ReferralPage() {
 
             <EarnHeader />
 
-            {/* Matrix Visualization */}
-            <div className="mb-8">
-                <ReferralTree stats={treeStats} />
-            </div>
+
 
             <ReferralWidget onInvite={() => setShowShareModal(true)} onShowQR={() => setShowQR(true)} />
 

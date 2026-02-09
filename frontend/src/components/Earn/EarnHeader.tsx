@@ -28,6 +28,20 @@ export const EarnHeader = () => {
                     <div className="relative w-32 h-32 flex items-center justify-center">
                         {/* Progress Ring Background */}
                         <svg className="absolute inset-0 w-full h-full -rotate-90 scale-95">
+                            <defs>
+                                <linearGradient id="crystalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stopColor="#94A3B8" />
+                                    <stop offset="50%" stopColor="#F1F5F9" /> {/* Crystal/White highlight */}
+                                    <stop offset="100%" stopColor="#94A3B8" />
+                                    <animate attributeName="x1" values="-100%;100%" dur="2s" repeatCount="indefinite" />
+                                    <animate attributeName="x2" values="0%;200%" dur="2s" repeatCount="indefinite" />
+                                </linearGradient>
+                                <filter id="crystalGlow" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
+                                    <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
+                                    <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+                                </filter>
+                            </defs>
                             <circle
                                 cx="64"
                                 cy="64"
@@ -37,17 +51,18 @@ export const EarnHeader = () => {
                                 strokeWidth="8"
                                 strokeLinecap="round"
                             />
-                            {/* Progress Ring Value (Simple Gray) */}
+                            {/* Progress Ring Value (Crystal Effect) */}
                             <motion.circle
                                 cx="64"
                                 cy="64"
                                 r="56"
                                 fill="none"
-                                stroke="#94A3B8"
+                                stroke="url(#crystalGradient)"
                                 strokeWidth="8"
                                 strokeDasharray="351"
                                 strokeDashoffset={351 - (351 * progress.percent) / 100}
                                 strokeLinecap="round"
+                                filter="drop-shadow(0px 0px 4px rgba(148, 163, 184, 0.5))"
                                 initial={{ strokeDashoffset: 351 }}
                                 animate={{ strokeDashoffset: 351 - (351 * progress.percent) / 100 }}
                                 transition={{ duration: 1.5, ease: "easeOut" }}

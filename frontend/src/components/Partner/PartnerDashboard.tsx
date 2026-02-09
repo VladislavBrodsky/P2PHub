@@ -6,7 +6,7 @@ import { useUser } from '../../context/UserContext';
 import { Button } from '../ui/Button';
 import { PersonalizationCard } from '../PersonalizationCard';
 import { NetworkExplorer } from './NetworkExplorer';
-import { ReferralTree } from '../Earn/ReferralTree';
+import { ReferralGrowthChart } from './ReferralGrowthChart';
 import axios from 'axios';
 import { getSafeLaunchParams } from '../../utils/tma';
 
@@ -93,7 +93,7 @@ export const PartnerDashboard = () => {
 
                 {/* 1. Network Visualization (Inline Preview) */}
                 <div className="space-y-4">
-                    <ReferralTree stats={treeStats} />
+                    <ReferralGrowthChart />
                     {/* Explorer is now an overlay, but we might want a teaser here or just hide it */}
                     <div
                         className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
