@@ -10,13 +10,13 @@ export const ReferralWidget = ({ onInvite, onShowQR }: ReferralWidgetProps) => {
     const { t } = useTranslation();
 
     return (
-        <div className="mb-6 relative max-w-sm mx-auto">
+        <div className="mb-6 relative w-full">
             <button
                 onClick={onInvite}
-                className="w-full h-12 rounded-full flex items-center justify-center gap-2 font-black text-white active:scale-95 transition-all relative overflow-hidden group shadow-xl liquid-blue-premium"
+                className="w-full h-12 rounded-full flex items-center justify-center gap-2 font-black text-white active:scale-95 transition-all relative overflow-hidden group shadow-xl liquid-blue-premium pl-14 pr-14"
             >
                 <Share2 className="w-5 h-5 relative z-10 opacity-90" />
-                <span className="relative z-10 text-sm tracking-tight">{t('referral.widget.invite')}</span>
+                <span className="relative z-10 text-base tracking-tight">{t('referral.widget.invite')}</span>
 
                 {/* Subtle Glass Shimmer overlay */}
                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />

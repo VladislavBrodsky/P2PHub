@@ -648,10 +648,10 @@ body {
 
 /* Premium Liquid Blue for Action Buttons */
 .liquid-blue-premium {
-  background: linear-gradient(135deg, #0066FF 0%, #00d2ff 50%, #0066FF 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #60a5fa 50%, #2563eb 100%);
   background-size: 200% 200%;
   animation: liquid 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
   transition: all 0.3s ease;
 }
 
