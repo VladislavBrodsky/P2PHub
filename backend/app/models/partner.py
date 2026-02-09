@@ -17,6 +17,7 @@ class Partner(SQLModel, table=True):
     level: int = Field(default=1)
     referral_code: str = Field(unique=True, index=True) # Optimized for lookups
     referrer_id: Optional[int] = Field(default=None, foreign_key="partner.id", index=True) # Optimized for joins
+    path: Optional[str] = Field(default=None, index=True) # Materialized path (e.g. "1.5.23")
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True) # Optimized for sorting
 
 class Earning(SQLModel, table=True):

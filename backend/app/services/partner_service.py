@@ -34,6 +34,7 @@ async def create_partner(
         
     # 2. Assign Referrer if code exists
     referrer_id = None
+    referrer = None
     if referrer_code:
         try:
             # 2a. Try direct code match
@@ -55,7 +56,12 @@ async def create_partner(
         except Exception as e:
             logger.error(f"Error resolving referrer_code {referrer_code}: {e}")
 
-    # 3. Create fresh partner
+    # 3. Create fresh partner with path
+    path = None
+    if referrer:
+        parent_path = referrer.path or ""
+        path = f"{parent_path}.{referrer.id}".lstrip(".")
+
     partner = Partner(
         telegram_id=telegram_id,
         username=username,
@@ -63,7 +69,8 @@ async def create_partner(
         last_name=last_name,
         language_code=language_code,
         referral_code=f"P2P-{secrets.token_hex(4).upper()}",
-        referrer_id=referrer_id
+        referrer_id=referrer_id,
+        path=path
     )
     session.add(partner)
     await session.commit()
@@ -145,81 +152,79 @@ async def process_referral_logic(bot, session: AsyncSession, partner: Partner):
 
 async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dict[int, int]:
     """
-    Uses PostgreSQL Recursive CTE for ultra-fast 9-level tree counting.
+    Uses Materialized Path for ultra-fast 9-level tree counting.
     Cached in Redis to avoid repeat execution.
     """
     cache_key = f"ref_tree_stats:{partner_id}"
     cached = await redis_service.get_json(cache_key)
     if cached: return {int(k): v for k, v in cached.items()}
 
-    # Recursive CTE Query
+    # Optimized Query using Path
+    # We look for path starting with partner_id. or being exactly partner_id (if we want self, but normally we want descendants)
+    # For descendants, path starts with f"{root_path}.{partner_id}." or IS f"{root_path}.{partner_id}" (if root_path empty)
+    
+    # Let's get the partner first to know their path base
+    partner = await session.get(Partner, partner_id)
+    if not partner: return {i: 0 for i in range(1, 10)}
+    
+    base_path = f"{partner.path}.{partner.id}".lstrip(".")
+    
+    # Query: Count partners where path starts with base_path
+    # We calculate level by counting dots in the path relative to base_path
     query = text("""
-        WITH RECURSIVE referral_tree AS (
-            -- Base case: Level 1 partners
-            SELECT id, referrer_id, 1 as level
-            FROM partner
-            WHERE referrer_id = :partner_id
-            
-            UNION ALL
-            
-            -- Recursive step: Join with next level
-            SELECT p.id, p.referrer_id, rt.level + 1
-            FROM partner p
-            JOIN referral_tree rt ON p.referrer_id = rt.id
-            WHERE rt.level < 9
-        )
-        SELECT level, COUNT(*) as count
-        FROM referral_tree
-        GROUP BY level
-        ORDER BY level;
+        SELECT 
+            (length(path) - length(:base_path) - length(replace(substring(path from length(:base_path) + 1), '.', '')) + 1) as tree_level,
+            COUNT(*) as count
+        FROM partner
+        WHERE path = :base_path OR path LIKE :base_path || '.%'
+        GROUP BY tree_level
+        HAVING (length(path) - length(:base_path) - length(replace(substring(path from length(:base_path) + 1), '.', '')) + 1) <= 9
+        ORDER BY tree_level;
     """)
     
-    result = await session.execute(query, {"partner_id": partner_id})
+    result = await session.execute(query, {"base_path": base_path})
     stats = {i: 0 for i in range(1, 10)}
     for row in result:
-        stats[row[0]] = row[1]
+        lvl = int(row[0])
+        if 1 <= lvl <= 9:
+            stats[lvl] = row[1]
         
     await redis_service.set_json(cache_key, stats, expire=300)
     return stats
 
 async def get_referral_tree_members(session: AsyncSession, partner_id: int, target_level: int) -> List[dict]:
     """
-    Fetches details of partners at a specific level in the 9-level matrix using Recursive CTE.
-    Cached in Redis to avoid database load on repeated views.
+    Fetches details of partners at a specific level using Materialized Path.
     """
     if not (1 <= target_level <= 9):
         return []
 
-    # Check cache first
     cache_key = f"ref_tree_members:{partner_id}:{target_level}"
     cached = await redis_service.get_json(cache_key)
-    if cached:
-        return cached
+    if cached: return cached
 
+    partner = await session.get(Partner, partner_id)
+    if not partner: return []
+    
+    base_path = f"{partner.path}.{partner.id}".lstrip(".")
+    
+    # Calculate exact path depth for the target level
+    # Level 1 means path == base_path
+    # Level 2 means path == base_path.child_id (one dot more than base_path)
+    base_dots = base_path.count('.') if base_path else -1
+    target_dots = base_dots + target_level
+    
     query = text("""
-        WITH RECURSIVE referral_tree AS (
-            -- Base case: Level 1
-            SELECT id, telegram_id, username, first_name, last_name, xp, photo_url, 1 as level, created_at
-            FROM partner
-            WHERE referrer_id = :partner_id
-            
-            UNION ALL
-            
-            -- Recursive step
-            SELECT p.id, p.telegram_id, p.username, p.first_name, p.last_name, p.xp, p.photo_url, rt.level + 1, p.created_at
-            FROM partner p
-            JOIN referral_tree rt ON p.referrer_id = rt.id
-            WHERE rt.level < :target_level
-        )
-        SELECT telegram_id, username, first_name, last_name, xp, photo_url, created_at
-        FROM referral_tree
-        WHERE level = :target_level
+        SELECT telegram_id, username, first_name, last_name, xp, photo_url, created_at, path
+        FROM partner
+        WHERE (path = :base_path OR path LIKE :base_path || '.%')
+        AND (length(path) - length(replace(path, '.', ''))) = :target_dots
         ORDER BY xp DESC
         LIMIT 100;
     """)
     
     try:
-        result = await session.execute(query, {"partner_id": partner_id, "target_level": target_level})
+        result = await session.execute(query, {"base_path": base_path, "target_dots": target_dots})
         members = []
         for row in result:
             members.append({
@@ -232,9 +237,34 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
                 "joined_at": row[6].isoformat() if row[6] else None
             })
         
-        # Cache the result
         await redis_service.set_json(cache_key, members, expire=300)
         return members
     except Exception as e:
         logger.error(f"Error fetching tree members: {e}")
         return []
+
+async def migrate_paths(session: AsyncSession):
+    """
+    Utility to hydrate the 'path' column for all existing partners.
+    Call this once to upgrade existing database.
+    """
+    # Simple recursive approach for migration (since it's a one-time thing)
+    async def update_children(parent_id: int, parent_path: str):
+        stmt = select(Partner).where(Partner.referrer_id == parent_id)
+        res = await session.exec(stmt)
+        children = res.all()
+        for child in children:
+            child.path = f"{parent_path}.{parent_id}".lstrip(".")
+            session.add(child)
+            await update_children(child.id, child.path)
+
+    # Start from root partners (no referrer)
+    stmt = select(Partner).where(Partner.referrer_id == None)
+    res = await session.exec(stmt)
+    roots = res.all()
+    for root in roots:
+        root.path = None
+        session.add(root)
+        await update_children(root.id, "")
+    
+    await session.commit()
