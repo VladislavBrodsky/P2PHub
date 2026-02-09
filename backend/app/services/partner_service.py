@@ -71,6 +71,9 @@ async def create_partner(
     
     return partner, True
 
+# Keep strong references to background tasks to prevent GC
+background_tasks = set()
+
 async def process_referral_notifications(bot, session: AsyncSession, partner: Partner, is_new: bool):
     """
     Wrapper to trigger the recursive referral logic for new signups.
@@ -78,7 +81,11 @@ async def process_referral_notifications(bot, session: AsyncSession, partner: Pa
     if is_new and partner.referrer_id:
         # Run logic in background (fire and forget)
         import asyncio
-        asyncio.create_task(process_referral_logic(partner.id))
+        task = asyncio.create_task(process_referral_logic(partner.id))
+        
+        # Add to set to prevent GC
+        background_tasks.add(task)
+        task.add_done_callback(background_tasks.discard)
 
 
 async def get_partner_by_telegram_id(session: AsyncSession, telegram_id: str) -> Optional[Partner]:
@@ -99,29 +106,32 @@ async def process_referral_logic(partner_id: int):
     Optimized 9-level referral logic.
     Run as a standard asyncio background task (no external broker needed).
     """
-    from app.models.partner import Partner, XPTransaction, get_session
-    from app.core.config import settings
-    # We need a new session for the background task
-    from sqlalchemy.ext.asyncio import create_async_engine
-    from sqlmodel.ext.asyncio.session import AsyncSession
+    from app.models.partner import Partner, XPTransaction, engine # Use GLOBAL engine
+    from app.services.notification_service import notification_service
     from sqlalchemy.orm import sessionmaker
+    from sqlmodel.ext.asyncio.session import AsyncSession
+    from app.core.i18n import get_msg
+    from app.services.leaderboard_service import leaderboard_service
+    from app.services.redis_service import redis_service
+    from app.utils.ranking import get_level
+    from sqlmodel import select
 
-    try:
-        engine = create_async_engine(settings.DATABASE_URL, echo=False, future=True, pool_pre_ping=True)
-        async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    # Use the global engine, do NOT create a new one every time
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
+    try:
         async with async_session() as session:
             partner = await session.get(Partner, partner_id)
             if not partner or not partner.referrer_id:
                 return
 
-        # 1. Reconstruct Lineage IDs (L1 to L9)
-        # partner.path already includes the referrer_id as the last element.
-        lineage_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-        lineage_ids = lineage_ids[-9:]
-        
-        # 2. Bulk Fetch all ancestors
-        statement = select(Partner).where(Partner.id.in_(lineage_ids))
+            # 1. Reconstruct Lineage IDs (L1 to L9)
+            # partner.path already includes the referrer_id as the last element.
+            lineage_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+            lineage_ids = lineage_ids[-9:]
+
+            # 2. Bulk Fetch all ancestors
+            statement = select(Partner).where(Partner.id.in_(lineage_ids))
         result = await session.exec(statement)
         ancestor_map = {p.id: p for p in result.all()}
 
@@ -198,8 +208,9 @@ async def process_referral_logic(partner_id: int):
 
         await session.commit()
     
-    finally:
-        await engine.dispose()
+    except Exception as e:
+        import logging
+        logging.error(f"Error in process_referral_logic: {e}")
 
 async def distribute_pro_commissions(session: AsyncSession, partner_id: int, total_amount: float):
     """
