@@ -141,7 +141,8 @@ async def process_referral_logic(bot, session: AsyncSession, partner: Partner):
             # Level Up!
             for l in range(referrer.level + 1, new_level + 1):
                 try:
-                    msg = f"🏆 *Level Up!* 🏆\n\nYou've reached *Level {l}*!\n\nKeep going to unlock the Platinum Tier."
+                    lang = referrer.language_code or "en"
+                    msg = get_msg(lang, "level_up", level=l)
                     await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
                 except Exception: pass
             referrer.level = new_level

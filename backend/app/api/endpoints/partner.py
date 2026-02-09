@@ -321,4 +321,14 @@ async def claim_task_reward(
         # 3. Invalidate profile cache
         await redis_service.client.delete(f"partner:profile:{tg_id}")
 
+        # 4. Send Notification
+        try:
+            from app.core.i18n import get_msg
+            from app.services.notification_service import notification_service
+            lang = partner.language_code or "en"
+            msg = get_msg(lang, "task_completed", reward=int(xp_reward))
+            await notification_service.enqueue_notification(chat_id=int(tg_id), text=msg)
+        except Exception as e:
+            print(f"Failed to send task notification: {e}")
+
     return partner
