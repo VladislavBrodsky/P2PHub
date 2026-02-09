@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.security import get_current_user, get_tg_user
-from app.models.partner import Partner, get_session
+from app.models.partner import Partner, get_session, XPTransaction
 from app.models.schemas import PartnerResponse, TaskClaimRequest, GrowthMetrics, NetworkStats, EarningSchema, PartnerTopResponse
 from sqlmodel import select
 from sqlalchemy.orm import selectinload
@@ -334,6 +334,16 @@ async def claim_task_reward(
         )
         session.add(new_task_completion)
 
+        # 1.1 Add XP Transaction record
+        new_xp_tx = XPTransaction(
+            partner_id=partner.id,
+            amount=xp_reward,
+            type="TASK",
+            description=f"Completed Task: {task_id}",
+            reference_id=task_id
+        )
+        session.add(new_xp_tx)
+
         # 2. Update partner stats
         partner.xp += xp_reward
         partner.level = get_level(partner.xp)
@@ -384,3 +394,30 @@ async def get_my_earnings(
     earnings = result.all()
     
     return earnings
+
+@router.get("/xp/history")
+async def get_my_xp_history(
+    limit: int = 50,
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Fetches the recent XP transaction history for the current user.
+    """
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
+
+    # Get partner ID first
+    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    result = await session.exec(statement)
+    partner = result.first()
+    
+    if not partner:
+        return []
+
+    # Query XPTransaction table
+    stmt = select(XPTransaction).where(XPTransaction.partner_id == partner.id).order_by(XPTransaction.created_at.desc()).limit(limit)
+    result = await session.exec(stmt)
+    xp_history = result.all()
+    
+    return xp_history

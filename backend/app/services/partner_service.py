@@ -138,6 +138,17 @@ async def process_referral_logic(partner_id: int):
             xp_gain = XP_MAP.get(level, 0)
             referrer.xp += xp_gain
             
+            # 1.1 Log XP Transaction
+            from app.models.partner import XPTransaction
+            xp_tx = XPTransaction(
+                partner_id=referrer.id,
+                amount=xp_gain,
+                type="REFERRAL_L1" if level == 1 else "REFERRAL_DEEP",
+                description=f"Referral XP reward from Level {level}",
+                reference_id=str(partner.id)
+            )
+            session.add(xp_tx)
+            
             # 2. Handle Level Up Logic
             new_level = get_level(referrer.xp)
             if new_level > referrer.level:

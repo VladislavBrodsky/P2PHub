@@ -50,3 +50,13 @@ class EarningSchema(BaseModel):
     
     class Config:
         from_attributes = True
+
+class PartnerTopResponse(BaseModel):
+    id: int
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    username: Optional[str] = None
+    photo_url: Optional[str] = None
+    xp: float
+    referrals_count: int
+    rank: str

@@ -47,9 +47,24 @@ class Partner(SQLModel, table=True):
         back_populates="partner",
         sa_relationship_kwargs={"foreign_keys": "PartnerTransaction.partner_id"}
     )
+    xp_history: list["XPTransaction"] = Relationship(
+        back_populates="partner",
+        sa_relationship_kwargs={"foreign_keys": "XPTransaction.partner_id"}
+    )
     last_transaction: Optional["PartnerTransaction"] = Relationship(
         sa_relationship_kwargs={"foreign_keys": "Partner.last_transaction_id"}
     )
+
+class XPTransaction(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    partner_id: int = Field(foreign_key="partner.id", index=True)
+    amount: float
+    type: str = Field(index=True) # TASK, REFERRAL_L1, REFERRAL_DEEP, LEVEL_UP, BONUS
+    description: Optional[str] = None
+    reference_id: Optional[str] = Field(default=None, index=True)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+    partner: Partner = Relationship(back_populates="xp_history")
 
 class PartnerTask(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
