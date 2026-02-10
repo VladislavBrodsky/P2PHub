@@ -122,96 +122,88 @@ async def cmd_my_network(message: types.Message):
 
 import random
 
+# Cache bot username to avoid repeated API calls
+BOT_USERNAME = None
+
 @dp.inline_query()
 async def inline_handler(inline_query: types.InlineQuery):
+    global BOT_USERNAME
     try:
-        # The query is the referral code passed from the Mini App
+        if not BOT_USERNAME:
+            bot_info = await bot.get_me()
+            BOT_USERNAME = bot_info.username.replace("@", "")
+
         ref_code = inline_query.query or ""
-        # If no code is provided, we can't really track the referral link properly, 
-        # but we can fallback to 'dev' or similar
         query_code = ref_code if ref_code else "start"
+        ref_link = f"https://t.me/{BOT_USERNAME}?start={query_code}"
         
-        bot_info = await bot.get_me()
-        ref_link = f"https://t.me/{bot_info.username}?start={query_code}"
-        
-        # Derive the actual base domain for API assets
+        # Base URL for assets
         if settings.WEBHOOK_URL and settings.WEBHOOK_PATH in settings.WEBHOOK_URL:
             base_api_url = settings.WEBHOOK_URL.split(settings.WEBHOOK_PATH)[0].rstrip('/')
-        elif settings.WEBHOOK_URL:
-            base_api_url = settings.WEBHOOK_URL.rstrip('/')
         else:
-            base_api_url = (settings.FRONTEND_URL or "http://localhost:8000").rstrip('/')
+            base_api_url = (settings.FRONTEND_URL or "https://p2phub-production.up.railway.app").rstrip('/')
         
-        # Photos
         photo1 = f"{base_api_url}/images/2026-02-05%2003.35.03.jpg"
         photo2 = f"{base_api_url}/images/2026-02-05%2003.35.36.jpg"
 
-        # Localization (Simplified for now, as we don't know user lang here easily without DB lookup)
         caption = (
             "🚀 *STOP BLEEDING MONEY TO BANKS!* 🛑\n\n"
             "Join me on Pintopay and unlock $1 per minute strategy! 💎\n"
             "Lead the revolution in FinTech & Web3 payments. 🌍"
         )
-        
-        title = "Elite Partner Invitation 💎"
-        description = "Share your $1/minute strategy"
 
-        logging.info(f"📤 Inline query from {inline_query.from_user.id}: '{ref_code}'")
+        logging.info(f"📤 Inline query: {query_code}")
+
+        # Use random ID suffix for stability during testing
+        rand_id = str(random.randint(1000, 9999))
 
         results = [
-            # Option 1: Premium Card 1
+            # PRIORITY 1: High-Speed Text Result (to ensure something shows up instantly)
+            types.InlineQueryResultArticle(
+                id=f"text_{query_code}_{rand_id}",
+                title="⚡ Immediate Invite",
+                description="Fastest way to share your link",
+                input_message_content=types.InputTextMessageContent(
+                    message_text=f"{caption}\n\n🔗 *Join Here:* {ref_link}",
+                    parse_mode="Markdown"
+                ),
+                reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
+                    [types.InlineKeyboardButton(text="💎 Start Now", url=ref_link)]
+                ])
+            ),
+            # PRIORITY 2: Premium Visual Card 1
             types.InlineQueryResultPhoto(
-                id=f"card1_{query_code}", 
+                id=f"card1_{query_code}_{rand_id}", 
                 photo_url=photo1,
                 thumbnail_url=photo1,
-                title=title,
-                description=description,
+                title="Premium Card v1",
                 caption=caption,
                 parse_mode="Markdown",
                 reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
                     [types.InlineKeyboardButton(text="🤝 Join Partner Club", url=ref_link)]
                 ])
             ),
-            # Option 2: Premium Card 2
+            # PRIORITY 3: Premium Visual Card 2
             types.InlineQueryResultPhoto(
-                id=f"card2_{query_code}", 
+                id=f"card2_{query_code}_{rand_id}", 
                 photo_url=photo2,
                 thumbnail_url=photo2,
-                title="Marketing Machine v2",
-                description="Alternative viral design",
+                title="Premium Card v2",
                 caption=caption,
                 parse_mode="Markdown",
                 reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
-                    [types.InlineKeyboardButton(text="🚀 Start Building", url=ref_link)]
-                ])
-            ),
-            # Option 3: Text Only (Fallback/Fast)
-            types.InlineQueryResultArticle(
-                id=f"text_{query_code}",
-                title="Fast Invite (Text Only)",
-                description="Send a quick text-based invitation",
-                input_message_content=types.InputTextMessageContent(
-                    message_text=f"{caption}\n\n🔗 *Join Here:* {ref_link}",
-                    parse_mode="Markdown"
-                ),
-                reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
-                    [types.InlineKeyboardButton(text="💎 Open App", url=ref_link)]
+                    [types.InlineKeyboardButton(text="🚀 Launch App", url=ref_link)]
                 ])
             )
         ]
         
-        logging.info(f"✅ Answering inline query {inline_query.id} with {len(results)} results")
-        await inline_query.answer(results, is_personal=True, cache_time=10) # Low cache for testing
+        await inline_query.answer(results, is_personal=True, cache_time=2)
 
     except Exception as e:
-        logging.error(f"❌ Error in inline_handler: {e}")
-        import traceback
-        traceback.print_exc()
-        # Answer with empty results to stop loading indicator
+        logging.error(f"❌ Inline handler error: {e}")
         try:
             await inline_query.answer([], is_personal=True, cache_time=0)
-        except:
-            pass
+        except: pass
 
 
 async def main():
