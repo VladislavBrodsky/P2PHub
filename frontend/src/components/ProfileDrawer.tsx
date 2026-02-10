@@ -140,7 +140,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
     return ReactDOM.createPortal(
         <AnimatePresence>
             {isOpen && (
-                <>
+                <React.Fragment key="drawer-portal-content">
                     {/* Backdrop */}
                     <motion.div
                         key="drawer-backdrop"
@@ -149,7 +149,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.15 }}
                         onClick={onClose}
-                        className="fixed inset-0 z-9998 bg-black/40 backdrop-blur-[1px]"
+                        className="fixed inset-0 z-9998 bg-black/30 backdrop-blur-[2px] will-change-opacity"
                     />
 
                     {/* Drawer Content */}
@@ -166,9 +166,8 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                 left: 0
                             }}
                         >
-                            {/* ... existing content internal */}
-                            {/* Mesh Background Overlay */}
-                            <div className="mesh-gradient-dark absolute inset-0 opacity-40 pointer-events-none" />
+                            {/* Mesh Background Overlay - Optimized opacity for performance */}
+                            <div className="mesh-gradient-dark absolute inset-0 opacity-20 pointer-events-none will-change-opacity" />
                             <div className="absolute inset-0 bg-linear-to-b from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
 
                             {/* Header / Back Button Area */}
@@ -207,7 +206,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
 
 
                             {/* Scrollable Content */}
-                            <div className="flex-1 overflow-y-auto px-5 pb-10 flex flex-col gap-5">
+                            <div className="flex-1 overflow-y-auto px-5 pb-10 flex flex-col gap-4">
                                 {/* User Profile Header - Standardized */}
                                 <div className="mt-4">
                                     <PersonalizationCard variant="compact" />
@@ -263,7 +262,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                 </div>
 
                                 {/* Wallet Integration */}
-                                <div className="px-1 mt-auto">
+                                <div className="px-1">
                                     <motion.button
                                         whileTap={{ scale: 0.98 }}
                                         onClick={() => {
@@ -371,7 +370,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                             </div>
                         </motion.div>
                     </div>
-                </>
+                </React.Fragment>
             )}
         </AnimatePresence>,
         document.body

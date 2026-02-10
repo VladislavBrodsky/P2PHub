@@ -85,8 +85,9 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
     return (
         <AnimatePresence>
             {isOpen && (
-                <>
+                <React.Fragment key="share-sheet-portal">
                     <motion.div
+                        key="share-sheet-backdrop"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -94,6 +95,7 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
                         className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
                     />
                     <motion.div
+                        key="share-sheet-content"
                         initial={{ y: '100%' }}
                         animate={{ y: 0 }}
                         exit={{ y: '100%' }}
@@ -177,7 +179,7 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
                         </div>
 
                     </motion.div>
-                </>
+                </React.Fragment>
             )}
         </AnimatePresence>
     );

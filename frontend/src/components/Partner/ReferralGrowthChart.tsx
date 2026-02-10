@@ -147,68 +147,63 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
 
     const maxValue = useMemo(() => Math.max(...chartData.map(d => d.total), 5), [chartData]);
 
-    // Helper to get cumulative values for a specific level index across all points
-    // Returns array of [bottomValue, topValue] for each point
-    const getLevelBounds = (points: ChartDataPoint[], levelIndex: number) => {
-        return points.map(point => {
-            let bottom = 0;
-            // Sum levels from the END (Level 9 down to levelIndex + 1)
-            for (let i = 8; i > levelIndex; i--) {
-                bottom += point.levels[i] || 0;
+    // Memoized level bounds to avoid recalculation on every mouse move
+    const chartLevelsWithBounds = useMemo(() => {
+        return LEVEL_COLORS.map((_, i) => ({
+            index: i,
+            color: LEVEL_COLORS[i],
+            bounds: chartData.map(point => {
+                let bottom = 0;
+                for (let j = 8; j > i; j--) {
+                    bottom += point.levels[j] || 0;
+                }
+                const value = point.levels[i] || 0;
+                return { bottom, top: bottom + value };
+            })
+        }));
+    }, [chartData]);
+
+    const chartPaths = useMemo(() => {
+        if (chartData.length === 0) return [];
+        const width = 100;
+        const height = 100;
+        const stepX = width / (chartData.length - 1);
+
+        return chartLevelsWithBounds.map(({ index, bounds }) => {
+            let path = ``;
+            bounds.forEach((bound, idx) => {
+                const x = idx * stepX;
+                const y = height - (bound.top / maxValue) * height * 0.9;
+                if (idx === 0) path += `M ${x},${y} `;
+                else path += `L ${x},${y} `;
+            });
+
+            for (let i = bounds.length - 1; i >= 0; i--) {
+                const bound = bounds[i];
+                const x = i * stepX;
+                const y = height - (bound.bottom / maxValue) * height * 0.9;
+                path += `L ${x},${y} `;
             }
-            const value = point.levels[levelIndex] || 0;
-            return { bottom, top: bottom + value };
+            path += `Z`;
+            return path;
         });
-    };
+    }, [chartLevelsWithBounds, maxValue, chartData.length]);
 
-    // Calculate path for a specific cumulative level
-    const getLevelPath = (points: ChartDataPoint[], levelIndex: number) => {
-        if (points.length === 0) return '';
+    const topLinePath = useMemo(() => {
+        if (chartData.length === 0) return '';
         const width = 100;
         const height = 100;
-        const stepX = width / (points.length - 1);
-
-        const bounds = getLevelBounds(points, levelIndex);
-
-        let path = ``;
-
-        // L -> R: Top line
-        bounds.forEach((bound, index) => {
-            const x = index * stepX;
-            const y = height - (bound.top / maxValue) * height * 0.9; // 90% vertical usage
-            if (index === 0) path += `M ${x},${y} `;
-            else path += `L ${x},${y} `;
-        });
-
-        // R -> L: Bottom line
-        for (let i = bounds.length - 1; i >= 0; i--) {
-            const bound = bounds[i];
-            const x = i * stepX;
-            const y = height - (bound.bottom / maxValue) * height * 0.9;
-            path += `L ${x},${y} `;
-        }
-
-        path += `Z`;
-        return path;
-    };
-
-    // Calculate line path for the top-most level (total)
-    const getTopLinePath = (points: ChartDataPoint[]) => {
-        if (points.length === 0) return '';
-        const width = 100;
-        const height = 100;
-        const stepX = width / (points.length - 1);
+        const stepX = width / (chartData.length - 1);
 
         let path = '';
-        points.forEach((point, index) => {
+        chartData.forEach((point, index) => {
             const x = index * stepX;
             const y = height - (point.total / maxValue) * height * 0.9;
             if (index === 0) path += `M ${x},${y} `;
             else path += `L ${x},${y} `;
         });
-
         return path;
-    };
+    }, [chartData, maxValue]);
 
     return (
         <div className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-3xl p-4 shadow-sm backdrop-blur-md relative overflow-hidden group">
@@ -304,10 +299,10 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                         {LEVEL_COLORS.map((_, i) => (
                             <motion.path
                                 key={i}
-                                d={getLevelPath(chartData, i)}
+                                d={chartPaths[i]}
                                 fill={`url(#${gradientId}-${i})`}
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: 1, d: getLevelPath(chartData, i) }}
+                                animate={{ opacity: 1, d: chartPaths[i] }}
                                 transition={{ duration: 0.8, delay: i * 0.05, ease: "easeOut" }}
                                 className="transition-opacity duration-300"
                             />
@@ -315,7 +310,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
 
                         {/* Stroke line for the Total (Top Level) */}
                         <motion.path
-                            d={getTopLinePath(chartData)}
+                            d={topLinePath}
                             fill="none"
                             stroke="white"
                             strokeWidth="1"
@@ -324,7 +319,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             initial={{ pathLength: 0, opacity: 0 }}
-                            animate={{ pathLength: 1, opacity: 1, d: getTopLinePath(chartData) }}
+                            animate={{ pathLength: 1, opacity: 1, d: topLinePath }}
                             transition={{ duration: 1, ease: "easeOut" }}
                         />
                     </svg>

@@ -38,25 +38,40 @@ async def get_my_profile(
     # 2. Query DB and/or Register
     from app.services.partner_service import create_partner, process_referral_notifications
     
-    # Capture photo_file_id from Telegram Bot if not already in DB
-    photo_file_id = None
-    try:
-        user_photos = await bot.get_user_profile_photos(tg_id, limit=1)
-        if user_photos.total_count > 0:
-            photo_file_id = user_photos.photos[0][0].file_id
-    except Exception as e:
-        logger.error(f"Failed to fetch photo for {tg_id}: {e}")
-
-    partner, is_new = await create_partner(
-        session=session,
-        telegram_id=tg_id,
-        username=tg_user.get("username"),
-        first_name=tg_user.get("first_name"),
-        last_name=tg_user.get("last_name"),
-        language_code=tg_user.get("language_code", "en"),
-        referrer_code=user_data.get("start_param"),
-        photo_file_id=photo_file_id
+    # Check if photo exists in DB first to avoid blocking Telegram API calls during every /me request
+    # Use selectinload to prevent lazy loading error in async session
+    stmt = select(Partner).where(Partner.telegram_id == tg_id).options(
+        selectinload(Partner.completed_task_records)
     )
+    result = await session.exec(stmt)
+    partner = result.first()
+    
+    is_new = False
+    if not partner:
+        # Capture photo_file_id from Telegram Bot ONLY on registration or if missing
+        photo_file_id = None
+        try:
+            user_photos = await bot.get_user_profile_photos(tg_id, limit=1)
+            if user_photos.total_count > 0:
+                photo_file_id = user_photos.photos[0][0].file_id
+        except Exception as e:
+            logger.error(f"Failed to fetch photo for {tg_id}: {e}")
+
+        partner, is_new = await create_partner(
+            session=session,
+            telegram_id=tg_id,
+            username=tg_user.get("username"),
+            first_name=tg_user.get("first_name"),
+            last_name=tg_user.get("last_name"),
+            language_code=tg_user.get("language_code", "en"),
+            referrer_code=user_data.get("start_param"),
+            photo_file_id=photo_file_id
+        )
+        # Need to refresh with relations after creation
+        stmt_refresh = select(Partner).where(Partner.id == partner.id).options(
+            selectinload(Partner.completed_task_records)
+        )
+        partner = (await session.exec(stmt_refresh)).one()
     
     if is_new:
         await process_referral_notifications(bot, session, partner, is_new)
@@ -71,11 +86,6 @@ async def get_my_profile(
                     setattr(partner, field, tg_user.get(field))
                     has_changed = True
             
-            # Update photo_file_id if it's missing or changed
-            if photo_file_id and photo_file_id != partner.photo_file_id:
-                partner.photo_file_id = photo_file_id
-                has_changed = True
-
             if has_changed:
                 partner.updated_at = now
                 session.add(partner)
