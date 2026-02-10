@@ -12,15 +12,12 @@ interface PartnerStatsProps {
 const PartnerAvatar = ({ partner, index }: { partner: any; index: number }) => {
     const [imgError, setImgError] = useState(false);
 
-    if (partner.photo_url && !imgError) {
-        let src = partner.photo_url;
-        if (src.startsWith('/')) {
-            const baseUrl = apiClient.defaults.baseURL?.replace('/api', '') || '';
-            src = `${baseUrl}${src}`;
-        }
+    if (partner.photo_file_id && !imgError) {
+        // Use the backend proxy endpoint to get the Telegram photo
+        const photoUrl = `${apiClient.defaults.baseURL}/partner/photo/${partner.photo_file_id}`;
         return (
             <LazyImage
-                src={src}
+                src={photoUrl}
                 alt={partner.first_name}
                 className="w-full h-full object-cover"
                 onError={() => setImgError(true)}

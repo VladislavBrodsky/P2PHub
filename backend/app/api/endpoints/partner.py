@@ -187,14 +187,6 @@ async def get_recent_partners(
     try:
         cached = await redis_service.get_json(cache_key)
         if cached:
-            # Prepend base URL to photo_urls if they are relative
-            base_url = "https://p2phub-production.up.railway.app"
-            if settings.WEBHOOK_URL and "/api/bot/webhook" in settings.WEBHOOK_URL:
-                base_url = settings.WEBHOOK_URL.split("/api/bot/webhook")[0].rstrip('/')
-            
-            for p in cached.get("partners", []):
-                if p.get("photo_url") and p["photo_url"].startswith("/images/"):
-                    p["photo_url"] = f"{base_url}{p['photo_url']}"
             return cached
     except Exception:
         pass
@@ -228,24 +220,24 @@ async def get_recent_partners(
                 refresh_count = True
 
     if refresh_partners:
-        # 3. Fetch Fresh from Partner Table
+        # 3. Fetch Fresh from Partner Table including photo_file_id
         statement = select(
             Partner.id, 
             Partner.first_name, 
             Partner.username, 
-            Partner.photo_url, 
+            Partner.photo_file_id, 
             Partner.created_at
         ).order_by(Partner.created_at.desc()).limit(limit)
         result = await session.exec(statement)
         partners = result.all()
         
         partners_list = []
-        for p_id, p_first_name, p_username, p_photo_url, p_created_at in partners:
+        for p_id, p_first_name, p_username, p_photo_file_id, p_created_at in partners:
             p_dict = {
                 "id": p_id,
                 "first_name": p_first_name,
                 "username": p_username,
-                "photo_url": p_photo_url,
+                "photo_file_id": p_photo_file_id,  # Store file_id, not URL
                 "created_at": p_created_at.isoformat() if p_created_at else None
             }
             partners_list.append(p_dict)
@@ -270,16 +262,7 @@ async def get_recent_partners(
     if refresh_partners or refresh_count:
         await session.commit()
 
-    # Final processing: prepend base URL to photo_urls
-    base_url = "https://p2phub-production.up.railway.app"
-    if settings.WEBHOOK_URL and "/api/bot/webhook" in settings.WEBHOOK_URL:
-        base_url = settings.WEBHOOK_URL.split("/api/bot/webhook")[0].rstrip('/')
-
-    for p in partners_list:
-        if p.get("photo_url") and p["photo_url"].startswith("/images/"):
-            # Ensure no double slashes
-            p["photo_url"] = f"{base_url.rstrip('/')}/{p['photo_url'].lstrip('/')}"
-    
+    # No need to process photo URLs - we're storing file_ids
     partners_data = {
         "partners": partners_list[:limit],
         "last_hour_count": last_hour_count
@@ -623,3 +606,36 @@ async def get_prepared_share_id(
     except Exception as e:
         print(f"❌ Failed to save prepared message: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to prepare share message: {str(e)}")
+
+
+@router.get("/photo/{file_id}")
+@limiter.limit("100/minute")
+async def get_partner_photo(request: Request, file_id: str):
+    """
+    Returns the Telegram photo URL for a given file_id.
+    Cached in Redis for performance.
+    """
+    cache_key = f"tg_photo:{file_id}"
+    
+    # Try cache first
+    try:
+        cached_url = await redis_service.get(cache_key)
+        if cached_url:
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url=cached_url)
+    except Exception:
+        pass
+    
+    # Fetch from Telegram Bot API
+    try:
+        file = await bot.get_file(file_id)
+        photo_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
+        
+        # Cache for 1 hour
+        await redis_service.set(cache_key, photo_url, expire=3600)
+        
+        from fastapi.responses import RedirectResponse
+        return RedirectResponse(url=photo_url)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=f"Photo not found: {str(e)}")
+

@@ -38,22 +38,16 @@ async def cmd_start(message: types.Message):
     if lang not in ["en", "ru"]:
         lang = "en"
 
-    # Fetch and download user profile photo
-    photo_url = None
+    # Fetch user profile photo file_id
+    photo_file_id = None
     try:
         user_photos = await bot.get_user_profile_photos(message.from_user.id, limit=1)
         if user_photos.total_count > 0:
-            # Get the file to download
-            file = await bot.get_file(user_photos.photos[0][0].file_id)
-            # Create temporary Telegram URL for download
-            temp_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
-            
-            # Download and convert to WebP stored locally
-            from app.services.image_service import image_service
-            photo_url = await image_service.download_and_convert_to_webp(temp_url, str(message.from_user.id))
-            logging.info(f"✅ Downloaded profile photo for user {message.from_user.id}: {photo_url}")
+            # Store the file_id which we can use to fetch the photo anytime
+            photo_file_id = user_photos.photos[0][0].file_id
+            logging.info(f"✅ Captured photo file_id for user {message.from_user.id}")
     except Exception as e:
-        logging.error(f"❌ Error fetching/downloading profile photo: {e}")
+        logging.error(f"❌ Error fetching profile photo: {e}")
 
     try:
         async for session in get_session():
@@ -66,7 +60,7 @@ async def cmd_start(message: types.Message):
                 last_name=message.from_user.last_name,
                 language_code=lang,
                 referrer_code=referrer_code,
-                photo_url=photo_url
+                photo_file_id=photo_file_id
             )
             
             await process_referral_notifications(bot, session, partner, is_new)
