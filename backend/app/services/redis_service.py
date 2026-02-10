@@ -49,12 +49,17 @@ class RedisService:
         :param factory: Async function (callable) that returns the data
         :param expire: Expiration time in seconds
         """
+        import logging
+        logger = logging.getLogger(__name__)
+        
         try:
             cached = await self.get_json(key)
             if cached is not None:
+                logger.info(f"✅ Cache HIT: {key}")
                 return cached
+            logger.info(f"⚠️ Cache MISS: {key}")
         except Exception as e:
-            print(f"Cache Read Error: {e}")
+            logger.error(f"❌ Cache Read Error for {key}: {e}")
 
         # Compute
         # factory() should return a coroutine
@@ -63,8 +68,9 @@ class RedisService:
         if data:
             try:
                 await self.set_json(key, data, expire=expire)
+                logger.info(f"💾 Cached: {key} (TTL: {expire}s)")
             except Exception as e:
-                print(f"Cache Write Error: {e}")
+                logger.error(f"❌ Cache Write Error for {key}: {e}")
         
         return data
 
