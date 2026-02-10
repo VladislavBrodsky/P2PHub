@@ -9,9 +9,17 @@ def get_main_menu_keyboard(url: str, referral_link: str = "", referral_code: str
     ))
     if referral_code:
         builder.row(types.InlineKeyboardButton(
-            text="🤝 Share Referral Link",
+            text="🤝 Share Viral Card",
             switch_inline_query=referral_code
         ))
+        
+        # Viral message for direct sharing
+        share_text = "🚀 STOP BLEEDING MONEY! Join Pintopay and unlock $1/minute strategy! 💎"
+        builder.row(types.InlineKeyboardButton(
+            text="📲 Direct Share Link",
+            url=f"https://t.me/share/url?url={referral_link}&text={share_text}"
+        ))
+
     builder.row(types.InlineKeyboardButton(
         text="📢 Join Community",
         url="https://t.me/pintopay_superapp"

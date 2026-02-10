@@ -124,52 +124,95 @@ import random
 
 @dp.inline_query()
 async def inline_handler(inline_query: types.InlineQuery):
-    # The query is the referral code passed from the Mini App
-    ref_code = inline_query.query or "dev"
-    bot_info = await bot.get_me()
-    ref_link = f"https://t.me/{bot_info.username}?start={ref_code}"
-    
-    # Derive the actual base domain for API assets
-    if settings.WEBHOOK_URL and settings.WEBHOOK_PATH in settings.WEBHOOK_URL:
-        base_api_url = settings.WEBHOOK_URL.split(settings.WEBHOOK_PATH)[0].rstrip('/')
-    elif settings.WEBHOOK_URL:
-        base_api_url = settings.WEBHOOK_URL.rstrip('/')
-    else:
-        # Fallback to frontend or localhost if backend URL not explicit
-        base_api_url = (settings.FRONTEND_URL or "http://localhost:8000").rstrip('/')
-    
-    # Use the specific requested image from the backend assets
-    chosen_photo = f"{base_api_url}/images/2026-02-05%2003.35.03.jpg"
+    try:
+        # The query is the referral code passed from the Mini App
+        ref_code = inline_query.query or ""
+        # If no code is provided, we can't really track the referral link properly, 
+        # but we can fallback to 'dev' or similar
+        query_code = ref_code if ref_code else "start"
+        
+        bot_info = await bot.get_me()
+        ref_link = f"https://t.me/{bot_info.username}?start={query_code}"
+        
+        # Derive the actual base domain for API assets
+        if settings.WEBHOOK_URL and settings.WEBHOOK_PATH in settings.WEBHOOK_URL:
+            base_api_url = settings.WEBHOOK_URL.split(settings.WEBHOOK_PATH)[0].rstrip('/')
+        elif settings.WEBHOOK_URL:
+            base_api_url = settings.WEBHOOK_URL.rstrip('/')
+        else:
+            base_api_url = (settings.FRONTEND_URL or "http://localhost:8000").rstrip('/')
+        
+        # Photos
+        photo1 = f"{base_api_url}/images/2026-02-05%2003.35.03.jpg"
+        photo2 = f"{base_api_url}/images/2026-02-05%2003.35.36.jpg"
 
-    # Final Viral Marketing Pitch
-    caption = (
-        "🚀 *STOP BLEEDING MONEY TO BANKS!* 🛑\n\n"
-        "Join me on Pintopay and unlock $1 per minute strategy! 💎\n"
-        "Lead the revolution in FinTech & Web3 payments. 🌍"
-    )
-
-    logging.info(f"📤 Responding to inline query from {inline_query.from_user.id} with photo: {chosen_photo}")
-    logging.info(f"🔗 Ref Link: {ref_link}")
-
-    results = [
-        types.InlineQueryResultPhoto(
-            id=f"share_{random.randint(1, 10000)}", 
-            photo_url=chosen_photo,
-            thumbnail_url=chosen_photo,
-            title="Elite Partner Invitation",
-            description="Share your $1/minute strategy",
-            caption=caption,
-            parse_mode="Markdown",
-            reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
-                [types.InlineKeyboardButton(text="🤝 Join Partner Club", url=ref_link)]
-            ])
+        # Localization (Simplified for now, as we don't know user lang here easily without DB lookup)
+        caption = (
+            "🚀 *STOP BLEEDING MONEY TO BANKS!* 🛑\n\n"
+            "Join me on Pintopay and unlock $1 per minute strategy! 💎\n"
+            "Lead the revolution in FinTech & Web3 payments. 🌍"
         )
-    ]
-    
-    logging.info(f"✅ Inline results prepared: {len(results)} items")
-    
-    # Set cache_time=0 or low to ensured randomness
-    await inline_query.answer(results, is_personal=True, cache_time=5)
+        
+        title = "Elite Partner Invitation 💎"
+        description = "Share your $1/minute strategy"
+
+        logging.info(f"📤 Inline query from {inline_query.from_user.id}: '{ref_code}'")
+
+        results = [
+            # Option 1: Premium Card 1
+            types.InlineQueryResultPhoto(
+                id=f"card1_{query_code}", 
+                photo_url=photo1,
+                thumbnail_url=photo1,
+                title=title,
+                description=description,
+                caption=caption,
+                parse_mode="Markdown",
+                reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
+                    [types.InlineKeyboardButton(text="🤝 Join Partner Club", url=ref_link)]
+                ])
+            ),
+            # Option 2: Premium Card 2
+            types.InlineQueryResultPhoto(
+                id=f"card2_{query_code}", 
+                photo_url=photo2,
+                thumbnail_url=photo2,
+                title="Marketing Machine v2",
+                description="Alternative viral design",
+                caption=caption,
+                parse_mode="Markdown",
+                reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
+                    [types.InlineKeyboardButton(text="🚀 Start Building", url=ref_link)]
+                ])
+            ),
+            # Option 3: Text Only (Fallback/Fast)
+            types.InlineQueryResultArticle(
+                id=f"text_{query_code}",
+                title="Fast Invite (Text Only)",
+                description="Send a quick text-based invitation",
+                input_message_content=types.InputTextMessageContent(
+                    message_text=f"{caption}\n\n🔗 *Join Here:* {ref_link}",
+                    parse_mode="Markdown"
+                ),
+                reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
+                    [types.InlineKeyboardButton(text="💎 Open App", url=ref_link)]
+                ])
+            )
+        ]
+        
+        logging.info(f"✅ Answering inline query {inline_query.id} with {len(results)} results")
+        await inline_query.answer(results, is_personal=True, cache_time=300) # Increased cache to 5 mins
+
+    except Exception as e:
+        logging.error(f"❌ Error in inline_handler: {e}")
+        import traceback
+        traceback.print_exc()
+        # Answer with empty results to stop loading indicator
+        try:
+            await inline_query.answer([], is_personal=True, cache_time=0)
+        except:
+            pass
+
 
 async def main():
     logging.info("Starting bot...")

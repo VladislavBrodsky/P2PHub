@@ -173,15 +173,17 @@ export default function ReferralPage() {
 
     const handleShareTelegram = () => {
         selection();
+        const botUsername = 'pintopay_probot'; // Seen in logs/screenshots
+        const shareText = encodeURIComponent("🚀 STOP BLEEDING MONEY! Join Pintopay and unlock $1/minute strategy! 💎");
 
+        // Check if we're in Telegram Web App
         if (window.Telegram?.WebApp) {
-            // Trigger Inline Query with the referral code to show the Marketing Card
-            window.Telegram.WebApp.switchInlineQuery(referralCode);
+            // Use switchInlineQuery with chat selection for better reach
+            // Users can choose exactly where to send the viral card
+            window.Telegram.WebApp.switchInlineQuery(referralCode, ['users', 'groups', 'channels']);
         } else {
-            // Fallback to static link if not in Telegram (though this is TMA)
-            const text = encodeURIComponent(VIRAL_TEXT);
-            const url = encodeURIComponent(referralLink);
-            const shareUrl = `https://t.me/share/url?url=${url}&text=${text}`;
+            // Fallback: regular t.me share link pointing to the bot referral link
+            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${shareText}`;
             window.open(shareUrl, '_blank');
         }
         setShowShareModal(false);
