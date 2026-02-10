@@ -61,6 +61,17 @@ export const AdminPage = () => {
         }
     };
 
+    const handleReject = async (txHash: string) => {
+        if (!confirm('Are you sure you want to reject this transaction? The user will be notified.')) return;
+
+        try {
+            await apiClient.post(`/api/admin/reject-payment/${txHash}`);
+            await fetchPending(true);
+        } catch (err: any) {
+            alert(err.response?.data?.detail || 'Rejection failed');
+        }
+    };
+
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
@@ -74,12 +85,20 @@ export const AdminPage = () => {
         <div className="p-4 safe-pb space-y-6">
             {/* Header */}
             <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-black flex items-center gap-2">
-                        <ShieldCheck className="text-blue-500" />
-                        Admin Panel
-                    </h1>
-                    <p className="text-slate-500 text-sm font-medium">Verify & Approve Revenue</p>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => window.location.href = '#/'}
+                        className="p-2 rounded-xl bg-slate-100 dark:bg-white/5 active:scale-95 transition-all"
+                    >
+                        <RefreshCw size={18} className="rotate-270 text-slate-500" />
+                    </button>
+                    <div>
+                        <h1 className="text-xl font-black flex items-center gap-2">
+                            <ShieldCheck className="text-blue-500" size={20} />
+                            Admin
+                        </h1>
+                        <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Revenue Review</p>
+                    </div>
                 </div>
                 <button
                     onClick={() => { setIsRefreshing(true); fetchPending(true); }}
@@ -160,7 +179,7 @@ export const AdminPage = () => {
                                     </div>
                                     <div className="text-right">
                                         <div className="text-[10px] font-bold text-slate-400">
-                                            {new Date(tx.created_at).toLocaleTimeString()}
+                                            {tx.created_at ? new Date(tx.created_at).toLocaleTimeString() : 'Recently'}
                                         </div>
                                     </div>
                                 </div>
@@ -169,7 +188,7 @@ export const AdminPage = () => {
                                     <span className="text-slate-500 shrink-0 uppercase font-black">Hash:</span>
                                     <span className="text-slate-600 dark:text-slate-300 select-all">{tx.tx_hash}</span>
                                     <a
-                                        href={`https://tronscan.org/#/transaction/${tx.tx_hash}`}
+                                        href={tx.network === 'TON' ? `https://tonviewer.com/transaction/${tx.tx_hash}` : `https://tronscan.org/#/transaction/${tx.tx_hash}`}
                                         target="_blank"
                                         rel="noreferrer"
                                         className="text-blue-500 shrink-0"
@@ -178,23 +197,31 @@ export const AdminPage = () => {
                                     </a>
                                 </div>
 
-                                <button
-                                    onClick={() => handleApprove(tx.tx_hash || '')}
-                                    disabled={approvingHashes.has(tx.tx_hash)}
-                                    className="w-full py-3 rounded-2xl bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-black text-sm transition-all active:scale-95 flex items-center justify-center gap-2"
-                                >
-                                    {approvingHashes.has(tx.tx_hash) ? (
-                                        <>
-                                            <RefreshCw className="animate-spin" size={16} />
-                                            Processing...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <CheckCircle size={16} />
-                                            Approve & Upgrade
-                                        </>
-                                    )}
-                                </button>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <button
+                                        onClick={() => handleReject(tx.tx_hash)}
+                                        className="py-3 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-500 font-bold text-sm active:scale-95 transition-all"
+                                    >
+                                        Reject
+                                    </button>
+                                    <button
+                                        onClick={() => handleApprove(tx.tx_hash || '')}
+                                        disabled={approvingHashes.has(tx.tx_hash)}
+                                        className="py-3 rounded-2xl bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-black text-sm transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20"
+                                    >
+                                        {approvingHashes.has(tx.tx_hash) ? (
+                                            <>
+                                                <RefreshCw className="animate-spin" size={16} />
+                                                Wait...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <CheckCircle size={16} />
+                                                Approve
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
                             </motion.div>
                         ))
                     )}

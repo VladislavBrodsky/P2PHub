@@ -76,7 +76,7 @@ async def approve_payment(
             user_msg = get_msg(lang, "pro_welcome")
             await notification_service.enqueue_notification(
                 chat_id=int(partner.telegram_id),
-                text=f"✅ *PAYMENT APPROVED!*\\n\\n{user_msg}"
+                text=f"✅ *PAYMENT APPROVED!*\n\n{user_msg}"
             )
         except Exception as e:
             print(f"[DEBUG] User approval notification failed: {e}")
@@ -85,3 +85,41 @@ async def approve_payment(
 
     else:
         raise HTTPException(status_code=500, detail="Failed to upgrade user to PRO")
+
+@router.post("/reject-payment/{tx_hash}")
+async def reject_payment(
+    tx_hash: str,
+    admin: dict = Depends(get_current_admin),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Rejects a manual payment. Sets status to 'failed' and notifies the user.
+    """
+    statement = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
+    result = await session.exec(statement)
+    tx = result.first()
+    
+    if not tx:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+        
+    if tx.status != "manual_review":
+        raise HTTPException(status_code=400, detail=f"Transaction is in {tx.status} state, cannot reject")
+
+    # Get the partner
+    partner = await session.get(Partner, tx.partner_id)
+    
+    tx.status = "failed"
+    session.add(tx)
+    await session.commit()
+    
+    # Notify the User
+    if partner:
+        try:
+            await notification_service.enqueue_notification(
+                chat_id=int(partner.telegram_id),
+                text="❌ *PAYMENT REJECTED*\n\nYour transaction hash could not be verified. Please check the hash and try again, or contact support."
+            )
+        except Exception:
+            pass
+            
+    return {"status": "success", "message": f"Payment {tx_hash} rejected"}
