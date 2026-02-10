@@ -24,13 +24,14 @@ RUN uv pip install --system --no-cache -r requirements.txt
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 COPY --chown=appuser:appuser . .
 
-USER appuser
 
 ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8000
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
+
+USER appuser
 
 CMD ["/start.sh"]
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=5 CMD curl -f http://localhost:${PORT:-8000}/health/ping || exit 1
