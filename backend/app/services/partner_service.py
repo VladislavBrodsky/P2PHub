@@ -174,64 +174,70 @@ async def process_referral_logic(partner_id: int):
                 if not referrer:
                     logger.warning(f"⚠️ Ancestor {current_referrer_id} not found in map for partner {partner_id} at level {level}")
                     break
-                    
-                # 1. Distribute XP
-                xp_gain = XP_MAP.get(level, 0)
-                if referrer.is_pro:
-                    xp_gain *= 5
-                    
-                referrer.xp += xp_gain
                 
-                # Atomic growth increment (Network Size)
-                referrer.referral_count += 1
-                
-                xp_tx = XPTransaction(
-                    partner_id=referrer.id,
-                    amount=xp_gain,
-                    type="REFERRAL_L1" if level == 1 else "REFERRAL_DEEP",
-                    description=f"Referral XP Reward (L{level})",
-                    reference_id=str(partner.id)
-                )
-                session.add(xp_tx)
+                try:
+                    # --- CORE OPERATION: XP DISTRIBUTION (GOLDEN RULE) ---
+                    xp_gain = XP_MAP.get(level, 0)
+                    if referrer.is_pro:
+                        xp_gain *= 5
+                        
+                    referrer.xp += xp_gain
+                    referrer.referral_count += 1
+                    
+                    xp_tx = XPTransaction(
+                        partner_id=referrer.id,
+                        amount=xp_gain,
+                        type="REFERRAL_L1" if level == 1 else "REFERRAL_DEEP",
+                        description=f"Referral XP Reward (L{level})",
+                        reference_id=str(partner.id)
+                    )
+                    session.add(xp_tx)
 
-                # 1.2 Unified Transaction: Log XP as an Earning
-                from app.models.partner import Earning
-                xp_earning = Earning(
-                    partner_id=referrer.id,
-                    amount=xp_gain,
-                    description=f"Referral XP Reward (L{level})",
-                    type="REFERRAL_XP",
-                    level=level,
-                    currency="XP"
-                )
-                session.add(xp_earning)
-                
-                # 2. Handle Level Up Logic
-                new_level = get_level(referrer.xp)
-                if new_level > referrer.level:
-                    # Level Up!
-                    for l in range(referrer.level + 1, new_level + 1):
-                        try:
-                            lang = referrer.language_code or "en"
-                            msg = get_msg(lang, "level_up", level=l)
-                            await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
-                        except Exception as e:
-                            logger.error(f"Failed to send level_up notification to {referrer.id}: {e}")
-                    referrer.level = new_level
+                    from app.models.partner import Earning
+                    xp_earning = Earning(
+                        partner_id=referrer.id,
+                        amount=xp_gain,
+                        description=f"Referral XP Reward (L{level})",
+                        type="REFERRAL_XP",
+                        level=level,
+                        currency="XP"
+                    )
+                    session.add(xp_earning)
+                    session.add(referrer)
                     
-                # 3. Sync to Redis Leaderboard
+                    # Flush to ensure XP is captured in the transaction
+                    await session.flush()
+                    logger.info(f"💰 [Level {level}] XP Awarded: {xp_gain} to {referrer.id}")
+                    
+                except Exception as core_error:
+                    logger.critical(f"❌ CRITICAL: Failed to award XP for {referrer.id} at level {level}: {core_error}")
+                    # If core operation fails for one user, we might still want to try for others, 
+                    # but usually this means DB issue. We continue to next level just in case.
+                    continue
+
+                # --- SIDE EFFECTS: ISOLATED FROM CORE ---
+                # 2. Handle Level Up Logic
+                try:
+                    new_level = get_level(referrer.xp)
+                    if new_level > referrer.level:
+                        for l in range(referrer.level + 1, new_level + 1):
+                            try:
+                                lang = referrer.language_code or "en"
+                                msg = get_msg(lang, "level_up", level=l)
+                                await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
+                            except Exception: pass
+                        referrer.level = new_level
+                except Exception as e:
+                    logger.error(f"⚠️ Level up logic failed for {referrer.id}: {e}")
+                    
+                # 3. Redis Side Effects
                 try:
                     await leaderboard_service.update_score(referrer.id, referrer.xp)
-                except Exception as e:
-                    logger.error(f"Failed to update leaderboard for {referrer.id}: {e}")
-                
-                # 4. Invalidate Profile Cache
-                try:
                     await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
                 except Exception as e:
-                    logger.error(f"Failed to delete profile cache for {referrer.id}: {e}")
+                    logger.error(f"⚠️ Redis sync failed for {referrer.id}: {e}")
                 
-                # 5. Send Notification
+                # 4. Referral Notifications
                 try:
                     lang = referrer.language_code or "en"
                     new_partner_name = f"{partner.first_name}"
@@ -261,19 +267,17 @@ async def process_referral_logic(partner_id: int):
                                 msg = get_msg(lang, "referral_l2_congrats", referral_chain=referral_chain)
                             else:
                                 msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=referral_chain)
-                        except Exception as e:
-                            logger.error(f"Error constructing referral chain for {referrer.id}: {e}")
+                        except Exception: pass
                     
                     if msg:
                         await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
                 except Exception as e:
-                    logger.error(f"Failed to process referral notification for {referrer.id}: {e}")
+                    logger.error(f"⚠️ Notification failed for {referrer.id}: {e}")
 
-                session.add(referrer)
                 current_referrer_id = referrer.referrer_id  # Move up the chain
 
             await session.commit()
-            logger.info(f"✅ Successfully processed referral logic for partner {partner_id}")
+            logger.info(f"✅ Successfully processed all levels for partner {partner_id}")
 
     
     except Exception as e:

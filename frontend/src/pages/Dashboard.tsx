@@ -49,8 +49,8 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
     // Calculate rotation index (0, 1, or 2) based on current day
     const rotationIndex = Math.floor(Date.now() / (1000 * 60 * 60 * 24)) % 3;
-    const heroTitle1 = t(`dashboard.hero_rotation.${rotationIndex}.title_1`, { defaultValue: "Slow Money Is Dead" });
-    const heroTitle2 = t(`dashboard.hero_rotation.${rotationIndex}.title_2`, { defaultValue: "Welcome to Web3 Finance" });
+    const heroTitle1 = t(`dashboard.hero_rotation.${rotationIndex}.title_1`, { defaultValue: "Everything You Know" });
+    const heroTitle2 = t(`dashboard.hero_rotation.${rotationIndex}.title_2`, { defaultValue: "About Money Is a Lie" });
 
     return (
         <motion.div
@@ -71,13 +71,13 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                     {/* Badge & Admin Entry */}
                     <div className="flex items-center gap-3">
                         <motion.div
-                            className="inline-block rounded-full border border-blue-200/50 bg-blue-50 px-6 py-2 shadow-sm"
+                            className="inline-block rounded-full border border-blue-400/30 vibing-blue-animated px-6 py-2 shadow-[0_0_20px_rgba(0,102,255,0.3)]"
                             animate={{
-                                scale: [1, 1.02, 1],
+                                scale: [1, 1.05, 1],
                             }}
-                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                         >
-                            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600">
+                            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white">
                                 {t('dashboard.hero_badge', { defaultValue: 'PARTNER NETWORK 2.0' })}
                             </p>
                         </motion.div>
@@ -98,24 +98,24 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
                     {/* Main Titles */}
                     <div className="space-y-4">
-                        <h1 className="text-[36px] font-extrabold tracking-tighter text-slate-900 dark:text-white leading-[0.95] flex flex-col items-center">
-                            <span>Slow Money Is</span>
-                            <span>Dead</span>
+                        <h1 className="text-[38px] font-extrabold tracking-tighter text-slate-900 dark:text-white leading-[0.9] flex flex-col items-center">
+                            <span>{heroTitle1.split(' ')[0]} {heroTitle1.split(' ')[1]}</span>
+                            <span>{heroTitle1.split(' ').slice(2).join(' ')}</span>
                         </h1>
                         <motion.div
-                            className="text-[34px] font-extrabold tracking-tighter leading-[0.95] flex flex-col items-center vibing-crystal-text"
+                            className="text-[36px] font-extrabold tracking-tighter leading-[0.9] flex flex-col items-center vibing-crystal-text"
                             animate={{
-                                scale: [1, 1.02, 1],
-                                rotate: [-0.5, 0.5, -0.5],
+                                scale: [1, 1.03, 1],
+                                rotate: [-0.3, 0.3, -0.3],
                             }}
                             transition={{
-                                duration: 4,
+                                duration: 3,
                                 repeat: Infinity,
                                 ease: "easeInOut"
                             }}
                         >
-                            <span>Welcome to Web3</span>
-                            <span>Finance</span>
+                            <span>{heroTitle2.split(' ').slice(0, 2).join(' ')}</span>
+                            <span>{heroTitle2.split(' ').slice(2).join(' ')}</span>
                         </motion.div>
                     </div>
                 </div>
