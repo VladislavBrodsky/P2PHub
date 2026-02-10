@@ -1,13 +1,12 @@
 """
-Backfill profile photos for existing partners.
-This script downloads Telegram profile photos for users who don't have them yet.
+Backfill photo_file_id for existing partners.
+This script fetches Telegram file_ids for users who don't have them yet.
 """
 import asyncio
 import logging
 from aiogram import Bot
 from app.core.config import settings
 from app.models.partner import Partner, get_session
-from app.services.image_service import image_service
 from sqlmodel import select
 
 logging.basicConfig(level=logging.INFO)
@@ -15,20 +14,20 @@ logger = logging.getLogger(__name__)
 
 bot = Bot(token=settings.BOT_TOKEN)
 
-async def backfill_photos():
-    """Download and save profile photos for partners who don't have them."""
+async def backfill_photo_file_ids():
+    """Fetch and save photo_file_id for partners who don't have them."""
     
     async for session in get_session():
-        # Get all partners without photo_urls or with telegram URLs
-        statement = select(Partner).where(
-            (Partner.photo_url == None) | (Partner.photo_url.like('%api.telegram.org%'))
-        )
+        # Get all partners without photo_file_id
+        statement = select(Partner).where(Partner.photo_file_id == None)
         result = await session.exec(statement)
         partners = result.all()
         
-        logger.info(f"Found {len(partners)} partners without local profile photos")
+        logger.info(f"Found {len(partners)} partners without photo_file_id")
         
         updated_count = 0
+        skipped_count = 0
+        
         for partner in partners:
             try:
                 user_id = int(partner.telegram_id)
@@ -38,29 +37,27 @@ async def backfill_photos():
                 user_photos = await bot.get_user_profile_photos(user_id, limit=1)
                 
                 if user_photos.total_count > 0:
-                    # Download the photo
-                    file = await bot.get_file(user_photos.photos[0][0].file_id)
-                    temp_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
+                    # Get the file_id (no need to download)
+                    file_id = user_photos.photos[0][0].file_id
                     
-                    # Convert and save locally
-                    local_url = await image_service.download_and_convert_to_webp(temp_url, partner.telegram_id)
-                    
-                    if local_url:
-                        partner.photo_url = local_url
-                        session.add(partner)
-                        updated_count += 1
-                        logger.info(f"✅ Updated photo for {partner.first_name}: {local_url}")
-                    else:
-                        logger.warning(f"⚠️ Failed to download photo for {partner.first_name}")
+                    partner.photo_file_id = file_id
+                    session.add(partner)
+                    updated_count += 1
+                    logger.info(f"✅ Updated photo_file_id for {partner.first_name}: {file_id[:20]}...")
                 else:
-                    logger.info(f"ℹ️ No profile photo available for {partner.first_name}")
+                    logger.info(f"ℹ️  No profile photo available for {partner.first_name}")
+                    skipped_count += 1
                     
             except Exception as e:
                 logger.error(f"❌ Error processing partner {partner.id}: {e}")
+                skipped_count += 1
                 continue
         
         await session.commit()
-        logger.info(f"\n🎉 Backfill complete! Updated {updated_count}/{len(partners)} partners")
+        logger.info(f"\n🎉 Backfill complete!")
+        logger.info(f"   ✅ Updated: {updated_count}")
+        logger.info(f"   ⏭️  Skipped: {skipped_count}")
+        logger.info(f"   📊 Total processed: {len(partners)}")
 
 if __name__ == "__main__":
-    asyncio.run(backfill_photos())
+    asyncio.run(backfill_photo_file_ids())
