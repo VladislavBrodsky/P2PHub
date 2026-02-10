@@ -12,7 +12,8 @@ type Timeframe = '24H' | '7D' | '1M' | '3M' | '6M' | '1Y';
 interface ChartDataPoint {
     date: string;
     total: number;
-    levels: number[]; // Breakdown by level 1-9
+    levels: number[]; // Cumulative count at each level 1-9
+    joined_per_level?: number[]; // New partners at each level in this bucket
 }
 
 // Mock Data Generator that ends at a specific total
@@ -62,7 +63,6 @@ const generateMockData = (timeframe: Timeframe, endTotal: number): ChartDataPoin
 
     for (let i = 0; i < points; i++) {
         const progress = i / (points - 1); // 0 to 1
-        // Ease out quad
         const eased = progress * (2 - progress);
         const total = Math.floor(startTotal + (endTotal - startTotal) * eased);
 
@@ -71,6 +71,12 @@ const generateMockData = (timeframe: Timeframe, endTotal: number): ChartDataPoin
         else if (timeframe === '7D') date.setDate(date.getDate() - (points - 1 - i));
         else date.setMonth(date.getMonth() - (points - 1 - i));
 
+        // Generate a synthetic cumulative breakdown
+        const levels = Array(9).fill(0).map((_, idx) => {
+            const factor = (idx + 1) / 9;
+            return Math.floor(total * factor);
+        });
+
         data.push({
             date: timeframe === '24H'
                 ? `${date.getHours()}:00`
@@ -78,12 +84,24 @@ const generateMockData = (timeframe: Timeframe, endTotal: number): ChartDataPoin
                     ? `${date.getDate()}/${date.getMonth() + 1}`
                     : `${date.toLocaleString('default', { month: 'short' })}`,
             total: total,
-            levels: Array(9).fill(0).map((_, idx) => Math.floor(total / 9)) // Simplified breakdown
+            levels: levels
         });
     }
 
     return data;
 };
+
+const LEVEL_COLORS = [
+    '#3b82f6', // L1: Blue
+    '#6366f1', // L2: Indigo
+    '#8b5cf6', // L3: Violet
+    '#a855f7', // L4: Purple
+    '#d946ef', // L5: Fuchsia
+    '#ec4899', // L6: Pink
+    '#f43f5e', // L7: Rose
+    '#f97316', // L8: Orange
+    '#eab308', // L9: Yellow
+];
 
 interface ReferralGrowthChartProps {
     onReportClick?: () => void;
@@ -129,34 +147,50 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
 
     const maxValue = useMemo(() => Math.max(...chartData.map(d => d.total), 1), [chartData]);
 
-    // Calculate path for the area chart
-    const getPath = (points: ChartDataPoint[]) => {
+    // Calculate path for a specific cumulative level
+    const getLevelPath = (points: ChartDataPoint[], levelIndex: number) => {
         if (points.length === 0) return '';
         const width = 100;
         const height = 100;
         const stepX = width / (points.length - 1);
 
-        let path = `M 0,${height} `; // Start bottom-left
+        // Previous level path (to stack on top of it)
+        const prevLevelValues = levelIndex > 0
+            ? points.map(p => p.levels[levelIndex - 1])
+            : Array(points.length).fill(0);
 
+        const currentLevelValues = points.map(p => p.levels[levelIndex]);
+
+        let path = `M 0,${height} `;
+
+        // L -> R: Current level top line
         points.forEach((point, index) => {
             const x = index * stepX;
-            const y = height - (point.total / maxValue) * height * 0.8; // Leave 20% top padding
+            const val = currentLevelValues[index];
+            const y = height - (val / maxValue) * height * 0.8;
             path += `L ${x},${y} `;
         });
 
-        path += `L ${width},${height} Z`; // Close path
+        // R -> L: Previous level line (or floor if levelIndex is 0)
+        for (let i = points.length - 1; i >= 0; i--) {
+            const x = i * stepX;
+            const val = prevLevelValues[i];
+            const y = height - (val / maxValue) * height * 0.8;
+            path += `L ${x},${y} `;
+        }
+
+        path += `Z`;
         return path;
     };
 
-    // Calculate line path (stroke)
-    const getLinePath = (points: ChartDataPoint[]) => {
+    // Calculate line path for the top-most level (total)
+    const getTopLinePath = (points: ChartDataPoint[]) => {
         if (points.length === 0) return '';
         const width = 100;
         const height = 100;
         const stepX = width / (points.length - 1);
 
         let path = '';
-
         points.forEach((point, index) => {
             const x = index * stepX;
             const y = height - (point.total / maxValue) * height * 0.8;
@@ -239,32 +273,39 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
 
                 <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full overflow-visible">
                     <defs>
-                        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
-                            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
-                        </linearGradient>
+                        {LEVEL_COLORS.map((color, i) => (
+                            <linearGradient key={i} id={`${gradientId}-${i}`} x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor={color} stopOpacity="0.6" />
+                                <stop offset="100%" stopColor={color} stopOpacity="0.1" />
+                            </linearGradient>
+                        ))}
                     </defs>
 
-                    {/* Area Fill */}
-                    <motion.path
-                        d={getPath(chartData)}
-                        fill={`url(#${gradientId})`}
-                        initial={{ opacity: 0, d: `M 0,100 L 100,100 Z` }}
-                        animate={{ opacity: 1, d: getPath(chartData) }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                    />
+                    {/* Stacked Areas */}
+                    {LEVEL_COLORS.map((_, i) => (
+                        <motion.path
+                            key={i}
+                            d={getLevelPath(chartData, i)}
+                            fill={`url(#${gradientId}-${i})`}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1, d: getLevelPath(chartData, i) }}
+                            transition={{ duration: 0.8, delay: i * 0.05, ease: "easeOut" }}
+                            className="transition-opacity duration-300"
+                        />
+                    ))}
 
-                    {/* Stroke Line */}
+                    {/* Stroke line for the Total (Top Level) */}
                     <motion.path
-                        d={getLinePath(chartData)}
+                        d={getTopLinePath(chartData)}
                         fill="none"
-                        stroke="#3b82f6"
-                        strokeWidth="2"
+                        stroke="white"
+                        strokeWidth="1"
+                        strokeOpacity="0.3"
                         vectorEffect="non-scaling-stroke"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         initial={{ pathLength: 0, opacity: 0 }}
-                        animate={{ pathLength: 1, opacity: 1, d: getLinePath(chartData) }}
+                        animate={{ pathLength: 1, opacity: 1, d: getTopLinePath(chartData) }}
                         transition={{ duration: 1, ease: "easeOut" }}
                     />
                 </svg>
@@ -323,20 +364,45 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                     })}
                 </div>
 
-                {/* Tooltip Overhead */}
+                {/* Tooltip Overhead - Redesigned for Level Breakdown */}
                 <AnimatePresence>
                     {hoveredIndex !== null && chartData[hoveredIndex] && (
                         <motion.div
                             initial={{ opacity: 0, y: 10, scale: 0.95 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            className="absolute top-2 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs rounded-xl py-2 px-3 shadow-xl border border-white/10 z-20 flex flex-col items-center pointer-events-none min-w-[100px]"
+                            className="absolute top-0 left-1/2 -translate-x-1/2 bg-slate-900/95 backdrop-blur-xl text-white text-[9px] rounded-2xl p-2.5 shadow-2xl border border-white/20 z-30 flex flex-col gap-1.5 pointer-events-none min-w-[140px]"
                         >
-                            <span className="font-bold mb-1 text-slate-300">{chartData[hoveredIndex].date}</span>
-                            <div className="flex items-center gap-2">
-                                <Users className="w-3 h-3 text-blue-400" />
-                                <span className="font-black text-lg">{chartData[hoveredIndex].total.toLocaleString()}</span>
+                            <div className="flex items-center justify-between border-b border-white/10 pb-1 mb-0.5">
+                                <span className="font-bold text-slate-400 uppercase tracking-tighter">{chartData[hoveredIndex].date}</span>
+                                <div className="flex items-center gap-1">
+                                    <Users className="w-2.5 h-2.5 text-blue-400" />
+                                    <span className="font-black text-xs">{chartData[hoveredIndex].total.toLocaleString()}</span>
+                                </div>
                             </div>
+
+                            <div className="grid grid-cols-3 gap-x-2 gap-y-1">
+                                {LEVEL_COLORS.map((color, i) => {
+                                    const count = chartData[hoveredIndex].levels[i];
+                                    const prevCount = i > 0 ? chartData[hoveredIndex].levels[i - 1] : 0;
+                                    const levelCount = count - prevCount;
+
+                                    return (
+                                        <div key={i} className="flex items-center gap-1 opacity-90">
+                                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
+                                            <span className="font-bold text-slate-400">L{i + 1}:</span>
+                                            <span className="font-black">{levelCount.toLocaleString()}</span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            {chartData[hoveredIndex].joined_per_level && (
+                                <div className="mt-1 pt-1 border-t border-white/10 flex items-center justify-between text-[8px]">
+                                    <span className="font-bold text-emerald-400 tracking-tighter uppercase italic">Flow Power:</span>
+                                    <span className="font-black text-emerald-400">+{chartData[hoveredIndex].joined_per_level.reduce((a, b) => a + b, 0)}</span>
+                                </div>
+                            )}
                         </motion.div>
                     )}
                 </AnimatePresence>

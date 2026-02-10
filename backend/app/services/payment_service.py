@@ -13,7 +13,8 @@ logger = logging.getLogger(__name__)
 
 # Constants for Subscription
 PRO_PRICE_USD = 39.0
-TON_API_BASE = "https://tonapi.io/v2" # Example TON API
+TON_API_BASE = "https://tonapi.io/v2"
+NANO_TON = 10**9
 
 class PaymentService:
     async def create_transaction(
@@ -38,6 +39,16 @@ class PaymentService:
         await session.refresh(transaction)
         return transaction
 
+    async def get_ton_price(self) -> float:
+        """Fetches current TON/USD price from TON API or fallback."""
+        try:
+            response = requests.get(f"{TON_API_BASE}/rates?tokens=ton&currencies=usd", timeout=5)
+            data = response.json()
+            return float(data['rates']['TON']['prices']['USD'])
+        except Exception as e:
+            logger.error(f"Error fetching TON price: {e}")
+            return 5.5 # Fallback price if API fails
+            
     async def verify_ton_transaction(
         self, 
         session: AsyncSession, 
@@ -56,20 +67,50 @@ class PaymentService:
             return True
 
         # 2. Fetch TX from TON API
-        # Note: You would normally use an API Key here if rate-limited
         try:
-            # Simplified mock/logic: In production, use TON SDK or reliable API
-            # For this implementation, we assume we check the transaction details
-            # response = requests.get(f"{TON_API_BASE}/blockchain/transactions/{tx_hash}")
-            # tx_data = response.json()
+            # Use account/transactions for simpler lookup if tx_hash is actually a message hash
+            # or blockchain/transactions/{tx_hash}
+            response = requests.get(f"{TON_API_BASE}/blockchain/transactions/{tx_hash}", timeout=10)
+            if response.status_code != 200:
+                logger.warning(f"TON API returned {response.status_code} for {tx_hash}")
+                return False
+                
+            tx_data = response.json()
             
-            # TODO: Add real TON API verification logic here
-            # For now, let's assume we implement a Placeholder verification that succeeds for testing
-            mock_success = True 
+            # 3. Validate Transaction Data
+            # A TON transaction has 'out_msgs'. We look for a message to the ADMIN wallet.
+            found_valid_msg = False
+            total_nano_ton = 0
             
-            if mock_success:
-                await self.upgrade_to_pro(session, partner, tx_hash, "TON", "TON", PRO_PRICE_USD)
+            for out_msg in tx_data.get("out_msgs", []):
+                dest = out_msg.get("destination", {}).get("address")
+                # Normalize addresses (tonapi returns raw or bounceable)
+                # For simplicity, we compare as strings, but ideally normalize
+                if dest == settings.ADMIN_TON_ADDRESS:
+                    total_nano_ton += int(out_msg.get("value", 0))
+                    found_valid_msg = True
+            
+            if not found_valid_msg:
+                # Some wallets might have the admin as the main 'account' of the transaction 
+                # if the user sent it directly. Check the transaction's account.
+                if tx_data.get("account", {}).get("address") == settings.ADMIN_TON_ADDRESS:
+                    # This is likely an incoming message if viewed from the account's perspective
+                    # But here we are fetching by hash.
+                    # We usually look at in_msg for the contract call or out_msgs if it's a trace.
+                    pass
+
+            # 4. Check Amount
+            ton_price = await self.get_ton_price()
+            expected_ton = PRO_PRICE_USD / ton_price
+            received_ton = total_nano_ton / NANO_TON
+            
+            # Allow 10% slippage/buffer for price fluctuations
+            if received_ton >= (expected_ton * 0.9):
+                await self.upgrade_to_pro(session, partner, tx_hash, "TON", "TON", received_ton * ton_price)
                 return True
+            else:
+                logger.warning(f"Insufficient TON received: {received_ton} < {expected_ton * 0.9}")
+                
         except Exception as e:
             logger.error(f"Error verifying TON transaction {tx_hash}: {e}")
             
@@ -131,6 +172,28 @@ class PaymentService:
         # 3. Distribute Commissions to Ancestors
         from app.services.partner_service import distribute_pro_commissions
         await distribute_pro_commissions(session, partner.id, amount)
+        
+        # 4. Send Visionary & Viral Messages
+        from app.services.notification_service import notification_service
+        from app.core.i18n import get_msg
+        
+        lang = partner.language_code or "en"
+        
+        # 4.1 Welcome Message
+        welcome_msg = get_msg(lang, "pro_welcome")
+        await notification_service.enqueue_notification(
+            chat_id=int(partner.telegram_id),
+            text=welcome_msg
+        )
+        
+        # 4.2 Viral Congrats Message (Instruction to user to share)
+        ref_link = f"{settings.FRONTEND_URL}?startapp={partner.referral_code}"
+        viral_msg = get_msg(lang, "pro_viral_announcement", referral_link=ref_link)
+        # We send it to them so they can forward/copy it
+        await notification_service.enqueue_notification(
+            chat_id=int(partner.telegram_id),
+            text=f"🎁 *VIRAL KIT UNLOCKED!*\n\nShare this message to announce your PRO status and attract more partners:\n\n---\n{viral_msg}"
+        )
         
         logger.info(f"Partner {partner.telegram_id} upgraded to PRO via {currency}")
 

@@ -7,6 +7,16 @@ from sqlmodel import select
 import json
 
 router = APIRouter()
+@router.get("/config")
+async def get_payment_config():
+    """
+    Returns payment configuration: prices and admin addresses.
+    """
+    return {
+        "pro_price_usd": payment_service.PRO_PRICE_USD,
+        "admin_ton_address": settings.ADMIN_TON_ADDRESS,
+        "admin_usdt_address": settings.ADMIN_USDT_ADDRESS
+    }
 
 @router.post("/create")
 async def create_invoice(

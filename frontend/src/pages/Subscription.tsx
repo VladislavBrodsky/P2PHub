@@ -14,10 +14,36 @@ export default function SubscriptionPage() {
     const [paymentMethod, setPaymentMethod] = useState<'TON' | 'CRYPTO' | null>(null);
     const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'manual_review'>('idle');
     const [manualHash, setManualHash] = useState('');
+    const [tonPrice, setTonPrice] = useState<number | null>(null);
+    const [config, setConfig] = useState<{ pro_price_usd: number, admin_ton_address: string, admin_usdt_address: string } | null>(null);
 
-    const PRO_PRICE_USD = 39;
-    const ADMIN_TON_ADDRESS = "UQDCv0H3Hk5_1sQ6v7Z_L_c3v_Z_L_c3v_Z_L_c3v_P2PHUB"; // Placeholder
-    const ADMIN_USDT_ADDRESS = "Txxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // Placeholder
+    useEffect(() => {
+        const fetchConfig = async () => {
+            try {
+                const res = await apiClient.get('/api/payment/config');
+                setConfig(res.data);
+            } catch (e) {
+                console.error("Failed to fetch payment config");
+            }
+        };
+        fetchConfig();
+
+        const fetchPrice = async () => {
+            try {
+                const res = await fetch('https://tonapi.io/v2/rates?tokens=ton&currencies=usd');
+                const data = await res.json();
+                setTonPrice(data.rates.TON.prices.USD);
+            } catch (e) {
+                setTonPrice(5.5); // Fallback
+            }
+        };
+        fetchPrice();
+    }, []);
+
+    const proPrice = config?.pro_price_usd || 39;
+    const adminTon = config?.admin_ton_address || "UQDCv0H3Hk5_1sQ6v7Z_L_c3v_Z_L_c3v_Z_L_c3v_P2PHUB";
+    const adminUsdt = config?.admin_usdt_address || "Txxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    const tonAmountNano = tonPrice ? Math.ceil((proPrice / tonPrice) * 10 ** 9).toString() : "8000000000";
 
     const handleTonPayment = async () => {
         if (!tonConnectUI.connected) {
@@ -29,32 +55,25 @@ export default function SubscriptionPage() {
         selection();
 
         try {
-            // 1. Create transaction on backend
-            const res = await apiClient.post('/api/payment/create', {
-                amount: PRO_PRICE_USD,
+            await apiClient.post('/api/payment/create', {
+                amount: proPrice,
                 currency: 'TON',
                 network: 'TON'
             });
-            const transaction = res.data;
-
-            // 2. Send transaction via TonConnect
-            // Note: We'd normally calculate TON amount based on USD price
-            const tonAmount = "15000000000"; // Placeholder: 15 TON in nanoTON
 
             const tx = {
-                validUntil: Math.floor(Date.now() / 1000) + 360,
+                validUntil: Math.floor(Date.now() / 1000) + 600,
                 messages: [
                     {
-                        address: ADMIN_TON_ADDRESS,
-                        amount: tonAmount,
+                        address: adminTon,
+                        amount: tonAmountNano,
                     }
                 ]
             };
 
             const result = await tonConnectUI.sendTransaction(tx);
-            const txHash = result.boc; // Simplified hash for demo
+            const txHash = result.boc;
 
-            // 3. Verify on backend
             setStatus('pending');
             const verifyRes = await apiClient.post('/api/payment/verify-ton', {
                 tx_hash: txHash
@@ -71,7 +90,6 @@ export default function SubscriptionPage() {
         } catch (error) {
             console.error('Payment failed:', error);
             notification('error');
-            alert('Payment failed or cancelled');
         } finally {
             setIsLoading(false);
         }
@@ -85,7 +103,7 @@ export default function SubscriptionPage() {
                 tx_hash: manualHash,
                 currency: 'USDT',
                 network: 'TRC20',
-                amount: PRO_PRICE_USD
+                amount: proPrice
             });
             setStatus('manual_review');
             notification('success');
@@ -98,19 +116,63 @@ export default function SubscriptionPage() {
 
     if (user?.is_pro) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[70vh] px-6 text-center">
-                <div className="w-24 h-24 rounded-full bg-linear-to-br from-amber-400 to-orange-600 flex items-center justify-center mb-6 shadow-xl animate-pulse">
-                    <Crown size={48} className="text-white fill-white/20" />
-                </div>
-                <h1 className="text-3xl font-black mb-2 text-(--color-text-primary)">YOU ARE PRO!</h1>
-                <p className="text-(--color-text-secondary) mb-8">
-                    Your subscription is active until {user.pro_expires_at ? new Date(user.pro_expires_at).toLocaleDateString() : 'Forever'}
-                </p>
-                <div className="w-full max-w-xs p-1 bg-linear-to-r from-amber-400 via-orange-500 to-amber-400 rounded-2xl overflow-hidden">
-                    <div className="bg-(--color-bg-surface) rounded-xl p-4 flex items-center gap-3">
-                        <CheckCircle2 className="text-orange-500" />
-                        <span className="font-bold text-sm">All Features Unlocked</span>
+            <div className="flex flex-col items-center justify-center min-h-[80vh] px-6 text-center overflow-hidden">
+                <motion.div
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", damping: 12 }}
+                    className="relative mb-8"
+                >
+                    <div className="absolute inset-0 bg-amber-400 blur-3xl opacity-30 animate-pulse" />
+                    <div className="w-32 h-32 rounded-full bg-linear-to-br from-amber-300 via-orange-500 to-amber-600 flex items-center justify-center shadow-[0_0_50px_rgba(251,191,36,0.4)] relative z-10">
+                        <Crown size={64} className="text-white fill-white/20 drop-shadow-lg" />
                     </div>
+                    {/* Floating Orbs */}
+                    <motion.div
+                        animate={{ y: [0, -10, 0] }}
+                        transition={{ duration: 3, repeat: Infinity }}
+                        className="absolute -top-4 -right-4 w-12 h-12 bg-indigo-500 rounded-full blur-xl opacity-40"
+                    />
+                </motion.div>
+
+                <motion.h1
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-4xl font-black mb-4 tracking-tighter text-(--color-text-primary)"
+                >
+                    WELCOME TO THE <span className="text-linear-to-r from-amber-400 to-orange-600 bg-clip-text text-transparent">ELITE</span>
+                </motion.h1>
+
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-(--color-text-secondary) font-medium text-sm leading-relaxed max-w-[280px] mb-10"
+                >
+                    You've unlocked the full potential of Pintopay. Your journey to x10 profits has officially begun.
+                </motion.p>
+
+                <div className="w-full space-y-4 max-w-xs">
+                    <div className="p-4 bg-white/5 border border-white/10 rounded-3xl flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
+                                <Sparkles size={20} className="text-amber-500" />
+                            </div>
+                            <div className="text-left">
+                                <p className="text-[10px] font-bold opacity-50 uppercase">Active Until</p>
+                                <p className="text-sm font-black">{user.pro_expires_at ? new Date(user.pro_expires_at).toLocaleDateString() : 'Lifetime Plan'}</p>
+                            </div>
+                        </div>
+                        <CheckCircle2 className="text-emerald-500" />
+                    </div>
+
+                    <button
+                        onClick={() => window.location.href = '#/partner'} // Redirect to network vision
+                        className="w-full h-16 bg-linear-to-r from-amber-400 to-orange-600 rounded-2xl font-black text-white shadow-lg active:scale-95 transition-all flex items-center justify-center gap-3"
+                    >
+                        Explore Your Empire
+                        <ChevronRight size={20} />
+                    </button>
                 </div>
             </div>
         );
@@ -151,7 +213,7 @@ export default function SubscriptionPage() {
                             <p className="text-[10px] font-medium opacity-50 uppercase tracking-widest">One-time payment</p>
                         </div>
                         <div className="text-right">
-                            <span className="text-3xl font-black">${PRO_PRICE_USD}</span>
+                            <span className="text-3xl font-black">${proPrice}</span>
                         </div>
                     </div>
 
@@ -217,7 +279,7 @@ export default function SubscriptionPage() {
                                     <div>
                                         <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">USDT TRC20 Address</p>
                                         <div className="flex items-center gap-2 p-3 bg-white/5 rounded-xl border border-white/5">
-                                            <code className="text-xs font-mono break-all flex-1">{ADMIN_USDT_ADDRESS}</code>
+                                            <code className="text-xs font-mono break-all flex-1">{adminUsdt}</code>
                                         </div>
                                     </div>
 

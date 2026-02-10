@@ -162,6 +162,9 @@ async def process_referral_logic(partner_id: int):
                 
             # 1. Distribute XP
             xp_gain = XP_MAP.get(level, 0)
+            if referrer.is_pro:
+                xp_gain *= 5
+                
             referrer.xp += xp_gain
             
             xp_tx = XPTransaction(
@@ -371,11 +374,11 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
     """)
     
     result = await session.execute(query, {"partner_id": partner_id})
-    stats = {i: 0 for i in range(1, 10)}
+    stats = {f"level_{i}": 0 for i in range(1, 10)}
     for row in result:
         lvl = int(row[0])
         if 1 <= lvl <= 9:
-            stats[lvl] = row[1]
+            stats[f"level_{lvl}"] = row[1]
         
     await redis_service.set_json(cache_key, stats, expire=1800) # 30 mins cache
     return stats
@@ -404,7 +407,8 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
             JOIN descendants d ON p.referrer_id = d.id
             WHERE d.level < :target_level
         )
-        SELECT p.telegram_id, p.username, p.first_name, p.last_name, p.xp, p.photo_url, p.created_at
+        SELECT p.telegram_id, p.username, p.first_name, p.last_name, p.xp, p.photo_url, p.created_at,
+               p.balance, p.level as partner_level, p.referral_code, p.is_pro, p.updated_at, p.id
         FROM partner p
         JOIN descendants d ON p.id = d.id
         WHERE d.level = :target_level
@@ -423,7 +427,13 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
                 "last_name": row[3],
                 "xp": row[4],
                 "photo_url": row[5],
-                "joined_at": row[6].isoformat() if row[6] else None
+                "created_at": row[6].isoformat() if row[6] else None,
+                "balance": row[7],
+                "level": row[8],
+                "referral_code": row[9],
+                "is_pro": bool(row[10]),
+                "updated_at": row[11].isoformat() if row[11] else None,
+                "id": row[12]
             })
         
         await redis_service.set_json(cache_key, members, expire=1800)
@@ -507,8 +517,9 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
 async def get_network_time_series(session: AsyncSession, partner_id: int, timeframe: str = '7D') -> List[dict]:
     """
     Returns data points for a growth chart, grouped by the appropriate interval.
+    Includes level breakdown (1-9) for each bucket.
     """
-    cache_key = f"growth_chart:{partner_id}:{timeframe}"
+    cache_key = f"growth_chart:v2:{partner_id}:{timeframe}"
     cached = await redis_service.get_json(cache_key)
     if cached: return cached
 
@@ -530,54 +541,80 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         interval = 'day'
         start_time = now - timedelta(days=30)
         points = 30
+    elif timeframe == '3M':
+        interval = 'day'
+        start_time = now - timedelta(days=90)
+        points = 90
     else:
-        interval = 'month' # Simple fallback for large periods
+        interval = 'month'
         start_time = now - timedelta(days=365)
         points = 12
 
-    base_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
-
-    # Query counts grouped by interval
-    # Note: date_trunc is Postgres specific
+    # Recursive CTE to find all descendants up to level 9 and their creation bucket
     query = text(f"""
         WITH RECURSIVE descendants AS (
-            SELECT id FROM partner WHERE referrer_id = :partner_id
+            -- Anchor: children of the partner
+            SELECT id, 1 as level, created_at
+            FROM partner
+            WHERE referrer_id = :partner_id
+            
             UNION ALL
-            SELECT p.id FROM partner p JOIN descendants d ON p.referrer_id = d.id
+            
+            -- Recursive: children of descendants
+            SELECT p.id, d.level + 1, p.created_at
+            FROM partner p
+            JOIN descendants d ON p.referrer_id = d.id
+            WHERE d.level < 9
         )
-        SELECT date_trunc('{interval}', p.created_at) as bucket, COUNT(*) 
-        FROM descendants d
-        INNER JOIN partner p ON p.id = d.id
-        WHERE p.created_at >= :start
-        GROUP BY bucket
-        ORDER BY bucket ASC
+        SELECT 
+            date_trunc('{interval}', created_at) as bucket,
+            level,
+            COUNT(*) as count
+        FROM descendants
+        WHERE created_at >= :start
+        GROUP BY bucket, level
+        ORDER BY bucket ASC, level ASC;
     """)
     
     result = await session.execute(query, {"partner_id": partner_id, "start": start_time})
     
-    data_map = {row[0]: row[1] for row in result}
+    # Organize into a map: {bucket: {level: count}}
+    data_map = {}
+    for row in result:
+        bucket = row[0].replace(tzinfo=None)
+        level = int(row[1])
+        count = int(row[2])
+        if bucket not in data_map:
+            data_map[bucket] = {lvl: 0 for lvl in range(1, 10)}
+        data_map[bucket][level] = count
     
+    # Get base count per level (partners joined BEFORE start_time)
+    stmt_base = text("""
+        WITH RECURSIVE descendants AS (
+            SELECT id, 1 as level, created_at
+            FROM partner
+            WHERE referrer_id = :partner_id
+            UNION ALL
+            SELECT p.id, d.level + 1, p.created_at
+            FROM partner p
+            JOIN descendants d ON p.referrer_id = d.id
+            WHERE d.level < 9
+        )
+        SELECT level, COUNT(*) 
+        FROM descendants
+        WHERE created_at < :start
+        GROUP BY level
+    """)
+    res_base = await session.execute(stmt_base, {"partner_id": partner_id, "start": start_time})
+    running_totals = {lvl: 0 for lvl in range(1, 10)}
+    for row in res_base:
+        running_totals[int(row[0])] = int(row[1])
+
     # Fill gaps for a smooth chart
     data = []
     curr = start_time
-    running_total = 0 # If we want an area chart showing cumulative total, we need a base
     
-    # Get base count (partners joined BEFORE start_time)
-    stmt_base = text("""
-        WITH RECURSIVE descendants AS (
-            SELECT id FROM partner WHERE referrer_id = :partner_id
-            UNION ALL
-            SELECT p.id FROM partner p JOIN descendants d ON p.referrer_id = d.id
-        )
-        SELECT COUNT(*) FROM descendants d
-        INNER JOIN partner p ON p.id = d.id
-        WHERE p.created_at < :start
-    """)
-    res_base = await session.execute(stmt_base, {"partner_id": partner_id, "start": start_time})
-    running_total = res_base.scalar() or 0
-
     for i in range(points + 1):
-        # Normalize current time bucket
         if interval == 'hour':
             bucket = curr.replace(minute=0, second=0, microsecond=0)
             label = f"{bucket.hour:02d}:00"
@@ -589,28 +626,26 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         else:
             bucket = curr.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
             label = bucket.strftime("%b")
-            next_step = timedelta(days=32) # approximate to hit next month
-            # Fix month logic
+            next_step = timedelta(days=32)
             if bucket.month == 12: next_step_bucket = bucket.replace(year=bucket.year + 1, month=1)
             else: next_step_bucket = bucket.replace(month=bucket.month + 1)
             next_step = next_step_bucket - bucket
 
-        count = 0
-        # Check if we have data for this bucket in Postgres's format (timezone naive)
-        for b, c in data_map.items():
-             if b.replace(tzinfo=None) == bucket:
-                 count = c
-                 break
+        bucket_data = data_map.get(bucket, {lvl: 0 for lvl in range(1, 10)})
         
-        running_total += count
+        # Update running totals with joined in this bucket
+        for lvl in range(1, 10):
+            running_totals[lvl] += bucket_data[lvl]
+            
         data.append({
             "date": label,
-            "total": running_total,
-            "joined": count
+            "total": sum(running_totals.values()),
+            "levels": [running_totals[lvl] for lvl in range(1, 10)],
+            "joined_per_level": [bucket_data[lvl] for lvl in range(1, 10)]
         })
         curr += next_step
 
-    await redis_service.set_json(cache_key, data, expire=300)
+    await redis_service.set_json(cache_key, data, expire=600)
     return data
 
 async def migrate_paths(session: AsyncSession):

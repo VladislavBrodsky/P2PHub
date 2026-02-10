@@ -16,7 +16,7 @@ interface NetworkMember {
     last_name: string;
     xp: number;
     photo_url: string;
-    joined_at: string;
+    created_at: string;
 }
 
 interface NetworkExplorerProps {
@@ -197,7 +197,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                                         </div>
                                         <div className="flex items-center gap-2 mt-0.5">
                                             <span className="text-[10px] font-medium text-slate-400 flex items-center gap-1">
-                                                Joined {new Date(member.joined_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                                                Joined {new Date(member.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                                             </span>
                                         </div>
                                     </div>
