@@ -145,10 +145,10 @@ async def inline_handler(inline_query: types.InlineQuery):
     # Use the specific requested image
     chosen_photo = f"{base_url}/images/2026-02-05%2003.35.03.jpg"
 
-    # Updated Viral Marketing Pitch
+    # Final Viral Marketing Pitch
     caption = (
         "🚀 Join me on Pintopay and unlock $1 per minute strategy!\n"
-        "💎 Join the revolution in decentralized payments"
+        "💎 Lead the revolution in FinTech & Web3 payments"
     )
 
     results = [
@@ -159,7 +159,7 @@ async def inline_handler(inline_query: types.InlineQuery):
             caption=caption,
             parse_mode="Markdown",
             reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
-                [types.InlineKeyboardButton(text="Join Partner Club 🚀", url=ref_link)]
+                [types.InlineKeyboardButton(text="🤝 Join Partner Club", url=ref_link)]
             ])
         )
     ]
