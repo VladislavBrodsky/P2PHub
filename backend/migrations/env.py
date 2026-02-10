@@ -88,21 +88,34 @@ async def run_migrations_online() -> None:
     )
 
     async with connectable.connect() as connection:
-        # Self-healing: Clear blocking locks before starting
         print("🔍 Checking for blocking locks before migration...")
         try:
+            await connection.execute(sa.text("SET lock_timeout = '30s'"))
+            
+            # First, try to cancel active queries gracefully
+            await connection.execute(sa.text("""
+                SELECT pg_cancel_backend(pid)
+                FROM pg_stat_activity
+                WHERE pid != pg_backend_pid()
+                  AND usename = current_user
+                  AND state = 'active';
+            """))
+            
+            # Then, terminate anything else that's not idle
             await connection.execute(sa.text("""
                 SELECT pg_terminate_backend(pid)
                 FROM pg_stat_activity
                 WHERE pid != pg_backend_pid()
                   AND usename = current_user
-                  AND (state != 'idle' OR xact_start < now() - interval '1 minute');
+                  AND state IN ('active', 'idle in transaction');
             """))
             print("✅ Cleared potentially blocking connections.")
         except Exception as e:
-            print(f"⚠️ Warning: Could not clear locks (expected if not superuser or different permissions): {e}")
+            print(f"⚠️ Warning: Could not clear locks or set timeout: {e}")
 
+        print("🚀 Starting Alembic's do_run_migrations...")
         await connection.run_sync(do_run_migrations)
+        print("🏁 Finished Alembic's do_run_migrations.")
 
     await connectable.dispose()
 

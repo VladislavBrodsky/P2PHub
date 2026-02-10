@@ -17,16 +17,17 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     # 1. Add columns
+    print("🛠 Adding columns to partner table...")
     op.add_column('partner', sa.Column('total_earned_usdt', sa.Float(), nullable=False, server_default='0.0'))
     op.add_column('partner', sa.Column('referral_count', sa.Integer(), nullable=False, server_default='0'))
     
     # 2. Add indexes
+    print("🔍 Creating indexes...")
     op.create_index(op.f('ix_partner_total_earned_usdt'), 'partner', ['total_earned_usdt'], unique=False)
     op.create_index(op.f('ix_partner_referral_count'), 'partner', ['referral_count'], unique=False)
 
     # 3. Initialize data (Optimized for 100K+ Users)
-
-    # 3. Initialize data (Optimized for 100K+ Users)
+    print("📊 Initializing materialized data (referral_count)...")
     # Optimized referral_count using JOIN
     op.execute("""
         UPDATE partner 
@@ -40,6 +41,7 @@ def upgrade() -> None:
         WHERE partner.id = sub.referrer_id
     """)
     
+    print("💰 Initializing materialized data (total_earned_usdt)...")
     # Optimized total_earned_usdt using JOIN
     op.execute("""
         UPDATE partner 
@@ -52,6 +54,7 @@ def upgrade() -> None:
         ) sub
         WHERE partner.id = sub.partner_id
     """)
+    print("✅ Migration d1e2f3a4b5c6 complete.")
 
 def downgrade() -> None:
     op.drop_index(op.f('ix_partner_referral_count'), table_name='partner')
