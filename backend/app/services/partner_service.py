@@ -183,7 +183,7 @@ async def process_referral_logic(partner_id: int):
                 xp_earning = Earning(
                     partner_id=referrer.id,
                     amount=xp_gain,
-                    description=f"Referral XP Reward (Level {level})",
+                    description=f"Referral XP Reward (L{level})",
                     type="REFERRAL_XP",
                     level=level,
                     currency="XP"

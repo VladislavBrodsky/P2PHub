@@ -82,7 +82,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[85vh] sm:max-h-[90vh]"
+                className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[75vh]"
             >
                 {/* Header */}
                 <div className="p-3 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-white dark:bg-slate-900 backdrop-blur-xl shrink-0">
@@ -103,7 +103,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                 </div>
 
                 {/* Content */}
-                <div className="overflow-y-auto p-3 space-y-4 scrollbar-hide">
+                <div className="overflow-y-auto p-3 pb-20 space-y-4 scrollbar-hide">
                     {sections.map((section) => {
                         const Icon = section.icon;
                         const colorClass =
