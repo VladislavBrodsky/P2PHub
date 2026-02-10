@@ -185,11 +185,30 @@ export default function ReferralPage() {
         setShowShareModal(false);
     };
 
-    const handleShareViralCard = () => {
+    const handleShareViralCard = async () => {
         selection();
-        if (window.Telegram?.WebApp) {
-            // High-quality premium card with buttons (Requires selection from inline results)
-            window.Telegram.WebApp.switchInlineQuery(referralCode, ['users', 'groups', 'channels']);
+        try {
+            if (window.Telegram?.WebApp) {
+                // 1. Fetch prepared message ID from backend
+                const response = await apiClient.post('/api/partner/prepared-share');
+                const { id } = response.data;
+
+                // 2. Trigger native prepared message sharing (requires Telegram 7.8+)
+                // If the client is old, this method might not exist, so we check
+                const webApp = window.Telegram.WebApp as any;
+                if (webApp.sharePreparedInlineMessage) {
+                    webApp.sharePreparedInlineMessage(id);
+                } else {
+                    // Fallback to existing search method
+                    webApp.switchInlineQuery(referralCode, ['users', 'groups', 'channels']);
+                }
+            }
+        } catch (error) {
+            console.error("Failed to prepare sharing message:", error);
+            // Fallback to existing search method on any error
+            if (window.Telegram?.WebApp) {
+                window.Telegram.WebApp.switchInlineQuery(referralCode, ['users', 'groups', 'channels']);
+            }
         }
         setShowShareModal(false);
     };

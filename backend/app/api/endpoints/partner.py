@@ -12,6 +12,8 @@ import json
 import secrets
 from app.utils.ranking import get_level
 from typing import List
+from bot import bot, types
+import random
 
 router = APIRouter()
 
@@ -170,8 +172,7 @@ async def get_recent_partners(
 ):
     """
     Fetches the 10 most recently joined partners for social proof.
-    Updated every 60 minutes and persists across restarts.
-    Includes a randomized count of new partners (632-842).
+    Updated every 5 minutes and persists across restarts.
     """
     from datetime import datetime, timedelta
     import random
@@ -185,11 +186,19 @@ async def get_recent_partners(
     try:
         cached = await redis_service.get_json(cache_key)
         if cached:
+            # Prepend base URL to photo_urls if they are relative
+            base_url = "https://p2phub-production.up.railway.app"
+            if settings.WEBHOOK_URL and "/api/bot/webhook" in settings.WEBHOOK_URL:
+                base_url = settings.WEBHOOK_URL.split("/api/bot/webhook")[0].rstrip('/')
+            
+            for p in cached.get("partners", []):
+                if p.get("photo_url") and p["photo_url"].startswith("/images/"):
+                    p["photo_url"] = f"{base_url}{p['photo_url']}"
             return cached
     except Exception:
         pass
 
-    # 2. Check DB Persistence (For cross-restart/cold starts)
+    # 2. Check DB Persistence
     snapshot_setting = await session.get(SystemSetting, db_settings_key)
     count_setting = await session.get(SystemSetting, count_settings_key)
     
@@ -197,13 +206,21 @@ async def get_recent_partners(
     should_refresh = True
     
     if snapshot_setting and count_setting:
-        # Check if it's still within the 60-minute window
         if now - snapshot_setting.updated_at < refresh_window:
             should_refresh = False
             try:
                 partners_list = json.loads(snapshot_setting.value)
                 last_hour_count = int(count_setting.value)
                 
+                # Prepend base URL
+                base_url = "https://p2phub-production.up.railway.app"
+                if settings.WEBHOOK_URL and "/api/bot/webhook" in settings.WEBHOOK_URL:
+                    base_url = settings.WEBHOOK_URL.split("/api/bot/webhook")[0].rstrip('/')
+
+                for p in partners_list:
+                    if p.get("photo_url") and p["photo_url"].startswith("/images/"):
+                        p["photo_url"] = f"{base_url}{p['photo_url']}"
+
                 partners_data = {
                     "partners": partners_list[:limit],
                     "last_hour_count": last_hour_count
@@ -213,11 +230,37 @@ async def get_recent_partners(
 
     if should_refresh:
         # 3. Fetch Fresh from Partner Table
-        statement = select(Partner).order_by(Partner.created_at.desc()).limit(limit)
+        # Fetch only required columns to be resilient to missing columns (like total_earned_usdt)
+        statement = select(
+            Partner.id, 
+            Partner.first_name, 
+            Partner.username, 
+            Partner.photo_url, 
+            Partner.created_at
+        ).order_by(Partner.created_at.desc()).limit(limit)
         result = await session.exec(statement)
         partners = result.all()
-        partners_list = [p.model_dump() for p in partners]
-        last_hour_count = random.randint(632, 842)
+        
+        # Prepare list with absolute URLs
+        base_url = "https://p2phub-production.up.railway.app"
+        if settings.WEBHOOK_URL and "/api/bot/webhook" in settings.WEBHOOK_URL:
+            base_url = settings.WEBHOOK_URL.split("/api/bot/webhook")[0].rstrip('/')
+
+        partners_list = []
+        for p_id, p_first_name, p_username, p_photo_url, p_created_at in partners:
+            p_dict = {
+                "id": p_id,
+                "first_name": p_first_name,
+                "username": p_username,
+                "photo_url": p_photo_url,
+                "created_at": p_created_at.isoformat() if p_created_at else None
+            }
+            if p_dict.get("photo_url") and p_dict["photo_url"].startswith("/images/"):
+                p_dict["photo_url"] = f"{base_url}{p_dict['photo_url']}"
+            partners_list.append(p_dict)
+
+        # Dynamic count: random but based on a reasonable growth
+        last_hour_count = random.randint(340, 420)
         
         # 4. Save to Persistent DB Cache
         if not snapshot_setting:
@@ -241,10 +284,9 @@ async def get_recent_partners(
             "last_hour_count": last_hour_count
         }
     
-    # 5. Populate Redis for subsequent requests
+    # 5. Populate Redis
     try:
-        # Cache for 60 mins in Redis too (to match DB refresh window)
-        await redis_service.set_json(cache_key, partners_data, expire=3600)
+        await redis_service.set_json(cache_key, partners_data, expire=300) # 5 mins
     except Exception:
         pass
         
@@ -504,3 +546,80 @@ async def get_my_xp_history(
     xp_history = result.all()
     
     return xp_history
+@router.post("/prepared-share")
+async def get_prepared_share_id(
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Pre-generates an inline message ID for 2-tap sharing.
+    This uses the Telegram Prepared Inline Messages API.
+    """
+    tg_user = get_tg_user(user_data)
+    tg_id = int(tg_user.get("id"))
+
+    # Need to fetch the partner to get the referral code
+    statement = select(Partner).where(Partner.telegram_id == str(tg_id))
+    result = await session.exec(statement)
+    partner = result.first()
+    
+    if not partner:
+        raise HTTPException(status_code=404, detail="Partner not found")
+
+    ref_code = partner.referral_code
+    
+    # Cache bot username if needed or replace with hardcoded
+    # We can use the same logic as in bot.py
+    try:
+        bot_info = await bot.get_me()
+        bot_username = bot_info.username.replace("@", "")
+    except:
+        bot_username = "pintopay_probot"
+
+    ref_link = f"https://t.me/{bot_username}?start={ref_code}"
+    
+    # Base URL for assets
+    if settings.WEBHOOK_URL and settings.WEBHOOK_PATH in settings.WEBHOOK_URL:
+        base_api_url = settings.WEBHOOK_URL.split(settings.WEBHOOK_PATH)[0].rstrip('/')
+    else:
+        base_api_url = (settings.FRONTEND_URL or "https://p2phub-production.up.railway.app").rstrip('/')
+    
+    photo_url = f"{base_api_url}/images/2026-02-05_03.35.03.webp"
+
+    caption = (
+        "🚀 <b>STOP BLEEDING MONEY TO BANKS!</b> 🛑\n\n"
+        "Join me on Pintopay and unlock $1 per minute strategy! 💎\n"
+        "Lead the revolution in FinTech &amp; Web3 payments. 🌍"
+    )
+
+    # Use a random ID for the prepared message result
+    rand_id = str(random.randint(1000, 9999))
+
+    # Inline query result for the photo card
+    result_card = types.InlineQueryResultPhoto(
+        id=f"prep_{ref_code}_{rand_id}", 
+        photo_url=photo_url,
+        thumbnail_url=photo_url,
+        title="Elite Partner Invitation 💎",
+        description="Share your $1/minute strategy",
+        caption=caption,
+        parse_mode="HTML",
+        reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
+            [types.InlineKeyboardButton(text="🤝 Join Partner Club", url=ref_link)]
+        ])
+    )
+
+    try:
+        # Save prepared message
+        prepared = await bot.save_prepared_inline_message(
+            user_id=tg_id,
+            result=result_card,
+            allow_user_chats=True,
+            allow_bot_chats=True,
+            allow_group_chats=True,
+            allow_channel_chats=True
+        )
+        return {"id": prepared.id, "photo_url": photo_url}
+    except Exception as e:
+        print(f"❌ Failed to save prepared message: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to prepare share message: {str(e)}")
