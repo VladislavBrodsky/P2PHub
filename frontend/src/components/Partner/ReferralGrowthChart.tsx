@@ -145,7 +145,20 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
         fetchData();
     }, [timeframe, onMetricsUpdate]);
 
-    const maxValue = useMemo(() => Math.max(...chartData.map(d => d.total), 1), [chartData]);
+    const maxValue = useMemo(() => Math.max(...chartData.map(d => d.total), 5), [chartData]);
+
+    // Helper to get cumulative values for a specific level index across all points
+    // Returns array of [bottomValue, topValue] for each point
+    const getLevelBounds = (points: ChartDataPoint[], levelIndex: number) => {
+        return points.map(point => {
+            let bottom = 0;
+            for (let i = 0; i < levelIndex; i++) {
+                bottom += point.levels[i] || 0;
+            }
+            const value = point.levels[levelIndex] || 0;
+            return { bottom, top: bottom + value };
+        });
+    };
 
     // Calculate path for a specific cumulative level
     const getLevelPath = (points: ChartDataPoint[], levelIndex: number) => {
@@ -154,28 +167,23 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
         const height = 100;
         const stepX = width / (points.length - 1);
 
-        // Previous level path (to stack on top of it)
-        const prevLevelValues = levelIndex > 0
-            ? points.map(p => p.levels[levelIndex - 1])
-            : Array(points.length).fill(0);
+        const bounds = getLevelBounds(points, levelIndex);
 
-        const currentLevelValues = points.map(p => p.levels[levelIndex]);
+        let path = ``;
 
-        let path = `M 0,${height} `;
-
-        // L -> R: Current level top line
-        points.forEach((point, index) => {
+        // L -> R: Top line
+        bounds.forEach((bound, index) => {
             const x = index * stepX;
-            const val = currentLevelValues[index];
-            const y = height - (val / maxValue) * height * 0.8;
-            path += `L ${x},${y} `;
+            const y = height - (bound.top / maxValue) * height * 0.9; // 90% vertical usage
+            if (index === 0) path += `M ${x},${y} `;
+            else path += `L ${x},${y} `;
         });
 
-        // R -> L: Previous level line (or floor if levelIndex is 0)
-        for (let i = points.length - 1; i >= 0; i--) {
+        // R -> L: Bottom line
+        for (let i = bounds.length - 1; i >= 0; i--) {
+            const bound = bounds[i];
             const x = i * stepX;
-            const val = prevLevelValues[i];
-            const y = height - (val / maxValue) * height * 0.8;
+            const y = height - (bound.bottom / maxValue) * height * 0.9;
             path += `L ${x},${y} `;
         }
 
@@ -193,7 +201,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
         let path = '';
         points.forEach((point, index) => {
             const x = index * stepX;
-            const y = height - (point.total / maxValue) * height * 0.8;
+            const y = height - (point.total / maxValue) * height * 0.9;
             if (index === 0) path += `M ${x},${y} `;
             else path += `L ${x},${y} `;
         });
@@ -262,150 +270,159 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                 </div>
             </div>
 
-            {/* Main Chart Area - Reduced Height */}
-            <div className="h-32 w-full relative px-2">
-                {/* Y-Axis Grid Lines */}
-                <div className="absolute top-0 bottom-0 left-2 right-2 flex flex-col justify-between py-2 pointer-events-none opacity-10">
-                    {[1, 0.75, 0.5, 0.25, 0].map((tick) => (
-                        <div key={tick} className="w-full h-px bg-slate-500" />
-                    ))}
+            <div className="flex w-full relative">
+                {/* Left Y-Axis Labels */}
+                <div className="flex flex-col justify-between py-2 pr-1 h-32 text-[8px] font-bold text-slate-400 dark:text-slate-500 text-right min-w-[20px]">
+                    <span>{maxValue.toLocaleString()}</span>
+                    <span>{Math.round(maxValue * 0.75).toLocaleString()}</span>
+                    <span>{Math.round(maxValue * 0.50).toLocaleString()}</span>
+                    <span>{Math.round(maxValue * 0.25).toLocaleString()}</span>
+                    <span>0</span>
                 </div>
 
-                <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full overflow-visible">
-                    <defs>
-                        {LEVEL_COLORS.map((color, i) => (
-                            <linearGradient key={i} id={`${gradientId}-${i}`} x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor={color} stopOpacity="0.6" />
-                                <stop offset="100%" stopColor={color} stopOpacity="0.1" />
-                            </linearGradient>
+                {/* Main Chart Area */}
+                <div className="h-32 w-full relative">
+                    {/* Y-Axis Grid Lines */}
+                    <div className="absolute inset-0 flex flex-col justify-between py-2 pointer-events-none opacity-10">
+                        {[1, 0.75, 0.5, 0.25, 0].map((tick) => (
+                            <div key={tick} className="w-full h-px bg-slate-500" />
                         ))}
-                    </defs>
+                    </div>
 
-                    {/* Stacked Areas */}
-                    {LEVEL_COLORS.map((_, i) => (
+                    <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full overflow-visible">
+                        <defs>
+                            {LEVEL_COLORS.map((color, i) => (
+                                <linearGradient key={i} id={`${gradientId}-${i}`} x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stopColor={color} stopOpacity="0.6" />
+                                    <stop offset="100%" stopColor={color} stopOpacity="0.1" />
+                                </linearGradient>
+                            ))}
+                        </defs>
+
+                        {/* Stacked Areas */}
+                        {LEVEL_COLORS.map((_, i) => (
+                            <motion.path
+                                key={i}
+                                d={getLevelPath(chartData, i)}
+                                fill={`url(#${gradientId}-${i})`}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1, d: getLevelPath(chartData, i) }}
+                                transition={{ duration: 0.8, delay: i * 0.05, ease: "easeOut" }}
+                                className="transition-opacity duration-300"
+                            />
+                        ))}
+
+                        {/* Stroke line for the Total (Top Level) */}
                         <motion.path
-                            key={i}
-                            d={getLevelPath(chartData, i)}
-                            fill={`url(#${gradientId}-${i})`}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1, d: getLevelPath(chartData, i) }}
-                            transition={{ duration: 0.8, delay: i * 0.05, ease: "easeOut" }}
-                            className="transition-opacity duration-300"
+                            d={getTopLinePath(chartData)}
+                            fill="none"
+                            stroke="white"
+                            strokeWidth="1"
+                            strokeOpacity="0.3"
+                            vectorEffect="non-scaling-stroke"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            initial={{ pathLength: 0, opacity: 0 }}
+                            animate={{ pathLength: 1, opacity: 1, d: getTopLinePath(chartData) }}
+                            transition={{ duration: 1, ease: "easeOut" }}
                         />
-                    ))}
+                    </svg>
 
-                    {/* Stroke line for the Total (Top Level) */}
-                    <motion.path
-                        d={getTopLinePath(chartData)}
-                        fill="none"
-                        stroke="white"
-                        strokeWidth="1"
-                        strokeOpacity="0.3"
-                        vectorEffect="non-scaling-stroke"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        animate={{ pathLength: 1, opacity: 1, d: getTopLinePath(chartData) }}
-                        transition={{ duration: 1, ease: "easeOut" }}
-                    />
-                </svg>
+                    {/* HTML Overlay for Interactive Points - Fixes aspect ratio distortion */}
+                    <div className="absolute top-0 bottom-0 left-2 right-2">
+                        {chartData.map((point: ChartDataPoint, index: number) => {
+                            const width = 100;
+                            const height = 100;
+                            const stepX = width / (chartData.length - 1);
+                            const x = index * stepX; // percentage 0-100
+                            const y = (1 - (point.total / maxValue) * 0.9) * 100; // percentage 0-100 (inverted for CSS top)
 
-                {/* HTML Overlay for Interactive Points - Fixes aspect ratio distortion */}
-                <div className="absolute top-0 bottom-0 left-2 right-2">
-                    {chartData.map((point: ChartDataPoint, index: number) => {
-                        const width = 100;
-                        const height = 100;
-                        const stepX = width / (chartData.length - 1);
-                        const x = index * stepX; // percentage 0-100
-                        const y = (1 - (point.total / maxValue) * 0.8) * 100; // percentage 0-100 (inverted for CSS top)
+                            // If maxValue is 0 or NaN, default y to bottom
+                            const safeY = isNaN(y) ? 100 : y;
 
-                        // If maxValue is 0 or NaN, default y to bottom
-                        const safeY = isNaN(y) ? 100 : y;
+                            return (
+                                <div
+                                    key={index}
+                                    className="absolute top-0 bottom-0 flex flex-col items-center justify-end z-10 group/point"
+                                    style={{
+                                        left: `${x}%`,
+                                        width: `${100 / chartData.length}%`,
+                                        transform: 'translateX(-50%)'
+                                    }}
+                                    onMouseEnter={() => { selection(); setHoveredIndex(index); }}
+                                    onMouseLeave={() => setHoveredIndex(null)}
+                                >
+                                    {/* Hit Area (Full Height) */}
+                                    <div className="absolute inset-0 bg-transparent cursor-crosshair" />
 
-                        return (
-                            <div
-                                key={index}
-                                className="absolute top-0 bottom-0 flex flex-col items-center justify-end z-10 group/point"
-                                style={{
-                                    left: `${x}%`,
-                                    width: `${100 / chartData.length}%`,
-                                    transform: 'translateX(-50%)'
-                                }}
-                                onMouseEnter={() => { selection(); setHoveredIndex(index); }}
-                                onMouseLeave={() => setHoveredIndex(null)}
+                                    {/* Dotted Line (Visual only on hover) */}
+                                    <div
+                                        className={cn(
+                                            "w-px bg-blue-500/50 border-r border-dashed border-blue-500 absolute bottom-0 transition-opacity duration-200 pointer-events-none",
+                                            hoveredIndex === index ? "opacity-100 h-full" : "opacity-0 h-0"
+                                        )}
+                                        style={{
+                                            height: `${100 - safeY}%`
+                                        }}
+                                    />
+
+                                    {/* The Dot */}
+                                    <div
+                                        className={cn(
+                                            "absolute w-3 h-3 rounded-full bg-blue-500 border-2 border-white shadow-sm transition-all duration-200 pointer-events-none",
+                                            hoveredIndex === index ? "scale-125 opacity-100 ring-4 ring-blue-500/20" : "scale-0 opacity-0"
+                                        )}
+                                        style={{
+                                            top: `${safeY}%`,
+                                            transform: 'translateY(-50%)'
+                                        }}
+                                    />
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {/* Tooltip Overhead - Redesigned for Level Breakdown */}
+                    <AnimatePresence>
+                        {hoveredIndex !== null && chartData[hoveredIndex] && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                className="absolute top-0 left-1/2 -translate-x-1/2 bg-slate-900/95 backdrop-blur-xl text-white text-[9px] rounded-2xl p-2.5 shadow-2xl border border-white/20 z-30 flex flex-col gap-1.5 pointer-events-none min-w-[140px]"
                             >
-                                {/* Hit Area (Full Height) */}
-                                <div className="absolute inset-0 bg-transparent cursor-crosshair" />
+                                <div className="flex items-center justify-between border-b border-white/10 pb-1 mb-0.5">
+                                    <span className="font-bold text-slate-400 uppercase tracking-tighter">{chartData[hoveredIndex].date}</span>
+                                    <div className="flex items-center gap-1">
+                                        <Users className="w-2.5 h-2.5 text-blue-400" />
+                                        <span className="font-black text-xs">{chartData[hoveredIndex].total.toLocaleString()}</span>
+                                    </div>
+                                </div>
 
-                                {/* Dotted Line (Visual only on hover) */}
-                                <div
-                                    className={cn(
-                                        "w-px bg-blue-500/50 border-r border-dashed border-blue-500 absolute bottom-0 transition-opacity duration-200 pointer-events-none",
-                                        hoveredIndex === index ? "opacity-100 h-full" : "opacity-0 h-0"
-                                    )}
-                                    style={{
-                                        height: `${100 - safeY}%`
-                                    }}
-                                />
+                                <div className="grid grid-cols-3 gap-x-2 gap-y-1">
+                                    {LEVEL_COLORS.map((color, i) => {
+                                        // Fix: Use raw level count directly
+                                        const count = chartData[hoveredIndex].levels[i] || 0;
+                                        return (
+                                            <div key={i} className="flex items-center gap-1 opacity-90">
+                                                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
+                                                <span className="font-bold text-slate-400">L{i + 1}:</span>
+                                                <span className="font-black">{count.toLocaleString()}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
 
-                                {/* The Dot */}
-                                <div
-                                    className={cn(
-                                        "absolute w-3 h-3 rounded-full bg-blue-500 border-2 border-white shadow-sm transition-all duration-200 pointer-events-none",
-                                        hoveredIndex === index ? "scale-125 opacity-100 ring-4 ring-blue-500/20" : "scale-0 opacity-0"
-                                    )}
-                                    style={{
-                                        top: `${safeY}%`,
-                                        transform: 'translateY(-50%)'
-                                    }}
-                                />
-                            </div>
-                        );
-                    })}
+                                {chartData[hoveredIndex].joined_per_level && (
+                                    <div className="mt-1 pt-1 border-t border-white/10 flex items-center justify-between text-[8px]">
+                                        <span className="font-bold text-emerald-400 tracking-tighter uppercase italic">Flow Power:</span>
+                                        <span className="font-black text-emerald-400">+{chartData[hoveredIndex].joined_per_level.reduce((a, b) => a + b, 0)}</span>
+                                    </div>
+                                )}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
-
-                {/* Tooltip Overhead - Redesigned for Level Breakdown */}
-                <AnimatePresence>
-                    {hoveredIndex !== null && chartData[hoveredIndex] && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="absolute top-0 left-1/2 -translate-x-1/2 bg-slate-900/95 backdrop-blur-xl text-white text-[9px] rounded-2xl p-2.5 shadow-2xl border border-white/20 z-30 flex flex-col gap-1.5 pointer-events-none min-w-[140px]"
-                        >
-                            <div className="flex items-center justify-between border-b border-white/10 pb-1 mb-0.5">
-                                <span className="font-bold text-slate-400 uppercase tracking-tighter">{chartData[hoveredIndex].date}</span>
-                                <div className="flex items-center gap-1">
-                                    <Users className="w-2.5 h-2.5 text-blue-400" />
-                                    <span className="font-black text-xs">{chartData[hoveredIndex].total.toLocaleString()}</span>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-x-2 gap-y-1">
-                                {LEVEL_COLORS.map((color, i) => {
-                                    const count = chartData[hoveredIndex].levels[i];
-                                    const prevCount = i > 0 ? chartData[hoveredIndex].levels[i - 1] : 0;
-                                    const levelCount = count - prevCount;
-
-                                    return (
-                                        <div key={i} className="flex items-center gap-1 opacity-90">
-                                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
-                                            <span className="font-bold text-slate-400">L{i + 1}:</span>
-                                            <span className="font-black">{levelCount.toLocaleString()}</span>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-
-                            {chartData[hoveredIndex].joined_per_level && (
-                                <div className="mt-1 pt-1 border-t border-white/10 flex items-center justify-between text-[8px]">
-                                    <span className="font-bold text-emerald-400 tracking-tighter uppercase italic">Flow Power:</span>
-                                    <span className="font-black text-emerald-400">+{chartData[hoveredIndex].joined_per_level.reduce((a, b) => a + b, 0)}</span>
-                                </div>
-                            )}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
             </div>
 
             {/* X-Axis Labels */}
