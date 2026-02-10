@@ -11,7 +11,7 @@ import { LevelUpModal } from '../components/Earn/LevelUpModal';
 import { EARN_TASKS, Task, MILESTONES } from '../data/earnData';
 import { useUser } from '../context/UserContext';
 import { Confetti } from '../components/ui/Confetti';
-import { CheckCircle2, Trophy, QrCode, X, Share2, Download, Copy, ExternalLink, Send, FileText } from 'lucide-react';
+import { CheckCircle2, Trophy, QrCode, X, Share2, Download, Copy, ExternalLink, Send, FileText, Sparkles } from 'lucide-react';
 import { BriefTermsModal } from '../components/Earn/BriefTermsModal';
 import { UpgradeButton } from '../components/ui/UpgradeButton';
 import { useTranslation, Trans } from 'react-i18next';
@@ -173,18 +173,23 @@ export default function ReferralPage() {
 
     const handleShareTelegram = () => {
         selection();
-        const botUsername = 'pintopay_probot'; // Seen in logs/screenshots
-        const shareText = encodeURIComponent("🚀 STOP BLEEDING MONEY! Join Pintopay and unlock $1/minute strategy! 💎");
+        const botUsername = 'pintopay_probot';
+        const shareLink = `https://t.me/${botUsername}?start=${referralCode}`;
+        const shareText = "🚀 STOP BLEEDING MONEY! Join Pintopay and unlock $1/minute strategy! 💎";
+        const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(shareText)}`;
 
-        // Check if we're in Telegram Web App
+        // Use direct share link for "immediate" sending
+        // This opens a chat picker, user picks chat, and message is sent with one more tap
+        // Avoiding Inline Query here as primary because it requires clicking the result list item
+        window.open(shareUrl, '_blank');
+        setShowShareModal(false);
+    };
+
+    const handleShareViralCard = () => {
+        selection();
         if (window.Telegram?.WebApp) {
-            // Use switchInlineQuery with chat selection for better reach
-            // Users can choose exactly where to send the viral card
+            // High-quality premium card with buttons (Requires selection from inline results)
             window.Telegram.WebApp.switchInlineQuery(referralCode, ['users', 'groups', 'channels']);
-        } else {
-            // Fallback: regular t.me share link pointing to the bot referral link
-            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${shareText}`;
-            window.open(shareUrl, '_blank');
         }
         setShowShareModal(false);
     };
@@ -287,6 +292,16 @@ export default function ReferralPage() {
                                             <Send className="w-5 h-5 -rotate-45 translate-x-1" />
                                             {t('referral.modal.share_telegram')}
                                         </button>
+
+                                        {window.Telegram?.WebApp && (
+                                            <button
+                                                onClick={handleShareViralCard}
+                                                className="w-full h-12 rounded-xl font-bold text-(--color-text-primary) flex items-center justify-center gap-2 active:scale-[0.98] transition-all bg-(--color-text-primary)/5 border border-(--color-border-glass) text-sm"
+                                            >
+                                                <Sparkles className="w-4 h-4 text-blue-500" />
+                                                Send Premium Viral Card
+                                            </button>
+                                        )}
 
                                         <div className="grid grid-cols-2 gap-3">
                                             <button
