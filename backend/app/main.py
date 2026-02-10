@@ -41,8 +41,8 @@ async def lifespan(app: FastAPI):
             )
             print(f"🚀 Webhook successfully set to: {webhook_url}")
         except Exception as e:
-            print(f"❌ Failed to set webhook: {e}. Falling back to polling...")
-            asyncio.create_task(dp.start_polling(bot))
+            print(f"❌ Failed to set webhook: {e}")
+            # Do NOT fallback to polling as per user request
     else:
         # Fallback to polling for local development or if URL is placeholder
         print("💡 WEBHOOK_URL is not set or is a placeholder. Starting Long Polling...")
@@ -89,11 +89,30 @@ app = FastAPI(title="Pintopay Partner Hub API", lifespan=lifespan)
 # Webhook Endpoint
 @app.post(settings.WEBHOOK_PATH)
 async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = Header(None)):
+    print(f"📥 Received Webhook POST at {settings.WEBHOOK_PATH}")
+    
     if x_telegram_bot_api_secret_token != settings.WEBHOOK_SECRET:
+        print(f"⚠️ Webhook Secret Mismatch! Got: {x_telegram_bot_api_secret_token}, Expected: {settings.WEBHOOK_SECRET}")
         raise HTTPException(status_code=401, detail="Invalid secret token")
     
-    update = types.Update.model_validate(await request.json(), context={"bot": bot})
-    await dp.feed_update(bot, update)
+    try:
+        body = await request.json()
+        print(f"📦 Webhook Body: {body}")
+        
+        update = types.Update.model_validate(body, context={"bot": bot})
+        print(f"🎭 Update parsed: {update.update_id}")
+        
+        # Feed the update to context-aware dispatcher
+        await dp.feed_update(bot, update)
+        print(f"✅ Update {update.update_id} processed successfully")
+        
+    except Exception as e:
+        print(f"❌ Webhook Error: {e}")
+        import traceback
+        traceback.print_exc()
+        # Still return 200 to Telegram to avoid retries if it's a code error
+        return {"status": "error", "detail": str(e)}
+        
     return {"status": "ok"}
 
 # Import rate limiter
