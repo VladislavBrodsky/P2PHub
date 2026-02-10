@@ -352,28 +352,28 @@ const EarningsList = () => {
         switch (type) {
             case 'PRO_COMMISSION':
                 return {
-                    icon: <DollarSign className="w-5 h-5" />,
+                    icon: <DollarSign className="w-4 h-4" />,
                     bg: 'bg-emerald-500/10',
                     border: 'border-emerald-500/20',
                     text: 'text-emerald-600 dark:text-emerald-400'
                 };
             case 'TASK_XP':
                 return {
-                    icon: <Gift className="w-5 h-5" />,
+                    icon: <Gift className="w-4 h-4" />,
                     bg: 'bg-blue-500/10',
                     border: 'border-blue-500/20',
                     text: 'text-blue-600 dark:text-blue-400'
                 };
             case 'REFERRAL_XP':
                 return {
-                    icon: <Users className="w-5 h-5" />,
+                    icon: <Users className="w-4 h-4" />,
                     bg: 'bg-amber-500/10',
                     border: 'border-amber-500/20',
                     text: 'text-amber-600 dark:text-amber-400'
                 };
             default:
                 return {
-                    icon: <DollarSign className="w-5 h-5" />,
+                    icon: <DollarSign className="w-4 h-4" />,
                     bg: 'bg-slate-500/10',
                     border: 'border-slate-500/20',
                     text: 'text-slate-600 dark:text-slate-400'
@@ -382,38 +382,38 @@ const EarningsList = () => {
     };
 
     return (
-        <div className="space-y-3">
+        <div className="space-y-2">
             {earnings.map((earning, idx) => {
                 const styles = getTypeStyles(earning.type);
                 return (
-                    <div key={earning.id || idx} className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                        <div className="flex items-center gap-4">
-                            <div className={`w-10 h-10 rounded-xl ${styles.bg} ${styles.border} flex items-center justify-center ${styles.text}`}>
+                    <div key={earning.id || idx} className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-xl p-3 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                        <div className="flex items-center gap-3">
+                            <div className={`w-8 h-8 rounded-lg ${styles.bg} ${styles.border} flex items-center justify-center ${styles.text}`}>
                                 {styles.icon}
                             </div>
                             <div className='flex flex-col'>
-                                <span className="font-bold text-slate-900 dark:text-white text-sm">{earning.description}</span>
-                                <span className="text-[10px] text-slate-500 mt-0.5">
+                                <span className="font-bold text-slate-900 dark:text-white text-xs">{earning.description}</span>
+                                <span className="text-[9px] text-slate-500 mt-0.5">
                                     {new Date(earning.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                 </span>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5">
                             {earning.level && (
                                 <div className="relative group">
-                                    <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-xl blur-sm group-hover:blur-md transition-all" />
-                                    <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-3 py-2 rounded-xl border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[50px] shadow-sm backdrop-blur-sm">
-                                        <span className="text-[8px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 mb-0.5 opacity-80">LEVEL</span>
-                                        <span className="text-lg font-black bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{earning.level}</span>
+                                    <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-lg blur-[2px] group-hover:blur-[3px] transition-all" />
+                                    <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-2 py-1 rounded-lg border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[38px] shadow-sm backdrop-blur-sm">
+                                        <span className="text-[7px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">L</span>
+                                        <span className="text-sm font-black bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{earning.level}</span>
                                     </div>
                                 </div>
                             )}
-                            <div className="flex items-center gap-1.5">
-                                <span className={`font-black ${styles.text} text-xl tracking-tight leading-none`}>
+                            <div className="flex items-center gap-1">
+                                <span className={`font-black ${styles.text} text-lg tracking-tight leading-none`}>
                                     +{earning.currency === 'XP' ? earning.amount : earning.amount.toFixed(earning.amount < 1 ? 3 : 2)}
                                 </span>
-                                <span className={`text-[10px] font-black ${styles.text} opacity-70 uppercase tracking-[0.15em] self-end pb-0.5`}>
+                                <span className={`text-[9px] font-black ${styles.text} opacity-70 uppercase tracking-[0.15em] self-end pb-0.5`}>
                                     {earning.currency}
                                 </span>
                             </div>
