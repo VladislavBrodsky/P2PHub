@@ -24,21 +24,31 @@ def upgrade() -> None:
     op.create_index(op.f('ix_partner_total_earned_usdt'), 'partner', ['total_earned_usdt'], unique=False)
     op.create_index(op.f('ix_partner_referral_count'), 'partner', ['referral_count'], unique=False)
 
-    # 3. Initialize data (SQLAlchemy Core)
-    # referral_count
+    # 3. Initialize data (Optimized for 100K+ Users)
+    # Optimized referral_count using JOIN
     op.execute("""
         UPDATE partner 
-        SET referral_count = (
-            SELECT COUNT(*) FROM partner p2 WHERE p2.referrer_id = partner.id
-        )
+        SET referral_count = sub.cnt
+        FROM (
+            SELECT referrer_id, COUNT(*) as cnt 
+            FROM partner 
+            WHERE referrer_id IS NOT NULL 
+            GROUP BY referrer_id
+        ) sub
+        WHERE partner.id = sub.referrer_id
     """)
     
-    # total_earned_usdt
+    # Optimized total_earned_usdt using JOIN
     op.execute("""
         UPDATE partner 
-        SET total_earned_usdt = COALESCE((
-            SELECT SUM(amount) FROM earning e WHERE e.partner_id = partner.id AND e.currency = 'USDT'
-        ), 0.0)
+        SET total_earned_usdt = sub.total
+        FROM (
+            SELECT partner_id, SUM(amount) as total 
+            FROM earning 
+            WHERE currency = 'USDT' 
+            GROUP BY partner_id
+        ) sub
+        WHERE partner.id = sub.partner_id
     """)
 
 def downgrade() -> None:

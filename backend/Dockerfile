@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y \
 # Install uv from the official image
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
-# Safety shim for Railway CLI if hardcoded in UI
-RUN echo '#!/bin/sh\nwhile [ "$#" -gt 0 ] && ! command -v "$1" >/dev/null 2>&1; do shift; done\nexec "$@"' > /usr/local/bin/railway && chmod +x /usr/local/bin/railway
+# Hardened safety shim for Railway CLI
+RUN echo '#!/bin/sh\nwhile [ "$#" -gt 0 ]; do case "$1" in run|-*|p2phub-*) shift ;; *) if command -v "$1" >/dev/null 2>&1; then break; else shift; fi ;; esac; done\nif [ "$#" -eq 0 ]; then exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}; fi\nexec "$@"' > /usr/local/bin/railway && chmod +x /usr/local/bin/railway
 
 # Install dependencies first for better caching
 COPY requirements.txt .
