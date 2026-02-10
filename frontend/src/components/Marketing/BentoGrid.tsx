@@ -54,15 +54,21 @@ export const BentoGrid = () => {
 
     const handleScroll = () => {
         if (!scrollRef.current) return;
-        const width = scrollRef.current.clientWidth;
         const scrollLeft = scrollRef.current.scrollLeft;
-        const index = Math.round(scrollLeft / (width * 0.85)); // 0.85 is the card width factor
+        const width = scrollRef.current.clientWidth;
+
+        // Use a more stable index calculation
+        const itemWidth = width * 0.85 + 16; // width factor + gap
+        const index = Math.round(scrollLeft / itemWidth);
         const clampedIndex = Math.max(0, Math.min(index, shiftSteps.length - 1));
-        if (clampedIndex !== activeIndex) setActiveIndex(clampedIndex);
+
+        if (clampedIndex !== activeIndex) {
+            setActiveIndex(clampedIndex);
+        }
     };
 
     return (
-        <section className="px-4 py-8 space-y-8">
+        <section className="px-4 py-8 space-y-8 overflow-hidden">
             <div className="space-y-3 flex flex-col items-center text-center">
                 <div className="flex items-center gap-2">
                     <motion.div
@@ -72,12 +78,23 @@ export const BentoGrid = () => {
                     />
                     <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">{t('evolution.badge')}</span>
                 </div>
-                <h3 className="text-3xl font-black tracking-tight text-(--color-text-primary) leading-[1.1] whitespace-pre-line">
+                <motion.h3
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-3xl font-black tracking-tight text-(--color-text-primary) leading-[1.1] whitespace-pre-line"
+                >
                     {t('evolution.title')}
-                </h3>
-                <p className="text-sm text-(--color-text-secondary) font-medium max-w-[280px] mx-auto">
+                </motion.h3>
+                <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.1 }}
+                    className="text-sm text-(--color-text-secondary) font-medium max-w-[280px] mx-auto"
+                >
                     {t('evolution.desc')}
-                </p>
+                </motion.p>
             </div>
 
             {/* Carousel Container */}
@@ -85,16 +102,21 @@ export const BentoGrid = () => {
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className="flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory no-scrollbar px-4 -mx-4 md:mx-0 md:px-0"
+                    className="flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory no-scrollbar px-4 -mx-4 md:mx-0 md:px-0 scroll-smooth"
                 >
                     {shiftSteps.map((step, index) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, x: 50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
-                            className={`relative group shrink-0 w-[85vw] md:w-[400px] snap-center overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) p-6 glass-panel-premium transition-all duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true, margin: "-10%" }}
+                            transition={{
+                                duration: 0.5,
+                                delay: index * 0.05,
+                                ease: [0.23, 1, 0.32, 1]
+                            }}
+                            className={`relative group shrink-0 w-[85vw] md:w-[400px] snap-center overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) p-6 glass-panel-premium transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
+                            style={{ transform: 'translateZ(0)' }} // Hardware acceleration
                         >
                             <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
 
@@ -126,6 +148,7 @@ export const BentoGrid = () => {
                                 className="absolute -right-2 -bottom-2 opacity-5 pointer-events-none"
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                                style={{ willChange: 'transform' }}
                             >
                                 {step.watermark}
                             </motion.div>
@@ -146,9 +169,10 @@ export const BentoGrid = () => {
                                     opacity: i === activeIndex ? 1 : 0.3,
                                     backgroundColor: i === activeIndex ? '#3b82f6' : '#94a3b8'
                                 }}
-                                className="h-1 rounded-full transition-all duration-300"
+                                className="h-1 rounded-full"
                                 style={{
-                                    boxShadow: i === activeIndex ? '0 0 8px rgba(59, 130, 246, 0.5)' : 'none'
+                                    boxShadow: i === activeIndex ? '0 0 8px rgba(59, 130, 246, 0.5)' : 'none',
+                                    transition: 'all 0.3s cubic-bezier(0.23, 1, 0.32, 1)'
                                 }}
                             />
                         ))}
