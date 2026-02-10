@@ -596,15 +596,17 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
 
     # Path-based query for buckets and levels
     query = text(f"""
-        SELECT 
-            {{}} as bucket,
-            (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level,
-            COUNT(*) as count
-        FROM partner
-        WHERE (path = :search_path OR path LIKE :search_wildcard)
-        AND created_at >= :start
+        SELECT bucket, level, COUNT(*) as count
+        FROM (
+            SELECT 
+                {{}} as bucket,
+                (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level
+            FROM partner
+            WHERE (path = :search_path OR path LIKE :search_wildcard)
+            AND created_at >= :start
+        ) as subquery
+        WHERE level >= 1 AND level <= 9
         GROUP BY 1, 2
-        HAVING level >= 1 AND level <= 9
         ORDER BY bucket ASC, level ASC;
     """.format(bucket_expr))
     
@@ -633,14 +635,16 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     
     # Path-based base count per level
     stmt_base = text("""
-        SELECT 
-            (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level,
-            COUNT(*) 
-        FROM partner
-        WHERE (path = :search_path OR path LIKE :search_wildcard)
-        AND created_at < :start
+        SELECT level, COUNT(*) 
+        FROM (
+            SELECT 
+                (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level
+            FROM partner
+            WHERE (path = :search_path OR path LIKE :search_wildcard)
+            AND created_at < :start
+        ) as base_subquery
+        WHERE level >= 1 AND level <= 9
         GROUP BY 1
-        HAVING level >= 1 AND level <= 9
     """)
     res_base = await session.execute(stmt_base, {
         "search_path": search_path,
