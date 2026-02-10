@@ -21,6 +21,8 @@ from app.core.i18n import get_msg
 
 @dp.message(CommandStart())
 async def cmd_start(message: types.Message):
+    logging.info(f"📥 Received /start command from user {message.from_user.id} (@{message.from_user.username})")
+    
     from app.services.partner_service import create_partner, process_referral_notifications
     from app.core.keyboards import get_main_menu_keyboard
     

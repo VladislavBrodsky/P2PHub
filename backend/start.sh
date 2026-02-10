@@ -22,7 +22,10 @@ fi
 
 # Pre-flight check removed to prevent startup crashes.
 # Python path issues can cause this to fail unnecessarily.
-
+# FORCE POLLING MODE FOR DEBUGGING
+# We unset WEBHOOK_URL so main.py falls back to dp.start_polling(bot)
+echo "🔌 Forcing Polling Mode (Unsetting WEBHOOK_URL)..."
+unset WEBHOOK_URL
 
 echo "🛠 Running Database Migrations..."
 alembic upgrade head
