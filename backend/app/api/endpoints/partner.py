@@ -617,24 +617,42 @@ async def get_prepared_share_id(
 async def get_partner_photo(request: Request, file_id: str):
     """
     Returns the Telegram photo content for a given file_id.
-    Streams the content to avoid CORS issues with redirects.
+    Optimizes (WebP + Resize) and caches the binary content in Redis.
     """
     import httpx
-    from fastapi.responses import StreamingResponse
-    
-    cache_key = f"tg_photo_url:{file_id}"
-    
-    # 1. Get or Refresh Photo URL
+    import io
+    from PIL import Image
+    from fastapi.responses import Response
+
+    cache_key_binary = f"tg_photo_bin_v1:{file_id}"
+    cache_key_url = f"tg_photo_url:{file_id}"
+
+    # 1. Try to get from Redis Binary Cache first (Super Fast)
     try:
-        photo_url = await redis_service.get(cache_key)
+        cached_binary = await redis_service.get_bytes(cache_key_binary)
+        if cached_binary:
+            return Response(
+                content=cached_binary,
+                media_type="image/webp",
+                headers={
+                    "Cache-Control": "public, max-age=86400",
+                    "Access-Control-Allow-Origin": "*",
+                    "X-Cache": "HIT"
+                }
+            )
+    except Exception as e:
+        print(f"⚠️ Binary Cache Read Error: {e}")
+
+    # 2. Get or Refresh Photo URL if not in binary cache
+    photo_url = None
+    try:
+        photo_url = await redis_service.get(cache_key_url)
         if not photo_url:
             try:
-                # Store the file info to get the path
                 file = await bot.get_file(file_id)
                 photo_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
-                await redis_service.set(cache_key, photo_url, expire=3600)
+                await redis_service.set(cache_key_url, photo_url, expire=3600)
             except Exception as e:
-                # Handle case where file_id is invalid or bot has no access
                 print(f"❌ Telegram API Error for file_id {file_id}: {e}")
                 raise HTTPException(status_code=404, detail="Photo not found on Telegram")
     except HTTPException:
@@ -643,25 +661,45 @@ async def get_partner_photo(request: Request, file_id: str):
         print(f"❌ Redis/Logic Error in get_partner_photo: {e}")
         raise HTTPException(status_code=500, detail="Internal server error fetching photo")
 
-    # 2. Proxy the content to bypass browser CORS
-    async def stream_telegram_photo():
-        try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                async with client.stream("GET", photo_url) as response:
-                    if response.status_code == 200:
-                        async for chunk in response.aiter_bytes():
-                            yield chunk
-                    else:
-                        print(f"⚠️ Telegram CDN returned {response.status_code} for {photo_url}")
-        except Exception as e:
-            print(f"❌ Streaming Error: {e}")
+    # 3. Fetch, Optimize, and Cache
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.get(photo_url)
+            if response.status_code == 200:
+                # Open image with PIL
+                img = Image.open(io.BytesIO(response.content))
+                
+                # Resize if larger than 128x128
+                if img.width > 128 or img.height > 128:
+                    img.thumbnail((128, 128), Image.Resampling.LANCZOS)
+                
+                # Convert to WebP
+                output = io.BytesIO()
+                img.save(output, format="WEBP", quality=80)
+                optimized_binary = output.getvalue()
 
-    return StreamingResponse(
-        stream_telegram_photo(), 
-        media_type="image/jpeg",
-        headers={
-            "Cache-Control": "public, max-age=3600",
-            "Access-Control-Allow-Origin": "*"
-        }
-    )
+                # Cache optimized binary (24 hours)
+                try:
+                    await redis_service.set_bytes(cache_key_binary, optimized_binary, expire=86400)
+                except Exception as e:
+                    print(f"⚠️ Failed to cache binary for {file_id}: {e}")
+
+                return Response(
+                    content=optimized_binary,
+                    media_type="image/webp",
+                    headers={
+                        "Cache-Control": "public, max-age=86400",
+                        "Access-Control-Allow-Origin": "*",
+                        "X-Cache": "MISS"
+                    }
+                )
+            else:
+                print(f"⚠️ Telegram CDN returned {response.status_code} for {photo_url}")
+                raise HTTPException(status_code=404, detail="Original photo could not be fetched")
+                
+    except Exception as e:
+        print(f"❌ Optimization Error: {e}")
+        # Fallback to streaming original if optimization fails? 
+        # Actually, if we're here, we probably can't optimize, so return error
+        raise HTTPException(status_code=500, detail="Failed to optimize photo")
 
