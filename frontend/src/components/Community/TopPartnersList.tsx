@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, TrendingUp, Users, Crown } from 'lucide-react';
+import { Trophy, TrendingUp, Users, Crown, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../api/client';
 
@@ -8,6 +8,7 @@ export const TopPartnersList = () => {
     const { t } = useTranslation();
     const [topPartners, setTopPartners] = React.useState<any[]>([]);
     const [loading, setLoading] = React.useState(true);
+    const [isExpanded, setIsExpanded] = React.useState(false);
 
     React.useEffect(() => {
         const fetchTop = async () => {
@@ -20,7 +21,16 @@ export const TopPartnersList = () => {
                 setTopPartners([
                     { id: 1, first_name: 'Alex', last_name: 'V.', username: 'alexv', xp: 12500, referrals_count: 84, rank: 'Global Partner' },
                     { id: 2, first_name: 'Elena', last_name: 'S.', username: 'elenas', xp: 9800, referrals_count: 52, rank: 'President' },
-                    { id: 3, first_name: 'Dmitry', last_name: 'K.', username: 'dimk', xp: 8200, referrals_count: 41, rank: 'Director' }
+                    { id: 3, first_name: 'Dmitry', last_name: 'K.', username: 'dimk', xp: 8200, referrals_count: 41, rank: 'Director' },
+                    { id: 4, first_name: 'Sarah', last_name: 'J.', username: 'sarahj', xp: 7500, referrals_count: 38, rank: 'Director' },
+                    { id: 5, first_name: 'Mike', last_name: 'T.', username: 'miket', xp: 6800, referrals_count: 35, rank: 'Manager' },
+                    { id: 6, first_name: 'Jessica', last_name: 'L.', username: 'jessl', xp: 6200, referrals_count: 32, rank: 'Manager' },
+                    { id: 7, first_name: 'David', last_name: 'W.', username: 'davidw', xp: 5900, referrals_count: 29, rank: 'Manager' },
+                    { id: 8, first_name: 'Anna', last_name: 'M.', username: 'annam', xp: 5500, referrals_count: 27, rank: 'Partner' },
+                    { id: 9, first_name: 'Chris', last_name: 'P.', username: 'chrisp', xp: 5100, referrals_count: 25, rank: 'Partner' },
+                    { id: 10, first_name: 'John', last_name: 'D.', username: 'johnd', xp: 4800, referrals_count: 22, rank: 'Partner' },
+                    { id: 11, first_name: 'Maria', last_name: 'G.', username: 'mariag', xp: 4500, referrals_count: 20, rank: 'Partner' },
+                    { id: 12, first_name: 'Tom', last_name: 'H.', username: 'tomh', xp: 4200, referrals_count: 18, rank: 'Partner' }
                 ]);
             } finally {
                 setLoading(false);
@@ -51,12 +61,12 @@ export const TopPartnersList = () => {
             </div>
 
             <div className="space-y-2">
-                {topPartners.map((partner, index) => (
+                {topPartners.slice(0, isExpanded ? undefined : 10).map((partner, index) => (
                     <motion.div
                         key={partner.id}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
+                        transition={{ delay: index * 0.05 }}
                         className="group relative flex items-center justify-between p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm active:scale-[0.98] transition-all"
                     >
                         <div className="flex items-center gap-3">
@@ -108,6 +118,23 @@ export const TopPartnersList = () => {
                     </motion.div>
                 ))}
             </div>
+
+            {topPartners.length > 10 && (
+                <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="w-full py-2 flex items-center justify-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white transition-colors"
+                >
+                    {isExpanded ? (
+                        <>
+                            Show Less <ChevronUp className="w-3 h-3" />
+                        </>
+                    ) : (
+                        <>
+                            Show More <ChevronDown className="w-3 h-3" />
+                        </>
+                    )}
+                </button>
+            )}
         </div>
     );
 };
