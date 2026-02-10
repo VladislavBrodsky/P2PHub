@@ -50,8 +50,8 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
 
     useEffect(() => {
         fetchRecentPartners();
-        // Refresh every 60 minutes as requested
-        const interval = setInterval(fetchRecentPartners, 60 * 60 * 1000);
+        // Refresh every 5 minutes as requested
+        const interval = setInterval(fetchRecentPartners, 5 * 60 * 1000);
         return () => clearInterval(interval);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -124,7 +124,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 </div>
                 <p className="text-[10px] font-bold text-(--color-text-secondary)">
                     <Trans i18nKey="dashboard.stats.recent_join" values={{ count: stats.lastHourCount }}>
-                        <span className="text-(--color-text-primary) font-black">+{stats.lastHourCount} new partners</span> joined the movement in the last 60m
+                        <span className="text-(--color-text-primary) font-black">+{stats.lastHourCount} new partners</span> joined the movement in the last 5m
                     </Trans>
                 </p>
             </motion.div>

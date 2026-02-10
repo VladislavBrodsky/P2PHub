@@ -51,7 +51,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
     };
 
     return (
-        <div className="fixed inset-0 z-200 bg-black" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+        <div className="fixed inset-0 z-200 overflow-hidden">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={index}
@@ -131,7 +131,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                         </div>
                     </div>
 
-                    <div className="absolute bottom-12 left-6 right-6">
+                    <div className="absolute left-6 right-6" style={{ bottom: 'calc(env(safe-area-inset-bottom) + 2rem)' }}>
                         <button
                             onClick={next}
                             className="w-full h-16 rounded-2xl bg-white text-slate-900 font-black flex items-center justify-center gap-2 active:scale-95 transition-all shadow-2xl shadow-black/20"

@@ -136,9 +136,21 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
 
 # Configure CORS
+allowed_origins = [
+    "https://p2phub-frontend.up.railway.app",
+    "https://p2phub-frontend-production.up.railway.app",
+    "https://p2phub-production.up.railway.app",
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
+
+# Add specific frontend URL from settings if not already there
+if settings.FRONTEND_URL and settings.FRONTEND_URL not in allowed_origins:
+    allowed_origins.append(settings.FRONTEND_URL)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

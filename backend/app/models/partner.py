@@ -1,11 +1,9 @@
 from sqlmodel import SQLModel, Field, create_engine, Session, select, Relationship
-from typing import Optional
+from typing import Optional, List
 from app.core.config import settings
-
 from datetime import datetime
 
 class Partner(SQLModel, table=True):
-    __table_args__ = {"extend_existing": True}
     id: Optional[int] = Field(default=None, primary_key=True)
     telegram_id: str = Field(index=True, unique=True)
     username: Optional[str] = None
@@ -132,3 +130,6 @@ async def get_session():
     )
     async with async_session() as session:
         yield session
+
+# Resolve Relationship string references
+from app.models.transaction import PartnerTransaction
