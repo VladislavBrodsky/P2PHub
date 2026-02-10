@@ -143,8 +143,8 @@ async def inline_handler(inline_query: types.InlineQuery):
         else:
             base_api_url = (settings.FRONTEND_URL or "https://p2phub-production.up.railway.app").rstrip('/')
         
-        photo1 = f"{base_api_url}/images/2026-02-05%2003.35.03.jpg"
-        photo2 = f"{base_api_url}/images/2026-02-05%2003.35.36.jpg"
+        photo1 = f"{base_api_url}/images/2026-02-05_03.35.03.webp"
+        photo2 = f"{base_api_url}/images/2026-02-05_03.35.36.webp"
 
         caption = (
             "🚀 *STOP BLEEDING MONEY TO BANKS!* 🛑\n\n"
@@ -197,7 +197,7 @@ async def inline_handler(inline_query: types.InlineQuery):
             )
         ]
         
-        await inline_query.answer(results, is_personal=True, cache_time=2)
+        await inline_query.answer(results, is_personal=True, cache_time=60)
 
     except Exception as e:
         logging.error(f"❌ Inline handler error: {e}")
