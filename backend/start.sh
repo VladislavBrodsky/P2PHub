@@ -5,6 +5,10 @@ set -x  # Print commands for debugging
 # Turn on python unbuffered mode
 export PYTHONUNBUFFERED=1
 
+# Debug: Print environment variables (sanitized)
+echo "🔍 Environment Variables (sanitized):"
+printenv | grep -vE "SECRET|KEY|TOKEN|PASSWORD|PASS" | sort
+
 echo "🚀 Starting P2PHub Backend..."
 
 # Re-export DATABASE_URL for asyncpg if needed (should be handled in code, but good safety)

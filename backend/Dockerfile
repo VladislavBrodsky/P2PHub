@@ -34,4 +34,5 @@ RUN chmod +x /start.sh && sed -i 's/\r$//' /start.sh
 USER appuser
 
 CMD ["/start.sh"]
-HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=5 CMD curl -f http://localhost:${PORT:-8000}/health/ping || exit 1
+# HEALTHCHECK disabled for debugging
+# HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=5 CMD curl -f http://localhost:${PORT:-8000}/health/ping || exit 1
