@@ -580,10 +580,24 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
     base_depth = len(search_path.split('.'))
 
+    # Detect dialect to support both SQLite and Postgres
+    from app.core.config import settings
+    is_sqlite = "sqlite" in settings.DATABASE_URL
+    
+    if is_sqlite:
+        if interval == 'hour':
+            bucket_expr = "strftime('%Y-%m-%d %H:00:00', created_at)"
+        elif interval == 'day':
+            bucket_expr = "strftime('%Y-%m-%d 00:00:00', created_at)"
+        else: # month
+            bucket_expr = "strftime('%Y-%m-01 00:00:00', created_at)"
+    else:
+        bucket_expr = f"date_trunc('{interval}', created_at)"
+
     # Path-based query for buckets and levels
     query = text(f"""
         SELECT 
-            date_trunc('{interval}', created_at) as bucket,
+            {{}} as bucket,
             (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level,
             COUNT(*) as count
         FROM partner
@@ -592,7 +606,7 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         GROUP BY 1, 2
         HAVING level >= 1 AND level <= 9
         ORDER BY bucket ASC, level ASC;
-    """)
+    """.format(bucket_expr))
     
     result = await session.execute(query, {
         "search_path": search_path,
