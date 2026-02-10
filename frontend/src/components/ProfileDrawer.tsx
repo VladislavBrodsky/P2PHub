@@ -273,21 +273,21 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                                 tonConnectUI.openModal();
                                             }
                                         }}
-                                        className={`relative overflow-hidden w-full rounded-2xl p-4 shadow-premium transition-all border ${wallet
+                                        className={`relative overflow-hidden w-full rounded-xl p-3 shadow-premium transition-all border ${wallet
                                             ? 'bg-emerald-500 text-white border-transparent'
                                             : 'bg-(--color-bg-surface)/80 backdrop-blur-md text-(--color-text-primary) border-(--color-border-glass)'
                                             }`}
                                     >
                                         <div className="flex items-center justify-between relative z-10">
-                                            <div className="flex items-center gap-3">
-                                                <div className={`rounded-xl p-2 ${wallet ? 'bg-white/20' : 'bg-blue-500/10 border border-blue-500/20'}`}>
-                                                    <Wallet className={`h-5 w-5 ${wallet ? 'text-white' : 'text-blue-500'}`} />
+                                            <div className="flex items-center gap-2.5">
+                                                <div className={`rounded-lg p-1.5 ${wallet ? 'bg-white/20' : 'bg-blue-500/10 border border-blue-500/20'}`}>
+                                                    <Wallet className={`h-4 w-4 ${wallet ? 'text-white' : 'text-blue-500'}`} />
                                                 </div>
                                                 <div className="text-left">
-                                                    <div className={`text-[10px] font-black uppercase tracking-widest ${wallet ? 'text-emerald-100' : 'text-(--color-text-secondary)'}`}>
+                                                    <div className={`text-[9px] font-black uppercase tracking-widest ${wallet ? 'text-emerald-100' : 'text-(--color-text-secondary)'}`}>
                                                         {t('common.wallet')}
                                                     </div>
-                                                    <div className="font-bold text-sm">
+                                                    <div className="font-bold text-xs">
                                                         {wallet ? formattedAddress : t('common.connect_wallet')}
                                                     </div>
                                                 </div>
@@ -295,12 +295,12 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                             {wallet ? (
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); handleCopy(formattedAddress); }}
-                                                    className="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
+                                                    className="p-1 rounded-md bg-white/20 hover:bg-white/30 transition-colors"
                                                 >
-                                                    {copied ? <Check className="h-4 w-4 text-white" /> : <Copy className="h-4 w-4 text-white" />}
+                                                    {copied ? <Check className="h-3.5 w-3.5 text-white" /> : <Copy className="h-3.5 w-3.5 text-white" />}
                                                 </button>
                                             ) : (
-                                                <ChevronRight className="h-4 w-4 opacity-50" />
+                                                <ChevronRight className="h-3.5 w-3.5 opacity-50" />
                                             )}
                                         </div>
                                     </motion.button>
