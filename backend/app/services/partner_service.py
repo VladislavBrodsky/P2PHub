@@ -173,7 +173,7 @@ async def process_referral_logic(partner_id: int):
                     partner_id=referrer.id,
                     amount=xp_gain,
                     type="REFERRAL_L1" if level == 1 else "REFERRAL_DEEP",
-                    description=f"Referral XP reward from Level {level}",
+                    description=f"Referral XP Reward (L{level})",
                     reference_id=str(partner.id)
                 )
                 session.add(xp_tx)
