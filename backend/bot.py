@@ -38,19 +38,22 @@ async def cmd_start(message: types.Message):
     if lang not in ["en", "ru"]:
         lang = "en"
 
-    # Fetch user profile photo
+    # Fetch and download user profile photo
     photo_url = None
     try:
         user_photos = await bot.get_user_profile_photos(message.from_user.id, limit=1)
         if user_photos.total_count > 0:
-            # Get the smallest photo to save bandwidth/storage
+            # Get the file to download
             file = await bot.get_file(user_photos.photos[0][0].file_id)
-            # This is a temporary file URL, we should ideally download and serve it
-            # For now, let's use the file_path if we can, or just store the ID
-            # Better implementation: storage service downloads it
-            photo_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
+            # Create temporary Telegram URL for download
+            temp_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
+            
+            # Download and convert to WebP stored locally
+            from app.services.image_service import image_service
+            photo_url = await image_service.download_and_convert_to_webp(temp_url, str(message.from_user.id))
+            logging.info(f"✅ Downloaded profile photo for user {message.from_user.id}: {photo_url}")
     except Exception as e:
-        logging.error(f"Error fetching profile photo: {e}")
+        logging.error(f"❌ Error fetching/downloading profile photo: {e}")
 
     try:
         async for session in get_session():
