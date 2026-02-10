@@ -46,7 +46,20 @@ async def lifespan(app: FastAPI):
         polling_task = asyncio.create_task(dp.start_polling(bot))
         app.state.polling_task = polling_task
         print("✅ Bot started with Long Polling")
+        print("✅ Bot started with Long Polling")
     
+    # Explicit Database Connection Check
+    try:
+        from app.models.partner import engine
+        from sqlalchemy import text
+        print(f"🌍 Checking Database Connection ({settings.DATABASE_URL.split('://')[0] if settings.DATABASE_URL else 'None'})...")
+        async with engine.begin() as conn:
+            await conn.execute(text("SELECT 1"))
+        print("✅ Database Connection Successful")
+    except Exception as e:
+        print(f"❌ Database Connection Failed: {e}")
+        print("⚠️ Application starting, but health checks may fail.")
+
     yield
     
     # Shutdown
