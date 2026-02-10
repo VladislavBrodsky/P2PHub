@@ -4,7 +4,10 @@ This document tracks the detailed version history and improvements for each spec
 Use this to see the evolution of individual components.
 
 ## 🟢 Earn Hub & Missions
-**Current Status**: v1.5.0 (Improved)
+**Current Status**: v1.5.1 (Fixed)
+
+### v1.5.1 (2026-02-10)
+- **PAYMENT UI**: Fixed "I Paid" button overflow on iPhone 16 Pro.
 
 ### v1.5.0 (2026-02-10)
 - **PHOTO OPTIMIZATION**: Implemented backend image proxy with WebP conversion and Redis caching for partner profile photos.
@@ -70,7 +73,10 @@ Use this to see the evolution of individual components.
 --------------------------------------------------------------------------------
 
 ## 🟢 Income Potential Section
-**Current Status**: v1.5.0 (Improved)
+**Current Status**: v1.5.1 (Fixed)
+
+### v1.5.1 (2026-02-10)
+- **SUBSCRIPTION LAYOUT**: Resolved layout clipping for the payment submission button on small screens.
 
 ### v1.5.0 (2026-02-10)
 - **UI POLISH**: Verified layout stability across different screen sizes (iPhone 16 Pro optimization).

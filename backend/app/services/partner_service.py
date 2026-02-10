@@ -618,7 +618,13 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     data_map = {}
     rows = result.all()
     for row in rows:
-        bucket = row[0].replace(tzinfo=None)
+        bucket = row[0]
+        # SQLite returns string for strftime, PostGres returns datetime
+        if isinstance(bucket, str):
+             # Format depends on interval: '2025-01-01 10:00:00'
+             bucket = datetime.strptime(bucket, '%Y-%m-%d %H:%M:%S')
+             
+        bucket = bucket.replace(tzinfo=None)
         level = int(row[1])
         count = int(row[2])
         if bucket not in data_map:
