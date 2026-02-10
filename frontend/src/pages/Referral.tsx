@@ -173,12 +173,14 @@ export default function ReferralPage() {
 
     const handleShareTelegram = () => {
         selection();
+        const text = encodeURIComponent(VIRAL_TEXT);
+        const url = encodeURIComponent(referralLink);
+        const shareUrl = `https://t.me/share/url?url=${url}&text=${text}`;
+
         if (window.Telegram?.WebApp) {
-            // Open user picker and trigger inline query with the referral code
-            window.Telegram.WebApp.switchInlineQuery(user?.referral_code || '', ['users', 'groups', 'channels']);
+            window.Telegram.WebApp.openTelegramLink(shareUrl);
         } else {
-            const url = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(VIRAL_TEXT)}`;
-            window.open(url, '_blank');
+            window.open(shareUrl, '_blank');
         }
         setShowShareModal(false);
     };
@@ -213,21 +215,21 @@ export default function ReferralPage() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setShowShareModal(false)}
-                            className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+                            className="absolute inset-0 bg-black/60 backdrop-blur-md"
                         />
                         <motion.div
                             initial={{ y: 100, opacity: 0, scale: 0.9 }}
                             animate={{ y: 0, opacity: 1, scale: 1 }}
                             exit={{ y: 100, opacity: 0, scale: 0.9 }}
                             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                            className="w-full max-w-sm bg-[#020617]/95 border border-white/10 rounded-[3rem] p-7 relative shadow-2xl overflow-hidden max-h-[90vh] flex flex-col backdrop-blur-2xl"
+                            className="w-full max-w-sm bg-(--color-bg-surface) border border-(--color-border-glass) rounded-[3rem] p-7 relative shadow-2xl overflow-hidden max-h-[90vh] flex flex-col backdrop-blur-2xl"
                         >
                             {/* Animated Background Glow */}
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-64 bg-blue-600/20 blur-[100px] animate-pulse pointer-events-none" />
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-64 bg-blue-600/10 blur-[100px] animate-pulse pointer-events-none" />
 
                             <button
                                 onClick={() => setShowShareModal(false)}
-                                className="absolute top-5 right-5 w-10 h-10 bg-white/10 backdrop-blur-md rounded-full text-white/50 hover:text-white flex items-center justify-center z-50 transition-colors border border-white/10"
+                                className="absolute top-5 right-5 w-10 h-10 bg-(--color-text-primary)/5 backdrop-blur-md rounded-full text-(--color-text-secondary) hover:text-(--color-text-primary) flex items-center justify-center z-50 transition-colors border border-(--color-border-glass)"
                             >
                                 <X className="w-5 h-5" />
                             </button>
@@ -235,32 +237,32 @@ export default function ReferralPage() {
                             <div className="relative z-10 flex flex-col gap-7">
                                 {/* Premium Invitation Card */}
                                 <div className="relative group perspective-1000">
-                                    <div className="absolute -inset-0.5 bg-linear-to-r from-blue-500 to-indigo-500 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
-                                    <div className="relative bg-[#020617] rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+                                    <div className="absolute -inset-0.5 bg-linear-to-r from-blue-500 to-indigo-500 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000" />
+                                    <div className="relative bg-(--color-bg-surface) rounded-3xl overflow-hidden border border-(--color-border-glass) shadow-2xl">
                                         <div className="relative h-44">
                                             <img src="/viral-invite.webp" alt={t('referral.modal.invite_image_alt')} className="w-full h-full object-cover opacity-90" />
                                             {/* Glossy Overlay */}
-                                            <div className="absolute inset-0 bg-linear-to-t from-[#020617] via-transparent to-transparent" />
-                                            <div className="absolute inset-0 bg-linear-to-tr from-blue-500/20 to-transparent" />
+                                            <div className="absolute inset-0 bg-linear-to-t from-(--color-bg-surface) via-transparent to-transparent" />
+                                            <div className="absolute inset-0 bg-linear-to-tr from-blue-500/10 to-transparent" />
 
                                             {/* Floating Badge */}
                                             <div className="absolute top-4 left-4">
                                                 <div className="px-2 py-1 bg-blue-500/20 backdrop-blur-md border border-blue-500/40 rounded-lg">
-                                                    <p className="text-[9px] font-black text-blue-400 uppercase tracking-widest">{t('referral.modal.limited_tier')}</p>
+                                                    <p className="text-[9px] font-black text-blue-500 uppercase tracking-widest">{t('referral.modal.limited_tier')}</p>
                                                 </div>
                                             </div>
 
-                                            <button className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80">
+                                            <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/20 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/90">
                                                 <Share2 className="w-4 h-4" />
-                                            </button>
+                                            </div>
                                         </div>
-                                        <div className="p-5 bg-linear-to-b from-[#0f172a] to-[#020617] backdrop-blur-sm border-t border-white/10">
-                                            <h4 className="text-base font-black text-white leading-tight mb-2 tracking-tight">
+                                        <div className="p-5 bg-linear-to-b from-(--color-bg-surface) to-(--color-bg-app) backdrop-blur-sm border-t border-(--color-border-glass)">
+                                            <h4 className="text-base font-black text-(--color-text-primary) leading-tight mb-2 tracking-tight">
                                                 {VIRAL_HOOK}
                                             </h4>
                                             <div className="flex items-center gap-2">
                                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)] animate-pulse" />
-                                                <p className="text-[11px] font-bold text-text-secondary tracking-wide uppercase">{VIRAL_SUBTITLE}</p>
+                                                <p className="text-[11px] font-bold text-(--color-text-secondary) tracking-wide uppercase">{VIRAL_SUBTITLE}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -269,8 +271,8 @@ export default function ReferralPage() {
                                 {/* Action Buttons */}
                                 <div className="space-y-6">
                                     <div className="text-center space-y-1">
-                                        <h3 className="text-2xl font-black text-white tracking-tighter">{t('referral.modal.recruit_title')}</h3>
-                                        <p className="text-[10px] font-black text-blue-500/80 uppercase tracking-[0.2em]">{t('referral.modal.limited_tier')}</p>
+                                        <h3 className="text-2xl font-black text-(--color-text-primary) tracking-tighter">{t('referral.modal.recruit_title')}</h3>
+                                        <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t('referral.modal.limited_tier')}</p>
                                     </div>
 
                                     <div className="space-y-3">
@@ -285,16 +287,16 @@ export default function ReferralPage() {
                                         <div className="grid grid-cols-2 gap-3">
                                             <button
                                                 onClick={handleNativeShare}
-                                                className="h-14 bg-white/10 border border-white/10 rounded-2xl font-extrabold text-white text-sm flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-white/15"
+                                                className="h-14 bg-(--color-text-primary)/5 border border-(--color-border-glass) rounded-2xl font-extrabold text-(--color-text-primary) text-sm flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-(--color-text-primary)/10"
                                             >
-                                                <ExternalLink className="w-4 h-4 text-blue-400" />
+                                                <ExternalLink className="w-4 h-4 text-blue-500" />
                                                 {t('referral.modal.share_more')}
                                             </button>
                                             <button
                                                 onClick={handleCopyLink}
-                                                className="h-14 bg-white/10 border border-white/10 rounded-2xl font-extrabold text-white text-sm flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-white/15"
+                                                className="h-14 bg-(--color-text-primary)/5 border border-(--color-border-glass) rounded-2xl font-extrabold text-(--color-text-primary) text-sm flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-(--color-text-primary)/10"
                                             >
-                                                <Copy className="w-4 h-4 text-blue-400" />
+                                                <Copy className="w-4 h-4 text-blue-500" />
                                                 {t('referral.modal.copy_link')}
                                             </button>
                                         </div>
@@ -303,10 +305,10 @@ export default function ReferralPage() {
 
                                 {/* Footer Hint */}
                                 <div className="pt-2">
-                                    <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-center">
-                                        <p className="text-[11px] text-text-secondary font-bold leading-relaxed px-2">
+                                    <div className="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/10 text-center">
+                                        <p className="text-[11px] text-(--color-text-secondary) font-bold leading-relaxed px-2">
                                             <Trans i18nKey="referral.modal.boost_desc">
-                                                Each referral boosts your XP and moves you closer to the <span className="text-white font-black underline decoration-blue-500 underline-offset-4">Physical Platinum Card</span>.
+                                                Each referral boosts your XP and moves you closer to the <span className="text-(--color-text-primary) font-black underline decoration-blue-500 underline-offset-4">Physical Platinum Card</span>.
                                             </Trans>
                                         </p>
                                     </div>
@@ -325,24 +327,24 @@ export default function ReferralPage() {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className="w-full max-w-sm bg-(--color-bg-surface) border border-white/10 rounded-[2.5rem] p-6 relative shadow-2xl"
+                            className="w-full max-w-sm bg-(--color-bg-surface) border border-(--color-border-glass) rounded-[2.5rem] p-6 relative shadow-2xl"
                         >
                             <button
                                 onClick={() => setShowQR(false)}
-                                className="absolute top-4 right-4 p-2 bg-(--color-bg-app) rounded-full text-slate-400 hover:text-white"
+                                className="absolute top-4 right-4 p-2 bg-(--color-bg-app) rounded-full text-(--color-text-secondary) hover:text-(--color-text-primary)"
                             >
                                 <X className="w-5 h-5" />
                             </button>
 
                             <div className="text-center space-y-6">
                                 <div className="space-y-2 pt-2">
-                                    <h3 className="text-2xl font-black text-white leading-none tracking-tight">
+                                    <h3 className="text-2xl font-black text-(--color-text-primary) leading-none tracking-tight">
                                         <Trans i18nKey="referral.qr.title">
                                             Claim Your <br />
-                                            <span className="text-blue-500 uppercase italic">Financial Sovereignty</span>
+                                            <span className="text-blue-600 uppercase italic">Financial Sovereignty</span>
                                         </Trans>
                                     </h3>
-                                    <p className="text-sm font-medium text-text-secondary">
+                                    <p className="text-sm font-medium text-(--color-text-secondary)">
                                         <Trans i18nKey="referral.qr.desc">
                                             Earn <span className="text-emerald-500 font-bold">$1/minute</span> for every active partner. <br />
                                             Build your empire now.
@@ -357,15 +359,15 @@ export default function ReferralPage() {
                                         alt="Your Referral QR Code"
                                         className="w-full h-full object-contain relative z-10"
                                     />
-                                    <div className="absolute top-3 left-3 w-8 h-8 border-t-4 border-l-4 border-blue-500 rounded-tl-xl" />
-                                    <div className="absolute top-3 right-3 w-8 h-8 border-t-4 border-r-4 border-blue-500 rounded-tr-xl" />
-                                    <div className="absolute bottom-3 left-3 w-8 h-8 border-b-4 border-l-4 border-blue-500 rounded-bl-xl" />
-                                    <div className="absolute bottom-3 right-3 w-8 h-8 border-b-4 border-r-4 border-blue-500 rounded-br-xl" />
+                                    <div className="absolute top-3 left-3 w-8 h-8 border-t-4 border-l-4 border-blue-600 rounded-tl-xl" />
+                                    <div className="absolute top-3 right-3 w-8 h-8 border-t-4 border-r-4 border-blue-600 rounded-tr-xl" />
+                                    <div className="absolute bottom-3 left-3 w-8 h-8 border-b-4 border-l-4 border-blue-600 rounded-bl-xl" />
+                                    <div className="absolute bottom-3 right-3 w-8 h-8 border-b-4 border-r-4 border-blue-600 rounded-br-xl" />
                                 </div>
 
                                 <div className="flex gap-3">
                                     <button
-                                        className="flex-1 py-3 bg-white/5 border border-white/10 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                        className="flex-1 py-3 bg-(--color-text-primary)/5 border border-(--color-border-glass) rounded-xl font-bold text-sm text-(--color-text-primary) flex items-center justify-center gap-2 active:scale-95 transition-all"
                                         onClick={handleCopyLink}
                                     >
                                         <Copy className="w-4 h-4" /> {t('referral.qr.copy')}

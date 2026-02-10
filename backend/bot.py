@@ -79,7 +79,7 @@ async def cmd_start(message: types.Message):
             await message.answer(
                 welcome_text,
                 parse_mode="Markdown",
-                reply_markup=get_main_menu_keyboard(WEB_APP_URL, referral_link, share_text)
+                reply_markup=get_main_menu_keyboard(WEB_APP_URL, referral_link, partner.referral_code)
             )
             break # We only need one session
     except Exception as e:
@@ -142,28 +142,24 @@ async def inline_handler(inline_query: types.InlineQuery):
         f"{base_url}/images/2026-02-05%2003.35.03.jpg"
     ]
     
-    # Pick one randomly
-    chosen_photo = random.choice(images)
+    # Use the specific requested image
+    chosen_photo = f"{base_url}/images/2026-02-05%2003.35.03.jpg"
 
-    # Viral marketing text
+    # Updated Viral Marketing Pitch
     caption = (
-        "🛑 STOP BLEEDING MONEY TO BANKS! 🛑\n\n"
-        "Everything you know about money is changing. While others lose, the 1% are profiting. 🦅\n\n"
-        "Join the Pintopay Partner Hub and start earning $1/minute in passive income.\n\n"
-        "🔥 NO Bureaucracy\n"
-        "🔥 NO Restrictions\n"
-        "🔥 100% Financial Sovereignty\n\n"
-        "Build your empire now. 👇"
+        "🚀 Join me on Pintopay and unlock $1 per minute strategy!\n"
+        "💎 Join the revolution in decentralized payments"
     )
 
     results = [
         types.InlineQueryResultPhoto(
-            id=f"share_{random.randint(1, 10000)}", # Unique ID to help bypass cache if needed
+            id=f"share_{random.randint(1, 10000)}", 
             photo_url=chosen_photo,
             thumbnail_url=chosen_photo,
             caption=caption,
+            parse_mode="Markdown",
             reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
-                [types.InlineKeyboardButton(text="Get Your Card Now 🚀", url=ref_link)]
+                [types.InlineKeyboardButton(text="Join Partner Club 🚀", url=ref_link)]
             ])
         )
     ]
