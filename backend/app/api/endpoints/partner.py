@@ -221,23 +221,36 @@ async def get_recent_partners(
 
     if refresh_partners:
         # 3. Fetch Fresh from Partner Table including photo_file_id
-        statement = select(
-            Partner.id, 
-            Partner.first_name, 
-            Partner.username, 
-            Partner.photo_file_id, 
-            Partner.created_at
-        ).order_by(Partner.created_at.desc()).limit(limit)
+        # Handle both old (photo_url) and new (photo_file_id) columns for backwards compatibility
+        try:
+            statement = select(
+                Partner.id, 
+                Partner.first_name, 
+                Partner.username, 
+                Partner.photo_file_id, 
+                Partner.created_at
+            ).order_by(Partner.created_at.desc()).limit(limit)
+        except Exception:
+            # Fallback to photo_url if photo_file_id doesn't exist yet
+            statement = select(
+                Partner.id, 
+                Partner.first_name, 
+                Partner.username, 
+                Partner.photo_url, 
+                Partner.created_at
+            ).order_by(Partner.created_at.desc()).limit(limit)
+            
         result = await session.exec(statement)
         partners = result.all()
         
         partners_list = []
-        for p_id, p_first_name, p_username, p_photo_file_id, p_created_at in partners:
+        for p_id, p_first_name, p_username, p_photo, p_created_at in partners:
             p_dict = {
                 "id": p_id,
                 "first_name": p_first_name,
                 "username": p_username,
-                "photo_file_id": p_photo_file_id,  # Store file_id, not URL
+                "photo_file_id": p_photo if p_photo and not p_photo.startswith('http') else None,  # Only if it's a file_id
+                "photo_url": p_photo if p_photo and p_photo.startswith('http') else None,  # Keep URL for backwards compat
                 "created_at": p_created_at.isoformat() if p_created_at else None
             }
             partners_list.append(p_dict)
