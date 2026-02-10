@@ -47,11 +47,10 @@ export const PartnerDashboard = () => {
         fetchStats();
     }, []);
 
-    // Valid "Network Size" calculation summing all levels from treeStats
+    // Valid "Network Size" calculation prioritizing materialized O(1) data
     const totalNetworkSize = React.useMemo(() => {
-        const sum = Object.values(treeStats).reduce((acc, val) => acc + (Number(val) || 0), 0);
-        return sum > 0 ? sum : (user?.referrals?.length || 0); // Fallback to direct referrals if tree is empty/loading but user has data
-    }, [treeStats, user?.referrals?.length]);
+        return user?.total_network_size ?? 0;
+    }, [user?.total_network_size]);
 
     const copyLink = async () => {
         try {

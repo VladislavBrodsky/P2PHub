@@ -30,34 +30,26 @@ async def get_my_profile(
     try:
         cached_partner = await redis_service.get_json(cache_key)
         if cached_partner:
-            print(f"[DEBUG] get_my_profile: Cache Hit for {tg_id}")
             return cached_partner
-    except Exception as e:
-        print(f"[DEBUG] Redis Error (get): {e}")
+    except Exception: pass
 
-    # 2. Query DB
+    # 2. Query DB - Optimized: No selectinload(referrals)
     statement = select(Partner).where(Partner.telegram_id == tg_id).options(
-        selectinload(Partner.referrals),
         selectinload(Partner.completed_task_records)
     )
     result = await session.exec(statement)
     partner = result.first()
     
     if not partner:
-        # Check for referrer
+        # Auto-register new partner
         referrer_id = None
         start_param = user_data.get("start_param")
         if start_param:
-            try:
-                ref_stmt = select(Partner).where(Partner.referral_code == start_param)
-                ref_res = await session.exec(ref_stmt)
-                referrer = ref_res.first()
-                if referrer:
-                    referrer_id = referrer.id
-            except Exception as e:
-                print(f"Error looking up referrer: {e}")
+            ref_stmt = select(Partner).where(Partner.referral_code == start_param)
+            ref_res = await session.exec(ref_stmt)
+            referrer = ref_res.first()
+            if referrer: referrer_id = referrer.id
 
-        # Auto-register new partner
         partner = Partner(
             telegram_id=tg_id,
             username=tg_user.get("username"),
@@ -71,101 +63,58 @@ async def get_my_profile(
         await session.commit()
         await session.refresh(partner)
         
-        # Offload notifications & high-scale referral logic
         from app.services.partner_service import process_referral_logic
         await process_referral_logic.kiq(partner.id)
     else:
-        # Update existing profile check (Throttled to once per hour)
+        # Throttled individual profile update
         from datetime import datetime, timedelta
-        has_changed = False
         now = datetime.utcnow()
         if not partner.updated_at or partner.updated_at < (now - timedelta(hours=1)):
-            if tg_user.get("username") != partner.username:
-                partner.username = tg_user.get("username"); has_changed = True
-            if tg_user.get("first_name") != partner.first_name:
-                partner.first_name = tg_user.get("first_name"); has_changed = True
-            if tg_user.get("last_name") != partner.last_name:
-                partner.last_name = tg_user.get("last_name"); has_changed = True
-            if tg_user.get("photo_url") != partner.photo_url:
-                partner.photo_url = tg_user.get("photo_url"); has_changed = True
-                
+            has_changed = False
+            for field in ["username", "first_name", "last_name", "photo_url"]:
+                if tg_user.get(field) != getattr(partner, field):
+                    setattr(partner, field, tg_user.get(field))
+                    has_changed = True
             if has_changed:
                 partner.updated_at = now
                 session.add(partner)
                 await session.commit()
                 await session.refresh(partner)
 
-    # 2.0.1 Lazy Migration: Fix Referral Code & Path
+    # 3. Handle Lazy Migrations & Self-healing
     migration_needed = False
-    
-    # Check 1: Fix Legacy Referral Code (if it's just numbers)
     if partner.referral_code and partner.referral_code.isdigit():
-        new_code = f"P2P-{secrets.token_hex(4).upper()}"
-        print(f"[MIGRATION] Upgrading User {tg_id} code: {partner.referral_code} -> {new_code}")
-        partner.referral_code = new_code
+        partner.referral_code = f"P2P-{secrets.token_hex(4).upper()}"
         migration_needed = True
 
-    # Check 2: Fix Missing Path (for Tree Stats)
     if not partner.path and partner.referrer_id:
-        # We need to fetch referrer to build path
-        try:
-            r_stmt = select(Partner).where(Partner.id == partner.referrer_id)
-            r_res = await session.exec(r_stmt)
-            referrer = r_res.first()
-            if referrer:
-                parent_path = referrer.path or ""
-                # Path format: "ancestor.parent"
-                partner.path = f"{parent_path}.{referrer.id}".lstrip(".")
-                print(f"[MIGRATION] Fixed path for {tg_id}: {partner.path}")
-                migration_needed = True
-        except Exception as e:
-            print(f"[MIGRATION] Path fix failed: {e}")
+        r_stmt = select(Partner).where(Partner.id == partner.referrer_id)
+        referrer = (await session.exec(r_stmt)).first()
+        if referrer:
+            partner.path = f"{referrer.path or ''}.{referrer.id}".lstrip(".")
+            migration_needed = True
+
+    correct_level = get_level(partner.xp)
+    if partner.level != correct_level:
+        partner.level = correct_level
+        migration_needed = True
 
     if migration_needed:
         session.add(partner)
         await session.commit()
         await session.refresh(partner)
-        # Invalidate cache again
-        await redis_service.client.delete(f"partner:profile:{tg_id}")
 
-    # 2.0 Hydrate completed_tasks from association table for frontend compatibility BEFORE any commit/refresh
-    # We populate the legacy 'completed_tasks' JSON string field temporarily for the response or sync
+    # 4. Prepare Response - O(1) using materialized totals
     task_ids = [pt.task_id for pt in partner.completed_task_records]
-    partner.completed_tasks = json.dumps(task_ids)
-
-    # 2.1 Self-healing: Correct level if inconsistent with XP
-    correct_level = get_level(partner.xp)
-    if partner.level != correct_level:
-        print(f"[DEBUG] Correcting level for {tg_id}: {partner.level} -> {correct_level}")
-        partner.level = correct_level
-        session.add(partner)
-        await session.commit()
-        await session.refresh(partner)
-        # Invalidate cache again since we updated the profile
-        await redis_service.client.delete(f"partner:profile:{tg_id}")
-
-    # 3. Calculate total earned from commissions
-    from app.models.partner import Earning
-    from sqlalchemy import func
-    
-    earnings_stmt = select(func.sum(Earning.amount)).where(
-        Earning.partner_id == partner.id,
-        Earning.currency == "USDT"  # Only sum USDT earnings
-    )
-    earnings_result = await session.exec(earnings_stmt)
-    total_earned = earnings_result.one_or_none() or 0.0
-    
-    # Add calculated field to partner object (not saved to DB)
-    partner_dict = partner.model_dump() # and not saved to DB
-    partner_dict["total_earned"] = float(total_earned)
+    partner_dict = partner.model_dump()
+    partner_dict["completed_tasks"] = json.dumps(task_ids)
+    partner_dict["total_earned"] = partner.total_earned_usdt
+    partner_dict["total_network_size"] = partner.referral_count
     partner_dict["is_admin"] = tg_id in settings.ADMIN_USER_IDS
 
-
-    # 4. Store in Redis Cache (expires in 5 minutes)
     try:
         await redis_service.set_json(cache_key, partner_dict, expire=300)
-    except Exception:
-        pass
+    except Exception: pass
         
     return partner_dict
 
@@ -188,7 +137,7 @@ async def get_top_partners(
     except Exception:
         pass
         
-    statement = select(Partner).order_by(Partner.xp.desc()).limit(5).options(selectinload(Partner.referrals))
+    statement = select(Partner).order_by(Partner.xp.desc()).limit(5)
     result = await session.exec(statement)
     partners = result.all()
     
@@ -201,7 +150,7 @@ async def get_top_partners(
             "username": p.username,
             "photo_url": p.photo_url,
             "xp": p.xp,
-            "referrals_count": len(p.referrals),
+            "referrals_count": p.referral_count,
             "rank": get_rank(p.xp)
         })
         

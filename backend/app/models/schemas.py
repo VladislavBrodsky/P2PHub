@@ -18,6 +18,7 @@ class PartnerResponse(PartnerBase):
     referral_code: str
     is_pro: bool
     is_admin: bool = False
+    total_network_size: int = 0
     created_at: datetime
     updated_at: datetime
     referrals: Optional[List[PartnerBase]] = None

@@ -1,0 +1,102 @@
+@router.get("/me", response_model=PartnerResponse)
+async def get_my_profile(
+    background_tasks: BackgroundTasks,
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    # Parse Telegram user data securely
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
+
+    # 1. Try Redis Cache first
+    cache_key = f"partner:profile:{tg_id}"
+    try:
+        cached_partner = await redis_service.get_json(cache_key)
+        if cached_partner:
+            return cached_partner
+    except Exception: pass
+
+    # 2. Query DB - Optimized: No selectinload(referrals)
+    statement = select(Partner).where(Partner.telegram_id == tg_id).options(
+        selectinload(Partner.completed_task_records)
+    )
+    result = await session.exec(statement)
+    partner = result.first()
+    
+    if not partner:
+        # Auto-register new partner
+        referrer_id = None
+        start_param = user_data.get("start_param")
+        if start_param:
+            ref_stmt = select(Partner).where(Partner.referral_code == start_param)
+            ref_res = await session.exec(ref_stmt)
+            referrer = ref_res.first()
+            if referrer: referrer_id = referrer.id
+
+        partner = Partner(
+            telegram_id=tg_id,
+            username=tg_user.get("username"),
+            first_name=tg_user.get("first_name"),
+            last_name=tg_user.get("last_name"),
+            photo_url=tg_user.get("photo_url"),
+            referral_code=f"P2P-{secrets.token_hex(4).upper()}",
+            referrer_id=referrer_id
+        )
+        session.add(partner)
+        await session.commit()
+        await session.refresh(partner)
+        
+        from app.services.partner_service import process_referral_logic
+        await process_referral_logic.kiq(partner.id)
+    else:
+        # Throttled individual profile update
+        from datetime import datetime, timedelta
+        now = datetime.utcnow()
+        if not partner.updated_at or partner.updated_at < (now - timedelta(hours=1)):
+            has_changed = False
+            for field in ["username", "first_name", "last_name", "photo_url"]:
+                if tg_user.get(field) != getattr(partner, field):
+                    setattr(partner, field, tg_user.get(field))
+                    has_changed = True
+            if has_changed:
+                partner.updated_at = now
+                session.add(partner)
+                await session.commit()
+                await session.refresh(partner)
+
+    # 3. Handle Lazy Migrations & Self-healing
+    migration_needed = False
+    if partner.referral_code and partner.referral_code.isdigit():
+        partner.referral_code = f"P2P-{secrets.token_hex(4).upper()}"
+        migration_needed = True
+
+    if not partner.path and partner.referrer_id:
+        r_stmt = select(Partner).where(Partner.id == partner.referrer_id)
+        referrer = (await session.exec(r_stmt)).first()
+        if referrer:
+            partner.path = f"{referrer.path or ''}.{referrer.id}".lstrip(".")
+            migration_needed = True
+
+    correct_level = get_level(partner.xp)
+    if partner.level != correct_level:
+        partner.level = correct_level
+        migration_needed = True
+
+    if migration_needed:
+        session.add(partner)
+        await session.commit()
+        await session.refresh(partner)
+
+    # 4. Prepare Response - O(1) using materialized totals
+    task_ids = [pt.task_id for pt in partner.completed_task_records]
+    partner_dict = partner.model_dump()
+    partner_dict["completed_tasks"] = json.dumps(task_ids)
+    partner_dict["total_earned"] = partner.total_earned_usdt
+    partner_dict["total_network_size"] = partner.referral_count
+    partner_dict["is_admin"] = tg_id in settings.ADMIN_USER_IDS
+
+    try:
+        await redis_service.set_json(cache_key, partner_dict, expire=300)
+    except Exception: pass
+        
+    return partner_dict
