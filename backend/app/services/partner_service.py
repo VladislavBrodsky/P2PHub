@@ -29,7 +29,7 @@ async def create_partner(
     # 1. Check if partner exists
     statement = select(Partner).where(Partner.telegram_id == telegram_id)
     result = await session.exec(statement)
-    partner = await result.first()
+    partner = result.first()
     
     if partner:
         return partner, False
@@ -42,7 +42,7 @@ async def create_partner(
             # 2a. Try direct code match
             ref_stmt = select(Partner).where(Partner.referral_code == referrer_code)
             ref_res = await session.exec(ref_stmt)
-            referrer = await ref_res.first()
+            referrer = ref_res.first()
             
             if referrer:
                 referrer_id = referrer.id
@@ -96,12 +96,12 @@ async def process_referral_notifications(bot, session: AsyncSession, partner: Pa
 async def get_partner_by_telegram_id(session: AsyncSession, telegram_id: str) -> Optional[Partner]:
     statement = select(Partner).where(Partner.telegram_id == telegram_id)
     result = await session.exec(statement)
-    return await result.first()
+    return result.first()
 
 async def get_partner_by_referral_code(session: AsyncSession, code: str) -> Optional[Partner]:
     statement = select(Partner).where(Partner.referral_code == code)
     result = await session.exec(statement)
-    return await result.first()
+    return result.first()
 
 
 from app.worker import broker
@@ -139,7 +139,7 @@ async def process_referral_logic(partner_id: int):
             # 2. Bulk Fetch all ancestors
             statement = select(Partner).where(Partner.id.in_(lineage_ids))
             result = await session.exec(statement)
-            ancestor_list = await result.all()
+            ancestor_list = result.all()
             ancestor_map = {p.id: p for p in ancestor_list}
 
             # XP distribution configuration
@@ -271,7 +271,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     # Fetch ancestors
     statement = select(Partner).where(Partner.id.in_(lineage_ids))
     result = await session.exec(statement)
-    ancestor_map = {p.id: p for p in await result.all()}
+    ancestor_map = {p.id: p for p in result.all()}
     
     current_referrer_id = partner.referrer_id
     for level in range(1, 10):
@@ -582,7 +582,7 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         GROUP BY level
     """)
     res_base = await session.execute(stmt_base, {"partner_id": partner_id, "start": start_time})
-    res_base_list = await res_base.all()
+    res_base_list = res_base.all()
     running_totals = {lvl: 0 for lvl in range(1, 10)}
     for row in res_base_list:
         running_totals[int(row[0])] = int(row[1])
@@ -634,7 +634,7 @@ async def migrate_paths(session: AsyncSession):
     async def update_children(parent_id: int, parent_path: str):
         stmt = select(Partner).where(Partner.referrer_id == parent_id)
         res = await session.exec(stmt)
-        children = await res.all()
+        children = res.all()
         for child in children:
             if not child.path or child.path != f"{parent_path}.{parent_id}".lstrip("."):
                 child.path = f"{parent_path}.{parent_id}".lstrip(".")
@@ -648,7 +648,7 @@ async def migrate_paths(session: AsyncSession):
     # Start from root partners (no referrer)
     stmt = select(Partner).where(Partner.referrer_id == None)
     res = await session.exec(stmt)
-    roots = await res.all()
+    roots = res.all()
     for root in roots:
         if root.path is not None:
             root.path = None

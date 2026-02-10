@@ -28,14 +28,14 @@ async def get_my_earnings(
 
     # 2. Query DB
     result = await session.exec(select(Partner).where(Partner.telegram_id == tg_id))
-    partner = await result.first()
+    partner = result.first()
     
     if not partner:
         return []
         
     statement = select(Earning).where(Earning.partner_id == partner.id).order_by(Earning.id.desc()).limit(50)
     result = await session.exec(statement)
-    earnings = await result.all()
+    earnings = result.all()
     
     # Transform to serializable dicts
     earnings_data = [e.dict() for e in earnings]
@@ -57,7 +57,7 @@ async def create_mock_earning(
     tg_id = str(tg_user.get("id"))
 
     result = await session.exec(select(Partner).where(Partner.telegram_id == tg_id))
-    partner = await result.first()
+    partner = result.first()
     
     if partner:
         earning = Earning(
