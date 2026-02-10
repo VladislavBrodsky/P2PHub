@@ -35,7 +35,7 @@ export default function CommunityPage() {
             <div className="fixed bottom-40 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none transition-colors duration-500" />
 
             {/* Premium Header with Briefing Trigger */}
-            <div className="flex items-center justify-center py-1 relative z-30 px-1">
+            <div className="flex items-center justify-center py-4 pb-6 relative z-30 px-1">
                 <div className="flex flex-col items-center">
                     <h1 className="text-base font-black text-slate-900 dark:text-white tracking-tight leading-none uppercase">
                         {t('menu.community')}
@@ -57,7 +57,7 @@ export default function CommunityPage() {
             </div>
 
             {/* Top Navigation / Switcher */}
-            <div className="relative z-20 mb-4 flex justify-center">
+            <div className="relative z-20 mb-4 mt-2 flex justify-center">
                 <div className="p-1 rounded-2xl bg-slate-100/50 dark:bg-black/20 border border-white/5 backdrop-blur-2xl flex items-center relative gap-1 shadow-inner overflow-hidden">
                     {/* Sliding Background */}
                     <motion.div
