@@ -16,13 +16,7 @@ async def lifespan(app: FastAPI):
     from app.services.notification_service import notification_service
     
     asyncio.create_task(warmup_redis())
-    
-    # Heartbeat Task to prove Event Loop is alive
-    async def heartbeat():
-        while True:
-            print("💓 Pulse (Event Loop Alive)")
-            await asyncio.sleep(5)
-    asyncio.create_task(heartbeat())
+
     
     # Start the subscription expiration checker
     from app.services.subscription_service import subscription_service

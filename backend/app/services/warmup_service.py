@@ -40,7 +40,7 @@ async def warmup_redis():
                     await redis_service.client.zadd(leaderboard_service.LEADERBOARD_KEY, current_batch)
                     current_batch = {}
                     # Yield control to allow health checks to pass during heavy processing
-                    await asyncio.sleep(0.01)
+                    await asyncio.sleep(0.5) # Increased sleep to prevent Redis overload
             
             # Flush remaining
             if current_batch:
