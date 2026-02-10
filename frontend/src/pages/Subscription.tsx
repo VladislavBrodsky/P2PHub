@@ -169,7 +169,7 @@ export default function SubscriptionPage() {
     }
 
     return (
-        <div className="flex flex-col px-6 pb-32 pt-4">
+        <div className="flex flex-col px-4 md:px-6 pb-32 pt-4">
             {/* Promo Header */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -192,7 +192,7 @@ export default function SubscriptionPage() {
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="relative bg-slate-900 rounded-[2rem] p-6 text-white shadow-2xl shadow-indigo-500/10 mb-6 overflow-hidden"
+                className="relative bg-slate-900 rounded-[2rem] p-5 md:p-6 text-white shadow-2xl shadow-indigo-500/10 mb-6 overflow-hidden"
             >
                 <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-indigo-500 rounded-full blur-[100px] opacity-20" />
 
@@ -279,15 +279,15 @@ export default function SubscriptionPage() {
                                             <input
                                                 value={manualHash}
                                                 onChange={(e) => setManualHash(e.target.value)}
-                                                placeholder="Paste TX hash here (optional)..."
-                                                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 text-xs focus:outline-none focus:border-amber-500"
+                                                placeholder="Paste TX hash (optional)"
+                                                className="flex-1 min-w-0 bg-white/5 border border-white/10 rounded-xl px-3 md:px-4 text-xs focus:outline-none focus:border-amber-500"
                                             />
                                             <button
                                                 onClick={handleManualSubmit}
                                                 disabled={isLoading}
-                                                className={`px-4 rounded-xl font-bold text-xs flex items-center gap-2 transition-all active:scale-95 ${manualHash
-                                                        ? "bg-white/10 text-white"
-                                                        : "bg-amber-500 text-slate-900 shadow-lg shadow-amber-500/20"
+                                                className={`px-3 md:px-4 rounded-xl font-bold text-xs flex items-center gap-2 transition-all active:scale-95 ${manualHash
+                                                    ? "bg-white/10 text-white"
+                                                    : "bg-amber-500 text-slate-900 shadow-lg shadow-amber-500/20"
                                                     }`}
                                             >
                                                 {manualHash ? <Send size={16} /> : <CheckCircle2 size={16} />}
