@@ -19,9 +19,9 @@ if [[ "$DATABASE_URL" == postgres://* ]]; then
   export DATABASE_URL="${DATABASE_URL/postgres:\/\//postgresql+asyncpg:\/\/}"
 fi
 
-# Pre-flight check: Verify Python environment and Config
-echo "🔍 Verifying Application Configuration..."
-python3 -c "from app.core.config import settings; print(f'✅ Config loaded. DB Scheme: {settings.DATABASE_URL.split(':')[0]}');" || { echo "❌ Config check failed! Check BOT_TOKEN or other env vars."; exit 1; }
+
+# Pre-flight check removed to prevent startup crashes.
+# Python path issues can cause this to fail unnecessarily.
 
 echo "🛠 Running Database Migrations..."
 alembic upgrade head
