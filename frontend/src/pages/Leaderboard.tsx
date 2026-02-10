@@ -88,7 +88,7 @@ export default function LeaderboardPage() {
                                         {(user.photo_file_id || user.photo_url) ? (
                                             <LazyImage
                                                 src={user.photo_file_id
-                                                    ? `${apiClient.defaults.baseURL}/partner/photo/${user.photo_file_id}`
+                                                    ? `${apiClient.defaults.baseURL}/api/partner/photo/${user.photo_file_id}`
                                                     : user.photo_url!
                                                 }
                                                 alt={user.username || user.first_name}

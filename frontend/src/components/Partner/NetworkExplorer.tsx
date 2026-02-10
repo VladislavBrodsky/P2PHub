@@ -242,7 +242,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                                         {(member.photo_file_id || member.photo_url) ? (
                                             <img
                                                 src={member.photo_file_id
-                                                    ? `${apiClient.defaults.baseURL}/partner/photo/${member.photo_file_id}`
+                                                    ? `${apiClient.defaults.baseURL}/api/partner/photo/${member.photo_file_id}`
                                                     : member.photo_url
                                                 }
                                                 alt={member.first_name}

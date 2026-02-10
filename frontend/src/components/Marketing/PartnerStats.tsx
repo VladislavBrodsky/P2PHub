@@ -18,7 +18,7 @@ const PartnerAvatar = ({ partner, index }: { partner: any; index: number }) => {
 
         if (partner.photo_file_id) {
             // Use the backend proxy endpoint for file_id
-            photoUrl = `${apiClient.defaults.baseURL}/partner/photo/${partner.photo_file_id}`;
+            photoUrl = `${apiClient.defaults.baseURL}/api/partner/photo/${partner.photo_file_id}`;
         } else if (partner.photo_url) {
             // Use the photo_url directly (legacy support)
             photoUrl = partner.photo_url;

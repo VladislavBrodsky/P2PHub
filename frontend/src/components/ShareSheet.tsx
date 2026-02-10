@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Copy, Check, Send } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
+import { apiClient } from '../api/client';
 
 interface ShareSheetProps {
     isOpen: boolean;
@@ -12,6 +13,7 @@ interface ShareSheetProps {
 export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) => {
     const { selection, notification } = useHaptic();
     const [copied, setCopied] = React.useState(false);
+    const [isSharing, setIsSharing] = React.useState(false);
 
     // Dynamic referral link based on bot username (can be passed as prop or env)
     // For now assuming the standard bot link structure
@@ -35,7 +37,24 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
         switch (platform) {
             case 'telegram':
                 if (window.Telegram?.WebApp) {
-                    window.Telegram.WebApp.switchInlineQuery(referralCode);
+                    // Try 2-tap share (Prepared Inline Message)
+                    if ((window.Telegram.WebApp as any).sharePreparedInlineMessage) {
+                        setIsSharing(true);
+                        try {
+                            const res = await apiClient.post('/api/partner/prepared-share');
+                            if (res.data?.id) {
+                                (window.Telegram.WebApp as any).sharePreparedInlineMessage(res.data.id);
+                                setIsSharing(false);
+                                return;
+                            }
+                        } catch (err) {
+                            console.error('Failed to get prepared share id:', err);
+                        } finally {
+                            setIsSharing(false);
+                        }
+                    }
+                    // Fallback to switch inline query
+                    window.Telegram.WebApp.switchInlineQuery(referralCode || '');
                 } else {
                     window.open(`https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(text)}`, '_blank');
                 }
@@ -107,9 +126,17 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
 
                         {/* Share Grid */}
                         <div className="grid grid-cols-4 gap-4">
-                            <button onClick={() => handleShare('telegram')} className="flex flex-col items-center gap-2 group">
-                                <div className="w-14 h-14 rounded-2xl bg-[#0088cc]/10 flex items-center justify-center group-active:scale-95 transition-transform">
-                                    <Send className="w-6 h-6 text-[#0088cc] -rotate-45 translate-x-1" />
+                            <button
+                                onClick={() => handleShare('telegram')}
+                                disabled={isSharing}
+                                className="flex flex-col items-center gap-2 group disabled:opacity-50"
+                            >
+                                <div className="w-14 h-14 rounded-2xl bg-[#0088cc]/10 flex items-center justify-center group-active:scale-95 transition-transform relative">
+                                    {isSharing ? (
+                                        <div className="w-5 h-5 border-2 border-[#0088cc] border-t-transparent rounded-full animate-spin" />
+                                    ) : (
+                                        <Send className="w-6 h-6 text-[#0088cc] -rotate-45 translate-x-1" />
+                                    )}
                                 </div>
                                 <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Telegram</span>
                             </button>

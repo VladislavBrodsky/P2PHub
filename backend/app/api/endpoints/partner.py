@@ -616,30 +616,52 @@ async def get_prepared_share_id(
 @limiter.limit("100/minute")
 async def get_partner_photo(request: Request, file_id: str):
     """
-    Returns the Telegram photo URL for a given file_id.
-    Cached in Redis for performance.
+    Returns the Telegram photo content for a given file_id.
+    Streams the content to avoid CORS issues with redirects.
     """
-    cache_key = f"tg_photo:{file_id}"
+    import httpx
+    from fastapi.responses import StreamingResponse
     
-    # Try cache first
-    try:
-        cached_url = await redis_service.get(cache_key)
-        if cached_url:
-            from fastapi.responses import RedirectResponse
-            return RedirectResponse(url=cached_url)
-    except Exception:
-        pass
+    cache_key = f"tg_photo_url:{file_id}"
     
-    # Fetch from Telegram Bot API
+    # 1. Get or Refresh Photo URL
     try:
-        file = await bot.get_file(file_id)
-        photo_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
-        
-        # Cache for 1 hour
-        await redis_service.set(cache_key, photo_url, expire=3600)
-        
-        from fastapi.responses import RedirectResponse
-        return RedirectResponse(url=photo_url)
+        photo_url = await redis_service.get(cache_key)
+        if not photo_url:
+            try:
+                # Store the file info to get the path
+                file = await bot.get_file(file_id)
+                photo_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
+                await redis_service.set(cache_key, photo_url, expire=3600)
+            except Exception as e:
+                # Handle case where file_id is invalid or bot has no access
+                print(f"❌ Telegram API Error for file_id {file_id}: {e}")
+                raise HTTPException(status_code=404, detail="Photo not found on Telegram")
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=404, detail=f"Photo not found: {str(e)}")
+        print(f"❌ Redis/Logic Error in get_partner_photo: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error fetching photo")
+
+    # 2. Proxy the content to bypass browser CORS
+    async def stream_telegram_photo():
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                async with client.stream("GET", photo_url) as response:
+                    if response.status_code == 200:
+                        async for chunk in response.aiter_bytes():
+                            yield chunk
+                    else:
+                        print(f"⚠️ Telegram CDN returned {response.status_code} for {photo_url}")
+        except Exception as e:
+            print(f"❌ Streaming Error: {e}")
+
+    return StreamingResponse(
+        stream_telegram_photo(), 
+        media_type="image/jpeg",
+        headers={
+            "Cache-Control": "public, max-age=3600",
+            "Access-Control-Allow-Origin": "*"
+        }
+    )
 
