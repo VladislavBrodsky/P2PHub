@@ -356,7 +356,8 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
     
     result = await session.execute(query, {"partner_id": partner_id})
     stats = {f"level_{i}": 0 for i in range(1, 10)}
-    async for row in result:
+    rows = result.all()
+    for row in rows:
         lvl = int(row[0])
         if 1 <= lvl <= 9:
             stats[f"level_{lvl}"] = row[1]
@@ -400,7 +401,8 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
     try:
         result = await session.execute(query, {"partner_id": partner_id, "target_level": target_level})
         members = []
-        async for row in result:
+        rows = result.all()
+        for row in rows:
             members.append({
                 "telegram_id": row[0],
                 "username": row[1],
@@ -561,7 +563,8 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     
     # Organize into a map: {bucket: {level: count}}
     data_map = {}
-    async for row in result:
+    rows = result.all()
+    for row in rows:
         bucket = row[0].replace(tzinfo=None)
         level = int(row[1])
         count = int(row[2])
