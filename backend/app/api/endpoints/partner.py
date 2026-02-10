@@ -38,6 +38,15 @@ async def get_my_profile(
     # 2. Query DB and/or Register
     from app.services.partner_service import create_partner, process_referral_notifications
     
+    # Capture photo_file_id from Telegram Bot if not already in DB
+    photo_file_id = None
+    try:
+        user_photos = await bot.get_user_profile_photos(tg_id, limit=1)
+        if user_photos.total_count > 0:
+            photo_file_id = user_photos.photos[0][0].file_id
+    except Exception as e:
+        logger.error(f"Failed to fetch photo for {tg_id}: {e}")
+
     partner, is_new = await create_partner(
         session=session,
         telegram_id=tg_id,
@@ -46,7 +55,7 @@ async def get_my_profile(
         last_name=tg_user.get("last_name"),
         language_code=tg_user.get("language_code", "en"),
         referrer_code=user_data.get("start_param"),
-        photo_url=tg_user.get("photo_url")
+        photo_file_id=photo_file_id
     )
     
     if is_new:
@@ -62,18 +71,10 @@ async def get_my_profile(
                     setattr(partner, field, tg_user.get(field))
                     has_changed = True
             
-            # Special handling for photo_url to trigger download if it's a telegram URL
-            new_photo = tg_user.get("photo_url")
-            if new_photo and new_photo != partner.photo_url:
-                if "api.telegram.org" in new_photo:
-                    from app.services.image_service import image_service
-                    processed = await image_service.download_and_convert_to_webp(new_photo, tg_id)
-                    if processed:
-                        partner.photo_url = processed
-                        has_changed = True
-                else:
-                    partner.photo_url = new_photo
-                    has_changed = True
+            # Update photo_file_id if it's missing or changed
+            if photo_file_id and photo_file_id != partner.photo_file_id:
+                partner.photo_file_id = photo_file_id
+                has_changed = True
 
             if has_changed:
                 partner.updated_at = now
@@ -81,7 +82,7 @@ async def get_my_profile(
                 await session.commit()
                 await session.refresh(partner)
                 # Invalidate recent partners if this user might be in it
-                await redis_service.client.delete("partners:recent")
+                await redis_service.client.delete("partners:recent_v2")
 
     # 3. Handle Lazy Migrations & Self-healing
     migration_needed = False
@@ -150,6 +151,7 @@ async def get_top_partners(
             "first_name": p.first_name,
             "last_name": p.last_name,
             "username": p.username,
+            "photo_file_id": p.photo_file_id,
             "photo_url": p.photo_url,
             "xp": p.xp,
             "referrals_count": p.referral_count,

@@ -14,6 +14,7 @@ interface LeaderboardUser {
     xp: number;
     level: number;
     photo_url?: string;
+    photo_file_id?: string;
 }
 
 interface UserStats {
@@ -84,9 +85,12 @@ export default function LeaderboardPage() {
                                 </span>
                                 <div className="flex items-center gap-3">
                                     <div className={`h-10 w-10 overflow-hidden rounded-full border-2 ${index < 3 ? 'border-amber-500 shadow-sm' : 'border-(--color-brand-border)'} bg-slate-200 dark:bg-slate-700`}>
-                                        {user.photo_url ? (
+                                        {(user.photo_file_id || user.photo_url) ? (
                                             <LazyImage
-                                                src={user.photo_url}
+                                                src={user.photo_file_id
+                                                    ? `${apiClient.defaults.baseURL}/partner/photo/${user.photo_file_id}`
+                                                    : user.photo_url!
+                                                }
                                                 alt={user.username || user.first_name}
                                                 className="h-full w-full object-cover"
                                             />
@@ -97,7 +101,6 @@ export default function LeaderboardPage() {
                                                 className="h-full w-full object-cover"
                                             />
                                         )}
-
                                     </div>
                                     <div>
                                         <p className="text-sm font-bold text-(--color-text-primary)">{user.first_name || user.username}</p>

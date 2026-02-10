@@ -6,5 +6,6 @@ class LeaderboardPartner(BaseModel):
     username: Optional[str] = None
     first_name: Optional[str] = None
     photo_url: Optional[str] = None
+    photo_file_id: Optional[str] = None
     xp: float
     level: int

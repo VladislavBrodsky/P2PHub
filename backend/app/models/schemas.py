@@ -9,6 +9,7 @@ class PartnerBase(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     photo_url: Optional[str] = None
+    photo_file_id: Optional[str] = None
 
 class PartnerResponse(PartnerBase):
     balance: float
@@ -64,6 +65,7 @@ class PartnerTopResponse(BaseModel):
     last_name: Optional[str] = None
     username: Optional[str] = None
     photo_url: Optional[str] = None
+    photo_file_id: Optional[str] = None
     xp: float
     referrals_count: int
     rank: str

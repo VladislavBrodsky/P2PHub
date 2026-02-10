@@ -16,6 +16,7 @@ interface NetworkMember {
     last_name: string;
     xp: number;
     photo_url: string;
+    photo_file_id?: string;
     created_at: string;
 }
 
@@ -238,8 +239,15 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                                     className="group flex items-center gap-3 p-3 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-2xl shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
                                 >
                                     <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/10 overflow-hidden shrink-0 ring-2 ring-white dark:ring-white/10 shadow-inner">
-                                        {member.photo_url ? (
-                                            <img src={member.photo_url} alt={member.first_name} className="w-full h-full object-cover" />
+                                        {(member.photo_file_id || member.photo_url) ? (
+                                            <img
+                                                src={member.photo_file_id
+                                                    ? `${apiClient.defaults.baseURL}/partner/photo/${member.photo_file_id}`
+                                                    : member.photo_url
+                                                }
+                                                alt={member.first_name}
+                                                className="w-full h-full object-cover"
+                                            />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center text-slate-400 font-black text-sm">
                                                 {member.first_name?.charAt(0)}

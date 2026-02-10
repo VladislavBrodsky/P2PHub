@@ -9,7 +9,7 @@ from app.core.i18n import get_msg
 from app.services.leaderboard_service import leaderboard_service
 from app.services.redis_service import redis_service
 from app.services.notification_service import notification_service
-from app.services.image_service import image_service
+
 from app.utils.ranking import get_level
 
 logger = logging.getLogger(__name__)
@@ -428,7 +428,7 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
             WHERE d.level < :target_level
         )
         SELECT p.telegram_id, p.username, p.first_name, p.last_name, p.xp, p.photo_url, p.created_at,
-               p.balance, p.level as partner_level, p.referral_code, p.is_pro, p.updated_at, p.id
+               p.balance, p.level as partner_level, p.referral_code, p.is_pro, p.updated_at, p.id, p.photo_file_id
         FROM partner p
         JOIN descendants d ON p.id = d.id
         WHERE d.level = :target_level
@@ -454,7 +454,8 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
                 "referral_code": row[9],
                 "is_pro": bool(row[10]),
                 "updated_at": row[11].isoformat() if row[11] else None,
-                "id": row[12]
+                "id": row[12],
+                "photo_file_id": row[13]
             })
         
         return members
