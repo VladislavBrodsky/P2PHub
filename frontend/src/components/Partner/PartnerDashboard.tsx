@@ -399,18 +399,21 @@ const EarningsList = () => {
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
                             {earning.level && (
-                                <div className="bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-lg flex flex-col items-start min-w-[40px]">
-                                    <span className="text-[7px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-0.5">LEVEL</span>
-                                    <span className="text-xs font-black text-slate-900 dark:text-white leading-none">{earning.level}</span>
+                                <div className="relative group">
+                                    <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-xl blur-sm group-hover:blur-md transition-all" />
+                                    <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-3 py-2 rounded-xl border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[50px] shadow-sm backdrop-blur-sm">
+                                        <span className="text-[8px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 mb-0.5 opacity-80">LEVEL</span>
+                                        <span className="text-lg font-black bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{earning.level}</span>
+                                    </div>
                                 </div>
                             )}
-                            <div className="flex flex-col items-end">
-                                <span className={`font-black ${styles.text} text-base tracking-tight`}>
+                            <div className="flex items-center gap-1.5">
+                                <span className={`font-black ${styles.text} text-xl tracking-tight leading-none`}>
                                     +{earning.currency === 'XP' ? earning.amount : earning.amount.toFixed(earning.amount < 1 ? 3 : 2)}
                                 </span>
-                                <span className={`text-[9px] font-bold ${styles.text} opacity-80 uppercase tracking-widest`}>
+                                <span className={`text-[10px] font-black ${styles.text} opacity-70 uppercase tracking-[0.15em] self-end pb-0.5`}>
                                     {earning.currency}
                                 </span>
                             </div>
