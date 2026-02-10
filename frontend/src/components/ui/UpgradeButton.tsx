@@ -42,18 +42,18 @@ export const UpgradeButton = ({ onClick, className = '', showPrice = true }: Upg
                 style={{ backgroundSize: '200% 200%' }} />
 
             {/* Inner Content */}
-            <div className="relative h-full bg-slate-900 rounded-[0.7rem] flex items-center justify-between px-4 py-3 group-hover:bg-slate-800 transition-colors">
+            <div className="relative h-full bg-(--color-bg-surface) rounded-[0.7rem] flex items-center justify-between px-4 py-3 group-hover:bg-(--color-text-primary)/5 transition-colors">
                 <div className="flex items-center gap-3">
                     <div className="relative">
                         <div className="absolute inset-0 bg-amber-400 blur-md opacity-40 animate-pulse" />
                         <Crown className="w-5 h-5 text-amber-400 fill-amber-400/20 relative z-10" />
                     </div>
                     <div className="flex flex-col items-start gap-0.5">
-                        <span className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-1.5">
+                        <span className="text-xs font-black text-(--color-text-primary) uppercase tracking-wider flex items-center gap-1.5">
                             Upgrade to PRO
                             <Sparkles className="w-3 h-3 text-yellow-200 animate-pulse" />
                         </span>
-                        <span className="text-[9px] font-bold text-slate-400">Unlock 2x Rewards & Perks</span>
+                        <span className="text-[9px] font-bold text-(--color-text-secondary)">Unlock 2x Rewards & Perks</span>
                     </div>
                 </div>
 

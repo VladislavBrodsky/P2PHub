@@ -76,7 +76,7 @@ export const TaskGrid = ({
                         );
                     })
                 ) : (
-                    <div className="col-span-full py-12 flex flex-col items-center justify-center gap-3 glass-panel rounded-3xl border border-white/5 opacity-80 backdrop-blur-xl">
+                    <div className="col-span-full py-12 flex flex-col items-center justify-center gap-3 glass-panel rounded-3xl border border-(--color-border-glass) opacity-80 backdrop-blur-xl">
                         <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
                             <CheckCircle2 className="w-8 h-8 text-emerald-500" />
                         </div>

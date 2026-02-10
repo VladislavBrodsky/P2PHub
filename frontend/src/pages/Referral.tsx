@@ -405,7 +405,7 @@ export default function ReferralPage() {
             <div className="flex justify-center mb-6">
                 <button
                     onClick={() => setShowBriefModal(true)}
-                    className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-blue-300 hover:bg-white/10 hover:text-white transition-all active:scale-95"
+                    className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-(--color-text-primary)/5 border border-(--color-border-glass) text-xs font-bold text-blue-500 hover:bg-(--color-text-primary)/10 transition-all active:scale-95"
                 >
                     <FileText className="w-3 h-3" />
                     {t('referral.brief.btn')}
