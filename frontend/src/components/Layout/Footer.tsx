@@ -2,78 +2,89 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactDOM from 'react-dom';
 import { X, Shield, FileText, Scale } from 'lucide-react';
+import { useTranslation, Trans } from 'react-i18next';
 
 export const Footer = () => {
+    const { t } = useTranslation();
     const [activeDoc, setActiveDoc] = useState<'terms' | 'privacy' | null>(null);
 
     const docContent = {
         terms: {
-            title: "Terms of Use",
+            title: t('legal.terms_title'),
             icon: Scale,
+            color: 'text-blue-400',
+            bg: 'bg-blue-500/10',
             content: (
-                <div className="space-y-4 text-xs leading-relaxed text-slate-400">
-                    <p><strong>1. Acceptance of Terms</strong><br />By accessing and using this platform, you accept and agree to be bound by the terms and provision of this agreement.</p>
-                    <p><strong>2. Ambassador Agency Status</strong><br />We operate as an independent Third-Party Ambassador Agency. We are a community of digital nomads and entrepreneurs analyzing global trends. We utilize marketing materials and referral systems to promote potential opportunities.</p>
-                    <p><strong>3. No Official Connection</strong><br />We explicitly declare that we have no official employment, ownership, or direct corporate connection to Pintopay. We act solely as independent affiliates/partners.</p>
-                    <p><strong>4. Risk Disclosure</strong><br />Participation in digital economy trends, crypto assets, and fintech opportunities involves significant risk. Past performance offers no guarantee of future results. You should perform your own due diligence before making any financial decisions.</p>
-                    <p><strong>5. Limitation of Liability</strong><br />In no event shall this agency or its contributors be liable for any damages arising out of the use or inability to use the materials on this site.</p>
+                <div className="space-y-6 text-xs leading-relaxed text-(--color-text-secondary)">
+                    {[1, 2, 3, 4, 5].map(i => (
+                        <p key={i}>
+                            <strong className="text-(--color-text-primary) block mb-1">{t(`legal.terms.${i}_title`)}</strong>
+                            {t(`legal.terms.${i}_desc`)}
+                        </p>
+                    ))}
                 </div>
             )
         },
         privacy: {
-            title: "Privacy Policy",
+            title: t('legal.privacy_title'),
             icon: Shield,
+            color: 'text-emerald-400',
+            bg: 'bg-emerald-500/10',
             content: (
-                <div className="space-y-4 text-xs leading-relaxed text-slate-400">
-                    <p><strong>1. Data Collection</strong><br />We respect your privacy. We strictly collect only necessary data to facilitate your partner journey and improve user experience.</p>
-                    <p><strong>2. Usage of Information</strong><br />Any information you provide is used strictly for communication, delivering promised educational materials, and facilitating access to partner tools.</p>
-                    <p><strong>3. Third-Party Services</strong><br />We may use third-party analytics and tools to optimize our services. These parties have access to your information only to perform these tasks on our behalf.</p>
-                    <p><strong>4. Security</strong><br />We value your trust in providing us your Personal Information, thus we are striving to use commercially acceptable means of protecting it.</p>
+                <div className="space-y-6 text-xs leading-relaxed text-(--color-text-secondary)">
+                    {[1, 2, 3, 4].map(i => (
+                        <p key={i}>
+                            <strong className="text-(--color-text-primary) block mb-1">{t(`legal.privacy.${i}_title`)}</strong>
+                            {t(`legal.privacy.${i}_desc`)}
+                        </p>
+                    ))}
                 </div>
             )
         }
     };
 
     return (
-        <footer className="px-6 pb-8 pt-8 border-t border-slate-800/20 bg-(--color-bg-deep) relative z-50">
+        <footer className="px-6 pb-8 pt-8 border-t border-(--color-border-glass) bg-(--color-bg-deep) relative z-50">
             <div className="max-w-md mx-auto space-y-6">
                 {/* Disclaimer Section */}
                 <div className="space-y-3">
                     <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400/80">
-                        Legal Disclaimer
+                        {t('legal.disclaimer_title')}
                     </h5>
-                    <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 font-medium">
-                        We are a community of digital nomads and online entrepreneurs who search for global trends. We act as a <span className="text-slate-900 dark:text-white font-bold">Third-Party Ambassador Agency</span> and do not have an official corporate connection to Pintopay.
+                    <p className="text-[11px] leading-relaxed text-(--color-text-secondary) font-medium">
+                        <Trans i18nKey="legal.disclaimer_desc">
+                            We are a community of digital nomads and online entrepreneurs who search for global trends. We act as a <span className="text-(--color-text-primary) font-bold">Third-Party Ambassador Agency</span> and do not have an official corporate connection to Pintopay.
+                        </Trans>
                     </p>
                     <div className="p-3 bg-rose-500/5 border border-rose-500/10 rounded-xl flex gap-3 items-start relative overflow-hidden">
                         <Shield className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5 relative z-10" />
                         <p className="text-[10px] text-rose-600 dark:text-rose-300 leading-relaxed font-bold relative z-10">
-                            All fast-growing trends include risks. Please conduct your own due diligence.
+                            {t('legal.risk_warning')}
                         </p>
                     </div>
                 </div>
 
                 {/* Links */}
-                <div className="flex flex-wrap gap-4 justify-center items-center pt-4 border-t border-slate-800/10 dark:border-slate-800/50">
+                <div className="flex flex-wrap gap-4 justify-center items-center pt-4 border-t border-(--color-border-glass)">
                     <button
                         onClick={() => setActiveDoc('terms')}
-                        className="text-[10px] font-bold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1.5"
+                        className="text-[10px] font-bold text-(--color-text-secondary) hover:text-(--color-text-primary) transition-colors uppercase tracking-wider flex items-center gap-1.5"
                     >
                         <Scale className="w-3 h-3" />
-                        Terms of Use
+                        {t('legal.terms_title')}
                     </button>
                     <button
                         onClick={() => setActiveDoc('privacy')}
-                        className="text-[10px] font-bold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1.5"
+                        className="text-[10px] font-bold text-(--color-text-secondary) hover:text-(--color-text-primary) transition-colors uppercase tracking-wider flex items-center gap-1.5"
                     >
                         <FileText className="w-3 h-3" />
-                        Privacy Policy
+                        {t('legal.privacy_title')}
                     </button>
                 </div>
 
                 <div className="text-center space-y-2">
                     <p className="text-[10px] text-slate-400/60 font-bold tracking-widest uppercase">
-                        © 2026 Ambassador Agency. All rights reserved.
+                        {t('legal.copyright')}
                     </p>
                 </div>
             </div>
@@ -88,7 +99,7 @@ export const Footer = () => {
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 onClick={() => setActiveDoc(null)}
-                                className="fixed inset-0 z-9999 bg-black/80 backdrop-blur-md"
+                                className="fixed inset-0 z-9999 bg-black/60 backdrop-blur-md"
                             />
                             <div className="fixed inset-0 z-10000 flex items-end sm:items-center justify-center pointer-events-none">
                                 <motion.div
@@ -96,23 +107,28 @@ export const Footer = () => {
                                     animate={{ y: 0 }}
                                     exit={{ y: "100%" }}
                                     transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                                    className="pointer-events-auto bg-slate-900 border-t sm:border border-slate-700 w-full max-w-lg sm:rounded-3xl rounded-t-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col"
+                                    className="pointer-events-auto bg-(--color-surface) border-t sm:border border-(--color-border-glass) w-full max-w-lg sm:rounded-3xl rounded-t-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col"
                                 >
                                     {/* Header */}
-                                    <div className="p-5 border-b border-slate-800 flex justify-between items-center bg-slate-900/50 backdrop-blur-xl relative z-10">
+                                    <div className="p-5 border-b border-(--color-border-glass) flex justify-between items-center bg-(--color-bg-glass) backdrop-blur-xl relative z-10">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center">
-                                                {activeDoc === 'terms' ? <Scale className="w-4 h-4 text-blue-400" /> : <Shield className="w-4 h-4 text-emerald-400" />}
-                                            </div>
-                                            <h3 className="text-sm font-black text-white uppercase tracking-wider">
-                                                {docContent[activeDoc].title}
+                                            {activeDoc && (() => {
+                                                const Icon = docContent[activeDoc].icon;
+                                                return (
+                                                    <div className={`w-8 h-8 rounded-full ${docContent[activeDoc].bg} flex items-center justify-center`}>
+                                                        <Icon className={`w-4 h-4 ${docContent[activeDoc].color}`} />
+                                                    </div>
+                                                );
+                                            })()}
+                                            <h3 className="text-sm font-black text-(--color-text-primary) uppercase tracking-wider">
+                                                {activeDoc && docContent[activeDoc].title}
                                             </h3>
                                         </div>
                                         <button
                                             onClick={() => setActiveDoc(null)}
-                                            className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors"
+                                            className="w-8 h-8 rounded-full bg-(--color-text-primary)/5 hover:bg-(--color-text-primary)/10 flex items-center justify-center transition-colors"
                                         >
-                                            <X className="w-4 h-4 text-slate-400" />
+                                            <X className="w-4 h-4 text-(--color-text-secondary)" />
                                         </button>
                                     </div>
 
@@ -122,12 +138,12 @@ export const Footer = () => {
                                     </div>
 
                                     {/* Footer */}
-                                    <div className="p-4 border-t border-slate-800 bg-slate-900/50 backdrop-blur-xl">
+                                    <div className="p-4 border-t border-(--color-border-glass) bg-(--color-bg-glass) backdrop-blur-xl">
                                         <button
                                             onClick={() => setActiveDoc(null)}
-                                            className="w-full py-3 bg-slate-800 hover:bg-slate-700 active:scale-[0.98] text-white font-bold rounded-xl transition-all text-xs tracking-wider uppercase"
+                                            className="w-full py-3 bg-(--color-text-primary) hover:opacity-90 active:scale-[0.98] text-(--color-surface) font-bold rounded-xl transition-all text-xs tracking-wider uppercase"
                                         >
-                                            I Understand
+                                            {t('legal.understand')}
                                         </button>
                                     </div>
                                 </motion.div>
@@ -140,3 +156,4 @@ export const Footer = () => {
         </footer>
     );
 };
+
