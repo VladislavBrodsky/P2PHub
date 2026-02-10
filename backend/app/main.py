@@ -11,11 +11,11 @@ from aiogram import types
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup
-    from app.services.warmup_service import warmup_redis
     from app.services.notification_service import notification_service
     
-    asyncio.create_task(warmup_redis())
+    # WARN: Warmup disabled to fix startup slowness. 
+    # Leaderboard will populate lazily or needs a separate worker.
+    # asyncio.create_task(warmup_redis())
 
     
     # Start the subscription expiration checker
