@@ -122,16 +122,16 @@ export default function SubscriptionPage() {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-center mb-12"
+                className="text-center mb-8"
             >
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 mb-6">
-                    <Sparkles size={14} className="text-amber-500" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-amber-600">Premium Membership</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 mb-4">
+                    <Sparkles size={12} className="text-amber-500" />
+                    <span className="text-[9px] font-black uppercase tracking-widest text-amber-600">Premium Membership</span>
                 </div>
-                <h1 className="text-4xl font-black text-(--color-text-primary) mb-4 tracking-tight">
+                <h1 className="text-3xl font-black text-(--color-text-primary) mb-2 tracking-tight">
                     Upgrade to <span className="text-linear-to-br from-amber-500 to-orange-600 bg-clip-text text-transparent">PRO</span>
                 </h1>
-                <p className="text-(--color-text-secondary) font-medium text-sm leading-relaxed max-w-[280px] mx-auto">
+                <p className="text-(--color-text-secondary) font-medium text-xs leading-relaxed max-w-[260px] mx-auto">
                     Unlock exclusive benefits, higher referral rewards, and premium features.
                 </p>
             </motion.div>
@@ -140,53 +140,51 @@ export default function SubscriptionPage() {
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="relative bg-slate-900 rounded-[2.5rem] p-8 text-white shadow-2xl shadow-indigo-500/10 mb-8 overflow-hidden"
+                className="relative bg-slate-900 rounded-[2rem] p-6 text-white shadow-2xl shadow-indigo-500/10 mb-6 overflow-hidden"
             >
                 <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-indigo-500 rounded-full blur-[100px] opacity-20" />
 
                 <div className="relative z-10">
-                    <div className="flex justify-between items-start mb-8">
+                    <div className="flex justify-between items-center mb-6">
                         <div>
-                            <h2 className="text-xl font-bold opacity-70 mb-1">Lifetime PRO</h2>
-                            <p className="text-sm font-medium opacity-50">One-time payment</p>
+                            <h2 className="text-lg font-bold opacity-80 mb-0.5">Lifetime PRO</h2>
+                            <p className="text-[10px] font-medium opacity-50 uppercase tracking-widest">One-time payment</p>
                         </div>
                         <div className="text-right">
-                            <span className="text-4xl font-black">${PRO_PRICE_USD}</span>
+                            <span className="text-3xl font-black">${PRO_PRICE_USD}</span>
                         </div>
                     </div>
 
-                    <div className="space-y-4 mb-8">
+                    <div className="grid grid-cols-2 gap-x-2 gap-y-2 mb-6 border-y border-white/5 py-4">
                         {[
-                            '9-Level Affiliate Network',
-                            'X5 Faster Leveling',
-                            'Priority Withdrawal',
-                            'VIP Support Access',
-                            'Custom Referral Codes'
+                            '9-Level Affiliate',
+                            'X5 Fast XP',
+                            'Priority Pay',
+                            'VIP Support',
+                            'Custom Refs'
                         ].map((benefit, i) => (
-                            <div key={i} className="flex items-center gap-3">
-                                <div className="p-1 rounded-full bg-white/10">
-                                    <CheckCircle2 size={16} className="text-amber-400" />
-                                </div>
-                                <span className="text-sm font-medium opacity-90">{benefit}</span>
+                            <div key={i} className="flex items-center gap-1.5 min-w-0">
+                                <CheckCircle2 size={12} className="text-amber-400 shrink-0" />
+                                <span className="text-[10px] font-bold opacity-90 truncate">{benefit}</span>
                             </div>
                         ))}
                     </div>
 
                     {!paymentMethod ? (
-                        <div className="grid grid-cols-1 gap-3">
+                        <div className="grid grid-cols-2 gap-3">
                             <button
                                 onClick={() => { setPaymentMethod('TON'); selection(); }}
-                                className="w-full h-14 bg-white text-slate-900 rounded-2xl font-black flex items-center justify-center gap-3 active:scale-95 transition-transform"
+                                className="h-12 bg-white text-slate-900 rounded-xl font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-transform"
                             >
-                                <Wallet size={20} />
-                                Pay with TON
+                                <Wallet size={16} />
+                                TON
                             </button>
                             <button
                                 onClick={() => { setPaymentMethod('CRYPTO'); selection(); }}
-                                className="w-full h-14 bg-white/10 hover:bg-white/20 border border-white/10 rounded-2xl font-black flex items-center justify-center gap-3 active:scale-95 transition-transform"
+                                className="h-12 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-transform"
                             >
-                                <CreditCard size={20} />
-                                Other Crypto
+                                <CreditCard size={16} />
+                                Crypto
                             </button>
                         </div>
                     ) : (
