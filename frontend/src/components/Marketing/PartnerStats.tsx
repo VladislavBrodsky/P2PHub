@@ -13,9 +13,14 @@ const PartnerAvatar = ({ partner, index }: { partner: any; index: number }) => {
     const [imgError, setImgError] = useState(false);
 
     if (partner.photo_url && !imgError) {
+        let src = partner.photo_url;
+        if (src.startsWith('/')) {
+            const baseUrl = apiClient.defaults.baseURL?.replace('/api', '') || '';
+            src = `${baseUrl}${src}`;
+        }
         return (
             <LazyImage
-                src={partner.photo_url}
+                src={src}
                 alt={partner.first_name}
                 className="w-full h-full object-cover"
                 onError={() => setImgError(true)}

@@ -35,53 +35,53 @@ async def get_my_profile(
             return cached_partner
     except Exception: pass
 
-    # 2. Query DB - Optimized: No selectinload(referrals)
-    statement = select(Partner).where(Partner.telegram_id == tg_id).options(
-        selectinload(Partner.completed_task_records)
-    )
-    result = await session.exec(statement)
-    partner = result.first()
+    # 2. Query DB and/or Register
+    from app.services.partner_service import create_partner, process_referral_notifications
     
-    if not partner:
-        # Auto-register new partner
-        referrer_id = None
-        start_param = user_data.get("start_param")
-        if start_param:
-            ref_stmt = select(Partner).where(Partner.referral_code == start_param)
-            ref_res = await session.exec(ref_stmt)
-            referrer = ref_res.first()
-            if referrer: referrer_id = referrer.id
-
-        partner = Partner(
-            telegram_id=tg_id,
-            username=tg_user.get("username"),
-            first_name=tg_user.get("first_name"),
-            last_name=tg_user.get("last_name"),
-            photo_url=tg_user.get("photo_url"),
-            referral_code=f"P2P-{secrets.token_hex(4).upper()}",
-            referrer_id=referrer_id
-        )
-        session.add(partner)
-        await session.commit()
-        await session.refresh(partner)
-        
-        from app.services.partner_service import process_referral_logic
-        await process_referral_logic.kiq(partner.id)
+    partner, is_new = await create_partner(
+        session=session,
+        telegram_id=tg_id,
+        username=tg_user.get("username"),
+        first_name=tg_user.get("first_name"),
+        last_name=tg_user.get("last_name"),
+        language_code=tg_user.get("language_code", "en"),
+        referrer_code=user_data.get("start_param"),
+        photo_url=tg_user.get("photo_url")
+    )
+    
+    if is_new:
+        await process_referral_notifications(bot, session, partner, is_new)
     else:
-        # Throttled individual profile update
+        # Update profile if changed (Throttled)
         from datetime import datetime, timedelta
         now = datetime.utcnow()
         if not partner.updated_at or partner.updated_at < (now - timedelta(hours=1)):
             has_changed = False
-            for field in ["username", "first_name", "last_name", "photo_url"]:
+            for field in ["username", "first_name", "last_name"]:
                 if tg_user.get(field) != getattr(partner, field):
                     setattr(partner, field, tg_user.get(field))
                     has_changed = True
+            
+            # Special handling for photo_url to trigger download if it's a telegram URL
+            new_photo = tg_user.get("photo_url")
+            if new_photo and new_photo != partner.photo_url:
+                if "api.telegram.org" in new_photo:
+                    from app.services.image_service import image_service
+                    processed = await image_service.download_and_convert_to_webp(new_photo, tg_id)
+                    if processed:
+                        partner.photo_url = processed
+                        has_changed = True
+                else:
+                    partner.photo_url = new_photo
+                    has_changed = True
+
             if has_changed:
                 partner.updated_at = now
                 session.add(partner)
                 await session.commit()
                 await session.refresh(partner)
+                # Invalidate recent partners if this user might be in it
+                await redis_service.client.delete("partners:recent")
 
     # 3. Handle Lazy Migrations & Self-healing
     migration_needed = False
@@ -277,7 +277,8 @@ async def get_recent_partners(
 
     for p in partners_list:
         if p.get("photo_url") and p["photo_url"].startswith("/images/"):
-            p["photo_url"] = f"{base_url}{p['photo_url']}"
+            # Ensure no double slashes
+            p["photo_url"] = f"{base_url.rstrip('/')}/{p['photo_url'].lstrip('/')}"
     
     partners_data = {
         "partners": partners_list[:limit],
