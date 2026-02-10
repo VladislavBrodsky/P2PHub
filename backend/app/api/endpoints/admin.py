@@ -35,27 +35,25 @@ async def list_pending_payments(
     result = await session.exec(statement)
     return result.all()
 
-@router.post("/approve-payment/{tx_hash}")
+@router.post("/approve-payment/{transaction_id}")
 async def approve_payment(
-    tx_hash: str,
+    transaction_id: int,
     admin: dict = Depends(get_current_admin),
     session: AsyncSession = Depends(get_session)
 ):
     """
     Approves a manual payment and triggers user upgrade.
     """
-    statement = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
-    result = await session.exec(statement)
-    tx = result.first()
+    transaction = await session.get(PartnerTransaction, transaction_id)
     
-    if not tx:
+    if not transaction:
         raise HTTPException(status_code=404, detail="Transaction not found")
         
-    if tx.status != "manual_review":
-        raise HTTPException(status_code=400, detail=f"Transaction is in {tx.status} state, cannot approve")
+    if transaction.status != "manual_review":
+        raise HTTPException(status_code=400, detail=f"Transaction is in {transaction.status} state, cannot approve")
 
     # Get the partner
-    partner = await session.get(Partner, tx.partner_id)
+    partner = await session.get(Partner, transaction.partner_id)
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
 
@@ -63,10 +61,11 @@ async def approve_payment(
     success = await payment_service.upgrade_to_pro(
         session=session,
         partner=partner,
-        tx_hash=tx.tx_hash,
-        currency=tx.currency,
-        network=tx.network,
-        amount=tx.amount
+        amount=transaction.amount,
+        currency=transaction.currency,
+        network=transaction.network,
+        tx_hash=transaction.tx_hash,
+        transaction_id=transaction.id
     )
     
     if success:
@@ -81,35 +80,33 @@ async def approve_payment(
         except Exception as e:
             print(f"[DEBUG] User approval notification failed: {e}")
             
-        return {"status": "success", "message": f"Payment {tx_hash} approved for {partner.telegram_id}"}
+        return {"status": "success", "message": f"Payment {transaction.id} approved for {partner.telegram_id}"}
 
     else:
         raise HTTPException(status_code=500, detail="Failed to upgrade user to PRO")
 
-@router.post("/reject-payment/{tx_hash}")
+@router.post("/reject-payment/{transaction_id}")
 async def reject_payment(
-    tx_hash: str,
+    transaction_id: int,
     admin: dict = Depends(get_current_admin),
     session: AsyncSession = Depends(get_session)
 ):
     """
     Rejects a manual payment. Sets status to 'failed' and notifies the user.
     """
-    statement = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
-    result = await session.exec(statement)
-    tx = result.first()
+    transaction = await session.get(PartnerTransaction, transaction_id)
     
-    if not tx:
+    if not transaction:
         raise HTTPException(status_code=404, detail="Transaction not found")
         
-    if tx.status != "manual_review":
-        raise HTTPException(status_code=400, detail=f"Transaction is in {tx.status} state, cannot reject")
+    if transaction.status != "manual_review":
+        raise HTTPException(status_code=400, detail=f"Transaction is in {transaction.status} state, cannot reject")
 
     # Get the partner
-    partner = await session.get(Partner, tx.partner_id)
+    partner = await session.get(Partner, transaction.partner_id)
     
-    tx.status = "failed"
-    session.add(tx)
+    transaction.status = "failed"
+    session.add(transaction)
     await session.commit()
     
     # Notify the User
@@ -117,9 +114,9 @@ async def reject_payment(
         try:
             await notification_service.enqueue_notification(
                 chat_id=int(partner.telegram_id),
-                text="❌ *PAYMENT REJECTED*\n\nYour transaction hash could not be verified. Please check the hash and try again, or contact support."
+                text="❌ *PAYMENT REJECTED*\n\nYour manual payment confirmation was rejected. Please try again or contact support."
             )
         except Exception:
             pass
             
-    return {"status": "success", "message": f"Payment {tx_hash} rejected"}
+    return {"status": "success", "message": f"Payment {transaction_id} rejected"}

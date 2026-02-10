@@ -84,7 +84,12 @@ async def get_my_leaderboard_stats(
     partner = result.first()
     
     if not partner:
-        return {"rank": -1, "xp": 0}
+        return {
+            "rank": -1,
+            "xp": 0,
+            "level": 1,
+            "referrals": 0
+        }
 
     # Get rank from Redis (0-indexed, so add 1)
     try:

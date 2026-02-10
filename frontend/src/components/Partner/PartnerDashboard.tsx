@@ -393,22 +393,29 @@ const EarningsList = () => {
                                 {styles.icon}
                             </div>
                             <div className='flex flex-col'>
-                                <div className="flex items-center gap-2">
-                                    <span className="font-bold text-slate-900 dark:text-white text-sm">{earning.description}</span>
-                                    {earning.level && (
-                                        <span className="text-[9px] font-black bg-slate-100 dark:bg-white/10 px-1.5 py-0.5 rounded uppercase tracking-tighter">
-                                            Level {earning.level}
-                                        </span>
-                                    )}
-                                </div>
+                                <span className="font-bold text-slate-900 dark:text-white text-sm">{earning.description}</span>
                                 <span className="text-[10px] text-slate-500 mt-0.5">
                                     {new Date(earning.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                 </span>
                             </div>
                         </div>
-                        <span className={`font-black ${styles.text} text-sm tracking-tight`}>
-                            +{earning.currency === 'XP' ? earning.amount : earning.amount.toFixed(earning.amount < 1 ? 3 : 2)} {earning.currency}
-                        </span>
+
+                        <div className="flex items-center gap-3">
+                            {earning.level && (
+                                <div className="bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-lg flex flex-col items-start min-w-[40px]">
+                                    <span className="text-[7px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-0.5">LEVEL</span>
+                                    <span className="text-xs font-black text-slate-900 dark:text-white leading-none">{earning.level}</span>
+                                </div>
+                            )}
+                            <div className="flex flex-col items-end">
+                                <span className={`font-black ${styles.text} text-base tracking-tight`}>
+                                    +{earning.currency === 'XP' ? earning.amount : earning.amount.toFixed(earning.amount < 1 ? 3 : 2)}
+                                </span>
+                                <span className={`text-[9px] font-bold ${styles.text} opacity-80 uppercase tracking-widest`}>
+                                    {earning.currency}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 );
             })}

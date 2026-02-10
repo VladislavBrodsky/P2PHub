@@ -35,8 +35,8 @@ export default function CommunityPage() {
             <div className="fixed bottom-40 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none transition-colors duration-500" />
 
             {/* Premium Header with Briefing Trigger */}
-            <div className="flex items-center justify-between py-1 relative z-30 px-1">
-                <div className="flex flex-col">
+            <div className="flex items-center justify-center py-1 relative z-30 px-1">
+                <div className="flex flex-col items-center">
                     <h1 className="text-base font-black text-slate-900 dark:text-white tracking-tight leading-none uppercase">
                         {t('menu.community')}
                     </h1>
@@ -46,7 +46,7 @@ export default function CommunityPage() {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="absolute right-1 flex items-center gap-2">
                     <button
                         onClick={() => { selection(); setIsBriefingOpen(true); }}
                         className="p-1.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl text-slate-600 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-all active:scale-95 shadow-sm group"

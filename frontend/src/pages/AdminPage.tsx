@@ -21,7 +21,7 @@ export const AdminPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [approvingHashes, setApprovingHashes] = useState<Set<string>>(new Set());
+    const [approvingIds, setApprovingIds] = useState<Set<number>>(new Set());
 
     const fetchPending = async (silent = false) => {
         if (!silent) setIsLoading(true);
@@ -42,30 +42,30 @@ export const AdminPage = () => {
         fetchPending();
     }, []);
 
-    const handleApprove = async (txHash: string) => {
-        if (approvingHashes.has(txHash)) return;
+    const handleApprove = async (txId: number) => {
+        if (approvingIds.has(txId)) return;
 
-        setApprovingHashes(prev => new Set(prev).add(txHash));
+        setApprovingIds(prev => new Set(prev).add(txId));
         try {
-            await apiClient.post(`/api/admin/approve-payment/${txHash}`);
+            await apiClient.post(`/api/admin/approve-payment/${txId}`);
             // Success - refresh list
             await fetchPending(true);
         } catch (err: any) {
             alert(err.response?.data?.detail || 'Approval failed');
         } finally {
-            setApprovingHashes(prev => {
+            setApprovingIds(prev => {
                 const next = new Set(prev);
-                next.delete(txHash);
+                next.delete(txId);
                 return next;
             });
         }
     };
 
-    const handleReject = async (txHash: string) => {
+    const handleReject = async (txId: number) => {
         if (!confirm('Are you sure you want to reject this transaction? The user will be notified.')) return;
 
         try {
-            await apiClient.post(`/api/admin/reject-payment/${txHash}`);
+            await apiClient.post(`/api/admin/reject-payment/${txId}`);
             await fetchPending(true);
         } catch (err: any) {
             alert(err.response?.data?.detail || 'Rejection failed');
@@ -186,30 +186,34 @@ export const AdminPage = () => {
 
                                 <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-black/20 font-mono text-[10px] break-all flex items-start justify-between gap-2 border border-slate-100 dark:border-white/5">
                                     <span className="text-slate-500 shrink-0 uppercase font-black">Hash:</span>
-                                    <span className="text-slate-600 dark:text-slate-300 select-all">{tx.tx_hash}</span>
-                                    <a
-                                        href={tx.network === 'TON' ? `https://tonviewer.com/transaction/${tx.tx_hash}` : `https://tronscan.org/#/transaction/${tx.tx_hash}`}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="text-blue-500 shrink-0"
-                                    >
-                                        <ExternalLink size={12} />
-                                    </a>
+                                    <span className={`select-all ${!tx.tx_hash ? "text-red-400 italic" : "text-slate-600 dark:text-slate-300"}`}>
+                                        {tx.tx_hash || "Not Provided (Manual Confirmation)"}
+                                    </span>
+                                    {tx.tx_hash && (
+                                        <a
+                                            href={tx.network === 'TON' ? `https://tonviewer.com/transaction/${tx.tx_hash}` : `https://tronscan.org/#/transaction/${tx.tx_hash}`}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="text-blue-500 shrink-0"
+                                        >
+                                            <ExternalLink size={12} />
+                                        </a>
+                                    )}
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-3">
                                     <button
-                                        onClick={() => handleReject(tx.tx_hash)}
+                                        onClick={() => handleReject(tx.id)}
                                         className="py-3 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-500 font-bold text-sm active:scale-95 transition-all"
                                     >
                                         Reject
                                     </button>
                                     <button
-                                        onClick={() => handleApprove(tx.tx_hash || '')}
-                                        disabled={approvingHashes.has(tx.tx_hash)}
+                                        onClick={() => handleApprove(tx.id)}
+                                        disabled={approvingIds.has(tx.id)}
                                         className="py-3 rounded-2xl bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-black text-sm transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20"
                                     >
-                                        {approvingHashes.has(tx.tx_hash) ? (
+                                        {approvingIds.has(tx.id) ? (
                                             <>
                                                 <RefreshCw className="animate-spin" size={16} />
                                                 Wait...

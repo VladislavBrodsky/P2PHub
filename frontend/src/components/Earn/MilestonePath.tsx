@@ -85,8 +85,6 @@ export const MilestonePath = () => {
                     return (
                         <motion.div
                             key={`${item.id || item.level}-${item.level}`}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
                             onClick={() => handleItemClick(item)}
                             className={`
                                 relative flex flex-col items-center p-2 rounded-2xl border transition-all duration-300 active:scale-95 cursor-pointer

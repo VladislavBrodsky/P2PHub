@@ -37,7 +37,7 @@ export default function LeaderboardPage() {
                     apiClient.get('/api/leaderboard/me')
                 ]);
 
-                setLeaderboard(leaderboardRes.data);
+                setLeaderboard(Array.isArray(leaderboardRes.data) ? leaderboardRes.data : []);
                 setUserStats(statsRes.data);
             } catch (error) {
                 console.error('Failed to fetch leaderboard data:', error);

@@ -81,7 +81,15 @@ class PaymentService:
         
         if is_valid:
             # Upgrade user to PRO
-            await self.upgrade_to_pro(session, partner, tx_hash, "TON", "TON", PRO_PRICE_USD)
+            # Upgrade user to PRO
+            await self.upgrade_to_pro(
+                session=session, 
+                partner=partner, 
+                amount=PRO_PRICE_USD,
+                currency="TON", 
+                network="TON", 
+                tx_hash=tx_hash
+            )
             return True
             
         return False
@@ -90,10 +98,11 @@ class PaymentService:
         self, 
         session: AsyncSession, 
         partner: Partner, 
-        tx_hash: str, 
+        amount: float,
         currency: str, 
         network: str,
-        amount: float
+        tx_hash: Optional[str] = None,
+        transaction_id: Optional[int] = None
     ):
         # 1. Update Partner
         now = datetime.utcnow()
@@ -107,9 +116,13 @@ class PaymentService:
         session.add(partner)
 
         # 2. Update or Create Transaction
-        stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
-        res = await session.exec(stmt)
-        transaction = res.first()
+        transaction = None
+        if transaction_id:
+            transaction = await session.get(PartnerTransaction, transaction_id)
+        elif tx_hash:
+            stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
+            res = await session.exec(stmt)
+            transaction = res.first()
 
         if not transaction:
             transaction = PartnerTransaction(
@@ -124,6 +137,9 @@ class PaymentService:
             await session.flush() # Get the ID
         else:
             transaction.status = "completed"
+            # Update hash if provided and missing
+            if tx_hash and not transaction.tx_hash:
+                transaction.tx_hash = tx_hash
             session.add(transaction)
             
         # Update Partner with verification details
@@ -131,7 +147,7 @@ class PaymentService:
         partner.payment_details = json.dumps({
             "currency": currency,
             "network": network,
-            "tx_hash": tx_hash,
+            "tx_hash": transaction.tx_hash or "MANUAL_CONFIRMATION",
             "amount": amount,
             "verified_at": now.isoformat()
         })

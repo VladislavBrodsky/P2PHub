@@ -86,10 +86,10 @@ async def verify_ton(
 
 @router.post("/submit-manual")
 async def submit_manual_payment(
-    tx_hash: str = Body(..., embed=True),
     currency: str = Body(..., embed=True),
     network: str = Body(..., embed=True),
     amount: float = Body(..., embed=True),
+    tx_hash: str | None = Body(None, embed=True),
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
@@ -125,7 +125,7 @@ async def submit_manual_payment(
             "🚨 *NEW MANUAL PAYMENT SUBMITTED*\n\n"
             f"👤 *Partner:* {partner.first_name} (@{partner.username})\n"
             f"💰 *Amount:* ${amount} {currency} ({network})\n"
-            f"📝 *Hash:* `{tx_hash}`\n\n"
+            f"📝 *Hash:* `{tx_hash or 'Not Provided'}`\n\n"
             "Please verify and approve in the Admin Panel."
         )
         for admin_id in settings.ADMIN_USER_IDS:

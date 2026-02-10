@@ -13,7 +13,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -26,7 +26,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                         animate={{ y: 0, opacity: 1, scale: 1 }}
                         exit={{ y: 100, opacity: 0, scale: 0.95 }}
                         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                        className="w-full max-w-md bg-(--color-surface) border border-(--color-border-glass) rounded-[2rem] relative shadow-2xl overflow-hidden max-h-[85vh] flex flex-col"
+                        className="w-full max-w-md bg-(--color-surface) border border-(--color-border-glass) rounded-t-[2rem] md:rounded-[2rem] relative shadow-2xl overflow-hidden h-[85vh] md:max-h-[85vh] flex flex-col z-[100]"
                     >
                         {/* Header */}
                         <div className="p-6 pb-4 border-b border-(--color-border-glass) bg-(--color-bg-glass) backdrop-blur-md sticky top-0 z-10">
@@ -45,7 +45,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                         </div>
 
                         {/* Content Scrollable Area */}
-                        <div className="overflow-y-auto p-6 space-y-8 custom-scrollbar pb-[calc(env(safe-area-inset-bottom)+4rem)]">
+                        <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar pb-safe-bottom">
 
                             {/* Mission / Goal */}
                             <section className="space-y-3">

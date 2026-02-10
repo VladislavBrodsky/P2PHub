@@ -87,11 +87,10 @@ export default function SubscriptionPage() {
     };
 
     const handleManualSubmit = async () => {
-        if (!manualHash) return;
         setIsLoading(true);
         try {
             await apiClient.post('/api/payment/submit-manual', {
-                tx_hash: manualHash,
+                tx_hash: manualHash || null,
                 currency: 'USDT',
                 network: 'TRC20',
                 amount: proPrice
@@ -275,20 +274,24 @@ export default function SubscriptionPage() {
                                     </div>
 
                                     <div>
-                                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">Transaction Hash</p>
+                                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">Transaction Hash (Optional)</p>
                                         <div className="flex gap-2">
                                             <input
                                                 value={manualHash}
                                                 onChange={(e) => setManualHash(e.target.value)}
-                                                placeholder="Paste TX hash here..."
+                                                placeholder="Paste TX hash here (optional)..."
                                                 className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 text-xs focus:outline-none focus:border-amber-500"
                                             />
                                             <button
                                                 onClick={handleManualSubmit}
-                                                disabled={!manualHash || isLoading}
-                                                className="p-3 bg-amber-500 rounded-xl disabled:opacity-50"
+                                                disabled={isLoading}
+                                                className={`px-4 rounded-xl font-bold text-xs flex items-center gap-2 transition-all active:scale-95 ${manualHash
+                                                        ? "bg-white/10 text-white"
+                                                        : "bg-amber-500 text-slate-900 shadow-lg shadow-amber-500/20"
+                                                    }`}
                                             >
-                                                <Send size={18} />
+                                                {manualHash ? <Send size={16} /> : <CheckCircle2 size={16} />}
+                                                {manualHash ? "" : "I Paid"}
                                             </button>
                                         </div>
                                     </div>
@@ -304,69 +307,71 @@ export default function SubscriptionPage() {
 
             {/* Status Modals */}
             <AnimatePresence>
-                {status !== 'idle' && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center px-6 bg-slate-950/80 backdrop-blur-sm"
-                    >
+                {
+                    status !== 'idle' && (
                         <motion.div
-                            initial={{ scale: 0.9, y: 20 }}
-                            animate={{ scale: 1, y: 0 }}
-                            className="bg-(--color-bg-surface) rounded-[2.5rem] p-8 w-full max-w-sm text-center shadow-2xl"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-50 flex items-center justify-center px-6 bg-slate-950/80 backdrop-blur-sm"
                         >
-                            {status === 'pending' && (
-                                <>
-                                    <div className="w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                                        <Loader2 size={40} className="text-amber-500 animate-spin" />
-                                    </div>
-                                    <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">Verifying...</h2>
-                                    <p className="text-sm text-(--color-text-secondary) mb-8">
-                                        Checking on-chain data. This usually takes 30-60 seconds.
-                                    </p>
-                                </>
-                            )}
+                            <motion.div
+                                initial={{ scale: 0.9, y: 20 }}
+                                animate={{ scale: 1, y: 0 }}
+                                className="bg-(--color-bg-surface) rounded-[2.5rem] p-8 w-full max-w-sm text-center shadow-2xl"
+                            >
+                                {status === 'pending' && (
+                                    <>
+                                        <div className="w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                                            <Loader2 size={40} className="text-amber-500 animate-spin" />
+                                        </div>
+                                        <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">Verifying...</h2>
+                                        <p className="text-sm text-(--color-text-secondary) mb-8">
+                                            Checking on-chain data. This usually takes 30-60 seconds.
+                                        </p>
+                                    </>
+                                )}
 
-                            {status === 'success' && (
-                                <>
-                                    <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                                        <CheckCircle2 size={40} className="text-emerald-500" />
-                                    </div>
-                                    <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">Welcome to PRO!</h2>
-                                    <p className="text-sm text-(--color-text-secondary) mb-8">
-                                        Your account has been successfully upgraded.
-                                    </p>
-                                    <button
-                                        onClick={() => setStatus('idle')}
-                                        className="w-full h-14 bg-linear-to-r from-emerald-500 to-teal-600 text-white rounded-2xl font-black"
-                                    >
-                                        Get Started
-                                    </button>
-                                </>
-                            )}
+                                {status === 'success' && (
+                                    <>
+                                        <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                                            <CheckCircle2 size={40} className="text-emerald-500" />
+                                        </div>
+                                        <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">Welcome to PRO!</h2>
+                                        <p className="text-sm text-(--color-text-secondary) mb-8">
+                                            Your account has been successfully upgraded.
+                                        </p>
+                                        <button
+                                            onClick={() => setStatus('idle')}
+                                            className="w-full h-14 bg-linear-to-r from-emerald-500 to-teal-600 text-white rounded-2xl font-black"
+                                        >
+                                            Get Started
+                                        </button>
+                                    </>
+                                )}
 
-                            {status === 'manual_review' && (
-                                <>
-                                    <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                                        <CreditCard size={40} className="text-blue-500" />
-                                    </div>
-                                    <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">Submitted</h2>
-                                    <p className="text-sm text-(--color-text-secondary) mb-8">
-                                        Our team is verifying your payment. You'll be notified once approved.
-                                    </p>
-                                    <button
-                                        onClick={() => setStatus('idle')}
-                                        className="w-full h-14 bg-slate-900 text-white rounded-2xl font-black"
-                                    >
-                                        Got it
-                                    </button>
-                                </>
-                            )}
+                                {status === 'manual_review' && (
+                                    <>
+                                        <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                                            <CreditCard size={40} className="text-blue-500" />
+                                        </div>
+                                        <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">Submitted</h2>
+                                        <p className="text-sm text-(--color-text-secondary) mb-8">
+                                            Our team is verifying your payment. You'll be notified once approved.
+                                        </p>
+                                        <button
+                                            onClick={() => setStatus('idle')}
+                                            className="w-full h-14 bg-slate-900 text-white rounded-2xl font-black"
+                                        >
+                                            Got it
+                                        </button>
+                                    </>
+                                )}
+                            </motion.div>
                         </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
+                    )
+                }
+            </AnimatePresence >
+        </div >
     );
 }
