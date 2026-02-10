@@ -17,8 +17,10 @@ interface User {
     referrals: any[]; // Extended for Earn Hub
     completed_tasks: string;
     is_pro: boolean;
+    is_admin: boolean;
     pro_expires_at: string | null;
     subscription_plan: string | null;
+
 }
 
 interface UserContextType {
@@ -100,8 +102,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     referrals: [],
                     completed_tasks: "[]",
                     is_pro: false,
+                    is_admin: false,
                     pro_expires_at: null,
                     subscription_plan: null
+
                 };
                 setUser(fallbackUser);
             }
@@ -130,8 +134,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         referrals: [],
                         completed_tasks: "[]",
                         is_pro: true,
+                        is_admin: true,
                         pro_expires_at: null,
                         subscription_plan: "DEV_PRO"
+
                     };
                     setUser(devUser);
                     setIsLoading(false);

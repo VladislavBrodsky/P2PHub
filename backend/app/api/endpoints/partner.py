@@ -155,8 +155,10 @@ async def get_my_profile(
     total_earned = earnings_result.one_or_none() or 0.0
     
     # Add calculated field to partner object (not saved to DB)
-    partner_dict = partner.dict()
+    partner_dict = partner.model_dump() # and not saved to DB
     partner_dict["total_earned"] = float(total_earned)
+    partner_dict["is_admin"] = tg_id in settings.ADMIN_USER_IDS
+
 
     # 4. Store in Redis Cache (expires in 5 minutes)
     try:

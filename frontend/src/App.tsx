@@ -8,6 +8,8 @@ const CommunityPage = lazy(() => import('./pages/Community'));
 const ReferralPage = lazy(() => import('./pages/Referral'));
 const LeaderboardPage = lazy(() => import('./pages/Leaderboard'));
 const SubscriptionPage = lazy(() => import('./pages/Subscription'));
+const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })));
+
 
 import { miniApp, backButton, viewport, swipeBehavior } from '@telegram-apps/sdk-react';
 import { UserProvider } from './context/UserContext';
@@ -174,6 +176,10 @@ function App() {
                             <div className={`h-full ${activeTab === 'subscription' ? 'block' : 'hidden'}`}>
                                 {visitedTabs.has('subscription') && <SubscriptionPage />}
                             </div>
+                            <div className={`h-full ${activeTab === 'admin' ? 'block' : 'hidden'}`}>
+                                {visitedTabs.has('admin') && <AdminPage />}
+                            </div>
+
                             {['coming_soon'].includes(activeTab) && (
                                 <div className="flex flex-col items-center justify-center text-center px-10 h-full">
                                     <div className="text-4xl mb-4">🚀</div>

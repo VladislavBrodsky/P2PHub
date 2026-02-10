@@ -7,8 +7,9 @@ import { IncomePotential } from '../components/Marketing/IncomePotential';
 import { PartnerStats } from '../components/Marketing/PartnerStats';
 
 import { useHaptic } from '../hooks/useHaptic';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, ShieldCheck } from 'lucide-react';
 import { useUser } from '../context/UserContext';
+
 import { getRank, getXPProgress } from '../utils/ranking';
 import { useTranslation, Trans } from 'react-i18next';
 import { Footer } from '../components/Layout/Footer';
@@ -67,18 +68,33 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
                 {/* Sub-Hero Text Section */}
                 <div className="text-center space-y-10 px-2 flex flex-col items-center">
-                    {/* Badge */}
-                    <motion.div
-                        className="inline-block rounded-full border border-blue-200/50 bg-blue-50 px-6 py-2 shadow-sm"
-                        animate={{
-                            scale: [1, 1.02, 1],
-                        }}
-                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    >
-                        <p className="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600">
-                            {t('dashboard.hero_badge', { defaultValue: 'PARTNER NETWORK 2.0' })}
-                        </p>
-                    </motion.div>
+                    {/* Badge & Admin Entry */}
+                    <div className="flex items-center gap-3">
+                        <motion.div
+                            className="inline-block rounded-full border border-blue-200/50 bg-blue-50 px-6 py-2 shadow-sm"
+                            animate={{
+                                scale: [1, 1.02, 1],
+                            }}
+                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                        >
+                            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600">
+                                {t('dashboard.hero_badge', { defaultValue: 'PARTNER NETWORK 2.0' })}
+                            </p>
+                        </motion.div>
+
+                        {user?.is_admin && (
+                            <motion.button
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                onClick={() => setActiveTab?.('admin')}
+                                className="p-2 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl border border-white/10 flex items-center gap-2 px-4 transition-transform active:scale-90"
+                            >
+                                <ShieldCheck size={14} className="text-blue-500" />
+                                <span className="text-[10px] font-black uppercase tracking-widest">Admin</span>
+                            </motion.button>
+                        )}
+                    </div>
+
 
                     {/* Main Titles */}
                     <div className="space-y-4">

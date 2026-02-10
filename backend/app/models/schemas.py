@@ -17,9 +17,11 @@ class PartnerResponse(PartnerBase):
     level: int
     referral_code: str
     is_pro: bool
+    is_admin: bool = False
     created_at: datetime
     updated_at: datetime
     referrals: Optional[List[PartnerBase]] = None
+
     
     class Config:
         from_attributes = True
