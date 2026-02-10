@@ -161,6 +161,8 @@ async def get_top_partners(
         
     return top_data
 
+from app.models.partner import Partner, get_session, XPTransaction, SystemSetting
+
 @router.get("/recent", response_model=List[PartnerResponse])
 async def get_recent_partners(
     limit: int = 10,
@@ -168,24 +170,60 @@ async def get_recent_partners(
 ):
     """
     Fetches the 10 most recently joined partners for social proof.
+    Updated every 60 minutes and persists across restarts.
     """
+    from datetime import datetime, timedelta
+    
     cache_key = "partners:recent"
+    db_settings_key = "partners_recent_snapshot"
+    refresh_window = timedelta(minutes=60)
+    
+    # 1. Try Redis Cache (Fastest)
     try:
         cached = await redis_service.get_json(cache_key)
         if cached:
             return cached
     except Exception:
         pass
+
+    # 2. Check DB Persistence (For cross-restart/cold starts)
+    snapshot_setting = await session.get(SystemSetting, db_settings_key)
+    
+    now = datetime.utcnow()
+    should_refresh = True
+    
+    if snapshot_setting:
+        # Check if it's still within the 60-minute window
+        if now - snapshot_setting.updated_at < refresh_window:
+            should_refresh = False
+            try:
+                partners_data = json.loads(snapshot_setting.value)
+                # Ensure limit is respected even in cached data
+                partners_data = partners_data[:limit]
+            except Exception:
+                should_refresh = True
+
+    if should_refresh:
+        # 3. Fetch Fresh from Partner Table
+        statement = select(Partner).order_by(Partner.created_at.desc()).limit(limit)
+        result = await session.exec(statement)
+        partners = result.all()
+        partners_data = [p.model_dump() for p in partners]
         
-    statement = select(Partner).order_by(Partner.created_at.desc()).limit(limit)
-    result = await session.exec(statement)
-    partners = result.all()
+        # 4. Save to Persistent DB Cache
+        if not snapshot_setting:
+            snapshot_setting = SystemSetting(key=db_settings_key, value=json.dumps(partners_data))
+        else:
+            snapshot_setting.value = json.dumps(partners_data)
+            snapshot_setting.updated_at = now
+            
+        session.add(snapshot_setting)
+        await session.commit()
     
-    # Pre-serialize for cache and return clean models
-    partners_data = [p.model_dump() for p in partners]
-    
+    # 5. Populate Redis for subsequent requests
     try:
-        await redis_service.set_json(cache_key, partners_data, expire=300)
+        # Cache for 60 mins in Redis too (to match DB refresh window)
+        await redis_service.set_json(cache_key, partners_data, expire=3600)
     except Exception:
         pass
         

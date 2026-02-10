@@ -93,6 +93,12 @@ class Earning(SQLModel, table=True):
     currency: str = Field(default="USDT") # USDT, XP
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
 
+class SystemSetting(SQLModel, table=True):
+    __table_args__ = {"extend_existing": True}
+    key: str = Field(primary_key=True)
+    value: str # JSON encoded string
+    updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}, index=True)
+
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
@@ -105,11 +111,15 @@ if database_url:
     elif database_url.startswith("postgres://"):
         database_url = database_url.replace("postgres://", "postgresql+asyncpg://", 1)
 
+connect_args = {}
+if "sqlite" not in database_url:
+    connect_args["statement_cache_size"] = 0
+
 engine = create_async_engine(
     database_url,
     echo=True,
     future=True,
-    connect_args={"statement_cache_size": 0}
+    connect_args=connect_args
 )
 
 async def create_db_and_tables():
