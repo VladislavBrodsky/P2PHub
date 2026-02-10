@@ -30,12 +30,16 @@ async def lifespan(app: FastAPI):
         webhook_url = webhook_base if webhook_base.endswith(path) else f"{webhook_base.rstrip('/')}{path}"
         
         try:
+            print(f"📡 Registering Webhook with Telegram: {webhook_url}")
+            webhook_info = await bot.get_webhook_info()
+            print(f"ℹ️ Current Webhook Info: {webhook_info}")
+            
             await bot.set_webhook(
                 url=webhook_url,
                 secret_token=settings.WEBHOOK_SECRET,
                 drop_pending_updates=True
             )
-            print(f"🚀 Webhook set to: {webhook_url}")
+            print(f"🚀 Webhook successfully set to: {webhook_url}")
         except Exception as e:
             print(f"❌ Failed to set webhook: {e}. Falling back to polling...")
             asyncio.create_task(dp.start_polling(bot))
