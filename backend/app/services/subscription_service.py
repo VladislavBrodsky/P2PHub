@@ -26,7 +26,7 @@ class SubscriptionService:
             Partner.pro_expires_at < three_days_end
         )
         res_3d = await session.exec(stmt_3d)
-        for partner in await res_3d.all():
+        for partner in res_3d.all():
             await self.send_expiration_warning(partner, 3)
 
         # 2. Check for 1-day warning
@@ -39,7 +39,7 @@ class SubscriptionService:
             Partner.pro_expires_at < one_day_end
         )
         res_1d = await session.exec(stmt_1d)
-        for partner in await res_1d.all():
+        for partner in res_1d.all():
             await self.send_expiration_warning(partner, 1)
 
         # 3. Handle actually expired
@@ -48,7 +48,7 @@ class SubscriptionService:
             Partner.pro_expires_at < now
         )
         res_expired = await session.exec(stmt_expired)
-        for partner in await res_expired.all():
+        for partner in res_expired.all():
             partner.is_pro = False
             session.add(partner)
             await self.send_expired_notification(partner)

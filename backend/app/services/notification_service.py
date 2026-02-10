@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from bot import bot
+# from bot import bot (Moved inside functions to break circular dependency)
 from app.worker import broker
 
 logger = logging.getLogger(__name__)
@@ -11,6 +11,7 @@ async def send_telegram_task(chat_id: int, text: str, parse_mode: str = "Markdow
     Background worker task to send Telegram messages.
     """
     try:
+        from bot import bot
         await bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode)
         return True
     except Exception as e:
@@ -28,6 +29,7 @@ class NotificationService:
         except Exception as e:
             logger.error(f"Failed to enqueue notification for {chat_id}: {e}")
             # Fallback to direct send if broker fails
+            from bot import bot
             asyncio.create_task(bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode))
 
     async def process_notifications_worker(self):
