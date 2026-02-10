@@ -24,11 +24,7 @@ def upgrade() -> None:
     op.create_index(op.f('ix_partner_total_earned_usdt'), 'partner', ['total_earned_usdt'], unique=False)
     op.create_index(op.f('ix_partner_referral_count'), 'partner', ['referral_count'], unique=False)
 
-    # --- CRITICAL: Commit structural changes to release locks ---
-    # This ensures that ACCESS EXCLUSIVE locks are released before we start
-    # the heavy JOIN-based updates.
-    op.execute("COMMIT")
-    op.execute("BEGIN")
+    # 3. Initialize data (Optimized for 100K+ Users)
 
     # 3. Initialize data (Optimized for 100K+ Users)
     # Optimized referral_count using JOIN
