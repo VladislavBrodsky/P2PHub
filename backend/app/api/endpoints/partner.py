@@ -179,7 +179,7 @@ async def get_recent_partners(
     cache_key = "partners:recent"
     db_settings_key = "partners_recent_snapshot"
     count_settings_key = "partners_recent_last_hour_count"
-    refresh_window = timedelta(minutes=60)
+    refresh_window = timedelta(minutes=5)
     
     # 1. Try Redis Cache (Fastest)
     try:

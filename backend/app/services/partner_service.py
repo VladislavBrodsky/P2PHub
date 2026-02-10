@@ -100,6 +100,12 @@ async def create_partner(
         except Exception as e:
             logger.error(f"Failed to invalidate cache for ancestors: {e}")
     
+    # 4.5 Invalidate Global Recent Partners list
+    try:
+        await redis_service.client.delete("partners:recent")
+    except Exception as e:
+        logger.error(f"Failed to invalidate global recent partners cache: {e}")
+    
     return partner, True
 
 async def process_referral_notifications(bot, session: AsyncSession, partner: Partner, is_new: bool):
@@ -234,8 +240,13 @@ async def process_referral_logic(partner_id: int):
                 try:
                     await leaderboard_service.update_score(referrer.id, referrer.xp)
                     await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
+                    
+                    # Also invalidate Network Tree caches to ensure real-time visibility in Explorer
+                    await redis_service.client.delete(f"ref_tree_stats:{referrer.id}")
+                    if level == 1:
+                        await redis_service.client.delete(f"ref_tree_members:{referrer.id}:1")
                 except Exception as e:
-                    logger.error(f"⚠️ Redis sync failed for {referrer.id}: {e}")
+                    logger.error(f"⚠️ Redis sync/invalidation failed for {referrer.id}: {e}")
                 
                 # 4. Referral Notifications
                 try:
