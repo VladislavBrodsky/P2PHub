@@ -160,6 +160,9 @@ async def process_referral_logic(partner_id: int):
                 
             referrer.xp += xp_gain
             
+            # Atomic growth increment (Network Size)
+            referrer.referral_count += 1
+            
             xp_tx = XPTransaction(
                 partner_id=referrer.id,
                 amount=xp_gain,
@@ -199,11 +202,10 @@ async def process_referral_logic(partner_id: int):
             # 4. Invalidate Profile Cache
             await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
             
-            # 5. Send Notification
+            # 5. Send Notification (Buffered logic could go here later)
             try:
+                # ... (rest of notification logic remains same for now)
                 lang = referrer.language_code or "en"
-                
-                # Format New Partner Name
                 new_partner_name = f"{partner.first_name}"
                 if partner.username:
                     new_partner_name += f" (@{partner.username})"
@@ -211,25 +213,11 @@ async def process_referral_logic(partner_id: int):
                 if level == 1:
                     msg = get_msg(lang, "referral_l1_congrats", name=new_partner_name)
                 else:
-                    # Construct Referral Chain for L2+
-                    # We want to show the path from (but excluding) the ancestor down to the new partner
-                    # Path: [Ancestor, Intermediary1, Intermediary2, ..., NewPartner]
-                    
-                    chain_names = []
-                    
-                    # 1. Get IDs between ancestor and new partner from the path
-                    # partner.path is like "root.child.grandchild" (contains IDs of ancestors)
-                    # We need to find where 'referrer.id' is and take everything after it
-                    
                     path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-                    
                     try:
-                        # Find index of current ancestor (referrer)
                         start_idx = path_ids.index(referrer.id)
-                        # Get intermediaries (ids after referrer)
                         intermediary_ids = path_ids[start_idx+1:]
-                        
-                        # Add intermediaries to chain
+                        chain_names = []
                         for mid_id in intermediary_ids:
                             mid_user = ancestor_map.get(mid_id)
                             if mid_user:
@@ -237,31 +225,23 @@ async def process_referral_logic(partner_id: int):
                                 if mid_user.username:
                                     name += f" (@{mid_user.username})"
                                 chain_names.append(name)
-                                
-                    except ValueError:
-                        # Should not happen if logic is correct
-                        pass
-
-                    # Add the new partner at the end
-                    chain_names.append(new_partner_name)
-                    
-                    # Format as vertical list with arrows
-                    # ➜ User A
-                    # ➜ User B
-                    referral_chain = "\n".join([f"➜ {name}" for name in chain_names])
-                    
-                    if level == 2:
-                        msg = get_msg(lang, "referral_l2_congrats", referral_chain=referral_chain)
-                    else:
-                        msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=referral_chain)
+                        chain_names.append(new_partner_name)
+                        referral_chain = "\n".join([f"➜ {name}" for name in chain_names])
+                        
+                        if level == 2:
+                            msg = get_msg(lang, "referral_l2_congrats", referral_chain=referral_chain)
+                        else:
+                            msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=referral_chain)
+                    except Exception:
+                        msg = None # Fallback
                 
-                await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
-            except Exception as e: 
-                # logger.error(f"Notification error: {e}") 
-                pass
+                if msg:
+                    await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
+            except Exception: pass
 
             session.add(referrer)
             current_referrer_id = referrer.referrer_id  # Move up the chain
+
 
         await session.commit()
     
@@ -306,6 +286,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
         
         if commission > 0:
             referrer.balance += commission
+            referrer.total_earned_usdt += commission
             
             # Log Commission Earning
             earning = Earning(

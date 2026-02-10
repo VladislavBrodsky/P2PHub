@@ -29,6 +29,10 @@ class Partner(SQLModel, table=True):
     pro_started_at: Optional[datetime] = Field(default=None)
     subscription_plan: Optional[str] = Field(default=None) # e.g. "PRO_LIFETIME", "PRO_YEARLY"
     
+    # Materialized Totals (Optimized for 100K+ Users)
+    total_earned_usdt: float = Field(default=0.0, index=True)
+    referral_count: int = Field(default=0, index=True)
+    
     # Verification & Payment Details
     last_transaction_id: Optional[int] = Field(default=None, foreign_key="partnertransaction.id")
     payment_details: Optional[str] = Field(default=None) # Store JSON of extra details if needed
