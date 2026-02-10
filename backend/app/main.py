@@ -4,6 +4,7 @@ from fastapi import FastAPI, Depends, HTTPException, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
+import json
 from app.api.endpoints import partner, earnings, tools, leaderboard, payment, admin
 from app.core.config import settings
 from bot import bot, dp
@@ -22,6 +23,7 @@ async def lifespan(app: FastAPI):
     from app.services.subscription_service import subscription_service
     checker_task = asyncio.create_task(subscription_service.run_checker_task())
     app.state.subscription_checker = checker_task
+    print("✅ Background tasks started.")
     
     webhook_base = settings.WEBHOOK_URL
     
@@ -70,8 +72,9 @@ async def lifespan(app: FastAPI):
         print(f"❌ Database Connection Failed: {e}")
         print("⚠️ Application starting, but health checks may fail.")
 
-    print("🏁 Lifespan setup complete. App is live.")
+    print("✅ Lifespan setup complete. App is live.")
     yield
+    print("🛑 Shutting down Lifespan...")
     
     # Shutdown
     await bot.session.close()
@@ -131,13 +134,9 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
 
 # Configure CORS
-origins = [settings.FRONTEND_URL]
-if settings.DEBUG:
-    origins = ["*"]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

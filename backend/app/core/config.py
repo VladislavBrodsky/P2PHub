@@ -4,16 +4,31 @@ from dotenv import load_dotenv
 
 from pathlib import Path
 try:
-    env_path = Path(".env")
-    if not env_path.exists():
-        env_path = Path("backend/.env")
-    if not env_path.exists():
-        # If we are inside backend/ already
-        pass
-    load_dotenv(dotenv_path=env_path if env_path.exists() else None)
+    # Try common .env locations with error handling
+    possible_env_paths = [
+        Path(".env"),
+        Path("backend/.env"),
+        Path("../backend/.env"),
+        Path("/app/.env"),
+        Path("/app/backend/.env")
+    ]
+    
+    loaded_env = False
+    for p in possible_env_paths:
+        try:
+            if p.exists():
+                load_dotenv(dotenv_path=p)
+                print(f"✅ Loaded environment from {p.absolute()}")
+                loaded_env = True
+                break
+        except Exception:
+            continue
+            
+    if not loaded_env:
+        # Fallback to default load_dotenv (current dir)
+        load_dotenv()
 except Exception as e:
-    print(f"Warning: Could not load .env file due to {e}")
-    load_dotenv()
+    print(f"Warning: Unexpected error during .env loading: {e}")
 
 class Settings(BaseSettings):
     # Required environment variables (with defaults for local development/migrations)

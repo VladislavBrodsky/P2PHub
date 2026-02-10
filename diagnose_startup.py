@@ -10,7 +10,7 @@ print("🔍 Starting Diagnostic Check...")
 
 try:
     print("1. Loading Environment...")
-    from backend.app.core.config import settings
+    from app.core.config import settings
     print(f"   DATABASE_URL: {settings.DATABASE_URL.split('://')[0]}://***")
     print(f"   REDIS_URL: {settings.REDIS_URL.split('://')[0]}://***")
 except Exception as e:
@@ -19,7 +19,7 @@ except Exception as e:
 
 try:
     print("2. Importing Models...")
-    from backend.app.models.partner import Partner, engine
+    from app.models.partner import Partner, engine
     print("   Models imported.")
 except Exception as e:
     print(f"❌ Failed to import models: {e}")
@@ -27,9 +27,9 @@ except Exception as e:
 
 try:
     print("3. Importing Services...")
-    from backend.app.services.partner_service import partner_service
-    from backend.app.services.leaderboard_service import leaderboard_service
-    from backend.app.services.notification_service import notification_service
+    from app.services.partner_service import create_partner
+    from app.services.leaderboard_service import leaderboard_service
+    from app.services.notification_service import notification_service
     print("   Services imported.")
 except Exception as e:
     print(f"❌ Failed to import services: {e}")
@@ -37,7 +37,7 @@ except Exception as e:
 
 try:
     print("4. Importing Main App...")
-    from backend.app.main import app
+    from app.main import app
     print("   Main app imported.")
 except Exception as e:
     print(f"❌ Failed to import main app: {e}")

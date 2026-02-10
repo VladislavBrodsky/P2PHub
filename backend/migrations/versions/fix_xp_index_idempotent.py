@@ -12,7 +12,7 @@ from sqlalchemy.engine.reflection import Inspector
 
 # revision identifiers, used by Alembic.
 revision: str = 'fix_xp_index_v2'
-down_revision: Union[str, Sequence[str], None] = 'ead7739fcce1'
+down_revision: Union[str, Sequence[str], None] = 'd1e2f3a4b5c6'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
