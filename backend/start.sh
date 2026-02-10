@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x  # Print commands for debugging
 
 # Turn on python unbuffered mode
 export PYTHONUNBUFFERED=1
@@ -13,6 +14,10 @@ if [[ "$DATABASE_URL" == postgres://* ]]; then
   echo "🔧 Fixing DATABASE_URL scheme from postgres:// to postgresql+asyncpg://..."
   export DATABASE_URL="${DATABASE_URL/postgres:\/\//postgresql+asyncpg:\/\/}"
 fi
+
+# Pre-flight check: Verify Python environment and Config
+echo "🔍 Verifying Application Configuration..."
+python3 -c "from app.core.config import settings; print(f'✅ Config loaded. DB Scheme: {settings.DATABASE_URL.split(':')[0]}');" || { echo "❌ Config check failed! Check BOT_TOKEN or other env vars."; exit 1; }
 
 echo "🛠 Running Database Migrations..."
 alembic upgrade head

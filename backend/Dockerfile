@@ -29,7 +29,7 @@ ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8000
 COPY start.sh /start.sh
-RUN chmod +x /start.sh
+RUN chmod +x /start.sh && sed -i 's/\r$//' /start.sh
 
 USER appuser
 
