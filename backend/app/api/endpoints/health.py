@@ -45,3 +45,4 @@ async def health_check(
             "status": "unhealthy",
             "database": "disconnected",
             "error": str(e)
+        }

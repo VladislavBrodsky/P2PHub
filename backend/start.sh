@@ -23,9 +23,9 @@ fi
 # Pre-flight check removed to prevent startup crashes.
 # Python path issues can cause this to fail unnecessarily.
 
-echo "🛠 Running Database Migrations..."
-alembic upgrade head
-echo "✅ Migrations applied successfully."
+echo "🛠 Running Database Migrations (with timeout)..."
+timeout 60s alembic upgrade head || echo "⚠️ Migrations failed or timed out, continuing startup..."
+echo "✅ Migration step finished."
 
 echo "🌍 Starting Uvicorn Server..."
 exec uvicorn app.main:app --host 0.0.0.0 --port "${PORT:-8000}"

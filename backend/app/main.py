@@ -61,9 +61,10 @@ async def lifespan(app: FastAPI):
     try:
         from app.models.partner import engine
         from sqlalchemy import text
-        print(f"🌍 Checking Database Connection...")
+        print(f"🌍 Checking Database Connection (Timeout 5s)...")
         async with asyncio.timeout(5.0):
             async with engine.begin() as conn:
+                print("   ⏳ Engine session begun, executing query...")
                 await conn.execute(text("SELECT 1"))
         print("✅ Database Connection Successful")
     except asyncio.TimeoutError:
