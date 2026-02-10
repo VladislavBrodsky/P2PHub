@@ -428,5 +428,36 @@
         "xp_to_next": "{{xp}} XP to next rank rewards",
         "partners": "Partners",
         "total_xp": "Total XP"
+    },
+    "legal": {
+        "terms_title": "Terms of Use",
+        "privacy_title": "Privacy Policy",
+        "disclaimer_title": "Legal Disclaimer",
+        "disclaimer_desc": "We are a community of digital nomads and online entrepreneurs who search for global trends. We act as a <1>Third-Party Ambassador Agency</1> and do not have an official corporate connection to Pintopay.",
+        "risk_warning": "All fast-growing trends include risks. Please conduct your own due diligence.",
+        "copyright": "© 2026 Ambassador Agency. All rights reserved.",
+        "understand": "I Understand",
+        "terms": {
+            "1_title": "1. Acceptance of Terms",
+            "1_desc": "By accessing and using this platform, you accept and agree to be bound by the terms and provision of this agreement.",
+            "2_title": "2. Ambassador Agency Status",
+            "2_desc": "We operate as an independent Third-Party Ambassador Agency. We are a community of digital nomads and entrepreneurs analyzing global trends. We utilize marketing materials and referral systems to promote potential opportunities.",
+            "3_title": "3. No Official Connection",
+            "3_desc": "We explicitly declare that we have no official employment, ownership, or direct corporate connection to Pintopay. We act solely as independent affiliates/partners.",
+            "4_title": "4. Risk Disclosure",
+            "4_desc": "Participation in digital economy trends, crypto assets, and fintech opportunities involves significant risk. Past performance offers no guarantee of future results. You should perform your own due diligence before making any financial decisions.",
+            "5_title": "5. Limitation of Liability",
+            "5_desc": "In no event shall this agency or its contributors be liable for any damages arising out of the use or inability to use the materials on this site."
+        },
+        "privacy": {
+            "1_title": "1. Data Collection",
+            "1_desc": "We respect your privacy. We strictly collect only necessary data to facilitate your partner journey and improve user experience.",
+            "2_title": "2. Usage of Information",
+            "2_desc": "Any information you provide is used strictly for communication, delivering promised educational materials, and facilitating access to partner tools.",
+            "3_title": "3. Third-Party Services",
+            "3_desc": "We may use third-party analytics and tools to optimize our services. These parties have access to your information only to perform these tasks on our behalf.",
+            "4_title": "4. Security",
+            "4_desc": "We value your trust in providing us your Personal Information, thus we are striving to use commercially acceptable means of protecting it."
+        }
     }
 }

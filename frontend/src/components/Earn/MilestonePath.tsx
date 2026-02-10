@@ -1,10 +1,11 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAllAchievements, getAllMilestones, Achievement } from '../../data/earnData';
-import { Lock, ChevronDown, ChevronUp, Trophy, Sparkles, Zap, Star, Shield, Target, X, Info, Share2, UserPlus, Milestone } from 'lucide-react';
+import { Lock, ChevronDown, ChevronUp, Trophy, Sparkles, Zap, Star, Shield, Target, X, Info, Share2, UserPlus, Milestone, Gem, ArrowRight, Flame } from 'lucide-react';
 import { useUser } from '../../context/UserContext';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
+import { Level100AchievementModal } from './Level100AchievementModal';
 
 const CHAPTER_TIERS = [
     { title: 'The Genesis', range: [1, 5], icon: <Zap className="w-3 h-3" /> },
@@ -22,6 +23,7 @@ export const MilestonePath = () => {
 
     const [visibleChapters, setVisibleChapters] = useState(1);
     const [selectedItem, setSelectedItem] = useState<any>(null);
+    const [isLevel100ModalOpen, setIsLevel100ModalOpen] = useState(false);
 
     const achievements = useMemo(() => getAllAchievements(), []);
     const milestones = useMemo(() => getAllMilestones(), []);
@@ -141,6 +143,77 @@ export const MilestonePath = () => {
                     {/* Progress Connecting Line between Chapters */}
                     {idx < visibleChapters - 1 && (
                         <div className="absolute left-6 -bottom-6 w-px h-5 bg-linear-to-b from-slate-200 dark:from-white/10 to-transparent" />
+                    )}
+
+                    {/* Level 100 Viral Block - Inserted after Level 10 (Part 2: Momentum) */}
+                    {idx === 1 && (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            className="relative mt-8 mb-10 overflow-hidden rounded-[2.5rem] bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700 p-[1px] shadow-2xl shadow-blue-500/20"
+                        >
+                            <div className="relative flex flex-col items-center p-8 text-center bg-white/5 backdrop-blur-3xl rounded-[2.45rem]">
+                                {/* Vibing Background Elements */}
+                                <motion.div
+                                    animate={{
+                                        scale: [1, 1.2, 1],
+                                        opacity: [0.3, 0.6, 0.3]
+                                    }}
+                                    transition={{ duration: 4, repeat: Infinity }}
+                                    className="absolute top-0 left-0 w-32 h-32 bg-blue-400/20 blur-[40px] rounded-full pointer-events-none"
+                                />
+                                <motion.div
+                                    animate={{
+                                        scale: [1.2, 1, 1.2],
+                                        opacity: [0.3, 0.6, 0.3]
+                                    }}
+                                    transition={{ duration: 5, repeat: Infinity, delay: 1 }}
+                                    className="absolute bottom-0 right-0 w-32 h-32 bg-purple-400/20 blur-[40px] rounded-full pointer-events-none"
+                                />
+
+                                <div className="relative z-10 flex flex-col items-center">
+                                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 mb-4">
+                                        <Flame className="w-3 h-3 text-orange-400 animate-pulse" />
+                                        <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">ULTIMATE HORIZON</span>
+                                    </div>
+
+                                    <h3 className="text-2xl font-black text-white leading-tight tracking-tight uppercase">
+                                        LvL 100 ACHIEVEMENTS
+                                    </h3>
+
+                                    <p className="text-[11px] font-bold text-blue-100/80 leading-relaxed mt-2 max-w-[220px]">
+                                        Unlock your <span className="text-white font-black underline decoration-blue-400/50 underline-offset-2">Fanocracy Passport</span>. Claim the Physical Platinum Card & 0% Fees for life.
+                                    </p>
+
+                                    <motion.button
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={() => {
+                                            selection();
+                                            setIsLevel100ModalOpen(true);
+                                        }}
+                                        className="mt-6 flex items-center gap-3 px-8 py-4 rounded-2xl bg-white text-blue-600 font-black text-xs shadow-xl shadow-black/10 transition-all hover:bg-blue-50"
+                                    >
+                                        DISCOVER LVL 100 BENEFITS
+                                        <ArrowRight className="w-4 h-4 animate-bounce-x" />
+                                    </motion.button>
+
+                                    <div className="mt-4 flex items-center gap-2">
+                                        <div className="flex -space-x-2">
+                                            {[1, 2, 3].map(i => (
+                                                <div key={i} className="w-5 h-5 rounded-full border-2 border-indigo-600 bg-indigo-400 flex items-center justify-center">
+                                                    <Star className="w-2.5 h-2.5 text-white" />
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <span className="text-[8px] font-black text-blue-200/60 uppercase tracking-widest">
+                                            Only 0.1% reach Fanocracy
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
                     )}
                 </div>
             ))}
@@ -294,6 +367,12 @@ export const MilestonePath = () => {
                     </div>
                 )}
             </AnimatePresence>
+
+            {/* Level 100 Premium Modal */}
+            <Level100AchievementModal
+                isOpen={isLevel100ModalOpen}
+                onClose={() => setIsLevel100ModalOpen(false)}
+            />
         </motion.section>
     );
 };
