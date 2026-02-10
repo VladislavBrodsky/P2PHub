@@ -145,7 +145,7 @@ const CentralLogo = () => (
                 repeat: Infinity,
                 ease: "easeInOut"
             }}
-            src="/logo.png"
+            src="/logo.webp"
             alt="Pintopay Logo"
             className="relative z-20 w-14 h-14 object-contain brightness-0 invert"
         />

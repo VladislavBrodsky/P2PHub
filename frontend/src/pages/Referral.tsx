@@ -238,7 +238,7 @@ export default function ReferralPage() {
                                     <div className="absolute -inset-0.5 bg-linear-to-r from-blue-500 to-indigo-500 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
                                     <div className="relative bg-[#020617] rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
                                         <div className="relative h-44">
-                                            <img src="/viral-invite.jpg" alt={t('referral.modal.invite_image_alt')} className="w-full h-full object-cover opacity-90" />
+                                            <img src="/viral-invite.webp" alt={t('referral.modal.invite_image_alt')} className="w-full h-full object-cover opacity-90" />
                                             {/* Glossy Overlay */}
                                             <div className="absolute inset-0 bg-linear-to-t from-[#020617] via-transparent to-transparent" />
                                             <div className="absolute inset-0 bg-linear-to-tr from-blue-500/20 to-transparent" />
