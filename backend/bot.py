@@ -201,7 +201,7 @@ async def inline_handler(inline_query: types.InlineQuery):
         ]
         
         logging.info(f"✅ Answering inline query {inline_query.id} with {len(results)} results")
-        await inline_query.answer(results, is_personal=True, cache_time=300) # Increased cache to 5 mins
+        await inline_query.answer(results, is_personal=True, cache_time=10) # Low cache for testing
 
     except Exception as e:
         logging.error(f"❌ Error in inline_handler: {e}")
