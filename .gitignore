@@ -20,3 +20,5 @@ Thumbs.db
 
 # Logs
 archive_logs/
+*.db
+debug_output*.txt
