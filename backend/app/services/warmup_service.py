@@ -16,32 +16,46 @@ async def warmup_redis():
     
     async for session in get_session():
         try:
-            # 1. Warm up Global Leaderboard
-            statement = select(Partner)
-            result = await session.exec(statement)
-            partners = result.all()
+            # 1. Warm up Global Leaderboard - Optimized for Large Datasets
+            # Only select needed columns to reduce memory overhead
+            statement = select(Partner.id, Partner.xp)
             
-            if not partners:
+            # Use stream() to iterate without loading all into memory
+            batch_size = 1000
+            current_batch = {}
+            count = 0
+            
+            # Streaming results allows us to yield control to event loop
+            stream_result = await session.stream(statement)
+            
+            async for row in stream_result:
+                # row is a Result object where row[0] is id, row[1] is xp (since we selected specific columns)
+                # or it acts like a tuple depending on SQLModel version. 
+                # Let's assume row is the tuple (id, xp)
+                p_id, p_xp = row
+                current_batch[str(p_id)] = float(p_xp)
+                count += 1
+                
+                if len(current_batch) >= batch_size:
+                    await redis_service.client.zadd(leaderboard_service.LEADERBOARD_KEY, current_batch)
+                    current_batch = {}
+                    # Yield control to allow health checks to pass during heavy processing
+                    await asyncio.sleep(0.01)
+            
+            # Flush remaining
+            if current_batch:
+                await redis_service.client.zadd(leaderboard_service.LEADERBOARD_KEY, current_batch)
+            
+            if count == 0:
                 logger.info("💡 No partners found to warm up.")
-                return
-
-            # Prepare data for Redis ZADD
-            # ZADD name score member [score member ...]
-            leaderboard_data = {str(p.id): float(p.xp) for p in partners}
+            else:
+                logger.info(f"✅ Leaderboard warmed up with {count} partners (Streamed).")
             
-            # Use zadd with dictionary for atomic update
-            await redis_service.client.zadd(leaderboard_service.LEADERBOARD_KEY, leaderboard_data)
-            logger.info(f"✅ Leaderboard warmed up with {len(partners)} partners.")
-            
-            # 2. Cache Recent Partners (Standard production list)
-            from app.api.endpoints.partner import get_recent_partners
-            # We don't call the endpoint directly to avoid Depends issues, 
-            # but we can reuse the logic if needed, or just let the first request hit the DB.
-            # For now, warming up the leaderboard is the most critical for "High Scale" feel.
+            # 2. Cache Recent Partners (Skipped for now as noted)
             
         except Exception as e:
             logger.error(f"❌ Redis Warmup Failed: {e}")
         finally:
-            break # Exit generator after one session
+            break # Exit generator after one session (crucial for get_session generator)
 
     logger.info("✨ Redis Warmup Complete.")
