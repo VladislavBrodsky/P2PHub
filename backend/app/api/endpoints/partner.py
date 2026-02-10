@@ -177,7 +177,7 @@ async def get_recent_partners(
     from datetime import datetime, timedelta
     import random
     
-    cache_key = "partners:recent"
+    cache_key = "partners:recent_v2"
     db_settings_key = "partners_recent_snapshot"
     count_settings_key = "partners_recent_last_hour_count"
     partners_refresh_window = timedelta(minutes=5)
