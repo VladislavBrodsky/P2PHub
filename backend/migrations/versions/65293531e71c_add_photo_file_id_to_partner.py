@@ -20,8 +20,15 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     """Upgrade schema."""
-    # Add photo_file_id column to partner table
-    op.add_column('partner', sa.Column('photo_file_id', sa.String(), nullable=True))
+    # Check if column exists before adding
+    conn = op.get_bind()
+    inspector = sa.inspect(conn)
+    columns = [c['name'] for c in inspector.get_columns('partner')]
+    
+    if 'photo_file_id' not in columns:
+        op.add_column('partner', sa.Column('photo_file_id', sa.String(), nullable=True))
+    else:
+        print("✅ Column 'photo_file_id' already exists in 'partner' table, skipping.")
 
 
 def downgrade() -> None:

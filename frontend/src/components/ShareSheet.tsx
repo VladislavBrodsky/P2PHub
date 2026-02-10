@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Copy, Check, Send } from 'lucide-react';
+import { X, Copy, Check, Send, Sparkles } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
 import { apiClient } from '../api/client';
 
@@ -123,6 +123,16 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
                                 {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
                             </button>
                         </div>
+
+                        {/* Premium Share Card Button */}
+                        <button
+                            onClick={() => handleShare('telegram')}
+                            className="w-full h-14 mb-6 rounded-2xl bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg shadow-blue-500/20 border border-white/20 relative overflow-hidden group"
+                        >
+                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                            <Sparkles className="w-5 h-5 text-amber-300" />
+                            <span className="font-black text-sm uppercase tracking-wider">Send Premium Viral Card</span>
+                        </button>
 
                         {/* Share Grid */}
                         <div className="grid grid-cols-4 gap-4">
