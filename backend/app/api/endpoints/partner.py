@@ -220,9 +220,11 @@ async def get_recent_partners(
                 refresh_count = True
 
     if refresh_partners:
-        # 3. Fetch Fresh from Partner Table including photo_file_id
-        # Handle both old (photo_url) and new (photo_file_id) columns for backwards compatibility
-        try:
+        # 3. Fetch Fresh from Partner Table
+        # Check if photo_file_id column exists (backwards compatibility during migration)
+        has_file_id_column = hasattr(Partner, 'photo_file_id')
+        
+        if has_file_id_column:
             statement = select(
                 Partner.id, 
                 Partner.first_name, 
@@ -230,8 +232,8 @@ async def get_recent_partners(
                 Partner.photo_file_id, 
                 Partner.created_at
             ).order_by(Partner.created_at.desc()).limit(limit)
-        except Exception:
-            # Fallback to photo_url if photo_file_id doesn't exist yet
+        else:
+            # Fallback to photo_url for backwards compat
             statement = select(
                 Partner.id, 
                 Partner.first_name, 
@@ -245,12 +247,15 @@ async def get_recent_partners(
         
         partners_list = []
         for p_id, p_first_name, p_username, p_photo, p_created_at in partners:
+            # Smart detection: if it's a URL, it's photo_url; otherwise it's file_id
+            is_url = p_photo and (p_photo.startswith('http') or p_photo.startswith('/'))
+            
             p_dict = {
                 "id": p_id,
                 "first_name": p_first_name,
                 "username": p_username,
-                "photo_file_id": p_photo if p_photo and not p_photo.startswith('http') else None,  # Only if it's a file_id
-                "photo_url": p_photo if p_photo and p_photo.startswith('http') else None,  # Keep URL for backwards compat
+                "photo_file_id": None if is_url else p_photo,  # file_id
+                "photo_url": p_photo if is_url else None,  # URL
                 "created_at": p_created_at.isoformat() if p_created_at else None
             }
             partners_list.append(p_dict)

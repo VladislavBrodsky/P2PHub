@@ -4,6 +4,12 @@ This script fetches Telegram file_ids for users who don't have them yet.
 """
 import asyncio
 import logging
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
 from aiogram import Bot
 from app.core.config import settings
 from app.models.partner import Partner, get_session
