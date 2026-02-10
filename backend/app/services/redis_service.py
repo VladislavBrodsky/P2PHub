@@ -40,10 +40,14 @@ class RedisService:
         # Returns (key, value) tuple or None
         return await self.client.brpop(name, timeout=timeout)
 
-    async def get_or_compute(self, key: str, coroutine, expire: int = 300):
+    async def get_or_compute(self, key: str, factory, expire: int = 300):
         """
-        Tries to get data from cache. If missing, awaits the coroutine,
+        Tries to get data from cache. If missing, awaits the factory function,
         caches the result, and returns it.
+        
+        :param key: Redis key
+        :param factory: Async function (callable) that returns the data
+        :param expire: Expiration time in seconds
         """
         try:
             cached = await self.get_json(key)
@@ -53,7 +57,8 @@ class RedisService:
             print(f"Cache Read Error: {e}")
 
         # Compute
-        data = await coroutine
+        # factory() should return a coroutine
+        data = await factory()
         
         if data:
             try:

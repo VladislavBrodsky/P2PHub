@@ -1,0 +1,17 @@
+Starting script...
+asyncpg imported successfully
+Warning: Could not load .env file due to [Errno 1] Operation not permitted: 'backend/.env'
+Using DB URL: postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway
+Connecting to DB...
+Session created, executing query...
+Found 10 recent partners:
+ID: 126, Name: Diego Maradonna, Username: None, PhotoURL: None
+ID: 125, Name: User L9 None, Username: User_L9_TEST_LVL_9_d57617, PhotoURL: None
+ID: 124, Name: User L8 None, Username: User_L8_TEST_LVL_8_eac4f9, PhotoURL: None
+ID: 123, Name: User L7 None, Username: User_L7_TEST_LVL_7_5ce39f, PhotoURL: None
+ID: 122, Name: User L6 None, Username: User_L6_TEST_LVL_6_f0d941, PhotoURL: None
+ID: 121, Name: User L5 None, Username: User_L5_TEST_LVL_5_59eaed, PhotoURL: None
+ID: 120, Name: User L4 None, Username: User_L4_TEST_LVL_4_6328b6, PhotoURL: None
+ID: 119, Name: User L3 None, Username: User_L3_TEST_LVL_3_0c1c38, PhotoURL: None
+ID: 118, Name: User L2 None, Username: User_L2_TEST_LVL_2_481173, PhotoURL: None
+ID: 117, Name: User L1 None, Username: User_L1_TEST_LVL_1_3bce2f, PhotoURL: None

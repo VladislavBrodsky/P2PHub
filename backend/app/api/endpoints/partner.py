@@ -248,7 +248,7 @@ async def get_my_referral_tree(
     cache_key = f"ref_tree_stats:{partner.id}"
     return await redis_service.get_or_compute(
         cache_key,
-        get_referral_tree_stats(session, partner.id),
+        lambda: get_referral_tree_stats(session, partner.id),
         expire=300
     )
 
@@ -280,7 +280,7 @@ async def get_network_level_members(
     cache_key = f"ref_tree_members:{partner.id}:{level}"
     return await redis_service.get_or_compute(
         cache_key,
-        get_referral_tree_members(session, partner.id, level),
+        lambda: get_referral_tree_members(session, partner.id, level),
         expire=300
     )
 
@@ -305,7 +305,7 @@ async def get_growth_metrics(
     cache_key = f"growth_metrics:{partner.id}:{timeframe}"
     return await redis_service.get_or_compute(
         cache_key,
-        get_network_growth_metrics(session, partner.id, timeframe),
+        lambda: get_network_growth_metrics(session, partner.id, timeframe),
         expire=300
     )
 
@@ -330,7 +330,7 @@ async def get_growth_chart(
     cache_key = f"growth_chart:{partner.id}:{timeframe}"
     return await redis_service.get_or_compute(
         cache_key,
-        get_network_time_series(session, partner.id, timeframe),
+        lambda: get_network_time_series(session, partner.id, timeframe),
         expire=300
     )
 

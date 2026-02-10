@@ -7,18 +7,22 @@ import os
 sys.path.append(os.path.join(os.getcwd(), 'backend'))
 
 from app.models.partner import Partner, get_session
+from app.models.transaction import PartnerTransaction # Fix for relationship resolution
 from app.core.config import settings
 from sqlmodel import select, create_engine
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
-# Fix for Railway providing postgresql:// but SQLAlchemy requiring postgresql+asyncpg://
-database_url = settings.DATABASE_URL
-if database_url and database_url.startswith("postgresql://"):
-    database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+# Hardcoded for debugging
+database_url = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
 
 engine = create_async_engine(database_url, echo=False, future=True)
+
+print(f"DEBUG: database_url from settings: {settings.DATABASE_URL}")
+print(f"DEBUG: database_url used for engine: {database_url}")
+import os
+print(f"DEBUG: os.environ DATABASE_URL: {os.environ.get('DATABASE_URL')}")
 
 async def main():
     async_session = sessionmaker(

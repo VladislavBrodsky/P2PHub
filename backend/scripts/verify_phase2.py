@@ -37,12 +37,12 @@ async def test_phase2_verification():
     # First call - should compute
     # We mock get_json to simulate miss then hit
     with patch.object(redis_service, 'get_json', side_effect=[None, {"value": 42}]) as mock_get:
-        res1 = await redis_service.get_or_compute(test_key, compute_data(), expire=5)
+        res1 = await redis_service.get_or_compute(test_key, compute_data, expire=5)
         assert res1["value"] == 42
         print("   ✅ First call computed correctly.")
 
         # Second call - should cache hit
-        res2 = await redis_service.get_or_compute(test_key, compute_data(), expire=5)
+        res2 = await redis_service.get_or_compute(test_key, compute_data, expire=5)
         assert res2["value"] == 42
         print("   ✅ Second call retrieved from cache.")
 
