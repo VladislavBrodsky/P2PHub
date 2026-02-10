@@ -117,7 +117,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             <motion.div
                                 animate={{
                                     scale: [1, 1.05, 1],
-                                    filter: ['drop-shadow(0 0 0px transparent)', 'drop-shadow(0 0 4px rgba(251, 191, 36, 0.4))', 'drop-shadow(0 0 0px transparent)']
+                                    filter: ['drop-shadow(0 0 0px transparent)', 'drop-shadow(0 0 4px rgba(59, 130, 246, 0.4))', 'drop-shadow(0 0 0px transparent)']
                                 }}
                                 transition={{
                                     duration: 2,
@@ -126,8 +126,8 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 }}
                                 className="flex items-baseline gap-1"
                             >
-                                <span className="text-[8px] font-black text-amber-400 tracking-tight uppercase">Total:</span>
-                                <span className="text-[9px] font-bold text-amber-300">{stats.xp} XP</span>
+                                <span className="text-[8px] font-black text-blue-600 dark:text-blue-400 tracking-tight uppercase">Total:</span>
+                                <span className="text-[9px] font-bold text-blue-500 dark:text-blue-300">{stats.xp} XP</span>
                             </motion.div>
                             <span className="text-[9px] font-black text-(--color-text-primary)">
                                 {xpProgress.current}<span className="text-(--color-text-secondary) font-medium mx-0.5">/</span>{xpProgress.total} <span className="text-[7px] text-(--color-text-secondary) uppercase ml-0.5 whitespace-nowrap">NEXT LVL</span>
