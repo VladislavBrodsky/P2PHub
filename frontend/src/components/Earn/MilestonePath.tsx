@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAllAchievements, getAllMilestones, Achievement } from '../../data/earnData';
 import { Lock, ChevronDown, ChevronUp, Trophy, Sparkles, Zap, Star, Shield, Target, X, Info, Share2, UserPlus, Milestone, Gem, ArrowRight, Flame } from 'lucide-react';
@@ -24,6 +25,16 @@ export const MilestonePath = () => {
     const [visibleChapters, setVisibleChapters] = useState(1);
     const [selectedItem, setSelectedItem] = useState<any>(null);
     const [isLevel100ModalOpen, setIsLevel100ModalOpen] = useState(false);
+
+    // Prevent body scroll when modal is open
+    useEffect(() => {
+        if (selectedItem) {
+            document.body.style.overflow = 'hidden';
+            return () => {
+                document.body.style.overflow = '';
+            };
+        }
+    }, [selectedItem]);
 
     const achievements = useMemo(() => getAllAchievements(), []);
     const milestones = useMemo(() => getAllMilestones(), []);
@@ -265,127 +276,130 @@ export const MilestonePath = () => {
                 </div>
             )}
 
-            {/* Achievement Detail Modal - Mobile-First Popup */}
-            <AnimatePresence>
-                {selectedItem && (
-                    <div className="fixed inset-0 z-999 flex items-end sm:items-center justify-center overflow-hidden">
-                        {/* Enhanced Backdrop with stronger blur */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            onClick={() => setSelectedItem(null)}
-                            className="absolute inset-0 bg-black/70 backdrop-blur-xl"
-                        />
+            {/* Achievement Detail Modal - Mobile-First Popup (Rendered via Portal) */}
+            {typeof document !== 'undefined' && ReactDOM.createPortal(
+                <AnimatePresence>
+                    {selectedItem && (
+                        <div className="fixed inset-0 z-999 flex items-end sm:items-center justify-center overflow-hidden">
+                            {/* Enhanced Backdrop with stronger blur */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                onClick={() => setSelectedItem(null)}
+                                className="absolute inset-0 bg-black/70 backdrop-blur-xl"
+                            />
 
-                        {/* Modal Content - Bottom Sheet on Mobile, Centered on Desktop */}
-                        <motion.div
-                            initial={{ y: '100%', opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: '100%', opacity: 0 }}
-                            transition={{
-                                type: 'spring',
-                                damping: 30,
-                                stiffness: 300
-                            }}
-                            className="relative w-full max-w-lg sm:max-w-md bg-white dark:bg-[#0f172a] rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0_-20px_60px_rgba(0,0,0,0.4)] sm:shadow-[0_20px_60px_rgba(0,0,0,0.4)] border-t border-slate-200 dark:border-white/10 sm:border overflow-hidden"
-                        >
-                            {/* Mobile Pull Indicator */}
-                            <div className="absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-slate-300 dark:bg-white/20 rounded-full sm:hidden" />
+                            {/* Modal Content - Bottom Sheet on Mobile, Centered on Desktop */}
+                            <motion.div
+                                initial={{ y: '100%', opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: '100%', opacity: 0 }}
+                                transition={{
+                                    type: 'spring',
+                                    damping: 30,
+                                    stiffness: 300
+                                }}
+                                className="relative w-full max-w-lg sm:max-w-md bg-white dark:bg-[#0f172a] rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0_-20px_60px_rgba(0,0,0,0.4)] sm:shadow-[0_20px_60px_rgba(0,0,0,0.4)] border-t border-slate-200 dark:border-white/10 sm:border overflow-hidden"
+                            >
+                                {/* Mobile Pull Indicator */}
+                                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-slate-300 dark:bg-white/20 rounded-full sm:hidden" />
 
-                            {/* Decorative Background Gradient */}
-                            <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-b from-blue-50/50 dark:from-blue-950/20 to-transparent pointer-events-none" />
+                                {/* Decorative Background Gradient */}
+                                <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-b from-blue-50/50 dark:from-blue-950/20 to-transparent pointer-events-none" />
 
-                            <div className="relative p-6 pb-8 sm:p-8 space-y-6">
-                                {/* Header with Close Button */}
-                                <div className="flex items-start justify-between gap-4 pt-4 sm:pt-0">
-                                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                                        <div className={`p-3 rounded-2xl ${selectedItem.color} bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 shrink-0 shadow-sm`}>
-                                            <selectedItem.icon className="w-6 h-6" />
+                                <div className="relative p-6 pb-8 sm:p-8 space-y-6">
+                                    {/* Header with Close Button */}
+                                    <div className="flex items-start justify-between gap-4 pt-4 sm:pt-0">
+                                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                                            <div className={`p-3 rounded-2xl ${selectedItem.color} bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 shrink-0 shadow-sm`}>
+                                                <selectedItem.icon className="w-6 h-6" />
+                                            </div>
+                                            <div className="flex flex-col min-w-0 flex-1">
+                                                <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">LEVEL {selectedItem.level} MISSION</span>
+                                                <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight leading-tight wrap-break-word">
+                                                    {currentLevel >= selectedItem.level ? t(selectedItem.reward, { level: selectedItem.level }) : '???'}
+                                                </h3>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col min-w-0 flex-1">
-                                            <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">LEVEL {selectedItem.level} MISSION</span>
-                                            <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight leading-tight wrap-break-word">
-                                                {currentLevel >= selectedItem.level ? t(selectedItem.reward, { level: selectedItem.level }) : '???'}
-                                            </h3>
-                                        </div>
+                                        <button
+                                            onClick={() => setSelectedItem(null)}
+                                            className="p-2 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-full text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors shrink-0"
+                                        >
+                                            <X className="w-5 h-5" />
+                                        </button>
                                     </div>
-                                    <button
-                                        onClick={() => setSelectedItem(null)}
-                                        className="p-2 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-full text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors shrink-0"
-                                    >
-                                        <X className="w-5 h-5" />
-                                    </button>
-                                </div>
 
-                                {/* Instruction Section */}
-                                <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3 text-left">
-                                    <div className="flex items-center gap-2">
-                                        <Info className="w-4 h-4 text-blue-500 shrink-0" />
-                                        <span className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">HOW TO UNLOCK</span>
+                                    {/* Instruction Section */}
+                                    <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3 text-left">
+                                        <div className="flex items-center gap-2">
+                                            <Info className="w-4 h-4 text-blue-500 shrink-0" />
+                                            <span className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">HOW TO UNLOCK</span>
+                                        </div>
+                                        <p className="text-sm font-bold text-slate-700 dark:text-slate-300 leading-relaxed">
+                                            {selectedItem.instruction || `Achieve Level ${selectedItem.level} to unlock this unique recognition and its associated rewards.`}
+                                        </p>
                                     </div>
-                                    <p className="text-sm font-bold text-slate-700 dark:text-slate-300 leading-relaxed">
-                                        {selectedItem.instruction || `Achieve Level ${selectedItem.level} to unlock this unique recognition and its associated rewards.`}
-                                    </p>
-                                </div>
 
-                                {/* Action Helper - Only show if locked */}
-                                {currentLevel < selectedItem.level && (
-                                    <div className="space-y-4">
-                                        <div className="flex items-center gap-3 px-2">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shrink-0" />
-                                            <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">PRO TIP: VIRAL GROWTH</p>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-3">
-                                            <button
-                                                onClick={() => {
-                                                    const link = `https://t.me/pintopay_probot?start=${user?.referral_code || ''}`;
-                                                    if (navigator.share) {
-                                                        navigator.share({ title: 'P2PHub', url: link });
-                                                    } else {
-                                                        navigator.clipboard.writeText(link);
-                                                    }
-                                                }}
-                                                className="h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-blue-500/20"
-                                            >
-                                                <Share2 className="w-4 h-4 shrink-0" />
-                                                <span className="truncate">SHARE LINK</span>
-                                            </button>
-                                            <button
-                                                onClick={() => {
-                                                    if (window.Telegram?.WebApp) {
-                                                        window.Telegram.WebApp.switchInlineQuery(user?.referral_code || '');
-                                                    }
-                                                }}
-                                                className="h-14 rounded-2xl bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all"
-                                            >
-                                                <UserPlus className="w-4 h-4 shrink-0" />
-                                                <span className="truncate">INVITE</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Status Badge */}
-                                <div className="flex justify-center pt-2">
-                                    {currentLevel >= selectedItem.level ? (
-                                        <div className="px-5 py-2.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
-                                            <Sparkles className="w-3 h-3 text-emerald-500 shrink-0" />
-                                            <span className="whitespace-nowrap">ACHIEVEMENT UNLOCKED</span>
-                                        </div>
-                                    ) : (
-                                        <div className="px-5 py-2.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
-                                            <Lock className="w-3 h-3 shrink-0" />
-                                            <span className="whitespace-nowrap">STILL LOCKED</span>
+                                    {/* Action Helper - Only show if locked */}
+                                    {currentLevel < selectedItem.level && (
+                                        <div className="space-y-4">
+                                            <div className="flex items-center gap-3 px-2">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shrink-0" />
+                                                <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">PRO TIP: VIRAL GROWTH</p>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <button
+                                                    onClick={() => {
+                                                        const link = `https://t.me/pintopay_probot?start=${user?.referral_code || ''}`;
+                                                        if (navigator.share) {
+                                                            navigator.share({ title: 'P2PHub', url: link });
+                                                        } else {
+                                                            navigator.clipboard.writeText(link);
+                                                        }
+                                                    }}
+                                                    className="h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-blue-500/20"
+                                                >
+                                                    <Share2 className="w-4 h-4 shrink-0" />
+                                                    <span className="truncate">SHARE LINK</span>
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        if (window.Telegram?.WebApp) {
+                                                            window.Telegram.WebApp.switchInlineQuery(user?.referral_code || '');
+                                                        }
+                                                    }}
+                                                    className="h-14 rounded-2xl bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                                >
+                                                    <UserPlus className="w-4 h-4 shrink-0" />
+                                                    <span className="truncate">INVITE</span>
+                                                </button>
+                                            </div>
                                         </div>
                                     )}
+
+                                    {/* Status Badge */}
+                                    <div className="flex justify-center pt-2">
+                                        {currentLevel >= selectedItem.level ? (
+                                            <div className="px-5 py-2.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
+                                                <Sparkles className="w-3 h-3 text-emerald-500 shrink-0" />
+                                                <span className="whitespace-nowrap">ACHIEVEMENT UNLOCKED</span>
+                                            </div>
+                                        ) : (
+                                            <div className="px-5 py-2.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
+                                                <Lock className="w-3 h-3 shrink-0" />
+                                                <span className="whitespace-nowrap">STILL LOCKED</span>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
 
             {/* Level 100 Premium Modal */}
             <Level100AchievementModal
