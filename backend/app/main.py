@@ -105,8 +105,9 @@ app.include_router(earnings.router, prefix="/api/earnings", tags=["earnings"])
 app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderboard"])
 app.include_router(tools.router, prefix="/api/tools", tags=["tools"])
 app.include_router(payment.router, prefix="/api/payment", tags=["payment"])
-from app.api.endpoints import health
+from app.api.endpoints import health, config
 app.include_router(health.router, tags=["health"])
+app.include_router(config.router, prefix="/api/config", tags=["config"])
 
 # Serve promo images
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

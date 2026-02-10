@@ -31,11 +31,14 @@ try {
 */
 
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { ConfigProvider } from './context/ConfigContext'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
-            <App />
+            <ConfigProvider>
+                <App />
+            </ConfigProvider>
         </QueryClientProvider>
     </ErrorBoundary>,
 )

@@ -18,8 +18,10 @@ import { NotificationOverlay } from './components/ui/NotificationOverlay';
 import { useRealtimeAlerts } from './hooks/useRealtimeAlerts';
 import { Skeleton } from './components/Skeleton';
 import { OnboardingStory } from './components/Onboarding/OnboardingStory';
+import { useConfig } from './context/ConfigContext';
 
 function App() {
+    const { config, isLoading: isConfigLoading } = useConfig();
     const [activeTab, setActiveTab] = useState('home');
     const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set(['home']));
     const [showOnboarding, setShowOnboarding] = useState(false);
@@ -129,8 +131,16 @@ function App() {
         };
     }, [activeTab]);
 
+    if (isConfigLoading) {
+        return (
+            <div className="h-screen w-full bg-(--color-bg-deep) flex items-center justify-center p-8">
+                <Skeleton className="w-full h-full max-w-md rounded-3xl" />
+            </div>
+        );
+    }
+
     return (
-        <TonConnectUIProvider manifestUrl="https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json">
+        <TonConnectUIProvider manifestUrl={config?.ton_manifest_url || "https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json"}>
             <ThemeProvider>
                 <UserProvider>
                     <NotificationOverlay />

@@ -34,6 +34,9 @@ class Settings(BaseSettings):
     # Payment settings
     ADMIN_TON_ADDRESS: str = "UQD_n02bdxQxFztKTXpWBaFDxo713qIuETyefIeK7wiUB0DN"
     ADMIN_USDT_ADDRESS: str = "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM"
+    TON_API_KEY: Optional[str] = None
+    TON_MANIFEST_URL: str = "https://p2phub-frontend.up.railway.app/tonconnect-manifest.json"
+    PAYMENT_SERVICE_MODE: str = "ton_api" # Enum: auto_approve, ton_api, manual
     
     class Config:
         # env_file = ".env"  <-- Removed to prevent PermissionError in sandbox
