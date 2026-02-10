@@ -13,9 +13,8 @@ from aiogram import types
 async def lifespan(app: FastAPI):
     from app.services.notification_service import notification_service
     
-    # WARN: Warmup disabled to fix startup slowness. 
-    # Leaderboard will populate lazily or needs a separate worker.
-    # asyncio.create_task(warmup_redis())
+    # Warmup re-enabled but limited to Top 1000 (see warmup_service.py)
+    asyncio.create_task(warmup_redis())
 
     
     # Start the subscription expiration checker

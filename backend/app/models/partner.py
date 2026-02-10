@@ -13,7 +13,7 @@ class Partner(SQLModel, table=True):
     photo_url: Optional[str] = None
     language_code: Optional[str] = Field(default="en") 
     balance: float = Field(default=0.0)
-    xp: float = Field(default=0.0)
+    xp: float = Field(default=0.0, index=True)
     level: int = Field(default=1)
     referral_code: str = Field(unique=True, index=True) # Optimized for lookups
     referrer_id: Optional[int] = Field(default=None, foreign_key="partner.id", index=True) # Optimized for joins

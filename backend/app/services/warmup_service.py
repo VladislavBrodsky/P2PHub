@@ -16,9 +16,9 @@ async def warmup_redis():
     
     async for session in get_session():
         try:
-            # 1. Warm up Global Leaderboard - Optimized for Large Datasets
-            # Only select needed columns to reduce memory overhead
-            statement = select(Partner.id, Partner.xp)
+            # 1. Warmup Global Leaderboard - Optimized & Limited
+            # Only load top 1000 users to prevent startup hang
+            statement = select(Partner.id, Partner.xp).order_by(Partner.xp.desc()).limit(1000)
             
             # Use stream() to iterate without loading all into memory
             batch_size = 1000
