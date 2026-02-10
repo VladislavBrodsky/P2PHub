@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Request
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.security import get_current_user, get_tg_user
 from app.models.partner import Partner, get_session, XPTransaction
@@ -6,6 +6,7 @@ from app.models.schemas import PartnerResponse, TaskClaimRequest, GrowthMetrics,
 from sqlmodel import select
 from sqlalchemy.orm import selectinload
 from app.services.redis_service import redis_service
+from app.middleware.rate_limit import limiter
 import json
 import secrets
 from app.utils.ranking import get_level
@@ -239,7 +240,9 @@ async def get_recent_partners(
     return partners_data
 
 @router.get("/tree", response_model=NetworkStats)
+@limiter.limit("60/minute")
 async def get_my_referral_tree(
+    request: Request,
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
@@ -300,7 +303,9 @@ async def get_network_level_members(
     )
 
 @router.get("/growth/metrics", response_model=GrowthMetrics)
+@limiter.limit("30/minute")
 async def get_growth_metrics(
+    request: Request,
     timeframe: str = "7D",
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
@@ -325,7 +330,9 @@ async def get_growth_metrics(
     )
 
 @router.get("/growth/chart")
+@limiter.limit("30/minute")
 async def get_growth_chart(
+    request: Request,
     timeframe: str = "7D",
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)

@@ -5,9 +5,11 @@ import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
 import { useUser } from '../context/UserContext';
 import { apiClient } from '../api/client';
 import { useHaptic } from '../hooks/useHaptic';
+import { useConfig } from '../context/ConfigContext';
 
 export default function SubscriptionPage() {
     const { user, refreshUser } = useUser();
+    const { config: globalConfig, isLoading: isConfigLoading } = useConfig();
     const { selection, notification } = useHaptic();
     const [tonConnectUI] = useTonConnectUI();
     const [isLoading, setIsLoading] = useState(false);
@@ -15,19 +17,8 @@ export default function SubscriptionPage() {
     const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'manual_review'>('idle');
     const [manualHash, setManualHash] = useState('');
     const [tonPrice, setTonPrice] = useState<number | null>(null);
-    const [config, setConfig] = useState<{ pro_price_usd: number, admin_ton_address: string, admin_usdt_address: string } | null>(null);
 
     useEffect(() => {
-        const fetchConfig = async () => {
-            try {
-                const res = await apiClient.get('/api/payment/config');
-                setConfig(res.data);
-            } catch (e) {
-                console.error("Failed to fetch payment config");
-            }
-        };
-        fetchConfig();
-
         const fetchPrice = async () => {
             try {
                 const res = await fetch('https://tonapi.io/v2/rates?tokens=ton&currencies=usd');
@@ -40,9 +31,9 @@ export default function SubscriptionPage() {
         fetchPrice();
     }, []);
 
-    const proPrice = config?.pro_price_usd || 39;
-    const adminTon = config?.admin_ton_address || "UQDCv0H3Hk5_1sQ6v7Z_L_c3v_Z_L_c3v_Z_L_c3v_P2PHUB";
-    const adminUsdt = config?.admin_usdt_address || "Txxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    const proPrice = 39; // Base price
+    const adminTon = globalConfig?.admin_ton_address || "UQD_n02bdxQxFztKTXpWBaFDxo713qIuETyefIeK7wiUB0DN";
+    const adminUsdt = globalConfig?.admin_usdt_address || "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM";
     const tonAmountNano = tonPrice ? Math.ceil((proPrice / tonPrice) * 10 ** 9).toString() : "8000000000";
 
     const handleTonPayment = async () => {
