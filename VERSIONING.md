@@ -26,4 +26,4 @@ This project follows [Semantic Versioning (SemVer)](https://semver.org/) and use
 -   **Patch (v1.1.1)**: Bug fixes (e.g., Fix typo, color adjustment).
 
 ## Current Version
-**v1.2.0** (Feb 8, 2026) - Crystal UI & Performance Audit
+**v1.5.0** (Feb 10, 2026) - "Improved" Version Control

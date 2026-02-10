@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-02-10
+
+### Added
+- **Image Optimization Engine**: Backend proxy for Telegram avatars with WebP conversion and Redis caching.
+- **Dynamic Growth Indicators**: Randomized but persistent "New Partner" counters for improved social proof.
+- **Resilient Infrastructure**: Enhanced webhook registration and database migration idempotency.
+
+### Changed
+- **Profile Architecture**: Standardized on `photo_file_id` for user avatars across the ecosystem.
+- **UI Fidelity**: Fixed referral chart colors and liquid progress bar stability.
+
+### Fixed
+- **Localization**: Comprehensive Russian translation audit and missing string coverage.
+- **UX**: Fixed iPhone 16 Pro layout clipping for briefing modals.
+
 ## [1.2.0] - 2026-02-08
 
 ### Added
