@@ -152,7 +152,8 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
     const getLevelBounds = (points: ChartDataPoint[], levelIndex: number) => {
         return points.map(point => {
             let bottom = 0;
-            for (let i = 0; i < levelIndex; i++) {
+            // Sum levels from the END (Level 9 down to levelIndex + 1)
+            for (let i = 8; i > levelIndex; i--) {
                 bottom += point.levels[i] || 0;
             }
             const value = point.levels[levelIndex] || 0;
