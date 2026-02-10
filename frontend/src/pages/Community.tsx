@@ -35,14 +35,14 @@ export default function CommunityPage() {
             <div className="fixed bottom-40 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none transition-colors duration-500" />
 
             {/* Premium Header with Briefing Trigger */}
-            <div className="flex items-center justify-between py-4 relative z-30 px-1">
+            <div className="flex items-center justify-between py-2 relative z-30 px-1">
                 <div className="flex flex-col">
-                    <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tight leading-none uppercase">
+                    <h1 className="text-lg font-black text-slate-900 dark:text-white tracking-tight leading-none uppercase">
                         {t('menu.community')}
                     </h1>
-                    <div className="flex items-center gap-1.5 mt-1">
+                    <div className="flex items-center gap-1.5 mt-0.5">
                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Network Live</span>
+                        <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Network Live</span>
                     </div>
                 </div>
 
