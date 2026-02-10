@@ -35,7 +35,8 @@ async def get_my_profile(
 
     # 2. Query DB - Optimized: No selectinload(referrals)
     statement = select(Partner).where(Partner.telegram_id == tg_id).options(
-        selectinload(Partner.completed_task_records)
+        selectinload(Partner.completed_task_records),
+        selectinload(Partner.referrals)
     )
     result = await session.exec(statement)
     partner = result.first()
