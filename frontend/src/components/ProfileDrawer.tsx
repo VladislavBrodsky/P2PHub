@@ -146,7 +146,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                         key="drawer-backdrop"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                        exit={{ opacity: 0, pointerEvents: 'none' }}
                         transition={{ duration: 0.15 }}
                         onClick={onClose}
                         className="fixed inset-0 z-9998 bg-black/30 backdrop-blur-[2px] will-change-opacity"

@@ -396,7 +396,7 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
             COUNT(*) as count
         FROM partner
         WHERE (path = :search_path OR path LIKE :search_wildcard)
-        GROUP BY level
+        GROUP BY 1
         HAVING level >= 1 AND level <= 9
         ORDER BY level;
     """)
@@ -589,7 +589,7 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         FROM partner
         WHERE (path = :search_path OR path LIKE :search_wildcard)
         AND created_at >= :start
-        GROUP BY bucket, level
+        GROUP BY 1, 2
         HAVING level >= 1 AND level <= 9
         ORDER BY bucket ASC, level ASC;
     """)
@@ -619,7 +619,7 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         FROM partner
         WHERE (path = :search_path OR path LIKE :search_wildcard)
         AND created_at < :start
-        GROUP BY level
+        GROUP BY 1
         HAVING level >= 1 AND level <= 9
     """)
     res_base = await session.execute(stmt_base, {
