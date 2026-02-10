@@ -63,6 +63,11 @@ MESSAGES = {
             "You just received `${amount} USDT`! 💸\n"
             "Someone in your deep network (Level {level}) just upgraded to PRO.\n\n"
             "🌟 *The Power of Passivity:* Your network is working for you 24/7. This is just the beginning of your x10 profit journey! 📈"
+        ),
+        "viral_share_caption": (
+            "🚀 <b>STOP BLEEDING MONEY TO BANKS!</b> 🛑\n\n"
+            "Join me on Pintopay and unlock $1 per minute strategy! 💎\n"
+            "Lead the revolution in FinTech &amp; Web3 payments. 🌍"
         )
     },
     "ru": {
@@ -119,6 +124,12 @@ MESSAGES = {
             "Вы только что получили `${amount} USDT`! 💸\n"
             "Кто-то в вашей глубокой сети (Уровень {level}) только что перешел на PRO.\n\n"
             "🌟 *Сила Пассивности:* Ваша сеть работает на вас 24/7. Это только начало вашего пути к x10 прибыли! 📈"
+        ),
+        "viral_share_caption": (
+            "🛑 <b>ХВАТИТ КОРМИТЬ БАНКИ!</b> 🛑\n\n"
+            "Мир финансов меняется навсегда. Пока другие теряют, 1% богатеет. 🦅\n\n"
+            "Вступай в Pintopay и начни получать $1 в минуту пассивного дохода.\n"
+            "Строй свою империю сейчас. 👇"
         )
     }
 }

@@ -180,7 +180,8 @@ async def get_recent_partners(
     cache_key = "partners:recent"
     db_settings_key = "partners_recent_snapshot"
     count_settings_key = "partners_recent_last_hour_count"
-    refresh_window = timedelta(minutes=5)
+    partners_refresh_window = timedelta(minutes=5)
+    count_refresh_window = timedelta(hours=1)
     
     # 1. Try Redis Cache (Fastest)
     try:
@@ -203,34 +204,31 @@ async def get_recent_partners(
     count_setting = await session.get(SystemSetting, count_settings_key)
     
     now = datetime.utcnow()
-    should_refresh = True
+    partners_list = []
+    last_hour_count = 0
     
-    if snapshot_setting and count_setting:
-        if now - snapshot_setting.updated_at < refresh_window:
-            should_refresh = False
+    # Check if we need to refresh partners list (every 5m)
+    refresh_partners = True
+    if snapshot_setting:
+        if now - snapshot_setting.updated_at < partners_refresh_window:
+            refresh_partners = False
             try:
                 partners_list = json.loads(snapshot_setting.value)
+            except:
+                refresh_partners = True
+
+    # Check if we need to refresh the randomized count (every 60m)
+    refresh_count = True
+    if count_setting:
+        if now - count_setting.updated_at < count_refresh_window:
+            refresh_count = False
+            try:
                 last_hour_count = int(count_setting.value)
-                
-                # Prepend base URL
-                base_url = "https://p2phub-production.up.railway.app"
-                if settings.WEBHOOK_URL and "/api/bot/webhook" in settings.WEBHOOK_URL:
-                    base_url = settings.WEBHOOK_URL.split("/api/bot/webhook")[0].rstrip('/')
+            except:
+                refresh_count = True
 
-                for p in partners_list:
-                    if p.get("photo_url") and p["photo_url"].startswith("/images/"):
-                        p["photo_url"] = f"{base_url}{p['photo_url']}"
-
-                partners_data = {
-                    "partners": partners_list[:limit],
-                    "last_hour_count": last_hour_count
-                }
-            except Exception:
-                should_refresh = True
-
-    if should_refresh:
+    if refresh_partners:
         # 3. Fetch Fresh from Partner Table
-        # Fetch only required columns to be resilient to missing columns (like total_earned_usdt)
         statement = select(
             Partner.id, 
             Partner.first_name, 
@@ -241,11 +239,6 @@ async def get_recent_partners(
         result = await session.exec(statement)
         partners = result.all()
         
-        # Prepare list with absolute URLs
-        base_url = "https://p2phub-production.up.railway.app"
-        if settings.WEBHOOK_URL and "/api/bot/webhook" in settings.WEBHOOK_URL:
-            base_url = settings.WEBHOOK_URL.split("/api/bot/webhook")[0].rstrip('/')
-
         partners_list = []
         for p_id, p_first_name, p_username, p_photo_url, p_created_at in partners:
             p_dict = {
@@ -255,34 +248,41 @@ async def get_recent_partners(
                 "photo_url": p_photo_url,
                 "created_at": p_created_at.isoformat() if p_created_at else None
             }
-            if p_dict.get("photo_url") and p_dict["photo_url"].startswith("/images/"):
-                p_dict["photo_url"] = f"{base_url}{p_dict['photo_url']}"
             partners_list.append(p_dict)
-
-        # Dynamic count: random but based on a reasonable growth
-        last_hour_count = random.randint(340, 420)
-        
-        # 4. Save to Persistent DB Cache
+            
+        # Update/Create Snapshot
         if not snapshot_setting:
             snapshot_setting = SystemSetting(key=db_settings_key, value=json.dumps(partners_list))
         else:
             snapshot_setting.value = json.dumps(partners_list)
             snapshot_setting.updated_at = now
-            
+        session.add(snapshot_setting)
+
+    if refresh_count:
+        last_hour_count = random.randint(632, 842)
         if not count_setting:
             count_setting = SystemSetting(key=count_settings_key, value=str(last_hour_count))
         else:
             count_setting.value = str(last_hour_count)
             count_setting.updated_at = now
-            
-        session.add(snapshot_setting)
         session.add(count_setting)
+
+    if refresh_partners or refresh_count:
         await session.commit()
-        
-        partners_data = {
-            "partners": partners_list,
-            "last_hour_count": last_hour_count
-        }
+
+    # Final processing: prepend base URL to photo_urls
+    base_url = "https://p2phub-production.up.railway.app"
+    if settings.WEBHOOK_URL and "/api/bot/webhook" in settings.WEBHOOK_URL:
+        base_url = settings.WEBHOOK_URL.split("/api/bot/webhook")[0].rstrip('/')
+
+    for p in partners_list:
+        if p.get("photo_url") and p["photo_url"].startswith("/images/"):
+            p["photo_url"] = f"{base_url}{p['photo_url']}"
+    
+    partners_data = {
+        "partners": partners_list[:limit],
+        "last_hour_count": last_hour_count
+    }
     
     # 5. Populate Redis
     try:
@@ -586,11 +586,10 @@ async def get_prepared_share_id(
     
     photo_url = f"{base_api_url}/images/2026-02-05_03.35.03.webp"
 
-    caption = (
-        "🚀 <b>STOP BLEEDING MONEY TO BANKS!</b> 🛑\n\n"
-        "Join me on Pintopay and unlock $1 per minute strategy! 💎\n"
-        "Lead the revolution in FinTech &amp; Web3 payments. 🌍"
-    )
+    # Fetch language preference
+    lang = partner.language_code or "en"
+    from app.core.i18n import get_msg
+    caption = get_msg(lang, "viral_share_caption")
 
     # Use a random ID for the prepared message result
     rand_id = str(random.randint(1000, 9999))

@@ -59,7 +59,7 @@
             "global_partners": "Global Partners",
             "volume_shifted": "Volume Shifted",
             "countries_active": "Countries Active",
-            "recent_join": "<0>+{{count}} new partners</0> joined the movement in the last 5m"
+            "recent_join": "<0>+{{count}} new partners</0> joined the movement in the last 60m"
         },
         "ticker": [
             "EARN PINTOPAY TOKENS",

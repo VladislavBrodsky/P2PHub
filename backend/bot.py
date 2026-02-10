@@ -146,11 +146,23 @@ async def inline_handler(inline_query: types.InlineQuery):
         photo1 = f"{base_api_url}/images/2026-02-05_03.35.03.webp"
         photo2 = f"{base_api_url}/images/2026-02-05_03.35.36.webp"
 
-        caption = (
-            "🚀 <b>STOP BLEEDING MONEY TO BANKS!</b> 🛑\n\n"
-            "Join me on Pintopay and unlock $1 per minute strategy! 💎\n"
-            "Lead the revolution in FinTech &amp; Web3 payments. 🌍"
-        )
+        # Try to find partner language
+        from app.core.i18n import get_msg
+        lang = "en"
+        try:
+            from app.models.partner import Partner, get_session
+            from sqlmodel import select
+            from sqlalchemy.ext.asyncio import create_async_engine
+            from sqlmodel.ext.asyncio.session import AsyncSession
+            
+            # Since we are in a top-level bot, we need a session
+            # This is a bit complex, let's just stick to English for bot if not easy
+            # Actually, we can just use the language_code from the inline_query user
+            lang = inline_query.from_user.language_code or "en"
+        except:
+            pass
+
+        caption = get_msg(lang, "viral_share_caption")
 
         logging.info(f"📤 Inline query: {query_code}")
 
