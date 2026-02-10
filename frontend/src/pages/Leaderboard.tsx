@@ -47,9 +47,11 @@ export default function LeaderboardPage() {
     const isLoading = isLeaderboardLoading || isStatsLoading;
 
     const getLeague = (level: number): LeagueTier => {
-        if (level >= 30) return 'platinum';
-        if (level >= 15) return 'gold';
-        return 'silver';
+        if (!level || typeof level !== 'number' || level < 5) return 'wooden';
+        if (level < 15) return 'silver';
+        if (level < 30) return 'metal';
+        if (level < 50) return 'gold';
+        return 'platinum';
     };
 
     if (isLoading) return <div className="p-4"><ListSkeleton /></div>;

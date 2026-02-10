@@ -105,9 +105,7 @@ async def get_my_leaderboard_stats(
             rank_val = -1
         
         # Get total referral count
-        from sqlmodel import func
-        count_stmt = select(func.count()).where(Partner.referrer_id == partner.id)
-        referral_count = (await session.exec(count_stmt)).one()
+        referral_count = partner.referral_count
         
         return {
             "rank": rank_val,

@@ -69,6 +69,11 @@ async def create_partner(
     await session.commit()
     await session.refresh(partner)
     
+    # 3.5 Sync to Redis Leaderboard
+    try:
+        await leaderboard_service.update_score(partner.id, partner.xp)
+    except Exception: pass
+    
     # 4. Invalidate referral tree stats for ancestors
     if referrer:
         try:

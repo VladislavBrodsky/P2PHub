@@ -35,8 +35,7 @@ async def get_my_profile(
 
     # 2. Query DB - Optimized: No selectinload(referrals)
     statement = select(Partner).where(Partner.telegram_id == tg_id).options(
-        selectinload(Partner.completed_task_records),
-        selectinload(Partner.referrals)
+        selectinload(Partner.completed_task_records)
     )
     result = await session.exec(statement)
     partner = result.first()
@@ -369,6 +368,13 @@ async def claim_task_reward(
         session.add(partner)
         await session.commit()
         await session.refresh(partner)
+        
+        # 2.1 Sync to Redis Leaderboard
+        from app.services.leaderboard_service import leaderboard_service
+        try:
+            await leaderboard_service.update_score(partner.id, partner.xp)
+        except Exception as e:
+            print(f"Leaderboard Sync Failed: {e}")
         
         # 3. Invalidate profile cache
         await redis_service.client.delete(f"partner:profile:{tg_id}")

@@ -1,4 +1,5 @@
 import logging
+import asyncio
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.models.partner import Partner, get_session
@@ -40,7 +41,7 @@ async def warmup_redis():
                     await redis_service.client.zadd(leaderboard_service.LEADERBOARD_KEY, current_batch)
                     current_batch = {}
                     # Yield control to allow health checks to pass during heavy processing
-                    await asyncio.sleep(0.5) # Increased sleep to prevent Redis overload
+                    await asyncio.sleep(0.1) # Reduced sleep for faster warmup while still yielding control
             
             # Flush remaining
             if current_batch:

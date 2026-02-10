@@ -29,11 +29,12 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     useEffect(() => {
         const fetchConfig = async () => {
             try {
-                const response = await apiClient.get('/api/config/public');
+                // Use a shorter timeout specifically for the public config to fail fast
+                const response = await apiClient.get('/api/config/public', { timeout: 5000 });
                 setConfig(response.data);
                 setIsLoading(false);
             } catch (err) {
-                console.error('[Config] Failed to fetch config:', err);
+                console.error('[Config] Failed to fetch config, using fallbacks:', err);
                 setError(err);
                 // Fallback to defaults to prevent app crash
                 setConfig({

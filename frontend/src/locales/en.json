@@ -249,9 +249,11 @@
         "top_partners": "Top Partners",
         "xp": "XP",
         "levels": {
-            "platinum": "Platinum",
-            "gold": "Gold",
-            "silver": "Silver"
+            "wooden": "Wooden League",
+            "silver": "Silver League",
+            "metal": "Metal League",
+            "gold": "Gold League",
+            "platinum": "Platinum League"
         }
     },
     "referral": {
