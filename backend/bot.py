@@ -158,46 +158,22 @@ async def inline_handler(inline_query: types.InlineQuery):
         rand_id = str(random.randint(1000, 9999))
 
         results = [
-            # PRIORITY 1: High-Speed Text Result
-            types.InlineQueryResultArticle(
-                id=f"text_{query_code}_{rand_id}",
-                title="⚡ Immediate Invite",
-                description="Fastest way to share your link",
-                input_message_content=types.InputTextMessageContent(
-                    message_text=f"{caption}\n\n🔗 <b>Join Here:</b> {ref_link}",
-                    parse_mode="HTML"
-                ),
-                reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
-                    [types.InlineKeyboardButton(text="💎 Start Now", url=ref_link)]
-                ])
-            ),
-            # PRIORITY 2: Premium Visual Card 1
+            # The ONLY result: Premium Visual Card v1
             types.InlineQueryResultPhoto(
                 id=f"card1_{query_code}_{rand_id}", 
                 photo_url=photo1,
                 thumbnail_url=photo1,
-                title="Premium Card v1",
+                title="Elite Partner Invitation 💎",
+                description="Share your $1/minute strategy",
                 caption=caption,
                 parse_mode="HTML",
                 reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
                     [types.InlineKeyboardButton(text="🤝 Join Partner Club", url=ref_link)]
                 ])
-            ),
-            # PRIORITY 3: Premium Visual Card 2
-            types.InlineQueryResultPhoto(
-                id=f"card2_{query_code}_{rand_id}", 
-                photo_url=photo2,
-                thumbnail_url=photo2,
-                title="Premium Card v2",
-                caption=caption,
-                parse_mode="HTML",
-                reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
-                    [types.InlineKeyboardButton(text="🚀 Launch App", url=ref_link)]
-                ])
             )
         ]
         
-        await inline_query.answer(results, is_personal=True, cache_time=60)
+        await inline_query.answer(results, is_personal=True, cache_time=0)
 
     except Exception as e:
         logging.error(f"❌ Inline handler error: {e}")
