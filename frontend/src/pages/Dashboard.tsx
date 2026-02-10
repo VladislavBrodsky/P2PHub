@@ -87,20 +87,15 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                             <span>Dead</span>
                         </h1>
                         <motion.div
-                            className="text-[34px] font-extrabold tracking-tighter leading-[0.95] flex flex-col items-center"
-                            style={{
-                                background: 'linear-gradient(to right, #3B82F6, #60A5FA, #3B82F6)',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                backgroundSize: '200% auto',
-                            }}
+                            className="text-[34px] font-extrabold tracking-tighter leading-[0.95] flex flex-col items-center vibing-crystal-text"
                             animate={{
-                                backgroundPosition: ['0% center', '200% center'],
+                                scale: [1, 1.02, 1],
+                                rotate: [-0.5, 0.5, -0.5],
                             }}
                             transition={{
-                                duration: 8,
+                                duration: 4,
                                 repeat: Infinity,
-                                ease: "linear"
+                                ease: "easeInOut"
                             }}
                         >
                             <span>Welcome to Web3</span>
