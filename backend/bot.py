@@ -136,12 +136,6 @@ async def inline_handler(inline_query: types.InlineQuery):
         
     base_url = base_url.rstrip('/')
     
-    # Available images
-    images = [
-        f"{base_url}/images/2026-02-05%2003.35.36.jpg",
-        f"{base_url}/images/2026-02-05%2003.35.03.jpg"
-    ]
-    
     # Use the specific requested image
     chosen_photo = f"{base_url}/images/2026-02-05%2003.35.03.jpg"
 
