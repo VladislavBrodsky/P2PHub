@@ -129,27 +129,35 @@ async def inline_handler(inline_query: types.InlineQuery):
     bot_info = await bot.get_me()
     ref_link = f"https://t.me/{bot_info.username}?start={ref_code}"
     
-    # Base URL for photos (using WEBHOOK_URL if set, or FRONTEND_URL as fallback)
-    base_url = settings.WEBHOOK_URL or settings.FRONTEND_URL
-    if not base_url:
-        return
-        
-    base_url = base_url.rstrip('/')
+    # Derive the actual base domain for API assets
+    if settings.WEBHOOK_URL and settings.WEBHOOK_PATH in settings.WEBHOOK_URL:
+        base_api_url = settings.WEBHOOK_URL.split(settings.WEBHOOK_PATH)[0].rstrip('/')
+    elif settings.WEBHOOK_URL:
+        base_api_url = settings.WEBHOOK_URL.rstrip('/')
+    else:
+        # Fallback to frontend or localhost if backend URL not explicit
+        base_api_url = (settings.FRONTEND_URL or "http://localhost:8000").rstrip('/')
     
-    # Use the specific requested image
-    chosen_photo = f"{base_url}/images/2026-02-05%2003.35.03.jpg"
+    # Use the specific requested image from the backend assets
+    chosen_photo = f"{base_api_url}/images/2026-02-05%2003.35.03.jpg"
 
     # Final Viral Marketing Pitch
     caption = (
-        "🚀 Join me on Pintopay and unlock $1 per minute strategy!\n"
-        "💎 Lead the revolution in FinTech & Web3 payments"
+        "🚀 *STOP BLEEDING MONEY TO BANKS!* 🛑\n\n"
+        "Join me on Pintopay and unlock $1 per minute strategy! 💎\n"
+        "Lead the revolution in FinTech & Web3 payments. 🌍"
     )
+
+    logging.info(f"📤 Responding to inline query from {inline_query.from_user.id} with photo: {chosen_photo}")
+    logging.info(f"🔗 Ref Link: {ref_link}")
 
     results = [
         types.InlineQueryResultPhoto(
             id=f"share_{random.randint(1, 10000)}", 
             photo_url=chosen_photo,
             thumbnail_url=chosen_photo,
+            title="Elite Partner Invitation",
+            description="Share your $1/minute strategy",
             caption=caption,
             parse_mode="Markdown",
             reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
@@ -157,6 +165,8 @@ async def inline_handler(inline_query: types.InlineQuery):
             ])
         )
     ]
+    
+    logging.info(f"✅ Inline results prepared: {len(results)} items")
     
     # Set cache_time=0 or low to ensured randomness
     await inline_query.answer(results, is_personal=True, cache_time=5)
