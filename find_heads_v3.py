@@ -8,17 +8,20 @@ for filename in os.listdir(versions_dir):
     if filename.endswith(".py"):
         with open(os.path.join(versions_dir, filename), "r") as f:
             content = f.read()
-            rev_match = re.search(r"^revision: str = ['\"]([^'\"]+)['\"]", content, re.M)
-            down_rev_match = re.search(r"^down_revision: Union\[str, Sequence\[str\], None\] = (['\"]([^'\"]+)['\"]|\(([^)]+)\)|None)", content, re.M)
+            rev_match = re.search(r"revision[:\s]+str\s*=\s*['\"]([^'\"]+)['\"]", content)
+            down_rev_match = re.search(r"down_revision: .*? = (.*)", content)
             
             if rev_match:
                 rev = rev_match.group(1).strip()
-                down_rev_match = re.search(r"down_revision: .* = (.*)", content)
                 down_rev = down_rev_match.group(1).strip() if down_rev_match else "None"
                 
                 # Clean up down_rev
                 down_rev = down_rev.replace('"', "'")
-                if down_rev.startswith("'"):
+                # Handle tuples
+                if down_rev.startswith("("):
+                    # Keep as is for now
+                    pass
+                elif down_rev.startswith("'"):
                     down_rev = down_rev.strip("'")
                 
                 revisions[rev] = down_rev
