@@ -101,7 +101,12 @@ if database_url:
     elif database_url.startswith("postgres://"):
         database_url = database_url.replace("postgres://", "postgresql+asyncpg://", 1)
 
-engine = create_async_engine(database_url, echo=True, future=True)
+engine = create_async_engine(
+    database_url,
+    echo=True,
+    future=True,
+    connect_args={"statement_cache_size": 0}
+)
 
 async def create_db_and_tables():
     async with engine.begin() as conn:
