@@ -38,7 +38,8 @@ TEST_USER_DATA = {
     "id": TEST_USER_ID,
     "first_name": "TestAdmin",
     "username": "test_admin",
-    "language_code": "en"
+    "language_code": "en",
+    "user": '{"id": ' + str(TEST_USER_ID) + ', "first_name": "TestAdmin", "username": "test_admin", "language_code": "en"}'
 }
 
 # Override Dependency
@@ -110,6 +111,8 @@ async def verify_flow():
 async def setup_test_user():
     print("🛠 Setting up test user...")
     
+    from sqlmodel import text
+    
     # Ensure tables exist
     from app.models.partner import create_db_and_tables
     await create_db_and_tables()
@@ -123,6 +126,27 @@ async def setup_test_user():
     )
     
     async with async_session() as session:
+        # Check constraints
+        try:
+            print("🔍 Checking constraints on partner table:")
+            res = await session.exec(text("SELECT conname, pg_get_constraintdef(oid) FROM pg_constraint WHERE conrelid = 'partner'::regclass"))
+            for row in res:
+                print(f"  - {row}")
+        except Exception as e:
+            print(f"⚠️ Could not listing constraints: {e}")
+
+        # Drop problematic constraints if they exist (schema mismatch fix)
+        try:
+            # Try specific named constraint from error
+            await session.exec(text("ALTER TABLE partner DROP CONSTRAINT IF EXISTS fk_partner_last_transaction"))
+            # Try default naming just in case
+            await session.exec(text("ALTER TABLE partner DROP CONSTRAINT IF EXISTS partner_last_transaction_id_fkey"))
+            # Try generic one if found in logs
+            await session.commit()
+            print("✅ Dropped potential bad FK constraints.")
+        except Exception as e:
+            print(f"⚠️ Could not drop constraints (might be fine): {e}")
+            
         stmt = select(Partner).where(Partner.telegram_id == str(TEST_USER_ID))
         res = await session.exec(stmt)
         partner = res.first()

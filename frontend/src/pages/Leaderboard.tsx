@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { LeagueCard, LeagueTier } from '../components/League/LeagueCard';
 import { Section } from '../components/Section';
 import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
@@ -25,29 +25,26 @@ interface UserStats {
 
 export default function LeaderboardPage() {
     const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState(true);
-    const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>([]);
-    const [userStats, setUserStats] = useState<UserStats | null>(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [leaderboardRes, statsRes] = await Promise.all([
-                    apiClient.get('/api/leaderboard/global?limit=50'),
-                    apiClient.get('/api/leaderboard/me')
-                ]);
+    const { data: leaderboard = [], isLoading: isLeaderboardLoading } = useQuery<LeaderboardUser[]>({
+        queryKey: ['leaderboard', 'global'],
+        queryFn: async () => {
+            const res = await apiClient.get('/api/leaderboard/global?limit=50');
+            return Array.isArray(res.data) ? res.data : [];
+        },
+        staleTime: 60 * 1000, // Fresh for 1 minute
+    });
 
-                setLeaderboard(Array.isArray(leaderboardRes.data) ? leaderboardRes.data : []);
-                setUserStats(statsRes.data);
-            } catch (error) {
-                console.error('Failed to fetch leaderboard data:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+    const { data: userStats, isLoading: isStatsLoading } = useQuery<UserStats>({
+        queryKey: ['leaderboard', 'me'],
+        queryFn: async () => {
+            const res = await apiClient.get('/api/leaderboard/me');
+            return res.data;
+        },
+        staleTime: 60 * 1000,
+    });
 
-        fetchData();
-    }, []);
+    const isLoading = isLeaderboardLoading || isStatsLoading;
 
     const getLeague = (level: number): LeagueTier => {
         if (level >= 30) return 'platinum';

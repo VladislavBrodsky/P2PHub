@@ -181,6 +181,8 @@ class PaymentService:
             text=f"🎁 *VIRAL KIT UNLOCKED!*\n\nShare this message to announce your PRO status and attract more partners:\n\n---\n{viral_msg}"
         )
         
+        
         logger.info(f"Partner {partner.telegram_id} upgraded to PRO via {currency}")
+        return True
 
 payment_service = PaymentService()

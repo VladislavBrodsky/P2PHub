@@ -74,39 +74,46 @@ async def get_my_leaderboard_stats(
 ):
     """
     Returns the current user's rank and relative position.
+    Cached for 60 seconds to improve performance.
     """
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
-    # Get partner from DB
-    statement = select(Partner).where(Partner.telegram_id == tg_id)
-    result = await session.exec(statement)
-    partner = result.first()
-    
-    if not partner:
+    from app.services.redis_service import redis_service
+    cache_key = f"leaderboard:me:{tg_id}"
+
+    async def fetch_user_stats():
+        # Get partner from DB
+        statement = select(Partner).where(Partner.telegram_id == tg_id)
+        result = await session.exec(statement)
+        partner = result.first()
+        
+        if not partner:
+            return {
+                "rank": -1,
+                "xp": 0,
+                "level": 1,
+                "referrals": 0
+            }
+
+        # Get rank from Redis (0-indexed, so add 1)
+        try:
+            rank = await leaderboard_service.get_partner_rank(partner.id)
+            rank_val = (rank + 1) if rank is not None else -1
+        except Exception as e:
+            logger.error(f"Rank Read Failed: {e}")
+            rank_val = -1
+        
+        # Get total referral count
+        from sqlmodel import func
+        count_stmt = select(func.count()).where(Partner.referrer_id == partner.id)
+        referral_count = (await session.exec(count_stmt)).one()
+        
         return {
-            "rank": -1,
-            "xp": 0,
-            "level": 1,
-            "referrals": 0
+            "rank": rank_val,
+            "xp": partner.xp,
+            "level": partner.level,
+            "referrals": referral_count
         }
 
-    # Get rank from Redis (0-indexed, so add 1)
-    try:
-        rank = await leaderboard_service.get_partner_rank(partner.id)
-        rank_val = (rank + 1) if rank is not None else -1
-    except Exception as e:
-        logger.error(f"Rank Read Failed: {e}")
-        rank_val = -1
-    
-    # Get total referral count
-    from sqlmodel import func
-    count_stmt = select(func.count()).where(Partner.referrer_id == partner.id)
-    referral_count = (await session.exec(count_stmt)).one()
-    
-    return {
-        "rank": rank_val,
-        "xp": partner.xp,
-        "level": partner.level,
-        "referrals": referral_count
-    }
+    return await redis_service.get_or_compute(cache_key, fetch_user_stats, expire=60)
