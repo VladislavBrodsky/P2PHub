@@ -79,6 +79,14 @@ async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = H
     await dp.feed_update(bot, update)
     return {"status": "ok"}
 
+# Import rate limiter
+from app.middleware.rate_limit import limiter, rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+
+# Add rate limiter state and exception handler
+app.state.limiter = limiter
+app.add_exception_handler(Rate LimitExceeded, rate_limit_exceeded_handler)
+
 # Configure CORS
 origins = [settings.FRONTEND_URL]
 if settings.DEBUG:

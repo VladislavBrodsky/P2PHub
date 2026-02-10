@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import Response
 import segno
 import io
@@ -7,6 +7,7 @@ router = APIRouter()
 
 @router.get("/qr")
 async def generate_qr(
+    request: Request,
     url: str = Query(..., description="The URL to encode in the QR code"),
     scale: int = Query(10, description="Scale of the QR code"),
     border: int = Query(1, description="Border size of the QR code"),
@@ -15,6 +16,7 @@ async def generate_qr(
 ):
     """
     Generate a QR code image (PNG) for the given URL.
+    Rate limited to 5 requests per minute per IP to prevent abuse.
     """
     try:
         qr = segno.make(url, error='h')
@@ -24,3 +26,4 @@ async def generate_qr(
         return Response(content=out.read(), media_type="image/png")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+

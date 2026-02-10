@@ -23,23 +23,35 @@ export const MilestonePath = () => {
     const currentLevel = user?.level || 1;
 
     const [visibleChapters, setVisibleChapters] = useState(1);
-    const [selectedItem, setSelectedItem] = useState<any>(null);
+    const [selectedItem, setSelectedItem] = useState<Achievement | null>(null);
     const [isLevel100ModalOpen, setIsLevel100ModalOpen] = useState(false);
 
     // Prevent body scroll when modal is open
     useEffect(() => {
         if (selectedItem) {
+            const originalOverflow = document.body.style.overflow;
             document.body.style.overflow = 'hidden';
             return () => {
-                document.body.style.overflow = '';
+                document.body.style.overflow = originalOverflow;
             };
         }
+    }, [selectedItem]);
+
+    // Handle Escape key to close modal
+    useEffect(() => {
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && selectedItem) {
+                setSelectedItem(null);
+            }
+        };
+        window.addEventListener('keydown', handleEscape);
+        return () => window.removeEventListener('keydown', handleEscape);
     }, [selectedItem]);
 
     const achievements = useMemo(() => getAllAchievements(), []);
     const milestones = useMemo(() => getAllMilestones(), []);
 
-    const handleItemClick = (item: any) => {
+    const handleItemClick = (item: Achievement) => {
         selection();
         setSelectedItem(item);
     };
@@ -301,6 +313,7 @@ export const MilestonePath = () => {
                                     damping: 30,
                                     stiffness: 300
                                 }}
+                                onClick={(e) => e.stopPropagation()}
                                 className="relative w-full max-w-lg sm:max-w-md bg-white dark:bg-[#0f172a] rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0_-20px_60px_rgba(0,0,0,0.4)] sm:shadow-[0_20px_60px_rgba(0,0,0,0.4)] border-t border-slate-200 dark:border-white/10 sm:border overflow-hidden"
                             >
                                 {/* Mobile Pull Indicator */}
@@ -313,13 +326,15 @@ export const MilestonePath = () => {
                                     {/* Header with Close Button */}
                                     <div className="flex items-start justify-between gap-4 pt-4 sm:pt-0">
                                         <div className="flex items-center gap-3 flex-1 min-w-0">
-                                            <div className={`p-3 rounded-2xl ${selectedItem.color} bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 shrink-0 shadow-sm`}>
-                                                <selectedItem.icon className="w-6 h-6" />
-                                            </div>
+                                            {selectedItem?.icon && (
+                                                <div className={`p-3 rounded-2xl ${selectedItem.color || 'text-slate-600'} bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 shrink-0 shadow-sm`}>
+                                                    <selectedItem.icon className="w-6 h-6" />
+                                                </div>
+                                            )}
                                             <div className="flex flex-col min-w-0 flex-1">
-                                                <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">LEVEL {selectedItem.level} MISSION</span>
+                                                <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">LEVEL {selectedItem?.level || 0} MISSION</span>
                                                 <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight leading-tight wrap-break-word">
-                                                    {currentLevel >= selectedItem.level ? t(selectedItem.reward, { level: selectedItem.level }) : '???'}
+                                                    {currentLevel >= (selectedItem?.level || 0) ? t(selectedItem?.reward || '', { level: selectedItem?.level }) : '???'}
                                                 </h3>
                                             </div>
                                         </div>
@@ -338,12 +353,12 @@ export const MilestonePath = () => {
                                             <span className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">HOW TO UNLOCK</span>
                                         </div>
                                         <p className="text-sm font-bold text-slate-700 dark:text-slate-300 leading-relaxed">
-                                            {selectedItem.instruction || `Achieve Level ${selectedItem.level} to unlock this unique recognition and its associated rewards.`}
+                                            {selectedItem?.instruction || `Achieve Level ${selectedItem?.level || 0} to unlock this unique recognition and its associated rewards.`}
                                         </p>
                                     </div>
 
                                     {/* Action Helper - Only show if locked */}
-                                    {currentLevel < selectedItem.level && (
+                                    {selectedItem && currentLevel < selectedItem.level && (
                                         <div className="space-y-4">
                                             <div className="flex items-center gap-3 px-2">
                                                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shrink-0" />
@@ -381,7 +396,7 @@ export const MilestonePath = () => {
 
                                     {/* Status Badge */}
                                     <div className="flex justify-center pt-2">
-                                        {currentLevel >= selectedItem.level ? (
+                                        {selectedItem && currentLevel >= selectedItem.level ? (
                                             <div className="px-5 py-2.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
                                                 <Sparkles className="w-3 h-3 text-emerald-500 shrink-0" />
                                                 <span className="whitespace-nowrap">ACHIEVEMENT UNLOCKED</span>
