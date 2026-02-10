@@ -37,7 +37,7 @@ export default function CommunityPage() {
             {/* Premium Header with Briefing Trigger */}
             <div className="flex items-center justify-between py-1 relative z-30 px-1">
                 <div className="flex flex-col">
-                    <h1 className="text-lg font-black text-slate-900 dark:text-white tracking-tight leading-none uppercase">
+                    <h1 className="text-base font-black text-slate-900 dark:text-white tracking-tight leading-none uppercase">
                         {t('menu.community')}
                     </h1>
                     <div className="flex items-center gap-1 mt-0.5">
@@ -49,14 +49,9 @@ export default function CommunityPage() {
                 <div className="flex items-center gap-2">
                     <button
                         onClick={() => { selection(); setIsBriefingOpen(true); }}
-                        className="p-2 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl text-slate-600 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-all active:scale-95 shadow-sm group"
+                        className="p-1.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl text-slate-600 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-all active:scale-95 shadow-sm group"
                     >
                         <Info className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                    </button>
-                    <button
-                        className="p-2 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl text-slate-600 dark:text-slate-400 hover:text-purple-500 dark:hover:text-purple-400 transition-all active:scale-95 shadow-sm"
-                    >
-                        <HelpCircle className="w-4 h-4" />
                     </button>
                 </div>
             </div>
