@@ -5,7 +5,10 @@ import io
 
 router = APIRouter()
 
+from app.middleware.rate_limit import limiter
+
 @router.get("/qr")
+@limiter.limit("5/minute")
 async def generate_qr(
     request: Request,
     url: str = Query(..., description="The URL to encode in the QR code"),

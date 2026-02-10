@@ -1,32 +1,37 @@
 import asyncio
 import logging
 from bot import bot
-# Remove redis dependency for notifications
-# from app.services.redis_service import redis_service 
+from app.worker import broker
 
 logger = logging.getLogger(__name__)
 
+@broker.task
+async def send_telegram_task(chat_id: int, text: str, parse_mode: str = "Markdown"):
+    """
+    Background worker task to send Telegram messages.
+    """
+    try:
+        await bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode)
+        return True
+    except Exception as e:
+        logger.error(f"Worker failed to send notification to {chat_id}: {e}")
+        return False
+
 class NotificationService:
-    async def enqueue_notification(self, chat_id: int, text: str, parse_mode: str = "Markdown", retry_count: int = 0):
+    async def enqueue_notification(self, chat_id: int, text: str, parse_mode: str = "Markdown"):
         """
-        Sends a notification directly via the Bot API.
-        This runs inside the background task (process_referral_logic), so it's safe to await.
+        Enqueues a notification to be sent by the background worker.
         """
         try:
-            # Direct send
-            await bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode)
+            # Send to TaskIQ broker
+            await send_telegram_task.kiq(chat_id, text, parse_mode)
         except Exception as e:
-            logger.error(f"Failed to send notification to {chat_id}: {e}")
-            # Simple retry logic for network blips
-            if retry_count < 3:
-                try:
-                    await asyncio.sleep(1 * (retry_count + 1))
-                    await self.enqueue_notification(chat_id, text, parse_mode, retry_count + 1)
-                except Exception as retry_err:
-                     logger.error(f"Retry failed for {chat_id}: {retry_err}")
+            logger.error(f"Failed to enqueue notification for {chat_id}: {e}")
+            # Fallback to direct send if broker fails
+            asyncio.create_task(bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode))
 
-    # Worker is no longer needed
     async def process_notifications_worker(self):
+        """Deprecated: superseded by TaskIQ worker."""
         pass
 
 notification_service = NotificationService()

@@ -84,21 +84,13 @@ async def create_partner(
     
     return partner, True
 
-# Keep strong references to background tasks to prevent GC
-background_tasks = set()
-
 async def process_referral_notifications(bot, session: AsyncSession, partner: Partner, is_new: bool):
     """
     Wrapper to trigger the recursive referral logic for new signups.
     """
     if is_new and partner.referrer_id:
-        # Run logic in background (fire and forget)
-        import asyncio
-        task = asyncio.create_task(process_referral_logic(partner.id))
-        
-        # Add to set to prevent GC
-        background_tasks.add(task)
-        task.add_done_callback(background_tasks.discard)
+        # Run logic in background via TaskIQ worker
+        await process_referral_logic.kiq(partner.id)
 
 
 async def get_partner_by_telegram_id(session: AsyncSession, telegram_id: str) -> Optional[Partner]:
@@ -112,8 +104,9 @@ async def get_partner_by_referral_code(session: AsyncSession, code: str) -> Opti
     return result.first()
 
 
-# from app.worker import broker
-# @broker.task(task_name="process_referral_logic")
+from app.worker import broker
+
+@broker.task(task_name="process_referral_logic")
 async def process_referral_logic(partner_id: int):
     """
     Optimized 9-level referral logic.
