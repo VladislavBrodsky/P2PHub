@@ -13,6 +13,9 @@ RUN apt-get update && apt-get install -y \
 # Install uv from the official image
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
+# Safety shim for Railway CLI if hardcoded in UI
+RUN echo '#!/bin/sh\nexec "$@"' > /usr/local/bin/railway && chmod +x /usr/local/bin/railway
+
 # Install dependencies first for better caching
 COPY requirements.txt .
 RUN uv pip install --system --no-cache -r requirements.txt

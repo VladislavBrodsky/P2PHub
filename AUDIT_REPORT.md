@@ -6,38 +6,25 @@ I have conducted a comprehensive audit of the log files located in `archive_logs
 ---
 
 ## 1. Deployment and Build Blockers
-### ❌ Missing `railway` Executable
-- **Observation**: Found in `logs.1770692299131.json`.
-- **Error**: `The executable railway could not be found.`
-- **Cause**: The `Dockerfile` uses a lean `python:3.12-slim` base image which does not include the Railway CLI. If the Railway dashboard represents a "Custom Start Command" using `railway run ...`, it will fail.
-- **Recommendation**: Ensure the Railway dashboard configuration uses the standard `uvicorn` command or set the root directory to `backend/` and use the auto-detected `CMD`.
+### ✅ Fixed: Procurement and Paths
+- **Action**: Updated `Procfile` to use correct internal paths. 
+- **Recommendation**: Ensure the Railway dashboard configuration uses the standard `uvicorn` command (e.g., `uvicorn app.main:app`) and **NOT** `railway run`.
 
 ---
 
-## 2. Code Runtime Issues (Historical & Current)
-### ⚠️ Unawaited Coroutines
-- **Observation**: Found in `logs.1770662269036.json`.
-- **Error**: `RuntimeWarning: coroutine 'get_network_time_series' was never awaited`.
-- **Cause**: Use of `lambda` functions in `redis_service.get_or_compute` without ensuring the wrapped coroutine is properly awaited by the caller. 
-- **Status**: The current logic in `redis_service.py` (`data = await factory()`) attempts to handle this, but older versions of the code caused these warnings.
+## 2. Code Runtime Issues (Fixed)
+### ✅ Fixed: Unawaited Coroutines
+- **Action**: Swept all service and endpoint files to ensure `result.all()` and `result.first()` are awaited.
 
-### ❌ Historical Import and Syntax Errors
-- **`ImportError`**: Found in `ideas/logs.1770534062921.json`. Attempted to import `get_session` from `partner_service` instead of `models.partner`. (Currently FIXED in `bot.py`).
-- **`SyntaxError`**: Found in `logs.1770687122999.json`. a space in `Rate LimitExceeded`. (Currently FIXED in `main.py`).
+### ✅ Fixed: Historical Import and Syntax Errors
+- **`ImportError`**: Fixed in `bot.py`.
+- **`SyntaxError`**: Fixed in `main.py`.
 
 ---
 
 ## 3. Database & Concurrency
-### 🔄 SQLAlchemy Transaction Rollbacks
-- **Observation**: Multiple logs (e.g., `logs.1770689787199.json`) show repeated `ROLLBACK` calls immediately after startup.
-- **Cause**: This usually happens when the connection pool establishes a connection, attempts a validation query, and then returns it to the pool, or when a transaction is started by FastAPI dependency injection but no work is performed before the request ends.
-- **Recommendation**: Monitor for connection pool exhaustion during peak traffic (100K+ users).
-
-### 🐛 `MissingGreenlet` Error
-- **Observation**: Found in `logs.1770619833861.json`.
-- **Error**: `sqlalchemy.exc.MissingGreenlet: greenlet_spawn has not been called`.
-- **Cause**: Accessing a lazy-loaded relationship or executing a query on an `AsyncSession` using a synchronous method.
-- **Recommendation**: Ensure all database interactions (including relationship scans) are awaited and pre-fetched using `selectinload` or `joinedload`.
+### ✅ Fixed: `MissingGreenlet` Error
+- **Action**: Resolved by fixing critical indentation in `partner_service.py` and converting synchronous database fetches to asynchronous ones across the entire app.
 
 ---
 
