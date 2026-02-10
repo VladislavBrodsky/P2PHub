@@ -141,7 +141,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 </div>
                 <p className="text-[10px] font-bold text-(--color-text-secondary)">
                     <Trans i18nKey="dashboard.stats.recent_join" values={{ count: stats.lastHourCount }}>
-                        <span className="text-(--color-text-primary) font-black">+{stats.lastHourCount} new partners</span> joined the movement in the last 5m
+                        <span className="text-(--color-text-primary) font-black">+{stats.lastHourCount} new partners</span> joined the movement in the last 60m
                     </Trans>
                 </p>
             </motion.div>
