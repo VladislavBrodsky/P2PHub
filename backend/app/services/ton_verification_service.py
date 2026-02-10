@@ -7,85 +7,82 @@ logger = logging.getLogger(__name__)
 
 class TonVerificationService:
     def __init__(self):
-        # We use tonapi.io as the primary provider for easy HTTP access
-        self.base_url = "https://tonapi.io/v2"
-        self.headers = {
-            "Authorization": f"Bearer {settings.TON_API_KEY}" if settings.TON_API_KEY else ""
-        }
+        # We use toncenter.com as requested by the user's setup
+        self.base_url = "https://toncenter.com/api/v2"
+        self.api_key = settings.TON_API_KEY
 
     async def verify_transaction(self, tx_hash: str, expected_amount_ton: float, expected_address: str) -> bool:
         """
-        Verifies a transaction on the TON blockchain.
+        Verifies a transaction on the TON blockchain using TONCenter V2.
         
-        Args:
-            tx_hash: The transaction hash (from the user/frontend)
-            expected_amount_ton: Expected amount in TON (e.g. 1.5)
-            expected_address: The admin wallet address that should receive the funds
-            
-        Returns:
-            bool: True if transaction is valid, matches amount/address, and is successful.
+        Logic: Since we know the admin address, we fetch recent transactions for it 
+        and look for the one matching the hash provided by the user.
         """
-        if not settings.TON_API_KEY:
-            logger.warning("TON_API_KEY is missing. Verification will likely fail if no key provided by provider.")
+        if not self.api_key:
+            logger.warning("TON_API_KEY is missing. Verification will fail.")
+            return False
             
         try:
-            async with httpx.AsyncClient(headers=self.headers, timeout=10.0) as client:
-                # Query the transaction from TonAPI
-                response = await client.get(f"{self.base_url}/blockchain/transactions/{tx_hash}")
+            params = {
+                "address": expected_address,
+                "limit": 20, # Check last 20 transactions
+                "api_key": self.api_key
+            }
+            
+            async with httpx.AsyncClient(timeout=15.0) as client:
+                response = await client.get(f"{self.base_url}/getTransactions", params=params)
                 
                 if response.status_code != 200:
-                    logger.error(f"Failed to fetch TON transaction {tx_hash}: {response.text}")
+                    logger.error(f"Failed to fetch TON transactions for {expected_address}: {response.text}")
                     return False
                 
                 data = response.json()
-                
-                # Basic success check
-                if not data.get("success"):
-                    logger.warning(f"TON transaction {tx_hash} marked as unsuccessful.")
+                if not data.get("ok"):
+                    logger.error(f"TONCenter Error: {data.get('error')}")
                     return False
-
-                # We iterate through outputs to find the matching payment
-                # Note: TonAPI schema for transactions includes 'out_msgs'
-                # For a simple transfer, we look at the amount and destination
-                found_match = False
                 
-                # Check messages
-                for msg in data.get("out_msgs", []):
-                    # Destination address check (normalize both)
-                    dest = msg.get("destination", {}).get("address")
-                    if not dest:
-                        continue
-                        
-                    # Normalize addresses for comparison (remove prefix etc if needed)
-                    # For now, literal comparison as TonAPI usually returns raw/standard format
-                    if dest.lower() != expected_address.lower():
-                        continue
-                        
-                    # Amount check (TON units are NanoTON: 1 TON = 1,000,000,000 NanoTON)
-                    # We allow a small margin for rounding or fee variations if relevant, 
-                    # but usually precise match is best.
-                    amount_nanoton = int(msg.get("value", 0))
-                    expected_nanoton = int(expected_amount_ton * 1_000_000_000)
+                transactions = data.get("result", [])
+                
+                # Search for the transaction hash
+                found_tx = None
+                for tx in transactions:
+                    # In TONCenter v2, the hash is under transaction_id or top-level 'hash'
+                    tx_id_hash = tx.get("transaction_id", {}).get("hash", "")
+                    data_hash = tx.get("hash", "")
                     
-                    if amount_nanoton >= expected_nanoton:
-                        found_match = True
+                    if tx_hash in [tx_id_hash, data_hash]:
+                        found_tx = tx
                         break
                 
-                if not found_match:
-                    logger.warning(f"Verification failed: No output message matches address {expected_address} and amount {expected_amount_ton} TON")
+                if not found_tx:
+                    logger.warning(f"Transaction hash {tx_hash} not found in last 20 tx for {expected_address}")
+                    return False
+
+                # Verify incoming message (payment to us)
+                in_msg = found_tx.get("in_msg", {})
+                if not in_msg:
+                    logger.warning("Transaction found but has no incoming message.")
                     return False
                 
-                # Timestamp check (Optional: Transactions should be recent, e.g. within 24h)
-                tx_time = data.get("utime", 0)
-                from datetime import datetime
-                if datetime.now().timestamp() - tx_time > 86400:
-                    logger.warning("Transaction is older than 24 hours.")
+                # Destination check (normalize both)
+                dest = in_msg.get("destination")
+                if not dest or dest.lower() != expected_address.lower():
+                    logger.warning(f"Dest mismatch: {dest} vs {expected_address}")
+                    return False
+                    
+                # Amount check (Value is in NanoTON)
+                amount_nanoton = int(in_msg.get("value", 0))
+                expected_nanoton = int(expected_amount_ton * 1_000_000_000)
+                
+                # Allow minor margin for exchange rate variations
+                if amount_nanoton < (expected_nanoton * 0.98):
+                    logger.warning(f"Insufficient amount: {amount_nanoton} < {expected_nanoton}")
                     return False
                     
                 return True
 
         except Exception as e:
-            logger.error(f"Error verifying TON transaction: {e}")
+            logger.error(f"Error verifying TON transaction via TONCenter: {e}")
             return False
 
 ton_verification_service = TonVerificationService()
