@@ -12,6 +12,7 @@ from aiogram import types
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     from app.services.notification_service import notification_service
+    from app.services.warmup_service import warmup_redis
     
     # Warmup re-enabled but limited to Top 1000 (see warmup_service.py)
     asyncio.create_task(warmup_redis())
