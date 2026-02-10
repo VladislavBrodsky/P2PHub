@@ -1,9 +1,11 @@
 MESSAGES = {
     "en": {
         "welcome": (
-            "🚀 **STOP BLEEDING MONEY TO BANKS!** 🛑\n\n"
-            "Experience the $1 per minute strategy with Pintopay. Join the revolution in decentralized payments and build your financial future now! 💎\n\n"
-            "🔗 *Your Private Access Link:*\n`{referral_link}`\n\n"
+            "💎 **Welcome to Pintopay Partner**\n\n"
+            "You are early! 🚀\n"
+            "Join the revolution in decentralized payments.\n"
+            "Earn XP, invite friends, and unlock exclusive rewards.\n\n"
+            "🔗 *Your Referral Link:*\n`{referral_link}`\n\n"
             "👇 *Start your journey below*"
         ),
         "referral_l1_congrats": (
@@ -65,9 +67,11 @@ MESSAGES = {
     },
     "ru": {
         "welcome": (
-            "🚀 **ХВАТИТ ТЕРЯТЬ ДЕНЬГИ В БАНКАХ!** 🛑\n\n"
-            "Попробуйте стратегию $1 в минуту с Pintopay. Присоединяйтесь к революции децентрализованных платежей и начните строить свое финансовое будущее прямо сейчас! 💎\n\n"
-            "🔗 *Ваша персональная ссылка:*\n`{referral_link}`\n\n"
+            "💎 **Добро пожаловать в Pintopay Partner**\n\n"
+            "Вы в числе первых! 🚀\n"
+            "Присоединяйтесь к революции децентрализованных платежей.\n"
+            "Зарабатывайте XP, приглашайте друзей и открывайте эксклюзивные награды.\n\n"
+            "🔗 *Ваша реферальная ссылка:*\n`{referral_link}`\n\n"
             "👇 *Начните свой путь ниже*"
         ),
         "referral_l1_congrats": (
