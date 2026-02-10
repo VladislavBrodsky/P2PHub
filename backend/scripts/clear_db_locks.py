@@ -1,43 +1,59 @@
-import asyncio
-import sys
+import psycopg2
 import os
-from sqlalchemy import text
+from dotenv import load_dotenv
+from urllib.parse import urlparse
 
-# Add parent dir to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Load .env
+load_dotenv()
 
-from app.models.partner import engine
+def clear_locks():
+    # Use PUBLIC_URL as it works outside Railway network (locally)
+    db_url = os.getenv("DATABASE_PUBLIC_URL") or os.getenv("DATABASE_URL")
+    
+    if not db_url:
+        print("❌ Error: No DATABASE_URL found in .env")
+        return
 
-async def clear_locks():
-    print("🧨 Emergency: Clearing Database Locks...")
-    async with engine.connect() as conn:
-        # Find and terminate blocking processes
-        # We target processes older than 1 minute that are holding locks
-        try:
-            result = await conn.execute(text("""
-                SELECT pg_terminate_backend(pid)
-                FROM pg_stat_activity
-                WHERE pid != pg_backend_pid()
-                  AND (state != 'idle' OR xact_start < now() - interval '1 minute');
-            """))
-            terminated = result.fetchall()
-            print(f"✅ Terminated {len(terminated)} blocking connections.")
-        except Exception as e:
-            print(f"⚠️ Error clearing locks: {e}")
-            print("Note: You might not have SUPERUSER permissions. Trying to kill only your own connections...")
-            try:
-                # Fallback: try to kill connections from the same user if possible
-                # (Postgres usually allows killing your own processes)
-                await conn.execute(text("""
-                    SELECT pg_terminate_backend(pid)
-                    FROM pg_stat_activity
-                    WHERE pid != pg_backend_pid()
-                      AND usename = current_user
-                      AND (state != 'idle' OR xact_start < now() - interval '1 minute');
-                """))
-                print("✅ Terminated your own blocking connections.")
-            except Exception as e2:
-                print(f"❌ Failed to clear locks: {e2}")
+    # Ensure it's not a sqlite url
+    if "sqlite" in db_url:
+        print("❌ Error: DATABASE_URL is pointing to SQLite. We need Postgres to clear locks.")
+        return
+
+    # Fix for async driver if it's there
+    if db_url.startswith("postgresql+asyncpg://"):
+        db_url = db_url.replace("postgresql+asyncpg://", "postgresql://", 1)
+
+    print(f"🧨 Connecting to database to clear locks...")
+    try:
+        conn = psycopg2.connect(db_url)
+        conn.autocommit = True
+        cur = conn.cursor()
+        
+        # 1. Check for active connections
+        cur.execute("""
+            SELECT pid, state, query, now() - xact_start AS duration
+            FROM pg_stat_activity
+            WHERE state != 'idle' AND pid != pg_backend_pid();
+        """)
+        rows = cur.fetchall()
+        print(f"📊 Found {len(rows)} active connections.")
+        for row in rows:
+            print(f"  PID: {row[0]} | Duration: {row[3]} | Query: {row[2][:100]}")
+
+        # 2. Terminate them
+        cur.execute("""
+            SELECT pg_terminate_backend(pid)
+            FROM pg_stat_activity
+            WHERE pid != pg_backend_pid()
+              AND (state != 'idle' OR xact_start < now() - interval '1 minute');
+        """)
+        terminated = cur.fetchall()
+        print(f"✅ Successfully terminated {len(terminated)} blocking connections.")
+        
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"❌ Error: {e}")
 
 if __name__ == "__main__":
-    asyncio.run(clear_locks())
+    clear_locks()

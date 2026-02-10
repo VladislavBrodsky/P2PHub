@@ -6,6 +6,9 @@ from sqlalchemy import text
 # Add parent dir to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from dotenv import load_dotenv
+load_dotenv() # Load from .env if present
+
 from app.models.partner import engine
 
 async def check_locks():
