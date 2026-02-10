@@ -368,13 +368,10 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
 async def get_referral_tree_members(session: AsyncSession, partner_id: int, target_level: int) -> List[dict]:
     """
     Fetches details of partners at a specific level using Recursive CTE.
+    NOTE: Caching is handled at the endpoint layer via get_or_compute.
     """
     if not (1 <= target_level <= 9):
         return []
-
-    cache_key = f"ref_tree_members:{partner_id}:{target_level}"
-    cached = await redis_service.get_json(cache_key)
-    if cached: return cached
 
     query = text("""
         WITH RECURSIVE descendants AS (
@@ -419,7 +416,6 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
                 "id": row[12]
             })
         
-        await redis_service.set_json(cache_key, members, expire=1800)
         return members
     except Exception as e:
         logger.error(f"Error fetching tree members: {e}")

@@ -29,32 +29,93 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
     const { user } = useUser();
     const [level, setLevel] = useState(1);
     const [members, setMembers] = useState<NetworkMember[]>([]);
+    const [levelCache, setLevelCache] = useState<Record<number, NetworkMember[]>>({});
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [isShareOpen, setIsShareOpen] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const fetchLevel = async () => {
-            setIsLoading(true);
-            setError('');
-            try {
-                const res = await apiClient.get(`/api/partner/network/${level}`);
+    // Fetch a single level and cache it
+    const fetchLevel = async (targetLevel: number) => {
+        // Skip if already cached
+        if (levelCache[targetLevel]) {
+            return levelCache[targetLevel];
+        }
 
-                if (Array.isArray(res.data)) {
-                    setMembers(res.data);
-                } else {
-                    setMembers([]);
+        try {
+            const res = await apiClient.get(`/api/partner/network/${targetLevel}`);
+            const data = Array.isArray(res.data) ? res.data : [];
+
+            // Update cache
+            setLevelCache(prev => ({ ...prev, [targetLevel]: data }));
+            return data;
+        } catch (err) {
+            console.error(`Failed to fetch level ${targetLevel}:`, err);
+            return null;
+        }
+    };
+
+    // Prefetch levels 1-3 on mount for instant browsing
+    useEffect(() => {
+        const prefetchInitialLevels = async () => {
+            setIsLoading(true);
+            try {
+                // Fetch levels 1, 2, 3 in parallel
+                const [l1, l2, l3] = await Promise.all([
+                    fetchLevel(1),
+                    fetchLevel(2),
+                    fetchLevel(3)
+                ]);
+
+                // Set initial display to level 1
+                if (l1) {
+                    setMembers(l1);
                 }
             } catch (err) {
-                console.error('Failed to fetch network level:', err);
+                console.error('Failed to prefetch levels:', err);
                 setError('Failed to load network data');
             } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchLevel();
+        prefetchInitialLevels();
+    }, []);
+
+    // When level changes, update display and prefetch adjacent levels
+    useEffect(() => {
+        const updateLevel = async () => {
+            // If already cached, instant switch
+            if (levelCache[level]) {
+                setMembers(levelCache[level]);
+                setError('');
+            } else {
+                // Not cached, fetch it
+                setIsLoading(true);
+                setError('');
+                const data = await fetchLevel(level);
+                if (data !== null) {
+                    setMembers(data);
+                } else {
+                    setError('Failed to load network data');
+                    setMembers([]);
+                }
+                setIsLoading(false);
+            }
+
+            // Prefetch adjacent levels in background (no await)
+            const adjacentLevels = [];
+            if (level > 1) adjacentLevels.push(level - 1);
+            if (level < 9) adjacentLevels.push(level + 1);
+
+            adjacentLevels.forEach(l => {
+                if (!levelCache[l]) {
+                    fetchLevel(l); // Fire and forget
+                }
+            });
+        };
+
+        updateLevel();
     }, [level]);
 
     // Auto-scroll logic for level selector
