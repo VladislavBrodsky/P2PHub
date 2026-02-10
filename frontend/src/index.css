@@ -704,3 +704,54 @@ body {
   box-shadow: 0 8px 25px rgba(0, 102, 255, 0.5);
   filter: brightness(1.05);
 }
+
+/* Vibing Blue - Modern Gradient for Light Theme Readability */
+.vibing-blue-gradient {
+  background: linear-gradient(135deg, #0066FF 0%, #3B82F6 50%, #0052D9 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0, 102, 255, 0.3);
+}
+
+/* Vibing Blue with Animation */
+@keyframes vibing-gradient {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+    filter: brightness(1);
+  }
+
+  50% {
+    background-position: 100% 50%;
+    filter: brightness(1.15);
+  }
+}
+
+.vibing-blue-animated {
+  background: linear-gradient(135deg, #0066FF 0%, #3B82F6 25%, #60A5FA 50%, #3B82F6 75%, #0052D9 100%);
+  background-size: 300% 300%;
+  animation: vibing-gradient 4s ease-in-out infinite;
+  color: #FFFFFF;
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0, 102, 255, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 102, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.vibing-blue-animated:hover {
+  box-shadow: 0 8px 30px rgba(0, 102, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Vibing Blue Text (for text-only elements) */
+.vibing-blue-text {
+  background: linear-gradient(135deg, #0066FF 0%, #3B82F6 50%, #60A5FA 100%);
+  background-size: 200% 200%;
+  animation: vibing-gradient 4s ease-in-out infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  filter: drop-shadow(0 0 8px rgba(0, 102, 255, 0.3));
+}

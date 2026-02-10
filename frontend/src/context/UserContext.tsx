@@ -10,6 +10,7 @@ interface User {
     last_name: string | null;
     photo_url: string | null;
     balance: number;
+    total_earned?: number; // Sum of all PRO commissions
     level: number;
     xp: number;
     referral_code: string;
