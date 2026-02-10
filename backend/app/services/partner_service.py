@@ -151,12 +151,15 @@ async def process_referral_logic(partner_id: int):
             XP_MAP = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
             
             current_referrer_id = partner.referrer_id
+            logger.info(f"🔄 Processing referral logic for partner {partner_id} (@{partner.username}). Referrer: {current_referrer_id}")
+
             for level in range(1, 10):
                 if not current_referrer_id:
                     break
                     
                 referrer = ancestor_map.get(current_referrer_id)
                 if not referrer:
+                    logger.warning(f"⚠️ Ancestor {current_referrer_id} not found in map for partner {partner_id} at level {level}")
                     break
                     
                 # 1. Distribute XP
@@ -199,23 +202,30 @@ async def process_referral_logic(partner_id: int):
                             lang = referrer.language_code or "en"
                             msg = get_msg(lang, "level_up", level=l)
                             await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
-                        except Exception: pass
+                        except Exception as e:
+                            logger.error(f"Failed to send level_up notification to {referrer.id}: {e}")
                     referrer.level = new_level
                     
                 # 3. Sync to Redis Leaderboard
-                await leaderboard_service.update_score(referrer.id, referrer.xp)
+                try:
+                    await leaderboard_service.update_score(referrer.id, referrer.xp)
+                except Exception as e:
+                    logger.error(f"Failed to update leaderboard for {referrer.id}: {e}")
                 
                 # 4. Invalidate Profile Cache
-                await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
-                
-                # 5. Send Notification (Buffered logic could go here later)
                 try:
-                    # ... (rest of notification logic remains same for now)
+                    await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
+                except Exception as e:
+                    logger.error(f"Failed to delete profile cache for {referrer.id}: {e}")
+                
+                # 5. Send Notification
+                try:
                     lang = referrer.language_code or "en"
                     new_partner_name = f"{partner.first_name}"
                     if partner.username:
                         new_partner_name += f" (@{partner.username})"
                     
+                    msg = None
                     if level == 1:
                         msg = get_msg(lang, "referral_l1_congrats", name=new_partner_name)
                     else:
@@ -238,18 +248,20 @@ async def process_referral_logic(partner_id: int):
                                 msg = get_msg(lang, "referral_l2_congrats", referral_chain=referral_chain)
                             else:
                                 msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=referral_chain)
-                        except Exception:
-                            msg = None # Fallback
+                        except Exception as e:
+                            logger.error(f"Error constructing referral chain for {referrer.id}: {e}")
                     
                     if msg:
                         await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
-                except Exception: pass
+                except Exception as e:
+                    logger.error(f"Failed to process referral notification for {referrer.id}: {e}")
 
                 session.add(referrer)
                 current_referrer_id = referrer.referrer_id  # Move up the chain
 
+            await session.commit()
+            logger.info(f"✅ Successfully processed referral logic for partner {partner_id}")
 
-        await session.commit()
     
     except Exception as e:
         import logging
