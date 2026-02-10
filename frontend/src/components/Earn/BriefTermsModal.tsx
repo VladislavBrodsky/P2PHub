@@ -45,7 +45,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                         </div>
 
                         {/* Content Scrollable Area */}
-                        <div className="overflow-y-auto p-6 space-y-8 custom-scrollbar">
+                        <div className="overflow-y-auto p-6 space-y-8 custom-scrollbar pb-[calc(env(safe-area-inset-bottom)+4rem)]">
 
                             {/* Mission / Goal */}
                             <section className="space-y-3">
