@@ -147,9 +147,9 @@ async def inline_handler(inline_query: types.InlineQuery):
         photo2 = f"{base_api_url}/images/2026-02-05_03.35.36.webp"
 
         caption = (
-            "🚀 *STOP BLEEDING MONEY TO BANKS!* 🛑\n\n"
+            "🚀 <b>STOP BLEEDING MONEY TO BANKS!</b> 🛑\n\n"
             "Join me on Pintopay and unlock $1 per minute strategy! 💎\n"
-            "Lead the revolution in FinTech & Web3 payments. 🌍"
+            "Lead the revolution in FinTech &amp; Web3 payments. 🌍"
         )
 
         logging.info(f"📤 Inline query: {query_code}")
@@ -158,14 +158,14 @@ async def inline_handler(inline_query: types.InlineQuery):
         rand_id = str(random.randint(1000, 9999))
 
         results = [
-            # PRIORITY 1: High-Speed Text Result (to ensure something shows up instantly)
+            # PRIORITY 1: High-Speed Text Result
             types.InlineQueryResultArticle(
                 id=f"text_{query_code}_{rand_id}",
                 title="⚡ Immediate Invite",
                 description="Fastest way to share your link",
                 input_message_content=types.InputTextMessageContent(
-                    message_text=f"{caption}\n\n🔗 *Join Here:* {ref_link}",
-                    parse_mode="Markdown"
+                    message_text=f"{caption}\n\n🔗 <b>Join Here:</b> {ref_link}",
+                    parse_mode="HTML"
                 ),
                 reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
                     [types.InlineKeyboardButton(text="💎 Start Now", url=ref_link)]
@@ -178,7 +178,7 @@ async def inline_handler(inline_query: types.InlineQuery):
                 thumbnail_url=photo1,
                 title="Premium Card v1",
                 caption=caption,
-                parse_mode="Markdown",
+                parse_mode="HTML",
                 reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
                     [types.InlineKeyboardButton(text="🤝 Join Partner Club", url=ref_link)]
                 ])
@@ -190,7 +190,7 @@ async def inline_handler(inline_query: types.InlineQuery):
                 thumbnail_url=photo2,
                 title="Premium Card v2",
                 caption=caption,
-                parse_mode="Markdown",
+                parse_mode="HTML",
                 reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
                     [types.InlineKeyboardButton(text="🚀 Launch App", url=ref_link)]
                 ])
