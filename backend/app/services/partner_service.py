@@ -334,7 +334,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     
     await session.commit()
 
-async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dict[int, int]:
+async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dict[str, int]:
     """
     Uses Recursive CTE for ultra-fast 9-level tree counting.
     More robust than Materialized Path for deeper/fragmented lineage.
@@ -342,7 +342,8 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
     """
     cache_key = f"ref_tree_stats:{partner_id}"
     cached = await redis_service.get_json(cache_key)
-    if cached: return {int(k): v for k, v in cached.items()}
+    if cached: return cached
+
 
     # Recursive CTE to find all descendants up to level 9
     query = text("""

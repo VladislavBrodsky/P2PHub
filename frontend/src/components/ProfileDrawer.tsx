@@ -15,8 +15,10 @@ import {
     Copy,
     Check,
     X, // Added Close icon
-    ArrowLeft
+    ArrowLeft,
+    ShieldCheck
 } from 'lucide-react';
+
 import { useHaptic } from '../hooks/useHaptic';
 import { useUser } from '../context/UserContext';
 import { useTonConnectUI, useTonAddress, useTonWallet } from '@tonconnect/ui-react';
@@ -187,7 +189,22 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                         </span>
                                     </div>
                                 </button>
+
+                                {/* Admin Link - Specific for @uslincoln or authorized admins */}
+                                {user?.is_admin && (
+                                    <button
+                                        onClick={() => {
+                                            onClose();
+                                            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'admin' }));
+                                        }}
+                                        className="ml-auto rounded-2xl bg-blue-500/10 border border-blue-500/20 px-4 py-1.5 flex items-center gap-2 active:scale-95 transition-all shadow-sm"
+                                    >
+                                        <ShieldCheck className="h-4 w-4 text-blue-500" />
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">Admin Panel</span>
+                                    </button>
+                                )}
                             </div>
+
 
                             {/* Scrollable Content */}
                             <div className="flex-1 overflow-y-auto px-5 pb-10 flex flex-col gap-5">

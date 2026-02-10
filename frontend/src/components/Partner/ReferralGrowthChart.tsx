@@ -265,7 +265,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
             {/* Main Chart Area - Reduced Height */}
             <div className="h-32 w-full relative px-2">
                 {/* Y-Axis Grid Lines */}
-                <div className="absolute inset-0 flex flex-col justify-between py-2 pointer-events-none opacity-10">
+                <div className="absolute top-0 bottom-0 left-2 right-2 flex flex-col justify-between py-2 pointer-events-none opacity-10">
                     {[1, 0.75, 0.5, 0.25, 0].map((tick) => (
                         <div key={tick} className="w-full h-px bg-slate-500" />
                     ))}
@@ -311,7 +311,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                 </svg>
 
                 {/* HTML Overlay for Interactive Points - Fixes aspect ratio distortion */}
-                <div className="absolute inset-0">
+                <div className="absolute top-0 bottom-0 left-2 right-2">
                     {chartData.map((point: ChartDataPoint, index: number) => {
                         const width = 100;
                         const height = 100;
