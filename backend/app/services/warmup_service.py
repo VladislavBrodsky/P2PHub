@@ -52,11 +52,15 @@ async def warmup_redis():
             else:
                 logger.info(f"✅ Leaderboard warmed up with {count} partners (Streamed).")
             
-            # 2. Cache Recent Partners (Skipped for now as noted)
+            # 2. Warmup Recent Partners (Social Proof)
+            from app.api.endpoints.partner import get_recent_partners
+            logger.info("📡 Warming up Recent Partners cache...")
+            await get_recent_partners(limit=10, session=session)
+            logger.info("✅ Recent Partners cache warmed up.")
             
         except Exception as e:
             logger.error(f"❌ Redis Warmup Failed: {e}")
         finally:
-            break # Exit generator after one session (crucial for get_session generator)
+            break 
 
     logger.info("✨ Redis Warmup Complete.")

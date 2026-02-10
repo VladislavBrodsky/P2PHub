@@ -93,7 +93,7 @@ async def create_partner(
     # 4.5 Invalidate Global Recent Partners list (Redis & DB snapshot)
     try:
         from app.models.partner import SystemSetting
-        await redis_service.client.delete("partners:recent")
+        await redis_service.client.delete("partners:recent_v2")
         
         # Also force DB snapshot refresh
         stmt = select(SystemSetting).where(SystemSetting.key == "partners_recent_snapshot")
@@ -188,8 +188,12 @@ async def process_referral_logic(partner_id: int):
                     if referrer.is_pro:
                         xp_gain *= 5
                         
-                    referrer.xp += xp_gain
-                    referrer.referral_count += 1
+                    # ATOMIC SQL INCREMENT (Resilient to concurrency)
+                    # We use a direct text query or SQLAlchemy expression to avoid race conditions
+                    await session.execute(
+                        text("UPDATE partner SET xp = xp + :gain, referral_count = referral_count + 1 WHERE id = :p_id"),
+                        {"gain": xp_gain, "p_id": referrer.id}
+                    )
                     
                     xp_tx = XPTransaction(
                         partner_id=referrer.id,
@@ -210,10 +214,12 @@ async def process_referral_logic(partner_id: int):
                         currency="XP"
                     )
                     session.add(xp_earning)
-                    session.add(referrer)
                     
                     # Flush to ensure XP is captured in the transaction
                     await session.flush()
+                    
+                    # Refresh referrer object to pick up the atomic changes for side effects (like level up)
+                    await session.refresh(referrer)
                     logger.info(f"💰 [Level {level}] XP Awarded: {xp_gain} to {referrer.id}")
                     
                 except Exception as core_error:
@@ -332,8 +338,11 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
         commission = total_amount * pct
         
         if commission > 0:
-            referrer.balance += commission
-            referrer.total_earned_usdt += commission
+            # ATOMIC SQL INCREMENT for Commissions
+            await session.execute(
+                text("UPDATE partner SET balance = balance + :comm, total_earned_usdt = total_earned_usdt + :comm WHERE id = :p_id"),
+                {"comm": commission, "p_id": referrer.id}
+            )
             
             # Log Commission Earning
             earning = Earning(
@@ -345,7 +354,9 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 currency="USDT"
             )
             session.add(earning)
-            session.add(referrer)
+            
+            # Refresh to pick up changes for cache consistency
+            await session.refresh(referrer)
             
             # Invalidate cache
             await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
@@ -364,38 +375,38 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
 
 async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dict[str, int]:
     """
-    Uses Recursive CTE for ultra-fast 9-level tree counting.
-    More robust than Materialized Path for deeper/fragmented lineage.
+    Uses Materialized Path for ultra-fast 9-level tree counting.
     Cached in Redis to avoid repeat execution.
     """
     cache_key = f"ref_tree_stats:{partner_id}"
     cached = await redis_service.get_json(cache_key)
     if cached: return cached
 
+    partner = await session.get(Partner, partner_id)
+    if not partner: return {f"level_{i}": 0 for i in range(1, 10)}
 
-    # Recursive CTE to find all descendants up to level 9
+    # Materialized Path prefix: current_path + current_id
+    search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
+    base_depth = len(search_path.split('.'))
+
+    # Calculate levels using the distance from base_depth
     query = text("""
-        WITH RECURSIVE descendants AS (
-            -- Anchor member: immediate children of the partner
-            SELECT id, referrer_id, 1 as level
-            FROM partner
-            WHERE referrer_id = :partner_id
-            
-            UNION ALL
-            
-            -- Recursive member: children of previously found descendants
-            SELECT p.id, p.referrer_id, d.level + 1
-            FROM partner p
-            JOIN descendants d ON p.referrer_id = d.id
-            WHERE d.level < 9
-        )
-        SELECT level, COUNT(*) as count
-        FROM descendants
+        SELECT 
+            (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level,
+            COUNT(*) as count
+        FROM partner
+        WHERE (path = :search_path OR path LIKE :search_wildcard)
         GROUP BY level
+        HAVING level >= 1 AND level <= 9
         ORDER BY level;
     """)
     
-    result = await session.execute(query, {"partner_id": partner_id})
+    result = await session.execute(query, {
+        "search_path": search_path, 
+        "search_wildcard": f"{search_path}.%",
+        "base_depth": base_depth
+    })
+    
     stats = {f"level_{i}": 0 for i in range(1, 10)}
     rows = result.all()
     for row in rows:
@@ -408,36 +419,34 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
 
 async def get_referral_tree_members(session: AsyncSession, partner_id: int, target_level: int) -> List[dict]:
     """
-    Fetches details of partners at a specific level using Recursive CTE.
-    NOTE: Caching is handled at the endpoint layer via get_or_compute.
+    Fetches details of partners at a specific level using Materialized Path.
     """
     if not (1 <= target_level <= 9):
         return []
 
+    partner = await session.get(Partner, partner_id)
+    if not partner: return []
+
+    search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
+    base_depth = len(search_path.split('.'))
+    target_depth = base_depth + target_level - 1
+
     query = text("""
-        WITH RECURSIVE descendants AS (
-            SELECT id, 1 as level
-            FROM partner
-            WHERE referrer_id = :partner_id
-            
-            UNION ALL
-            
-            SELECT p.id, d.level + 1
-            FROM partner p
-            JOIN descendants d ON p.referrer_id = d.id
-            WHERE d.level < :target_level
-        )
-        SELECT p.telegram_id, p.username, p.first_name, p.last_name, p.xp, p.photo_url, p.created_at,
-               p.balance, p.level as partner_level, p.referral_code, p.is_pro, p.updated_at, p.id, p.photo_file_id
-        FROM partner p
-        JOIN descendants d ON p.id = d.id
-        WHERE d.level = :target_level
-        ORDER BY p.xp DESC
+        SELECT telegram_id, username, first_name, last_name, xp, photo_url, created_at,
+               balance, level as partner_level, referral_code, is_pro, updated_at, id, photo_file_id
+        FROM partner
+        WHERE (path = :search_path OR path LIKE :search_wildcard)
+        AND (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) = :target_depth
+        ORDER BY xp DESC
         LIMIT 100;
     """)
     
     try:
-        result = await session.execute(query, {"partner_id": partner_id, "target_level": target_level})
+        result = await session.execute(query, {
+            "search_path": search_path,
+            "search_wildcard": f"{search_path}.%",
+            "target_depth": target_depth
+        })
         members = []
         rows = result.all()
         for row in rows:
@@ -465,8 +474,7 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
 
 async def get_network_growth_metrics(session: AsyncSession, partner_id: int, timeframe: str = '7D') -> dict:
     """
-    Calculates partners joined in the current period vs the previous period.
-    Periods are defined by the timeframe (e.g., 7D = current 7 days vs previous 7 days).
+    Calculates partners joined in the current period vs the previous period using Materialized Path.
     """
     cache_key = f"growth_metrics:{partner_id}:{timeframe}"
     cached = await redis_service.get_json(cache_key)
@@ -489,34 +497,34 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
     current_start = now - delta
     previous_start = now - (delta * 2)
 
-    base_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
+    search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
 
     # Query Current Period
     stmt_curr = text("""
-        WITH RECURSIVE descendants AS (
-            SELECT id FROM partner WHERE referrer_id = :partner_id
-            UNION ALL
-            SELECT p.id FROM partner p JOIN descendants d ON p.referrer_id = d.id
-        )
-        SELECT COUNT(*) FROM descendants d
-        INNER JOIN partner p ON p.id = d.id
-        WHERE p.created_at >= :start AND p.created_at <= :end
+        SELECT COUNT(*) FROM partner
+        WHERE (path = :search_path OR path LIKE :search_wildcard)
+        AND created_at >= :start AND created_at <= :end
     """)
-    res_curr = await session.execute(stmt_curr, {"partner_id": partner_id, "start": current_start, "end": now})
+    res_curr = await session.execute(stmt_curr, {
+        "search_path": search_path, 
+        "search_wildcard": f"{search_path}.%", 
+        "start": current_start, 
+        "end": now
+    })
     current_count = res_curr.scalar() or 0
 
     # Query Previous Period
     stmt_prev = text("""
-        WITH RECURSIVE descendants AS (
-            SELECT id FROM partner WHERE referrer_id = :partner_id
-            UNION ALL
-            SELECT p.id FROM partner p JOIN descendants d ON p.referrer_id = d.id
-        )
-        SELECT COUNT(*) FROM descendants d
-        INNER JOIN partner p ON p.id = d.id
-        WHERE p.created_at >= :start AND p.created_at < :end
+        SELECT COUNT(*) FROM partner
+        WHERE (path = :search_path OR path LIKE :search_wildcard)
+        AND created_at >= :start AND created_at < :end
     """)
-    res_prev = await session.execute(stmt_prev, {"partner_id": partner_id, "start": previous_start, "end": current_start})
+    res_prev = await session.execute(stmt_prev, {
+        "search_path": search_path, 
+        "search_wildcard": f"{search_path}.%", 
+        "start": previous_start, 
+        "end": current_start
+    })
     previous_count = res_prev.scalar() or 0
 
     # Calculate Growth %
@@ -537,8 +545,7 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
 
 async def get_network_time_series(session: AsyncSession, partner_id: int, timeframe: str = '7D') -> List[dict]:
     """
-    Returns data points for a growth chart, grouped by the appropriate interval.
-    Includes level breakdown (1-9) for each bucket.
+    Returns data points for a growth chart using Materialized Path.
     """
     cache_key = f"growth_chart:v2:{partner_id}:{timeframe}"
     cached = await redis_service.get_json(cache_key)
@@ -549,7 +556,6 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
 
     now = datetime.utcnow()
     
-    # Intervals: 24H -> Hour, 7D/1M -> Day, 3M/6M/1Y -> Month/Week
     if timeframe == '24H':
         interval = 'hour'
         start_time = now - timedelta(hours=24)
@@ -571,35 +577,30 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         start_time = now - timedelta(days=365)
         points = 12
 
-    # Recursive CTE to find all descendants up to level 9 and their creation bucket
+    search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
+    base_depth = len(search_path.split('.'))
+
+    # Path-based query for buckets and levels
     query = text(f"""
-        WITH RECURSIVE descendants AS (
-            -- Anchor: children of the partner
-            SELECT id, 1 as level, created_at
-            FROM partner
-            WHERE referrer_id = :partner_id
-            
-            UNION ALL
-            
-            -- Recursive: children of descendants
-            SELECT p.id, d.level + 1, p.created_at
-            FROM partner p
-            JOIN descendants d ON p.referrer_id = d.id
-            WHERE d.level < 9
-        )
         SELECT 
             date_trunc('{interval}', created_at) as bucket,
-            level,
+            (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level,
             COUNT(*) as count
-        FROM descendants
-        WHERE created_at >= :start
+        FROM partner
+        WHERE (path = :search_path OR path LIKE :search_wildcard)
+        AND created_at >= :start
         GROUP BY bucket, level
+        HAVING level >= 1 AND level <= 9
         ORDER BY bucket ASC, level ASC;
     """)
     
-    result = await session.execute(query, {"partner_id": partner_id, "start": start_time})
+    result = await session.execute(query, {
+        "search_path": search_path,
+        "search_wildcard": f"{search_path}.%",
+        "start": start_time,
+        "base_depth": base_depth
+    })
     
-    # Organize into a map: {bucket: {level: count}}
     data_map = {}
     rows = result.all()
     for row in rows:
@@ -610,24 +611,23 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
             data_map[bucket] = {lvl: 0 for lvl in range(1, 10)}
         data_map[bucket][level] = count
     
-    # Get base count per level (partners joined BEFORE start_time)
+    # Path-based base count per level
     stmt_base = text("""
-        WITH RECURSIVE descendants AS (
-            SELECT id, 1 as level, created_at
-            FROM partner
-            WHERE referrer_id = :partner_id
-            UNION ALL
-            SELECT p.id, d.level + 1, p.created_at
-            FROM partner p
-            JOIN descendants d ON p.referrer_id = d.id
-            WHERE d.level < 9
-        )
-        SELECT level, COUNT(*) 
-        FROM descendants
-        WHERE created_at < :start
+        SELECT 
+            (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level,
+            COUNT(*) 
+        FROM partner
+        WHERE (path = :search_path OR path LIKE :search_wildcard)
+        AND created_at < :start
         GROUP BY level
+        HAVING level >= 1 AND level <= 9
     """)
-    res_base = await session.execute(stmt_base, {"partner_id": partner_id, "start": start_time})
+    res_base = await session.execute(stmt_base, {
+        "search_path": search_path,
+        "search_wildcard": f"{search_path}.%",
+        "start": start_time,
+        "base_depth": base_depth
+    })
     res_base_list = res_base.all()
     running_totals = {lvl: 0 for lvl in range(1, 10)}
     for row in res_base_list:
@@ -655,8 +655,6 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
             next_step = next_step_bucket - bucket
 
         bucket_data = data_map.get(bucket, {lvl: 0 for lvl in range(1, 10)})
-        
-        # Update running totals with joined in this bucket
         for lvl in range(1, 10):
             running_totals[lvl] += bucket_data[lvl]
             

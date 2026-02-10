@@ -102,13 +102,8 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
-# Fix for Railway providing postgresql:// or postgres:// but SQLAlchemy requiring postgresql+asyncpg://
-database_url = settings.DATABASE_URL
-if database_url:
-    if database_url.startswith("postgresql://"):
-        database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
-    elif database_url.startswith("postgres://"):
-        database_url = database_url.replace("postgres://", "postgresql+asyncpg://", 1)
+# Standardized async database URL from settings
+database_url = settings.async_database_url
 
 connect_args = {}
 if "sqlite" not in database_url:
@@ -116,7 +111,7 @@ if "sqlite" not in database_url:
 
 engine = create_async_engine(
     database_url,
-    echo=True,
+    echo=settings.DEBUG,
     future=True,
     connect_args=connect_args
 )

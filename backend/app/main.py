@@ -35,8 +35,8 @@ async def lifespan(app: FastAPI):
         
         try:
             print(f"📡 Registering Webhook with Telegram: {webhook_url}")
-            # Use short timeout to prevent startup hang
-            async with asyncio.timeout(5.0):
+            # Increased timeout to prevent startup hang on slow API responses
+            async with asyncio.timeout(15.0):
                 await bot.set_webhook(
                     url=webhook_url,
                     secret_token=settings.WEBHOOK_SECRET,
@@ -44,8 +44,8 @@ async def lifespan(app: FastAPI):
                 )
             print(f"🚀 Webhook successfully set to: {webhook_url}")
         except asyncio.TimeoutError:
-            print("⚠️ Webhook registration timed out. The app will continue starting...")
-            # Consider falling back to polling if registration fails
+            print("⚠️ Webhook registration timed out (15s). The app will continue starting...")
+            # Consider falling back to polling if registration fails frequently
             # asyncio.create_task(dp.start_polling(bot))
         except Exception as e:
             print(f"❌ Failed to set webhook: {e}")

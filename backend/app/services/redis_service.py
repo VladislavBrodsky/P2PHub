@@ -4,7 +4,10 @@ from app.core.config import settings
 
 class RedisService:
     def __init__(self):
+        # Default client for text/JSON operations
         self.client = redis.from_url(settings.REDIS_URL, decode_responses=True)
+        # Raw client for binary operations (Photos, etc.)
+        self.raw_client = redis.from_url(settings.REDIS_URL, decode_responses=False)
 
     async def get(self, key: str):
         return await self.client.get(key)
@@ -13,17 +16,10 @@ class RedisService:
         await self.client.set(key, value, ex=expire)
 
     async def get_bytes(self, key: str):
-        # We need a separate client or different way to handle bytes
-        # since decode_responses=True is set.
-        # Let's use the low-level execute_command or create a byte-specific client.
-        raw_client = redis.from_url(settings.REDIS_URL, decode_responses=False)
-        async with raw_client:
-            return await raw_client.get(key)
+        return await self.raw_client.get(key)
 
     async def set_bytes(self, key: str, value: bytes, expire: int = None):
-        raw_client = redis.from_url(settings.REDIS_URL, decode_responses=False)
-        async with raw_client:
-            await raw_client.set(key, value, ex=expire)
+        await self.raw_client.set(key, value, ex=expire)
 
     async def get_json(self, key: str):
         data = await self.get(key)

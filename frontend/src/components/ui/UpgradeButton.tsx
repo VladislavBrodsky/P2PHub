@@ -35,14 +35,14 @@ export const UpgradeButton = ({ onClick, className = '', showPrice = true }: Upg
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleClick}
-            className={`relative w-full group overflow-hidden rounded-xl p-px ${className}`}
+            className={`relative w-full group overflow-hidden rounded-full p-[1px] ${className}`}
         >
             {/* Animated Border Gradient */}
-            <div className="absolute inset-0 bg-linear-to-r from-amber-400 via-yellow-200 to-orange-500 animate-shimmer"
-                style={{ backgroundSize: '200% 200%' }} />
+            <div className="absolute inset-0 bg-linear-to-r from-amber-400 via-white/80 to-orange-500 animate-[liquid_3s_linear_infinite]"
+                style={{ backgroundSize: '200% 100%' }} />
 
             {/* Inner Content */}
-            <div className="relative h-full bg-(--color-bg-surface) rounded-[0.7rem] flex items-center justify-between px-4 py-3 group-hover:bg-(--color-text-primary)/5 transition-colors">
+            <div className="relative h-full bg-(--color-bg-surface) rounded-full flex items-center justify-between px-4 py-3 group-hover:bg-(--color-text-primary)/5 transition-colors">
                 <div className="flex items-center gap-3">
                     <div className="relative">
                         <div className="absolute inset-0 bg-amber-400 blur-md opacity-40 animate-pulse" />
