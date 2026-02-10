@@ -3,6 +3,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.security import get_current_user, get_tg_user
 from app.models.partner import Partner, get_session, XPTransaction
 from app.models.schemas import PartnerResponse, TaskClaimRequest, GrowthMetrics, NetworkStats, EarningSchema, PartnerTopResponse
+from app.core.config import settings
 from sqlmodel import select
 from sqlalchemy.orm import selectinload
 from app.services.redis_service import redis_service
