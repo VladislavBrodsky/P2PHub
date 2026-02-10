@@ -4,7 +4,7 @@ from fastapi import FastAPI, Depends, HTTPException, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
-from app.api.endpoints import partner, earnings, tools, leaderboard, payment
+from app.api.endpoints import partner, earnings, tools, leaderboard, payment, admin
 from app.core.config import settings
 from bot import bot, dp
 from aiogram import types
@@ -85,7 +85,7 @@ from slowapi.errors import RateLimitExceeded
 
 # Add rate limiter state and exception handler
 app.state.limiter = limiter
-app.add_exception_handler(Rate LimitExceeded, rate_limit_exceeded_handler)
+app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
 
 # Configure CORS
 origins = [settings.FRONTEND_URL]
@@ -105,6 +105,7 @@ app.include_router(earnings.router, prefix="/api/earnings", tags=["earnings"])
 app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderboard"])
 app.include_router(tools.router, prefix="/api/tools", tags=["tools"])
 app.include_router(payment.router, prefix="/api/payment", tags=["payment"])
+app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
 from app.api.endpoints import health, config
 app.include_router(health.router, tags=["health"])
 app.include_router(config.router, prefix="/api/config", tags=["config"])

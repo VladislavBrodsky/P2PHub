@@ -38,6 +38,11 @@ class Settings(BaseSettings):
     TON_MANIFEST_URL: str = "https://p2phub-frontend.up.railway.app/tonconnect-manifest.json"
     PAYMENT_SERVICE_MODE: str = "ton_api" # Enum: auto_approve, ton_api, manual
     
+    # Admin settings
+    ADMIN_USER_IDS: list[str] = ["12345678", "537873096", "716720099"] # uslincoln added here
+
+
+    
     class Config:
         # env_file = ".env"  <-- Removed to prevent PermissionError in sandbox
         # Allow extra fields from Railway/environment

@@ -4,6 +4,7 @@ from app.core.security import get_current_user
 from app.core.config import settings
 from app.models.partner import Partner, get_session
 from app.services.payment_service import payment_service
+from app.services.notification_service import notification_service
 from sqlmodel import select
 import json
 
@@ -118,4 +119,25 @@ async def submit_manual_payment(
     session.add(transaction)
     await session.commit()
     
+    # Notify Admins
+    try:
+        admin_msg = (
+            "🚨 *NEW MANUAL PAYMENT SUBMITTED*\n\n"
+            f"👤 *Partner:* {partner.first_name} (@{partner.username})\n"
+            f"💰 *Amount:* ${amount} {currency} ({network})\n"
+            f"📝 *Hash:* `{tx_hash}`\n\n"
+            "Please verify and approve in the Admin Panel."
+        )
+        for admin_id in settings.ADMIN_USER_IDS:
+            try:
+                await notification_service.enqueue_notification(
+                    chat_id=int(admin_id),
+                    text=admin_msg
+                )
+            except Exception:
+                pass
+    except Exception as e:
+        print(f"[DEBUG] Admin notification failed: {e}")
+    
     return {"status": "submitted", "message": "Payment submitted for manual review"}
+
