@@ -51,7 +51,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
     };
 
     return (
-        <div className="fixed inset-0 z-200 bg-black">
+        <div className="fixed inset-0 z-200 bg-black" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
             <AnimatePresence mode="wait">
                 <motion.div
                     key={index}
@@ -59,9 +59,10 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     className={`relative w-full h-full flex flex-col items-center justify-center p-8 bg-linear-to-br ${STORIES[index].color}`}
+                    style={{ paddingTop: 'calc(env(safe-area-inset-top) + 3rem)' }}
                 >
                     {/* Progress Bar */}
-                    <div className="absolute top-12 left-6 right-6 flex gap-1.5 z-10">
+                    <div className="absolute left-6 right-6 flex gap-1.5 z-10" style={{ top: 'calc(env(safe-area-inset-top) + 4rem)' }}>
                         {STORIES.map((_, i) => (
                             <div key={i} className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden">
                                 <motion.div
@@ -77,7 +78,8 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
 
                     <button
                         onClick={onComplete}
-                        className="absolute top-20 right-6 z-20 p-2 rounded-full bg-white/10 backdrop-blur-md text-white/70 hover:text-white"
+                        className="absolute right-6 z-20 p-2 rounded-full bg-white/10 backdrop-blur-md text-white/70 hover:text-white"
+                        style={{ top: 'calc(env(safe-area-inset-top) + 5.5rem)' }}
                     >
                         <X size={20} />
                     </button>
