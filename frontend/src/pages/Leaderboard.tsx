@@ -3,6 +3,7 @@ import { LeagueCard, LeagueTier } from '../components/League/LeagueCard';
 import { Section } from '../components/Section';
 import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 import { useTranslation } from 'react-i18next';
+import { LazyImage } from '../components/ui/LazyImage';
 
 import { apiClient } from '../api/client';
 
@@ -85,18 +86,13 @@ export default function LeaderboardPage() {
                                 <div className="flex items-center gap-3">
                                     <div className={`h-10 w-10 overflow-hidden rounded-full border-2 ${index < 3 ? 'border-amber-500 shadow-sm' : 'border-(--color-brand-border)'} bg-slate-200 dark:bg-slate-700`}>
                                         {user.photo_url ? (
-                                            <img
+                                            <LazyImage
                                                 src={user.photo_url}
                                                 alt={user.username || user.first_name}
                                                 className="h-full w-full object-cover"
-                                                onError={(e) => {
-                                                    // Fallback if the real photo fails to load
-                                                    const target = e.target as HTMLImageElement;
-                                                    target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username || user.first_name}`;
-                                                }}
                                             />
                                         ) : (
-                                            <img
+                                            <LazyImage
                                                 src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username || user.first_name}`}
                                                 alt={user.username || user.first_name}
                                                 className="h-full w-full object-cover"

@@ -69,6 +69,19 @@ async def create_partner(
     await session.commit()
     await session.refresh(partner)
     
+    # 4. Invalidate referral tree stats for ancestors
+    if referrer:
+        try:
+            # Reconstruct lineage for invalidation (up to 9 levels)
+            anc_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+            for anc_id in anc_ids[-9:]:
+                await redis_service.client.delete(f"ref_tree_stats:{anc_id}")
+                # Also invalidate Level 1 members for immediate referrer
+                if anc_id == referrer.id:
+                    await redis_service.client.delete(f"ref_tree_members:{anc_id}:1")
+        except Exception as e:
+            logger.error(f"Failed to invalidate cache for ancestors: {e}")
+    
     return partner, True
 
 # Keep strong references to background tasks to prevent GC
@@ -327,51 +340,49 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
 
 async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dict[int, int]:
     """
-    Uses Materialized Path for ultra-fast 9-level tree counting.
+    Uses Recursive CTE for ultra-fast 9-level tree counting.
+    More robust than Materialized Path for deeper/fragmented lineage.
     Cached in Redis to avoid repeat execution.
     """
     cache_key = f"ref_tree_stats:{partner_id}"
     cached = await redis_service.get_json(cache_key)
     if cached: return {int(k): v for k, v in cached.items()}
 
-    # Optimized Query using Path
-    # We look for path starting with partner_id. or being exactly partner_id (if we want self, but normally we want descendants)
-    # For descendants, path starts with f"{root_path}.{partner_id}." or IS f"{root_path}.{partner_id}" (if root_path empty)
-    
-    # Let's get the partner first to know their path base
-    partner = await session.get(Partner, partner_id)
-    if not partner: return {i: 0 for i in range(1, 10)}
-    
-    base_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
-    
-    base_dots = base_path.count('.') if base_path else -1
-    
-    # Query: Count partners where path starts with base_path
-    # We calculate level by counting dots in the path relative to base_path dots
+    # Recursive CTE to find all descendants up to level 9
     query = text("""
-        SELECT 
-            (length(COALESCE(path, '')) - length(replace(COALESCE(path, ''), '.', ''))) - :base_dots + 1 as tree_level,
-            COUNT(*) as count
-        FROM partner
-        WHERE (path = :base_path OR path LIKE :base_path || '.%')
-        GROUP BY tree_level
-        HAVING tree_level BETWEEN 1 AND 9
-        ORDER BY tree_level;
+        WITH RECURSIVE descendants AS (
+            -- Anchor member: immediate children of the partner
+            SELECT id, referrer_id, 1 as level
+            FROM partner
+            WHERE referrer_id = :partner_id
+            
+            UNION ALL
+            
+            -- Recursive member: children of previously found descendants
+            SELECT p.id, p.referrer_id, d.level + 1
+            FROM partner p
+            JOIN descendants d ON p.referrer_id = d.id
+            WHERE d.level < 9
+        )
+        SELECT level, COUNT(*) as count
+        FROM descendants
+        GROUP BY level
+        ORDER BY level;
     """)
     
-    result = await session.execute(query, {"base_path": base_path, "base_dots": base_dots})
+    result = await session.execute(query, {"partner_id": partner_id})
     stats = {i: 0 for i in range(1, 10)}
     for row in result:
         lvl = int(row[0])
         if 1 <= lvl <= 9:
             stats[lvl] = row[1]
         
-    await redis_service.set_json(cache_key, stats, expire=300)
+    await redis_service.set_json(cache_key, stats, expire=1800) # 30 mins cache
     return stats
 
 async def get_referral_tree_members(session: AsyncSession, partner_id: int, target_level: int) -> List[dict]:
     """
-    Fetches details of partners at a specific level using Materialized Path.
+    Fetches details of partners at a specific level using Recursive CTE.
     """
     if not (1 <= target_level <= 9):
         return []
@@ -380,28 +391,29 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
     cached = await redis_service.get_json(cache_key)
     if cached: return cached
 
-    partner = await session.get(Partner, partner_id)
-    if not partner: return []
-    
-    base_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
-    
-    # Calculate exact path depth for the target level
-    # Level 1 means path == base_path
-    # Level 2 means path == base_path.child_id (one dot more than base_path)
-    base_dots = base_path.count('.') if base_path else -1
-    target_dots = base_dots + target_level - 1
-    
     query = text("""
-        SELECT telegram_id, username, first_name, last_name, xp, photo_url, created_at, path
-        FROM partner
-        WHERE (path = :base_path OR path LIKE :base_path || '.%')
-        AND (length(path) - length(replace(path, '.', ''))) = :target_dots
-        ORDER BY xp DESC
+        WITH RECURSIVE descendants AS (
+            SELECT id, 1 as level
+            FROM partner
+            WHERE referrer_id = :partner_id
+            
+            UNION ALL
+            
+            SELECT p.id, d.level + 1
+            FROM partner p
+            JOIN descendants d ON p.referrer_id = d.id
+            WHERE d.level < :target_level
+        )
+        SELECT p.telegram_id, p.username, p.first_name, p.last_name, p.xp, p.photo_url, p.created_at
+        FROM partner p
+        JOIN descendants d ON p.id = d.id
+        WHERE d.level = :target_level
+        ORDER BY p.xp DESC
         LIMIT 100;
     """)
     
     try:
-        result = await session.execute(query, {"base_path": base_path, "target_dots": target_dots})
+        result = await session.execute(query, {"partner_id": partner_id, "target_level": target_level})
         members = []
         for row in result:
             members.append({
@@ -414,7 +426,7 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
                 "joined_at": row[6].isoformat() if row[6] else None
             })
         
-        await redis_service.set_json(cache_key, members, expire=300)
+        await redis_service.set_json(cache_key, members, expire=1800)
         return members
     except Exception as e:
         logger.error(f"Error fetching tree members: {e}")
@@ -450,20 +462,30 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
 
     # Query Current Period
     stmt_curr = text("""
-        SELECT COUNT(*) FROM partner 
-        WHERE (path = :path OR path LIKE :path || '.%')
-        AND created_at >= :start AND created_at <= :end
+        WITH RECURSIVE descendants AS (
+            SELECT id FROM partner WHERE referrer_id = :partner_id
+            UNION ALL
+            SELECT p.id FROM partner p JOIN descendants d ON p.referrer_id = d.id
+        )
+        SELECT COUNT(*) FROM descendants d
+        INNER JOIN partner p ON p.id = d.id
+        WHERE p.created_at >= :start AND p.created_at <= :end
     """)
-    res_curr = await session.execute(stmt_curr, {"path": base_path, "start": current_start, "end": now})
+    res_curr = await session.execute(stmt_curr, {"partner_id": partner_id, "start": current_start, "end": now})
     current_count = res_curr.scalar() or 0
 
     # Query Previous Period
     stmt_prev = text("""
-        SELECT COUNT(*) FROM partner 
-        WHERE (path = :path OR path LIKE :path || '.%')
-        AND created_at >= :start AND created_at < :end
+        WITH RECURSIVE descendants AS (
+            SELECT id FROM partner WHERE referrer_id = :partner_id
+            UNION ALL
+            SELECT p.id FROM partner p JOIN descendants d ON p.referrer_id = d.id
+        )
+        SELECT COUNT(*) FROM descendants d
+        INNER JOIN partner p ON p.id = d.id
+        WHERE p.created_at >= :start AND p.created_at < :end
     """)
-    res_prev = await session.execute(stmt_prev, {"path": base_path, "start": previous_start, "end": current_start})
+    res_prev = await session.execute(stmt_prev, {"partner_id": partner_id, "start": previous_start, "end": current_start})
     previous_count = res_prev.scalar() or 0
 
     # Calculate Growth %
@@ -518,15 +540,20 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     # Query counts grouped by interval
     # Note: date_trunc is Postgres specific
     query = text(f"""
-        SELECT date_trunc('{interval}', created_at) as bucket, COUNT(*) 
-        FROM partner 
-        WHERE (path = :path OR path LIKE :path || '.%')
-        AND created_at >= :start
+        WITH RECURSIVE descendants AS (
+            SELECT id FROM partner WHERE referrer_id = :partner_id
+            UNION ALL
+            SELECT p.id FROM partner p JOIN descendants d ON p.referrer_id = d.id
+        )
+        SELECT date_trunc('{interval}', p.created_at) as bucket, COUNT(*) 
+        FROM descendants d
+        INNER JOIN partner p ON p.id = d.id
+        WHERE p.created_at >= :start
         GROUP BY bucket
         ORDER BY bucket ASC
     """)
     
-    result = await session.execute(query, {"path": base_path, "start": start_time})
+    result = await session.execute(query, {"partner_id": partner_id, "start": start_time})
     
     data_map = {row[0]: row[1] for row in result}
     
@@ -537,11 +564,16 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     
     # Get base count (partners joined BEFORE start_time)
     stmt_base = text("""
-        SELECT COUNT(*) FROM partner 
-        WHERE (path = :path OR path LIKE :path || '.%')
-        AND created_at < :start
+        WITH RECURSIVE descendants AS (
+            SELECT id FROM partner WHERE referrer_id = :partner_id
+            UNION ALL
+            SELECT p.id FROM partner p JOIN descendants d ON p.referrer_id = d.id
+        )
+        SELECT COUNT(*) FROM descendants d
+        INNER JOIN partner p ON p.id = d.id
+        WHERE p.created_at < :start
     """)
-    res_base = await session.execute(stmt_base, {"path": base_path, "start": start_time})
+    res_base = await session.execute(stmt_base, {"partner_id": partner_id, "start": start_time})
     running_total = res_base.scalar() or 0
 
     for i in range(points + 1):

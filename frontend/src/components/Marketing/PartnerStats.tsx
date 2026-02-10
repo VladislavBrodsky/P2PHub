@@ -3,6 +3,7 @@ import { Users, Zap, Globe2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { apiClient } from '../../api/client';
+import { LazyImage } from '../ui/LazyImage';
 
 interface PartnerStatsProps {
     onNavigateToEarn?: () => void;
@@ -13,7 +14,7 @@ const PartnerAvatar = ({ partner, index }: { partner: any; index: number }) => {
 
     if (partner.photo_url && !imgError) {
         return (
-            <img
+            <LazyImage
                 src={partner.photo_url}
                 alt={partner.first_name}
                 className="w-full h-full object-cover"

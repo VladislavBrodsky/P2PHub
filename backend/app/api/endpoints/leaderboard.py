@@ -60,9 +60,9 @@ async def get_global_leaderboard(
     # 3. Hydrate via Service
     data = await leaderboard_service.hydrate_leaderboard(partner_ids, scores, session)
     
-    # 4. Cache for 60 seconds
+    # 4. Cache for 300 seconds (5 minutes)
     try:
-        await redis_service.set_json(cache_key, data, expire=60)
+        await redis_service.set_json(cache_key, data, expire=300)
     except Exception: pass
     
     return data
