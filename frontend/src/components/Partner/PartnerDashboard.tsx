@@ -81,7 +81,7 @@ export const PartnerDashboard = () => {
                 <div className="grid grid-cols-2 gap-2">
                     <div className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm">
                         <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Total Earned</div>
-                        <div className="text-2xl font-black text-slate-900 dark:text-white">${user?.balance?.toFixed(2) || '0.00'}</div>
+                        <div className="text-2xl font-black text-slate-900 dark:text-white">${(user?.total_earned || 0).toFixed(2)}</div>
                     </div>
                     <div
                         className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm active:scale-95 transition-transform cursor-pointer relative group overflow-hidden"

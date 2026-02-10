@@ -142,13 +142,28 @@ async def get_my_profile(
         # Invalidate cache again since we updated the profile
         await redis_service.client.delete(f"partner:profile:{tg_id}")
 
+    # 3. Calculate total earned from commissions
+    from app.models.partner import Earning
+    from sqlalchemy import func
+    
+    earnings_stmt = select(func.sum(Earning.amount)).where(
+        Earning.partner_id == partner.id,
+        Earning.currency == "USDT"  # Only sum USDT earnings
+    )
+    earnings_result = await session.exec(earnings_stmt)
+    total_earned = earnings_result.one_or_none() or 0.0
+    
+    # Add calculated field to partner object (not saved to DB)
+    partner_dict = partner.dict()
+    partner_dict["total_earned"] = float(total_earned)
+
     # 4. Store in Redis Cache (expires in 5 minutes)
     try:
-        await redis_service.set_json(cache_key, partner.dict(), expire=300)
+        await redis_service.set_json(cache_key, partner_dict, expire=300)
     except Exception:
         pass
         
-    return partner
+    return partner_dict
 
     return partners_data
 

@@ -12,6 +12,7 @@ class PartnerBase(BaseModel):
 
 class PartnerResponse(PartnerBase):
     balance: float
+    total_earned: Optional[float] = 0.0  # Sum of all PRO commissions and earnings
     xp: float
     level: int
     referral_code: str

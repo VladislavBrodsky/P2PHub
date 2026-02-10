@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Body
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.security import get_current_user
+from app.core.config import settings
 from app.models.partner import Partner, get_session
 from app.services.payment_service import payment_service
 from sqlmodel import select
