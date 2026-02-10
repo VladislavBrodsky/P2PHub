@@ -34,7 +34,11 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
 
         switch (platform) {
             case 'telegram':
-                window.open(`https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(text)}`, '_blank');
+                if (window.Telegram?.WebApp) {
+                    window.Telegram.WebApp.switchInlineQuery(referralCode);
+                } else {
+                    window.open(`https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(text)}`, '_blank');
+                }
                 break;
             case 'whatsapp':
                 window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + referralLink)}`, '_blank');

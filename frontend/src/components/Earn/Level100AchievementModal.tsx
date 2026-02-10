@@ -48,11 +48,12 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
     const handleShare = () => {
         impact('heavy');
         const link = `https://t.me/pintopay_probot?start=${user?.referral_code || ''}`;
-        const text = "I'm climbing to Level 100 in Pintopay! Join my network to unlock Fanocracy benefits together! 🚀";
+        const referralCode = user?.referral_code || '';
 
         if (window.Telegram?.WebApp) {
-            window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`);
+            window.Telegram.WebApp.switchInlineQuery(referralCode);
         } else if (navigator.share) {
+            const text = "I'm climbing to Level 100 in Pintopay! Join my network to unlock Fanocracy benefits together! 🚀";
             navigator.share({ title: 'Join P2PHub', text, url: link });
         } else {
             navigator.clipboard.writeText(link);

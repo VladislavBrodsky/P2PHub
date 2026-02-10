@@ -173,13 +173,15 @@ export default function ReferralPage() {
 
     const handleShareTelegram = () => {
         selection();
-        const text = encodeURIComponent(VIRAL_TEXT);
-        const url = encodeURIComponent(referralLink);
-        const shareUrl = `https://t.me/share/url?url=${url}&text=${text}`;
 
         if (window.Telegram?.WebApp) {
-            window.Telegram.WebApp.openTelegramLink(shareUrl);
+            // Trigger Inline Query with the referral code to show the Marketing Card
+            window.Telegram.WebApp.switchInlineQuery(referralCode);
         } else {
+            // Fallback to static link if not in Telegram (though this is TMA)
+            const text = encodeURIComponent(VIRAL_TEXT);
+            const url = encodeURIComponent(referralLink);
+            const shareUrl = `https://t.me/share/url?url=${url}&text=${text}`;
             window.open(shareUrl, '_blank');
         }
         setShowShareModal(false);
@@ -240,7 +242,7 @@ export default function ReferralPage() {
                                     <div className="absolute -inset-0.5 bg-linear-to-r from-blue-500 to-indigo-500 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000" />
                                     <div className="relative bg-(--color-bg-surface) rounded-3xl overflow-hidden border border-(--color-border-glass) shadow-2xl">
                                         <div className="relative h-44">
-                                            <img src="/viral-invite.webp" alt={t('referral.modal.invite_image_alt')} className="w-full h-full object-cover opacity-90" />
+                                            <img src={`${getApiUrl()}/images/2026-02-05%2003.35.03.jpg`} alt={t('referral.modal.invite_image_alt')} className="w-full h-full object-cover opacity-90" />
                                             {/* Glossy Overlay */}
                                             <div className="absolute inset-0 bg-linear-to-t from-(--color-bg-surface) via-transparent to-transparent" />
                                             <div className="absolute inset-0 bg-linear-to-tr from-blue-500/10 to-transparent" />
