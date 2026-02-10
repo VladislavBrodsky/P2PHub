@@ -42,7 +42,7 @@ async def create_invoice(
 
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
-    partner = result.first()
+    partner = await result.first()
     
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
@@ -72,7 +72,7 @@ async def verify_ton(
 
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
-    partner = result.first()
+    partner = await result.first()
     
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
@@ -107,7 +107,7 @@ async def submit_manual_payment(
 
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
-    partner = result.first()
+    partner = await result.first()
     
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")

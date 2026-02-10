@@ -1,64 +1,56 @@
-# P2PHub Full-Stack Technical Audit Report (Feb 2026)
+# P2PHub Log Audit Report
 
-This audit identifies critical bottlenecks, architectural conflicts, and performance optimization opportunities for the P2PHub Telegram Mini App.
-
-## 🔴 Critical Performance Bottlenecks
-
-### 1. Synchronous Referral Chain Processing
-The `process_referral_notifications` service in `partner_service.py` handles a 9-level deep chain. For every level, it performs a 1-to-1 sequential Telegram API call (`bot.send_message`). 
-- **Impact**: If a user is referred, the backend response remains "Pending" until all 9 messages are sent. This can take 3-5 seconds on mobile, causing the frontend to appear "frozen" during signup.
-- **Expert Solution**: Offload these notifications to a **Background Task** (FastAPI `BackgroundTasks`) or a worker queue.
-
-### 2. Recursive SQL Queries
-`get_referral_tree_stats` performs 9 separate `SELECT` queries sequentially to build the partner graph.
-- **Impact**: Extremely slow for users with large networks. 
-- **Expert Solution**: Use a **Recursive Common Table Expression (CTE)** in SQL to fetch the entire tree in one single query, then cache the result in **Redis**.
-
-### 3. Missing Professional Fonts (FOUT)
-`index.css` defines `--font-sans: "Inter", "Onest"`, but no `@import` or `<link>` exists in the codebase.
-- **Impact**: The app falls back to generic system fonts. This breaks the "High Fidelity" Apple-esque brand identity and causes a visual "glitch" (Flash of Unstyled Text) when the app first loads.
+## Summary
+I have conducted a comprehensive audit of the log files located in `archive_logs/` and `ideas/`. The following major issues were identified and analyzed.
 
 ---
 
-## 🟠 Architectural Issues & Conflicts
-
-### 1. Hardcoded Production URLs
-The `TonConnectUIProvider` and several frontend hooks use hardcoded `production.up.railway.app` URLs.
-- **Impact**: Makes testing in Staging or Local environment difficult/impossible as it will constantly redirect or fetch from the production backend.
-
-### 2. Redundant Profile Writes
-The `/me` endpoint in `partner.py` updates the user's `username` and `photo_url` in the database on **every single request**.
-- **Impact**: Unnecessary DB lock contention and write IOPS.
-- **Expert Solution**: Only call `session.add(partner)` if the incoming data actually differs from the stored state.
-
-### 3. Inefficient Asset Loading
-The app uses massive un-optimized `unsplash.com` images directly.
-- **Impact**: Slow "first paint" on slow mobile networks (3G/4G).
-- **Expert Solution**: Use a **CDN (Cloudinary/Imgix)** to serve compressed, WebP versions of these assets.
+## 1. Deployment and Build Blockers
+### ❌ Missing `railway` Executable
+- **Observation**: Found in `logs.1770692299131.json`.
+- **Error**: `The executable railway could not be found.`
+- **Cause**: The `Dockerfile` uses a lean `python:3.12-slim` base image which does not include the Railway CLI. If the Railway dashboard represents a "Custom Start Command" using `railway run ...`, it will fail.
+- **Recommendation**: Ensure the Railway dashboard configuration uses the standard `uvicorn` command or set the root directory to `backend/` and use the auto-detected `CMD`.
 
 ---
 
-## 🟡 UI/UX & Mini App Stability
+## 2. Code Runtime Issues (Historical & Current)
+### ⚠️ Unawaited Coroutines
+- **Observation**: Found in `logs.1770662269036.json`.
+- **Error**: `RuntimeWarning: coroutine 'get_network_time_series' was never awaited`.
+- **Cause**: Use of `lambda` functions in `redis_service.get_or_compute` without ensuring the wrapped coroutine is properly awaited by the caller. 
+- **Status**: The current logic in `redis_service.py` (`data = await factory()`) attempts to handle this, but older versions of the code caused these warnings.
 
-### 1. CSS Box-Shadow Performance
-Heavy `box-shadow` and `filter: blur` are used in several animations (e.g., `pulse-glow`).
-- **Impact**: Causes "frame skipping" and battery drain on older Android/iOS devices. 
-- **Expert Solution**: Replace shadow animations with `opacity` or `transform: scale` layers using GPU acceleration (`will-change`).
-
-### 2. Viewport Mount Race Condition
-In `App.tsx`, `viewport.expand()` is behind a `setTimeout(100)`. 
-- **Impact**: Causes a visible "jump" after the app loads.
+### ❌ Historical Import and Syntax Errors
+- **`ImportError`**: Found in `ideas/logs.1770534062921.json`. Attempted to import `get_session` from `partner_service` instead of `models.partner`. (Currently FIXED in `bot.py`).
+- **`SyntaxError`**: Found in `logs.1770687122999.json`. a space in `Rate LimitExceeded`. (Currently FIXED in `main.py`).
 
 ---
 
-## 🚀 Optimization Roadmap
+## 3. Database & Concurrency
+### 🔄 SQLAlchemy Transaction Rollbacks
+- **Observation**: Multiple logs (e.g., `logs.1770689787199.json`) show repeated `ROLLBACK` calls immediately after startup.
+- **Cause**: This usually happens when the connection pool establishes a connection, attempts a validation query, and then returns it to the pool, or when a transaction is started by FastAPI dependency injection but no work is performed before the request ends.
+- **Recommendation**: Monitor for connection pool exhaustion during peak traffic (100K+ users).
 
-| Priority | Task | Tool |
-| :--- | :--- | :--- |
-| **P0** | Implement Caching for 9-level referral stats | **Redis** |
-| **P0** | Import Onest/Inter via Google Fonts | **CDN** |
-| **P1** | Offload Telegram Notifications to background | **FastAPI BackgroundTasks** |
-| **P1** | Optimize `CommunityOrbit` math for GPU | **CSS Variables** |
-| **P2** | Centralize InitData parsing into shared Dependency | **FastAPI Depends** |
+### 🐛 `MissingGreenlet` Error
+- **Observation**: Found in `logs.1770619833861.json`.
+- **Error**: `sqlalchemy.exc.MissingGreenlet: greenlet_spawn has not been called`.
+- **Cause**: Accessing a lazy-loaded relationship or executing a query on an `AsyncSession` using a synchronous method.
+- **Recommendation**: Ensure all database interactions (including relationship scans) are awaited and pre-fetched using `selectinload` or `joinedload`.
 
-**Conclusion**: The codebase is modern but currently "bottlenecked" by synchronous external calls and lack of data caching. Fixing the Referral Graph with Redis and the Font Loading will provide the most significant "speedup" perceived by the user.
+---
+
+## 4. Environment & Connectivity
+- **Frontend URL**: `https://p2phub-frontend-production.up.railway.app`
+- **Backend URL**: `https://p2phub-production.up.railway.app`
+- **Redis**: Configured to use `redis.railway.internal:6379` (low latency).
+- **Postgres**: Using `switchback.proxy.rlwy.net` (external proxy) instead of internal DNS.
+- **Recommendation**: Use the internal database host in production for better performance.
+
+---
+
+## Final Suggestions
+1. **Optimize Database Queries**: High CPU/Contention seen in healthcheck failures (`logs.1770691770956.json`) suggests that migrations or heavy startup queries might be locking the DB.
+2. **Clean Up `scripts/`**: Many scripts have hardcoded `DATABASE_URL`. These should be updated to use `app.core.config.settings` to avoid migration errors.
+3. **Verify CORS**: Ensure that the backend `allow_origins` exactly matches the production frontend domain.

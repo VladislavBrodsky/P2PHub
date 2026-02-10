@@ -50,7 +50,7 @@ class LeaderboardService:
             
         statement = select(Partner).where(Partner.id.in_(partner_ids))
         result = await session.exec(statement)
-        partners = result.all()
+        partners = await result.all()
         
         # Map to schema and sort by score
         hydrated = []

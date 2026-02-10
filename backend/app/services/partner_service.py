@@ -29,7 +29,7 @@ async def create_partner(
     # 1. Check if partner exists
     statement = select(Partner).where(Partner.telegram_id == telegram_id)
     result = await session.exec(statement)
-    partner = result.first()
+    partner = await result.first()
     
     if partner:
         return partner, False
@@ -42,7 +42,7 @@ async def create_partner(
             # 2a. Try direct code match
             ref_stmt = select(Partner).where(Partner.referral_code == referrer_code)
             ref_res = await session.exec(ref_stmt)
-            referrer = ref_res.first()
+            referrer = await ref_res.first()
             
             if referrer:
                 referrer_id = referrer.id
@@ -96,12 +96,12 @@ async def process_referral_notifications(bot, session: AsyncSession, partner: Pa
 async def get_partner_by_telegram_id(session: AsyncSession, telegram_id: str) -> Optional[Partner]:
     statement = select(Partner).where(Partner.telegram_id == telegram_id)
     result = await session.exec(statement)
-    return result.first()
+    return await result.first()
 
 async def get_partner_by_referral_code(session: AsyncSession, code: str) -> Optional[Partner]:
     statement = select(Partner).where(Partner.referral_code == code)
     result = await session.exec(statement)
-    return result.first()
+    return await result.first()
 
 
 from app.worker import broker
@@ -138,109 +138,110 @@ async def process_referral_logic(partner_id: int):
 
             # 2. Bulk Fetch all ancestors
             statement = select(Partner).where(Partner.id.in_(lineage_ids))
-        result = await session.exec(statement)
-        ancestor_map = {p.id: p for p in result.all()}
+            result = await session.exec(statement)
+            ancestor_list = await result.all()
+            ancestor_map = {p.id: p for p in ancestor_list}
 
-        # XP distribution configuration
-        XP_MAP = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
-        
-        current_referrer_id = partner.referrer_id
-        for level in range(1, 10):
-            if not current_referrer_id:
-                break
-                
-            referrer = ancestor_map.get(current_referrer_id)
-            if not referrer:
-                break
-                
-            # 1. Distribute XP
-            xp_gain = XP_MAP.get(level, 0)
-            if referrer.is_pro:
-                xp_gain *= 5
-                
-            referrer.xp += xp_gain
+            # XP distribution configuration
+            XP_MAP = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
             
-            # Atomic growth increment (Network Size)
-            referrer.referral_count += 1
-            
-            xp_tx = XPTransaction(
-                partner_id=referrer.id,
-                amount=xp_gain,
-                type="REFERRAL_L1" if level == 1 else "REFERRAL_DEEP",
-                description=f"Referral XP reward from Level {level}",
-                reference_id=str(partner.id)
-            )
-            session.add(xp_tx)
+            current_referrer_id = partner.referrer_id
+            for level in range(1, 10):
+                if not current_referrer_id:
+                    break
+                    
+                referrer = ancestor_map.get(current_referrer_id)
+                if not referrer:
+                    break
+                    
+                # 1. Distribute XP
+                xp_gain = XP_MAP.get(level, 0)
+                if referrer.is_pro:
+                    xp_gain *= 5
+                    
+                referrer.xp += xp_gain
+                
+                # Atomic growth increment (Network Size)
+                referrer.referral_count += 1
+                
+                xp_tx = XPTransaction(
+                    partner_id=referrer.id,
+                    amount=xp_gain,
+                    type="REFERRAL_L1" if level == 1 else "REFERRAL_DEEP",
+                    description=f"Referral XP reward from Level {level}",
+                    reference_id=str(partner.id)
+                )
+                session.add(xp_tx)
 
-            # 1.2 Unified Transaction: Log XP as an Earning
-            from app.models.partner import Earning
-            xp_earning = Earning(
-                partner_id=referrer.id,
-                amount=xp_gain,
-                description=f"Referral XP Reward (Level {level})",
-                type="REFERRAL_XP",
-                level=level,
-                currency="XP"
-            )
-            session.add(xp_earning)
-            
-            # 2. Handle Level Up Logic
-            new_level = get_level(referrer.xp)
-            if new_level > referrer.level:
-                # Level Up!
-                for l in range(referrer.level + 1, new_level + 1):
-                    try:
-                        lang = referrer.language_code or "en"
-                        msg = get_msg(lang, "level_up", level=l)
+                # 1.2 Unified Transaction: Log XP as an Earning
+                from app.models.partner import Earning
+                xp_earning = Earning(
+                    partner_id=referrer.id,
+                    amount=xp_gain,
+                    description=f"Referral XP Reward (Level {level})",
+                    type="REFERRAL_XP",
+                    level=level,
+                    currency="XP"
+                )
+                session.add(xp_earning)
+                
+                # 2. Handle Level Up Logic
+                new_level = get_level(referrer.xp)
+                if new_level > referrer.level:
+                    # Level Up!
+                    for l in range(referrer.level + 1, new_level + 1):
+                        try:
+                            lang = referrer.language_code or "en"
+                            msg = get_msg(lang, "level_up", level=l)
+                            await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
+                        except Exception: pass
+                    referrer.level = new_level
+                    
+                # 3. Sync to Redis Leaderboard
+                await leaderboard_service.update_score(referrer.id, referrer.xp)
+                
+                # 4. Invalidate Profile Cache
+                await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
+                
+                # 5. Send Notification (Buffered logic could go here later)
+                try:
+                    # ... (rest of notification logic remains same for now)
+                    lang = referrer.language_code or "en"
+                    new_partner_name = f"{partner.first_name}"
+                    if partner.username:
+                        new_partner_name += f" (@{partner.username})"
+                    
+                    if level == 1:
+                        msg = get_msg(lang, "referral_l1_congrats", name=new_partner_name)
+                    else:
+                        path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+                        try:
+                            start_idx = path_ids.index(referrer.id)
+                            intermediary_ids = path_ids[start_idx+1:]
+                            chain_names = []
+                            for mid_id in intermediary_ids:
+                                mid_user = ancestor_map.get(mid_id)
+                                if mid_user:
+                                    name = mid_user.first_name or "Unknown"
+                                    if mid_user.username:
+                                        name += f" (@{mid_user.username})"
+                                    chain_names.append(name)
+                            chain_names.append(new_partner_name)
+                            referral_chain = "\n".join([f"➜ {name}" for name in chain_names])
+                            
+                            if level == 2:
+                                msg = get_msg(lang, "referral_l2_congrats", referral_chain=referral_chain)
+                            else:
+                                msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=referral_chain)
+                        except Exception:
+                            msg = None # Fallback
+                    
+                    if msg:
                         await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
-                    except Exception: pass
-                referrer.level = new_level
-                
-            # 3. Sync to Redis Leaderboard
-            await leaderboard_service.update_score(referrer.id, referrer.xp)
-            
-            # 4. Invalidate Profile Cache
-            await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
-            
-            # 5. Send Notification (Buffered logic could go here later)
-            try:
-                # ... (rest of notification logic remains same for now)
-                lang = referrer.language_code or "en"
-                new_partner_name = f"{partner.first_name}"
-                if partner.username:
-                    new_partner_name += f" (@{partner.username})"
-                
-                if level == 1:
-                    msg = get_msg(lang, "referral_l1_congrats", name=new_partner_name)
-                else:
-                    path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-                    try:
-                        start_idx = path_ids.index(referrer.id)
-                        intermediary_ids = path_ids[start_idx+1:]
-                        chain_names = []
-                        for mid_id in intermediary_ids:
-                            mid_user = ancestor_map.get(mid_id)
-                            if mid_user:
-                                name = mid_user.first_name or "Unknown"
-                                if mid_user.username:
-                                    name += f" (@{mid_user.username})"
-                                chain_names.append(name)
-                        chain_names.append(new_partner_name)
-                        referral_chain = "\n".join([f"➜ {name}" for name in chain_names])
-                        
-                        if level == 2:
-                            msg = get_msg(lang, "referral_l2_congrats", referral_chain=referral_chain)
-                        else:
-                            msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=referral_chain)
-                    except Exception:
-                        msg = None # Fallback
-                
-                if msg:
-                    await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
-            except Exception: pass
+                except Exception: pass
 
-            session.add(referrer)
-            current_referrer_id = referrer.referrer_id  # Move up the chain
+                session.add(referrer)
+                current_referrer_id = referrer.referrer_id  # Move up the chain
 
 
         await session.commit()
@@ -270,7 +271,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     # Fetch ancestors
     statement = select(Partner).where(Partner.id.in_(lineage_ids))
     result = await session.exec(statement)
-    ancestor_map = {p.id: p for p in result.all()}
+    ancestor_map = {p.id: p for p in await result.all()}
     
     current_referrer_id = partner.referrer_id
     for level in range(1, 10):
@@ -350,7 +351,7 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
     
     result = await session.execute(query, {"partner_id": partner_id})
     stats = {f"level_{i}": 0 for i in range(1, 10)}
-    for row in result:
+    async for row in result:
         lvl = int(row[0])
         if 1 <= lvl <= 9:
             stats[f"level_{lvl}"] = row[1]
@@ -394,7 +395,7 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
     try:
         result = await session.execute(query, {"partner_id": partner_id, "target_level": target_level})
         members = []
-        for row in result:
+        async for row in result:
             members.append({
                 "telegram_id": row[0],
                 "username": row[1],
@@ -555,7 +556,7 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     
     # Organize into a map: {bucket: {level: count}}
     data_map = {}
-    for row in result:
+    async for row in result:
         bucket = row[0].replace(tzinfo=None)
         level = int(row[1])
         count = int(row[2])
@@ -581,8 +582,9 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         GROUP BY level
     """)
     res_base = await session.execute(stmt_base, {"partner_id": partner_id, "start": start_time})
+    res_base_list = await res_base.all()
     running_totals = {lvl: 0 for lvl in range(1, 10)}
-    for row in res_base:
+    for row in res_base_list:
         running_totals[int(row[0])] = int(row[1])
 
     # Fill gaps for a smooth chart
@@ -632,7 +634,7 @@ async def migrate_paths(session: AsyncSession):
     async def update_children(parent_id: int, parent_path: str):
         stmt = select(Partner).where(Partner.referrer_id == parent_id)
         res = await session.exec(stmt)
-        children = res.all()
+        children = await res.all()
         for child in children:
             if not child.path or child.path != f"{parent_path}.{parent_id}".lstrip("."):
                 child.path = f"{parent_path}.{parent_id}".lstrip(".")
@@ -646,7 +648,7 @@ async def migrate_paths(session: AsyncSession):
     # Start from root partners (no referrer)
     stmt = select(Partner).where(Partner.referrer_id == None)
     res = await session.exec(stmt)
-    roots = res.all()
+    roots = await res.all()
     for root in roots:
         if root.path is not None:
             root.path = None

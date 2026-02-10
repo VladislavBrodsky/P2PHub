@@ -19,7 +19,7 @@ class AdminService:
                     statement = statement.where(Partner.level >= filters["min_level"])
             
             result = await session.exec(statement)
-            partners = result.all()
+            partners = await result.all()
             
             broadcast_count = 0
             for tg_id, lang in partners:

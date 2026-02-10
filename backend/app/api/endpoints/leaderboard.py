@@ -43,7 +43,7 @@ async def get_global_leaderboard(
         # Fallback to DB if Redis is cold or down
         statement = select(Partner).order_by(Partner.xp.desc()).limit(limit)
         result = await session.exec(statement)
-        partners = result.all()
+        partners = await result.all()
         from app.schemas.leaderboard import LeaderboardPartner
         data = [LeaderboardPartner(**p.dict()).model_dump() for p in partners]
         
@@ -86,7 +86,7 @@ async def get_my_leaderboard_stats(
         # Get partner from DB
         statement = select(Partner).where(Partner.telegram_id == tg_id)
         result = await session.exec(statement)
-        partner = result.first()
+        partner = await result.first()
         
         if not partner:
             return {

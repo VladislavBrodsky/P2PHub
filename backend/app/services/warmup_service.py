@@ -19,7 +19,7 @@ async def warmup_redis():
             # 1. Warm up Global Leaderboard
             statement = select(Partner)
             result = await session.exec(statement)
-            partners = result.all()
+            partners = await result.all()
             
             if not partners:
                 logger.info("💡 No partners found to warm up.")

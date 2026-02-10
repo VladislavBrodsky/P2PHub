@@ -33,7 +33,7 @@ async def list_pending_payments(
     """
     statement = select(PartnerTransaction).where(PartnerTransaction.status == "manual_review")
     result = await session.exec(statement)
-    return result.all()
+    return await result.all()
 
 @router.post("/approve-payment/{transaction_id}")
 async def approve_payment(

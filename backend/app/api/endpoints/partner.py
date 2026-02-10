@@ -38,7 +38,7 @@ async def get_my_profile(
         selectinload(Partner.completed_task_records)
     )
     result = await session.exec(statement)
-    partner = result.first()
+    partner = await result.first()
     
     if not partner:
         # Auto-register new partner
@@ -47,7 +47,7 @@ async def get_my_profile(
         if start_param:
             ref_stmt = select(Partner).where(Partner.referral_code == start_param)
             ref_res = await session.exec(ref_stmt)
-            referrer = ref_res.first()
+            referrer = await ref_res.first()
             if referrer: referrer_id = referrer.id
 
         partner = Partner(
@@ -139,7 +139,7 @@ async def get_top_partners(
         
     statement = select(Partner).order_by(Partner.xp.desc()).limit(5)
     result = await session.exec(statement)
-    partners = result.all()
+    partners = await result.all()
     
     top_data = []
     for p in partners:
@@ -179,7 +179,7 @@ async def get_recent_partners(
         
     statement = select(Partner).order_by(Partner.created_at.desc()).limit(limit)
     result = await session.exec(statement)
-    partners = result.all()
+    partners = await result.all()
     
     # Pre-serialize for cache and return clean models
     partners_data = [p.model_dump() for p in partners]
@@ -207,7 +207,7 @@ async def get_my_referral_tree(
     # Get partner
     statement = select(Partner).where(Partner.telegram_id == tg_id).options(selectinload(Partner.referrals))
     result = await session.exec(statement)
-    partner = result.first()
+    partner = await result.first()
     
     if not partner:
         return {str(i): 0 for i in range(1, 10)}
@@ -237,7 +237,7 @@ async def get_network_level_members(
     # Get partner
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
-    partner = result.first()
+    partner = await result.first()
     
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
@@ -267,7 +267,7 @@ async def get_growth_metrics(
 
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
-    partner = result.first()
+    partner = await result.first()
     
     if not partner:
         return {"growth_pct": 0, "current_count": 0, "previous_count": 0}
@@ -294,7 +294,7 @@ async def get_growth_chart(
 
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
-    partner = result.first()
+    partner = await result.first()
     
     if not partner:
         return []
@@ -321,7 +321,7 @@ async def claim_task_reward(
 
     statement = select(Partner).where(Partner.telegram_id == tg_id).options(selectinload(Partner.completed_task_records))
     result = await session.exec(statement)
-    partner = result.first()
+    partner = await result.first()
     
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
@@ -399,7 +399,7 @@ async def get_my_earnings(
     # Get partner ID first
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
-    partner = result.first()
+    partner = await result.first()
     
     if not partner:
         return []
@@ -408,7 +408,7 @@ async def get_my_earnings(
     # Query Earnings table
     stmt = select(Earning).where(Earning.partner_id == partner.id).order_by(Earning.created_at.desc()).limit(limit)
     result = await session.exec(stmt)
-    earnings = result.all()
+    earnings = await result.all()
     
     return earnings
 
@@ -427,7 +427,7 @@ async def get_my_xp_history(
     # Get partner ID first
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
-    partner = result.first()
+    partner = await result.first()
     
     if not partner:
         return []
@@ -435,6 +435,6 @@ async def get_my_xp_history(
     # Query XPTransaction table
     stmt = select(XPTransaction).where(XPTransaction.partner_id == partner.id).order_by(XPTransaction.created_at.desc()).limit(limit)
     result = await session.exec(stmt)
-    xp_history = result.all()
+    xp_history = await result.all()
     
     return xp_history

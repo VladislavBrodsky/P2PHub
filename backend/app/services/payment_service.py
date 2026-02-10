@@ -64,7 +64,7 @@ class PaymentService:
         # 1. Check if TX already processed
         stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
         res = await session.exec(stmt)
-        existing = res.first()
+        existing = await res.first()
         if existing and existing.status == "completed":
             return True
 
@@ -122,7 +122,7 @@ class PaymentService:
         elif tx_hash:
             stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
             res = await session.exec(stmt)
-            transaction = res.first()
+            transaction = await res.first()
 
         if not transaction:
             transaction = PartnerTransaction(
