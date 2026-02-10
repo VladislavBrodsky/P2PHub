@@ -140,26 +140,16 @@ async def inline_handler(inline_query: types.InlineQuery):
         else:
             base_api_url = (settings.FRONTEND_URL or "https://p2phub-production.up.railway.app").rstrip('/')
         
-        photo1 = f"{base_api_url}/images/2026-02-05_03.35.03.webp"
-        photo2 = f"{base_api_url}/images/2026-02-05_03.35.36.webp"
+        photo1 = f"{base_api_url}/images/2026-02-05 03.35.03.jpg".replace(" ", "%20")
+        photo2 = f"{base_api_url}/images/2026-02-05 03.35.36.jpg".replace(" ", "%20")
 
         # Try to find partner language
         from app.core.i18n import get_msg
-        lang = "en"
-        try:
-            from app.models.partner import Partner, get_session
-            from sqlmodel import select
-            from sqlalchemy.ext.asyncio import create_async_engine
-            from sqlmodel.ext.asyncio.session import AsyncSession
-            
-            # Since we are in a top-level bot, we need a session
-            # This is a bit complex, let's just stick to English for bot if not easy
-            # Actually, we can just use the language_code from the inline_query user
-            lang = inline_query.from_user.language_code or "en"
-        except:
-            pass
+        lang = inline_query.from_user.language_code or "en"
+        if lang not in ["en", "ru"]:
+            lang = "en"
 
-        caption = get_msg(lang, "viral_share_caption")
+        caption = get_msg(lang, "viral_share_caption", referral_link=ref_link)
 
         logging.info(f"📤 Inline query: {query_code}")
 
@@ -175,7 +165,7 @@ async def inline_handler(inline_query: types.InlineQuery):
                 title="Elite Partner Invitation 💎",
                 description="Share your $1/minute strategy",
                 caption=caption,
-                parse_mode="HTML",
+                parse_mode="Markdown",
                 reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
                     [types.InlineKeyboardButton(text="🤝 Join Partner Club", url=ref_link)]
                 ])
