@@ -163,7 +163,7 @@ async def get_top_partners(
 
 from app.models.partner import Partner, get_session, XPTransaction, SystemSetting
 
-@router.get("/recent", response_model=List[PartnerResponse])
+@router.get("/recent")
 async def get_recent_partners(
     limit: int = 10,
     session: AsyncSession = Depends(get_session)
@@ -171,11 +171,14 @@ async def get_recent_partners(
     """
     Fetches the 10 most recently joined partners for social proof.
     Updated every 60 minutes and persists across restarts.
+    Includes a randomized count of new partners (632-842).
     """
     from datetime import datetime, timedelta
+    import random
     
     cache_key = "partners:recent"
     db_settings_key = "partners_recent_snapshot"
+    count_settings_key = "partners_recent_last_hour_count"
     refresh_window = timedelta(minutes=60)
     
     # 1. Try Redis Cache (Fastest)
@@ -188,18 +191,23 @@ async def get_recent_partners(
 
     # 2. Check DB Persistence (For cross-restart/cold starts)
     snapshot_setting = await session.get(SystemSetting, db_settings_key)
+    count_setting = await session.get(SystemSetting, count_settings_key)
     
     now = datetime.utcnow()
     should_refresh = True
     
-    if snapshot_setting:
+    if snapshot_setting and count_setting:
         # Check if it's still within the 60-minute window
         if now - snapshot_setting.updated_at < refresh_window:
             should_refresh = False
             try:
-                partners_data = json.loads(snapshot_setting.value)
-                # Ensure limit is respected even in cached data
-                partners_data = partners_data[:limit]
+                partners_list = json.loads(snapshot_setting.value)
+                last_hour_count = int(count_setting.value)
+                
+                partners_data = {
+                    "partners": partners_list[:limit],
+                    "last_hour_count": last_hour_count
+                }
             except Exception:
                 should_refresh = True
 
@@ -208,17 +216,30 @@ async def get_recent_partners(
         statement = select(Partner).order_by(Partner.created_at.desc()).limit(limit)
         result = await session.exec(statement)
         partners = result.all()
-        partners_data = [p.model_dump() for p in partners]
+        partners_list = [p.model_dump() for p in partners]
+        last_hour_count = random.randint(632, 842)
         
         # 4. Save to Persistent DB Cache
         if not snapshot_setting:
-            snapshot_setting = SystemSetting(key=db_settings_key, value=json.dumps(partners_data))
+            snapshot_setting = SystemSetting(key=db_settings_key, value=json.dumps(partners_list))
         else:
-            snapshot_setting.value = json.dumps(partners_data)
+            snapshot_setting.value = json.dumps(partners_list)
             snapshot_setting.updated_at = now
             
+        if not count_setting:
+            count_setting = SystemSetting(key=count_settings_key, value=str(last_hour_count))
+        else:
+            count_setting.value = str(last_hour_count)
+            count_setting.updated_at = now
+            
         session.add(snapshot_setting)
+        session.add(count_setting)
         await session.commit()
+        
+        partners_data = {
+            "partners": partners_list,
+            "last_hour_count": last_hour_count
+        }
     
     # 5. Populate Redis for subsequent requests
     try:

@@ -33,10 +33,24 @@ async def cmd_start(message: types.Message):
         referrer_code = args[1]
         logging.info(f"User {message.from_user.id} joined with referral code: {referrer_code}")
 
-    # Capture language from telegram user
+    # Capture language and photo from telegram user
     lang = message.from_user.language_code or "en"
     if lang not in ["en", "ru"]:
         lang = "en"
+
+    # Fetch user profile photo
+    photo_url = None
+    try:
+        user_photos = await bot.get_user_profile_photos(message.from_user.id, limit=1)
+        if user_photos.total_count > 0:
+            # Get the smallest photo to save bandwidth/storage
+            file = await bot.get_file(user_photos.photos[0][0].file_id)
+            # This is a temporary file URL, we should ideally download and serve it
+            # For now, let's use the file_path if we can, or just store the ID
+            # Better implementation: storage service downloads it
+            photo_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
+    except Exception as e:
+        logging.error(f"Error fetching profile photo: {e}")
 
     try:
         async for session in get_session():
@@ -48,7 +62,8 @@ async def cmd_start(message: types.Message):
                 first_name=message.from_user.first_name,
                 last_name=message.from_user.last_name,
                 language_code=lang,
-                referrer_code=referrer_code
+                referrer_code=referrer_code,
+                photo_url=photo_url
             )
             
             await process_referral_notifications(bot, session, partner, is_new)

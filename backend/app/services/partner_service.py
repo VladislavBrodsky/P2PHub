@@ -9,6 +9,7 @@ from app.core.i18n import get_msg
 from app.services.leaderboard_service import leaderboard_service
 from app.services.redis_service import redis_service
 from app.services.notification_service import notification_service
+from app.services.image_service import image_service
 from app.utils.ranking import get_level
 
 logger = logging.getLogger(__name__)
@@ -20,7 +21,8 @@ async def create_partner(
     first_name: Optional[str] = None,
     last_name: Optional[str] = None,
     language_code: Optional[str] = "en",
-    referrer_code: Optional[str] = None
+    referrer_code: Optional[str] = None,
+    photo_url: Optional[str] = None
 ) -> Tuple[Partner, bool]:
     """
     Creates a new partner or retrieves an existing one.
@@ -49,7 +51,17 @@ async def create_partner(
         except Exception as e:
             logger.error(f"Error resolving referrer_code {referrer_code}: {e}")
 
-    # 3. Create fresh partner with path
+    # 3. Handle Profile Photo (Convert to WebP)
+    local_photo_url = photo_url
+    if photo_url and "api.telegram.org" in photo_url:
+        try:
+            processed_path = await image_service.download_and_convert_to_webp(photo_url, telegram_id)
+            if processed_path:
+                local_photo_url = processed_path
+        except Exception as e:
+            logger.error(f"Failed to process profile photo for {telegram_id}: {e}")
+
+    # 4. Create fresh partner with path
     path = None
     if referrer:
         parent_path = referrer.path or ""
@@ -63,6 +75,7 @@ async def create_partner(
         language_code=language_code,
         referral_code=f"P2P-{secrets.token_hex(4).upper()}",
         referrer_id=referrer_id,
+        photo_url=local_photo_url,
         path=path
     )
     session.add(partner)
