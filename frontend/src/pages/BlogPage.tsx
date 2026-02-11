@@ -383,7 +383,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             className="flex flex-col min-h-screen bg-(--color-bg-app)"
         >
             {/* Header Sticky */}
-            <div className="px-4 pt-4 pb-3 flex items-center justify-between sticky top-0 z-40 bg-(--color-bg-app)/95 backdrop-blur-xl border-b border-(--color-border-glass)">
+            <div className="px-4 pt-4 pb-3 flex items-center justify-between sticky top-(--header-total-height) z-40 bg-(--color-bg-app)/95 backdrop-blur-xl border-b border-(--color-border-glass)">
                 <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-(--color-bg-surface) active:scale-90 transition-all">
                     <ArrowLeft className="w-6 h-6" />
                 </button>
@@ -394,8 +394,8 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                     <button
                         onClick={onLike}
                         className={`p-3 rounded-full border transition-all active:scale-95 flex items-center justify-center ${engagement.liked
-                                ? 'bg-red-500/15 border-red-500/30 text-red-500 shadow-lg shadow-red-500/10'
-                                : 'bg-(--color-bg-surface) border-(--color-border-glass) text-(--color-text-secondary) hover:border-red-500/20'
+                            ? 'bg-red-500/15 border-red-500/30 text-red-500 shadow-lg shadow-red-500/10'
+                            : 'bg-(--color-bg-surface) border-(--color-border-glass) text-(--color-text-secondary) hover:border-red-500/20'
                             }`}
                     >
                         <Heart className={`w-5 h-5 ${engagement.liked ? 'fill-current' : ''}`} />

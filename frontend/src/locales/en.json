@@ -537,5 +537,91 @@
             "4_title": "4. Security",
             "4_desc": "We value your trust in providing us your Personal Information, thus we are striving to use commercially acceptable means of protecting it."
         }
+    },
+    "academy": {
+        "global_ranking": "Global Ranking",
+        "stage": "STAGE {{stage}}",
+        "progress_to_pro": "Progress to PRO",
+        "expand_higher": "Expand Higher Stages",
+        "mastery": "Stage {{stage}} Mastery",
+        "stage_locked": "Stage Locked",
+        "lock_desc": "Stages 21-100 contain our most elite marketing secrets. Upgrade to PRO to unlock the full Career Stair.",
+        "pro_benefits": "PRO Benefits",
+        "pro_items": [
+            "Reach $1/Minute Blueprint",
+            "AI Marketing Autopilot 24/7",
+            "High-Ticket Sales Closures",
+            "50k+ TG Channel Mastery"
+        ],
+        "upgrade_btn": "Upgrade to PRO Center",
+        "elite_training": "Welcome to the elite training floor. To reach the result of <1>$1 per minute</1>, we must first master the art of <3>leverage</3>.",
+        "profit_secret": "Profitability Secret",
+        "profit_quote": "Value is not in the work you do, but in the systems you scale. A partner with a 10,000 node network earns while they sleep, because their AI works 24/7.",
+        "growth_hacker": "In the year 2026, manual marketing is dead. You need to become a <1>Growth Hacker</1>. This means using viral loops where every new member brings 3 more.",
+        "ai_expert": "AI Marketing Expert (PRO Preview)",
+        "ai_desc": "Our exclusive PRO engine generates viral content on autopilot 24/7. It auto-posts to your target audience while you focus on scaling. This is how you spend less time and reach maximum results.",
+        "learn_how": "Learn how it works",
+        "build_empire": "Step-by-step, we will build your empire. By Stage 20, your foundation will be unbreakable. Beyond that, we enter the world of high-ticket sales and AI domination.",
+        "complete_stage": "Complete Stage {{stage}}"
+    },
+    "income_details": {
+        "market_title": "The Largest Wealth Transfer inside the <1>Digital Economy</1>",
+        "market_desc": "Crypto adoption is growing <1>2x faster</1> than the Internet did in the 90s.",
+        "adoption_curve": "Adoption Curve",
+        "you_are_here": "You are here (Early)",
+        "maximize_btn": "Maximize This Opportunity",
+        "revenue_title": "Unlock <1>True Passive Income</1>",
+        "revenue_desc": "Earn lifetime commissions from every action in your network:",
+        "benefit_1_title": "Up to 30%",
+        "benefit_1_desc": "From Pintopay Card Sales",
+        "benefit_2_title": "Up to 0.3% (Lifetime)",
+        "benefit_2_desc": "From All Network Top-ups",
+        "benefit_3_title": "30% Rewards",
+        "benefit_3_desc": "From Partner Network",
+        "start_earning": "Start Earning Dividends"
+    },
+    "referral_matrix": {
+        "nine_level": "9-Level Network Matrix",
+        "partners_suffix": "Partners",
+        "xp_info": "You earn XP from every active partner in your 9-level matrix.",
+        "send_viral": "Send Premium Viral Card"
+    },
+    "achievements_path": {
+        "part": "PART {{index}}: {{title}}",
+        "progression_phase": "Progression Phase",
+        "ultimate_horizon": "ULTIMATE HORIZON",
+        "lvl_100_title": "LvL 100 ACHIEVEMENTS",
+        "lvl_100_desc": "Unlock your <1>Fanocracy Passport</1>. Claim the Physical Platinum Card & 0% Fees for life.",
+        "discover_btn": "DISCOVER LVL 100 BENEFITS",
+        "fanocracy_stat": "Only 0.1% reach Fanocracy",
+        "reveal_part": "Reveal Part {{index}}",
+        "unlock_horizons": "Unlock next Level Horizons",
+        "show_less": "Show Less",
+        "mission": "LEVEL {{level}} MISSION",
+        "unlock_locked": "Achieve Level {{level}} to unlock this unique recognition and its associated rewards.",
+        "how_to_unlock": "HOW TO UNLOCK",
+        "pro_tip": "PRO TIP: VIRAL GROWTH",
+        "share_link": "SHARE LINK",
+        "invite": "INVITE",
+        "unlocked_badge": "ACHIEVEMENT UNLOCKED",
+        "locked_badge": "STILL LOCKED"
+    },
+    "level_100": {
+        "apex": "APEX ACHIEVEMENT",
+        "fanocracy": "Fanocracy",
+        "status_quote": "The ultimate status for those who build the future of P2P.",
+        "benefits": {
+            "card_title": "Platinum Physical Card",
+            "card_desc": "Exclusive vertical design with no lifetime fees.",
+            "status_title": "Fanocracy Status",
+            "status_desc": "Priority governance power in the Partner Network.",
+            "fees_title": "0% Platform Fees",
+            "fees_desc": "Maximum earnings on all network transactions.",
+            "support_title": "Executive Support",
+            "support_desc": "24/7 personal manager for your growing team."
+        },
+        "claim_btn": "CLAIM LVL 100 FOCUS",
+        "elite_tier": "DON'T MISS YOUR SPOT IN THE ELITE TIER",
+        "share_text": "I'm climbing to Level 100 in Pintopay! Join my network to unlock Fanocracy benefits together! 🚀"
     }
 }
