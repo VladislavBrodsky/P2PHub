@@ -1,50 +1,66 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useNotificationStore } from '../store/useNotificationStore';
-import { Zap } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { Zap, Users, Trophy } from 'lucide-react';
+import { apiClient } from '../api/client';
 
 export const useRealtimeAlerts = () => {
     const { showNotification } = useNotificationStore();
-    // #comment: Removed unused 't' variable from useTranslation to address linting warnings
-    useTranslation();
 
-    useEffect(() => {
-        // Mock Real-time Events
-        const interval = setInterval(() => {
-            const randomEvent = Math.random() > 0.7; // 30% chance every interval
-            if (randomEvent) {
-                const names = ['Alex', 'Maria', 'John', 'Satoshi', 'Vitalik', 'CZ'];
-                const actions = ['joined_network', 'earned_commission', 'leveled_up'];
+    const fetchActivity = useCallback(async () => {
+        try {
+            const response = await apiClient.get<any[]>('/api/partner/activity');
+            const activities = response.data;
 
-                const name = names[Math.floor(Math.random() * names.length)];
-                const action = actions[Math.floor(Math.random() * actions.length)];
+            if (activities && activities.length > 0) {
+                // Pick one random recent event from the last 20
+                const event = activities[Math.floor(Math.random() * activities.length)];
 
+                // Avoid notifying about same event twice if possible (simple deduplication could be added)
                 let message = '';
                 let title = 'Network Activity';
+                let icon = <Zap size={18} className="text-amber-500" />;
 
-                switch (action) {
-                    case 'joined_network':
-                        message = `${name} just joined the partner network!`;
+                switch (event.type) {
+                    case 'REFERRAL_L1':
+                    case 'REFERRAL_DEEP':
+                        message = `${event.first_name} just joined the partner network!`;
+                        title = 'New Partner';
+                        icon = <Users size={18} className="text-blue-500" />;
                         break;
-                    case 'earned_commission':
-                        message = `${name} earned $${(Math.random() * 50).toFixed(2)} commission`;
-                        title = '💰 New Earnings';
+                    case 'TASK':
+                        message = `${event.first_name} completed a reward task!`;
+                        title = 'Task Glory';
+                        icon = <Trophy size={18} className="text-emerald-500" />;
                         break;
-                    case 'leveled_up':
-                        message = `${name} reached Level ${Math.floor(Math.random() * 5) + 1}!`;
-                        title = '🚀 Level Up';
+                    case 'LEVEL_UP':
+                        message = `${event.first_name} reached a new Level!`;
+                        title = 'Level Up';
+                        icon = <Zap size={18} className="text-yellow-500" />;
                         break;
+                    default:
+                        // Fallback generic message
+                        message = `${event.first_name} is active in the network`;
                 }
 
                 showNotification({
                     title,
                     message,
-                    icon: <Zap size={18} className="text-amber-500 dark:text-yellow-400" />,
+                    icon,
                     type: 'info'
                 });
             }
-        }, 15000); // Check every 15 seconds
+        } catch (error) {
+            console.error('Failed to fetch network activity:', error);
+        }
+    }, [showNotification]);
+
+    useEffect(() => {
+        // Initial fetch
+        fetchActivity();
+
+        // Moderate interval to keep the app feeling alive without being overbearing
+        const interval = setInterval(fetchActivity, 25000);
 
         return () => clearInterval(interval);
-    }, [showNotification]);
+    }, [fetchActivity]);
 };

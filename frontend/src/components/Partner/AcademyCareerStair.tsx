@@ -49,14 +49,16 @@ export const AcademyCareerStair = () => {
                     <div className="flex flex-col items-end">
                         <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Progress to PRO</span>
                         <div className="flex items-center gap-2">
-                            <div className="w-24 h-1.5 rounded-full bg-slate-200 dark:bg-white/5 overflow-hidden">
+                            <div className="w-24 h-2 rounded-full bg-slate-200 dark:bg-white/5 overflow-hidden relative border border-white/5">
                                 <motion.div
-                                    className="h-full bg-linear-to-r from-blue-500 to-indigo-600"
+                                    className="absolute inset-0 branding-liquid-gradient"
                                     initial={{ width: 0 }}
                                     animate={{ width: `${(completedStages.length / 100) * 100}%` }}
+                                    transition={{ duration: 1, ease: "easeOut" }}
                                 />
+                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent" />
                             </div>
-                            <span className="text-[10px] font-black text-blue-500">{completedStages.length}/100</span>
+                            <span className="text-[10px] font-black text-blue-500">{completedStages.length}%</span>
                         </div>
                     </div>
                 </div>
@@ -93,18 +95,17 @@ export const AcademyCareerStair = () => {
                     );
                 })}
 
-                {/* Load More Trigger */}
                 {visibleStages < 100 && (
                     <motion.button
-                        whileHover={{ scale: 1.05 }}
+                        whileHover={{ scale: 1.05, y: -5 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={loadMore}
-                        className="mt-12 flex flex-col items-center gap-2 group transition-all"
+                        className="mt-16 flex flex-col items-center gap-3 group transition-all"
                     >
-                        <div className="p-4 rounded-full bg-white dark:bg-white/5 border-2 border-dashed border-slate-200 dark:border-white/10 group-hover:border-blue-500/50 group-hover:bg-blue-500/5">
-                            <ChevronDown className="w-6 h-6 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                        <div className="p-5 rounded-[2rem] bg-white/5 backdrop-blur-xl border-2 border-dashed border-blue-500/30 group-hover:border-blue-500/60 group-hover:bg-blue-500/10 transition-all shadow-xl">
+                            <ChevronDown className="w-8 h-8 text-blue-500 group-hover:animate-bounce" />
                         </div>
-                        <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Reveal Higher Stages</span>
+                        <span className="text-[11px] font-black text-blue-500/60 group-hover:text-blue-500 uppercase tracking-[0.2em] transition-colors">Expand Higher Stages</span>
                     </motion.button>
                 )}
             </div>

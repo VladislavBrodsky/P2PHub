@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ImageCacheService } from '../../services/ImageCacheService';
 
 interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
     src: string;
@@ -15,6 +16,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
     placeholderClassName = "",
     ...props
 }) => {
+    const [displaySrc, setDisplaySrc] = useState<string | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isInView, setIsInView] = useState(false);
     const imgRef = useRef<HTMLDivElement>(null);
@@ -37,6 +39,17 @@ export const LazyImage: React.FC<LazyImageProps> = ({
         return () => observer.disconnect();
     }, []);
 
+    useEffect(() => {
+        if (isInView && src) {
+            const loadImage = async () => {
+                // Fetch from cache or network
+                const finalSrc = await ImageCacheService.fetchAndCache(src);
+                setDisplaySrc(finalSrc);
+            };
+            loadImage();
+        }
+    }, [isInView, src]);
+
     return (
         <div ref={imgRef} className={`relative overflow-hidden ${className}`}>
             <AnimatePresence mode="wait">
@@ -53,9 +66,9 @@ export const LazyImage: React.FC<LazyImageProps> = ({
                 )}
             </AnimatePresence>
 
-            {isInView && (
+            {displaySrc && (
                 <img
-                    src={src}
+                    src={displaySrc}
                     alt={alt}
                     onLoad={() => setIsLoaded(true)}
                     className={`${className} transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}

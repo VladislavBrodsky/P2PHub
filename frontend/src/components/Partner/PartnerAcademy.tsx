@@ -1,13 +1,14 @@
 import { AcademyCareerStair } from './AcademyCareerStair';
 import { Sparkles, TrendingUp, Award } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export const PartnerAcademy = () => {
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-700">
             {/* Academy Elite Header */}
             <div className="relative group overflow-hidden rounded-[3rem] p-1 shadow-2xl perspective-1000">
-                <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-blue-900 to-indigo-950 animate-vibing opacity-95 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute inset-0 vibing-blue-animated opacity-20" />
+                <div className="absolute inset-0 branding-liquid-gradient opacity-95 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 vibing-blue-animated opacity-10" />
 
                 <div className="relative z-10 glass-panel-premium rounded-[2.8rem] border-white/20 p-8 overflow-hidden">
                     {/* Background Visuals */}
@@ -15,35 +16,35 @@ export const PartnerAcademy = () => {
                     <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-indigo-500/20 blur-[60px] rounded-full" />
 
                     <div className="relative z-20 flex flex-col items-center text-center space-y-5">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[9px] font-black uppercase tracking-[0.2em] text-blue-400">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/10 backdrop-blur-md border border-slate-900/10 text-[9px] font-black uppercase tracking-[0.2em] text-blue-700">
                             <Sparkles className="w-3.5 h-3.5" />
                             Elite Growth Academy
                         </div>
 
                         <div className="space-y-2">
-                            <h2 className="text-3xl font-black leading-none tracking-tight text-white uppercase italic">
-                                Career <span className="text-blue-500">Staircase</span>
+                            <h2 className="text-3xl font-black leading-none tracking-tight text-slate-900 uppercase italic">
+                                Career <span className="text-blue-600 drop-shadow-[0_2px_10px_rgba(37,99,235,0.2)]">Staircase</span>
                             </h2>
-                            <p className="text-slate-300 text-[11px] font-medium leading-relaxed max-w-[320px] mx-auto opacity-80 uppercase tracking-wide">
+                            <p className="text-slate-700 text-[11px] font-bold leading-relaxed max-w-[320px] mx-auto opacity-90 uppercase tracking-wide">
                                 Master the 100-Stage roadmap to <br />
-                                <span className="text-white font-black">$1 Per Minute</span> with AI Automation.
+                                <span className="text-blue-700 font-black">$1 Per Minute</span> with AI Automation.
                             </p>
                         </div>
 
                         <div className="flex items-center gap-6 pt-2">
                             <div className="flex flex-col items-center">
-                                <span className="text-[14px] font-black text-white">100</span>
-                                <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">Levels</span>
+                                <span className="text-[14px] font-black text-slate-900">100</span>
+                                <span className="text-[7px] font-black text-slate-600 uppercase tracking-widest">Levels</span>
                             </div>
-                            <div className="w-px h-6 bg-white/10" />
+                            <div className="w-px h-6 bg-slate-900/10" />
                             <div className="flex flex-col items-center">
-                                <span className="text-[14px] font-black text-blue-500">20+</span>
-                                <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">Free</span>
+                                <span className="text-[14px] font-black text-blue-600">20+</span>
+                                <span className="text-[7px] font-black text-slate-600 uppercase tracking-widest">Free</span>
                             </div>
-                            <div className="w-px h-6 bg-white/10" />
+                            <div className="w-px h-6 bg-slate-900/10" />
                             <div className="flex flex-col items-center">
-                                <span className="text-[14px] font-black text-amber-500">PRO</span>
-                                <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">Elite</span>
+                                <span className="text-[14px] font-black text-orange-600">PRO</span>
+                                <span className="text-[7px] font-black text-slate-600 uppercase tracking-widest">Elite</span>
                             </div>
                         </div>
                     </div>
@@ -58,21 +59,26 @@ export const PartnerAcademy = () => {
 
             {/* Sticky Bottom Footer (Educational Callout) */}
             <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-40 w-full max-w-xs px-4">
-                <div className="glass-panel-premium rounded-2xl p-3 border-blue-500/20 shadow-2xl flex items-center justify-between gap-3">
+                <motion.div
+                    initial={{ y: 100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="glass-panel-premium rounded-[2rem] p-4 border-blue-500/20 shadow-2xl flex items-center justify-between gap-4 bg-white/10 backdrop-blur-2xl"
+                >
                     <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-xl bg-blue-500/10 text-blue-500">
-                            <TrendingUp className="w-4 h-4" />
+                        <div className="w-10 h-10 rounded-2xl branding-liquid-gradient flex items-center justify-center shadow-lg">
+                            <TrendingUp className="w-5 h-5 text-slate-900" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-[8px] font-black text-blue-500 uppercase tracking-widest leading-none">Status</span>
-                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase leading-none mt-1">Growth Hacker</span>
+                            <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest leading-none">Rank</span>
+                            <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase leading-none mt-1">Growth Hacker</span>
                         </div>
                     </div>
-                    <div className="px-3 py-1.5 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 animate-pulse">
-                        <Award className="w-3.5 h-3.5" />
-                        Stage 1 Active
+                    <div className="h-8 w-px bg-slate-200 dark:bg-white/10" />
+                    <div className="px-4 py-2 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-600 dark:text-orange-400 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 animate-pulse">
+                        <Award className="w-4 h-4" />
+                        Active
                     </div>
-                </div>
+                </motion.div>
             </div>
 
             {/* Bottom Spacing to ensure path isn't cut off by navbar */}

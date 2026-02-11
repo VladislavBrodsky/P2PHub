@@ -23,11 +23,56 @@ from app.models.schemas import (
 from app.services.redis_service import redis_service
 from app.utils.ranking import get_level
 from bot import bot, types
+from app.core.tasks import get_task_reward
 import logging
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
+@router.get("/activity")
+async def get_network_activity(
+    limit: int = 20,
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Returns the latest 20 XP transactions (joins, tasks, levels) for social proof.
+    """
+    cache_key = "partners:activity"
+    try:
+        cached = await redis_service.get_json(cache_key)
+        if cached:
+            return cached
+    except Exception: pass
+
+    # Fetch latest XP transactions with partner details
+    from app.models.partner import Partner, XPTransaction
+    stmt = (
+        select(XPTransaction, Partner.first_name, Partner.username, Partner.photo_file_id)
+        .join(Partner, XPTransaction.partner_id == Partner.id)
+        .order_by(XPTransaction.created_at.desc())
+        .limit(limit)
+    )
+    result = await session.exec(stmt)
+    rows = result.all()
+
+    activity = []
+    for tx, first_name, username, photo_file_id in rows:
+        activity.append({
+            "id": tx.id,
+            "type": tx.type,
+            "amount": tx.amount,
+            "first_name": first_name,
+            "username": username,
+            "photo_file_id": photo_file_id,
+            "timestamp": tx.created_at.isoformat()
+        })
+
+    try:
+        await redis_service.set_json(cache_key, activity, expire=30) # 30s cache
+    except Exception: pass
+
+    return activity
 
 @router.get("/me", response_model=PartnerResponse)
 async def get_my_profile(
@@ -445,7 +490,11 @@ async def claim_task_reward(
 ):
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
-    xp_reward = payload.xp_reward
+
+    # SECURITY FIX: Use backend source of truth for reward
+    xp_reward = get_task_reward(task_id)
+    if xp_reward <= 0:
+         raise HTTPException(status_code=400, detail="Invalid or unsupported task")
 
     statement = select(Partner).where(Partner.telegram_id == tg_id).options(selectinload(Partner.completed_task_records))
     result = await session.exec(statement)

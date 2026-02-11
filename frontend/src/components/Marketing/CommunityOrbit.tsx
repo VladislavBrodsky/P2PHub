@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion';
+import React, { memo, useState, useEffect } from 'react';
+import { ImageCacheService } from '../../services/ImageCacheService';
 
 const AVATARS = [
     "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&fm=webp",
@@ -17,7 +19,7 @@ const CRYPTO_ICONS = [
 
 
 // Crypto SVG Icons
-const CryptoIcon = ({ name }: { name: string }) => {
+const CryptoIcon = memo(({ name }: { name: string }) => {
     if (name === 'BTC') {
         return (
             <svg viewBox="0 0 32 32" className="h-full w-full drop-shadow-md">
@@ -50,9 +52,9 @@ const CryptoIcon = ({ name }: { name: string }) => {
             <path d="M17.922 17.383v-.002c-.11.008-.677.042-1.942.042-1.01 0-1.721-.03-1.971-.042v.003c-3.888-.171-6.79-.848-6.79-1.658 0-.809 2.902-1.486 6.79-1.66v2.644c.254.018.982.061 1.988.061 1.207 0 1.812-.05 1.925-.06v-2.643c3.88.173 6.775.85 6.775 1.658 0 .81-2.895 1.485-6.775 1.657m0-3.59v-2.366h5.414V7.819H8.595v3.608h5.414v2.365c-4.4.202-7.709 1.074-7.709 2.118 0 1.044 3.309 1.915 7.709 2.118v7.582h3.913v-7.584c4.393-.202 7.694-1.073 7.694-2.116 0-1.043-3.301-1.914-7.694-2.117" fill="white" />
         </svg>
     );
-};
+});
 
-export const CommunityOrbit = () => {
+export const CommunityOrbit = memo(() => {
     // Interleave avatars and crypto icons - EXACTLY 8 ITEMS
     const orbitItems = [
         { type: 'avatar' as const, src: AVATARS[0] },
@@ -96,9 +98,6 @@ export const CommunityOrbit = () => {
             {/* Middle Ring */}
             <div className="absolute h-[260px] w-[260px] rounded-full border border-slate-200/30 opacity-40 dark:border-white/10" />
 
-            {/* Inner Rotating Dashed Ring */}
-
-
             {/* Central Logic */}
             <CentralLogo />
 
@@ -109,10 +108,10 @@ export const CommunityOrbit = () => {
             ))}
         </div>
     );
-};
+});
 
 
-const CentralLogo = () => (
+const CentralLogo = memo(() => (
     <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -166,9 +165,9 @@ const CentralLogo = () => (
             />
         ))}
     </motion.div>
-);
+));
 
-const FractalProfits = () => {
+const FractalProfits = memo(() => {
     return (
         <div className="absolute inset-0 pointer-events-none z-0">
             {[...Array(6)].map((_, i) => {
@@ -202,16 +201,23 @@ const FractalProfits = () => {
             })}
         </div>
     );
-};
+});
 
 type OrbitItem =
     | { type: 'avatar'; src: string }
     | { type: 'crypto'; name: string; color: string; gradientStart?: string; gradientEnd?: string };
 
-const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; total: number }) => {
+const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: number; total: number }) => {
     const radius = 140; // Balanced radius
     const duration = 50;
     const angle = (index / total) * 360;
+    const [cachedSrc, setCachedSrc] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (item.type === 'avatar' && item.src) {
+            ImageCacheService.fetchAndCache(item.src).then(setCachedSrc);
+        }
+    }, [item]);
 
     return (
         <motion.div
@@ -266,7 +272,9 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
                                 boxShadow: '0 10px 30px -10px rgba(0,0,0,0.3)'
                             }}
                         >
-                            <img src={item.src} alt="Member" width={60} height={60} loading="eager" className="h-full w-full object-cover" />
+                            {(cachedSrc || item.src) && (
+                                <img src={cachedSrc || item.src} alt="Member" width={60} height={60} loading="eager" className="h-full w-full object-cover" />
+                            )}
                             {/* Reflection Overlay */}
                             <div className="absolute inset-0 bg-linear-to-tr from-white/20 to-transparent opacity-60" />
                         </div>
@@ -302,4 +310,4 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
             </motion.div>
         </motion.div>
     );
-};
+});

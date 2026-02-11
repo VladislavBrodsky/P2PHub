@@ -27,8 +27,9 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
             initial={{ opacity: 0, y: 20, x: xOffset }}
             whileInView={{ opacity: 1, y: 0, x: xOffset }}
             viewport={{ once: true, margin: "-100px" }}
-            whileHover={{ scale: 1.05, zIndex: 50 }}
+            whileHover={{ scale: 1.1, zIndex: 50, rotateY: isLeft ? 10 : -10 }}
             whileTap={{ scale: 0.95 }}
+            style={{ transformStyle: "preserve-3d" }}
             onClick={() => !isLocked && onClick(stage)}
             className={cn(
                 "relative group cursor-pointer w-full flex justify-center py-8",
@@ -38,19 +39,27 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
             {/* Connecting Line (drawn from previous node) */}
             {index > 0 && (
                 <div className={cn(
-                    "absolute -top-8 left-1/2 -translate-x-1/2 w-0.5 h-16 -z-10",
-                    isCompleted || isCurrent ? "bg-blue-500/50" : "bg-slate-200 dark:bg-white/10"
-                )} />
+                    "absolute -top-8 left-1/2 -translate-x-1/2 w-0.5 h-16 -z-10 bg-slate-200 dark:bg-white/10 overflow-hidden"
+                )}>
+                    {(isCompleted || isCurrent) && (
+                        <motion.div
+                            initial={{ y: "-100%" }}
+                            animate={{ y: "100%" }}
+                            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                            className="w-full h-1/2 bg-linear-to-b from-transparent via-blue-500 to-transparent"
+                        />
+                    )}
+                </div>
             )}
 
             {/* Node Background with Glow for Active/Current */}
             <div className={cn(
-                "relative w-20 h-20 rounded-3xl flex items-center justify-center transition-all duration-500 border-2",
-                isCurrent ? "bg-blue-600 border-blue-400 shadow-[0_0_30px_rgba(37,99,235,0.4)]" :
-                    isCompleted ? "bg-emerald-500/10 border-emerald-500/30" :
+                "relative w-20 h-20 rounded-3xl flex items-center justify-center transition-all duration-500 border-2 overflow-hidden",
+                isCurrent ? "branding-liquid-gradient border-blue-400 shadow-[0_0_40px_rgba(37,99,235,0.5)]" :
+                    isCompleted ? "bg-emerald-500/10 border-emerald-500/30 shadow-[0_5px_15px_rgba(16,185,129,0.1)]" :
                         isLocked ? "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10" :
-                            "bg-white dark:bg-white/10 border-slate-200 dark:border-white/20 shadow-lg"
-            )}>
+                            "bg-white dark:bg-white/10 border-slate-200 dark:border-white/20 shadow-xl"
+            )} style={{ transform: "translateZ(30px)" }}>
                 {/* Visual indicator for current stage */}
                 {isCurrent && (
                     <motion.div
@@ -63,7 +72,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                 {/* Icon Rendering */}
                 <div className={cn(
                     "relative z-10 transition-transform duration-300 group-hover:scale-110",
-                    isCurrent ? "text-white" :
+                    isCurrent ? "text-slate-900" :
                         isCompleted ? "text-emerald-500" :
                             isLocked ? "text-slate-400/50" : "text-blue-500"
                 )}>
@@ -97,22 +106,23 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
 
             {/* Label Content (Floating to the side) */}
             <div className={cn(
-                "absolute top-1/2 -translate-y-1/2 w-48 flex flex-col",
-                isLeft ? "left-[calc(50%+60px)] items-start text-left" : "right-[calc(50%+60px)] items-end text-right"
-            )}>
+                "absolute top-1/2 -translate-y-1/2 w-52 flex flex-col p-4 rounded-2xl glass-panel-premium border-white/10 transition-all duration-500 group-hover:border-blue-500/30",
+                isLeft ? "left-[calc(50%+60px)] items-start text-left" : "right-[calc(50%+60px)] items-end text-right",
+                isLocked ? "opacity-40 grayscale" : "opacity-100"
+            )} style={{ transform: "translateZ(20px)" }}>
                 <h4 className={cn(
-                    "text-[11px] font-black uppercase tracking-tight leading-none",
-                    isLocked ? "text-slate-400" : "text-slate-900 dark:text-white"
+                    "text-[12px] font-black uppercase tracking-tight leading-none",
+                    isLocked ? "text-slate-400" : "text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors"
                 )}>{stage.title}</h4>
                 <p className={cn(
-                    "text-[8px] font-medium leading-tight mt-1 opacity-70 line-clamp-2",
-                    isLocked ? "text-slate-500" : "text-slate-600 dark:text-slate-400"
+                    "text-[9px] font-medium leading-tight mt-1.5 opacity-80 line-clamp-2",
+                    isLocked ? "text-slate-500" : "text-slate-600 dark:text-slate-300"
                 )}>{stage.description}</p>
 
                 {stage.duration && !isLocked && (
-                    <div className="flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 w-fit">
-                        <Play className="w-2 h-2 text-blue-500" />
-                        <span className="text-[7px] font-bold text-slate-500">{stage.duration}</span>
+                    <div className="flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/10 w-fit">
+                        <Play className="w-2.5 h-2.5 text-blue-500" />
+                        <span className="text-[8px] font-black text-blue-500 uppercase">{stage.duration}</span>
                     </div>
                 )}
             </div>

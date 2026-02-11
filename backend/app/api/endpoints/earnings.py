@@ -50,35 +50,4 @@ async def get_my_earnings(
 
     return earnings_data
 
-@router.post("/mock")
-async def create_mock_earning(
-    user_data: dict = Depends(get_current_user),
-    session: AsyncSession = Depends(get_session)
-):
-    tg_user = get_tg_user(user_data)
-    tg_id = str(tg_user.get("id"))
-
-    result = await session.exec(select(Partner).where(Partner.telegram_id == tg_id))
-    partner = result.first()
-
-    if partner:
-        earning = Earning(
-            partner_id=partner.id,
-            amount=50.0,
-            description="Referral Commission"
-        )
-        partner.balance += 50.0
-        session.add(earning)
-        session.add(partner)
-        await session.commit()
-
-        # Invalidate cache on new earning
-        try:
-            cache_key = f"partner:earnings:{tg_id}"
-            await redis_service.client.delete(cache_key)
-            # Also invalidate profile cache to reflect new balance
-            await redis_service.client.delete(f"partner:profile:{tg_id}")
-        except Exception:
-            pass
-
-    return {"status": "success"}
+    return earnings_data

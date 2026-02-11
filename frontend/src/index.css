@@ -786,6 +786,27 @@ body {
   backface-visibility: hidden;
 }
 
+@keyframes branding-liquid {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.branding-liquid-gradient {
+  background: linear-gradient(135deg, #0066FF 0%, #FFFFFF 25%, #3B82F6 50%, #E0F2FE 75%, #0052D9 100%);
+  background-size: 400% 400%;
+  animation: branding-liquid 8s ease-in-out infinite;
+  box-shadow: 0 10px 40px -10px rgba(0, 102, 255, 0.3);
+}
+
 @keyframes liquid-red {
   0% {
     background-position: 0% 50%;

@@ -230,6 +230,21 @@ async def process_referral_logic(partner_id: int):
                                 lang = referrer.language_code or "en"
                                 msg = get_msg(lang, "level_up", level=lvl)
                                 await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
+
+                                # Admin Alert for important milestones (Level 50+)
+                                if lvl >= 50:
+                                    admin_msg = (
+                                        f"⭐️ *ELITE MILESTONE* ⭐️\n\n"
+                                        f"👤 *Partner:* {referrer.first_name} (@{referrer.username})\n"
+                                        f"🚀 *Reached Level:* {lvl}\n"
+                                        f"💎 *XP:* {referrer.xp}\n\n"
+                                        "A new leader is rising!"
+                                    )
+                                    for admin_id in settings.ADMIN_USER_IDS:
+                                        try:
+                                            await notification_service.enqueue_notification(chat_id=int(admin_id), text=admin_msg)
+                                        except Exception: pass
+
                             except Exception: pass
                         referrer.level = new_level
                 except Exception as e:

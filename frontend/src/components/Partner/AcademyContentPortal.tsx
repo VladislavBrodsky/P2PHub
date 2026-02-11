@@ -29,16 +29,28 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 exit={{ scale: 0.9, opacity: 0, y: 20 }}
                 className="relative w-full max-w-lg bg-white dark:bg-[#0f172a] rounded-[2.5rem] shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col max-h-[90vh]"
             >
+                {/* Decorative Liquid Header */}
+                <div className="h-32 branding-liquid-gradient relative flex items-center justify-center">
+                    <div className="absolute inset-0 bg-linear-to-t from-white dark:from-[#0f172a] to-transparent" />
+                    <motion.div
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="relative z-10 w-24 h-24 rounded-3xl bg-white/20 backdrop-blur-xl border border-white/30 flex items-center justify-center shadow-2xl"
+                    >
+                        <stage.icon className="w-12 h-12 text-slate-900" />
+                    </motion.div>
+                </div>
+
                 {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-6 right-6 z-30 p-2 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 hover:scale-110 transition-transform"
+                    className="absolute top-6 right-6 z-30 p-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-slate-900 hover:scale-110 transition-transform shadow-lg"
                 >
                     <X className="w-5 h-5" />
                 </button>
 
                 {/* Content Area */}
-                <div className="overflow-y-auto p-8 pt-12 custom-scrollbar">
+                <div className="overflow-y-auto p-8 pt-4 custom-scrollbar">
                     {isLocked ? (
                         /* PRO Lock View */
                         <div className="flex flex-col items-center text-center space-y-6 py-8">
