@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAllAchievements, getAllMilestones, Achievement } from '../../data/earnData';
@@ -6,7 +6,8 @@ import { Lock, ChevronDown, ChevronUp, Trophy, Sparkles, Zap, Star, Shield, Targ
 import { useUser } from '../../context/UserContext';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
-import { Level100AchievementModal } from './Level100AchievementModal';
+
+const Level100AchievementModal = lazy(() => import('./Level100AchievementModal').then(m => ({ default: m.Level100AchievementModal })));
 
 const CHAPTER_TIERS = [
     { title: 'The Genesis', range: [1, 5], icon: <Zap className="w-3 h-3" /> },
@@ -415,10 +416,16 @@ export const MilestonePath = () => {
             )}
 
             {/* Level 100 Premium Modal */}
-            <Level100AchievementModal
-                isOpen={isLevel100ModalOpen}
-                onClose={() => setIsLevel100ModalOpen(false)}
-            />
+            <AnimatePresence>
+                {isLevel100ModalOpen && (
+                    <Suspense fallback={null}>
+                        <Level100AchievementModal
+                            isOpen={isLevel100ModalOpen}
+                            onClose={() => setIsLevel100ModalOpen(false)}
+                        />
+                    </Suspense>
+                )}
+            </AnimatePresence>
         </motion.section>
     );
 };

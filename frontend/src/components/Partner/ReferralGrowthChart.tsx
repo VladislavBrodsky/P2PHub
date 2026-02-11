@@ -16,80 +16,6 @@ interface ChartDataPoint {
     joined_per_level?: number[]; // New partners at each level in this bucket
 }
 
-// Mock Data Generator that ends at a specific total
-const generateMockData = (timeframe: Timeframe, endTotal: number): ChartDataPoint[] => {
-    const points = timeframe === '24H' ? 24 : timeframe === '7D' ? 7 : timeframe === '1M' ? 30 : 12;
-    const data: ChartDataPoint[] = [];
-
-    // Reverse generation: Start from endTotal and go backwards
-    const currentTotal = endTotal;
-
-    for (let i = 0; i < points; i++) {
-        // Distribute across 9 levels
-        const levels = Array(9).fill(0).map((_, idx) => {
-            const weight = Math.max(0.1, 1 - (idx * 0.1));
-            return Math.floor(currentTotal * (weight / 5));
-        });
-
-        const date = new Date();
-        // Adjust date based on index (0 is most recent in this reverse loop logic, but we push to array differently)
-        // Let's generate dates forward, but values backward? No, let's generate points normally but scale them.
-
-        // Better approach: Generate a specialized curve 0 -> 1, then multiply by endTotal
-    }
-
-    // Simpler: Generate normalized growth curve 0.5 -> 1.0 (or 0 -> 1 if new)
-    // Then map to [startTotal, endTotal]
-
-    // For now, let's just make a nice curve ending at endTotal
-    // If endTotal is 0, just return flat 0
-    if (endTotal === 0) {
-        for (let i = 0; i < points; i++) {
-            const date = new Date();
-            if (timeframe === '24H') date.setHours(date.getHours() - (points - 1 - i));
-            else if (timeframe === '7D') date.setDate(date.getDate() - (points - 1 - i));
-            else date.setMonth(date.getMonth() - (points - 1 - i));
-
-            data.push({
-                date: timeframe === '24H' ? `${date.getHours()}:00` : timeframe === '7D' || timeframe === '1M' ? `${date.getDate()}/${date.getMonth() + 1}` : `${date.toLocaleString('default', { month: 'short' })}`,
-                total: 0,
-                levels: Array(9).fill(0)
-            });
-        }
-        return data;
-    }
-
-    const startTotal = Math.max(0, Math.floor(endTotal * 0.7)); // 30% growth simulation
-
-    for (let i = 0; i < points; i++) {
-        const progress = i / (points - 1); // 0 to 1
-        const eased = progress * (2 - progress);
-        const total = Math.floor(startTotal + (endTotal - startTotal) * eased);
-
-        const date = new Date();
-        if (timeframe === '24H') date.setHours(date.getHours() - (points - 1 - i));
-        else if (timeframe === '7D') date.setDate(date.getDate() - (points - 1 - i));
-        else date.setMonth(date.getMonth() - (points - 1 - i));
-
-        // Generate a synthetic cumulative breakdown
-        const levels = Array(9).fill(0).map((_, idx) => {
-            const factor = (idx + 1) / 9;
-            return Math.floor(total * factor);
-        });
-
-        data.push({
-            date: timeframe === '24H'
-                ? `${date.getHours()}:00`
-                : timeframe === '7D' || timeframe === '1M'
-                    ? `${date.getDate()}/${date.getMonth() + 1}`
-                    : `${date.toLocaleString('default', { month: 'short' })}`,
-            total: total,
-            levels: levels
-        });
-    }
-
-    return data;
-};
 
 const LEVEL_COLORS = [
     '#3b82f6', // L1: Blue
@@ -124,14 +50,16 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                // 1. Fetch Chart Data
-                const chartRes = await apiClient.get(`/api/partner/growth/chart?timeframe=${timeframe}`);
+                // Fetch Chart Data and Metrics in parallel
+                const [chartRes, metricsRes] = await Promise.all([
+                    apiClient.get(`/api/partner/growth/chart?timeframe=${timeframe}`),
+                    apiClient.get(`/api/partner/growth/metrics?timeframe=${timeframe}`)
+                ]);
+
                 if (Array.isArray(chartRes.data)) {
                     setChartData(chartRes.data);
                 }
 
-                // 2. Fetch Metrics
-                const metricsRes = await apiClient.get(`/api/partner/growth/metrics?timeframe=${timeframe}`);
                 if (metricsRes.data) {
                     setMetrics(metricsRes.data);
                     onMetricsUpdate?.(metricsRes.data);
