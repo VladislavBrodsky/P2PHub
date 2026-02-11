@@ -29,7 +29,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 initial={{ scale: 0.9, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                className="relative w-full max-w-lg bg-white dark:bg-[#0f172a] rounded-[2.5rem] shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col max-h-[90vh]"
+                className="relative w-full max-w-lg bg-white dark:bg-[#0f172a] rounded-[2.5rem] shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col max-h-[85vh]"
             >
                 {/* Decorative Liquid Header */}
                 <div className="h-32 branding-liquid-gradient relative flex items-center justify-center">
@@ -52,7 +52,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 </button>
 
                 {/* Content Area */}
-                <div className="overflow-y-auto p-8 pt-4 custom-scrollbar">
+                <div className="flex-1 overflow-y-auto p-6 pt-4 overscroll-contain custom-scrollbar">
                     {isLocked ? (
                         /* PRO Lock View */
                         <div className="flex flex-col items-center text-center space-y-6 py-8">

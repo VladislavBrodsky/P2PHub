@@ -58,24 +58,24 @@ export const PartnerAcademy = () => {
             </div>
 
             {/* Sticky Bottom Footer (Educational Callout) */}
-            <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-40 w-full max-w-xs px-4">
+            <div className="fixed bottom-28 left-1/2 -translate-x-1/2 z-40 w-full max-w-[280px] px-2">
                 <motion.div
                     initial={{ y: 100, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    className="glass-panel-premium rounded-[2rem] p-4 border-blue-500/20 shadow-2xl flex items-center justify-between gap-4 bg-white/10 backdrop-blur-2xl"
+                    className="glass-panel-premium rounded-2xl p-2.5 border-blue-500/30 shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex items-center justify-between gap-3 bg-white/10 backdrop-blur-3xl ring-1 ring-white/20"
                 >
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-2xl branding-liquid-gradient flex items-center justify-center shadow-lg">
-                            <TrendingUp className="w-5 h-5 text-slate-900" />
+                    <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl branding-liquid-gradient flex items-center justify-center shadow-md ring-1 ring-white/20">
+                            <TrendingUp className="w-4 h-4 text-slate-900" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest leading-none">Rank</span>
-                            <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase leading-none mt-1">Growth Hacker</span>
+                            <span className="text-[8px] font-black text-blue-500 uppercase tracking-widest leading-none">Rank</span>
+                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase leading-none mt-0.5">Growth Hacker</span>
                         </div>
                     </div>
-                    <div className="h-8 w-px bg-slate-200 dark:bg-white/10" />
-                    <div className="px-4 py-2 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-600 dark:text-orange-400 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 animate-pulse">
-                        <Award className="w-4 h-4" />
+                    <div className="h-6 w-px bg-slate-200 dark:bg-white/10" />
+                    <div className="px-3 py-1.5 rounded-lg bg-orange-500/10 border border-orange-500/20 text-orange-600 dark:text-orange-400 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 animate-pulse shadow-sm">
+                        <Award className="w-3.5 h-3.5" />
                         Active
                     </div>
                 </motion.div>
