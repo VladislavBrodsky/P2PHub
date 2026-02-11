@@ -196,6 +196,7 @@ app.include_router(payment.router, prefix="/api/payment", tags=["payment"])
 app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
 from app.api.endpoints import health, config
 app.include_router(health.router, tags=["health"])
+app.include_router(health.router, prefix="/api", tags=["health"])
 app.include_router(config.router, prefix="/api/config", tags=["config"])
 
 # Serve promo images

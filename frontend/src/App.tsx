@@ -25,14 +25,13 @@ import { PageSkeleton } from './components/Skeletons/PageSkeleton';
 import { OnboardingStory } from './components/Onboarding/OnboardingStory';
 import { useConfig } from './context/ConfigContext';
 
-function App() {
-    const { config, isLoading: isConfigLoading } = useConfig();
+function AppContent() {
+    const { config } = useConfig();
     const [activeTab, setActiveTab] = useState('home');
     const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set(['home']));
     const [showOnboarding, setShowOnboarding] = useState(false);
     const { user, updateUser } = useUser();
     useRealtimeAlerts();
-
 
     // Check onboarding status
     useEffect(() => {
@@ -47,7 +46,7 @@ function App() {
         if (!visitedTabs.has(activeTab)) {
             setVisitedTabs(prev => new Set(prev).add(activeTab));
         }
-    }, [activeTab, visitedTabs]);
+    }, [activeTab]);
 
     // Initialize TMA SDK once
     useEffect(() => {
@@ -140,6 +139,57 @@ function App() {
         };
     }, [activeTab]);
 
+    return (
+        <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
+            <Suspense fallback={<PageSkeleton />}>
+                <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
+                    {visitedTabs.has('home') && <Dashboard setActiveTab={setActiveTab} />}
+                </div>
+                <div className={`h-full ${activeTab === 'cards' ? 'block' : 'hidden'}`}>
+                    {visitedTabs.has('cards') && <CardsPage setActiveTab={setActiveTab} />}
+                </div>
+                <div className={`h-full ${activeTab === 'partner' ? 'block' : 'hidden'}`}>
+                    {visitedTabs.has('partner') && <CommunityPage />}
+                </div>
+                <div className={`h-full ${activeTab === 'earn' ? 'block' : 'hidden'}`}>
+                    {visitedTabs.has('earn') && <ReferralPage />}
+                </div>
+                <div className={`h-full ${activeTab === 'league' ? 'block' : 'hidden'}`}>
+                    {visitedTabs.has('league') && <LeaderboardPage />}
+                </div>
+                <div className={`h-full ${activeTab === 'subscription' ? 'block' : 'hidden'}`}>
+                    {visitedTabs.has('subscription') && <SubscriptionPage />}
+                </div>
+                <div className={`h-full ${activeTab === 'admin' ? 'block' : 'hidden'}`}>
+                    {visitedTabs.has('admin') && <AdminPage />}
+                </div>
+
+                {['coming_soon'].includes(activeTab) && (
+                    <div className="flex flex-col items-center justify-center text-center px-10 h-full">
+                        <div className="text-4xl mb-4">🚀</div>
+                        <h2 className="text-2xl font-black mb-2 uppercase">Coming Soon</h2>
+                        <p className="text-(--color-text-secondary) font-medium">
+                            We're building something amazing for our partners. Stay tuned!
+                        </p>
+                    </div>
+                )}
+            </Suspense>
+        </Layout>
+    );
+}
+
+function App() {
+    const { config, isLoading: isConfigLoading } = useConfig();
+    const [showOnboarding, setShowOnboarding] = useState(false);
+
+    // Initial check for onboarding to avoid flash if possible
+    useEffect(() => {
+        const hasOnboarded = localStorage.getItem('p2p_onboarded');
+        if (!hasOnboarded) {
+            setShowOnboarding(true);
+        }
+    }, []);
+
     if (isConfigLoading) {
         return (
             <div className="h-screen w-full bg-(--color-bg-deep) flex items-center justify-center p-8">
@@ -163,41 +213,7 @@ function App() {
                             />
                         )}
                     </AnimatePresence>
-                    <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
-                        <Suspense fallback={<PageSkeleton />}>
-                            <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
-                                {visitedTabs.has('home') && <Dashboard setActiveTab={setActiveTab} />}
-                            </div>
-                            <div className={`h-full ${activeTab === 'cards' ? 'block' : 'hidden'}`}>
-                                {visitedTabs.has('cards') && <CardsPage setActiveTab={setActiveTab} />}
-                            </div>
-                            <div className={`h-full ${activeTab === 'partner' ? 'block' : 'hidden'}`}>
-                                {visitedTabs.has('partner') && <CommunityPage />}
-                            </div>
-                            <div className={`h-full ${activeTab === 'earn' ? 'block' : 'hidden'}`}>
-                                {visitedTabs.has('earn') && <ReferralPage />}
-                            </div>
-                            <div className={`h-full ${activeTab === 'league' ? 'block' : 'hidden'}`}>
-                                {visitedTabs.has('league') && <LeaderboardPage />}
-                            </div>
-                            <div className={`h-full ${activeTab === 'subscription' ? 'block' : 'hidden'}`}>
-                                {visitedTabs.has('subscription') && <SubscriptionPage />}
-                            </div>
-                            <div className={`h-full ${activeTab === 'admin' ? 'block' : 'hidden'}`}>
-                                {visitedTabs.has('admin') && <AdminPage />}
-                            </div>
-
-                            {['coming_soon'].includes(activeTab) && (
-                                <div className="flex flex-col items-center justify-center text-center px-10 h-full">
-                                    <div className="text-4xl mb-4">🚀</div>
-                                    <h2 className="text-2xl font-black mb-2 uppercase">Coming Soon</h2>
-                                    <p className="text-(--color-text-secondary) font-medium">
-                                        We're building something amazing for our partners. Stay tuned!
-                                    </p>
-                                </div>
-                            )}
-                        </Suspense>
-                    </Layout>
+                    <AppContent />
                 </UserProvider>
             </ThemeProvider>
         </TonConnectUIProvider>
