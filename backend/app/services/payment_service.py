@@ -74,7 +74,6 @@ class PaymentService:
             "expires_at": (transaction.created_at + timedelta(minutes=10)).isoformat()
         }
 
-        }
 
     async def get_ton_price(self) -> float:
         """Fetches current TON/USD price from TON API or fallback."""
