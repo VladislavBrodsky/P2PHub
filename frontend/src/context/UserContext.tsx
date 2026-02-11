@@ -152,12 +152,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 const checkData = async () => {
                     try {
                         if (window.Telegram?.WebApp?.initData) {
+                            console.log('[DEBUG] Telegram SDK detected, refreshing user...');
                             await refreshUser();
-                        } else if (attempts < 5) { // Reduced attempts to avoid long hangs
+                        } else if (attempts < 20) { // Check every 100ms for 2 seconds
                             attempts++;
-                            setTimeout(checkData, 500);
+                            setTimeout(checkData, 100);
                         } else {
-                            console.log('[DEBUG] Proceeding with refresh anyway');
+                            console.log('[DEBUG] Telegram SDK timeout, proceeding with refresh anyway');
                             await refreshUser();
                         }
                     } catch (e) {

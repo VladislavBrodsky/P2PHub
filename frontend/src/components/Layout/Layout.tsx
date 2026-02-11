@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Header } from '../Header';
-import ProfileDrawer from '../ProfileDrawer';
+const ProfileDrawer = lazy(() => import('../ProfileDrawer')); // Lazy load
 import BottomNav from '../BottomNav';
 import { backButton } from '@telegram-apps/sdk-react';
 
@@ -13,6 +13,13 @@ interface LayoutProps {
 
 export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: LayoutProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [hasOpened, setHasOpened] = useState(false);
+
+    useEffect(() => {
+        if (isMenuOpen && !hasOpened) {
+            setHasOpened(true);
+        }
+    }, [isMenuOpen, hasOpened]);
 
     // Handle Back Button, Scroll Lock for Drawer, and Scroll Reset
     useEffect(() => {
@@ -76,7 +83,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
             <div className="pointer-events-none fixed bottom-[-10%] left-[-20%] z-0 aspect-square w-[60%] rounded-full bg-emerald-500/5 blur-[100px] dark:bg-emerald-500/10" />
 
             {/* Grainy Texture */}
-            <div className="pointer-events-none fixed inset-0 z-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay" />
+            <div className="pointer-events-none fixed inset-0 z-0 bg-[url('/noise.svg')] opacity-[0.03] mix-blend-overlay" />
 
             {/* Main Content Area - THE SCROLL LAYER */}
             <main
@@ -94,11 +101,15 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 </div>
             </main>
 
-            {/* Side Menu / Profile Drawer - Portaled out, so safe */}
-            <ProfileDrawer
-                isOpen={isMenuOpen}
-                onClose={() => setIsMenuOpen(false)}
-            />
+            {/* Side Menu / Profile Drawer - Portaled out, lazily loaded */}
+            {hasOpened && (
+                <Suspense fallback={null}>
+                    <ProfileDrawer
+                        isOpen={isMenuOpen}
+                        onClose={() => setIsMenuOpen(false)}
+                    />
+                </Suspense>
+            )}
 
             {/* Integrated Footer Stack */}
             <div className="fixed bottom-0 left-1/2 z-50 flex w-full max-w-lg -translate-x-1/2 flex-col items-center pointer-events-none pb-safe-bottom">
