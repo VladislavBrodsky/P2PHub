@@ -32,7 +32,10 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401) {
+        const status = error.response?.status;
+        const url = error.config?.url;
+
+        if (status === 401) {
             // Only log warning if we are actually in a TMA environment
             try {
                 const params = getSafeLaunchParams();
@@ -42,6 +45,10 @@ apiClient.interceptors.response.use(
             } catch (e) {
                 // Ignore errors checking TMA state
             }
+        } else if (status >= 500) {
+            console.error(`[API] Server Error (${status}) at ${url}:`, error.response?.data || error.message);
+        } else {
+            console.warn(`[API] Error (${status}) at ${url}:`, error.message);
         }
         return Promise.reject(error);
     }

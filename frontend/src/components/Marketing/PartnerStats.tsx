@@ -52,26 +52,25 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
     const [recentPartners, setRecentPartners] = useState<any[]>([]);
     const [stats, setStats] = useState({ total: '12.4k', volume: '$84.2M', countries: '142', lastHourCount: 342 });
 
-    const fetchRecentPartners = async () => {
-        try {
-            const response = await apiClient.get('/api/partner/recent');
-            if (response.status === 200 && response.data) {
-                const { partners, last_hour_count } = response.data;
-                setRecentPartners(partners || []);
-                setStats(prev => ({ ...prev, lastHourCount: last_hour_count || prev.lastHourCount }));
-            }
-        } catch (error) {
-            console.error("Failed to fetch recent partners", error);
-        }
-    };
-
     useEffect(() => {
+        const fetchRecentPartners = async () => {
+            try {
+                const response = await apiClient.get('/api/partner/recent');
+                if (response.status === 200 && response.data) {
+                    const { partners, last_hour_count } = response.data;
+                    setRecentPartners(partners || []);
+                    setStats(prev => ({ ...prev, lastHourCount: last_hour_count || prev.lastHourCount }));
+                }
+            } catch (error) {
+                console.error("Failed to fetch recent partners", error);
+            }
+        };
+
         fetchRecentPartners();
         // Refresh every 5 minutes as requested
         const interval = setInterval(fetchRecentPartners, 5 * 60 * 1000);
         return () => clearInterval(interval);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, []); // Dependencies are now truly empty as state setters and imports are stable
 
     return (
         <section className="px-4 py-8">

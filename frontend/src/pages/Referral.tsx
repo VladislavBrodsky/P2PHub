@@ -27,9 +27,6 @@ export default function ReferralPage() {
     const { notification, selection } = useHaptic();
     const { user, updateUser, isLoading } = useUser();
 
-    if (isLoading) {
-        return <PageSkeleton />;
-    }
 
     // Local State for Instant Feedback
     const [tasksList, setTasksList] = useState<Task[]>(EARN_TASKS);
@@ -235,6 +232,10 @@ export default function ReferralPage() {
             handleCopyLink();
         }
     };
+
+    if (isLoading) {
+        return <PageSkeleton />;
+    }
 
     return (
         <div className="flex flex-col min-h-[90vh] px-4 pt-4 pb-32 relative">

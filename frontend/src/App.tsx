@@ -45,6 +45,7 @@ import { Skeleton } from './components/Skeleton';
 import { PageSkeleton } from './components/Skeletons/PageSkeleton';
 import { OnboardingStory } from './components/Onboarding/OnboardingStory';
 import { useConfig } from './context/ConfigContext';
+import { FeatureErrorBoundary } from './components/FeatureErrorBoundary';
 
 function AppContent() {
     const { config } = useConfig();
@@ -165,28 +166,60 @@ function AppContent() {
         <Layout activeTab={activeTab} setActiveTab={setActiveTab} prefetchPages={prefetchPages}>
             <Suspense fallback={<PageSkeleton />}>
                 <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('home') && <Dashboard setActiveTab={setActiveTab} />}
+                    {visitedTabs.has('home') && (
+                        <FeatureErrorBoundary featureName="Dashboard">
+                            <Dashboard setActiveTab={setActiveTab} />
+                        </FeatureErrorBoundary>
+                    )}
                 </div>
                 <div className={`h-full ${activeTab === 'cards' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('cards') && <CardsPage setActiveTab={setActiveTab} />}
+                    {visitedTabs.has('cards') && (
+                        <FeatureErrorBoundary featureName="Cards">
+                            <CardsPage setActiveTab={setActiveTab} />
+                        </FeatureErrorBoundary>
+                    )}
                 </div>
                 <div className={`h-full ${activeTab === 'partner' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('partner') && <CommunityPage />}
+                    {visitedTabs.has('partner') && (
+                        <FeatureErrorBoundary featureName="Community Orbit">
+                            <CommunityPage />
+                        </FeatureErrorBoundary>
+                    )}
                 </div>
                 <div className={`h-full ${activeTab === 'earn' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('earn') && <ReferralPage />}
+                    {visitedTabs.has('earn') && (
+                        <FeatureErrorBoundary featureName="Referral Program">
+                            <ReferralPage />
+                        </FeatureErrorBoundary>
+                    )}
                 </div>
                 <div className={`h-full ${activeTab === 'league' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('league') && <LeaderboardPage />}
+                    {visitedTabs.has('league') && (
+                        <FeatureErrorBoundary featureName="Leaderboard">
+                            <LeaderboardPage />
+                        </FeatureErrorBoundary>
+                    )}
                 </div>
                 <div className={`h-full ${activeTab === 'subscription' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('subscription') && <SubscriptionPage />}
+                    {visitedTabs.has('subscription') && (
+                        <FeatureErrorBoundary featureName="Subscription">
+                            <SubscriptionPage />
+                        </FeatureErrorBoundary>
+                    )}
                 </div>
                 <div className={`h-full ${activeTab === 'blog' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('blog') && <BlogPage setActiveTab={setActiveTab} currentTab={activeTab} />}
+                    {visitedTabs.has('blog') && (
+                        <FeatureErrorBoundary featureName="Blog">
+                            <BlogPage setActiveTab={setActiveTab} currentTab={activeTab} />
+                        </FeatureErrorBoundary>
+                    )}
                 </div>
                 <div className={`h-full ${activeTab === 'admin' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('admin') && <AdminPage />}
+                    {visitedTabs.has('admin') && (
+                        <FeatureErrorBoundary featureName="Admin Panel">
+                            <AdminPage />
+                        </FeatureErrorBoundary>
+                    )}
                 </div>
 
                 {['coming_soon'].includes(activeTab) && (

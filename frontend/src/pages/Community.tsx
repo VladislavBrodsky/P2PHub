@@ -127,4 +127,5 @@ export default function CommunityPage() {
             <PartnerBriefingModal isOpen={isBriefingOpen} onClose={() => setIsBriefingOpen(false)} />
         </div>
     );
-};
+}
+

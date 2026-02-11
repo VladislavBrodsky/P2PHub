@@ -42,10 +42,8 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
     useEffect(() => {
         if (!backButton.isMounted() || currentTab !== 'blog') return;
 
-        let cleanup: VoidFunction | undefined;
-
         backButton.show();
-        cleanup = backButton.onClick(() => {
+        const cleanup = backButton.onClick(() => {
             selection();
             if (selectedPost) {
                 setSelectedPost(null);
@@ -55,7 +53,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
         });
 
         return () => {
-            if (cleanup) cleanup();
+            cleanup();
         };
     }, [selectedPost, setActiveTab, currentTab]);
 

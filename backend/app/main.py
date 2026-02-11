@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 
 from aiogram import types
 from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -172,6 +173,17 @@ from app.middleware.rate_limit import limiter, rate_limit_exceeded_handler
 # Add rate limiter state and exception handler
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
+
+# Global Exception Handler
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    print(f"❌ Global Exception: {exc}")
+    import traceback
+    traceback.print_exc()
+    return JSONResponse(
+        status_code=500,
+        content={"status": "error", "message": "Internal Server Error"},
+    )
 
 # Configure CORS
 allowed_origins = [

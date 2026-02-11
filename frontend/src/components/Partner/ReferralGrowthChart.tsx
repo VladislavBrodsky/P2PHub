@@ -22,7 +22,7 @@ const generateMockData = (timeframe: Timeframe, endTotal: number): ChartDataPoin
     const data: ChartDataPoint[] = [];
 
     // Reverse generation: Start from endTotal and go backwards
-    let currentTotal = endTotal;
+    const currentTotal = endTotal;
 
     for (let i = 0; i < points; i++) {
         // Distribute across 9 levels

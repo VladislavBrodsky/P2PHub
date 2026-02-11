@@ -6,7 +6,8 @@ venv
 node_modules
 dist
 build
-frontend
+# frontend
+# backend
 **/__pycache__
 **/*.pyc
 **/*.pyo

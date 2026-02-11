@@ -10,10 +10,11 @@ description: Perform a comprehensive project health check
    - Check console for critical errors (excluding 401s if not logged in).
    - Verify the backend health endpoint: `https://p2phub-production.up.railway.app/`.
 
-3. **Audit Frontend Assets**
+3. **Audit Frontend Assets & Health**
+   - Run `npm run lint` in the `frontend/` directory to check for code quality regressions.
+   - Look for malformed SVG path errors in the browser console.
    - Check the 'Network' tab for any failed (404/500) JS or CSS bundles.
-   - Look for malformed SVG path errors in the console.
 
 4. **Security Audit**
    - Run `npm audit` in the `frontend/` directory.
-   - Run `safety check` (if installed) or check for outdated critical packages in `backend/`.
+   - Run `python3 -m pip list --outdated` in `backend/` to identify critical package updates.
