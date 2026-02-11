@@ -7,17 +7,12 @@ def get_main_menu_keyboard(url: str, referral_link: str = "", referral_code: str
         text="🚀 Open App", 
         web_app=types.WebAppInfo(url=url)
     ))
-    if referral_code:
+    if referral_link:
         builder.row(types.InlineKeyboardButton(
             text="📲 Share Link (Immediate)",
-            switch_inline_query=referral_code
+            url=referral_link
         ))
-        
-        # Premium card flow - TWO-STEP FLOW
-        builder.row(types.InlineKeyboardButton(
-            text="💎 Send Premium Card",
-            switch_inline_query=referral_code
-        ))
+
 
     builder.row(types.InlineKeyboardButton(
         text="📢 Join Community",

@@ -72,12 +72,17 @@ async def cmd_start(message: types.Message):
             # Get localized messages
             welcome_text = get_msg(lang, "welcome", referral_link=referral_link)
             share_text = get_msg(lang, "share_text")
+            
+            # Construct direct sharing URL
+            import urllib.parse
+            share_url = f"https://t.me/share/url?url={urllib.parse.quote(referral_link)}&text={urllib.parse.quote(share_text)}"
 
             await message.answer(
                 welcome_text,
                 parse_mode="Markdown",
-                reply_markup=get_main_menu_keyboard(WEB_APP_URL, referral_link, partner.referral_code)
+                reply_markup=get_main_menu_keyboard(WEB_APP_URL, share_url)
             )
+
             break # We only need one session
     except Exception as e:
         logging.error(f"Error in cmd_start: {e}")
@@ -285,10 +290,17 @@ async def handle_tx_hash(message: types.Message):
                     parse_mode="Markdown"
                 )
                 # Show main menu again with new status
+                bot_info = await bot.get_me()
+                referral_link = f"https://t.me/{bot_info.username}?start={partner.referral_code}"
+                share_text = get_msg(partner.language_code or "en", "share_text")
+                import urllib.parse
+                share_url = f"https://t.me/share/url?url={urllib.parse.quote(referral_link)}&text={urllib.parse.quote(share_text)}"
+
                 await message.answer(
                     "What would you like to do next?",
-                    reply_markup=get_main_menu_keyboard(WEB_APP_URL, partner.referral_code, partner.referral_code)
+                    reply_markup=get_main_menu_keyboard(WEB_APP_URL, share_url)
                 )
+
             else:
                 await wait_msg.edit_text(
                     "❌ *Verification Failed*\n\n"
