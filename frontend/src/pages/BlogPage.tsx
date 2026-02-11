@@ -9,11 +9,14 @@ import { blogPosts, BlogPost } from '../data/blogPosts';
 import { useHaptic } from '../hooks/useHaptic';
 import { blogService, BlogEngagement } from '../services/blogService';
 
+import { backButton } from '@telegram-apps/sdk-react';
+
 interface BlogPageProps {
     setActiveTab?: (tab: string) => void;
+    currentTab?: string;
 }
 
-export const BlogPage = ({ setActiveTab }: BlogPageProps) => {
+export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
     const { t, i18n } = useTranslation();
     const { selection, impact, notification } = useHaptic();
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -34,6 +37,27 @@ export const BlogPage = ({ setActiveTab }: BlogPageProps) => {
         window.addEventListener('nav-blog-post', handleDeepLink);
         return () => window.removeEventListener('nav-blog-post', handleDeepLink);
     }, []);
+
+    // Telegram Native Back Button Integration
+    useEffect(() => {
+        if (!backButton.isMounted() || currentTab !== 'blog') return;
+
+        let cleanup: VoidFunction | undefined;
+
+        backButton.show();
+        cleanup = backButton.onClick(() => {
+            selection();
+            if (selectedPost) {
+                setSelectedPost(null);
+            } else {
+                setActiveTab?.('home');
+            }
+        });
+
+        return () => {
+            if (cleanup) cleanup();
+        };
+    }, [selectedPost, setActiveTab, currentTab]);
 
     const categories = ['All', ...new Set(blogPosts.map(post => post.category))];
 
@@ -143,7 +167,7 @@ export const BlogPage = ({ setActiveTab }: BlogPageProps) => {
                         className="flex flex-col"
                     >
                         {/* Header Area */}
-                        <div className="px-4 pt-[calc(var(--spacing-safe-top)+1rem)] pb-4 flex items-center justify-between sticky top-0 z-30 bg-(--color-bg-app)/80 backdrop-blur-xl border-b border-(--color-border-glass)">
+                        <div className="px-4 pt-4 pb-4 flex items-center justify-between sticky top-(--header-total-height) z-30 bg-(--color-bg-app)/80 backdrop-blur-xl border-b border-(--color-border-glass)">
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => { selection(); setActiveTab?.('home'); }}
@@ -368,7 +392,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             className="flex flex-col min-h-screen bg-(--color-bg-app)"
         >
             {/* Header Sticky */}
-            <div className="px-4 pt-[calc(var(--spacing-safe-top)+0.5rem)] pb-3 flex items-center justify-between sticky top-0 z-40 bg-(--color-bg-app)/90 backdrop-blur-xl border-b border-(--color-border-glass)">
+            <div className="px-4 pt-4 pb-3 flex items-center justify-between sticky top-(--header-total-height) z-40 bg-(--color-bg-app)/90 backdrop-blur-xl border-b border-(--color-border-glass)">
                 <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-(--color-bg-surface) active:scale-90 transition-all">
                     <ArrowLeft className="w-6 h-6" />
                 </button>

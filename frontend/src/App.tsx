@@ -146,7 +146,8 @@ function AppContent() {
         try {
             if (activeTab === 'home') {
                 if (backButton.hide.isAvailable()) backButton.hide();
-            } else {
+            } else if (activeTab !== 'blog') {
+                // Blog tab handles its own hierarchical back button
                 if (backButton.show.isAvailable()) backButton.show();
                 const handleBack = () => setActiveTab('home');
                 cleanup = backButton.onClick(handleBack);
@@ -182,7 +183,7 @@ function AppContent() {
                     {visitedTabs.has('subscription') && <SubscriptionPage />}
                 </div>
                 <div className={`h-full ${activeTab === 'blog' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('blog') && <BlogPage setActiveTab={setActiveTab} />}
+                    {visitedTabs.has('blog') && <BlogPage setActiveTab={setActiveTab} currentTab={activeTab} />}
                 </div>
                 <div className={`h-full ${activeTab === 'admin' ? 'block' : 'hidden'}`}>
                     {visitedTabs.has('admin') && <AdminPage />}
