@@ -170,9 +170,9 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                 setIsTermsOpen(!isTermsOpen);
                                 selection();
                             }}
-                            className="w-full py-4 flex items-center justify-between border-t border-slate-100 group cursor-pointer"
+                            className="w-full py-4 flex items-center justify-between border-t border-(--color-brand-border) group cursor-pointer"
                         >
-                            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider group-hover:text-slate-800 transition-colors">
+                            <span className="text-xs font-bold text-(--color-text-secondary) uppercase tracking-wider group-hover:text-(--color-text-primary) transition-colors">
                                 {t('cards.terms')}
                             </span>
                             <motion.div
@@ -245,7 +245,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             )}
                         </motion.button>
 
-                        <p className="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 opacity-60">
+                        <p className="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary) opacity-60">
                             {t('cards.instant_delivery')}
                         </p>
                     </div>
@@ -329,7 +329,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
 
                                 <button
                                     onClick={() => setIsPremiumModalOpen(false)}
-                                    className="mt-4 text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
+                                    className="mt-4 text-[11px] font-black uppercase tracking-widest text-(--color-text-secondary) hover:text-(--color-text-primary) transition-colors"
                                 >
                                     {t('cards.modal.later')}
                                 </button>
