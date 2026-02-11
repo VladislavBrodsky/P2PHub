@@ -241,6 +241,34 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
                 ease: "linear"
             }}
         >
+            {/* Tether Line to Center */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ transform: 'translate(-50%, -50%)', width: '200%', height: '200%', left: '50%', top: '50%' }}>
+                <svg className="w-full h-full overflow-visible">
+                    <motion.line
+                        x1="30" // Center of the 60x60 item
+                        y1="30"
+                        animate={{
+                            x2: [
+                                -Math.cos((angle) * (Math.PI / 180)) * radius + 30,
+                                -Math.cos((angle + 360) * (Math.PI / 180)) * radius + 30
+                            ],
+                            y2: [
+                                -Math.sin((angle) * (Math.PI / 180)) * radius + 30,
+                                -Math.sin((angle + 360) * (Math.PI / 180)) * radius + 30
+                            ],
+                        }}
+                        transition={{
+                            duration,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                        stroke="rgba(59, 130, 246, 0.2)"
+                        strokeWidth="1"
+                        strokeDasharray="4 4"
+                    />
+                </svg>
+            </div>
+
             {/* Float & Breathing Animation Layer */}
             <motion.div
                 animate={{

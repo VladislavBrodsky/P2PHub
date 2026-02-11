@@ -16,7 +16,7 @@ import { ProWelcomeCard } from './ProWelcomeCard';
 
 export const PartnerDashboard = () => {
     const { notification, selection } = useHaptic();
-    const { user } = useUser();
+    const { user, updateUser } = useUser();
     const [isExplorerOpen, setIsExplorerOpen] = React.useState(false);
     const [isQrOpen, setIsQrOpen] = React.useState(false);
     const [isBriefingOpen, setIsBriefingOpen] = React.useState(false);
@@ -32,8 +32,8 @@ export const PartnerDashboard = () => {
     const handleCloseProWelcome = async () => {
         setIsProWelcomeOpen(false);
         try {
-            await apiClient.post('/api/partner/mark-notif-seen');
-            // Optimistically update or re-fetch user if needed
+            await apiClient.post('/api/partner/notification/seen');
+            updateUser({ pro_notification_seen: true });
         } catch (e) {
             console.error('Failed to mark notification as seen', e);
         }

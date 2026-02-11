@@ -164,7 +164,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
     }, [chartData]);
 
     const chartPaths = useMemo(() => {
-        if (chartData.length === 0) return [];
+        if (chartData.length < 2) return [];
         const width = 100;
         const height = 100;
         const stepX = width / (chartData.length - 1);
@@ -173,7 +173,9 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
             let path = ``;
             bounds.forEach((bound, idx) => {
                 const x = idx * stepX;
-                const y = height - (bound.top / maxValue) * height * 0.9;
+                const topVal = isNaN(bound.top) ? 0 : bound.top;
+                const safeMaxValue = maxValue || 1;
+                const y = height - (topVal / safeMaxValue) * height * 0.9;
                 if (idx === 0) path += `M ${x},${y} `;
                 else path += `L ${x},${y} `;
             });
@@ -181,7 +183,9 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
             for (let i = bounds.length - 1; i >= 0; i--) {
                 const bound = bounds[i];
                 const x = i * stepX;
-                const y = height - (bound.bottom / maxValue) * height * 0.9;
+                const bottomVal = isNaN(bound.bottom) ? 0 : bound.bottom;
+                const safeMaxValue = maxValue || 1;
+                const y = height - (bottomVal / safeMaxValue) * height * 0.9;
                 path += `L ${x},${y} `;
             }
             path += `Z`;
@@ -190,7 +194,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
     }, [chartLevelsWithBounds, maxValue, chartData.length]);
 
     const topLinePath = useMemo(() => {
-        if (chartData.length === 0) return '';
+        if (chartData.length < 2) return '';
         const width = 100;
         const height = 100;
         const stepX = width / (chartData.length - 1);
@@ -198,7 +202,9 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
         let path = '';
         chartData.forEach((point, index) => {
             const x = index * stepX;
-            const y = height - (point.total / maxValue) * height * 0.9;
+            const safeTotal = isNaN(point.total) ? 0 : point.total;
+            const safeMaxValue = maxValue || 1;
+            const y = height - (safeTotal / safeMaxValue) * height * 0.9;
             if (index === 0) path += `M ${x},${y} `;
             else path += `L ${x},${y} `;
         });

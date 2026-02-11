@@ -23,6 +23,9 @@ async def get_my_profile(
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
+    if not user_data:
+        raise HTTPException(status_code=401, detail="Authentication required")
+        
     # Parse Telegram user data securely
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
@@ -300,6 +303,9 @@ async def get_my_referral_tree(
     """
     Fetches the 9-level referral tree stats for the current user.
     """
+    if not user_data:
+        raise HTTPException(status_code=401, detail="Authentication required")
+        
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
@@ -330,6 +336,9 @@ async def get_network_level_members(
     """
     Fetches the list of members for a specific level in the 9-level matrix.
     """
+    if not user_data:
+        raise HTTPException(status_code=401, detail="Authentication required")
+        
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
@@ -361,6 +370,9 @@ async def get_growth_metrics(
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
+    if not user_data:
+        raise HTTPException(status_code=401, detail="Authentication required")
+        
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
@@ -388,6 +400,9 @@ async def get_growth_chart(
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
+    if not user_data:
+        raise HTTPException(status_code=401, detail="Authentication required")
+        
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
@@ -713,3 +728,30 @@ async def get_partner_photo(request: Request, file_id: str):
         # Actually, if we're here, we probably can't optimize, so return error
         raise HTTPException(status_code=500, detail="Failed to optimize photo")
 
+@router.post("/notification/seen")
+async def mark_notification_seen(
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    if not user_data:
+        raise HTTPException(status_code=401, detail="Authentication required")
+        
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
+
+    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    result = await session.exec(statement)
+    partner = result.first()
+    
+    if not partner:
+        raise HTTPException(status_code=404, detail="Partner not found")
+
+    partner.pro_notification_seen = True
+    session.add(partner)
+    await session.commit()
+    await session.refresh(partner)
+    
+    # Invalidate cache
+    await redis_service.client.delete(f"partner:profile:{tg_id}")
+    
+    return {"status": "ok"}

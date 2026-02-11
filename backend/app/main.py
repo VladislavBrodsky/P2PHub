@@ -24,6 +24,27 @@ async def lifespan(app: FastAPI):
     from app.services.subscription_service import subscription_service
     checker_task = asyncio.create_task(subscription_service.run_checker_task())
     app.state.subscription_checker = checker_task
+    
+    # Start the profile photo sync task (24h)
+    async def run_photo_sync_task():
+        from app.services.partner_service import sync_profile_photos
+        from app.models.partner import engine
+        from sqlalchemy.orm import sessionmaker
+        from sqlmodel.ext.asyncio.session import AsyncSession
+        
+        while True:
+            await asyncio.sleep(24 * 3600) # Run once every 24h
+            try:
+                print("📅 Triggering scheduled Profile Photo Sync...")
+                async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+                async with async_session() as session:
+                    await sync_profile_photos(bot, session)
+            except Exception as e:
+                print(f"❌ Photo Sync Task Error: {e}")
+    
+    photo_sync_task = asyncio.create_task(run_photo_sync_task())
+    app.state.photo_sync = photo_sync_task
+    
     print("✅ Background tasks started.")
     
     webhook_base = settings.WEBHOOK_URL
@@ -86,6 +107,13 @@ async def lifespan(app: FastAPI):
         app.state.subscription_checker.cancel()
         try:
             await app.state.subscription_checker
+        except asyncio.CancelledError:
+            pass
+
+    if hasattr(app.state, "photo_sync"):
+        app.state.photo_sync.cancel()
+        try:
+            await app.state.photo_sync
         except asyncio.CancelledError:
             pass
 

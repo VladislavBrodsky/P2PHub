@@ -36,10 +36,13 @@ def validate_telegram_data(init_data: str) -> dict:
     except Exception as e:
         raise HTTPException(status_code=401, detail="Authentication failed")
 
-async def get_current_user(x_telegram_init_data: str = Header(..., alias="X-Telegram-Init-Data")):
+async def get_current_user(x_telegram_init_data: Optional[str] = Header(None, alias="X-Telegram-Init-Data")):
     """
     Central authentication dependency. Verified Telegram initData.
+    Returns None if header is missing, allowing guest mode.
     """
+    if not x_telegram_init_data:
+        return None
     return validate_telegram_data(x_telegram_init_data)
 
 def get_tg_user(user_data: dict) -> dict:

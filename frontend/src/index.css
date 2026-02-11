@@ -169,10 +169,11 @@
   --color-surface: #0f172a;
   --color-bg-surface: #0f172a;
   --color-text-primary: #F9FAFB;
-  --color-text-secondary: #94a3b8;
-  --color-bg-glass: rgba(15, 23, 42, 0.8);
-  --color-border-glass: rgba(255, 255, 255, 0.03);
-  --color-glass-highlight: rgba(255, 255, 255, 0.05);
+  --color-text-secondary: #cbd5e1;
+  /* Increased contrast for WCAG (formerly #94a3b8) */
+  --color-bg-glass: rgba(15, 23, 42, 0.85);
+  --color-border-glass: rgba(255, 255, 255, 0.08);
+  --color-glass-highlight: rgba(255, 255, 255, 0.1);
   --nav-active: #FFFFFF;
   --nav-inactive: #64748b;
   --color-brand-primary: #FFFFFF;

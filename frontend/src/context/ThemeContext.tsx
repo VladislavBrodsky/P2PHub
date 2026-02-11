@@ -10,15 +10,15 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    // Default to 'light' as requested
+    // Default to 'dark' for elite feel
     const [theme, setThemeState] = useState<Theme>(() => {
-        const saved = localStorage.getItem('app-theme') as Theme;
-        return saved || 'light';
+        const saved = localStorage.getItem('p2p_theme') as Theme;
+        return saved || 'dark';
     });
 
     const setTheme = (newTheme: Theme) => {
         setThemeState(newTheme);
-        localStorage.setItem('app-theme', newTheme);
+        localStorage.setItem('p2p_theme', newTheme);
     };
 
     useEffect(() => {

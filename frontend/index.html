@@ -20,6 +20,18 @@
     rel="stylesheet">
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    (function () {
+      try {
+        const theme = localStorage.getItem('p2p_theme') || 'dark'; // Default to dark for elite feel
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) { }
+    })();
+  </script>
 </head>
 
 <body class="bg-gray-50 text-gray-900">

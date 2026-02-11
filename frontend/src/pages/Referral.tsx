@@ -19,12 +19,17 @@ import { getSafeLaunchParams } from '../utils/tma';
 import { apiClient } from '../api/client';
 import { getLevel } from '../utils/ranking';
 import { getApiUrl } from '../utils/api';
+import { PageSkeleton } from '../components/Skeletons/PageSkeleton';
 
 
 export default function ReferralPage() {
     const { t } = useTranslation();
     const { notification, selection } = useHaptic();
-    const { user, updateUser } = useUser();
+    const { user, updateUser, isLoading } = useUser();
+
+    if (isLoading) {
+        return <PageSkeleton />;
+    }
 
     // Local State for Instant Feedback
     const [tasksList, setTasksList] = useState<Task[]>(EARN_TASKS);

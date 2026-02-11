@@ -16,9 +16,12 @@ import { UserProvider } from './context/UserContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { isTMA } from './utils/tma';
+import { useUser } from './context/UserContext';
+import { apiClient } from './api/client';
 import { NotificationOverlay } from './components/ui/NotificationOverlay';
 import { useRealtimeAlerts } from './hooks/useRealtimeAlerts';
 import { Skeleton } from './components/Skeleton';
+import { PageSkeleton } from './components/Skeletons/PageSkeleton';
 import { OnboardingStory } from './components/Onboarding/OnboardingStory';
 import { useConfig } from './context/ConfigContext';
 
@@ -27,7 +30,9 @@ function App() {
     const [activeTab, setActiveTab] = useState('home');
     const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set(['home']));
     const [showOnboarding, setShowOnboarding] = useState(false);
+    const { user, updateUser } = useUser();
     useRealtimeAlerts();
+
 
     // Check onboarding status
     useEffect(() => {
@@ -114,18 +119,20 @@ function App() {
 
     // Handle Back Button state based on active tab
     useEffect(() => {
+        if (!isTMA()) return;
+
         let cleanup: VoidFunction | undefined;
 
         try {
             if (activeTab === 'home') {
-                backButton.hide();
+                if (backButton.hide.isAvailable()) backButton.hide();
             } else {
-                backButton.show();
+                if (backButton.show.isAvailable()) backButton.show();
                 const handleBack = () => setActiveTab('home');
                 cleanup = backButton.onClick(handleBack);
             }
         } catch (e) {
-            // Ignore errors if backButton not mounted/available
+            console.warn('[SDK] backButton error:', e);
         }
 
         return () => {
@@ -157,7 +164,7 @@ function App() {
                         )}
                     </AnimatePresence>
                     <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
-                        <Suspense fallback={<div className="h-full flex items-center justify-center"><Skeleton className="w-full h-full max-w-md max-h-96" /></div>}>
+                        <Suspense fallback={<PageSkeleton />}>
                             <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
                                 {visitedTabs.has('home') && <Dashboard setActiveTab={setActiveTab} />}
                             </div>
