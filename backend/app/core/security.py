@@ -55,3 +55,17 @@ def get_tg_user(user_data: dict) -> dict:
         return json.loads(user_json)
     except Exception:
         raise HTTPException(status_code=400, detail="Malformed user data")
+
+async def get_current_admin(user_data: dict = Depends(get_current_user)):
+    """
+    Dependency to verify if the current user is an admin.
+    """
+    if not user_data:
+        raise HTTPException(status_code=401, detail="Authentication required")
+        
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
+    
+    if tg_id not in settings.ADMIN_USER_IDS:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return tg_user

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.core.security import get_current_user, get_tg_user
+from app.core.security import get_current_user, get_tg_user, get_current_admin
 from app.core.config import settings
 from app.models.partner import Partner, get_session
 from app.models.transaction import PartnerTransaction
@@ -21,17 +21,6 @@ async def get_admin_stats(
     Returns high-level KPIs and financial data for the admin dashboard.
     """
     return await admin_service.get_dashboard_stats()
-
-async def get_current_admin(user_data: dict = Depends(get_current_user)):
-    """
-    Dependency to verify if the current user is an admin.
-    """
-    tg_user = get_tg_user(user_data)
-    tg_id = str(tg_user.get("id"))
-    
-    if tg_id not in settings.ADMIN_USER_IDS:
-        raise HTTPException(status_code=403, detail="Admin access required")
-    return tg_user
 
 @router.get("/pending-payments", response_model=List[PartnerTransaction])
 async def list_pending_payments(
