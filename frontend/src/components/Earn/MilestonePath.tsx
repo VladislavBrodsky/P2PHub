@@ -11,11 +11,11 @@ import { useHaptic } from '../../hooks/useHaptic';
 const Level100AchievementModal = lazy(() => import('./Level100AchievementModal').then(m => ({ default: m.Level100AchievementModal })));
 
 const CHAPTER_TIERS = [
-    { title: 'milestone.tier_1', range: [1, 5], icon: <Zap className="w-3 h-3" /> },
-    { title: 'milestone.tier_2', range: [6, 10], icon: <Star className="w-3 h-3" /> },
-    { title: 'milestone.tier_3', range: [11, 20], icon: <Shield className="w-3 h-3" /> },
-    { title: 'milestone.tier_4', range: [21, 50], icon: <Trophy className="w-3 h-3" /> },
-    { title: 'milestone.tier_5', range: [51, 100], icon: <Milestone className="w-3 h-3" /> },
+    { title: 'milestones.tier_1', range: [1, 5], icon: <Zap className="w-3 h-3" /> },
+    { title: 'milestones.tier_2', range: [6, 10], icon: <Star className="w-3 h-3" /> },
+    { title: 'milestones.tier_3', range: [11, 20], icon: <Shield className="w-3 h-3" /> },
+    { title: 'milestones.tier_4', range: [21, 50], icon: <Trophy className="w-3 h-3" /> },
+    { title: 'milestones.tier_5', range: [51, 100], icon: <Milestone className="w-3 h-3" /> },
 ];
 
 export const MilestonePath = () => {
@@ -174,38 +174,38 @@ export const MilestonePath = () => {
                             initial={{ opacity: 0, scale: 0.95 }}
                             whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
-                            className="relative mt-8 mb-10 overflow-hidden rounded-[2.5rem] bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700 p-[1px] shadow-2xl shadow-blue-500/20"
+                            className="relative mt-10 mb-12 overflow-hidden rounded-[2.5rem] bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700 p-[1px] shadow-2xl shadow-blue-500/20 group mx-1"
                         >
-                            <div className="relative flex flex-col items-center p-8 text-center bg-white/5 backdrop-blur-3xl rounded-[2.45rem]">
+                            <div className="relative flex flex-col items-center p-7 sm:p-8 text-center bg-white/5 backdrop-blur-3xl rounded-[2.45rem]">
                                 {/* Vibing Background Elements */}
                                 <motion.div
                                     animate={{
                                         scale: [1, 1.2, 1],
-                                        opacity: [0.3, 0.6, 0.3]
+                                        opacity: [0.3, 0.5, 0.3]
                                     }}
                                     transition={{ duration: 4, repeat: Infinity }}
-                                    className="absolute top-0 left-0 w-32 h-32 bg-blue-400/20 blur-[40px] rounded-full pointer-events-none"
+                                    className="absolute top-0 left-0 w-32 h-32 bg-blue-400/20 blur-[40px] rounded-full pointer-events-none group-hover:bg-blue-400/30 transition-colors"
                                 />
                                 <motion.div
                                     animate={{
                                         scale: [1.2, 1, 1.2],
-                                        opacity: [0.3, 0.6, 0.3]
+                                        opacity: [0.3, 0.5, 0.3]
                                     }}
                                     transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-                                    className="absolute bottom-0 right-0 w-32 h-32 bg-purple-400/20 blur-[40px] rounded-full pointer-events-none"
+                                    className="absolute bottom-0 right-0 w-32 h-32 bg-purple-400/20 blur-[40px] rounded-full pointer-events-none group-hover:bg-purple-400/30 transition-colors"
                                 />
 
                                 <div className="relative z-10 flex flex-col items-center">
-                                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 mb-4">
-                                        <Flame className="w-3 h-3 text-orange-400 animate-pulse" />
-                                        <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">{t('level100.ultimate_horizon')}</span>
+                                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 mb-5">
+                                        <Flame className="w-3.5 h-3.5 text-orange-400 animate-pulse" />
+                                        <span className="text-[9px] font-black text-white uppercase tracking-[0.25em]">{t('level100.ultimate_horizon')}</span>
                                     </div>
 
-                                    <h3 className="text-2xl font-black text-white leading-tight tracking-tight uppercase">
+                                    <h3 className="text-2xl sm:text-3xl font-black text-white leading-[0.9] tracking-tight uppercase">
                                         {t('level100.achievements_title')}
                                     </h3>
 
-                                    <p className="text-[11px] font-bold text-blue-100/80 leading-relaxed mt-2 max-w-[220px]">
+                                    <p className="text-[11px] font-bold text-blue-100/70 leading-relaxed mt-4 max-w-[240px]">
                                         <Trans i18nKey="level100.achievements_desc">
                                             Unlock your <span className="text-white font-black underline decoration-blue-400/50 underline-offset-2">Fanocracy Passport</span>. Claim the Physical Platinum Card & 0% Fees for life.
                                         </Trans>
@@ -218,22 +218,22 @@ export const MilestonePath = () => {
                                             selection();
                                             setIsLevel100ModalOpen(true);
                                         }}
-                                        className="mt-6 flex items-center gap-3 px-8 py-4 rounded-2xl bg-white text-blue-600 font-black text-xs shadow-xl shadow-black/10 transition-all hover:bg-blue-50"
+                                        className="mt-8 flex items-center gap-3 px-10 py-5 rounded-[1.5rem] bg-white text-blue-600 font-black text-xs shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-all hover:bg-blue-50 active:shadow-none"
                                     >
                                         {t('level100.discover_btn')}
                                         <ArrowRight className="w-4 h-4 animate-bounce-x" />
                                     </motion.button>
 
-                                    <div className="mt-4 flex items-center gap-2">
-                                        <div className="flex -space-x-2">
+                                    <div className="mt-6 flex items-center gap-2.5">
+                                        <div className="flex -space-x-1.5">
                                             {[1, 2, 3].map(i => (
-                                                <div key={i} className="w-5 h-5 rounded-full border-2 border-indigo-600 bg-indigo-400 flex items-center justify-center">
+                                                <div key={i} className="w-6 h-6 rounded-full border-2 border-indigo-600 bg-indigo-500/80 backdrop-blur-sm flex items-center justify-center">
                                                     <Star className="w-2.5 h-2.5 text-white" />
                                                 </div>
                                             ))}
                                         </div>
-                                        <span className="text-[8px] font-black text-blue-200/60 uppercase tracking-widest">
-                                            Only 0.1% reach Fanocracy
+                                        <span className="text-[9px] font-black text-blue-200/50 uppercase tracking-widest">
+                                            Elite 0.1% Recognition
                                         </span>
                                     </div>
                                 </div>
@@ -316,101 +316,108 @@ export const MilestonePath = () => {
                                     stiffness: 300
                                 }}
                                 onClick={(e) => e.stopPropagation()}
-                                className="relative w-full max-w-lg sm:max-w-md bg-white dark:bg-[#0f172a] rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0_-20px_60px_rgba(0,0,0,0.4)] sm:shadow-[0_20px_60px_rgba(0,0,0,0.4)] border-t border-slate-200 dark:border-white/10 sm:border overflow-hidden max-h-[90vh] flex flex-col"
+                                className="relative w-full max-w-lg sm:max-w-md bg-white dark:bg-[#0f172a] rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0_-20px_60px_rgba(0,0,0,0.4)] sm:shadow-[0_20px_60px_rgba(0,0,0,0.4)] border-t border-slate-200 dark:border-white/10 sm:border overflow-hidden max-h-[85vh] flex flex-col"
                             >
                                 {/* Mobile Pull Indicator */}
                                 <div className="absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-slate-300 dark:bg-white/20 rounded-full sm:hidden z-20" />
 
-                                {/* Decorative Background Gradient */}
-                                <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-b from-blue-50/50 dark:from-blue-950/20 to-transparent pointer-events-none" />
+                                {/* Fixed Header Bar */}
+                                <div className="absolute top-0 left-0 right-0 z-50 flex items-center justify-end px-6 py-5 pointer-events-none">
+                                    <button
+                                        onClick={() => setSelectedItem(null)}
+                                        className="pointer-events-auto p-2 bg-white/20 dark:bg-black/20 backdrop-blur-xl hover:bg-white/30 dark:hover:bg-black/30 rounded-full text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shadow-lg border border-white/20"
+                                    >
+                                        <X className="w-5 h-5" />
+                                    </button>
+                                </div>
 
-                                <div className="relative flex-1 overflow-y-auto custom-scrollbar p-6 pb-8 sm:p-8 space-y-6">
-                                    {/* Header with Close Button */}
-                                    <div className="flex items-start justify-between gap-4 pt-4 sm:pt-0">
-                                        <div className="flex items-center gap-3 flex-1 min-w-0">
-                                            {selectedItem?.icon && (
-                                                <div className={`p-3 rounded-2xl ${selectedItem.color || 'text-slate-600'} bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 shrink-0 shadow-sm`}>
-                                                    <selectedItem.icon className="w-6 h-6" />
+                                {/* Content Area (Scrollable) */}
+                                <div className="flex-1 overflow-y-auto overscroll-contain custom-scrollbar scroll-smooth p-6 pb-10 sm:p-8 pt-8 sm:pt-10">
+                                    <div className="space-y-6 pt-4">
+                                        {/* Header Title Section */}
+                                        <div className="flex items-start gap-4">
+                                            <div className="flex items-center gap-3 flex-1 min-w-0">
+                                                {selectedItem?.icon && (
+                                                    <div className={`p-4 rounded-[1.5rem] ${selectedItem.color || 'text-slate-600'} bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 shrink-0 shadow-sm`}>
+                                                        <selectedItem.icon className="w-8 h-8" />
+                                                    </div>
+                                                )}
+                                                <div className="flex flex-col min-w-0 flex-1">
+                                                    <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">LEVEL {selectedItem?.level || 0} MISSION</span>
+                                                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight wrap-break-word">
+                                                        {currentLevel >= (selectedItem?.level || 0) ? t(selectedItem?.reward || '', { level: selectedItem?.level }) : '???'}
+                                                    </h3>
                                                 </div>
-                                            )}
-                                            <div className="flex flex-col min-w-0 flex-1">
-                                                <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">LEVEL {selectedItem?.level || 0} MISSION</span>
-                                                <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight leading-tight wrap-break-word">
-                                                    {currentLevel >= (selectedItem?.level || 0) ? t(selectedItem?.reward || '', { level: selectedItem?.level }) : '???'}
-                                                </h3>
                                             </div>
                                         </div>
-                                        <button
-                                            onClick={() => setSelectedItem(null)}
-                                            className="p-2 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-full text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors shrink-0"
-                                        >
-                                            <X className="w-5 h-5" />
-                                        </button>
-                                    </div>
 
-                                    {/* Instruction Section */}
-                                    <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3 text-left">
-                                        <div className="flex items-center gap-2">
-                                            <Info className="w-4 h-4 text-blue-500 shrink-0" />
-                                            <span className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">HOW TO UNLOCK</span>
+                                        {/* Instruction Section */}
+                                        <div className="p-6 rounded-[2rem] bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3 text-left relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 blur-2xl -mr-8 -mt-8" />
+                                            <div className="flex items-center gap-2 relative z-10">
+                                                <Info className="w-4 h-4 text-blue-500 shrink-0" />
+                                                <span className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">HOW TO UNLOCK</span>
+                                            </div>
+                                            <p className="text-sm font-bold text-slate-700 dark:text-slate-300 leading-relaxed relative z-10">
+                                                {selectedItem?.instruction || `Achieve Level ${selectedItem?.level || 0} to unlock this unique recognition and its associated rewards.`}
+                                            </p>
                                         </div>
-                                        <p className="text-sm font-bold text-slate-700 dark:text-slate-300 leading-relaxed">
-                                            {selectedItem?.instruction || `Achieve Level ${selectedItem?.level || 0} to unlock this unique recognition and its associated rewards.`}
-                                        </p>
-                                    </div>
 
-                                    {/* Action Helper - Only show if locked */}
-                                    {selectedItem && currentLevel < selectedItem.level && (
-                                        <div className="space-y-4">
-                                            <div className="flex items-center gap-3 px-2">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shrink-0" />
-                                                <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">PRO TIP: VIRAL GROWTH</p>
-                                            </div>
-                                            <div className="grid grid-cols-2 gap-3">
-                                                <button
-                                                    onClick={() => {
-                                                        const link = `https://t.me/pintopay_probot?start=${user?.referral_code || ''}`;
-                                                        if (navigator.share) {
-                                                            navigator.share({ title: 'P2PHub', url: link });
-                                                        } else {
-                                                            navigator.clipboard.writeText(link);
-                                                        }
-                                                    }}
-                                                    className="h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-blue-500/20"
-                                                >
-                                                    <Share2 className="w-4 h-4 shrink-0" />
-                                                    <span className="truncate">SHARE LINK</span>
-                                                </button>
-                                                <button
-                                                    onClick={() => {
-                                                        if (window.Telegram?.WebApp) {
-                                                            window.Telegram.WebApp.switchInlineQuery(user?.referral_code || '');
-                                                        }
-                                                    }}
-                                                    className="h-14 rounded-2xl bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all"
-                                                >
-                                                    <UserPlus className="w-4 h-4 shrink-0" />
-                                                    <span className="truncate">INVITE</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* Status Badge */}
-                                    <div className="flex justify-center pt-2">
-                                        {selectedItem && currentLevel >= selectedItem.level ? (
-                                            <div className="px-5 py-2.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
-                                                <Sparkles className="w-3 h-3 text-emerald-500 shrink-0" />
-                                                <span className="whitespace-nowrap">ACHIEVEMENT UNLOCKED</span>
-                                            </div>
-                                        ) : (
-                                            <div className="px-5 py-2.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
-                                                <Lock className="w-3 h-3 shrink-0" />
-                                                <span className="whitespace-nowrap">STILL LOCKED</span>
+                                        {/* Action Helper - Only show if locked */}
+                                        {selectedItem && currentLevel < selectedItem.level && (
+                                            <div className="space-y-4">
+                                                <div className="flex items-center gap-3 px-2">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shrink-0" />
+                                                    <p className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">PRO TIP: VIRAL GROWTH</p>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-3">
+                                                    <button
+                                                        onClick={() => {
+                                                            const link = `https://t.me/pintopay_probot?start=${user?.referral_code || ''}`;
+                                                            if (navigator.share) {
+                                                                navigator.share({ title: 'P2PHub', url: link });
+                                                            } else {
+                                                                navigator.clipboard.writeText(link);
+                                                            }
+                                                        }}
+                                                        className="h-16 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all shadow-xl shadow-blue-500/20"
+                                                    >
+                                                        <Share2 className="w-5 h-5 shrink-0" />
+                                                        <span className="truncate">SHARE LINK</span>
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            if (window.Telegram?.WebApp) {
+                                                                window.Telegram.WebApp.switchInlineQuery(user?.referral_code || '');
+                                                            }
+                                                        }}
+                                                        className="h-16 rounded-2xl bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                                    >
+                                                        <UserPlus className="w-5 h-5 shrink-0" />
+                                                        <span className="truncate">INVITE</span>
+                                                    </button>
+                                                </div>
                                             </div>
                                         )}
+
+                                        {/* Status Badge */}
+                                        <div className="flex justify-center pt-4">
+                                            {selectedItem && currentLevel >= selectedItem.level ? (
+                                                <div className="px-6 py-3 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2 shadow-inner">
+                                                    <Sparkles className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                                                    <span className="whitespace-nowrap">ACHIEVEMENT UNLOCKED</span>
+                                                </div>
+                                            ) : (
+                                                <div className="px-6 py-3 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
+                                                    <Lock className="w-3.5 h-3.5 shrink-0" />
+                                                    <span className="whitespace-nowrap">STILL LOCKED</span>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
+                                {/* Bottom Decoration */}
+                                <div className="h-6 bg-linear-to-t from-white dark:from-[#0f172a] to-transparent pointer-events-none absolute bottom-0 left-0 right-0 z-10" />
                             </motion.div>
                         </div>
                     )}
