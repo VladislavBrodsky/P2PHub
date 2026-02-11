@@ -8,6 +8,7 @@ const CommunityLoader = () => import('./pages/Community');
 const ReferralLoader = () => import('./pages/Referral');
 const LeaderboardLoader = () => import('./pages/Leaderboard');
 const SubscriptionLoader = () => import('./pages/Subscription');
+const BlogLoader = () => import('./pages/BlogPage').then(m => ({ default: m.BlogPage }));
 const AdminLoader = () => import('./pages/AdminPage').then(m => ({ default: m.AdminPage }));
 
 const Dashboard = lazy(DashboardLoader);
@@ -16,6 +17,7 @@ const CommunityPage = lazy(CommunityLoader);
 const ReferralPage = lazy(ReferralLoader);
 const LeaderboardPage = lazy(LeaderboardLoader);
 const SubscriptionPage = lazy(SubscriptionLoader);
+const BlogPage = lazy(BlogLoader);
 const AdminPage = lazy(AdminLoader);
 
 export const prefetchPages = {
@@ -25,6 +27,7 @@ export const prefetchPages = {
     earn: ReferralLoader,
     league: LeaderboardLoader,
     subscription: SubscriptionLoader,
+    blog: BlogLoader,
     admin: AdminLoader,
 };
 
@@ -177,6 +180,9 @@ function AppContent() {
                 </div>
                 <div className={`h-full ${activeTab === 'subscription' ? 'block' : 'hidden'}`}>
                     {visitedTabs.has('subscription') && <SubscriptionPage />}
+                </div>
+                <div className={`h-full ${activeTab === 'blog' ? 'block' : 'hidden'}`}>
+                    {visitedTabs.has('blog') && <BlogPage setActiveTab={setActiveTab} />}
                 </div>
                 <div className={`h-full ${activeTab === 'admin' ? 'block' : 'hidden'}`}>
                     {visitedTabs.has('admin') && <AdminPage />}

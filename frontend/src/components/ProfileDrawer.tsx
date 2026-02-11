@@ -219,14 +219,8 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                             <button
                                                 onClick={() => {
                                                     if (item.id === 'blog') {
-                                                        const blogSection = document.querySelector('section.py-8.space-y-6');
-                                                        if (blogSection) {
-                                                            onClose();
-                                                            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' }));
-                                                            setTimeout(() => {
-                                                                blogSection.scrollIntoView({ behavior: 'smooth' });
-                                                            }, 100);
-                                                        }
+                                                        onClose();
+                                                        window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'blog' }));
                                                     } else {
                                                         toggleSection(item.id);
                                                     }

@@ -6,11 +6,21 @@ from app.models.partner import Partner, get_session
 from app.models.transaction import PartnerTransaction
 from app.services.payment_service import payment_service
 from app.services.notification_service import notification_service
+from app.services.admin_service import admin_service
 from app.core.i18n import get_msg
 from sqlmodel import select
-from typing import List
+from typing import List, Any, Dict
 
 router = APIRouter()
+
+@router.get("/stats", response_model=Dict[str, Any])
+async def get_admin_stats(
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Returns high-level KPIs and financial data for the admin dashboard.
+    """
+    return await admin_service.get_dashboard_stats()
 
 async def get_current_admin(user_data: dict = Depends(get_current_user)):
     """
