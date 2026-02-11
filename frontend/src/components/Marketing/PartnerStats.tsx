@@ -55,7 +55,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
     const fetchRecentPartners = async () => {
         try {
             const response = await apiClient.get('/api/partner/recent');
-            if (response.status === 200) {
+            if (response.status === 200 && response.data) {
                 const { partners, last_hour_count } = response.data;
                 setRecentPartners(partners || []);
                 setStats(prev => ({ ...prev, lastHourCount: last_hour_count || prev.lastHourCount }));

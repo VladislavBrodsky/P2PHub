@@ -174,14 +174,24 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
 
         return chartLevelsWithBounds.map(({ index, bounds }) => {
             let path = ``;
+            let hasValidPoints = false;
             bounds.forEach((bound, idx) => {
                 const x = idx * stepX;
                 const topVal = isNaN(bound.top) ? 0 : bound.top;
                 const safeMaxValue = maxValue || 1;
                 const y = height - (topVal / safeMaxValue) * height * 0.9;
-                if (idx === 0) path += `M ${x},${y} `;
-                else path += `L ${x},${y} `;
+
+                if (!isNaN(x) && !isNaN(y)) {
+                    if (!hasValidPoints) {
+                        path += `M ${x},${y} `;
+                        hasValidPoints = true;
+                    } else {
+                        path += `L ${x},${y} `;
+                    }
+                }
             });
+
+            if (!hasValidPoints) return '';
 
             for (let i = bounds.length - 1; i >= 0; i--) {
                 const bound = bounds[i];
@@ -189,7 +199,9 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                 const bottomVal = isNaN(bound.bottom) ? 0 : bound.bottom;
                 const safeMaxValue = maxValue || 1;
                 const y = height - (bottomVal / safeMaxValue) * height * 0.9;
-                path += `L ${x},${y} `;
+                if (!isNaN(x) && !isNaN(y)) {
+                    path += `L ${x},${y} `;
+                }
             }
             path += `Z`;
             return path;
@@ -203,13 +215,21 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
         const stepX = width / (chartData.length - 1);
 
         let path = '';
+        let hasValidPoints = false;
         chartData.forEach((point, index) => {
             const x = index * stepX;
             const safeTotal = isNaN(point.total) ? 0 : point.total;
             const safeMaxValue = maxValue || 1;
             const y = height - (safeTotal / safeMaxValue) * height * 0.9;
-            if (index === 0) path += `M ${x},${y} `;
-            else path += `L ${x},${y} `;
+
+            if (!isNaN(x) && !isNaN(y)) {
+                if (!hasValidPoints) {
+                    path += `M ${x},${y} `;
+                    hasValidPoints = true;
+                } else {
+                    path += `L ${x},${y} `;
+                }
+            }
         });
         return path;
     }, [chartData, maxValue]);
