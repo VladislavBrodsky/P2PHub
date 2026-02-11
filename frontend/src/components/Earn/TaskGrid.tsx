@@ -1,6 +1,7 @@
 import { Task } from '../../data/earnData';
 import { TaskCard } from './TaskCard';
 import { CheckCircle2 } from 'lucide-react';
+import { ActiveTask } from '../../context/UserContext';
 
 interface TaskGridProps {
     tasks: Task[];
@@ -10,6 +11,7 @@ interface TaskGridProps {
     currentLevel: number;
     referrals: number;
     checkinStreak: number;
+    activeTasks?: ActiveTask[];
     onTaskClick: (task: Task) => void;
     onClaim: (task: Task) => void;
 }
@@ -22,6 +24,7 @@ export const TaskGrid = ({
     currentLevel,
     referrals,
     checkinStreak,
+    activeTasks,
     onTaskClick,
     onClaim
 }: TaskGridProps) => {
@@ -30,7 +33,6 @@ export const TaskGrid = ({
     const visibleTasks = tasks.filter(t => !completedTaskIds.includes(t.id));
 
     const sortedTasks = [...visibleTasks].sort((a, b) => {
-        // Since we filtered completed, sorting is simpler (e.g., by level or availability)
         return a.minLevel - b.minLevel;
     });
 
@@ -53,20 +55,34 @@ export const TaskGrid = ({
                         const isCompleted = completedTaskIds.includes(task.id);
                         const isVerifying = !!verifyingTasks[task.id];
                         const isClaimableTimed = claimableTasks.includes(task.id);
+                        const activeTask = activeTasks?.find(at => at.task_id === task.id);
 
-                        let status: 'LOCKED' | 'AVAILABLE' | 'VERIFYING' | 'CLAIMABLE' | 'COMPLETED' = 'AVAILABLE';
+                        let status: 'LOCKED' | 'AVAILABLE' | 'VERIFYING' | 'CLAIMABLE' | 'COMPLETED' | 'STARTED' = 'AVAILABLE';
+                        let effectiveProgress = 0;
 
                         if (isCompleted) status = 'COMPLETED';
                         else if (isLocked) status = 'LOCKED';
                         else if (isVerifying) status = 'VERIFYING';
                         else if (isClaimableTimed) status = 'CLAIMABLE';
                         else if (task.type === 'referral') {
-                            if (referrals >= (task.requirement || 0)) status = 'CLAIMABLE';
-                            else status = 'AVAILABLE';
+                            if (activeTask) {
+                                effectiveProgress = Math.max(0, referrals - activeTask.initial_metric_value);
+                                if (effectiveProgress >= (task.requirement || 0)) status = 'CLAIMABLE';
+                                else status = 'STARTED';
+                            } else {
+                                status = 'AVAILABLE';
+                                effectiveProgress = 0; // Not started yet
+                            }
                         }
                         else if (task.type === 'action') {
-                            if (checkinStreak >= (task.requirement || 0)) status = 'CLAIMABLE';
-                            else status = 'AVAILABLE';
+                            if (activeTask) {
+                                effectiveProgress = Math.max(0, checkinStreak - activeTask.initial_metric_value);
+                                if (effectiveProgress >= (task.requirement || 0)) status = 'CLAIMABLE';
+                                else status = 'STARTED';
+                            } else {
+                                status = 'AVAILABLE';
+                                effectiveProgress = 0;
+                            }
                         }
 
                         return (
@@ -74,7 +90,8 @@ export const TaskGrid = ({
                                 key={task.id}
                                 task={task}
                                 status={status}
-                                userReferrals={referrals}
+                                progress={effectiveProgress} // Pass calculated progress
+                                userReferrals={referrals} // Keep for legacy or debug?
                                 checkinStreak={checkinStreak}
                                 countdown={verifyingTasks[task.id]}
                                 onClick={() => onTaskClick(task)}

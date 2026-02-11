@@ -159,16 +159,37 @@ export default function ReferralPage() {
         }
     };
 
-    const handleTaskClick = (task: Task) => {
+    // #comment: Helper to handle task start API call
+    const handleTaskStart = async (task: Task) => {
+        try {
+            await apiClient.post(`/api/partner/tasks/${task.id}/start`);
+            // #comment: Refresh user to get updated active_tasks state immediately
+            await updateUser({});
+            window.dispatchEvent(new Event('focus'));
+        } catch (e) {
+            console.error("Failed to start task", e);
+        }
+    };
+
+    const handleTaskClick = async (task: Task) => {
         if (task.link) {
             selection();
             window.open(task.link, '_blank');
             if (!completedTaskIds.includes(task.id) && !verifyingTasks[task.id] && !claimableTasks.includes(task.id)) {
                 setVerifyingTasks(prev => ({ ...prev, [task.id]: 15 }));
             }
-        } else if (task.type === 'referral') {
+        } else if (task.type === 'referral' || task.type === 'action') {
             selection();
-            setShowShareModal(true);
+
+            // #comment: Check if task is started. If not, start it.
+            const isActive = user?.active_tasks?.some(at => at.task_id === task.id);
+            if (!isActive && !completedTaskIds.includes(task.id)) {
+                await handleTaskStart(task);
+            }
+
+            if (task.type === 'referral') {
+                setShowShareModal(true);
+            }
         }
     };
 
@@ -496,6 +517,8 @@ export default function ReferralPage() {
                     currentLevel={currentLevel}
                     referrals={referrals}
                     checkinStreak={user?.checkin_streak || 0}
+                    // #comment: Pass active tasks to grid for status determination
+                    activeTasks={user?.active_tasks}
                     onTaskClick={handleTaskClick}
                     onClaim={handleClaim}
                 />

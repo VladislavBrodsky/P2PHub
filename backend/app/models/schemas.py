@@ -13,6 +13,12 @@ class PartnerBase(BaseModel):
     photo_url: Optional[str] = None
     photo_file_id: Optional[str] = None
 
+class ActiveTaskResponse(BaseModel):
+    task_id: str
+    status: str
+    initial_metric_value: int
+    started_at: datetime
+
 class PartnerResponse(PartnerBase):
     balance: float
     total_earned: Optional[float] = 0.0  # Sum of all PRO commissions and earnings
@@ -27,6 +33,13 @@ class PartnerResponse(PartnerBase):
     created_at: datetime
     updated_at: datetime
     referrals: Optional[List[PartnerBase]] = None
+    active_tasks: Optional[List["ActiveTaskResponse"]] = None
+
+class ActiveTaskResponse(BaseModel):
+    task_id: str
+    status: str
+    initial_metric_value: int
+    started_at: datetime
 
 
     class Config:

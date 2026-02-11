@@ -209,9 +209,23 @@ async def get_my_profile(
         await redis_service.client.delete(cache_key)
 
     # 5. Prepare Response - O(1) using materialized totals
-    task_ids = [pt.task_id for pt in partner.completed_task_records]
+    completed_tasks = []
+    active_tasks = []
+    
+    for pt in partner.completed_task_records:
+        if pt.status == "COMPLETED" or not pt.status: # Handle legacy/null as completed
+            completed_tasks.append(pt.task_id)
+        elif pt.status == "STARTED":
+            active_tasks.append({
+                "task_id": pt.task_id,
+                "status": pt.status,
+                "initial_metric_value": pt.initial_metric_value,
+                "started_at": pt.started_at
+            })
+
     partner_dict = partner.model_dump()
-    partner_dict["completed_tasks"] = json.dumps(task_ids)
+    partner_dict["completed_tasks"] = json.dumps(completed_tasks)
+    partner_dict["active_tasks"] = active_tasks
     partner_dict["total_earned"] = partner.total_earned_usdt
     partner_dict["total_network_size"] = partner.referral_count
     partner_dict["is_admin"] = tg_id in settings.ADMIN_USER_IDS
@@ -509,6 +523,75 @@ async def get_growth_chart(
         expire=300
     )
 
+@router.post("/tasks/{task_id}/start", response_model=ActiveTaskResponse)
+async def start_task(
+    task_id: str,
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
+
+    from app.core.tasks import get_task_config
+    config = get_task_config(task_id)
+    if not config:
+        raise HTTPException(status_code=404, detail="Task config not found")
+
+    task_type = config.get('type')
+    if task_type not in ['referral', 'action']:
+         raise HTTPException(status_code=400, detail="This task type cannot be started manually")
+
+    # Fetch partner with tasks
+    statement = select(Partner).where(Partner.telegram_id == tg_id).options(selectinload(Partner.completed_task_records))
+    result = await session.exec(statement)
+    partner = result.first()
+    if not partner:
+        raise HTTPException(status_code=404, detail="Partner not found")
+
+    # Check existing
+    existing_task = next((pt for pt in partner.completed_task_records if pt.task_id == task_id), None)
+    if existing_task:
+        if existing_task.status == "COMPLETED":
+             raise HTTPException(status_code=400, detail="Task already completed")
+        # Reuse existing started task
+        return ActiveTaskResponse(
+            task_id=existing_task.task_id,
+            status=existing_task.status,
+            initial_metric_value=existing_task.initial_metric_value,
+            started_at=existing_task.started_at or datetime.utcnow()
+        )
+
+    # Snapshot current metric
+    initial_metric = 0
+    if task_type == 'referral':
+        initial_metric = partner.referral_count
+    elif task_type == 'action':
+        initial_metric = partner.checkin_streak
+
+    from app.models.partner import PartnerTask
+    new_task = PartnerTask(
+        partner_id=partner.id,
+        task_id=task_id,
+        status="STARTED",
+        started_at=datetime.utcnow(),
+        initial_metric_value=initial_metric,
+        completed_at=None
+    )
+    session.add(new_task)
+    await session.commit()
+    await session.refresh(new_task)
+
+    # Invalidate cache
+    await redis_service.client.delete(f"partner:profile:{tg_id}")
+
+    return ActiveTaskResponse(
+        task_id=new_task.task_id,
+        status=new_task.status,
+        initial_metric_value=new_task.initial_metric_value,
+        started_at=new_task.started_at
+    )
+
+
 @router.post("/tasks/{task_id}/claim", response_model=PartnerResponse)
 async def claim_task_reward(
     task_id: str,
@@ -537,14 +620,40 @@ async def claim_task_reward(
     # 2. VALIDATION: Check requirements based on task type
     task_type = config.get('type')
     requirement = config.get('requirement', 0)
+    
+    # Check if task is started
+    partner_task_record = next((pt for pt in partner.completed_task_records if pt.task_id == task_id), None)
+    
+    if task_type in ['referral', 'action']:
+        if not partner_task_record or partner_task_record.status != "STARTED":
+             raise HTTPException(status_code=400, detail="Task must be started first")
 
-    if task_type == 'referral':
-        if partner.referral_count < requirement:
-            raise HTTPException(status_code=400, detail=f"Requirement not met: {requirement} referrals needed.")
-    elif task_type == 'action':
-        if partner.checkin_streak < requirement:
-            # Maybe the task is recurring or something else, but for now we expect streak
-            raise HTTPException(status_code=400, detail=f"Requirement not met: {requirement} day streak needed.")
+        initial_value = partner_task_record.initial_metric_value
+        current_value = 0
+        
+        if task_type == 'referral':
+            current_value = partner.referral_count
+        elif task_type == 'action':
+            current_value = partner.checkin_streak
+            
+        progress = current_value - initial_value
+        
+        # Special case for streak: if they had a streak before, we might want to count absolute streak?
+        # User said: "Start Mission -> since that momemnt you start track"
+        # So it implies relative. But for streak, if I have 0 streak, start mission, check in 3 days -> streak 3. progress = 3-0 = 3. Correct.
+        # If I have 5 streak, start mission (requires 3), check in 1 day -> streak 6. progress = 6-5 = 1.
+        # This implies user must maintain streak for 3 MORE days. That's hard but fair for "mission".
+        # OR, maybe for streak/absolute metrics, we just check absolute value?
+        # "if a user has new referral since the mission startded" -> this confirms relative tracking.
+        
+        if progress < requirement:
+             raise HTTPException(status_code=400, detail=f"Requirement not met. Progress: {progress}/{requirement}")
+
+    # 3. Check if task already completed
+    if partner_task_record and partner_task_record.status == "COMPLETED":
+         raise HTTPException(status_code=400, detail="Task already completed")
+         
+    # Proceed to award...
 
     # 3. Check if task already completed in the new table
     already_completed = any(pt.task_id == task_id for pt in partner.completed_task_records)

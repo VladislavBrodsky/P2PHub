@@ -6,7 +6,10 @@ import { Haptic } from '../../utils/tma';
 
 interface TaskCardProps {
     task: Task;
-    status: 'LOCKED' | 'AVAILABLE' | 'VERIFYING' | 'CLAIMABLE' | 'COMPLETED';
+    // #comment: Added progress prop to support relative tracking for started missions
+    progress?: number;
+    // #comment: Added STARTED status to handle the new mission flow
+    status: 'LOCKED' | 'AVAILABLE' | 'VERIFYING' | 'CLAIMABLE' | 'COMPLETED' | 'STARTED';
     userReferrals: number;
     checkinStreak?: number;
     countdown?: number;
@@ -14,7 +17,7 @@ interface TaskCardProps {
     onClaim?: () => void;
 }
 
-export const TaskCard = ({ task, status, userReferrals, checkinStreak = 0, countdown, onClick, onClaim }: TaskCardProps) => {
+export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak = 0, countdown, onClick, onClaim }: TaskCardProps) => {
     const { t } = useTranslation();
 
     // Status Logic
@@ -22,6 +25,8 @@ export const TaskCard = ({ task, status, userReferrals, checkinStreak = 0, count
     const isCompleted = status === 'COMPLETED';
     const isClaimable = status === 'CLAIMABLE';
     const isAvailable = status === 'AVAILABLE';
+    // #comment: Added isStarted check for UI rendering
+    const isStarted = status === 'STARTED';
 
     // Visual Variations
     const variants = {
@@ -29,7 +34,9 @@ export const TaskCard = ({ task, status, userReferrals, checkinStreak = 0, count
         AVAILABLE: 'glass-panel hover:border-blue-500/50 hover:bg-(--color-text-primary)/5 cursor-pointer text-text-primary',
         VERIFYING: 'glass-panel border-blue-500/30 bg-blue-500/5 cursor-wait',
         CLAIMABLE: 'glass-panel border-emerald-500/50 bg-emerald-500/10 shadow-[0_0_20px_rgba(16,185,129,0.2)] animate-pulse',
-        COMPLETED: 'glass-panel border-green-500/20 bg-green-500/5 cursor-default'
+        COMPLETED: 'glass-panel border-green-500/20 bg-green-500/5 cursor-default',
+        // #comment: Added specific style for STARTED state (active but not yet claimable)
+        STARTED: 'glass-panel border-blue-500/30 bg-blue-500/5 cursor-default'
     };
 
     const handleCardClick = () => {
@@ -40,7 +47,16 @@ export const TaskCard = ({ task, status, userReferrals, checkinStreak = 0, count
             Haptic.notification('success');
             onClaim?.();
         }
+        // #comment: STARTED state is not clickable (user must perform action elsewhere)
     };
+
+    // #comment: Calculate current progress to show. If progress prop is provided (from activeTask), use it.
+    // Otherwise fallback to absolute values for backward compatibility or valid absolute checks.
+    const currentProgress = progress !== undefined ? progress : (
+        task.type === 'referral' ? userReferrals : (
+            task.type === 'action' ? checkinStreak : 0
+        )
+    );
 
     return (
         <motion.div
@@ -63,6 +79,12 @@ export const TaskCard = ({ task, status, userReferrals, checkinStreak = 0, count
             <div className="flex items-start justify-between gap-4">
                 {/* Icon */}
                 <div className={`p-3 rounded-xl border ${isClaimable ? 'bg-emerald-500 text-white border-emerald-400' : 'bg-(--color-text-primary)/5 border-(--color-border-glass) text-(--color-text-secondary)'}`}>
+                    {/* #comment: Show spinner for verifying OR started tasks (if we want to show activity) 
+                        For now, maybe just keep icon for started, or a specific status icon? 
+                        The user asked for a button status change, not necessarily an icon spin.
+                        Let's keep the icon static for STARTED unless verifiable. 
+                        Actually, let's keep it simple: only verify spins.
+                    */}
                     {status === 'VERIFYING' ? (
                         <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                     ) : (
@@ -91,10 +113,8 @@ export const TaskCard = ({ task, status, userReferrals, checkinStreak = 0, count
                             <div className="flex justify-between text-[10px] font-bold uppercase text-text-secondary">
                                 <span>{t('tasks.progress')}</span>
                                 <span className="font-mono">
-                                    {task.type === 'referral'
-                                        ? Math.min(userReferrals, task.requirement || 0)
-                                        : Math.min(checkinStreak, task.requirement || 0)
-                                    } / {task.requirement}
+                                    {/* #comment: Use currentProgress which handles relative tracking */}
+                                    {Math.min(currentProgress, task.requirement || 0)} / {task.requirement}
                                 </span>
                             </div>
                             <div className="h-1.5 w-full bg-brand-muted/10 rounded-full overflow-hidden p-px relative">
@@ -108,7 +128,8 @@ export const TaskCard = ({ task, status, userReferrals, checkinStreak = 0, count
                                     }}
                                     initial={{ width: 0 }}
                                     animate={{
-                                        width: `${Math.min(((task.type === 'referral' ? userReferrals : checkinStreak) / (task.requirement || 1)) * 100, 100)}%`
+                                        // #comment: Calculate width percentage based on new currentProgress
+                                        width: `${Math.min((currentProgress / (task.requirement || 1)) * 100, 100)}%`
                                     }}
                                 >
                                     {/* Crystal Layers */}
@@ -145,7 +166,13 @@ export const TaskCard = ({ task, status, userReferrals, checkinStreak = 0, count
                             <span className="animate-pulse">Verifying...</span>
                             <span className="font-mono bg-blue-500/10 px-1.5 py-0.5 rounded text-[9px]">{countdown}s</span>
                         </div>
+                    ) : status === 'STARTED' ? (
+                        // #comment: Show "In Progress" when mission is started but not yet completed
+                        <div className="flex items-center gap-2 text-[10px] font-bold text-blue-400 uppercase tracking-wider">
+                            <span className="animate-pulse">In Progress</span>
+                        </div>
                     ) : (
+                        // #comment: Default state is "Start Mission"
                         <div className="flex items-center gap-1 text-[10px] font-bold text-blue-400 uppercase tracking-wider group-hover:gap-2 transition-all">
                             {t('tasks.start')} <ArrowRight className="w-3 h-3" />
                         </div>

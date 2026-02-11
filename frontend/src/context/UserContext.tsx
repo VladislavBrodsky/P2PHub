@@ -25,6 +25,14 @@ interface User {
     pro_notification_seen: boolean;
     last_checkin_at: string | null;
     checkin_streak: number;
+    active_tasks?: ActiveTask[];
+}
+
+export interface ActiveTask {
+    task_id: string;
+    status: string; // STARTED
+    initial_metric_value: number;
+    started_at: string;
 }
 
 interface UserContextType {

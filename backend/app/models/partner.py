@@ -84,7 +84,10 @@ class PartnerTask(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     partner_id: int = Field(foreign_key="partner.id", index=True)
     task_id: str = Field(index=True)
-    completed_at: datetime = Field(default_factory=datetime.utcnow)
+    status: str = Field(default="COMPLETED") # STARTED, COMPLETED
+    started_at: Optional[datetime] = Field(default=None)
+    completed_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
+    initial_metric_value: int = Field(default=0) # Snapshot of metric at start
     reward_xp: float = Field(default=0.0)
 
     partner: Partner = Relationship(back_populates="completed_task_records")
