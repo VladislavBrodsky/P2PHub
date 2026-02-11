@@ -92,11 +92,6 @@ export const CommunityOrbit = memo(() => {
                 />
             ))}
 
-            {/* Dynamic Orbit Rings */}
-            <div className="absolute h-[340px] w-[340px] rounded-full border border-slate-200/20 opacity-20 dark:border-white/5" />
-
-            {/* Middle Ring */}
-            <div className="absolute h-[260px] w-[260px] rounded-full border border-slate-200/30 opacity-40 dark:border-white/10" />
 
             {/* Central Logic */}
             <CentralLogo />
@@ -146,24 +141,6 @@ const CentralLogo = memo(() => (
             className="relative z-20 w-14 h-14 object-contain brightness-0 invert"
         />
 
-        {/* Shockwave Ripples */}
-        {[0, 1].map((i) => (
-            <motion.div
-                key={i}
-                animate={{
-                    scale: [1, 2.5],
-                    opacity: [0.5, 0],
-                }}
-                transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    delay: i * 2,
-                    ease: "easeOut"
-                }}
-                className="absolute inset-0 z-0 rounded-full border border-blue-400/30"
-                style={{ willChange: 'transform, opacity' }}
-            />
-        ))}
     </motion.div>
 ));
 

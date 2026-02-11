@@ -35,60 +35,6 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
             <div className="relative flex flex-col items-center justify-center">
                 {/* Main Animated Hub */}
                 <div className="relative w-44 h-44 flex items-center justify-center">
-                    {/* #comment: Pulsing Outer Rings - Micro-animations that provide visual feedback 
-                        of "active loading" beyond the static percentage. */}
-                    <motion.div
-                        className="absolute inset-0 rounded-full border border-(--color-brand-primary)/10"
-                        animate={{
-                            scale: [1, 1.15, 1],
-                            opacity: [0.1, 0.3, 0.1],
-                        }}
-                        transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                    />
-                    <motion.div
-                        className="absolute inset-4 rounded-full border border-(--color-brand-primary)/5"
-                        animate={{
-                            scale: [1, 1.1, 1],
-                            opacity: [0.1, 0.2, 0.1],
-                        }}
-                        transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: 0.5
-                        }}
-                    />
-
-                    {/* Progress Circle SVG */}
-                    <svg className="absolute inset-0 w-full h-full -rotate-90">
-                        <circle
-                            cx="88"
-                            cy="88"
-                            r="82"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            className="text-(--color-text-primary)/5"
-                        />
-                        <motion.circle
-                            cx="88"
-                            cy="88"
-                            r="82"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                            strokeDasharray="515"
-                            initial={{ strokeDashoffset: 515 }}
-                            animate={{ strokeDashoffset: 515 - (515 * displayProgress) / 100 }}
-                            transition={{ duration: 0.5, ease: "easeOut" }}
-                            className="text-(--color-brand-primary)"
-                            strokeLinecap="round"
-                        />
-                    </svg>
 
                     {/* Central Logo Container - Blue Shadow Glow */}
                     <motion.div
