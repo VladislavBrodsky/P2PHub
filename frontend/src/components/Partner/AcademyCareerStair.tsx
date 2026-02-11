@@ -3,10 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AcademyStageNode } from './AcademyStageNode';
 import { ACADEMY_STAGES, AcademyStage } from '../../data/academyData';
 import { useUser } from '../../context/UserContext';
+import { useTranslation } from 'react-i18next';
 import { Trophy, ChevronDown } from 'lucide-react';
 import { AcademyContentPortal } from './AcademyContentPortal';
 
 export const AcademyCareerStair = () => {
+    const { t } = useTranslation();
     const { user } = useUser();
     const [selectedStage, setSelectedStage] = useState<AcademyStage | null>(null);
     const [visibleStages, setVisibleStages] = useState(10); // Start with first 10
@@ -34,20 +36,20 @@ export const AcademyCareerStair = () => {
     };
 
     return (
-        <div className="relative pb-32">
+        <div className="relative pb-32 overflow-x-hidden">
             {/* Header / Stats Overlay (Floating) */}
             <div className="sticky top-0 z-30 pt-2 pb-1 px-1 mb-6">
-                <div className="glass-panel-premium rounded-xl p-3 flex items-center justify-between border-blue-500/20 shadow-2xl">
+                <div className="glass-panel-premium rounded-xl px-3 py-2 flex items-center justify-between border-blue-500/20 shadow-2xl">
                     <div className="flex flex-col">
-                        <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest">Global Ranking</span>
+                        <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest">{t('academy.global_ranking')}</span>
                         <div className="flex items-center gap-2">
                             <Trophy className="w-4 h-4 text-amber-500" />
-                            <h3 className="text-sm font-black text-slate-900 dark:text-white">STAGE {currentMaxStage}</h3>
+                            <h3 className="text-sm font-black text-slate-900 dark:text-white">{t('academy.stage', { stage: currentMaxStage })}</h3>
                         </div>
                     </div>
                     <div className="h-8 w-px bg-slate-200 dark:bg-white/10" />
                     <div className="flex flex-col items-end">
-                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Progress to PRO</span>
+                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{t('academy.progress_to_pro')}</span>
                         <div className="flex items-center gap-2">
                             <div className="w-24 h-2 rounded-full bg-slate-200 dark:bg-white/5 overflow-hidden relative border border-white/5">
                                 <motion.div
@@ -105,7 +107,7 @@ export const AcademyCareerStair = () => {
                         <div className="p-5 rounded-[2rem] bg-white/5 backdrop-blur-xl border-2 border-dashed border-blue-500/30 group-hover:border-blue-500/60 group-hover:bg-blue-500/10 transition-all shadow-xl">
                             <ChevronDown className="w-8 h-8 text-blue-500 group-hover:animate-bounce" />
                         </div>
-                        <span className="text-[11px] font-black text-blue-500/60 group-hover:text-blue-500 uppercase tracking-[0.2em] transition-colors">Expand Higher Stages</span>
+                        <span className="text-[11px] font-black text-blue-500/60 group-hover:text-blue-500 uppercase tracking-[0.2em] transition-colors">{t('academy.expand_higher')}</span>
                     </motion.button>
                 )}
             </div>

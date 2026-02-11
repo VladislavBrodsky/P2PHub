@@ -20,7 +20,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
 
     // Zig-zag offset logic
     const isLeft = index % 2 === 0;
-    const xOffset = isLeft ? -40 : 40;
+    const xOffset = isLeft ? -25 : 25;
 
     return (
         <motion.div
@@ -106,16 +106,16 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
 
             {/* Label Content (Floating to the side) */}
             <div className={cn(
-                "absolute top-1/2 -translate-y-1/2 w-52 flex flex-col p-4 rounded-2xl glass-panel-premium border-white/10 transition-all duration-500 group-hover:border-blue-500/30",
-                isLeft ? "left-[calc(50%+60px)] items-start text-left" : "right-[calc(50%+60px)] items-end text-right",
+                "absolute top-1/2 -translate-y-1/2 w-40 flex flex-col p-3 rounded-xl glass-panel-premium border-white/10 transition-all duration-500 group-hover:border-blue-500/30",
+                isLeft ? "left-[calc(50%+40px)] items-start text-left" : "right-[calc(50%+40px)] items-end text-right",
                 isLocked ? "opacity-40 grayscale" : "opacity-100"
             )} style={{ transform: "translateZ(20px)" }}>
                 <h4 className={cn(
-                    "text-[12px] font-black uppercase tracking-tight leading-none",
+                    "text-[11px] font-black uppercase tracking-tight leading-none",
                     isLocked ? "text-slate-400" : "text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors"
                 )}>{stage.title}</h4>
                 <p className={cn(
-                    "text-[9px] font-medium leading-tight mt-1.5 opacity-80 line-clamp-2",
+                    "text-[8px] font-medium leading-tight mt-1.5 opacity-80 line-clamp-2",
                     isLocked ? "text-slate-500" : "text-slate-600 dark:text-slate-300"
                 )}>{stage.description}</p>
 
