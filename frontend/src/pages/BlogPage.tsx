@@ -380,31 +380,33 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -10 }}
-            className="flex flex-col min-h-screen bg-(--color-bg-app)"
+            className="flex flex-col min-h-screen bg-(--color-bg-app) relative"
         >
-            {/* Header Sticky */}
-            <div className="px-4 pt-4 pb-3 flex items-center justify-between sticky top-(--header-total-height) z-40 bg-(--color-bg-app)/95 backdrop-blur-xl border-b border-(--color-border-glass)">
-                <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-(--color-bg-surface) active:scale-90 transition-all">
-                    <ArrowLeft className="w-6 h-6" />
-                </button>
-                <div className="flex items-center gap-1.5">
-                    <button onClick={onShare} className="p-2.5 rounded-full bg-(--color-bg-surface) border border-(--color-border-glass) active:scale-90 transition-all">
-                        <Share2 className="w-5 h-5 text-(--color-text-secondary)" />
+            {/* Header Sticky - Fixed for better scroll reliability */}
+            <div className="fixed top-0 left-0 right-0 z-50 bg-(--color-bg-app)/95 backdrop-blur-xl border-b border-(--color-border-glass) pt-[env(safe-area-inset-top,0.5rem)] pb-3 px-4">
+                <div className="flex items-center justify-between max-w-2xl mx-auto w-full">
+                    <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-(--color-bg-surface) active:scale-90 transition-all text-(--color-text-primary)">
+                        <ArrowLeft className="w-6 h-6" />
                     </button>
-                    <button
-                        onClick={onLike}
-                        className={`p-3 rounded-full border transition-all active:scale-95 flex items-center justify-center ${engagement.liked
-                            ? 'bg-red-500/15 border-red-500/30 text-red-500 shadow-lg shadow-red-500/10'
-                            : 'bg-(--color-bg-surface) border-(--color-border-glass) text-(--color-text-secondary) hover:border-red-500/20'
-                            }`}
-                    >
-                        <Heart className={`w-5 h-5 ${engagement.liked ? 'fill-current' : ''}`} />
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button onClick={onShare} className="p-2.5 rounded-full bg-(--color-bg-surface) border border-(--color-border-glass) active:scale-90 transition-all">
+                            <Share2 className="w-5 h-5 text-(--color-text-secondary)" />
+                        </button>
+                        <button
+                            onClick={onLike}
+                            className={`p-3 rounded-full border transition-all active:scale-95 flex items-center justify-center ${engagement.liked
+                                ? 'bg-red-500/15 border-red-500/30 text-red-500 shadow-lg shadow-red-500/10'
+                                : 'bg-(--color-bg-surface) border-(--color-border-glass) text-(--color-text-secondary) hover:border-red-500/20'
+                                }`}
+                        >
+                            <Heart className={`w-5 h-5 ${engagement.liked ? 'fill-current' : ''}`} />
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            {/* Content Container */}
-            <div className="px-5 pt-20 pb-32 space-y-8 max-w-2xl mx-auto">
+            {/* Content Container - Added pt for fixed header */}
+            <div className="px-5 pt-32 pb-32 space-y-8 max-w-2xl mx-auto">
                 {/* Meta */}
                 <div className="space-y-4">
                     <div className="flex items-center gap-2">
