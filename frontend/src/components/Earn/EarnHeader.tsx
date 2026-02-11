@@ -166,7 +166,7 @@ export const EarnHeader = ({ onUpgrade }: { onUpgrade?: () => void }) => {
                                 <span className="text-[9px] font-black text-text-secondary uppercase tracking-widest">{t('earn_header.partners')}</span>
                             </div>
                             <div className="text-2xl font-black text-text-primary mt-1">
-                                {user?.referrals?.length || 0}
+                                {user?.total_network_size || 0}
                             </div>
                         </div>
                     </div>
