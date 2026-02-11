@@ -19,6 +19,7 @@ from app.models.schemas import (
     PartnerResponse,
     PartnerTopResponse,
     TaskClaimRequest,
+    ActiveTaskResponse,
 )
 from app.services.redis_service import redis_service
 from app.utils.ranking import get_level
