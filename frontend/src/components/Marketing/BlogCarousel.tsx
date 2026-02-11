@@ -9,9 +9,15 @@ export const BlogCarousel = () => {
     const { selection } = useHaptic();
     const latestPosts = getLatestPosts(3);
 
-    const navigateToBlog = () => {
+    const navigateToBlog = (postId?: string) => {
         selection();
         window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'blog' }));
+        if (postId) {
+            // Give a small delay for the tab to switch
+            setTimeout(() => {
+                window.dispatchEvent(new CustomEvent('nav-blog-post', { detail: postId }));
+            }, 100);
+        }
     };
 
     return (
@@ -26,7 +32,7 @@ export const BlogCarousel = () => {
                     </p>
                 </div>
                 <button
-                    onClick={navigateToBlog}
+                    onClick={() => navigateToBlog()}
                     className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-blue-500 bg-blue-500/5 px-4 py-2 rounded-full border border-blue-500/20 active:scale-95 transition-transform"
                 >
                     {t('blog.view_all')} <ChevronRight className="w-3.5 h-3.5 ml-0.5" />
@@ -41,7 +47,7 @@ export const BlogCarousel = () => {
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1, type: "spring", bounce: 0.2 }}
-                        onClick={navigateToBlog}
+                        onClick={() => navigateToBlog(post.id)}
                         className="min-w-[280px] max-w-[280px] group flex flex-col gap-4 p-6 rounded-[2.5rem] border border-(--color-border-glass) glass-panel-premium snap-start active:scale-[0.98] transition-all"
                     >
                         <div className="space-y-3">

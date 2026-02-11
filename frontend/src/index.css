@@ -783,4 +783,35 @@ body {
   font-weight: 900;
   filter: drop-shadow(0 2px 10px rgba(0, 102, 255, 0.2));
   will-change: transform, filter, background-position;
+  backface-visibility: hidden;
+}
+
+@keyframes liquid-red {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.liquid-red-premium {
+  background: linear-gradient(135deg, #ff0000 0%, #da0000 25%, #ff4b4b 50%, #da0000 75%, #a50000 100%);
+  background-size: 300% 300%;
+  animation: liquid-red 5s ease-in-out infinite;
+  color: #FFFFFF;
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(255, 0, 0, 0.4);
+  box-shadow: 0 4px 20px rgba(255, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.liquid-red-premium:hover {
+  box-shadow: 0 8px 30px rgba(255, 0, 0, 0.5);
+  transform: translateY(-2px);
 }
