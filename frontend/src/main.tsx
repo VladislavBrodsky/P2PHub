@@ -32,17 +32,39 @@ try {
 */
 
 import { ErrorBoundary } from './components/ErrorBoundary'
-import { ConfigProvider } from './context/ConfigContext'
+import { ConfigProvider, useConfig } from './context/ConfigContext'
 import { StartupProgressProvider } from './context/StartupProgressContext'
+import { ThemeProvider } from './context/ThemeContext'
+import { UserProvider } from './context/UserContext'
+import { TonConnectUIProvider } from '@tonconnect/ui-react';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
             <StartupProgressProvider>
                 <ConfigProvider>
-                    <App />
+                    <TonConnectContextWrapper>
+                        <ThemeProvider>
+                            <UserProvider>
+                                <App />
+                            </UserProvider>
+                        </ThemeProvider>
+                    </TonConnectContextWrapper>
                 </ConfigProvider>
             </StartupProgressProvider>
         </QueryClientProvider>
     </ErrorBoundary>,
 )
+
+// Helper to access config for TonConnect
+function TonConnectContextWrapper({ children }: { children: React.ReactNode }) {
+    const { config } = useConfig();
+    const manifestUrl = config?.ton_manifest_url || "https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json";
+
+    return (
+        <TonConnectUIProvider manifestUrl={manifestUrl}>
+            {children}
+        </TonConnectUIProvider>
+    );
+}
+

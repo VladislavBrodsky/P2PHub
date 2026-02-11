@@ -33,9 +33,6 @@ export const prefetchPages = {
 
 
 import { miniApp, backButton, viewport, swipeBehavior } from '@telegram-apps/sdk-react';
-import { UserProvider } from './context/UserContext';
-import { ThemeProvider } from './context/ThemeContext';
-import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { isTMA } from './utils/tma';
 import { useUser } from './context/UserContext';
 // #comment: Removed unused apiClient, Skeleton and PageSkeleton imports to clean up the dependency list
@@ -282,26 +279,20 @@ function App() {
             </AnimatePresence>
 
             <div className={!isComplete ? 'hidden' : 'block h-full'}>
-                <TonConnectUIProvider manifestUrl={config?.ton_manifest_url || "https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json"}>
-                    <ThemeProvider>
-                        <UserProvider>
-                            <NotificationOverlay />
-                            <LazyMotion features={domAnimation}>
-                                <AnimatePresence mode="wait">
-                                    {showOnboarding && (
-                                        <OnboardingStory
-                                            onComplete={() => {
-                                                setShowOnboarding(false);
-                                                localStorage.setItem('p2p_onboarded', 'true');
-                                            }}
-                                        />
-                                    )}
-                                </AnimatePresence>
-                                <AppContent onReady={complete} />
-                            </LazyMotion>
-                        </UserProvider>
-                    </ThemeProvider>
-                </TonConnectUIProvider>
+                <NotificationOverlay />
+                <LazyMotion features={domAnimation}>
+                    <AnimatePresence mode="wait">
+                        {showOnboarding && (
+                            <OnboardingStory
+                                onComplete={() => {
+                                    setShowOnboarding(false);
+                                    localStorage.setItem('p2p_onboarded', 'true');
+                                }}
+                            />
+                        )}
+                    </AnimatePresence>
+                    <AppContent onReady={complete} />
+                </LazyMotion>
             </div>
         </>
     );
