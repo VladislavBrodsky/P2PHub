@@ -82,12 +82,13 @@ export default function SubscriptionPage() {
             console.error('Payment failed:', error);
             if (error.response?.status === 400) {
                 alert("Payment session expired or failed. Please try again.");
-                setStatus('idle');
             }
+            setStatus('idle');
             notification('error');
         } finally {
             setIsLoading(false);
         }
+
 
     };
 
