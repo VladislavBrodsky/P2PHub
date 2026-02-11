@@ -35,11 +35,7 @@ class PartnerResponse(PartnerBase):
     referrals: Optional[List[PartnerBase]] = None
     active_tasks: Optional[List["ActiveTaskResponse"]] = None
 
-class ActiveTaskResponse(BaseModel):
-    task_id: str
-    status: str
-    initial_metric_value: int
-    started_at: datetime
+
 
 
     class Config:

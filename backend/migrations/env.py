@@ -91,6 +91,9 @@ async def run_migrations_online() -> None:
         future=True
     )
 
+    # CI/CD Fix: Use connectable.begin() instead of connect() to ensure 
+    # the transaction is properly committed. This is crucial for asyncpg 
+    # to persist schema changes during migrations.
     async with connectable.begin() as connection:
         if "sqlite" not in url:
              # Optional: Just set a lock timeout if needed, but skip the aggressive killing for now
