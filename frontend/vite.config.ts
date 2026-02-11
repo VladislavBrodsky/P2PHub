@@ -26,15 +26,19 @@ export default defineConfig({
       // https://sharp.pixelplumbing.com/api-output#gif
       gif: {},
       webp: {
-        lossless: true,
+        quality: 75,
       },
       avif: {
-        lossless: true,
+        quality: 75,
       },
     }),
     viteCompression({
       algorithm: 'gzip',
       ext: '.gz',
+    }),
+    viteCompression({
+      algorithm: 'brotliCompress',
+      ext: '.br',
     }),
   ],
   server: {
@@ -49,9 +53,12 @@ export default defineConfig({
         manualChunks: {
           'vendor-react': ['react', 'react-dom'],
           'vendor-ui': ['framer-motion', '@tonconnect/ui-react'],
+          'vendor-icons': ['lucide-react'],
+          'vendor-charts': ['recharts'],
+          'vendor-i18n': ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
         },
       }
     },
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 1200,
   },
 })

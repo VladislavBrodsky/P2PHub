@@ -73,19 +73,17 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                     {/* Active Indicator Background */}
                     <div className="absolute inset-1 flex pointer-events-none" aria-hidden="true">
                         <motion.div
-                            className="bg-(--color-bg-surface) rounded-lg shadow-sm h-full z-0"
-                            initial={{
-                                left: selectedTab === 'virtual' ? '0%' : selectedTab === 'physical' ? '33.33%' : '66.66%',
-                                width: '33.33%'
-                            }}
+                            className="absolute inset-y-0 bg-(--color-bg-surface) rounded-lg shadow-sm z-0"
+                            layout={false}
+                            initial={false}
                             animate={{
-                                left: selectedTab === 'virtual' ? '0%' : selectedTab === 'physical' ? '33.33%' : '66.66%',
-                                width: '33.33%'
+                                x: selectedTab === 'virtual' ? '0%' : selectedTab === 'physical' ? '100%' : '200%',
+                            }}
+                            style={{
+                                width: '33.33%',
+                                left: 0
                             }}
                             transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                            style={{
-                                position: 'absolute',
-                            }}
                         />
                     </div>
 

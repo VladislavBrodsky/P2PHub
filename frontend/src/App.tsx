@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, LazyMotion, domAnimation } from 'framer-motion';
 import { Layout } from './components/Layout/Layout';
 // Lazy load pages
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -203,17 +203,19 @@ function App() {
             <ThemeProvider>
                 <UserProvider>
                     <NotificationOverlay />
-                    <AnimatePresence>
-                        {showOnboarding && (
-                            <OnboardingStory
-                                onComplete={() => {
-                                    setShowOnboarding(false);
-                                    localStorage.setItem('p2p_onboarded', 'true');
-                                }}
-                            />
-                        )}
-                    </AnimatePresence>
-                    <AppContent />
+                    <LazyMotion features={domAnimation}>
+                        <AnimatePresence mode="wait">
+                            {showOnboarding && (
+                                <OnboardingStory
+                                    onComplete={() => {
+                                        setShowOnboarding(false);
+                                        localStorage.setItem('p2p_onboarded', 'true');
+                                    }}
+                                />
+                            )}
+                        </AnimatePresence>
+                        <AppContent />
+                    </LazyMotion>
                 </UserProvider>
             </ThemeProvider>
         </TonConnectUIProvider>

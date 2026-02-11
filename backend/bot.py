@@ -194,9 +194,125 @@ async def inline_handler(inline_query: types.InlineQuery):
         except: pass
 
 
+@dp.message(Command("pro"))
+async def cmd_pro(message: types.Message):
+    await handle_buy_pro(message)
+
+@dp.callback_query(F.data == "buy_pro")
+async def callback_buy_pro(callback: types.CallbackQuery):
+    await handle_buy_pro(callback.message)
+    await callback.answer()
+
+async def handle_buy_pro(message: types.Message):
+    from app.services.payment_service import payment_service
+    from app.services.partner_service import get_partner_by_telegram_id
+    from app.core.keyboards import get_pro_payment_keyboard
+    
+    try:
+        async for session in get_session():
+            partner = await get_partner_by_telegram_id(session, str(message.chat.id))
+            if not partner:
+                await message.answer("⚠️ You are not registered yet. Type /start to join!")
+                return
+            
+            if partner.is_pro:
+                await message.answer("✅ You are already a PRO member! Enjoy your benefits.")
+                return
+
+            # Create payment session
+            payment_data = await payment_service.create_payment_session(session, partner.id)
+            
+            text = (
+                "👑 *UPGRADE TO PRO*\n\n"
+                "Unlock the full potential of Pintopay:\n"
+                "• 9-Level Affiliate System\n"
+                "• X5 XP Multiplier\n"
+                "• Priority Payouts\n"
+                "• VIP Support\n\n"
+                f"💰 *Price:* {payment_data['amount_ton']} TON (~$39)\n"
+                f"⏳ *Valid for:* 10 minutes\n\n"
+                "Please send the exact amount to the address below:"
+            )
+            
+            # Send the address as a separate message for easy copying, or just include in code block
+            text += f"\n\n`{payment_data['address']}`"
+
+            await message.answer(
+                text,
+                parse_mode="Markdown",
+                reply_markup=get_pro_payment_keyboard(payment_data['address'], payment_data['amount_ton'])
+            )
+            break
+    except Exception as e:
+        logging.error(f"Error in handle_buy_pro: {e}")
+        await message.answer("⚠️ Session creation failed. Please try again later.")
+
+@dp.callback_query(F.data == "verify_pro_payment")
+async def callback_verify_pro(callback: types.CallbackQuery):
+    from app.services.payment_service import payment_service
+    from app.services.partner_service import get_partner_by_telegram_id
+    from app.core.keyboards import get_main_menu_keyboard
+    
+    # Ask for TX hash
+    await callback.message.answer(
+        "📝 *Verification Step*\n\n"
+        "Please paste the *Transaction Hash* (TX ID) of your payment below. "
+        "I will verify it on the TON blockchain immediately.",
+        parse_mode="Markdown"
+    )
+    await callback.answer()
+
+@dp.message(F.text.regexp(r'^[a-fA-F0-9]{64}$')) # Simple regex for TON hash
+async def handle_tx_hash(message: types.Message):
+    from app.services.payment_service import payment_service
+    from app.services.partner_service import get_partner_by_telegram_id
+    from app.core.keyboards import get_main_menu_keyboard
+
+    tx_hash = message.text.strip()
+    wait_msg = await message.answer("⏳ *Verifying transaction...* Please wait a moment.")
+
+    try:
+        async for session in get_session():
+            partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
+            if not partner: return
+
+            success = await payment_service.verify_ton_transaction(session, partner, tx_hash)
+            
+            if success:
+                await wait_msg.edit_text(
+                    "🎉 *WELCOME TO PRO!*\n\n"
+                    "Your payment has been verified. You now have full access to all premium features!",
+                    parse_mode="Markdown"
+                )
+                # Show main menu again with new status
+                await message.answer(
+                    "What would you like to do next?",
+                    reply_markup=get_main_menu_keyboard(WEB_APP_URL, partner.referral_code, partner.referral_code)
+                )
+            else:
+                await wait_msg.edit_text(
+                    "❌ *Verification Failed*\n\n"
+                    "I couldn't find a matching transaction for this hash, or your payment session has expired (10 min limit).\n\n"
+                    "If you just paid, wait 30 seconds and try again. If the session expired, please start a new one.",
+                    parse_mode="Markdown",
+                    reply_markup=InlineKeyboardBuilder().row(
+                        types.InlineKeyboardButton(text="🔄 Try Again", callback_data="buy_pro")
+                    ).as_markup()
+                )
+            break
+    except Exception as e:
+        logging.error(f"Error in handle_tx_hash: {e}")
+        await wait_msg.edit_text("⚠️ Verification error. Please contact support.")
+
+@dp.callback_query(F.data == "cancel_payment")
+async def callback_cancel_payment(callback: types.CallbackQuery):
+    await callback.message.edit_text("❌ Payment cancelled. You can upgrade to PRO anytime by typing /pro.")
+    await callback.answer()
+
 async def main():
     logging.info("Starting bot...")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
     asyncio.run(main())
+

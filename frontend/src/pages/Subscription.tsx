@@ -46,18 +46,18 @@ export default function SubscriptionPage() {
         selection();
 
         try {
-            await apiClient.post('/api/payment/create', {
-                amount: proPrice,
-                currency: 'TON',
-                network: 'TON'
+            const sessionRes = await apiClient.post('/api/payment/session', {
+                amount: proPrice
             });
+
+            const { amount_ton, address } = sessionRes.data;
 
             const tx = {
                 validUntil: Math.floor(Date.now() / 1000) + 600,
                 messages: [
                     {
-                        address: adminTon,
-                        amount: tonAmountNano,
+                        address: address,
+                        amount: Math.ceil(amount_ton * 10 ** 9).toString(),
                     }
                 ]
             };
@@ -78,12 +78,17 @@ export default function SubscriptionPage() {
                 setStatus('manual_review');
             }
 
-        } catch (error) {
+        } catch (error: any) {
             console.error('Payment failed:', error);
+            if (error.response?.status === 400) {
+                alert("Payment session expired or failed. Please try again.");
+                setStatus('idle');
+            }
             notification('error');
         } finally {
             setIsLoading(false);
         }
+
     };
 
     const handleManualSubmit = async () => {

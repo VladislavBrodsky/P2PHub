@@ -62,13 +62,14 @@ export default function CommunityPage() {
                     {/* Sliding Background */}
                     <motion.div
                         className="absolute inset-y-1 rounded-xl bg-white dark:bg-white/10 shadow-[0_2px_10px_rgba(0,0,0,0.1)] dark:shadow-premium border border-white/10 z-0"
-                        initial={{
-                            left: activeTab === 'dashboard' ? '4px' : 'calc(50% + 2px)',
+                        layout={false}
+                        initial={false}
+                        animate={{
+                            x: activeTab === 'dashboard' ? '0%' : '100.5%',
                             width: 'calc(50% - 6px)'
                         }}
-                        animate={{
-                            left: activeTab === 'dashboard' ? '4px' : 'calc(50% + 2px)',
-                            width: 'calc(50% - 6px)'
+                        style={{
+                            left: '4px'
                         }}
                         transition={{
                             type: "spring",

@@ -40,6 +40,51 @@ class PaymentService:
         await session.refresh(transaction)
         return transaction
 
+    async def create_payment_session(
+        self,
+        session: AsyncSession,
+        partner_id: int,
+        amount_usd: float = PRO_PRICE_USD
+    ) -> dict:
+        """
+        Creates a 10-minute TON payment session.
+        Returns amount in TON and the admin address.
+        """
+        ton_price = await self.get_ton_price()
+        # Add 2% buffer for spread/volatility to ensure they pay enough
+        amount_ton = (amount_usd / ton_price) * 1.02 
+        
+        transaction = PartnerTransaction(
+            partner_id=partner_id,
+            amount=amount_usd,
+            currency="TON",
+            network="TON",
+            status="pending"
+        )
+        session.add(transaction)
+        await session.commit()
+        await session.refresh(transaction)
+
+        return {
+            "transaction_id": transaction.id,
+            "amount_ton": round(amount_ton, 4),
+            "address": settings.ADMIN_TON_ADDRESS,
+            "expires_at": (transaction.created_at + timedelta(minutes=10)).isoformat()
+        }
+
+        transaction = PartnerTransaction(
+            partner_id=partner_id,
+            amount=amount,
+            currency=currency,
+            network=network,
+            tx_hash=tx_hash,
+            status="pending"
+        )
+        session.add(transaction)
+        await session.commit()
+        await session.refresh(transaction)
+        return transaction
+
     async def get_ton_price(self) -> float:
         """Fetches current TON/USD price from TON API or fallback."""
         try:
@@ -68,11 +113,30 @@ class PaymentService:
         if existing and existing.status == "completed":
             return True
 
-        # 2. Get current price to calculate expected TON
-        ton_price = await self.get_ton_price()
-        expected_ton = PRO_PRICE_USD / ton_price
+        # 2. Find a recent pending TON transaction for this partner
+        # A "session" is valid if created within last 10 minutes
+        ten_mins_ago = datetime.utcnow() - timedelta(minutes=10)
+        stmt_session = select(PartnerTransaction).where(
+            PartnerTransaction.partner_id == partner.id,
+            PartnerTransaction.status == "pending",
+            PartnerTransaction.currency == "TON",
+            PartnerTransaction.created_at >= ten_mins_ago
+        ).order_by(PartnerTransaction.created_at.desc())
         
-        # 3. Call dedicated verification service
+        res_session = await session.exec(stmt_session)
+        active_session = res_session.first()
+        
+        if not active_session:
+            logger.warning(f"No active TON session found for partner {partner.id}")
+            return False
+
+        # 3. Get current price to calculate expected TON
+        # We use the price at verification time to be safe, 
+        # but create_payment_session gave them a quote.
+        ton_price = await self.get_ton_price()
+        expected_ton = (active_session.amount) / ton_price
+        
+        # 4. Call dedicated verification service
         is_valid = await ton_verification_service.verify_transaction(
             tx_hash=tx_hash,
             expected_amount_ton=expected_ton * 0.95, # Allow 5% margin
@@ -81,16 +145,21 @@ class PaymentService:
         
         if is_valid:
             # Upgrade user to PRO
-            # Upgrade user to PRO
             await self.upgrade_to_pro(
                 session=session, 
                 partner=partner, 
-                amount=PRO_PRICE_USD,
+                amount=active_session.amount,
                 currency="TON", 
                 network="TON", 
-                tx_hash=tx_hash
+                tx_hash=tx_hash,
+                transaction_id=active_session.id
             )
             return True
+        
+        # If it failed but session is still valid, we keep it pending.
+        # If we wanted to cancel it explicitly on failure, we could, 
+        # but the 10-min check handles it.
+
             
         return False
 

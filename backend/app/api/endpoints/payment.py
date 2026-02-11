@@ -53,6 +53,37 @@ async def create_invoice(
     
     return transaction
 
+@router.post("/session")
+async def create_payment_session(
+    amount: float = Body(39.0, embed=True),
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Creates a 10-minute TON payment session.
+    """
+    try:
+        if "user" in user_data:
+            tg_id = str(json.loads(user_data["user"]).get("id"))
+        else:
+            tg_id = str(user_data.get("id"))
+    except:
+        raise HTTPException(status_code=400, detail="Invalid user data")
+
+    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    result = await session.exec(statement)
+    partner = result.first()
+    
+    if not partner:
+        raise HTTPException(status_code=404, detail="Partner not found")
+
+    payment_data = await payment_service.create_payment_session(
+        session, partner.id, amount
+    )
+    
+    return payment_data
+
+
 @router.post("/verify-ton")
 async def verify_ton(
     tx_hash: str = Body(..., embed=True),
