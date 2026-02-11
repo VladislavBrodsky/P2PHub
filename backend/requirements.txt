@@ -143,7 +143,7 @@ wrapt==2.0.1
 wsproto==1.2.0
 WTForms==3.1.2
 yarl==1.20.1
-greenlet==3.0.3
+greenlet>=3.1.1
 segno==1.6.6
 asyncpg==0.31.0
 # TaskIQ & Background Processing
