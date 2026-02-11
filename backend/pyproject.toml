@@ -154,5 +154,10 @@ dependencies = [
     "wsproto==1.2.0",
     "WTForms==3.1.2",
     "yarl==1.20.1",
-    "segno==1.6.1",
+    "greenlet==3.0.3",
+    "segno==1.6.6",
+    "asyncpg==0.31.0",
+    "taskiq==0.12.1",
+    "taskiq-fastapi==0.4.0",
+    "taskiq-redis==1.2.2",
 ]
