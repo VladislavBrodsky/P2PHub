@@ -16,59 +16,59 @@ export const ACADEMY_STAGES: AcademyStage[] = [
     // --- STAGES 1-20: THE FOUNDATION (FREE) ---
     {
         id: 1,
-        title: "Ignition: $1/Minute Vision",
-        description: "The math behind global financial sovereignty. Why P2PHub is the last tool you'll ever need.",
+        title: "The $1/Minute Blueprint",
+        description: "Why P2PHub is the elite partner ecosystem. Learn the math of reaching $1/min through network multipliers.",
         icon: Rocket,
         category: 'basics',
         isPro: false,
         rewardXp: 100,
-        duration: "5 min"
+        duration: "3 min"
     },
     {
         id: 2,
-        title: "Ecosystem Mastery",
-        description: "Understanding the bridge between TON, USDT, and Pintopay banking.",
-        icon: Shield,
-        category: 'basics',
-        isPro: false,
-        rewardXp: 150,
-        duration: "7 min"
-    },
-    {
-        id: 3,
-        title: "The Viral Blueprint",
-        description: "How to set up your profile for maximum trust and conversion.",
+        title: "Growth Hacking 101",
+        description: "Viral loops and referrals. How to turn 1 invite into 10 active nodes using our onboarding engine.",
         icon: Target,
         category: 'viral',
         isPro: false,
+        rewardXp: 150,
+        duration: "5 min"
+    },
+    {
+        id: 3,
+        title: "Digital Marketing Guru 2026",
+        description: "The shift to AI-driven social growth. Strategy for Telegram, Instagram, and Web3 audience acquisition.",
+        icon: TrendingUp,
+        category: 'basics',
+        isPro: false,
         rewardXp: 200,
-        duration: "10 min"
+        duration: "7 min"
     },
     {
         id: 4,
-        title: "Ghost Sharing Secrets",
-        description: "How to share without being 'salesy'. The psychology of curiosity.",
+        title: "Ghost Sharing Mastery",
+        description: "Marketing secret: How to share your link without 'promoting'. The psychology of passive curiosity.",
         icon: Ghost,
         category: 'viral',
         isPro: false,
         rewardXp: 250,
-        duration: "8 min"
+        duration: "6 min"
     },
     {
         id: 5,
-        title: "AI Marketing Expert: Part 1",
-        description: "Introduction to AI-driven growth. Why humans can't compete with 24/7 automation.",
+        title: "AI Marketing Expert: Intro",
+        description: "FIRST LOOK: Exclusive AI Marketing section for PRO members. Generate viral content on autopilot 24/7.",
         icon: Bot,
         category: 'ai',
         isPro: false,
         rewardXp: 300,
-        duration: "12 min"
+        duration: "10 min"
     },
     {
         id: 6,
-        title: "AI Auto-Pilot Strategies",
-        description: "Exclusive look into generating viral content on autopilot 24/7.",
-        icon: Zap,
+        title: "Automated Content Cycles",
+        description: "How to use AI to auto-post content exactly to your target audience. spend less time, get maximum result.",
+        icon: Sparkles,
         category: 'ai',
         isPro: false,
         rewardXp: 350,
@@ -76,39 +76,43 @@ export const ACADEMY_STAGES: AcademyStage[] = [
     },
     {
         id: 7,
-        title: "TG Channel Architecture",
-        description: "Building a structure that retains 90% of new members.",
-        icon: MessageCircle,
-        category: 'viral',
+        title: "Sales Mastery: Level 1",
+        description: "Best sales techniques for 2026. Closing partners by showing value, not asking for investment.",
+        icon: DollarSign,
+        category: 'sales',
         isPro: false,
-        rewardXp: 400
+        rewardXp: 400,
+        duration: "12 min"
     },
     {
         id: 8,
-        title: "The $100 Day Milestone",
-        description: "Step-by-step to your first consistent $100 daily earnings.",
-        icon: DollarSign,
-        category: 'basics',
+        title: "TG Community Domination",
+        description: "Step-by-step: From 0 to 5,000 members in your private partner group using viral hooks.",
+        icon: MessageCircle,
+        category: 'viral',
         isPro: false,
-        rewardXp: 450
+        rewardXp: 450,
+        duration: "10 min"
     },
     {
         id: 9,
-        title: "Instagram Reels Optimization",
-        description: "The 3-second hook theory for financial services.",
-        icon: Instagram,
-        category: 'viral',
+        title: "The Targeted Ads Secret",
+        description: "How to run ads that pay for themselves. The self-liquidating offer model for P2P partners.",
+        icon: Megaphone,
+        category: 'basics',
         isPro: false,
-        rewardXp: 500
+        rewardXp: 500,
+        duration: "15 min"
     },
     {
         id: 10,
-        title: "Community Retention Logic",
-        description: "Turning followers into a loyal army of partners.",
+        title: "Elite Retention Logic",
+        description: "Your best friend in growth: Turning partners into leaders who build their own 10k+ networks.",
         icon: Users,
         category: 'viral',
         isPro: false,
-        rewardXp: 550
+        rewardXp: 550,
+        duration: "10 min"
     },
     // Stages 11-20 continue the foundation...
     ...Array.from({ length: 10 }, (_, i) => ({
