@@ -253,11 +253,15 @@ function App() {
         }
     }, []);
 
-    // Effect to monitor network state/initial data sync
+    // #comment: Parallel Initialization Strategy
+    // Instead of sequential waiting, we trigger config/user fetches and prefetch the dashboard
+    // code immediately. This concurrently loads data and JS bundles while the StartupLoader 
+    // provides smooth visual feedback to the user.
     useEffect(() => {
         if (!isConfigLoading) {
             updateProgress(50, 'Config Loaded');
-            // Start prefetching Dashboard immediately after config
+            // #comment: Start prefetching Dashboard JS chunk immediately after config is ready
+            // to ensure it's ready by the time the loader fades out.
             DashboardLoader();
         }
     }, [isConfigLoading, updateProgress]);

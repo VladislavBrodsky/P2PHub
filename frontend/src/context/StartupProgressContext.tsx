@@ -8,6 +8,9 @@ interface StartupProgressContextType {
     complete: () => void;
 }
 
+// #comment: Global context to coordinate the application's multi-stage initialization.
+// It centralizes progress reporting from different service layers (Config, User, SDK)
+// and ensures a unified, smooth startup animation that masks underlying API latencies.
 const StartupProgressContext = createContext<StartupProgressContextType | undefined>(undefined);
 
 export const StartupProgressProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

@@ -7,6 +7,9 @@ from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.i18n import get_msg
+# #comment: Consolidated imports at the module level to ensure cleaner dependency resolution
+# and prevent CI failures related to undefined names (like 'settings') in background tasks.
+from app.core.config import settings
 from app.models.partner import Partner, XPTransaction
 from app.services.leaderboard_service import leaderboard_service
 from app.services.notification_service import notification_service
@@ -592,7 +595,6 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     base_depth = len(search_path.split('.'))
 
     # Detect dialect to support both SQLite and Postgres
-    from app.core.config import settings
     is_sqlite = "sqlite" in settings.DATABASE_URL
 
     if is_sqlite:

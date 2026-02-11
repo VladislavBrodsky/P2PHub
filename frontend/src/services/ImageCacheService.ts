@@ -1,3 +1,6 @@
+// #comment: Custom persistent caching service using native IndexedDB.
+// This allows the app to store high-res assets (avatars, icons) permanently in the browser after the first fetch,
+// significantly improving perceived load times and responsiveness on subsequent visits by bypassing the network.
 const DB_NAME = 'p2phub-cache-db';
 const STORE_NAME = 'image-cache';
 const CACHE_VERSION = 1;
