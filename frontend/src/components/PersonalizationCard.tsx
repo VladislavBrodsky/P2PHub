@@ -29,9 +29,33 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                 {/* Left: Avatar & Rank Badge Column */}
                 <div className="flex flex-col items-center gap-2 shrink-0">
                     <div className="relative">
+                        {/* Vibing Gold Crown for PRO Users - Moved outside overflow-hidden container to fix glitch */}
+                        {user?.is_pro && (
+                            <motion.div
+                                initial={{ rotate: -15, y: 0 }}
+                                animate={{
+                                    rotate: [-15, 15, -15],
+                                    y: [-2, 2, -2],
+                                    scale: [1, 1.1, 1]
+                                }}
+                                transition={{
+                                    duration: 3,
+                                    repeat: Infinity,
+                                    ease: "easeInOut"
+                                }}
+                                className="absolute -top-3 -left-3 z-30 drop-shadow-[0_4px_12px_rgba(245,158,11,0.6)]"
+                            >
+                                <Crown
+                                    size={variant === 'compact' ? 24 : 28}
+                                    className="text-amber-400 fill-amber-400/20"
+                                    strokeWidth={3}
+                                />
+                            </motion.div>
+                        )}
+
                         <motion.div
                             whileHover={variant === 'compact' ? {} : { scale: 1.05, rotate: 2 }}
-                            className={`${variant === 'compact' ? 'h-14 w-14 rounded-xl' : 'h-16 w-16 rounded-2xl'} overflow-hidden border-2 border-(--color-border-glass) bg-slate-900 shadow-premium transition-all duration-300 relative will-change-transform`}
+                            className={`${variant === 'compact' ? 'h-14 w-14 rounded-xl' : 'h-16 w-16 rounded-2xl'} overflow-hidden border-2 border-(--color-border-glass) bg-slate-900 shadow-premium transition-all duration-300 relative will-change-transform z-10`}
                         >
                             {isUserLoading ? (
                                 <div className="h-full w-full bg-slate-900 animate-pulse" />
@@ -46,52 +70,13 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     height={variant === 'compact' ? 56 : 64}
                                 />
                             )}
-
-                            {/* Vibing Gold Crown for PRO Users */}
-                            {user?.is_pro && (
-                                <motion.div
-                                    initial={{ rotate: -15, y: 0 }}
-                                    animate={{
-                                        rotate: [-15, 15, -15],
-                                        y: [-2, 2, -2],
-                                        scale: [1, 1.1, 1]
-                                    }}
-                                    transition={{
-                                        duration: 3,
-                                        repeat: Infinity,
-                                        ease: "easeInOut"
-                                    }}
-                                    className="absolute -top-1 -left-1 z-20 drop-shadow-[0_2px_8px_rgba(245,158,11,0.5)]"
-                                >
-                                    <Crown
-                                        size={variant === 'compact' ? 20 : 24}
-                                        className="text-amber-400 fill-amber-400/20"
-                                        strokeWidth={3}
-                                    />
-                                </motion.div>
-                            )}
                         </motion.div>
 
                         {/* Level Badge Integrated into Avatar */}
-                        <div className={`absolute -bottom-1 -right-1 flex ${variant === 'compact' ? 'h-5 w-5' : 'h-6 w-6'} items-center justify-center rounded-lg bg-blue-500 text-white shadow-premium ring-2 ring-(--color-bg-deep)`}>
+                        <div className={`absolute -bottom-1 -right-1 flex ${variant === 'compact' ? 'h-5 w-5' : 'h-6 w-6'} items-center justify-center rounded-lg bg-blue-500 text-white shadow-premium ring-2 ring-(--color-bg-deep) z-20`}>
                             <span className={`${variant === 'compact' ? 'text-[7px]' : 'text-[8px]'} font-black`}>{user?.level || 1}</span>
                         </div>
                     </div>
-
-                    {/* Rank Badge Moved Under Avatar */}
-                    <motion.div
-                        className={`flex items-center gap-1 ${variant === 'compact' ? 'px-1.5 py-0.5' : 'px-2 py-0.5'} rounded-lg border border-(--color-border-glass) shadow-premium backdrop-blur-xl relative overflow-hidden`}
-                        style={{
-                            backgroundColor: `${currentRank.badgeColor}15`,
-                            color: currentRank.badgeColor
-                        }}
-                    >
-                        <div className="absolute inset-0 opacity-20 bg-linear-to-r from-transparent via-white to-transparent -translate-x-full animate-shimmer-slide" />
-                        <Sparkles className={`${variant === 'compact' ? 'h-2 w-2' : 'h-3 w-3'}`} style={{ color: currentRank.badgeColor }} />
-                        <span className={`${variant === 'compact' ? 'text-[6px]' : 'text-[8px]'} font-black uppercase tracking-widest leading-none`}>
-                            {currentRank.name}
-                        </span>
-                    </motion.div>
                 </div>
 
                 {/* Right: Stats Vertical Stack */}
