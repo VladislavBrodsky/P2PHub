@@ -698,7 +698,7 @@ async def get_partner_photo(request: Request, file_id: str):
                     content=optimized_binary,
                     media_type="image/webp",
                     headers={
-                        "Cache-Control": "public, max-age=86400",
+                        "Cache-Control": "public, max-age=31536000, immutable",
                         "Access-Control-Allow-Origin": "*",
                         "X-Cache": "MISS"
                     }

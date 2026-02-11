@@ -90,20 +90,10 @@ async def create_partner(
         except Exception as e:
             logger.error(f"Failed to invalidate cache for ancestors: {e}")
     
-    # 4.5 Invalidate Global Recent Partners list (Redis & DB snapshot)
+    # 4.5 Invalidate Global Recent Partners list (Redis only)
+    # The refresh logic in get_recent_partners will handle the actual data fetch.
     try:
-        from app.models.partner import SystemSetting
         await redis_service.client.delete("partners:recent_v2")
-        
-        # Also force DB snapshot refresh
-        stmt = select(SystemSetting).where(SystemSetting.key == "partners_recent_snapshot")
-        res = await session.exec(stmt)
-        snapshot = res.first()
-        if snapshot:
-            # Set updated_at to a long time ago to force refresh
-            snapshot.updated_at = datetime.utcnow() - timedelta(hours=24)
-            session.add(snapshot)
-            await session.commit()
     except Exception as e:
         logger.error(f"Failed to invalidate global recent partners cache: {e}")
     

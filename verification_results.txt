@@ -1,4 +1,0 @@
-Starting verification...
-Found Partner: Diego (ID: 126)
-Successfully updated photo_url to: https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&fm=webp
-Verified photo_url in DB: https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&fm=webp

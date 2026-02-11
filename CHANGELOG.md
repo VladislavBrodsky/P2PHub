@@ -1,6 +1,21 @@
 # Changelog
-
 All notable changes to this project will be documented in this file.
+
+## [1.2.0] - 2026-02-11
+### Added
+- Unified Photo Pipeline: All avatar displays now use optimized WebP proxy via `/api/partner/photo/{file_id}`.
+- PRO User Welcome Experience: Added `ProWelcomeCard` with confetti and interactive briefing for first-time PRO users.
+- Backend persistence for PRO welcome notification (`pro_notification_seen`).
+- Standardized CSS variables for theme consistency across `Leaderboard` and `Cards` pages.
+
+### Fixed
+- BentoGrid Carousel Stability: Improved active card calculation and snapping logic for small devices.
+- Leaderboard Photo Leak: Replaced direct Telegram URL fetches with optimized proxy.
+- Registration Latency: Offloaded redundant snapshot updates in `create_partner` to O(1) Redis invalidations.
+
+### Optimized
+- Photo Proxy Caching: Increased `max-age` to 1 year for immutable avatar assets.
+- Codebase Cleanup: Removed legacy diagnostic scripts and logs from the root directory.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
