@@ -32,14 +32,14 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
             style={{ transformStyle: "preserve-3d" }}
             onClick={() => !isLocked && onClick(stage)}
             className={cn(
-                "relative group cursor-pointer w-full flex justify-center py-8",
+                "relative group cursor-pointer w-full flex justify-center py-4",
                 isLocked && "cursor-not-allowed opacity-60"
             )}
         >
             {/* Connecting Line (drawn from previous node) */}
             {index > 0 && (
                 <div className={cn(
-                    "absolute -top-8 left-1/2 -translate-x-1/2 w-0.5 h-16 -z-10 bg-slate-200 dark:bg-white/10 overflow-hidden"
+                    "absolute -top-4 left-1/2 -translate-x-1/2 w-0.5 h-8 -z-10 bg-slate-200 dark:bg-white/10 overflow-hidden"
                 )}>
                     {(isCompleted || isCurrent) && (
                         <motion.div

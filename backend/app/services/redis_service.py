@@ -5,6 +5,10 @@ import redis.asyncio as redis
 from app.core.config import settings
 
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 class RedisService:
     def __init__(self):
         # Default client for text/JSON operations
@@ -58,29 +62,25 @@ class RedisService:
         caches the result, and returns it.
 
         :param key: Redis key
-        :param factory: Async function (callable) that returns the data
+        :param factory: Async function (call) that returns the data
         :param expire: Expiration time in seconds
         """
-        import logging
-        logger = logging.getLogger(__name__)
-
         try:
             cached = await self.get_json(key)
             if cached is not None:
-                logger.info(f"✅ Cache HIT: {key}")
+                logger.debug(f"Cache HIT: {key}")
                 return cached
-            logger.info(f"⚠️ Cache MISS: {key}")
         except Exception as e:
             logger.error(f"❌ Cache Read Error for {key}: {e}")
 
         # Compute
-        # factory() should return a coroutine
         data = await factory()
 
-        if data:
+        # Cache even if empty (e.g. empty list/dict), but not if None
+        if data is not None:
             try:
                 await self.set_json(key, data, expire=expire)
-                logger.info(f"💾 Cached: {key} (TTL: {expire}s)")
+                logger.info(f"Cache Refresh: {key} (TTL: {expire}s)")
             except Exception as e:
                 logger.error(f"❌ Cache Write Error for {key}: {e}")
 

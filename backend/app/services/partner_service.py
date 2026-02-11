@@ -386,12 +386,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
 async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dict[str, int]:
     """
     Uses Materialized Path for ultra-fast 9-level tree counting.
-    Cached in Redis to avoid repeat execution.
     """
-    cache_key = f"ref_tree_stats:{partner_id}"
-    cached = await redis_service.get_json(cache_key)
-    if cached: return cached
-
     partner = await session.get(Partner, partner_id)
     if not partner: return {f"level_{i}": 0 for i in range(1, 10)}
 
@@ -425,7 +420,6 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
         if 1 <= lvl <= 9:
             stats[f"level_{lvl}"] = row[1]
 
-    await redis_service.set_json(cache_key, stats, expire=1800) # 30 mins cache
     return stats
 
 async def get_referral_tree_members(session: AsyncSession, partner_id: int, target_level: int) -> List[dict]:
@@ -490,10 +484,6 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
     """
     Calculates partners joined in the current period vs the previous period using Materialized Path.
     """
-    cache_key = f"growth_metrics:{partner_id}:{timeframe}"
-    cached = await redis_service.get_json(cache_key)
-    if cached: return cached
-
     partner = await session.get(Partner, partner_id)
     if not partner: return {"growth_pct": 0, "previous_count": 0, "current_count": 0}
 
@@ -554,17 +544,12 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
         "timeframe": timeframe
     }
 
-    await redis_service.set_json(cache_key, result_data, expire=300)
     return result_data
 
 async def get_network_time_series(session: AsyncSession, partner_id: int, timeframe: str = '7D') -> List[dict]:
     """
     Returns data points for a growth chart using Materialized Path.
     """
-    cache_key = f"growth_chart:v2:{partner_id}:{timeframe}"
-    cached = await redis_service.get_json(cache_key)
-    if cached: return cached
-
     partner = await session.get(Partner, partner_id)
     if not partner: return []
 
@@ -703,7 +688,6 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         })
         curr += next_step
 
-    await redis_service.set_json(cache_key, data, expire=600)
     return data
 
 async def migrate_paths(session: AsyncSession):

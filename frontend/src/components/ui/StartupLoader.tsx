@@ -34,7 +34,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
 
             <div className="relative flex flex-col items-center justify-center">
                 {/* Main Animated Hub */}
-                <div className="relative w-56 h-56 flex items-center justify-center">
+                <div className="relative w-44 h-44 flex items-center justify-center">
                     {/* #comment: Pulsing Outer Rings - Micro-animations that provide visual feedback 
                         of "active loading" beyond the static percentage. */}
                     <motion.div
@@ -64,71 +64,62 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                     />
 
                     {/* Progress Circle SVG */}
-                    <svg className="absolute inset-0 w-full h-full -rotate-90 filter drop-shadow-[0_0_8px_rgba(var(--color-brand-primary-rgb),0.3)]">
+                    <svg className="absolute inset-0 w-full h-full -rotate-90">
                         <circle
-                            cx="112"
-                            cy="112"
-                            r="104"
+                            cx="88"
+                            cy="88"
+                            r="82"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="1.5"
                             className="text-(--color-text-primary)/5"
                         />
                         <motion.circle
-                            cx="112"
-                            cy="112"
-                            r="104"
+                            cx="88"
+                            cy="88"
+                            r="82"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="3"
-                            strokeDasharray="653"
-                            initial={{ strokeDashoffset: 653 }}
-                            animate={{ strokeDashoffset: 653 - (653 * displayProgress) / 100 }}
+                            strokeDasharray="515"
+                            initial={{ strokeDashoffset: 515 }}
+                            animate={{ strokeDashoffset: 515 - (515 * displayProgress) / 100 }}
                             transition={{ duration: 0.5, ease: "easeOut" }}
                             className="text-(--color-brand-primary)"
                             strokeLinecap="round"
                         />
                     </svg>
 
-                    {/* Central Logo Container - Elite Glassmorphism */}
+                    {/* Central Logo Container - Blue Shadow Glow */}
                     <motion.div
-                        className="relative w-36 h-36 rounded-[2.5rem] bg-(--color-bg-surface)/40 backdrop-blur-2xl border border-(--color-border-glass) flex items-center justify-center shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden group"
+                        className="relative w-28 h-28 flex items-center justify-center overflow-visible"
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
                     >
-                        {/* Inner Glow */}
-                        <div className="absolute inset-0 bg-linear-to-tr from-white/5 to-transparent pointer-events-none" />
+                        {/* Recursive Blue Glow Layers */}
+                        <motion.div
+                            className="absolute inset-0 rounded-full bg-(--color-brand-primary)/20 blur-[30px]"
+                            animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.7, 0.4] }}
+                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                        />
+                        <div className="absolute inset-4 rounded-full bg-(--color-brand-primary)/30 blur-[20px]" />
 
                         <img
                             src="/logo.webp"
                             alt="P2P Hub"
-                            className="w-20 h-20 object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.1)] dark:drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]"
-                        />
-
-                        {/* Liquid Shine Effect */}
-                        <motion.div
-                            className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -skew-x-12"
-                            animate={{
-                                x: ['-200%', '200%'],
-                            }}
-                            transition={{
-                                duration: 2.5,
-                                repeat: Infinity,
-                                ease: "easeInOut",
-                                repeatDelay: 1.5
-                            }}
+                            className="relative w-16 h-16 object-contain z-10 drop-shadow-[0_0_25px_rgba(var(--color-brand-primary-rgb),0.5)]"
                         />
                     </motion.div>
                 </div>
 
-                {/* Progress Text - High Contrast & Refined Typography */}
-                <div className="mt-16 flex flex-col items-center space-y-3">
+                {/* Progress Text - Compact & Refined */}
+                <div className="mt-8 flex flex-col items-center space-y-2">
                     <div className="flex items-baseline space-x-1">
-                        <span className="text-5xl font-black text-(--color-text-primary) tracking-tighter tabular-nums drop-shadow-sm">
+                        <span className="text-3xl font-black text-(--color-text-primary) tracking-tighter tabular-nums">
                             {displayProgress}
                         </span>
-                        <span className="text-xl font-bold text-(--color-brand-primary) opacity-80">%</span>
+                        <span className="text-sm font-bold text-(--color-brand-primary) opacity-80">%</span>
                     </div>
 
                     <div className="flex flex-col items-center space-y-1">

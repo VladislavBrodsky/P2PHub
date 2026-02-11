@@ -4,13 +4,13 @@ import { motion } from 'framer-motion';
 
 export const PartnerAcademy = () => {
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-700">
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700 pt-[env(safe-area-inset-top,2rem)]">
             {/* Academy Elite Header */}
             <div className="relative group overflow-hidden rounded-[3rem] p-1 shadow-2xl perspective-1000">
                 <div className="absolute inset-0 branding-liquid-gradient opacity-95 group-hover:opacity-100 transition-opacity" />
                 <div className="absolute inset-0 vibing-blue-animated opacity-10" />
 
-                <div className="relative z-10 glass-panel-premium rounded-[2.8rem] border-white/20 p-8 overflow-hidden">
+                <div className="relative z-10 glass-panel-premium rounded-[2.2rem] border-white/20 p-6 overflow-hidden">
                     {/* Background Visuals */}
                     <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-500/20 blur-[80px] rounded-full animate-pulse" />
                     <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-indigo-500/20 blur-[60px] rounded-full" />
@@ -82,7 +82,7 @@ export const PartnerAcademy = () => {
             </div>
 
             {/* Bottom Spacing to ensure path isn't cut off by navbar */}
-            <div className="h-40 pointer-events-none" />
+            <div className="h-32 pointer-events-none" />
         </div>
     );
 };

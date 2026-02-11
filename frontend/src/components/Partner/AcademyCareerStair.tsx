@@ -36,8 +36,8 @@ export const AcademyCareerStair = () => {
     return (
         <div className="relative pb-32">
             {/* Header / Stats Overlay (Floating) */}
-            <div className="sticky top-0 z-30 pt-4 pb-2 px-1 mb-8">
-                <div className="glass-panel-premium rounded-2xl p-4 flex items-center justify-between border-blue-500/20 shadow-2xl">
+            <div className="sticky top-0 z-30 pt-2 pb-1 px-1 mb-6">
+                <div className="glass-panel-premium rounded-xl p-3 flex items-center justify-between border-blue-500/20 shadow-2xl">
                     <div className="flex flex-col">
                         <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest">Global Ranking</span>
                         <div className="flex items-center gap-2">
