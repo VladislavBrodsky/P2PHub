@@ -5,8 +5,8 @@ MESSAGES = {
             "🥳 You are early! \n\n"
             "Join the revolution in Fintech & Web3 payments!\n"
             "Earn XP, grow your influence, and unlock exclusive rewards!\n\n"
-            "🔗 *Your Referral Link:*\n`{referral_link}`\n\n"
-            "👇 *Open Partner App*"
+            "🔗 Your Referral Link:\n`{referral_link}`\n\n"
+            "👇 Open Partner App"
         ),
         "referral_l1_congrats": (
             "🤝 *New Direct Partner!* (L1)\n\n"
@@ -76,8 +76,8 @@ MESSAGES = {
             "🥳 Вы в числе первых!\n\n"
             "Присоединяйтесь к революции в Fintech и Web3 платежах!\n"
             "Зарабатывайте XP, растите свое влияние и открывайте эксклюзивные награды!\n\n"
-            "🔗 *Ваша реферальная ссылка:*\n`{referral_link}`\n\n"
-            "👇 *Открыть Partner App*"
+            "🔗 Ваша реферальная ссылка:\n`{referral_link}`\n\n"
+            "👇 Открыть Partner App"
         ),
         "referral_l1_congrats": (
             "🤝 *Новый прямой партнер!* (L1)\n\n"
