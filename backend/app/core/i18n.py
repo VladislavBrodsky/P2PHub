@@ -2,11 +2,11 @@ MESSAGES = {
     "en": {
         "welcome": (
             "💎 **Welcome to Pintopay Partner**\n\n"
-            "You are early! 🚀\n"
-            "Join the revolution in decentralized payments.\n"
-            "Earn XP, invite friends, and unlock exclusive rewards.\n\n"
+            "🥳 You are early! \n\n"
+            "Join the revolution in Fintech & Web3 payments!\n"
+            "Earn XP, grow your influence, and unlock exclusive rewards!\n\n"
             "🔗 *Your Referral Link:*\n`{referral_link}`\n\n"
-            "👇 *Start your journey below*"
+            "👇 *Open Partner App*"
         ),
         "referral_l1_congrats": (
             "🤝 *New Direct Partner!* (L1)\n\n"
@@ -73,11 +73,11 @@ MESSAGES = {
     "ru": {
         "welcome": (
             "💎 **Добро пожаловать в Pintopay Partner**\n\n"
-            "Вы в числе первых! 🚀\n"
-            "Присоединяйтесь к революции децентрализованных платежей.\n"
-            "Зарабатывайте XP, приглашайте друзей и открывайте эксклюзивные награды.\n\n"
+            "🥳 Вы в числе первых!\n\n"
+            "Присоединяйтесь к революции в Fintech и Web3 платежах!\n"
+            "Зарабатывайте XP, растите свое влияние и открывайте эксклюзивные награды!\n\n"
             "🔗 *Ваша реферальная ссылка:*\n`{referral_link}`\n\n"
-            "👇 *Начните свой путь ниже*"
+            "👇 *Открыть Partner App*"
         ),
         "referral_l1_congrats": (
             "🤝 *Новый прямой партнер!* (L1)\n\n"
