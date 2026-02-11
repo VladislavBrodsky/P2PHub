@@ -22,7 +22,8 @@
         "support": "Support",
         "notifications": "Notifications",
         "channel": "Channel",
-        "chat": "Chat"
+        "chat": "Chat",
+        "blog": "Blog"
     },
     "faq": {
         "withdraw": "How to withdraw?",

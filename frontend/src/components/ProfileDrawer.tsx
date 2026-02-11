@@ -14,9 +14,9 @@ import {
     MessageCircle,
     Copy,
     Check,
-    X, // Added Close icon
     ArrowLeft,
-    ShieldCheck
+    ShieldCheck,
+    Newspaper
 } from 'lucide-react';
 
 import { useHaptic } from '../hooks/useHaptic';
@@ -128,9 +128,9 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                 return null;
         }
     };
-
     const menuItems = [
         { id: 'settings', icon: <Settings />, label: t('menu.settings') },
+        { id: 'blog', icon: <Newspaper />, label: t('menu.blog') },
         { id: 'community', icon: <Users />, label: t('menu.community') },
         { id: 'faq', icon: <HelpCircle />, label: t('menu.faq') },
         { id: 'support', icon: <Headphones />, label: t('menu.support') },
@@ -217,8 +217,21 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                     {menuItems.map((item) => (
                                         <div key={item.id} className="rounded-2xl bg-(--color-bg-surface)/60 backdrop-blur-sm border border-(--color-border-glass) overflow-hidden shadow-sm group">
                                             <button
-                                                onClick={() => toggleSection(item.id)}
-                                                className="w-full flex items-center justify-between p-4 bg-transparent active:bg-white/5 transition-colors"
+                                                onClick={() => {
+                                                    if (item.id === 'blog') {
+                                                        const blogSection = document.querySelector('section.py-8.space-y-6');
+                                                        if (blogSection) {
+                                                            onClose();
+                                                            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' }));
+                                                            setTimeout(() => {
+                                                                blogSection.scrollIntoView({ behavior: 'smooth' });
+                                                            }, 100);
+                                                        }
+                                                    } else {
+                                                        toggleSection(item.id);
+                                                    }
+                                                }}
+                                                className="w-full flex items-center justify-between p-3 bg-transparent active:bg-white/5 transition-colors"
                                             >
                                                 <div className="flex items-center gap-3">
                                                     <div className={`p-2 rounded-xl bg-(--color-bg-app)/50 border border-(--color-border-glass) text-(--color-text-secondary) group-hover:text-(--color-text-primary) transition-colors`}>
@@ -273,7 +286,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                                 tonConnectUI.openModal();
                                             }
                                         }}
-                                        className={`relative overflow-hidden w-full rounded-xl p-3 shadow-premium transition-all border ${wallet
+                                        className={`relative overflow-hidden w-full rounded-xl p-2.5 shadow-premium transition-all border ${wallet
                                             ? 'bg-emerald-500 text-white border-transparent'
                                             : 'bg-(--color-bg-surface)/80 backdrop-blur-md text-(--color-text-primary) border-(--color-border-glass)'
                                             }`}
@@ -316,7 +329,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                         <button
                                             key={option.id}
                                             onClick={() => { i18n.changeLanguage(option.id); selection(); }}
-                                            className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 transition-all relative z-10 ${i18n.language.startsWith(option.id)
+                                            className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2 transition-all relative z-10 ${i18n.language.startsWith(option.id)
                                                 ? 'bg-white/10 dark:bg-white/5 border border-white/10 shadow-lg text-(--color-text-primary) overflow-hidden'
                                                 : 'text-(--color-text-secondary) hover:bg-white/5'
                                                 }`}
@@ -345,7 +358,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                             <button
                                                 key={option.id}
                                                 onClick={() => { setTheme(option.id); selection(); }}
-                                                className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 transition-all relative z-10 ${theme === option.id
+                                                className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2 transition-all relative z-10 ${theme === option.id
                                                     ? 'bg-white/10 dark:bg-white/5 border border-white/10 shadow-lg text-(--color-text-primary) overflow-hidden'
                                                     : 'text-(--color-text-secondary) hover:bg-white/5'
                                                     }`}

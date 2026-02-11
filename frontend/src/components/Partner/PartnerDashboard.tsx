@@ -220,7 +220,7 @@ export const PartnerDashboard = () => {
                         }}
                     >
                         {/* Shimmer Effect */}
-                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 dark:via-blue-400/20 to-transparent -translate-x-full group-hover:animate-shimmer pointer-events-none" />
+                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 dark:via-blue-400/20 to-transparent -translate-x-full group-hover:animate-shimmer-slide pointer-events-none" />
                         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-linear-to-r from-blue-500/5 via-purple-500/5 to-blue-500/5 transition-opacity duration-500" />
 
                         <div className="flex items-center gap-3 relative z-10 pt-1">

@@ -86,7 +86,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             color: currentRank.badgeColor
                         }}
                     >
-                        <div className="absolute inset-0 opacity-20 bg-linear-to-r from-transparent via-white to-transparent -translate-x-full animate-shimmer" />
+                        <div className="absolute inset-0 opacity-20 bg-linear-to-r from-transparent via-white to-transparent -translate-x-full animate-shimmer-slide" />
                         <Sparkles className={`${variant === 'compact' ? 'h-2 w-2' : 'h-3 w-3'}`} style={{ color: currentRank.badgeColor }} />
                         <span className={`${variant === 'compact' ? 'text-[6px]' : 'text-[8px]'} font-black uppercase tracking-widest leading-none`}>
                             {currentRank.name}

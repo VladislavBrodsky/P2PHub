@@ -146,7 +146,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             >
                                                 <Lock className="w-3.5 h-3.5 mb-0.5 text-white" />
                                                 <span className="text-white">{t('income.profit.unlock_btn')}</span>
-                                                <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/30 to-white/0 -translate-x-full group-hover:animate-shimmer" />
+                                                <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/30 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
                                             </button>
                                         </div>
                                     </motion.div>
@@ -348,7 +348,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         >
                             {t('income.cta.lead')}
                             <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
-                            <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer" />
+                            <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
                         </motion.button>
                         <p className="mt-4 text-[10px] font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80">
                             {t('income.cta.unlocked')}

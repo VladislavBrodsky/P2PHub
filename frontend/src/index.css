@@ -95,17 +95,17 @@
     }
   }
 
-  @keyframes shimmer {
+  @keyframes shimmer-slide {
     from {
       transform: translateX(-100%);
     }
 
     to {
-      transform: translateX(100%);
+      transform: translateX(200%);
     }
   }
 
-  --animate-shimmer: shimmer 2s infinite linear;
+  --animate-shimmer: shimmer-loading 2s infinite linear;
 }
 
 @utility mesh-gradient-dark {
@@ -467,7 +467,7 @@ body {
   }
 
   /* Loading Shimmer */
-  @keyframes shimmer {
+  @keyframes shimmer-loading {
     0% {
       background-position: -1000px 0;
     }
@@ -478,9 +478,13 @@ body {
   }
 
   .animate-shimmer {
-    animation: shimmer 2s infinite linear;
+    animation: shimmer-loading 2s infinite linear;
     background: linear-gradient(to right, #f1f5f9 4%, #e2e8f0 25%, #f1f5f9 36%);
     background-size: 1000px 100%;
+  }
+
+  .animate-shimmer-slide {
+    animation: shimmer-slide 2s infinite linear;
   }
 
   .text-animate-shimmer {

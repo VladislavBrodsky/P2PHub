@@ -48,7 +48,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
                         className={`absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse ${placeholderClassName}`}
                     >
                         {/* Shimmer Effect */}
-                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-shimmer" />
+                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-shimmer-slide" />
                     </motion.div>
                 )}
             </AnimatePresence>

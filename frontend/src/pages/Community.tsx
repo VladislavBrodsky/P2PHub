@@ -61,9 +61,11 @@ export default function CommunityPage() {
                 <div className="p-1 rounded-2xl bg-slate-100/50 dark:bg-black/20 border border-white/5 backdrop-blur-2xl flex items-center relative gap-1 shadow-inner overflow-hidden">
                     {/* Sliding Background */}
                     <motion.div
-                        layoutId="activeTab"
-                        className="absolute inset-y-1 rounded-xl bg-white dark:bg-white/10 shadow-[0_2px_10px_rgba(0,0,0,0.1)] dark:shadow-premium border border-white/10"
-                        initial={false}
+                        className="absolute inset-y-1 rounded-xl bg-white dark:bg-white/10 shadow-[0_2px_10px_rgba(0,0,0,0.1)] dark:shadow-premium border border-white/10 z-0"
+                        initial={{
+                            left: activeTab === 'dashboard' ? '4px' : 'calc(50% + 2px)',
+                            width: 'calc(50% - 6px)'
+                        }}
                         animate={{
                             left: activeTab === 'dashboard' ? '4px' : 'calc(50% + 2px)',
                             width: 'calc(50% - 6px)'
