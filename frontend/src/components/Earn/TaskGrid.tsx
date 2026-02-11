@@ -9,6 +9,7 @@ interface TaskGridProps {
     claimableTasks: string[];
     currentLevel: number;
     referrals: number;
+    checkinStreak: number;
     onTaskClick: (task: Task) => void;
     onClaim: (task: Task) => void;
 }
@@ -20,6 +21,7 @@ export const TaskGrid = ({
     claimableTasks,
     currentLevel,
     referrals,
+    checkinStreak,
     onTaskClick,
     onClaim
 }: TaskGridProps) => {
@@ -62,6 +64,10 @@ export const TaskGrid = ({
                             if (referrals >= (task.requirement || 0)) status = 'CLAIMABLE';
                             else status = 'AVAILABLE';
                         }
+                        else if (task.type === 'action') {
+                            if (checkinStreak >= (task.requirement || 0)) status = 'CLAIMABLE';
+                            else status = 'AVAILABLE';
+                        }
 
                         return (
                             <TaskCard
@@ -69,6 +75,7 @@ export const TaskGrid = ({
                                 task={task}
                                 status={status}
                                 userReferrals={referrals}
+                                checkinStreak={checkinStreak}
                                 countdown={verifyingTasks[task.id]}
                                 onClick={() => onTaskClick(task)}
                                 onClaim={() => onClaim(task)}

@@ -166,6 +166,9 @@ export default function ReferralPage() {
             if (!completedTaskIds.includes(task.id) && !verifyingTasks[task.id] && !claimableTasks.includes(task.id)) {
                 setVerifyingTasks(prev => ({ ...prev, [task.id]: 15 }));
             }
+        } else if (task.type === 'referral') {
+            selection();
+            setShowShareModal(true);
         }
     };
 
@@ -326,7 +329,7 @@ export default function ReferralPage() {
                                                 className="w-full h-12 rounded-xl font-bold text-(--color-text-primary) flex items-center justify-center gap-2 active:scale-[0.98] transition-all bg-(--color-text-primary)/5 border border-(--color-border-glass) text-sm"
                                             >
                                                 <Sparkles className="w-4 h-4 text-blue-500" />
-                                                Send Premium Viral Card
+                                                {t('referral.modal.viral_btn')}
                                             </button>
                                         )}
 
@@ -492,6 +495,7 @@ export default function ReferralPage() {
                     claimableTasks={claimableTasks}
                     currentLevel={currentLevel}
                     referrals={referrals}
+                    checkinStreak={user?.checkin_streak || 0}
                     onTaskClick={handleTaskClick}
                     onClaim={handleClaim}
                 />

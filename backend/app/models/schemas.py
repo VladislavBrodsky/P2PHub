@@ -22,6 +22,8 @@ class PartnerResponse(PartnerBase):
     is_pro: bool
     pro_notification_seen: bool = False
     total_network_size: int = 0
+    last_checkin_at: Optional[datetime] = None
+    checkin_streak: int = 0
     created_at: datetime
     updated_at: datetime
     referrals: Optional[List[PartnerBase]] = None

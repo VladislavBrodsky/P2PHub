@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 // #comment: Removed unused Star and ChevronRight icons from lucide-react to clean up the import list
 import { Trophy, Sparkles, X, ShieldCheck, Zap, Gem, CreditCard, Share2 } from 'lucide-react';
 // #comment: Removed unused t variable from useTranslation as local benefit texts are used instead
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
 import { useHaptic } from '../../hooks/useHaptic';
 
@@ -12,36 +12,36 @@ interface Level100AchievementModalProps {
 }
 
 export const Level100AchievementModal = ({ isOpen, onClose }: Level100AchievementModalProps) => {
-    useTranslation();
+    const { t } = useTranslation();
     const { user } = useUser();
     const { impact } = useHaptic();
 
     const benefits = [
         {
             icon: CreditCard,
-            title: 'Platinum Physical Card',
-            desc: 'Exclusive vertical design with no lifetime fees.',
+            title: t('level100.benefit_1_title'),
+            desc: t('level100.benefit_1_desc'),
             color: 'text-slate-400',
             bg: 'bg-slate-400/10'
         },
         {
             icon: Gem,
-            title: 'Fanocracy Status',
-            desc: 'Priority governance power in the Partner Network.',
+            title: t('level100.benefit_2_title'),
+            desc: t('level100.benefit_2_desc'),
             color: 'text-purple-400',
             bg: 'bg-purple-400/10'
         },
         {
             icon: Zap,
-            title: '0% Platform Fees',
-            desc: 'Maximum earnings on all network transactions.',
+            title: t('level100.benefit_3_title'),
+            desc: t('level100.benefit_3_desc'),
             color: 'text-yellow-400',
             bg: 'bg-yellow-400/10'
         },
         {
             icon: ShieldCheck,
-            title: 'Executive Support',
-            desc: '24/7 personal manager for your growing team.',
+            title: t('level100.benefit_4_title'),
+            desc: t('level100.benefit_4_desc'),
             color: 'text-emerald-400',
             bg: 'bg-emerald-400/10'
         }
@@ -116,13 +116,15 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
                         <div className="space-y-4 mb-8 text-left">
                             <div className="text-center">
                                 <h2 className="text-[10px] font-black tracking-[0.4em] text-blue-600 dark:text-blue-400 uppercase">
-                                    APEX ACHIEVEMENT
+                                    {t('level100.apex_achievement')}
                                 </h2>
                                 <h3 className="text-3xl font-black text-slate-900 dark:text-white mt-1">
-                                    LvL 100 <span className="bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Fanocracy</span>
+                                    <Trans i18nKey="level100.fanocracy_title">
+                                        LvL 100 <span className="bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Fanocracy</span>
+                                    </Trans>
                                 </h3>
                                 <p className="text-slate-500 dark:text-slate-400 font-bold text-sm mt-2 px-4 italic">
-                                    "The ultimate status for those who build the future of P2P."
+                                    {t('level100.fanocracy_quote')}
                                 </p>
                             </div>
 
@@ -158,12 +160,12 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
                                 onClick={handleShare}
                                 className="w-full h-14 rounded-2xl bg-blue-600 active:scale-95 transition-all shadow-[0_10px_30px_-5px_rgba(37,99,235,0.4)] flex items-center justify-center gap-2 group"
                             >
-                                <span className="text-sm font-black text-white tracking-widest">CLAIM LVL 100 FOCUS</span>
+                                <span className="text-sm font-black text-white tracking-widest">{t('level100.claim_btn')}</span>
                                 <Share2 className="w-4 h-4 text-white group-hover:rotate-12 transition-transform" />
                             </button>
 
                             <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest animate-pulse">
-                                DON'T MISS YOUR SPOT IN THE ELITE TIER
+                                {t('level100.limited_slots')}
                             </p>
                         </div>
 

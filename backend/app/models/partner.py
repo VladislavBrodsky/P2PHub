@@ -33,6 +33,10 @@ class Partner(SQLModel, table=True):
     pro_notification_seen: bool = Field(default=False)  # Track if user saw the "You are PRO" card
     subscription_plan: Optional[str] = Field(default=None) # e.g. "PRO_LIFETIME", "PRO_YEARLY"
 
+    # Daily Check-in Tracking
+    last_checkin_at: Optional[datetime] = Field(default=None, index=True)
+    checkin_streak: int = Field(default=0, index=True)
+
     # Materialized Totals (Optimized for 100K+ Users)
     total_earned_usdt: float = Field(default=0.0, index=True)
     referral_count: int = Field(default=0, index=True)

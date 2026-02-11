@@ -8,12 +8,13 @@ interface TaskCardProps {
     task: Task;
     status: 'LOCKED' | 'AVAILABLE' | 'VERIFYING' | 'CLAIMABLE' | 'COMPLETED';
     userReferrals: number;
+    checkinStreak?: number;
     countdown?: number;
     onClick?: () => void;
     onClaim?: () => void;
 }
 
-export const TaskCard = ({ task, status, userReferrals, countdown, onClick, onClaim }: TaskCardProps) => {
+export const TaskCard = ({ task, status, userReferrals, checkinStreak = 0, countdown, onClick, onClaim }: TaskCardProps) => {
     const { t } = useTranslation();
 
     // Status Logic
@@ -84,22 +85,31 @@ export const TaskCard = ({ task, status, userReferrals, countdown, onClick, onCl
                         {task.description}
                     </p>
 
-                    {/* Progress Bar for Referrals */}
-                    {task.type === 'referral' && (
+                    {/* Progress Bar for Referrals/Check-ins */}
+                    {(task.type === 'referral' || task.type === 'action') && (
                         <div className="pt-2 space-y-1">
                             <div className="flex justify-between text-[10px] font-bold uppercase text-text-secondary">
                                 <span>{t('tasks.progress')}</span>
-                                <span className="font-mono">{Math.min(userReferrals, task.requirement || 0)} / {task.requirement}</span>
+                                <span className="font-mono">
+                                    {task.type === 'referral'
+                                        ? Math.min(userReferrals, task.requirement || 0)
+                                        : Math.min(checkinStreak, task.requirement || 0)
+                                    } / {task.requirement}
+                                </span>
                             </div>
                             <div className="h-1.5 w-full bg-brand-muted/10 rounded-full overflow-hidden p-px relative">
                                 <motion.div
                                     className="h-full rounded-full relative overflow-hidden"
                                     style={{
-                                        backgroundColor: '#3b82f6',
-                                        boxShadow: '0 0 8px rgba(59, 130, 246, 0.4)'
+                                        backgroundColor: task.type === 'referral' ? '#3b82f6' : '#10b981',
+                                        boxShadow: task.type === 'referral'
+                                            ? '0 0 8px rgba(59, 130, 246, 0.4)'
+                                            : '0 0 8px rgba(16, 185, 129, 0.4)'
                                     }}
                                     initial={{ width: 0 }}
-                                    animate={{ width: `${Math.min((userReferrals / (task.requirement || 1)) * 100, 100)}%` }}
+                                    animate={{
+                                        width: `${Math.min(((task.type === 'referral' ? userReferrals : checkinStreak) / (task.requirement || 1)) * 100, 100)}%`
+                                    }}
                                 >
                                     {/* Crystal Layers */}
                                     <div className="absolute inset-0 bg-linear-to-b from-white/30 to-transparent" />

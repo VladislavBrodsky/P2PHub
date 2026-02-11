@@ -5,17 +5,17 @@ import { getAllAchievements, getAllMilestones, Achievement } from '../../data/ea
 // #comment: Removed unused Target and Gem icons from lucide-react to clean up the import list
 import { Lock, ChevronDown, ChevronUp, Trophy, Sparkles, Zap, Star, Shield, X, Info, Share2, UserPlus, Milestone, ArrowRight, Flame } from 'lucide-react';
 import { useUser } from '../../context/UserContext';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
 
 const Level100AchievementModal = lazy(() => import('./Level100AchievementModal').then(m => ({ default: m.Level100AchievementModal })));
 
 const CHAPTER_TIERS = [
-    { title: 'The Genesis', range: [1, 5], icon: <Zap className="w-3 h-3" /> },
-    { title: 'Momentum', range: [6, 10], icon: <Star className="w-3 h-3" /> },
-    { title: 'Growth Hub', range: [11, 20], icon: <Shield className="w-3 h-3" /> },
-    { title: 'Executive Tier', range: [21, 50], icon: <Trophy className="w-3 h-3" /> },
-    { title: 'Ultimate Mastery', range: [51, 100], icon: <Milestone className="w-3 h-3" /> },
+    { title: 'milestone.tier_1', range: [1, 5], icon: <Zap className="w-3 h-3" /> },
+    { title: 'milestone.tier_2', range: [6, 10], icon: <Star className="w-3 h-3" /> },
+    { title: 'milestone.tier_3', range: [11, 20], icon: <Shield className="w-3 h-3" /> },
+    { title: 'milestone.tier_4', range: [21, 50], icon: <Trophy className="w-3 h-3" /> },
+    { title: 'milestone.tier_5', range: [51, 100], icon: <Milestone className="w-3 h-3" /> },
 ];
 
 export const MilestonePath = () => {
@@ -145,10 +145,10 @@ export const MilestonePath = () => {
                         </div>
                         <div className="flex flex-col">
                             <h4 className={`text-[12px] font-black uppercase tracking-widest ${chapter.isPartiallyComplete || chapter.isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-600'}`}>
-                                PART {idx + 1}: {chapter.title}
+                                {t('milestone.part_label', { part: idx + 1 })}: {t(chapter.title)}
                             </h4>
                             <span className="text-[8px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-0.5">
-                                Progression Phase
+                                {t('milestone.progression_phase')}
                             </span>
                         </div>
                         {chapter.isUnlocked ? (
@@ -198,15 +198,17 @@ export const MilestonePath = () => {
                                 <div className="relative z-10 flex flex-col items-center">
                                     <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 mb-4">
                                         <Flame className="w-3 h-3 text-orange-400 animate-pulse" />
-                                        <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">ULTIMATE HORIZON</span>
+                                        <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">{t('level100.ultimate_horizon')}</span>
                                     </div>
 
                                     <h3 className="text-2xl font-black text-white leading-tight tracking-tight uppercase">
-                                        LvL 100 ACHIEVEMENTS
+                                        {t('level100.achievements_title')}
                                     </h3>
 
                                     <p className="text-[11px] font-bold text-blue-100/80 leading-relaxed mt-2 max-w-[220px]">
-                                        Unlock your <span className="text-white font-black underline decoration-blue-400/50 underline-offset-2">Fanocracy Passport</span>. Claim the Physical Platinum Card & 0% Fees for life.
+                                        <Trans i18nKey="level100.achievements_desc">
+                                            Unlock your <span className="text-white font-black underline decoration-blue-400/50 underline-offset-2">Fanocracy Passport</span>. Claim the Physical Platinum Card & 0% Fees for life.
+                                        </Trans>
                                     </p>
 
                                     <motion.button
@@ -218,7 +220,7 @@ export const MilestonePath = () => {
                                         }}
                                         className="mt-6 flex items-center gap-3 px-8 py-4 rounded-2xl bg-white text-blue-600 font-black text-xs shadow-xl shadow-black/10 transition-all hover:bg-blue-50"
                                     >
-                                        DISCOVER LVL 100 BENEFITS
+                                        {t('level100.discover_btn')}
                                         <ArrowRight className="w-4 h-4 animate-bounce-x" />
                                     </motion.button>
 

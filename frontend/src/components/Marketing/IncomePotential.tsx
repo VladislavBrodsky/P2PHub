@@ -394,17 +394,21 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 </div>
 
                                                 <h3 className="text-xl font-black text-white leading-tight">
-                                                    The Largest Wealth Transfer inside the <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-400">Digital Economy</span>
+                                                    <Trans i18nKey="income_details.market_title">
+                                                        The Largest Wealth Transfer inside the <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-400">Digital Economy</span>
+                                                    </Trans>
                                                 </h3>
 
                                                 <div className="space-y-3 py-2">
                                                     <p className="text-sm text-slate-300 leading-relaxed">
-                                                        Crypto adoption is growing <span className="text-white font-bold">2x faster</span> than the Internet did in the 90s.
+                                                        <Trans i18nKey="income_details.market_desc">
+                                                            Crypto adoption is growing <span className="text-white font-bold">2x faster</span> than the Internet did in the 90s.
+                                                        </Trans>
                                                     </p>
                                                     <div className="p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
                                                         <div className="flex justify-between items-center text-xs mb-1">
-                                                            <span className="text-slate-400">Adoption Curve</span>
-                                                            <span className="text-emerald-400 font-bold">You are here (Early)</span>
+                                                            <span className="text-slate-400">{t('income_details.adoption_curve')}</span>
+                                                            <span className="text-emerald-400 font-bold">{t('income_details.you_are_here')}</span>
                                                         </div>
                                                         <div className="h-1.5 w-full bg-slate-700/50 rounded-full overflow-hidden">
                                                             <div className="h-full w-[15%] bg-blue-500 rounded-full relative">
@@ -418,7 +422,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                     onClick={() => setActiveModal(null)}
                                                     className="w-full py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-all hover:scale-[1.02] text-xs tracking-wider uppercase border border-slate-700"
                                                 >
-                                                    Maximize This Opportunity
+                                                    {t('income_details.maximize_btn')}
                                                 </button>
                                             </>
                                         )}
@@ -430,11 +434,13 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 </div>
 
                                                 <h3 className="text-xl font-black text-white leading-tight">
-                                                    Unlock <span className="text-emerald-400">True Passive Income</span>
+                                                    <Trans i18nKey="income_details.revenue_title">
+                                                        Unlock <span className="text-emerald-400">True Passive Income</span>
+                                                    </Trans>
                                                 </h3>
 
                                                 <p className="text-xs text-slate-400 font-medium">
-                                                    Earn lifetime commissions from every action in your network:
+                                                    {t('income_details.revenue_desc')}
                                                 </p>
 
                                                 <div className="space-y-2.5 my-2">
@@ -443,8 +449,8 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                                                         </div>
                                                         <div>
-                                                            <h5 className="text-sm font-bold text-white">Up to 30%</h5>
-                                                            <p className="text-[10px] text-slate-400 uppercase tracking-wide">From Pintopay Card Sales</p>
+                                                            <h5 className="text-sm font-bold text-white">{t('income_details.benefit_1_title')}</h5>
+                                                            <p className="text-[10px] text-slate-400 uppercase tracking-wide">{t('income_details.benefit_1_desc')}</p>
                                                         </div>
                                                     </div>
 
@@ -453,8 +459,8 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                             <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                                                         </div>
                                                         <div>
-                                                            <h5 className="text-sm font-bold text-white">Up to 0.3% (Lifetime)</h5>
-                                                            <p className="text-[10px] text-slate-400 uppercase tracking-wide">From All Network Top-ups</p>
+                                                            <h5 className="text-sm font-bold text-white">{t('income_details.benefit_2_title')}</h5>
+                                                            <p className="text-[10px] text-slate-400 uppercase tracking-wide">{t('income_details.benefit_2_desc')}</p>
                                                         </div>
                                                     </div>
 
@@ -463,8 +469,8 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                             <div className="w-1.5 h-1.5 rounded-full bg-purple-500" />
                                                         </div>
                                                         <div>
-                                                            <h5 className="text-sm font-bold text-white">30% Rewards</h5>
-                                                            <p className="text-[10px] text-slate-400 uppercase tracking-wide">From Partner Network</p>
+                                                            <h5 className="text-sm font-bold text-white">{t('income_details.benefit_3_title')}</h5>
+                                                            <p className="text-[10px] text-slate-400 uppercase tracking-wide">{t('income_details.benefit_3_desc')}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -476,7 +482,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                     }}
                                                     className="w-full py-3.5 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
                                                 >
-                                                    Start Earning Dividends <ArrowRight className="w-4 h-4" />
+                                                    {t('income_details.start_earning')} <ArrowRight className="w-4 h-4" />
                                                 </button>
                                             </>
                                         )}

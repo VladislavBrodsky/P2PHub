@@ -180,7 +180,35 @@ async def get_my_profile(
         await session.commit()
         await session.refresh(partner)
 
-    # 4. Prepare Response - O(1) using materialized totals
+    # 4. Daily Check-in Logic
+    now_dt = datetime.utcnow()
+    today_date = now_dt.date()
+    
+    if partner.last_checkin_at:
+        last_date = partner.last_checkin_at.date()
+        if last_date < today_date:
+            if last_date == today_date - timedelta(days=1):
+                # Consecutive day
+                partner.checkin_streak += 1
+            else:
+                # Streak broken
+                partner.checkin_streak = 1
+            partner.last_checkin_at = now_dt
+            session.add(partner)
+            await session.commit()
+            await session.refresh(partner)
+            # Invalidate cache since streak changed
+            await redis_service.client.delete(cache_key)
+    else:
+        # First check-in
+        partner.checkin_streak = 1
+        partner.last_checkin_at = now_dt
+        session.add(partner)
+        await session.commit()
+        await session.refresh(partner)
+        await redis_service.client.delete(cache_key)
+
+    # 5. Prepare Response - O(1) using materialized totals
     task_ids = [pt.task_id for pt in partner.completed_task_records]
     partner_dict = partner.model_dump()
     partner_dict["completed_tasks"] = json.dumps(task_ids)
@@ -491,8 +519,11 @@ async def claim_task_reward(
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
-    # SECURITY FIX: Use backend source of truth for reward
-    xp_reward = get_task_reward(task_id)
+    # 1. SECURITY FIX: Use backend source of truth for reward and configuration
+    from app.core.tasks import get_task_config
+    config = get_task_config(task_id)
+    xp_reward = config.get('reward', 0)
+    
     if xp_reward <= 0:
          raise HTTPException(status_code=400, detail="Invalid or unsupported task")
 
@@ -503,7 +534,19 @@ async def claim_task_reward(
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
 
-    # Check if task already completed in the new table
+    # 2. VALIDATION: Check requirements based on task type
+    task_type = config.get('type')
+    requirement = config.get('requirement', 0)
+
+    if task_type == 'referral':
+        if partner.referral_count < requirement:
+            raise HTTPException(status_code=400, detail=f"Requirement not met: {requirement} referrals needed.")
+    elif task_type == 'action':
+        if partner.checkin_streak < requirement:
+            # Maybe the task is recurring or something else, but for now we expect streak
+            raise HTTPException(status_code=400, detail=f"Requirement not met: {requirement} day streak needed.")
+
+    # 3. Check if task already completed in the new table
     already_completed = any(pt.task_id == task_id for pt in partner.completed_task_records)
 
     if not already_completed:

@@ -23,6 +23,8 @@ interface User {
     subscription_plan: string | null;
     total_network_size: number;
     pro_notification_seen: boolean;
+    last_checkin_at: string | null;
+    checkin_streak: number;
 }
 
 interface UserContextType {
@@ -110,7 +112,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     pro_expires_at: null,
                     subscription_plan: null,
                     total_network_size: 0,
-                    pro_notification_seen: false
+                    pro_notification_seen: false,
+                    last_checkin_at: null,
+                    checkin_streak: 0
                 };
                 setUser(fallbackUser);
             }
@@ -144,7 +148,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         pro_expires_at: null,
                         subscription_plan: "DEV_PRO",
                         total_network_size: 25,
-                        pro_notification_seen: false
+                        pro_notification_seen: false,
+                        last_checkin_at: new Date().toISOString(),
+                        checkin_streak: 5
                     };
                     setUser(devUser);
                     setIsLoading(false);
