@@ -58,8 +58,14 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         fetchConfig();
     }, [updateProgress]);
 
+    const contextValue = React.useMemo(() => ({
+        config,
+        isLoading,
+        error
+    }), [config, isLoading, error]);
+
     return (
-        <ConfigContext.Provider value={{ config, isLoading, error }}>
+        <ConfigContext.Provider value={contextValue}>
             {children}
         </ConfigContext.Provider>
     );

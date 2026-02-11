@@ -67,7 +67,16 @@ export const PartnerDashboard = () => {
         }
     };
 
-    // ... (existing code)
+    // #comment: Memoize handlers to prevent infinite re-render loops when passed to children with useEffect dependencies
+    const handleMetricsUpdate = React.useCallback((m: { growth_pct: number; current_count: number }) => {
+        setGrowthPct(m.growth_pct);
+    }, []);
+
+    const handleExplorerOpen = React.useCallback(() => {
+        selection();
+        setIsExplorerOpen(true);
+    }, [selection]);
+
 
     return (
         <>
@@ -87,10 +96,7 @@ export const PartnerDashboard = () => {
                     </div>
                     <div
                         className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm active:scale-95 transition-transform cursor-pointer relative group overflow-hidden"
-                        onClick={() => {
-                            selection();
-                            setIsExplorerOpen(true);
-                        }}
+                        onClick={handleExplorerOpen}
                     >
                         <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-colors" />
                         <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1 flex items-center justify-between">
@@ -111,13 +117,13 @@ export const PartnerDashboard = () => {
                     <ReferralGrowthChart
                         timeframe={timeframe}
                         setTimeframe={setTimeframe}
-                        onMetricsUpdate={(m) => setGrowthPct(m.growth_pct)}
-                        onReportClick={() => setIsExplorerOpen(true)}
+                        onMetricsUpdate={handleMetricsUpdate}
+                        onReportClick={handleExplorerOpen}
                     />
                     {/* Explorer is now an overlay, but we might want a teaser here or just hide it */}
                     <div
                         className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
-                        onClick={() => setIsExplorerOpen(true)}
+                        onClick={handleExplorerOpen}
                     >
                         <div className="flex items-center gap-3">
                             <div className="bg-blue-500/10 p-2 rounded-xl text-blue-600 dark:text-blue-400">

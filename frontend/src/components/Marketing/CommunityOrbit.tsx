@@ -54,19 +54,19 @@ const CryptoIcon = memo(({ name }: { name: string }) => {
     );
 });
 
-export const CommunityOrbit = memo(() => {
-    // Interleave avatars and crypto icons - EXACTLY 8 ITEMS
-    const orbitItems = [
-        { type: 'avatar' as const, src: AVATARS[0] },
-        { type: 'crypto' as const, ...CRYPTO_ICONS[0] }, // BTC
-        { type: 'avatar' as const, src: AVATARS[1] },
-        { type: 'crypto' as const, ...CRYPTO_ICONS[1] }, // ETH
-        { type: 'avatar' as const, src: AVATARS[2] },
-        { type: 'crypto' as const, ...CRYPTO_ICONS[2] }, // USDT
-        { type: 'avatar' as const, src: AVATARS[3] },
-        { type: 'crypto' as const, ...CRYPTO_ICONS[3] }, // TON
-    ];
+// Interleave avatars and crypto icons - EXACTLY 8 ITEMS
+const ORBIT_ITEMS: OrbitItem[] = [
+    { type: 'avatar' as const, src: AVATARS[0] },
+    { type: 'crypto' as const, ...CRYPTO_ICONS[0] }, // BTC
+    { type: 'avatar' as const, src: AVATARS[1] },
+    { type: 'crypto' as const, ...CRYPTO_ICONS[1] }, // ETH
+    { type: 'avatar' as const, src: AVATARS[2] },
+    { type: 'crypto' as const, ...CRYPTO_ICONS[2] }, // USDT
+    { type: 'avatar' as const, src: AVATARS[3] },
+    { type: 'crypto' as const, ...CRYPTO_ICONS[3] }, // TON
+];
 
+export const CommunityOrbit = memo(() => {
     return (
         <div className="relative flex h-[420px] w-full items-center justify-center overflow-visible">
             {/* Background Particles/Stars */}
@@ -98,8 +98,8 @@ export const CommunityOrbit = memo(() => {
 
 
             {/* Orbiting Avatars & Crypto Icons */}
-            {orbitItems.map((item, i) => (
-                <OrbitingItem key={i} item={item} index={i} total={orbitItems.length} />
+            {ORBIT_ITEMS.map((item, i) => (
+                <OrbitingItem key={i} item={item} index={i} total={ORBIT_ITEMS.length} />
             ))}
         </div>
     );
@@ -190,11 +190,13 @@ const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: num
     const angle = (index / total) * 360;
     const [cachedSrc, setCachedSrc] = useState<string | null>(null);
 
+    const itemSrc = item.type === 'avatar' ? item.src : undefined;
+
     useEffect(() => {
-        if (item.type === 'avatar' && item.src) {
-            ImageCacheService.fetchAndCache(item.src).then(setCachedSrc);
+        if (item.type === 'avatar' && itemSrc) {
+            ImageCacheService.fetchAndCache(itemSrc).then(setCachedSrc);
         }
-    }, [item]);
+    }, [item.type, itemSrc]);
 
     return (
         <motion.div

@@ -46,8 +46,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
     }, [theme]);
 
+    const contextValue = React.useMemo(() => ({
+        theme,
+        setTheme
+    }), [theme]);
+
     return (
-        <ThemeContext.Provider value={{ theme, setTheme }}>
+        <ThemeContext.Provider value={contextValue}>
             {children}
         </ThemeContext.Provider>
     );

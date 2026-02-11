@@ -30,8 +30,16 @@ export const StartupProgressProvider: React.FC<{ children: React.ReactNode }> = 
         setTimeout(() => setIsComplete(true), 800);
     }, []);
 
+    const contextValue = React.useMemo(() => ({
+        progress,
+        status,
+        updateProgress,
+        isComplete,
+        complete
+    }), [progress, status, updateProgress, isComplete, complete]);
+
     return (
-        <StartupProgressContext.Provider value={{ progress, status, updateProgress, isComplete, complete }}>
+        <StartupProgressContext.Provider value={contextValue}>
             {children}
         </StartupProgressContext.Provider>
     );

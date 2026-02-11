@@ -122,7 +122,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             setIsLoading(false);
         }
         // #comment: Added updateProgress to dependencies to ensure refreshUser uses the latest progress tracking function
-    }, [user, updateProgress]); // user dependency needed for fallback check '&& !user'
+    }, [updateProgress]); // user dependency removed as '&& !user' is checked against current closure or state, but more importantly, we want this stable.
 
     useEffect(() => {
         const init = async () => {
@@ -194,8 +194,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         return () => window.removeEventListener('focus', handleFocus);
     }, [refreshUser]);
 
+    const contextValue = React.useMemo(() => ({
+        user,
+        isLoading,
+        refreshUser,
+        updateUser
+    }), [user, isLoading, refreshUser, updateUser]);
+
     return (
-        <UserContext.Provider value={{ user, isLoading, refreshUser, updateUser }}>
+        <UserContext.Provider value={contextValue}>
             {children}
         </UserContext.Provider>
     );
