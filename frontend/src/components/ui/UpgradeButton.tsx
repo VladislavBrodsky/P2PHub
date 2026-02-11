@@ -19,12 +19,14 @@ export const UpgradeButton = ({ onClick, className = '', showPrice = true }: Upg
 
     if (isPro) {
         return (
-            <div className={`relative overflow-hidden group rounded-xl bg-linear-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 p-1 ${className}`}>
+            <div className={`relative overflow-hidden group rounded-full bg-linear-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 p-1 ${className}`}>
                 <div className="absolute inset-0 bg-amber-500/5 group-hover:bg-amber-500/10 transition-colors" />
-                <div className="relative flex items-center justify-center gap-2 py-2.5 px-4">
+                <div className="relative flex items-center justify-center gap-3 py-2 px-6">
                     <Crown className="w-4 h-4 text-amber-500 fill-amber-500/20" />
                     <span className="text-xs font-black text-amber-500 uppercase tracking-widest">PRO Active</span>
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                    <div className="bg-emerald-500/20 p-0.5 rounded-full border border-emerald-500/30">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+                    </div>
                 </div>
             </div>
         );
