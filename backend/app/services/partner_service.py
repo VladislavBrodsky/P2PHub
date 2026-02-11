@@ -383,13 +383,14 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
 
     # Calculate levels using the distance from base_depth
     query = text("""
-        SELECT
-            (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level,
-            COUNT(*) as count
-        FROM partner
-        WHERE (path = :search_path OR path LIKE :search_wildcard)
+        SELECT level, COUNT(*) as count
+        FROM (
+            SELECT (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level
+            FROM partner
+            WHERE (path = :search_path OR path LIKE :search_wildcard)
+        ) as subquery
+        WHERE level >= 1 AND level <= 9
         GROUP BY 1
-        HAVING level >= 1 AND level <= 9
         ORDER BY level;
     """)
 
@@ -426,9 +427,12 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
     query = text("""
         SELECT telegram_id, username, first_name, last_name, xp, photo_url, created_at,
                balance, level as partner_level, referral_code, is_pro, updated_at, id, photo_file_id
-        FROM partner
-        WHERE (path = :search_path OR path LIKE :search_wildcard)
-        AND (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) = :target_depth
+        FROM (
+            SELECT *, (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) as depth
+            FROM partner
+            WHERE (path = :search_path OR path LIKE :search_wildcard)
+        ) as subquery
+        WHERE depth = :target_depth
         ORDER BY xp DESC
         LIMIT 100;
     """)

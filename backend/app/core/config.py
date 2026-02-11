@@ -4,6 +4,9 @@ from typing import Optional
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
+import time
+start_time = time.time()
+
 try:
     # Try common .env locations with error handling
     possible_env_paths = [
@@ -20,7 +23,7 @@ try:
         try:
             if p.exists():
                 load_dotenv(dotenv_path=p)
-                print(f"✅ Loaded environment from {p.absolute()}")
+                print(f"✅ Loaded environment from {p.absolute()} (took {time.time() - start_time:.4f}s)")
                 loaded_env = True
                 break
         except Exception:
@@ -29,8 +32,11 @@ try:
     if not loaded_env:
         # Fallback to default load_dotenv (current dir)
         load_dotenv()
+        print(f"ℹ️ Fallback to default .env loading (took {time.time() - start_time:.4f}s)")
 except Exception as e:
     print(f"Warning: Unexpected error during .env loading: {e}")
+
+settings_init_start = time.time()
 
 class Settings(BaseSettings):
     # Required environment variables (with defaults for local development/migrations)
@@ -82,3 +88,4 @@ class Settings(BaseSettings):
         extra = "ignore"
 
 settings = Settings()
+print(f"⚙️ Settings initialized in {time.time() - settings_init_start:.4f}s")
