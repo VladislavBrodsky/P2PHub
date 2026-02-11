@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { apiClient } from '../api/client';
+// #comment: Added missing import for useStartupProgress to track initialization progress in the config context
+import { useStartupProgress } from './StartupProgressContext';
 
 interface PublicConfig {
     ton_manifest_url: string;
@@ -26,12 +28,16 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<any>(null);
 
+    const { updateProgress } = useStartupProgress();
+
     useEffect(() => {
         const fetchConfig = async () => {
+            updateProgress(20, 'Loading Configuration...');
             try {
                 // Use a shorter timeout specifically for the public config to fail fast
                 const response = await apiClient.get('/api/config/public', { timeout: 5000 });
                 setConfig(response.data);
+                updateProgress(40, 'Config Synced');
                 setIsLoading(false);
             } catch (err) {
                 console.error('[Config] Failed to fetch config, using fallbacks:', err);
@@ -44,12 +50,13 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                     admin_usdt_address: "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM",
                     is_debug: false
                 });
+                updateProgress(40, 'Using Offline Config');
                 setIsLoading(false);
             }
         };
 
         fetchConfig();
-    }, []);
+    }, [updateProgress]);
 
     return (
         <ConfigContext.Provider value={{ config, isLoading, error }}>

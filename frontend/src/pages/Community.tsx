@@ -6,7 +6,8 @@ import { PartnerDashboard } from '../components/Partner/PartnerDashboard';
 import { PartnerAcademy } from '../components/Partner/PartnerAcademy';
 import { cn } from '../lib/utils';
 import { useTranslation } from 'react-i18next';
-import { Info, HelpCircle } from 'lucide-react';
+// #comment: Removed unused HelpCircle icon from lucide-react to clean up the import list
+import { Info } from 'lucide-react';
 import { PartnerBriefingModal } from '../components/Partner/PartnerBriefingModal';
 
 export default function CommunityPage() {

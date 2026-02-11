@@ -1,5 +1,5 @@
 import { AcademyCareerStair } from './AcademyCareerStair';
-import { Target, Sparkles, TrendingUp, Award } from 'lucide-react';
+import { Sparkles, TrendingUp, Award } from 'lucide-react';
 
 export const PartnerAcademy = () => {
     return (

@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, lazy } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useHaptic } from '../hooks/useHaptic';
 import { EarnHeader } from '../components/Earn/EarnHeader';
-import { TaskCard } from '../components/Earn/TaskCard';
+// import { TaskCard } from '../components/Earn/TaskCard'; // Unused
 import { ReferralWidget } from '../components/Earn/ReferralWidget';
 import { LazyLoader } from '../components/ui/LazyLoader';
 
@@ -10,14 +10,14 @@ const MilestonePath = lazy(() => import('../components/Earn/MilestonePath').then
 const TaskGrid = lazy(() => import('../components/Earn/TaskGrid').then(m => ({ default: m.TaskGrid })));
 const LevelUpModal = lazy(() => import('../components/Earn/LevelUpModal').then(m => ({ default: m.LevelUpModal })));
 
-import { EARN_TASKS, Task, MILESTONES } from '../data/earnData';
+import { EARN_TASKS, Task } from '../data/earnData';
 import { useUser } from '../context/UserContext';
 import { Confetti } from '../components/ui/Confetti';
-import { CheckCircle2, Trophy, QrCode, X, Share2, Download, Copy, ExternalLink, Send, FileText, Sparkles } from 'lucide-react';
+import { X, Share2, Download, Copy, ExternalLink, Send, FileText, Sparkles } from 'lucide-react';
 import { BriefTermsModal } from '../components/Earn/BriefTermsModal';
 import { UpgradeButton } from '../components/ui/UpgradeButton';
 import { useTranslation, Trans } from 'react-i18next';
-import { getSafeLaunchParams } from '../utils/tma';
+// import { getSafeLaunchParams } from '../utils/tma'; // Unused
 import { apiClient } from '../api/client';
 import { getLevel } from '../utils/ranking';
 import { getApiUrl } from '../utils/api';
@@ -31,7 +31,7 @@ export default function ReferralPage() {
 
 
     // Local State for Instant Feedback
-    const [tasksList, setTasksList] = useState<Task[]>(EARN_TASKS);
+    // const [tasksList, setTasksList] = useState<Task[]>(EARN_TASKS); // Unused
     const [completedTaskIds, setCompletedTaskIds] = useState<string[]>([]);
     const [verifyingTasks, setVerifyingTasks] = useState<Record<string, number>>({});
     const [claimableTasks, setClaimableTasks] = useState<string[]>([]);
@@ -470,10 +470,7 @@ export default function ReferralPage() {
             {/* Content Stack - Optimized for stability and z-index safety */}
             <div className="flex flex-col gap-4 relative w-full">
                 <div className="relative min-h-[380px]">
-                    <EarnHeader onUpgrade={() => {
-                        selection();
-                        window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
-                    }} />
+                    <EarnHeader />
                 </div>
 
                 <div className="relative z-10 mt-2">

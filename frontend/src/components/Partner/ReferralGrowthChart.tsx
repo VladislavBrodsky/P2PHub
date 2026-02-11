@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect, useId } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TrendingUp, Users, Calendar, Filter, ChevronDown } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { TrendingUp, Users, ChevronDown } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useHaptic } from '../../hooks/useHaptic';
 
@@ -37,18 +36,15 @@ interface ReferralGrowthChartProps {
 }
 
 export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe, setTimeframe }: ReferralGrowthChartProps) => {
-    const { t } = useTranslation();
     const { selection } = useHaptic();
     const gradientId = useId();
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
     const [metrics, setMetrics] = useState({ growth_pct: 0, current_count: 0 });
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
-            setIsLoading(true);
             try {
                 // Fetch Chart Data and Metrics in parallel
                 const [chartRes, metricsRes] = await Promise.all([
@@ -66,8 +62,6 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                 }
             } catch (e) {
                 console.error("Failed to fetch growth data", e);
-            } finally {
-                setIsLoading(false);
             }
         };
         fetchData();
@@ -100,7 +94,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
         const height = 100;
         const stepX = width / (chartData.length - 1);
 
-        return chartLevelsWithBounds.map(({ index, bounds }) => {
+        return chartLevelsWithBounds.map(({ bounds }) => {
             let path = ``;
             let hasValidPoints = false;
             bounds.forEach((bound, idx) => {
@@ -285,7 +279,6 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                     <div className="absolute top-0 bottom-0 left-2 right-2">
                         {chartData.map((point: ChartDataPoint, index: number) => {
                             const width = 100;
-                            const height = 100;
                             const stepX = width / (chartData.length - 1);
                             const x = index * stepX; // percentage 0-100
                             const y = (1 - (point.total / maxValue) * 0.9) * 100; // percentage 0-100 (inverted for CSS top)

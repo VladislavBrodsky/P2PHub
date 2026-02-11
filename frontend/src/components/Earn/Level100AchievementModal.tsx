@@ -1,5 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Star, Sparkles, X, ChevronRight, ShieldCheck, Zap, Gem, CreditCard, Share2 } from 'lucide-react';
+// #comment: Removed unused Star and ChevronRight icons from lucide-react to clean up the import list
+import { Trophy, Sparkles, X, ShieldCheck, Zap, Gem, CreditCard, Share2 } from 'lucide-react';
+// #comment: Removed unused t variable from useTranslation as local benefit texts are used instead
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
 import { useHaptic } from '../../hooks/useHaptic';
@@ -10,7 +12,7 @@ interface Level100AchievementModalProps {
 }
 
 export const Level100AchievementModal = ({ isOpen, onClose }: Level100AchievementModalProps) => {
-    const { t } = useTranslation();
+    useTranslation();
     const { user } = useUser();
     const { impact } = useHaptic();
 
@@ -63,8 +65,10 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center overflow-hidden">
+                <div className="fixed inset-0 z-100 flex items-end sm:items-center justify-center overflow-hidden">
                     {/* Immersive Backdrop */}
+                    // #comment: Updated z-index to standard Tailwind 4.0 class for better compatibility
+                    // #comment: Updated z-index to standard Tailwind 4.0 class for better compatibility
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}

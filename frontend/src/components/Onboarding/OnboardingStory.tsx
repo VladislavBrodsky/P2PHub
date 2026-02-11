@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+// #comment: Removed unused useTranslation import from OnboardingStory.tsx to address linting warnings
 import { X, ChevronRight, Zap, Target, Shield, Rocket } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
 
 interface OnboardingStoryProps {
@@ -37,7 +37,6 @@ const STORIES = [
 
 export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
     const [index, setIndex] = useState(0);
-    const { t } = useTranslation();
     const { selection, notification } = useHaptic();
 
     const next = () => {

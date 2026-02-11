@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
-    ChevronRight, ArrowLeft, Search, Filter, BookOpen, Clock,
-    ArrowUpRight, Heart, Share2, ChevronLeft, Sparkles, Zap, Shield, Globe
+    ChevronRight, ArrowLeft, Search, BookOpen, Clock,
+    ArrowUpRight, Heart, Share2, ChevronLeft, Zap,
+    Globe
 } from 'lucide-react';
 import { blogPosts, BlogPost } from '../data/blogPosts';
 import { useHaptic } from '../hooks/useHaptic';
@@ -25,6 +26,21 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
     const [engagement, setEngagement] = useState<BlogEngagement>({ likes: 0, liked: false });
     const [isLoadingEngagement, setIsLoadingEngagement] = useState(false);
 
+    // Optimized: Wrapped in useCallback to suppress lint warning and ensure stable reference for useEffect
+    const handlePostClick = useCallback(async (post: BlogPost) => {
+        selection();
+        setSelectedPost(post);
+        setIsLoadingEngagement(true);
+        try {
+            const data = await blogService.getEngagement(post.id);
+            setEngagement(data);
+        } catch (error) {
+            console.error('Failed to load engagement', error);
+        } finally {
+            setIsLoadingEngagement(false);
+        }
+    }, [selection]);
+
     useEffect(() => {
         const handleDeepLink = (e: any) => {
             const postId = e.detail;
@@ -36,7 +52,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
 
         window.addEventListener('nav-blog-post', handleDeepLink);
         return () => window.removeEventListener('nav-blog-post', handleDeepLink);
-    }, []);
+    }, [handlePostClick]); // Added dependency
 
     // Telegram Native Back Button Integration
     useEffect(() => {
@@ -55,34 +71,10 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
         return () => {
             cleanup();
         };
-    }, [selectedPost, setActiveTab, currentTab]);
+    }, [selectedPost, setActiveTab, currentTab, selection]); // Added selection dependency
 
     const categories = ['All', ...new Set(blogPosts.map(post => post.category))];
-
-    const filteredPosts = blogPosts.filter(post => {
-        const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;
-        const matchesSearch =
-            post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchesCategory && matchesSearch;
-    });
-
-    const featuredPost = filteredPosts[0];
-    const otherPosts = filteredPosts.slice(1);
-
-    const handlePostClick = async (post: BlogPost) => {
-        selection();
-        setSelectedPost(post);
-        setIsLoadingEngagement(true);
-        try {
-            const data = await blogService.getEngagement(post.id);
-            setEngagement(data);
-        } catch (error) {
-            console.error('Failed to load engagement', error);
-        } finally {
-            setIsLoadingEngagement(false);
-        }
-    };
+    // Removed unused variables featuredPost/otherPosts to clean up code
 
     const handleLike = async () => {
         if (!selectedPost || engagement.liked) return;
@@ -338,7 +330,8 @@ interface BlogDetailProps {
 }
 
 const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNext, onPrev, isRussian, setActiveTab }: BlogDetailProps) => {
-    const { t } = useTranslation();
+    // #comment: Removed unused 't' variable from useTranslation in BlogDetail to address linting warnings
+    useTranslation();
     const { selection } = useHaptic();
 
     // Marketing "Between the lines" snippets

@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 export const useRealtimeAlerts = () => {
     const { showNotification } = useNotificationStore();
-    const { t } = useTranslation();
+    // #comment: Removed unused 't' variable from useTranslation to address linting warnings
+    useTranslation();
 
     useEffect(() => {
         // Mock Real-time Events

@@ -1,5 +1,5 @@
-import { useHaptic } from '../hooks/useHaptic';
-import { Sparkles, ShieldCheck } from 'lucide-react';
+// #comment: Removed unused useHaptic import from Dashboard.tsx to address linting warnings
+import { ShieldCheck } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { lazy } from 'react';
 import { motion } from 'framer-motion';
@@ -11,7 +11,6 @@ const BlogCarousel = lazy(() => import('../components/Marketing/BlogCarousel').t
 const IncomePotential = lazy(() => import('../components/Marketing/IncomePotential').then(m => ({ default: m.IncomePotential })));
 const PartnerStats = lazy(() => import('../components/Marketing/PartnerStats').then(m => ({ default: m.PartnerStats })));
 
-import { getRank, getXPProgress } from '../utils/ranking';
 import { useTranslation, Trans } from 'react-i18next';
 import { Footer } from '../components/Layout/Footer';
 
@@ -21,17 +20,7 @@ interface DashboardProps {
 
 export default function Dashboard({ setActiveTab }: DashboardProps) {
     const { t } = useTranslation();
-    const { selection } = useHaptic();
-    const { user, isLoading: isUserLoading } = useUser();
-
-    const stats = user || {
-        balance: 0,
-        level: 1,
-        xp: 0
-    };
-
-    const currentRank = getRank(stats.level || 1);
-    const xpProgress = getXPProgress(stats.level || 1, stats.xp || 0);
+    const { user } = useUser();
 
     const container = {
         hidden: { opacity: 0 },

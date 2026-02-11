@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Crown, CheckCircle2, Sparkles, X, Rocket, Zap } from 'lucide-react';
+import { Crown, Sparkles, X, Rocket, Zap } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Confetti } from '../ui/Confetti';
 import { useHaptic } from '../../hooks/useHaptic';
@@ -17,7 +17,7 @@ export const ProWelcomeCard = ({ isOpen, onClose }: ProWelcomeCardProps) => {
         if (isOpen) {
             notification('success');
         }
-    }, [isOpen]);
+    }, [isOpen, notification]);
 
     return (
         <AnimatePresence>

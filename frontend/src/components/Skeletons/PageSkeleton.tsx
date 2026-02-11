@@ -1,3 +1,4 @@
+// #comment: No changes needed in PageSkeleton.tsx as Skeleton import is required
 import { Skeleton } from '../Skeleton';
 
 export const PageSkeleton = () => {

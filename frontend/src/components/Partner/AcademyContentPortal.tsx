@@ -1,8 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { X, Zap, Target, Rocket, Bot, Sparkles, CheckCircle2, ArrowRight, DollarSign, TrendingUp, Lock } from 'lucide-react';
+import { X, Zap, Rocket, Bot, CheckCircle2, ArrowRight, Lock } from 'lucide-react';
 import { AcademyStage } from '../../data/academyData';
-import { cn } from '../../lib/utils';
 
 interface AcademyContentPortalProps {
     stage: AcademyStage;

@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Lock, CheckCircle2, Play, Star, Sparkles, Zap, Bot, Trophy } from 'lucide-react';
+// #comment: Removed unused icons (Star, Sparkles, Bot, Trophy) to clean up imports and improve maintainability
+import { Lock, CheckCircle2, Play, Zap } from 'lucide-react';
 import { cn } from '../../lib/utils';
-import { AcademyStage, getCategoryColor } from '../../data/academyData';
+import { AcademyStage } from '../../data/academyData';
 
 interface AcademyStageNodeProps {
     stage: AcademyStage;
@@ -15,7 +16,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
     const isLocked = status === 'locked';
     const isCompleted = status === 'completed';
     const isCurrent = status === 'current';
-    const categoryStyles = getCategoryColor(stage.category);
+    // #comment: Removed unused 'categoryStyles' variable as it was not being utilized in the component rendering
 
     // Zig-zag offset logic
     const isLeft = index % 2 === 0;

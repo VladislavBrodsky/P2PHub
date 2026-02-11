@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+// #comment: Refined imports by removing unused Lucide icons and the ListSkeleton component to reduce bundle size and clean up the code
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, Users, Shield, Calendar, Search, X, ChevronRight, UserPlus, AlertCircle } from 'lucide-react';
+import { Users, X, UserPlus, AlertCircle } from 'lucide-react';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
-import { ListSkeleton } from '../Skeletons/ListSkeleton';
 import { cn } from '../../lib/utils';
 import { useHaptic } from '../../hooks/useHaptic';
 import { useUser } from '../../context/UserContext';
@@ -26,7 +26,8 @@ interface NetworkExplorerProps {
 }
 
 export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
-    const { t } = useTranslation();
+    // #comment: Removed unused 't' from useTranslation to address linting warning
+    useTranslation();
     const { selection } = useHaptic();
     const { user } = useUser();
     const [level, setLevel] = useState(1);
@@ -37,8 +38,10 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
     const [isShareOpen, setIsShareOpen] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    // Fetch a single level and cache it
-    const fetchLevel = async (targetLevel: number) => {
+    // #comment: Memoized fetchLevel is not strictly necessary here since it's used within effects that handle their own states, 
+    // but we'll include it in dependency arrays as required by linting rules.
+    // #comment: Wrapped fetchLevel in useCallback to stabilize its reference and resolve exhaustive-deps warnings in effects
+    const fetchLevel = useCallback(async (targetLevel: number) => {
         // Skip if already cached
         if (levelCache[targetLevel]) {
             return levelCache[targetLevel];
@@ -55,15 +58,15 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
             console.error(`Failed to fetch level ${targetLevel}:`, err);
             return null;
         }
-    };
+    }, [levelCache]);
 
     // Prefetch levels 1-3 on mount for instant browsing
     useEffect(() => {
         const prefetchInitialLevels = async () => {
             setIsLoading(true);
             try {
-                // Fetch levels 1, 2, 3 in parallel
-                const [l1, l2, l3] = await Promise.all([
+                // #comment: Removed unused l2, l3 variables from destructuring to clean up the prefetch logic
+                const [l1] = await Promise.all([
                     fetchLevel(1),
                     fetchLevel(2),
                     fetchLevel(3)
@@ -82,7 +85,8 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
         };
 
         prefetchInitialLevels();
-    }, []);
+        // #comment: Added fetchLevel to dependency array to comply with exhaustive-deps rule
+    }, [fetchLevel]);
 
     // When level changes, update display and prefetch adjacent levels
     useEffect(() => {
@@ -118,7 +122,8 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
         };
 
         updateLevel();
-    }, [level]);
+        // #comment: Added fetchLevel and levelCache to dependency array to ensure effect runs with latest functions/state
+    }, [level, fetchLevel, levelCache]);
 
     // Auto-scroll logic for level selector
     useEffect(() => {

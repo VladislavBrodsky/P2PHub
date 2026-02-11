@@ -33,13 +33,16 @@ try {
 
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { ConfigProvider } from './context/ConfigContext'
+import { StartupProgressProvider } from './context/StartupProgressContext'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
-            <ConfigProvider>
-                <App />
-            </ConfigProvider>
+            <StartupProgressProvider>
+                <ConfigProvider>
+                    <App />
+                </ConfigProvider>
+            </StartupProgressProvider>
         </QueryClientProvider>
     </ErrorBoundary>,
 )

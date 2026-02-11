@@ -1,9 +1,9 @@
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AcademyStageNode } from './AcademyStageNode';
 import { ACADEMY_STAGES, AcademyStage } from '../../data/academyData';
 import { useUser } from '../../context/UserContext';
-import { Trophy, Star, Sparkles, Lock, ChevronDown, ChevronUp } from 'lucide-react';
+import { Trophy, ChevronDown } from 'lucide-react';
 import { AcademyContentPortal } from './AcademyContentPortal';
 
 export const AcademyCareerStair = () => {
@@ -70,7 +70,6 @@ export const AcademyCareerStair = () => {
                 {stages.slice(0, visibleStages).map((stage, index) => {
                     let status: 'locked' | 'available' | 'completed' | 'current' = 'locked';
 
-                    const isUnlockedByLevel = currentMaxStage >= stage.id;
                     const isProLocked = stage.isPro && !user?.is_pro;
 
                     if (completedStages.includes(stage.id)) {

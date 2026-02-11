@@ -6,7 +6,8 @@ import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
 
 export const TopPartnersList = () => {
-    const { t } = useTranslation();
+    // #comment: Removed unused 't' variable from useTranslation to address linting warnings
+    useTranslation();
     const [topPartners, setTopPartners] = React.useState<any[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [isExpanded, setIsExpanded] = React.useState(false);

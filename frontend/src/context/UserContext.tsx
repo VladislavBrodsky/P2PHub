@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { apiClient } from '../api/client';
 import { getSafeLaunchParams } from '../utils/tma';
+import { useStartupProgress } from './StartupProgressContext';
 
 interface User {
     id: number;
@@ -47,20 +48,23 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [isLoading, setIsLoading] = useState(!user);
     const lastRefresh = React.useRef(0);
 
-    const updateUser = (updates: Partial<User>) => {
+    const updateUser = React.useCallback((updates: Partial<User>) => {
         setUser(prev => {
             const next = prev ? { ...prev, ...updates } : null;
             if (next) localStorage.setItem('p2p_user_cache', JSON.stringify(next));
             return next;
         });
-    };
+    }, []);
 
-    const refreshUser = async () => {
+    const { updateProgress } = useStartupProgress();
+
+    const refreshUser = React.useCallback(async () => {
         const now = Date.now();
         // Throttle refreshes to once every 10 seconds unless forced
         if (now - lastRefresh.current < 10000) return;
         lastRefresh.current = now;
 
+        updateProgress(60, 'Fetching Profile...');
         let tgUser: any = null;
         try {
             // Use Safe SDK helper to get initData without crashing in browser
@@ -73,8 +77,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
             const userData = res.data;
 
-
-
             // Enrich with Telegram SDK data if backend is missing details
             if (tgUser) {
                 if (!userData.photo_url && tgUser.photoUrl) userData.photo_url = tgUser.photoUrl;
@@ -84,12 +86,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
             console.log('[DEBUG] refreshUser: Success:', userData.first_name);
             setUser(userData);
+            updateProgress(90, 'User Verified');
             localStorage.setItem('p2p_user_cache', JSON.stringify(userData));
         } catch (error) {
             console.error('[DEBUG] refreshUser: Failed:', error);
             // Fallback: If backend fails, use Telegram SDK data for UI personalization (Optimistic UI)
             if (tgUser && !user) {
-                const fallbackUser = {
+                const fallbackUser: any = {
                     id: tgUser.id,
                     telegram_id: String(tgUser.id),
                     username: tgUser.username || null,
@@ -114,7 +117,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         } finally {
             setIsLoading(false);
         }
-    };
+        // #comment: Added updateProgress to dependencies to ensure refreshUser uses the latest progress tracking function
+    }, [user, updateProgress]); // user dependency needed for fallback check '&& !user'
 
     useEffect(() => {
         const init = async () => {
@@ -182,7 +186,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
         window.addEventListener('focus', handleFocus);
         return () => window.removeEventListener('focus', handleFocus);
-    }, []);
+    }, [refreshUser]);
 
     return (
         <UserContext.Provider value={{ user, isLoading, refreshUser, updateUser }}>

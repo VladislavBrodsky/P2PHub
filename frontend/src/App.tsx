@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { AnimatePresence, LazyMotion, domAnimation } from 'framer-motion';
+import { AnimatePresence, LazyMotion, domAnimation, motion } from 'framer-motion';
 import { Layout } from './components/Layout/Layout';
 // Lazy load pages
 const DashboardLoader = () => import('./pages/Dashboard');
@@ -38,37 +38,43 @@ import { ThemeProvider } from './context/ThemeContext';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { isTMA } from './utils/tma';
 import { useUser } from './context/UserContext';
-import { apiClient } from './api/client';
+// #comment: Removed unused apiClient, Skeleton and PageSkeleton imports to clean up the dependency list
 import { NotificationOverlay } from './components/ui/NotificationOverlay';
 import { useRealtimeAlerts } from './hooks/useRealtimeAlerts';
-import { Skeleton } from './components/Skeleton';
-import { PageSkeleton } from './components/Skeletons/PageSkeleton';
 import { OnboardingStory } from './components/Onboarding/OnboardingStory';
 import { useConfig } from './context/ConfigContext';
 import { FeatureErrorBoundary } from './components/FeatureErrorBoundary';
+import { StartupLoader } from './components/ui/StartupLoader';
+import { useStartupProgress } from './context/StartupProgressContext';
 
-function AppContent() {
+import { RevealSkeleton } from './components/Skeletons/RevealSkeleton';
+
+function AppContent({ onReady }: { onReady: () => void }) {
     const { config } = useConfig();
     const [activeTab, setActiveTab] = useState('home');
     const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set(['home']));
-    const [showOnboarding, setShowOnboarding] = useState(false);
-    const { user, updateUser } = useUser();
+    // #comment: Removed unused showOnboarding state in AppContent as it is managed in the parent App component
+    const { isLoading: isUserLoading } = useUser();
+    const { updateProgress } = useStartupProgress();
     useRealtimeAlerts();
 
-    // Check onboarding status
+    // Signal completion when both user and config are ready
     useEffect(() => {
-        const hasOnboarded = localStorage.getItem('p2p_onboarded');
-        if (!hasOnboarded) {
-            setShowOnboarding(true);
+        if (!isUserLoading && config) {
+            updateProgress(95, 'Finalizing UI...');
+            // Small delay to ensure smooth transition
+            const timer = setTimeout(onReady, 500);
+            return () => clearTimeout(timer);
         }
-    }, []);
+    }, [isUserLoading, config, onReady, updateProgress]);
 
     // Track visited tabs to keep components mounted after first load
     useEffect(() => {
         if (!visitedTabs.has(activeTab)) {
             setVisitedTabs(prev => new Set(prev).add(activeTab));
         }
-    }, [activeTab]);
+        // #comment: Added visitedTabs to the dependency array to ensure the effect has access to the latest state
+    }, [activeTab, visitedTabs]);
 
     // Initialize TMA SDK once
     useEffect(() => {
@@ -130,13 +136,14 @@ function AppContent() {
                 }
 
                 console.log('[DEBUG] initTMA: Complete');
+                updateProgress(98, 'Interface Ready');
             } catch (e) {
                 console.log('Not in TMA environment or SDK error:', e);
             }
         };
 
         initTMA();
-    }, []);
+    }, [updateProgress]);
 
     // Handle Back Button state based on active tab
     useEffect(() => {
@@ -164,7 +171,7 @@ function AppContent() {
 
     return (
         <Layout activeTab={activeTab} setActiveTab={setActiveTab} prefetchPages={prefetchPages}>
-            <Suspense fallback={<PageSkeleton />}>
+            <Suspense fallback={<RevealSkeleton />}>
                 <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
                     {visitedTabs.has('home') && (
                         <FeatureErrorBoundary featureName="Dashboard">
@@ -238,6 +245,7 @@ function AppContent() {
 
 function App() {
     const { config, isLoading: isConfigLoading } = useConfig();
+    const { progress, status, isComplete, complete, updateProgress } = useStartupProgress();
     const [showOnboarding, setShowOnboarding] = useState(false);
 
     // Initial check for onboarding to avoid flash if possible
@@ -248,35 +256,54 @@ function App() {
         }
     }, []);
 
-    if (isConfigLoading) {
-        return (
-            <div className="h-screen w-full bg-(--color-bg-deep) flex items-center justify-center p-8">
-                <Skeleton className="w-full h-full max-w-md rounded-3xl" />
-            </div>
-        );
-    }
+    // Effect to monitor network state/initial data sync
+    useEffect(() => {
+        if (!isConfigLoading) {
+            updateProgress(50, 'Config Loaded');
+            // Start prefetching Dashboard immediately after config
+            DashboardLoader();
+        }
+    }, [isConfigLoading, updateProgress]);
 
     return (
-        <TonConnectUIProvider manifestUrl={config?.ton_manifest_url || "https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json"}>
-            <ThemeProvider>
-                <UserProvider>
-                    <NotificationOverlay />
-                    <LazyMotion features={domAnimation}>
-                        <AnimatePresence mode="wait">
-                            {showOnboarding && (
-                                <OnboardingStory
-                                    onComplete={() => {
-                                        setShowOnboarding(false);
-                                        localStorage.setItem('p2p_onboarded', 'true');
-                                    }}
-                                />
-                            )}
-                        </AnimatePresence>
-                        <AppContent />
-                    </LazyMotion>
-                </UserProvider>
-            </ThemeProvider>
-        </TonConnectUIProvider>
+        <>
+            <AnimatePresence>
+                {!isComplete && (
+                    <motion.div
+                        key="loader"
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.8, ease: "easeInOut" }}
+                        className="fixed inset-0 z-100"
+                    >
+                        <StartupLoader progress={progress} statusText={status} />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            <div className={!isComplete ? 'hidden' : 'block h-full'}>
+                <TonConnectUIProvider manifestUrl={config?.ton_manifest_url || "https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json"}>
+                    <ThemeProvider>
+                        <UserProvider>
+                            <NotificationOverlay />
+                            <LazyMotion features={domAnimation}>
+                                <AnimatePresence mode="wait">
+                                    {showOnboarding && (
+                                        <OnboardingStory
+                                            onComplete={() => {
+                                                setShowOnboarding(false);
+                                                localStorage.setItem('p2p_onboarded', 'true');
+                                            }}
+                                        />
+                                    )}
+                                </AnimatePresence>
+                                <AppContent onReady={complete} />
+                            </LazyMotion>
+                        </UserProvider>
+                    </ThemeProvider>
+                </TonConnectUIProvider>
+            </div>
+        </>
     );
 }
 

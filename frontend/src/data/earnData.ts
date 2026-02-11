@@ -1,6 +1,6 @@
 import {
-    LucideIcon, Users, MessageCircle, CreditCard, Send, CheckCircle2, Lock, Gift, Zap, Star, Trophy, Crown, UserPlus, Shield, Share2,
-    Diamond, Medal, Gem, Flame, Rocket, Sparkles, Target, Award
+    LucideIcon, Users, MessageCircle, CreditCard, Send, CheckCircle2, Zap, Star, Trophy, Crown, Shield,
+    Diamond, Medal, Gem, Flame, Rocket, Target, Award
 } from 'lucide-react';
 
 export interface Achievement {

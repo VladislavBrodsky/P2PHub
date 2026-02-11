@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     CheckCircle, Clock, AlertTriangle, ShieldCheck, RefreshCw,
     User, ExternalLink, TrendingUp, TrendingDown, Users,
-    Zap, DollarSign, PieChart, ArrowRight, Wallet
+    Zap, PieChart, Wallet
+    // #comment: Removed unused DollarSign and ArrowRight icons from lucide-react to clean up the import list
 } from 'lucide-react';
 import { apiClient } from '../api/client';
 import { useUser } from '../context/UserContext';
@@ -51,7 +52,8 @@ interface Transaction {
 }
 
 export const AdminPage = () => {
-    const { user } = useUser();
+    // #comment: Removed unused user variable from useUser as it is not needed in the AdminPage component
+    useUser();
     const [stats, setStats] = useState<DashboardStats | null>(null);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -162,8 +164,8 @@ export const AdminPage = () => {
                         key={mode}
                         onClick={() => setViewMode(mode)}
                         className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${viewMode === mode
-                                ? 'bg-white dark:bg-white/10 shadow-sm text-blue-500'
-                                : 'text-slate-500'
+                            ? 'bg-white dark:bg-white/10 shadow-sm text-blue-500'
+                            : 'text-slate-500'
                             }`}
                     >
                         {mode}

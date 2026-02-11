@@ -47,24 +47,8 @@ export const PartnerDashboard = () => {
 
     const [copied, setCopied] = React.useState(false);
 
-    // Fetch Tree Stats for the Dashboard visualization
-    const [treeStats, setTreeStats] = React.useState<Record<string, number>>({});
     const [timeframe, setTimeframe] = React.useState<'24H' | '7D' | '1M' | '3M' | '6M' | '1Y'>('7D');
     const [growthPct, setGrowthPct] = React.useState<number>(0);
-
-    React.useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                const res = await apiClient.get('/api/partner/tree');
-                if (res.data && typeof res.data === 'object') {
-                    setTreeStats(res.data);
-                }
-            } catch (e) {
-                console.error('Failed to fetch tree stats', e);
-            }
-        };
-        fetchStats();
-    }, []);
 
     // Valid "Network Size" calculation prioritizing materialized O(1) data
     const totalNetworkSize = React.useMemo(() => {
@@ -295,45 +279,6 @@ export const PartnerDashboard = () => {
 };
 
 
-const RecentPartnersSection = () => {
-    const [recentPartners, setRecentPartners] = React.useState<any[]>([]);
-
-    React.useEffect(() => {
-        const fetchRecent = async () => {
-            try {
-                const res = await apiClient.get('/api/partner/recent');
-                setRecentPartners(res.data);
-            } catch (e) {
-                // Silently fail or use mocks
-            }
-        };
-        fetchRecent();
-    }, []);
-
-    if (recentPartners.length === 0) return null;
-
-    return (
-        <div className="flex items-center justify-between px-1 py-1">
-            <div className="flex -space-x-2">
-                {recentPartners.slice(0, 4).map((p, i) => (
-                    <div key={p.id || i} className="w-6 h-6 rounded-full border-2 border-slate-900 bg-slate-800 overflow-hidden">
-                        <img
-                            src={p.photo_file_id
-                                ? `${getApiUrl()}/api/partner/photo/${p.photo_file_id}`
-                                : p.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.username || i}`
-                            }
-                            alt=""
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
-                ))}
-            </div>
-            <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 italic">
-                Social proof: {recentPartners.length}+ active partners joined recently
-            </p>
-        </div>
-    );
-};
 
 const EarningsList = () => {
     const [earnings, setEarnings] = React.useState<any[]>([]);

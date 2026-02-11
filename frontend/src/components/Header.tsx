@@ -1,6 +1,7 @@
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
-import { MoreHorizontal, ChevronDown, X, Crown } from 'lucide-react';
+// #comment: Removed unused ChevronDown and X icons from lucide-react to clean up the import list
+import { MoreHorizontal, Crown } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 
 interface HeaderProps {

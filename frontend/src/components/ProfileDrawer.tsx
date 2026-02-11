@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+// #comment: Removed unused Trophy icon from lucide-react to clean up the import list
 import {
     Settings,
     Users,
     HelpCircle,
     Headphones,
     ChevronRight,
-    Trophy,
     Wallet,
     Sun,
     Moon,
@@ -26,15 +26,13 @@ import { PersonalizationCard } from './PersonalizationCard';
 import { useTheme } from '../context/ThemeContext';
 import { UpgradeButton } from './ui/UpgradeButton';
 
+import { useTranslation } from 'react-i18next'; // Import hook
+import { createPortal } from 'react-dom';
+
 interface ProfileDrawerProps {
     isOpen: boolean;
     onClose: () => void;
 }
-
-import { useTranslation } from 'react-i18next'; // Import hook
-import ReactDOM from 'react-dom';
-
-// ... imports remain the same
 
 export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
     const { selection } = useHaptic();
@@ -45,11 +43,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
     const [expandedItem, setExpandedItem] = React.useState<string | null>(null);
     const [copied, setCopied] = React.useState(false);
 
-    // Mock stats
-    const stats = {
-        level: user?.level || 1,
-        rank: user?.level ? (user.level > 10 ? 'Elite' : 'Beginner') : 'Beginner'
-    };
+    // #comment: Removed unused 'stats' variable that was holding redundant level/rank info already present in the user context
 
     // TON Connect
     const [tonConnectUI] = useTonConnectUI();
@@ -137,7 +131,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
     ];
 
     // Add key to AnimatePresence for clean unmount
-    return ReactDOM.createPortal(
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
                 <React.Fragment key="drawer-portal-content">

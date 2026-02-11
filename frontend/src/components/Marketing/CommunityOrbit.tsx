@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { Globe, TrendingUp } from 'lucide-react';
 
 const AVATARS = [
     "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&fm=webp",

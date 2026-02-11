@@ -1,10 +1,14 @@
 import { motion } from 'framer-motion';
-import { Trophy, Star, Zap, Users, Crown, CheckCircle2 } from 'lucide-react';
+// #comment: Removed unused Star and CheckCircle2 icons from lucide-react
+// #comment: Removed unused Crown icon from lucide-react to clean up the import list
+import { Trophy, Zap, Users } from 'lucide-react';
 import { getRank, getXPProgress } from '../../utils/ranking';
 import { useUser } from '../../context/UserContext';
-import { useTranslation, Trans } from 'react-i18next';
+// #comment: Removed unused Trans import from react-i18next
+import { useTranslation } from 'react-i18next';
 
-export const EarnHeader = ({ onUpgrade }: { onUpgrade?: () => void }) => {
+// #comment: Removed unused onUpgrade prop to simplify component interface and clean up code
+export const EarnHeader = () => {
     const { t } = useTranslation();
     const { user } = useUser();
 

@@ -1,4 +1,4 @@
-import { LucideIcon, Rocket, Flame, Target, Zap, Shield, Medal, Award, Gem, Crown, Trophy, Star, Sparkles, Send, Instagram, MessageCircle, Users, Download, PlayCircle, BookOpen, Bot, TrendingUp, DollarSign, Megaphone, Share2, Ghost } from 'lucide-react';
+import { LucideIcon, Rocket, Target, Zap, Award, Gem, Sparkles, MessageCircle, Users, Bot, TrendingUp, DollarSign, Megaphone, Share2, Ghost } from 'lucide-react';
 
 export interface AcademyStage {
     id: number;

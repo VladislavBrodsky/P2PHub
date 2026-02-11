@@ -2,7 +2,8 @@ import { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAllAchievements, getAllMilestones, Achievement } from '../../data/earnData';
-import { Lock, ChevronDown, ChevronUp, Trophy, Sparkles, Zap, Star, Shield, Target, X, Info, Share2, UserPlus, Milestone, Gem, ArrowRight, Flame } from 'lucide-react';
+// #comment: Removed unused Target and Gem icons from lucide-react to clean up the import list
+import { Lock, ChevronDown, ChevronUp, Trophy, Sparkles, Zap, Star, Shield, X, Info, Share2, UserPlus, Milestone, ArrowRight, Flame } from 'lucide-react';
 import { useUser } from '../../context/UserContext';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';

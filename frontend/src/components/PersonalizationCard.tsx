@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Sparkles, Crown } from 'lucide-react';
+import { Crown } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { getRank, getXPProgress } from '../utils/ranking';
 
