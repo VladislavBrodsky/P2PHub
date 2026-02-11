@@ -49,7 +49,7 @@ export const TaskGrid = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {sortedTasks.length > 0 ? (
                     sortedTasks.map((task) => {
-                        const isLocked = currentLevel < task.minLevel;
+                        const isLocked = Number(currentLevel) < Number(task.minLevel);
                         const isCompleted = completedTaskIds.includes(task.id);
                         const isVerifying = !!verifyingTasks[task.id];
                         const isClaimableTimed = claimableTasks.includes(task.id);

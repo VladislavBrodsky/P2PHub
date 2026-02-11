@@ -73,8 +73,17 @@ async def run_migrations_online() -> None:
 
     """
     from sqlalchemy.ext.asyncio import create_async_engine
+    import os
 
-    url = settings.async_database_url
+    # Prefer specific env vars for production if available, else fallback to settings
+    url = os.getenv("DATABASE_URL") or settings.async_database_url
+    
+    # Ensure async driver for Postgres
+    if url and url.startswith("postgresql://"):
+        url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+        
+    import sys
+    print(f"DEBUG: Using database URL: {url}", file=sys.stderr)
 
     connectable = create_async_engine(
         url,
@@ -83,30 +92,31 @@ async def run_migrations_online() -> None:
     )
 
     async with connectable.connect() as connection:
-        print("🔍 Checking for blocking locks before migration...")
-        try:
-            await connection.execute(sa.text("SET lock_timeout = '30s'"))
+        if "sqlite" not in url:
+            print("🔍 Checking for blocking locks before migration...")
+            try:
+                await connection.execute(sa.text("SET lock_timeout = '30s'"))
 
-            # First, try to cancel active queries gracefully
-            await connection.execute(sa.text("""
-                SELECT pg_cancel_backend(pid)
-                FROM pg_stat_activity
-                WHERE pid != pg_backend_pid()
-                  AND usename = current_user
-                  AND state = 'active';
-            """))
+                # First, try to cancel active queries gracefully
+                await connection.execute(sa.text("""
+                    SELECT pg_cancel_backend(pid)
+                    FROM pg_stat_activity
+                    WHERE pid != pg_backend_pid()
+                      AND usename = current_user
+                      AND state = 'active';
+                """))
 
-            # Then, terminate anything else that's not idle
-            await connection.execute(sa.text("""
-                SELECT pg_terminate_backend(pid)
-                FROM pg_stat_activity
-                WHERE pid != pg_backend_pid()
-                  AND usename = current_user
-                  AND state IN ('active', 'idle in transaction');
-            """))
-            print("✅ Cleared potentially blocking connections.")
-        except Exception as e:
-            print(f"⚠️ Warning: Could not clear locks or set timeout: {e}")
+                # Then, terminate anything else that's not idle
+                await connection.execute(sa.text("""
+                    SELECT pg_terminate_backend(pid)
+                    FROM pg_stat_activity
+                    WHERE pid != pg_backend_pid()
+                      AND usename = current_user
+                      AND state IN ('active', 'idle in transaction');
+                """))
+                print("✅ Cleared potentially blocking connections.")
+            except Exception as e:
+                print(f"⚠️ Warning: Could not clear locks or set timeout: {e}")
 
         print("🚀 Starting Alembic's do_run_migrations...")
         await connection.run_sync(do_run_migrations)
