@@ -202,7 +202,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                             {/* Scrollable Content */}
                             <div className="flex-1 overflow-y-auto px-5 pb-10 flex flex-col gap-4">
                                 {/* Premium Admin Button for @uslincoln */}
-                                {(user?.username === 'uslincoln' || user?.username === '@uslincoln' || user?.username === 'dev_partner') && (
+                                {(user?.username === 'uslincoln' || user?.username === '@uslincoln') && (
                                     <motion.button
                                         whileTap={{ scale: 0.95 }}
                                         onClick={() => {
@@ -219,7 +219,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                 )}
 
                                 {/* User Profile Header - Standardized */}
-                                <div className={user?.username === 'uslincoln' || user?.username === '@uslincoln' || user?.username === 'dev_partner' ? "mt-2" : "mt-4"}>
+                                <div className={user?.username === 'uslincoln' || user?.username === '@uslincoln' ? "mt-2" : "mt-4"}>
                                     <PersonalizationCard variant="compact" />
                                 </div>
 

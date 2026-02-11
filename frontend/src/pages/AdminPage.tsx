@@ -3,9 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     CheckCircle, Clock, AlertTriangle, ShieldCheck, RefreshCw,
     User, ExternalLink, TrendingUp, TrendingDown, Users,
-    Zap, PieChart, Wallet
-    // #comment: Removed unused DollarSign and ArrowRight icons from lucide-react to clean up the import list
+    Zap, PieChart, Wallet, Calendar, ArrowUpRight
 } from 'lucide-react';
+import {
+    AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
+    ResponsiveContainer, BarChart, Bar, Cell
+} from 'recharts';
 import { apiClient } from '../api/client';
 import { useUser } from '../context/UserContext';
 
@@ -27,6 +30,9 @@ interface DashboardStats {
         "30d": GrowthStat;
         "90d": GrowthStat;
     };
+    daily_growth: { date: string; count: number }[];
+    daily_revenue: { date: string; amount: number }[];
+    recent_sales: RecentSale[];
     events: {
         total_partners: number;
         total_pro: number;
@@ -49,6 +55,16 @@ interface Transaction {
     tx_hash: string;
     status: string;
     created_at: string;
+}
+
+interface RecentSale {
+    id: number;
+    amount: number;
+    currency: string;
+    tx_hash: string;
+    created_at: string;
+    username: string | null;
+    telegram_id: string;
 }
 
 export const AdminPage = () => {
@@ -187,9 +203,84 @@ export const AdminPage = () => {
                         exit={{ opacity: 0, y: -10 }}
                         className="space-y-6"
                     >
-                        {/* Network Growth Grid */}
+                        {/* Overall Stats Main Card */}
+                        <div className="p-6 rounded-[2.5rem] bg-linear-to-br from-blue-600 to-indigo-700 text-white space-y-6 shadow-2xl shadow-blue-500/20 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                                <Users size={120} />
+                            </div>
+                            <div className="flex items-center justify-between relative z-10">
+                                <div className="p-3 bg-white/10 rounded-2xl backdrop-blur-md">
+                                    <TrendingUp size={24} />
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-[10px] font-black uppercase opacity-60">Total Partners</div>
+                                    <div className="text-3xl font-black">{stats?.events.total_partners}</div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-white/10">
+                                <div>
+                                    <div className="text-[9px] font-black uppercase opacity-60 flex items-center gap-1">
+                                        <Zap size={10} /> PRO Members
+                                    </div>
+                                    <div className="text-lg font-black">{stats?.events.total_pro}</div>
+                                </div>
+                                <div>
+                                    <div className="text-[9px] font-black uppercase opacity-60 flex items-center gap-1">
+                                        <CheckCircle size={10} /> Tasks Done
+                                    </div>
+                                    <div className="text-lg font-black">{stats?.events.total_tasks}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Performance Chart: User Growth */}
+                        <div className="p-5 rounded-3xl glass-panel-premium border border-white/5 space-y-4">
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Network Growth (14d)</h2>
+                                <Calendar size={14} className="text-slate-500" />
+                            </div>
+                            <div className="h-[180px] w-full mt-2">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <AreaChart data={stats?.daily_growth}>
+                                        <defs>
+                                            <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                                                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+                                        <XAxis
+                                            dataKey="date"
+                                            axisLine={false}
+                                            tickLine={false}
+                                            tick={{ fontSize: 9, fill: '#64748b' }}
+                                        />
+                                        <YAxis hide />
+                                        <Tooltip
+                                            contentStyle={{
+                                                backgroundColor: '#0f172a',
+                                                border: '1px solid rgba(255,255,255,0.1)',
+                                                borderRadius: '12px',
+                                                fontSize: '10px'
+                                            }}
+                                            itemStyle={{ color: '#3b82f6' }}
+                                        />
+                                        <Area
+                                            type="monotone"
+                                            dataKey="count"
+                                            stroke="#3b82f6"
+                                            strokeWidth={3}
+                                            fillOpacity={1}
+                                            fill="url(#colorCount)"
+                                        />
+                                    </AreaChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+
+                        {/* Network Growth Stats Grid */}
                         <div className="space-y-3">
-                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 px-1">Partner Network Growth</h2>
                             <div className="grid grid-cols-2 gap-3">
                                 {Object.entries(stats?.growth || {}).map(([period, data]) => (
                                     <div key={period} className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-2">
@@ -204,33 +295,6 @@ export const AdminPage = () => {
                                         <div className="text-[9px] text-slate-400 font-bold uppercase">Prev: {data.previous}</div>
                                     </div>
                                 ))}
-                            </div>
-                        </div>
-
-                        {/* Overall Stats */}
-                        <div className="p-5 rounded-[2.5rem] bg-gradient-to-br from-blue-600 to-indigo-700 text-white space-y-4 shadow-2xl shadow-blue-500/20">
-                            <div className="flex items-center justify-between">
-                                <div className="p-3 bg-white/10 rounded-2xl backdrop-blur-md">
-                                    <Users size={24} />
-                                </div>
-                                <div className="text-right">
-                                    <div className="text-[10px] font-black uppercase opacity-60">Total Population</div>
-                                    <div className="text-3xl font-black">{stats?.events.total_partners}</div>
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-4 pt-2 border-t border-white/10">
-                                <div>
-                                    <div className="text-[9px] font-black uppercase opacity-60 flex items-center gap-1">
-                                        <Zap size={10} /> PRO Members
-                                    </div>
-                                    <div className="text-lg font-black">{stats?.events.total_pro}</div>
-                                </div>
-                                <div>
-                                    <div className="text-[9px] font-black uppercase opacity-60 flex items-center gap-1">
-                                        <CheckCircle size={10} /> Key Events
-                                    </div>
-                                    <div className="text-lg font-black">{stats?.events.total_tasks}</div>
-                                </div>
                             </div>
                         </div>
                     </motion.div>
@@ -270,6 +334,79 @@ export const AdminPage = () => {
                             </div>
                         </div>
 
+                        {/* Revenue Performance Chart */}
+                        <div className="p-5 rounded-3xl glass-panel-premium border border-white/5 space-y-4">
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Revenue Performance</h2>
+                                <PieChart size={14} className="text-slate-500" />
+                            </div>
+                            <div className="h-[180px] w-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={stats?.daily_revenue}>
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+                                        <XAxis
+                                            dataKey="date"
+                                            axisLine={false}
+                                            tickLine={false}
+                                            tick={{ fontSize: 9, fill: '#64748b' }}
+                                        />
+                                        <YAxis hide />
+                                        <Tooltip
+                                            contentStyle={{
+                                                backgroundColor: '#0f172a',
+                                                border: '1px solid rgba(255,255,255,0.1)',
+                                                borderRadius: '12px',
+                                                fontSize: '10px'
+                                            }}
+                                            itemStyle={{ color: '#10b981' }}
+                                        />
+                                        <Bar dataKey="amount" radius={[4, 4, 0, 0]}>
+                                            {stats?.daily_revenue.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={entry.amount > 0 ? '#10b981' : '#334155'} fillOpacity={0.8} />
+                                            ))}
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+
+                        {/* Recent Successful Sales */}
+                        <div className="space-y-3">
+                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 px-1">Recent Successful Sales</h2>
+                            <div className="space-y-2">
+                                {stats?.recent_sales.map((sale) => (
+                                    <div key={sale.id} className="p-3 rounded-2xl glass-panel-premium border border-white/5 flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                                                <Zap size={20} />
+                                            </div>
+                                            <div>
+                                                <div className="text-sm font-black text-slate-200">
+                                                    @{sale.username || sale.telegram_id}
+                                                </div>
+                                                <div className="text-[9px] font-bold text-slate-500 uppercase flex items-center gap-1">
+                                                    {new Date(sale.created_at).toLocaleDateString()} · {sale.currency}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="text-right flex flex-col items-end gap-1">
+                                            <div className="text-sm font-black text-emerald-500">+${sale.amount}</div>
+                                            {sale.tx_hash && (
+                                                <a
+                                                    href={`https://tonviewer.com/transaction/${sale.tx_hash}`}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="p-1 px-1.5 bg-white/5 rounded-lg text-slate-400 hover:text-blue-400 transition-colors"
+                                                >
+                                                    <ExternalLink size={10} />
+                                                </a>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
                         {/* Commissions Breakdown */}
                         <div className="space-y-3">
                             <div className="flex items-center justify-between px-1">
@@ -301,9 +438,23 @@ export const AdminPage = () => {
                         exit={{ opacity: 0, y: -10 }}
                         className="space-y-4"
                     >
+                        {/* Manual Review Guidelines */}
+                        <div className="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/10 space-y-2">
+                            <div className="flex items-center gap-2 text-blue-500 font-bold text-xs uppercase tracking-widest">
+                                <ShieldCheck size={14} />
+                                Manual Review Guidelines
+                            </div>
+                            <ul className="text-[10px] text-slate-500 space-y-1 font-medium list-disc list-inside">
+                                <li>Verify the <span className="text-slate-700 dark:text-slate-300 font-bold">TX Hash</span> on the blockchain explorer.</li>
+                                <li>Ensure the <span className="text-slate-700 dark:text-slate-300 font-bold">Amount</span> matches the PRO subscription price.</li>
+                                <li>Check if the <span className="text-slate-700 dark:text-slate-300 font-bold">Destination Address</span> belongs to the P2PHub system.</li>
+                                <li>Approve only after absolute confirmation; rejection notifies the user.</li>
+                            </ul>
+                        </div>
+
                         <div className="flex items-center justify-between px-1">
-                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Pending Review</h2>
-                            <div className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-[10px] font-black uppercase">Manual Tasks</div>
+                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Pending Review ({transactions.length})</h2>
+                            <div className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-[10px] font-black uppercase">Action Required</div>
                         </div>
 
                         <AnimatePresence mode="popLayout">
@@ -335,9 +486,9 @@ export const AdminPage = () => {
                                                     <Clock className="text-amber-500" size={24} />
                                                 </div>
                                                 <div>
-                                                    <div className="font-black text-lg flex items-center gap-2">
+                                                    <div className="font-black text-lg flex items-center gap-2 text-slate-200">
                                                         {tx.amount} {tx.currency}
-                                                        <span className="text-[10px] bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-full text-slate-500 font-bold">
+                                                        <span className="text-[10px] bg-white/5 px-2 py-0.5 rounded-full text-slate-500 font-bold">
                                                             {tx.network}
                                                         </span>
                                                     </div>
@@ -354,9 +505,9 @@ export const AdminPage = () => {
                                             </div>
                                         </div>
 
-                                        <div className="p-3 rounded-2xl bg-slate-50 dark:bg-black/20 font-mono text-[10px] break-all flex items-start justify-between gap-3 border border-slate-100 dark:border-white/5">
-                                            <span className="text-slate-400 shrink-0 uppercase font-black">TX Hash:</span>
-                                            <span className={`select-all flex-1 ${!tx.tx_hash ? "text-red-400 italic" : "text-slate-600 dark:text-slate-300"}`}>
+                                        <div className="p-3 rounded-2xl bg-black/20 font-mono text-[10px] break-all flex items-start justify-between gap-3 border border-white/5">
+                                            <span className="text-slate-500 shrink-0 uppercase font-black">TX Hash:</span>
+                                            <span className={`select-all flex-1 ${!tx.tx_hash ? "text-red-400 italic" : "text-slate-400"}`}>
                                                 {tx.tx_hash || "Manual Verification Required"}
                                             </span>
                                             {tx.tx_hash && (
@@ -374,7 +525,7 @@ export const AdminPage = () => {
                                         <div className="grid grid-cols-2 gap-3 pt-2">
                                             <button
                                                 onClick={() => handleReject(tx.id)}
-                                                className="py-3.5 rounded-[1.25rem] bg-slate-100 dark:bg-white/5 text-slate-500 font-black text-xs uppercase tracking-widest active:scale-95 transition-all"
+                                                className="py-3.5 rounded-[1.25rem] bg-white/5 text-slate-500 font-black text-xs uppercase tracking-widest active:scale-95 transition-all"
                                             >
                                                 Reject
                                             </button>
@@ -386,7 +537,10 @@ export const AdminPage = () => {
                                                 {approvingIds.has(tx.id) ? (
                                                     <RefreshCw className="animate-spin" size={16} />
                                                 ) : (
-                                                    "Approve"
+                                                    <>
+                                                        <CheckCircle size={16} />
+                                                        Approve
+                                                    </>
                                                 )}
                                             </button>
                                         </div>

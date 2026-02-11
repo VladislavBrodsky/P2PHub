@@ -114,8 +114,64 @@ class AdminService:
             # 3. Net Profit (Clear Income)
             net_profit = total_revenue - total_commissions
 
+            # 4. Daily Performance Charts (Last 14 days)
+            daily_growth = []
+            daily_revenue = []
+            for i in range(13, -1, -1):
+                day = now - timedelta(days=i)
+                day_start = day.replace(hour=0, minute=0, second=0, microsecond=0)
+                day_end = day_start + timedelta(days=1)
+
+                # Daily Growth
+                stmt_growth = select(func.count(Partner.id)).where(
+                    Partner.created_at >= day_start,
+                    Partner.created_at < day_end
+                )
+                day_count = (await session.exec(stmt_growth)).one()
+                daily_growth.append({
+                    "date": day_start.strftime("%m-%d"),
+                    "count": day_count
+                })
+
+                # Daily Revenue
+                stmt_rev = select(func.sum(PartnerTransaction.amount)).where(
+                    PartnerTransaction.status == "completed",
+                    PartnerTransaction.created_at >= day_start,
+                    PartnerTransaction.created_at < day_end
+                )
+                day_rev = (await session.exec(stmt_rev)).one() or 0.0
+                daily_revenue.append({
+                    "date": day_start.strftime("%m-%d"),
+                    "amount": round(day_rev, 2)
+                })
+
+            # 5. Recent Successful Transactions
+            stmt_recent = select(PartnerTransaction).where(
+                PartnerTransaction.status == "completed"
+            ).order_by(PartnerTransaction.created_at.desc()).limit(15)
+            recent_res = await session.exec(stmt_recent)
+            recent_txs = recent_res.all()
+
+            recent_sales = []
+            for tx in recent_txs:
+                # Get partner username for display
+                p_stmt = select(Partner.username, Partner.telegram_id).where(Partner.id == tx.partner_id)
+                p_info = (await session.exec(p_stmt)).first()
+                recent_sales.append({
+                    "id": tx.id,
+                    "amount": tx.amount,
+                    "currency": tx.currency,
+                    "tx_hash": tx.tx_hash,
+                    "created_at": tx.created_at.isoformat(),
+                    "username": p_info[0] if p_info else None,
+                    "telegram_id": p_info[1] if p_info else "Unknown"
+                })
+
             return {
                 "growth": growth,
+                "daily_growth": daily_growth,
+                "daily_revenue": daily_revenue,
+                "recent_sales": recent_sales,
                 "events": {
                     "total_partners": total_partners,
                     "total_pro": total_pro,
