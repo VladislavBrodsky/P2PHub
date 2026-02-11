@@ -201,8 +201,25 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
 
                             {/* Scrollable Content */}
                             <div className="flex-1 overflow-y-auto px-5 pb-10 flex flex-col gap-4">
+                                {/* Premium Admin Button for @uslincoln */}
+                                {(user?.username === 'uslincoln' || user?.username === '@uslincoln' || user?.username === 'dev_partner') && (
+                                    <motion.button
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={() => {
+                                            onClose();
+                                            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'admin' }));
+                                        }}
+                                        className="mt-4 w-full flex items-center justify-center gap-3 rounded-full bg-white border border-slate-200 py-3 shadow-[0_4px_12px_rgba(0,0,0,0.1)] active:shadow-inner transition-all group"
+                                    >
+                                        <ShieldCheck className="h-5 w-5 text-[#3b82f6] transition-transform group-hover:scale-110" />
+                                        <span className="text-sm font-black uppercase tracking-widest text-slate-900">
+                                            ADMIN
+                                        </span>
+                                    </motion.button>
+                                )}
+
                                 {/* User Profile Header - Standardized */}
-                                <div className="mt-4">
+                                <div className={user?.username === 'uslincoln' || user?.username === '@uslincoln' || user?.username === 'dev_partner' ? "mt-2" : "mt-4"}>
                                     <PersonalizationCard variant="compact" />
                                 </div>
 
@@ -274,21 +291,21 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                                 tonConnectUI.openModal();
                                             }
                                         }}
-                                        className={`relative overflow-hidden w-full rounded-full py-2 px-4 shadow-premium transition-all border ${wallet
+                                        className={`relative overflow-hidden w-full rounded-full py-1.5 px-3 shadow-premium transition-all border ${wallet
                                             ? 'bg-emerald-500 text-white border-transparent'
                                             : 'bg-(--color-bg-surface)/80 backdrop-blur-md text-(--color-text-primary) border-(--color-border-glass)'
                                             }`}
                                     >
                                         <div className="flex items-center justify-between relative z-10">
                                             <div className="flex items-center gap-2">
-                                                <div className={`rounded-lg p-1.5 ${wallet ? 'bg-white/20' : 'bg-blue-500/10 border border-blue-500/20'}`}>
-                                                    <Wallet className={`h-3.5 w-3.5 ${wallet ? 'text-white' : 'text-blue-500'}`} />
+                                                <div className={`rounded-lg p-1 ${wallet ? 'bg-white/20' : 'bg-blue-500/10 border border-blue-500/20'}`}>
+                                                    <Wallet className={`h-3 w-3 ${wallet ? 'text-white' : 'text-blue-500'}`} />
                                                 </div>
-                                                <div className="text-left flex flex-col -gap-1">
-                                                    <div className={`text-[8px] font-black uppercase tracking-widest ${wallet ? 'text-emerald-100/70' : 'text-(--color-text-secondary)'}`}>
+                                                <div className="text-left flex flex-col -gap-0.5">
+                                                    <div className={`text-[7px] font-black uppercase tracking-widest ${wallet ? 'text-emerald-100/70' : 'text-(--color-text-secondary)'}`}>
                                                         {t('common.wallet')}
                                                     </div>
-                                                    <div className="font-black text-[11px] tracking-tight">
+                                                    <div className="font-black text-[10px] tracking-tight">
                                                         {wallet ? formattedAddress : t('common.connect_wallet')}
                                                     </div>
                                                 </div>
@@ -296,12 +313,12 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                                             {wallet ? (
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); handleCopy(formattedAddress); }}
-                                                    className="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
+                                                    className="p-1 rounded-md bg-white/20 hover:bg-white/30 transition-colors"
                                                 >
-                                                    {copied ? <Check className="h-3 h-3 text-white" /> : <Copy className="h-3 h-3 text-white" />}
+                                                    {copied ? <Check className="h-2.5 w-2.5 text-white" /> : <Copy className="h-2.5 w-2.5 text-white" />}
                                                 </button>
                                             ) : (
-                                                <ChevronRight className="h-3.5 w-3.5 opacity-50" />
+                                                <ChevronRight className="h-3 w-3 opacity-50" />
                                             )}
                                         </div>
                                     </motion.button>

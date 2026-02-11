@@ -145,10 +145,10 @@ export const MilestonePath = () => {
                         </div>
                         <div className="flex flex-col">
                             <h4 className={`text-[12px] font-black uppercase tracking-widest ${chapter.isPartiallyComplete || chapter.isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-600'}`}>
-                                {t('milestone.part_label', { part: idx + 1 })}: {t(chapter.title)}
+                                {t('milestones.part_label', { part: idx + 1 })}: {t(chapter.title)}
                             </h4>
                             <span className="text-[8px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-0.5">
-                                {t('milestone.progression_phase')}
+                                {t('milestones.progression_phase')}
                             </span>
                         </div>
                         {chapter.isUnlocked ? (
@@ -316,15 +316,15 @@ export const MilestonePath = () => {
                                     stiffness: 300
                                 }}
                                 onClick={(e) => e.stopPropagation()}
-                                className="relative w-full max-w-lg sm:max-w-md bg-white dark:bg-[#0f172a] rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0_-20px_60px_rgba(0,0,0,0.4)] sm:shadow-[0_20px_60px_rgba(0,0,0,0.4)] border-t border-slate-200 dark:border-white/10 sm:border overflow-hidden"
+                                className="relative w-full max-w-lg sm:max-w-md bg-white dark:bg-[#0f172a] rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0_-20px_60px_rgba(0,0,0,0.4)] sm:shadow-[0_20px_60px_rgba(0,0,0,0.4)] border-t border-slate-200 dark:border-white/10 sm:border overflow-hidden max-h-[90vh] flex flex-col"
                             >
                                 {/* Mobile Pull Indicator */}
-                                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-slate-300 dark:bg-white/20 rounded-full sm:hidden" />
+                                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-slate-300 dark:bg-white/20 rounded-full sm:hidden z-20" />
 
                                 {/* Decorative Background Gradient */}
                                 <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-b from-blue-50/50 dark:from-blue-950/20 to-transparent pointer-events-none" />
 
-                                <div className="relative p-6 pb-8 sm:p-8 space-y-6">
+                                <div className="relative flex-1 overflow-y-auto custom-scrollbar p-6 pb-8 sm:p-8 space-y-6">
                                     {/* Header with Close Button */}
                                     <div className="flex items-start justify-between gap-4 pt-4 sm:pt-0">
                                         <div className="flex items-center gap-3 flex-1 min-w-0">

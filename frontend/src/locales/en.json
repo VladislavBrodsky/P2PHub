@@ -13,7 +13,8 @@
         "copied": "Copied",
         "show_more": "Show More",
         "show_less": "Show Less",
-        "unlock_at": "Unlock at level"
+        "unlock_at": "Unlock at level",
+        "pro_active": "PRO Active"
     },
     "menu": {
         "settings": "Settings",
@@ -344,6 +345,7 @@
             "limited_tier": "Limited Access Tier",
             "recruit_title": "Recruit Your Inner Circle",
             "share_telegram": "Share to Telegram",
+            "viral_btn": "Send Viral Card",
             "share_more": "Share...",
             "copy_link": "Copy Link",
             "boost_desc": "Each referral boosts your XP and moves you closer to the **Physical Platinum Card**."
@@ -466,7 +468,14 @@
         "68": "VIP Support",
         "80": "Elite Dashboard",
         "92": "Founder Access",
-        "100": "Physical Platinum Card"
+        "100": "Physical Platinum Card",
+        "part_label": "Part {{part}}",
+        "tier_1": "Tier 1: Foundation",
+        "tier_2": "Tier 2: Momentum",
+        "tier_3": "Tier 3: Elite",
+        "tier_4": "Tier 4: Legend",
+        "tier_5": "Tier 5: Immortal",
+        "progression_phase": "Progression Phase"
     },
     "ranks": {
         "Beginner": "Beginner",

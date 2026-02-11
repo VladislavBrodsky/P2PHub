@@ -278,95 +278,95 @@ export default function ReferralPage() {
                             className="absolute inset-0 bg-black/60 backdrop-blur-md"
                         />
                         <motion.div
-                            initial={{ y: 100, opacity: 0, scale: 0.9 }}
+                            initial={{ y: 100, opacity: 0, scale: 0.95 }}
                             animate={{ y: 0, opacity: 1, scale: 1 }}
-                            exit={{ y: 100, opacity: 0, scale: 0.9 }}
+                            exit={{ y: 100, opacity: 0, scale: 0.95 }}
                             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                            className="w-full max-w-sm bg-(--color-bg-surface) border border-(--color-border-glass) rounded-[3rem] p-7 relative shadow-2xl overflow-hidden max-h-[90vh] flex flex-col backdrop-blur-2xl"
+                            className="w-full max-w-sm bg-(--color-bg-surface)/80 border border-(--color-border-glass) rounded-[2.5rem] p-6 relative shadow-2xl overflow-hidden max-h-[90vh] flex flex-col backdrop-blur-3xl"
                         >
                             {/* Animated Background Glow */}
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-64 bg-blue-600/10 blur-[100px] animate-pulse pointer-events-none" />
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-64 bg-blue-600/20 blur-[100px] animate-pulse pointer-events-none" />
 
                             <button
                                 onClick={() => setShowShareModal(false)}
-                                className="absolute top-5 right-5 w-10 h-10 bg-(--color-text-primary)/5 backdrop-blur-md rounded-full text-(--color-text-secondary) hover:text-(--color-text-primary) flex items-center justify-center z-50 transition-colors border border-(--color-border-glass)"
+                                className="absolute top-4 right-4 w-9 h-9 bg-(--color-text-primary)/5 backdrop-blur-md rounded-full text-(--color-text-secondary) hover:text-(--color-text-primary) flex items-center justify-center z-50 transition-colors border border-(--color-border-glass)"
                             >
-                                <X className="w-5 h-5" />
+                                <X className="w-4 h-4" />
                             </button>
 
-                            <div className="relative z-10 flex flex-col gap-7">
+                            <div className="relative z-10 flex flex-col gap-5 overflow-y-auto no-scrollbar py-2">
                                 {/* Premium Invitation Card */}
-                                <div className="relative group perspective-1000">
-                                    <div className="absolute -inset-0.5 bg-linear-to-r from-blue-500 to-indigo-500 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000" />
-                                    <div className="relative bg-(--color-bg-surface) rounded-3xl overflow-hidden border border-(--color-border-glass) shadow-2xl">
-                                        <div className="relative h-44">
+                                <div className="relative group perspective-1000 shrink-0">
+                                    <div className="absolute -inset-0.5 bg-linear-to-r from-blue-500/50 to-indigo-500/50 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000" />
+                                    <div className="relative bg-(--color-bg-surface) rounded-2xl overflow-hidden border border-(--color-border-glass) shadow-2xl">
+                                        <div className="relative h-40">
                                             <img src={`${getApiUrl()}/images/2026-02-05_03.35.03.webp`} alt={t('referral.modal.invite_image_alt')} className="w-full h-full object-cover opacity-90" />
                                             {/* Glossy Overlay */}
                                             <div className="absolute inset-0 bg-linear-to-t from-(--color-bg-surface) via-transparent to-transparent" />
-                                            <div className="absolute inset-0 bg-linear-to-tr from-blue-500/10 to-transparent" />
+                                            <div className="absolute inset-0 bg-linear-to-tr from-blue-500/20 to-transparent" />
 
                                             {/* Floating Badge */}
-                                            <div className="absolute top-4 left-4">
-                                                <div className="px-2 py-1 bg-blue-500/20 backdrop-blur-md border border-blue-500/40 rounded-lg">
-                                                    <p className="text-[9px] font-black text-blue-500 uppercase tracking-widest">{t('referral.modal.limited_tier')}</p>
+                                            <div className="absolute top-3 left-3">
+                                                <div className="px-2 py-0.5 bg-blue-500/25 backdrop-blur-md border border-blue-400/30 rounded-lg">
+                                                    <p className="text-[8px] font-black text-blue-400 uppercase tracking-widest">{t('referral.modal.limited_tier')}</p>
                                                 </div>
                                             </div>
 
-                                            <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/20 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/90">
-                                                <Share2 className="w-4 h-4" />
+                                            <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-black/30 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/90">
+                                                <Share2 className="w-3.5 h-3.5" />
                                             </div>
                                         </div>
-                                        <div className="p-5 bg-linear-to-b from-(--color-bg-surface) to-(--color-bg-app) backdrop-blur-sm border-t border-(--color-border-glass)">
-                                            <h4 className="text-base font-black text-(--color-text-primary) leading-tight mb-2 tracking-tight">
+                                        <div className="p-4 bg-linear-to-b from-(--color-bg-surface) to-(--color-bg-app) backdrop-blur-sm border-t border-(--color-border-glass)">
+                                            <h4 className="text-sm font-black text-(--color-text-primary) leading-tight mb-1.5 tracking-tight">
                                                 {VIRAL_HOOK}
                                             </h4>
                                             <div className="flex items-center gap-2">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)] animate-pulse" />
-                                                <p className="text-[11px] font-bold text-(--color-text-secondary) tracking-wide uppercase">{VIRAL_SUBTITLE}</p>
+                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
+                                                <p className="text-[10px] font-bold text-(--color-text-secondary) tracking-wide uppercase">{VIRAL_SUBTITLE}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Action Buttons */}
-                                <div className="space-y-6">
-                                    <div className="text-center space-y-1">
-                                        <h3 className="text-2xl font-black text-(--color-text-primary) tracking-tighter">{t('referral.modal.recruit_title')}</h3>
-                                        <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t('referral.modal.limited_tier')}</p>
+                                <div className="space-y-4 shrink-0">
+                                    <div className="text-center space-y-0.5">
+                                        <h3 className="text-xl font-black text-(--color-text-primary) tracking-tighter">{t('referral.modal.recruit_title')}</h3>
+                                        <p className="text-[9px] font-black text-blue-500 uppercase tracking-[0.2em] opacity-80">{t('referral.modal.limited_tier')}</p>
                                     </div>
 
-                                    <div className="space-y-3">
+                                    <div className="space-y-2.5">
                                         <button
                                             onClick={handleShareTelegram}
-                                            className="w-full h-15 rounded-2xl font-black text-white flex items-center justify-center gap-3 active:scale-[0.98] transition-all shadow-xl liquid-blue-premium text-lg border border-white/20"
+                                            className="w-full h-12 rounded-xl font-black text-white flex items-center justify-center gap-2.5 active:scale-[0.97] transition-all shadow-xl liquid-blue-premium text-base border border-white/20"
                                         >
-                                            <Send className="w-5 h-5 -rotate-45 translate-x-1" />
+                                            <Send className="w-4.5 h-4.5 -rotate-45 translate-x-0.5" />
                                             {t('referral.modal.share_telegram')}
                                         </button>
 
                                         {window.Telegram?.WebApp && (
                                             <button
                                                 onClick={handleShareViralCard}
-                                                className="w-full h-12 rounded-xl font-bold text-(--color-text-primary) flex items-center justify-center gap-2 active:scale-[0.98] transition-all bg-(--color-text-primary)/5 border border-(--color-border-glass) text-sm"
+                                                className="w-full h-11 rounded-xl font-bold text-(--color-text-primary) flex items-center justify-center gap-2 active:scale-[0.97] transition-all bg-(--color-text-primary)/5 border border-(--color-border-glass) text-sm backdrop-blur-sm hover:bg-(--color-text-primary)/10"
                                             >
                                                 <Sparkles className="w-4 h-4 text-blue-500" />
                                                 {t('referral.modal.viral_btn')}
                                             </button>
                                         )}
 
-                                        <div className="grid grid-cols-2 gap-3">
+                                        <div className="grid grid-cols-2 gap-2.5">
                                             <button
                                                 onClick={handleNativeShare}
-                                                className="h-14 bg-(--color-text-primary)/5 border border-(--color-border-glass) rounded-2xl font-extrabold text-(--color-text-primary) text-sm flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-(--color-text-primary)/10"
+                                                className="h-11 bg-(--color-text-primary)/5 border border-(--color-border-glass) rounded-xl font-extrabold text-(--color-text-primary) text-xs flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-(--color-text-primary)/10 backdrop-blur-sm"
                                             >
-                                                <ExternalLink className="w-4 h-4 text-blue-500" />
+                                                <ExternalLink className="w-3.5 h-3.5 text-blue-500" />
                                                 {t('referral.modal.share_more')}
                                             </button>
                                             <button
                                                 onClick={handleCopyLink}
-                                                className="h-14 bg-(--color-text-primary)/5 border border-(--color-border-glass) rounded-2xl font-extrabold text-(--color-text-primary) text-sm flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-(--color-text-primary)/10"
+                                                className="h-11 bg-(--color-text-primary)/5 border border-(--color-border-glass) rounded-xl font-extrabold text-(--color-text-primary) text-xs flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-(--color-text-primary)/10 backdrop-blur-sm"
                                             >
-                                                <Copy className="w-4 h-4 text-blue-500" />
+                                                <Copy className="w-3.5 h-3.5 text-blue-500" />
                                                 {t('referral.modal.copy_link')}
                                             </button>
                                         </div>
@@ -374,11 +374,11 @@ export default function ReferralPage() {
                                 </div>
 
                                 {/* Footer Hint */}
-                                <div className="pt-2">
-                                    <div className="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/10 text-center">
-                                        <p className="text-[11px] text-(--color-text-secondary) font-bold leading-relaxed px-2">
+                                <div className="pt-1 shrink-0">
+                                    <div className="p-3 rounded-2xl bg-blue-500/5 border border-blue-500/10 text-center">
+                                        <p className="text-[10px] text-(--color-text-secondary) font-bold leading-relaxed px-1">
                                             <Trans i18nKey="referral.modal.boost_desc">
-                                                Each referral boosts your XP and moves you closer to the <span className="text-(--color-text-primary) font-black underline decoration-blue-500 underline-offset-4">Physical Platinum Card</span>.
+                                                Each referral boosts your XP and moves you closer to the <span className="text-(--color-text-primary) font-black underline decoration-blue-500/50 underline-offset-4">Physical Platinum Card</span>.
                                             </Trans>
                                         </p>
                                     </div>

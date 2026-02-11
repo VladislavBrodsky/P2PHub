@@ -38,20 +38,20 @@ export const AcademyCareerStair = () => {
     return (
         <div className="relative pb-32 overflow-x-hidden">
             {/* Header / Stats Overlay (Floating) */}
-            <div className="sticky top-0 z-30 pt-2 pb-1 px-1 mb-6">
-                <div className="glass-panel-premium rounded-xl px-3 py-2 flex items-center justify-between border-blue-500/20 shadow-2xl">
+            <div className="sticky top-0 z-30 pt-1.5 pb-0.5 px-0.5 mb-4">
+                <div className="glass-panel-premium rounded-xl px-2.5 py-1.5 flex items-center justify-between border-blue-500/20 shadow-2xl">
                     <div className="flex flex-col">
-                        <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest">{t('academy.global_ranking')}</span>
-                        <div className="flex items-center gap-2">
-                            <Trophy className="w-4 h-4 text-amber-500" />
-                            <h3 className="text-sm font-black text-slate-900 dark:text-white">{t('academy.stage', { stage: currentMaxStage })}</h3>
+                        <span className="text-[8px] font-black text-blue-500 uppercase tracking-widest">{t('academy.global_ranking')}</span>
+                        <div className="flex items-center gap-1.5">
+                            <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                            <h3 className="text-[13px] font-black text-slate-900 dark:text-white">{t('academy.stage', { stage: currentMaxStage })}</h3>
                         </div>
                     </div>
-                    <div className="h-8 w-px bg-slate-200 dark:bg-white/10" />
+                    <div className="h-6 w-px bg-slate-200 dark:bg-white/10" />
                     <div className="flex flex-col items-end">
-                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{t('academy.progress_to_pro')}</span>
-                        <div className="flex items-center gap-2">
-                            <div className="w-24 h-2 rounded-full bg-slate-200 dark:bg-white/5 overflow-hidden relative border border-white/5">
+                        <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">{t('academy.progress_to_pro')}</span>
+                        <div className="flex items-center gap-1.5">
+                            <div className="w-20 h-1.5 rounded-full bg-slate-200 dark:bg-white/5 overflow-hidden relative border border-white/5">
                                 <motion.div
                                     className="absolute inset-0 branding-liquid-gradient"
                                     initial={{ width: 0 }}
@@ -102,12 +102,12 @@ export const AcademyCareerStair = () => {
                         whileHover={{ scale: 1.05, y: -5 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={loadMore}
-                        className="mt-16 flex flex-col items-center gap-3 group transition-all"
+                        className="mt-8 flex flex-col items-center gap-2.5 group transition-all"
                     >
-                        <div className="p-5 rounded-[2rem] bg-white/5 backdrop-blur-xl border-2 border-dashed border-blue-500/30 group-hover:border-blue-500/60 group-hover:bg-blue-500/10 transition-all shadow-xl">
-                            <ChevronDown className="w-8 h-8 text-blue-500 group-hover:animate-bounce" />
+                        <div className="p-4 rounded-[1.5rem] bg-white/5 backdrop-blur-xl border-2 border-dashed border-blue-500/30 group-hover:border-blue-500/60 group-hover:bg-blue-500/10 transition-all shadow-xl">
+                            <ChevronDown className="w-6 h-6 text-blue-500 group-hover:animate-bounce" />
                         </div>
-                        <span className="text-[11px] font-black text-blue-500/60 group-hover:text-blue-500 uppercase tracking-[0.2em] transition-colors">{t('academy.expand_higher')}</span>
+                        <span className="text-[10px] font-black text-blue-500/60 group-hover:text-blue-500 uppercase tracking-[0.2em] transition-colors">{t('academy.expand_higher')}</span>
                     </motion.button>
                 )}
             </div>

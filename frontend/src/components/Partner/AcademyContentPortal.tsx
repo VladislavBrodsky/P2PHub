@@ -17,6 +17,15 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
     const { t } = useTranslation();
     const { user } = useUser();
 
+    // Prevent body scroll when portal is open
+    React.useEffect(() => {
+        const originalOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = originalOverflow;
+        };
+    }, []);
+
     return (
         <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
             {/* Backdrop */}
@@ -33,7 +42,8 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 initial={{ scale: 0.9, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                className="relative w-full max-w-lg bg-white dark:bg-[#0f172a] rounded-[2.5rem] shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col max-h-[85vh]"
+                className="relative w-full max-w-lg bg-white dark:bg-[#0f172a] rounded-[1.5rem] shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col max-h-[85vh]"
+            /* #comment: Reduced border radius from rounded-[2.5rem] to rounded-[1.5rem] for a punchier, more compact feel */
             >
                 {/* Fixed Header Bar */}
                 <div className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-5 pointer-events-none">
@@ -63,18 +73,22 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 {/* Content Area (Scrollable) */}
                 <div className="flex-1 overflow-y-auto overscroll-contain custom-scrollbar scroll-smooth">
                     {/* Decorative Liquid Header - Internal to scroll to allow full experience */}
-                    <div className="h-48 branding-liquid-gradient relative flex items-center justify-center pt-8">
+                    <div className="h-40 branding-liquid-gradient relative flex items-center justify-center pt-8">
+                        {/* #comment: Reduced decorative header height from h-48 to h-40 */}
                         <div className="absolute inset-0 bg-linear-to-t from-white dark:from-[#0f172a] to-transparent" />
                         <motion.div
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            className="relative z-10 w-28 h-28 rounded-[2rem] bg-white/40 dark:bg-white/10 backdrop-blur-2xl border border-white/40 flex items-center justify-center shadow-2xl"
+                            className="relative z-10 w-24 h-24 rounded-[1.5rem] bg-white/40 dark:bg-white/10 backdrop-blur-2xl border border-white/40 flex items-center justify-center shadow-2xl"
+                        /* #comment: Reduced icon container size from w-28 to w-24 and radius from rounded-[2rem] to rounded-[1.5rem] */
                         >
-                            <stage.icon className="w-14 h-14 text-slate-900 dark:text-white" />
+                            <stage.icon className="w-12 h-12 text-slate-900 dark:text-white" />
+                            {/* #comment: Reduced icon size from w-14 to w-12 */}
                         </motion.div>
                     </div>
 
-                    <div className="p-6 pt-2 space-y-8">
+                    <div className="p-5 pt-2 space-y-6">
+                        {/* #comment: Reduced horizontal padding from p-6 to p-5 and vertical spacing from space-y-8 to space-y-6 */}
                         {isLocked ? (
                             /* PRO Lock View */
                             <div className="flex flex-col items-center text-center space-y-6 py-8">
@@ -119,7 +133,8 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                             {stage.category}
                                         </div>
                                     </div>
-                                    <h2 className="text-4xl font-black text-slate-900 dark:text-white leading-[0.9] tracking-tight">
+                                    <h2 className="text-3xl font-black text-slate-900 dark:text-white leading-[0.9] tracking-tight">
+                                        {/* #comment: Reduced title font size from text-4xl to text-3xl */}
                                         {stage.title}
                                     </h2>
                                 </div>
