@@ -22,8 +22,6 @@ export default defineConfig({
       tiff: {
         quality: 80,
       },
-      // gif does not support lossless compression
-      // https://sharp.pixelplumbing.com/api-output#gif
       gif: {},
       webp: {
         quality: 75,
