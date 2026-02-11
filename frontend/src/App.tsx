@@ -45,6 +45,7 @@ import { StartupLoader } from './components/ui/StartupLoader';
 import { useStartupProgress } from './context/StartupProgressContext';
 
 import { RevealSkeleton } from './components/Skeletons/RevealSkeleton';
+import { UIProvider } from './context/UIContext';
 
 function AppContent({ onReady }: { onReady: () => void }) {
     const { config } = useConfig();
@@ -267,7 +268,7 @@ function App() {
     }, [isConfigLoading, updateProgress]);
 
     return (
-        <>
+        <UIProvider>
             <AnimatePresence>
                 {!isComplete && (
                     <motion.div
@@ -298,7 +299,7 @@ function App() {
                     <AppContent onReady={complete} />
                 </LazyMotion>
             </div>
-        </>
+        </UIProvider>
     );
 }
 

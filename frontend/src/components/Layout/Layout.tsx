@@ -3,6 +3,7 @@ import { Header } from '../Header';
 const ProfileDrawer = lazy(() => import('../ProfileDrawer')); // Lazy load
 import BottomNav from '../BottomNav';
 import { backButton } from '@telegram-apps/sdk-react';
+import { useUI } from '../../context/UIContext';
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -12,6 +13,7 @@ interface LayoutProps {
 }
 
 export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: LayoutProps) => {
+    const { isHeaderVisible } = useUI();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [hasOpened, setHasOpened] = useState(false);
 
@@ -91,9 +93,11 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
             >
                 <div className="relative mx-auto w-full max-w-lg px-4 safe-pb">
                     {/* Header */}
-                    <div className="relative z-50">
-                        <Header onOpenMenu={() => setIsMenuOpen(true)} />
-                    </div>
+                    {isHeaderVisible && (
+                        <div className="relative z-50">
+                            <Header onOpenMenu={() => setIsMenuOpen(true)} />
+                        </div>
+                    )}
 
                     <div className="mx-auto w-full">
                         {children}

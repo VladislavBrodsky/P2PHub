@@ -11,6 +11,7 @@ import { useHaptic } from '../hooks/useHaptic';
 import { blogService, BlogEngagement } from '../services/blogService';
 
 import { backButton } from '@telegram-apps/sdk-react';
+import { useUI } from '../context/UIContext';
 
 interface BlogPageProps {
     setActiveTab?: (tab: string) => void;
@@ -19,12 +20,31 @@ interface BlogPageProps {
 
 export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
     const { t, i18n } = useTranslation();
+    const { setHeaderVisible } = useUI();
     const { selection, impact, notification } = useHaptic();
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
     const [engagement, setEngagement] = useState<BlogEngagement>({ likes: 0, liked: false });
     const [isLoadingEngagement, setIsLoadingEngagement] = useState(false);
+
+    // Sync header visibility with selectedPost
+    useEffect(() => {
+        if (currentTab === 'blog') {
+            setHeaderVisible(!selectedPost);
+        }
+        return () => {
+            if (currentTab === 'blog') {
+                setHeaderVisible(true);
+            }
+        };
+    }, [selectedPost, currentTab, setHeaderVisible]);
+
+    // Reset scroll when post changes
+    useEffect(() => {
+        const main = document.querySelector('main');
+        if (main) main.scrollTop = 0;
+    }, [selectedPost]);
 
     // Optimized: Wrapped in useCallback to suppress lint warning and ensure stable reference for useEffect
     const handlePostClick = useCallback(async (post: BlogPost) => {
@@ -383,8 +403,8 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             className="flex flex-col min-h-screen bg-(--color-bg-app) relative"
         >
             {/* Header Sticky - Fixed for better scroll reliability */}
-            <div className="fixed top-0 left-0 right-0 z-50 bg-(--color-bg-app)/95 backdrop-blur-xl border-b border-(--color-border-glass) pt-[env(safe-area-inset-top,0.5rem)] pb-3 px-4">
-                <div className="flex items-center justify-between max-w-2xl mx-auto w-full">
+            <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-lg z-50 bg-(--color-bg-app)/95 backdrop-blur-xl border-b border-(--color-border-glass) pt-[env(safe-area-inset-top,0.5rem)] pb-3 px-4">
+                <div className="flex items-center justify-between w-full">
                     <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-(--color-bg-surface) active:scale-90 transition-all text-(--color-text-primary)">
                         <ArrowLeft className="w-6 h-6" />
                     </button>
@@ -406,7 +426,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             </div>
 
             {/* Content Container - Added pt for fixed header */}
-            <div className="px-5 pt-32 pb-32 space-y-8 max-w-2xl mx-auto">
+            <div className="px-5 pt-32 pb-32 space-y-8 max-w-lg mx-auto">
                 {/* Meta */}
                 <div className="space-y-4">
                     <div className="flex items-center gap-2">

@@ -67,8 +67,6 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
             {isOpen && (
                 <div className="fixed inset-0 z-100 flex items-end sm:items-center justify-center overflow-hidden">
                     {/* Immersive Backdrop */}
-                    // #comment: Updated z-index to standard Tailwind 4.0 class for better compatibility
-                    // #comment: Updated z-index to standard Tailwind 4.0 class for better compatibility
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -92,7 +90,6 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
                         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-blue-600/20 blur-[80px] rounded-full pointer-events-none" />
 
                         <div className="flex-1 overflow-y-auto custom-scrollbar p-8 pb-12 sm:pb-8">
-
                             {/* Header */}
                             <div className="relative mb-6 pt-4">
                                 <motion.div
@@ -170,14 +167,15 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
                                     {t('level100.limited_slots')}
                                 </p>
                             </div>
+                        </div>
 
-                            {/* Close button */}
-                            <button
-                                onClick={onClose}
-                                className="absolute top-6 right-6 p-2 text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
+                        {/* Close button */}
+                        <button
+                            onClick={onClose}
+                            className="absolute top-6 right-6 p-2 text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors z-30"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
                     </motion.div>
                 </div>
             )}

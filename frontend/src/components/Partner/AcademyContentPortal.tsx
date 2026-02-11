@@ -4,6 +4,7 @@ import { X, Zap, CheckCircle2, ArrowRight, Lock, Trophy, Lightbulb, Wand2 } from
 import { AcademyStage } from '../../data/academyData';
 import { useTranslation, Trans } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
+import { useUI } from '../../context/UIContext';
 import { cn } from '../../utils/cn';
 
 interface AcademyContentPortalProps {
@@ -16,15 +17,20 @@ interface AcademyContentPortalProps {
 export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stage, onClose, onComplete, isLocked }) => {
     const { t } = useTranslation();
     const { user } = useUser();
+    const { setHeaderVisible } = useUI();
 
     // Prevent body scroll when portal is open
     React.useEffect(() => {
-        const originalOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
+        setHeaderVisible(false);
+        const main = document.querySelector('main');
+        const originalOverflow = main ? main.style.overflow : '';
+        if (main) main.style.overflow = 'hidden';
+
         return () => {
-            document.body.style.overflow = originalOverflow;
+            setHeaderVisible(true);
+            if (main) main.style.overflow = originalOverflow;
         };
-    }, []);
+    }, [setHeaderVisible]);
 
     return (
         <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
