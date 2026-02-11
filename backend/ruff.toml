@@ -1,4 +1,8 @@
-# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`) codes by default.
+line-length = 88
+target-version = "py310"
+
+[lint]
 select = ["E4", "E7", "E9", "F"]
 ignore = ["E402", "E722", "E701", "F401"]
 
@@ -6,6 +10,16 @@ ignore = ["E402", "E722", "E701", "F401"]
 fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "EM", "ERA", "EXE", "FBT", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "TRY", "UP", "YTT"]
 unfixable = []
 
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[lint.per-file-ignores]
+# Ignore imports not at top of file and bare excepts in bot.py and migrations
+"bot.py" = ["E402", "E722"]
+"migrations/env.py" = ["E402"]
+"scripts/*.py" = ["E402", "E722", "E701", "F401"]
+
+[format]
 # Exclude a variety of commonly ignored directories.
 exclude = [
     ".bzr",
@@ -30,18 +44,3 @@ exclude = [
     "node_modules",
     "venv",
 ]
-
-# Same as Black.
-line-length = 88
-
-# Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-
-# Assume Python 3.10.
-target-version = "py310"
-
-[per-file-ignores]
-# Ignore imports not at top of file and bare excepts in bot.py and migrations
-"bot.py" = ["E402", "E722"]
-"migrations/env.py" = ["E402"]
-"scripts/*.py" = ["E402", "E722", "E701", "F401"]

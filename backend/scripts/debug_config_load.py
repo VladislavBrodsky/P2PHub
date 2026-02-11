@@ -38,11 +38,9 @@ async def main():
     
     if copywriter.client:
         print("✅ Copywriter client is READY.")
-        topic = "Test Topic"
-        category = "brand_awareness"
         try: 
             print("📝 Attempting generation...")
-            # article = await copywriter.generate_article(category, topic)
+            # article = await copywriter.generate_article("brand_awareness", "Test Topic")
             # print("✅ Generation success (mock)")
         except Exception as e:
             print(f"❌ Generation failed: {e}")
