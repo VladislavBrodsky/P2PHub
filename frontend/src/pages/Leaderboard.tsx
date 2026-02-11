@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { LazyImage } from '../components/ui/LazyImage';
 
 import { apiClient } from '../api/client';
+import { getApiUrl } from '../utils/api';
 
 interface LeaderboardUser {
     id: number;
@@ -88,7 +89,7 @@ export default function LeaderboardPage() {
                                         {(user.photo_file_id || user.photo_url) ? (
                                             <LazyImage
                                                 src={user.photo_file_id
-                                                    ? `${apiClient.defaults.baseURL}/api/partner/photo/${user.photo_file_id}`
+                                                    ? `${getApiUrl()}/api/partner/photo/${user.photo_file_id}`
                                                     : user.photo_url!
                                                 }
                                                 alt={user.username || user.first_name}

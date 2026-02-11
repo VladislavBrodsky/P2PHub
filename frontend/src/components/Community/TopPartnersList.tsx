@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Trophy, TrendingUp, Users, Crown, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../api/client';
+import { getApiUrl } from '../../utils/api';
 
 export const TopPartnersList = () => {
     const { t } = useTranslation();
@@ -73,7 +74,10 @@ export const TopPartnersList = () => {
                             <div className="relative">
                                 <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center overflow-hidden">
                                     <img
-                                        src={partner.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${partner.username}`}
+                                        src={partner.photo_file_id
+                                            ? `${getApiUrl()}/api/partner/photo/${partner.photo_file_id}`
+                                            : partner.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${partner.username}`
+                                        }
                                         className="w-full h-full object-cover"
                                         alt=""
                                     />

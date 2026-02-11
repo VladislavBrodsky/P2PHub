@@ -12,6 +12,7 @@ import { getApiUrl } from '../../utils/api';
 
 import { PartnerBriefingModal } from './PartnerBriefingModal';
 import { TopPartnersList } from '../Community/TopPartnersList';
+import { ProWelcomeCard } from './ProWelcomeCard';
 
 export const PartnerDashboard = () => {
     const { notification, selection } = useHaptic();
@@ -19,6 +20,24 @@ export const PartnerDashboard = () => {
     const [isExplorerOpen, setIsExplorerOpen] = React.useState(false);
     const [isQrOpen, setIsQrOpen] = React.useState(false);
     const [isBriefingOpen, setIsBriefingOpen] = React.useState(false);
+    const [isProWelcomeOpen, setIsProWelcomeOpen] = React.useState(false);
+
+    // Show Pro Welcome if user is pro but hasn't seen the notification
+    React.useEffect(() => {
+        if (user?.is_pro && !user?.pro_notification_seen) {
+            setIsProWelcomeOpen(true);
+        }
+    }, [user?.is_pro, user?.pro_notification_seen]);
+
+    const handleCloseProWelcome = async () => {
+        setIsProWelcomeOpen(false);
+        try {
+            await apiClient.post('/api/partner/mark-notif-seen');
+            // Optimistically update or re-fetch user if needed
+        } catch (e) {
+            console.error('Failed to mark notification as seen', e);
+        }
+    };
 
     // Correct bot username as requested
     const referralLink = `https://t.me/pintopay_probot?start=${user?.referral_code || 'ref_dev'}`;
@@ -214,6 +233,7 @@ export const PartnerDashboard = () => {
             </div>
 
             <PartnerBriefingModal isOpen={isBriefingOpen} onClose={() => setIsBriefingOpen(false)} />
+            <ProWelcomeCard isOpen={isProWelcomeOpen} onClose={handleCloseProWelcome} />
 
             {/* Network Explorer Overlay */}
             <AnimatePresence>
@@ -298,7 +318,10 @@ const RecentPartnersSection = () => {
                 {recentPartners.slice(0, 4).map((p, i) => (
                     <div key={p.id || i} className="w-6 h-6 rounded-full border-2 border-slate-900 bg-slate-800 overflow-hidden">
                         <img
-                            src={p.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.username || i}`}
+                            src={p.photo_file_id
+                                ? `${getApiUrl()}/api/partner/photo/${p.photo_file_id}`
+                                : p.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.username || i}`
+                            }
                             alt=""
                             className="w-full h-full object-cover"
                         />

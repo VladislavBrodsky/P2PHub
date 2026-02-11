@@ -21,6 +21,7 @@ interface User {
     pro_expires_at: string | null;
     subscription_plan: string | null;
     total_network_size: number;
+    pro_notification_seen: boolean;
 }
 
 interface UserContextType {
@@ -105,7 +106,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     is_admin: false,
                     pro_expires_at: null,
                     subscription_plan: null,
-                    total_network_size: 0
+                    total_network_size: 0,
+                    pro_notification_seen: false
                 };
                 setUser(fallbackUser);
             }
@@ -137,7 +139,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         is_admin: true,
                         pro_expires_at: null,
                         subscription_plan: "DEV_PRO",
-                        total_network_size: 25
+                        total_network_size: 25,
+                        pro_notification_seen: false
                     };
                     setUser(devUser);
                     setIsLoading(false);

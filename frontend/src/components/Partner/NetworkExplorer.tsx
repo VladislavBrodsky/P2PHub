@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, Users, Shield, Calendar, Search, X, ChevronRight, UserPlus, AlertCircle } from 'lucide-react';
 import { apiClient } from '../../api/client';
+import { getApiUrl } from '../../utils/api';
 import { ListSkeleton } from '../Skeletons/ListSkeleton';
 import { cn } from '../../lib/utils';
 import { useHaptic } from '../../hooks/useHaptic';
@@ -242,7 +243,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                                         {(member.photo_file_id || member.photo_url) ? (
                                             <img
                                                 src={member.photo_file_id
-                                                    ? `${apiClient.defaults.baseURL}/api/partner/photo/${member.photo_file_id}`
+                                                    ? `${getApiUrl()}/api/partner/photo/${member.photo_file_id}`
                                                     : member.photo_url
                                                 }
                                                 alt={member.first_name}

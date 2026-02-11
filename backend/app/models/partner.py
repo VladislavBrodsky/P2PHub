@@ -27,6 +27,7 @@ class Partner(SQLModel, table=True):
     pro_expires_at: Optional[datetime] = Field(default=None)
     pro_purchased_at: Optional[datetime] = Field(default=None)
     pro_started_at: Optional[datetime] = Field(default=None)
+    pro_notification_seen: bool = Field(default=False)  # Track if user saw the "You are PRO" card
     subscription_plan: Optional[str] = Field(default=None) # e.g. "PRO_LIFETIME", "PRO_YEARLY"
     
     # Materialized Totals (Optimized for 100K+ Users)

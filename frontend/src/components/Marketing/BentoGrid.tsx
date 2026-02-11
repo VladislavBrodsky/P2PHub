@@ -57,13 +57,25 @@ export const BentoGrid = () => {
         const scrollLeft = scrollRef.current.scrollLeft;
         const width = scrollRef.current.clientWidth;
 
-        // Use a more stable index calculation
-        const itemWidth = width * 0.85 + 16; // width factor + gap
-        const index = Math.round(scrollLeft / itemWidth);
-        const clampedIndex = Math.max(0, Math.min(index, shiftSteps.length - 1));
+        // Find all children and their positions to determine the truly active one
+        const children = Array.from(scrollRef.current.children) as HTMLElement[];
+        if (children.length === 0) return;
 
-        if (clampedIndex !== activeIndex) {
-            setActiveIndex(clampedIndex);
+        let closestIndex = 0;
+        let minDistance = Infinity;
+        const centerPoint = scrollLeft + width / 2;
+
+        children.forEach((child, i) => {
+            const childCenter = child.offsetLeft + child.offsetWidth / 2;
+            const distance = Math.abs(centerPoint - childCenter);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestIndex = i;
+            }
+        });
+
+        if (closestIndex !== activeIndex) {
+            setActiveIndex(closestIndex);
         }
     };
 
