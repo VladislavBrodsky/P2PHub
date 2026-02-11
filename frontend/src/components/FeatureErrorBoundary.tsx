@@ -51,7 +51,7 @@ export class FeatureErrorBoundary extends Component<Props, State> {
                     </button>
                     {import.meta.env.DEV && (
                         <div className="mt-6 p-3 bg-red-950/30 border border-red-900/50 rounded-lg text-left w-full max-w-md overflow-x-auto">
-                            <p className="text-xs font-mono text-red-400 break-words whitespace-pre-wrap">
+                            <p className="text-xs font-mono text-red-400 wrap-break-word whitespace-pre-wrap">
                                 {this.state.error?.toString()}
                             </p>
                         </div>

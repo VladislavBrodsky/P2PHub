@@ -142,6 +142,9 @@ const CentralLogo = () => (
             }}
             src="/logo.webp"
             alt="Pintopay Logo"
+            width="56"
+            height="56"
+            loading="eager"
             className="relative z-20 w-14 h-14 object-contain brightness-0 invert"
         />
 
@@ -264,7 +267,7 @@ const OrbitingItem = ({ item, index, total }: { item: OrbitItem; index: number; 
                                 boxShadow: '0 10px 30px -10px rgba(0,0,0,0.3)'
                             }}
                         >
-                            <img src={item.src} alt="Member" className="h-full w-full object-cover" />
+                            <img src={item.src} alt="Member" width={60} height={60} loading="eager" className="h-full w-full object-cover" />
                             {/* Reflection Overlay */}
                             <div className="absolute inset-0 bg-linear-to-tr from-white/20 to-transparent opacity-60" />
                         </div>

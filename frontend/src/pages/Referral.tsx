@@ -1,13 +1,15 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, lazy } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useHaptic } from '../hooks/useHaptic';
 import { EarnHeader } from '../components/Earn/EarnHeader';
 import { TaskCard } from '../components/Earn/TaskCard';
-import { MilestonePath } from '../components/Earn/MilestonePath';
 import { ReferralWidget } from '../components/Earn/ReferralWidget';
+import { LazyLoader } from '../components/ui/LazyLoader';
 
-import { TaskGrid } from '../components/Earn/TaskGrid';
-import { LevelUpModal } from '../components/Earn/LevelUpModal';
+const MilestonePath = lazy(() => import('../components/Earn/MilestonePath').then(m => ({ default: m.MilestonePath })));
+const TaskGrid = lazy(() => import('../components/Earn/TaskGrid').then(m => ({ default: m.TaskGrid })));
+const LevelUpModal = lazy(() => import('../components/Earn/LevelUpModal').then(m => ({ default: m.LevelUpModal })));
+
 import { EARN_TASKS, Task, MILESTONES } from '../data/earnData';
 import { useUser } from '../context/UserContext';
 import { Confetti } from '../components/ui/Confetti';
@@ -435,14 +437,21 @@ export default function ReferralPage() {
             </AnimatePresence>
 
             {/* Level Up Overlay */}
-            <LevelUpModal
-                isOpen={levelUp}
-                level={reachedLevel}
-                onClose={() => {
-                    setLevelUp(false);
-                    setConfettiActive(false);
-                }}
-            />
+            {/* Level Up Overlay */}
+            <AnimatePresence>
+                {levelUp && (
+                    <LazyLoader height="0px">
+                        <LevelUpModal
+                            isOpen={levelUp}
+                            level={reachedLevel}
+                            onClose={() => {
+                                setLevelUp(false);
+                                setConfettiActive(false);
+                            }}
+                        />
+                    </LazyLoader>
+                )}
+            </AnimatePresence>
 
             <h1 className="text-3xl font-black mb-2 tracking-tighter text-gradient-primary text-center">{t('referral.title')}</h1>
 
@@ -472,20 +481,24 @@ export default function ReferralPage() {
                 </div>
 
                 <div className="relative">
-                    <MilestonePath />
+                    <LazyLoader height="300px">
+                        <MilestonePath />
+                    </LazyLoader>
                 </div>
             </div>
 
-            <TaskGrid
-                tasks={localizedTasks}
-                completedTaskIds={completedTaskIds}
-                verifyingTasks={verifyingTasks}
-                claimableTasks={claimableTasks}
-                currentLevel={currentLevel}
-                referrals={referrals}
-                onTaskClick={handleTaskClick}
-                onClaim={handleClaim}
-            />
+            <LazyLoader height="500px">
+                <TaskGrid
+                    tasks={localizedTasks}
+                    completedTaskIds={completedTaskIds}
+                    verifyingTasks={verifyingTasks}
+                    claimableTasks={claimableTasks}
+                    currentLevel={currentLevel}
+                    referrals={referrals}
+                    onTaskClick={handleTaskClick}
+                    onClaim={handleClaim}
+                />
+            </LazyLoader>
 
             <div className="mt-8 mb-4">
                 <UpgradeButton

@@ -5,7 +5,8 @@ import { lazy } from 'react';
 import { motion } from 'framer-motion';
 import { LazyLoader } from '../components/ui/LazyLoader';
 
-const CommunityOrbit = lazy(() => import('../components/Marketing/CommunityOrbit').then(m => ({ default: m.CommunityOrbit })));
+import { CommunityOrbit } from '../components/Marketing/CommunityOrbit';
+
 const BentoGrid = lazy(() => import('../components/Marketing/BentoGrid').then(m => ({ default: m.BentoGrid })));
 const BlogCarousel = lazy(() => import('../components/Marketing/BlogCarousel').then(m => ({ default: m.BlogCarousel })));
 const IncomePotential = lazy(() => import('../components/Marketing/IncomePotential').then(m => ({ default: m.IncomePotential })));
@@ -64,9 +65,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             <motion.div variants={item} className="px-4 space-y-12">
                 {/* Orbit Container */}
                 <div className="relative overflow-visible -mx-4 h-[400px] -mt-10 flex items-center justify-center">
-                    <LazyLoader height="400px">
-                        <CommunityOrbit />
-                    </LazyLoader>
+                    <CommunityOrbit />
                 </div>
 
                 {/* Sub-Hero Text Section */}
