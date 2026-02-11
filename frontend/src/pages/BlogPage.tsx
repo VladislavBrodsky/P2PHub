@@ -143,17 +143,17 @@ export const BlogPage = ({ setActiveTab }: BlogPageProps) => {
                         className="flex flex-col"
                     >
                         {/* Header Area */}
-                        <div className="px-4 py-6 flex items-center justify-between sticky top-0 z-30 bg-(--color-bg-app)/80 backdrop-blur-xl border-b border-(--color-border-glass)">
+                        <div className="px-4 pt-[calc(var(--spacing-safe-top)+1rem)] pb-4 flex items-center justify-between sticky top-0 z-30 bg-(--color-bg-app)/80 backdrop-blur-xl border-b border-(--color-border-glass)">
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => { selection(); setActiveTab?.('home'); }}
-                                    className="p-2 rounded-full bg-(--color-bg-surface) border border-(--color-border-glass) active:scale-95 transition-transform"
+                                    className="p-2 rounded-full bg-(--color-bg-surface) border border-(--color-border-glass) active:scale-90 transition-transform"
                                 >
                                     <ArrowLeft className="w-5 h-5" />
                                 </button>
                                 <div>
-                                    <h2 className="text-xl font-black tracking-tight">{t('blog.title')}</h2>
-                                    <p className="text-[10px] font-bold text-(--color-text-secondary) uppercase tracking-widest opacity-60">
+                                    <h2 className="text-xl font-black tracking-tight leading-none">{t('blog.title')}</h2>
+                                    <p className="text-[9px] font-bold text-(--color-text-secondary) uppercase tracking-widest opacity-60 mt-1">
                                         {blogPosts.length} {t('blog.latest')}
                                     </p>
                                 </div>
@@ -198,37 +198,37 @@ export const BlogPage = ({ setActiveTab }: BlogPageProps) => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     onClick={() => handlePostClick(currentFeaturedPost)}
-                                    className="relative group overflow-hidden rounded-[3rem] border border-(--color-border-glass) glass-panel-premium aspect-4/5 flex flex-col justify-end p-8"
+                                    className="relative group overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) glass-panel-premium aspect-4/5 sm:aspect-video flex flex-col justify-end p-6 sm:p-8"
                                 >
                                     <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent z-10" />
 
                                     {/* Decorative Background Glow */}
                                     <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/20 blur-[100px] group-hover:bg-blue-600/30 transition-colors" />
 
-                                    <div className="relative z-20 space-y-4">
+                                    <div className="relative z-20 space-y-3 sm:space-y-4">
                                         <div className="flex items-center gap-2">
-                                            <span className="px-3 py-1 rounded-full bg-blue-500 text-[10px] font-black uppercase tracking-widest text-white">
+                                            <span className="px-2.5 py-1 rounded-full bg-blue-500 text-[9px] font-black uppercase tracking-widest text-white">
                                                 {isRussian ? "Главное" : "Featured"}
                                             </span>
-                                            <span className="text-[10px] font-bold text-white/60">
+                                            <span className="text-[9px] font-bold text-white/60">
                                                 {currentFeaturedPost.date}
                                             </span>
                                         </div>
-                                        <h3 className="text-3xl font-black leading-tight text-white group-hover:text-blue-400 transition-colors">
+                                        <h3 className="text-2xl sm:text-3xl font-black leading-tight text-white group-hover:text-blue-400 transition-colors line-clamp-2">
                                             {currentFeaturedPost.title}
                                         </h3>
-                                        <p className="text-sm font-medium text-white/70 line-clamp-2">
+                                        <p className="text-xs sm:text-sm font-medium text-white/70 line-clamp-2 hidden sm:block">
                                             {currentFeaturedPost.excerpt}
                                         </p>
-                                        <div className="pt-4 flex items-center justify-between">
+                                        <div className="pt-2 sm:pt-4 flex items-center justify-between">
                                             <div className="flex items-center gap-2">
-                                                <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-                                                    <BookOpen className="w-4 h-4 text-white" />
+                                                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                                                    <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
                                                 </div>
-                                                <span className="text-xs font-bold text-white/80">{currentFeaturedPost.author}</span>
+                                                <span className="text-[10px] sm:text-xs font-bold text-white/80">{currentFeaturedPost.author}</span>
                                             </div>
-                                            <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10 group-hover:bg-blue-500 group-hover:scale-110 transition-all duration-500">
-                                                <ArrowUpRight className="w-6 h-6 text-white" />
+                                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10 group-hover:bg-blue-500 group-hover:scale-110 transition-all duration-500">
+                                                <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                                             </div>
                                         </div>
                                     </div>
@@ -368,15 +368,15 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             className="flex flex-col min-h-screen bg-(--color-bg-app)"
         >
             {/* Header Sticky */}
-            <div className="px-4 py-4 flex items-center justify-between sticky top-0 z-40 bg-(--color-bg-app)/90 backdrop-blur-xl border-b border-(--color-border-glass)">
-                <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-(--color-bg-surface) transition-colors">
+            <div className="px-4 pt-[calc(var(--spacing-safe-top)+0.5rem)] pb-3 flex items-center justify-between sticky top-0 z-40 bg-(--color-bg-app)/90 backdrop-blur-xl border-b border-(--color-border-glass)">
+                <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-(--color-bg-surface) active:scale-90 transition-all">
                     <ArrowLeft className="w-6 h-6" />
                 </button>
-                <div className="flex items-center gap-2">
-                    <button onClick={onShare} className="p-2 rounded-full hover:bg-(--color-bg-surface) transition-colors">
+                <div className="flex items-center gap-1.5">
+                    <button onClick={onShare} className="p-2.5 rounded-full bg-(--color-bg-surface) border border-(--color-border-glass) active:scale-90 transition-all">
                         <Share2 className="w-5 h-5 text-(--color-text-secondary)" />
                     </button>
-                    <button onClick={onLike} className={`p-2 rounded-full transition-all ${engagement.liked ? 'text-red-500 bg-red-500/10' : 'text-(--color-text-secondary)'}`}>
+                    <button onClick={onLike} className={`p-2.5 rounded-full border border-(--color-border-glass) transition-all active:scale-90 ${engagement.liked ? 'text-red-500 bg-red-500/10 border-red-500/20' : 'bg-(--color-bg-surface) text-(--color-text-secondary)'}`}>
                         <Heart className={`w-5 h-5 ${engagement.liked ? 'fill-current' : ''}`} />
                     </button>
                 </div>
@@ -395,7 +395,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                             {post.date}
                         </div>
                     </div>
-                    <h1 className="text-4xl font-black leading-tight tracking-tight text-(--color-text-primary)">
+                    <h1 className="text-3xl sm:text-4xl font-black leading-tight tracking-tight text-(--color-text-primary)">
                         {post.title}
                     </h1>
                     <div className="flex items-center gap-3 py-2 border-y border-(--color-border-glass)">
@@ -462,20 +462,20 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                 </div>
 
                 {/* Navigation Buttons */}
-                <div className="pt-12 grid grid-cols-2 gap-4">
+                <div className="pt-12 grid grid-cols-2 gap-3 sm:gap-4">
                     <button
                         onClick={() => { selection(); onPrev(); }}
-                        className="p-6 rounded-[2rem] bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-blue-500/30 transition-all flex flex-col gap-2 group text-left"
+                        className="p-4 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-blue-500/30 active:scale-95 transition-all flex flex-col gap-2 group text-left"
                     >
                         <ChevronLeft className="w-5 h-5 text-blue-500" />
-                        <span className="text-[10px] font-bold text-(--color-text-secondary) uppercase tracking-wider">{isRussian ? "Предыдущая" : "Previous"}</span>
+                        <span className="text-[9px] sm:text-[10px] font-extrabold text-(--color-text-secondary) uppercase tracking-wider">{isRussian ? "Предыдущая" : "Previous"}</span>
                     </button>
                     <button
                         onClick={() => { selection(); onNext(); }}
-                        className="p-6 rounded-[2rem] bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-blue-500/30 transition-all flex flex-col items-end gap-2 group text-right"
+                        className="p-4 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-blue-500/30 active:scale-95 transition-all flex flex-col items-end gap-2 group text-right"
                     >
                         <ChevronRight className="w-5 h-5 text-blue-500" />
-                        <span className="text-[10px] font-bold text-(--color-text-secondary) uppercase tracking-wider">{isRussian ? "Следующая" : "Next"}</span>
+                        <span className="text-[9px] sm:text-[10px] font-extrabold text-(--color-text-secondary) uppercase tracking-wider">{isRussian ? "Следующая" : "Next"}</span>
                     </button>
                 </div>
             </div>

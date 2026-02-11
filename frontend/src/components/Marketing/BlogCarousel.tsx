@@ -48,11 +48,11 @@ export const BlogCarousel = () => {
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1, type: "spring", bounce: 0.2 }}
                         onClick={() => navigateToBlog(post.id)}
-                        className="min-w-[280px] max-w-[280px] group flex flex-col gap-4 p-6 rounded-[2.5rem] border border-(--color-border-glass) glass-panel-premium snap-start active:scale-[0.98] transition-all"
+                        className="min-w-[280px] max-w-[280px] group flex flex-col gap-4 p-6 rounded-[2.5rem] border border-(--color-border-glass) glass-panel-premium snap-start active:scale-95 transition-all cursor-pointer"
                     >
                         <div className="space-y-3">
                             <div className="flex items-center justify-between">
-                                <span className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/10">
+                                <span className="text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/10">
                                     {t(`blog.posts.${post.id}.category`)}
                                 </span>
                                 <span className="text-[9px] font-bold text-(--color-text-secondary) opacity-60">
@@ -71,14 +71,14 @@ export const BlogCarousel = () => {
 
                         <div className="mt-auto pt-4 flex items-center justify-between border-t border-(--color-border-glass)">
                             <div className="flex items-center gap-2">
-                                <div className="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-[10px] font-black text-blue-500 border border-blue-500/10">
+                                <div className="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-[10px] font-black text-blue-500 border border-blue-500/10 shadow-inner">
                                     {post.author.charAt(0)}
                                 </div>
                                 <span className="text-[10px] font-black text-(--color-text-secondary) opacity-80 uppercase tracking-wider">
                                     {post.author}
                                 </span>
                             </div>
-                            <div className="p-2 rounded-full bg-(--color-bg-app) group-hover:bg-blue-500 group-hover:text-white transition-all duration-500 shadow-sm border border-(--color-border-glass)">
+                            <div className="p-2 rounded-full bg-(--color-bg-app) group-hover:bg-blue-500 group-hover:text-white transition-all duration-500 shadow-sm border border-(--color-border-glass) group-active:scale-90">
                                 <ArrowUpRight className="w-4 h-4" />
                             </div>
                         </div>
