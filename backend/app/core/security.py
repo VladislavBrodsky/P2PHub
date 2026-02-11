@@ -2,6 +2,7 @@ import hmac
 import hashlib
 import json
 from urllib.parse import parse_qsl
+from typing import Optional
 from fastapi import HTTPException, Header, Depends
 from app.core.config import settings
 

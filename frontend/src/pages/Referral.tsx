@@ -457,20 +457,20 @@ export default function ReferralPage() {
 
             <BriefTermsModal isOpen={showBriefModal} onClose={() => setShowBriefModal(false)} />
 
-            {/* Content Wrapper to enforce layout and stacking context */}
-            <div className="flex flex-col gap-0 relative isolate w-full">
-                <div className="z-30 relative">
+            {/* Content Stack - Optimized for stability and z-index safety */}
+            <div className="flex flex-col gap-4 relative w-full">
+                <div className="relative min-h-[380px]">
                     <EarnHeader onUpgrade={() => {
                         selection();
                         window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
                     }} />
                 </div>
 
-                <div className="z-20 relative">
+                <div className="relative z-10 mt-2">
                     <ReferralWidget onInvite={() => setShowShareModal(true)} onShowQR={() => setShowQR(true)} />
                 </div>
 
-                <div className="z-10 relative">
+                <div className="relative">
                     <MilestonePath />
                 </div>
             </div>

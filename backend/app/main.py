@@ -10,6 +10,10 @@ from app.core.config import settings
 from bot import bot, dp
 from aiogram import types
 
+@app.get("/")
+async def root_health():
+    return {"status": "healthy", "service": "P2PHub Backend"}
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     from app.services.warmup_service import warmup_redis
