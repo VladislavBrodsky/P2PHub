@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-set -x  # Print commands for debugging
+# set -x  # Debugging disabled to reduce log noise
 
 # Turn on python unbuffered mode
 export PYTHONUNBUFFERED=1

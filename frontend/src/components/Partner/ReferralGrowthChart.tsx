@@ -145,7 +145,10 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
         fetchData();
     }, [timeframe, onMetricsUpdate]);
 
-    const maxValue = useMemo(() => Math.max(...chartData.map(d => d.total), 5), [chartData]);
+    const maxValue = useMemo(() => {
+        const vals = chartData.map(d => d.total).filter(v => !isNaN(v));
+        return Math.max(...vals, 5) || 5;
+    }, [chartData]);
 
     // Memoized level bounds to avoid recalculation on every mouse move
     const chartLevelsWithBounds = useMemo(() => {
