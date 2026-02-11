@@ -11,7 +11,7 @@ async def main():
     print("🚀 Testing Viral Copywriter Service...")
     
     if not copywriter.client:
-        print("❌ OpenAI Client not initialized. Check OPENAI_API_KEY in .env")
+        print("❌ OpenAI Client not initialized. Check OPENAI_API_KEY in backend/.env.backend")
         return
 
     topic = "Why Crypto Cards are replacing traditional banks in 2026"

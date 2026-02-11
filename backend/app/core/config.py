@@ -9,6 +9,7 @@ try:
     possible_env_paths = [
         Path(".env"),
         Path("backend/.env"),
+        Path("backend/.env.backend"),
         Path("../backend/.env"),
         Path("/app/.env"),
         Path("/app/backend/.env")
@@ -45,10 +46,12 @@ class Settings(BaseSettings):
 
     # Webhook settings
     WEBHOOK_URL: Optional[str] = None # e.g. https://p2phub-api.up.railway.app
-
     WEBHOOK_PATH: str = "/api/bot/webhook"
 
     # AI Services
+    # Why: API Key for OpenAI integration. Required for the ViralCopywriter service.
+    # We attempt to load this from multiple .env locations (see possible_env_paths above)
+    # due to varying permissions in different deployment/dev environments.
     OPENAI_API_KEY: Optional[str] = None
 
     # Payment settings

@@ -3,6 +3,8 @@ from typing import Dict, Optional
 from app.core.config import settings
 
 # Try to import openai, but don't crash if it's missing (unless used)
+# Why: This allows the app to start even without the 'openai' package installed,
+# preventing crashes in environments where this specific feature isn't needed.
 try:
     from openai import AsyncOpenAI
 except ImportError:
@@ -14,6 +16,10 @@ class ViralCopywriter:
     Specializes in high-conversion, FOMO-driven, and sales-focused articles.
     """
 
+    # VIRAL CATEGORIES CONFIGURATION
+    # Why: We define distinct categories with specific goals, tones, and focuses to ensure
+    # variety in the content strategy. Each category targets a different psychological trigger
+    # (e.g., Fear of Missing Out, Authority, Relatability) to maximize engagement across user segments.
     CATEGORIES = {
         "brand_awareness": {
             "goal": "Brand Awareness",
@@ -53,10 +59,15 @@ class ViralCopywriter:
         }
     }
 
+    # Hardcoded referral link to ensure attribution for all generated content
     REFERRAL_LINK = "https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3"
 
     def __init__(self, api_key: Optional[str] = None):
+        # Why: We allow passing an explicit key for testing or overriding, but default to settings
+        # for seamless production usage.
         self.api_key = api_key or settings.OPENAI_API_KEY
+        
+        # Why: Only initialize the client if the key and library are available to prevent runtime errors.
         if self.api_key and AsyncOpenAI:
             self.client = AsyncOpenAI(api_key=self.api_key)
         else:
@@ -100,6 +111,9 @@ class ViralCopywriter:
     def _build_system_prompt(self, cat_config: Dict[str, str]) -> str:
         """
         Constructs the high-converting system prompt.
+        Why: We prefer a structured prompt with explicit rules and examples over a simple instruction.
+        This ensures consistent output quality, enforces formatting (JSON), and guarantees
+        the inclusion of critical sales elements like the referral link and viral hooks.
         """
         return f"""
 You are an Elite Viral Copywriter and Professional Sales Expert.
@@ -169,4 +183,6 @@ Hook Style: {cat_config['hook_style']}
             }
 
 # Singleton instance
+# Why: We use a singleton pattern to share the OpenAI client connection and configuration
+# across the application, avoiding the overhead of re-initializing the client for every request.
 copywriter = ViralCopywriter()
