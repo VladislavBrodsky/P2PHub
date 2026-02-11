@@ -157,7 +157,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                         className="flex flex-col"
                     >
                         {/* Header Area */}
-                        <div className="px-4 pt-4 pb-4 flex items-center justify-between sticky top-(--header-total-height) z-30 bg-(--color-bg-app)/80 backdrop-blur-xl border-b border-(--color-border-glass)">
+                        <div className="px-4 pt-4 pb-4 flex items-center justify-between border-b border-(--color-border-glass) bg-(--color-bg-app)">
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => { selection(); setActiveTab?.('home'); }}
@@ -228,7 +228,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                                 {currentFeaturedPost.date}
                                             </span>
                                         </div>
-                                        <h3 className="text-2xl sm:text-3xl font-black leading-tight text-white group-hover:text-blue-400 transition-colors line-clamp-2">
+                                        <h3 className="text-xl sm:text-2xl font-black leading-tight text-white group-hover:text-blue-400 transition-colors line-clamp-3">
                                             {currentFeaturedPost.title}
                                         </h3>
                                         <p className="text-xs sm:text-sm font-medium text-white/70 line-clamp-2 hidden sm:block">
@@ -383,7 +383,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             className="flex flex-col min-h-screen bg-(--color-bg-app)"
         >
             {/* Header Sticky */}
-            <div className="px-4 pt-4 pb-3 flex items-center justify-between sticky top-(--header-total-height) z-40 bg-(--color-bg-app)/90 backdrop-blur-xl border-b border-(--color-border-glass)">
+            <div className="px-4 pt-4 pb-3 flex items-center justify-between sticky top-0 z-40 bg-(--color-bg-app)/95 backdrop-blur-xl border-b border-(--color-border-glass)">
                 <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-(--color-bg-surface) active:scale-90 transition-all">
                     <ArrowLeft className="w-6 h-6" />
                 </button>
@@ -391,14 +391,20 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                     <button onClick={onShare} className="p-2.5 rounded-full bg-(--color-bg-surface) border border-(--color-border-glass) active:scale-90 transition-all">
                         <Share2 className="w-5 h-5 text-(--color-text-secondary)" />
                     </button>
-                    <button onClick={onLike} className={`p-2.5 rounded-full border border-(--color-border-glass) transition-all active:scale-90 ${engagement.liked ? 'text-red-500 bg-red-500/10 border-red-500/20' : 'bg-(--color-bg-surface) text-(--color-text-secondary)'}`}>
+                    <button
+                        onClick={onLike}
+                        className={`p-3 rounded-full border transition-all active:scale-95 flex items-center justify-center ${engagement.liked
+                                ? 'bg-red-500/15 border-red-500/30 text-red-500 shadow-lg shadow-red-500/10'
+                                : 'bg-(--color-bg-surface) border-(--color-border-glass) text-(--color-text-secondary) hover:border-red-500/20'
+                            }`}
+                    >
                         <Heart className={`w-5 h-5 ${engagement.liked ? 'fill-current' : ''}`} />
                     </button>
                 </div>
             </div>
 
             {/* Content Container */}
-            <div className="px-5 pt-8 pb-32 space-y-8 max-w-2xl mx-auto">
+            <div className="px-5 pt-20 pb-32 space-y-8 max-w-2xl mx-auto">
                 {/* Meta */}
                 <div className="space-y-4">
                     <div className="flex items-center gap-2">
@@ -480,17 +486,27 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                 <div className="pt-12 grid grid-cols-2 gap-3 sm:gap-4">
                     <button
                         onClick={() => { selection(); onPrev(); }}
-                        className="p-4 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-blue-500/30 active:scale-95 transition-all flex flex-col gap-2 group text-left"
+                        className="p-4 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-blue-500/30 active:scale-95 transition-all flex items-center gap-3 group text-left"
                     >
-                        <ChevronLeft className="w-5 h-5 text-blue-500" />
-                        <span className="text-[9px] sm:text-[10px] font-extrabold text-(--color-text-secondary) uppercase tracking-wider">{isRussian ? "Предыдущая" : "Previous"}</span>
+                        <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all">
+                            <ChevronLeft className="w-5 h-5" />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-[9px] sm:text-[10px] font-extrabold text-(--color-text-secondary) uppercase tracking-wider">{isRussian ? "Назад" : "Back"}</span>
+                            <span className="text-[10px] sm:text-xs font-black">{isRussian ? "Предыдущая" : "Previous"}</span>
+                        </div>
                     </button>
                     <button
                         onClick={() => { selection(); onNext(); }}
-                        className="p-4 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-blue-500/30 active:scale-95 transition-all flex flex-col items-end gap-2 group text-right"
+                        className="p-4 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-blue-500/30 active:scale-95 transition-all flex items-center justify-end gap-3 group text-right"
                     >
-                        <ChevronRight className="w-5 h-5 text-blue-500" />
-                        <span className="text-[9px] sm:text-[10px] font-extrabold text-(--color-text-secondary) uppercase tracking-wider">{isRussian ? "Следующая" : "Next"}</span>
+                        <div className="flex flex-col items-end">
+                            <span className="text-[9px] sm:text-[10px] font-extrabold text-(--color-text-secondary) uppercase tracking-wider">{isRussian ? "Далее" : "Next"}</span>
+                            <span className="text-[10px] sm:text-xs font-black">{isRussian ? "Следующая статья" : "Forward"}</span>
+                        </div>
+                        <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all">
+                            <ChevronRight className="w-5 h-5" />
+                        </div>
                     </button>
                 </div>
             </div>
