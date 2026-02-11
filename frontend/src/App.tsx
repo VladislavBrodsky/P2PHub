@@ -2,13 +2,31 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { AnimatePresence, LazyMotion, domAnimation } from 'framer-motion';
 import { Layout } from './components/Layout/Layout';
 // Lazy load pages
-const Dashboard = lazy(() => import('./pages/Dashboard'));
-const CardsPage = lazy(() => import('./pages/Cards'));
-const CommunityPage = lazy(() => import('./pages/Community'));
-const ReferralPage = lazy(() => import('./pages/Referral'));
-const LeaderboardPage = lazy(() => import('./pages/Leaderboard'));
-const SubscriptionPage = lazy(() => import('./pages/Subscription'));
-const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })));
+const DashboardLoader = () => import('./pages/Dashboard');
+const CardsLoader = () => import('./pages/Cards');
+const CommunityLoader = () => import('./pages/Community');
+const ReferralLoader = () => import('./pages/Referral');
+const LeaderboardLoader = () => import('./pages/Leaderboard');
+const SubscriptionLoader = () => import('./pages/Subscription');
+const AdminLoader = () => import('./pages/AdminPage').then(m => ({ default: m.AdminPage }));
+
+const Dashboard = lazy(DashboardLoader);
+const CardsPage = lazy(CardsLoader);
+const CommunityPage = lazy(CommunityLoader);
+const ReferralPage = lazy(ReferralLoader);
+const LeaderboardPage = lazy(LeaderboardLoader);
+const SubscriptionPage = lazy(SubscriptionLoader);
+const AdminPage = lazy(AdminLoader);
+
+export const prefetchPages = {
+    home: DashboardLoader,
+    cards: CardsLoader,
+    partner: CommunityLoader,
+    earn: ReferralLoader,
+    league: LeaderboardLoader,
+    subscription: SubscriptionLoader,
+    admin: AdminLoader,
+};
 
 
 import { miniApp, backButton, viewport, swipeBehavior } from '@telegram-apps/sdk-react';
@@ -140,7 +158,7 @@ function AppContent() {
     }, [activeTab]);
 
     return (
-        <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
+        <Layout activeTab={activeTab} setActiveTab={setActiveTab} prefetchPages={prefetchPages}>
             <Suspense fallback={<PageSkeleton />}>
                 <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
                     {visitedTabs.has('home') && <Dashboard setActiveTab={setActiveTab} />}

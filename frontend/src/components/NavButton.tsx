@@ -5,11 +5,12 @@ import { useHaptic } from '../hooks/useHaptic';
 interface NavButtonProps {
     active: boolean;
     onClick: () => void;
+    onMouseEnter?: () => void;
     icon: React.ReactNode;
     label: string;
 }
 
-export const NavButton = ({ active, onClick, icon, label }: NavButtonProps) => {
+export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavButtonProps) => {
     const { selection } = useHaptic();
 
     const handleClick = () => {
@@ -20,6 +21,8 @@ export const NavButton = ({ active, onClick, icon, label }: NavButtonProps) => {
     return (
         <button
             onClick={handleClick}
+            onMouseEnter={onMouseEnter}
+            onPointerEnter={onMouseEnter}
             className={`relative flex h-full min-w-0 flex-1 flex-col items-center justify-center gap-1 transition-all duration-300 active:scale-90 ${active
                 ? 'text-(--nav-active)'
                 : 'text-(--nav-inactive) hover:text-(--color-text-primary)'

@@ -1,14 +1,15 @@
-import { motion } from 'framer-motion';
-import { CommunityOrbit } from '../components/Marketing/CommunityOrbit';
-import { Ticker } from '../components/Marketing/Ticker';
-import { BentoGrid } from '../components/Marketing/BentoGrid';
-import { BlogCarousel } from '../components/Marketing/BlogCarousel';
-import { IncomePotential } from '../components/Marketing/IncomePotential';
-import { PartnerStats } from '../components/Marketing/PartnerStats';
-
 import { useHaptic } from '../hooks/useHaptic';
 import { Sparkles, ShieldCheck } from 'lucide-react';
 import { useUser } from '../context/UserContext';
+import { lazy } from 'react';
+import { motion } from 'framer-motion';
+import { LazyLoader } from '../components/ui/LazyLoader';
+
+const CommunityOrbit = lazy(() => import('../components/Marketing/CommunityOrbit').then(m => ({ default: m.CommunityOrbit })));
+const BentoGrid = lazy(() => import('../components/Marketing/BentoGrid').then(m => ({ default: m.BentoGrid })));
+const BlogCarousel = lazy(() => import('../components/Marketing/BlogCarousel').then(m => ({ default: m.BlogCarousel })));
+const IncomePotential = lazy(() => import('../components/Marketing/IncomePotential').then(m => ({ default: m.IncomePotential })));
+const PartnerStats = lazy(() => import('../components/Marketing/PartnerStats').then(m => ({ default: m.PartnerStats })));
 
 import { getRank, getXPProgress } from '../utils/ranking';
 import { useTranslation, Trans } from 'react-i18next';
@@ -63,7 +64,9 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             <motion.div variants={item} className="px-4 space-y-12">
                 {/* Orbit Container */}
                 <div className="relative overflow-visible -mx-4 h-[400px] -mt-10 flex items-center justify-center">
-                    <CommunityOrbit />
+                    <LazyLoader height="400px">
+                        <CommunityOrbit />
+                    </LazyLoader>
                 </div>
 
                 {/* Sub-Hero Text Section */}
@@ -125,22 +128,30 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
             {/* 2. Viral Proof - Partner Stats */}
             <motion.div variants={item} className="mt-4">
-                <PartnerStats onNavigateToEarn={() => setActiveTab?.('earn')} />
+                <LazyLoader height="160px">
+                    <PartnerStats onNavigateToEarn={() => setActiveTab?.('earn')} />
+                </LazyLoader>
             </motion.div>
 
             {/* 3. The Evolution - Bento Grid */}
             <motion.div variants={item}>
-                <BentoGrid />
+                <LazyLoader height="400px">
+                    <BentoGrid />
+                </LazyLoader>
             </motion.div>
 
             {/* 4. The Opportunity - Income Potential */}
             <motion.div variants={item}>
-                <IncomePotential onNavigateToPartner={() => setActiveTab?.('partner')} />
+                <LazyLoader height="600px">
+                    <IncomePotential onNavigateToPartner={() => setActiveTab?.('partner')} />
+                </LazyLoader>
             </motion.div>
 
             {/* 5. Intelligence Hub - Blog Carousel */}
             <motion.div variants={item}>
-                <BlogCarousel />
+                <LazyLoader height="300px">
+                    <BlogCarousel />
+                </LazyLoader>
             </motion.div>
 
             {/* 6. Final CTA */}
