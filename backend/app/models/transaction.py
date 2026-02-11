@@ -1,8 +1,10 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from sqlmodel import Field, Relationship, SQLModel
 
+if TYPE_CHECKING:
+    from app.models.partner import Partner
 
 class PartnerTransaction(SQLModel, table=True):
     __table_args__ = {"extend_existing": True}

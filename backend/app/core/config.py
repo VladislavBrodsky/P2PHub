@@ -47,7 +47,7 @@ class Settings(BaseSettings):
     WEBHOOK_URL: Optional[str] = None # e.g. https://p2phub-api.up.railway.app
 
     WEBHOOK_PATH: str = "/api/bot/webhook"
-    
+
     # AI Services
     OPENAI_API_KEY: Optional[str] = None
 

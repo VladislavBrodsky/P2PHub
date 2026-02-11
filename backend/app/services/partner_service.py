@@ -225,10 +225,10 @@ async def process_referral_logic(partner_id: int):
                 try:
                     new_level = get_level(referrer.xp)
                     if new_level > referrer.level:
-                        for l in range(referrer.level + 1, new_level + 1):
+                        for lvl in range(referrer.level + 1, new_level + 1):
                             try:
                                 lang = referrer.language_code or "en"
-                                msg = get_msg(lang, "level_up", level=l)
+                                msg = get_msg(lang, "level_up", level=lvl)
                                 await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
                             except Exception: pass
                         referrer.level = new_level

@@ -23,6 +23,9 @@ from app.models.schemas import (
 from app.services.redis_service import redis_service
 from app.utils.ranking import get_level
 from bot import bot, types
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -146,7 +149,6 @@ async def get_my_profile(
 
     return partner_dict
 
-    return partners_data
 
 @router.get("/top", response_model=List[PartnerTopResponse])
 async def get_top_partners(
@@ -304,7 +306,6 @@ async def get_recent_partners(
     except Exception:
         pass
 
-    return partners_data
 
 @router.get("/tree", response_model=NetworkStats)
 @limiter.limit("60/minute")

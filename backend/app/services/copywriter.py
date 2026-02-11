@@ -1,6 +1,5 @@
-import asyncio
-import random
-from typing import Optional, Dict, Any
+from typing import Dict, Optional
+
 from app.core.config import settings
 
 # Try to import openai, but don't crash if it's missing (unless used)
@@ -14,7 +13,7 @@ class ViralCopywriter:
     AI-Powered Viral Content Generator for Pintopay Blog.
     Specializes in high-conversion, FOMO-driven, and sales-focused articles.
     """
-    
+
     CATEGORIES = {
         "brand_awareness": {
             "goal": "Brand Awareness",
@@ -72,12 +71,12 @@ class ViralCopywriter:
             return {
                 "error": "OpenAI API Key is missing. Please configure OPENAI_API_KEY in settings."
             }
-        
+
         if category not in self.CATEGORIES:
             raise ValueError(f"Invalid category. Choose from: {list(self.CATEGORIES.keys())}")
 
         cat_config = self.CATEGORIES[category]
-        
+
         system_prompt = self._build_system_prompt(cat_config)
         user_prompt = f"Topic: {topic}\nLanguage: {language}\n\nGenerate the viral article now."
 
@@ -91,7 +90,7 @@ class ViralCopywriter:
                 temperature=0.75, # High creativity but focused
                 max_tokens=1500
             )
-            
+
             content = response.choices[0].message.content
             return self._parse_response(content)
         except Exception as e:
@@ -152,12 +151,12 @@ Hook Style: {cat_config['hook_style']}
         """
         import json
         import re
-        
+
         # Cleanup code blocks if present
         content = re.sub(r'^```json\s*', '', content)
         content = re.sub(r'^```\s*', '', content)
         content = re.sub(r'\s*```$', '', content)
-        
+
         try:
             return json.loads(content)
         except json.JSONDecodeError:
