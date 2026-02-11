@@ -13,6 +13,11 @@ def get_main_menu_keyboard(url: str, referral_link: str = "", referral_code: str
             url=referral_link
         ))
 
+    if referral_code:
+        builder.row(types.InlineKeyboardButton(
+            text="💎 Send Premium Card",
+            switch_inline_query=referral_code
+        ))
 
     builder.row(types.InlineKeyboardButton(
         text="📢 Join Community",

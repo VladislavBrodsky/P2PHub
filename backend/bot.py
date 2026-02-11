@@ -80,7 +80,7 @@ async def cmd_start(message: types.Message):
             await message.answer(
                 welcome_text,
                 parse_mode="Markdown",
-                reply_markup=get_main_menu_keyboard(WEB_APP_URL, share_url)
+                reply_markup=get_main_menu_keyboard(WEB_APP_URL, share_url, referral_code=partner.referral_code)
             )
 
             break # We only need one session
@@ -298,7 +298,7 @@ async def handle_tx_hash(message: types.Message):
 
                 await message.answer(
                     "What would you like to do next?",
-                    reply_markup=get_main_menu_keyboard(WEB_APP_URL, share_url)
+                    reply_markup=get_main_menu_keyboard(WEB_APP_URL, share_url, referral_code=partner.referral_code)
                 )
 
             else:
