@@ -1,15 +1,16 @@
+from typing import Any, Dict, List
+
 from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.core.security import get_current_user, get_tg_user, get_current_admin
-from app.core.config import settings
+
+from app.core.i18n import get_msg
+from app.core.security import get_current_admin
 from app.models.partner import Partner, get_session
 from app.models.transaction import PartnerTransaction
-from app.services.payment_service import payment_service
-from app.services.notification_service import notification_service
 from app.services.admin_service import admin_service
-from app.core.i18n import get_msg
-from sqlmodel import select
-from typing import List, Any, Dict
+from app.services.notification_service import notification_service
+from app.services.payment_service import payment_service
 
 router = APIRouter()
 
@@ -44,10 +45,10 @@ async def approve_payment(
     Approves a manual payment and triggers user upgrade.
     """
     transaction = await session.get(PartnerTransaction, transaction_id)
-    
+
     if not transaction:
         raise HTTPException(status_code=404, detail="Transaction not found")
-        
+
     if transaction.status != "manual_review":
         raise HTTPException(status_code=400, detail=f"Transaction is in {transaction.status} state, cannot approve")
 
@@ -66,7 +67,7 @@ async def approve_payment(
         tx_hash=transaction.tx_hash,
         transaction_id=transaction.id
     )
-    
+
     if success:
         # Notify the User
         try:
@@ -78,7 +79,7 @@ async def approve_payment(
             )
         except Exception as e:
             print(f"[DEBUG] User approval notification failed: {e}")
-            
+
         return {"status": "success", "message": f"Payment {transaction.id} approved for {partner.telegram_id}"}
 
     else:
@@ -94,20 +95,20 @@ async def reject_payment(
     Rejects a manual payment. Sets status to 'failed' and notifies the user.
     """
     transaction = await session.get(PartnerTransaction, transaction_id)
-    
+
     if not transaction:
         raise HTTPException(status_code=404, detail="Transaction not found")
-        
+
     if transaction.status != "manual_review":
         raise HTTPException(status_code=400, detail=f"Transaction is in {transaction.status} state, cannot reject")
 
     # Get the partner
     partner = await session.get(Partner, transaction.partner_id)
-    
+
     transaction.status = "failed"
     session.add(transaction)
     await session.commit()
-    
+
     # Notify the User
     if partner:
         try:
@@ -117,5 +118,5 @@ async def reject_payment(
             )
         except Exception:
             pass
-            
+
     return {"status": "success", "message": f"Payment {transaction_id} rejected"}

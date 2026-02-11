@@ -1,6 +1,7 @@
 import asyncio
-from aiogram import Bot
 import os
+
+from aiogram import Bot
 from dotenv import load_dotenv
 
 # Load from backend/.env
@@ -11,7 +12,7 @@ async def main():
     if not TOKEN:
         print("No BOT_TOKEN found in backend/.env")
         return
-    
+
     print(f"Checking webhook for token: {TOKEN[:5]}...{TOKEN[-5:]}")
     bot = Bot(token=TOKEN)
     try:

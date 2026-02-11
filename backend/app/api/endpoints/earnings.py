@@ -1,11 +1,13 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.core.security import get_current_user, get_tg_user
-from app.models.partner import Partner, Earning, get_session
+from app.models.partner import Earning, Partner, get_session
 from app.models.schemas import EarningSchema
 from app.services.redis_service import redis_service
-from typing import List
 
 router = APIRouter()
 
@@ -29,17 +31,17 @@ async def get_my_earnings(
     # 2. Query DB
     result = await session.exec(select(Partner).where(Partner.telegram_id == tg_id))
     partner = result.first()
-    
+
     if not partner:
         return []
-        
+
     statement = select(Earning).where(Earning.partner_id == partner.id).order_by(Earning.id.desc()).limit(50)
     result = await session.exec(statement)
     earnings = result.all()
-    
+
     # Transform to serializable dicts
     earnings_data = [e.dict() for e in earnings]
-    
+
     # 3. Store in Redis Cache (expires in 2 minutes for a good balance of freshness/speed)
     try:
         await redis_service.set_json(cache_key, earnings_data, expire=120)
@@ -58,7 +60,7 @@ async def create_mock_earning(
 
     result = await session.exec(select(Partner).where(Partner.telegram_id == tg_id))
     partner = result.first()
-    
+
     if partner:
         earning = Earning(
             partner_id=partner.id,
@@ -69,7 +71,7 @@ async def create_mock_earning(
         session.add(earning)
         session.add(partner)
         await session.commit()
-        
+
         # Invalidate cache on new earning
         try:
             cache_key = f"partner:earnings:{tg_id}"
@@ -78,5 +80,5 @@ async def create_mock_earning(
             await redis_service.client.delete(f"partner:profile:{tg_id}")
         except Exception:
             pass
-            
+
     return {"status": "success"}

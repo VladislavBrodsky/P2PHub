@@ -1,0 +1,29 @@
+# Ruff configuration for P2PHub Backend
+
+# Target Python version
+target-version = "py312"
+
+# Exclude common directories
+exclude = [
+    ".git",
+    ".github",
+    ".venv",
+    "venv",
+    "node_modules",
+    "__pypackages__",
+    "dist",
+]
+
+[lint]
+# Enable Pyflakes (F) and Pycodestyle (E, W)
+select = ["F", "E", "W", "I"]
+ignore = [
+    "E501", # Line length (handled by formatter if we used one, but many long strings in this project)
+]
+
+[lint.per-file-ignores]
+# Ignore module level imports not at top of file for scripts, 
+# as they often need sys.path manipulation
+"scripts/*.py" = ["E402"]
+# Allow unused imports in __init__.py
+"__init__.py" = ["F401"]

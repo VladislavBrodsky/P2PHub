@@ -1,7 +1,10 @@
-from sqlmodel import SQLModel, Field, create_engine, Session, select, Relationship
-from typing import Optional, List
-from app.core.config import settings
 from datetime import datetime
+from typing import Optional
+
+from sqlmodel import Field, Relationship, SQLModel
+
+from app.core.config import settings
+
 
 class Partner(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -11,7 +14,7 @@ class Partner(SQLModel, table=True):
     last_name: Optional[str] = None
     photo_url: Optional[str] = None
     photo_file_id: Optional[str] = None  # Telegram file_id for profile photo
-    language_code: Optional[str] = Field(default="en") 
+    language_code: Optional[str] = Field(default="en")
     balance: float = Field(default=0.0)
     xp: float = Field(default=0.0, index=True)
     level: int = Field(default=1)
@@ -21,7 +24,7 @@ class Partner(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True) # Optimized for sorting
     updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}, index=True)
     completed_tasks: str = Field(default="[]") # Store task IDs as JSON string
-    
+
     # PRO Subscription Status
     is_pro: bool = Field(default=False, index=True)
     pro_expires_at: Optional[datetime] = Field(default=None)
@@ -29,15 +32,15 @@ class Partner(SQLModel, table=True):
     pro_started_at: Optional[datetime] = Field(default=None)
     pro_notification_seen: bool = Field(default=False)  # Track if user saw the "You are PRO" card
     subscription_plan: Optional[str] = Field(default=None) # e.g. "PRO_LIFETIME", "PRO_YEARLY"
-    
+
     # Materialized Totals (Optimized for 100K+ Users)
     total_earned_usdt: float = Field(default=0.0, index=True)
     referral_count: int = Field(default=0, index=True)
-    
+
     # Verification & Payment Details
     last_transaction_id: Optional[int] = Field(default=None, foreign_key="partnertransaction.id")
     payment_details: Optional[str] = Field(default=None) # Store JSON of extra details if needed
-    
+
     # Relationships
     referrals: list["Partner"] = Relationship(
         back_populates="referrer",
@@ -79,7 +82,7 @@ class PartnerTask(SQLModel, table=True):
     task_id: str = Field(index=True)
     completed_at: datetime = Field(default_factory=datetime.utcnow)
     reward_xp: float = Field(default=0.0)
-    
+
     partner: Partner = Relationship(back_populates="completed_task_records")
 
 class Earning(SQLModel, table=True):
@@ -100,8 +103,8 @@ class SystemSetting(SQLModel, table=True):
     updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}, index=True)
 
 from sqlalchemy.ext.asyncio import create_async_engine
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 # Standardized async database URL from settings
 database_url = settings.async_database_url
@@ -130,4 +133,3 @@ async def get_session():
 
 # Resolve Relationship string references
 from app.models.transaction import PartnerTransaction
-from app.models.blog import BlogPostEngagement, PartnerBlogLike

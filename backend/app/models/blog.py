@@ -1,6 +1,8 @@
-from sqlmodel import SQLModel, Field, Relationship
-from typing import Optional
 from datetime import datetime
+from typing import Optional
+
+from sqlmodel import Field, SQLModel
+
 
 class BlogPostEngagement(SQLModel, table=True):
     __table_args__ = {"extend_existing": True}

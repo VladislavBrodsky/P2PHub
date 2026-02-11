@@ -2,6 +2,7 @@ import asyncio
 import os
 import sys
 from datetime import datetime, timedelta
+
 from dotenv import load_dotenv
 
 # Add backend to path
@@ -9,29 +10,30 @@ sys.path.append(os.path.join(os.getcwd(), 'backend'))
 # Load env before importing app
 load_dotenv(dotenv_path=os.path.join(os.getcwd(), 'backend', '.env'))
 
-from app.models.partner import Partner, get_session
-
-from app.services.payment_service import payment_service
 from sqlmodel import select
+
+from app.models.partner import Partner, get_session
+from app.services.payment_service import payment_service
+
 
 async def verify_ton_session_flow():
     from app.core.config import settings
     print(f"🔧 Using Database: {settings.async_database_url}")
     print("🧪 Starting TON Session Verification...")
 
-    
+
     async for session in get_session():
         # 1. Get a test user
         stmt = select(Partner).limit(1)
         res = await session.exec(stmt)
         user = res.first()
-        
+
         if not user:
             print("❌ No users found for testing.")
             return
 
         print(f"👤 Testing with User: {user.telegram_id}")
-        
+
         # Reset PRO status
         user.is_pro = False
         session.add(user)
@@ -59,7 +61,7 @@ async def verify_ton_session_flow():
         tx.created_at = datetime.utcnow() - timedelta(minutes=11)
         session.add(tx)
         await session.commit()
-        
+
         # Try to verify with a "valid" looking hash (it will still fail but should hit the session check first)
         success = await payment_service.verify_ton_transaction(session, user, "a" * 64)
         print(f"{'✅' if not success else '❌'} Verification failed due to timeout as expected")

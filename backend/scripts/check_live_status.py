@@ -1,6 +1,7 @@
 
 import asyncio
 import os
+
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
 
@@ -9,10 +10,10 @@ os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgr
 async def check_live_status():
     db_url = os.environ["DATABASE_URL"]
     engine = create_async_engine(db_url, echo=False, future=True)
-    
+
     async with engine.connect() as conn:
         print("🔍 Checking LIVE status for @uslincoln (ID: 1)...")
-        
+
         # Check XP transactions in the last 15 minutes
         res = await conn.execute(text("SELECT type, amount, description, created_at FROM xptransaction WHERE partner_id = 1 AND created_at > NOW() - INTERVAL '15 minutes' ORDER BY created_at DESC"))
         rows = res.all()

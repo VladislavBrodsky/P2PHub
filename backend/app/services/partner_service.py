@@ -1,15 +1,16 @@
-import secrets
 import logging
-from typing import Optional, List, Dict, Tuple
+import secrets
+from datetime import datetime, timedelta
+from typing import List, Optional, Tuple
+
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.models.partner import Partner, XPTransaction
-from datetime import datetime, timedelta
-from app.core.i18n import get_msg
-from app.services.leaderboard_service import leaderboard_service
-from app.services.redis_service import redis_service
-from app.services.notification_service import notification_service
 
+from app.core.i18n import get_msg
+from app.models.partner import Partner, XPTransaction
+from app.services.leaderboard_service import leaderboard_service
+from app.services.notification_service import notification_service
+from app.services.redis_service import redis_service
 from app.utils.ranking import get_level
 
 logger = logging.getLogger(__name__)
@@ -32,10 +33,10 @@ async def create_partner(
     statement = select(Partner).where(Partner.telegram_id == telegram_id)
     result = await session.exec(statement)
     partner = result.first()
-    
+
     if partner:
         return partner, False
-        
+
     # 2. Assign Referrer if code exists
     referrer_id = None
     referrer = None
@@ -45,7 +46,7 @@ async def create_partner(
             ref_stmt = select(Partner).where(Partner.referral_code == referrer_code)
             ref_res = await session.exec(ref_stmt)
             referrer = ref_res.first()
-            
+
             if referrer:
                 referrer_id = referrer.id
         except Exception as e:
@@ -71,12 +72,12 @@ async def create_partner(
     session.add(partner)
     await session.commit()
     await session.refresh(partner)
-    
+
     # 3.5 Sync to Redis Leaderboard
     try:
         await leaderboard_service.update_score(partner.id, partner.xp)
     except Exception: pass
-    
+
     # 4. Invalidate referral tree stats for ancestors
     if referrer:
         try:
@@ -89,14 +90,14 @@ async def create_partner(
                     await redis_service.client.delete(f"ref_tree_members:{anc_id}:1")
         except Exception as e:
             logger.error(f"Failed to invalidate cache for ancestors: {e}")
-    
+
     # 4.5 Invalidate Global Recent Partners list (Redis only)
     # The refresh logic in get_recent_partners will handle the actual data fetch.
     try:
         await redis_service.client.delete("partners:recent_v2")
     except Exception as e:
         logger.error(f"Failed to invalidate global recent partners cache: {e}")
-    
+
     return partner, True
 
 async def process_referral_notifications(bot, session: AsyncSession, partner: Partner, is_new: bool):
@@ -121,25 +122,26 @@ async def get_partner_by_referral_code(session: AsyncSession, code: str) -> Opti
 
 from app.worker import broker
 
+
 @broker.task(task_name="process_referral_logic")
 async def process_referral_logic(partner_id: int):
     """
     Optimized 9-level referral logic.
     Run as a standard asyncio background task (no external broker needed).
     """
-    from app.models.partner import Partner, XPTransaction, engine # Use GLOBAL engine
-    from app.services.notification_service import notification_service
     from sqlalchemy.orm import sessionmaker
-    from sqlmodel.ext.asyncio.session import AsyncSession
-    from app.core.i18n import get_msg
-    from app.services.leaderboard_service import leaderboard_service
-    from app.services.redis_service import redis_service
-    from app.utils.ranking import get_level
     from sqlmodel import select
+    from sqlmodel.ext.asyncio.session import AsyncSession
+
+    from app.core.i18n import get_msg
+    from app.models.partner import Partner, engine  # Use GLOBAL engine
+    from app.services.leaderboard_service import leaderboard_service
+    from app.services.notification_service import notification_service
+    from app.services.redis_service import redis_service
 
     # Use the global engine, do NOT create a new one every time
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    
+
     try:
         async with async_session() as session:
             partner = await session.get(Partner, partner_id)
@@ -159,32 +161,32 @@ async def process_referral_logic(partner_id: int):
 
             # XP distribution configuration
             XP_MAP = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
-            
+
             current_referrer_id = partner.referrer_id
             logger.info(f"🔄 Processing referral logic for partner {partner_id} (@{partner.username}). Referrer: {current_referrer_id}")
 
             for level in range(1, 10):
                 if not current_referrer_id:
                     break
-                    
+
                 referrer = ancestor_map.get(current_referrer_id)
                 if not referrer:
                     logger.warning(f"⚠️ Ancestor {current_referrer_id} not found in map for partner {partner_id} at level {level}")
                     break
-                
+
                 try:
                     # --- CORE OPERATION: XP DISTRIBUTION (GOLDEN RULE) ---
                     xp_gain = XP_MAP.get(level, 0)
                     if referrer.is_pro:
                         xp_gain *= 5
-                        
+
                     # ATOMIC SQL INCREMENT (Resilient to concurrency)
                     # We use a direct text query or SQLAlchemy expression to avoid race conditions
                     await session.execute(
                         text("UPDATE partner SET xp = xp + :gain, referral_count = referral_count + 1 WHERE id = :p_id"),
                         {"gain": xp_gain, "p_id": referrer.id}
                     )
-                    
+
                     xp_tx = XPTransaction(
                         partner_id=referrer.id,
                         amount=xp_gain,
@@ -204,17 +206,17 @@ async def process_referral_logic(partner_id: int):
                         currency="XP"
                     )
                     session.add(xp_earning)
-                    
+
                     # Flush to ensure XP is captured in the transaction
                     await session.flush()
-                    
+
                     # Refresh referrer object to pick up the atomic changes for side effects (like level up)
                     await session.refresh(referrer)
                     logger.info(f"💰 [Level {level}] XP Awarded: {xp_gain} to {referrer.id}")
-                    
+
                 except Exception as core_error:
                     logger.critical(f"❌ CRITICAL: Failed to award XP for {referrer.id} at level {level}: {core_error}")
-                    # If core operation fails for one user, we might still want to try for others, 
+                    # If core operation fails for one user, we might still want to try for others,
                     # but usually this means DB issue. We continue to next level just in case.
                     continue
 
@@ -232,26 +234,26 @@ async def process_referral_logic(partner_id: int):
                         referrer.level = new_level
                 except Exception as e:
                     logger.error(f"⚠️ Level up logic failed for {referrer.id}: {e}")
-                    
+
                 # 3. Redis Side Effects
                 try:
                     await leaderboard_service.update_score(referrer.id, referrer.xp)
                     await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
-                    
+
                     # Also invalidate Network Tree caches to ensure real-time visibility in Explorer
                     await redis_service.client.delete(f"ref_tree_stats:{referrer.id}")
                     if level == 1:
                         await redis_service.client.delete(f"ref_tree_members:{referrer.id}:1")
                 except Exception as e:
                     logger.error(f"⚠️ Redis sync/invalidation failed for {referrer.id}: {e}")
-                
+
                 # 4. Referral Notifications
                 try:
                     lang = referrer.language_code or "en"
                     new_partner_name = f"{partner.first_name}"
                     if partner.username:
                         new_partner_name += f" (@{partner.username})"
-                    
+
                     msg = None
                     if level == 1:
                         msg = get_msg(lang, "referral_l1_congrats", name=new_partner_name)
@@ -270,13 +272,13 @@ async def process_referral_logic(partner_id: int):
                                     chain_names.append(name)
                             chain_names.append(new_partner_name)
                             referral_chain = "\n".join([f"➜ {name}" for name in chain_names])
-                            
+
                             if level == 2:
                                 msg = get_msg(lang, "referral_l2_congrats", referral_chain=referral_chain)
                             else:
                                 msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=referral_chain)
                         except Exception: pass
-                    
+
                     if msg:
                         await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
                 except Exception as e:
@@ -287,7 +289,7 @@ async def process_referral_logic(partner_id: int):
             await session.commit()
             logger.info(f"✅ Successfully processed all levels for partner {partner_id}")
 
-    
+
     except Exception as e:
         import logging
         logging.error(f"Error in process_referral_logic: {e}")
@@ -297,43 +299,43 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     Distributes commissions for PRO subscription purchase across 9 levels.
     L1: 30%, L2: 5%, L3: 3%, L4-9: 1%
     """
-    from app.models.partner import Partner, Earning
-    
+    from app.models.partner import Earning, Partner
+
     partner = await session.get(Partner, partner_id)
     if not partner or not partner.referrer_id:
         return
 
     # COMMISSION MAP
     COMMISSION_PCT = {1: 0.30, 2: 0.05, 3: 0.03, 4: 0.01, 5: 0.01, 6: 0.01, 7: 0.01, 8: 0.01, 9: 0.01}
-    
+
     # Get Lineage
     path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
     lineage_ids = (path_ids + [partner.referrer_id])[-9:]
-    
+
     # Fetch ancestors
     statement = select(Partner).where(Partner.id.in_(lineage_ids))
     result = await session.exec(statement)
     ancestor_map = {p.id: p for p in result.all()}
-    
+
     current_referrer_id = partner.referrer_id
     for level in range(1, 10):
         if not current_referrer_id:
             break
-            
+
         referrer = ancestor_map.get(current_referrer_id)
         if not referrer:
             break
-            
+
         pct = COMMISSION_PCT.get(level, 0)
         commission = total_amount * pct
-        
+
         if commission > 0:
             # ATOMIC SQL INCREMENT for Commissions
             await session.execute(
                 text("UPDATE partner SET balance = balance + :comm, total_earned_usdt = total_earned_usdt + :comm WHERE id = :p_id"),
                 {"comm": commission, "p_id": referrer.id}
             )
-            
+
             # Log Commission Earning
             earning = Earning(
                 partner_id=referrer.id,
@@ -344,14 +346,14 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 currency="USDT"
             )
             session.add(earning)
-            
+
             # Refresh to pick up changes for cache consistency
             await session.refresh(referrer)
-            
+
             # Invalidate cache
             await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
             await redis_service.client.delete(f"partner:earnings:{referrer.telegram_id}")
-            
+
             # Notify
             try:
                 lang = referrer.language_code or "en"
@@ -360,7 +362,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             except Exception: pass
 
         current_referrer_id = referrer.referrer_id
-    
+
     await session.commit()
 
 async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dict[str, int]:
@@ -381,7 +383,7 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
 
     # Calculate levels using the distance from base_depth
     query = text("""
-        SELECT 
+        SELECT
             (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level,
             COUNT(*) as count
         FROM partner
@@ -390,20 +392,20 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
         HAVING level >= 1 AND level <= 9
         ORDER BY level;
     """)
-    
+
     result = await session.execute(query, {
-        "search_path": search_path, 
+        "search_path": search_path,
         "search_wildcard": f"{search_path}.%",
         "base_depth": base_depth
     })
-    
+
     stats = {f"level_{i}": 0 for i in range(1, 10)}
     rows = result.all()
     for row in rows:
         lvl = int(row[0])
         if 1 <= lvl <= 9:
             stats[f"level_{lvl}"] = row[1]
-        
+
     await redis_service.set_json(cache_key, stats, expire=1800) # 30 mins cache
     return stats
 
@@ -430,7 +432,7 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
         ORDER BY xp DESC
         LIMIT 100;
     """)
-    
+
     try:
         result = await session.execute(query, {
             "search_path": search_path,
@@ -456,7 +458,7 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
                 "id": row[12],
                 "photo_file_id": row[13]
             })
-        
+
         return members
     except Exception as e:
         logger.error(f"Error fetching tree members: {e}")
@@ -474,7 +476,7 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
     if not partner: return {"growth_pct": 0, "previous_count": 0, "current_count": 0}
 
     now = datetime.utcnow()
-    
+
     # Define period length
     if timeframe == '24H': delta = timedelta(hours=24)
     elif timeframe == '7D': delta = timedelta(days=7)
@@ -496,9 +498,9 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
         AND created_at >= :start AND created_at <= :end
     """)
     res_curr = await session.execute(stmt_curr, {
-        "search_path": search_path, 
-        "search_wildcard": f"{search_path}.%", 
-        "start": current_start, 
+        "search_path": search_path,
+        "search_wildcard": f"{search_path}.%",
+        "start": current_start,
         "end": now
     })
     current_count = res_curr.scalar() or 0
@@ -510,9 +512,9 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
         AND created_at >= :start AND created_at < :end
     """)
     res_prev = await session.execute(stmt_prev, {
-        "search_path": search_path, 
-        "search_wildcard": f"{search_path}.%", 
-        "start": previous_start, 
+        "search_path": search_path,
+        "search_wildcard": f"{search_path}.%",
+        "start": previous_start,
         "end": current_start
     })
     previous_count = res_prev.scalar() or 0
@@ -529,7 +531,7 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
         "previous_count": previous_count,
         "timeframe": timeframe
     }
-    
+
     await redis_service.set_json(cache_key, result_data, expire=300)
     return result_data
 
@@ -545,7 +547,7 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     if not partner: return []
 
     now = datetime.utcnow()
-    
+
     if timeframe == '24H':
         interval = 'hour'
         start_time = now - timedelta(hours=24)
@@ -573,7 +575,7 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     # Detect dialect to support both SQLite and Postgres
     from app.core.config import settings
     is_sqlite = "sqlite" in settings.DATABASE_URL
-    
+
     if is_sqlite:
         if interval == 'hour':
             bucket_expr = "strftime('%Y-%m-%d %H:00:00', created_at)"
@@ -585,11 +587,11 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         bucket_expr = f"date_trunc('{interval}', created_at)"
 
     # Path-based query for buckets and levels
-    query = text(f"""
+    query = text("""
         SELECT bucket, level, COUNT(*) as count
         FROM (
-            SELECT 
-                {{}} as bucket,
+            SELECT
+                {} as bucket,
                 (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level
             FROM partner
             WHERE (path = :search_path OR path LIKE :search_wildcard)
@@ -599,14 +601,14 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         GROUP BY 1, 2
         ORDER BY bucket ASC, level ASC;
     """.format(bucket_expr))
-    
+
     result = await session.execute(query, {
         "search_path": search_path,
         "search_wildcard": f"{search_path}.%",
         "start": start_time,
         "base_depth": base_depth
     })
-    
+
     data_map = {}
     rows = result.all()
     for row in rows:
@@ -615,19 +617,19 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         if isinstance(bucket, str):
              # Format depends on interval: '2025-01-01 10:00:00'
              bucket = datetime.strptime(bucket, '%Y-%m-%d %H:%M:%S')
-             
+
         bucket = bucket.replace(tzinfo=None)
         level = int(row[1])
         count = int(row[2])
         if bucket not in data_map:
             data_map[bucket] = {lvl: 0 for lvl in range(1, 10)}
         data_map[bucket][level] = count
-    
+
     # Path-based base count per level
     stmt_base = text("""
-        SELECT level, COUNT(*) 
+        SELECT level, COUNT(*)
         FROM (
-            SELECT 
+            SELECT
                 (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level
             FROM partner
             WHERE (path = :search_path OR path LIKE :search_wildcard)
@@ -650,7 +652,7 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     # Fill gaps for a smooth chart
     data = []
     curr = start_time
-    
+
     for i in range(points + 1):
         if interval == 'hour':
             bucket = curr.replace(minute=0, second=0, microsecond=0)
@@ -671,7 +673,7 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         bucket_data = data_map.get(bucket, {lvl: 0 for lvl in range(1, 10)})
         for lvl in range(1, 10):
             running_totals[lvl] += bucket_data[lvl]
-            
+
         data.append({
             "date": label,
             "total": sum(running_totals.values()),
@@ -699,12 +701,12 @@ async def migrate_paths(session: AsyncSession):
                 session.add(child)
                 await update_children(child.id, child.path)
             else:
-                 # Even if path is correct, recurse to check children? 
+                 # Even if path is correct, recurse to check children?
                  # Optimization: Recurse anyway just in case deep children are broken
                  await update_children(child.id, child.path)
 
     # Start from root partners (no referrer)
-    stmt = select(Partner).where(Partner.referrer_id == None)
+    stmt = select(Partner).where(Partner.referrer_id is None)
     res = await session.exec(stmt)
     roots = res.all()
     for root in roots:
@@ -712,5 +714,5 @@ async def migrate_paths(session: AsyncSession):
             root.path = None
             session.add(root)
         await update_children(root.id, "")
-    
+
     await session.commit()

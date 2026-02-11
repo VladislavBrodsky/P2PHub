@@ -1,12 +1,13 @@
 import asyncio
 import logging
-from aiogram import Bot, Dispatcher, types, F
+import sys
+
+from aiogram import Bot, Dispatcher, F, types
 from aiogram.filters import CommandStart
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+
 from app.core.config import settings
 from app.models.partner import get_session
-
-import sys
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
@@ -19,13 +20,17 @@ WEB_APP_URL = settings.FRONTEND_URL
 
 from app.core.i18n import get_msg
 
+
 @dp.message(CommandStart())
 async def cmd_start(message: types.Message):
     logging.info(f"📥 Received /start command from user {message.from_user.id} (@{message.from_user.username})")
-    
-    from app.services.partner_service import create_partner, process_referral_notifications
+
     from app.core.keyboards import get_main_menu_keyboard
-    
+    from app.services.partner_service import (
+        create_partner,
+        process_referral_notifications,
+    )
+
     # Extract referral code from /start link if any
     referrer_code = None
     args = message.text.split()
@@ -62,9 +67,9 @@ async def cmd_start(message: types.Message):
                 referrer_code=referrer_code,
                 photo_file_id=photo_file_id
             )
-            
+
             await process_referral_notifications(bot, session, partner, is_new)
-            
+
             # Personal referral link
             bot_info = await bot.get_me()
             referral_link = f"https://t.me/{bot_info.username}?start={partner.referral_code}"
@@ -72,7 +77,7 @@ async def cmd_start(message: types.Message):
             # Get localized messages
             welcome_text = get_msg(lang, "welcome", referral_link=referral_link)
             share_text = get_msg(lang, "share_text")
-            
+
             # Construct direct sharing URL
             import urllib.parse
             share_url = f"https://t.me/share/url?url={urllib.parse.quote(referral_link)}&text={urllib.parse.quote(share_text)}"
@@ -91,9 +96,13 @@ async def cmd_start(message: types.Message):
 
 from aiogram.filters import Command
 
+
 @dp.message(Command("my_network", "tree", "stats"))
 async def cmd_my_network(message: types.Message):
-    from app.services.partner_service import get_partner_by_telegram_id, get_referral_tree_stats
+    from app.services.partner_service import (
+        get_partner_by_telegram_id,
+        get_referral_tree_stats,
+    )
     try:
         async for session in get_session():
             partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
@@ -102,20 +111,20 @@ async def cmd_my_network(message: types.Message):
                 return
 
             stats = await get_referral_tree_stats(session, partner.id)
-            
+
             total_network = sum(stats.values())
-            
-            lines = [f"🌳 *Your Referral Network*"]
+
+            lines = ["🌳 *Your Referral Network*"]
             lines.append(f"Total Partners: *{total_network}*")
             lines.append("")
-            
+
             for level, count in stats.items():
                 if count > 0:
                     lines.append(f"Level {level}: {count} partners")
-            
+
             if total_network == 0:
                 lines.append("\n_You haven't invited anyone yet. Share your link to start earning!_")
-            
+
             await message.answer("\n".join(lines), parse_mode="Markdown")
             break
     except Exception as e:
@@ -138,13 +147,13 @@ async def inline_handler(inline_query: types.InlineQuery):
         ref_code = inline_query.query or ""
         query_code = ref_code if ref_code else "start"
         ref_link = f"https://t.me/{BOT_USERNAME}?start={query_code}"
-        
+
         # Base URL for assets
         if settings.WEBHOOK_URL and settings.WEBHOOK_PATH in settings.WEBHOOK_URL:
             base_api_url = settings.WEBHOOK_URL.split(settings.WEBHOOK_PATH)[0].rstrip('/')
         else:
             base_api_url = (settings.FRONTEND_URL or "https://p2phub-production.up.railway.app").rstrip('/')
-        
+
         photo1 = f"{base_api_url}/images/2026-02-05 03.35.03.jpg".replace(" ", "%20")
         photo2 = f"{base_api_url}/images/2026-02-05 03.35.36.jpg".replace(" ", "%20")
 
@@ -164,7 +173,7 @@ async def inline_handler(inline_query: types.InlineQuery):
         results = [
             # Card 1: Premium Visual Card v1
             types.InlineQueryResultPhoto(
-                id=f"card1_{query_code}_{rand_id}", 
+                id=f"card1_{query_code}_{rand_id}",
                 photo_url=photo1,
                 thumbnail_url=photo1,
                 title="Premium Card v1",
@@ -177,7 +186,7 @@ async def inline_handler(inline_query: types.InlineQuery):
             ),
             # Card 2: Premium Visual Card v2
             types.InlineQueryResultPhoto(
-                id=f"card2_{query_code}_{rand_id}", 
+                id=f"card2_{query_code}_{rand_id}",
                 photo_url=photo2,
                 thumbnail_url=photo2,
                 title="Premium Card v2",
@@ -189,7 +198,7 @@ async def inline_handler(inline_query: types.InlineQuery):
                 ])
             )
         ]
-        
+
         await inline_query.answer(results, is_personal=True, cache_time=0)
 
     except Exception as e:
@@ -209,24 +218,24 @@ async def callback_buy_pro(callback: types.CallbackQuery):
     await callback.answer()
 
 async def handle_buy_pro(message: types.Message):
-    from app.services.payment_service import payment_service
-    from app.services.partner_service import get_partner_by_telegram_id
     from app.core.keyboards import get_pro_payment_keyboard
-    
+    from app.services.partner_service import get_partner_by_telegram_id
+    from app.services.payment_service import payment_service
+
     try:
         async for session in get_session():
             partner = await get_partner_by_telegram_id(session, str(message.chat.id))
             if not partner:
                 await message.answer("⚠️ You are not registered yet. Type /start to join!")
                 return
-            
+
             if partner.is_pro:
                 await message.answer("✅ You are already a PRO member! Enjoy your benefits.")
                 return
 
             # Create payment session
             payment_data = await payment_service.create_payment_session(session, partner.id)
-            
+
             text = (
                 "👑 *UPGRADE TO PRO*\n\n"
                 "Unlock the full potential of Pintopay:\n"
@@ -238,7 +247,7 @@ async def handle_buy_pro(message: types.Message):
                 f"⏳ *Valid for:* 10 minutes\n\n"
                 "Please send the exact amount to the address below:"
             )
-            
+
             # Send the address as a separate message for easy copying, or just include in code block
             text += f"\n\n`{payment_data['address']}`"
 
@@ -254,10 +263,7 @@ async def handle_buy_pro(message: types.Message):
 
 @dp.callback_query(F.data == "verify_pro_payment")
 async def callback_verify_pro(callback: types.CallbackQuery):
-    from app.services.payment_service import payment_service
-    from app.services.partner_service import get_partner_by_telegram_id
-    from app.core.keyboards import get_main_menu_keyboard
-    
+
     # Ask for TX hash
     await callback.message.answer(
         "📝 *Verification Step*\n\n"
@@ -269,9 +275,9 @@ async def callback_verify_pro(callback: types.CallbackQuery):
 
 @dp.message(F.text.regexp(r'^[a-fA-F0-9]{64}$')) # Simple regex for TON hash
 async def handle_tx_hash(message: types.Message):
-    from app.services.payment_service import payment_service
-    from app.services.partner_service import get_partner_by_telegram_id
     from app.core.keyboards import get_main_menu_keyboard
+    from app.services.partner_service import get_partner_by_telegram_id
+    from app.services.payment_service import payment_service
 
     tx_hash = message.text.strip()
     wait_msg = await message.answer("⏳ *Verifying transaction...* Please wait a moment.")
@@ -282,7 +288,7 @@ async def handle_tx_hash(message: types.Message):
             if not partner: return
 
             success = await payment_service.verify_ton_transaction(session, partner, tx_hash)
-            
+
             if success:
                 await wait_msg.edit_text(
                     "🎉 *WELCOME TO PRO!*\n\n"

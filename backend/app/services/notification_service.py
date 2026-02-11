@@ -1,5 +1,6 @@
 import asyncio
 import logging
+
 # from bot import bot (Moved inside functions to break circular dependency)
 from app.worker import broker
 
@@ -26,7 +27,7 @@ class NotificationService:
         if not chat_id:
             logger.warning("⚠️ Skipping notification: no chat_id provided")
             return
-            
+
         try:
             # Send to TaskIQ broker
             await send_telegram_task.kiq(chat_id, text, parse_mode)

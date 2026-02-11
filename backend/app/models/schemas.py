@@ -1,6 +1,8 @@
-from pydantic import BaseModel, HttpUrl, Field
-from typing import Optional, List
 from datetime import datetime
+from typing import List, Optional
+
+from pydantic import BaseModel, Field
+
 
 class PartnerBase(BaseModel):
     id: Optional[int] = None
@@ -24,7 +26,7 @@ class PartnerResponse(PartnerBase):
     updated_at: datetime
     referrals: Optional[List[PartnerBase]] = None
 
-    
+
     class Config:
         from_attributes = True
 
@@ -55,7 +57,7 @@ class EarningSchema(BaseModel):
     level: Optional[int] = None
     currency: str
     created_at: datetime
-    
+
     class Config:
         from_attributes = True
 

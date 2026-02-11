@@ -1,7 +1,7 @@
-import psycopg2
 import os
+
+import psycopg2
 from dotenv import load_dotenv
-from urllib.parse import urlparse
 
 # Load .env
 load_dotenv()
@@ -9,7 +9,7 @@ load_dotenv()
 def clear_locks():
     # Use PUBLIC_URL as it works outside Railway network (locally)
     db_url = os.getenv("DATABASE_PUBLIC_URL") or os.getenv("DATABASE_URL")
-    
+
     if not db_url:
         print("❌ Error: No DATABASE_URL found in .env")
         return
@@ -23,12 +23,12 @@ def clear_locks():
     if db_url.startswith("postgresql+asyncpg://"):
         db_url = db_url.replace("postgresql+asyncpg://", "postgresql://", 1)
 
-    print(f"🧨 Connecting to database to clear locks...")
+    print("🧨 Connecting to database to clear locks...")
     try:
         conn = psycopg2.connect(db_url)
         conn.autocommit = True
         cur = conn.cursor()
-        
+
         # 1. Check for active connections
         cur.execute("""
             SELECT pid, state, query, now() - xact_start AS duration
@@ -49,7 +49,7 @@ def clear_locks():
         """)
         terminated = cur.fetchall()
         print(f"✅ Successfully terminated {len(terminated)} blocking connections.")
-        
+
         cur.close()
         conn.close()
     except Exception as e:

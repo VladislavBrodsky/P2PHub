@@ -1,11 +1,13 @@
+import io
+
+import segno
 from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import Response
-import segno
-import io
 
 router = APIRouter()
 
 from app.middleware.rate_limit import limiter
+
 
 @router.get("/qr")
 @limiter.limit("5/minute")

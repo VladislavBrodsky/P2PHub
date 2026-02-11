@@ -1,6 +1,7 @@
 
 import asyncio
 import os
+
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
 
@@ -10,15 +11,15 @@ os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgr
 async def fix_schema():
     db_url = os.environ["DATABASE_URL"]
     engine = create_async_engine(db_url, echo=True, future=True)
-    
+
     print("🚀 Checking and fixing 'earning' table schema...")
-    
+
     async with engine.begin() as conn:
         # Check current columns
         res = await conn.execute(text("SELECT column_name FROM information_schema.columns WHERE table_name = 'earning'"))
         cols = [r[0] for r in res]
         print(f"   Current columns: {cols}")
-        
+
         # Add 'type' if missing
         if 'type' not in cols:
             print("   ➕ Adding 'type' column...")
@@ -42,7 +43,7 @@ async def fix_schema():
                  await conn.execute(text("CREATE INDEX ix_earning_created_at ON earning (created_at)"))
              except Exception:
                  pass
-                 
+
     print("✅ Schema fix completed.")
     await engine.dispose()
 

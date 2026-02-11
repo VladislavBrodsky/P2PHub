@@ -13,20 +13,20 @@ for f in files:
         content = src.read()
         rev_match = re.search(r"revision: str = ['\"]([^'\"]+)['\"]", content)
         if not rev_match: rev_match = re.search(r"revision = ['\"]([^'\"]+)['\"]", content)
-        
+
         if not rev_match: continue
         rev = rev_match.group(1)
         revisions[rev] = f
-        
+
         # Look for parent(s)
         # Single parent
         down_match = re.search(r"down_revision: Union\[str, Sequence\[str\], None\] = ['\"]([^'\"]+)['\"]", content)
         if not down_match: down_match = re.search(r"down_revision = ['\"]([^'\"]+)['\"]", content)
-        
+
         # Multi parent
         multi_match = re.search(r"down_revision: Union\[str, Sequence\[str\], None\] = \(([^)]+)\)", content)
         if not multi_match: multi_match = re.search(r"down_revision = \(([^)]+)\)", content)
-        
+
         if down_match:
             parents[rev] = [down_match.group(1)]
         elif multi_match:

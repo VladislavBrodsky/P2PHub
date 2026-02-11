@@ -6,8 +6,8 @@ Create Date: 2026-02-10 01:00:00.000000
 
 """
 from typing import Sequence, Union
+
 from alembic import op
-import sqlalchemy as sa
 from sqlalchemy.engine.reflection import Inspector
 
 # revision identifiers, used by Alembic.
@@ -20,7 +20,7 @@ def upgrade() -> None:
     # Get database connection
     conn = op.get_bind()
     inspector = Inspector.from_engine(conn)
-    
+
     # Check if index exists on the 'partner' table
     tables = inspector.get_table_names()
     if 'partner' not in tables:
@@ -29,7 +29,7 @@ def upgrade() -> None:
 
     indexes = inspector.get_indexes('partner')
     index_names = [idx['name'] for idx in indexes]
-    
+
     if 'ix_partner_xp' not in index_names:
         print("🛠 Creating index ix_partner_xp on partner(xp)...")
         op.create_index(op.f('ix_partner_xp'), 'partner', ['xp'], unique=False)
@@ -39,7 +39,7 @@ def upgrade() -> None:
 def downgrade() -> None:
     conn = op.get_bind()
     inspector = Inspector.from_engine(conn)
-    
+
     indexes = inspector.get_indexes('partner')
     index_names = [idx['name'] for idx in indexes]
 

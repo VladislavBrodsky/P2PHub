@@ -1,6 +1,6 @@
 import asyncio
-import sys
 import os
+import sys
 
 # Add parent dir to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -9,8 +9,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
 
 # MOCK BOT & AIOGRAM & TASKIQ
-from unittest.mock import MagicMock
 import sys
+from unittest.mock import MagicMock
 
 # Bot Mocks
 sys.modules["aiogram"] = MagicMock()
@@ -44,16 +44,15 @@ worker_mock.broker = broker_mock
 sys.modules["app.worker"] = worker_mock
 
 # Load env vars
-from app.core.config import settings
 
 # Import ALL models to ensure relationships resolve
-from app.models.partner import Partner, XPTransaction, engine
-from app.models.transaction import PartnerTransaction 
-# (Add other models if needed, e.g. PartnerTask if it exists in a separate file, 
-# but usually it's in partner.py or imported there)
-
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
+
+# (Add other models if needed, e.g. PartnerTask if it exists in a separate file,
+# but usually it's in partner.py or imported there)
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.partner import engine
 from app.services.partner_service import migrate_paths
 
 async_session_factory = sessionmaker(

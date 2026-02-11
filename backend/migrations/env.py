@@ -1,14 +1,9 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
 import sqlalchemy as sa
-
 from alembic import context
-
+from sqlalchemy import pool
 from sqlmodel import SQLModel
-from app.models.partner import Partner
-from app.models.transaction import PartnerTransaction
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -31,7 +26,9 @@ target_metadata = SQLModel.metadata
 
 
 import asyncio
+
 from app.core.config import settings
+
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
@@ -59,7 +56,7 @@ def run_migrations_offline() -> None:
 
 def do_run_migrations(connection):
     context.configure(
-        connection=connection, 
+        connection=connection,
         target_metadata=target_metadata,
         render_as_batch=True
     )
@@ -76,7 +73,7 @@ async def run_migrations_online() -> None:
 
     """
     from sqlalchemy.ext.asyncio import create_async_engine
-    
+
     url = settings.async_database_url
 
     connectable = create_async_engine(
@@ -89,7 +86,7 @@ async def run_migrations_online() -> None:
         print("🔍 Checking for blocking locks before migration...")
         try:
             await connection.execute(sa.text("SET lock_timeout = '30s'"))
-            
+
             # First, try to cancel active queries gracefully
             await connection.execute(sa.text("""
                 SELECT pg_cancel_backend(pid)
@@ -98,7 +95,7 @@ async def run_migrations_online() -> None:
                   AND usename = current_user
                   AND state = 'active';
             """))
-            
+
             # Then, terminate anything else that's not idle
             await connection.execute(sa.text("""
                 SELECT pg_terminate_backend(pid)

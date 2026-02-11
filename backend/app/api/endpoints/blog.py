@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel.ext.asyncio.session import AsyncSession
-from app.core.security import get_current_user, get_tg_user
-from app.models.partner import Partner, get_session
-from app.models.blog import BlogPostEngagement, PartnerBlogLike
-from sqlmodel import select
 import random
-from typing import Dict
+
+from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.core.security import get_current_user, get_tg_user
+from app.models.blog import BlogPostEngagement, PartnerBlogLike
+from app.models.partner import Partner, get_session
 
 router = APIRouter()
 
@@ -17,7 +18,7 @@ async def get_blog_stats(
     statement = select(BlogPostEngagement)
     result = await session.exec(statement)
     stats = result.all()
-    
+
     return {s.post_slug: {"likes": s.base_likes + s.user_likes} for s in stats}
 
 @router.get("/{slug}/engagement")
@@ -29,15 +30,15 @@ async def get_post_engagement(
     """Get engagement stats for a specific post and check if current user liked it."""
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
-    
+
     # Get partner
     p_stmt = select(Partner).where(Partner.telegram_id == tg_id)
     partner = (await session.exec(p_stmt)).first()
-    
+
     # Get or create engagement
     e_stmt = select(BlogPostEngagement).where(BlogPostEngagement.post_slug == slug)
     engagement = (await session.exec(e_stmt)).first()
-    
+
     fb_likes = 0
     if not engagement:
         fb_likes = random.randint(333, 712)
@@ -50,7 +51,7 @@ async def get_post_engagement(
         await session.refresh(engagement)
     else:
         fb_likes = engagement.base_likes + engagement.user_likes
-        
+
     liked = False
     if partner:
         l_stmt = select(PartnerBlogLike).where(
@@ -58,7 +59,7 @@ async def get_post_engagement(
             PartnerBlogLike.post_slug == slug
         )
         liked = (await session.exec(l_stmt)).first() is not None
-        
+
     return {
         "likes": fb_likes,
         "liked": liked
@@ -73,31 +74,31 @@ async def like_post(
     """Add a like to a post."""
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
-    
+
     p_stmt = select(Partner).where(Partner.telegram_id == tg_id)
     partner = (await session.exec(p_stmt)).first()
-    
+
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
-        
+
     # Check if already liked
     l_stmt = select(PartnerBlogLike).where(
         PartnerBlogLike.partner_id == partner.id,
         PartnerBlogLike.post_slug == slug
     )
     existing_like = (await session.exec(l_stmt)).first()
-    
+
     if existing_like:
         return {"status": "already_liked"}
-        
+
     # Add like
     new_like = PartnerBlogLike(partner_id=partner.id, post_slug=slug)
     session.add(new_like)
-    
+
     # Update engagement
     e_stmt = select(BlogPostEngagement).where(BlogPostEngagement.post_slug == slug)
     engagement = (await session.exec(e_stmt)).first()
-    
+
     if not engagement:
         engagement = BlogPostEngagement(
             post_slug=slug,
@@ -106,8 +107,8 @@ async def like_post(
         )
     else:
         engagement.user_likes += 1
-        
+
     session.add(engagement)
     await session.commit()
-    
+
     return {"status": "ok", "likes": engagement.base_likes + engagement.user_likes}

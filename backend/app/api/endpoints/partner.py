@@ -1,19 +1,28 @@
-from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Request
-from sqlmodel.ext.asyncio.session import AsyncSession
-from app.core.security import get_current_user, get_tg_user
-from app.models.partner import Partner, get_session, XPTransaction
-from app.models.schemas import PartnerResponse, TaskClaimRequest, GrowthMetrics, NetworkStats, EarningSchema, PartnerTopResponse
-from app.core.config import settings
-from sqlmodel import select
-from sqlalchemy.orm import selectinload
-from app.services.redis_service import redis_service
-from app.middleware.rate_limit import limiter
 import json
-import secrets
-from app.utils.ranking import get_level
-from typing import List
-from bot import bot, types
 import random
+import secrets
+from typing import List
+
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
+from sqlalchemy.orm import selectinload
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.core.config import settings
+from app.core.security import get_current_user, get_tg_user
+from app.middleware.rate_limit import limiter
+from app.models.partner import Partner, XPTransaction, get_session
+from app.models.schemas import (
+    EarningSchema,
+    GrowthMetrics,
+    NetworkStats,
+    PartnerResponse,
+    PartnerTopResponse,
+    TaskClaimRequest,
+)
+from app.services.redis_service import redis_service
+from app.utils.ranking import get_level
+from bot import bot, types
 
 router = APIRouter()
 
@@ -25,7 +34,7 @@ async def get_my_profile(
 ):
     if not user_data:
         raise HTTPException(status_code=401, detail="Authentication required")
-        
+
     # Parse Telegram user data securely
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
@@ -39,8 +48,11 @@ async def get_my_profile(
     except Exception: pass
 
     # 2. Query DB and/or Register
-    from app.services.partner_service import create_partner, process_referral_notifications
-    
+    from app.services.partner_service import (
+        create_partner,
+        process_referral_notifications,
+    )
+
     # Check if photo exists in DB first to avoid blocking Telegram API calls during every /me request
     # Use selectinload to prevent lazy loading error in async session
     stmt = select(Partner).where(Partner.telegram_id == tg_id).options(
@@ -48,7 +60,7 @@ async def get_my_profile(
     )
     result = await session.exec(stmt)
     partner = result.first()
-    
+
     is_new = False
     if not partner:
         # Capture photo_file_id from Telegram Bot ONLY on registration or if missing
@@ -75,7 +87,7 @@ async def get_my_profile(
             selectinload(Partner.completed_task_records)
         )
         partner = (await session.exec(stmt_refresh)).one()
-    
+
     if is_new:
         await process_referral_notifications(bot, session, partner, is_new)
     else:
@@ -88,7 +100,7 @@ async def get_my_profile(
                 if tg_user.get(field) != getattr(partner, field):
                     setattr(partner, field, tg_user.get(field))
                     has_changed = True
-            
+
             if has_changed:
                 partner.updated_at = now
                 session.add(partner)
@@ -131,7 +143,7 @@ async def get_my_profile(
     try:
         await redis_service.set_json(cache_key, partner_dict, expire=300)
     except Exception: pass
-        
+
     return partner_dict
 
     return partners_data
@@ -144,7 +156,7 @@ async def get_top_partners(
     Fetches the top 5 partners by XP for social proof.
     """
     from app.utils.ranking import get_rank
-    
+
     cache_key = "partners:top"
     try:
         cached = await redis_service.get_json(cache_key)
@@ -152,11 +164,11 @@ async def get_top_partners(
             return cached
     except Exception:
         pass
-        
+
     statement = select(Partner).order_by(Partner.xp.desc()).limit(5)
     result = await session.exec(statement)
     partners = result.all()
-    
+
     top_data = []
     for p in partners:
         top_data.append({
@@ -170,15 +182,16 @@ async def get_top_partners(
             "referrals_count": p.referral_count,
             "rank": get_rank(p.xp)
         })
-        
+
     try:
         await redis_service.set_json(cache_key, top_data, expire=600)
     except Exception:
         pass
-        
+
     return top_data
 
-from app.models.partner import Partner, get_session, XPTransaction, SystemSetting
+from app.models.partner import SystemSetting, get_session
+
 
 @router.get("/recent")
 async def get_recent_partners(
@@ -189,15 +202,15 @@ async def get_recent_partners(
     Fetches the 10 most recently joined partners for social proof.
     Updated every 5 minutes and persists across restarts.
     """
-    from datetime import datetime, timedelta
     import random
-    
+    from datetime import datetime, timedelta
+
     cache_key = "partners:recent_v2"
     db_settings_key = "partners_recent_snapshot"
     count_settings_key = "partners_recent_last_hour_count"
     partners_refresh_window = timedelta(minutes=5)
     count_refresh_window = timedelta(hours=1)
-    
+
     # 1. Try Redis Cache (Fastest)
     try:
         cached = await redis_service.get_json(cache_key)
@@ -209,11 +222,11 @@ async def get_recent_partners(
     # 2. Check DB Persistence
     snapshot_setting = await session.get(SystemSetting, db_settings_key)
     count_setting = await session.get(SystemSetting, count_settings_key)
-    
+
     now = datetime.utcnow()
     partners_list = []
     last_hour_count = 0
-    
+
     # Check if we need to refresh partners list (every 5m)
     refresh_partners = True
     if snapshot_setting:
@@ -237,16 +250,16 @@ async def get_recent_partners(
     if refresh_partners:
         # 3. Fetch Fresh from Partner Table with photo_file_id
         statement = select(
-            Partner.id, 
-            Partner.first_name, 
-            Partner.username, 
-            Partner.photo_file_id, 
+            Partner.id,
+            Partner.first_name,
+            Partner.username,
+            Partner.photo_file_id,
             Partner.created_at
         ).order_by(Partner.created_at.desc()).limit(limit)
-            
+
         result = await session.exec(statement)
         partners = result.all()
-        
+
         partners_list = []
         for p_id, p_first_name, p_username, p_photo_file_id, p_created_at in partners:
             p_dict = {
@@ -258,7 +271,7 @@ async def get_recent_partners(
                 "created_at": p_created_at.isoformat() if p_created_at else None
             }
             partners_list.append(p_dict)
-            
+
         # Update/Create Snapshot
         if not snapshot_setting:
             snapshot_setting = SystemSetting(key=db_settings_key, value=json.dumps(partners_list))
@@ -284,13 +297,13 @@ async def get_recent_partners(
         "partners": partners_list[:limit],
         "last_hour_count": last_hour_count
     }
-    
+
     # 5. Populate Redis
     try:
         await redis_service.set_json(cache_key, partners_data, expire=300) # 5 mins
     except Exception:
         pass
-        
+
     return partners_data
 
 @router.get("/tree", response_model=NetworkStats)
@@ -305,7 +318,7 @@ async def get_my_referral_tree(
     """
     if not user_data:
         raise HTTPException(status_code=401, detail="Authentication required")
-        
+
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
@@ -313,12 +326,12 @@ async def get_my_referral_tree(
     statement = select(Partner).where(Partner.telegram_id == tg_id).options(selectinload(Partner.referrals))
     result = await session.exec(statement)
     partner = result.first()
-    
+
     if not partner:
         return {str(i): 0 for i in range(1, 10)}
 
     from app.services.partner_service import get_referral_tree_stats
-    
+
     # 2. Use Intelligent Caching (300s TTL)
     cache_key = f"ref_tree_stats:{partner.id}"
     return await redis_service.get_or_compute(
@@ -338,7 +351,7 @@ async def get_network_level_members(
     """
     if not user_data:
         raise HTTPException(status_code=401, detail="Authentication required")
-        
+
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
@@ -346,7 +359,7 @@ async def get_network_level_members(
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
     partner = result.first()
-    
+
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
 
@@ -354,7 +367,7 @@ async def get_network_level_members(
          raise HTTPException(status_code=400, detail="Level must be between 1 and 9")
 
     from app.services.partner_service import get_referral_tree_members
-    
+
     cache_key = f"ref_tree_members:{partner.id}:{level}"
     return await redis_service.get_or_compute(
         cache_key,
@@ -372,19 +385,19 @@ async def get_growth_metrics(
 ):
     if not user_data:
         raise HTTPException(status_code=401, detail="Authentication required")
-        
+
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
     partner = result.first()
-    
+
     if not partner:
         return {"growth_pct": 0, "current_count": 0, "previous_count": 0}
 
     from app.services.partner_service import get_network_growth_metrics
-    
+
     cache_key = f"growth_metrics:{partner.id}:{timeframe}"
     return await redis_service.get_or_compute(
         cache_key,
@@ -402,19 +415,19 @@ async def get_growth_chart(
 ):
     if not user_data:
         raise HTTPException(status_code=401, detail="Authentication required")
-        
+
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
     partner = result.first()
-    
+
     if not partner:
         return []
 
     from app.services.partner_service import get_network_time_series
-    
+
     cache_key = f"growth_chart:{partner.id}:{timeframe}"
     return await redis_service.get_or_compute(
         cache_key,
@@ -436,13 +449,13 @@ async def claim_task_reward(
     statement = select(Partner).where(Partner.telegram_id == tg_id).options(selectinload(Partner.completed_task_records))
     result = await session.exec(statement)
     partner = result.first()
-    
+
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
 
     # Check if task already completed in the new table
     already_completed = any(pt.task_id == task_id for pt in partner.completed_task_records)
-        
+
     if not already_completed:
         # 1. Add record to PartnerTask table
         from app.models.partner import PartnerTask
@@ -478,18 +491,18 @@ async def claim_task_reward(
         effective_xp = xp_reward * 5 if partner.is_pro else xp_reward
         partner.xp += effective_xp
         partner.level = get_level(partner.xp)
-            
+
         session.add(partner)
         await session.commit()
         await session.refresh(partner)
-        
+
         # 2.1 Sync to Redis Leaderboard
         from app.services.leaderboard_service import leaderboard_service
         try:
             await leaderboard_service.update_score(partner.id, partner.xp)
         except Exception as e:
             print(f"Leaderboard Sync Failed: {e}")
-        
+
         # 3. Invalidate profile cache
         await redis_service.client.delete(f"partner:profile:{tg_id}")
 
@@ -521,7 +534,7 @@ async def get_my_earnings(
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
     partner = result.first()
-    
+
     if not partner:
         return []
 
@@ -530,7 +543,7 @@ async def get_my_earnings(
     stmt = select(Earning).where(Earning.partner_id == partner.id).order_by(Earning.created_at.desc()).limit(limit)
     result = await session.exec(stmt)
     earnings = result.all()
-    
+
     return earnings
 
 @router.get("/xp/history")
@@ -549,7 +562,7 @@ async def get_my_xp_history(
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
     partner = result.first()
-    
+
     if not partner:
         return []
 
@@ -557,7 +570,7 @@ async def get_my_xp_history(
     stmt = select(XPTransaction).where(XPTransaction.partner_id == partner.id).order_by(XPTransaction.created_at.desc()).limit(limit)
     result = await session.exec(stmt)
     xp_history = result.all()
-    
+
     return xp_history
 @router.post("/prepared-share")
 async def get_prepared_share_id(
@@ -575,12 +588,12 @@ async def get_prepared_share_id(
     statement = select(Partner).where(Partner.telegram_id == str(tg_id))
     result = await session.exec(statement)
     partner = result.first()
-    
+
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
 
     ref_code = partner.referral_code
-    
+
     # Cache bot username if needed or replace with hardcoded
     # We can use the same logic as in bot.py
     try:
@@ -590,13 +603,13 @@ async def get_prepared_share_id(
         bot_username = "pintopay_probot"
 
     ref_link = f"https://t.me/{bot_username}?start={ref_code}"
-    
+
     # Base URL for assets
     if settings.WEBHOOK_URL and settings.WEBHOOK_PATH in settings.WEBHOOK_URL:
         base_api_url = settings.WEBHOOK_URL.split(settings.WEBHOOK_PATH)[0].rstrip('/')
     else:
         base_api_url = (settings.FRONTEND_URL or "https://p2phub-production.up.railway.app").rstrip('/')
-    
+
     photo_url = f"{base_api_url}/images/2026-02-05_03.35.03.webp"
 
     # Fetch language preference
@@ -609,7 +622,7 @@ async def get_prepared_share_id(
 
     # Inline query result for the photo card
     result_card = types.InlineQueryResultPhoto(
-        id=f"prep_{ref_code}_{rand_id}", 
+        id=f"prep_{ref_code}_{rand_id}",
         photo_url=photo_url,
         thumbnail_url=photo_url,
         title="Elite Partner Invitation 💎",
@@ -644,10 +657,11 @@ async def get_partner_photo(request: Request, file_id: str):
     Returns the Telegram photo content for a given file_id.
     Optimizes (WebP + Resize) and caches the binary content in Redis.
     """
-    import httpx
     import io
-    from PIL import Image
+
+    import httpx
     from fastapi.responses import Response
+    from PIL import Image
 
     cache_key_binary = f"tg_photo_bin_v1:{file_id}"
     cache_key_url = f"tg_photo_url:{file_id}"
@@ -693,11 +707,11 @@ async def get_partner_photo(request: Request, file_id: str):
             if response.status_code == 200:
                 # Open image with PIL
                 img = Image.open(io.BytesIO(response.content))
-                
+
                 # Resize if larger than 128x128
                 if img.width > 128 or img.height > 128:
                     img.thumbnail((128, 128), Image.Resampling.LANCZOS)
-                
+
                 # Convert to WebP
                 output = io.BytesIO()
                 img.save(output, format="WEBP", quality=80)
@@ -721,10 +735,10 @@ async def get_partner_photo(request: Request, file_id: str):
             else:
                 print(f"⚠️ Telegram CDN returned {response.status_code} for {photo_url}")
                 raise HTTPException(status_code=404, detail="Original photo could not be fetched")
-                
+
     except Exception as e:
         print(f"❌ Optimization Error: {e}")
-        # Fallback to streaming original if optimization fails? 
+        # Fallback to streaming original if optimization fails?
         # Actually, if we're here, we probably can't optimize, so return error
         raise HTTPException(status_code=500, detail="Failed to optimize photo")
 
@@ -735,14 +749,14 @@ async def mark_notification_seen(
 ):
     if not user_data:
         raise HTTPException(status_code=401, detail="Authentication required")
-        
+
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
     partner = result.first()
-    
+
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
 
@@ -750,8 +764,8 @@ async def mark_notification_seen(
     session.add(partner)
     await session.commit()
     await session.refresh(partner)
-    
+
     # Invalidate cache
     await redis_service.client.delete(f"partner:profile:{tg_id}")
-    
+
     return {"status": "ok"}

@@ -1,19 +1,19 @@
 import os
+
 # Production DB URL - MUST BE SET BEFORE IMPORTS
 os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
 
 import asyncio
+import os
 import secrets
-import time
-from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.orm import sessionmaker
-from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlmodel import select
+import sys
 
 # MOCK BOT & AIOGRAM & TASKIQ
 from unittest.mock import MagicMock
-import sys
-import os
+
+from sqlalchemy.orm import sessionmaker
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 # Add parent dir to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -77,7 +77,9 @@ sys.modules["app.worker"] = worker_mock
 
 # Patch actual imports in partner_service
 from unittest.mock import AsyncMock
+
 import app.services.partner_service as ps
+
 ps.redis_service = MagicMock()
 ps.redis_service.client.delete = AsyncMock(return_value=None)
 ps.leaderboard_service = MagicMock()
@@ -86,14 +88,13 @@ ps.notification_service = MagicMock()
 ps.notification_service.enqueue_notification = AsyncMock(return_value=None)
 
 # Import Models & Logic
-from app.models.partner import Partner, XPTransaction, engine
-from app.models.transaction import PartnerTransaction
-from app.services.partner_service import create_partner, process_referral_logic
+from app.models.partner import Partner, engine
+
 
 async def create_real_user():
     print("🚀 Connecting to Production DB...")
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    
+
     async with async_session_factory() as session:
         # REFERRER: @uslincoln (ID 1)
         referrer_code = "P2P-425DA3DB"
@@ -107,21 +108,21 @@ async def create_real_user():
             return
 
         print(f"👤 Root User Found: @{root_user.username} (Level: {root_user.level}) - Start XP: {root_user.xp}")
-        
+
         initial_xp = root_user.xp
         current_referrer_code = referrer_code
-        
+
         # Expected Rewards
         XP_MAP = {1: 35.0, 2: 10.0, 3: 1.0, 4: 1.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0}
-        
+
         for level in range(1, 10):
             # Create User at this Level
             new_id = f"TEST_LVL_{level}_{secrets.token_hex(3)}"
             new_username = f"User_L{level}_{new_id}"
-            
+
             print(f"\n--- Level {level} Joined ---")
             print(f"🆕 Registering @{new_username} under {current_referrer_code}...")
-            
+
             new_partner, is_new = await ps.create_partner(
                 session,
                 telegram_id=new_id,
@@ -129,32 +130,32 @@ async def create_real_user():
                 first_name=f"User L{level}",
                 referrer_code=current_referrer_code
             )
-            
+
             # Run Logic
             await ps.process_referral_logic(new_partner.id)
-            
+
             # Verify Root XP
             session.expire(root_user)
             await session.refresh(root_user)
-            
-            expected_gain = XP_MAP.get(level, 0)
-            # We can't easily track exact incremental gain without storing previous, 
-            # but we can check if it increased. 
+
+            XP_MAP.get(level, 0)
+            # We can't easily track exact incremental gain without storing previous,
+            # but we can check if it increased.
             # Better: Calculate "Total Expected so far"
-            
+
             print(f"💰 Root User XP: {root_user.xp}")
-            
+
             # Update referrer for next iteration (chaining down)
             current_referrer_code = new_partner.referral_code
 
         final_xp = root_user.xp
         total_gained = final_xp - initial_xp
         expected_total = sum(XP_MAP.values())
-        
+
         print("\n=== FINAL VERIFICATION ===")
         print(f"Total XP Gained: {total_gained}")
         print(f"Expected Total:  {expected_total}")
-        
+
         if abs(total_gained - expected_total) < 0.1:
              print("✅ SUCCESS: 9-Level XP Sync Verified Perfectly!")
         else:

@@ -2,10 +2,10 @@
 import asyncio
 import os
 import random
-import json
 
 # Set PYTHONPATH to include backend
 import sys
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(current_dir)
 sys.path.append(project_root)
@@ -14,8 +14,8 @@ sys.path.append(project_root)
 os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
 
 from sqlmodel import select
+
 from app.models.partner import Partner
-from app.core.config import settings
 
 # Diverse names data
 NAMES_DATA = [
@@ -46,46 +46,46 @@ async def main():
         from sqlalchemy.ext.asyncio import create_async_engine
         from sqlalchemy.orm import sessionmaker
         from sqlmodel.ext.asyncio.session import AsyncSession
-        
+
         db_url = os.environ["DATABASE_URL"]
         if db_url.startswith("postgresql://"):
             db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
-        
+
         engine = create_async_engine(db_url, echo=True, future=True)
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-        
+
         async with async_session() as session:
             # Query all partners that look like test users or have "None" names
             statement = select(Partner).where(
-                (Partner.first_name.like("TestUser%")) | 
-                (Partner.first_name == None) |
+                (Partner.first_name.like("TestUser%")) |
+                (Partner.first_name is None) |
                 (Partner.username.like("TestUser%"))
             )
             result = await session.exec(statement)
             partners = result.all()
-            
+
             print(f"Globalizing {len(partners)} partners...")
-            
+
             for i, p in enumerate(partners):
                 # Pick a name and identity
                 identity = NAMES_DATA[i % len(NAMES_DATA)]
-                
+
                 # Update attributes
                 p.first_name = identity["first_name"]
                 p.last_name = identity["last_name"]
                 # Append a small random number to username to keep it somewhat unique if many users
                 p.username = f"{identity['username']}_{random.randint(10, 99)}"
-                
+
                 # Assign a Dicebear avatar URL based on the name (avataaars)
                 # Seed with username to ensure they stay the same
                 p.photo_url = f"https://api.dicebear.com/7.x/avataaars/svg?seed={p.username}&backgroundColor=b6e3f4,c0aede,d1d4f9"
-                
+
                 session.add(p)
                 print(f"Updated ID {p.id}: {p.first_name} (@{p.username})")
-                
+
             await session.commit()
             print("Successfully globalized all test users!")
-            
+
     except Exception as e:
         print(f"Error during globalization: {e}")
 

@@ -1,6 +1,6 @@
-import os
 import time
 from pathlib import Path
+
 
 def rotate_logs(directory: str, max_age_days: int = 7):
     """
@@ -10,7 +10,7 @@ def rotate_logs(directory: str, max_age_days: int = 7):
     now_ms = int(time.time() * 1000)
     max_age_ms = max_age_days * 24 * 60 * 60 * 1000
     cutoff_ms = now_ms - max_age_ms
-    
+
     path = Path(directory)
     if not path.exists():
         print(f"Directory {directory} does not exist.")
@@ -27,7 +27,7 @@ def rotate_logs(directory: str, max_age_days: int = 7):
             parts = file.name.split('.')
             if len(parts) >= 2:
                 file_ts_ms = int(parts[1])
-                
+
                 if file_ts_ms < cutoff_ms:
                     size = file.stat().st_size
                     file.unlink()
@@ -43,5 +43,5 @@ if __name__ == "__main__":
     # Get project root (script is in backend/scripts/rotate_logs.py)
     base_dir = Path(__file__).parent.parent.parent
     archive_logs_dir = base_dir / "archive_logs"
-    
+
     rotate_logs(str(archive_logs_dir))

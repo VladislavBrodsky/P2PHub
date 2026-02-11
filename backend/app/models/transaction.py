@@ -1,6 +1,8 @@
-from sqlmodel import SQLModel, Field, Relationship
-from typing import Optional
 from datetime import datetime
+from typing import Optional
+
+from sqlmodel import Field, Relationship, SQLModel
+
 
 class PartnerTransaction(SQLModel, table=True):
     __table_args__ = {"extend_existing": True}
@@ -13,7 +15,7 @@ class PartnerTransaction(SQLModel, table=True):
     status: str = Field(default="pending") # pending, completed, failed, manual_review
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow})
-    
+
     # Optional relationship back to Partner
     partner: "Partner" = Relationship(
         back_populates="transactions",

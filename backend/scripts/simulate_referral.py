@@ -1,7 +1,6 @@
 import asyncio
-import logging
-import sys
 import os
+import sys
 
 # --- PRE-IMPORT CONFIGURATION ---
 # Set env vars BEFORE importing app modules to satisfy Pydantic
@@ -23,33 +22,34 @@ os.environ["FRONTEND_URL"] = "http://localhost:3000" # Dummy
 # Add parent dir to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app.models.partner import get_session, Partner
-from app.services.partner_service import create_partner, process_referral_notifications
-from sqlmodel import select
-from sqlalchemy.ext.asyncio import create_async_engine
-from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlalchemy.orm import sessionmaker
-
 # Real Bot for testing
 from aiogram import Bot
+from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.orm import sessionmaker
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.partner import Partner
+from app.services.partner_service import create_partner, process_referral_notifications
+
 # Use the token from env (which we set in the script)
 real_bot = Bot(token=os.environ["BOT_TOKEN"])
 
 async def main():
     print(f"Using DB: {PUBLIC_DB_URL}")
     print(f"Using Bot Token: {os.environ['BOT_TOKEN'][:5]}...")
-    
+
     # Create engine manually to be sure (though config should load it now)
     engine = create_async_engine(PUBLIC_DB_URL, echo=False, future=True)
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    
+
     referrer_code = "P716720099"
     # Generate a NEW random test user ID each time to ensure "start" logic triggers
     import random
     test_telegram_id = str(random.randint(100000000, 999999999))
     test_username = f"new_partner_{test_telegram_id[:4]}"
 
-    print(f"--- Simulating Referral ---")
+    print("--- Simulating Referral ---")
     print(f"Referrer Code: {referrer_code}")
     print(f"New User ID: {test_telegram_id}")
 
@@ -58,7 +58,7 @@ async def main():
         statement = select(Partner).where(Partner.referral_code == referrer_code)
         result = await session.exec(statement)
         referrer = result.first()
-        
+
         if not referrer:
             print("❌ Referrer not found!")
             await real_bot.session.close()
@@ -78,26 +78,26 @@ async def main():
             language_code="en",
             referrer_code=referrer_code
         )
-        
+
         if is_new:
             print("✅ New partner created successfully.")
-            
+
             # 4. Process Notifications (REAL)
             print("Processing notifications (SENDING REAL TELEGRAM MESSAGE)...")
             await process_referral_notifications(real_bot, session, new_partner, is_new)
-            
+
             # 5. Verify XP
             await session.refresh(referrer)
             final_xp = referrer.xp
             print(f"Referrer Final XP: {final_xp}")
-            
+
             if final_xp >= initial_xp + 35:
                 print("✅ XP added correctly (+35)")
             else:
-                print(f"❌ XP check failed.")
+                print("❌ XP check failed.")
         else:
             print("⚠️ Partner was not new.")
-            
+
     await real_bot.session.close()
 
 if __name__ == "__main__":

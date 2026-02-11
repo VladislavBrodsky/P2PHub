@@ -1,7 +1,7 @@
 """Empty migration
 
 Revision ID: ee26570e6422
-Revises: 
+Revises:
 Create Date: 2026-02-07 00:51:43.841087
 
 """
@@ -10,7 +10,6 @@ from typing import Sequence, Union
 import sqlalchemy as sa
 import sqlmodel
 from alembic import op
-
 
 # revision identifiers, used by Alembic.
 revision: str = 'ee26570e6422'

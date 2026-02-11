@@ -8,6 +8,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.services.redis_service import redis_service
 
+
 async def clear_leaderboard_cache():
     # Scan for leaderboard keys
     keys = await redis_service.client.keys("leaderboard:*")

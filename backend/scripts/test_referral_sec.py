@@ -10,16 +10,15 @@ project_root = os.path.dirname(current_dir)
 sys.path.append(project_root)
 
 # Load env vars (already set in shell but just in case)
-from app.core.config import settings
-from app.models.partner import Partner, get_session, engine
-from app.models.transaction import Transaction # Register Transaction
+from app.models.partner import get_session
 from app.services.partner_service import create_partner
+
 
 async def test_security():
     print("🛡️ Starting Referral Security Test...")
-    
+
     timestamp = int(time.time())
-    
+
     async for session in get_session():
         # 1. Create a "Referrer" user
         referrer_tg_id = f"SEC_REF_{timestamp}"
@@ -29,7 +28,7 @@ async def test_security():
             username=f"referrer_{timestamp}"
         )
         print(f"Created Referrer: ID={referrer.id}, TG_ID={referrer.telegram_id}, Code={referrer.referral_code}")
-        
+
         # 2. Try to refer a new user using the Referrer's Telegram ID (STRICTLY FORBIDDEN NOW)
         print(f"\nAttempting to join using Telegram ID '{referrer_tg_id}' as referrer_code...")
         new_user_1_tg_id = f"SEC_USER_BAD_{timestamp}"
@@ -39,7 +38,7 @@ async def test_security():
             username=f"bad_user_{timestamp}",
             referrer_code=referrer_tg_id # This should FAIL to link
         )
-        
+
         if partner_bad.referrer_id is None:
             print("✅ SUCCESS: New user was NOT linked to referrer via Telegram ID.")
         else:
@@ -54,7 +53,7 @@ async def test_security():
             username=f"good_user_{timestamp}",
             referrer_code=referrer.referral_code # This should SUCCEED
         )
-        
+
         if partner_good.referrer_id == referrer.id:
             print("✅ SUCCESS: New user WAS linked to referrer via valid Referral Code.")
         else:

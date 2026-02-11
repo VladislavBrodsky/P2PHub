@@ -1,16 +1,20 @@
 import asyncio
-import sys
 import os
-from datetime import datetime, timedelta
-from sqlmodel import select, text
-from sqlalchemy.orm import selectinload
+import sys
+
+from sqlmodel import select
 
 # Add parent dir to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app.models.partner import Partner, engine
-from app.services.partner_service import get_network_growth_metrics, get_network_time_series
 from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.partner import Partner, engine
+from app.services.partner_service import (
+    get_network_growth_metrics,
+    get_network_time_series,
+)
+
 
 async def verify_growth(tg_id: str):
     async with AsyncSession(engine) as session:
@@ -18,7 +22,7 @@ async def verify_growth(tg_id: str):
         stmt = select(Partner).where(Partner.telegram_id == tg_id)
         res = await session.exec(stmt)
         user = res.first()
-        
+
         if not user:
             print(f"❌ User {tg_id} not found.")
             return
@@ -28,7 +32,7 @@ async def verify_growth(tg_id: str):
         # 2. Test 7D Growth
         metrics_7d = await get_network_growth_metrics(session, user.id, '7D')
         print(f"📊 7D Metrics: {metrics_7d}")
-        
+
         # 3. Test 24H Growth
         metrics_24h = await get_network_growth_metrics(session, user.id, '24H')
         print(f"📊 24H Metrics: {metrics_24h}")

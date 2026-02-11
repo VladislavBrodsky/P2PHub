@@ -1,37 +1,41 @@
-from contextlib import asynccontextmanager
 import asyncio
-from fastapi import FastAPI, Depends, HTTPException, Header, Request
+import json
+import os
+from contextlib import asynccontextmanager
+
+from aiogram import types
+from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-import os
-import json
-from app.api.endpoints import partner, earnings, tools, leaderboard, payment, admin
+
+from app.api.endpoints import admin, earnings, leaderboard, partner, payment, tools
 from app.core.config import settings
 from bot import bot, dp
-from aiogram import types
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    from app.services.warmup_service import warmup_redis
     from app.models.partner import create_db_and_tables
+    from app.services.warmup_service import warmup_redis
     await create_db_and_tables()
-    
+
     # Warmup re-enabled but limited to Top 1000 (see warmup_service.py)
     asyncio.create_task(warmup_redis())
 
-    
+
     # Start the subscription expiration checker
     from app.services.subscription_service import subscription_service
     checker_task = asyncio.create_task(subscription_service.run_checker_task())
     app.state.subscription_checker = checker_task
-    
+
     # Start the profile photo sync task (24h)
     async def run_photo_sync_task():
-        from app.services.partner_service import sync_profile_photos
-        from app.models.partner import engine
         from sqlalchemy.orm import sessionmaker
         from sqlmodel.ext.asyncio.session import AsyncSession
-        
+
+        from app.models.partner import engine
+        from app.services.partner_service import sync_profile_photos
+
         while True:
             await asyncio.sleep(24 * 3600) # Run once every 24h
             try:
@@ -41,19 +45,19 @@ async def lifespan(app: FastAPI):
                     await sync_profile_photos(bot, session)
             except Exception as e:
                 print(f"❌ Photo Sync Task Error: {e}")
-    
+
     photo_sync_task = asyncio.create_task(run_photo_sync_task())
     app.state.photo_sync = photo_sync_task
-    
+
     print("✅ Background tasks started.")
-    
+
     webhook_base = settings.WEBHOOK_URL
-    
+
     if webhook_base and "your-backend-url" not in webhook_base:
         # Avoid double-appending the path
         path = settings.WEBHOOK_PATH
         webhook_url = webhook_base if webhook_base.endswith(path) else f"{webhook_base.rstrip('/')}{path}"
-        
+
         try:
             print(f"📡 Registering Webhook with Telegram: {webhook_url}")
             # Increased timeout to prevent startup hang on slow API responses
@@ -78,12 +82,13 @@ async def lifespan(app: FastAPI):
         app.state.polling_task = polling_task
         print("✅ Bot started with Long Polling")
         print("✅ Bot started with Long Polling")
-    
+
     # Explicit Database Connection Check
     try:
-        from app.models.partner import engine
         from sqlalchemy import text
-        print(f"🌍 Checking Database Connection (Timeout 5s)...")
+
+        from app.models.partner import engine
+        print("🌍 Checking Database Connection (Timeout 5s)...")
         async with asyncio.timeout(5.0):
             async with engine.begin() as conn:
                 print("   ⏳ Engine session begun, executing query...")
@@ -98,10 +103,10 @@ async def lifespan(app: FastAPI):
     print("✅ Lifespan setup complete. App is live.")
     yield
     print("🛑 Shutting down Lifespan...")
-    
+
     # Shutdown
     await bot.session.close()
-    
+
     # Stop background tasks
     if hasattr(app.state, "subscription_checker"):
         app.state.subscription_checker.cancel()
@@ -134,34 +139,35 @@ async def root_health():
 @app.post(settings.WEBHOOK_PATH)
 async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = Header(None)):
     print(f"📥 Received Webhook POST at {settings.WEBHOOK_PATH}")
-    
+
     if x_telegram_bot_api_secret_token != settings.WEBHOOK_SECRET:
         print(f"⚠️ Webhook Secret Mismatch! Got: {x_telegram_bot_api_secret_token}, Expected: {settings.WEBHOOK_SECRET}")
         raise HTTPException(status_code=401, detail="Invalid secret token")
-    
+
     try:
         body = await request.json()
         print(f"📦 Webhook Body: {json.dumps(body, indent=2)}")
-        
+
         update = types.Update.model_validate(body, context={"bot": bot})
         print(f"🎭 Update parsed: {update.update_id} (Type: {update.event_type if hasattr(update, 'event_type') else 'unknown'})")
-        
+
         # Feed the update to context-aware dispatcher
         await dp.feed_update(bot, update)
         print(f"✅ Update {update.update_id} processed successfully")
-        
+
     except Exception as e:
         print(f"❌ Webhook Error: {e}")
         import traceback
         traceback.print_exc()
         # Return 200 anyway to prevent Telegram retry loops for code errors
         return {"status": "error", "message": str(e)}
-        
+
     return {"status": "ok"}
 
 # Import rate limiter
-from app.middleware.rate_limit import limiter, rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
+
+from app.middleware.rate_limit import limiter, rate_limit_exceeded_handler
 
 # Add rate limiter state and exception handler
 app.state.limiter = limiter
@@ -194,7 +200,8 @@ app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderb
 app.include_router(tools.router, prefix="/api/tools", tags=["tools"])
 app.include_router(payment.router, prefix="/api/payment", tags=["payment"])
 app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
-from app.api.endpoints import health, config, blog
+from app.api.endpoints import blog, config, health
+
 app.include_router(blog.router, prefix="/api/blog", tags=["blog"])
 app.include_router(health.router, tags=["health"])
 app.include_router(health.router, prefix="/api", tags=["health"])

@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, Response, status
-from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlalchemy import text
-from app.models.partner import get_session
 import time
+
+from fastapi import APIRouter, Depends, Response, status
+from sqlalchemy import text
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.partner import get_session
 
 router = APIRouter()
 
@@ -32,7 +33,7 @@ async def health_check(
         import asyncio
         async with asyncio.timeout(3.0):
             await session.exec(text("SELECT 1"))
-            
+
         latency = (time.time() - start_time) * 1000
         return {
             "status": "healthy",

@@ -1,9 +1,9 @@
 
 import asyncio
-import os
-import sys
+
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
+
 
 async def fix_schema():
     # Force use of production URL for emergency fix
@@ -12,10 +12,10 @@ async def fix_schema():
 
     print(f"🚀 Connecting to production DB: {db_url.split('@')[-1]}")
     engine = create_async_engine(db_url, echo=True, future=True)
-    
+
     async with engine.begin() as conn:
         print("🛠 Checking for missing columns in 'partner' table...")
-        
+
         # 1. Add pro_notification_seen
         try:
             await conn.execute(text("ALTER TABLE partner ADD COLUMN IF NOT EXISTS pro_notification_seen BOOLEAN DEFAULT FALSE"))

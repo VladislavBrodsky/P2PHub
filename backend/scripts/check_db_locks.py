@@ -1,15 +1,18 @@
 import asyncio
-import sys
 import os
+import sys
+
 from sqlalchemy import text
 
 # Add parent dir to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from dotenv import load_dotenv
+
 load_dotenv() # Load from .env if present
 
 from app.models.partner import engine
+
 
 async def check_locks():
     print("🔍 Checking for Database Locks and Active Connections...")
@@ -33,7 +36,7 @@ async def check_locks():
                    blocking_activity.query AS blocking_query
             FROM pg_catalog.pg_locks blocked_locks
             JOIN pg_catalog.pg_stat_activity blocked_activity ON blocked_locks.pid = blocked_activity.pid
-            JOIN pg_catalog.pg_locks blocking_locks 
+            JOIN pg_catalog.pg_locks blocking_locks
                  ON blocking_locks.locktype = blocked_locks.locktype
                  AND blocking_locks.database IS NOT DISTINCT FROM blocked_locks.database
                  AND blocking_locks.relation IS NOT DISTINCT FROM blocked_locks.relation

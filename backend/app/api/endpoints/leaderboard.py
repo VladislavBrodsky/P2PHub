@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.core.security import get_current_user, get_tg_user
 from app.models.partner import Partner, get_session
 from app.services.leaderboard_service import leaderboard_service
-from typing import List, Dict
-import json
 
 router = APIRouter()
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 @router.get("/global")
@@ -22,7 +22,7 @@ async def get_global_leaderboard(
     Hydrates with partner details from PostgreSQL.
     """
     from app.services.redis_service import redis_service
-    
+
     # Check cache first
     cache_key = f"leaderboard:global_hydrated:{limit}"
     try:
@@ -46,11 +46,11 @@ async def get_global_leaderboard(
         partners = result.all()
         from app.schemas.leaderboard import LeaderboardPartner
         data = [LeaderboardPartner(**p.dict()).model_dump() for p in partners]
-        
+
         try:
             await redis_service.set_json(cache_key, data, expire=60)
         except Exception: pass
-        
+
         return data
 
     # 2. Extract IDs and Scores
@@ -59,12 +59,12 @@ async def get_global_leaderboard(
 
     # 3. Hydrate via Service
     data = await leaderboard_service.hydrate_leaderboard(partner_ids, scores, session)
-    
+
     # 4. Cache for 300 seconds (5 minutes)
     try:
         await redis_service.set_json(cache_key, data, expire=300)
     except Exception: pass
-    
+
     return data
 
 @router.get("/me")
@@ -87,7 +87,7 @@ async def get_my_leaderboard_stats(
         statement = select(Partner).where(Partner.telegram_id == tg_id)
         result = await session.exec(statement)
         partner = result.first()
-        
+
         if not partner:
             return {
                 "rank": -1,
@@ -103,10 +103,10 @@ async def get_my_leaderboard_stats(
         except Exception as e:
             logger.error(f"Rank Read Failed: {e}")
             rank_val = -1
-        
+
         # Get total referral count
         referral_count = partner.referral_count
-        
+
         return {
             "rank": rank_val,
             "xp": partner.xp,

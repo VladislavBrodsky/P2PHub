@@ -1,33 +1,34 @@
-import httpx
 import asyncio
-import time
-from PIL import Image
 import io
-import sys
 import os
+import sys
+import time
+
+from PIL import Image
 
 # Ensure backend is in path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 async def test_photo_optimization():
     print("🧪 Testing Photo Optimization...")
-    
+
     # Use TestClient to test the endpoint
     from fastapi.testclient import TestClient
-    from app.main import app
-    from app.models.partner import Partner, engine
+    from sqlalchemy.orm import sessionmaker
     from sqlmodel import select
     from sqlmodel.ext.asyncio.session import AsyncSession
-    from sqlalchemy.orm import sessionmaker
-    
+
+    from app.main import app
+    from app.models.partner import Partner, engine
+
     client = TestClient(app)
-    
+
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    
+
     real_file_id = None
     try:
         async with async_session() as session:
-            statement = select(Partner).where(Partner.photo_file_id != None).limit(1)
+            statement = select(Partner).where(Partner.photo_file_id is not None).limit(1)
             result = await session.exec(statement)
             partner = result.first()
             if partner:
@@ -42,28 +43,28 @@ async def test_photo_optimization():
         real_file_id = "test_dummy_id"
 
     url = f"/api/partner/photo/{real_file_id}"
-    
-    print(f"--- Request 1 (Initial) ---")
+
+    print("--- Request 1 (Initial) ---")
     start = time.time()
     response = client.get(url)
     end = time.time()
-    
+
     print(f"Status: {response.status_code}")
     print(f"Time: {end - start:.4f}s")
     print(f"Content-Type: {response.headers.get('Content-Type')}")
     print(f"X-Cache: {response.headers.get('X-Cache')}")
-    
+
     if response.status_code == 200:
         assert response.headers.get("Content-Type") == "image/webp"
         img = Image.open(io.BytesIO(response.content))
         print(f"Image Size: {img.size}")
         assert img.width <= 128 and img.height <= 128
 
-        print(f"\n--- Request 2 (Cached) ---")
+        print("\n--- Request 2 (Cached) ---")
         start = time.time()
         response = client.get(url)
         end = time.time()
-        
+
         print(f"Status: {response.status_code}")
         print(f"Time: {end - start:.4f}s")
         print(f"X-Cache: {response.headers.get('X-Cache')}")

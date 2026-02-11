@@ -1,7 +1,9 @@
 import asyncio
-from sqlmodel import select
-from app.models.partner import Partner, get_session
 import logging
+
+from sqlmodel import select
+
+from app.models.partner import Partner, get_session
 
 logging.basicConfig(level=logging.INFO)
 
@@ -12,7 +14,7 @@ async def check_user():
         stmt = select(Partner).where(Partner.username == "uslincoln")
         res = await session.exec(stmt)
         user = res.first()
-        
+
         if not user:
             print("User @uslincoln NOT found in database.")
             # Search by referral code provided in URL

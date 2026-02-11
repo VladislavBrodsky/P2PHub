@@ -1,12 +1,14 @@
 import asyncio
-import sys
 import os
+import sys
+
 from sqlalchemy import text
 
 # Add parent dir to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.models.partner import engine
+
 
 async def main():
     print("🚀 Adding path column to partner table...")

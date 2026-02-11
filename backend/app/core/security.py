@@ -1,40 +1,43 @@
-import hmac
 import hashlib
+import hmac
 import json
-from urllib.parse import parse_qsl
 from typing import Optional
-from fastapi import HTTPException, Header, Depends
+from urllib.parse import parse_qsl
+
+from fastapi import Depends, Header, HTTPException
+
 from app.core.config import settings
+
 
 def validate_telegram_data(init_data: str) -> dict:
     try:
         if not init_data:
             raise HTTPException(status_code=401, detail="Init data missing")
-            
+
         vals = dict(parse_qsl(init_data))
         hash_str = vals.pop('hash', None)
         if not hash_str:
             raise HTTPException(status_code=401, detail="Hash missing")
-            
+
         data_check_string = "\n".join(f"{k}={v}" for k, v in sorted(vals.items()))
-        
+
         # Proper HMAC verification using BOT_TOKEN as secret
         secret_key = hmac.new(b"WebAppData", settings.BOT_TOKEN.encode(), hashlib.sha256).digest()
         hmac_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
-        
+
         if hmac_hash != hash_str:
             raise HTTPException(status_code=401, detail="Invalid signature")
-            
+
         # Replay attack protection: auth_date must be within 24h
         import time
         auth_date = int(vals.get('auth_date', 0))
         if time.time() - auth_date > 86400:
             raise HTTPException(status_code=401, detail="Session expired")
-            
+
         return vals
     except HTTPException:
         raise
-    except Exception as e:
+    except Exception:
         raise HTTPException(status_code=401, detail="Authentication failed")
 
 async def get_current_user(x_telegram_init_data: Optional[str] = Header(None, alias="X-Telegram-Init-Data")):
@@ -62,10 +65,10 @@ async def get_current_admin(user_data: dict = Depends(get_current_user)):
     """
     if not user_data:
         raise HTTPException(status_code=401, detail="Authentication required")
-        
+
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
-    
+
     if tg_id not in settings.ADMIN_USER_IDS:
         raise HTTPException(status_code=403, detail="Admin access required")
     return tg_user

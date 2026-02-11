@@ -1,9 +1,7 @@
 
 import asyncio
 import os
-import secrets
 import sys
-from typing import Optional
 
 # Set PYTHONPATH to include backend
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -15,7 +13,8 @@ os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgr
 os.environ["BOT_TOKEN"] = "12345678:ABCDEF" # Dummy but properly formatted
 
 # MOCK ALL DEPENDENCIES BEFORE IMPORTS
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import AsyncMock, MagicMock
+
 mock_bot = MagicMock()
 mock_bot.send_message = AsyncMock()
 
@@ -54,14 +53,14 @@ worker_mock.broker = broker_mock
 sys.modules["app.worker"] = worker_mock
 
 # Import models & services AFTER all mocks
-from sqlmodel import select
-from app.models.partner import Partner, PartnerTask, XPTransaction
-from app.models.transaction import PartnerTransaction
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.services.partner_service import create_partner, process_referral_logic
+
+from app.models.partner import Partner
 from app.services import partner_service as ps
+from app.services.partner_service import create_partner, process_referral_logic
 
 # Mocking services for clean output and to avoid local Redis/Notification issues
 ps.redis_service = MagicMock()
@@ -81,7 +80,7 @@ ps.notification_service.enqueue_notification = AsyncMock(side_effect=mock_enqueu
 
 async def run_simulation():
     print("🚀 Starting 9-Level Referral Chain Simulation...")
-    
+
     db_url = os.environ["DATABASE_URL"]
     engine = create_async_engine(db_url, echo=False, future=True)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -96,10 +95,10 @@ async def run_simulation():
 
         print(f"📊 Root User: @{root_user.username} (ID: {root_user.id}, Current XP: {root_user.xp})")
         initial_xp = root_user.xp
-        
+
         referrer_code = root_user.referral_code
         chain = []
-        
+
         import time
         ts = int(time.time())
 
@@ -108,7 +107,7 @@ async def run_simulation():
             tg_id = f"SIM_{ts}_{i}"
             username = f"sim_user_{i}_{ts}"
             print(f"\n📦 Level {i}: Creating {username} under code {referrer_code}...")
-            
+
             partner, is_new = await create_partner(
                 session=session,
                 telegram_id=tg_id,
@@ -116,40 +115,40 @@ async def run_simulation():
                 first_name=f"SimUser{i}",
                 referrer_code=referrer_code
             )
-            
+
             if is_new:
                 # Manual trigger of referral logic since TaskIQ is mocked/not running
                 print(f"   ⚙️ Processing Referral Logic for {username}...")
-                # We need to ensure process_referral_logic uses our mocked services 
-                # but it recreates its own engine/session inside. 
+                # We need to ensure process_referral_logic uses our mocked services
+                # but it recreates its own engine/session inside.
                 # Actually, in the current implementation, it's a @broker.task.
                 # Let's call the function directly.
                 await process_referral_logic(partner.id)
-                
+
                 # We need to refresh the partners in the chain to see XP updates
                 # but process_referral_logic uses its own session.
                 # So we commit and refresh here.
                 await session.commit()
                 await session.refresh(partner)
-            
+
             chain.append(partner)
             referrer_code = partner.referral_code
-            
+
         print("\n" + "="*50)
         print("✅ Simulation Finished. Verifying Math...")
         print("="*50)
-        
+
         # 3. Verify @uslincoln XP
         await session.refresh(root_user)
         xp_gain = root_user.xp - initial_xp
         # Expected: L1: 35, L2: 10, L3-L9: 1 each (7 users) -> 35 + 10 + 7 = 52 XP
         expected_xp_gain = 52
-        
-        print(f"👤 @uslincoln Stats:")
+
+        print("👤 @uslincoln Stats:")
         print(f"   Initial XP: {initial_xp}")
         print(f"   Final XP:   {root_user.xp}")
         print(f"   Gain:       {xp_gain} (Expected: {expected_xp_gain})")
-        
+
         if xp_gain == expected_xp_gain:
              print("   ✅ Math is CORRECT!")
         else:
@@ -172,7 +171,7 @@ async def run_simulation():
         print(f"   XP: {u8.xp} (Expected: 35)")
 
         print("\n🗑️ Cleaning up simulation data (optional, but keep for verification)...")
-    
+
     await engine.dispose()
 
 if __name__ == "__main__":

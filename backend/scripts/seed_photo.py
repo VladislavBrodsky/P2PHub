@@ -1,18 +1,17 @@
 
 import asyncio
-import sys
 import os
+import sys
 
 # Add backend to path
 sys.path.append(os.path.join(os.getcwd(), 'backend'))
 
-from app.models.partner import Partner, get_session
-from app.models.transaction import PartnerTransaction
-from app.core.config import settings
-from sqlmodel import select
 from sqlalchemy.ext.asyncio import create_async_engine
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.partner import Partner
 
 # Hardcoded for debugging (as discovered in previous steps)
 database_url = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
@@ -23,13 +22,13 @@ async def main():
     async_session = sessionmaker(
         engine, class_=AsyncSession, expire_on_commit=False
     )
-    
+
     async with async_session() as session:
         # Get the most recent user (Diego Maradonna, ID 126 according to previous logs)
         statement = select(Partner).order_by(Partner.id.desc()).limit(1)
         result = await session.exec(statement)
         partner = result.first()
-        
+
         if partner:
             print(f"Updating Partner: {partner.first_name} (ID: {partner.id})")
             # Using a high-quality Unsplash profile photo for demonstration

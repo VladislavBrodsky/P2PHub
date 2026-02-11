@@ -1,14 +1,16 @@
 import asyncio
-import sys
 import os
+import sys
+
 from sqlmodel import select, text
-from sqlalchemy.orm import selectinload
 
 # Add parent dir to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app.models.partner import Partner, engine
 from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.partner import Partner, engine
+
 
 async def debug_user(telegram_id: str):
     async with AsyncSession(engine) as session:
@@ -16,13 +18,13 @@ async def debug_user(telegram_id: str):
         stmt = select(Partner).where(Partner.telegram_id == telegram_id)
         res = await session.exec(stmt)
         user = res.first()
-        
+
         if not user:
             print(f"❌ User with Telegram ID {telegram_id} not found in DB.")
             return
 
         print(f"✅ User Found: ID={user.id}, TG={user.telegram_id}, Path={user.path}")
-        
+
         # 2. Check direct referrals and their paths
         stmt = select(Partner).where(Partner.referrer_id == user.id)
         res = await session.exec(stmt)
@@ -35,7 +37,7 @@ async def debug_user(telegram_id: str):
         parent_path = user.path or ""
         base_path = f"{parent_path}.{user.id}".lstrip(".")
         print(f"🔍 Searching for path='{base_path}' or path LIKE '{base_path}.%'")
-        
+
         stmt = text("SELECT id, telegram_id, path FROM partner WHERE path = :path OR path LIKE :path || '.%'")
         res = await session.execute(stmt, {"path": base_path})
         matches = res.all()

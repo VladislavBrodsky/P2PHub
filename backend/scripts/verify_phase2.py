@@ -1,7 +1,7 @@
 import asyncio
-import sys
 import os
-from unittest.mock import AsyncMock, patch, MagicMock
+import sys
+from unittest.mock import AsyncMock, MagicMock, patch
 
 # Ensure backend is in path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -14,6 +14,7 @@ sys.modules["taskiq_fastapi"] = MagicMock()
 
 # Now we can import app code
 from app.services.redis_service import redis_service
+
 
 async def test_phase2_verification():
     print("🚀 Starting Phase 2 Verification (Simulated)...")
@@ -36,7 +37,7 @@ async def test_phase2_verification():
 
     # First call - should compute
     # We mock get_json to simulate miss then hit
-    with patch.object(redis_service, 'get_json', side_effect=[None, {"value": 42}]) as mock_get:
+    with patch.object(redis_service, 'get_json', side_effect=[None, {"value": 42}]):
         res1 = await redis_service.get_or_compute(test_key, compute_data, expire=5)
         assert res1["value"] == 42
         print("   ✅ First call computed correctly.")
@@ -49,8 +50,8 @@ async def test_phase2_verification():
     # 2. Test Logic Flow (Simulating Worker)
     print("\n⚙️ Testing Worker Logic Flow...")
     print("   Since TaskIQ is mocked, we verify the service method exists and is decorated.")
-    
-    # We can't easily import the decorated function because of the mock, 
+
+    # We can't easily import the decorated function because of the mock,
     # but we can verify the file structure was updated correctly by checkin the file content
     with open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "app/services/partner_service.py"), "r") as f:
         content = f.read()

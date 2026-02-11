@@ -1,8 +1,10 @@
 import logging
-from typing import List, Dict, Optional
-from app.services.redis_service import redis_service
+from typing import Dict, List, Optional
+
 from sqlmodel import select
+
 from app.models.partner import Partner
+from app.services.redis_service import redis_service
 
 logger = logging.getLogger(__name__)
 
@@ -44,14 +46,14 @@ class LeaderboardService:
     async def hydrate_leaderboard(self, partner_ids: List[int], scores: Dict[int, float], session) -> List[Dict]:
         """Hydrates partner IDs with details from DB and maps to privacy-safe schema."""
         from app.schemas.leaderboard import LeaderboardPartner
-        
+
         if not partner_ids:
             return []
-            
+
         statement = select(Partner).where(Partner.id.in_(partner_ids))
         result = await session.exec(statement)
         partners = result.all()
-        
+
         # Map to schema and sort by score
         hydrated = []
         for p in partners:
@@ -65,7 +67,7 @@ class LeaderboardService:
                 level=p.level
             )
             hydrated.append(item.model_dump())
-            
+
         hydrated.sort(key=lambda x: x['xp'], reverse=True)
         return hydrated
 

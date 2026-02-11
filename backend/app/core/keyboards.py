@@ -1,10 +1,11 @@
 from aiogram import types
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
+
 def get_main_menu_keyboard(url: str, referral_link: str = "", referral_code: str = ""):
     builder = InlineKeyboardBuilder()
     builder.row(types.InlineKeyboardButton(
-        text="🚀 Open App", 
+        text="🚀 Open App",
         web_app=types.WebAppInfo(url=url)
     ))
     if referral_link:
@@ -35,7 +36,7 @@ def get_pro_payment_keyboard(address: str, amount_ton: float):
     builder = InlineKeyboardBuilder()
     # Deep link to TON wallet if possible, otherwise just instructions
     ton_link = f"ton://transfer/{address}?amount={int(amount_ton * 10**9)}"
-    
+
     builder.row(types.InlineKeyboardButton(
         text=f"💎 Pay {amount_ton} TON",
         url=ton_link

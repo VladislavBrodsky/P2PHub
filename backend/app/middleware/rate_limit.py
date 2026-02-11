@@ -1,10 +1,12 @@
-from slowapi import Limiter
-from slowapi.util import get_remote_address
-from slowapi.errors import RateLimitExceeded
+import redis.asyncio as redis
 from fastapi import Request, Response
 from fastapi.responses import JSONResponse
+from slowapi import Limiter
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
+
 from app.core.config import settings
-import redis.asyncio as redis
+
 
 # Initialize Redis-backed limiter for production, in-memory for local
 def get_user_key(request: Request) -> str:
@@ -16,8 +18,8 @@ def get_user_key(request: Request) -> str:
     init_data = request.headers.get("X-Telegram-Init-Data")
     if init_data:
         try:
-            from urllib.parse import parse_qsl
             import json
+            from urllib.parse import parse_qsl
             vals = dict(parse_qsl(init_data))
             user_json = vals.get("user")
             if user_json:

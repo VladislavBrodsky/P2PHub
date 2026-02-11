@@ -1,7 +1,6 @@
 import asyncio
-import sys
 import os
-from sqlmodel import select
+import sys
 
 # Add parent dir to path to import app modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -15,30 +14,26 @@ try:
             if "=" in line and not line.strip().startswith("#"):
                 key, value = line.strip().split("=", 1)
                 value = value.strip().strip('"').strip("'")
-                
+
                 # Fix for potential double assignment e.g. KEY=KEY=VALUE
                 if value.startswith(f"{key}="):
                     print(f"⚠️ Fixing malformed env var for {key}")
                     value = value[len(key)+1:].strip().strip('"').strip("'")
-                
+
                 os.environ[key] = value
 except Exception as e:
     print(f"Failed to load .env: {e}")
 
 
-from app.models.partner import Partner, get_session, engine
-from app.models.transaction import Transaction # Register Transaction for Relationships
-from app.services.partner_service import create_partner, process_referral_logic
-
-
-
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlmodel.ext.asyncio.session import AsyncSession
+
 import app.models.partner
 
 # Access configuration via app.core.config
 from app.core.config import settings
+from app.models.partner import engine
 
 # Use the exact DB URL from .env
 db_url = settings.DATABASE_URL
@@ -61,7 +56,8 @@ async_session_factory = sessionmaker(
     local_engine, class_=AsyncSession, expire_on_commit=False
 )
 
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock, MagicMock, patch
+
 from app.services import partner_service as ps
 
 # Mock Redis and Leaderboard services to avoid connection errors
@@ -80,14 +76,14 @@ print("⚡️ Mocked Redis, Leaderboard, and Notification services.")
 
 async def run_simulation():
     print("🚀 Starting Referral Simulation (Mocked Verification)...")
-    
+
     # Mock bot
     bot = MagicMock()
     bot.send_message = AsyncMock()
 
     # Mock session
-    session = AsyncMock()
-    
+    AsyncMock()
+
     # Mock partner
     partner = MagicMock()
     partner.id = 123
@@ -95,7 +91,7 @@ async def run_simulation():
     partner.username = "test_user"
 
     print(f"Creating User: {partner.username} (Ref ID: {partner.referrer_id})")
-    
+
     # Simulating the call that was failing
     print(f"   -> Processing Referral Logic for {partner.username}...")
     try:
@@ -103,7 +99,7 @@ async def run_simulation():
         # In the real app, this would be a background task call via .kiq()
         # but here we just want to ensure it doesn't crash on arguments
         from app.services.partner_service import process_referral_logic
-        
+
         # We need to mock the internals of process_referral_logic since it creates its own engine
         with patch('app.services.partner_service.create_async_engine'), \
              patch('app.services.partner_service.sessionmaker'):
@@ -112,7 +108,7 @@ async def run_simulation():
     except TypeError as e:
         print(f"❌ TypeError: {e}")
     except Exception as e:
-        # We expect other errors (database, etc.) which is fine, 
+        # We expect other errors (database, etc.) which is fine,
         # as long as it's not the TypeError we're fixing
         if "takes 1 positional argument but 3 were given" in str(e):
              print(f"❌ TypeError still present: {e}")
@@ -123,6 +119,8 @@ async def run_simulation():
 
 from sqlalchemy.orm import sessionmaker
 from sqlmodel.ext.asyncio.session import AsyncSession
+
+
 async def post_session():
     async_session = sessionmaker(
         engine, class_=AsyncSession, expire_on_commit=False

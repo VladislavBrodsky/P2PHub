@@ -1,11 +1,9 @@
 
 import asyncio
 import os
-import secrets
 import sys
 import time
-from typing import Optional
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 # Set PYTHONPATH to include backend
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -51,14 +49,14 @@ worker_mock.broker = broker_mock
 sys.modules["app.worker"] = worker_mock
 
 # Import models & services AFTER all mocks
-from sqlmodel import select
-from app.models.partner import Partner, PartnerTask, XPTransaction
-from app.models.transaction import PartnerTransaction
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.services.partner_service import create_partner, process_referral_logic
+
+from app.models.partner import Partner
 from app.services import partner_service as ps
+from app.services.partner_service import create_partner, process_referral_logic
 
 # Mocking services for clean output
 ps.redis_service = MagicMock()
@@ -77,7 +75,7 @@ ps.notification_service.enqueue_notification = AsyncMock(side_effect=mock_enqueu
 async def run_simulation():
     start_code = "P2P-425DA3DB"
     print(f"🚀 Starting 6-Level Chain Simulation from code: {start_code}")
-    
+
     db_url = os.environ["DATABASE_URL"]
     engine = create_async_engine(db_url, echo=False, future=True)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -92,7 +90,7 @@ async def run_simulation():
 
         print(f"👤 Root User Found: @{root_user.username} (ID: {root_user.id})")
         initial_xp = root_user.xp
-        
+
         referrer_code = start_code
         ts = int(time.time())
 
@@ -101,7 +99,7 @@ async def run_simulation():
             username = f"chain_user_{i}_{ts}"
             tg_id = f"CH_{ts}_{i}"
             print(f"\n📦 Step {i}: Registering @{username} under {referrer_code}...")
-            
+
             partner, is_new = await create_partner(
                 session=session,
                 telegram_id=tg_id,
@@ -109,16 +107,16 @@ async def run_simulation():
                 first_name=f"ChainUser{i}",
                 referrer_code=referrer_code
             )
-            
+
             if is_new:
                 await process_referral_logic(partner.id)
                 await session.commit()
                 await session.refresh(partner)
-                
+
                 # Next user registers under the newly created user
                 referrer_code = partner.referral_code
             else:
-                print(f"   ⚠️ User already existed, skipping logic.")
+                print("   ⚠️ User already existed, skipping logic.")
 
         # 3. Final Verification
         await session.refresh(root_user)
@@ -130,7 +128,7 @@ async def run_simulation():
         print(f"   Initial XP: {initial_xp}")
         print(f"   Final XP:   {root_user.xp}")
         print(f"   TOTAL GAIN: {gain} XP")
-        
+
         # Breakdown:
         # User 1 -> L1 (35 XP)
         # User 2 -> L2 (10 XP)
@@ -139,8 +137,8 @@ async def run_simulation():
         # User 5 -> L5 (1 XP)
         # User 6 -> L6 (1 XP)
         # Total Expected: 35 + 10 + 4 = 49 XP
-        print(f"   Expected:   49.0 XP")
-        
+        print("   Expected:   49.0 XP")
+
     await engine.dispose()
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 
 import asyncio
 import os
+
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
 
@@ -9,7 +10,7 @@ os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgr
 async def fix():
     db_url = os.environ["DATABASE_URL"]
     engine = create_async_engine(db_url, echo=True, future=True)
-    
+
     async with engine.begin() as conn:
         print("🚀 Force adding columns to 'earning'...")
         try:
@@ -29,7 +30,7 @@ async def fix():
             print("   ✅ 'currency' added or exists.")
         except Exception as e:
             print(f"   ❌ Error adding 'currency': {e}")
-            
+
         try:
             await conn.execute(text("CREATE INDEX IF NOT EXISTS ix_earning_type ON earning (type)"))
             print("   ✅ index on 'type' added.")

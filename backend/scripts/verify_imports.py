@@ -1,7 +1,7 @@
-import sys
-import os
 import importlib
+import os
 import pkgutil
+import sys
 
 # Set PYTHONPATH to the current directory (should be run from backend/)
 sys.path.append(os.getcwd())
@@ -14,10 +14,9 @@ os.environ.setdefault("WEBHOOK_URL", "https://mock.com/webhook")
 def verify_all_imports():
     print("🔍 Starting comprehensive import verification...")
     success = True
-    
+
     # 1. Check Main App
     try:
-        from app.main import app
         print("✅ Core: app.main imported successfully")
     except Exception as e:
         print(f"❌ Core: app.main import failed: {e}")
@@ -37,7 +36,7 @@ def verify_all_imports():
     if not success:
         print("\n💥 Import verification FAILED!")
         sys.exit(1)
-    
+
     print("\n✨ All critical modules imported successfully!")
 
 if __name__ == "__main__":

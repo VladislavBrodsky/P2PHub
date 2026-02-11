@@ -7,21 +7,22 @@ from datetime import datetime, timedelta
 # Add backend directory to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from app.core.config import settings
-from app.models.partner import engine, Partner
+from sqlalchemy.orm import sessionmaker
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlalchemy.orm import sessionmaker
+
+from app.models.partner import Partner, engine
+
 
 async def debug_growth():
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    
+
     async with async_session() as session:
         # 1. Get partner with most referrals to debug
         stmt = select(Partner).order_by(Partner.referral_count.desc()).limit(1)
         res = await session.exec(stmt)
         partner = res.first()
-        
+
         if not partner:
             print("No partner found in DB")
             return
@@ -31,7 +32,7 @@ async def debug_growth():
         # Replicate service logic
         search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
         base_depth = len(search_path.split('.'))
-        
+
         print(f"Search Path: '{search_path}'")
         print(f"Base Depth: {base_depth}")
         print(f"Search Wildcard: '{search_path}.%'")
@@ -51,7 +52,7 @@ async def debug_growth():
 
         # Check the Level Logic
         query_levels = text("""
-            SELECT 
+            SELECT
                 (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level,
                 COUNT(*) as count
             FROM partner
@@ -59,9 +60,9 @@ async def debug_growth():
             GROUP BY level
             ORDER BY level;
         """)
-        
+
         res_levels = await session.execute(query_levels, {
-            "search_path": search_path, 
+            "search_path": search_path,
             "search_wildcard": f"{search_path}.%",
             "base_depth": base_depth
         })
@@ -74,24 +75,24 @@ async def debug_growth():
         now = datetime.utcnow()
         start_time = now - timedelta(days=7)
         print(f"\nChecking Base Count (Before {start_time}):")
-        
+
         stmt_base = text("""
-            SELECT 
+            SELECT
                 (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level,
-                COUNT(*) 
+                COUNT(*)
             FROM partner
             WHERE (path = :search_path OR path LIKE :search_wildcard)
             AND created_at < :start
             GROUP BY level
         """)
-        
+
         res_base = await session.execute(stmt_base, {
             "search_path": search_path,
             "search_wildcard": f"{search_path}.%",
             "start": start_time,
             "base_depth": base_depth
         })
-        
+
         for row in res_base:
             print(f"  Base Level {row[0]}: {row[1]}")
 

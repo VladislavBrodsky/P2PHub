@@ -7,9 +7,8 @@ Create Date: 2026-02-10 05:59:07.823448
 """
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = '65293531e71c'
@@ -24,7 +23,7 @@ def upgrade() -> None:
     conn = op.get_bind()
     inspector = sa.inspect(conn)
     columns = [c['name'] for c in inspector.get_columns('partner')]
-    
+
     if 'photo_file_id' not in columns:
         op.add_column('partner', sa.Column('photo_file_id', sa.String(), nullable=True))
     else:

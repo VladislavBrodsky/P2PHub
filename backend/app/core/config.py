@@ -1,8 +1,9 @@
-from pydantic_settings import BaseSettings
-from typing import Optional
-from dotenv import load_dotenv
-
 from pathlib import Path
+from typing import Optional
+
+from dotenv import load_dotenv
+from pydantic_settings import BaseSettings
+
 try:
     # Try common .env locations with error handling
     possible_env_paths = [
@@ -12,7 +13,7 @@ try:
         Path("/app/.env"),
         Path("/app/backend/.env")
     ]
-    
+
     loaded_env = False
     for p in possible_env_paths:
         try:
@@ -23,7 +24,7 @@ try:
                 break
         except Exception:
             continue
-            
+
     if not loaded_env:
         # Fallback to default load_dotenv (current dir)
         load_dotenv()
@@ -35,29 +36,29 @@ class Settings(BaseSettings):
     BOT_TOKEN: str = ""
     DATABASE_URL: str = "sqlite+aiosqlite:///dev.db"
     WEBHOOK_SECRET: str = ""
-    
+
     # Optional with sensible defaults
     DEBUG: bool = False
     REDIS_URL: str = "redis://localhost:6379/0"
     PORT: int = 8000
     FRONTEND_URL: str = "https://p2phub-frontend.up.railway.app"
-    
+
     # Webhook settings
     WEBHOOK_URL: Optional[str] = None # e.g. https://p2phub-api.up.railway.app
     WEBHOOK_PATH: str = "/api/bot/webhook"
-    
+
     # Payment settings
     ADMIN_TON_ADDRESS: str = "UQD_n02bdxQxFztKTXpWBaFDxo713qIuETyefIeK7wiUB0DN"
     ADMIN_USDT_ADDRESS: str = "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM"
     TON_API_KEY: Optional[str] = None
     TON_MANIFEST_URL: str = "https://p2phub-frontend.up.railway.app/tonconnect-manifest.json"
     PAYMENT_SERVICE_MODE: str = "ton_api" # Enum: auto_approve, ton_api, manual
-    
+
     # Admin settings
     ADMIN_USER_IDS: list[str] = ["12345678", "537873096", "716720099"] # uslincoln added here
 
 
-    
+
     @property
     def async_database_url(self) -> str:
         url = self.DATABASE_URL

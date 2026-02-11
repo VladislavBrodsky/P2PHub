@@ -1,16 +1,17 @@
-from fastapi.testclient import TestClient
-import hmac
 import hashlib
+import hmac
+import os
+import sys
 import time
 from urllib.parse import urlencode
-import sys
-import os
+
+from fastapi.testclient import TestClient
 
 # Ensure backend is in path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app.main import app
 from app.core.config import settings
+from app.main import app
 
 client = TestClient(app)
 
@@ -30,7 +31,7 @@ def generate_valid_init_data(user_id=12345):
 
 def test_api_security():
     print("🧪 Running API Integration Security Tests...")
-    
+
     # 1. Test Without Header
     response = client.get("/api/partner/me")
     assert response.status_code == 422 # Missing header

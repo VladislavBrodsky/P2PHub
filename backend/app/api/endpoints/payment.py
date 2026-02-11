@@ -1,12 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException, Body
-from sqlmodel.ext.asyncio.session import AsyncSession
-from app.core.security import get_current_user
-from app.core.config import settings
-from app.models.partner import Partner, get_session
-from app.services.payment_service import payment_service
-from app.services.notification_service import notification_service
-from sqlmodel import select
 import json
+
+from fastapi import APIRouter, Body, Depends, HTTPException
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.core.config import settings
+from app.core.security import get_current_user
+from app.models.partner import Partner, get_session
+from app.services.notification_service import notification_service
+from app.services.payment_service import payment_service
 
 router = APIRouter()
 @router.get("/config")
@@ -43,14 +45,14 @@ async def create_invoice(
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
     partner = result.first()
-    
+
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
 
     transaction = await payment_service.create_transaction(
         session, partner.id, amount, currency, network
     )
-    
+
     return transaction
 
 @router.post("/session")
@@ -73,14 +75,14 @@ async def create_payment_session(
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
     partner = result.first()
-    
+
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
 
     payment_data = await payment_service.create_payment_session(
         session, partner.id, amount
     )
-    
+
     return payment_data
 
 
@@ -104,12 +106,12 @@ async def verify_ton(
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
     partner = result.first()
-    
+
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
 
     success = await payment_service.verify_ton_transaction(session, partner, tx_hash)
-    
+
     if success:
         return {"status": "success", "message": "Upgraded to PRO"}
     else:
@@ -139,7 +141,7 @@ async def submit_manual_payment(
     statement = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(statement)
     partner = result.first()
-    
+
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
 
@@ -149,7 +151,7 @@ async def submit_manual_payment(
     transaction.status = "manual_review"
     session.add(transaction)
     await session.commit()
-    
+
     # Notify Admins
     try:
         admin_msg = (
@@ -169,6 +171,6 @@ async def submit_manual_payment(
                 pass
     except Exception as e:
         print(f"[DEBUG] Admin notification failed: {e}")
-    
+
     return {"status": "submitted", "message": "Payment submitted for manual review"}
 

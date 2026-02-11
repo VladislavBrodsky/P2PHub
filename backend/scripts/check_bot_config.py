@@ -21,7 +21,7 @@ for f in env_files:
         print(f"  Size: {st.st_size}")
         print(f"  Mode: {oct(st.st_mode)}")
         print(f"  Type: {'Dir' if stat.S_ISDIR(st.st_mode) else 'File'}")
-        
+
         # Try reading
         with open(full_path, "rb") as file:
             content = file.read(50)

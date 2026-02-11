@@ -7,11 +7,9 @@ Create Date: 2026-02-09 02:42:57.471874
 """
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
-
-
 import sqlmodel
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = '85ea8462aeec'
@@ -25,7 +23,7 @@ def upgrade() -> None:
     conn = op.get_bind()
     inspector = sa.inspect(conn)
     tables = inspector.get_table_names()
-    
+
     # 1. Handle transaction table
     if 'transaction' not in tables:
         op.create_table('transaction',
@@ -47,24 +45,24 @@ def upgrade() -> None:
 
     # 2. Handle partner table columns
     columns = [c['name'] for c in inspector.get_columns('partner')]
-    
+
     with op.batch_alter_table('partner', schema=None) as batch_op:
         if 'last_transaction_id' not in columns:
             batch_op.add_column(sa.Column('last_transaction_id', sa.Integer(), nullable=True))
             batch_op.create_foreign_key('fk_partner_last_transaction', 'transaction', ['last_transaction_id'], ['id'])
-        
+
         if 'payment_details' not in columns:
             batch_op.add_column(sa.Column('payment_details', sqlmodel.sql.sqltypes.AutoString(), nullable=True))
-            
+
         # These might be detected as missing if previous migrations were skipped or failed on SQLite
         if 'path' not in columns:
             batch_op.add_column(sa.Column('path', sqlmodel.sql.sqltypes.AutoString(), nullable=True))
             batch_op.create_index(batch_op.f('ix_partner_path'), ['path'], unique=False)
-            
+
         if 'updated_at' not in columns:
             batch_op.add_column(sa.Column('updated_at', sa.DateTime(), nullable=False, server_default=sa.text("'2026-01-01 00:00:00'") if op.get_context().dialect.name == 'sqlite' else sa.func.now()))
             batch_op.create_index(batch_op.f('ix_partner_updated_at'), ['updated_at'], unique=False)
-            
+
         if 'completed_tasks' not in columns:
             batch_op.add_column(sa.Column('completed_tasks', sqlmodel.sql.sqltypes.AutoString(), nullable=False, server_default='[]'))
 

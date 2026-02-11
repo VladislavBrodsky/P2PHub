@@ -1,7 +1,9 @@
 
 import asyncio
+
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
+
 
 async def check():
     engine = create_async_engine('postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway', echo=False, future=True)

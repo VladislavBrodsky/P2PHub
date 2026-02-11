@@ -14,23 +14,23 @@ for f in files:
         rev_match = re.search(r"revision: str = ['\"]([^'\"]+)['\"]", content)
         if not rev_match:
             rev_match = re.search(r"revision = ['\"]([^'\"]+)['\"]", content)
-            
+
         down_match = re.search(r"down_revision: Union\[str, Sequence\[str\], None\] = ['\"]([^'\"]+)['\"]", content)
         if not down_match:
             down_match = re.search(r"down_revision = ['\"]([^'\"]+)['\"]", content)
-        
+
         # Check for multiple parents
         multi_match = re.search(r"down_revision: Union\[str, Sequence\[str\], None\] = \(([^)]+)\)", content)
         if not multi_match:
             multi_match = re.search(r"down_revision = \(([^)]+)\)", content)
-            
+
         rev = rev_match.group(1) if rev_match else None
         down = None
         if down_match:
             down = down_match.group(1)
         elif multi_match:
             down = [x.strip().strip("'").strip('"') for x in multi_match.group(1).split(",")]
-            
+
         revisions[rev] = f
         graph[rev] = down
 

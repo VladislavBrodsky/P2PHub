@@ -1,11 +1,11 @@
 
 import asyncio
-import json
-from datetime import datetime, timedelta
+
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy import text, delete
+
 from app.core.config import settings
-from app.models.partner import SystemSetting
+
 
 async def reset_stats():
     # Fix for Railway providing postgresql:// or postgres:// but SQLAlchemy requiring postgresql+asyncpg://
@@ -16,9 +16,9 @@ async def reset_stats():
         elif database_url.startswith("postgres://"):
             database_url = database_url.replace("postgres://", "postgresql+asyncpg://", 1)
 
-    print(f"Connecting to DB to reset stats...")
+    print("Connecting to DB to reset stats...")
     engine = create_async_engine(database_url)
-    
+
     async with engine.begin() as conn:
         # Delete the persistent snapshot and count to force a refresh with new range
         print("Deleting 'partners_recent_snapshot' and 'partners_recent_last_hour_count'...")

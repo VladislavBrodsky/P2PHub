@@ -1,11 +1,12 @@
-import logging
 import asyncio
+import logging
 from datetime import datetime, timedelta
+
 from sqlmodel import select
-from app.models.partner import Partner, get_session
-from app.services.notification_service import notification_service
 from sqlmodel.ext.asyncio.session import AsyncSession
-from contextlib import asynccontextmanager
+
+from app.models.partner import Partner
+from app.services.notification_service import notification_service
 
 logger = logging.getLogger(__name__)
 
@@ -15,13 +16,13 @@ class SubscriptionService:
         Finds users whose subscription expires in exactly 3 days or 1 day.
         """
         now = datetime.utcnow()
-        
+
         # 1. Check for 3-day warning
         three_days_start = now + timedelta(days=3)
         three_days_end = three_days_start + timedelta(hours=1)
-        
+
         stmt_3d = select(Partner).where(
-            Partner.is_pro == True,
+            Partner.is_pro,
             Partner.pro_expires_at >= three_days_start,
             Partner.pro_expires_at < three_days_end
         )
@@ -32,9 +33,9 @@ class SubscriptionService:
         # 2. Check for 1-day warning
         one_day_start = now + timedelta(days=1)
         one_day_end = one_day_start + timedelta(hours=1)
-        
+
         stmt_1d = select(Partner).where(
-            Partner.is_pro == True,
+            Partner.is_pro,
             Partner.pro_expires_at >= one_day_start,
             Partner.pro_expires_at < one_day_end
         )
@@ -44,7 +45,7 @@ class SubscriptionService:
 
         # 3. Handle actually expired
         stmt_expired = select(Partner).where(
-            Partner.is_pro == True,
+            Partner.is_pro,
             Partner.pro_expires_at < now
         )
         res_expired = await session.exec(stmt_expired)
@@ -52,7 +53,7 @@ class SubscriptionService:
             partner.is_pro = False
             session.add(partner)
             await self.send_expired_notification(partner)
-        
+
         await session.commit()
 
     async def send_expiration_warning(self, partner: Partner, days_left: int):
@@ -69,9 +70,9 @@ class SubscriptionService:
 
     async def send_expired_notification(self, partner: Partner):
         text = (
-            f"❌ *Subscription Expired*\n\n"
-            f"Your PRO membership has expired. You have lost access to premium features.\n\n"
-            f"👉 Use /start and click 'Open App' to re-activate your PRO status for $39."
+            "❌ *Subscription Expired*\n\n"
+            "Your PRO membership has expired. You have lost access to premium features.\n\n"
+            "👉 Use /start and click 'Open App' to re-activate your PRO status for $39."
         )
         await notification_service.enqueue_notification(int(partner.telegram_id), text)
 
@@ -88,7 +89,7 @@ class SubscriptionService:
                     await self.check_expiring_subscriptions(session)
             except Exception as e:
                 logger.error(f"Error in Subscription Checker: {e}")
-            
+
             await asyncio.sleep(3600) # Check every hour
 
 subscription_service = SubscriptionService()

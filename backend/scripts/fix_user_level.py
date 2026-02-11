@@ -1,7 +1,6 @@
 import asyncio
-import logging
-import sys
 import os
+import sys
 
 # --- PRE-IMPORT CONFIGURATION ---
 PUBLIC_DB_URL = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
@@ -20,18 +19,20 @@ os.environ["FRONTEND_URL"] = "http://localhost:3000" # Dummy
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app.models.partner import Partner
-from sqlmodel import select
 from sqlalchemy.ext.asyncio import create_async_engine
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.partner import Partner
+
 
 async def main():
     print(f"Using DB: {PUBLIC_DB_URL}")
-    
+
     engine = create_async_engine(PUBLIC_DB_URL, echo=False, future=True)
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    
+
     referral_code = "P716720099" # User's referral code
 
     async with async_session() as session:
@@ -39,25 +40,25 @@ async def main():
         statement = select(Partner).where(Partner.referral_code == referral_code)
         result = await session.exec(statement)
         partner = result.first()
-        
+
         if not partner:
             print(f"❌ User with code {referral_code} not found!")
             return
 
         print(f"Found Partner: {partner.first_name} (ID: {partner.id})")
         print(f"Current State: Level {partner.level}, XP {partner.xp}")
-        
+
         # Recalculate Level
         # Formula: Next Level Threshold = Current Level * 100
         # If XP is 140, Level 1 -> Threshold 100. 140 >= 100 -> Level 2.
         # Level 2 -> Threshold 200. 140 < 200 -> Stop.
-        
+
         updates_made = False
         while partner.xp >= partner.level * 100:
             partner.level += 1
             updates_made = True
             print(f"🚀 Upgrading to Level {partner.level}...")
-            
+
         if updates_made:
             session.add(partner)
             await session.commit()
