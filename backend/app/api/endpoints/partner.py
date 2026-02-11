@@ -652,24 +652,27 @@ async def claim_task_reward(
         if progress < requirement:
              raise HTTPException(status_code=400, detail=f"Requirement not met. Progress: {progress}/{requirement}")
 
-    # 3. Check if task already completed
+    # 3. Check if task already completed in the new table
     if partner_task_record and partner_task_record.status == "COMPLETED":
          raise HTTPException(status_code=400, detail="Task already completed")
-         
-    # Proceed to award...
 
-    # 3. Check if task already completed in the new table
-    already_completed = any(pt.task_id == task_id for pt in partner.completed_task_records)
-
-    if not already_completed:
-        # 1. Add record to PartnerTask table
+    if not partner_task_record:
+        # 1. Add record to PartnerTask table (for social tasks that don't have /start)
         from app.models.partner import PartnerTask
-        new_task_completion = PartnerTask(
+        partner_task_record = PartnerTask(
             partner_id=partner.id,
             task_id=task_id,
-            reward_xp=xp_reward
+            status="COMPLETED",
+            reward_xp=xp_reward,
+            completed_at=datetime.utcnow()
         )
-        session.add(new_task_completion)
+        session.add(partner_task_record)
+    else:
+        # Update existing STARTED record
+        partner_task_record.status = "COMPLETED"
+        partner_task_record.reward_xp = xp_reward
+        partner_task_record.completed_at = datetime.utcnow()
+        session.add(partner_task_record)
 
         # 1.1 Add XP Transaction record
         new_xp_tx = XPTransaction(

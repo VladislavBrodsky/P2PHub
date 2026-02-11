@@ -122,9 +122,9 @@ export default function ReferralPage() {
         notification('success');
 
         try {
-            // Persist to backend
-            await apiClient.post(`/api/partner/tasks/${task.id}/claim`, null, {
-                params: { xp_reward: task.reward }
+            // Persist to backend - Payload matches TaskClaimRequest schema
+            await apiClient.post(`/api/partner/tasks/${task.id}/claim`, {
+                xp_reward: task.reward
             });
 
             const newCompleted = [...completedTaskIds, task.id];

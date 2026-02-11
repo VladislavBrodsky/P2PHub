@@ -33,6 +33,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
             onClick={() => !isLocked && onClick(stage)}
             className={cn(
                 "relative group cursor-pointer w-full flex justify-center py-3",
+                /* #comment: Reduced vertical padding from py-4 to py-3 for better node density */
                 isLocked && "cursor-not-allowed opacity-60"
             )}
         >
@@ -41,6 +42,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                 <div className={cn(
                     "absolute -top-3 left-1/2 -translate-x-1/2 w-0.5 h-6 -z-10 bg-slate-200 dark:bg-white/10 overflow-hidden"
                 )}>
+                /* #comment: Adjusted connecting line position (-top-3) and height (h-6) to match the smaller node size */
                     {(isCompleted || isCurrent) && (
                         <motion.div
                             initial={{ y: "-100%" }}
@@ -55,11 +57,13 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
             {/* Node Background with Glow for Active/Current */}
             <div className={cn(
                 "relative w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 border-2 overflow-hidden",
+                /* #comment: Reduced node size from w-20 to w-16 and radius from rounded-3xl to rounded-2xl */
                 isCurrent ? "branding-liquid-gradient border-blue-400 shadow-[0_0_30px_rgba(37,99,235,0.4)]" :
                     isCompleted ? "bg-emerald-500/10 border-emerald-500/30 shadow-[0_4px_12px_rgba(16,185,129,0.1)]" :
                         isLocked ? "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10" :
                             "bg-white dark:bg-white/10 border-slate-200 dark:border-white/20 shadow-lg"
             )} style={{ transform: "translateZ(30px)" }}>
+                {/* #comment: Subtly reduced shadow intensities for a cleaner compact look */}
                 {/* Visual indicator for current stage */}
                 {isCurrent && (
                     <motion.div
@@ -77,6 +81,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                             isLocked ? "text-slate-400/50" : "text-blue-500"
                 )}>
                     {isLocked ? <Lock className="w-6 h-6" /> : <stage.icon className="w-7 h-7" />}
+                    {/* #comment: Reduced icon sizes (from w-8/9 to w-6/7) to fit the smaller container */}
                 </div>
 
                 {/* Status Badges */}
@@ -97,6 +102,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                 {/* Stage Number Floating */}
                 <div className={cn(
                     "absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap px-1.5 py-0.5 rounded-lg text-[8px] font-black uppercase tracking-widest border",
+                    /* #comment: Reduced stage number label offset (-bottom-5), padding (px-1.5), and font size (text-[8px]) */
                     isCurrent ? "bg-blue-600 border-blue-400 text-white" :
                         "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-500"
                 )}>
@@ -107,15 +113,18 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
             {/* Label Content (Floating to the side) */}
             <div className={cn(
                 "absolute top-1/2 -translate-y-1/2 w-36 flex flex-col p-2.5 rounded-xl glass-panel-premium border-white/10 transition-all duration-500 group-hover:border-blue-500/30",
+                /* #comment: Reduced floating label width (w-36), padding (p-2.5), and offset (calc(50%+36px)) */
                 isLeft ? "left-[calc(50%+36px)] items-start text-left" : "right-[calc(50%+36px)] items-end text-right",
                 isLocked ? "opacity-40 grayscale" : "opacity-100"
             )} style={{ transform: "translateZ(20px)" }}>
                 <h4 className={cn(
                     "text-[10px] font-black uppercase tracking-tight leading-none",
+                    /* #comment: Reduced title size from 11px to 10px */
                     isLocked ? "text-slate-400" : "text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors"
                 )}>{stage.title}</h4>
                 <p className={cn(
                     "text-[7.5px] font-medium leading-tight mt-1 opacity-80 line-clamp-2",
+                    /* #comment: Reduced description size (8px to 7.5px) and spacing (mt-1) */
                     isLocked ? "text-slate-500" : "text-slate-600 dark:text-slate-300"
                 )}>{stage.description}</p>
 
@@ -123,6 +132,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                     <div className="flex items-center gap-1.5 mt-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/10 w-fit">
                         <Play className="w-2 h-2 text-blue-500" />
                         <span className="text-[7.5px] font-black text-blue-500 uppercase">{stage.duration}</span>
+                        {/* #comment: Reduced duration label size and spacing to maintain compactness */}
                     </div>
                 )}
             </div>

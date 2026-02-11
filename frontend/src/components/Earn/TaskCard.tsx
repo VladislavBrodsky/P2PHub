@@ -40,14 +40,13 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
     };
 
     const handleCardClick = () => {
-        if (isAvailable) {
+        if (isAvailable || isStarted) {
             Haptic.selection();
             onClick?.();
         } else if (isClaimable) {
             Haptic.notification('success');
             onClaim?.();
         }
-        // #comment: STARTED state is not clickable (user must perform action elsewhere)
     };
 
     // #comment: Calculate current progress to show. If progress prop is provided (from activeTask), use it.
@@ -168,8 +167,8 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                         </div>
                     ) : status === 'STARTED' ? (
                         // #comment: Show "In Progress" when mission is started but not yet completed
-                        <div className="flex items-center gap-2 text-[10px] font-bold text-blue-400 uppercase tracking-wider">
-                            <span className="animate-pulse">In Progress</span>
+                        <div className="flex items-center gap-1 text-[10px] font-bold text-blue-400 uppercase tracking-wider group-hover:gap-2 transition-all">
+                            <span className="animate-pulse">In Progress</span> <ArrowRight className="w-3 h-3" />
                         </div>
                     ) : (
                         // #comment: Default state is "Start Mission"
