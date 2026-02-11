@@ -18,9 +18,17 @@ if [ -d "backend" ]; then
     cd backend
 fi
 
-# Run import verification
+# Run import verification using the project's virtual environment if it exists
+PYTHON_EXEC="python3"
+if [ -d "../.venv" ]; then
+    PYTHON_EXEC="../.venv/bin/python3"
+elif [ -d ".venv" ]; then
+    PYTHON_EXEC="./.venv/bin/python3"
+fi
+
+echo "🐍 Using: $PYTHON_EXEC"
 export PYTHONPATH=$PYTHONPATH:.
-python3 scripts/verify_imports.py
+$PYTHON_EXEC scripts/verify_imports.py
 
 if [ $? -ne 0 ]; then
     echo "❌ Pre-push checks FAILED! Please fix the errors before pushing."
