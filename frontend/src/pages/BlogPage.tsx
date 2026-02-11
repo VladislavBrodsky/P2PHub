@@ -423,7 +423,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                         {post.title}
                     </h1>
                     <div className="flex items-center gap-3 py-2 border-y border-(--color-border-glass)">
-                        <div className="w-10 h-10 rounded-full bg-linear-to-br from-slate-200 to-slate-400 dark:from-slate-700 dark:to-slate-900 flex items-center justify-center font-black text-sm text-(--color-bg-app)">
+                        <div className="w-10 h-10 rounded-full bg-linear-to-br from-slate-400 to-slate-600 dark:from-slate-700 dark:to-slate-900 flex items-center justify-center font-black text-sm text-white shadow-inner">
                             {post.author[0]}
                         </div>
                         <div>
@@ -434,8 +434,8 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                 </div>
 
                 {/* Body Text (Simulated content structure) */}
-                <div className="space-y-6 text-readable text-lg leading-relaxed text-(--color-text-primary)/90 font-medium whitespace-pre-wrap">
-                    <p className="first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left first-letter:text-blue-500">
+                <div className="space-y-6 text-lg leading-relaxed text-(--color-text-primary)/90 font-medium whitespace-pre-wrap">
+                    <p className="first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left first-letter:text-blue-500 first-letter:leading-none first-letter:pt-2">
                         {post.excerpt}
                     </p>
 
@@ -480,7 +480,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                             {isLoading ? '...' : engagement.likes}
                         </span>
                     </motion.button>
-                    <p className="text-[10px] font-bold text-(--color-text-secondary) uppercase tracking-widest opacity-40">
+                    <p className="text-[10px] font-bold text-(--color-text-secondary) uppercase tracking-widest opacity-60">
                         {isRussian ? "Нажмите, чтобы поддержать статью" : "Tap to support this insight"}
                     </p>
                 </div>
