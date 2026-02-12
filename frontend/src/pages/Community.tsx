@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { useHaptic } from '../hooks/useHaptic';
 import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 import { PartnerDashboard } from '../components/Partner/PartnerDashboard';
@@ -16,6 +16,12 @@ export default function CommunityPage() {
     const [activeTab, setActiveTab] = useState<'dashboard' | 'academy'>('dashboard');
     const [isBriefingOpen, setIsBriefingOpen] = useState(false);
     const { selection } = useHaptic();
+    const { scrollY } = useScroll();
+    const [showInfo, setShowInfo] = useState(true);
+
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        setShowInfo(latest < 50);
+    });
 
     useEffect(() => {
         setIsLoading(false);
@@ -35,15 +41,27 @@ export default function CommunityPage() {
             <div className="fixed top-20 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full pointer-events-none transition-colors duration-500" />
             <div className="fixed bottom-40 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none transition-colors duration-500" />
 
+
+            // ... (rest of component)
+
             {/* Premium Header with Briefing Trigger - Sticky with Glassmorphism */}
-            <div className="sticky top-0 z-50 flex items-center justify-center py-4 pb-6 px-1 bg-(--color-bg-deep)/80 backdrop-blur-xl border-b border-(--color-border-glass) -mx-4 mb-4">
-                <button
-                    onClick={() => { selection(); setIsBriefingOpen(true); }}
-                    className="p-1.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl text-slate-600 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-all active:scale-95 shadow-sm group"
-                >
-                    <Info className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                </button>
-            </div>
+            <AnimatePresence>
+                {showInfo && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="sticky top-0 z-50 flex items-center justify-center py-4 pb-6 px-1 bg-(--color-bg-deep)/80 backdrop-blur-xl border-b border-(--color-border-glass) -mx-4 mb-4"
+                    >
+                        <button
+                            onClick={() => { selection(); setIsBriefingOpen(true); }}
+                            className="p-1.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl text-slate-600 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-all active:scale-95 shadow-sm group"
+                        >
+                            <Info className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                        </button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Top Navigation / Switcher */}
             <div className="relative z-20 mb-4 mt-2 flex justify-center">

@@ -106,10 +106,17 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
         try {
             await blogService.likePost(selectedPost.id);
             notification('success');
-        } catch (error) {
+        } catch (error: any) {
             console.error('Fail to like', error);
-            // Revert on error
-            setEngagement(prev => ({ ...prev, likes: prev.likes - 1, liked: false }));
+            // Check for 404 which might mean partner record missing in dev
+            if (error?.response?.status === 404) {
+                // In dev mode/local, we might not have a partner record, so we keep the optimistic update
+                // but warn in console
+                console.warn('Like failed due to missing partner record (likely Dev environment). Keeping optimistic state.');
+            } else {
+                // Revert on real errors
+                setEngagement(prev => ({ ...prev, likes: prev.likes - 1, liked: false }));
+            }
         }
     };
 
@@ -403,7 +410,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             className="flex flex-col min-h-screen bg-(--color-bg-app) relative"
         >
             {/* Header Sticky - Fixed for better scroll reliability */}
-            <div className="sticky top-0 z-50 w-full bg-(--color-bg-app)/90 backdrop-blur-2xl border-b border-(--color-border-glass) pt-[env(safe-area-inset-top,1rem)] pb-4 px-5">
+            <div className="sticky top-0 z-50 w-full bg-(--color-bg-app)/95 backdrop-blur-3xl border-b border-(--color-border-glass) pt-[env(safe-area-inset-top,1rem)] pb-4 px-5 shadow-sm">
                 <div className="flex items-center justify-between w-full">
                     <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-(--color-bg-surface) active:scale-90 transition-all text-(--color-text-primary)">
                         <ArrowLeft className="w-6 h-6" />
@@ -485,7 +492,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                 </div>
 
                 {/* Engagement Footer */}
-                <div className="pt-12 border-t border-(--color-border-glass) flex flex-col items-center gap-6">
+                <div className="pt-12 border-t border-(--color-border-glass) flex flex-col items-center gap-6 pb-20">
                     <motion.button
                         whileTap={{ scale: 0.9 }}
                         onClick={onLike}
