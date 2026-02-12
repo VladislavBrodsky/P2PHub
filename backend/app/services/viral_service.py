@@ -5,7 +5,7 @@ import secrets
 from datetime import datetime
 from typing import Dict, List, Optional, Any
 
-import google.generativeai as genai
+
 from google import genai as google_genai
 from google.genai import types as genai_types
 from openai import AsyncOpenAI
@@ -58,10 +58,8 @@ class ViralMarketingStudio:
     def __init__(self):
         self.openai_client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY) if settings.OPENAI_API_KEY else None
         
-        # Initialize Gemini 1.5 Pro for content assistance
+        # Initialize Gemini 1.5 Pro for content assistance (using new GenAI client)
         if os.getenv("GOOGLE_API_KEY"):
-            genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-            self.gemini_model = genai.GenerativeModel('gemini-1.5-pro')
             # Initialize Gemini GenAI Client for Imagen 3
             self.genai_client = google_genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
         else:
