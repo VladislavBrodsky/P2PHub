@@ -27,5 +27,5 @@ echo "🛠 Running Database Migrations (with timeout)..."
 timeout 60s alembic upgrade head || echo "⚠️ Migrations failed or timed out, continuing startup..."
 echo "✅ Migration step finished."
 
-echo "🌍 Starting Uvicorn Server..."
-exec uvicorn app.main:app --host 0.0.0.0 --port "${PORT:-8000}"
+echo "🌍 Starting Server with Gunicorn (4 workers)..."
+exec gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:"${PORT:-8080}"
