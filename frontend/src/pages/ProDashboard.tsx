@@ -144,6 +144,10 @@ export const ProDashboard = () => {
         }
     };
 
+    const postTypes = ["Viral Strategy", "Financial Shift", "Growth Hack", "Wealth Creation", "Tech Insider", "Digital Nomad Lifestyle"];
+    const audiences = ["Crypto Investors", "Digital Nomads", "Freelancers", "E-commerce Owners", "Tech Enthusiasts", "High-Net-Worth Individuals"];
+    const languages = ["English", "Russian", "Spanish", "French", "German", "Portuguese", "Chinese", "Japanese", "Arabic", "Hindi"];
+
     const renderTabs = () => (
         <div className="flex items-center gap-2 px-6 mb-6 overflow-x-auto no-scrollbar">
             {(['studio', 'tools', 'academy'] as Tab[]).map((tab) => (
@@ -238,41 +242,82 @@ export const ProDashboard = () => {
                             </div>
 
                             {step === 1 && (
-                                <div className="bg-(--color-bg-surface) rounded-[2rem] p-6 border border-(--color-border-glass) shadow-sm space-y-6">
-                                    <div className="space-y-4">
-                                        <div>
-                                            <label className="text-[10px] font-black uppercase opacity-50 ml-4 mb-2 block">Post Type</label>
-                                            <div className="grid grid-cols-2 gap-2">
-                                                {["Viral Strategy", "Financial Shift", "Growth Hack", "Wealth Creation", "Tech Insider", "Digital Nomad"].map(type => (
-                                                    <button
-                                                        key={type}
-                                                        onClick={() => { selection(); setPostType(type); }}
-                                                        className={`p-3 rounded-2xl text-[10px] font-black border transition-all ${postType === type ? 'bg-indigo-500 border-indigo-500 text-white shadow-lg' : 'bg-black/5 dark:bg-white/5 border-transparent opacity-60'}`}
+                                <motion.div
+                                    key="step1"
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    className="space-y-4"
+                                >
+                                    <div className="bg-(--color-bg-surface) rounded-[2rem] p-5 border border-(--color-border-glass) shadow-sm">
+                                        <h3 className="text-sm font-black mb-4 flex items-center gap-2 uppercase tracking-wide opacity-70">
+                                            <Bot size={16} className="text-indigo-500" /> Configuration
+                                        </h3>
+
+                                        <div className="space-y-3">
+                                            {/* Post Type */}
+                                            <div className="relative group">
+                                                <label className="text-[9px] font-black uppercase text-indigo-500 ml-3 mb-1 block tracking-wider">Strategy</label>
+                                                <div className="relative">
+                                                    <select
+                                                        value={postType}
+                                                        onChange={(e) => { selection(); setPostType(e.target.value); }}
+                                                        className="w-full h-12 bg-black/5 dark:bg-white/5 border border-transparent focus:border-indigo-500/50 rounded-xl px-4 pr-10 text-xs font-bold outline-hidden appearance-none transition-all cursor-pointer hover:bg-black/10 dark:hover:bg-white/10"
                                                     >
-                                                        {type}
-                                                    </button>
-                                                ))}
+                                                        <option value="" disabled>Select Viral Strategy</option>
+                                                        {postTypes.map(t => <option key={t} value={t}>{t}</option>)}
+                                                    </select>
+                                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
+                                                        <ChevronRight className="rotate-90 w-4 h-4" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Target Audience */}
+                                            <div className="relative group">
+                                                <label className="text-[9px] font-black uppercase text-pink-500 ml-3 mb-1 block tracking-wider">Target</label>
+                                                <div className="relative">
+                                                    <select
+                                                        value={audience}
+                                                        onChange={(e) => { selection(); setAudience(e.target.value); }}
+                                                        className="w-full h-12 bg-black/5 dark:bg-white/5 border border-transparent focus:border-pink-500/50 rounded-xl px-4 pr-10 text-xs font-bold outline-hidden appearance-none transition-all cursor-pointer hover:bg-black/10 dark:hover:bg-white/10"
+                                                    >
+                                                        <option value="" disabled>Select Audience</option>
+                                                        {audiences.map(a => <option key={a} value={a}>{a}</option>)}
+                                                    </select>
+                                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
+                                                        <ChevronRight className="rotate-90 w-4 h-4" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Language */}
+                                            <div className="relative group">
+                                                <label className="text-[9px] font-black uppercase text-emerald-500 ml-3 mb-1 block tracking-wider">Language</label>
+                                                <div className="relative">
+                                                    <select
+                                                        value={language}
+                                                        onChange={(e) => setLanguage(e.target.value)}
+                                                        className="w-full h-12 bg-black/5 dark:bg-white/5 border border-transparent focus:border-emerald-500/50 rounded-xl px-4 pr-10 text-xs font-bold outline-hidden appearance-none transition-all cursor-pointer hover:bg-black/10 dark:hover:bg-white/10"
+                                                    >
+                                                        {languages.map(l => <option key={l} value={l}>{l}</option>)}
+                                                    </select>
+                                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
+                                                        <Globe size={14} />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div>
-                                            <label className="text-[10px] font-black uppercase opacity-50 ml-4 mb-2 block">Language</label>
-                                            <select
-                                                value={language}
-                                                onChange={(e) => setLanguage(e.target.value)}
-                                                className="w-full h-12 bg-black/5 dark:bg-white/5 border-none rounded-2xl px-6 font-bold text-xs outline-hidden cursor-pointer"
-                                            >
-                                                {["English", "Russian", "Spanish", "Chinese"].map(l => <option key={l} value={l}>{l}</option>)}
-                                            </select>
-                                        </div>
                                     </div>
+
                                     <button
                                         onClick={() => setStep(2)}
-                                        disabled={!postType}
-                                        className="w-full h-14 bg-linear-to-r from-indigo-500 to-purple-700 rounded-2xl font-black text-white shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                        disabled={!postType || !audience}
+                                        className="w-full h-14 bg-linear-to-r from-indigo-500 to-purple-700 rounded-2xl font-black text-white text-sm shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:shadow-none"
                                     >
-                                        NEXT PHASE <ChevronRight size={18} />
+                                        INITIATE AI AGENT <ChevronRight size={18} />
                                     </button>
-                                </div>
+                                </motion.div>
                             )}
 
                             {step === 2 && (
