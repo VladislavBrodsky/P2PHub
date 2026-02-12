@@ -60,6 +60,10 @@ async def lifespan(app: FastAPI):
         webhook_url = webhook_base if webhook_base.endswith(path) else f"{webhook_base.rstrip('/')}{path}"
 
         try:
+            # Small random jitters to prevent 4 workers from hitting Telegram API at the exact same millisecond
+            import random
+            await asyncio.sleep(random.uniform(0.1, 2.0))
+
             print(f"📡 Registering Webhook with Telegram: {webhook_url}")
             # Increased timeout to prevent startup hang on slow API responses
             async with asyncio.timeout(15.0):
@@ -71,17 +75,20 @@ async def lifespan(app: FastAPI):
             print(f"🚀 Webhook successfully set to: {webhook_url}")
         except asyncio.TimeoutError:
             print("⚠️ Webhook registration timed out (15s). The app will continue starting...")
-            # Consider falling back to polling if registration fails frequently
-            # asyncio.create_task(dp.start_polling(bot))
         except Exception as e:
-            print(f"❌ Failed to set webhook: {e}")
+            # Ignore flood control if it's already being handled by another worker
+            if "Flood control exceeded" in str(e):
+                print(f"⚠️ Webhook flood control: Another worker might have already set it. Continuing...")
+            else:
+                print(f"❌ Failed to set webhook (URL: {webhook_url}): {e}")
+                import traceback
+                traceback.print_exc()
     else:
         # Fallback to polling for local development or if URL is placeholder
         print("💡 WEBHOOK_URL is not set or is a placeholder. Starting Long Polling...")
         await bot.delete_webhook(drop_pending_updates=True)
         polling_task = asyncio.create_task(dp.start_polling(bot))
         app.state.polling_task = polling_task
-        print("✅ Bot started with Long Polling")
         print("✅ Bot started with Long Polling")
 
     # Explicit Database Connection Check
@@ -139,22 +146,35 @@ async def root_health():
 # Webhook Endpoint
 @app.post(settings.WEBHOOK_PATH)
 async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = Header(None)):
-    print(f"📥 Received Webhook POST at {settings.WEBHOOK_PATH}")
+    if settings.DEBUG:
+        print(f"📥 Received Webhook POST at {settings.WEBHOOK_PATH}")
 
     if x_telegram_bot_api_secret_token != settings.WEBHOOK_SECRET:
         print(f"⚠️ Webhook Secret Mismatch! Got: {x_telegram_bot_api_secret_token}, Expected: {settings.WEBHOOK_SECRET}")
+        # Log headers for debugging (excluding sensitive info if possible)
+        # print(f"Headers: {request.headers}")
         raise HTTPException(status_code=401, detail="Invalid secret token")
 
     try:
         body = await request.json()
-        print(f"📦 Webhook Body: {json.dumps(body, indent=2)}")
+        if settings.DEBUG:
+            print(f"📦 Webhook Body: {json.dumps(body, indent=2)}")
 
         update = types.Update.model_validate(body, context={"bot": bot})
-        print(f"🎭 Update parsed: {update.update_id} (Type: {update.event_type if hasattr(update, 'event_type') else 'unknown'})")
+        
+        # Log the update type and ID
+        update_type = "unknown"
+        if update.message: update_type = "message"
+        elif update.callback_query: update_type = "callback_query"
+        elif update.inline_query: update_type = "inline_query"
+        
+        print(f"🎭 Update {update.update_id} received (Type: {update_type})")
 
         # Feed the update to context-aware dispatcher
         await dp.feed_update(bot, update)
-        print(f"✅ Update {update.update_id} processed successfully")
+        
+        if settings.DEBUG:
+            print(f"✅ Update {update.update_id} processed successfully")
 
     except Exception as e:
         print(f"❌ Webhook Error: {e}")
