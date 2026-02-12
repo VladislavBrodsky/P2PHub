@@ -150,39 +150,49 @@ export const PartnerDashboard = () => {
 
                     <div className="space-y-2">
                         {/* QR Code Row with Modal Trigger */}
-                        <div className="group rounded-2xl border border-slate-200 dark:border-white/5 bg-white/60 dark:bg-slate-800/40 backdrop-blur-md p-3 shadow-sm dark:shadow-premium flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-all active:scale-[0.98] cursor-pointer" onClick={() => { selection(); setIsQrOpen(true); }}>
-                            <div className="flex items-center gap-3">
-                                <div className="bg-blue-500/10 p-2 rounded-xl border border-blue-500/20 group-hover:bg-blue-500/20 transition-colors">
-                                    <QrCode className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                        <div
+                            className="group relative rounded-[1.25rem] border border-slate-200 dark:border-white/5 bg-white/60 dark:bg-slate-800/40 backdrop-blur-xl p-4 shadow-sm dark:shadow-premium flex items-center justify-between hover:bg-white dark:hover:bg-slate-800/60 transition-all active:scale-[0.98] cursor-pointer overflow-hidden"
+                            onClick={() => { selection(); setIsQrOpen(true); }}
+                        >
+                            <div className="absolute inset-0 bg-linear-to-r from-blue-500/0 via-blue-500/0 to-blue-500/5 dark:to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                            <div className="flex items-center gap-4 relative z-10">
+                                <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/20 group-hover:scale-110 transition-all duration-300">
+                                    <QrCode className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                                 </div>
-                                <div className="flex flex-col">
-                                    <span className="font-bold text-slate-900 dark:text-white text-sm tracking-tight">Personal QR Portfolio</span>
-                                    <span className="text-[10px] text-slate-500 dark:text-slate-400">High-converting personalized assets</span>
+                                <div className="flex flex-col gap-0.5">
+                                    <span className="font-black text-slate-900 dark:text-white text-sm tracking-tight">Personal QR Portfolio</span>
+                                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-80">High-converting assets</span>
                                 </div>
                             </div>
-                            <div className='p-2 bg-slate-100 dark:bg-white/5 rounded-lg text-slate-400 group-hover:text-slate-600 dark:group-hover:text-white transition-colors'>
-                                <ExternalLink className="w-3.5 h-3.5" />
+                            <div className='w-8 h-8 flex items-center justify-center bg-slate-100 dark:bg-white/5 rounded-full text-slate-400 group-hover:text-blue-500 group-hover:bg-blue-500/10 transition-all'>
+                                <ExternalLink className="w-4 h-4" />
                             </div>
                         </div>
 
                         {/* Referral Link Row */}
-                        <div className="group rounded-2xl border border-slate-200 dark:border-white/5 bg-white/60 dark:bg-slate-800/40 backdrop-blur-md p-3 shadow-sm dark:shadow-premium flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-all active:scale-[0.98]">
-                            <div className="flex items-center gap-3 overflow-hidden">
-                                <div className="bg-purple-500/10 p-2 rounded-xl border border-purple-500/20 group-hover:bg-purple-500/20 transition-colors shrink-0">
+                        <div className="group relative rounded-[1.25rem] border border-slate-200 dark:border-white/5 bg-white/60 dark:bg-slate-800/40 backdrop-blur-xl p-4 shadow-sm dark:shadow-premium flex items-center justify-between hover:bg-white dark:hover:bg-slate-800/60 transition-all active:scale-[0.98] overflow-hidden">
+                            <div className="absolute inset-0 bg-linear-to-r from-purple-500/0 via-purple-500/0 to-purple-500/5 dark:to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                            <div className="flex items-center gap-4 overflow-hidden relative z-10">
+                                <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center group-hover:bg-purple-500/20 group-hover:scale-110 transition-all duration-300 shrink-0">
                                     <div className="w-5 h-5 flex items-center justify-center text-base">🔗</div>
                                 </div>
-                                <div className="flex flex-col overflow-hidden">
-                                    <span className="font-bold text-slate-900 dark:text-white text-sm tracking-tight">Referral Network Link</span>
-                                    <span className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[180px] font-mono leading-none mt-1 opacity-60">{referralLink}</span>
+                                <div className="flex flex-col gap-0.5 overflow-hidden">
+                                    <span className="font-black text-slate-900 dark:text-white text-sm tracking-tight">Referral Network Link</span>
+                                    <span className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[180px] font-mono font-medium opacity-60 leading-none py-0.5">{referralLink}</span>
                                 </div>
                             </div>
-                            <button onClick={(e) => { e.stopPropagation(); copyLink(); }} className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-2 active:scale-90 transition-all bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-xl relative group">
+                            <button
+                                onClick={(e) => { e.stopPropagation(); copyLink(); }}
+                                className="w-10 h-10 flex items-center justify-center text-slate-400 hover:text-purple-500 active:scale-90 transition-all bg-slate-100 dark:bg-white/5 hover:bg-purple-500/10 rounded-full relative z-10"
+                            >
                                 {copied ? (
-                                    <div className="absolute inset-0 flex items-center justify-center text-emerald-500 animate-in zoom-in spin-in-180 duration-300">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    <div className="animate-in zoom-in spin-in-180 duration-300 text-emerald-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                     </div>
                                 ) : (
-                                    <Copy className="w-3.5 h-3.5 transition-all group-active:scale-90" />
+                                    <Copy className="w-4 h-4 transition-all" />
                                 )}
                             </button>
                         </div>
