@@ -32,6 +32,7 @@ interface UserStats {
 export default function LeaderboardPage() {
     const { t } = useTranslation();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showAll, setShowAll] = useState(false);
 
     const { data: leaderboard = [], isLoading: isLeaderboardLoading } = useQuery<LeaderboardUser[]>({
         queryKey: ['leaderboard', 'global'],
@@ -63,6 +64,9 @@ export default function LeaderboardPage() {
         return 'platinum';
     };
 
+    const displayCount = showAll ? 50 : 10;
+    const visiblePartners = leaderboard.slice(0, displayCount);
+
     if (isLoading) return <div className="p-4"><ListSkeleton /></div>;
 
     return (
@@ -93,12 +97,13 @@ export default function LeaderboardPage() {
                     </button>
                 }
             >
-                <div className="space-y-4">
-                    {leaderboard.map((user, index) => (
+                <div className="space-y-2">
+                    {visiblePartners.map((user, index) => (
                         <button
                             key={user.id}
                             onClick={() => setIsModalOpen(true)}
-                            className="w-full flex items-center justify-between rounded-[2rem] border border-(--color-brand-border) bg-(--color-bg-surface) p-3 shadow-premium transition-all active:scale-[0.98] group relative overflow-hidden"
+                            // #comment Reduced padding to p-2.5 and border-radius to rounded-2xl for a tighter, more data-dense look on mobile.
+                            className="w-full flex items-center justify-between rounded-2xl border border-(--color-brand-border) bg-(--color-bg-surface) p-2.5 shadow-premium transition-all active:scale-[0.98] group relative overflow-hidden"
                         >
                             {/* Background Glow for Top 3 */}
                             {index < 3 && (
@@ -106,17 +111,18 @@ export default function LeaderboardPage() {
                                     }`} />
                             )}
 
-                            <div className="flex items-center gap-4 relative z-10">
+                            <div className="flex items-center gap-3 relative z-10">
                                 <div className="relative">
-                                    <div className={`flex h-10 w-10 items-center justify-center rounded-2xl text-sm font-black shadow-sm ${index === 0 ? 'bg-amber-500 text-white' :
+                                    {/* #comment Switched to rounded-full for the rank circle to satisfy the "perfect circle" aesthetic requested. */}
+                                    <div className={`flex h-8 w-8 items-center justify-center rounded-full text-[10px] font-black shadow-sm ${index === 0 ? 'bg-amber-500 text-white' :
                                         index === 1 ? 'bg-slate-300 text-slate-700' :
                                             index === 2 ? 'bg-orange-300 text-orange-800' :
                                                 'bg-slate-100 dark:bg-slate-800 text-(--color-text-secondary)'
                                         }`}>
                                         {index < 3 ? (
-                                            index === 0 ? <Trophy size={16} /> :
-                                                index === 1 ? <Shield size={16} /> :
-                                                    <Star size={16} />
+                                            index === 0 ? <Trophy size={14} /> :
+                                                index === 1 ? <Shield size={14} /> :
+                                                    <Star size={14} />
                                         ) : (
                                             <span>#{index + 1}</span>
                                         )}
@@ -124,14 +130,15 @@ export default function LeaderboardPage() {
                                     {index < 3 && (
                                         <div className="absolute -top-1 -right-1">
                                             <div className="absolute inset-0 bg-white rounded-full animate-ping opacity-20" />
-                                            <Crown size={12} className={index === 0 ? 'text-amber-500' : 'text-slate-400'} />
+                                            <Crown size={10} className={index === 0 ? 'text-amber-500' : 'text-slate-400'} />
                                         </div>
                                     )}
                                 </div>
 
-                                <div className="flex items-center gap-3">
-                                    <div className={`h-12 w-12 overflow-hidden rounded-2xl border-2 shadow-sm transition-transform group-hover:scale-105 ${index < 3 ? 'border-white dark:border-white/20 ring-2 ring-amber-500/20' : 'border-(--color-brand-border)'
-                                        } bg-slate-200 dark:bg-slate-700`}>
+                                <div className="flex items-center gap-2.5">
+                                    {/* #comment Forced perfect circle with rounded-full and aspect-square. Removed rounded-2xl. */}
+                                    <div className={`h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 shadow-sm transition-transform group-hover:scale-105 ${index < 3 ? 'border-white dark:border-white/20 ring-2 ring-amber-500/20' : 'border-(--color-brand-border)'
+                                        } bg-slate-200 dark:bg-slate-700 aspect-square`}>
                                         {(user.photo_file_id || user.photo_url) ? (
                                             <LazyImage
                                                 src={user.photo_file_id
@@ -150,20 +157,20 @@ export default function LeaderboardPage() {
                                         )}
                                     </div>
                                     <div className="text-left">
-                                        <p className="text-sm font-black text-(--color-text-primary) line-clamp-1">{user.first_name || user.username}</p>
+                                        <p className="text-xs font-black text-(--color-text-primary) line-clamp-1 leading-tight">{user.first_name || user.username}</p>
                                         <div className="flex items-center gap-1.5 flex-wrap">
                                             <div className="flex items-center gap-1">
-                                                <span className={`text-[10px] font-black uppercase tracking-widest ${index < 3 ? 'text-amber-600 dark:text-amber-400' : 'text-(--color-text-secondary)'
+                                                <span className={`text-[9px] font-black uppercase tracking-widest ${index < 3 ? 'text-amber-600 dark:text-amber-400' : 'text-(--color-text-secondary)'
                                                     }`}>
                                                     {t(`leaderboard.levels.${getLeague(user.level)}`)}
                                                 </span>
                                             </div>
-                                            <div className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-600" />
-                                            <div className="flex items-center gap-1.5 text-[10px] font-bold text-(--color-text-secondary)">
+                                            <div className="h-0.5 w-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
+                                            <div className="flex items-center gap-1 text-[9px] font-bold text-(--color-text-secondary)">
                                                 <span>LVL {user.level}</span>
-                                                <div className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-600" />
-                                                <div className="flex items-center gap-1 text-blue-500/80">
-                                                    <Crown size={10} className="stroke-3" />
+                                                <div className="h-0.5 w-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
+                                                <div className="flex items-center gap-1 text-blue-500/70">
+                                                    <Crown size={8} className="stroke-3" />
                                                     <span className="font-black">{user.referral_count.toLocaleString()} {t('referral.members')}</span>
                                                 </div>
                                             </div>
@@ -172,16 +179,26 @@ export default function LeaderboardPage() {
                                 </div>
                             </div>
 
-                            <div className="flex flex-col items-end gap-1 relative z-10">
-                                <span className="text-sm font-black text-(--color-text-primary) font-mono tracking-tighter">
+                            <div className="flex flex-col items-end gap-0.5 relative z-10">
+                                <span className="text-xs font-black text-(--color-text-primary) font-mono tracking-tighter">
                                     {user.xp.toLocaleString()}
                                 </span>
-                                <span className="text-[9px] font-black uppercase tracking-widest text-emerald-500/80">
+                                <span className="text-[8px] font-black uppercase tracking-widest text-emerald-500/80 leading-none">
                                     {t('leaderboard.xp')}
                                 </span>
                             </div>
                         </button>
                     ))}
+
+                    {/* #comment Show All toggle button implementation */}
+                    {leaderboard.length > 10 && (
+                        <button
+                            onClick={() => setShowAll(!showAll)}
+                            className="w-full mt-2 py-3 rounded-xl border border-dashed border-(--color-brand-border) text-xs font-black text-(--color-text-secondary) uppercase tracking-tighter hover:bg-(--color-bg-surface) hover:text-(--color-text-primary) transition-all active:scale-95"
+                        >
+                            {showAll ? t('common.show_less') : `${t('common.show_more')} (TOP 50)`}
+                        </button>
+                    )}
                 </div>
             </Section>
 
