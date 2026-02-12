@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
 import React, { memo, useState, useEffect } from 'react';
 import { ImageCacheService } from '../../services/ImageCacheService';
+import { getApiUrl } from '../../utils/api';
 
 const AVATARS = [
-    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&fm=webp",
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&fm=webp",
-    "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop&fm=webp",
-    "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop&fm=webp",
-    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&h=100&fit=crop&fm=webp"
+    `${getApiUrl()}/images/avatars/avatar_1.webp`,
+    `${getApiUrl()}/images/avatars/avatar_2.webp`,
+    `${getApiUrl()}/images/avatars/avatar_3.webp`,
+    `${getApiUrl()}/images/avatars/avatar_4.webp`,
+    `${getApiUrl()}/images/avatars/avatar_5.webp`
 ];
 
 const CRYPTO_ICONS = [

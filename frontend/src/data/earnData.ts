@@ -86,7 +86,7 @@ export const EARN_TASKS: Task[] = [
         type: 'referral',
         requirement: 3,
         minLevel: 1,
-        image: 'https://placehold.co/600x400/0066FF/FFFFFF/png?text=Invite+Friends'
+        image: '/images/2026-02-05_03.35.36.webp'
     },
 
     // Level 5: Consistency
