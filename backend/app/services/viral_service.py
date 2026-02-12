@@ -142,42 +142,42 @@ class ViralMarketingStudio:
             if self.genai_client:
                 try:
                     # Use Imagen 3 for premium quality (method is likely generate_images)
-                    if not hasattr(self.genai_client.models, 'generate_image'):
-                         # Fallback or correction logic if attribute is missing
-                         # Try generate_images (plural) if generate_image (singular) failed in logs
-                         img_response = self.genai_client.models.generate_images(
-                            model='imagen-3.0-generate-001',
-                            prompt=image_prompt,
-                            config=genai_types.GenerateImageConfig(
-                                number_of_images=1,
-                                include_rai_reasoning=True,
-                                output_mime_type='image/png'
-                            )
-                        )
-                    else:
-                        img_response = self.genai_client.models.generate_image(
-                            model='imagen-3.0-generate-001',
-                            prompt=image_prompt,
-                            config=genai_types.GenerateImageConfig(
-                                number_of_images=1,
-                                include_rai_reasoning=True,
-                                output_mime_type='image/png'
-                            )
-                        )
+            # 2. Generate Image via Gemini (Imagen 3) - Completely Fault Tolerant
+            image_url = None
+            if self.genai_client:
+                try:
+                    # Dynamically check for available methods to avoid crashing on version mismatches
+                    method = None
+                    if hasattr(self.genai_client.models, 'generate_images'): # Standard new SDK
+                        method = self.genai_client.models.generate_images
+                    elif hasattr(self.genai_client.models, 'generate_image'): # Singular variant
+                        method = self.genai_client.models.generate_image
                     
-                    if img_response.generated_images:
-                        image = img_response.generated_images[0]
-                        filename = f"viral_{partner.id}_{secrets.token_hex(4)}.png"
-                        # Save to our served images directory
-                        save_path = os.path.join("app_images", "generated", filename)
+                    if method:
+                        img_response = method(
+                            model='imagen-3.0-generate-001',
+                            prompt=image_prompt,
+                            config=genai_types.GenerateImageConfig(
+                                number_of_images=1,
+                                include_rai_reasoning=True,
+                                output_mime_type='image/png'
+                            )
+                        )
                         
-                        # Ensure directory exists (fallback)
-                        os.makedirs(os.path.dirname(save_path), exist_ok=True)
-                        
-                        image.image.save(save_path)
-                        image_url = f"/images/generated/{filename}"
+                        # Handle response structure (it matches the method used)
+                        if getattr(img_response, 'generated_images', None):
+                            image = img_response.generated_images[0]
+                            filename = f"viral_{partner.id}_{secrets.token_hex(4)}.png"
+                            save_path = os.path.join("app_images", "generated", filename)
+                            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                            image.image.save(save_path)
+                            image_url = f"/images/generated/{filename}"
+                    else:
+                        logger.warning("⚠️ Google GenAI Client found but no generate_image(s) method available on models.")
+
                 except Exception as img_err:
-                    logger.error(f"Imagen generation failed, falling back to prompt only: {img_err}")
+                    # Log error but DO NOT crash the request. Return text only.
+                    logger.error(f"❌ Imagen generation failed (graceful fallback): {img_err}")
 
             return {
                 "text": content.get("body"),
