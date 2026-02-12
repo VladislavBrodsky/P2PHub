@@ -1,9 +1,8 @@
 import json
-import random
 import secrets
 from typing import List
 # Added datetime for tracking task start times
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
 from sqlalchemy.orm import selectinload
@@ -294,7 +293,6 @@ async def get_recent_partners(
     Fetches the 10 most recently joined partners for social proof.
     Updated every 5 minutes and persists across restarts.
     """
-    from datetime import datetime, timedelta
 
     cache_key = "partners:recent_v2"
     db_settings_key = "partners_recent_snapshot"
@@ -825,7 +823,7 @@ async def get_prepared_share_id(
     caption = get_msg(lang, "viral_share_caption")
 
     # Use a random ID for the prepared message result
-    rand_id = str(random.randint(1000, 9999))
+    rand_id = str(1000 + secrets.randbelow(9000))
 
     # Inline query result for the photo card
     result_card = types.InlineQueryResultPhoto(

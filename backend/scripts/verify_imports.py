@@ -87,6 +87,20 @@ def verify_all_imports():
     except Exception as e:
         print(f"❌ API: global endpoint discovery failed: {e}")
         success = False
+    # 3. Check all service modules
+    try:
+        import app.services as services
+        prefix = services.__name__ + "."
+        for loader, modname, ispkg in pkgutil.iter_modules(services.__path__, prefix):
+            try:
+                importlib.import_module(modname)
+                print(f"✅ Service: {modname} imported successfully")
+            except Exception as e:
+                print(f"❌ Service: {modname} import failed: {e}")
+                success = False
+    except Exception as e:
+        print(f"❌ Service: global service discovery failed: {e}")
+        success = False
 
     if not success:
         print("\n💥 Import verification FAILED!")

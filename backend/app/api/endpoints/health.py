@@ -1,3 +1,4 @@
+import asyncio
 import time
 
 from fastapi import APIRouter, Depends, Response, status
@@ -6,6 +7,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.models.partner import get_session
 
+# #comment: health checkpoints for Kubernetes/Railway probes.
+# /health/ping is for liveness (fast), /health is for readiness (DB check).
 router = APIRouter()
 
 @router.get("/health/ping", status_code=status.HTTP_200_OK)
@@ -30,7 +33,6 @@ async def health_check(
     try:
         # Fast query to check DB availability with timeout
         # If DB is locked or slow (e.g. startup migration), this won't hang forever
-        import asyncio
         async with asyncio.timeout(3.0):
             await session.exec(text("SELECT 1"))
 

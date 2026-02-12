@@ -1,24 +1,25 @@
 import asyncio
 import logging
+import secrets
 import sys
+import urllib.parse
 
 from aiogram import Bot, Dispatcher, F, types
-from aiogram.filters import CommandStart
+from aiogram.filters import Command, CommandStart
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from app.core.config import settings
+from app.core.i18n import get_msg
 from app.models.partner import get_session
 
-# Setup logging
-logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-
+# #comment: Centralizing bot initialization and configurations. 
+# We use a deferred import pattern for services in handlers to avoid circular dependencies.
+# The bot instance is shared across the entire backend (API workers and background tasks).
 bot = Bot(token=settings.BOT_TOKEN)
 dp = Dispatcher()
 
 # TMA URL (Railway URL or local tunnel)
 WEB_APP_URL = settings.FRONTEND_URL
-
-from app.core.i18n import get_msg
 
 
 @dp.message(CommandStart())
@@ -79,7 +80,6 @@ async def cmd_start(message: types.Message):
             share_text = get_msg(lang, "share_text")
 
             # Construct direct sharing URL
-            import urllib.parse
             share_url = f"https://t.me/share/url?url={urllib.parse.quote(referral_link)}&text={urllib.parse.quote(share_text)}"
 
             await message.answer(
@@ -94,7 +94,7 @@ async def cmd_start(message: types.Message):
         await message.answer(f"⚠️ Error: {str(e)}")
 
 
-from aiogram.filters import Command
+
 
 
 @dp.message(Command("my_network", "tree", "stats"))
@@ -131,7 +131,6 @@ async def cmd_my_network(message: types.Message):
         logging.error(f"Error in cmd_my_network: {e}")
         await message.answer(f"⚠️ Error fetching stats: {str(e)}")
 
-import random
 
 # Cache bot username to avoid repeated API calls
 BOT_USERNAME = None
@@ -158,7 +157,7 @@ async def inline_handler(inline_query: types.InlineQuery):
         photo2 = f"{base_api_url}/images/2026-02-05 03.35.36.jpg".replace(" ", "%20")
 
         # Try to find partner language
-        from app.core.i18n import get_msg
+        # Try to find partner language
         lang = inline_query.from_user.language_code or "en"
         if lang not in ["en", "ru"]:
             lang = "en"
@@ -168,7 +167,7 @@ async def inline_handler(inline_query: types.InlineQuery):
         logging.info(f"📤 Inline query: {query_code}")
 
         # Use random ID suffix for stability during testing
-        rand_id = str(random.randint(1000, 9999))
+        rand_id = str(1000 + secrets.randbelow(9000))
 
         results = [
             # Card 1: Premium Visual Card v1
@@ -299,7 +298,6 @@ async def handle_tx_hash(message: types.Message):
                 bot_info = await bot.get_me()
                 referral_link = f"https://t.me/{bot_info.username}?start={partner.referral_code}"
                 share_text = get_msg(partner.language_code or "en", "share_text")
-                import urllib.parse
                 share_url = f"https://t.me/share/url?url={urllib.parse.quote(referral_link)}&text={urllib.parse.quote(share_text)}"
 
                 await message.answer(
