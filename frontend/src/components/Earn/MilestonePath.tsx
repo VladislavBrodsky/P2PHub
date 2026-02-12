@@ -80,7 +80,7 @@ export const MilestonePath = () => {
                 <span className="text-[7.5px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap dark:text-slate-400">{typeLabel}</span>
                 <div className="h-px w-full bg-slate-200 dark:bg-white/5" />
             </div>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-2.5">
                 {items.map((item) => {
                     const isUnlocked = currentLevel >= item.level;
                     const isLocked = !isUnlocked;
@@ -88,39 +88,44 @@ export const MilestonePath = () => {
                         <motion.div
                             key={`${item.id || item.level}-${item.level}`}
                             onClick={() => handleItemClick(item)}
+                            whileTap={{ scale: 0.95 }}
                             className={`
-                                relative flex flex-col items-center p-2 rounded-2xl border transition-all duration-300 active:scale-95 cursor-pointer
+                                relative flex flex-col items-center p-3 rounded-[18px] border transition-all duration-300 cursor-pointer overflow-hidden
                                 ${isUnlocked
-                                    ? 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 shadow-premium backdrop-blur-xl'
-                                    : 'bg-slate-200/50 dark:bg-slate-900/10 border-slate-300 dark:border-white/5'}
+                                    ? 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 shadow-lg shadow-slate-200/50 dark:shadow-none'
+                                    : 'bg-slate-100/50 dark:bg-white/[0.02] border-slate-200/50 dark:border-white/5'}
                             `}
                         >
+                            {/* Unlock Glow Effect */}
+                            {isUnlocked && <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />}
+
                             <div className={`
-                                relative w-8 h-8 rounded-xl flex items-center justify-center mb-1.5
-                                ${isUnlocked ? 'bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10' : 'bg-slate-200 dark:bg-black/20'}
+                                relative w-9 h-9 rounded-[14px] flex items-center justify-center mb-2 shadow-inner
+                                ${isUnlocked
+                                    ? 'bg-slate-50 dark:bg-white/10 border border-slate-100 dark:border-white/5'
+                                    : 'bg-slate-200/50 dark:bg-white/5 border-transparent'}
                             `}>
-                                <div className={`relative z-10 ${isUnlocked ? item.color : 'text-slate-400'}`}>
+                                <div className={`relative z-10 transition-transform duration-300 ${isUnlocked ? `${item.color} scale-110` : 'text-slate-300 dark:text-slate-600 scale-90'}`}>
                                     {isUnlocked ? (
-                                        <item.icon className="w-3.5 h-3.5" />
+                                        <item.icon className="w-4 h-4" />
                                     ) : (
-                                        <Lock className="w-3 h-3 opacity-40" />
+                                        <Lock className="w-3.5 h-3.5" />
                                     )}
                                 </div>
                             </div>
-                            <div className="text-center space-y-0.5">
-                                <div className={`text-[7px] font-black uppercase tracking-tighter ${isUnlocked ? 'text-blue-500' : 'text-slate-600 dark:text-slate-500'}`}>
+
+                            <div className="text-center space-y-0.5 relative z-10 w-full">
+                                <div className={`text-[8px] font-black uppercase tracking-wider ${isUnlocked ? 'text-blue-500' : 'text-slate-400 dark:text-slate-600'}`}>
                                     {isLocked ? `Lvl ${item.level}` : `LVL ${item.level}`}
                                 </div>
-                                <h5 className={`text-[9px] font-black leading-tight line-clamp-1 h-3 ${isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-600'}`}>
+                                <h5 className={`text-[9px] font-bold leading-tight line-clamp-1 w-full px-0.5 ${isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-600'}`}>
                                     {isLocked ? '???' : t(item.reward, { level: item.level })}
                                 </h5>
                             </div>
+
+                            {/* Status Indicator Dot */}
                             {isUnlocked && (
-                                <div className="absolute -top-1 -right-1">
-                                    <div className="bg-emerald-500 p-0.5 rounded-full shadow-lg">
-                                        <Sparkles className="w-1.5 h-1.5 text-white" />
-                                    </div>
-                                </div>
+                                <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                             )}
                         </motion.div>
                     );
