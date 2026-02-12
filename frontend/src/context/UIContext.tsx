@@ -5,6 +5,8 @@ interface UIContextType {
     setHeaderVisible: (visible: boolean) => void;
     isFooterVisible: boolean;
     setFooterVisible: (visible: boolean) => void;
+    isNotificationsVisible: boolean;
+    setNotificationsVisible: (visible: boolean) => void;
 }
 
 const UIContext = createContext<UIContextType | undefined>(undefined);
@@ -12,13 +14,16 @@ const UIContext = createContext<UIContextType | undefined>(undefined);
 export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isHeaderVisible, setHeaderVisible] = useState(true);
     const [isFooterVisible, setFooterVisible] = useState(true);
+    const [isNotificationsVisible, setNotificationsVisible] = useState(true);
 
     const value = useMemo(() => ({
         isHeaderVisible,
         setHeaderVisible,
         isFooterVisible,
         setFooterVisible,
-    }), [isHeaderVisible, isFooterVisible]);
+        isNotificationsVisible,
+        setNotificationsVisible,
+    }), [isHeaderVisible, isFooterVisible, isNotificationsVisible]);
 
     return (
         <UIContext.Provider value={value}>

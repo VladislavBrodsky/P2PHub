@@ -16,123 +16,118 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
     const isLocked = status === 'locked';
     const isCompleted = status === 'completed';
     const isCurrent = status === 'current';
-    // #comment: Removed unused 'categoryStyles' variable as it was not being utilized in the component rendering
 
-    // Zig-zag offset logic
+    // Alternating card position logic
     const isLeft = index % 2 === 0;
-    const xOffset = isLeft ? -25 : 25;
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20, x: xOffset }}
-            whileInView={{ opacity: 1, y: 0, x: xOffset }}
-            viewport={{ once: true, margin: "-100px" }}
-            whileHover={{ scale: 1.1, zIndex: 50, rotateY: isLeft ? 10 : -10 }}
-            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            whileHover={{ scale: 1.02, zIndex: 50 }}
+            whileTap={{ scale: 0.98 }}
             style={{ transformStyle: "preserve-3d" }}
             onClick={() => !isLocked && onClick(stage)}
             className={cn(
-                "relative group cursor-pointer w-full flex justify-center py-3",
-                /* #comment: Reduced vertical padding from py-4 to py-3 for better node density */
+                "relative group cursor-pointer w-full flex justify-center py-5",
+                /* #comment: Increased py-5 for better vertical breathing room */
                 isLocked && "cursor-not-allowed opacity-60"
             )}
         >
-            {/* Connecting Line (drawn from previous node) */}
+            {/* Connecting Line (Spine of the roadmap) */}
             {index > 0 && (
                 <div className={cn(
-                    "absolute -top-3 left-1/2 -translate-x-1/2 w-0.5 h-6 -z-10 bg-slate-200 dark:bg-white/10 overflow-hidden"
+                    "absolute -top-5 left-1/2 -translate-x-1/2 w-0.5 h-10 -z-10 bg-slate-200 dark:bg-white/10"
                 )}>
-                /* #comment: Adjusted connecting line position (-top-3) and height (h-6) to match the smaller node size */
+                /* #comment: Fixed spine alignment to be perfectly centered and tall enough to connect nodes */
                     {(isCompleted || isCurrent) && (
                         <motion.div
                             initial={{ y: "-100%" }}
                             animate={{ y: "100%" }}
-                            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-                            className="w-full h-1/2 bg-linear-to-b from-transparent via-blue-500 to-transparent"
+                            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                            className="w-full h-1/2 bg-linear-to-b from-transparent via-blue-500 to-transparent shadow-[0_0_8px_rgba(59,130,246,0.5)]"
                         />
                     )}
                 </div>
             )}
 
-            {/* Node Background with Glow for Active/Current */}
+            {/* Central Node (Always centered for perfect proportions) */}
             <div className={cn(
-                "relative w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 border-2 overflow-hidden",
-                /* #comment: Reduced node size from w-20 to w-16 and radius from rounded-3xl to rounded-2xl */
+                "relative z-20 w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 border-2 overflow-hidden",
                 isCurrent ? "branding-liquid-gradient border-blue-400 shadow-[0_0_30px_rgba(37,99,235,0.4)]" :
-                    isCompleted ? "bg-emerald-500/10 border-emerald-500/30 shadow-[0_4px_12px_rgba(16,185,129,0.1)]" :
-                        isLocked ? "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10" :
-                            "bg-white dark:bg-white/10 border-slate-200 dark:border-white/20 shadow-lg"
+                    isCompleted ? "bg-emerald-500/10 border-emerald-500/30" :
+                        isLocked ? "bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10" :
+                            "bg-white dark:bg-white/10 border-slate-200 dark:border-white/20 shadow-md"
             )} style={{ transform: "translateZ(30px)" }}>
-                {/* #comment: Subtly reduced shadow intensities for a cleaner compact look */}
                 {/* Visual indicator for current stage */}
                 {isCurrent && (
                     <motion.div
-                        animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="absolute inset-0 bg-blue-400 blur-xl rounded-full -z-10"
+                        animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
+                        transition={{ duration: 3, repeat: Infinity }}
+                        className="absolute inset-0 bg-blue-400 blur-2xl rounded-full -z-10"
                     />
                 )}
 
-                {/* Icon Rendering */}
+                {/* Icon */}
                 <div className={cn(
-                    "relative z-10 transition-transform duration-300 group-hover:scale-110",
-                    isCurrent ? "text-slate-900" :
+                    "relative z-10 transition-transform duration-500 group-hover:scale-110",
+                    isCurrent ? "text-white" :
                         isCompleted ? "text-emerald-500" :
                             isLocked ? "text-slate-400/50" : "text-blue-500"
                 )}>
                     {isLocked ? <Lock className="w-6 h-6" /> : <stage.icon className="w-7 h-7" />}
-                    {/* #comment: Reduced icon sizes (from w-8/9 to w-6/7) to fit the smaller container */}
                 </div>
 
                 {/* Status Badges */}
-                <div className="absolute -top-2 -right-2 z-20">
+                <div className="absolute -top-1 -right-1 z-30">
                     {isCompleted && (
-                        <div className="bg-emerald-500 p-1 rounded-full shadow-lg">
-                            <CheckCircle2 className="w-4 h-4 text-white" />
+                        <div className="bg-emerald-500 p-1 rounded-full shadow-lg border border-white/20">
+                            <CheckCircle2 className="w-3 h-3 text-white" />
                         </div>
                     )}
                     {stage.isPro && isLocked && (
-                        <div className="bg-amber-500 px-1.5 py-0.5 rounded-lg shadow-lg flex items-center gap-1">
-                            <Zap className="w-3 h-3 text-white fill-white" />
-                            <span className="text-[8px] font-black text-white uppercase tracking-tighter">PRO</span>
+                        <div className="bg-amber-500 px-1.5 py-0.5 rounded-lg shadow-lg flex items-center gap-1 border border-white/20">
+                            <Zap className="w-2.5 h-2.5 text-white fill-white" />
+                            <span className="text-[7px] font-black text-white uppercase">PRO</span>
                         </div>
                     )}
                 </div>
 
                 {/* Stage Number Floating */}
                 <div className={cn(
-                    "absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap px-1.5 py-0.5 rounded-lg text-[8px] font-black uppercase tracking-widest border",
-                    /* #comment: Reduced stage number label offset (-bottom-5), padding (px-1.5), and font size (text-[8px]) */
-                    isCurrent ? "bg-blue-600 border-blue-400 text-white" :
-                        "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-500"
+                    "absolute -bottom-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-0.5 rounded-full text-[7px] font-black uppercase tracking-[0.2em] border z-30",
+                    isCurrent ? "bg-blue-600 border-blue-400 text-white shadow-lg" :
+                        "bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-white/10 text-slate-500"
                 )}>
-                    Stage {stage.id}
+                    {stage.id}
                 </div>
             </div>
 
-            {/* Label Content (Floating to the side) */}
+            {/* Stage Card Content (Alternating to side) */}
             <div className={cn(
-                "absolute top-1/2 -translate-y-1/2 w-36 flex flex-col p-2.5 rounded-xl glass-panel-premium border-white/10 transition-all duration-500 group-hover:border-blue-500/30",
-                /* #comment: Reduced floating label width (w-36), padding (p-2.5), and offset (calc(50%+36px)) */
-                isLeft ? "left-[calc(50%+36px)] items-start text-left" : "right-[calc(50%+36px)] items-end text-right",
-                isLocked ? "opacity-40 grayscale" : "opacity-100"
+                "absolute top-1/2 -translate-y-1/2 w-[130px] min-[375px]:w-[145px] sm:w-[160px] flex flex-col p-3.5 rounded-2xl glass-panel-premium border-white/5 transition-all duration-500 group-hover:border-blue-500/30 group-hover:bg-white/10 dark:group-hover:bg-white/5",
+                /* #comment: Added min-[375px] check to ensure cards fit perfectly on both older small iPhones and modern wider ones like 16 Pro */
+                isLeft ? "left-[calc(50%+42px)] text-left" : "right-[calc(50%+42px)] text-right items-end",
+                isLocked ? "opacity-30 grayscale blur-[0.5px]" : "opacity-100 shadow-xl"
             )} style={{ transform: "translateZ(20px)" }}>
                 <h4 className={cn(
-                    "text-[10px] font-black uppercase tracking-tight leading-none",
-                    /* #comment: Reduced title size from 11px to 10px */
-                    isLocked ? "text-slate-400" : "text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors"
+                    "text-[10px] font-black uppercase tracking-tight leading-tight",
+                    isLocked ? "text-slate-500" : "text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors"
                 )}>{stage.title}</h4>
+
                 <p className={cn(
-                    "text-[7.5px] font-medium leading-tight mt-1 opacity-80 line-clamp-2",
-                    /* #comment: Reduced description size (8px to 7.5px) and spacing (mt-1) */
-                    isLocked ? "text-slate-500" : "text-slate-600 dark:text-slate-300"
+                    "text-[8px] font-medium leading-[1.3] mt-1.5 opacity-80 line-clamp-2",
+                    isLocked ? "text-slate-600" : "text-slate-600 dark:text-slate-300"
                 )}>{stage.description}</p>
 
                 {stage.duration && !isLocked && (
-                    <div className="flex items-center gap-1.5 mt-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/10 w-fit">
-                        <Play className="w-2 h-2 text-blue-500" />
+                    <div className={cn(
+                        "flex items-center gap-1.5 mt-2 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/10 w-fit",
+                        !isLeft && "ml-auto"
+                    )}>
+                        <Play className="w-2 h-2 text-blue-500 fill-blue-500" />
                         <span className="text-[7.5px] font-black text-blue-500 uppercase">{stage.duration}</span>
-                        {/* #comment: Reduced duration label size and spacing to maintain compactness */}
                     </div>
                 )}
             </div>

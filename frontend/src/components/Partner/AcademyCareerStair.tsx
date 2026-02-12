@@ -76,7 +76,7 @@ export const AcademyCareerStair = () => {
             {/* Path Container */}
             <div
                 ref={scrollContainerRef}
-                className="relative flex flex-col items-center max-w-sm mx-auto perspective-1000"
+                className="relative flex flex-col items-center w-full max-w-[400px] mx-auto perspective-1000 px-4"
             >
                 {stages.slice(0, visibleStages).map((stage, index) => {
                     let status: 'locked' | 'available' | 'completed' | 'current' = 'locked';

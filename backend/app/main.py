@@ -331,8 +331,17 @@ app.include_router(health.router, tags=["health"])
 app.include_router(health.router, prefix="/api", tags=["health"])
 app.include_router(config.router, prefix="/api/config", tags=["config"])
 
+# #comment: Custom StaticFiles handler to inject aggressive Cache-Control headers.
+# This ensures that images are cached by the browser/CDN for 1 year,
+# which is perfect since our optimized WebP assets rarely change.
+class CachedStaticFiles(StaticFiles):
+    async def get_response(self, path: str, scope):
+        response = await super().get_response(path, scope)
+        response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        return response
+
 # Serve promo images
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 images_dir = os.path.join(base_dir, "app_images")
 if os.path.exists(images_dir):
-    app.mount("/images", StaticFiles(directory=images_dir), name="images")
+    app.mount("/images", CachedStaticFiles(directory=images_dir), name="images")

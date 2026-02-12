@@ -2,9 +2,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNotificationStore } from '../../store/useNotificationStore';
 import { useEffect } from 'react';
 import { X } from 'lucide-react';
+import { useUI } from '../../context/UIContext';
 
 export const NotificationOverlay = () => {
     const { notification, hideNotification } = useNotificationStore();
+    const { isNotificationsVisible } = useUI();
 
     useEffect(() => {
         if (notification) {
@@ -25,7 +27,7 @@ export const NotificationOverlay = () => {
 
     return (
         <AnimatePresence>
-            {notification && (
+            {notification && isNotificationsVisible && (
                 <motion.div
                     key={`${notification.title}-${notification.message}`}
                     drag="y"

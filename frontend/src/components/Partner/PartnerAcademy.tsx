@@ -1,8 +1,12 @@
 import { AcademyCareerStair } from './AcademyCareerStair';
 import { Sparkles, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useUI } from '../../context/UIContext';
 
 export const PartnerAcademy = () => {
+    const { isFooterVisible } = useUI();
+    // #comment: We use isFooterVisible as a proxy to determine if immersive/portal mode is active
+
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700 pt-4">
             {/* Academy Elite Header */}
@@ -68,28 +72,34 @@ export const PartnerAcademy = () => {
             </div>
 
             {/* Sticky Bottom Footer (Educational Callout) */}
-            <div className="fixed bottom-32 left-1/2 -translate-x-1/2 z-40 w-full max-w-[260px] px-2">
-                <motion.div
-                    initial={{ y: 50, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    className="glass-panel-premium rounded-[1.5rem] p-2 border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex items-center justify-between gap-3 bg-[#0f172a]/40 backdrop-blur-3xl ring-1 ring-white/10"
-                >
-                    <div className="flex items-center gap-2 pl-2">
-                        <div className="w-9 h-9 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg ring-1 ring-white/30 text-white">
-                            <TrendingUp className="w-5 h-5" />
+            {isFooterVisible && (
+                <div className="fixed bottom-32 left-1/2 -translate-x-1/2 z-40 w-full max-w-[260px] px-2">
+                    {/* #comment: Hide this rank badge when a stage portal is open (isFooterVisible=false) to avoid CTA conflict */}
+                    <motion.div
+                        initial={{ y: 50, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        className="glass-panel-premium rounded-[1.5rem] p-2 border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex items-center justify-between gap-3 bg-white/80 dark:bg-[#0f172a]/40 backdrop-blur-3xl ring-1 ring-white/10"
+                    >
+                        {/* #comment: Fixed bg to bg-white/80 for light mode readability and dark blue for dark mode */}
+                        <div className="flex items-center gap-2 pl-2">
+                            <div className="w-9 h-9 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg ring-1 ring-white/30 text-white">
+                                <TrendingUp className="w-5 h-5" />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-[7px] font-black text-blue-500 dark:text-blue-400 uppercase tracking-[0.2em] leading-none">Global Rank</span>
+                                {/* #comment: Fixed label color for light mode (text-blue-500) */}
+                                <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase leading-none mt-1 group-hover:text-blue-600 transition-colors">Growth Hacker</span>
+                                {/* #comment: Fixed text color from text-white to text-slate-900 in light mode for proper contrast */}
+                            </div>
                         </div>
-                        <div className="flex flex-col">
-                            <span className="text-[7px] font-black text-blue-400 uppercase tracking-[0.2em] leading-none">Global Rank</span>
-                            <span className="text-[11px] font-black text-white uppercase leading-none mt-1 group-hover:text-blue-400 transition-colors">Growth Hacker</span>
-                        </div>
-                    </div>
 
-                    <div className="px-3 py-2 rounded-xl bg-orange-500/10 border border-orange-500/30 text-orange-400 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-[inset_0_1px_10px_rgba(249,115,22,0.1)]">
-                        <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-                        Active
-                    </div>
-                </motion.div>
-            </div>
+                        <div className="px-3 py-2 rounded-xl bg-orange-500/10 border border-orange-500/30 text-orange-400 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-[inset_0_1px_10px_rgba(249,115,22,0.1)]">
+                            <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+                            Active
+                        </div>
+                    </motion.div>
+                </div>
+            )}
 
             {/* Bottom Spacing to ensure path isn't cut off by navbar */}
             <div className="h-32 pointer-events-none" />
