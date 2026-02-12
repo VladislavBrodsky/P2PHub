@@ -96,47 +96,36 @@ export const AcademyCard = ({
 
             <div
                 className="relative z-10 h-full p-6 flex flex-col justify-between"
-                {/* #comment: Reduced card padding from p-8 to p-6 for a more compact design */}
                 style={{ transform: "translateZ(50px)" }}
             >
                 <div className="space-y-4">
-                    {/* #comment: Reduced vertical spacing from space-y-5 to space-y-4 */}
                     <div className="flex items-start justify-between">
                         {Icon && (
                             <div className="p-3.5 rounded-[1.125rem] bg-slate-100/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 backdrop-blur-xl group-hover:bg-blue-500/10 dark:group-hover:bg-blue-500/20 group-hover:border-blue-500/20 dark:group-hover:border-blue-500/30 transition-all duration-300 shadow-sm">
-                                {/* #comment: Reduced icon container padding from p-4 to p-3.5 and radius slightly */}
                                 <Icon className="w-6 h-6 text-slate-700 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
-                                {/* #comment: Reduced icon size from w-7 to w-6 */}
                             </div>
                         )}
                         {badge && (
                             <span className="px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-[9px] font-black uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400 shadow-sm">
-                                {/* #comment: Reduced badge padding and font size from 10px to 9px */}
                                 {badge}
                             </span>
                         )}
                     </div>
 
                     <div className="space-y-2.5">
-                        {/* #comment: Reduced spacing from space-y-3 to space-y-2.5 */}
                         <h3 className="text-xl font-black text-slate-900 dark:text-white leading-tight tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-200 transition-colors">
-                            {/* #comment: Reduced title font size from text-2xl to text-xl */}
                             {title}
                         </h3>
                         <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors">
-                            {/* #comment: Reduced description font size from 13px to 12px */}
                             {description}
                         </p>
                     </div>
                 </div>
 
                 <div className="pt-6 flex items-center gap-2.5 text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400 group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-all">
-                    {/* #comment: Reduced footer top padding from pt-8 to pt-6, gap from 3 to 2.5, and text size from xs to [10px] */}
                     <span>{cta}</span>
                     <div className="w-7 h-7 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/10 group-hover:translate-x-1 group-hover:bg-blue-500/20 transition-all">
-                        {/* #comment: Reduced CTA arrow container from w-8 to w-7 */}
                         <ArrowRight className="w-3.5 h-3.5" />
-                        {/* #comment: Reduced CTA arrow size from w-4 to w-3.5 */}
                     </div>
                 </div>
             </div>

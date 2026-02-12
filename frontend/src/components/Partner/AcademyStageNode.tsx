@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-// #comment: Removed unused icons (Star, Sparkles, Bot, Trophy) to clean up imports and improve maintainability
 import { Lock, CheckCircle2, Play, Zap } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { AcademyStage } from '../../data/academyData';
@@ -31,7 +30,6 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
             onClick={() => !isLocked && onClick(stage)}
             className={cn(
                 "relative group cursor-pointer w-full flex justify-center py-5",
-                /* #comment: Increased py-5 for better vertical breathing room */
                 isLocked && "cursor-not-allowed opacity-60"
             )}
         >
@@ -40,7 +38,6 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                 <div className={cn(
                     "absolute -top-5 left-1/2 -translate-x-1/2 w-0.5 h-10 -z-10 bg-slate-200 dark:bg-white/10"
                 )}>
-                    {/* #comment: Fixed spine alignment to be perfectly centered and tall enough to connect nodes */}
                     {(isCompleted || isCurrent) && (
                         <motion.div
                             initial={{ y: "-100%" }}
@@ -107,7 +104,6 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
             {/* Stage Card Content (Alternating to side) */}
             <div className={cn(
                 "absolute top-1/2 -translate-y-1/2 w-[130px] min-[375px]:w-[145px] sm:w-[160px] flex flex-col p-3.5 rounded-2xl glass-panel-premium border-white/5 transition-all duration-500 group-hover:border-blue-500/30 group-hover:bg-white/10 dark:group-hover:bg-white/5",
-                /* #comment: Added min-[375px] check to ensure cards fit perfectly on both older small iPhones and modern wider ones like 16 Pro */
                 isLeft ? "left-[calc(50%+42px)] text-left" : "right-[calc(50%+42px)] text-right items-end",
                 isLocked ? "opacity-30 grayscale blur-[0.5px]" : "opacity-100 shadow-xl"
             )} style={{ transform: "translateZ(20px)" }}>
