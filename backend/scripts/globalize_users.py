@@ -144,30 +144,27 @@ async def main():
         async with async_session() as session:
             # Query all partners that look like test users or have "None" names
             # Query all partners that look like test users or have "None" names
+            # Query all partners that look like test users or have "None" names
             statement = select(Partner).where(
                 (Partner.first_name.like("TestUser%")) |
                 (Partner.first_name.like("SimUser%")) |
                 (Partner.first_name.like("ChainUser%")) |
-                (Partner.first_name.like("User %")) |  # Covers User A, User B, User C, User L...
-                (Partner.first_name.like("Test User%")) | # Covers Test User Final
-                (Partner.first_name.like("%|%")) | # Covers names with pipes like "Name | Title"
+                (Partner.first_name.like("User %")) |
+                (Partner.first_name.like("Test User%")) |
+                (Partner.first_name.like("%|%")) |
                 (Partner.first_name.is_(None)) |
                 (Partner.username.like("TestUser%")) |
                 (Partner.username.like("SimUser%")) |
                 (Partner.username.like("ChainUser%")) |
                 (Partner.username.like("User %")) |
                 (Partner.photo_url.like("%dicebear%")) |
-                (Partner.photo_url.like("/avatars/%")) | # Force refresh existing
-                (Partner.photo_url.is_(None)) # Catch users with NO avatar
-            )
+                (Partner.photo_url.like("/avatars/%")) | 
+                (Partner.photo_url.is_(None))
+            ).order_by(Partner.xp.desc()) # Prioritize top rankers for unique avatars
+
             result = await session.exec(statement)
             partners = result.all()
             
-            # Exclude specific real users or admins if needed
-            # For now, we assume if they match the patterns above, they should be globalized
-            # But let's protect "Alex | Pintopay Manager" if that's a real account, or just globalize it if it's a test one.
-            # Based on user request "each artificial user", assuming these are all artificial.
-
             print(f"Globalizing {len(partners)} partners...")
 
             # Shuffle names to ensure unique distribution
@@ -176,6 +173,22 @@ async def main():
 
             # Web3 flavor text
             CRYPTO_SUFFIXES = ["_eth", "_btc", "_sol", "_nft", "_dao", "_defi", "_web3", "_hodl", "_gm", "_wagmi", "_alpha", "_degne"]
+
+            # Comprehensive Avatar Pools
+            MALE_POOL = [
+                "/avatars/m1.webp", "/avatars/m2.webp", "/avatars/m3.webp", "/avatars/m4.webp",
+                "/avatars/us_m_1.webp", "/avatars/ca_m_1.webp", "/avatars/de_m_1.webp",
+                "/avatars/es_m_1.webp", "/avatars/in_m_1.webp", "/avatars/ng_m_1.webp", "/avatars/ru_m_1.webp"
+            ]
+            FEMALE_POOL = [
+                "/avatars/f1.webp", "/avatars/f2.webp", "/avatars/f3.webp",
+                "/avatars/us_f_1.webp", "/avatars/ae_f_1.webp", "/avatars/br_f_1.webp",
+                "/avatars/fr_f_1.webp", "/avatars/it_f_1.webp", "/avatars/jp_f_1.webp"
+            ]
+
+            # Track usage to ensure uniqueness for top users
+            used_avatars = set()
+            last_assigned_avatar = None # To prevent adjacent duplicates
 
             for i, p in enumerate(partners):
                 # Pick a unique identity if pool allows
@@ -189,7 +202,7 @@ async def main():
                 p.last_name = identity["last_name"]
                 
                 # Create a Web3 style username
-                base_username = identity['username'].split('_')[0] # Simplify base
+                base_username = identity['username'].split('_')[0] 
                 suffix = random.choice(CRYPTO_SUFFIXES) if random.random() > 0.3 else ""
                 p.username = f"{base_username}{suffix}_{random.randint(100, 9999)}"
 
@@ -197,17 +210,41 @@ async def main():
                 country_code = identity.get("country", "RU")
                 gender = identity.get("gender", "m")
                 
-                # Try to match gender from default avatars if generic
+                # Determine candidate pool
+                pool = MALE_POOL if gender == 'm' else FEMALE_POOL
+                
+                # 1. Try strict country match first
                 country_avatars = AVATARS.get(country_code)
+                selected_avatar = None
+                
                 if country_avatars:
-                    p.photo_url = random.choice(country_avatars)
-                else:
-                    # Fallback to gender-filtered generic avatars
-                    generic_pool = [a for a in DEFAULT_AVATARS if (gender == 'm' and '/m' in a) or (gender == 'f' and '/f' in a)]
-                    p.photo_url = random.choice(generic_pool if generic_pool else DEFAULT_AVATARS)
+                    for av in country_avatars:
+                        if av not in used_avatars:
+                           selected_avatar = av
+                           break
+                    if not selected_avatar: selected_avatar = random.choice(country_avatars) # Re-use if specific match exhausted
+
+                # 2. If no specific match or we want to prioritize uniqueness for top ranks
+                # (For top 20, force unique from general pool if specific is taken/unavailable)
+                if not selected_avatar:
+                    # Try to find an unused avatar from the general gender pool
+                    available_in_pool = [a for a in pool if a not in used_avatars]
+                    if available_in_pool:
+                        selected_avatar = random.choice(available_in_pool)
+                    else:
+                        # Pool exhausted, must reuse.
+                        # Filter out the LAST assigned avatar to prevent adjacent duplicates
+                        choices = [a for a in pool if a != last_assigned_avatar]
+                        if not choices: choices = pool # Should not happen unless pool size is 1
+                        selected_avatar = random.choice(choices)
+
+                # Assign and track
+                p.photo_url = selected_avatar
+                used_avatars.add(selected_avatar)
+                last_assigned_avatar = selected_avatar
 
                 session.add(p)
-                print(f"Updated ID {p.id}: {p.first_name} {p.last_name} (@{p.username})")
+                print(f"Updated ID {p.id}: {p.first_name} (@{p.username}) -> {p.photo_url}")
 
             await session.commit()
             print("Successfully globalized all test users!")
