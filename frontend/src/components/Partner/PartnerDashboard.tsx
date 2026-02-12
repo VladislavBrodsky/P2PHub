@@ -404,38 +404,38 @@ const EarningsList = () => {
     };
 
     return (
-        <div className="space-y-2">
+        <div className="space-y-1">
             {earnings.map((earning, idx) => {
                 const styles = getTypeStyles(earning.type);
                 return (
-                    <div key={earning.id || idx} className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-xl p-3 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                        <div className="flex items-center gap-3">
-                            <div className={`w-8 h-8 rounded-lg ${styles.bg} ${styles.border} flex items-center justify-center ${styles.text}`}>
-                                {styles.icon}
+                    <div key={earning.id || idx} className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-xl p-2 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                        <div className="flex items-center gap-2">
+                            <div className={`w-6.5 h-6.5 rounded-lg ${styles.bg} ${styles.border} flex items-center justify-center ${styles.text}`}>
+                                {React.cloneElement(styles.icon as React.ReactElement, { className: 'w-3 h-3' })}
                             </div>
                             <div className='flex flex-col'>
-                                <span className="font-bold text-slate-900 dark:text-white text-xs">{earning.description.replace('(Level ', '(L')}</span>
-                                <span className="text-[9px] text-slate-500 mt-0.5">
+                                <span className="font-bold text-slate-900 dark:text-white text-[10.5px] leading-tight">{earning.description.replace('(Level ', '(L')}</span>
+                                <span className="text-[7.5px] text-slate-500 opacity-50 font-medium">
                                     {new Date(earning.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                 </span>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-2">
                             {earning.level && (
                                 <div className="relative group">
-                                    <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-lg blur-[2px] group-hover:blur-[3px] transition-all" />
-                                    <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-2 py-1 rounded-lg border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[38px] shadow-sm backdrop-blur-sm">
-                                        <span className="text-[7px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">L</span>
-                                        <span className="text-sm font-black bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{earning.level}</span>
+                                    <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-md blur-[2px] group-hover:blur-[3px] transition-all" />
+                                    <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-1 py-0.5 rounded-md border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[28px] shadow-sm backdrop-blur-sm">
+                                        <span className="text-[5.5px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">L</span>
+                                        <span className="text-[11px] font-black bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{earning.level}</span>
                                     </div>
                                 </div>
                             )}
                             <div className="flex items-center gap-1">
-                                <span className={`font-black ${styles.text} text-lg tracking-tight leading-none`}>
+                                <span className={`font-black ${styles.text} text-sm tracking-tight leading-none`}>
                                     +{earning.currency === 'XP' ? earning.amount : earning.amount.toFixed(earning.amount < 1 ? 3 : 2)}
                                 </span>
-                                <span className={`text-[9px] font-black ${styles.text} opacity-70 uppercase tracking-[0.15em] self-end pb-0.5`}>
+                                <span className={`text-[7.5px] font-black ${styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
                                     {earning.currency}
                                 </span>
                             </div>

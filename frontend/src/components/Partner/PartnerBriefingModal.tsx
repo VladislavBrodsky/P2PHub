@@ -72,7 +72,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
     ];
 
     return createPortal(
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 pt-[calc(var(--spacing-safe-top)+10px)] pb-[calc(var(--spacing-safe-bottom)+10px)]">
             {/* Backdrop with enhanced blur */}
             <motion.div
                 initial={{ opacity: 0 }}
@@ -88,7 +88,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 40 }}
                 transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                className="relative w-full max-w-lg bg-white/95 dark:bg-slate-900/95 rounded-[2.5rem] border border-white/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col max-h-[90vh] backdrop-blur-2xl"
+                className="relative w-full max-w-lg bg-white/95 dark:bg-slate-900/95 rounded-[2.5rem] border border-white/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col max-h-[82vh] backdrop-blur-2xl"
             >
                 {/* Background Decoration Glows */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] pointer-events-none" />
@@ -121,7 +121,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                 </div>
 
                 {/* Scrollable Content */}
-                <div className="overflow-y-auto p-5 space-y-4 scrollbar-hide flex-1 relative z-10">
+                <div className="overflow-y-auto p-5 pb-10 space-y-4 scrollbar-hide flex-1 relative z-10">
                     <AnimatePresence>
                         {sections.map((section, index) => {
                             const Icon = section.icon;
@@ -219,7 +219,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                 </div>
 
                 {/* Footer CTA */}
-                <div className="p-6 pt-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-white/5 shrink-0 relative z-20">
+                <div className="p-6 pt-4 pb-10 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-white/5 shrink-0 relative z-20">
                     <Button
                         onClick={onClose}
                         className="w-full h-14 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-blue-50 rounded-[1.25rem] font-black text-sm shadow-2xl hover:scale-[1.01] active:scale-[0.98] transition-all relative overflow-hidden group"
