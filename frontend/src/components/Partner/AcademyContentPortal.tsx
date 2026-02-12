@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { X, Zap, CheckCircle2, ArrowRight, Lock, Trophy, Lightbulb, Wand2 } from 'lucide-react';
 import { AcademyStage } from '../../data/academyData';
@@ -36,8 +37,8 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
         };
     }, [setHeaderVisible, setFooterVisible, setNotificationsVisible]);
 
-    return (
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-0 sm:p-4">
+    return createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 touch-none">
             {/* Backdrop */}
             <motion.div
                 initial={{ opacity: 0 }}
@@ -53,28 +54,28 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 animate={{ y: 0 }}
                 exit={{ y: "100%" }}
                 transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                className="relative w-full h-full sm:h-auto sm:max-w-lg bg-white dark:bg-[#030712] sm:rounded-[2rem] shadow-2xl border-t sm:border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col"
+                className="relative w-full h-dvh sm:h-auto sm:max-w-lg bg-white dark:bg-[#030712] sm:rounded-[2rem] shadow-2xl border-t sm:border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col"
             >
                 {/* Fixed Header Bar - Premium Glassmorphism with Safe Area support */}
-                <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pb-4 pt-[calc(var(--spacing-safe-top)+1rem)] bg-white/80 dark:bg-black/40 backdrop-blur-3xl border-b border-slate-200 dark:border-white/5">
+                <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pb-4 pt-[calc(var(--spacing-safe-top)+1rem)] bg-white/80 dark:bg-black/40 backdrop-blur-3xl border-b border-slate-200 dark:border-white/5 shrink-0">
 
                     {/* Close Button */}
                     <button
                         onClick={onClose}
-                        className="pointer-events-auto p-2 rounded-xl bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/20 text-slate-900 dark:text-white hover:scale-105 active:scale-90 transition-all shadow-md flex items-center gap-2 group"
+                        className="pointer-events-auto p-2 rounded-xl bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/20 text-slate-900 dark:text-white hover:scale-105 active:scale-90 transition-all shadow-md flex items-center gap-2 group z-50"
                     >
                         <X className="w-4 h-4" />
                         <span className="text-[9px] font-black uppercase tracking-widest pr-1 hidden sm:block">{t('common.close')}</span>
                     </button>
 
                     {/* Stage Badge - Centered specifically for better hierarchy */}
-                    <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
+                    <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
                         <span className="text-[8px] font-black text-blue-500 uppercase tracking-[0.2em] leading-none mb-1">Academy</span>
                         <h3 className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Stage {stage.id}</h3>
                     </div>
 
                     {/* Stats Badge */}
-                    <div className="pointer-events-auto flex items-center gap-1.5 p-1 pr-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm">
+                    <div className="pointer-events-auto flex items-center gap-1.5 p-1 pr-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm z-50">
                         <div className="px-2 py-1 rounded-lg bg-blue-500 border border-blue-400 shadow-lg flex items-center justify-center">
                             <span className="text-xs font-black text-white leading-none">{user?.level || 1}</span>
                         </div>
@@ -86,9 +87,9 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 </div>
 
                 {/* Content Area (Scrollable) */}
-                <div className="flex-1 overflow-y-auto overscroll-contain custom-scrollbar scroll-smooth">
+                <div className="flex-1 overflow-y-auto overscroll-contain custom-scrollbar scroll-smooth touch-pan-y pb-32">
                     {/* Decorative Liquid Header */}
-                    <div className="h-40 branding-liquid-gradient relative flex items-center justify-center">
+                    <div className="h-40 branding-liquid-gradient relative flex items-center justify-center shrink-0">
                         <div className="absolute inset-0 bg-linear-to-t from-white dark:from-[#030712] to-transparent" />
                         <motion.div
                             initial={{ scale: 0.8, opacity: 0 }}
@@ -134,7 +135,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                             </div>
                         ) : (
                             /* Lesson Content View */
-                            <div className="space-y-10 pb-20">
+                            <div className="space-y-10">
                                 <div className="flex flex-col gap-2">
                                     <div className="flex items-center gap-2">
                                         <div className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-[9px] font-black text-blue-500 uppercase tracking-widest">
@@ -205,7 +206,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                     {!isLocked && (
                         <button
                             onClick={() => onComplete(stage.id)}
-                            className="w-full py-5 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black text-sm uppercase tracking-[0.2em] shadow-[0_20px_40px_rgba(0,0,0,0.3)] active:scale-95 transition-all flex items-center justify-center gap-4 border border-white/5 active:brightness-90"
+                            className="w-full py-5 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black text-sm uppercase tracking-[0.2em] shadow-[0_20px_40px_rgba(0,0,0,0.3)] active:scale-95 transition-all flex items-center justify-center gap-4 border border-white/5 active:brightness-90 touch-manipulation"
                         >
                             <CheckCircle2 className="w-5 h-5" />
                             {t('academy.complete_stage', { stage: stage.id })}
@@ -213,6 +214,8 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                     )}
                 </div>
             </motion.div>
-        </div>
+        </div>,
+        document.body
     );
+
 };

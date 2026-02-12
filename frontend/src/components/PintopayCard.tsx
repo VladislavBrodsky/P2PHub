@@ -166,29 +166,29 @@ export const PintopayCard = ({
                         {/* Global Grain Texture - Inherited */}
                         <div className="absolute inset-0 z-0 opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
-                        {/* Dark Overlay for Readability */}
-                        <div className="absolute inset-0 z-0 bg-black/60 backdrop-blur-sm" />
+                        {/* Dark Overlay for Readability - slightly heavier for text contrast */}
+                        <div className="absolute inset-0 z-0 bg-black/40 mix-blend-multiply" />
 
                         {variant === 'platinum' && (
-                            <div className="absolute inset-0 z-0 bg-linear-to-tr from-transparent via-white/10 to-transparent opacity-30" />
+                            <div className="absolute inset-0 z-0 bg-linear-to-tr from-transparent via-white/20 to-transparent opacity-40" />
                         )}
 
                         <div className="relative z-10 w-full h-full flex flex-col justify-center">
-                            <h3 className={`text-lg font-black uppercase tracking-tight mb-3 ${variant === 'platinum' ? 'text-white' : 'text-white'}`}>
+                            <h3 className={`text-lg font-black uppercase tracking-tight mb-3 ${variant === 'platinum' ? 'text-slate-900' : 'text-white'}`}>
                                 {t(`cards.${variant}.back_title`)}
                             </h3>
-                            <p className={`text-xs font-medium leading-relaxed ${variant === 'platinum' ? 'text-slate-200' : 'text-white/80'}`}>
+                            <p className={`text-xs font-medium leading-relaxed ${variant === 'platinum' ? 'text-slate-800' : 'text-white/90'}`}>
                                 {t(`cards.${variant}.back_desc`)}
                             </p>
                         </div>
 
                         {/* Magnetic Strip Visual */}
-                        <div className="absolute top-6 left-0 right-0 h-10 bg-black/40 backdrop-blur-md z-1" />
+                        <div className="absolute top-6 left-0 right-0 h-10 bg-black/80 z-1" />
 
                         {/* CVV/Security Code Visual */}
                         <div className="absolute bottom-6 left-6 right-6 flex justify-between items-center z-10">
-                            <div className="h-6 w-10 bg-white/10 rounded-sm" />
-                            <span className={`text-[10px] font-mono tracking-widest opacity-60 ${variant === 'platinum' ? 'text-white' : 'text-white'}`}>000 / CVV</span>
+                            <div className="h-6 w-10 bg-white/20 rounded-sm border border-white/10" />
+                            <span className={`text-[10px] font-mono tracking-widest opacity-80 ${variant === 'platinum' ? 'text-slate-900' : 'text-white'}`}>000 / CVV</span>
                         </div>
                     </div>
                 </motion.div>
