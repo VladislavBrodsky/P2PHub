@@ -130,7 +130,7 @@ class ViralMarketingStudio:
 
         try:
             response = await self.openai_client.chat.completions.create(
-                model="gpt-5",
+                model="gpt-4o",
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}
@@ -163,7 +163,7 @@ class ViralMarketingStudio:
                     
                     if method:
                         img_response = method(
-                            model='gemini-3.0-pro',
+                            model='imagen-3.0-generate-001',
                             prompt=image_prompt,
                             config={
                                 'number_of_images': 1,
@@ -209,7 +209,7 @@ class ViralMarketingStudio:
             
         try:
             response = await self.openai_client.chat.completions.create(
-                model="gpt-5",
+                model="gpt-4o",
                 messages=[
                     {"role": "system", "content": "You are a viral marketing expert. Rewrite the user's headline to be highly engaging, click-worthy, and FOMO-inducing for the crypto/fintech niche. Return ONLY the best new headline. No quotes."},
                     {"role": "user", "content": f"Make this viral: {headline}"}
@@ -232,7 +232,7 @@ class ViralMarketingStudio:
             if self.genai_client:
                 # Use Gemini
                 response = self.genai_client.models.generate_content(
-                    model='gemini-3.0-pro', 
+                    model='gemini-1.5-pro', 
                     contents=prompt,
                     config={'response_mime_type': 'application/json'}
                 )
@@ -240,7 +240,7 @@ class ViralMarketingStudio:
             elif self.openai_client:
                 # Fallback OpenAI
                 response = await self.openai_client.chat.completions.create(
-                    model="gpt-5",
+                    model="gpt-4o",
                     messages=[
                         {"role": "system", "content": "You are a trend hunter. Return JSON."},
                         {"role": "user", "content": prompt}
