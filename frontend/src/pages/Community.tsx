@@ -42,8 +42,6 @@ export default function CommunityPage() {
             <div className="fixed bottom-40 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none transition-colors duration-500" />
 
 
-            // ... (rest of component)
-
             {/* Premium Header with Briefing Trigger - Sticky with Glassmorphism */}
             <AnimatePresence>
                 {showInfo && (
