@@ -64,7 +64,7 @@ class ViralMarketingStudio:
             self.gemini_model = None
             logger.warning("⚠️ Google API Key for Gemini missing.")
 
-    async def check_tokens_and_reset(self, partner: Partner, session: AsyncSession) -> bool:
+    async def check_tokens_and_reset(self, partner: Partner, session: AsyncSession, min_tokens: int = 1) -> bool:
         """
         Ensures partner has tokens and handles monthly reset.
         Each PRO member gets 500 tokens per month.
@@ -83,7 +83,7 @@ class ViralMarketingStudio:
             await session.commit()
             await session.refresh(partner)
 
-        return partner.pro_tokens > 0
+        return partner.pro_tokens >= min_tokens
 
     async def generate_viral_content(
         self, 

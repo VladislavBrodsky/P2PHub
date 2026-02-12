@@ -191,8 +191,8 @@ export const ProDashboard = () => {
                                                     key={type}
                                                     onClick={() => { selection(); setPostType(type); }}
                                                     className={`p-3 rounded-2xl text-[10px] font-black border transition-all ${postType === type
-                                                            ? 'bg-indigo-500 border-indigo-500 text-white shadow-lg'
-                                                            : 'bg-black/5 dark:bg-white/5 border-transparent opacity-60'
+                                                        ? 'bg-indigo-500 border-indigo-500 text-white shadow-lg'
+                                                        : 'bg-black/5 dark:bg-white/5 border-transparent opacity-60'
                                                         }`}
                                                 >
                                                     {type}
@@ -209,8 +209,8 @@ export const ProDashboard = () => {
                                                     key={a}
                                                     onClick={() => { selection(); setAudience(a); }}
                                                     className={`p-3 rounded-2xl text-[10px] font-black border transition-all ${audience === a
-                                                            ? 'bg-indigo-500 border-indigo-500 text-white shadow-lg'
-                                                            : 'bg-black/5 dark:bg-white/5 border-transparent opacity-60'
+                                                        ? 'bg-indigo-500 border-indigo-500 text-white shadow-lg'
+                                                        : 'bg-black/5 dark:bg-white/5 border-transparent opacity-60'
                                                         }`}
                                                 >
                                                     {a}
@@ -288,9 +288,16 @@ export const ProDashboard = () => {
                                 <button
                                     onClick={handleGenerate}
                                     disabled={isGenerating}
-                                    className="h-16 bg-indigo-500 rounded-3xl font-black text-white shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2"
+                                    className="h-16 bg-indigo-500 rounded-3xl font-black text-white shadow-lg active:scale-95 transition-transform flex flex-col items-center justify-center gap-0.5"
                                 >
-                                    {isGenerating ? <Loader2 className="animate-spin w-5 h-5" /> : "GO VIRAL 🚀"}
+                                    {isGenerating ? (
+                                        <Loader2 className="animate-spin w-5 h-5" />
+                                    ) : (
+                                        <>
+                                            <span className="text-sm">GO VIRAL 🚀</span>
+                                            <span className="text-[9px] font-bold opacity-70">COST: 2 TOKENS</span>
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         </motion.div>

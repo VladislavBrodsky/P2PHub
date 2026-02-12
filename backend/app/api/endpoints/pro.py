@@ -78,12 +78,12 @@ async def generate_content(
         raise HTTPException(status_code=403, detail="PRO membership required")
     
     # Check if a month has passed since last reset
-    has_tokens = await viral_studio.check_tokens_and_reset(partner, session)
+    has_tokens = await viral_studio.check_tokens_and_reset(partner, session, min_tokens=2)
     if not has_tokens:
-        raise HTTPException(status_code=402, detail="No PRO tokens remaining this month")
+        raise HTTPException(status_code=402, detail="Insufficient tokens (2 tokens required: 1 for Text, 1 for Image)")
     
-    # Deduct 1 token
-    partner.pro_tokens -= 1
+    # Deduct 2 tokens (1 for Text, 1 for Image)
+    partner.pro_tokens -= 2
     session.add(partner)
     await session.commit()
     
@@ -96,8 +96,8 @@ async def generate_content(
     )
     
     if "error" in result:
-        # Refund token on error
-        partner.pro_tokens += 1
+        # Refund tokens on error
+        partner.pro_tokens += 2
         session.add(partner)
         await session.commit()
         raise HTTPException(status_code=500, detail=result["error"])
