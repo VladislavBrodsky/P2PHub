@@ -5,9 +5,8 @@ set -e
 # Turn on python unbuffered mode
 export PYTHONUNBUFFERED=1
 
-# Debug: Print environment variables (sanitized)
-echo "🔍 Environment Variables (sanitized):"
-printenv | grep -vE "SECRET|KEY|TOKEN|PASSWORD|PASS" | sort
+# echo "🔍 Environment Variables (sanitized):"
+# printenv | grep -vE "SECRET|KEY|TOKEN|PASSWORD|PASS|URL" | sort
 
 echo "🚀 Starting P2PHub Backend..."
 

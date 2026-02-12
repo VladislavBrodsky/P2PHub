@@ -1,12 +1,16 @@
 
 import asyncio
-
+import os
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
 
 
 async def check():
-    engine = create_async_engine('postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway', echo=False, future=True)
+    db_url = os.getenv("DATABASE_URL")
+    if not db_url:
+        print("❌ DATABASE_URL not set")
+        return
+    engine = create_async_engine(db_url, echo=False, future=True)
     async with engine.connect() as conn:
         res = await conn.execute(text("SELECT telegram_id FROM partner WHERE username = 'uslincoln'"))
         row = res.first()

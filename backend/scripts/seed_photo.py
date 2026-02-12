@@ -14,7 +14,11 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.models.partner import Partner
 
 # Hardcoded for debugging (as discovered in previous steps)
-database_url = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
+# Credentials removed for security. Use environment variables.
+database_url = os.getenv("DATABASE_URL")
+if not database_url:
+    print("❌ DATABASE_URL environment variable is not set!")
+    sys.exit(1)
 
 engine = create_async_engine(database_url, echo=False, future=True)
 

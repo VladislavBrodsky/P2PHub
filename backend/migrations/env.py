@@ -83,7 +83,8 @@ async def run_migrations_online() -> None:
         url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
         
     import sys
-    print(f"DEBUG: Using database URL: {url}", file=sys.stderr)
+    # Removed raw URL logging for security
+    print(f"DEBUG: Using database (sanitized): {url.split('@')[-1] if '@' in url else 'local'}", file=sys.stderr)
 
     connectable = create_async_engine(
         url,

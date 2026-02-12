@@ -5,7 +5,8 @@ import os
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
 
-os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
+# Credentials removed for security. Use environment variables.
+# os.environ["DATABASE_URL"] = "..." 
 
 async def fix():
     db_url = os.environ["DATABASE_URL"]

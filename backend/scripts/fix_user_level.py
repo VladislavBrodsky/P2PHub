@@ -3,17 +3,16 @@ import os
 import sys
 
 # --- PRE-IMPORT CONFIGURATION ---
-PUBLIC_DB_URL = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
-FAKE_BOT_TOKEN = "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
+# Credentials removed for security. Use environment variables.
+DB_URL = os.getenv("DATABASE_URL")
+if not DB_URL:
+    print("❌ DATABASE_URL environment variable is not set!")
+    sys.exit(1)
 
-# Use real token if passed from shell, otherwise fake
-token_from_env = os.getenv("BOT_TOKEN")
-if not token_from_env:
-    os.environ["BOT_TOKEN"] = FAKE_BOT_TOKEN
-else:
-    os.environ["BOT_TOKEN"] = token_from_env
-
-os.environ["DATABASE_URL"] = PUBLIC_DB_URL
+# Ensure BOT_TOKEN is set
+if not os.getenv("BOT_TOKEN"):
+    print("⚠️ BOT_TOKEN not set, using dummy for script bypass...")
+    os.environ["BOT_TOKEN"] = "dummy_token"
 os.environ["REDIS_URL"] = "redis://localhost:6379/0" # Dummy
 os.environ["FRONTEND_URL"] = "http://localhost:3000" # Dummy
 
@@ -28,9 +27,9 @@ from app.models.partner import Partner
 
 
 async def main():
-    print(f"Using DB: {PUBLIC_DB_URL}")
+    print("Using Database from environment...")
 
-    engine = create_async_engine(PUBLIC_DB_URL, echo=False, future=True)
+    engine = create_async_engine(DB_URL, echo=False, future=True)
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
     referral_code = "P716720099" # User's referral code
