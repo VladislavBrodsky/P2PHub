@@ -66,7 +66,6 @@ async def warmup_redis():
             # #comment: Calling endpoint function requires BackgroundTasks which we don't have in warmup context.
             # Instead, we'll manually cache the recent partners query directly.
             logger.info("📡 Warming up Recent Partners cache...")
-            from app.models.partner import Partner, SystemSetting
             import json
             from datetime import datetime, timedelta
             

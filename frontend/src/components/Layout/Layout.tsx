@@ -87,18 +87,18 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
             {/* Grainy Texture */}
             <div className="pointer-events-none fixed inset-0 z-0 bg-[url('/noise.svg')] opacity-[0.03] mix-blend-overlay" />
 
+            {/* Header - Fixed at top, outside the scroll layer */}
+            {isHeaderVisible && (
+                <div className="relative z-100">
+                    <Header onOpenMenu={() => setIsMenuOpen(true)} />
+                </div>
+            )}
+
             {/* Main Content Area - THE SCROLL LAYER */}
             <main
                 className={`flex-1 overflow-x-hidden overflow-y-auto scroll-smooth relative z-10 [-webkit-overflow-scrolling:touch] ${!isHeaderVisible ? '' : (isStaging ? 'staging-offset' : 'content-main-padding')}`}
             >
                 <div className="relative mx-auto w-full max-w-lg px-4 safe-pb">
-                    {/* Header */}
-                    {isHeaderVisible && (
-                        <div className="relative z-50">
-                            <Header onOpenMenu={() => setIsMenuOpen(true)} />
-                        </div>
-                    )}
-
                     <div className="mx-auto w-full">
                         {children}
                     </div>

@@ -34,10 +34,10 @@ async def restore_names_from_telegram():
         print("🔧 RESTORING ORIGINAL DATA FROM TELEGRAM")
         print("=" * 70)
         
-        from sqlalchemy import not_
+        from sqlalchemy import not_, String
         # Find all real users (telegram_id does not start with TEST_)
         statement = select(Partner).where(
-            not_(Partner.telegram_id.cast(str).like("TEST_%"))
+            not_(Partner.telegram_id.cast(String).like("TEST_%"))
         ).order_by(Partner.xp.desc()).limit(500)
         
         result = await session.exec(statement)
