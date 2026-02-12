@@ -70,6 +70,41 @@ NAMES_DATA = [
     {"first_name": "Lotte 🇳🇱", "last_name": "Visser", "username": "lotte_nl", "country": "NL", "gender": "f"},
     {"first_name": "Tiago 🇵🇹", "last_name": "Santos", "username": "tiago_lis", "country": "PT", "gender": "m"},
     {"first_name": "Beatriz 🇵🇹", "last_name": "Ferreira", "username": "bea_pt", "country": "PT", "gender": "f"},
+    {"first_name": "Kenzo 🇯🇵", "last_name": "Sato", "username": "kenzo_tokyo", "country": "JP", "gender": "m"},
+    {"first_name": "Sakura 🇯🇵", "last_name": "Ito", "username": "sakura_web3", "country": "JP", "gender": "f"},
+    {"first_name": "Lars 🇸🇪", "last_name": "Andersson", "username": "lars_sthlm", "country": "SE", "gender": "m"},
+    {"first_name": "Astrid 🇸🇪", "last_name": "Eriksson", "username": "astrid_se", "country": "SE", "gender": "f"},
+    {"first_name": "Luca 🇨🇭", "last_name": "Muller", "username": "luca_zug", "country": "CH", "gender": "m"},
+    {"first_name": "Heidi 🇨🇭", "last_name": "Weber", "username": "heidi_ch", "country": "CH", "gender": "f"},
+    {"first_name": "Ravi 🇮🇳", "last_name": "Gupta", "username": "ravi_crypto", "country": "IN", "gender": "m"},
+    {"first_name": "Ananya 🇮🇳", "last_name": "Iyer", "username": "ananya_in", "country": "IN", "gender": "f"},
+    {"first_name": "Carlos 🇨🇴", "last_name": "Rodriguez", "username": "carlos_med", "country": "CO", "gender": "m"},
+    {"first_name": "Sofia 🇨🇴", "last_name": "Lopez", "username": "sofia_co", "country": "CO", "gender": "f"},
+    {"first_name": "Stefan 🇦🇹", "last_name": "Hofer", "username": "stefan_vienna", "country": "AT", "gender": "m"},
+    {"first_name": "Lara 🇦🇹", "last_name": "Steiner", "username": "lara_at", "country": "AT", "gender": "f"},
+    {"first_name": "Yassin 🇲🇦", "last_name": "Alaoui", "username": "yassin_casa", "country": "MA", "gender": "m"},
+    {"first_name": "Salma 🇲🇦", "last_name": "Fassi", "username": "salma_ma", "country": "MA", "gender": "f"},
+    {"first_name": "Hugo 🇧🇪", "last_name": "Peeters", "username": "hugo_brux", "country": "BE", "gender": "m"},
+    {"first_name": "Amelie 🇧🇪", "last_name": "Leclerc", "username": "amelie_be", "country": "BE", "gender": "f"},
+    {"first_name": "Ivan 🇭🇷", "last_name": "Horvat", "username": "ivan_zg", "country": "HR", "gender": "m"},
+    {"first_name": "Marija 🇭🇷", "last_name": "Kovac", "username": "marija_hr", "country": "HR", "gender": "f"},
+    {"first_name": "Tariq 🇸🇦", "last_name": "Al-Fahd", "username": "tariq_ruh", "country": "SA", "gender": "m"},
+    {"first_name": "Noora 🇸🇦", "last_name": "Salem", "username": "noora_jed", "country": "SA", "gender": "f"},
+    {"first_name": "Andrei 🇷🇴", "last_name": "Popa", "username": "andrei_buc", "country": "RO", "gender": "m"},
+    {"first_name": "Elena 🇷🇴", "last_name": "Radu", "username": "elena_ro", "country": "RO", "gender": "f"},
+    {"first_name": "Søren 🇫🇴", "last_name": "Joensen", "username": "soren_faroe", "country": "DK", "gender": "m"},
+    {"first_name": "Daria 🇵🇱", "last_name": "Nowak", "username": "daria_pl", "country": "PL", "gender": "f"},
+    {"first_name": "Marek 🇨🇿", "last_name": "Svoboda", "username": "marek_prg", "country": "CZ", "gender": "m"},
+    {"first_name": "Adela 🇨🇿", "last_name": "Novotna", "username": "adela_cz", "country": "CZ", "gender": "f"},
+    {"first_name": "Niklas 🇫🇮", "last_name": "Virtanen", "username": "niklas_hel", "country": "FI", "gender": "m"},
+    {"first_name": "Silva 🇬🇷", "last_name": "Papadopoulos", "username": "silva_ath", "country": "GR", "gender": "m"},
+    {"first_name": "Eleni 🇬🇷", "last_name": "Kostas", "username": "eleni_gr", "country": "GR", "gender": "f"},
+    {"first_name": "Femi 🇳🇬", "last_name": "Adeyemi", "username": "femi_abuja", "country": "NG", "gender": "m"},
+    {"first_name": "Tolu 🇳🇬", "last_name": "Ojo", "username": "tolu_lag", "country": "NG", "gender": "f"},
+    {"first_name": "Marc 🇱🇺", "last_name": "Schmit", "username": "marc_lux", "country": "LU", "gender": "m"},
+    {"first_name": "Sven 🇮🇸", "last_name": "Gunnarsson", "username": "sven_rek", "country": "IS", "gender": "m"},
+    {"first_name": "Erika 🇭🇺", "last_name": "Nagy", "username": "erika_bud", "country": "HU", "gender": "f"},
+    {"first_name": "Viktor 🇸🇰", "last_name": "Kovac", "username": "viktor_sk", "country": "SK", "gender": "m"},
 ]
 
 AVATARS = {
@@ -110,8 +145,14 @@ async def main():
             # Query all partners that look like test users or have "None" names
             statement = select(Partner).where(
                 (Partner.first_name.like("TestUser%")) |
+                (Partner.first_name.like("SimUser%")) |
+                (Partner.first_name.like("ChainUser%")) |
+                (Partner.first_name.like("User L%")) |
                 (Partner.first_name.is_(None)) |
                 (Partner.username.like("TestUser%")) |
+                (Partner.username.like("SimUser%")) |
+                (Partner.username.like("ChainUser%")) |
+                (Partner.username.like("User L%")) |
                 (Partner.photo_url.like("%dicebear%")) |
                 (Partner.photo_url.like("/avatars/%")) # Force refresh to country-specific
             )
