@@ -53,7 +53,7 @@ try_import_or_mock('taskiq_fastapi', {'init': lambda *a, **k: None})
 try_import_or_mock('taskiq', {'TaskiqScheduler': lambda *a, **k: None}, 
                    sub_modules={'schedule_sources': {'LabelScheduleSource': lambda *a, **k: None}})
 try_import_or_mock('taskiq_redis', {
-    'ListQueueBroker': lambda *a, **k: type('DB', (), {'with_result_backend': lambda s, *x: s, 'task': lambda s, *x: lambda f: f})(),
+    'ListQueueBroker': lambda *a, **k: type('DB', (), {'with_result_backend': lambda s, *x, **kw: s, 'task': lambda s, *x, **kw: lambda f: f})(),
     'RedisAsyncResultBackend': lambda *a, **k: None
 })
 
