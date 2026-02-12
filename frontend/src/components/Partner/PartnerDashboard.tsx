@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { QrCode, Copy, Gift, DollarSign, ExternalLink, Users, ChevronRight } from 'lucide-react';
+import { QrCode, Copy, Gift, DollarSign, ExternalLink, Users, ChevronRight, BookOpen } from 'lucide-react';
+import { useTranslation, Trans } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
 import { useUser } from '../../context/UserContext';
 import { Button } from '../ui/Button';
@@ -15,6 +16,7 @@ import { TopPartnersList } from '../Community/TopPartnersList';
 import { ProWelcomeCard } from './ProWelcomeCard';
 
 export const PartnerDashboard = () => {
+    const { t } = useTranslation();
     const { notification, selection } = useHaptic();
     const { user, updateUser } = useUser();
     const [isExplorerOpen, setIsExplorerOpen] = React.useState(false);
@@ -120,6 +122,30 @@ export const PartnerDashboard = () => {
                         onMetricsUpdate={handleMetricsUpdate}
                         onReportClick={handleExplorerOpen}
                     />
+
+                    {/* Partner Briefing Card - Moved from CommunityPage */}
+                    <div
+                        onClick={() => { selection(); setIsBriefingOpen(true); }}
+                        className="group relative overflow-hidden rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 p-4 shadow-sm backdrop-blur-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all active:scale-[0.98]"
+                    >
+                        <div className="absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-transparent via-blue-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 group-hover:scale-110 transition-transform">
+                                <BookOpen className="w-5 h-5" />
+                            </div>
+                            <div className="flex flex-col">
+                                <h3 className="text-sm font-black uppercase tracking-[0.12em] text-slate-900 dark:text-white leading-none">
+                                    {t('referral.brief.title')}
+                                </h3>
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5 line-clamp-1">
+                                    Official Partner Guide
+                                    <div className="w-1 h-1 rounded-full bg-blue-500/50" />
+                                    <span className="opacity-60 italic">Read Briefing</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                     {/* Explorer is now an overlay, but we might want a teaser here or just hide it */}
                     <div
                         className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"

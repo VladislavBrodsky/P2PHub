@@ -35,34 +35,7 @@ export default function CommunityPage() {
             <div className="fixed bottom-40 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none transition-colors duration-500" />
 
 
-            {/* Premium Briefing Trigger - Static Card */}
-            {/* #comment: Reduced trigger card padding and dimensions for a much tighter, compact look as requested */}
-            <div className="pt-2 -mb-2 relative z-30">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    onClick={() => { selection(); setIsBriefingOpen(true); }}
-                    className="group relative overflow-hidden rounded-xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-3 py-1.5 shadow-sm backdrop-blur-xl cursor-pointer hover:bg-white dark:hover:bg-white/10 transition-all active:scale-[0.98]"
-                >
-                    <div className="absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-transparent via-blue-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                    <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 rounded-lg bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 group-hover:scale-110 transition-transform">
-                            <BookOpen className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="flex flex-col">
-                            <h3 className="text-[9.5px] font-black uppercase tracking-[0.12em] text-slate-900 dark:text-white leading-none">
-                                {t('referral.brief.title')}
-                            </h3>
-                            <span className="text-[7px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-0.5 flex items-center gap-1.5 line-clamp-1">
-                                Official Partner Guide
-                                <div className="w-0.5 h-0.5 rounded-full bg-blue-500/50" />
-                                <span className="opacity-60 italic">Read Briefing</span>
-                            </span>
-                        </div>
-                    </div>
-                </motion.div>
-            </div>
 
             {/* Top Navigation / Switcher */}
             <div className="relative z-20 mb-4 mt-2 flex justify-center">

@@ -36,7 +36,7 @@ export const NotificationOverlay = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 100, scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                    className="fixed bottom-0 left-0 right-0 z-[10000] flex justify-center pointer-events-none px-4 pb-[calc(env(safe-area-inset-bottom,20px)+85px)]"
+                    className="fixed bottom-0 left-0 right-0 z-10000 flex justify-center pointer-events-none px-4 pb-[calc(env(safe-area-inset-bottom,24px)+110px)]"
                     whileDrag={{ scale: 0.95, opacity: 0.8 }}
                 >
                     <div className="glass-panel-premium rounded-full px-4 py-3 shadow-xl flex items-center gap-3 max-w-sm w-full pointer-events-auto backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/50 dark:border-slate-700/50 touch-pan-y">
