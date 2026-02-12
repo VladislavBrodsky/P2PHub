@@ -69,7 +69,11 @@ export const TopPartnersList = () => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.05 }}
-                        className="group relative flex items-center justify-between p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm active:scale-[0.98] transition-all"
+                        className={`group relative flex items-center justify-between p-3 rounded-2xl border backdrop-blur-md shadow-sm active:scale-[0.98] transition-all ${index === 0 ? 'bg-amber-500/10 border-amber-500/30' :
+                                index === 1 ? 'bg-slate-300/10 border-slate-400/30' :
+                                    index === 2 ? 'bg-orange-500/10 border-orange-500/30' :
+                                        'bg-white/60 dark:bg-slate-900/40 border-slate-200 dark:border-white/5'
+                            }`}
                     >
                         <div className="flex items-center gap-3">
                             <div className="relative">
@@ -83,8 +87,11 @@ export const TopPartnersList = () => {
                                         alt=""
                                     />
                                 </div>
-                                {index === 0 && (
-                                    <div className="absolute -top-1.5 -right-1.5 bg-amber-400 p-0.5 rounded-full shadow-lg">
+                                {index < 3 && (
+                                    <div className={`absolute -top-1.5 -right-1.5 p-0.5 rounded-full shadow-lg ${index === 0 ? 'bg-amber-400' :
+                                            index === 1 ? 'bg-slate-400' :
+                                                'bg-orange-400'
+                                        }`}>
                                         <Crown className="w-3 h-3 text-white" />
                                     </div>
                                 )}
@@ -118,28 +125,34 @@ export const TopPartnersList = () => {
 
                         <div className="flex flex-col items-end">
                             <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">RANK</div>
-                            <div className="text-lg font-black text-slate-900 dark:text-white">#{index + 1}</div>
+                            <div className={`text-lg font-black ${index === 0 ? 'text-amber-500' :
+                                    index === 1 ? 'text-slate-400' :
+                                        index === 2 ? 'text-orange-400' :
+                                            'text-slate-900 dark:text-white'
+                                }`}>#{index + 1}</div>
                         </div>
                     </motion.div>
                 ))}
             </div>
 
-            {topPartners.length > 10 && (
-                <button
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    className="w-full py-2 flex items-center justify-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white transition-colors"
-                >
-                    {isExpanded ? (
-                        <>
-                            Show Less <ChevronUp className="w-3 h-3" />
-                        </>
-                    ) : (
-                        <>
-                            Show More <ChevronDown className="w-3 h-3" />
-                        </>
-                    )}
-                </button>
-            )}
-        </div>
+            {
+                topPartners.length > 10 && (
+                    <button
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className="w-full py-2 flex items-center justify-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white transition-colors"
+                    >
+                        {isExpanded ? (
+                            <>
+                                Show Less <ChevronUp className="w-3 h-3" />
+                            </>
+                        ) : (
+                            <>
+                                Show More <ChevronDown className="w-3 h-3" />
+                            </>
+                        )}
+                    </button>
+                )
+            }
+        </div >
     );
 };

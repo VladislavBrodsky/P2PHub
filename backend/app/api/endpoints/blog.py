@@ -79,7 +79,17 @@ async def like_post(
     partner = (await session.exec(p_stmt)).first()
 
     if not partner:
-        raise HTTPException(status_code=404, detail="Partner not found")
+        # Lazy creation for Blog interactions (supports Dev mode & new users)
+        from app.services.partner_service import create_partner
+        partner, _ = await create_partner(
+            session=session,
+            telegram_id=tg_id,
+            username=tg_user.get("username"),
+            first_name=tg_user.get("first_name"),
+            last_name=tg_user.get("last_name"),
+            language_code=tg_user.get("language_code"),
+            photo_file_id=None # We don't have this in simple webapp init usually
+        )
 
     # Check if already liked
     l_stmt = select(PartnerBlogLike).where(
