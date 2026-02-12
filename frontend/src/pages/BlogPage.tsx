@@ -184,7 +184,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                         className="flex flex-col"
                     >
                         {/* Header Area - Sticky with Glassmorphism */}
-                        <div className="sticky top-0 z-50 px-4 pt-6 pb-2 flex items-center justify-between bg-transparent">
+                        <div className="px-4 pt-6 pb-2 flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => { selection(); setActiveTab?.('home'); }}
@@ -239,44 +239,43 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     onClick={() => handlePostClick(currentFeaturedPost)}
-                                    className="relative group overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) glass-panel-premium aspect-4/5 sm:aspect-video flex flex-col justify-end p-6 sm:p-8"
+                                    className="group overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) bg-(--color-bg-surface) flex flex-col shadow-sm"
                                 >
                                     {currentFeaturedPost.image && (
-                                        <img
-                                            src={currentFeaturedPost.image}
-                                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                            alt={currentFeaturedPost.title}
-                                        />
+                                        <div className="aspect-video w-full overflow-hidden relative">
+                                            <img
+                                                src={currentFeaturedPost.image}
+                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                alt={currentFeaturedPost.title}
+                                            />
+                                            <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
+                                        </div>
                                     )}
-                                    <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent z-10" />
 
-                                    {/* Decorative Background Glow */}
-                                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/20 blur-[100px] group-hover:bg-blue-600/30 transition-colors" />
-
-                                    <div className="relative z-20 space-y-3 sm:space-y-4">
+                                    <div className="p-6 sm:p-8 space-y-3 sm:space-y-4">
                                         <div className="flex items-center gap-2">
                                             <span className="px-2.5 py-1 rounded-full bg-blue-500 text-[9px] font-black uppercase tracking-widest text-white">
                                                 {isRussian ? "Главное" : "Featured"}
                                             </span>
-                                            <span className="text-[9px] font-bold text-white/60">
+                                            <span className="text-[9px] font-bold text-(--color-text-secondary) opacity-60">
                                                 {currentFeaturedPost.date}
                                             </span>
                                         </div>
-                                        <h3 className="text-xl sm:text-2xl font-black leading-tight text-white group-hover:text-blue-400 transition-colors line-clamp-3">
+                                        <h3 className="text-xl sm:text-2xl font-black leading-tight text-(--color-text-primary) group-hover:text-blue-500 transition-colors line-clamp-3">
                                             {currentFeaturedPost.title}
                                         </h3>
-                                        <p className="text-xs sm:text-sm font-medium text-white/70 line-clamp-2 hidden sm:block">
+                                        <p className="text-xs sm:text-sm font-medium text-(--color-text-secondary) line-clamp-2">
                                             {currentFeaturedPost.excerpt}
                                         </p>
                                         <div className="pt-2 sm:pt-4 flex items-center justify-between">
                                             <div className="flex items-center gap-2">
-                                                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-                                                    <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+                                                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                                                    <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
                                                 </div>
-                                                <span className="text-[10px] sm:text-xs font-bold text-white/80">{currentFeaturedPost.author}</span>
+                                                <span className="text-[10px] sm:text-xs font-bold text-(--color-text-secondary)">{currentFeaturedPost.author}</span>
                                             </div>
-                                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10 group-hover:bg-blue-500 group-hover:scale-110 transition-all duration-500">
-                                                <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/5 flex items-center justify-center border border-blue-500/10 group-hover:bg-blue-500 group-hover:text-white group-hover:scale-110 transition-all duration-500">
+                                                <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6" />
                                             </div>
                                         </div>
                                     </div>
@@ -421,8 +420,8 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             exit={{ opacity: 0, x: -10 }}
             className="flex flex-col min-h-screen bg-(--color-bg-app) relative"
         >
-            {/* Header Sticky - Fixed for better scroll reliability */}
-            <div className="sticky top-0 z-50 w-full pt-[env(safe-area-inset-top,1rem)] pb-3 px-4 bg-transparent transition-all">
+            {/* Header Area - Non-sticky to avoid overlapping */}
+            <div className="w-full pt-[env(safe-area-inset-top,1rem)] pb-3 px-4 bg-transparent transition-all">
                 <div className="flex items-center justify-between w-full">
                     <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-(--color-bg-surface) active:scale-90 transition-all text-(--color-text-primary)">
                         <ArrowLeft className="w-6 h-6" />
