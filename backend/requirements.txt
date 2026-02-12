@@ -154,3 +154,6 @@ taskiq-redis==1.2.2
 
 # Monitoring & Error Tracking
 sentry-sdk==2.52.0
+
+# Testing
+aiosqlite==0.20.0
