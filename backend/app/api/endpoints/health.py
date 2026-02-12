@@ -28,24 +28,44 @@ async def health_check(
     """
     Readiness probe for deployment methods that need DB confirmation.
     Verifies Database connectivity with a strict 3-second timeout.
+    Also verifies Redis connectivity.
     """
     start_time = time.time()
+    health_status = {
+        "status": "healthy",
+        "database": "unknown",
+        "redis": "unknown",
+        "latency_ms": 0
+    }
+    
     try:
-        # Fast query to check DB availability with timeout
-        # If DB is locked or slow (e.g. startup migration), this won't hang forever
+        # Check Database
         async with asyncio.timeout(3.0):
             await session.exec(text("SELECT 1"))
-
-        latency = (time.time() - start_time) * 1000
-        return {
-            "status": "healthy",
-            "database": "connected",
-            "latency_ms": round(latency, 2)
-        }
+        health_status["database"] = "connected"
     except Exception as e:
+        health_status["database"] = "disconnected"
+        health_status["database_error"] = str(e)
         response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
-        return {
-            "status": "unhealthy",
-            "database": "disconnected",
-            "error": str(e)
-        }
+        health_status["status"] = "unhealthy"
+
+    try:
+        # Check Redis
+        from app.services.redis_service import redis_service
+        async with asyncio.timeout(3.0):
+            if await redis_service.client.ping():
+                health_status["redis"] = "connected"
+            else:
+                 health_status["redis"] = "disconnected"
+    except Exception as e:
+        health_status["redis"] = "disconnected"
+        health_status["redis_error"] = str(e)
+        # Redis failure might be considered partial health or unhealthy depending on criticality
+        # For now, let's mark it as unhealthy if Redis is down too
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+        health_status["status"] = "unhealthy"
+
+    latency = (time.time() - start_time) * 1000
+    health_status["latency_ms"] = round(latency, 2)
+    
+    return health_status
