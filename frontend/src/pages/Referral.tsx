@@ -6,8 +6,8 @@ import { EarnHeader } from '../components/Earn/EarnHeader';
 import { ReferralWidget } from '../components/Earn/ReferralWidget';
 import { LazyLoader } from '../components/ui/LazyLoader';
 
-const MilestonePath = lazy(() => import('../components/Earn/MilestonePath').then(m => ({ default: m.MilestonePath })));
-const TaskGrid = lazy(() => import('../components/Earn/TaskGrid').then(m => ({ default: m.TaskGrid })));
+import { MilestonePath } from '../components/Earn/MilestonePath';
+import { TaskGrid } from '../components/Earn/TaskGrid';
 const LevelUpModal = lazy(() => import('../components/Earn/LevelUpModal').then(m => ({ default: m.LevelUpModal })));
 
 import { EARN_TASKS, Task } from '../data/earnData';
@@ -502,27 +502,23 @@ export default function ReferralPage() {
                 </div>
 
                 <div className="relative">
-                    <LazyLoader height="300px">
-                        <MilestonePath />
-                    </LazyLoader>
+                    <MilestonePath />
                 </div>
             </div>
 
-            <LazyLoader height="500px">
-                <TaskGrid
-                    tasks={localizedTasks}
-                    completedTaskIds={completedTaskIds}
-                    verifyingTasks={verifyingTasks}
-                    claimableTasks={claimableTasks}
-                    currentLevel={currentLevel}
-                    referrals={referrals}
-                    checkinStreak={user?.checkin_streak || 0}
-                    // #comment: Pass active tasks to grid for status determination
-                    activeTasks={user?.active_tasks}
-                    onTaskClick={handleTaskClick}
-                    onClaim={handleClaim}
-                />
-            </LazyLoader>
+            <TaskGrid
+                tasks={localizedTasks}
+                completedTaskIds={completedTaskIds}
+                verifyingTasks={verifyingTasks}
+                claimableTasks={claimableTasks}
+                currentLevel={currentLevel}
+                referrals={referrals}
+                checkinStreak={user?.checkin_streak || 0}
+                // #comment: Pass active tasks to grid for status determination
+                activeTasks={user?.active_tasks}
+                onTaskClick={handleTaskClick}
+                onClaim={handleClaim}
+            />
 
             <div className="mt-8 mb-4">
                 <UpgradeButton

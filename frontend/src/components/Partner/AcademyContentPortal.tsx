@@ -57,7 +57,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 className="relative w-full h-dvh sm:h-auto sm:max-w-lg bg-white dark:bg-[#030712] sm:rounded-[2rem] shadow-2xl border-t sm:border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col"
             >
                 {/* Fixed Header Bar - Premium Glassmorphism with Safe Area support */}
-                <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pb-4 pt-[calc(var(--spacing-safe-top)+1rem)] bg-white/80 dark:bg-black/40 backdrop-blur-3xl border-b border-slate-200 dark:border-white/5 shrink-0">
+                <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pb-4 pt-[calc(var(--spacing-safe-top)+2.5rem)] bg-white/80 dark:bg-black/40 backdrop-blur-3xl border-b border-slate-200 dark:border-white/5 shrink-0">
 
                     {/* Close Button */}
                     <button
@@ -74,16 +74,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                         <h3 className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Stage {stage.id}</h3>
                     </div>
 
-                    {/* Stats Badge */}
-                    <div className="pointer-events-auto flex items-center gap-1.5 p-1 pr-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm z-50">
-                        <div className="px-2 py-1 rounded-lg bg-blue-500 border border-blue-400 shadow-lg flex items-center justify-center">
-                            <span className="text-xs font-black text-white leading-none">{user?.level || 1}</span>
-                        </div>
-                        <div className="flex flex-col items-end">
-                            <span className="text-[9px] font-black text-slate-900 dark:text-white leading-none">{user?.xp || 0}</span>
-                            <span className="text-[6.5px] font-black text-green-500 uppercase tracking-widest">XP</span>
-                        </div>
-                    </div>
+                    {/* Stats Badge Removed to resolve collision with Telegram Menu Button */}
                 </div>
 
                 {/* Content Area (Scrollable) */}

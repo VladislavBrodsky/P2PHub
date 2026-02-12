@@ -9,19 +9,13 @@ import { useTranslation } from 'react-i18next';
 
 export default function CommunityPage() {
     const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'dashboard' | 'academy'>('dashboard');
     const { selection } = useHaptic();
-    useEffect(() => {
-        setIsLoading(false);
-    }, []);
 
     const handleTabChange = (tab: 'dashboard' | 'academy') => {
         selection();
         setActiveTab(tab);
     };
-
-    if (isLoading) return <div className="p-4"><ListSkeleton /></div>;
 
     return (
         <div className="flex flex-col min-h-screen px-4 pb-32 relative bg-(--color-bg-deep) transition-colors duration-300 -mt-6">
