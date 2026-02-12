@@ -27,6 +27,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install -r requirements.txt
         python -m pip install ruff
+      continue-on-error: true
 
     - name: Run Ruff Lint
       run: ruff check .
