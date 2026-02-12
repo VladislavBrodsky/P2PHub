@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
 import { useUser } from '../context/UserContext';
 import { proService, PROStatus } from '../services/proService';
+import { getApiUrl } from '../utils/api';
 
 export const ProDashboard = () => {
     const { t, i18n } = useTranslation();
@@ -191,8 +192,8 @@ export const ProDashboard = () => {
                                                     key={type}
                                                     onClick={() => { selection(); setPostType(type); }}
                                                     className={`p-3 rounded-2xl text-[10px] font-black border transition-all ${postType === type
-                                                        ? 'bg-indigo-500 border-indigo-500 text-white shadow-lg'
-                                                        : 'bg-black/5 dark:bg-white/5 border-transparent opacity-60'
+                                                            ? 'bg-indigo-500 border-indigo-500 text-white shadow-lg'
+                                                            : 'bg-black/5 dark:bg-white/5 border-transparent opacity-60'
                                                         }`}
                                                 >
                                                     {type}
@@ -209,8 +210,8 @@ export const ProDashboard = () => {
                                                     key={a}
                                                     onClick={() => { selection(); setAudience(a); }}
                                                     className={`p-3 rounded-2xl text-[10px] font-black border transition-all ${audience === a
-                                                        ? 'bg-indigo-500 border-indigo-500 text-white shadow-lg'
-                                                        : 'bg-black/5 dark:bg-white/5 border-transparent opacity-60'
+                                                            ? 'bg-indigo-500 border-indigo-500 text-white shadow-lg'
+                                                            : 'bg-black/5 dark:bg-white/5 border-transparent opacity-60'
                                                         }`}
                                                 >
                                                     {a}
@@ -310,9 +311,6 @@ export const ProDashboard = () => {
                             animate={{ opacity: 1, y: 0 }}
                             className="space-y-6"
                         >
-                            import {getApiUrl} from '../utils/api';
-
-                            // ... inside component ...
                             <div className="bg-(--color-bg-surface) rounded-[2.5rem] border border-(--color-border-glass) overflow-hidden">
                                 <div className="aspect-video bg-indigo-900/20 flex flex-col items-center justify-center border-b border-(--color-border-glass) relative overflow-hidden">
                                     {generatedResult.image_url ? (
