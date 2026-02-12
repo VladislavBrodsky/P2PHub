@@ -1,2 +1,3 @@
 web: ./start.sh
 worker: bash scripts/start_worker.sh
+scheduler: taskiq scheduler app.worker:scheduler

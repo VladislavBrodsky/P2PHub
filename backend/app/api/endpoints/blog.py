@@ -1,4 +1,4 @@
-import random
+import secrets
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import select
@@ -41,7 +41,6 @@ async def get_post_engagement(
 
     fb_likes = 0
     if not engagement:
-        import secrets
         fb_likes = 333 + secrets.randbelow(380) # Range [333, 712]
         engagement = BlogPostEngagement(
             post_slug=slug,
@@ -111,7 +110,6 @@ async def like_post(
     engagement = (await session.exec(e_stmt)).first()
 
     if not engagement:
-        import secrets
         engagement = BlogPostEngagement(
             post_slug=slug,
             base_likes=333 + secrets.randbelow(380),

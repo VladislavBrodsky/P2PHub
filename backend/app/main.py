@@ -18,39 +18,19 @@ from bot import bot, dp
 async def lifespan(app: FastAPI):
     from app.models.partner import create_db_and_tables
     from app.services.warmup_service import warmup_redis
+    
+    # #comment: Always ensure DB tables exist. safe to run from multiple workers.
     await create_db_and_tables()
 
-    # Warmup re-enabled but limited to Top 1000 (see warmup_service.py)
+    # #comment: Warmup already has an internal Redis lock, so it's safe to call from all 4 workers.
+    # Only one will succeed, the others will skip.
     asyncio.create_task(warmup_redis())
 
+    # #comment: Migrated Subscription and Photo Sync tasks to TaskIQ Scheduler.
+    # We no longer run infinite loops here to save worker memory and prevent redundant DB load.
 
-    # Start the subscription expiration checker
-    from app.services.subscription_service import subscription_service
-    checker_task = asyncio.create_task(subscription_service.run_checker_task())
-    app.state.subscription_checker = checker_task
 
-    # Start the profile photo sync task (24h)
-    async def run_photo_sync_task():
-        from sqlalchemy.orm import sessionmaker
-        from sqlmodel.ext.asyncio.session import AsyncSession
-
-        from app.models.partner import engine
-        from app.services.partner_service import sync_profile_photos
-
-        while True:
-            await asyncio.sleep(24 * 3600) # Run once every 24h
-            try:
-                print("📅 Triggering scheduled Profile Photo Sync...")
-                async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-                async with async_session() as session:
-                    await sync_profile_photos(bot, session)
-            except Exception as e:
-                print(f"❌ Photo Sync Task Error: {e}")
-
-    photo_sync_task = asyncio.create_task(run_photo_sync_task())
-    app.state.photo_sync = photo_sync_task
-
-    print("✅ Background tasks started.")
+    print("✅ Webhook registration check starting...")
 
     webhook_base = settings.WEBHOOK_URL
 
@@ -60,21 +40,23 @@ async def lifespan(app: FastAPI):
         webhook_url = webhook_base if webhook_base.endswith(path) else f"{webhook_base.rstrip('/')}{path}"
 
         try:
-            # Small random jitters to prevent 4 workers from hitting Telegram API at the exact same millisecond
-            import secrets
-            await asyncio.sleep(0.1 + (secrets.randbelow(1900) / 1000.0))  # 0.1 to 2.0s jitter
+            # #comment: Leader Election for Webhook. Only one worker should register the webhook.
+            # This prevents 4 workers from hammering the Telegram API simultaneously.
+            from app.services.redis_service import redis_service
+            lock_key = "lock:webhook_registration"
+            is_leader = await redis_service.client.set(lock_key, "1", ex=60, nx=True)
 
-            print(f"📡 Registering Webhook with Telegram: {webhook_url}")
-            # Increased timeout to prevent startup hang on slow API responses
-            async with asyncio.timeout(15.0):
-                await bot.set_webhook(
-                    url=webhook_url,
-                    secret_token=settings.WEBHOOK_SECRET,
-                    drop_pending_updates=True
-                )
-            print(f"🚀 Webhook successfully set to: {webhook_url}")
-        except asyncio.TimeoutError:
-            print("⚠️ Webhook registration timed out (15s). The app will continue starting...")
+            if is_leader:
+                print(f"📡 Leader Worker: Registering Webhook with Telegram: {webhook_url}")
+                async with asyncio.timeout(15.0):
+                    await bot.set_webhook(
+                        url=webhook_url,
+                        secret_token=settings.WEBHOOK_SECRET,
+                        drop_pending_updates=True
+                    )
+                print(f"🚀 Webhook successfully set to: {webhook_url}")
+            else:
+                print("ℹ️ Webhook already registered by leader worker. Skipping...")
         except Exception as e:
             # Ignore flood control if it's already being handled by another worker
             if "Flood control exceeded" in str(e):
@@ -114,21 +96,6 @@ async def lifespan(app: FastAPI):
 
     # Shutdown
     await bot.session.close()
-
-    # Stop background tasks
-    if hasattr(app.state, "subscription_checker"):
-        app.state.subscription_checker.cancel()
-        try:
-            await app.state.subscription_checker
-        except asyncio.CancelledError:
-            pass
-
-    if hasattr(app.state, "photo_sync"):
-        app.state.photo_sync.cancel()
-        try:
-            await app.state.photo_sync
-        except asyncio.CancelledError:
-            pass
 
     if not settings.WEBHOOK_URL and hasattr(app.state, "polling_task"):
         app.state.polling_task.cancel()

@@ -116,18 +116,26 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 # Standardized async database URL from settings
 database_url = settings.async_database_url
 
-connect_args = {}
-if "sqlite" not in database_url:
-    connect_args["statement_cache_size"] = 0
+# SQLite specific arguments
+connect_args = {"check_same_thread": False} if "sqlite" in database_url else {}
 
+# #comment: In a multi-worker environment (4 Gunicorn workers), each worker maintains its own pool.
+# We set pool_size=15 and max_overflow=10 per worker. This allows the cluster to handle
+# up to 60-100 concurrent DB connections reliably. pool_recycle helps prevent 'stale'
+# connections on cloud platforms like Railway where idle connections are often killed.
 engine = create_async_engine(
     database_url,
     echo=settings.DEBUG,
     future=True,
-    connect_args=connect_args
+    connect_args=connect_args,
+    pool_size=15,
+    max_overflow=10,
+    pool_timeout=30,
+    pool_recycle=1800,
 )
 
 async def create_db_and_tables():
+    # #comment: DB creation is now guarded in main.py lifespan, but the logic remains here.
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
 

@@ -30,13 +30,12 @@ The P2PHub codebase was audited using static analysis tools (`Bandit`, `Safety`)
 - **Issue:** Standard pseudo-random generators (`random`) were used for jitter and social proof. While not directly exploitable for auth, it's a best practice to use `secrets`.
 - **Mitigation:** Migrated all flagged occurrences to `secrets.randbelow()` or `secrets.token_hex()`.
 
-### 2.3 Exposed Credentials (Action Required)
-- **Issue:** A summary of production logs was found in the `archive_logs` folder (not tracked but present locally) and some secrets were visible in the safety report generated previously.
-- **Action Required:**
-    1. **ROTATE** `BOT_TOKEN` in Telegram @BotFather.
-    2. **ROTATE** `DATABASE_URL` and `REDIS_URL` in Railway.
-    3. **ROTATE** `TON_API_KEY` and `OPENAI_API_KEY`.
-    4. Ensure `.env` is never added to Git (verified: `.gitignore` is correct).
+### 2.3 Exposed Credentials (Mitigated)
+- **Issue:** Summary of production logs and secrets were visible in legacy reports.
+- **Action Taken:**
+    1. ✅ **ROTATED** `BOT_TOKEN` in Telegram @BotFather (Owner confirmed update).
+    2. ⚠️ **PENDING** Rotation for `DATABASE_URL`, `REDIS_URL`, and other secondary keys if they remain unchanged in Railway.
+    3. Ensure `.env` is never added to Git (verified: `.gitignore` is correct).
 
 ### 2.4 Dependency Vulnerabilities (Mitigated)
 - **Package:** `ecdsa`

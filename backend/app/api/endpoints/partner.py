@@ -294,7 +294,6 @@ async def get_recent_partners(
     Fetches the 10 most recently joined partners for social proof.
     Updated every 5 minutes and persists across restarts.
     """
-    import random
     from datetime import datetime, timedelta
 
     cache_key = "partners:recent_v2"
@@ -373,7 +372,6 @@ async def get_recent_partners(
         session.add(snapshot_setting)
 
     if refresh_count:
-        import secrets
         last_hour_count = 632 + secrets.randbelow(211) # Range [632, 842]
         if not count_setting:
             count_setting = SystemSetting(key=count_settings_key, value=str(last_hour_count))

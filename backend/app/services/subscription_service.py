@@ -7,10 +7,22 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.models.partner import Partner
 from app.services.notification_service import notification_service
+from app.worker import broker
 
 logger = logging.getLogger(__name__)
 
 class SubscriptionService:
+    @broker.task(task_name="check_expiring_subscriptions_task", schedule=[{"cron": "0 * * * *"}])
+    async def check_expiring_subscriptions_task(self):
+        """
+        TaskIQ wrapper for the subscription checker. 
+        #comment: By moving this to TaskIQ, we ensure it only runs once per hour 
+        across the entire cluster, rather than once per Gunicorn worker.
+        """
+        from app.models.partner import engine
+        async with AsyncSession(engine) as session:
+            await self.check_expiring_subscriptions(session)
+
     async def check_expiring_subscriptions(self, session: AsyncSession):
         """
         Finds users whose subscription expires in exactly 3 days or 1 day.
@@ -78,18 +90,18 @@ class SubscriptionService:
 
     async def run_checker_task(self):
         """
-        Background task that runs the checker every hour.
+        #comment: This method is now DEPRECATED in favor of the TaskIQ 'check_expiring_subscriptions_task'.
+        It remains here for fallback/dev purposes but is no longer called in main.py lifespan.
         """
-        logger.info("🕒 Subscription Checker Started")
+        logger.info("🕒 DEPRECATED: Subscription Checker Local Loop")
         while True:
             try:
-                # We need to create a session manually since this is a background task
                 from app.models.partner import engine
                 async with AsyncSession(engine) as session:
                     await self.check_expiring_subscriptions(session)
             except Exception as e:
                 logger.error(f"Error in Subscription Checker: {e}")
 
-            await asyncio.sleep(3600) # Check every hour
+            await asyncio.sleep(3600)
 
 subscription_service = SubscriptionService()

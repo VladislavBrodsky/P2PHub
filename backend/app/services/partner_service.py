@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import secrets
 from datetime import datetime, timedelta
@@ -128,6 +129,22 @@ async def get_partner_by_referral_code(session: AsyncSession, code: str) -> Opti
 
 from app.worker import broker
 
+
+@broker.task(task_name="sync_profile_photos_task", schedule=[{"cron": "0 0 * * *"}])
+async def sync_profile_photos_task():
+    """
+    TaskIQ wrapper for the profile photo sync.
+    #comment: This task iterates over all partners to refresh their profile pictures from Telegram.
+    Syncing it here prevents the 4 Gunicorn workers from all trying to do it at once.
+    """
+    from bot import bot
+    from app.models.partner import engine
+    from sqlalchemy.orm import sessionmaker
+    from sqlmodel.ext.asyncio.session import AsyncSession
+    
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    async with async_session() as session:
+        await sync_profile_photos(bot, session)
 
 @broker.task(task_name="process_referral_logic")
 async def process_referral_logic(partner_id: int):
@@ -704,6 +721,33 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         curr += next_step
 
     return data
+
+async def sync_profile_photos(bot, session: AsyncSession):
+    """
+    Refreshes profile photo file IDs from Telegram for all partners.
+    """
+    logger.info("📅 Starting Profile Photo Sync...")
+    statement = select(Partner)
+    result = await session.exec(statement)
+    partners = result.all()
+    
+    updated = 0
+    for partner in partners:
+        try:
+            # Throttle to avoid Telegram flood limits
+            await asyncio.sleep(0.05)
+            user_photos = await bot.get_user_profile_photos(partner.telegram_id, limit=1)
+            if user_photos.total_count > 0:
+                new_file_id = user_photos.photos[0][0].file_id
+                if partner.photo_file_id != new_file_id:
+                    partner.photo_file_id = new_file_id
+                    session.add(partner)
+                    updated += 1
+        except Exception as e:
+            logger.error(f"Failed to sync photo for {partner.telegram_id}: {e}")
+            
+    await session.commit()
+    logger.info(f"✅ Sync complete. Updated {updated} photos.")
 
 async def migrate_paths(session: AsyncSession):
     """

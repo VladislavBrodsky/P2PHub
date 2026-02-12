@@ -40,4 +40,5 @@ taskiq_fastapi.init(
 TASKS_TO_IMPORT: List[str] = [
     "app.services.partner_service",
     "app.services.notification_service",
+    "app.services.subscription_service",
 ]
