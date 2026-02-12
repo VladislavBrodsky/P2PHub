@@ -111,7 +111,6 @@ async def check_recent_users():
                 print(f"   Lineage ({len(lineage_ids)} levels): {lineage_ids}")
                 
                 # Fetch all ancestors
-                placeholders = ','.join(['?'] * len(lineage_ids))
                 ancestor_result = await session.execute(
                     text(f"SELECT id, username, xp, is_pro, referrer_id FROM partner WHERE id IN ({','.join(map(str, lineage_ids))})")
                 )
