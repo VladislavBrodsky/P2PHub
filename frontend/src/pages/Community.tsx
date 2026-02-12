@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { useHaptic } from '../hooks/useHaptic';
 import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 import { PartnerDashboard } from '../components/Partner/PartnerDashboard';
@@ -7,7 +7,7 @@ import { PartnerAcademy } from '../components/Partner/PartnerAcademy';
 import { cn } from '../lib/utils';
 import { useTranslation } from 'react-i18next';
 // #comment: Removed unused HelpCircle icon from lucide-react to clean up the import list
-import { BookOpen } from 'lucide-react';
+import { Info } from 'lucide-react';
 import { PartnerBriefingModal } from '../components/Partner/PartnerBriefingModal';
 
 export default function CommunityPage() {
@@ -16,6 +16,12 @@ export default function CommunityPage() {
     const [activeTab, setActiveTab] = useState<'dashboard' | 'academy'>('dashboard');
     const [isBriefingOpen, setIsBriefingOpen] = useState(false);
     const { selection } = useHaptic();
+    const { scrollY } = useScroll();
+    const [showInfo, setShowInfo] = useState(true);
+
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        setShowInfo(latest < 50);
+    });
 
     useEffect(() => {
         setIsLoading(false);
@@ -36,18 +42,24 @@ export default function CommunityPage() {
             <div className="fixed bottom-40 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none transition-colors duration-500" />
 
 
-            {/* Briefing Button Container */}
-            <div className="flex justify-end pt-4 -mb-2 relative z-30">
-                <motion.button
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    onClick={() => { selection(); setIsBriefingOpen(true); }}
-                    className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl text-slate-600 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-all active:scale-95 shadow-sm group"
-                >
-                    <BookOpen className="w-4 h-4 group-hover:rotate-6 transition-transform" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.15em]">Briefing</span>
-                </motion.button>
-            </div>
+            {/* Premium Header with Briefing Trigger - Sticky with Glassmorphism */}
+            <AnimatePresence>
+                {showInfo && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="sticky top-0 z-50 flex items-center justify-center py-4 pb-6 px-1 bg-(--color-bg-deep)/80 backdrop-blur-xl border-b border-(--color-border-glass) -mx-4 mb-4"
+                    >
+                        <button
+                            onClick={() => { selection(); setIsBriefingOpen(true); }}
+                            className="p-1.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl text-slate-600 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-all active:scale-95 shadow-sm group"
+                        >
+                            <Info className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                        </button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Top Navigation / Switcher */}
             <div className="relative z-20 mb-4 mt-2 flex justify-center">
