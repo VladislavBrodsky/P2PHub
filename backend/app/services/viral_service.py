@@ -200,6 +200,65 @@ class ViralMarketingStudio:
             logger.error(f"Error in viral generation: {e}")
             return {"error": str(e)}
 
+    async def fix_headline(self, headline: str) -> str:
+        """
+        Rewrites a headline to be more viral/clickbaity. Cost: 1 Token.
+        """
+        if not self.openai_client:
+            return "Error: AI Service Unavailable"
+            
+        try:
+            response = await self.openai_client.chat.completions.create(
+                model="gpt-4-turbo-preview",
+                messages=[
+                    {"role": "system", "content": "You are a viral marketing expert. Rewrite the user's headline to be highly engaging, click-worthy, and FOMO-inducing for the crypto/fintech niche. Return ONLY the best new headline. No quotes."},
+                    {"role": "user", "content": f"Make this viral: {headline}"}
+                ],
+                max_tokens=60
+            )
+            return response.choices[0].message.content.strip()
+        except Exception as e:
+            logger.error(f"Headline fix failed: {e}")
+            return headline # Fallback to original
+
+    async def fetch_trends(self) -> List[dict]:
+        """
+        Fetches 3 trending topics. Cost: 3 Tokens.
+        Uses Gemini if available for freshness, else OpenAI.
+        """
+        prompt = "Identify 3 top trending, controversial, or high-growth narratives in the Crypto/Fintech world for 2026. Format as JSON list of objects with 'topic', 'reason', and 'viral_angle'."
+        
+        try:
+            if self.genai_client:
+                # Use Gemini
+                response = self.genai_client.models.generate_content(
+                    model='gemini-2.0-flash-exp', 
+                    contents=prompt,
+                    config=genai_types.GenerateContentConfig(response_mime_type='application/json')
+                )
+                return json.loads(response.text)
+            elif self.openai_client:
+                # Fallback OpenAI
+                response = await self.openai_client.chat.completions.create(
+                    model="gpt-4-turbo-preview",
+                    messages=[
+                        {"role": "system", "content": "You are a trend hunter. Return JSON."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    response_format={"type": "json_object"}
+                )
+                content = json.loads(response.choices[0].message.content)
+                # Handle if it returns { "trends": [...] } or just [...]
+                if isinstance(content, list): return content
+                return content.get("trends", [])
+        except Exception as e:
+            logger.error(f"Trend fetch failed: {e}")
+            return [
+                {"topic": "DeFi 3.0", "reason": "AI Agents managing portfolios", "viral_angle": "Is your wallet smarter than you?"},
+                {"topic": "RWA Tokenization", "reason": "Real estate on-chain", "viral_angle": "Own a skyscraper for $10"},
+                {"topic": "Privacy Coins", "reason": "Regulatory crackdowns", "viral_angle": "They are banning your money"}
+            ]
+
     async def post_to_social(self, partner: Partner, platform: str, content: str, image_path: Optional[str] = None) -> Dict[str, Any]:
         """
         Autoposts to X, Telegram, or LinkedIn using partner's API keys.

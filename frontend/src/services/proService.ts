@@ -57,5 +57,15 @@ export const proService = {
             image_path
         });
         return response.data;
+    },
+
+    fixHeadline: async (headline: string): Promise<{ result: string, tokens_remaining: number }> => {
+        const response = await apiClient.post('/api/pro/tools/headline', { headline });
+        return response.data;
+    },
+
+    fetchTrends: async (): Promise<{ trends: any[], tokens_remaining: number }> => {
+        const response = await apiClient.post('/api/pro/tools/trends', {});
+        return response.data;
     }
 };

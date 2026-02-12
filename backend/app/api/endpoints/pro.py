@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
 
+from pydantic import BaseModel
 from app.models.partner import Partner, get_session
 from app.core.security import get_current_user, get_tg_user
 from app.models.schemas import (
@@ -131,3 +132,45 @@ async def publish_content(
         raise HTTPException(status_code=400, detail=result["error"])
     
     return result
+
+class HeadlineRequest(BaseModel):
+    headline: str
+
+@router.post("/tools/headline")
+async def fix_headline_api(
+    payload: HeadlineRequest,
+    partner: Partner = Depends(get_current_partner),
+    session: AsyncSession = Depends(get_session)
+):
+    if not partner.is_pro:
+        raise HTTPException(status_code=403, detail="PRO membership required")
+        
+    has_tokens = await viral_studio.check_tokens_and_reset(partner, session, min_tokens=1)
+    if not has_tokens:
+        raise HTTPException(status_code=402, detail="Insufficient tokens (1 required)")
+    
+    partner.pro_tokens -= 1
+    session.add(partner)
+    await session.commit()
+    
+    new_headline = await viral_studio.fix_headline(payload.headline)
+    return {"result": new_headline, "tokens_remaining": partner.pro_tokens}
+
+@router.post("/tools/trends")
+async def get_trends_api(
+    partner: Partner = Depends(get_current_partner),
+    session: AsyncSession = Depends(get_session)
+):
+    if not partner.is_pro:
+        raise HTTPException(status_code=403, detail="PRO membership required")
+        
+    has_tokens = await viral_studio.check_tokens_and_reset(partner, session, min_tokens=3)
+    if not has_tokens:
+        raise HTTPException(status_code=402, detail="Insufficient tokens (3 required)")
+    
+    partner.pro_tokens -= 3
+    session.add(partner)
+    await session.commit()
+    
+    trends = await viral_studio.fetch_trends()
+    return {"trends": trends, "tokens_remaining": partner.pro_tokens}

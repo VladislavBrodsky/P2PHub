@@ -80,31 +80,41 @@
                 "title": "Primitive Era",
                 "subtitle": "Traditional Cash",
                 "desc": "Physical, slow, and restricted by borders. Prone to inflation and theft.",
-                "status": "OBSOLETE"
+                "status": "OBSOLETE",
+                "back_title": "⚠️ WARNING: YOUR CASH IS DYING",
+                "back_desc": "Every second you hold paper money, inflation steals your life's work. The elites have already exited. Why are you still holding the bag? DUMP THE PAPER. ESCAPE THE SYSTEM."
             },
             "1": {
                 "title": "The Friction Gap",
                 "subtitle": "TradFi & Cards",
                 "desc": "Hidden fees and 3-5 day delays. You don't own your money.",
-                "status": "VULNERABLE"
+                "status": "VULNERABLE",
+                "back_title": "THEY PROFIT, YOU PAY",
+                "back_desc": "Hidden fees. Frozen accounts. 'Business days' delays. The banks generate billions using YOUR money while giving you crumbs. Stop being their product. RECLAIM YOUR SOVEREIGNTY."
             },
             "2": {
                 "title": "The Digital Proxy",
                 "subtitle": "Mobile Wallets",
                 "desc": "Apple/Google Pay. Convenient, but still tied to failing legacy rails.",
-                "status": "STABLE"
+                "status": "STABLE",
+                "back_title": "THE GOLDEN CAGE",
+                "back_desc": "Convenient? Yes. Free? Never. They track every purchase, build your profile, and sell your data. One policy change, and you're deplatformed. Real wealth requires REAL PRIVACY."
             },
             "3": {
                 "title": "The Financial Reset",
                 "subtitle": "Crypto & Web3",
                 "desc": "True ownership and 24/7 global liquidity. The bridge to freedom.",
-                "status": "FREEDOM"
+                "status": "FREEDOM",
+                "back_title": "THE 1% ARE HERE",
+                "back_desc": "The biggest wealth transfer in human history is happening NOW. While the masses sleep, the new crypto-elite are building generational fortunes. You are early, but the window is closing. ADAPT OR GET LEFT BEHIND."
             },
             "4": {
                 "title": "ELITE VELOCITY",
                 "subtitle": "Pintopay QR",
                 "desc": "Instant, global, P2P settlements at $1/minute velocity. The ultimate infrastructure.",
-                "status": "ELITE"
+                "status": "ELITE",
+                "back_title": "UNLIMITED VELOCITY",
+                "back_desc": "Imagine earning every time money moves. $1/minute. 24/7. No borders. No limits. This is the financial infrastructure of the future. The question isn't if it works. It is: ARE YOU IN OR OUT?"
             }
         }
     },
@@ -179,17 +189,23 @@
         "virtual": {
             "title": "Mastercard Virtual USD",
             "desc": "Pay contactless in-store or online in 180+ countries",
-            "bonus_text": "on your balance after card activation"
+            "bonus_text": "on your balance after card activation",
+            "back_title": "GHOST PROTOCOL",
+            "back_desc": "Create 1-time cards for every subscription. Netflix, Spotify, Amazon—they never get your real data. Cancel instantly. You are a ghost in the machine."
         },
         "physical": {
             "title": "Mastercard Physical",
             "desc": "Premium soft-touch PVC card with worldwide delivery",
-            "bonus_text": "Standard Shipping included"
+            "bonus_text": "Standard Shipping included",
+            "back_title": "OFF-GRID ASSET",
+            "back_desc": "Looks like a bank card. Works like a bank card. But it connects directly to your crypto liquidity. No bank account needed. Total separation of state and money."
         },
         "platinum": {
             "title": "Platinum Metal",
             "desc": "Solid metal construction with concierge service",
-            "bonus_text": "Access to premium lounges"
+            "bonus_text": "Access to premium lounges",
+            "back_title": "THE BLACK KEY",
+            "back_desc": "Access 1,200+ airport lounges. Concierge service that answers in seconds, not minutes. High limits. Zero questions. This isn't just a card; it's a diplomat's passport."
         },
         "terms": "Card Issuance Terms",
         "fees": {
@@ -654,5 +670,46 @@
         "claim_btn": "CLAIM LVL 100 FOCUS",
         "elite_tier": "DON'T MISS YOUR SPOT IN THE ELITE TIER",
         "share_text": "I'm climbing to Level 100 in Pintopay! Join my network to unlock Fanocracy benefits together! 🚀"
+    },
+    "pro_dashboard": {
+        "title_studio": "Viral Marketing Studio",
+        "title_tools": "Power Tools",
+        "title_academy": "Viral Academy",
+        "tokens_left": "{{count}} TOKENS LEFT",
+        "system_offline": "SYSTEM OFFLINE",
+        "tab_studio": "Studio",
+        "tab_tools": "Tools",
+        "tab_academy": "Academy",
+        "tab_setup": "API Setup",
+        "tools": {
+            "headline": {
+                "title": "Viral Headline Fixer",
+                "desc": "Turn boring titles into click-magnets. (1 Token)",
+                "placeholder": "e.g. How to buy Bitcoin",
+                "btn": "Rewrite Headline"
+            },
+            "trends": {
+                "title": "Trend Hunter 2026",
+                "desc": "Unlock top 3 viral narratives now. (3 Tokens)",
+                "btn": "Reveal Trends"
+            }
+        },
+        "academy": {
+            "hook_rule": {
+                "title": "The 3-Second Hook Rule",
+                "desc": "You lose 80% of viewers in 3 seconds. Here is the formula to keep them.",
+                "content": "1. Disrupt Pattern (Visual/Audio). 2. State Big Benefit. 3. Open Loop (Curiosity)."
+            },
+            "algorithm": {
+                "title": "Algorithm Hacking 2026",
+                "desc": "How the new AI feed really works.",
+                "content": "Engagement velocity > Total Likes. You need comments in the first 10 mins."
+            },
+            "psycho": {
+                "title": "Psychological Triggers",
+                "desc": "Why people click.",
+                "content": "Fear of Missing Out (FOMO), Greed (Profit), and Tribalism (Us vs Them) are the top 3 drivers."
+            }
+        }
     }
 }
