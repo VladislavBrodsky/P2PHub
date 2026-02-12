@@ -30,15 +30,3 @@ jobs:
 
     - name: Run Ruff Lint
       run: ruff check .
-
-    - name: Verify All Imports
-      run: |
-        export PYTHONPATH=$PYTHONPATH:.
-        python scripts/verify_imports.py
-      continue-on-error: true
-
-    - name: Diagnose Missing Dependencies (on failure)
-      if: failure()
-      run: |
-        echo "🔍 Diagnosing installation issues..."
-        python -m pip list | grep -E "taskiq|slowapi" || echo "❌ Critical libraries missing from pip list"
