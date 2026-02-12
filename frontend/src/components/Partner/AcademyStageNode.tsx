@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Lock, CheckCircle2, Play, Zap } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { AcademyStage } from '../../data/academyData';
+import { useTranslation } from 'react-i18next';
 
 interface AcademyStageNodeProps {
     stage: AcademyStage;
@@ -12,12 +13,40 @@ interface AcademyStageNodeProps {
 }
 
 export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, status, onClick, index }) => {
+    const { t } = useTranslation();
     const isLocked = status === 'locked';
     const isCompleted = status === 'completed';
     const isCurrent = status === 'current';
 
     // Alternating card position logic
     const isLeft = index % 2 === 0;
+
+    const getStageContent = (id: number) => {
+        if (id <= 10 || (id >= 21 && id <= 24)) {
+            return {
+                titleKey: `academy_content.stage_${id}_title`,
+                descKey: `academy_content.stage_${id}_desc`,
+                params: {}
+            };
+        }
+        if (id >= 11 && id <= 20) {
+            return {
+                titleKey: `academy_content.stage_foundation_title`,
+                descKey: `academy_content.stage_foundation_desc`,
+                params: { phase: id }
+            };
+        }
+        // Default / Elite (25+)
+        return {
+            titleKey: `academy_content.stage_elite_title`,
+            descKey: `academy_content.stage_elite_desc`,
+            params: { stage: id }
+        };
+    };
+
+    const { titleKey, descKey, params } = getStageContent(stage.id);
+    const title = t(titleKey, { ...params, defaultValue: stage.title });
+    const description = t(descKey, { ...params, defaultValue: stage.description });
 
     return (
         <motion.div
@@ -110,12 +139,12 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                 <h4 className={cn(
                     "text-[10px] font-black uppercase tracking-tight leading-tight",
                     isLocked ? "text-slate-500" : "text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors"
-                )}>{stage.title}</h4>
+                )}>{title}</h4>
 
                 <p className={cn(
                     "text-[8px] font-medium leading-[1.3] mt-1.5 opacity-80 line-clamp-2",
                     isLocked ? "text-slate-600" : "text-slate-600 dark:text-slate-300"
-                )}>{stage.description}</p>
+                )}>{description}</p>
 
                 {stage.duration && !isLocked && (
                     <div className={cn(

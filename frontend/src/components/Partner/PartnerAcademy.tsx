@@ -2,9 +2,11 @@ import { AcademyCareerStair } from './AcademyCareerStair';
 import { Sparkles, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useUI } from '../../context/UIContext';
+import { useTranslation, Trans } from 'react-i18next';
 
 export const PartnerAcademy = () => {
     const { isFooterVisible } = useUI();
+    const { t } = useTranslation();
 
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700 pt-4">
@@ -20,33 +22,35 @@ export const PartnerAcademy = () => {
                     <div className="relative z-20 flex flex-col items-center text-center space-y-5">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/10 backdrop-blur-md border border-slate-900/10 text-[9px] font-black uppercase tracking-[0.2em] text-blue-700">
                             <Sparkles className="w-3.5 h-3.5" />
-                            Elite Growth Academy
+                            {t('academy.hero_badge')}
                         </div>
 
                         <div className="space-y-1.5">
                             <h2 className="text-2xl font-black leading-none tracking-tight text-slate-900 uppercase italic">
-                                Career <span className="text-blue-600 drop-shadow-[0_2px_10px_rgba(37,99,235,0.2)]">Staircase</span>
+                                {t('academy.hero_title_1')} <span className="text-blue-600 drop-shadow-[0_2px_10px_rgba(37,99,235,0.2)]">{t('academy.hero_title_2')}</span>
                             </h2>
                             <p className="text-slate-700 text-[10px] font-bold leading-relaxed max-w-[300px] mx-auto opacity-90 uppercase tracking-wide">
-                                Master the 100-Stage roadmap to <br />
-                                <span className="text-blue-700 font-black">$1 Per Minute</span> with AI Automation.
+                                <Trans i18nKey="academy.hero_desc">
+                                    Master the 100-Stage roadmap to <br />
+                                    <span className="text-blue-700 font-black">$1 Per Minute</span> with AI Automation.
+                                </Trans>
                             </p>
                         </div>
 
                         <div className="flex items-center gap-5 pt-1.5">
                             <div className="flex flex-col items-center">
                                 <span className="text-[12px] font-black text-slate-900">100</span>
-                                <span className="text-[6.5px] font-black text-slate-600 uppercase tracking-widest">Levels</span>
+                                <span className="text-[6.5px] font-black text-slate-600 uppercase tracking-widest">{t('academy.stat_levels')}</span>
                             </div>
                             <div className="w-px h-5 bg-slate-900/10" />
                             <div className="flex flex-col items-center">
                                 <span className="text-[12px] font-black text-blue-600">20+</span>
-                                <span className="text-[6.5px] font-black text-slate-600 uppercase tracking-widest">Free</span>
+                                <span className="text-[6.5px] font-black text-slate-600 uppercase tracking-widest">{t('academy.stat_free')}</span>
                             </div>
                             <div className="w-px h-5 bg-slate-900/10" />
                             <div className="flex flex-col items-center">
                                 <span className="text-[12px] font-black text-orange-600">PRO</span>
-                                <span className="text-[6.5px] font-black text-slate-600 uppercase tracking-widest">Elite</span>
+                                <span className="text-[6.5px] font-black text-slate-600 uppercase tracking-widest">{t('academy.stat_elite')}</span>
                             </div>
                         </div>
                     </div>
@@ -72,14 +76,14 @@ export const PartnerAcademy = () => {
                                 <TrendingUp className="w-5 h-5" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-[7px] font-black text-blue-500 dark:text-blue-400 uppercase tracking-[0.2em] leading-none">Global Rank</span>
-                                <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase leading-none mt-1 group-hover:text-blue-600 transition-colors">Growth Hacker</span>
+                                <span className="text-[7px] font-black text-blue-500 dark:text-blue-400 uppercase tracking-[0.2em] leading-none">{t('academy.global_ranking')}</span>
+                                <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase leading-none mt-1 group-hover:text-blue-600 transition-colors">{t('academy.footer_rank')}</span>
                             </div>
                         </div>
 
                         <div className="px-3 py-2 rounded-xl bg-orange-500/10 border border-orange-500/30 text-orange-400 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-[inset_0_1px_10px_rgba(249,115,22,0.1)]">
                             <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-                            Active
+                            {t('academy.footer_status')}
                         </div>
                     </motion.div>
                 </div>

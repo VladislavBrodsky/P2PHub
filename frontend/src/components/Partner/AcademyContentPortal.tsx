@@ -19,6 +19,29 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
     const { user } = useUser();
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
 
+    const getStageContent = (id: number) => {
+        if (id <= 10 || (id >= 21 && id <= 24)) {
+            return {
+                titleKey: `academy_content.stage_${id}_title`,
+                params: {}
+            };
+        }
+        if (id >= 11 && id <= 20) {
+            return {
+                titleKey: `academy_content.stage_foundation_title`,
+                params: { phase: id }
+            };
+        }
+        return {
+            titleKey: `academy_content.stage_elite_title`,
+            params: { stage: id }
+        };
+    };
+
+    const { titleKey, params } = getStageContent(stage.id);
+    const title = t(titleKey, { ...params, defaultValue: stage.title });
+    const category = t(`academy_categories.${stage.category}`, stage.category);
+
     // Prevent body scroll and hide global UI elements when portal is open
     React.useEffect(() => {
         setHeaderVisible(false);
@@ -131,11 +154,11 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                             {t('academy.mastery', { stage: stage.id })}
                                         </div>
                                         <div className="px-3 py-1 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[9px] font-black text-slate-500 uppercase tracking-widest">
-                                            {stage.category}
+                                            {category}
                                         </div>
                                     </div>
                                     <h2 className="text-3xl font-black text-slate-900 dark:text-white leading-[0.95] tracking-tight">
-                                        {stage.title}
+                                        {title}
                                     </h2>
                                 </div>
 
