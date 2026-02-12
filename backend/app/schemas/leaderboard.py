@@ -11,3 +11,4 @@ class LeaderboardPartner(BaseModel):
     photo_file_id: Optional[str] = None
     xp: float
     level: int
+    referral_count: int = 0
