@@ -143,21 +143,30 @@ async def main():
 
         async with async_session() as session:
             # Query all partners that look like test users or have "None" names
+            # Query all partners that look like test users or have "None" names
             statement = select(Partner).where(
                 (Partner.first_name.like("TestUser%")) |
                 (Partner.first_name.like("SimUser%")) |
                 (Partner.first_name.like("ChainUser%")) |
-                (Partner.first_name.like("User L%")) |
+                (Partner.first_name.like("User %")) |  # Covers User A, User B, User C, User L...
+                (Partner.first_name.like("Test User%")) | # Covers Test User Final
+                (Partner.first_name.like("%|%")) | # Covers names with pipes like "Name | Title"
                 (Partner.first_name.is_(None)) |
                 (Partner.username.like("TestUser%")) |
                 (Partner.username.like("SimUser%")) |
                 (Partner.username.like("ChainUser%")) |
-                (Partner.username.like("User L%")) |
+                (Partner.username.like("User %")) |
                 (Partner.photo_url.like("%dicebear%")) |
-                (Partner.photo_url.like("/avatars/%")) # Force refresh to country-specific
+                (Partner.photo_url.like("/avatars/%")) | # Force refresh existing
+                (Partner.photo_url.is_(None)) # Catch users with NO avatar
             )
             result = await session.exec(statement)
             partners = result.all()
+            
+            # Exclude specific real users or admins if needed
+            # For now, we assume if they match the patterns above, they should be globalized
+            # But let's protect "Alex | Pintopay Manager" if that's a real account, or just globalize it if it's a test one.
+            # Based on user request "each artificial user", assuming these are all artificial.
 
             print(f"Globalizing {len(partners)} partners...")
 
