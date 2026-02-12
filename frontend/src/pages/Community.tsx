@@ -53,7 +53,7 @@ export default function CommunityPage() {
                     >
                         <button
                             onClick={() => { selection(); setIsBriefingOpen(true); }}
-                            className="p-1.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl text-slate-600 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-all active:scale-95 shadow-sm group"
+                            className="p-1.5 rounded-2xl border border-slate-200 dark:border-white/10 backdrop-blur-xl text-slate-600 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-all active:scale-95 shadow-sm group"
                         >
                             <Info className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                         </button>

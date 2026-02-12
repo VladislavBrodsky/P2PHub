@@ -19,11 +19,12 @@ export const NotificationOverlay = () => {
         <AnimatePresence>
             {notification && (
                 <motion.div
+                    key={`${notification.title}-${notification.message}`}
                     initial={{ opacity: 0, y: -50, scale: 0.9 }}
                     animate={{ opacity: 1, y: 20, scale: 1 }}
                     exit={{ opacity: 0, y: -20, scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className="fixed top-safe-top pt-12 left-0 right-0 z-9999 flex justify-center pointer-events-none px-4"
+                    className="fixed top-0 left-0 right-0 z-[9999] flex justify-center pointer-events-none px-4 pt-[calc(env(safe-area-inset-top,24px)+24px)]"
                 >
                     <div className="glass-panel-premium rounded-full px-4 py-3 shadow-xl flex items-center gap-3 max-w-sm w-full pointer-events-auto backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/50 dark:border-slate-700/50">
                         {notification.icon && (

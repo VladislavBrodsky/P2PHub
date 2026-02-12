@@ -1,6 +1,7 @@
 // #comment: Custom persistent caching service using native IndexedDB.
 // This allows the app to store high-res assets (avatars, icons) permanently in the browser after the first fetch,
 // significantly improving perceived load times and responsiveness on subsequent visits by bypassing the network.
+// Strategy: Cache-First. We always check the local IndexedDB before making a network request.
 const DB_NAME = 'p2phub-cache-db';
 const STORE_NAME = 'image-cache';
 const CACHE_VERSION = 1;
@@ -95,6 +96,23 @@ export class ImageCacheService {
         } catch (e) {
             console.warn(`[Cache] Fetch failed for ${url}:`, e);
             return url;
+        }
+    }
+    // #comment: Added clear method to allow for manual cache invalidation or cleanup
+    // useful when user logs out or during version migrations.
+    static async clear(): Promise<void> {
+        try {
+            const db = await this.init();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(STORE_NAME, 'readwrite');
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.clear();
+
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        } catch (e) {
+            console.warn('[Cache] Clear failed:', e);
         }
     }
 }
