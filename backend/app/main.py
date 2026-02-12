@@ -25,9 +25,37 @@ async def lifespan(app: FastAPI):
     # #comment: Warmup already has an internal Redis lock, so it's safe to call from all 4 workers.
     # Only one will succeed, the others will skip.
     asyncio.create_task(warmup_redis())
+    
+    # #comment: One-time restoration task for users affected by globalization script
+    # This will run once on startup, protected by leader election
+    async def restore_affected_users():
+        try:
+            from app.services.redis_service import redis_service
+            lock_key = "lock:restore_users_from_telegram"
+            # Check if already done
+            done_key = "restore:users_completed"
+            if await redis_service.client.get(done_key):
+                print("ℹ️ User restoration already completed. Skipping...")
+                return
+            
+            is_leader = await redis_service.client.set(lock_key, "1", ex=300, nx=True)
+            if is_leader:
+                print("🔧 Leader Worker: Running user restoration from Telegram...")
+                from scripts.restore_names_from_telegram import restore_names_from_telegram
+                restored_count = await restore_names_from_telegram()
+                # Mark as done so it doesn't run again
+                await redis_service.client.set(done_key, "1", ex=86400 * 7)  # 7 days
+                print(f"✅ User restoration complete: {restored_count} users restored")
+            else:
+                print("ℹ️ Another worker is handling user restoration. Skipping...")
+        except Exception as e:
+            print(f"⚠️ User restoration failed: {e}")
+    
+    asyncio.create_task(restore_affected_users())
 
     # #comment: Migrated Subscription and Photo Sync tasks to TaskIQ Scheduler.
     # We no longer run infinite loops here to save worker memory and prevent redundant DB load.
+
 
 
     print("✅ Webhook registration check starting...")
