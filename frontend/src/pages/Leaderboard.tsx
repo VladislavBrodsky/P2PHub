@@ -159,13 +159,6 @@ export default function LeaderboardPage() {
                                     <div className="text-left">
                                         <p className="text-xs font-black text-(--color-text-primary) line-clamp-1 leading-tight">{user.first_name || user.username}</p>
                                         <div className="flex items-center gap-1.5 flex-wrap">
-                                            <div className="flex items-center gap-1">
-                                                <span className={`text-[9px] font-black uppercase tracking-widest ${index < 3 ? 'text-amber-600 dark:text-amber-400' : 'text-(--color-text-secondary)'
-                                                    }`}>
-                                                    {t(`leaderboard.levels.${getLeague(user.level)}`)}
-                                                </span>
-                                            </div>
-                                            <div className="h-0.5 w-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
                                             <div className="flex items-center gap-1 text-[9px] font-bold text-(--color-text-secondary)">
                                                 <span>LVL {user.level}</span>
                                                 <div className="h-0.5 w-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
