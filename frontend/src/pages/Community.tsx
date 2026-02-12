@@ -37,24 +37,12 @@ export default function CommunityPage() {
 
             {/* Premium Header with Briefing Trigger - Sticky with Glassmorphism */}
             <div className="sticky top-0 z-50 flex items-center justify-center py-4 pb-6 px-1 bg-(--color-bg-deep)/80 backdrop-blur-xl border-b border-(--color-border-glass) -mx-4 mb-4">
-                <div className="flex flex-col items-center">
-                    <h1 className="text-base font-black text-slate-900 dark:text-white tracking-tight leading-none uppercase">
-                        {t('menu.community')}
-                    </h1>
-                    <div className="flex items-center gap-1 mt-0.5">
-                        <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Network Live</span>
-                    </div>
-                </div>
-
-                <div className="absolute right-5 flex items-center gap-2">
-                    <button
-                        onClick={() => { selection(); setIsBriefingOpen(true); }}
-                        className="p-1.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl text-slate-600 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-all active:scale-95 shadow-sm group"
-                    >
-                        <Info className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                    </button>
-                </div>
+                <button
+                    onClick={() => { selection(); setIsBriefingOpen(true); }}
+                    className="p-1.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl text-slate-600 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-all active:scale-95 shadow-sm group"
+                >
+                    <Info className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                </button>
             </div>
 
             {/* Top Navigation / Switcher */}

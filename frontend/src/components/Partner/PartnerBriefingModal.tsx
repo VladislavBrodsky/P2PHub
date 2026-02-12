@@ -67,84 +67,107 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
     ];
 
     return (
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-3">
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6">
             {/* Backdrop */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="absolute inset-0 bg-slate-950/80 backdrop-blur-md"
+                className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"
             />
 
             {/* Modal */}
             <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[75vh]"
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                className="relative w-full max-w-lg bg-slate-50 dark:bg-slate-900 rounded-[2rem] border border-white/20 shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
             >
                 {/* Header */}
-                <div className="p-3 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-white dark:bg-slate-900 backdrop-blur-xl shrink-0">
-                    <div className="flex items-center gap-2">
-                        <div className="p-1 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                            <BookOpen className="w-3.5 h-3.5" />
+                <div className="relative p-5 pb-6 bg-white dark:bg-slate-900 z-10 shrink-0">
+                    <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 ring-1 ring-blue-500/20">
+                                <BookOpen className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h2 className="text-lg font-black tracking-tight text-slate-900 dark:text-white uppercase leading-none">
+                                    {t('referral.brief.title')}
+                                </h2>
+                                <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-1">
+                                    Official Partner Guide
+                                </p>
+                            </div>
                         </div>
-                        <h2 className="text-base font-black tracking-tight text-slate-900 dark:text-white uppercase">
-                            {t('referral.brief.title')}
-                        </h2>
+                        <button
+                            onClick={onClose}
+                            className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 transition-colors active:scale-95"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
                     </div>
-                    <button
-                        onClick={onClose}
-                        className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 transition-colors"
-                    >
-                        <X className="w-5 h-5" />
-                    </button>
                 </div>
 
                 {/* Content */}
-                <div className="overflow-y-auto p-3 pb-20 space-y-4 scrollbar-hide">
-                    {sections.map((section) => {
+                <div className="overflow-y-auto p-5 space-y-4 scrollbar-hide bg-slate-50/50 dark:bg-black/20">
+                    {sections.map((section, index) => {
                         const Icon = section.icon;
+                        const isRed = section.color === 'red';
                         const colorClass =
-                            section.color === 'blue' ? 'text-blue-500 bg-blue-500/10' :
-                                section.color === 'purple' ? 'text-purple-500 bg-purple-500/10' :
-                                    section.color === 'red' ? 'text-red-500 bg-red-500/10' :
-                                        'text-emerald-500 bg-emerald-500/10';
+                            section.color === 'blue' ? 'text-blue-600 dark:text-blue-400 bg-blue-500/10 ring-blue-500/20' :
+                                section.color === 'purple' ? 'text-purple-600 dark:text-purple-400 bg-purple-500/10 ring-purple-500/20' :
+                                    section.color === 'red' ? 'text-red-600 dark:text-red-400 bg-red-500/10 ring-red-500/20' :
+                                        'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 ring-emerald-500/20';
 
                         return (
-                            <div key={section.id} className="space-y-2">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <div className={`p-1 rounded-lg ${colorClass}`}>
-                                            <Icon className="w-3.5 h-3.5" />
+                            <motion.div
+                                key={section.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                className={`group relative p-4 rounded-2xl border ${isRed
+                                    ? 'bg-red-50/50 dark:bg-red-900/10 border-red-200/50 dark:border-red-500/20'
+                                    : 'bg-white dark:bg-white/5 border-slate-200/60 dark:border-white/5'
+                                    } shadow-sm hover:shadow-md transition-all duration-300`}
+                            >
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`p-1.5 rounded-lg ring-1 ${colorClass}`}>
+                                            <Icon className="w-4 h-4" />
                                         </div>
-                                        <h3 className="text-xs font-black text-slate-900 dark:text-white tracking-tight uppercase">
+                                        <h3 className={`text-sm font-black tracking-tight uppercase ${isRed ? 'text-red-700 dark:text-red-400' : 'text-slate-900 dark:text-white'
+                                            }`}>
                                             {section.title}
                                         </h3>
                                     </div>
                                     {section.badge && (
-                                        <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md bg-red-500/10 text-red-500 border border-red-500/20">
-                                            {section.badge}
+                                        <span className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-red-500/10 border border-red-500/20">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                                            <span className="text-[9px] font-black uppercase tracking-wider text-red-600 dark:text-red-400">
+                                                {section.badge}
+                                            </span>
                                         </span>
                                     )}
                                 </div>
 
-                                <div className="pl-7">
+                                <div className="pl-[3.25rem]">
                                     {section.content && (
-                                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                                        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                                             {section.content}
                                         </p>
                                     )}
 
                                     {section.steps && (
-                                        <div className="space-y-2">
+                                        <div className="space-y-3 relative">
+                                            <div className="absolute left-[11px] top-2 bottom-2 w-px bg-purple-200 dark:bg-purple-500/20" />
                                             {section.steps.map((step, i) => (
-                                                <div key={i} className="flex items-start gap-2.5">
-                                                    <div className="mt-0.5 flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-purple-500/20 text-[9px] font-black text-purple-600 dark:text-purple-400">
+                                                <div key={i} className="relative flex items-start gap-4">
+                                                    <div className="relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-900 ring-2 ring-purple-500/20 text-[10px] font-black text-purple-600 dark:text-purple-400 shadow-sm">
                                                         {i + 1}
                                                     </div>
-                                                    <p className="text-[12px] text-slate-600 dark:text-slate-400 font-medium leading-tight">
+                                                    <p className="text-sm text-slate-700 dark:text-slate-300 font-medium leading-normal pt-0.5">
                                                         {step}
                                                     </p>
                                                 </div>
@@ -153,36 +176,36 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                                     )}
 
                                     {section.points && (
-                                        <div className="space-y-2.5">
+                                        <div className="space-y-3">
                                             {section.points.map((point, i) => (
-                                                <div key={i} className="space-y-0.5">
-                                                    <div className="flex items-center gap-1.5">
-                                                        <div className="w-1 h-1 rounded-full bg-red-500/50" />
-                                                        <h4 className="text-[9px] font-black uppercase tracking-widest text-slate-900 dark:text-white/80">
+                                                <div key={i} className="flex gap-3 p-3 rounded-xl bg-white/50 dark:bg-black/20 border border-red-100 dark:border-red-500/10">
+                                                    <div className="mt-1.5 w-1.5 h-1.5 shrink-0 rounded-full bg-red-500" />
+                                                    <div className="space-y-0.5">
+                                                        <h4 className="text-[11px] font-black uppercase tracking-wider text-slate-900 dark:text-white/90">
                                                             {point.title}
                                                         </h4>
+                                                        <p className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                                                            {point.desc}
+                                                        </p>
                                                     </div>
-                                                    <p className="text-[11px] text-slate-600 dark:text-slate-400 font-medium leading-snug">
-                                                        {point.desc}
-                                                    </p>
                                                 </div>
                                             ))}
                                         </div>
                                     )}
                                 </div>
-                            </div>
+                            </motion.div>
                         );
                     })}
                 </div>
 
                 {/* Footer */}
-                <div className="p-3 border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/2 backdrop-blur-xl shrink-0">
+                <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-white/5 shrink-0 relative z-20 shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.1)]">
                     <Button
                         onClick={onClose}
-                        className="w-full h-11 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-blue-50 rounded-xl font-black text-xs shadow-xl flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+                        className="w-full h-12 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-slate-200 rounded-xl font-black text-sm shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group"
                     >
-                        <CheckCircle2 className="w-4 h-4" />
-                        {t('referral.brief.cta')}
+                        <CheckCircle2 className="w-5 h-5 transition-transform group-hover:scale-110" />
+                        <span>{t('referral.brief.cta')}</span>
                     </Button>
                 </div>
             </motion.div>
