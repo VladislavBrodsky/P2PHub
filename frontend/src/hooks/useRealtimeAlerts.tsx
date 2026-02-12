@@ -36,31 +36,80 @@ export const useRealtimeAlerts = () => {
                         }
                     }
 
-                    // Avoid notifying about same event twice if possible (simple deduplication could be added)
+                    // #comment Viral FOMO message variants - randomly select for variety and engagement
                     let message = '';
                     let title = 'Network Activity';
                     let icon = <Zap size={18} className="text-amber-500" />;
 
+                    const randomVariant = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+
                     switch (event.type) {
                         case 'REFERRAL_L1':
                         case 'REFERRAL_DEEP':
-                            message = `${event.first_name} just joined the partner network!`;
-                            title = 'New Partner';
+                            const referralMessages = [
+                                `${event.first_name} just joined the partner network!`,
+                                `🔥 ${event.first_name} is building their empire!`,
+                                `💰 ${event.first_name} just unlocked passive income!`,
+                                `⚡ ${event.first_name} joined the movement!`,
+                                `🚀 ${event.first_name} is getting ahead - are you?`,
+                                `💎 ${event.first_name} claimed their spot!`,
+                                `${event.first_name} just started earning - don't miss out!`
+                            ];
+                            const referralTitles = [
+                                'New Partner 🎉',
+                                'Network Growing 📈',
+                                'Someone Just Joined 🔥',
+                                'Movement Alert 🚨',
+                                'Partner Joined ⚡'
+                            ];
+                            message = randomVariant(referralMessages);
+                            title = randomVariant(referralTitles);
                             icon = <Users size={18} className="text-blue-500" />;
                             break;
                         case 'TASK':
-                            message = `${event.first_name} completed a reward task!`;
-                            title = 'Task Glory';
+                            const taskMessages = [
+                                `${event.first_name} just claimed rewards!`,
+                                `⚡ ${event.first_name} is crushing tasks!`,
+                                `💰 ${event.first_name} earned big - your turn!`,
+                                `🎯 ${event.first_name} completed a mission!`,
+                                `🔥 ${event.first_name} just got paid!`,
+                                `${event.first_name} is stacking rewards!`
+                            ];
+                            const taskTitles = [
+                                'Reward Claimed 💰',
+                                'Task Crushed 🎯',
+                                'Mission Complete ⚡',
+                                'Someone Earned 🔥',
+                                'Rewards Unlocked 💎'
+                            ];
+                            message = randomVariant(taskMessages);
+                            title = randomVariant(taskTitles);
                             icon = <Trophy size={18} className="text-emerald-500" />;
                             break;
                         case 'LEVEL_UP':
-                            message = `${event.first_name} reached a new Level!`;
-                            title = 'Level Up';
+                            const levelMessages = [
+                                `🚀 ${event.first_name} just leveled up!`,
+                                `📈 ${event.first_name} is climbing fast - keep up!`,
+                                `⚡ ${event.first_name} reached a new milestone!`,
+                                `🔥 ${event.first_name} is on fire!`,
+                                `💪 ${event.first_name} leveled up - don't fall behind!`,
+                                `${event.first_name} unlocked new rewards!`
+                            ];
+                            const levelTitles = [
+                                'Level Up 🚀',
+                                'New Milestone 📈',
+                                'Rank Advanced ⚡',
+                                'Progress Alert 🔥',
+                                'Achievement Unlocked 🏆'
+                            ];
+                            message = randomVariant(levelMessages);
+                            title = randomVariant(levelTitles);
                             icon = <Zap size={18} className="text-yellow-500" />;
                             break;
                         default:
-                            // Fallback generic message
-                            message = `${event.first_name} is active in the network`;
+                            // Fallback generic message with FOMO
+                            message = `🌟 ${event.first_name} is actively earning!`;
+                            title = 'Network Active 🔥';
                     }
 
                     showNotification({
