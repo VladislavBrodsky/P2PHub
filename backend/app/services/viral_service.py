@@ -141,11 +141,6 @@ class ViralMarketingStudio:
             image_url = None
             if self.genai_client:
                 try:
-                    # Use Imagen 3 for premium quality (method is likely generate_images)
-            # 2. Generate Image via Gemini (Imagen 3) - Completely Fault Tolerant
-            image_url = None
-            if self.genai_client:
-                try:
                     # Dynamically check for available methods to avoid crashing on version mismatches
                     method = None
                     if hasattr(self.genai_client.models, 'generate_images'): # Standard new SDK
@@ -164,7 +159,7 @@ class ViralMarketingStudio:
                             )
                         )
                         
-                        # Handle response structure (it matches the method used)
+                        # Handle response structure
                         if getattr(img_response, 'generated_images', None):
                             image = img_response.generated_images[0]
                             filename = f"viral_{partner.id}_{secrets.token_hex(4)}.png"
@@ -173,7 +168,7 @@ class ViralMarketingStudio:
                             image.image.save(save_path)
                             image_url = f"/images/generated/{filename}"
                     else:
-                        logger.warning("⚠️ Google GenAI Client found but no generate_image(s) method available on models.")
+                        logger.warning("⚠️ Google GenAI Client found but no known content generation method available.")
 
                 except Exception as img_err:
                     # Log error but DO NOT crash the request. Return text only.
