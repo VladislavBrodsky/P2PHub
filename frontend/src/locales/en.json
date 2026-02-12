@@ -81,40 +81,40 @@
                 "subtitle": "Traditional Cash",
                 "desc": "Physical, slow, and restricted by borders. Prone to inflation and theft.",
                 "status": "OBSOLETE",
-                "back_title": "⚠️ WARNING: YOUR CASH IS DYING",
-                "back_desc": "Every second you hold paper money, inflation steals your life's work. The elites have already exited. Why are you still holding the bag? DUMP THE PAPER. ESCAPE THE SYSTEM."
+                "back_title": "THE LIMITATIONS OF PHYSICAL CURRENCY",
+                "back_desc": "Physical cash has served humanity for centuries, but in a digital-first world, it faces challenges like inflation and geographical restrictions. The global economy is moving towards more efficient, digital forms of value exchange."
             },
             "1": {
                 "title": "The Friction Gap",
                 "subtitle": "TradFi & Cards",
                 "desc": "Hidden fees and 3-5 day delays. You don't own your money.",
                 "status": "VULNERABLE",
-                "back_title": "THEY PROFIT, YOU PAY",
-                "back_desc": "Hidden fees. Frozen accounts. 'Business days' delays. The banks generate billions using YOUR money while giving you crumbs. Stop being their product. RECLAIM YOUR SOVEREIGNTY."
+                "back_title": "LEGACY BANKING INFRASTRUCTURE",
+                "back_desc": "Traditional banking systems, built decades ago, often involve processing delays and intermediaries. Modern financial solutions aim to reduce friction, enabling faster and more transparent transactions for everyone."
             },
             "2": {
                 "title": "The Digital Proxy",
                 "subtitle": "Mobile Wallets",
                 "desc": "Apple/Google Pay. Convenient, but still tied to failing legacy rails.",
                 "status": "STABLE",
-                "back_title": "THE GOLDEN CAGE",
-                "back_desc": "Convenient? Yes. Free? Never. They track every purchase, build your profile, and sell your data. One policy change, and you're deplatformed. Real wealth requires REAL PRIVACY."
+                "back_title": "THE RISE OF DIGITAL WALLETS",
+                "back_desc": "Mobile payment solutions popularized digital transactions, offering convenience over cash. However, they typically rely on traditional banking rails. The next step is a truly decentralized financial layer."
             },
             "3": {
                 "title": "The Financial Reset",
                 "subtitle": "Crypto & Web3",
                 "desc": "True ownership and 24/7 global liquidity. The bridge to freedom.",
                 "status": "FREEDOM",
-                "back_title": "THE 1% ARE HERE",
-                "back_desc": "The biggest wealth transfer in human history is happening NOW. While the masses sleep, the new crypto-elite are building generational fortunes. You are early, but the window is closing. ADAPT OR GET LEFT BEHIND."
+                "back_title": "THE BLOCKCHAIN REVOLUTION",
+                "back_desc": "Blockchain technology introduces true digital ownership and 24/7 global liquidity. It represents a fundamental shift in how value is stored and transferred, independent of centralized intermediaries."
             },
             "4": {
                 "title": "ELITE VELOCITY",
                 "subtitle": "Pintopay QR",
                 "desc": "Instant, global, P2P settlements at $1/minute velocity. The ultimate infrastructure.",
                 "status": "ELITE",
-                "back_title": "UNLIMITED VELOCITY",
-                "back_desc": "Imagine earning every time money moves. $1/minute. 24/7. No borders. No limits. This is the financial infrastructure of the future. The question isn't if it works. It is: ARE YOU IN OR OUT?"
+                "back_title": "GLOBAL P2P NETWORK",
+                "back_desc": "Pintopay leverages the power of decentralized networks to facilitate instant, borderless settlements. By participating in this ecosystem, partners contribute to a faster, more inclusive global financial fabric."
             }
         }
     },

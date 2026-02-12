@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { CreditCard, Smartphone, Zap, Globe, Coins, QrCode, RotateCcw, AlertTriangle, Lock, TrendingUp, Infinity as IconInfinity } from 'lucide-react';
+import { CreditCard, Smartphone, Zap, Globe, Coins, QrCode, RotateCcw, AlertTriangle, Lock, TrendingUp, Infinity as IconInfinity, History, Landmark, Wallet, ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const shiftSteps = [
@@ -84,6 +84,17 @@ export const BentoGrid = () => {
 
         if (closestIndex !== activeIndex) {
             setActiveIndex(closestIndex);
+        }
+    };
+
+    const getBackIcon = (index: number) => {
+        switch (index) {
+            case 0: return <History className="w-8 h-8 text-amber-500" />;
+            case 1: return <Landmark className="w-8 h-8 text-blue-500" />;
+            case 2: return <Wallet className="w-8 h-8 text-purple-500" />;
+            case 3: return <ShieldCheck className="w-8 h-8 text-emerald-500" />;
+            case 4: return <Globe className="w-8 h-8 text-blue-400" />;
+            default: return <TrendingUp className="w-8 h-8 text-emerald-500" />;
         }
     };
 
@@ -197,15 +208,9 @@ export const BentoGrid = () => {
                                     <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
 
                                     <div className="relative z-10 flex flex-col items-center justify-center h-full space-y-4">
-                                        {/* Alert Icon based on step */}
+                                        {/* Icon based on step */}
                                         <div className="p-4 rounded-full bg-(--color-bg-app)/50 dark:bg-black/40 backdrop-blur-xl border border-(--color-border-glass) shadow-lg mb-2">
-                                            {index < 2 ? (
-                                                <AlertTriangle className="w-8 h-8 text-red-500 animate-pulse" />
-                                            ) : index === 2 ? (
-                                                <Lock className="w-8 h-8 text-amber-500" />
-                                            ) : (
-                                                <TrendingUp className="w-8 h-8 text-emerald-500" />
-                                            )}
+                                            {getBackIcon(index)}
                                         </div>
 
                                         <div className="space-y-2">
