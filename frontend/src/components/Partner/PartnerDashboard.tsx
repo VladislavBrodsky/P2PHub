@@ -126,33 +126,32 @@ export const PartnerDashboard = () => {
                     {/* Partner Briefing Card - Moved from CommunityPage */}
                     <div
                         onClick={() => { selection(); setIsBriefingOpen(true); }}
-                        className="group relative overflow-hidden rounded-[1.25rem] bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 p-2.5 px-4 shadow-sm backdrop-blur-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all active:scale-[0.98]"
+                        className="group relative overflow-hidden rounded-[1.25rem] bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 p-2 px-3 shadow-sm backdrop-blur-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all active:scale-[0.98]"
                     >
                         <div className="absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-transparent via-blue-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                        <div className="flex items-center justify-between gap-4">
-                            <div className="flex items-center gap-3">
-                                <div className="w-9 h-9 rounded-full bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 group-hover:scale-110 transition-transform">
-                                    <BookOpen className="w-4 h-4" />
+                        <div className="flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-2.5">
+                                <div className="w-8 h-8 rounded-full bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 group-hover:scale-110 transition-transform shadow-inner">
+                                    <BookOpen className="w-3.5 h-3.5" />
                                 </div>
                                 <div className="flex flex-col min-w-0">
-                                    <h3 className="text-sm font-black uppercase tracking-[0.08em] text-slate-900 dark:text-white leading-tight truncate">
+                                    <h3 className="text-xs font-black uppercase tracking-[0.08em] text-slate-900 dark:text-white leading-tight truncate">
                                         {t('referral.brief.title')}
                                     </h3>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 opacity-60 leading-none mt-1">
+                                    <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 opacity-60 leading-none mt-0.5">
                                         {t('referral.brief.guide')}
                                     </span>
                                 </div>
                             </div>
 
-                            {/* #comment: Compact action trigger - split text and added pulse indicator for a "live" feel without taking vertical space */}
                             <div className="flex items-center gap-2 shrink-0 pr-1">
-                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.3)]" />
-                                <div className="flex flex-col">
-                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 italic leading-none group-hover:text-blue-500 transition-colors">
+                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+                                <div className="flex flex-col text-right">
+                                    <span className="text-[8px] font-black uppercase tracking-widest text-slate-400 italic leading-none group-hover:text-blue-500 transition-colors">
                                         {t('referral.brief.read').split(' ')[0]}
                                     </span>
-                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 italic leading-none mt-0.5 group-hover:text-blue-500 transition-colors">
+                                    <span className="text-[8px] font-black uppercase tracking-widest text-slate-400 italic leading-none mt-0.5 group-hover:text-blue-500 transition-colors">
                                         {t('referral.brief.read').split(' ')[1]}
                                     </span>
                                 </div>
