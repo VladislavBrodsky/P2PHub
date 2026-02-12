@@ -128,20 +128,42 @@ class ViralMarketingStudio:
             content = json.loads(response.choices[0].message.content)
             image_prompt = content.get("image_description")
             
+            # Ensure hashtags is a list
+            hashtags_raw = content.get("hashtags", [])
+            if isinstance(hashtags_raw, str):
+                hashtags = [tag.strip() for tag in hashtags_raw.split(',')]
+            elif isinstance(hashtags_raw, list):
+                hashtags = hashtags_raw
+            else:
+                hashtags = []
+
             # 2. Generate Image via Gemini (Imagen 3)
             image_url = None
             if self.genai_client:
                 try:
-                    # Use Imagen 3 for premium quality
-                    img_response = self.genai_client.models.generate_image(
-                        model='imagen-3.0-generate-001',
-                        prompt=image_prompt,
-                        config=genai_types.GenerateImageConfig(
-                            number_of_images=1,
-                            include_rai_reasoning=True,
-                            output_mime_type='image/png'
+                    # Use Imagen 3 for premium quality (method is likely generate_images)
+                    if not hasattr(self.genai_client.models, 'generate_image'):
+                         # Fallback or correction logic if attribute is missing
+                         # Try generate_images (plural) if generate_image (singular) failed in logs
+                         img_response = self.genai_client.models.generate_images(
+                            model='imagen-3.0-generate-001',
+                            prompt=image_prompt,
+                            config=genai_types.GenerateImageConfig(
+                                number_of_images=1,
+                                include_rai_reasoning=True,
+                                output_mime_type='image/png'
+                            )
                         )
-                    )
+                    else:
+                        img_response = self.genai_client.models.generate_image(
+                            model='imagen-3.0-generate-001',
+                            prompt=image_prompt,
+                            config=genai_types.GenerateImageConfig(
+                                number_of_images=1,
+                                include_rai_reasoning=True,
+                                output_mime_type='image/png'
+                            )
+                        )
                     
                     if img_response.generated_images:
                         image = img_response.generated_images[0]
@@ -160,7 +182,7 @@ class ViralMarketingStudio:
             return {
                 "text": content.get("body"),
                 "title": content.get("title"),
-                "hashtags": content.get("hashtags"),
+                "hashtags": hashtags,
                 "image_prompt": image_prompt,
                 "image_url": image_url,
                 "status": "success"

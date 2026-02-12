@@ -27,10 +27,8 @@ async def cmd_start(message: types.Message):
     logging.info(f"📥 Received /start command from user {message.from_user.id} (@{message.from_user.username})")
 
     from app.core.keyboards import get_main_menu_keyboard
-    from app.services.partner_service import (
-        create_partner,
-        process_referral_notifications,
-    )
+    from app.services.partner_service import create_partner
+    from app.services.referral_service import process_referral_notifications
 
     # Extract referral code from /start link if any
     referrer_code = None
