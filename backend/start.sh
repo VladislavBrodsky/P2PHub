@@ -27,5 +27,7 @@ echo "🛠 Running Database Migrations (with timeout)..."
 timeout 60s alembic upgrade head || echo "⚠️ Migrations failed or timed out, continuing startup..."
 echo "✅ Migration step finished."
 
+# Optimization: Using Gunicorn as a process manager with 4 workers to handle concurrent traffic.
+# The UvicornWorker class allows gunicorn to serve ASGI (FastAPI) applications.
 echo "🌍 Starting Server with Gunicorn (4 workers)..."
 exec gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:"${PORT:-8080}"

@@ -64,6 +64,7 @@ async def main():
             # Query all partners that look like test users or have "None" names
             statement = select(Partner).where(
                 (Partner.first_name.like("TestUser%")) |
+                # Using .is_(None) instead of '== None' to satisfy PEP8/Ruff (E711) and ensure compatibility with SQLAlchemy 
                 (Partner.first_name.is_(None)) |
                 (Partner.username.like("TestUser%")) |
                 (Partner.photo_url.like("%dicebear%"))
