@@ -86,33 +86,35 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                 className="relative w-full max-w-lg bg-slate-50 dark:bg-slate-900 rounded-[2rem] border border-white/20 shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
             >
                 {/* Header */}
-                <div className="relative p-5 pb-6 bg-white dark:bg-slate-900 z-10 shrink-0">
-                    <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
+                {/* #comment: Reduced header padding and font sizes for a more compact modal top */}
+                <div className="relative p-4 pb-4 bg-white dark:bg-slate-900 z-10 shrink-0">
+                    <div className="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 ring-1 ring-blue-500/20">
-                                <BookOpen className="w-5 h-5" />
+                        <div className="flex items-center gap-2.5">
+                            <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 ring-1 ring-blue-500/20">
+                                <BookOpen className="w-4 h-4" />
                             </div>
                             <div>
-                                <h2 className="text-lg font-black tracking-tight text-slate-900 dark:text-white uppercase leading-none">
+                                <h2 className="text-base font-black tracking-tight text-slate-900 dark:text-white uppercase leading-none">
                                     {t('referral.brief.title')}
                                 </h2>
-                                <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-1">
+                                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-1">
                                     Official Partner Guide
                                 </p>
                             </div>
                         </div>
                         <button
                             onClick={onClose}
-                            className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 transition-colors active:scale-95"
+                            className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 transition-colors active:scale-95"
                         >
-                            <X className="w-5 h-5" />
+                            <X className="w-4 h-4" />
                         </button>
                     </div>
                 </div>
 
                 {/* Content */}
-                <div className="overflow-y-auto p-5 space-y-4 scrollbar-hide bg-slate-50/50 dark:bg-black/20">
+                {/* #comment: Tightened content padding and section spacing for better info density */}
+                <div className="overflow-y-auto p-4 space-y-3 scrollbar-hide bg-slate-50/50 dark:bg-black/20">
                     {sections.map((section, index) => {
                         const Icon = section.icon;
                         const isRed = section.color === 'red';
@@ -128,17 +130,17 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
-                                className={`group relative p-4 rounded-2xl border ${isRed
+                                className={`group relative p-3 rounded-xl border ${isRed
                                     ? 'bg-red-50/50 dark:bg-red-900/10 border-red-200/50 dark:border-red-500/20'
                                     : 'bg-white dark:bg-white/5 border-slate-200/60 dark:border-white/5'
                                     } shadow-sm hover:shadow-md transition-all duration-300`}
                             >
-                                <div className="flex items-center justify-between mb-3">
-                                    <div className="flex items-center gap-3">
+                                <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2.5">
                                         <div className={`p-1.5 rounded-lg ring-1 ${colorClass}`}>
-                                            <Icon className="w-4 h-4" />
+                                            <Icon className="w-3.5 h-3.5" />
                                         </div>
-                                        <h3 className={`text-sm font-black tracking-tight uppercase ${isRed ? 'text-red-700 dark:text-red-400' : 'text-slate-900 dark:text-white'
+                                        <h3 className={`text-xs font-black tracking-tight uppercase ${isRed ? 'text-red-700 dark:text-red-400' : 'text-slate-900 dark:text-white'
                                             }`}>
                                             {section.title}
                                         </h3>
@@ -153,22 +155,22 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                                     )}
                                 </div>
 
-                                <div className="pl-[3.25rem]">
+                                <div className="pl-10">
                                     {section.content && (
-                                        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                                        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                                             {section.content}
                                         </p>
                                     )}
 
                                     {section.steps && (
-                                        <div className="space-y-3 relative">
-                                            <div className="absolute left-[11px] top-2 bottom-2 w-px bg-purple-200 dark:bg-purple-500/20" />
+                                        <div className="space-y-2 relative">
+                                            <div className="absolute left-[9px] top-2 bottom-2 w-px bg-purple-200 dark:bg-purple-500/20" />
                                             {section.steps.map((step, i) => (
-                                                <div key={i} className="relative flex items-start gap-4">
-                                                    <div className="relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-900 ring-2 ring-purple-500/20 text-[10px] font-black text-purple-600 dark:text-purple-400 shadow-sm">
+                                                <div key={i} className="relative flex items-start gap-3">
+                                                    <div className="relative z-10 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-900 ring-2 ring-purple-500/20 text-[9px] font-black text-purple-600 dark:text-purple-400 shadow-sm">
                                                         {i + 1}
                                                     </div>
-                                                    <p className="text-sm text-slate-700 dark:text-slate-300 font-medium leading-normal pt-0.5">
+                                                    <p className="text-xs text-slate-700 dark:text-slate-300 font-medium leading-normal pt-0.5">
                                                         {step}
                                                     </p>
                                                 </div>
@@ -177,15 +179,15 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                                     )}
 
                                     {section.points && (
-                                        <div className="space-y-3">
+                                        <div className="space-y-2">
                                             {section.points.map((point, i) => (
-                                                <div key={i} className="flex gap-3 p-3 rounded-xl bg-white/50 dark:bg-black/20 border border-red-100 dark:border-red-500/10">
-                                                    <div className="mt-1.5 w-1.5 h-1.5 shrink-0 rounded-full bg-red-500" />
+                                                <div key={i} className="flex gap-2.5 p-2.5 rounded-xl bg-white/50 dark:bg-black/20 border border-red-100 dark:border-red-500/10">
+                                                    <div className="mt-1.5 w-1 h-1 shrink-0 rounded-full bg-red-500" />
                                                     <div className="space-y-0.5">
-                                                        <h4 className="text-[11px] font-black uppercase tracking-wider text-slate-900 dark:text-white/90">
+                                                        <h4 className="text-[10px] font-black uppercase tracking-wider text-slate-900 dark:text-white/90">
                                                             {point.title}
                                                         </h4>
-                                                        <p className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                                                        <p className="text-[11px] text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
                                                             {point.desc}
                                                         </p>
                                                     </div>
@@ -200,12 +202,13 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-white/5 shrink-0 relative z-20 shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.1)]">
+                {/* #comment: Reduced footer padding and button height for compactness */}
+                <div className="p-3 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-white/5 shrink-0 relative z-20 shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.1)]">
                     <Button
                         onClick={onClose}
-                        className="w-full h-12 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-slate-200 rounded-xl font-black text-sm shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group"
+                        className="w-full h-10 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-slate-200 rounded-xl font-black text-xs shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group"
                     >
-                        <CheckCircle2 className="w-5 h-5 transition-transform group-hover:scale-110" />
+                        <CheckCircle2 className="w-4 h-4 transition-transform group-hover:scale-110" />
                         <span>{t('referral.brief.cta')}</span>
                     </Button>
                 </div>
