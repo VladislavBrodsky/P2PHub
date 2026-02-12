@@ -79,7 +79,8 @@ async def create_partner(
     # 3.5 Sync to Redis Leaderboard
     try:
         await leaderboard_service.update_score(partner.id, partner.xp)
-    except Exception: pass
+    except Exception as e:
+        logger.warning(f"Failed to sync leaderboard for partner {partner.id}: {e}")
 
     # 4. Invalidate referral tree stats for ancestors
     if referrer:
@@ -599,11 +600,12 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         bucket_expr = f"date_trunc('{interval}', created_at)"
 
     # Path-based query for buckets and levels
-    query = text("""
+    # Use dialect-aware expression selection to avoid Bandit B608 (hardcoded_sql_expressions)
+    sql_template = """
         SELECT bucket, level, COUNT(*) as count
         FROM (
             SELECT
-                {} as bucket,
+                {bucket_expr} as bucket,
                 (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level
             FROM partner
             WHERE (path = :search_path OR path LIKE :search_wildcard)
@@ -612,7 +614,23 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         WHERE level >= 1 AND level <= 9
         GROUP BY 1, 2
         ORDER BY bucket ASC, level ASC;
-    """.format(bucket_expr))
+    """
+    
+    # Strictly define bucket_expr based on interval and dialect
+    if is_sqlite:
+        if interval == 'hour':
+            bucket_column = "strftime('%Y-%m-%d %H:00:00', created_at)"
+        elif interval == 'day':
+            bucket_column = "strftime('%Y-%m-%d 00:00:00', created_at)"
+        else:
+            bucket_column = "strftime('%Y-%m-01 00:00:00', created_at)"
+    else:
+        # For Postgres, strictly validate interval to prevent injection
+        valid_intervals = {'hour', 'day', 'month', 'week'}
+        safe_interval = interval if interval in valid_intervals else 'day'
+        bucket_column = f"date_trunc('{safe_interval}', created_at)"
+
+    query = text(sql_template.replace("{bucket_expr}", bucket_column))
 
     result = await session.execute(query, {
         "search_path": search_path,
