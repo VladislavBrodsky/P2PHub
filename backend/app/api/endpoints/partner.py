@@ -610,7 +610,10 @@ async def claim_task_reward(
     if xp_reward <= 0:
          raise HTTPException(status_code=400, detail="Invalid or unsupported task")
 
-    statement = select(Partner).where(Partner.telegram_id == tg_id).options(selectinload(Partner.completed_task_records))
+    statement = select(Partner).where(Partner.telegram_id == tg_id).options(
+        selectinload(Partner.completed_task_records),
+        selectinload(Partner.referrals)
+    )
     result = await session.exec(statement)
     partner = result.first()
 
