@@ -15,7 +15,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Discover the exact mechanics of high-velocity P2P settlements and why speed is the ultimate currency of 2026.",
         category: "Wealth Strategy",
         date: "Feb 7, 2026",
-        author: "Pinto Team"
+        author: "Pinto Team",
+        image: "/blog/strategy.webp"
     },
     {
         id: '2',

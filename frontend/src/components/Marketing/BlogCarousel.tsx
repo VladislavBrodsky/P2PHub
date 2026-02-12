@@ -48,38 +48,50 @@ export const BlogCarousel = () => {
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1, type: "spring", bounce: 0.2 }}
                         onClick={() => navigateToBlog(post.id)}
-                        className="min-w-[280px] max-w-[280px] group flex flex-col gap-4 p-6 rounded-[2.5rem] border border-(--color-border-glass) glass-panel-premium snap-start active:scale-95 transition-all cursor-pointer"
+                        className="min-w-[280px] max-w-[280px] group flex flex-col gap-4 p-6 rounded-[2.5rem] border border-(--color-border-glass) glass-panel-premium snap-start active:scale-95 transition-all cursor-pointer relative overflow-hidden"
                     >
-                        <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                                <span className="text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/10">
-                                    {t(`blog.posts.${post.id}.category`)}
-                                </span>
-                                <span className="text-[9px] font-bold text-(--color-text-secondary) opacity-60">
-                                    {post.date}
-                                </span>
-                            </div>
-
-                            <h4 className="text-xl font-black leading-tight text-(--color-text-primary) group-hover:text-blue-500 transition-colors line-clamp-2">
-                                {t(`blog.posts.${post.id}.title`)}
-                            </h4>
-
-                            <p className="text-xs font-semibold leading-relaxed text-(--color-text-secondary) line-clamp-3 opacity-80">
-                                {t(`blog.posts.${post.id}.excerpt`)}
-                            </p>
-                        </div>
-
-                        <div className="mt-auto pt-4 flex items-center justify-between border-t border-(--color-border-glass)">
-                            <div className="flex items-center gap-2">
-                                <div className="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-[10px] font-black text-blue-500 border border-blue-500/10 shadow-inner">
-                                    {post.author.charAt(0)}
+                        {post.image && (
+                            <>
+                                <img
+                                    src={post.image}
+                                    className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-all duration-700 group-hover:scale-110"
+                                    alt={post.title}
+                                />
+                                <div className="absolute inset-0 bg-linear-to-t from-(--color-bg-surface) via-(--color-bg-surface)/80 to-transparent z-10" />
+                            </>
+                        )}
+                        <div className="relative z-20 flex flex-col h-full gap-4">
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/10">
+                                        {t(`blog.posts.${post.id}.category`)}
+                                    </span>
+                                    <span className="text-[9px] font-bold text-(--color-text-secondary) opacity-60">
+                                        {post.date}
+                                    </span>
                                 </div>
-                                <span className="text-[10px] font-black text-(--color-text-secondary) opacity-80 uppercase tracking-wider">
-                                    {post.author}
-                                </span>
+
+                                <h4 className="text-xl font-black leading-tight text-(--color-text-primary) group-hover:text-blue-500 transition-colors line-clamp-2">
+                                    {t(`blog.posts.${post.id}.title`)}
+                                </h4>
+
+                                <p className="text-xs font-semibold leading-relaxed text-(--color-text-secondary) line-clamp-3 opacity-80">
+                                    {t(`blog.posts.${post.id}.excerpt`)}
+                                </p>
                             </div>
-                            <div className="p-2 rounded-full bg-(--color-bg-app) group-hover:bg-blue-500 group-hover:text-white transition-all duration-500 shadow-sm border border-(--color-border-glass) group-active:scale-90">
-                                <ArrowUpRight className="w-4 h-4" />
+
+                            <div className="mt-auto pt-4 flex items-center justify-between border-t border-(--color-border-glass)">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-[10px] font-black text-blue-500 border border-blue-500/10 shadow-inner">
+                                        {post.author.charAt(0)}
+                                    </div>
+                                    <span className="text-[10px] font-black text-(--color-text-secondary) opacity-80 uppercase tracking-wider">
+                                        {post.author}
+                                    </span>
+                                </div>
+                                <div className="p-2 rounded-full bg-(--color-bg-app) group-hover:bg-blue-500 group-hover:text-white transition-all duration-500 shadow-sm border border-(--color-border-glass) group-active:scale-90">
+                                    <ArrowUpRight className="w-4 h-4" />
+                                </div>
                             </div>
                         </div>
                     </motion.div>

@@ -241,6 +241,13 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                     onClick={() => handlePostClick(currentFeaturedPost)}
                                     className="relative group overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) glass-panel-premium aspect-4/5 sm:aspect-video flex flex-col justify-end p-6 sm:p-8"
                                 >
+                                    {currentFeaturedPost.image && (
+                                        <img
+                                            src={currentFeaturedPost.image}
+                                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                            alt={currentFeaturedPost.title}
+                                        />
+                                    )}
                                     <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent z-10" />
 
                                     {/* Decorative Background Glow */}
@@ -285,8 +292,13 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: index * 0.05 }}
                                         onClick={() => handlePostClick(post)}
-                                        className="group p-5 rounded-[2rem] bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-blue-500/30 transition-all active:scale-[0.98] flex gap-4"
+                                        className="group p-5 rounded-[2rem] bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-blue-500/30 transition-all active:scale-[0.98] flex gap-4 items-center"
                                     >
+                                        {post.image && (
+                                            <div className="shrink-0 w-20 h-20 rounded-2xl overflow-hidden border border-(--color-border-glass)">
+                                                <img src={post.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" />
+                                            </div>
+                                        )}
                                         <div className="flex-1 space-y-3">
                                             <div className="flex items-center justify-between">
                                                 <span className="text-[9px] font-black uppercase tracking-widest text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/10">
@@ -436,6 +448,16 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             <div className="px-4 pt-5 pb-24 space-y-6 max-w-lg mx-auto">
                 {/* Meta */}
                 <div className="space-y-4">
+                    {post.image && (
+                        <div className="relative w-full aspect-video rounded-3xl overflow-hidden border border-(--color-border-glass) shadow-2xl">
+                            <img
+                                src={post.image}
+                                className="absolute inset-0 w-full h-full object-cover"
+                                alt={post.title}
+                            />
+                            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/60 to-transparent" />
+                        </div>
+                    )}
                     <div className="flex items-center gap-2">
                         <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-widest border border-blue-500/20">
                             {post.category}
