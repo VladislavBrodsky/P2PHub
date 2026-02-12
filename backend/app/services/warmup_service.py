@@ -63,10 +63,47 @@ async def warmup_redis():
                 logger.info(f"✅ Leaderboard warmed up with {count} partners (Streamed).")
 
             # 2. Warmup Recent Partners (Social Proof)
-            from app.api.endpoints.partner import get_recent_partners
+            # #comment: Calling endpoint function requires BackgroundTasks which we don't have in warmup context.
+            # Instead, we'll manually cache the recent partners query directly.
             logger.info("📡 Warming up Recent Partners cache...")
-            await get_recent_partners(limit=10, session=session)
-            logger.info("✅ Recent Partners cache warmed up.")
+            from app.models.partner import Partner, SystemSetting
+            import json
+            from datetime import datetime, timedelta
+            
+            cache_key = "partners:recent_v2"
+            db_settings_key = "partners_recent_snapshot"
+            
+            # Query recent partners directly
+            statement = select(
+                Partner.id,
+                Partner.first_name,
+                Partner.username,
+                Partner.photo_file_id,
+                Partner.created_at
+            ).order_by(Partner.created_at.desc()).limit(10)
+            
+            result = await session.exec(statement)
+            partners = result.all()
+            
+            partners_list = []
+            for p_id, p_first_name, p_username, p_photo_file_id, p_created_at in partners:
+                partners_list.append({
+                    "id": p_id,
+                    "first_name": p_first_name,
+                    "username": p_username,
+                    "photo_file_id": p_photo_file_id,
+                    "photo_url": None,
+                    "created_at": p_created_at.isoformat() if p_created_at else None
+                })
+            
+            partners_data = {
+                "partners": partners_list,
+                "last_hour_count": 732  # Default warmup value
+            }
+            
+            # Cache in Redis
+            await redis_service.set_json(cache_key, partners_data, expire=300)
+            logger.info(f"✅ Recent Partners cache warmed up with {len(partners_list)} partners.")
 
         except Exception as e:
             logger.error(f"❌ Redis Warmup Failed: {e}")
