@@ -308,9 +308,23 @@ async def process_referral_logic(partner_id: int):
                         description=f"Referral XP Reward (L{level})",
                         type="REFERRAL_XP",
                         level=level,
-                        currency="XP"
+                        created_at=datetime.utcnow()
                     )
                     session.add(xp_earning)
+
+                    # #comment: Audit logging for XP awards - track all distributions for transparency
+                    # This helps debug "Why didn't I get XP?" and provides history for users
+                    from app.services.audit_service import audit_service
+                    await audit_service.log_xp_award(
+                        session=session,
+                        partner_id=referrer.id,
+                        new_user_id=partner.id,
+                        xp_amount=xp_gain,
+                        level=level,
+                        is_pro=referrer.is_pro,
+                        xp_before=referrer.xp,  # Note: This is before the atomic update
+                        xp_after=referrer.xp + xp_gain,
+                    )
 
                     # Flush to ensure XP is captured in the transaction
                     await session.flush()
@@ -472,6 +486,22 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 currency="USDT"
             )
             session.add(earning)
+
+            # #comment: Audit logging for commission payments - critical for financial transparency
+            # This creates an immutable record of every commission payment for compliance and debugging
+            balance_before = referrer.balance  # Before atomic update
+            balance_after = referrer.balance + commission
+            
+            from app.services.audit_service import audit_service
+            await audit_service.log_commission(
+                session=session,
+                partner_id=referrer.id,
+                buyer_id=partner.id,
+                amount=commission,
+                level=level,
+                balance_before=balance_before,
+                balance_after=balance_after,
+            )
 
             # Refresh to pick up changes for cache consistency
             await session.refresh(referrer)
