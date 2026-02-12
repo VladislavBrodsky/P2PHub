@@ -135,13 +135,13 @@ export const BentoGrid = () => {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true, margin: "-10%" }}
                                 transition={{
-                                    duration: 0.4,
-                                    delay: index * 0.05,
-                                    ease: [0.23, 1, 0.32, 1]
+                                    type: "spring",
+                                    stiffness: 260,
+                                    damping: 20
                                 }}
                                 animate={{ rotateY: flippedCards[index] ? 180 : 0 }}
                                 style={{ transformStyle: "preserve-3d" }}
-                                className={`w-full h-full relative duration-500`}
+                                className={`w-full h-full relative`}
                             >
                                 {/* FRONT SIDE */}
                                 <div
