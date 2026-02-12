@@ -78,7 +78,7 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             # Ignore flood control if it's already being handled by another worker
             if "Flood control exceeded" in str(e):
-                print(f"⚠️ Webhook flood control: Another worker might have already set it. Continuing...")
+                print("⚠️ Webhook flood control: Another worker might have already set it. Continuing...")
             else:
                 print(f"❌ Failed to set webhook (URL: {webhook_url}): {e}")
                 import traceback
