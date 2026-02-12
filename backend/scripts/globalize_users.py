@@ -11,7 +11,7 @@ project_root = os.path.dirname(current_dir)
 sys.path.append(project_root)
 
 # Hardcode env vars for script
-os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
+os.environ["DATABASE_URL"] = os.getenv("DATABASE_URL", "REMOVED_FOR_SECURITY")
 
 from sqlmodel import select
 

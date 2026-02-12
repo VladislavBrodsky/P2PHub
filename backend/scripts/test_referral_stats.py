@@ -4,7 +4,7 @@ import sys
 from unittest.mock import AsyncMock
 
 # --- PRE-IMPORT CONFIGURATION ---
-PUBLIC_DB_URL = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
+PUBLIC_DB_URL = os.getenv("DATABASE_URL", "REMOVED_FOR_SECURITY")
 FAKE_BOT_TOKEN = "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
 
 os.environ["BOT_TOKEN"] = FAKE_BOT_TOKEN

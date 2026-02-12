@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 async def fix_schema():
     # Force use of production URL for emergency fix
     # This URL was retrieved from existing maintenance scripts in the repo
-    db_url = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
+    db_url = os.getenv("DATABASE_URL", "REMOVED_FOR_SECURITY")
 
     print(f"🚀 Connecting to production DB: {db_url.split('@')[-1]}")
     engine = create_async_engine(db_url, echo=True, future=True)

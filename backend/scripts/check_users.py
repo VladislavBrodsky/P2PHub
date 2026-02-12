@@ -5,7 +5,7 @@ import os
 # Hardcode env vars for script
 os.environ["BOT_TOKEN"] = "8245884329:AAEy0UaI2zGuwTHdkRXHa1f-kzhY6t1_lG4"
 # Use PUBLIC URL for local script access
-os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
+os.environ["DATABASE_URL"] = os.getenv("DATABASE_URL", "REMOVED_FOR_SECURITY")
 print("DEBUG: Set hardcoded env vars")
 
 from sqlmodel import select

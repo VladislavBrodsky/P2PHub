@@ -1,7 +1,7 @@
 import os
 
 # Production DB URL - MUST BE SET BEFORE IMPORTS
-os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
+os.environ["DATABASE_URL"] = os.getenv("DATABASE_URL", "REMOVED_FOR_SECURITY")
 
 import asyncio
 import os

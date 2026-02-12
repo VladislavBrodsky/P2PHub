@@ -12,7 +12,7 @@ env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
 load_dotenv(dotenv_path=env_path)
 
 # Get DATABASE_URL from environment
-db_url = os.getenv("DATABASE_URL", "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway")
+db_url = os.getenv("DATABASE_URL", os.getenv("DATABASE_URL", "REMOVED_FOR_SECURITY"))
 
 # Ensure async driver
 if db_url.startswith("postgresql://"):

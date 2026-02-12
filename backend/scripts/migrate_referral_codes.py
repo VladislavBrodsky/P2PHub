@@ -11,7 +11,7 @@ project_root = os.path.dirname(current_dir)
 sys.path.append(project_root)
 
 # Hardcode/Load environment variables BEFORE importing app modules
-os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
+os.environ["DATABASE_URL"] = os.getenv("DATABASE_URL", "REMOVED_FOR_SECURITY")
 
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker

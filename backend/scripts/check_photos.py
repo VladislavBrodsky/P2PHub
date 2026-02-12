@@ -15,7 +15,7 @@ from app.core.config import settings
 from app.models.partner import Partner
 
 # Hardcoded for debugging
-database_url = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
+database_url = os.getenv("DATABASE_URL", "REMOVED_FOR_SECURITY")
 
 engine = create_async_engine(database_url, echo=False, future=True)
 

@@ -9,7 +9,7 @@ project_root = os.path.dirname(current_dir)
 sys.path.append(project_root)
 
 # Hardcode environment variables
-os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
+os.environ["DATABASE_URL"] = os.getenv("DATABASE_URL", "REMOVED_FOR_SECURITY")
 os.environ["BOT_TOKEN"] = "12345678:ABCDEF" # Dummy but properly formatted
 
 # MOCK ALL DEPENDENCIES BEFORE IMPORTS

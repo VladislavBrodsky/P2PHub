@@ -9,9 +9,13 @@ from dotenv import load_dotenv
 load_dotenv(dotenv_path=".env")
 
 # Get the URL directly
-url = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
+url = os.getenv("DATABASE_URL")
+if not url:
+    print("❌ DATABASE_URL not set")
+    import sys
+    sys.exit(1)
 
-print(f"Connecting to: {url}")
+print("Connecting to database from environment...")
 
 async def verify():
     engine = create_async_engine(url)

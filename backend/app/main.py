@@ -150,7 +150,7 @@ async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = H
         print(f"📥 Received Webhook POST at {settings.WEBHOOK_PATH}")
 
     if x_telegram_bot_api_secret_token != settings.WEBHOOK_SECRET:
-        print(f"⚠️ Webhook Secret Mismatch! (Token masked: {x_telegram_bot_api_secret_token[:4]}... if x_telegram_bot_api_secret_token else 'null'})")
+        print(f"⚠️ Webhook Secret Mismatch! (Token masked: {x_telegram_bot_api_secret_token[:4] if x_telegram_bot_api_secret_token else 'null'}...)")
         # Log headers for debugging (excluding sensitive info if possible)
         # print(f"Headers: {request.headers}")
         raise HTTPException(status_code=401, detail="Invalid secret token")
