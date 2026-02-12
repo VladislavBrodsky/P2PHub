@@ -403,7 +403,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             className="flex flex-col min-h-screen bg-(--color-bg-app) relative"
         >
             {/* Header Sticky - Fixed for better scroll reliability */}
-            <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-lg z-50 bg-(--color-bg-app)/90 backdrop-blur-2xl border-b border-(--color-border-glass) pt-[env(safe-area-inset-top,1rem)] pb-4 px-5">
+            <div className="sticky top-0 z-50 w-full bg-(--color-bg-app)/90 backdrop-blur-2xl border-b border-(--color-border-glass) pt-[env(safe-area-inset-top,1rem)] pb-4 px-5">
                 <div className="flex items-center justify-between w-full">
                     <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-(--color-bg-surface) active:scale-90 transition-all text-(--color-text-primary)">
                         <ArrowLeft className="w-6 h-6" />
@@ -426,7 +426,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             </div>
 
             {/* Content Container - Added pt for fixed header */}
-            <div className="px-5 pt-32 pb-32 space-y-8 max-w-lg mx-auto">
+            <div className="px-5 pt-8 pb-32 space-y-8 max-w-lg mx-auto">
                 {/* Meta */}
                 <div className="space-y-4">
                     <div className="flex items-center gap-2">
