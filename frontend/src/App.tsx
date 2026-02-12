@@ -1,35 +1,18 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { AnimatePresence, LazyMotion, domAnimation, motion } from 'framer-motion';
 import { Layout } from './components/Layout/Layout';
-// Lazy load pages
-const DashboardLoader = () => import('./pages/Dashboard');
-const CardsLoader = () => import('./pages/Cards');
-const CommunityLoader = () => import('./pages/Community');
-const ReferralLoader = () => import('./pages/Referral');
-const LeaderboardLoader = () => import('./pages/Leaderboard');
-const SubscriptionLoader = () => import('./pages/Subscription');
-const BlogLoader = () => import('./pages/BlogPage').then(m => ({ default: m.BlogPage }));
-const AdminLoader = () => import('./pages/AdminPage').then(m => ({ default: m.AdminPage }));
+// #comment: Reorganized imports and lazy declarations to satisfy Fast Refresh (react-refresh/only-export-components).
+// Constants and non-component exports (like prefetchPages) were moved to separate utility files.
+import { prefetchPages } from './utils/navigation';
 
-const Dashboard = lazy(DashboardLoader);
-const CardsPage = lazy(CardsLoader);
-const CommunityPage = lazy(CommunityLoader);
-const ReferralPage = lazy(ReferralLoader);
-const LeaderboardPage = lazy(LeaderboardLoader);
-const SubscriptionPage = lazy(SubscriptionLoader);
-const BlogPage = lazy(BlogLoader);
-const AdminPage = lazy(AdminLoader);
-
-export const prefetchPages = {
-    home: DashboardLoader,
-    cards: CardsLoader,
-    partner: CommunityLoader,
-    earn: ReferralLoader,
-    league: LeaderboardLoader,
-    subscription: SubscriptionLoader,
-    blog: BlogLoader,
-    admin: AdminLoader,
-};
+const Dashboard = lazy(prefetchPages.home);
+const CardsPage = lazy(prefetchPages.cards);
+const CommunityPage = lazy(prefetchPages.partner);
+const ReferralPage = lazy(prefetchPages.earn);
+const LeaderboardPage = lazy(prefetchPages.league);
+const SubscriptionPage = lazy(prefetchPages.subscription);
+const BlogPage = lazy(prefetchPages.blog);
+const AdminPage = lazy(prefetchPages.admin);
 
 
 import { miniApp, backButton, viewport, swipeBehavior } from '@telegram-apps/sdk-react';
@@ -263,7 +246,7 @@ function App() {
             updateProgress(50, 'Config Loaded');
             // #comment: Start prefetching Dashboard JS chunk immediately after config is ready
             // to ensure it's ready by the time the loader fades out.
-            DashboardLoader();
+            prefetchPages.home();
         }
     }, [isConfigLoading, updateProgress]);
 

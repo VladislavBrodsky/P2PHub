@@ -52,6 +52,8 @@ def try_import_or_mock(name, attributes, sub_modules=None):
 try_import_or_mock('taskiq_fastapi', {'init': lambda *a, **k: None})
 try_import_or_mock('taskiq', {'TaskiqScheduler': lambda *a, **k: None}, 
                    sub_modules={'schedule_sources': {'LabelScheduleSource': lambda *a, **k: None}})
+# #comment: Updated ListQueueBroker mock to support keyword arguments (e.g., task_name).
+# This prevents TypeError during import verification in CI when decorators use these params.
 try_import_or_mock('taskiq_redis', {
     'ListQueueBroker': lambda *a, **k: type('DB', (), {'with_result_backend': lambda s, *x, **kw: s, 'task': lambda s, *x, **kw: lambda f: f})(),
     'RedisAsyncResultBackend': lambda *a, **k: None

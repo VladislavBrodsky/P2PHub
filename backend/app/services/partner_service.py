@@ -201,6 +201,7 @@ async def process_referral_logic(partner_id: int):
                     # --- CORE OPERATION: XP DISTRIBUTION (GOLDEN RULE) ---
                     xp_gain = XP_MAP.get(level, 0)
                     if referrer.is_pro:
+                        # #comment: Upgraded from 3x to 5x to align with marketing copy and verification reports
                         xp_gain *= 5  # PRO members get 5x XP bonus
 
                     # ATOMIC SQL INCREMENT (Resilient to concurrency)

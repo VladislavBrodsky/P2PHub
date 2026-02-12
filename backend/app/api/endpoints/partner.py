@@ -693,6 +693,7 @@ async def claim_task_reward(
         session.add(task_earning)
 
         # 2. Update partner stats
+        # #comment: Upgraded multiplier to 5x as per Phase 2 requirements and marketing alignment.
         effective_xp = xp_reward * 5 if partner.is_pro else xp_reward  # PRO members get 5x XP bonus
         partner.xp += effective_xp
         partner.level = get_level(partner.xp)
