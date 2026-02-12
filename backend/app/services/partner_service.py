@@ -589,15 +589,6 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     # Detect dialect to support both SQLite and Postgres
     is_sqlite = "sqlite" in settings.DATABASE_URL
 
-    if is_sqlite:
-        if interval == 'hour':
-            bucket_expr = "strftime('%Y-%m-%d %H:00:00', created_at)"
-        elif interval == 'day':
-            bucket_expr = "strftime('%Y-%m-%d 00:00:00', created_at)"
-        else: # month
-            bucket_expr = "strftime('%Y-%m-01 00:00:00', created_at)"
-    else:
-        bucket_expr = f"date_trunc('{interval}', created_at)"
 
     # Path-based query for buckets and levels
     # Use dialect-aware expression selection to avoid Bandit B608 (hardcoded_sql_expressions)
