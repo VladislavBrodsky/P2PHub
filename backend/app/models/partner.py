@@ -75,7 +75,7 @@ class XPTransaction(SQLModel, table=True):
     type: str = Field(index=True) # TASK, REFERRAL_L1, REFERRAL_DEEP, LEVEL_UP, BONUS
     description: Optional[str] = None
     reference_id: Optional[str] = Field(default=None, index=True)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
 
     partner: Partner = Relationship(back_populates="xp_history")
 
@@ -86,7 +86,7 @@ class PartnerTask(SQLModel, table=True):
     task_id: str = Field(index=True)
     status: str = Field(default="COMPLETED") # STARTED, COMPLETED
     started_at: Optional[datetime] = Field(default=None)
-    completed_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
+    completed_at: Optional[datetime] = Field(default_factory=datetime.utcnow, index=True)
     initial_metric_value: int = Field(default=0) # Snapshot of metric at start
     reward_xp: float = Field(default=0.0)
 
@@ -119,19 +119,20 @@ database_url = settings.async_database_url
 # SQLite specific arguments
 connect_args = {"check_same_thread": False} if "sqlite" in database_url else {}
 
-# #comment: In a multi-worker environment (4 Gunicorn workers), each worker maintains its own pool.
-# We set pool_size=15 and max_overflow=10 per worker. This allows the cluster to handle
-# up to 60-100 concurrent DB connections reliably. pool_recycle helps prevent 'stale'
-# connections on cloud platforms like Railway where idle connections are often killed.
+# #comment: Robust Engine configuration for multi-worker (4 Gunicorn) environments.
+# pool_pre_ping=True ensures stale connections are discarded before use.
+# pool_size and max_overflow are tuned to stay within Railway's Postgres connection limits
+# across all workers and TaskIQ processes. pool_recycle helps with cloud firewalls.
 engine = create_async_engine(
     database_url,
     echo=settings.DEBUG,
     future=True,
     connect_args=connect_args,
-    pool_size=15,
-    max_overflow=10,
+    pool_size=10,
+    max_overflow=5,
     pool_timeout=30,
     pool_recycle=1800,
+    pool_pre_ping=True,
 )
 
 async def create_db_and_tables():
@@ -139,11 +140,14 @@ async def create_db_and_tables():
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
 
+# #comment: Single SessionMaker instance shared across the worker's event loop.
+# This avoids the overhead of initializing the factory on every request.
+async_session_maker = sessionmaker(
+    engine, class_=AsyncSession, expire_on_commit=False
+)
+
 async def get_session():
-    async_session = sessionmaker(
-        engine, class_=AsyncSession, expire_on_commit=False
-    )
-    async with async_session() as session:
+    async with async_session_maker() as session:
         yield session
 
 # Resolve Relationship string references

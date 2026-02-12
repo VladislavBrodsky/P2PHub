@@ -15,7 +15,7 @@ class PartnerTransaction(SQLModel, table=True):
     network: str # TON, TRC20, ERC20, etc.
     tx_hash: Optional[str] = Field(default=None, index=True)
     status: str = Field(default="pending") # pending, completed, failed, manual_review
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
     updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow})
 
     # Optional relationship back to Partner
