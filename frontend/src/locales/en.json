@@ -406,6 +406,8 @@
         "brief": {
             "btn": "Brief & Terms",
             "title": "Partner Briefing",
+            "guide": "Official Partner Guide",
+            "read": "Read Briefing",
             "goal_title": "Main Objective",
             "goal_desc": "Our mission is to build the world's largest decentralized partner network. <1> Your goal is simple:</1> Expand the network, earn XP, and unlock the <3>$1/minute passive income stream.</3>",
             "manual_title": "Field Manual",

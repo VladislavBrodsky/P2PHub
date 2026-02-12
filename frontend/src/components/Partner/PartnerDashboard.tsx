@@ -139,9 +139,9 @@ export const PartnerDashboard = () => {
                                     {t('referral.brief.title')}
                                 </h3>
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5 line-clamp-1">
-                                    Official Partner Guide
+                                    {t('referral.brief.guide')}
                                     <div className="w-1 h-1 rounded-full bg-blue-500/50" />
-                                    <span className="opacity-60 italic">Read Briefing</span>
+                                    <span className="opacity-60 italic">{t('referral.brief.read')}</span>
                                 </span>
                             </div>
                         </div>
