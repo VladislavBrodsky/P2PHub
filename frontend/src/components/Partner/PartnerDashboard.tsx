@@ -376,7 +376,7 @@ const EarningsList = () => {
                                 {styles.icon}
                             </div>
                             <div className='flex flex-col'>
-                                <span className="font-bold text-slate-900 dark:text-white text-xs">{earning.description.replace('(Level ', '(L')}</span>
+                                <span className="font-bold text-slate-900 dark:text-white text-xs">{earning.description}</span>
                                 <span className="text-[9px] text-slate-500 mt-0.5">
                                     {new Date(earning.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                 </span>

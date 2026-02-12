@@ -358,7 +358,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             earning = Earning(
                 partner_id=referrer.id,
                 amount=commission,
-                description=f"PRO Commission (L{level})",
+                description=f"PRO Commission (Level {level})",
                 type="PRO_COMMISSION",
                 level=level,
                 currency="USDT"
