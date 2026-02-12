@@ -1,10 +1,13 @@
 import logging
 import json
 import os
+import secrets
 from datetime import datetime
 from typing import Dict, List, Optional, Any
 
 import google.generativeai as genai
+from google import genai as google_genai
+from google.genai import types as genai_types
 from openai import AsyncOpenAI
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -55,14 +58,16 @@ class ViralMarketingStudio:
     def __init__(self):
         self.openai_client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY) if settings.OPENAI_API_KEY else None
         
-        # Initialize Gemini
-        # We use Gemini 1.5 Pro or similar as "Gemini 3 Pro" is likely the user's future-facing name
+        # Initialize Gemini 1.5 Pro for content assistance
         if os.getenv("GOOGLE_API_KEY"):
             genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
             self.gemini_model = genai.GenerativeModel('gemini-1.5-pro')
+            # Initialize Gemini GenAI Client for Imagen 3
+            self.genai_client = google_genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
         else:
             self.gemini_model = None
-            logger.warning("⚠️ Google API Key for Gemini missing.")
+            self.genai_client = None
+            logger.warning("⚠️ Google API Key for Gemini/Imagen missing.")
 
     async def check_tokens_and_reset(self, partner: Partner, session: AsyncSession, min_tokens: int = 1) -> bool:
         """
@@ -123,26 +128,43 @@ class ViralMarketingStudio:
             )
             
             content = json.loads(response.choices[0].message.content)
+            image_prompt = content.get("image_description")
             
-            # 2. Generate Image via Gemini (Simulated or Real if API supports Imagen)
-            # Since Gemini 1.5 Pro doesn't generate images directly via 'generate_content' usually,
-            # we would use Vertex AI or similar, but for now we will provide the prompt 
-            # and simulate the 'image_url' if no real image gen is available, 
-            # or use a placeholder that looks premium.
-            # UPD: Some Gemini versions support 'generate_images' if configured.
-            
-            # For the sake of this task, I'll return the description and a cinematic placeholder 
-            # that matches the lifestyle if I can't call a real image generator here.
-            
-            # But wait, I have 'generate_image' tool as Antigravity! 
-            # However, I need to provide a result to the END USER in the app.
-            
-            # I'll return the generated prompts and text.
+            # 2. Generate Image via Gemini (Imagen 3)
+            image_url = None
+            if self.genai_client:
+                try:
+                    # Use Imagen 3 for premium quality
+                    img_response = self.genai_client.models.generate_image(
+                        model='imagen-3.0-generate-001',
+                        prompt=image_prompt,
+                        config=genai_types.GenerateImageConfig(
+                            number_of_images=1,
+                            include_rai_reasoning=True,
+                            output_mime_type='image/png'
+                        )
+                    )
+                    
+                    if img_response.generated_images:
+                        image = img_response.generated_images[0]
+                        filename = f"viral_{partner.id}_{secrets.token_hex(4)}.png"
+                        # Save to our served images directory
+                        save_path = os.path.join("app_images", "generated", filename)
+                        
+                        # Ensure directory exists (fallback)
+                        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                        
+                        image.image.save(save_path)
+                        image_url = f"/images/generated/{filename}"
+                except Exception as img_err:
+                    logger.error(f"Imagen generation failed, falling back to prompt only: {img_err}")
+
             return {
                 "text": content.get("body"),
                 "title": content.get("title"),
                 "hashtags": content.get("hashtags"),
-                "image_prompt": content.get("image_description"),
+                "image_prompt": image_prompt,
+                "image_url": image_url,
                 "status": "success"
             }
 

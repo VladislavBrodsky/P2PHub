@@ -310,13 +310,26 @@ export const ProDashboard = () => {
                             animate={{ opacity: 1, y: 0 }}
                             className="space-y-6"
                         >
+                            import {getApiUrl} from '../utils/api';
+
+                            // ... inside component ...
                             <div className="bg-(--color-bg-surface) rounded-[2.5rem] border border-(--color-border-glass) overflow-hidden">
-                                <div className="aspect-video bg-indigo-900/20 flex flex-col items-center justify-center p-8 text-center border-b border-(--color-border-glass) relative">
-                                    <ImageIcon className="w-12 h-12 text-indigo-500 mb-4 opacity-50" />
-                                    <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest leading-relaxed line-clamp-3">
-                                        {generatedResult.image_prompt}
-                                    </p>
-                                    <div className="absolute inset-0 bg-linear-to-t from-indigo-950/20 to-transparent pointer-events-none" />
+                                <div className="aspect-video bg-indigo-900/20 flex flex-col items-center justify-center border-b border-(--color-border-glass) relative overflow-hidden">
+                                    {generatedResult.image_url ? (
+                                        <img
+                                            src={generatedResult.image_url.startsWith('http') ? generatedResult.image_url : `${getApiUrl().replace(/\/api$/, '')}${generatedResult.image_url}`}
+                                            alt="Generated Viral Content"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="p-8 text-center flex flex-col items-center">
+                                            <ImageIcon className="w-12 h-12 text-indigo-500 mb-4 opacity-50" />
+                                            <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest leading-relaxed line-clamp-3">
+                                                {generatedResult.image_prompt}
+                                            </p>
+                                        </div>
+                                    )}
+                                    <div className="absolute inset-0 bg-linear-to-t from-indigo-950/40 to-transparent pointer-events-none" />
                                 </div>
                                 <div className="p-6 space-y-4">
                                     <h4 className="text-xl font-black leading-tight">{generatedResult.title}</h4>

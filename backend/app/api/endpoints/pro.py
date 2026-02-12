@@ -107,6 +107,7 @@ async def generate_content(
         "body": result["text"],
         "hashtags": result["hashtags"],
         "image_prompt": result["image_prompt"],
+        "image_url": result.get("image_url"),
         "tokens_remaining": partner.pro_tokens
     }
 

@@ -63,6 +63,7 @@ class ViralGenerateResponse(BaseModel):
     body: str
     hashtags: Optional[List[str]] = None
     image_prompt: str
+    image_url: Optional[str] = None
     tokens_remaining: int
 
 class SocialPostRequest(BaseModel):
