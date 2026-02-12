@@ -615,6 +615,25 @@
         "unlocked_badge": "ACHIEVEMENT UNLOCKED",
         "locked_badge": "STILL LOCKED"
     },
+    "level100": {
+        "ultimate_horizon": "ULTIMATE HORIZON",
+        "achievements_title": "LEVEL 100 ACHIEVEMENTS",
+        "achievements_desc": "Unlock your <1>Fanocracy Passport</1>. Claim the Physical Platinum Card & 0% Fees for life.",
+        "discover_btn": "DISCOVER LEVEL 100 BENEFITS",
+        "apex_achievement": "APEX ACHIEVEMENT",
+        "fanocracy_title": "LvL 100 <1>Fanocracy</1>",
+        "fanocracy_quote": "The ultimate status for those who build the future of P2P.",
+        "claim_btn": "CLAIM LVL 100 FOCUS",
+        "limited_slots": "LIMITED SLOTS AVAILABLE",
+        "benefit_1_title": "Platinum Physical Card",
+        "benefit_1_desc": "Exclusive vertical design with no lifetime fees.",
+        "benefit_2_title": "Fanocracy Status",
+        "benefit_2_desc": "Priority governance power in the Partner Network.",
+        "benefit_3_title": "0% Platform Fees",
+        "benefit_3_desc": "Maximum earnings on all network transactions.",
+        "benefit_4_title": "Executive Support",
+        "benefit_4_desc": "24/7 personal manager for your growing team."
+    },
     "level_100": {
         "apex": "APEX ACHIEVEMENT",
         "fanocracy": "Fanocracy",
