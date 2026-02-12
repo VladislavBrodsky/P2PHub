@@ -15,10 +15,10 @@ export const NotificationOverlay = () => {
         }
     }, [notification, hideNotification]);
 
-    // #comment Handle swipe-up gesture to dismiss notification
+    // #comment Handle swipe-down gesture to dismiss notification
     const handleDragEnd = (_event: any, info: any) => {
-        // If dragged up more than 50px, dismiss the notification
-        if (info.offset.y < -50) {
+        // If dragged down more than 50px, dismiss the notification
+        if (info.offset.y > 50) {
             hideNotification();
         }
     };
@@ -29,25 +29,25 @@ export const NotificationOverlay = () => {
                 <motion.div
                     key={`${notification.title}-${notification.message}`}
                     drag="y"
-                    dragConstraints={{ top: -200, bottom: 0 }}
+                    dragConstraints={{ top: 0, bottom: 200 }}
                     dragElastic={0.2}
                     onDragEnd={handleDragEnd}
-                    initial={{ opacity: 0, y: -100, scale: 0.9 }}
+                    initial={{ opacity: 0, y: 100, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -100, scale: 0.9 }}
+                    exit={{ opacity: 0, y: 100, scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                    className="fixed top-0 left-0 right-0 z-[10000] flex justify-center pointer-events-none px-4 pt-[calc(env(safe-area-inset-top,24px)+24px)]"
+                    className="fixed bottom-0 left-0 right-0 z-[10000] flex justify-center pointer-events-none px-4 pb-[calc(env(safe-area-inset-bottom,20px)+85px)]"
                     whileDrag={{ scale: 0.95, opacity: 0.8 }}
                 >
                     <div className="glass-panel-premium rounded-full px-4 py-3 shadow-xl flex items-center gap-3 max-w-sm w-full pointer-events-auto backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/50 dark:border-slate-700/50 touch-pan-y">
                         {notification.icon && (
-                            <div className="shrink-0 text-amber-500 dark:text-emerald-400">
+                            <div className="shrink-0">
                                 {notification.icon}
                             </div>
                         )}
                         <div className="flex-1 overflow-hidden">
-                            <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">{notification.title}</h4>
-                            <p className="text-[10px] text-slate-600 dark:text-slate-300 truncate">{notification.message}</p>
+                            <h4 className="text-xs font-black text-slate-900 dark:text-white truncate uppercase tracking-tight">{notification.title}</h4>
+                            <p className="text-[10px] text-slate-600 dark:text-slate-300 truncate font-bold">{notification.message}</p>
                         </div>
                         <button
                             onClick={hideNotification}

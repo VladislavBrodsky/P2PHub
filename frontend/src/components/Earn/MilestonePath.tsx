@@ -430,17 +430,20 @@ export const MilestonePath = () => {
                 document.body
             )}
 
-            {/* Level 100 Premium Modal */}
-            <AnimatePresence>
-                {isLevel100ModalOpen && (
-                    <Suspense fallback={null}>
-                        <Level100AchievementModal
-                            isOpen={isLevel100ModalOpen}
-                            onClose={() => setIsLevel100ModalOpen(false)}
-                        />
-                    </Suspense>
-                )}
-            </AnimatePresence>
+            {/* Level 100 Premium Modal - Portaled for top-level focus */}
+            {typeof document !== 'undefined' && ReactDOM.createPortal(
+                <AnimatePresence>
+                    {isLevel100ModalOpen && (
+                        <Suspense fallback={null}>
+                            <Level100AchievementModal
+                                isOpen={isLevel100ModalOpen}
+                                onClose={() => setIsLevel100ModalOpen(false)}
+                            />
+                        </Suspense>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
         </motion.section>
     );
 };
