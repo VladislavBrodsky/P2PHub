@@ -40,6 +40,36 @@ NAMES_DATA = [
     {"first_name": "Oliver 🇬🇧", "last_name": "Smith", "username": "ollie_uk", "country": "UK", "gender": "m"},
     {"first_name": "Isla 🏴󠁧󠁢󠁳󠁣󠁴󠁿", "last_name": "McGregor", "username": "isla_scot", "country": "UK", "gender": "f"},
     {"first_name": "Lars 🇸🇪", "last_name": "Svensson", "username": "lars_sw", "country": "SE", "gender": "m"},
+    {"first_name": "Noah 🇺🇸", "last_name": "Anderson", "username": "noah_nyc", "country": "US", "gender": "m"},
+    {"first_name": "Emma 🇺🇸", "last_name": "Wilson", "username": "emma_cali", "country": "US", "gender": "f"},
+    {"first_name": "Lucas 🇨🇦", "last_name": "Tremblay", "username": "lucas_to", "country": "CA", "gender": "m"},
+    {"first_name": "Mia 🇦🇺", "last_name": "Taylor", "username": "mia_syd", "country": "AU", "gender": "f"},
+    {"first_name": "Min-jun 🇰🇷", "last_name": "Kim", "username": "minjun_seo", "country": "KR", "gender": "m"},
+    {"first_name": "Ji-won 🇰🇷", "last_name": "Park", "username": "jiwon_kr", "country": "KR", "gender": "f"},
+    {"first_name": "Alejandro 🇦🇷", "last_name": "Gomez", "username": "ale_ba", "country": "AR", "gender": "m"},
+    {"first_name": "Camila 🇦🇷", "last_name": "Perez", "username": "cami_ar", "country": "AR", "gender": "f"},
+    {"first_name": "Nikolaj 🇩🇰", "last_name": "Jensen", "username": "nik_cph", "country": "DK", "gender": "m"},
+    {"first_name": "Freja 🇩🇰", "last_name": "Nielsen", "username": "freja_dk", "country": "DK", "gender": "f"},
+    {"first_name": "Mustafa 🇹🇷", "last_name": "Yilmaz", "username": "musti_ist", "country": "TR", "gender": "m"},
+    {"first_name": "Zeynep 🇹🇷", "last_name": "Kaya", "username": "zeynep_tk", "country": "TR", "gender": "f"},
+    {"first_name": "Kwame 🇬🇭", "last_name": "Mensah", "username": "kwame_gh", "country": "GH", "gender": "m"},
+    {"first_name": "Efua 🇬🇭", "last_name": "Annan", "username": "efua_vibe", "country": "GH", "gender": "f"},
+    {"first_name": "Sven 🇳🇴", "last_name": "Bakke", "username": "sven_oslo", "country": "NO", "gender": "m"},
+    {"first_name": "Ingrid 🇳🇴", "last_name": "Larsen", "username": "ingrid_no", "country": "NO", "gender": "f"},
+    {"first_name": "Piotr 🇵🇱", "last_name": "Wojcik", "username": "piotr_waw", "country": "PL", "gender": "m"},
+    {"first_name": "Kasia 🇵🇱", "last_name": "Kowalska", "username": "kasia_pl", "country": "PL", "gender": "f"},
+    {"first_name": "Oleksandr 🇺🇦", "last_name": "Shevchenko", "username": "olex_ua", "country": "UA", "gender": "m"},
+    {"first_name": "Olena 🇺🇦", "last_name": "Bondarenko", "username": "olena_kyiv", "country": "UA", "gender": "f"},
+    {"first_name": "Ahmed 🇪🇬", "last_name": "Hassan", "username": "ahmed_cairo", "country": "EG", "gender": "m"},
+    {"first_name": "Layla 🇪🇬", "last_name": "Mahmoud", "username": "layla_eg", "country": "EG", "gender": "f"},
+    {"first_name": "Jari 🇫🇮", "last_name": "Korhonen", "username": "jari_fin", "country": "FI", "gender": "m"},
+    {"first_name": "Aino 🇫🇮", "last_name": "Maki", "username": "aino_hel", "country": "FI", "gender": "f"},
+    {"first_name": "Thabo 🇿🇦", "last_name": "Molefe", "username": "thabo_sa", "country": "ZA", "gender": "m"},
+    {"first_name": "Zanele 🇿🇦", "last_name": "Dlamini", "username": "zanele_dbn", "country": "ZA", "gender": "f"},
+    {"first_name": "Daan 🇳🇱", "last_name": "De Jong", "username": "daan_ams", "country": "NL", "gender": "m"},
+    {"first_name": "Lotte 🇳🇱", "last_name": "Visser", "username": "lotte_nl", "country": "NL", "gender": "f"},
+    {"first_name": "Tiago 🇵🇹", "last_name": "Santos", "username": "tiago_lis", "country": "PT", "gender": "m"},
+    {"first_name": "Beatriz 🇵🇹", "last_name": "Ferreira", "username": "bea_pt", "country": "PT", "gender": "f"},
 ]
 
 AVATARS = {
@@ -52,11 +82,16 @@ AVATARS = {
     "FR": ["/avatars/fr_f_1.webp"],
     "DE": ["/avatars/de_m_1.webp"],
     "AE": ["/avatars/ae_f_1.webp"],
-    "IT": ["/avatars/it_f_1.webp"]
+    "IT": ["/avatars/it_f_1.webp"],
+    "US": ["/avatars/us_m_1.webp", "/avatars/us_f_1.webp"],
+    "CA": ["/avatars/ca_m_1.webp"]
 }
 
-# Generic fallback
-DEFAULT_AVATARS = ["/avatars/m1.webp", "/avatars/m2.webp", "/avatars/f1.webp", "/avatars/f2.webp"]
+# Generic fallback pool for variety
+DEFAULT_AVATARS = [
+    "/avatars/m1.webp", "/avatars/m2.webp", "/avatars/m3.webp", "/avatars/m4.webp",
+    "/avatars/f1.webp", "/avatars/f2.webp", "/avatars/f3.webp"
+]
 
 async def main():
     try:
@@ -85,20 +120,35 @@ async def main():
 
             print(f"Globalizing {len(partners)} partners...")
 
-            for p in partners:
-                # Pick a name and identity
-                identity = random.choice(NAMES_DATA)
+            # Shuffle names to ensure unique distribution
+            available_identities = list(NAMES_DATA)
+            random.shuffle(available_identities)
+
+            for i, p in enumerate(partners):
+                # Pick a unique identity if pool allows
+                if i < len(available_identities):
+                    identity = available_identities[i]
+                else:
+                    identity = random.choice(NAMES_DATA)
 
                 # Update attributes
                 p.first_name = identity["first_name"]
                 p.last_name = identity["last_name"]
-                # Append a small random number to username to keep it somewhat unique
-                p.username = f"{identity['username']}_{random.randint(100, 999)}"
+                # Append a slightly longer random number for extra uniqueness
+                p.username = f"{identity['username']}_{random.randint(1000, 9999)}"
 
                 # Match country avatar or fallback
                 country_code = identity.get("country", "RU")
-                country_avatars = AVATARS.get(country_code, DEFAULT_AVATARS)
-                p.photo_url = random.choice(country_avatars)
+                gender = identity.get("gender", "m")
+                
+                # Try to match gender from default avatars if generic
+                country_avatars = AVATARS.get(country_code)
+                if country_avatars:
+                    p.photo_url = random.choice(country_avatars)
+                else:
+                    # Fallback to gender-filtered generic avatars
+                    generic_pool = [a for a in DEFAULT_AVATARS if (gender == 'm' and '/m' in a) or (gender == 'f' and '/f' in a)]
+                    p.photo_url = random.choice(generic_pool if generic_pool else DEFAULT_AVATARS)
 
                 session.add(p)
                 print(f"Updated ID {p.id}: {p.first_name} (@{p.username})")
