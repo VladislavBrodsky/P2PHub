@@ -59,13 +59,26 @@ class ViralMarketingStudio:
         self.openai_client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY) if settings.OPENAI_API_KEY else None
         
         # Initialize Gemini 1.5 Pro for content assistance (using new GenAI client)
+        # Initialize Gemini 1.5 Pro/Imagen 3 (Safe Init)
+        self.genai_client = None
         if os.getenv("GOOGLE_API_KEY"):
-            # Initialize Gemini GenAI Client for Imagen 3
-            self.genai_client = google_genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+            try:
+                # Initialize Gemini GenAI Client for Imagen 3
+                self.genai_client = google_genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+            except Exception as e:
+                logger.error(f"⚠️ Failed to initialize Google GenAI Client: {e}")
         else:
             self.gemini_model = None
-            self.genai_client = None
             logger.warning("⚠️ Google API Key for Gemini/Imagen missing.")
+
+    def get_capabilities(self) -> Dict[str, bool]:
+        """
+        Returns the operational status of the studio's AI dependencies.
+        """
+        return {
+            "text_generation": bool(self.openai_client),
+            "image_generation": bool(self.genai_client)
+        }
 
     async def check_tokens_and_reset(self, partner: Partner, session: AsyncSession, min_tokens: int = 1) -> bool:
         """

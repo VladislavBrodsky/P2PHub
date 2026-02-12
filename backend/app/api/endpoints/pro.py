@@ -43,7 +43,8 @@ async def get_pro_status(
         "pro_tokens": partner.pro_tokens,
         "has_x_setup": bool(partner.x_api_key),
         "has_telegram_setup": bool(partner.telegram_channel_id),
-        "has_linkedin_setup": bool(partner.linkedin_access_token)
+        "has_linkedin_setup": bool(partner.linkedin_access_token),
+        "capabilities": viral_studio.get_capabilities()
     }
 
 @router.post("/setup")

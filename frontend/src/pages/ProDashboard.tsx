@@ -141,6 +141,9 @@ export const ProDashboard = () => {
                             {status && (
                                 <span className="text-[10px] font-black text-amber-500">{status.pro_tokens} TOKENS LEFT</span>
                             )}
+                            {status && !status.capabilities.text_generation && (
+                                <span className="text-[10px] font-bold text-red-500 bg-red-500/10 px-2 py-0.5 rounded-full border border-red-500/20">SYSTEM OFFLINE</span>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -192,8 +195,8 @@ export const ProDashboard = () => {
                                                     key={type}
                                                     onClick={() => { selection(); setPostType(type); }}
                                                     className={`p-3 rounded-2xl text-[10px] font-black border transition-all ${postType === type
-                                                            ? 'bg-indigo-500 border-indigo-500 text-white shadow-lg'
-                                                            : 'bg-black/5 dark:bg-white/5 border-transparent opacity-60'
+                                                        ? 'bg-indigo-500 border-indigo-500 text-white shadow-lg'
+                                                        : 'bg-black/5 dark:bg-white/5 border-transparent opacity-60'
                                                         }`}
                                                 >
                                                     {type}
@@ -210,8 +213,8 @@ export const ProDashboard = () => {
                                                     key={a}
                                                     onClick={() => { selection(); setAudience(a); }}
                                                     className={`p-3 rounded-2xl text-[10px] font-black border transition-all ${audience === a
-                                                            ? 'bg-indigo-500 border-indigo-500 text-white shadow-lg'
-                                                            : 'bg-black/5 dark:bg-white/5 border-transparent opacity-60'
+                                                        ? 'bg-indigo-500 border-indigo-500 text-white shadow-lg'
+                                                        : 'bg-black/5 dark:bg-white/5 border-transparent opacity-60'
                                                         }`}
                                                 >
                                                     {a}

@@ -6,6 +6,10 @@ export interface PROStatus {
     has_x_setup: boolean;
     has_telegram_setup: boolean;
     has_linkedin_setup: boolean;
+    capabilities: {
+        text_generation: boolean;
+        image_generation: boolean;
+    };
 }
 
 export interface PROSetupPayload {
