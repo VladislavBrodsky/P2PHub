@@ -184,7 +184,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                         className="flex flex-col"
                     >
                         {/* Header Area - Sticky with Glassmorphism */}
-                        <div className="px-4 pt-6 pb-2 flex items-center justify-between">
+                        <div className="px-4 pt-[calc(env(safe-area-inset-top,0px)+3rem)] pb-2 flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => { selection(); setActiveTab?.('home'); }}
@@ -421,7 +421,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             className="flex flex-col min-h-screen bg-(--color-bg-app) relative"
         >
             {/* Header Area - Non-sticky to avoid overlapping */}
-            <div className="w-full pt-[env(safe-area-inset-top,1rem)] pb-3 px-4 bg-transparent transition-all">
+            <div className="w-full pt-[calc(env(safe-area-inset-top,0px)+3rem)] pb-3 px-4 bg-transparent transition-all">
                 <div className="flex items-center justify-between w-full">
                     <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-(--color-bg-surface) active:scale-90 transition-all text-(--color-text-primary)">
                         <ArrowLeft className="w-6 h-6" />
