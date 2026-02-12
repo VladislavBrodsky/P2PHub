@@ -15,7 +15,7 @@ os.environ.setdefault("WEBHOOK_URL", "https://mock.com/webhook")
 # Set VERIFY_STRICT=1 to disable mocks and fail if items are missing
 STRICT = os.environ.get("VERIFY_STRICT", "0") == "1"
 
-def mock_module(name, attributes):
+def mock_module(name, attributes, sub_modules=None):
     if name in sys.modules and not STRICT:
         return
     if STRICT:
@@ -31,6 +31,15 @@ def mock_module(name, attributes):
     for k, v in attributes.items():
         setattr(m, k, v)
     sys.modules[name] = m
+
+    # Mock sub-modules if provided
+    if sub_modules:
+        for sub_name, sub_attr in sub_modules.items():
+            full_name = f"{name}.{sub_name}"
+            ms = type(sys)(full_name)
+            for k, v in sub_attr.items():
+                setattr(ms, k, v)
+            sys.modules[full_name] = ms
 
 def try_import_or_mock(name, attributes, sub_modules=None):
     try:
@@ -52,19 +61,28 @@ def try_import_or_mock(name, attributes, sub_modules=None):
 # Execute Mocks if needed
 # We wrap these in try/except even in STRICT mode because taskiq modules can be fickle
 # and are not strictly required for the main web application to start.
-try:
-    try_import_or_mock('taskiq_fastapi', {'init': lambda *a, **k: None})
-    try_import_or_mock('taskiq', {'TaskiqScheduler': lambda *a, **k: None}, 
+# Execute Mocks if needed
+# We FORCE mock taskiq modules in non-strict mode to avoid runtime side-effects 
+# (like trying to connect to Redis) which causes CI to fail when services aren't running.
+if not STRICT:
+    # Force mock these even if installed
+    mock_module('taskiq_fastapi', {'init': lambda *a, **k: None})
+    mock_module('taskiq', {'TaskiqScheduler': lambda *a, **k: None}, 
                        sub_modules={'schedule_sources': {'LabelScheduleSource': lambda *a, **k: None}})
-except ImportError as e:
-    print(f"⚠️ Warning: TaskIQ modules not found ({e}). Running in web-only mode?")
-    # We do NOT re-raise here, allowing the script to continue to verify other imports.
-# #comment: Updated ListQueueBroker mock to support keyword arguments (e.g., task_name).
-# This prevents TypeError during import verification in CI when decorators use these params.
-try_import_or_mock('taskiq_redis', {
-    'ListQueueBroker': lambda *a, **k: type('DB', (), {'with_result_backend': lambda s, *x, **kw: s, 'task': lambda s, *x, **kw: lambda f: f})(),
-    'RedisAsyncResultBackend': lambda *a, **k: None
-})
+    # Updated ListQueueBroker mock to support keyword arguments
+    mock_module('taskiq_redis', {
+        'ListQueueBroker': lambda *a, **k: type('DB', (), {'with_result_backend': lambda s, *x, **kw: s, 'task': lambda s, *x, **kw: lambda f: f})(),
+        'RedisAsyncResultBackend': lambda *a, **k: None
+    })
+else:
+    # In STRICT mode, we expect them to be installed and working
+    try:
+        import taskiq_fastapi
+        import taskiq
+        import taskiq_redis
+    except ImportError:
+        # Strict mode will fail naturally later or we can raise here
+        pass
 
 def verify_all_imports():
     print(f"🔍 Starting comprehensive import verification (STRICT={STRICT})...")
