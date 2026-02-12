@@ -133,7 +133,7 @@ async def check_recent_users():
                     XP_MAP = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
                     xp_gain = XP_MAP.get(lvl, 0)
                     if ref_is_pro:
-                        xp_gain *= 5
+                        xp_gain *= 3  # PRO members get 3x XP bonus
                     
                     status = "✅"
                     pro_indicator = "🌟 PRO" if ref_is_pro else ""

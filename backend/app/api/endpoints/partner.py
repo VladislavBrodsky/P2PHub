@@ -696,7 +696,7 @@ async def claim_task_reward(
         session.add(task_earning)
 
         # 2. Update partner stats
-        effective_xp = xp_reward * 5 if partner.is_pro else xp_reward
+        effective_xp = xp_reward * 3 if partner.is_pro else xp_reward  # PRO members get 3x XP bonus
         partner.xp += effective_xp
         partner.level = get_level(partner.xp)
 
