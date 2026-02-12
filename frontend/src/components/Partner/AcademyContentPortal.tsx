@@ -74,24 +74,22 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                         <h3 className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Stage {stage.id}</h3>
                     </div>
 
-                    {/* Stats Badge Removed to resolve collision with Telegram Menu Button */}
+                    {/* Stats Badge */}
+                    <div className="pointer-events-auto flex items-center gap-1.5 p-1 pr-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm z-50">
+                        <div className="px-2 py-1 rounded-lg bg-blue-500 border border-blue-400 shadow-lg flex items-center justify-center">
+                            <span className="text-xs font-black text-white leading-none">{user?.level || 1}</span>
+                        </div>
+                        <div className="flex flex-col items-end">
+                            <span className="text-[9px] font-black text-slate-900 dark:text-white leading-none">{user?.xp || 0}</span>
+                            <span className="text-[6.5px] font-black text-green-500 uppercase tracking-widest">XP</span>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Content Area (Scrollable) */}
                 <div className="flex-1 overflow-y-auto overscroll-contain custom-scrollbar scroll-smooth touch-pan-y pb-32">
-                    {/* Decorative Liquid Header */}
-                    <div className="h-40 branding-liquid-gradient relative flex items-center justify-center shrink-0">
-                        <div className="absolute inset-0 bg-linear-to-t from-white dark:from-[#030712] to-transparent" />
-                        <motion.div
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            whileInView={{ scale: 1, opacity: 1 }}
-                            className="relative z-10 w-24 h-24 rounded-3xl bg-white/40 dark:bg-white/10 backdrop-blur-2xl border border-white/40 flex items-center justify-center shadow-2xl"
-                        >
-                            <stage.icon className="w-12 h-12 text-blue-600 dark:text-white" />
-                        </motion.div>
-                    </div>
 
-                    <div className="p-6 pt-0 space-y-8">
+                    <div className="p-6 pt-10 space-y-8">
                         {isLocked ? (
                             /* PRO Lock View */
                             <div className="flex flex-col items-center text-center space-y-8 py-12">
