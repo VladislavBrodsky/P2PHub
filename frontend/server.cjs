@@ -2,7 +2,13 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = process.env.PORT || 80;
+// Validate process.env.PORT to prevent string injection (e.g. '${PORT}')
+let PORT = process.env.PORT;
+if (PORT && (PORT.includes('${') || isNaN(parseInt(PORT, 10)))) {
+    console.warn(`WARNING: Invalid PORT environment variable detected: "${PORT}". Falling back to default.`);
+    PORT = null;
+}
+PORT = PORT || 80;
 const DIST_DIR = path.join(__dirname, 'dist');
 
 const MIME_TYPES = {
