@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { QrCode, Copy, Gift, DollarSign, ExternalLink, Users, ChevronRight, BookOpen } from 'lucide-react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
 import { useUser } from '../../context/UserContext';
 import { Button } from '../ui/Button';

@@ -45,15 +45,24 @@ export const useRealtimeAlerts = () => {
 
                     // Map icon based on type
                     let icon = <Zap size={18} className="text-amber-500" />;
-                    if (event.type === 'REFERRAL_L1' || event.type === 'REFERRAL_DEEP') icon = <Users size={18} className="text-blue-500" />;
-                    else if (event.type === 'TASK') icon = <Trophy size={18} className="text-emerald-500" />;
-                    else if (event.type === 'LEVEL_UP') icon = <Zap size={18} className="text-yellow-500" />;
+                    let nType: 'success' | 'info' | 'warning' = 'info';
+
+                    if (event.type === 'REFERRAL_L1' || event.type === 'REFERRAL_DEEP') {
+                        icon = <Users size={18} className="text-blue-500" />;
+                        nType = 'success';
+                    } else if (event.type === 'TASK') {
+                        icon = <Trophy size={18} className="text-emerald-500" />;
+                        nType = 'warning';
+                    } else if (event.type === 'LEVEL_UP') {
+                        icon = <Zap size={18} className="text-yellow-500" />;
+                        nType = 'info';
+                    }
 
                     showNotification({
                         title,
                         message,
                         icon,
-                        type: 'info'
+                        type: nType
                     });
                 }
             }

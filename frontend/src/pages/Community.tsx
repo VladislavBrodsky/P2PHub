@@ -6,15 +6,11 @@ import { PartnerDashboard } from '../components/Partner/PartnerDashboard';
 import { PartnerAcademy } from '../components/Partner/PartnerAcademy';
 import { cn } from '../lib/utils';
 import { useTranslation } from 'react-i18next';
-// #comment: Removed unused HelpCircle icon from lucide-react to clean up the import list
-import { BookOpen } from 'lucide-react';
-import { PartnerBriefingModal } from '../components/Partner/PartnerBriefingModal';
 
 export default function CommunityPage() {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'dashboard' | 'academy'>('dashboard');
-    const [isBriefingOpen, setIsBriefingOpen] = useState(false);
     const { selection } = useHaptic();
     useEffect(() => {
         setIsLoading(false);
@@ -104,8 +100,6 @@ export default function CommunityPage() {
                     </motion.div>
                 )}
             </AnimatePresence>
-
-            <PartnerBriefingModal isOpen={isBriefingOpen} onClose={() => setIsBriefingOpen(false)} />
         </div>
     );
 }
