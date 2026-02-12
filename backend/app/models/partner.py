@@ -154,18 +154,23 @@ connect_args = {"check_same_thread": False} if "sqlite" in database_url else {}
 # pool_pre_ping=True ensures stale connections are discarded before use.
 # pool_size and max_overflow are tuned to stay within Railway's Postgres connection limits
 # across all workers and TaskIQ processes. pool_recycle helps with cloud firewalls.
+engine_args = {
+    "echo": settings.DEBUG,
+    "future": True,
+    "connect_args": connect_args,
+    "pool_pre_ping": True,
+}
+
+if "sqlite" not in database_url:
+    engine_args.update({
+        "pool_size": 10,
+        "max_overflow": 5,
+        "pool_timeout": 30,
+        "pool_recycle": 1800,
+    })
+
 try:
-    engine = create_async_engine(
-        database_url,
-        echo=settings.DEBUG,
-        future=True,
-        connect_args=connect_args,
-        pool_size=10,
-        max_overflow=5,
-        pool_timeout=30,
-        pool_recycle=1800,
-        pool_pre_ping=True,
-    )
+    engine = create_async_engine(database_url, **engine_args)
 except Exception as e:
     print(f"❌ CRITICAL ERROR: Failed to create database engine: {e}", file=sys.stderr)
     print("📋 Common causes:", file=sys.stderr)

@@ -30,7 +30,8 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.models.partner import Partner
-from app.services.partner_service import create_partner, process_referral_notifications
+from app.services.partner_service import create_partner
+from app.services.referral_service import process_referral_notifications
 
 # Use the token from env (which we set in the script)
 real_bot = Bot(token=os.environ["BOT_TOKEN"])

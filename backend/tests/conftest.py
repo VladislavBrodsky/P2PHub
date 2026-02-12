@@ -12,7 +12,7 @@ from typing import AsyncGenerator
 
 # #comment: Set required environment variables BEFORE importing any app modules.
 # This prevents pydantic validation errors when Settings() tries to load DATABASE_URL.
-os.environ.setdefault("DATABASE_URL", "sqlite:///test.db")
+os.environ.setdefault("DATABASE_URL", "sqlite+aiosqlite:///:memory:")
 os.environ.setdefault("BOT_TOKEN", "test_token")
 os.environ.setdefault("WEBHOOK_SECRET", "test_secret")
 

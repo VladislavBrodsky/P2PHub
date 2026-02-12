@@ -1,6 +1,7 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Wifi } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export type CardVariant = 'virtual' | 'physical' | 'platinum';
 
@@ -11,6 +12,9 @@ interface PintopayCardProps {
 export const PintopayCard = ({
     variant = 'virtual',
 }: PintopayCardProps) => {
+    const [isFlipped, setIsFlipped] = useState(false);
+    const { t } = useTranslation();
+
     const x = useMotionValue(0);
     const y = useMotionValue(0);
 
@@ -53,10 +57,15 @@ export const PintopayCard = ({
     };
 
     const cardStyles = {
-        virtual: 'bg-gradient-to-br from-blue-600 to-blue-800',
+        virtual: 'bg-linear-to-br from-blue-600 to-blue-800',
         physical: 'bg-black', // Sleek matte black
-        platinum: 'bg-gradient-to-br from-slate-200 via-white to-slate-300',
+        platinum: 'bg-linear-to-br from-slate-200 via-white to-slate-300',
     };
+
+    // Reset flip when variant changes
+    useEffect(() => {
+        setIsFlipped(false);
+    }, [variant]);
 
     return (
         <div
@@ -65,6 +74,7 @@ export const PintopayCard = ({
             onTouchMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             onTouchEnd={handleMouseLeave}
+            onClick={() => setIsFlipped(!isFlipped)}
         >
             <motion.div
                 style={{
@@ -72,63 +82,124 @@ export const PintopayCard = ({
                     rotateY,
                     transformStyle: 'preserve-3d',
                 }}
-                className={`group relative h-full w-full overflow-hidden rounded-2xl shadow-2xl transition-all duration-300 ${cardStyles[variant]}`}
+                className="relative h-full w-full transition-all duration-300"
             >
-                {/* Global Grain Texture */}
-                <div className="absolute inset-0 z-0 opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+                <motion.div
+                    animate={{ rotateY: isFlipped ? 180 : 0 }}
+                    transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
+                    style={{ transformStyle: 'preserve-3d' }}
+                    className="w-full h-full relative"
+                >
+                    {/* FRONT SIDE */}
+                    <div
+                        className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl shadow-2xl ${cardStyles[variant]}`}
+                        style={{ backfaceVisibility: 'hidden' }}
+                    >
+                        {/* Global Grain Texture */}
+                        <div className="absolute inset-0 z-0 opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
-                {/* Variant Specific Overlays */}
-                {variant === 'platinum' && (
-                    <>
-                        <div className="absolute inset-0 z-1 card-shine opacity-60 mix-blend-soft-light" />
-                        <div className="absolute inset-0 z-1 bg-gradient-to-tr from-transparent via-white/40 to-transparent opacity-80" />
-                        <div className="absolute -inset-1 z-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-20 blur-xl" />
-                    </>
-                )}
+                        {/* Variant Specific Overlays */}
+                        {variant === 'platinum' && (
+                            <>
+                                <div className="absolute inset-0 z-1 card-shine opacity-60 mix-blend-soft-light" />
+                                <div className="absolute inset-0 z-1 bg-linear-to-tr from-transparent via-white/40 to-transparent opacity-80" />
+                                <div className="absolute -inset-1 z-0 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-20 blur-xl" />
+                            </>
+                        )}
 
-                {variant === 'physical' && (
-                    <div className="absolute inset-0 z-1 bg-gradient-to-b from-white/10 to-transparent" />
-                )}
+                        {variant === 'physical' && (
+                            <div className="absolute inset-0 z-1 bg-linear-to-b from-white/10 to-transparent" />
+                        )}
 
-                <div className="absolute inset-0 z-0 bg-gradient-to-br from-white/10 to-transparent mix-blend-overlay" />
+                        <div className="absolute inset-0 z-0 bg-linear-to-br from-white/10 to-transparent mix-blend-overlay" />
 
-                {/* Contactless Icon */}
-                <div className="absolute top-6 left-6 z-20 opacity-80">
-                    <Wifi className={`h-8 w-8 rotate-90 ${variant === 'platinum' ? 'text-slate-800' : 'text-white'}`} strokeWidth={2} />
-                </div>
+                        {/* Contactless Icon */}
+                        <div className="absolute top-6 left-6 z-20 opacity-80">
+                            <Wifi className={`h-8 w-8 rotate-90 ${variant === 'platinum' ? 'text-slate-800' : 'text-white'}`} strokeWidth={2} />
+                        </div>
 
-                {/* Logo Text */}
-                <div className="absolute bottom-6 left-6 z-20 transition-transform duration-300 group-hover:scale-110 drop-shadow-xl">
-                    <span className={`text-xl font-black tracking-tighter ${variant === 'platinum' ? 'text-slate-900' : 'text-white'}`}>
-                        Pintopay
-                    </span>
-                </div>
-
-                {/* Platinum Badge */}
-                {variant === 'platinum' && (
-                    <div className="absolute top-6 right-6 z-20">
-                        <div className="bg-slate-900/5 backdrop-blur-md border border-slate-900/10 rounded-full px-3 py-1 shadow-sm">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-900">
-                                Platinum
+                        {/* Logo Text */}
+                        <div className="absolute bottom-6 left-6 z-20 transition-transform duration-300 group-hover:scale-110 drop-shadow-xl">
+                            <span className={`text-xl font-black tracking-tighter ${variant === 'platinum' ? 'text-slate-900' : 'text-white'}`}>
+                                Pintopay
                             </span>
                         </div>
+
+                        {/* Platinum Badge */}
+                        {variant === 'platinum' && (
+                            <div className="absolute top-6 right-6 z-20">
+                                <div className="bg-slate-900/5 backdrop-blur-md border border-slate-900/10 rounded-full px-3 py-1 shadow-sm">
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-900">
+                                        Platinum
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Mastercard Logo */}
+                        <div className="absolute bottom-6 right-6 z-20 flex items-center justify-center opacity-90 transition-opacity group-hover:opacity-100">
+                            <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
+                                <circle cx="11" cy="11" r="11" fill="#EB001B" />
+                                <circle cx="23" cy="11" r="11" fill="#F79E1B" fillOpacity="0.9" />
+                                <path d="M17 3.17C15.15 4.9 14.07 7.32 14.07 10C14.07 12.68 15.15 15.1 17 16.83C18.85 15.1 19.93 12.68 19.93 10C19.93 7.32 18.85 4.9 17 3.17Z" fill="#FF5F00" />
+                            </svg>
+                        </div>
+
+                        {/* Tap Hint */}
+                        <div className="absolute bottom-1/2 translate-y-1/2 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div className="bg-black/20 backdrop-blur-md rounded-full p-2">
+                                <RotateCcwIcon size={16} className="text-white" />
+                            </div>
+                        </div>
+
+                        {/* Shimmer Effect for Non-Platinum */}
+                        {variant !== 'platinum' && (
+                            <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/10 to-transparent group-hover:animate-[shimmer_2s_infinite]" />
+                        )}
                     </div>
-                )}
 
-                {/* Mastercard Logo */}
-                <div className="absolute bottom-6 right-6 z-20 flex items-center justify-center opacity-90 transition-opacity group-hover:opacity-100">
-                    <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
-                        <circle cx="11" cy="11" r="11" fill="#EB001B" />
-                        <circle cx="23" cy="11" r="11" fill="#F79E1B" fillOpacity="0.9" />
-                        <path d="M17 3.17C15.15 4.9 14.07 7.32 14.07 10C14.07 12.68 15.15 15.1 17 16.83C18.85 15.1 19.93 12.68 19.93 10C19.93 7.32 18.85 4.9 17 3.17Z" fill="#FF5F00" />
-                    </svg>
-                </div>
+                    {/* BACK SIDE */}
+                    <div
+                        className="absolute inset-0 backface-hidden overflow-hidden rounded-2xl shadow-2xl bg-zinc-950 p-6 flex flex-col justify-center items-center text-center border border-zinc-800"
+                        style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+                    >
+                        <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-purple-500/5 to-transparent opacity-50" />
+                        <div className="relative z-10">
+                            <h3 className="text-lg font-black uppercase tracking-tight text-white mb-3">
+                                {t(`cards.${variant}.back_title`)}
+                            </h3>
+                            <p className="text-xs font-medium text-zinc-400 leading-relaxed">
+                                {t(`cards.${variant}.back_desc`)}
+                            </p>
+                        </div>
+                        {/* Magnetic Strip Visual */}
+                        <div className="absolute top-4 left-0 right-0 h-10 bg-zinc-900/80" />
 
-                {/* Shimmer Effect for Non-Platinum */}
-                {variant !== 'platinum' && (
-                    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent group-hover:animate-[shimmer_2s_infinite]" />
-                )}
+                        <div className="absolute bottom-4 right-6 opacity-30">
+                            <span className="text-[10px] font-mono text-zinc-500">000 / CVV</span>
+                        </div>
+                    </div>
+                </motion.div>
             </motion.div>
         </div>
     );
 };
+
+// Icon helper
+const RotateCcwIcon = ({ size, className }: { size: number; className?: string }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+    >
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+        <path d="M3 3v5h5" />
+    </svg>
+);

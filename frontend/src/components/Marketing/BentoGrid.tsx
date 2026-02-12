@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { CreditCard, Smartphone, Zap, Globe, Coins, QrCode } from 'lucide-react';
+import { CreditCard, Smartphone, Zap, Globe, Coins, QrCode, RotateCcw, AlertTriangle, Lock, TrendingUp, Infinity as IconInfinity } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const shiftSteps = [
@@ -51,6 +51,14 @@ export const BentoGrid = () => {
     const { t } = useTranslation();
     const scrollRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
+
+    const toggleFlip = (index: number) => {
+        setFlippedCards(prev => ({
+            ...prev,
+            [index]: !prev[index]
+        }));
+    };
 
     const handleScroll = () => {
         if (!scrollRef.current) return;
@@ -117,54 +125,100 @@ export const BentoGrid = () => {
                     className="flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory no-scrollbar px-4 -mx-4 md:mx-0 md:px-0 scroll-smooth"
                 >
                     {shiftSteps.map((step, index) => (
-                        <motion.div
+                        <div
                             key={index}
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true, margin: "-10%" }}
-                            transition={{
-                                duration: 0.5,
-                                delay: index * 0.05,
-                                ease: [0.23, 1, 0.32, 1]
-                            }}
-                            className={`relative group shrink-0 w-[85vw] md:w-[400px] snap-center overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) p-6 glass-panel-premium transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
-                            style={{ transform: 'translateZ(0)' }} // Hardware acceleration
+                            className={`relative group shrink-0 w-[85vw] md:w-[400px] h-[300px] snap-center perspective-1000 cursor-pointer`}
+                            onClick={() => toggleFlip(index)}
                         >
-                            <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
-
-                            <div className="relative z-10 space-y-4 h-full flex flex-col">
-                                <div className="flex items-center justify-between">
-                                    <div className="p-3 w-fit rounded-2xl bg-(--color-bg-app)/50 dark:bg-black/40 backdrop-blur-xl border border-(--color-border-glass) shadow-lg transition-transform group-hover:scale-110">
-                                        {step.icon}
-                                    </div>
-                                    <span className={`text-[9px] font-black px-2.5 py-1 rounded-full ${step.statusColor} tracking-widest`}>
-                                        {t(`evolution.steps.${step.id}.status`)}
-                                    </span>
-                                </div>
-
-                                <div className="space-y-1">
-                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary) opacity-60">
-                                        {t(`evolution.steps.${step.id}.title`)}
-                                    </p>
-                                    <h4 className={`text-xl font-black leading-tight ${step.featured ? 'text-blue-500' : 'text-(--color-text-primary)'}`}>
-                                        {t(`evolution.steps.${step.id}.subtitle`)}
-                                    </h4>
-                                </div>
-
-                                <p className="text-xs font-semibold leading-relaxed text-(--color-text-secondary) opacity-80 grow">
-                                    {t(`evolution.steps.${step.id}.desc`)}
-                                </p>
-                            </div>
-
                             <motion.div
-                                className="absolute -right-2 -bottom-2 opacity-5 pointer-events-none"
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                                style={{ willChange: 'transform' }}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true, margin: "-10%" }}
+                                transition={{
+                                    duration: 0.6,
+                                    delay: index * 0.05,
+                                    ease: [0.23, 1, 0.32, 1]
+                                }}
+                                animate={{ rotateY: flippedCards[index] ? 180 : 0 }}
+                                style={{ transformStyle: "preserve-3d" }}
+                                className={`w-full h-full relative duration-500`}
                             >
-                                {step.watermark}
+                                {/* FRONT SIDE */}
+                                <div
+                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) p-6 glass-panel-premium transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
+                                    style={{ transform: 'rotateY(0deg)' }}
+                                >
+                                    <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
+
+                                    <div className="relative z-10 space-y-4 h-full flex flex-col">
+                                        <div className="flex items-center justify-between">
+                                            <div className="p-3 w-fit rounded-2xl bg-(--color-bg-app)/50 dark:bg-black/40 backdrop-blur-xl border border-(--color-border-glass) shadow-lg transition-transform group-hover:scale-110">
+                                                {step.icon}
+                                            </div>
+                                            <span className={`text-[9px] font-black px-2.5 py-1 rounded-full ${step.statusColor} tracking-widest`}>
+                                                {t(`evolution.steps.${step.id}.status`)}
+                                            </span>
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary) opacity-60">
+                                                {t(`evolution.steps.${step.id}.title`)}
+                                            </p>
+                                            <h4 className={`text-xl font-black leading-tight ${step.featured ? 'text-blue-500' : 'text-(--color-text-primary)'}`}>
+                                                {t(`evolution.steps.${step.id}.subtitle`)}
+                                            </h4>
+                                        </div>
+
+                                        <p className="text-xs font-semibold leading-relaxed text-(--color-text-secondary) opacity-80 grow">
+                                            {t(`evolution.steps.${step.id}.desc`)}
+                                        </p>
+
+                                        <div className="pt-2 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <span className="text-[9px] font-black text-blue-500 flex items-center gap-1">
+                                                TAP TO FLIP <RotateCcw size={10} />
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <motion.div
+                                        className="absolute -right-2 -bottom-2 opacity-5 pointer-events-none"
+                                        animate={{ rotate: 360 }}
+                                        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                                    >
+                                        {step.watermark}
+                                    </motion.div>
+                                </div>
+
+                                {/* BACK SIDE */}
+                                <div
+                                    className="absolute inset-0 backface-hidden overflow-hidden rounded-[2.5rem] bg-slate-950 border border-slate-800 p-6 flex flex-col text-center justify-center items-center shadow-2xl"
+                                    style={{ transform: 'rotateY(180deg)' }}
+                                >
+                                    {/* Alert Icon based on step */}
+                                    <div className="mb-4">
+                                        {index < 2 ? (
+                                            <AlertTriangle className="w-12 h-12 text-red-500 animate-pulse" />
+                                        ) : index === 2 ? (
+                                            <Lock className="w-12 h-12 text-amber-500" />
+                                        ) : (
+                                            <TrendingUp className="w-12 h-12 text-emerald-500" />
+                                        )}
+                                    </div>
+
+                                    <h4 className="text-lg font-black uppercase text-white mb-3 tracking-tight">
+                                        {t(`evolution.steps.${step.id}.back_title`)}
+                                    </h4>
+
+                                    <p className="text-xs font-medium text-slate-300 leading-relaxed mb-6">
+                                        {t(`evolution.steps.${step.id}.back_desc`)}
+                                    </p>
+
+                                    <button className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-transform active:scale-95 ${index < 3 ? 'bg-red-500/20 text-red-500 border border-red-500/50' : 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'}`}>
+                                        {index < 3 ? t('common.back') : t('income.cta.join')}
+                                    </button>
+                                </div>
                             </motion.div>
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
 

@@ -73,7 +73,7 @@ async def lifespan(app: FastAPI):
             is_leader = await redis_service.client.set(lock_key, "1", ex=300, nx=True)
             if is_leader:
                 logger.info("🔧 Leader Worker: Running user restoration from Telegram...")
-                from scripts.restore_names_from_telegram import restore_names_from_telegram
+                from scripts.archive.restore_names_from_telegram import restore_names_from_telegram
                 restored_count = await restore_names_from_telegram()
                 
                 # Clear all caches to force refresh
