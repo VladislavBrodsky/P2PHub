@@ -18,28 +18,34 @@ from sqlmodel import select
 from app.models.partner import Partner
 
 # Diverse names data
+# Diverse names data
 NAMES_DATA = [
-    {"first_name": "Dmitri", "last_name": "Ivanov", "username": "dmitri_iv", "country": "RU"},
-    {"first_name": "Siddharth", "last_name": "Sharma", "username": "sid_india", "country": "IN"},
-    {"first_name": "Isabella", "last_name": "Silva", "username": "bella_rio", "country": "BR"},
-    {"first_name": "Yuki", "last_name": "Tanaka", "username": "yuki_tk", "country": "JP"},
-    {"first_name": "Chinonso", "last_name": "Okonkwo", "username": "chi_vibe", "country": "NG"},
-    {"first_name": "Mateo", "last_name": "Garcia", "username": "mateo_esp", "country": "ES"},
-    {"first_name": "Elena", "last_name": "Petrova", "username": "elena_p", "country": "RU"},
-    {"first_name": "Liam", "last_name": "O'Sullivan", "username": "liam_dublin", "country": "IE"},
-    {"first_name": "Amina", "last_name": "Mansour", "username": "amina_dxb", "country": "AE"},
-    {"first_name": "Arjun", "last_name": "Patel", "username": "arjun_web3", "country": "IN"},
-    {"first_name": "Chloe", "last_name": "Lefebvre", "username": "chloe_paris", "country": "FR"},
-    {"first_name": "Hans", "last_name": "Müller", "username": "hans_berlin", "country": "DE"},
-    {"first_name": "Sofia", "last_name": "Rossi", "username": "sofia_roma", "country": "IT"},
-    {"first_name": "Zhu", "last_name": "Wei", "username": "zhu_wei", "country": "CN"},
-    {"first_name": "Santiago", "last_name": "Hernandez", "username": "santi_mx", "country": "MX"},
-    {"first_name": "Aarav", "last_name": "Kumar", "username": "aarav_k", "country": "IN"},
-    {"first_name": "Fatima", "last_name": "Zahra", "username": "fatima_z", "country": "MA"},
-    {"first_name": "Oliver", "last_name": "Smith", "username": "ollie_uk", "country": "UK"},
-    {"first_name": "Isla", "last_name": "McGregor", "username": "isla_scot", "country": "UK"},
-    {"first_name": "Lars", "last_name": "Svensson", "username": "lars_sw", "country": "SE"},
+    {"first_name": "Dmitri", "last_name": "Ivanov", "username": "dmitri_iv", "country": "RU", "gender": "m"},
+    {"first_name": "Siddharth", "last_name": "Sharma", "username": "sid_india", "country": "IN", "gender": "m"},
+    {"first_name": "Isabella", "last_name": "Silva", "username": "bella_rio", "country": "BR", "gender": "f"},
+    {"first_name": "Yuki", "last_name": "Tanaka", "username": "yuki_tk", "country": "JP", "gender": "f"},
+    {"first_name": "Chinonso", "last_name": "Okonkwo", "username": "chi_vibe", "country": "NG", "gender": "m"},
+    {"first_name": "Mateo", "last_name": "Garcia", "username": "mateo_esp", "country": "ES", "gender": "m"},
+    {"first_name": "Elena", "last_name": "Petrova", "username": "elena_p", "country": "RU", "gender": "f"},
+    {"first_name": "Liam", "last_name": "O'Sullivan", "username": "liam_dublin", "country": "IE", "gender": "m"},
+    {"first_name": "Amina", "last_name": "Mansour", "username": "amina_dxb", "country": "AE", "gender": "f"},
+    {"first_name": "Arjun", "last_name": "Patel", "username": "arjun_web3", "country": "IN", "gender": "m"},
+    {"first_name": "Chloe", "last_name": "Lefebvre", "username": "chloe_paris", "country": "FR", "gender": "f"},
+    {"first_name": "Hans", "last_name": "Müller", "username": "hans_berlin", "country": "DE", "gender": "m"},
+    {"first_name": "Sofia", "last_name": "Rossi", "username": "sofia_roma", "country": "IT", "gender": "f"},
+    {"first_name": "Zhu", "last_name": "Wei", "username": "zhu_wei", "country": "CN", "gender": "f"},
+    {"first_name": "Santiago", "last_name": "Hernandez", "username": "santi_mx", "country": "MX", "gender": "m"},
+    {"first_name": "Aarav", "last_name": "Kumar", "username": "aarav_k", "country": "IN", "gender": "m"},
+    {"first_name": "Fatima", "last_name": "Zahra", "username": "fatima_z", "country": "MA", "gender": "f"},
+    {"first_name": "Oliver", "last_name": "Smith", "username": "ollie_uk", "country": "UK", "gender": "m"},
+    {"first_name": "Isla", "last_name": "McGregor", "username": "isla_scot", "country": "UK", "gender": "f"},
+    {"first_name": "Lars", "last_name": "Svensson", "username": "lars_sw", "country": "SE", "gender": "m"},
 ]
+
+AVATARS = {
+    "m": ["/avatars/m1.webp", "/avatars/m2.webp", "/avatars/m3.webp", "/avatars/m4.webp"],
+    "f": ["/avatars/f1.webp", "/avatars/f2.webp", "/avatars/f3.webp"]
+}
 
 async def main():
     try:
@@ -58,27 +64,28 @@ async def main():
             # Query all partners that look like test users or have "None" names
             statement = select(Partner).where(
                 (Partner.first_name.like("TestUser%")) |
-                (Partner.first_name is None) |
-                (Partner.username.like("TestUser%"))
+                (Partner.first_name == None) |
+                (Partner.username.like("TestUser%")) |
+                (Partner.photo_url.like("%dicebear%"))
             )
             result = await session.exec(statement)
             partners = result.all()
 
             print(f"Globalizing {len(partners)} partners...")
 
-            for i, p in enumerate(partners):
+            for p in partners:
                 # Pick a name and identity
-                identity = NAMES_DATA[i % len(NAMES_DATA)]
+                identity = random.choice(NAMES_DATA)
 
                 # Update attributes
                 p.first_name = identity["first_name"]
                 p.last_name = identity["last_name"]
-                # Append a small random number to username to keep it somewhat unique if many users
-                p.username = f"{identity['username']}_{random.randint(10, 99)}"
+                # Append a small random number to username to keep it somewhat unique
+                p.username = f"{identity['username']}_{random.randint(100, 999)}"
 
-                # Assign a Dicebear avatar URL based on the name (avataaars)
-                # Seed with username to ensure they stay the same
-                p.photo_url = f"https://api.dicebear.com/7.x/avataaars/svg?seed={p.username}&backgroundColor=b6e3f4,c0aede,d1d4f9"
+                # Assign a local cinematic avatar based on gender
+                gender = identity.get("gender", "m")
+                p.photo_url = random.choice(AVATARS[gender])
 
                 session.add(p)
                 print(f"Updated ID {p.id}: {p.first_name} (@{p.username})")
