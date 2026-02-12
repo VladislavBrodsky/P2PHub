@@ -11,7 +11,7 @@ project_root = os.path.dirname(current_dir)
 sys.path.append(project_root)
 
 # Hardcode env vars for script
-os.environ["DATABASE_URL"] = os.getenv("DATABASE_URL", "REMOVED_FOR_SECURITY")
+# Database configuration handled via environment variables
 
 from sqlmodel import select
 
@@ -165,6 +165,9 @@ async def main():
             available_identities = list(NAMES_DATA)
             random.shuffle(available_identities)
 
+            # Web3 flavor text
+            CRYPTO_SUFFIXES = ["_eth", "_btc", "_sol", "_nft", "_dao", "_defi", "_web3", "_hodl", "_gm", "_wagmi", "_alpha", "_degne"]
+
             for i, p in enumerate(partners):
                 # Pick a unique identity if pool allows
                 if i < len(available_identities):
@@ -175,8 +178,11 @@ async def main():
                 # Update attributes
                 p.first_name = identity["first_name"]
                 p.last_name = identity["last_name"]
-                # Append a slightly longer random number for extra uniqueness
-                p.username = f"{identity['username']}_{random.randint(1000, 9999)}"
+                
+                # Create a Web3 style username
+                base_username = identity['username'].split('_')[0] # Simplify base
+                suffix = random.choice(CRYPTO_SUFFIXES) if random.random() > 0.3 else ""
+                p.username = f"{base_username}{suffix}_{random.randint(100, 9999)}"
 
                 # Match country avatar or fallback
                 country_code = identity.get("country", "RU")
@@ -192,7 +198,7 @@ async def main():
                     p.photo_url = random.choice(generic_pool if generic_pool else DEFAULT_AVATARS)
 
                 session.add(p)
-                print(f"Updated ID {p.id}: {p.first_name} (@{p.username})")
+                print(f"Updated ID {p.id}: {p.first_name} {p.last_name} (@{p.username})")
 
             await session.commit()
             print("Successfully globalized all test users!")

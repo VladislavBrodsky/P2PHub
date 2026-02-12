@@ -74,8 +74,12 @@ async def lifespan(app: FastAPI):
         print("✅ Bot started with Long Polling")
 
     # Explicit Database Connection Check
+    # Why: Catches database connection issues early in the startup process.
+    # This prevents the app from starting with a broken database connection,
+    # which would cause cryptic errors later during request handling.
     try:
         from sqlalchemy import text
+        import asyncpg
 
         from app.models.partner import engine
         print("🌍 Checking Database Connection (Timeout 5s)...")
@@ -84,11 +88,42 @@ async def lifespan(app: FastAPI):
                 print("   ⏳ Engine session begun, executing query...")
                 await conn.execute(text("SELECT 1"))
         print("✅ Database Connection Successful")
+    except asyncpg.InvalidPasswordError as e:
+        # Specific handling for authentication errors
+        print("=" * 70, flush=True)
+        print("❌ DATABASE AUTHENTICATION FAILED", flush=True)
+        print("=" * 70, flush=True)
+        print(f"Error: {e}", flush=True)
+        print("\n📋 TROUBLESHOOTING STEPS:", flush=True)
+        print("1. Go to Railway Dashboard → PostgreSQL service → Variables", flush=True)
+        print("2. Copy the DATABASE_URL value", flush=True)
+        print("3. Go to Backend service → Variables", flush=True)
+        print("4. Update DATABASE_URL with the value from step 2", flush=True)
+        print("5. Redeploy the backend service", flush=True)
+        print("\n🔍 Common causes:", flush=True)
+        print("   - Railway rotated the database password", flush=True)
+        print("   - Manual password change not synced to backend", flush=True)
+        print("   - Copied wrong DATABASE_URL from another service", flush=True)
+        print("\n⚠️  Application CANNOT start with invalid database credentials!", flush=True)
+        print("=" * 70, flush=True)
+        # Exit with error code to prevent unhealthy deployment
+        import sys
+        sys.exit(1)
     except asyncio.TimeoutError:
-        print("⚠️ Database connection check timed out. Startup continues...")
+        print("⚠️ Database connection check timed out. Startup continues...", flush=True)
+        print("📋 This may indicate:", flush=True)
+        print("   - Slow database startup", flush=True)
+        print("   - Network connectivity issues", flush=True)
+        print("   - Database under heavy load", flush=True)
     except Exception as e:
-        print(f"❌ Database Connection Failed: {e}")
-        print("⚠️ Application starting, but health checks may fail.")
+        print(f"❌ Database Connection Failed: {type(e).__name__}: {e}", flush=True)
+        print("⚠️ Application starting, but health checks may fail.", flush=True)
+        # Check if it's a connection-related error
+        if "connection" in str(e).lower() or "refused" in str(e).lower():
+            print("\n📋 Connection troubleshooting:", flush=True)
+            print("   - Verify DATABASE_URL is correct", flush=True)
+            print("   - Check if database service is running", flush=True)
+            print("   - Ensure network connectivity", flush=True)
 
     print("✅ Lifespan setup complete. App is live.")
     yield

@@ -112,9 +112,28 @@ class SystemSetting(SQLModel, table=True):
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlmodel.ext.asyncio.session import AsyncSession
+import sys
 
 # Standardized async database URL from settings
 database_url = settings.async_database_url
+
+# Validate DATABASE_URL is set and properly formatted
+# Why: Prevents cryptic startup errors when DATABASE_URL is missing or malformed.
+# This provides clear, actionable error messages to developers and ops teams.
+if not database_url:
+    print("❌ CRITICAL ERROR: DATABASE_URL is not set!", file=sys.stderr)
+    print("📋 To fix this:", file=sys.stderr)
+    print("   1. Check Railway environment variables", file=sys.stderr)
+    print("   2. Ensure DATABASE_URL is set in the PostgreSQL service", file=sys.stderr)
+    print("   3. Copy it to the backend service variables", file=sys.stderr)
+    sys.exit(1)
+
+# Validate database URL format
+# Why: Catches common issues like wrong scheme (postgres:// vs postgresql://)
+# or missing components (username, password, host, database name)
+if database_url and not any(database_url.startswith(prefix) for prefix in ["postgresql+asyncpg://", "postgresql://", "sqlite"]):
+    print(f"⚠️ WARNING: DATABASE_URL has unexpected format: {database_url[:20]}...", file=sys.stderr)
+    print("   Expected: postgresql+asyncpg://... or postgresql://...", file=sys.stderr)
 
 # SQLite specific arguments
 connect_args = {"check_same_thread": False} if "sqlite" in database_url else {}
@@ -123,17 +142,25 @@ connect_args = {"check_same_thread": False} if "sqlite" in database_url else {}
 # pool_pre_ping=True ensures stale connections are discarded before use.
 # pool_size and max_overflow are tuned to stay within Railway's Postgres connection limits
 # across all workers and TaskIQ processes. pool_recycle helps with cloud firewalls.
-engine = create_async_engine(
-    database_url,
-    echo=settings.DEBUG,
-    future=True,
-    connect_args=connect_args,
-    pool_size=10,
-    max_overflow=5,
-    pool_timeout=30,
-    pool_recycle=1800,
-    pool_pre_ping=True,
-)
+try:
+    engine = create_async_engine(
+        database_url,
+        echo=settings.DEBUG,
+        future=True,
+        connect_args=connect_args,
+        pool_size=10,
+        max_overflow=5,
+        pool_timeout=30,
+        pool_recycle=1800,
+        pool_pre_ping=True,
+    )
+except Exception as e:
+    print(f"❌ CRITICAL ERROR: Failed to create database engine: {e}", file=sys.stderr)
+    print("📋 Common causes:", file=sys.stderr)
+    print("   1. Invalid DATABASE_URL format", file=sys.stderr)
+    print("   2. Missing database driver (asyncpg)", file=sys.stderr)
+    print("   3. Incorrect connection parameters", file=sys.stderr)
+    sys.exit(1)
 
 async def create_db_and_tables():
     # #comment: DB creation is now guarded in main.py lifespan, but the logic remains here.
