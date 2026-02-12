@@ -94,8 +94,56 @@ async def restore_names_from_telegram():
         
         await session.commit()
         
+        # Now fetch photos for users without photo_file_id
+        print("\n" + "=" * 70)
+        print("🖼️  FETCHING MISSING PROFILE PHOTOS")
+        print("=" * 70)
+        
+        statement_no_photos = select(Partner).where(
+            Partner.photo_file_id.is_(None)
+        ).limit(100)
+        
+        result_no_photos = await session.exec(statement_no_photos)
+        users_no_photos = result_no_photos.all()
+        
+        # Filter real users
+        real_users_no_photos = [u for u in users_no_photos if not str(u.telegram_id).startswith("TEST_")]
+        
+        print(f"\nFound {len(real_users_no_photos)} users without photos\n")
+        
+        photos_fetched = 0
+        for user in real_users_no_photos:
+            try:
+                telegram_id = int(user.telegram_id)
+                
+                # Get user profile photos
+                photos = await bot.get_user_profile_photos(telegram_id, limit=1)
+                
+                if photos.photos and len(photos.photos) > 0:
+                    # Get the highest resolution photo
+                    photo = photos.photos[0][-1]
+                    file_id = photo.file_id
+                    
+                    print(f"✅ {user.first_name} (@{user.username}): Fetched photo")
+                    
+                    user.photo_file_id = file_id
+                    # Clear fake avatar URL
+                    if user.photo_url and "/avatars/" in user.photo_url:
+                        user.photo_url = None
+                    
+                    session.add(user)
+                    photos_fetched += 1
+                    
+            except Exception as e:
+                if "chat not found" not in str(e).lower():
+                    print(f"⚠️  {user.first_name}: Could not fetch photo - {e}")
+        
+        await session.commit()
+        print(f"\n✅ Fetched {photos_fetched} profile photos")
+        
         print("\n" + "=" * 70)
         print(f"✅ Restored {restored_count} users from Telegram")
+        print(f"✅ Fetched {photos_fetched} profile photos")
         if failed_count > 0:
             print(f"⚠️  {failed_count} users could not be fetched (may be deleted/blocked)")
         print("=" * 70)
