@@ -191,31 +191,45 @@ export const BentoGrid = () => {
 
                                 {/* BACK SIDE */}
                                 <div
-                                    className="absolute inset-0 backface-hidden overflow-hidden rounded-[2.5rem] bg-(--color-bg-surface) border border-(--color-border-glass) p-6 flex flex-col text-center justify-center items-center shadow-2xl"
+                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) p-6 glass-panel-premium flex flex-col text-center justify-center items-center shadow-2xl transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
                                     style={{ transform: 'rotateY(180deg)' }}
                                 >
-                                    {/* Alert Icon based on step */}
-                                    <div className="mb-4">
-                                        {index < 2 ? (
-                                            <AlertTriangle className="w-12 h-12 text-red-500 animate-pulse" />
-                                        ) : index === 2 ? (
-                                            <Lock className="w-12 h-12 text-amber-500" />
-                                        ) : (
-                                            <TrendingUp className="w-12 h-12 text-emerald-500" />
-                                        )}
+                                    <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
+
+                                    <div className="relative z-10 flex flex-col items-center justify-center h-full space-y-4">
+                                        {/* Alert Icon based on step */}
+                                        <div className="p-4 rounded-full bg-(--color-bg-app)/50 dark:bg-black/40 backdrop-blur-xl border border-(--color-border-glass) shadow-lg mb-2">
+                                            {index < 2 ? (
+                                                <AlertTriangle className="w-8 h-8 text-red-500 animate-pulse" />
+                                            ) : index === 2 ? (
+                                                <Lock className="w-8 h-8 text-amber-500" />
+                                            ) : (
+                                                <TrendingUp className="w-8 h-8 text-emerald-500" />
+                                            )}
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <h4 className="text-sm font-black uppercase text-(--color-text-primary) tracking-widest leading-tight">
+                                                {t(`evolution.steps.${step.id}.back_title`)}
+                                            </h4>
+
+                                            <p className="text-[11px] font-medium text-(--color-text-secondary) leading-relaxed opacity-90 max-w-[260px] mx-auto">
+                                                {t(`evolution.steps.${step.id}.back_desc`)}
+                                            </p>
+                                        </div>
+
+                                        <button className={`mt-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-lg ${index < 3 ? 'bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20' : 'bg-emerald-500 text-white shadow-emerald-500/20 hover:bg-emerald-600'}`}>
+                                            {index < 3 ? t('common.back') : t('income.cta.join')}
+                                        </button>
                                     </div>
 
-                                    <h4 className="text-lg font-black uppercase text-(--color-text-primary) mb-3 tracking-tight">
-                                        {t(`evolution.steps.${step.id}.back_title`)}
-                                    </h4>
-
-                                    <p className="text-xs font-medium text-(--color-text-secondary) leading-relaxed mb-6">
-                                        {t(`evolution.steps.${step.id}.back_desc`)}
-                                    </p>
-
-                                    <button className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-transform active:scale-95 ${index < 3 ? 'bg-red-500/20 text-red-500 border border-red-500/50' : 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'}`}>
-                                        {index < 3 ? t('common.back') : t('income.cta.join')}
-                                    </button>
+                                    <motion.div
+                                        className="absolute -left-10 -top-10 opacity-5 pointer-events-none"
+                                        animate={{ rotate: -360 }}
+                                        transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                                    >
+                                        {step.watermark}
+                                    </motion.div>
                                 </div>
                             </motion.div>
                         </div>
