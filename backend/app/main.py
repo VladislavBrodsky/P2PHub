@@ -13,6 +13,35 @@ from app.api.endpoints import admin, earnings, leaderboard, partner, payment, to
 from app.core.config import settings
 from bot import bot, dp
 
+# #comment: Initialize Sentry for error tracking and performance monitoring.
+# Only activates if SENTRY_DSN is set in environment variables.
+# This automatically captures: exceptions, slow queries, HTTP requests, custom events.
+# Get your DSN from https://sentry.io after creating a project.
+if settings.SENTRY_DSN:
+    import sentry_sdk
+    from sentry_sdk.integrations.asyncio import AsyncioIntegration
+    from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
+    from sentry_sdk.integrations.redis import RedisIntegration
+    
+    sentry_sdk.init(
+        dsn=settings.SENTRY_DSN,
+        environment=settings.SENTRY_ENVIRONMENT,
+        traces_sample_rate=settings.SENTRY_TRACES_SAMPLE_RATE,
+        integrations=[
+            AsyncioIntegration(),
+            SqlalchemyIntegration(),
+            RedisIntegration(),
+        ],
+        # #comment: Send meaningful context with each error for easier debugging
+        send_default_pii=False,  # Don't send user IPs/cookies for privacy
+        attach_stacktrace=True,   # Include full stack traces
+        before_send=lambda event, hint: event,  # Can filter events here if needed
+    )
+    print(f"✅ Sentry initialized (Environment: {settings.SENTRY_ENVIRONMENT}, Sample Rate: {settings.SENTRY_TRACES_SAMPLE_RATE})")
+else:
+    print("ℹ️  Sentry disabled (SENTRY_DSN not set)")
+
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -233,13 +262,40 @@ app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
 # Global Exception Handler
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
-    print(f"❌ Global Exception: {exc}")
+    request_id = getattr(request.state, "request_id", "unknown")
+    print(f"❌ Global Exception [Request: {request_id}]: {exc}")
     import traceback
     traceback.print_exc()
+    
+    # #comment: Send exception to Sentry if configured
+    if settings.SENTRY_DSN:
+        import sentry_sdk
+        sentry_sdk.capture_exception(exc)
+    
     return JSONResponse(
         status_code=500,
-        content={"status": "error", "message": "Internal Server Error"},
+        content={
+            "status": "error", 
+            "message": "Internal Server Error",
+            "request_id": request_id
+        },
     )
+
+# #comment: Request ID Middleware - Assigns unique ID to each request for tracing.
+# This makes debugging SO much easier - you can grep logs for a specific request ID
+# and see all operations that happened during that request across all services.
+@app.middleware("http")
+async def add_request_id_middleware(request: Request, call_next):
+    import uuid
+    request_id = str(uuid.uuid4())
+    request.state.request_id = request_id
+    
+    # Add to response headers so clients can include it in bug reports
+    response = await call_next(request)
+    response.headers["X-Request-ID"] = request_id
+    
+    return response
+
 
 # Configure CORS
 allowed_origins = [

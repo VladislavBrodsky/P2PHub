@@ -60,6 +60,15 @@ class Settings(BaseSettings):
     # due to varying permissions in different deployment/dev environments.
     OPENAI_API_KEY: Optional[str] = None
 
+    # Monitoring & Error Tracking
+    # #comment: Sentry DSN for production error tracking and monitoring.
+    # Get this from https://sentry.io after creating a project.
+    # Sentry automatically captures all exceptions and performance metrics.
+    SENTRY_DSN: Optional[str] = None
+    SENTRY_ENVIRONMENT: str = "production"  # Can be: production, staging, development
+    SENTRY_TRACES_SAMPLE_RATE: float = 0.1  # 10% of transactions for performance monitoring
+
+
     # Payment settings
     ADMIN_TON_ADDRESS: str = "UQD_n02bdxQxFztKTXpWBaFDxo713qIuETyefIeK7wiUB0DN"
     ADMIN_USDT_ADDRESS: str = "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM"
