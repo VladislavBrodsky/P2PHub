@@ -14,26 +14,49 @@ async def clear_all_caches():
     print("🔧 CLEARING ALL CACHES")
     print("=" * 70)
     
-    # Clear leaderboard caches
+    # Clear leaderboard and partner caches
     keys_to_clear = [
+        "partners:top",
+        "partners:top_v2",
+        "partners:recent_v2",
+        "partners:activity",
         "leaderboard:global",
         "leaderboard:top",
         "leaderboard:top10",
-        "leaderboard:zset",
-        "partners:top_v2",
-        "partners:recent_v2",
-        "partners:activity"
+        "leaderboard:zset"
     ]
     
     cleared_count = 0
     for key in keys_to_clear:
         try:
-            deleted = await redis_service.client.delete(key)
-            if deleted:
+            # Delete exact key
+            if await redis_service.client.delete(key):
                 print(f"  ✅ Cleared: {key}")
                 cleared_count += 1
         except Exception as e:
             print(f"  ⚠️  Error clearing {key}: {e}")
+            
+    # Also clear patterns
+    patterns = [
+        "leaderboard:global_hydrated:*",
+        "partner:profile:*",
+        "partner:earnings:*",
+        "ref_tree_stats:*",
+        "ref_tree_members:*",
+        "growth_metrics:*",
+        "growth_chart:*"
+    ]
+    
+    for pattern in patterns:
+        try:
+            keys = await redis_service.client.keys(pattern)
+            if keys:
+                for k in keys:
+                    await redis_service.client.delete(k)
+                print(f"  ✅ Cleared pattern: {pattern} ({len(keys)} keys)")
+                cleared_count += len(keys)
+        except Exception as e:
+            print(f"  ⚠️  Error clearing pattern {pattern}: {e}")
     
     # Rebuild Redis sorted set from database
     print("\n🔄 Rebuilding Redis leaderboard...")

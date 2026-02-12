@@ -62,7 +62,7 @@ async def lifespan(app: FastAPI):
             from app.services.redis_service import redis_service
             lock_key = "lock:restore_users_from_telegram"
             # Check if already done
-            done_key = "restore:users_completed"
+            done_key = "restore:users_completed_v2"
             if await redis_service.client.get(done_key):
                 print("ℹ️ User restoration already completed. Skipping...")
                 return

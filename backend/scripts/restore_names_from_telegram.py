@@ -19,17 +19,26 @@ async def restore_names_from_telegram():
     where BOT_TOKEN is available.
     """
     from bot import bot
+    from app.core.config import settings
     from app.models.partner import async_session_maker
+    
+    # Check token presence
+    if not settings.BOT_TOKEN or len(settings.BOT_TOKEN) < 10:
+        print("❌ BOT_TOKEN is missing or too short!")
+        return 0
+    else:
+        print(f"📡 BOT_TOKEN present (prefix: {settings.BOT_TOKEN[:10]}...)")
     
     async with async_session_maker() as session:
         print("=" * 70)
-        print("🔧 RESTORING ORIGINAL NAMES FROM TELEGRAM")
+        print("🔧 RESTORING ORIGINAL DATA FROM TELEGRAM")
         print("=" * 70)
         
-        # Find all real users (with photo_file_id)
+        from sqlalchemy import not_
+        # Find all real users (telegram_id does not start with TEST_)
         statement = select(Partner).where(
-            Partner.photo_file_id.isnot(None)
-        ).limit(100)
+            not_(Partner.telegram_id.cast(str).like("TEST_%"))
+        ).order_by(Partner.xp.desc()).limit(500)
         
         result = await session.exec(statement)
         real_users = result.all()
@@ -37,115 +46,67 @@ async def restore_names_from_telegram():
         print(f"\nFound {len(real_users)} real users to check\n")
         
         restored_count = 0
+        photos_fetched = 0
         failed_count = 0
         
         for user in real_users:
             try:
-                # Skip if telegram_id looks like a test ID
-                if "TEST_" in str(user.telegram_id):
+                telegram_id_str = str(user.telegram_id)
+                if "TEST_" in telegram_id_str:
                     continue
                 
                 telegram_id = int(user.telegram_id)
+                needs_save = False
                 
-                # Fetch current profile from Telegram
+                # 1. Restore Profile Data (Names/Usernames)
                 try:
                     chat = await bot.get_chat(telegram_id)
                     
-                    original_first_name = chat.first_name
-                    original_last_name = chat.last_name
-                    original_username = chat.username
+                    if user.first_name != chat.first_name:
+                        print(f"🔄 Name {user.id}: '{user.first_name}' -> '{chat.first_name}'")
+                        user.first_name = chat.first_name
+                        needs_save = True
                     
-                    # Check if current data differs from Telegram
-                    needs_update = False
-                    
-                    if user.first_name != original_first_name:
-                        print(f"\n🔄 User {user.id} ({telegram_id})")
-                        print(f"   Name: '{user.first_name}' → '{original_first_name}'")
-                        user.first_name = original_first_name
-                        needs_update = True
-                    
-                    if user.last_name != original_last_name:
-                        if not needs_update:
-                            print(f"\n🔄 User {user.id} ({telegram_id})")
-                        print(f"   Last Name: '{user.last_name}' → '{original_last_name}'")
-                        user.last_name = original_last_name
-                        needs_update = True
-                    
-                    if user.username != original_username:
-                        if not needs_update:
-                            print(f"\n🔄 User {user.id} ({telegram_id})")
-                        print(f"   Username: '@{user.username}' → '@{original_username}'")
-                        user.username = original_username
-                        needs_update = True
-                    
-                    if needs_update:
-                        session.add(user)
-                        restored_count += 1
-                        print(f"   ✅ Restored from Telegram")
-                    
+                    if user.username != chat.username:
+                        print(f"🔄 User {user.id}: '@{user.username}' -> '@{chat.username}'")
+                        user.username = chat.username
+                        needs_save = True
                 except Exception as e:
-                    if "chat not found" not in str(e).lower():
-                        print(f"\n⚠️  User {user.id} ({telegram_id}): Could not fetch from Telegram - {e}")
-                    failed_count += 1
+                    print(f"⚠️ Chat {user.id}: {e}")
+                
+                # 2. Restore Photo
+                if not user.photo_file_id:
+                    try:
+                        photos = await bot.get_user_profile_photos(telegram_id, limit=1)
+                        if photos.photos:
+                            photo = photos.photos[0][-1]
+                            user.photo_file_id = photo.file_id
+                            if user.photo_url and "/avatars/" in user.photo_url:
+                                user.photo_url = None
+                            print(f"🖼️ Photo {user.id}: Fetched")
+                            needs_save = True
+                            photos_fetched += 1
+                    except Exception as e:
+                        print(f"⚠️ Photo {user.id}: {e}")
+
+                if needs_save:
+                    session.add(user)
+                    restored_count += 1
+                    # Commit every 10 to be safe
+                    if restored_count % 10 == 0:
+                        await session.commit()
                     
             except Exception as e:
-                print(f"\n❌ Error processing user {user.id}: {e}")
+                print(f"❌ Error {user.id}: {e}")
                 failed_count += 1
         
         await session.commit()
         
-        # Now fetch photos for users without photo_file_id
         print("\n" + "=" * 70)
-        print("🖼️  FETCHING MISSING PROFILE PHOTOS")
-        print("=" * 70)
-        
-        statement_no_photos = select(Partner).where(
-            Partner.photo_file_id.is_(None)
-        ).limit(100)
-        
-        result_no_photos = await session.exec(statement_no_photos)
-        users_no_photos = result_no_photos.all()
-        
-        # Filter real users
-        real_users_no_photos = [u for u in users_no_photos if not str(u.telegram_id).startswith("TEST_")]
-        
-        print(f"\nFound {len(real_users_no_photos)} users without photos\n")
-        
-        photos_fetched = 0
-        for user in real_users_no_photos:
-            try:
-                telegram_id = int(user.telegram_id)
-                
-                # Get user profile photos
-                photos = await bot.get_user_profile_photos(telegram_id, limit=1)
-                
-                if photos.photos and len(photos.photos) > 0:
-                    # Get the highest resolution photo
-                    photo = photos.photos[0][-1]
-                    file_id = photo.file_id
-                    
-                    print(f"✅ {user.first_name} (@{user.username}): Fetched photo")
-                    
-                    user.photo_file_id = file_id
-                    # Clear fake avatar URL
-                    if user.photo_url and "/avatars/" in user.photo_url:
-                        user.photo_url = None
-                    
-                    session.add(user)
-                    photos_fetched += 1
-                    
-            except Exception as e:
-                if "chat not found" not in str(e).lower():
-                    print(f"⚠️  {user.first_name}: Could not fetch photo - {e}")
-        
-        await session.commit()
-        print(f"\n✅ Fetched {photos_fetched} profile photos")
-        
-        print("\n" + "=" * 70)
-        print(f"✅ Restored {restored_count} users from Telegram")
-        print(f"✅ Fetched {photos_fetched} profile photos")
+        print(f"✅ Users updated: {restored_count}")
+        print(f"✅ Photos fetched: {photos_fetched}")
         if failed_count > 0:
-            print(f"⚠️  {failed_count} users could not be fetched (may be deleted/blocked)")
+            print(f"⚠️ Failures: {failed_count}")
         print("=" * 70)
         
         return restored_count
