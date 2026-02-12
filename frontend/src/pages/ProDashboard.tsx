@@ -50,6 +50,19 @@ export const ProDashboard = () => {
         linkedin_access_token: ''
     });
 
+    const [countdown, setCountdown] = useState(15);
+
+    useEffect(() => {
+        let interval: any;
+        if (isGenerating) {
+            setCountdown(15);
+            interval = setInterval(() => {
+                setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
+            }, 1000);
+        }
+        return () => clearInterval(interval);
+    }, [isGenerating]);
+
     useEffect(() => {
         loadStatus();
     }, []);
@@ -138,8 +151,8 @@ export const ProDashboard = () => {
                     key={tab}
                     onClick={() => { setActiveTab(tab); selection(); }}
                     className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wide transition-all whitespace-nowrap ${activeTab === tab
-                            ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/25'
-                            : 'bg-(--color-bg-surface) text-(--color-text-secondary) border border-(--color-border-glass)'
+                        ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/25'
+                        : 'bg-(--color-bg-surface) text-(--color-text-secondary) border border-(--color-border-glass)'
                         }`}
                 >
                     {t(`pro_dashboard.tab_${tab}`)}
