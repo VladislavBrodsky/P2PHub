@@ -130,7 +130,7 @@ class ViralMarketingStudio:
 
         try:
             response = await self.openai_client.chat.completions.create(
-                model="gpt-4-turbo-preview",
+                model="gpt-5",
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}
@@ -163,13 +163,13 @@ class ViralMarketingStudio:
                     
                     if method:
                         img_response = method(
-                            model='imagen-3.0-generate-001',
+                            model='gemini-3.0-pro',
                             prompt=image_prompt,
-                            config=genai_types.GenerateImageConfig(
-                                number_of_images=1,
-                                include_rai_reasoning=True,
-                                output_mime_type='image/png'
-                            )
+                            config={
+                                'number_of_images': 1,
+                                'include_rai_reasoning': True,
+                                'output_mime_type': 'image/png'
+                            }
                         )
                         
                         # Handle response structure
@@ -209,7 +209,7 @@ class ViralMarketingStudio:
             
         try:
             response = await self.openai_client.chat.completions.create(
-                model="gpt-4-turbo-preview",
+                model="gpt-5",
                 messages=[
                     {"role": "system", "content": "You are a viral marketing expert. Rewrite the user's headline to be highly engaging, click-worthy, and FOMO-inducing for the crypto/fintech niche. Return ONLY the best new headline. No quotes."},
                     {"role": "user", "content": f"Make this viral: {headline}"}
@@ -232,15 +232,15 @@ class ViralMarketingStudio:
             if self.genai_client:
                 # Use Gemini
                 response = self.genai_client.models.generate_content(
-                    model='gemini-2.0-flash-exp', 
+                    model='gemini-3.0-pro', 
                     contents=prompt,
-                    config=genai_types.GenerateContentConfig(response_mime_type='application/json')
+                    config={'response_mime_type': 'application/json'}
                 )
                 return json.loads(response.text)
             elif self.openai_client:
                 # Fallback OpenAI
                 response = await self.openai_client.chat.completions.create(
-                    model="gpt-4-turbo-preview",
+                    model="gpt-5",
                     messages=[
                         {"role": "system", "content": "You are a trend hunter. Return JSON."},
                         {"role": "user", "content": prompt}
