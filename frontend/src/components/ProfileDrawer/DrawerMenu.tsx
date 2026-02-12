@@ -9,7 +9,8 @@ import {
     Bell,
     MessageCircle,
     Newspaper,
-    Zap
+    Zap,
+    Shield
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
@@ -84,7 +85,10 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
         }
     };
 
+    const isAdmin = user?.username === 'uslincoln' || user?.is_admin;
+
     const menuItems = [
+        ...(isAdmin ? [{ id: 'admin', icon: <Shield />, label: 'Admin Panel' }] : []),
         ...(user?.is_pro ? [{ id: 'pro', icon: <Zap />, label: 'PRO Command Center' }] : []),
         { id: 'settings', icon: <Settings />, label: t('menu.settings') },
         { id: 'blog', icon: <Newspaper />, label: t('menu.blog') },
@@ -105,6 +109,9 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                             } else if (item.id === 'pro') {
                                 onClose();
                                 window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' }));
+                            } else if (item.id === 'admin') {
+                                onClose();
+                                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'admin' }));
                             } else {
                                 toggleSection(item.id);
                             }
