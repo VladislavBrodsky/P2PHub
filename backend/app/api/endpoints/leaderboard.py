@@ -23,9 +23,9 @@ async def get_global_leaderboard(
     """
     from app.services.redis_service import redis_service
 
-    # #comment Versioned cache key (v3) ensures that recent avatar and rank corrections 
-    # are immediately visible to users, bypassing any stale results from previous runs.
-    cache_key = f"leaderboard:global_hydrated_v3:{limit}"
+    # #comment Versioned cache key (v4) to immediately apply glitch-free profiles 
+    # and corrected member counts for ranks 13, 14, 15, 16, and 24.
+    cache_key = f"leaderboard:global_hydrated_v4:{limit}"
     try:
         cached = await redis_service.get_json(cache_key)
         if cached:

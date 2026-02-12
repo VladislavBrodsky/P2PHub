@@ -64,7 +64,8 @@ class LeaderboardService:
                 photo_url=p.photo_url,
                 photo_file_id=p.photo_file_id,
                 xp=scores.get(p.id, p.xp),
-                level=p.level
+                level=p.level,
+                referral_count=p.referral_count
             )
             hydrated.append(item.model_dump())
 
