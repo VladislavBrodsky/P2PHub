@@ -286,6 +286,7 @@ from app.models.partner import SystemSetting, get_session
 
 @router.get("/recent")
 async def get_recent_partners(
+    background_tasks: BackgroundTasks,
     limit: int = 10,
     session: AsyncSession = Depends(get_session)
 ):
@@ -386,6 +387,15 @@ async def get_recent_partners(
         "partners": partners_list[:limit],
         "last_hour_count": last_hour_count
     }
+
+    # 4.5. Warm up photo cache (Background)
+    if refresh_partners and partners_list:
+        try:
+            from app.services.partner_service import warm_up_partner_photos
+            photo_ids = [p["photo_file_id"] for p in partners_list if p.get("photo_file_id")]
+            background_tasks.add_task(warm_up_partner_photos, photo_ids)
+        except Exception as e:
+            logger.error(f"Failed to queue cache warming: {e}")
 
     # 5. Populate Redis
     try:
@@ -866,90 +876,31 @@ async def get_partner_photo(request: Request, file_id: str):
     Returns the Telegram photo content for a given file_id.
     Optimizes (WebP + Resize) and caches the binary content in Redis.
     """
-    import io
-
-    import httpx
     from fastapi.responses import Response
-    from PIL import Image
+    from app.services.partner_service import ensure_photo_cached
 
-    cache_key_binary = f"tg_photo_bin_v1:{file_id}"
-    cache_key_url = f"tg_photo_url:{file_id}"
-
-    # 1. Try to get from Redis Binary Cache first (Super Fast)
     try:
-        cached_binary = await redis_service.get_bytes(cache_key_binary)
-        if cached_binary:
+        # Use shared service logic which handles caching, fetching, resizing
+        image_data = await ensure_photo_cached(file_id)
+        
+        if image_data:
             return Response(
-                content=cached_binary,
+                content=image_data,
                 media_type="image/webp",
                 headers={
-                    "Cache-Control": "public, max-age=86400",
+                    "Cache-Control": "public, max-age=31536000, immutable",
                     "Access-Control-Allow-Origin": "*",
-                    "X-Cache": "HIT"
+                    "X-Cache": "HIT" # We don't know if it was a HIT or MISS from/to cache inside service, but result is served from "internal" cache
                 }
             )
-    except Exception as e:
-        print(f"⚠️ Binary Cache Read Error: {e}")
+        else:
+            raise HTTPException(status_code=404, detail="Photo not found or could not be processed")
 
-    # 2. Get or Refresh Photo URL if not in binary cache
-    photo_url = None
-    try:
-        photo_url = await redis_service.get(cache_key_url)
-        if not photo_url:
-            try:
-                file = await bot.get_file(file_id)
-                photo_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
-                await redis_service.set(cache_key_url, photo_url, expire=3600)
-            except Exception as e:
-                print(f"❌ Telegram API Error for file_id {file_id}: {e}")
-                raise HTTPException(status_code=404, detail="Photo not found on Telegram")
     except HTTPException:
         raise
     except Exception as e:
-        print(f"❌ Redis/Logic Error in get_partner_photo: {e}")
+        logger.error(f"❌ Error in get_partner_photo: {e}")
         raise HTTPException(status_code=500, detail="Internal server error fetching photo")
-
-    # 3. Fetch, Optimize, and Cache
-    try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(photo_url)
-            if response.status_code == 200:
-                # Open image with PIL
-                img = Image.open(io.BytesIO(response.content))
-
-                # Resize if larger than 128x128
-                if img.width > 128 or img.height > 128:
-                    img.thumbnail((128, 128), Image.Resampling.LANCZOS)
-
-                # Convert to WebP
-                output = io.BytesIO()
-                img.save(output, format="WEBP", quality=80)
-                optimized_binary = output.getvalue()
-
-                # Cache optimized binary (24 hours)
-                try:
-                    await redis_service.set_bytes(cache_key_binary, optimized_binary, expire=86400)
-                except Exception as e:
-                    print(f"⚠️ Failed to cache binary for {file_id}: {e}")
-
-                return Response(
-                    content=optimized_binary,
-                    media_type="image/webp",
-                    headers={
-                        "Cache-Control": "public, max-age=31536000, immutable",
-                        "Access-Control-Allow-Origin": "*",
-                        "X-Cache": "MISS"
-                    }
-                )
-            else:
-                print(f"⚠️ Telegram CDN returned {response.status_code} for {photo_url}")
-                raise HTTPException(status_code=404, detail="Original photo could not be fetched")
-
-    except Exception as e:
-        print(f"❌ Optimization Error: {e}")
-        # Fallback to streaming original if optimization fails?
-        # Actually, if we're here, we probably can't optimize, so return error
-        raise HTTPException(status_code=500, detail="Failed to optimize photo")
 
 @router.post("/notification/seen")
 async def mark_notification_seen(

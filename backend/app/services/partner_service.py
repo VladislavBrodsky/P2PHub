@@ -19,6 +19,78 @@ from app.utils.ranking import get_level
 
 logger = logging.getLogger(__name__)
 
+async def ensure_photo_cached(file_id: str) -> Optional[bytes]:
+    """
+    Ensures the Telegram photo is cached in Redis (WebP optimized).
+    Returns the binary content if successful, None otherwise.
+    """
+    import io
+    import httpx
+    from PIL import Image
+    from bot import bot
+
+    cache_key_binary = f"tg_photo_bin_v1:{file_id}"
+    cache_key_url = f"tg_photo_url:{file_id}"
+
+    # 1. Check Binary Cache
+    try:
+        cached_binary = await redis_service.get_bytes(cache_key_binary)
+        if cached_binary:
+            return cached_binary
+    except Exception:
+        pass
+
+    # 2. Get/Refresh URL
+    try:
+        photo_url = await redis_service.get(cache_key_url)
+        if not photo_url:
+            file = await bot.get_file(file_id)
+            photo_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
+            await redis_service.set(cache_key_url, photo_url, expire=3600)
+    except Exception as e:
+        logger.error(f"Failed to get photo URL for {file_id}: {e}")
+        return None
+
+    # 3. Fetch, Optimize, Cache
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.get(photo_url)
+            if response.status_code == 200:
+                img = Image.open(io.BytesIO(response.content))
+
+                # Resize
+                if img.width > 128 or img.height > 128:
+                    img.thumbnail((128, 128), Image.Resampling.LANCZOS)
+                
+                # Convert
+                output = io.BytesIO()
+                img.save(output, format="WEBP", quality=80)
+                optimized_binary = output.getvalue()
+
+                # Cache
+                await redis_service.set_bytes(cache_key_binary, optimized_binary, expire=86400)
+                return optimized_binary
+    except Exception as e:
+        logger.error(f"Failed to optimize/cache photo {file_id}: {e}")
+    
+    return None
+
+async def warm_up_partner_photos(file_ids: List[str]):
+    """
+    Background task to warm up photo cache for a list of file_ids.
+    """
+    if not file_ids:
+        return
+        
+    logger.info(f"🔥 Warming up cache for {len(file_ids)} photos...")
+    
+    # Process in batches to avoid overwhelming resources
+    chunk_size = 5
+    for i in range(0, len(file_ids), chunk_size):
+        chunk = file_ids[i:i + chunk_size]
+        await asyncio.gather(*[ensure_photo_cached(fid) for fid in chunk if fid])
+
+
 async def create_partner(
     session: AsyncSession,
     telegram_id: str,
