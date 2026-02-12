@@ -77,10 +77,16 @@ const LEVEL_CELEBRATIONS = [
 export const generateNotificationMessage = (type: NotificationType, firstName?: string) => {
     const randomItem = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
-    // #comment Use the provided name or pick a realistic one from the pool
-    // Override if the provided name looks like a placeholder (e.g. "User L6")
+    // #comment Implementation of diverse naming to maintain "busy" atmosphere
+    // If name is missing, starts with "User", or is "Grand Maestro" (the admin/owner), 
+    // we swap it with a random realistic identity to create a diverse community feel.
     let activeName = firstName || randomItem(REAL_NAMES);
-    if (activeName.toLowerCase().startsWith('user')) {
+
+    const isOwner = activeName === 'Grand Maestro' || activeName === 'uslincoln' || activeName === 'Vlad';
+    const isPlaceholder = activeName.toLowerCase().startsWith('user');
+
+    // 80% chance to swap owner name for variety, 100% chance for placeholders
+    if (isPlaceholder || (isOwner && Math.random() > 0.2)) {
         activeName = randomItem(REAL_NAMES);
     }
 
