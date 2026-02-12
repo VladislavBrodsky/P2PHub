@@ -135,7 +135,7 @@ export const BentoGrid = () => {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true, margin: "-10%" }}
                                 transition={{
-                                    duration: 0.6,
+                                    duration: 0.4,
                                     delay: index * 0.05,
                                     ease: [0.23, 1, 0.32, 1]
                                 }}
@@ -191,7 +191,7 @@ export const BentoGrid = () => {
 
                                 {/* BACK SIDE */}
                                 <div
-                                    className="absolute inset-0 backface-hidden overflow-hidden rounded-[2.5rem] bg-slate-950 border border-slate-800 p-6 flex flex-col text-center justify-center items-center shadow-2xl"
+                                    className="absolute inset-0 backface-hidden overflow-hidden rounded-[2.5rem] bg-(--color-bg-surface) border border-(--color-border-glass) p-6 flex flex-col text-center justify-center items-center shadow-2xl"
                                     style={{ transform: 'rotateY(180deg)' }}
                                 >
                                     {/* Alert Icon based on step */}
@@ -205,11 +205,11 @@ export const BentoGrid = () => {
                                         )}
                                     </div>
 
-                                    <h4 className="text-lg font-black uppercase text-white mb-3 tracking-tight">
+                                    <h4 className="text-lg font-black uppercase text-(--color-text-primary) mb-3 tracking-tight">
                                         {t(`evolution.steps.${step.id}.back_title`)}
                                     </h4>
 
-                                    <p className="text-xs font-medium text-slate-300 leading-relaxed mb-6">
+                                    <p className="text-xs font-medium text-(--color-text-secondary) leading-relaxed mb-6">
                                         {t(`evolution.steps.${step.id}.back_desc`)}
                                     </p>
 

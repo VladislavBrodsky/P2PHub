@@ -86,7 +86,7 @@ export const PintopayCard = ({
             >
                 <motion.div
                     animate={{ rotateY: isFlipped ? 180 : 0 }}
-                    transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
+                    transition={{ duration: 0.4, type: "spring", stiffness: 260, damping: 20 }}
                     style={{ transformStyle: 'preserve-3d' }}
                     className="w-full h-full relative"
                 >
@@ -160,23 +160,35 @@ export const PintopayCard = ({
 
                     {/* BACK SIDE */}
                     <div
-                        className="absolute inset-0 backface-hidden overflow-hidden rounded-2xl shadow-2xl bg-zinc-950 p-6 flex flex-col justify-center items-center text-center border border-zinc-800"
+                        className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl shadow-2xl p-6 flex flex-col justify-center items-center text-center ${cardStyles[variant]}`}
                         style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
                     >
-                        <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-purple-500/5 to-transparent opacity-50" />
-                        <div className="relative z-10">
-                            <h3 className="text-lg font-black uppercase tracking-tight text-white mb-3">
+                        {/* Global Grain Texture - Inherited */}
+                        <div className="absolute inset-0 z-0 opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+
+                        {/* Dark Overlay for Readability */}
+                        <div className="absolute inset-0 z-0 bg-black/60 backdrop-blur-sm" />
+
+                        {variant === 'platinum' && (
+                            <div className="absolute inset-0 z-0 bg-linear-to-tr from-transparent via-white/10 to-transparent opacity-30" />
+                        )}
+
+                        <div className="relative z-10 w-full h-full flex flex-col justify-center">
+                            <h3 className={`text-lg font-black uppercase tracking-tight mb-3 ${variant === 'platinum' ? 'text-white' : 'text-white'}`}>
                                 {t(`cards.${variant}.back_title`)}
                             </h3>
-                            <p className="text-xs font-medium text-zinc-400 leading-relaxed">
+                            <p className={`text-xs font-medium leading-relaxed ${variant === 'platinum' ? 'text-slate-200' : 'text-white/80'}`}>
                                 {t(`cards.${variant}.back_desc`)}
                             </p>
                         </div>
-                        {/* Magnetic Strip Visual */}
-                        <div className="absolute top-4 left-0 right-0 h-10 bg-zinc-900/80" />
 
-                        <div className="absolute bottom-4 right-6 opacity-30">
-                            <span className="text-[10px] font-mono text-zinc-500">000 / CVV</span>
+                        {/* Magnetic Strip Visual */}
+                        <div className="absolute top-6 left-0 right-0 h-10 bg-black/40 backdrop-blur-md z-1" />
+
+                        {/* CVV/Security Code Visual */}
+                        <div className="absolute bottom-6 left-6 right-6 flex justify-between items-center z-10">
+                            <div className="h-6 w-10 bg-white/10 rounded-sm" />
+                            <span className={`text-[10px] font-mono tracking-widest opacity-60 ${variant === 'platinum' ? 'text-white' : 'text-white'}`}>000 / CVV</span>
                         </div>
                     </div>
                 </motion.div>
