@@ -61,8 +61,8 @@ async def lifespan(app: FastAPI):
 
         try:
             # Small random jitters to prevent 4 workers from hitting Telegram API at the exact same millisecond
-            import random
-            await asyncio.sleep(random.uniform(0.1, 2.0))
+            import secrets
+            await asyncio.sleep(0.1 + (secrets.randbelow(1900) / 1000.0))  # 0.1 to 2.0s jitter
 
             print(f"📡 Registering Webhook with Telegram: {webhook_url}")
             # Increased timeout to prevent startup hang on slow API responses

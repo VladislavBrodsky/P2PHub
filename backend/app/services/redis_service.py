@@ -87,8 +87,9 @@ class RedisService:
             try:
                 # #comment: Using "Jitter" (±10% random TTL) to prevent the "Thundering Herd" effect.
                 # If 10,000 users have the same 5-minute expiry, they would all hit the DB at once.
-                import random
-                jitter = random.randint(-max(1, int(expire * 0.1)), max(1, int(expire * 0.1)))
+                import secrets
+                max_jitter = max(1, int(expire * 0.1))
+                jitter = secrets.randbelow(max_jitter * 2) - max_jitter
                 final_expire = max(1, expire + jitter)
                 
                 await self.set_json(key, data, expire=final_expire)

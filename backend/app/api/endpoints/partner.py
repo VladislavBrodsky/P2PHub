@@ -373,7 +373,8 @@ async def get_recent_partners(
         session.add(snapshot_setting)
 
     if refresh_count:
-        last_hour_count = random.randint(632, 842)
+        import secrets
+        last_hour_count = 632 + secrets.randbelow(211) # Range [632, 842]
         if not count_setting:
             count_setting = SystemSetting(key=count_settings_key, value=str(last_hour_count))
         else:

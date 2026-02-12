@@ -41,7 +41,8 @@ async def get_post_engagement(
 
     fb_likes = 0
     if not engagement:
-        fb_likes = random.randint(333, 712)
+        import secrets
+        fb_likes = 333 + secrets.randbelow(380) # Range [333, 712]
         engagement = BlogPostEngagement(
             post_slug=slug,
             base_likes=fb_likes
@@ -110,9 +111,10 @@ async def like_post(
     engagement = (await session.exec(e_stmt)).first()
 
     if not engagement:
+        import secrets
         engagement = BlogPostEngagement(
             post_slug=slug,
-            base_likes=random.randint(333, 712),
+            base_likes=333 + secrets.randbelow(380),
             user_likes=1
         )
     else:

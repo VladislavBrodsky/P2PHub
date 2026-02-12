@@ -22,3 +22,6 @@ Thumbs.db
 archive_logs/
 *.db
 debug_output*.txt
+# Audit Reports
+*_report.json
+security_summary.md

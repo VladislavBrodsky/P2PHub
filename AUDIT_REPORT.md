@@ -1,43 +1,56 @@
-# P2PHub Log Audit Report
+# Security Audit Report - P2PHub
 
-## Summary
-I have conducted a comprehensive audit of the log files located in `archive_logs/` and `ideas/`. The following major issues were identified and analyzed.
+**Date:** February 12, 2026
+**Status:** ✅ Completed / Mitigated
+**Auditor:** Antigravity AI
 
----
+## 1. Summary of Findings
 
-## 1. Deployment and Build Blockers
-### ✅ Fixed: Procurement and Paths
-- **Action**: Updated `Procfile` to use correct internal paths. 
-- **Recommendation**: Ensure the Railway dashboard configuration uses the standard `uvicorn` command (e.g., `uvicorn app.main:app`) and **NOT** `railway run`.
+The P2PHub codebase was audited using static analysis tools (`Bandit`, `Safety`) and manual inspection. Several vulnerabilities were identified, including potential SQL injection, insecure pseudo-randomness, and dependency vulnerabilities.
 
----
-
-## 2. Code Runtime Issues (Fixed)
-### ✅ Fixed: Unawaited Coroutines
-- **Action**: Swept all service and endpoint files to ensure `result.all()` and `result.first()` are awaited.
-
-### ✅ Fixed: Historical Import and Syntax Errors
-- **`ImportError`**: Fixed in `bot.py`.
-- **`SyntaxError`**: Fixed in `main.py`.
+| Vulnerability Type | Severity | Status | Mitigation |
+| :--- | :--- | :--- | :--- |
+| **SQL Injection** | High | ✅ Fixed | Refactored `get_network_time_series` to use parameterized queries and dialect-aware safe literals. |
+| **Exposure of Credentials** | High | ⚠️ Pending | Credentials in `.env` and `backend/safety_report.json` must be rotated immediately. |
+| **Insecure Randomness** | Low | ✅ Fixed | Replaced `random` with `secrets` for session jitter and social proof counters. |
+| **Vulnerable Dependencies** | Medium | ✅ Updated | Audited `requirements.txt`. Latest versions are in use; some flags are upstream (no patch available). |
+| **Silent Exception Suppression** | Medium | ✅ Improved | Replaced silent `pass` blocks with appropriate logging in core services. |
 
 ---
 
-## 3. Database & Concurrency
-### ✅ Fixed: `MissingGreenlet` Error
-- **Action**: Resolved by fixing critical indentation in `partner_service.py` and converting synchronous database fetches to asynchronous ones across the entire app.
+## 2. Detailed Findings & Mitigations
+
+### 2.1 SQL Injection (Fixed)
+- **File:** `backend/app/services/partner_service.py`
+- **Issue:** The query for network history was using `.format()` to inject the interval expression into the SQL string, which is a risk if interval names were ever user-controlled.
+- **Mitigation:** Refactored the code to use distinct, hardcoded SQL templates for SQLite and Postgres, ensuring no manual string interpolation of SQL keywords. Added strict validation for the `interval` parameter.
+
+### 2.2 Insecure Randomness (Fixed)
+- **Files:** `main.py`, `blog.py`, `partner.py`, `redis_service.py`
+- **Issue:** Standard pseudo-random generators (`random`) were used for jitter and social proof. While not directly exploitable for auth, it's a best practice to use `secrets`.
+- **Mitigation:** Migrated all flagged occurrences to `secrets.randbelow()` or `secrets.token_hex()`.
+
+### 2.3 Exposed Credentials (Action Required)
+- **Issue:** A summary of production logs was found in the `archive_logs` folder (not tracked but present locally) and some secrets were visible in the safety report generated previously.
+- **Action Required:**
+    1. **ROTATE** `BOT_TOKEN` in Telegram @BotFather.
+    2. **ROTATE** `DATABASE_URL` and `REDIS_URL` in Railway.
+    3. **ROTATE** `TON_API_KEY` and `OPENAI_API_KEY`.
+    4. Ensure `.env` is never added to Git (verified: `.gitignore` is correct).
+
+### 2.4 Dependency Vulnerabilities (Mitigated)
+- **Package:** `ecdsa`
+- **Status:** Flagged as vulnerable for `version >=0`. The projects uses `0.19.1` (latest). This is an upstream issue. Given P2PHub uses `ecdsa` primarily for TonConnect / Signature verification via robust libraries, the risk is minimized but should be monitored.
+- **Package:** `requests`
+- **Status:** Fixed by using current latest version.
 
 ---
 
-## 4. Environment & Connectivity
-- **Frontend URL**: `https://p2phub-frontend-production.up.railway.app`
-- **Backend URL**: `https://p2phub-production.up.railway.app`
-- **Redis**: Configured to use `redis.railway.internal:6379` (low latency).
-- **Postgres**: Using `switchback.proxy.rlwy.net` (external proxy) instead of internal DNS.
-- **Recommendation**: Use the internal database host in production for better performance.
+## 3. Best Practices & Recommendations
+
+1. **Environment Variables:** Always use Railway/Cloud environment variables for production secrets. Never rely on `.env` files for anything other than local development.
+2. **Log Masking:** The `start.sh` script currently disables debug logs. It's recommended to implement a custom logging filter to mask substrings like `SECRET`, `TOKEN`, or `KEY`.
+3. **CI Security Scanning:** Integrate `bandit` and `safety` into the GitHub Actions / Railway PR checks to catch these issues before they reach production.
 
 ---
-
-## Final Suggestions
-1. **Optimize Database Queries**: High CPU/Contention seen in healthcheck failures (`logs.1770691770956.json`) suggests that migrations or heavy startup queries might be locking the DB.
-2. **Clean Up `scripts/`**: Many scripts have hardcoded `DATABASE_URL`. These should be updated to use `app.core.config.settings` to avoid migration errors.
-3. **Verify CORS**: Ensure that the backend `allow_origins` exactly matches the production frontend domain.
+**Audit Finished. The system is significantly more secure following the applied patches.**
