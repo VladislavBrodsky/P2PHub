@@ -100,7 +100,7 @@ export const generateNotificationMessage = (type: NotificationType, firstName?: 
         message = randomItem(templates)();
         title = randomItem([
             'New VIP 👑', 'Partner Alert 🤝', 'Network Growth 📈',
-            'Member Status: ACTIVE 🔥', 'Position Secured 💎'
+            'Member Status: Active 🔥', 'Position Secured 💎'
         ]);
     } else if (type === 'TASK') {
         const templates = [

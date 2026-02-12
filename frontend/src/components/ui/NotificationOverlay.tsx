@@ -36,22 +36,22 @@ export const NotificationOverlay = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 100, scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                    className="fixed bottom-0 left-0 right-0 z-10000 flex justify-center pointer-events-none px-4 pb-[calc(env(safe-area-inset-bottom,24px)+110px)]"
+                    className="fixed bottom-0 left-0 right-0 z-10000 flex justify-center pointer-events-none px-4 pb-[calc(env(safe-area-inset-bottom,24px)+145px)]"
                     whileDrag={{ scale: 0.95, opacity: 0.8 }}
                 >
                     <div className={`
                         glass-panel-premium rounded-full px-4 py-3 shadow-2xl flex items-center gap-3 max-w-sm w-full pointer-events-auto 
                         backdrop-blur-3xl bg-white/80 dark:bg-slate-900/80 border transition-colors duration-500 touch-pan-y
-                        ${notification.type === 'success' ? 'border-blue-500/30' :
-                            notification.type === 'warning' ? 'border-emerald-500/30' :
-                                'border-amber-500/30'}
+                        ${notification.type === 'success' ? 'border-blue-500/20' :
+                            notification.type === 'warning' ? 'border-emerald-500/20' :
+                                'border-amber-500/20'}
                     `}>
                         {notification.icon && (
                             <div className="relative">
                                 {/* #comment Accent glow for the icon */}
-                                <div className={`absolute inset-0 blur-lg opacity-40 animate-pulse ${notification.type === 'success' ? 'bg-blue-500' :
-                                        notification.type === 'warning' ? 'bg-emerald-500' :
-                                            'bg-amber-500'
+                                <div className={`absolute inset-0 blur-lg opacity-30 animate-pulse ${notification.type === 'success' ? 'bg-blue-500' :
+                                    notification.type === 'warning' ? 'bg-emerald-500' :
+                                        'bg-amber-500'
                                     }`} />
                                 <div className="relative z-10 shrink-0">
                                     {notification.icon}
@@ -60,12 +60,12 @@ export const NotificationOverlay = () => {
                         )}
                         <div className="flex-1 overflow-hidden">
                             <div className="flex items-center gap-2">
-                                <h4 className="text-xs font-black text-slate-900 dark:text-white truncate uppercase tracking-tight">{notification.title}</h4>
-                                <span className="text-[7px] font-black px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/5 text-slate-400 uppercase tracking-widest whitespace-nowrap">
+                                <h4 className="text-xs font-semibold text-slate-900 dark:text-white truncate tracking-tight">{notification.title}</h4>
+                                <span className="text-[7px] font-medium px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/5 text-slate-400 tracking-widest whitespace-nowrap">
                                     Just Now
                                 </span>
                             </div>
-                            <p className="text-[10px] text-slate-600 dark:text-slate-300 truncate font-bold">{notification.message}</p>
+                            <p className="text-[10px] text-slate-600 dark:text-slate-300 truncate font-medium">{notification.message}</p>
                         </div>
                         <button
                             onClick={hideNotification}
