@@ -43,6 +43,12 @@ async def lifespan(app: FastAPI):
                 print("🔧 Leader Worker: Running user restoration from Telegram...")
                 from scripts.restore_names_from_telegram import restore_names_from_telegram
                 restored_count = await restore_names_from_telegram()
+                
+                # Clear all caches to force refresh
+                print("🔧 Clearing all caches...")
+                from scripts.clear_all_caches import clear_all_caches
+                await clear_all_caches()
+                
                 # Mark as done so it doesn't run again
                 await redis_service.client.set(done_key, "1", ex=86400 * 7)  # 7 days
                 print(f"✅ User restoration complete: {restored_count} users restored")
