@@ -19,6 +19,7 @@ interface LeaderboardUser {
     level: number;
     photo_url?: string;
     photo_file_id?: string;
+    referral_count: number;
 }
 
 interface UserStats {
@@ -52,11 +53,13 @@ export default function LeaderboardPage() {
 
     const isLoading = isLeaderboardLoading || isStatsLoading;
 
+    // #comment Rebalanced league thresholds to ensure top partners (4k+ XP) look prestigious.
+    // Level 1-2: Wooden, Level 3-5: Silver, Level 6-10: Metal, Level 11-20: Gold, 21+: Platinum
     const getLeague = (level: number): LeagueTier => {
-        if (!level || typeof level !== 'number' || level < 5) return 'wooden';
-        if (level < 15) return 'silver';
-        if (level < 30) return 'metal';
-        if (level < 50) return 'gold';
+        if (!level || typeof level !== 'number' || level < 3) return 'wooden';
+        if (level < 6) return 'silver';
+        if (level < 11) return 'metal';
+        if (level < 21) return 'gold';
         return 'platinum';
     };
 
@@ -148,15 +151,22 @@ export default function LeaderboardPage() {
                                     </div>
                                     <div className="text-left">
                                         <p className="text-sm font-black text-(--color-text-primary) line-clamp-1">{user.first_name || user.username}</p>
-                                        <div className="flex items-center gap-1.5">
-                                            <span className={`text-[10px] font-black uppercase tracking-widest ${index < 3 ? 'text-amber-600 dark:text-amber-400' : 'text-(--color-text-secondary)'
-                                                }`}>
-                                                {t(`leaderboard.levels.${getLeague(user.level)}`)}
-                                            </span>
+                                        <div className="flex items-center gap-1.5 flex-wrap">
+                                            <div className="flex items-center gap-1">
+                                                <span className={`text-[10px] font-black uppercase tracking-widest ${index < 3 ? 'text-amber-600 dark:text-amber-400' : 'text-(--color-text-secondary)'
+                                                    }`}>
+                                                    {t(`leaderboard.levels.${getLeague(user.level)}`)}
+                                                </span>
+                                            </div>
                                             <div className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-600" />
-                                            <span className="text-[10px] font-bold text-(--color-text-secondary)">
-                                                LVL {user.level}
-                                            </span>
+                                            <div className="flex items-center gap-1.5 text-[10px] font-bold text-(--color-text-secondary)">
+                                                <span>LVL {user.level}</span>
+                                                <div className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-600" />
+                                                <div className="flex items-center gap-1 text-blue-500/80">
+                                                    <Crown size={10} className="stroke-3" />
+                                                    <span className="font-black">{user.referral_count.toLocaleString()} {t('referral.members')}</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

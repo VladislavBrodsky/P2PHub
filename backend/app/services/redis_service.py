@@ -68,6 +68,22 @@ class RedisService:
         # Returns (key, value) tuple or None
         return await self.client.brpop(name, timeout=timeout)
 
+    async def delete(self, key: str):
+        """Removes a single key from Redis."""
+        await self.client.delete(key)
+
+    async def delete_pattern(self, pattern: str):
+        """Removes all keys matching a specific pattern (e.g. 'users:*')."""
+        # Note: In production with millions of keys, SCAN would be safer.
+        # But for this scale, keys() is fine.
+        keys = await self.client.keys(pattern)
+        if keys:
+            await self.client.delete(*keys)
+
+    async def flushdb(self):
+        """Wipes the entire Redis database."""
+        await self.client.flushdb()
+
     async def get_or_compute(self, key: str, factory, expire: int = 300):
         """
         Tries to get data from cache. If missing, awaits the factory function,
