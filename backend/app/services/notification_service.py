@@ -7,20 +7,27 @@ from app.worker import broker
 logger = logging.getLogger(__name__)
 
 @broker.task
-async def send_telegram_task(chat_id: int, text: str, parse_mode: str = "Markdown"):
+async def send_telegram_task(chat_id: str | int, text: str, parse_mode: str = "Markdown"):
     """
     Background worker task to send Telegram messages.
     """
     try:
         from bot import bot
-        await bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode)
+        # Ensure chat_id is int if it's numeric, otherwise pass as is (for usernames)
+        target_id = chat_id
+        try:
+            target_id = int(str(chat_id))
+        except (ValueError, TypeError):
+            pass
+
+        await bot.send_message(chat_id=target_id, text=text, parse_mode=parse_mode)
         return True
     except Exception as e:
         logger.error(f"Worker failed to send notification to {chat_id}: {e}")
         return False
 
 class NotificationService:
-    async def enqueue_notification(self, chat_id: int, text: str, parse_mode: str = "Markdown"):
+    async def enqueue_notification(self, chat_id: str | int, text: str, parse_mode: str = "Markdown"):
         """
         Enqueues a notification to be sent by the background worker.
         """

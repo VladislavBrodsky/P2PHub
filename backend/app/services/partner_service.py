@@ -349,7 +349,7 @@ async def process_referral_logic(partner_id: int):
                             try:
                                 lang = referrer.language_code or "en"
                                 msg = get_msg(lang, "level_up", level=lvl)
-                                await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
+                                await notification_service.enqueue_notification(chat_id=referrer.telegram_id, text=msg)
 
                                 # Admin Alert for important milestones (Level 50+)
                                 if lvl >= 50:
@@ -362,7 +362,7 @@ async def process_referral_logic(partner_id: int):
                                     )
                                     for admin_id in settings.ADMIN_USER_IDS:
                                         try:
-                                            await notification_service.enqueue_notification(chat_id=int(admin_id), text=admin_msg)
+                                            await notification_service.enqueue_notification(chat_id=admin_id, text=admin_msg)
                                         except Exception: pass
 
                             except Exception: pass
@@ -417,7 +417,7 @@ async def process_referral_logic(partner_id: int):
                         except Exception: pass
 
                     if msg:
-                        await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
+                        await notification_service.enqueue_notification(chat_id=referrer.telegram_id, text=msg)
                 except Exception as e:
                     logger.error(f"⚠️ Notification failed for {referrer.id}: {e}")
 
@@ -516,7 +516,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             try:
                 lang = referrer.language_code or "en"
                 msg = get_msg(lang, "commission_received", amount=round(commission, 2), level=level)
-                await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
+                await notification_service.enqueue_notification(chat_id=referrer.telegram_id, text=msg)
             except Exception: pass
 
 

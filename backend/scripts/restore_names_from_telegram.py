@@ -35,9 +35,13 @@ async def restore_names_from_telegram():
         print("=" * 70)
         
         from sqlalchemy import not_, String
-        # Find all real users (telegram_id does not start with TEST_)
+        # Find all real users (telegram_id does not start with TEST_, SIM_, CH_, SEC_) 
+        # because those cannot be checked in Telegram Bot API.
         statement = select(Partner).where(
-            not_(Partner.telegram_id.cast(String).like("TEST_%"))
+            not_(Partner.telegram_id.cast(String).like("TEST_%")),
+            not_(Partner.telegram_id.cast(String).like("SIM_%")),
+            not_(Partner.telegram_id.cast(String).like("CH_%")),
+            not_(Partner.telegram_id.cast(String).like("SEC_%"))
         ).order_by(Partner.xp.desc()).limit(500)
         
         result = await session.exec(statement)
@@ -51,11 +55,13 @@ async def restore_names_from_telegram():
         
         for user in real_users:
             try:
-                telegram_id_str = str(user.telegram_id)
-                if "TEST_" in telegram_id_str:
+                # Safely convert to int for Telegram API
+                try:
+                    telegram_id = int(str(user.telegram_id))
+                except (ValueError, TypeError):
+                    # Skip non-numeric IDs (Simulated, Test, etc)
                     continue
-                
-                telegram_id = int(user.telegram_id)
+
                 needs_save = False
                 
                 # 1. Restore Profile Data (Names/Usernames)
