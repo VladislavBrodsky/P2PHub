@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { X, Shield, Target, BookOpen, Sparkles, CheckCircle2 } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { Button } from '../ui/Button';
+import { createPortal } from 'react-dom';
 
 interface PartnerBriefingModalProps {
     isOpen: boolean;

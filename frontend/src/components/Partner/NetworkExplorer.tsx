@@ -36,7 +36,12 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [isShareOpen, setIsShareOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+        setIsScrolled(e.currentTarget.scrollTop > 20);
+    };
 
     // #comment: Memoized fetchLevel is not strictly necessary here since it's used within effects that handle their own states, 
     // but we'll include it in dependency arrays as required by linting rules.
@@ -141,26 +146,49 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
             <div className="absolute inset-0 bg-linear-to-b from-white/10 to-transparent pointer-events-none" />
 
             {/* Header */}
-            <div className="p-5 border-b border-black/5 dark:border-white/5 relative z-10">
-                <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                            <Users className="w-5 h-5" />
-                        </div>
-                        <div>
-                            <h3 className="text-lg font-black text-slate-900 dark:text-white leading-none">Network Explorer</h3>
-                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1">9-Level Deep Dive</p>
-                        </div>
-                    </div>
-                    {onClose && (
-                        <button
-                            onClick={onClose}
-                            className="w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors active:scale-95"
+            <div className={`border-b border-black/5 dark:border-white/5 relative z-10 transition-all duration-300 ${isScrolled ? 'p-3' : 'p-5'}`}>
+                <AnimatePresence>
+                    {!isScrolled && (
+                        <motion.div
+                            initial={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="flex items-center justify-between mb-4 overflow-hidden"
                         >
-                            <X className="w-5 h-5" />
-                        </button>
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                                    <Users className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-black text-slate-900 dark:text-white leading-none">Network Explorer</h3>
+                                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1">9-Level Deep Dive</p>
+                                </div>
+                            </div>
+                            {onClose && (
+                                <button
+                                    onClick={onClose}
+                                    className="w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors active:scale-95"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            )}
+                        </motion.div>
                     )}
-                </div>
+                </AnimatePresence>
+
+                {/* Compact Header for Scrolled State */}
+                {isScrolled && (
+                    <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Level {level} Network</span>
+                        {onClose && (
+                            <button
+                                onClick={onClose}
+                                className="w-6 h-6 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors active:scale-95"
+                            >
+                                <X className="w-3.5 h-3.5" />
+                            </button>
+                        )}
+                    </div>
+                )}
 
                 {/* Compact Level Selector */}
                 <div className="relative mx-[-20px] px-[20px]"> {/* Negative margin hack to stretch full width but keep padding */}
@@ -169,19 +197,24 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
 
                     <div
                         ref={scrollContainerRef}
-                        className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none px-6" // Added px-6 to prevent first item clipping
+                        className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none px-6" // Added px-6 to prevent first item clipping
                     >
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((l) => (
                             <button
                                 key={l}
                                 onClick={() => { selection(); setLevel(l); }}
                                 className={cn(
-                                    "flex items-center justify-center min-w-[48px] h-9 rounded-full text-xs font-black transition-all active:scale-95 border shrink-0", // Added shrink-0
-                                    level === l
-                                        ? "bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-500/30"
-                                        : "bg-white dark:bg-white/5 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/10"
+                                    "relative flex items-center justify-center min-w-[48px] h-9 rounded-full text-xs font-black transition-all active:scale-95 shrink-0 z-10",
+                                    level === l ? "text-white" : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5"
                                 )}
                             >
+                                {level === l && (
+                                    <motion.div
+                                        layoutId="activeLevel"
+                                        className="absolute inset-0 bg-blue-600 rounded-full shadow-lg shadow-blue-500/30 -z-10"
+                                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                    />
+                                )}
                                 L{l}
                             </button>
                         ))}
@@ -190,7 +223,10 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
             </div>
 
             {/* Content Area */}
-            <div className="flex-1 overflow-y-auto p-4 custom-scrollbar bg-slate-50/50 dark:bg-black/20 relative z-0">
+            <div
+                onScroll={handleScroll}
+                className="flex-1 overflow-y-auto p-4 custom-scrollbar bg-slate-50/50 dark:bg-black/20 relative z-0"
+            >
                 <AnimatePresence mode="wait">
                     {isLoading ? (
                         <motion.div
