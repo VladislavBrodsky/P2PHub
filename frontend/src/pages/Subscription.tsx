@@ -149,8 +149,16 @@ export default function SubscriptionPage() {
                     </div>
 
                     <button
-                        onClick={() => window.location.href = '#/partner'} // Redirect to network vision
-                        className="w-full h-16 bg-linear-to-r from-amber-400 to-orange-600 rounded-2xl font-black text-white shadow-lg active:scale-95 transition-all flex items-center justify-center gap-3"
+                        onClick={() => window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' }))}
+                        className="w-full h-16 bg-linear-to-r from-indigo-500 to-purple-700 rounded-2xl font-black text-white shadow-lg active:scale-95 transition-all flex items-center justify-center gap-3"
+                    >
+                        PRO Command Center
+                        <Sparkles size={20} />
+                    </button>
+
+                    <button
+                        onClick={() => window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'partner' }))}
+                        className="w-full h-16 bg-white/5 border border-white/10 rounded-2xl font-black text-(--color-text-secondary) active:scale-95 transition-all flex items-center justify-center gap-3"
                     >
                         Explore Your Empire
                         <ChevronRight size={20} />

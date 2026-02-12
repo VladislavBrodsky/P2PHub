@@ -96,7 +96,7 @@ export const AcademyCard = ({
 
             <div
                 className="relative z-10 h-full p-6 flex flex-col justify-between"
-                /* #comment: Reduced card padding from p-8 to p-6 for a more compact design */
+                {/* #comment: Reduced card padding from p-8 to p-6 for a more compact design */}
                 style={{ transform: "translateZ(50px)" }}
             >
                 <div className="space-y-4">

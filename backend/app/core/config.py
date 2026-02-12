@@ -1,10 +1,12 @@
+import logging
+import time
 from pathlib import Path
 from typing import Optional
 
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
-import time
+logger = logging.getLogger(__name__)
 start_time = time.time()
 
 try:
@@ -23,7 +25,7 @@ try:
         try:
             if p.exists():
                 load_dotenv(dotenv_path=p)
-                print(f"✅ Loaded environment from {p.absolute()} (took {time.time() - start_time:.4f}s)")
+                logger.info(f"✅ Loaded environment from {p.absolute()} (took {time.time() - start_time:.4f}s)")
                 loaded_env = True
                 break
         except Exception:
@@ -32,9 +34,9 @@ try:
     if not loaded_env:
         # Fallback to default load_dotenv (current dir)
         load_dotenv()
-        print(f"ℹ️ Fallback to default .env loading (took {time.time() - start_time:.4f}s)")
+        logger.info(f"ℹ️ Fallback to default .env loading (took {time.time() - start_time:.4f}s)")
 except Exception as e:
-    print(f"Warning: Unexpected error during .env loading: {e}")
+    logger.warning(f"Warning: Unexpected error during .env loading: {e}")
 
 settings_init_start = time.time()
 
@@ -97,4 +99,4 @@ class Settings(BaseSettings):
         extra = "ignore"
 
 settings = Settings()
-print(f"⚙️ Settings initialized in {time.time() - settings_init_start:.4f}s")
+logger.info(f"⚙️ Settings initialized in {time.time() - settings_init_start:.4f}s")

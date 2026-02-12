@@ -11,6 +11,9 @@ from app.models.transaction import PartnerTransaction
 from app.services.admin_service import admin_service
 from app.services.notification_service import notification_service
 from app.services.payment_service import payment_service
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -78,7 +81,7 @@ async def approve_payment(
                 text=f"✅ *PAYMENT APPROVED!*\n\n{user_msg}"
             )
         except Exception as e:
-            print(f"[DEBUG] User approval notification failed: {e}")
+            logger.error(f"[DEBUG] User approval notification failed: {e}")
 
         return {"status": "success", "message": f"Payment {transaction.id} approved for {partner.telegram_id}"}
 

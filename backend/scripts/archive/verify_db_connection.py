@@ -35,7 +35,7 @@ async def verify_connection():
         print("2. Or add it to your .env file")
         return False
     
-    print(f"✅ DATABASE_URL is set")
+    print("✅ DATABASE_URL is set")
     
     # Step 2: Parse the URL
     try:
@@ -95,7 +95,7 @@ async def verify_connection():
         
         # Test query
         version = await conn.fetchval('SELECT version()')
-        print(f"✅ Connection successful!")
+        print("✅ Connection successful!")
         print(f"   PostgreSQL version: {version.split(',')[0]}")
         
         await conn.close()

@@ -35,7 +35,7 @@ async def main():
         result = await session.exec(statement)
         users = result.all()
         
-        print(f"\nCurrent Top 5:\n")
+        print("\nCurrent Top 5:\n")
         
         for i, user in enumerate(users, 1):
             print(f"Rank #{i}")

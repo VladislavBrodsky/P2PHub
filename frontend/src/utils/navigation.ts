@@ -7,4 +7,5 @@ export const prefetchPages = {
     subscription: () => import('../pages/Subscription'),
     blog: () => import('../pages/BlogPage').then(m => ({ default: m.BlogPage })),
     admin: () => import('../pages/AdminPage').then(m => ({ default: m.AdminPage })),
+    pro: () => import('../pages/ProDashboard').then(m => ({ default: m.ProDashboard })),
 };

@@ -1,6 +1,9 @@
+import logging
 from typing import Dict, Optional
 
 from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 # Try to import openai, but don't crash if it's missing (unless used)
 # Why: This allows the app to start even without the 'openai' package installed,
@@ -72,7 +75,7 @@ class ViralCopywriter:
             self.client = AsyncOpenAI(api_key=self.api_key)
         else:
             self.client = None
-            print("⚠️ ViralCopywriter: OpenAI API Key not found or openai lib missing. Service limited.")
+            logger.warning("⚠️ ViralCopywriter: OpenAI API Key not found or openai lib missing. Service limited.")
 
     async def generate_article(self, category: str, topic: str, language: str = "en") -> Dict[str, str]:
         """
@@ -105,7 +108,7 @@ class ViralCopywriter:
             content = response.choices[0].message.content
             return self._parse_response(content)
         except Exception as e:
-            print(f"❌ ViralCopywriter Error: {e}")
+            logger.error(f"❌ ViralCopywriter Error: {e}", exc_info=True)
             return {"error": str(e)}
 
     def _build_system_prompt(self, cat_config: Dict[str, str]) -> str:

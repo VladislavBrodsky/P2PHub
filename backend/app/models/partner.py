@@ -32,6 +32,18 @@ class Partner(SQLModel, table=True):
     pro_started_at: Optional[datetime] = Field(default=None)
     pro_notification_seen: bool = Field(default=False)  # Track if user saw the "You are PRO" card
     subscription_plan: Optional[str] = Field(default=None) # e.g. "PRO_LIFETIME", "PRO_YEARLY"
+    
+    # PRO Content Generation Tokens
+    pro_tokens: int = Field(default=500)
+    pro_tokens_last_reset: datetime = Field(default_factory=datetime.utcnow)
+
+    # Viral Marketing API Setup
+    x_api_key: Optional[str] = Field(default=None)
+    x_api_secret: Optional[str] = Field(default=None)
+    x_access_token: Optional[str] = Field(default=None)
+    x_access_token_secret: Optional[str] = Field(default=None)
+    telegram_channel_id: Optional[str] = Field(default=None)
+    linkedin_access_token: Optional[str] = Field(default=None)
 
     # Daily Check-in Tracking
     last_checkin_at: Optional[datetime] = Field(default=None, index=True)

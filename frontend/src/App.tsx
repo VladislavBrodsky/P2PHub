@@ -13,6 +13,7 @@ const LeaderboardPage = lazy(prefetchPages.league);
 const SubscriptionPage = lazy(prefetchPages.subscription);
 const BlogPage = lazy(prefetchPages.blog);
 const AdminPage = lazy(prefetchPages.admin);
+const ProPage = lazy(prefetchPages.pro);
 
 
 import { miniApp, backButton, viewport, swipeBehavior } from '@telegram-apps/sdk-react';
@@ -206,6 +207,13 @@ function AppContent({ onReady }: { onReady: () => void }) {
                     {visitedTabs.has('admin') && (
                         <FeatureErrorBoundary featureName="Admin Panel">
                             <AdminPage />
+                        </FeatureErrorBoundary>
+                    )}
+                </div>
+                <div className={`h-full ${activeTab === 'pro' ? 'block' : 'hidden'}`}>
+                    {visitedTabs.has('pro') && (
+                        <FeatureErrorBoundary featureName="PRO Dashboard">
+                            <ProPage />
                         </FeatureErrorBoundary>
                     )}
                 </div>

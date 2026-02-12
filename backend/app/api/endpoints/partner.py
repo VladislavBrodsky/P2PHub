@@ -98,10 +98,8 @@ async def get_my_profile(
     except Exception: pass
 
     # 2. Query DB and/or Register
-    from app.services.partner_service import (
-        create_partner,
-        process_referral_notifications,
-    )
+    from app.services.partner_service import create_partner
+    from app.services.referral_service import process_referral_notifications
 
     # Check if photo exists in DB first to avoid blocking Telegram API calls during every /me request
     # Use selectinload to prevent lazy loading error in async session
@@ -231,6 +229,9 @@ async def get_my_profile(
     partner_dict["total_earned"] = partner.total_earned_usdt
     partner_dict["total_network_size"] = partner.referral_count
     partner_dict["is_admin"] = tg_id in settings.ADMIN_USER_IDS
+    partner_dict["has_x_setup"] = bool(partner.x_api_key)
+    partner_dict["has_telegram_setup"] = bool(partner.telegram_channel_id)
+    partner_dict["has_linkedin_setup"] = bool(partner.linkedin_access_token)
 
     try:
         await redis_service.set_json(cache_key, partner_dict, expire=300)
@@ -393,7 +394,7 @@ async def get_recent_partners(
         try:
             from app.services.partner_service import warm_up_partner_photos
             photo_ids = [p["photo_file_id"] for p in partners_list if p.get("photo_file_id")]
-            background_tasks.add_task(warm_up_partner_photos, photo_ids)
+            await warm_up_partner_photos.kiq(photo_ids)
         except Exception as e:
             logger.error(f"Failed to queue cache warming: {e}")
 
@@ -428,7 +429,7 @@ async def get_my_referral_tree(
     if not partner:
         return {str(i): 0 for i in range(1, 10)}
 
-    from app.services.partner_service import get_referral_tree_stats
+    from app.services.analytics_service import get_referral_tree_stats
 
     # 2. Use Intelligent Caching (300s TTL)
     cache_key = f"ref_tree_stats:{partner.id}"
@@ -464,7 +465,7 @@ async def get_network_level_members(
     if not (1 <= level <= 9):
          raise HTTPException(status_code=400, detail="Level must be between 1 and 9")
 
-    from app.services.partner_service import get_referral_tree_members
+    from app.services.analytics_service import get_referral_tree_members
 
     cache_key = f"ref_tree_members:{partner.id}:{level}"
     return await redis_service.get_or_compute(
@@ -494,7 +495,7 @@ async def get_growth_metrics(
     if not partner:
         return {"growth_pct": 0, "current_count": 0, "previous_count": 0}
 
-    from app.services.partner_service import get_network_growth_metrics
+    from app.services.analytics_service import get_network_growth_metrics
 
     cache_key = f"growth_metrics:{partner.id}:{timeframe}"
     return await redis_service.get_or_compute(
@@ -524,7 +525,7 @@ async def get_growth_chart(
     if not partner:
         return []
 
-    from app.services.partner_service import get_network_time_series
+    from app.services.analytics_service import get_network_time_series
 
     cache_key = f"growth_chart:{partner.id}:{timeframe}"
     return await redis_service.get_or_compute(
@@ -720,7 +721,7 @@ async def claim_task_reward(
         try:
             await leaderboard_service.update_score(partner.id, partner.xp)
         except Exception as e:
-            print(f"Leaderboard Sync Failed: {e}")
+            logger.error(f"Leaderboard Sync Failed: {e}", exc_info=True)
 
         # 3. Invalidate profile cache
         await redis_service.client.delete(f"partner:profile:{tg_id}")
@@ -733,7 +734,7 @@ async def claim_task_reward(
             msg = get_msg(lang, "task_completed", reward=int(xp_reward))
             await notification_service.enqueue_notification(chat_id=int(tg_id), text=msg)
         except Exception as e:
-            print(f"Failed to send task notification: {e}")
+            logger.error(f"Failed to send task notification: {e}")
 
     return partner
 
@@ -865,8 +866,8 @@ async def get_prepared_share_id(
         )
         return {"id": prepared.id, "photo_url": photo_url}
     except Exception as e:
-        print(f"❌ Failed to save prepared message: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to prepare share message: {str(e)}")
+        logger.error(f"❌ Failed to save prepared message: {e}", exc_info=True)
+        return {"id": ""}
 
 
 @router.get("/photo/{file_id}")

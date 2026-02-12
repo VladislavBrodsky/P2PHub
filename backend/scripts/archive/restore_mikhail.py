@@ -44,7 +44,7 @@ async def main():
             statement = select(Partner).order_by(Partner.xp.desc()).limit(10)
             result = await session.exec(statement)
             users = result.all()
-            print(f"\nTop 10 users by XP:")
+            print("\nTop 10 users by XP:")
             for i, u in enumerate(users, 1):
                 print(f"{i}. {u.first_name} (@{u.username}) - {u.xp} XP - Telegram ID: {u.telegram_id}")
             return

@@ -46,7 +46,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 onClick={onClose}
                 className="absolute inset-0 bg-black/90 backdrop-blur-2xl"
             />
-            /* #comment: Increased backdrop opacity and blur for absolute focus on content */
+            {/* #comment: Increased backdrop opacity and blur for absolute focus on content */}
 
             {/* Modal Content */}
             <motion.div
@@ -56,7 +56,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 transition={{ type: "spring", damping: 30, stiffness: 300 }}
                 className="relative w-full h-full sm:h-auto sm:max-w-lg bg-white dark:bg-[#030712] sm:rounded-[2rem] shadow-2xl border-t sm:border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col"
             >
-                /* #comment: Enabled full-screen mode on mobile to respect safe areas and provide more room */
+                {/* #comment: Enabled full-screen mode on mobile to respect safe areas and provide more room */}
 
                 {/* Fixed Header Bar - Premium Glassmorphism with Safe Area support */}
                 <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pb-4 pt-[calc(var(--spacing-safe-top)+1rem)] bg-white/80 dark:bg-black/40 backdrop-blur-3xl border-b border-slate-200 dark:border-white/5">
@@ -178,7 +178,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                 In the year 2026, manual marketing is dead. You need to become a <span className="text-blue-600 dark:text-blue-400"><strong>Growth Hacker</strong></span>. This means using viral loops where every new member brings 3 more.
                                             </Trans>
                                         </p>
-                                        /* #comment: Fixed GROWTH HACKER text color glitch by highlighting it with brand blue */
+                                        {/* #comment: Fixed GROWTH HACKER text color glitch by highlighting it with brand blue */}
                                     </div>
 
                                     {stage.id >= 5 && stage.id <= 10 && (

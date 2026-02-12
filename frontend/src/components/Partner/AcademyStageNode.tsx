@@ -40,7 +40,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                 <div className={cn(
                     "absolute -top-5 left-1/2 -translate-x-1/2 w-0.5 h-10 -z-10 bg-slate-200 dark:bg-white/10"
                 )}>
-                /* #comment: Fixed spine alignment to be perfectly centered and tall enough to connect nodes */
+                    {/* #comment: Fixed spine alignment to be perfectly centered and tall enough to connect nodes */}
                     {(isCompleted || isCurrent) && (
                         <motion.div
                             initial={{ y: "-100%" }}

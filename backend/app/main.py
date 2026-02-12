@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import os
 from contextlib import asynccontextmanager
 
@@ -9,7 +10,9 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app.api.endpoints import admin, earnings, leaderboard, partner, payment, tools
+logger = logging.getLogger(__name__)
+
+from app.api.endpoints import admin, earnings, leaderboard, partner, payment, tools, pro
 from app.core.config import settings
 from bot import bot, dp
 
@@ -37,9 +40,9 @@ if settings.SENTRY_DSN:
         attach_stacktrace=True,   # Include full stack traces
         before_send=lambda event, hint: event,  # Can filter events here if needed
     )
-    print(f"✅ Sentry initialized (Environment: {settings.SENTRY_ENVIRONMENT}, Sample Rate: {settings.SENTRY_TRACES_SAMPLE_RATE})")
+    logger.info(f"✅ Sentry initialized (Environment: {settings.SENTRY_ENVIRONMENT}, Sample Rate: {settings.SENTRY_TRACES_SAMPLE_RATE})")
 else:
-    print("ℹ️  Sentry disabled (SENTRY_DSN not set)")
+    logger.info("ℹ️  Sentry disabled (SENTRY_DSN not set)")
 
 
 
@@ -64,36 +67,34 @@ async def lifespan(app: FastAPI):
             # Check if already done
             done_key = "restore:users_completed_v2"
             if await redis_service.client.get(done_key):
-                print("ℹ️ User restoration already completed. Skipping...")
+                logger.info("ℹ️ User restoration already completed. Skipping...")
                 return
             
             is_leader = await redis_service.client.set(lock_key, "1", ex=300, nx=True)
             if is_leader:
-                print("🔧 Leader Worker: Running user restoration from Telegram...")
+                logger.info("🔧 Leader Worker: Running user restoration from Telegram...")
                 from scripts.restore_names_from_telegram import restore_names_from_telegram
                 restored_count = await restore_names_from_telegram()
                 
                 # Clear all caches to force refresh
-                print("🔧 Clearing all caches...")
+                logger.info("🔧 Clearing all caches...")
                 from scripts.clear_all_caches import clear_all_caches
                 await clear_all_caches()
                 
                 # Mark as done so it doesn't run again
                 await redis_service.client.set(done_key, "1", ex=86400 * 7)  # 7 days
-                print(f"✅ User restoration complete: {restored_count} users restored")
+                logger.info(f"✅ User restoration complete: {restored_count} users restored")
             else:
-                print("ℹ️ Another worker is handling user restoration. Skipping...")
+                logger.info("ℹ️ Another worker is handling user restoration. Skipping...")
         except Exception as e:
-            print(f"⚠️ User restoration failed: {e}")
+            logger.error(f"⚠️ User restoration failed: {e}")
     
     asyncio.create_task(restore_affected_users())
 
     # #comment: Migrated Subscription and Photo Sync tasks to TaskIQ Scheduler.
     # We no longer run infinite loops here to save worker memory and prevent redundant DB load.
 
-
-
-    print("✅ Webhook registration check starting...")
+    logger.info("✅ Webhook registration check starting...")
 
     webhook_base = settings.WEBHOOK_URL
 
@@ -110,31 +111,29 @@ async def lifespan(app: FastAPI):
             is_leader = await redis_service.client.set(lock_key, "1", ex=60, nx=True)
 
             if is_leader:
-                print(f"📡 Leader Worker: Registering Webhook with Telegram: {webhook_url}")
+                logger.info(f"📡 Leader Worker: Registering Webhook with Telegram: {webhook_url}")
                 async with asyncio.timeout(15.0):
                     await bot.set_webhook(
                         url=webhook_url,
                         secret_token=settings.WEBHOOK_SECRET,
                         drop_pending_updates=True
                     )
-                print(f"🚀 Webhook successfully set to: {webhook_url}")
+                logger.info(f"🚀 Webhook successfully set to: {webhook_url}")
             else:
-                print("ℹ️ Webhook already registered by leader worker. Skipping...")
+                logger.info("ℹ️ Webhook already registered by leader worker. Skipping...")
         except Exception as e:
             # Ignore flood control if it's already being handled by another worker
             if "Flood control exceeded" in str(e):
-                print("⚠️ Webhook flood control: Another worker might have already set it. Continuing...")
+                logger.warning("⚠️ Webhook flood control: Another worker might have already set it. Continuing...")
             else:
-                print(f"❌ Failed to set webhook (URL: {webhook_url}): {e}")
-                import traceback
-                traceback.print_exc()
+                logger.error(f"❌ Failed to set webhook (URL: {webhook_url}): {e}", exc_info=True)
     else:
         # Fallback to polling for local development or if URL is placeholder
-        print("💡 WEBHOOK_URL is not set or is a placeholder. Starting Long Polling...")
+        logger.info("💡 WEBHOOK_URL is not set or is a placeholder. Starting Long Polling...")
         await bot.delete_webhook(drop_pending_updates=True)
         polling_task = asyncio.create_task(dp.start_polling(bot))
         app.state.polling_task = polling_task
-        print("✅ Bot started with Long Polling")
+        logger.info("✅ Bot started with Long Polling")
 
     # Explicit Database Connection Check
     # Why: Catches database connection issues early in the startup process.
@@ -145,52 +144,52 @@ async def lifespan(app: FastAPI):
         import asyncpg
 
         from app.models.partner import engine
-        print("🌍 Checking Database Connection (Timeout 5s)...")
+        logger.info("🌍 Checking Database Connection (Timeout 5s)...")
         async with asyncio.timeout(5.0):
             async with engine.begin() as conn:
-                print("   ⏳ Engine session begun, executing query...")
+                logger.info("   ⏳ Engine session begun, executing query...")
                 await conn.execute(text("SELECT 1"))
-        print("✅ Database Connection Successful")
+        logger.info("✅ Database Connection Successful")
     except asyncpg.InvalidPasswordError as e:
         # Specific handling for authentication errors
-        print("=" * 70, flush=True)
-        print("❌ DATABASE AUTHENTICATION FAILED", flush=True)
-        print("=" * 70, flush=True)
-        print(f"Error: {e}", flush=True)
-        print("\n📋 TROUBLESHOOTING STEPS:", flush=True)
-        print("1. Go to Railway Dashboard → PostgreSQL service → Variables", flush=True)
-        print("2. Copy the DATABASE_URL value", flush=True)
-        print("3. Go to Backend service → Variables", flush=True)
-        print("4. Update DATABASE_URL with the value from step 2", flush=True)
-        print("5. Redeploy the backend service", flush=True)
-        print("\n🔍 Common causes:", flush=True)
-        print("   - Railway rotated the database password", flush=True)
-        print("   - Manual password change not synced to backend", flush=True)
-        print("   - Copied wrong DATABASE_URL from another service", flush=True)
-        print("\n⚠️  Application CANNOT start with invalid database credentials!", flush=True)
-        print("=" * 70, flush=True)
+        logger.error("=" * 70)
+        logger.error("❌ DATABASE AUTHENTICATION FAILED")
+        logger.error("=" * 70)
+        logger.error(f"Error: {e}")
+        logger.error("\n📋 TROUBLESHOOTING STEPS:")
+        logger.error("1. Go to Railway Dashboard → PostgreSQL service → Variables")
+        logger.error("2. Copy the DATABASE_URL value")
+        logger.error("3. Go to Backend service → Variables")
+        logger.error("4. Update DATABASE_URL with the value from step 2")
+        logger.error("5. Redeploy the backend service")
+        logger.error("\n🔍 Common causes:")
+        logger.error("   - Railway rotated the database password")
+        logger.error("   - Manual password change not synced to backend")
+        logger.error("   - Copied wrong DATABASE_URL from another service")
+        logger.error("\n⚠️  Application CANNOT start with invalid database credentials!")
+        logger.error("=" * 70)
         # Exit with error code to prevent unhealthy deployment
         import sys
         sys.exit(1)
     except asyncio.TimeoutError:
-        print("⚠️ Database connection check timed out. Startup continues...", flush=True)
-        print("📋 This may indicate:", flush=True)
-        print("   - Slow database startup", flush=True)
-        print("   - Network connectivity issues", flush=True)
-        print("   - Database under heavy load", flush=True)
+        logger.warning("⚠️ Database connection check timed out. Startup continues...")
+        logger.info("📋 This may indicate:")
+        logger.info("   - Slow database startup")
+        logger.info("   - Network connectivity issues")
+        logger.info("   - Database under heavy load")
     except Exception as e:
-        print(f"❌ Database Connection Failed: {type(e).__name__}: {e}", flush=True)
-        print("⚠️ Application starting, but health checks may fail.", flush=True)
+        logger.error(f"❌ Database Connection Failed: {type(e).__name__}: {e}")
+        logger.warning("⚠️ Application starting, but health checks may fail.")
         # Check if it's a connection-related error
         if "connection" in str(e).lower() or "refused" in str(e).lower():
-            print("\n📋 Connection troubleshooting:", flush=True)
-            print("   - Verify DATABASE_URL is correct", flush=True)
-            print("   - Check if database service is running", flush=True)
-            print("   - Ensure network connectivity", flush=True)
+            logger.info("\n📋 Connection troubleshooting:")
+            logger.info("   - Verify DATABASE_URL is correct")
+            logger.info("   - Check if database service is running")
+            logger.info("   - Ensure network connectivity")
 
-    print("✅ Lifespan setup complete. App is live.")
+    logger.info("✅ Lifespan setup complete. App is live.")
     yield
-    print("🛑 Shutting down Lifespan...")
+    logger.info("🛑 Shutting down Lifespan...")
 
     # Shutdown
     await bot.session.close()
@@ -212,18 +211,16 @@ async def root_health():
 @app.post(settings.WEBHOOK_PATH)
 async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = Header(None)):
     if settings.DEBUG:
-        print(f"📥 Received Webhook POST at {settings.WEBHOOK_PATH}")
+        logger.debug(f"📥 Received Webhook POST at {settings.WEBHOOK_PATH}")
 
     if x_telegram_bot_api_secret_token != settings.WEBHOOK_SECRET:
-        print(f"⚠️ Webhook Secret Mismatch! (Token masked: {x_telegram_bot_api_secret_token[:4] if x_telegram_bot_api_secret_token else 'null'}...)")
-        # Log headers for debugging (excluding sensitive info if possible)
-        # print(f"Headers: {request.headers}")
+        logger.warning(f"⚠️ Webhook Secret Mismatch! (Token masked: {x_telegram_bot_api_secret_token[:4] if x_telegram_bot_api_secret_token else 'null'}...)")
         raise HTTPException(status_code=401, detail="Invalid secret token")
 
     try:
         body = await request.json()
         if settings.DEBUG:
-            print(f"📦 Webhook Body: {json.dumps(body, indent=2)}")
+            logger.debug(f"📦 Webhook Body: {json.dumps(body, indent=2)}")
 
         update = types.Update.model_validate(body, context={"bot": bot})
         
@@ -233,18 +230,16 @@ async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = H
         elif update.callback_query: update_type = "callback_query"
         elif update.inline_query: update_type = "inline_query"
         
-        print(f"🎭 Update {update.update_id} received (Type: {update_type})")
+        logger.info(f"🎭 Update {update.update_id} received (Type: {update_type})")
 
         # Feed the update to context-aware dispatcher
         await dp.feed_update(bot, update)
         
         if settings.DEBUG:
-            print(f"✅ Update {update.update_id} processed successfully")
+            logger.debug(f"✅ Update {update.update_id} processed successfully")
 
     except Exception as e:
-        print(f"❌ Webhook Error: {e}")
-        import traceback
-        traceback.print_exc()
+        logger.error(f"❌ Webhook Error: {e}", exc_info=True)
         # Return 200 anyway to prevent Telegram retry loops for code errors
         return {"status": "error", "message": str(e)}
 
@@ -263,9 +258,7 @@ app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     request_id = getattr(request.state, "request_id", "unknown")
-    print(f"❌ Global Exception [Request: {request_id}]: {exc}")
-    import traceback
-    traceback.print_exc()
+    logger.error(f"❌ Global Exception [Request: {request_id}]: {exc}", exc_info=True)
     
     # #comment: Send exception to Sentry if configured
     if settings.SENTRY_DSN:
@@ -323,7 +316,7 @@ app.include_router(earnings.router, prefix="/api/earnings", tags=["earnings"])
 app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderboard"])
 app.include_router(tools.router, prefix="/api/tools", tags=["tools"])
 app.include_router(payment.router, prefix="/api/payment", tags=["payment"])
-app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
+app.include_router(pro.router, prefix="/api/pro", tags=["pro"])
 from app.api.endpoints import blog, config, health
 
 app.include_router(blog.router, prefix="/api/blog", tags=["blog"])

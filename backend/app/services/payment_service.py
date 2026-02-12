@@ -216,7 +216,7 @@ class PaymentService:
         # #comment: CRITICAL - Commission distribution must happen in the same transaction as the upgrade.
         # If we commit first, then commissions fail, the user gets upgraded but referrers don't get paid.
         # By doing this before commit, we ensure both succeed or both rollback on error.
-        from app.services.partner_service import distribute_pro_commissions
+        from app.services.referral_service import distribute_pro_commissions
         await distribute_pro_commissions(session, partner.id, amount)
         
         # Commit everything atomically
