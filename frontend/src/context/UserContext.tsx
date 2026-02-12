@@ -17,6 +17,7 @@ interface User {
     referral_code: string;
     referrals: any[]; // Extended for Earn Hub
     completed_tasks: string;
+    completed_stages: number[]; // Added for Academy
     is_pro: boolean;
     is_admin: boolean;
     pro_expires_at: string | null;
@@ -40,6 +41,7 @@ interface UserContextType {
     isLoading: boolean;
     refreshUser: () => Promise<void>;
     updateUser: (updates: Partial<User>) => void;
+    completeStage: (id: number) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -68,6 +70,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     const { updateProgress } = useStartupProgress();
 
+    const completeStage = React.useCallback(async (id: number) => {
+        // Optimistic update
+        updateUser({
+            completed_stages: user?.completed_stages ? [...user.completed_stages, id] : [id]
+        });
+
+        // TODO: Implement backend API call to persist stage completion
+        // await apiClient.post(`/api/academy/stages/${id}/complete`);
+    }, [user, updateUser]);
+
     const refreshUser = React.useCallback(async () => {
         const now = Date.now();
         // Throttle refreshes to once every 10 seconds unless forced
@@ -86,6 +98,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             const res = await apiClient.get('/api/partner/me');
 
             const userData = res.data;
+
+            // Ensure completed_stages exists (backend might not send it yet)
+            if (!userData.completed_stages) {
+                userData.completed_stages = [];
+            }
 
             // Enrich with Telegram SDK data if backend is missing details
             if (tgUser) {
@@ -117,6 +134,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         referral_code: 'UNVERIFIED',
                         referrals: [],
                         completed_tasks: "[]",
+                        completed_stages: [],
                         is_pro: false,
                         is_admin: false,
                         pro_expires_at: null,
@@ -132,7 +150,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             setIsLoading(false);
         }
         // #comment: Added updateProgress to dependencies to ensure refreshUser uses the latest progress tracking function
-    }, [updateProgress]); // user dependency removed as '&& !user' is checked against current closure or state, but more importantly, we want this stable.
+    }, [updateProgress]); // user dependency removed
 
     useEffect(() => {
         const init = async () => {
@@ -153,6 +171,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         referral_code: 'DEV-TEST',
                         referrals: [],
                         completed_tasks: "[]",
+                        completed_stages: [1, 2, 3], // Mock stages
                         is_pro: true,
                         is_admin: true,
                         pro_expires_at: null,
@@ -208,8 +227,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         user,
         isLoading,
         refreshUser,
-        updateUser
-    }), [user, isLoading, refreshUser, updateUser]);
+        updateUser,
+        completeStage
+    }), [user, isLoading, refreshUser, updateUser, completeStage]);
 
     return (
         <UserContext.Provider value={contextValue}>
