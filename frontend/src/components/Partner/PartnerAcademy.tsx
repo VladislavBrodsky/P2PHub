@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export const PartnerAcademy = () => {
     return (
-        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700 pt-[env(safe-area-inset-top,2rem)]">
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700 pt-4">
             {/* Academy Elite Header */}
             <div className="relative group overflow-hidden rounded-[3rem] p-1 shadow-2xl perspective-1000">
                 <div className="absolute inset-0 branding-liquid-gradient opacity-95 group-hover:opacity-100 transition-opacity" />

@@ -89,7 +89,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
 
             {/* Main Content Area - THE SCROLL LAYER */}
             <main
-                className={`flex-1 overflow-x-hidden overflow-y-auto scroll-smooth relative z-10 [-webkit-overflow-scrolling:touch] ${isStaging ? 'staging-offset' : 'content-main-padding'}`}
+                className={`flex-1 overflow-x-hidden overflow-y-auto scroll-smooth relative z-10 [-webkit-overflow-scrolling:touch] ${!isHeaderVisible ? '' : (isStaging ? 'staging-offset' : 'content-main-padding')}`}
             >
                 <div className="relative mx-auto w-full max-w-lg px-4 safe-pb">
                     {/* Header */}
