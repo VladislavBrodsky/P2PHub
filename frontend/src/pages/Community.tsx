@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useHaptic } from '../hooks/useHaptic';
 import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 import { PartnerDashboard } from '../components/Partner/PartnerDashboard';
@@ -7,7 +7,7 @@ import { PartnerAcademy } from '../components/Partner/PartnerAcademy';
 import { cn } from '../lib/utils';
 import { useTranslation } from 'react-i18next';
 // #comment: Removed unused HelpCircle icon from lucide-react to clean up the import list
-import { Info } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { PartnerBriefingModal } from '../components/Partner/PartnerBriefingModal';
 
 export default function CommunityPage() {
@@ -16,13 +16,6 @@ export default function CommunityPage() {
     const [activeTab, setActiveTab] = useState<'dashboard' | 'academy'>('dashboard');
     const [isBriefingOpen, setIsBriefingOpen] = useState(false);
     const { selection } = useHaptic();
-    const { scrollY } = useScroll();
-    const [showInfo, setShowInfo] = useState(true);
-
-    useMotionValueEvent(scrollY, "change", (latest) => {
-        setShowInfo(latest < 50);
-    });
-
     useEffect(() => {
         setIsLoading(false);
     }, []);
@@ -42,24 +35,33 @@ export default function CommunityPage() {
             <div className="fixed bottom-40 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none transition-colors duration-500" />
 
 
-            {/* Premium Header with Briefing Trigger - Sticky with Glassmorphism */}
-            <AnimatePresence>
-                {showInfo && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        className="sticky top-0 z-50 flex items-center justify-center py-4 pb-6 px-1 bg-(--color-bg-deep)/80 backdrop-blur-xl border-b border-(--color-border-glass) -mx-4 mb-4"
-                    >
-                        <button
-                            onClick={() => { selection(); setIsBriefingOpen(true); }}
-                            className="p-1.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl text-slate-600 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-all active:scale-95 shadow-sm group"
-                        >
-                            <Info className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                        </button>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {/* Premium Briefing Trigger - Static Card */}
+            <div className="pt-4 -mb-2 relative z-30">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    onClick={() => { selection(); setIsBriefingOpen(true); }}
+                    className="group relative overflow-hidden rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-4 shadow-sm backdrop-blur-xl cursor-pointer hover:bg-white dark:hover:bg-white/10 transition-all active:scale-[0.98]"
+                >
+                    <div className="absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-transparent via-blue-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                    <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 group-hover:scale-110 transition-transform">
+                            <BookOpen className="w-5 h-5" />
+                        </div>
+                        <div className="flex flex-col">
+                            <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white leading-none">
+                                {t('referral.brief.title')}
+                            </h3>
+                            <span className="text-[8px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-1.5 flex items-center gap-1.5">
+                                Official Partner Guide
+                                <div className="w-1 h-1 rounded-full bg-blue-500/50" />
+                                <span className="opacity-60 italic">Read Briefing</span>
+                            </span>
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
 
             {/* Top Navigation / Switcher */}
             <div className="relative z-20 mb-4 mt-2 flex justify-center">
