@@ -44,7 +44,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         className="group flex items-center gap-2 rounded-2xl border border-slate-200/50 bg-white/80 dark:bg-slate-900/50 px-4 py-2 shadow-premium backdrop-blur-md transition-all active:scale-95 shrink-0"
                     >
                         <Menu className="text-slate-900 h-5 w-5 dark:text-white transition-transform group-hover:scale-110" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white hidden sm:block">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white">
                             Menu
                         </span>
                     </button>

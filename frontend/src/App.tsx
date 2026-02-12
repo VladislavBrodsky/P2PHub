@@ -242,7 +242,7 @@ function AppContent({ onReady }: { onReady: () => void }) {
 }
 
 function App() {
-    const { config, isLoading: isConfigLoading } = useConfig();
+    const { isLoading: isConfigLoading } = useConfig();
     const { progress, status, isComplete, complete, updateProgress } = useStartupProgress();
     const [showOnboarding, setShowOnboarding] = useState(false);
 

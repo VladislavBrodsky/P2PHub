@@ -5,7 +5,6 @@ import { AcademyStage } from '../../data/academyData';
 import { useTranslation, Trans } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
 import { useUI } from '../../context/UIContext';
-import { cn } from '../../utils/cn';
 
 interface AcademyContentPortalProps {
     stage: AcademyStage;

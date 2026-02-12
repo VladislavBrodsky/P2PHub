@@ -1,5 +1,5 @@
 import { AcademyCareerStair } from './AcademyCareerStair';
-import { Sparkles, TrendingUp, Award } from 'lucide-react';
+import { Sparkles, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const PartnerAcademy = () => {

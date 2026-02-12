@@ -101,30 +101,32 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         } catch (error) {
             console.error('[DEBUG] refreshUser: Failed:', error);
             // Fallback: If backend fails, use Telegram SDK data for UI personalization (Optimistic UI)
-            if (tgUser && !user) {
-                const fallbackUser: any = {
-                    id: tgUser.id,
-                    telegram_id: String(tgUser.id),
-                    username: tgUser.username || null,
-                    first_name: tgUser.firstName,
-                    last_name: tgUser.lastName || null,
-                    photo_url: tgUser.photoUrl || null,
-                    balance: 0,
-                    level: 1,
-                    xp: 0,
-                    referral_code: 'UNVERIFIED',
-                    referrals: [],
-                    completed_tasks: "[]",
-                    is_pro: false,
-                    is_admin: false,
-                    pro_expires_at: null,
-                    subscription_plan: null,
-                    total_network_size: 0,
-                    pro_notification_seen: false,
-                    last_checkin_at: null,
-                    checkin_streak: 0
-                };
-                setUser(fallbackUser);
+            if (tgUser) {
+                setUser(prev => {
+                    if (prev) return prev;
+                    return {
+                        id: tgUser.id,
+                        telegram_id: String(tgUser.id),
+                        username: tgUser.username || null,
+                        first_name: tgUser.firstName,
+                        last_name: tgUser.lastName || null,
+                        photo_url: tgUser.photoUrl || null,
+                        balance: 0,
+                        level: 1,
+                        xp: 0,
+                        referral_code: 'UNVERIFIED',
+                        referrals: [],
+                        completed_tasks: "[]",
+                        is_pro: false,
+                        is_admin: false,
+                        pro_expires_at: null,
+                        subscription_plan: null,
+                        total_network_size: 0,
+                        pro_notification_seen: false,
+                        last_checkin_at: null,
+                        checkin_streak: 0
+                    };
+                });
             }
         } finally {
             setIsLoading(false);
