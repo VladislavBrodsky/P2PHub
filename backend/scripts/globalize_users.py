@@ -64,7 +64,7 @@ async def main():
             # Query all partners that look like test users or have "None" names
             statement = select(Partner).where(
                 (Partner.first_name.like("TestUser%")) |
-                (Partner.first_name == None) |
+                (Partner.first_name.is_(None)) |
                 (Partner.username.like("TestUser%")) |
                 (Partner.photo_url.like("%dicebear%"))
             )
