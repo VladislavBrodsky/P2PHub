@@ -84,13 +84,15 @@ async def create_partner(
     # 4. Invalidate referral tree stats for ancestors
     if referrer:
         try:
-            # Reconstruct lineage for invalidation (up to 9 levels)
-            anc_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-            for anc_id in anc_ids[-9:]:
-                await redis_service.client.delete(f"ref_tree_stats:{anc_id}")
-                # Also invalidate Level 1 members for immediate referrer
-                if anc_id == referrer.id:
-                    await redis_service.client.delete(f"ref_tree_members:{anc_id}:1")
+            # #comment: Using a Redis Pipeline to batch multiple "delete" commands into a single network RTT.
+            # This is significantly faster than sequential deletes in production high-traffic environments.
+            async with redis_service.client.pipeline(transaction=True) as pipe:
+                anc_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+                for anc_id in anc_ids[-9:]:
+                    pipe.delete(f"ref_tree_stats:{anc_id}")
+                    if anc_id == referrer.id:
+                        pipe.delete(f"ref_tree_members:{anc_id}:1")
+                await pipe.execute()
         except Exception as e:
             logger.error(f"Failed to invalidate cache for ancestors: {e}")
 
@@ -255,13 +257,15 @@ async def process_referral_logic(partner_id: int):
 
                 # 3. Redis Side Effects
                 try:
+                    # #comment: Using pipelining for side-effect invalidations. 
+                    # Although update_score is a separate utility, the deletes are batched.
                     await leaderboard_service.update_score(referrer.id, referrer.xp)
-                    await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
-
-                    # Also invalidate Network Tree caches to ensure real-time visibility in Explorer
-                    await redis_service.client.delete(f"ref_tree_stats:{referrer.id}")
-                    if level == 1:
-                        await redis_service.client.delete(f"ref_tree_members:{referrer.id}:1")
+                    async with redis_service.client.pipeline(transaction=True) as pipe:
+                        pipe.delete(f"partner:profile:{referrer.telegram_id}")
+                        pipe.delete(f"ref_tree_stats:{referrer.id}")
+                        if level == 1:
+                            pipe.delete(f"ref_tree_members:{referrer.id}:1")
+                        await pipe.execute()
                 except Exception as e:
                     logger.error(f"⚠️ Redis sync/invalidation failed for {referrer.id}: {e}")
 
@@ -368,9 +372,11 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             # Refresh to pick up changes for cache consistency
             await session.refresh(referrer)
 
-            # Invalidate cache
-            await redis_service.client.delete(f"partner:profile:{referrer.telegram_id}")
-            await redis_service.client.delete(f"partner:earnings:{referrer.telegram_id}")
+            # #comment: Pipeline ensures that both profile and earning caches are invalidated atomically and fast.
+            async with redis_service.client.pipeline(transaction=True) as pipe:
+                pipe.delete(f"partner:profile:{referrer.telegram_id}")
+                pipe.delete(f"partner:earnings:{referrer.telegram_id}")
+                await pipe.execute()
 
             # Notify
             try:

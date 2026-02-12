@@ -11,10 +11,22 @@ logger = logging.getLogger(__name__)
 
 class RedisService:
     def __init__(self):
-        # Default client for text/JSON operations
-        self.client = redis.from_url(settings.REDIS_URL, decode_responses=True)
+        # #comment: Implementing connection pooling to handle high-concurrency across Gunicorn workers.
+        # max_connections=20 per worker (80 total) allows headroom for traffic spikes.
+        # socket_keepalive ensures idle connections aren't dropped by cloud firewalls.
+        pool_args = {
+            "max_connections": 20,
+            "socket_timeout": 5.0,
+            "socket_keepalive": True,
+            "retry_on_timeout": True,
+            "decode_responses": True
+        }
+        self.client = redis.from_url(settings.REDIS_URL, **pool_args)
+        
         # Raw client for binary operations (Photos, etc.)
-        self.raw_client = redis.from_url(settings.REDIS_URL, decode_responses=False)
+        raw_pool_args = pool_args.copy()
+        raw_pool_args["decode_responses"] = False
+        self.raw_client = redis.from_url(settings.REDIS_URL, **raw_pool_args)
 
     async def get(self, key: str):
         return await self.client.get(key)
@@ -60,15 +72,10 @@ class RedisService:
         """
         Tries to get data from cache. If missing, awaits the factory function,
         caches the result, and returns it.
-
-        :param key: Redis key
-        :param factory: Async function (call) that returns the data
-        :param expire: Expiration time in seconds
         """
         try:
             cached = await self.get_json(key)
             if cached is not None:
-                logger.debug(f"Cache HIT: {key}")
                 return cached
         except Exception as e:
             logger.error(f"❌ Cache Read Error for {key}: {e}")
@@ -76,11 +83,16 @@ class RedisService:
         # Compute
         data = await factory()
 
-        # Cache even if empty (e.g. empty list/dict), but not if None
         if data is not None:
             try:
-                await self.set_json(key, data, expire=expire)
-                logger.info(f"Cache Refresh: {key} (TTL: {expire}s)")
+                # #comment: Using "Jitter" (±10% random TTL) to prevent the "Thundering Herd" effect.
+                # If 10,000 users have the same 5-minute expiry, they would all hit the DB at once.
+                import random
+                jitter = random.randint(-max(1, int(expire * 0.1)), max(1, int(expire * 0.1)))
+                final_expire = max(1, expire + jitter)
+                
+                await self.set_json(key, data, expire=final_expire)
+                logger.info(f"Cache Refresh: {key} (TTL: {final_expire}s with jitter)")
             except Exception as e:
                 logger.error(f"❌ Cache Write Error for {key}: {e}")
 

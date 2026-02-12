@@ -14,6 +14,15 @@ async def warmup_redis():
     Seeds Redis with critical production data from PostgreSQL.
     Ensures leaderboards and frequent caches are ready on startup.
     """
+    # #comment: Implementing a distributed lock to prevent 4 workers from running warmup simultaneously.
+    # We set a 10-minute timeout for the lock to ensure it cleans up if a worker crashes.
+    lock_key = "lock:warmup"
+    is_locked = await redis_service.client.set(lock_key, "1", ex=600, nx=True)
+    
+    if not is_locked:
+        logger.info("ℹ️ Redis Warmup already in progress by another worker. Skipping...")
+        return
+
     logger.info("🔥 Starting Redis Warmup...")
 
     async for session in get_session():
@@ -62,6 +71,7 @@ async def warmup_redis():
         except Exception as e:
             logger.error(f"❌ Redis Warmup Failed: {e}")
         finally:
+            # #comment: Always break after the first session to prevent re-running in loop
             break
 
     logger.info("✨ Redis Warmup Complete.")
