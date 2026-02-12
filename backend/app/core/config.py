@@ -41,7 +41,7 @@ settings_init_start = time.time()
 class Settings(BaseSettings):
     # Required environment variables (with defaults for local development/migrations)
     BOT_TOKEN: str = ""
-    DATABASE_URL: str = "sqlite+aiosqlite:///dev.db"
+    DATABASE_URL: str
     WEBHOOK_SECRET: str = ""
 
     # Optional with sensible defaults

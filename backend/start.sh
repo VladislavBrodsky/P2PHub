@@ -5,6 +5,12 @@ set -e
 # Turn on python unbuffered mode
 export PYTHONUNBUFFERED=1
 
+# Sanitize PORT (prevent crash from invalid injection like '${PORT}')
+if [[ -n "${PORT}" ]] && ! [[ "${PORT}" =~ ^[0-9]+$ ]]; then
+    echo "⚠️ Invalid PORT environment variable detected: '${PORT}'. Falling back to 8080."
+    export PORT=8080
+fi
+
 # echo "🔍 Environment Variables (sanitized):"
 # printenv | grep -vE "SECRET|KEY|TOKEN|PASSWORD|PASS|URL" | sort
 
