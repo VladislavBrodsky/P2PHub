@@ -36,16 +36,16 @@ export const useRealtimeAlerts = () => {
                         }
                     }
 
-                    // #comment Viral FOMO message variants - randomly select for variety and engagement
+                    // Avoid notifying about same event twice if possible (simple deduplication could be added)
                     let message = '';
                     let title = 'Network Activity';
                     let icon = <Zap size={18} className="text-amber-500" />;
 
-                    const randomVariant = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
-
+                    // #comment: Wrapped switch cases with const declarations in curly braces to fix ESLint "Unexpected lexical declaration in case block" error
+                    // This creates a proper block scope for each case and prevents variable hoisting issues
                     switch (event.type) {
                         case 'REFERRAL_L1':
-                        case 'REFERRAL_DEEP':
+                        case 'REFERRAL_DEEP': {
                             const referralMessages = [
                                 `${event.first_name} just joined the partner network!`,
                                 `🔥 ${event.first_name} is building their empire!`,
@@ -62,11 +62,13 @@ export const useRealtimeAlerts = () => {
                                 'Movement Alert 🚨',
                                 'Partner Joined ⚡'
                             ];
+                            const randomVariant = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
                             message = randomVariant(referralMessages);
                             title = randomVariant(referralTitles);
                             icon = <Users size={18} className="text-blue-500" />;
                             break;
-                        case 'TASK':
+                        }
+                        case 'TASK': {
                             const taskMessages = [
                                 `${event.first_name} just claimed rewards!`,
                                 `⚡ ${event.first_name} is crushing tasks!`,
@@ -82,11 +84,13 @@ export const useRealtimeAlerts = () => {
                                 'Someone Earned 🔥',
                                 'Rewards Unlocked 💎'
                             ];
+                            const randomVariant = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
                             message = randomVariant(taskMessages);
                             title = randomVariant(taskTitles);
                             icon = <Trophy size={18} className="text-emerald-500" />;
                             break;
-                        case 'LEVEL_UP':
+                        }
+                        case 'LEVEL_UP': {
                             const levelMessages = [
                                 `🚀 ${event.first_name} just leveled up!`,
                                 `📈 ${event.first_name} is climbing fast - keep up!`,
@@ -102,10 +106,12 @@ export const useRealtimeAlerts = () => {
                                 'Progress Alert 🔥',
                                 'Achievement Unlocked 🏆'
                             ];
+                            const randomVariant = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
                             message = randomVariant(levelMessages);
                             title = randomVariant(levelTitles);
                             icon = <Zap size={18} className="text-yellow-500" />;
                             break;
+                        }
                         default:
                             // Fallback generic message with FOMO
                             message = `🌟 ${event.first_name} is actively earning!`;
