@@ -252,9 +252,30 @@ function App() {
     useEffect(() => {
         if (!isConfigLoading) {
             updateProgress(50, 'Config Loaded');
-            // #comment: Start prefetching Dashboard JS chunk immediately after config is ready
-            // to ensure it's ready by the time the loader fades out.
-            prefetchPages.home();
+
+            // #comment: Aggressive Prefetch Strategy
+            // Immediately start loading all core route chunks to ensure instant navigation.
+            // This eliminates the RevealSkeleton flash when switching tabs.
+            const prefetchCoreRoutes = async () => {
+                try {
+                    // Critical path
+                    await prefetchPages.home();
+
+                    // Secondary paths (Parallel fetch)
+                    Promise.all([
+                        prefetchPages.earn(),
+                        prefetchPages.cards(),
+                        prefetchPages.partner(),
+                        prefetchPages.league(),
+                        prefetchPages.subscription()
+                    ]).catch(e => console.debug('Prefetch error', e));
+
+                } catch (e) {
+                    console.warn('Prefetch failed', e);
+                }
+            };
+
+            prefetchCoreRoutes();
         }
     }, [isConfigLoading, updateProgress]);
 
