@@ -211,11 +211,17 @@ class PaymentService:
         })
 
         session.add(partner)
-        await session.commit()
 
-        # 3. Distribute Commissions to Ancestors
+        # 3. Distribute Commissions to Ancestors (BEFORE commit for transaction atomicity)
+        # #comment: CRITICAL - Commission distribution must happen in the same transaction as the upgrade.
+        # If we commit first, then commissions fail, the user gets upgraded but referrers don't get paid.
+        # By doing this before commit, we ensure both succeed or both rollback on error.
         from app.services.partner_service import distribute_pro_commissions
         await distribute_pro_commissions(session, partner.id, amount)
+        
+        # Commit everything atomically
+        await session.commit()
+
 
         # 4. Send Visionary & Viral Messages
         from app.core.i18n import get_msg

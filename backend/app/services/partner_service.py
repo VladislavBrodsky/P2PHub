@@ -243,10 +243,19 @@ async def process_referral_logic(partner_id: int):
             if not partner or not partner.referrer_id:
                 return
 
+
             # 1. Reconstruct Lineage IDs (L1 to L9)
-            # partner.path already includes the referrer_id as the last element.
+            # #comment: CRITICAL - partner.path contains ancestors UP TO but NOT including the direct referrer.
+            # Example: If Alice refers Bob who refers Charlie:
+            #   - Alice: path=None, referrer_id=None
+            #   - Bob: path="<Alice.id>", referrer_id=<Alice.id>
+            #   - Charlie: path="<Alice.id>.<Bob.id>", referrer_id=<Bob.id>
+            # So we MUST append referrer_id to get the complete lineage for XP distribution.
             lineage_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+            if partner.referrer_id:
+                lineage_ids.append(partner.referrer_id)
             lineage_ids = lineage_ids[-9:]
+
 
             # 2. Bulk Fetch all ancestors
             statement = select(Partner).where(Partner.id.in_(lineage_ids))
@@ -314,6 +323,7 @@ async def process_referral_logic(partner_id: int):
                     logger.critical(f"❌ CRITICAL: Failed to award XP for {referrer.id} at level {level}: {core_error}")
                     # If core operation fails for one user, we might still want to try for others,
                     # but usually this means DB issue. We continue to next level just in case.
+                    current_referrer_id = referrer.referrer_id
                     continue
 
                 # --- SIDE EFFECTS: ISOLATED FROM CORE ---
@@ -421,7 +431,10 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     # COMMISSION MAP
     COMMISSION_PCT = {1: 0.30, 2: 0.05, 3: 0.03, 4: 0.01, 5: 0.01, 6: 0.01, 7: 0.01, 8: 0.01, 9: 0.01}
 
-    # Get Lineage
+    # #comment: CRITICAL FIX - Lineage construction must match process_referral_logic.
+    # partner.path contains ancestor IDs up to (but NOT including) the direct referrer.
+    # We must append referrer_id to ensure L1 commission is always included.
+    # Example: if path="1.5" and referrer_id=10, lineage should be [1,5,10] not [1,5].
     path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
     lineage_ids = (path_ids + [partner.referrer_id])[-9:]
 
@@ -476,9 +489,10 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
             except Exception: pass
 
+
         current_referrer_id = referrer.referrer_id
 
-    await session.commit()
+    # #comment: Removed session.commit() - caller (upgrade_to_pro) now handles commit for transaction atomicity.
 
 async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dict[str, int]:
     """

@@ -42,8 +42,6 @@ class NotificationService:
             except Exception as fe:
                 logger.error(f"Fallback notification also failed for {chat_id}: {fe}")
 
-    async def process_notifications_worker(self):
-        """Deprecated: superseded by TaskIQ worker."""
-        pass
+
 
 notification_service = NotificationService()
