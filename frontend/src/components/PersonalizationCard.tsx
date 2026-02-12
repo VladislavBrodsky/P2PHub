@@ -25,7 +25,8 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
             {/* Premium Background Glow */}
             <div className="absolute top-1/2 left-10 -translate-y-1/2 w-32 h-32 bg-brand-blue/10 blur-[60px] rounded-full -z-10" />
 
-            <div className={`flex items-center gap-5 p-4 rounded-[2rem] bg-(--color-bg-surface)/40 backdrop-blur-md border border-(--color-border-glass) shadow-premium ${variant === 'compact' ? 'p-3 gap-4' : ''}`}>
+            {/* #comment: Unified padding (p-2.5 px-4) with other dashboard cards for vertical rhythm consistency */}
+            <div className={`flex items-center gap-5 p-4 rounded-[2rem] bg-(--color-bg-surface)/40 backdrop-blur-md border border-(--color-border-glass) shadow-premium ${variant === 'compact' ? 'p-2.5 px-4 gap-4' : ''}`}>
                 {/* Left: Avatar & Rank Badge Column */}
                 <div className="flex flex-col items-center gap-2 shrink-0">
                     <div className="relative">

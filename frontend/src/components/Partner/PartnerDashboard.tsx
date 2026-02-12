@@ -126,38 +126,51 @@ export const PartnerDashboard = () => {
                     {/* Partner Briefing Card - Moved from CommunityPage */}
                     <div
                         onClick={() => { selection(); setIsBriefingOpen(true); }}
-                        className="group relative overflow-hidden rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 p-4 shadow-sm backdrop-blur-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all active:scale-[0.98]"
+                        className="group relative overflow-hidden rounded-[1.25rem] bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 p-2.5 px-4 shadow-sm backdrop-blur-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all active:scale-[0.98]"
                     >
                         <div className="absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-transparent via-blue-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 group-hover:scale-110 transition-transform">
-                                <BookOpen className="w-5 h-5" />
+                        <div className="flex items-center justify-between gap-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-9 h-9 rounded-full bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 group-hover:scale-110 transition-transform">
+                                    <BookOpen className="w-4 h-4" />
+                                </div>
+                                <div className="flex flex-col min-w-0">
+                                    <h3 className="text-sm font-black uppercase tracking-[0.08em] text-slate-900 dark:text-white leading-tight truncate">
+                                        {t('referral.brief.title')}
+                                    </h3>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 opacity-60 leading-none mt-1">
+                                        {t('referral.brief.guide')}
+                                    </span>
+                                </div>
                             </div>
-                            <div className="flex flex-col">
-                                <h3 className="text-sm font-black uppercase tracking-[0.12em] text-slate-900 dark:text-white leading-none">
-                                    {t('referral.brief.title')}
-                                </h3>
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5 line-clamp-1">
-                                    {t('referral.brief.guide')}
-                                    <div className="w-1 h-1 rounded-full bg-blue-500/50" />
-                                    <span className="opacity-60 italic">{t('referral.brief.read')}</span>
-                                </span>
+
+                            {/* #comment: Compact action trigger - split text and added pulse indicator for a "live" feel without taking vertical space */}
+                            <div className="flex items-center gap-2 shrink-0 pr-1">
+                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.3)]" />
+                                <div className="flex flex-col">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 italic leading-none group-hover:text-blue-500 transition-colors">
+                                        {t('referral.brief.read').split(' ')[0]}
+                                    </span>
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 italic leading-none mt-0.5 group-hover:text-blue-500 transition-colors">
+                                        {t('referral.brief.read').split(' ')[1]}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    {/* Explorer is now an overlay, but we might want a teaser here or just hide it */}
+                    {/* #comment: Unified card styling for secondary tools to maintain dashboard vertical breathing room */}
                     <div
-                        className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
+                        className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-[1.25rem] p-2.5 px-4 shadow-sm flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
                         onClick={handleExplorerOpen}
                     >
                         <div className="flex items-center gap-3">
-                            <div className="bg-blue-500/10 p-2 rounded-xl text-blue-600 dark:text-blue-400">
+                            <div className="bg-blue-500/10 p-2 rounded-full text-blue-600 dark:text-blue-400">
                                 <Users className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="font-bold text-slate-900 dark:text-white text-sm">Explore Connectivity</h3>
-                                <p className="text-[10px] text-slate-500">View your 9-level deep downline</p>
+                                <h3 className="font-black text-slate-900 dark:text-white text-xs uppercase tracking-tight">Explore Connectivity</h3>
+                                <p className="text-[10px] font-bold text-slate-500 opacity-60 uppercase tracking-widest leading-none mt-1">View your 9-level matrix</p>
                             </div>
                         </div>
                         <ChevronRight className="w-4 h-4 text-slate-400" />
