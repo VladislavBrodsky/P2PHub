@@ -58,6 +58,11 @@ async def lifespan(app: FastAPI):
     # #comment: Warmup already has an internal Redis lock, so it's safe to call from all 4 workers.
     # Only one will succeed, the others will skip.
     asyncio.create_task(warmup_redis())
+
+    # #comment: Warmup AI services in the background during boot.
+    # This ensures Google Sheets / KB caches are ready before the first user request.
+    from app.services.support_service import support_service
+    asyncio.create_task(support_service._get_cached_kb())
     
     # #comment: One-time restoration task for users affected by globalization script
     # This will run once on startup, protected by leader election

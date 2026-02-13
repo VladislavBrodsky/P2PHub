@@ -75,15 +75,9 @@ class SupportAgentService:
         self._init_google_sheets_client()
 
     def _init_google_sheets_client(self):
-        """Lazy/Async initialization to prevent blocking the event loop at startup."""
+        """Lazy initialization to prevent blocking the event loop at startup."""
         creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
-        if creds_json:
-            # #comment: Proactive background authentication to pre-warm the service.
-            # This ensures the GS client is ready before the first user even opens support.
-            asyncio.create_task(self._get_gs_client())
-            # #comment: Trigger KB pre-fetch to warm up in-memory caches and index.
-            asyncio.create_task(self._get_cached_kb())
-        else:
+        if not creds_json:
              logger.warning("❌ SupportService: Google Credentials missing.")
 
     async def _get_gs_client(self):
