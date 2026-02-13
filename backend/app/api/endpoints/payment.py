@@ -12,6 +12,8 @@ from app.core.security import get_current_user
 from app.models.partner import Partner, get_session
 from app.services.notification_service import notification_service
 from app.services.payment_service import payment_service
+from app.services.audit_service import audit_service
+from app.models.transaction import PartnerTransaction
 
 router = APIRouter()
 @router.get("/config")
@@ -90,6 +92,22 @@ async def create_payment_session(
     payment_data = await payment_service.create_payment_session(
         session, partner.id, amount, currency, network
     )
+    
+    # #comment: Log session creation so we can track conversion rates and abandoned carts.
+    await audit_service.log_event(
+        session=session,
+        entity_type="payment_session",
+        entity_id=str(payment_data.get("transaction_id", "unknown")),
+        action="payment_session_created",
+        actor_id=tg_id,
+        details={
+            "amount": amount,
+            "currency": currency,
+            "network": network,
+            "expires_at": payment_data.get("expires_at")
+        }
+    )
+    
     await session.commit()
 
     return payment_data
@@ -121,6 +139,22 @@ async def verify_ton(
         raise HTTPException(status_code=404, detail="Partner not found")
 
     success = await payment_service.verify_ton_transaction(session, partner, tx_hash)
+
+    # #comment: Log the verification result for audit purposes.
+    # We record whether the verification succeeded or failed, and the hash used.
+    await audit_service.log_event(
+        session=session,
+        entity_type="transaction",
+        entity_id=tx_hash, # Using hash as ID for lookup since we might not have a txn ID yet if failed
+        action="ton_verification_attempt",
+        actor_id=tg_id,
+        details={
+            "tx_hash": tx_hash,
+            "success": success
+        }
+    )
+    # Commit audit log (flush logic handles ID generation but commit persists it)
+    await session.commit()
 
     if success:
         return {"status": "success", "message": "Upgraded to PRO"}
@@ -157,22 +191,66 @@ async def submit_manual_payment(
         if not partner:
             raise HTTPException(status_code=404, detail="Partner not found")
 
+        # #comment: Create a new transaction record with 'manual_review' status.
+        # This prevents the user from being upgraded immediately but allows admins to see the request.
         transaction = await payment_service.create_transaction(
             session, partner.id, amount, currency, network, tx_hash
         )
         transaction.status = "manual_review"
+        session.add(transaction)
+        await session.commit()
+        await session.refresh(transaction)
+
+        # #comment: Log this action in the audit table for security and history tracking.
+        await audit_service.log_event(
+            session=session,
+            entity_type="transaction",
+            entity_id=str(transaction.id),
+            action="manual_payment_submitted",
+            actor_id=tg_id,
+            details={
+                "amount": amount,
+                "currency": currency,
+                "network": network,
+                "tx_hash": tx_hash
+            }
+        )
         await session.commit()
 
-        # Notify Admins (Background-style)
+        # #comment: Background task to notify admins.
+        # Specific requirement: Notify @uslincoln (ID: 537873096) with detailed user info.
         async def notify_admins():
+            # Construct a detailed message with all necessary verification info
+            # We include the ID and Username so the admin knows exactly who to look up.
+            safe_username = f"@{partner.username}" if partner.username else "No Username"
+            
             admin_msg = (
-                "🚨 *NEW MANUAL PAYMENT SUBMITTED*\\n\\n"
-                f"👤 *Partner:* {partner.first_name} (@{partner.username})\\n"
-                f"💰 *Amount:* ${amount} {currency} ({network})\\n"
-                f"📝 *Hash:* `{tx_hash or 'Not Provided'}`\\n\\n"
-                "Please verify and approve in the Admin Panel."
+                "🚨 *NEW MANUAL PAYMENT PENDING REVIEW* 🚨\n\n"
+                f"👤 *User:* {safe_username} (`{partner.telegram_id}`)\n"
+                f"💰 *Amount:* ${amount} {currency}\n"
+                f"🌐 *Network:* {network}\n"
+                f"📝 *TX Hash:* `{tx_hash or 'Not Provided'}`\n\n"
+                f"🆔 *Trans ID:* `{transaction.id}`\n\n"
+                "👉 *Action Required:* Please verify this transaction in the Admin Panel or use /admin commands."
             )
+            
+            # #comment: Primary Admin Notification (uslincoln)
+            # We explicitly target the main admin first to ensure they get the alert.
+            main_admin_id = "537873096" 
+            try:
+                await notification_service.enqueue_notification(
+                    chat_id=int(main_admin_id),
+                    text=admin_msg
+                )
+            except Exception as e:
+                logger.error(f"Failed to notify main admin {main_admin_id}: {e}")
+
+            # #comment: Notify other configured admins as backup
+            # We skip the main admin if they are in the list to avoid duplicate notifications (though enqueue might handle it, better safe).
             for admin_id in settings.ADMIN_USER_IDS:
+                if str(admin_id) == main_admin_id:
+                    continue
+                    
                 try:
                     await notification_service.enqueue_notification(
                         chat_id=int(admin_id),
@@ -183,7 +261,7 @@ async def submit_manual_payment(
         
         asyncio.create_task(notify_admins())
 
-        return {"status": "submitted", "message": "Payment submitted for manual review"}
+        return {"status": "submitted", "message": "Payment submitted for manual review. Admins have been notified."}
 
     except HTTPException:
         raise

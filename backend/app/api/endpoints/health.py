@@ -69,3 +69,38 @@ async def health_check(
     health_status["latency_ms"] = round(latency, 2)
     
     return health_status
+
+@router.get("/payment-health", status_code=status.HTTP_200_OK)
+async def payment_health_check(response: Response):
+    """
+    Specific health check for Payment Systems (TON API).
+    Verifies connectivity to external price providers and blockchain nodes.
+    """
+    health = {
+        "status": "healthy",
+        "ton_api": "unknown",
+        "latency_ms": 0
+    }
+    start = time.time()
+    
+    try:
+        from app.services.payment_service import payment_service
+        # Check TON Price API (connectivity test)
+        async with asyncio.timeout(5.0):
+            price = await payment_service.get_ton_price()
+            if price > 0:
+                health["ton_api"] = "connected"
+                health["ton_price_usd"] = price
+            else:
+                health["ton_api"] = "error"
+                health["status"] = "degraded"
+                response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+                
+    except Exception as e:
+        health["ton_api"] = "disconnected"
+        health["error"] = str(e)
+        health["status"] = "unhealthy"
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+
+    health["latency_ms"] = round((time.time() - start) * 1000, 2)
+    return health
