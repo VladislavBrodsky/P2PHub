@@ -71,7 +71,7 @@ export default function LeaderboardPage() {
 
     return (
         <div className="flex flex-col min-h-[85vh] px-4 pt-4 pb-32">
-            <h1 className="text-2xl font-black text-(--color-text-primary) mb-6 tracking-tight uppercase">
+            <h1 className="text-2xl font-black text-(--color-text-primary) mb-6 tracking-tight uppercase text-center">
                 {t('leaderboard.title')}
             </h1>
 

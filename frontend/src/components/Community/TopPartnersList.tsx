@@ -8,7 +8,7 @@ import { getApiUrl } from '../../utils/api';
 // #comment: Added onOpenInfo prop to support opening the briefing modal from the header button
 export const TopPartnersList = ({ onOpenInfo }: { onOpenInfo?: () => void }) => {
     // #comment: Removed unused 't' variable from useTranslation to address linting warnings
-    useTranslation();
+    const { t } = useTranslation();
     const [topPartners, setTopPartners] = React.useState<any[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [isExpanded, setIsExpanded] = React.useState(false);
@@ -53,16 +53,16 @@ export const TopPartnersList = ({ onOpenInfo }: { onOpenInfo?: () => void }) => 
             <div className="flex items-center justify-between px-1">
                 <div className="flex items-center gap-2">
                     {/* #comment: Renamed title to 'Top Partners' and matched casing */}
-                    <h3 className="text-sm font-black text-slate-900 dark:text-white tracking-tight">
-                        Top Partners
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white tracking-tight uppercase">
+                        {t('leaderboard.top_partners')}
                     </h3>
                 </div>
                 {/* #comment: Replaced 'Live Updates' with 'REFERRAL.INFO' button with pill styling */}
                 <button
                     onClick={onOpenInfo}
-                    className="bg-blue-100 dark:bg-blue-500/20 hover:bg-blue-200 dark:hover:bg-blue-500/30 active:scale-95 transition-all text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-full flex items-center justify-center shadow-sm"
+                    className="bg-blue-100 dark:bg-blue-500/20 hover:bg-blue-200 dark:hover:bg-blue-500/30 active:scale-95 transition-all text-blue-600 dark:text-blue-400 px-4 py-1.5 rounded-full flex items-center justify-center shadow-sm border border-blue-500/10"
                 >
-                    <span className="text-[10px] font-black tracking-widest">Network Info</span>
+                    <span className="text-[10px] font-black tracking-widest uppercase">{t('referral.info')}</span>
                 </button>
             </div>
 

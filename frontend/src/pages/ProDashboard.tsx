@@ -5,7 +5,7 @@ import {
     ArrowLeft, Terminal, Bot, Image as ImageIcon,
     Share2, CheckCircle2, AlertCircle, Loader2,
     Lock, Instagram, Twitter, Cpu, BookOpen, Flame, Settings, Wand2, ShieldCheck,
-    Linkedin, Info, Copy, Download, RefreshCw, Undo2, Share, Compass, Milestone
+    Linkedin, Info, Copy, Download, RefreshCw, Undo2, Share, Compass, Milestone, Menu, Crown
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
@@ -78,16 +78,16 @@ export const ProDashboard = () => {
     const [publishedPlatforms, setPublishedPlatforms] = useState<string[]>([]);
 
     useEffect(() => {
+        // Hide global header/footer to provide a bespoke PRO experience
+        setHeaderVisible(false);
         if (showSetup || showPublishModal) {
             setFooterVisible(false);
-            setHeaderVisible(false);
         } else {
             setFooterVisible(true);
-            setHeaderVisible(true);
         }
         return () => {
-            setFooterVisible(true);
             setHeaderVisible(true);
+            setFooterVisible(true);
         };
     }, [showSetup, showPublishModal, setFooterVisible, setHeaderVisible]);
 
@@ -361,15 +361,16 @@ export const ProDashboard = () => {
     ];
     const languages = ["English", "Russian", "Spanish", "French", "German"];
 
+    // #comment: Custom tab rendering for ProDashboard - Optimized for mobile view with compact pill styling
     const renderTabs = () => (
         <div className="flex items-center gap-2 px-6 mb-6 overflow-x-auto no-scrollbar py-2">
             {(['studio', 'tools', 'academy'] as Tab[]).map((tab) => (
                 <button
                     key={tab}
                     onClick={() => { setActiveTab(tab); selection(); }}
-                    className={`px-6 h-10 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${activeTab === tab
-                        ? 'vibing-blue-animated text-white shadow-lg scale-105 border-blue-400/50'
-                        : 'bg-(--color-bg-surface) text-(--color-text-secondary) border-(--color-border-glass) hover:border-indigo-500/30'
+                    className={`px-4 h-8 rounded-full text-[8.5px] font-black uppercase tracking-[0.15em] transition-all whitespace-nowrap border ${activeTab === tab
+                        ? 'vibing-blue-animated text-white shadow-lg border-blue-400/50'
+                        : 'bg-white/5 text-brand-muted border-white/5 hover:border-indigo-500/30'
                         }`}
                 >
                     {t(`pro_dashboard.tab_${tab}`)}
@@ -397,37 +398,92 @@ export const ProDashboard = () => {
     }
 
     return (
-        <div className="relative w-full min-h-full flex flex-col bg-(--color-bg-app)">
-            <div className={`flex-1 ${showSetup ? 'pb-10' : 'pb-32'} custom-scrollbar scroll-smooth overflow-y-auto overscroll-contain`}>
-                {/* Header - Premium Liquid Style */}
-                <div className="px-6 pt-2 pb-6">
-                    <div className="flex items-center justify-between glass-panel-premium p-4 rounded-3xl border-(--color-border-glass) relative overflow-hidden group shadow-2xl">
-                        <div className="absolute inset-0 bg-linear-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 animate-liquid pointer-events-none" />
-                        <div className="flex items-center gap-3 relative z-10">
-                            <div className="w-11 h-11 rounded-2xl vibing-blue-animated flex items-center justify-center shadow-lg shadow-blue-500/20">
-                                <Zap className="text-white w-5 h-5" />
+        <div className="relative w-full h-full flex flex-col bg-(--color-bg-deep) overflow-hidden">
+            {/* Bespoke Header - Responsive to Notch */}
+            <header className="pt-safe-top bg-(--color-bg-app)/80 backdrop-blur-xl border-b border-white/5 relative z-50 shadow-2xl">
+                <div className="px-6 py-4 space-y-4">
+                    {/* Row 1: App Title & Tokens - #comment: Premium branding row with pulse effects and high-fidelity icons */}
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className="relative">
+                                <div className="absolute inset-0 bg-blue-500/20 blur-lg rounded-xl animate-pulse" />
+                                <div className="w-11 h-11 rounded-xl vibing-blue-animated flex items-center justify-center shadow-lg shadow-blue-500/20 relative z-10 border border-white/10">
+                                    <Zap className="text-white w-5 h-5" />
+                                </div>
                             </div>
                             <div>
-                                <h1 className="text-sm font-black tracking-tight leading-none uppercase text-brand-text">{t('pro_dashboard.title_studio')}</h1>
-                                <div className="flex items-center gap-2 mt-1.5">
+                                <h1 className="text-[11px] font-black tracking-[0.1em] leading-tight uppercase text-brand-text drop-shadow-sm flex items-center gap-2">
+                                    {t('pro_dashboard.title_studio')}
+                                    <span className="px-1.5 py-0.5 rounded-sm bg-indigo-500 text-[7px] text-white">PRO</span>
+                                </h1>
+                                <div className="mt-1.5">
                                     {status && (
-                                        <span className="text-[9px] font-black text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 uppercase tracking-tighter">
-                                            {t('pro_dashboard.tokens_left', { count: status.pro_tokens })}
-                                        </span>
+                                        <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/5 border border-amber-500/10 shadow-inner group cursor-default">
+                                            <div className="w-1 h-1 rounded-full bg-amber-500 animate-pulse" />
+                                            <span className="text-[8px] font-black text-amber-500/80 uppercase tracking-tighter">
+                                                {t('pro_dashboard.tokens_left', { count: status.pro_tokens })}
+                                            </span>
+                                            <Sparkles size={8} className="text-amber-500/40 group-hover:rotate-12 transition-transform" />
+                                        </div>
                                     )}
                                 </div>
                             </div>
                         </div>
                         <button
                             onClick={() => { selection(); setShowSetup(true); }}
-                            className="p-3 rounded-xl bg-(--color-bg-surface) border border-(--color-border-glass) active:scale-95 transition-all shadow-sm relative z-10"
+                            className="p-3.5 rounded-2xl bg-white/5 border border-white/5 active:scale-95 transition-all shadow-sm hover:bg-white/10"
                         >
-                            <Settings className="w-5 h-5 text-(--color-text-secondary)" />
+                            <Settings className="w-4 h-4 text-brand-muted" />
                         </button>
+                    </div>
+
+                    {/* Row 2: Menu & Quick Stats (Replica of global header) */}
+                    <div className="flex items-center justify-between gap-3">
+                        <button
+                            onClick={() => window.dispatchEvent(new CustomEvent('open-menu'))}
+                            className="flex items-center gap-2 rounded-xl border border-(--color-border-glass) bg-white/5 px-4 py-2.5 shadow-sm active:scale-95"
+                        >
+                            <Menu className="h-4 w-4 text-brand-text" />
+                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-brand-text">
+                                {t('common.menu')}
+                            </span>
+                        </button>
+
+                        <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 shadow-sm">
+                            <div className="flex items-center gap-1.5 focus:outline-hidden">
+                                <span className="text-[9px] font-black uppercase tracking-wider text-brand-muted">{t('common.lvl')}</span>
+                                <span className="text-xs font-black text-brand-text leading-none">{user?.level ?? 2}</span>
+                                <Crown size={10} className="text-amber-500 fill-amber-500/10" />
+                            </div>
+                            <div className="h-3 w-px bg-white/10" />
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-xs font-black text-brand-text leading-none">{user?.xp ?? 200}</span>
+                                <span className="text-[9px] font-black uppercase tracking-wider text-emerald-500">XP</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {renderTabs()}
+                {/* Row 3: Internal Tabs - #comment: Compact pill-style navigation for single-hand reachability */}
+                <div className="px-6 pb-4">
+                    <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+                        {(['studio', 'tools', 'academy'] as Tab[]).map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => { setActiveTab(tab); selection(); }}
+                                className={`px-4 h-8 rounded-full text-[8.5px] font-black uppercase tracking-[0.15em] transition-all whitespace-nowrap border ${activeTab === tab
+                                    ? 'vibing-blue-animated text-white shadow-lg border-blue-400/50'
+                                    : 'bg-white/5 text-brand-muted border-white/5 hover:border-indigo-500/30'
+                                    }`}
+                            >
+                                {t(`pro_dashboard.tab_${tab}`)}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </header>
+
+            <div className={`flex-1 ${showSetup ? 'pb-10' : 'pb-32'} custom-scrollbar scroll-smooth overflow-y-auto overscroll-contain`}>
 
                 {/* Main Content Areas */}
                 <div className="px-6 space-y-6 flex-1">
@@ -579,45 +635,43 @@ export const ProDashboard = () => {
                                         <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
 
                                         {isGenerating ? (
-                                            <div className="py-4 flex flex-col items-center justify-center space-y-6 relative">
-                                                {/* Cooking Animation */}
+                                            <div className="py-10 flex flex-col items-center justify-center space-y-10 relative bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-3xl border border-black/5">
+                                                {/* Premium Synthesis View - White Square Style */}
                                                 <div className="relative">
-                                                    <div className="absolute inset-0 bg-indigo-500/20 blur-3xl animate-pulse rounded-full" />
-                                                    <div className="w-20 h-20 bg-(--color-bg-surface) rounded-[1.5rem] border border-(--color-border-glass) flex items-center justify-center relative overflow-hidden shadow-2xl">
-                                                        <motion.div
-                                                            animate={{ rotate: 360 }}
-                                                            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                                                            className="absolute inset-0 bg-[conic-gradient(var(--tw-gradient-stops))] from-transparent via-indigo-500/20 to-transparent opacity-60"
-                                                        />
-                                                        <div className="absolute inset-1 bg-(--color-bg-surface) rounded-[1.3rem] border border-(--color-border-glass) flex items-center justify-center z-10 shadow-sm">
-                                                            <Bot className="w-8 h-8 text-indigo-500 animate-pulse" />
-                                                        </div>
+                                                    <div className="w-20 h-20 bg-white rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] flex items-center justify-center border border-black/3 relative z-10">
+                                                        <Bot className="w-9 h-9 text-indigo-500" />
                                                     </div>
+                                                    <div className="absolute -inset-4 bg-indigo-500/5 blur-2xl rounded-full animate-pulse" />
                                                 </div>
 
-                                                <div className="space-y-3 relative z-10 w-full max-w-xs">
-                                                    <div className="space-y-0.5">
-                                                        <h3 className="text-sm font-black uppercase tracking-[0.2em] text-transparent bg-clip-text vibing-blue-animated bg-size-[200%_auto]">
-                                                            {t('pro_dashboard.studio.cooking_title')}
-                                                        </h3>
-                                                        <p className="text-[8px] font-bold text-brand-muted uppercase tracking-widest opacity-60">
-                                                            Deep Learning Optimization Active
+                                                <div className="space-y-6 w-full max-w-xs px-6">
+                                                    <div className="space-y-1 text-center">
+                                                        <div className="vibing-blue-animated py-3 px-6 rounded-xl shadow-lg border border-blue-400/30">
+                                                            <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-white">
+                                                                {t('pro_dashboard.studio.cooking_title')}
+                                                            </h3>
+                                                        </div>
+                                                        <p className="text-[8px] font-bold text-brand-muted uppercase tracking-[0.3em] opacity-60 mt-2">
+                                                            DEEP LEARNING OPTIMIZATION ACTIVE
                                                         </p>
                                                     </div>
 
-                                                    {/* Percentage & Progress Bar */}
-                                                    <div className="space-y-2">
-                                                        <div className="flex justify-between items-end px-1">
-                                                            <span className="text-2xl font-black text-brand-text italic leading-none">
-                                                                {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-xs not-italic opacity-30 ml-1">%</span>
-                                                            </span>
-                                                            <span className="text-[8px] font-black text-indigo-500 uppercase tracking-widest pb-0.5 border-b border-indigo-500/20">
-                                                                {t('pro_dashboard.studio.cooking_remaining', { count: countdown })}
-                                                            </span>
+                                                    <div className="space-y-4">
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="flex items-baseline gap-2">
+                                                                <span className="text-4xl font-black text-brand-text italic tracking-tighter">
+                                                                    {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-xs not-italic opacity-30 ml-1 font-bold">%</span>
+                                                                </span>
+                                                                <span className="text-[9px] font-black text-indigo-500 uppercase tracking-widest border-b border-indigo-500/20 pb-1">
+                                                                    {t('pro_dashboard.studio.cooking_remaining', { count: countdown })}
+                                                                </span>
+                                                            </div>
                                                         </div>
-                                                        <div className="h-2 w-full bg-(--color-bg-surface) rounded-full overflow-hidden border border-(--color-border-glass) p-0.5 shadow-inner">
+
+                                                        {/* Simple Premium Progress Bar */}
+                                                        <div className="h-1.5 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden relative">
                                                             <motion.div
-                                                                className="h-full vibing-blue-animated rounded-full shadow-[0_0_10px_rgba(0,102,255,0.4)]"
+                                                                className="h-full vibing-blue-animated rounded-full"
                                                                 initial={{ width: "0%" }}
                                                                 animate={{ width: `${Math.min(((30 - countdown) / 30) * 100, 99)}%` }}
                                                                 transition={{ duration: 0.5 }}
@@ -751,7 +805,7 @@ export const ProDashboard = () => {
                                 exit={{ opacity: 0, x: -20 }}
                                 className="space-y-4"
                             >
-                                {/* Headline Fixer */}
+                                {/* Headline Fixer - #comment: AI-driven copywriting utility to optimize content hooks for maximum retention */}
                                 <div className="glass-panel-premium p-8 rounded-[2.5rem] border border-white/10 relative overflow-hidden group shadow-2xl bg-grid-white/5">
                                     <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-1000">
                                         <Sparkles size={120} />
@@ -799,7 +853,7 @@ export const ProDashboard = () => {
                                     </div>
                                 </div>
 
-                                {/* Viral Bio Generator */}
+                                {/* Viral Bio Generator - #comment: High-conversion profile optimization tool using social engineering patterns */}
                                 <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden group shadow-2xl">
                                     <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-blue-500/5 pointer-events-none" />
 
@@ -865,7 +919,7 @@ export const ProDashboard = () => {
                                     </div>
                                 </div>
 
-                                {/* Trend Hunter */}
+                                {/* Trend Hunter - #comment: Real-time cultural intelligence system to identify emerging narratives before they peak */}
                                 <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden group shadow-2xl">
                                     <div className="absolute inset-0 bg-linear-to-br from-orange-500/5 via-transparent to-amber-500/5 pointer-events-none" />
 
