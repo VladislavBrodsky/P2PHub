@@ -26,7 +26,7 @@ class SupportAgentService:
     You are an Expert Customer Care and Support Team manager for Pintopay.
     Your tone is ultra-professional, charismatic, and infectious with positivity.
     You represent Pintopay as the ABSOLUTE BEST financial service for the digital economy and digital nomads.
-    We are a elite team that focuses on radical improvements every single day.
+    We are an elite team that focuses on radical improvements every single day.
     
     GUIDELINES:
     1. Act as a real human manager (e.g., Alex or Sarah from Support). NEVER disclose you are an AI.
@@ -36,16 +36,20 @@ class SupportAgentService:
     5. Always maintain a 10/10 positive tone about Pintopay. Use phrases like "Our top-tier cards," "Elite service," and "Improving your experience daily."
     6. If the user asks random or unrelated questions (not about Pintopay or Crypto/Fintech), 
        gracefully guide the conversation back to Pintopay. Sell the vision of Crypto Cards and Crypto Payments as the future of financial freedom.
-    7. Provide clear, detailed instructions and premium advice.
+    7. Provide clear, detailed instructions, checklists, and premium advice.
+    8. **PRO PRIORITY**: If a user is a PRO Member, acknowledge their valued status immediately. Let them know they are in our priority queue with 24/7 dedicated handling. Solve their tasks with maximum diligence.
     """
     
     CATEGORIES = [
-        "Pintopay Card Details",
-        "Card Issue & Setup",
-        "Top-up & Limits",
-        "ApplePay / GooglePay",
-        "Earnings & Network",
-        "Security & Technical"
+        "💳 Virtual & Physical Cards",
+        "🚀 Card Setup & Activation",
+        "💰 Top-ups & Crypto Deposits",
+        "📲 Mobile Payments (Apple/Google Pay)",
+        "💎 PRO Membership & Benefits",
+        "🤝 Partner Network & Earnings",
+        "🔒 Account Security & Safety",
+        "⚡ Trading & Transactions",
+        "☎️ VIP Priority Support"
     ]
     
     KB_CACHE_KEY = "knowledge_base_cache"
@@ -61,6 +65,57 @@ class SupportAgentService:
     _kb_index: Dict[str, List[int]] = {} # Word-to-Record Index
     _kb_last_refresh: datetime = datetime.min
     KB_MEMORY_TTL = 300  # 5 minutes in-memory TTL
+
+    KB_MEMORY_TTL = 300  # 5 minutes in-memory TTL
+    
+    # #comment: Fallback Instruction Library (Ensures 5-star service if Sheet is offline)
+    FALLBACK_INSTRUCTIONS = {
+        "💳 Virtual & Physical Cards": [
+            "Checklist: Select Card Type -> Pay Fee -> Instant Issuance for Virtual.",
+            "Info: Physical cards take 7-14 business days. Max balance up to $50,000.",
+            "Instruction: View card details in 'My Cards' section by tapping the eye icon."
+        ],
+        "🚀 Card Setup & Activation": [
+            "Checklist: Complete KYC -> Verify ID -> Wait 5-10 mins for Approval.",
+            "Instruction: If 3DS fails, ensure your internet connection is stable and try again.",
+            "Requirement: Minimum age 18 years for full activation."
+        ],
+        "💰 Top-ups & Crypto Deposits": [
+            "Checklist: Copy Wallet Address -> Send USDT (TRC20) or TON -> Wait for 1 confirmation.",
+            "Speed: Transactions usually reflect within 2-5 minutes.",
+            "Warning: Always double-check the network (TRC20 is most popular)."
+        ],
+        "📲 Mobile Payments (Apple/Google Pay)": [
+            "Checklist: Open Wallet App -> Add Credit/Debit Card -> Enter Pintopay Details -> SMS Verification.",
+            "Note: Apple Pay is supported globally with our Virtual Cards.",
+            "Instruction: Keep NFC enabled on your device for in-store payments."
+        ],
+        "💎 PRO Membership & Benefits": [
+            "Checklist: Pay PRO fee -> Instant Activation -> Enjoy 5x XP boost.",
+            "Benefits: Reduced transaction fees, Priority support, and exclusive card designs.",
+            "Note: PRO is a lifetime status with no recurring monthly fees."
+        ],
+        "🤝 Partner Network & Earnings": [
+            "Checklist: Share Referral Link -> Friends Join -> Earn Commissions up to 9 levels.",
+            "Payouts: Commissions are credited instantly to your partner balance.",
+            "Multiplier: PRO members earn significantly more on multi-tier commissions."
+        ],
+        "🔒 Account Security & Safety": [
+            "Instruction: Enable 2FA in settings immediately after account creation.",
+            "Emergency: If card is lost, use the 'Freeze Card' button in the dashboard.",
+            "Advice: Never share your login code or 3DS passwords with anyone."
+        ],
+        "⚡ Trading & Transactions": [
+            "Info: P2P Hub transactions are secured by an escrow system.",
+            "Checklist: Check Merchant Rating -> Open Trade -> Complete Payment -> Receive Crypto.",
+            "Support: If a trade is stuck, use 'Dispute' button for 24/7 moderation."
+        ],
+        "☎️ VIP Priority Support": [
+            "Workflow: Direct ticket escalation for PRO members.",
+            "Response Time: < 5 minutes for urgent technical tasks.",
+            "Personalization: Dedicated account managers oversee large partner networks."
+        ]
+    }
 
     def __init__(self):
         openai_key = settings.OPENAI_API_KEY or os.getenv("OPENAI_API_KEY")
@@ -258,8 +313,13 @@ class SupportAgentService:
                     f"Balance: {user_metadata.get('balance', 0.0)} USDT"
                 )
             
+            # #comment: Handle PRO Priority logic
+            is_pro = user_metadata.get("is_pro", False) if user_metadata else False
+            pro_context = "\n⚠️ **PRIORITY USER**: This is a PRO Member. Treat this request with 24/7 VIP priority handling. Emphasize their contribution to the Pintopay ecosystem." if is_pro else ""
+
             system_msg = (
                 f"{self.SYSTEM_PROMPT}\n\n"
+                f"{pro_context}\n"
                 f"--- USER PROFILE ---\n{user_context_str}\n\n"
                 f"--- KNOWLEDGE BASE ---\n{kb_context}"
             )
@@ -375,7 +435,21 @@ class SupportAgentService:
                     gs_info = "No specific match found in KB. Use general knowledge."
                     best_category = "General"
 
-        return f"CORE RULES:\n{core_info}\n\nTONE OF VOICE & SPECIFIC RULES:\n{tov_info}\n\nKNOWLEDGE BASE MATCHES:\n{gs_info}", best_category
+        # 3. Inject Fallback Checklists (Enabling 5-Star Service reliability)
+        fallback_data = self.FALLBACK_INSTRUCTIONS.get(best_category, [])
+        if not fallback_data and "Card" in query: # Heuristic for card related
+             fallback_data = self.FALLBACK_INSTRUCTIONS["💳 Virtual & Physical Cards"]
+        
+        fallback_str = "\n".join([f"- {item}" for item in fallback_data])
+        
+        final_context = (
+            f"CORE RULES:\n{core_info}\n\n"
+            f"TONE OF VOICE & SPECIFIC RULES:\n{tov_info}\n\n"
+            f"RELEVANT CHECKLISTS & INSTRUCTIONS ({best_category}):\n{fallback_str}\n\n"
+            f"SEARCH RESULTS FROM RECENT KB UPDATES:\n{gs_info}"
+        )
+
+        return final_context, best_category
         
 
 

@@ -51,3 +51,23 @@ def get_pro_payment_keyboard(address: str, amount_ton: float):
     ))
     return builder.as_markup()
 
+def get_support_keyboard():
+    builder = InlineKeyboardBuilder()
+    categories = [
+        ("💳 Cards", "sup_cards"),
+        ("🚀 Setup", "sup_setup"),
+        ("💰 Top-up", "sup_topup"),
+        ("📲 Mobile", "sup_mobile"),
+        ("💎 PRO", "sup_pro"),
+        ("🤝 Partner", "sup_partner"),
+        ("🔒 Safety", "sup_safety"),
+        ("⚡ Trading", "sup_trading"),
+        ("☎️ VIP VIP", "sup_vip")
+    ]
+    
+    # 3 buttons per row for 9 categories
+    for i in range(0, len(categories), 3):
+        row = [types.InlineKeyboardButton(text=text, callback_data=data) for text, data in categories[i:i+3]]
+        builder.row(*row)
+    
+    return builder.as_markup()

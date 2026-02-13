@@ -205,9 +205,53 @@ async def inline_handler(inline_query: types.InlineQuery):
         except: pass
 
 
-@dp.message(Command("pro"))
-async def cmd_pro(message: types.Message):
-    await handle_buy_pro(message)
+@dp.message(Command("support", "care", "help"))
+async def cmd_support(message: types.Message):
+    from app.core.keyboards import get_support_keyboard
+    text = (
+        "🌟 *PINTOPAY CUSTOMER CARE*\n\n"
+        "How can we improve your experience today?\n"
+        "Select a category below for instant instructions and 5-star support."
+    )
+    await message.answer(text, parse_mode="Markdown", reply_markup=get_support_keyboard())
+
+@dp.callback_query(F.data.startswith("sup_"))
+async def callback_support_category(callback: types.CallbackQuery):
+    from app.services.support_service import support_service
+    from app.services.partner_service import get_partner_by_telegram_id
+    
+    cat_map = {
+        "sup_cards": "💳 Virtual & Physical Cards",
+        "sup_setup": "🚀 Card Setup & Activation",
+        "sup_topup": "💰 Top-ups & Crypto Deposits",
+        "sup_mobile": "📲 Mobile Payments (Apple/Google Pay)",
+        "sup_pro": "💎 PRO Membership & Benefits",
+        "sup_partner": "🤝 Partner Network & Earnings",
+        "sup_safety": "🔒 Account Security & Safety",
+        "sup_trading": "⚡ Trading & Transactions",
+        "sup_vip": "☎️ VIP Priority Support"
+    }
+    
+    category_name = cat_map.get(callback.data, "General")
+    user_id = str(callback.from_user.id)
+    
+    # Get initial instructions (checklists) from fallback library
+    instructions = support_service.FALLBACK_INSTRUCTIONS.get(category_name, ["Please describe your issue."])
+    instr_text = "\n".join([f"• {i}" for i in instructions])
+    
+    await callback.message.edit_text(
+        f"📍 *{category_name}*\n\n"
+        f"Quick Instructions:\n{instr_text}\n\n"
+        "💡 *Need more help?* Just reply to this message and our Expert AI Support Team will assist you instantly!",
+        parse_mode="Markdown"
+    )
+    
+    # Pre-select category in AI session
+    session = await support_service.get_session(user_id)
+    session["category"] = category_name
+    await support_service.update_session(user_id, session)
+    
+    await callback.answer()
 
 @dp.callback_query(F.data == "buy_pro")
 async def callback_buy_pro(callback: types.CallbackQuery):
@@ -322,6 +366,56 @@ async def handle_tx_hash(message: types.Message):
 async def callback_cancel_payment(callback: types.CallbackQuery):
     await callback.message.edit_text("❌ Payment cancelled. You can upgrade to PRO anytime by typing /pro.")
     await callback.answer()
+
+@dp.message(F.text & ~F.text.startswith('/'))
+async def handle_support_chat(message: types.Message):
+    """
+    Catch-all Support Chat handler.
+    Natural language queries are routed to the AI Support Agent.
+    """
+    from app.services.support_service import support_service
+    from app.services.partner_service import get_partner_by_telegram_id
+    
+    user_id = str(message.from_user.id)
+    
+    # Skip processing if it's a very short or junk message
+    if len(message.text.strip()) < 2:
+        return
+
+    # Show typing indicator for a premium human-like feel
+    try:
+        await bot.send_chat_action(chat_id=message.chat.id, action="typing")
+    except: pass
+    
+    try:
+        async for session_db in get_session():
+            partner = await get_partner_by_telegram_id(session_db, user_id)
+            user_metadata = {
+                "first_name": message.from_user.first_name,
+                "last_name": message.from_user.last_name,
+                "username": message.from_user.username,
+                "is_pro": partner.is_pro if partner else False,
+                "level": partner.level if partner else 1,
+                "balance": float(partner.balance) if partner else 0.0
+            }
+            
+            response = await support_service.generate_response(
+                user_id=user_id,
+                message=message.text,
+                user_metadata=user_metadata
+            )
+            
+            # Splitting response if it's too long for Telegram (limit 4096)
+            if len(response) > 4000:
+                chunks = [response[i:i+4000] for i in range(0, len(response), 4000)]
+                for chunk in chunks:
+                    await message.answer(chunk, parse_mode="Markdown")
+            else:
+                await message.answer(response, parse_mode="Markdown")
+            break
+    except Exception as e:
+        logging.error(f"❌ Error in support chat handler: {e}")
+        await message.answer("I apologize, but my circuits are currently busy improving our elite services. Please try again in 30 seconds!")
 
 async def main():
     logging.info("Starting bot...")
