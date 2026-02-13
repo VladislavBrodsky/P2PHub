@@ -192,7 +192,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={handleGetCard}
-                            className={`w-full h-16 rounded-2xl font-black text-lg shadow-[0_20px_40px_-12px_rgba(0,0,0,0.15)] flex items-center justify-center gap-3 transition-transform relative overflow-hidden ${selectedTab === 'platinum'
+                            className={`w-full h-12 rounded-xl font-bold text-sm shadow-[0_20px_40px_-12px_rgba(0,0,0,0.15)] flex items-center justify-center gap-2 transition-transform relative overflow-hidden ${selectedTab === 'platinum'
                                 ? 'bg-linear-to-br from-slate-100 via-white to-slate-300 text-slate-900 border border-white/50'
                                 : 'bg-slate-900 text-white'
                                 }`}
@@ -204,7 +204,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                         transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
                                         className="absolute inset-0 bg-linear-to-r from-transparent via-white/80 to-transparent -skew-x-12"
                                     />
-                                    <Crown size={22} className="text-amber-500 fill-amber-100 relative z-10" />
+                                    <Crown size={18} className="text-amber-500 fill-amber-100 relative z-10" />
                                     <span className="relative z-10">{t('cards.premium_only')}</span>
                                 </>
                             ) : (

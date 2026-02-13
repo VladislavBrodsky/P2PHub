@@ -177,7 +177,8 @@ export const PartnerDashboard = () => {
                 </div>
 
                 {/* 1.5 Social Proof - Top Partners */}
-                <TopPartnersList />
+                {/* 1.5 Social Proof - Top Partners */}
+                <TopPartnersList onOpenInfo={() => { selection(); setIsBriefingOpen(true); }} />
 
                 {/* ... (Rest of dashboard) ... */}
                 {/* 2. Invitation Method */}

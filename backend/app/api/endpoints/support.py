@@ -54,8 +54,12 @@ async def chat_with_agent(
     partner: Partner = Depends(get_current_partner)
 ):
     """Entry point for chatting with AI agent."""
-    answer = await support_service.generate_response(partner.telegram_id, payload.message)
-    return {"answer": answer, "status": "success"}
+    try:
+        answer = await support_service.generate_response(partner.telegram_id, payload.message)
+        return {"answer": answer, "status": "success"}
+    except Exception as e:
+        logger.error(f"Chat endpoint error: {e}")
+        return {"answer": "I'm sorry, I'm experiencing a temporary connection issue. Please try again in a moment.", "status": "error"}
 
 @router.post("/close")
 async def close_chat_session(partner: Partner = Depends(get_current_partner)):

@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
 
-export const TopPartnersList = () => {
+// #comment: Added onOpenInfo prop to support opening the briefing modal from the header button
+export const TopPartnersList = ({ onOpenInfo }: { onOpenInfo?: () => void }) => {
     // #comment: Removed unused 't' variable from useTranslation to address linting warnings
     useTranslation();
     const [topPartners, setTopPartners] = React.useState<any[]>([]);
@@ -51,15 +52,18 @@ export const TopPartnersList = () => {
         <div className="space-y-4">
             <div className="flex items-center justify-between px-1">
                 <div className="flex items-center gap-2">
-                    <Trophy className="w-4 h-4 text-amber-400" />
+                    {/* #comment: Renamed title to 'Top Partners' as requested */}
                     <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">
-                        Top Network Leaders
+                        Top Partners
                     </h3>
                 </div>
-                <div className="flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Live Updates</span>
-                </div>
+                {/* #comment: Replaced 'Live Updates' with 'REFERRAL.INFO' button */}
+                <button
+                    onClick={onOpenInfo}
+                    className="bg-blue-500/10 dark:bg-blue-500/20 hover:bg-blue-500/20 active:scale-95 transition-all text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-lg flex items-center justify-center shadow-sm"
+                >
+                    <span className="text-[10px] font-black uppercase tracking-widest">REFERRAL.INFO</span>
+                </button>
             </div>
 
             <div className="space-y-2">
@@ -70,9 +74,9 @@ export const TopPartnersList = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.05 }}
                         className={`group relative flex items-center justify-between p-3 rounded-2xl border backdrop-blur-md shadow-sm active:scale-[0.98] transition-all ${index === 0 ? 'bg-amber-500/10 border-amber-500/30' :
-                                index === 1 ? 'bg-slate-300/10 border-slate-400/30' :
-                                    index === 2 ? 'bg-orange-500/10 border-orange-500/30' :
-                                        'bg-white/60 dark:bg-slate-900/40 border-slate-200 dark:border-white/5'
+                            index === 1 ? 'bg-slate-300/10 border-slate-400/30' :
+                                index === 2 ? 'bg-orange-500/10 border-orange-500/30' :
+                                    'bg-white/60 dark:bg-slate-900/40 border-slate-200 dark:border-white/5'
                             }`}
                     >
                         <div className="flex items-center gap-3">
@@ -89,8 +93,8 @@ export const TopPartnersList = () => {
                                 </div>
                                 {index < 3 && (
                                     <div className={`absolute -top-1.5 -right-1.5 p-0.5 rounded-full shadow-lg ${index === 0 ? 'bg-amber-400' :
-                                            index === 1 ? 'bg-slate-400' :
-                                                'bg-orange-400'
+                                        index === 1 ? 'bg-slate-400' :
+                                            'bg-orange-400'
                                         }`}>
                                         <Crown className="w-3 h-3 text-white" />
                                     </div>
@@ -126,9 +130,9 @@ export const TopPartnersList = () => {
                         <div className="flex flex-col items-end">
                             <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">RANK</div>
                             <div className={`text-lg font-black ${index === 0 ? 'text-amber-500' :
-                                    index === 1 ? 'text-slate-400' :
-                                        index === 2 ? 'text-orange-400' :
-                                            'text-slate-900 dark:text-white'
+                                index === 1 ? 'text-slate-400' :
+                                    index === 2 ? 'text-orange-400' :
+                                        'text-slate-900 dark:text-white'
                                 }`}>#{index + 1}</div>
                         </div>
                     </motion.div>

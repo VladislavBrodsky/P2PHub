@@ -20,7 +20,7 @@ interface BlogPageProps {
 
 export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
     const { t, i18n } = useTranslation();
-    const { setHeaderVisible } = useUI();
+    const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
     const { selection, impact, notification } = useHaptic();
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     const [searchQuery, setSearchQuery] = useState('');
@@ -31,14 +31,19 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
     // Sync header visibility with selectedPost
     useEffect(() => {
         if (currentTab === 'blog') {
-            setHeaderVisible(!selectedPost);
+            const isVisible = !selectedPost;
+            setHeaderVisible(isVisible);
+            setFooterVisible(isVisible);
+            setNotificationsVisible(isVisible);
         }
         return () => {
             if (currentTab === 'blog') {
                 setHeaderVisible(true);
+                setFooterVisible(true);
+                setNotificationsVisible(true);
             }
         };
-    }, [selectedPost, currentTab, setHeaderVisible]);
+    }, [selectedPost, currentTab, setHeaderVisible, setFooterVisible, setNotificationsVisible]);
 
     // Reset scroll when post changes
     useEffect(() => {

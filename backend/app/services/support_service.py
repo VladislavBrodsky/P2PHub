@@ -73,9 +73,26 @@ class SupportAgentService:
     async def get_session(self, user_id: str) -> Dict[str, Any]:
         """Retrieves or creates a support session for a user."""
         session_key = f"support_session:{user_id}"
-        session = await redis_service.get_json(session_key)
-        if not session:
-            session = {
+        
+        try:
+            session = await redis_service.get_json(session_key)
+            if not session:
+                session = {
+                    "user_id": user_id,
+                    "history": [],
+                    "created_at": datetime.utcnow().isoformat(),
+                    "last_activity": datetime.utcnow().isoformat(),
+                    "last_ping": datetime.utcnow().isoformat(),
+                    "status": "active",
+                    "category": None,
+                    "ping_count": 0
+                }
+                await redis_service.set_json(session_key, session, expire=3600)
+            return session
+        except Exception as e:
+            logger.error(f"❌ Redis Session Error (get_session): {e}")
+            # Fallback to ephemeral session so the user can still chat
+            return {
                 "user_id": user_id,
                 "history": [],
                 "created_at": datetime.utcnow().isoformat(),
@@ -85,37 +102,38 @@ class SupportAgentService:
                 "category": None,
                 "ping_count": 0
             }
-            await redis_service.set_json(session_key, session, expire=3600)
-        return session
 
     async def update_session(self, user_id: str, session: Dict[str, Any]):
         """Updates the session in Redis and refreshes activity timestamp."""
-        session_key = f"support_session:{user_id}"
-        session["last_activity"] = datetime.utcnow().isoformat()
-        session["ping_count"] = 0 # Reset pings on activity
-        await redis_service.set_json(session_key, session, expire=3600)
+        try:
+            session_key = f"support_session:{user_id}"
+            session["last_activity"] = datetime.utcnow().isoformat()
+            session["ping_count"] = 0 # Reset pings on activity
+            await redis_service.set_json(session_key, session, expire=3600)
+        except Exception as e:
+            logger.error(f"❌ Redis Update Error (update_session): {e}")
 
     async def generate_response(self, user_id: str, message: str) -> str:
         """Generates an AI response based on KB and history."""
         if not self.openai_client:
             return "Support service is currently unavailable. Please try again later."
 
-        session = await self.get_session(user_id)
-        
-        # 1. Search Knowledge Base (FAQ + Google Sheet)
-        kb_context = await self._search_knowledge_base(message)
-        
-        # 2. Build messages for LLM
-        messages = [{"role": "system", "content": f"{self.SYSTEM_PROMPT}\n\nContext from Knowledge Base:\n{kb_context}"}]
-        
-        # History window (last 10 messages)
-        relevant_history = session.get("history", [])[-10:]
-        for m in relevant_history:
-            messages.append(m)
-            
-        messages.append({"role": "user", "content": message})
-
         try:
+            session = await self.get_session(user_id)
+            
+            # 1. Search Knowledge Base (FAQ + Google Sheet)
+            kb_context = await self._search_knowledge_base(message)
+            
+            # 2. Build messages for LLM
+            messages = [{"role": "system", "content": f"{self.SYSTEM_PROMPT}\n\nContext from Knowledge Base:\n{kb_context}"}]
+            
+            # History window (last 10 messages)
+            relevant_history = session.get("history", [])[-10:]
+            for m in relevant_history:
+                messages.append(m)
+                
+            messages.append({"role": "user", "content": message})
+
             response = await self.openai_client.chat.completions.create(
                 model="gpt-4o",
                 messages=messages,
@@ -133,6 +151,7 @@ class SupportAgentService:
         except Exception as e:
             logger.error(f"❌ Error generating AI response: {e}")
             return "I apologize, but I'm processing multiple requests. One moment, please."
+
 
     async def _search_knowledge_base(self, query: str) -> str:
         """
