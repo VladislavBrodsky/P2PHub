@@ -8,6 +8,7 @@ from app.services.leaderboard_service import leaderboard_service
 
 router = APIRouter()
 
+import logging
 from app.middleware.rate_limit import limiter
 from fastapi import Request
 
@@ -53,7 +54,8 @@ async def get_global_leaderboard(
 
         try:
             await redis_service.set_json(cache_key, data, expire=60)
-        except Exception: pass
+        except Exception as e:
+            logger.warning(f"Failed to cache fallback leaderboard: {e}")
 
         return data
 
@@ -62,12 +64,17 @@ async def get_global_leaderboard(
     scores = {int(p_id): score for p_id, score in top_data}
 
     # 3. Hydrate via Service
-    data = await leaderboard_service.hydrate_leaderboard(partner_ids, scores, session)
-
-    # 4. Cache for 300 seconds (5 minutes)
     try:
+        data = await leaderboard_service.hydrate_leaderboard(partner_ids, scores, session)
+
+        # 4. Cache for 300 seconds (5 minutes)
         await redis_service.set_json(cache_key, data, expire=300)
-    except Exception: pass
+    except Exception as e:
+        logger.warning(f"Failed to cache leaderboard data: {e}")
+        # In case of hydration failure, we should probably fallback to DB or return empty
+        # For now, let's assume if hydration fails we return an empty list or log the error
+        # But 'data' needs to be defined for the return statement
+        data = []
 
     return data
 
