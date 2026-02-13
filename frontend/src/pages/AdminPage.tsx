@@ -316,6 +316,27 @@ export const AdminPage = () => {
                             </div>
                         </div>
 
+                        {/* Top Partners Leaderboard */}
+                        <div className="p-5 rounded-3xl glass-panel-premium border border-white/5 space-y-4">
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Top Earners</h2>
+                                <TrendingUp size={14} className="text-blue-500" />
+                            </div>
+                            <div className="space-y-3">
+                                {stats?.top_partners?.map((p, idx) => (
+                                    <div key={p.telegram_id} className="flex items-center justify-between group">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-6 h-6 rounded-lg bg-white/5 flex items-center justify-center text-[10px] font-black text-slate-500">
+                                                #{idx + 1}
+                                            </div>
+                                            <div className="text-[11px] font-bold text-slate-200">@{p.username || p.telegram_id}</div>
+                                        </div>
+                                        <div className="text-[11px] font-black text-emerald-500">${p.earnings}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
                         {/* Performance Chart: User Growth */}
                         <div className="p-5 rounded-3xl glass-panel-premium border border-white/5 space-y-4">
                             <div className="flex items-center justify-between">
@@ -406,7 +427,17 @@ export const AdminPage = () => {
 
                             <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-white/5">
                                 <div>
-                                    <div className="text-slate-500 text-[9px] font-black uppercase">Gross Revenue</div>
+                                    <div className="text-slate-500 text-[9px] font-black uppercase">Revenue USDT</div>
+                                    <div className="text-lg font-black text-white">${stats?.financials.total_revenue_usdt}</div>
+                                </div>
+                                <div>
+                                    <div className="text-slate-500 text-[9px] font-black uppercase">Revenue TON</div>
+                                    <div className="text-lg font-black text-blue-400">{stats?.financials.total_revenue_ton} TON</div>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-white/5">
+                                <div>
+                                    <div className="text-slate-500 text-[9px] font-black uppercase">Gross Revenue (Total)</div>
                                     <div className="text-lg font-black text-white">${stats?.financials.total_revenue}</div>
                                 </div>
                                 <div>
@@ -684,6 +715,68 @@ export const AdminPage = () => {
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                    </motion.div>
+                )}
+
+                {viewMode === 'search' && (
+                    <motion.div
+                        key="search"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="space-y-6"
+                    >
+                        <div className="p-5 rounded-3xl glass-panel-premium border border-white/5 space-y-4">
+                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Partner Search</h2>
+                            <form onSubmit={handleSearch} className="relative">
+                                <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Username or Telegram ID..."
+                                    className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm focus:outline-hidden focus:border-blue-500 transition-all"
+                                />
+                            </form>
+                        </div>
+
+                        <div className="space-y-2">
+                            {isSearching ? (
+                                <div className="p-12 text-center text-slate-500 text-xs font-bold animate-pulse">Searching users...</div>
+                            ) : searchResults.length > 0 ? (
+                                searchResults.map(p => (
+                                    <div key={p.id} className="p-4 rounded-2xl glass-panel-premium border border-white/5 space-y-2">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <div className="text-sm font-black text-slate-200">@{p.username || p.telegram_id}</div>
+                                                <div className="text-[10px] text-slate-500 font-bold uppercase">ID: {p.telegram_id}</div>
+                                            </div>
+                                            <div className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase ${p.is_pro ? 'bg-amber-500/20 text-amber-500' : 'bg-slate-500/20 text-slate-500'}`}>
+                                                {p.is_pro ? 'PRO MEMBER' : 'FREE USER'}
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5">
+                                            <div className="text-center">
+                                                <div className="text-[8px] text-slate-500 font-black uppercase">Level</div>
+                                                <div className="text-xs font-black text-slate-200">{p.level}</div>
+                                            </div>
+                                            <div className="text-center">
+                                                <div className="text-[8px] text-slate-500 font-black uppercase">Network</div>
+                                                <div className="text-xs font-black text-slate-200">{p.referral_count}</div>
+                                            </div>
+                                            <div className="text-center">
+                                                <div className="text-[8px] text-slate-500 font-black uppercase">XP</div>
+                                                <div className="text-xs font-black text-blue-500">{p.xp}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : searchQuery && !isSearching ? (
+                                <div className="p-12 text-center text-slate-500 text-xs font-bold">No results found</div>
+                            ) : (
+                                <div className="p-12 text-center text-slate-500 text-xs font-bold">Search for any partner by username or ID</div>
+                            )}
                         </div>
                     </motion.div>
                 )}

@@ -239,7 +239,7 @@ class AdminService:
                 Partner.telegram_id,
                 func.sum(Earning.amount).label("total_earnings")
             ).join(Earning, Partner.id == Earning.partner_id) \
-             .group_by(Partner.id) \
+             .group_by(Partner.username, Partner.telegram_id) \
              .order_by(text("total_earnings DESC")) \
              .limit(limit)
             
