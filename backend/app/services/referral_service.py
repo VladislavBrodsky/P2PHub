@@ -12,7 +12,9 @@ from app.models.partner import Partner, XPTransaction, Earning, engine
 from app.services.leaderboard_service import leaderboard_service
 from app.services.notification_service import notification_service
 from app.services.redis_service import redis_service
+from app.services.audit_service import audit_service
 from app.utils.ranking import get_level
+from app.utils.text import escape_markdown_v1
 from app.worker import broker
 
 logger = logging.getLogger(__name__)
@@ -24,6 +26,23 @@ async def process_referral_notifications(bot, session: AsyncSession, partner: Pa
     if is_new and partner.referrer_id:
         # Run logic in background via TaskIQ worker
         await process_referral_logic.kiq(partner.id)
+from app.utils.text import escape_markdown_v1
+
+def format_partner_name(p: Partner) -> str:
+    """Construct Full Name: First Last (@username)"""
+    parts = []
+    if p.first_name:
+        parts.append(p.first_name)
+    if p.last_name:
+        parts.append(p.last_name)
+    
+    name_display = " ".join(parts) if parts else "Partner"
+    
+    if p.username:
+        name_display += f" (@{p.username})"
+    
+    return escape_markdown_v1(name_display)
+
 @broker.task
 async def process_referral_logic(partner_id: int):
     """
@@ -49,10 +68,9 @@ async def process_referral_logic(partner_id: int):
                 return
 
             # 1. Reconstruct lineage (L1 to L9)
-            # partner.path already ends with referrer_id if set correctly in create_partner
             lineage_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-            # Ensure we only fetch ancestors, not self (path doesn't include self)
-            lineage_ids = list(dict.fromkeys(lineage_ids))[-9:] # Remove potential duplicates and keep last 9
+            # Ensure we only fetch ancestors and keep last 9
+            lineage_ids = list(dict.fromkeys(lineage_ids))[-9:]
 
             # Bulk Fetch all ancestors
             statement = select(Partner).where(Partner.id.in_(lineage_ids))
@@ -63,8 +81,10 @@ async def process_referral_logic(partner_id: int):
             # XP distribution configuration
             XP_MAP = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
 
+            logger.info(f"🔄 Processing referral logic for partner {partner_id} (@{partner.username}).")
+
+            new_partner_name = format_partner_name(partner)
             current_referrer_id = partner.referrer_id
-            logger.info(f"🔄 Processing referral logic for partner {partner_id} (@{partner.username}). Referrer: {current_referrer_id}")
 
             for level in range(1, 10):
                 if not current_referrer_id:
@@ -81,11 +101,18 @@ async def process_referral_logic(partner_id: int):
                     if referrer.is_pro:
                         xp_gain *= 5  # PRO members get 5x XP bonus
 
+                    # Capture state for audit BEFORE atomic update
+                    xp_before = referrer.xp
+
                     # ATOMIC SQL INCREMENT
                     await session.execute(
                         text("UPDATE partner SET xp = xp + :gain, referral_count = referral_count + 1 WHERE id = :p_id"),
                         {"gain": xp_gain, "p_id": referrer.id}
                     )
+
+                    # Refresh referrer to get updated state for subsequent logic
+                    await session.flush()
+                    await session.refresh(referrer)
 
                     xp_tx = XPTransaction(
                         partner_id=referrer.id,
@@ -107,7 +134,6 @@ async def process_referral_logic(partner_id: int):
                     session.add(xp_earning)
 
                     # Audit logging
-                    from app.services.audit_service import audit_service
                     await audit_service.log_xp_award(
                         session=session,
                         partner_id=referrer.id,
@@ -115,12 +141,10 @@ async def process_referral_logic(partner_id: int):
                         xp_amount=xp_gain,
                         level=level,
                         is_pro=referrer.is_pro,
-                        xp_before=referrer.xp,
-                        xp_after=referrer.xp + xp_gain,
+                        xp_before=xp_before,
+                        xp_after=referrer.xp,
                     )
 
-                    await session.flush()
-                    await session.refresh(referrer)
                     logger.info(f"💰 [Level {level}] XP Awarded: {xp_gain} to {referrer.id}")
 
                 except Exception as core_error:
@@ -175,30 +199,17 @@ async def process_referral_logic(partner_id: int):
 
                 # Referral Notifications
                 try:
-                    from app.utils.text import escape_markdown_v1 # Import escape function
-
-                    lang = referrer.language_code or "en"
-                    
                     # Construct Full Name: First Last (@username)
                     def format_partner_name(p):
                         parts = []
-                        if p.first_name:
-                            parts.append(p.first_name)
-                        if p.last_name:
-                            parts.append(p.last_name)
-                        
-                        if not parts:
-                            name_display = "Partner"
-                        else:
-                            name_display = " ".join(parts)
-                        
-                        if p.username:
-                            name_display += f" (@{p.username})"
-                        
+                        if p.first_name: parts.append(p.first_name)
+                        if p.last_name: parts.append(p.last_name)
+                        name_display = " ".join(parts) if parts else "Partner"
+                        if p.username: name_display += f" (@{p.username})"
                         return escape_markdown_v1(name_display)
 
                     new_partner_name = format_partner_name(partner)
-
+                    lang = referrer.language_code or "en"
                     msg = None
                     if level == 1:
                         msg = get_msg(lang, "referral_l1_congrats", name=new_partner_name)
@@ -209,13 +220,9 @@ async def process_referral_logic(partner_id: int):
                             if referrer.id in path_ids:
                                 start_idx = path_ids.index(referrer.id)
                                 intermediary_ids = path_ids[start_idx+1:]
-                                chain_names = []
-                                for mid_id in intermediary_ids:
-                                    mid_user = ancestor_map.get(mid_id)
-                                    if mid_user:
-                                        chain_names.append(format_partner_name(mid_user))
-                                        
-                                chain_names.append(new_partner_name) # already escaped
+                                chain_names = [format_partner_name(ancestor_map[mid_id]) for mid_id in intermediary_ids if mid_id in ancestor_map]
+                                    
+                                chain_names.append(new_partner_name)
                                 referral_chain = "\n".join([f"➜ {name}" for name in chain_names])
 
                                 if level == 2:
@@ -223,11 +230,8 @@ async def process_referral_logic(partner_id: int):
                                 else:
                                     msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=referral_chain)
                             else:
-                                # Fallback if path reconstruction fails for some reason
-                                if level == 2:
-                                    msg = get_msg(lang, "referral_l2_congrats", referral_chain=f"➜ {new_partner_name}")
-                                else:
-                                    msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=f"➜ {new_partner_name}")
+                                # Fallback if path reconstruction fails
+                                msg = get_msg(lang, "referral_l2_congrats" if level == 2 else "referral_deep_activity", level=level, referral_chain=f"➜ {new_partner_name}")
                         except Exception as e:
                             logger.error(f"Error building referral chain msg: {e}")
 
@@ -252,8 +256,8 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
         return
 
     COMMISSION_PCT = {1: 0.30, 2: 0.05, 3: 0.03, 4: 0.01, 5: 0.01, 6: 0.01, 7: 0.01, 8: 0.01, 9: 0.01}
-    path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-    lineage_ids = (path_ids + [partner.referrer_id])[-9:]
+    # Path already includes ancestors, just deduplicate and fetch
+    lineage_ids = list(dict.fromkeys([int(x) for x in partner.path.split('.')] if partner.path else []))[-9:]
 
     statement = select(Partner).where(Partner.id.in_(lineage_ids))
     result = await session.exec(statement)
@@ -272,10 +276,17 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
         commission = total_amount * pct
 
         if commission > 0:
+            # Capture state for audit
+            balance_before = referrer.balance
+
             await session.execute(
                 text("UPDATE partner SET balance = balance + :comm, total_earned_usdt = total_earned_usdt + :comm WHERE id = :p_id"),
                 {"comm": commission, "p_id": referrer.id}
             )
+
+            # Refresh to get updated balance
+            await session.flush()
+            await session.refresh(referrer)
 
             earning = Earning(
                 partner_id=referrer.id,
@@ -287,18 +298,15 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             )
             session.add(earning)
 
-            from app.services.audit_service import audit_service
             await audit_service.log_commission(
                 session=session,
                 partner_id=referrer.id,
                 buyer_id=partner.id,
                 amount=commission,
                 level=level,
-                balance_before=referrer.balance,
-                balance_after=referrer.balance + commission,
+                balance_before=balance_before,
+                balance_after=referrer.balance,
             )
-
-            await session.refresh(referrer)
 
             async with redis_service.client.pipeline(transaction=True) as pipe:
                 pipe.delete(f"partner:profile:{referrer.telegram_id}")

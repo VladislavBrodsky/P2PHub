@@ -11,6 +11,7 @@ class PartnerTransaction(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     partner_id: int = Field(foreign_key="partner.id", index=True)
     amount: float
+    amount_crypto: Optional[float] = Field(default=None) # The exact crypto amount expected (fixed at session creation)
     currency: str # TON, USDT, BTC, etc.
     network: str # TON, TRC20, ERC20, etc.
     tx_hash: Optional[str] = Field(default=None, index=True)

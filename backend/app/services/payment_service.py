@@ -11,6 +11,8 @@ from app.core.config import settings
 from app.models.partner import Partner
 from app.models.transaction import PartnerTransaction
 from app.services.ton_verification_service import ton_verification_service
+from app.services.redis_service import redis_service
+from app.core.http_client import http_client
 
 logger = logging.getLogger(__name__)
 
@@ -60,13 +62,14 @@ class PaymentService:
         if currency == "TON":
             ton_price = await self.get_ton_price()
             # Add 2% buffer for spread/volatility to ensure they pay enough
-            amount_ton = (amount_usd / ton_price) * 1.02
+            amount_crypto = (amount_usd / ton_price) * 1.02
         else:
-            amount_ton = amount_usd # For USDT it's 1:1
+            amount_crypto = amount_usd # For USDT it's 1:1
 
         transaction = PartnerTransaction(
             partner_id=partner_id,
             amount=amount_usd,
+            amount_crypto=amount_crypto,
             currency=currency,
             network=network,
             status="pending"
@@ -77,7 +80,7 @@ class PaymentService:
 
         return {
             "transaction_id": transaction.id,
-            "amount": round(amount_ton, 4),
+            "amount": round(amount_crypto, 4),
             "currency": currency,
             "network": network,
             "address": settings.ADMIN_TON_ADDRESS if currency == "TON" else settings.ADMIN_USDT_ADDRESS,
@@ -85,16 +88,34 @@ class PaymentService:
         }
 
     async def get_ton_price(self) -> float:
-        """Fetches current TON/USD price from TON API or fallback."""
+        """Fetches current TON/USD price with caching (1 minute)."""
+        cache_key = "ton_price_usd"
         try:
-            async with httpx.AsyncClient(timeout=5.0) as client:
-                response = await client.get(f"{TON_API_BASE}/rates?tokens=ton&currencies=usd")
-                data = response.json()
-                return float(data['rates']['TON']['prices']['USD'])
+            cached_price = await redis_service.get(cache_key)
+            if cached_price:
+                return float(cached_price)
+        except Exception:
+            pass
+
+        try:
+            client = await http_client.get_client()
+            # #comment: Using TonAPI.io for reliable, high-precision price data.
+            response = await client.get(f"{TON_API_BASE}/rates?tokens=ton&currencies=usd")
+            data = response.json()
+            # Extract price from standardized TonAPI response format
+            price = float(data['rates']['TON']['prices']['USD'])
+            
+            # Cache for 60 seconds
+            try:
+                await redis_service.set(cache_key, str(price), expire=60)
+            except Exception:
+                pass
+                
+            return price
         except Exception as e:
             logger.error(f"Error fetching TON price: {e}")
-            return 5.5 # Fallback price if API fails
-
+            return 5.5 # Fallback conservative price if API fails
+            
     async def verify_ton_transaction(
         self,
         session: AsyncSession,
@@ -105,14 +126,15 @@ class PaymentService:
         Verifies a TON transaction hash via TonVerificationService.
         Checks if the destination address matches admin wallet and amount is correct.
         """
-        # 1. Check if TX already processed
+        # 1. Check if TX already processed (Global Uniqueness per hash)
         stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
         res = await session.exec(stmt)
         existing = res.first()
         if existing and existing.status == "completed":
+            logger.info(f"Transaction {tx_hash} already completed.")
             return True
 
-        # 2. Find a recent pending TON transaction for this partner
+        # 2. Find the most recent pending TON transaction for this partner
         # A "session" is valid if created within last 10 minutes
         ten_mins_ago = datetime.utcnow() - timedelta(minutes=10)
         stmt_session = select(PartnerTransaction).where(
@@ -126,19 +148,17 @@ class PaymentService:
         active_session = res_session.first()
 
         if not active_session:
-            logger.warning(f"No active TON session found for partner {partner.id}")
+            logger.warning(f"No active TON session found for partner {partner.id} in the last 10 minutes.")
             return False
 
-        # 3. Get current price to calculate expected TON
-        # We use the price at verification time to be safe,
-        # but create_payment_session gave them a quote.
-        ton_price = await self.get_ton_price()
-        expected_ton = (active_session.amount) / ton_price
+        # 3. Use the fixed crypto amount stored at session creation
+        # This prevents verification failures due to price fluctuations between payment and verification.
+        expected_ton = active_session.amount_crypto or ((active_session.amount / 5.5) * 1.02)
 
-        # 4. Call dedicated verification service
+        # 4. Call dedicated verification service with robust validation parameters
         is_valid = await ton_verification_service.verify_transaction(
             tx_hash=tx_hash,
-            expected_amount_ton=expected_ton * 0.95, # Allow 5% margin
+            expected_amount_ton=expected_ton * 0.98, # Allow 2% slippage margin for gas fees/precision
             expected_address=settings.ADMIN_TON_ADDRESS
         )
 
