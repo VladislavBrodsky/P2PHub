@@ -120,6 +120,12 @@ async def get_my_profile(
             user_photos = await bot.get_user_profile_photos(tg_id, limit=1)
             if user_photos.total_count > 0:
                 photo_file_id = user_photos.photos[0][0].file_id
+                # Eagerly cache the photo to avoid delay when UI requests it
+                try:
+                    from app.services.partner_service import ensure_photo_cached
+                    background_tasks.add_task(ensure_photo_cached, photo_file_id)
+                except Exception as e:
+                    logger.warning(f"⚠️ Failed to eager-cache photo for new user {tg_id}: {e}")
         except Exception as e:
             logger.error(f"Failed to fetch photo for {tg_id}: {e}")
 
@@ -461,14 +467,18 @@ async def get_recent_partners(
         "last_hour_count": last_hour_count
     }
 
-    # 4.5. Warm up photo cache (Background)
+    # 4.5. EAGER Photo Cache Warming (Synchronous for first 4 images)
+    # This ensures photos are ready BEFORE the frontend requests them
     if refresh_partners and partners_list:
         try:
-            from app.services.partner_service import warm_up_partner_photos
-            photo_ids = [p["photo_file_id"] for p in partners_list if p.get("photo_file_id")]
-            await warm_up_partner_photos.kiq(photo_ids)
+            from app.services.partner_service import ensure_photo_cached
+            # Warm first 4 photos eagerly (these show in the UI immediately)
+            priority_photos = [p["photo_file_id"] for p in partners_list[:4] if p.get("photo_file_id")]
+            if priority_photos:
+                logger.info(f"🔥 Eagerly warming {len(priority_photos)} priority photos...")
+                await asyncio.gather(*[ensure_photo_cached(fid) for fid in priority_photos], return_exceptions=True)
         except Exception as e:
-            logger.error(f"Failed to queue cache warming: {e}")
+            logger.warning(f"⚠️ Photo warming failed (non-critical): {e}")
 
     # 5. Populate Redis
     try:
