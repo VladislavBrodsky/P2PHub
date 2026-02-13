@@ -141,28 +141,6 @@ async def lifespan(app: FastAPI):
         app.state.polling_task = polling_task
         logger.info("✅ Bot started with Long Polling")
 
-@app.get("/health")
-async def health_check():
-    """
-    Rapid health check for system monitoring.
-    Verify Redis connectivity and general availability.
-    """
-    try:
-        from app.services.redis_service import redis_service
-        from datetime import datetime
-        is_redis_ok = await redis_service.client.ping()
-        return {
-            "status": "healthy",
-            "redis": "online" if is_redis_ok else "offline",
-            "timestamp": datetime.utcnow().isoformat()
-        }
-    except Exception as e:
-        logger.error(f"💥 Health check failed: {e}")
-        return JSONResponse(
-            status_code=503,
-            content={"status": "unhealthy", "error": str(e)}
-        )
-
     # Explicit Database Connection Check
     # Why: Catches database connection issues early in the startup process.
     # This prevents the app from starting with a broken database connection,
@@ -232,7 +210,31 @@ async def health_check():
         except Exception as e:
             logger.error(f"❌ Error cancelling polling task: {e}")
 
+
 app = FastAPI(title="Pintopay Partner Hub API", lifespan=lifespan)
+
+@app.get("/health")
+async def health_check():
+    """
+    Rapid health check for system monitoring.
+    Verify Redis connectivity and general availability.
+    """
+    try:
+        from app.services.redis_service import redis_service
+        from datetime import datetime
+        is_redis_ok = await redis_service.client.ping()
+        return {
+            "status": "healthy",
+            "redis": "online" if is_redis_ok else "offline",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"💥 Health check failed: {e}")
+        from fastapi.responses import JSONResponse
+        return JSONResponse(
+            status_code=503,
+            content={"status": "unhealthy", "error": str(e)}
+        )
 
 @app.get("/")
 async def root_health():
