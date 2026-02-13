@@ -10,7 +10,7 @@ The task system is **fully functional** and correctly implemented across the bac
 
 ### Task Types Supported
 1. **Social Tasks** - One-time actions (join Telegram, follow channels)
-2. **Referral Tasks** - Invite-based missions (1 to 500 friends)
+2. **Referral Tasks** - Invite-based missions (1 to 500 friends, 250 XP - 10,000 XP)
 3. **Action Tasks** - Daily engagement streaks (5-day check-in)
 
 ---
