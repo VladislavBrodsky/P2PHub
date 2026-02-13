@@ -16,6 +16,7 @@ export interface PROStatus {
         x_access_token: string;
         x_access_token_secret: string;
         telegram_channel_id: string;
+        telegram_channels: string[];
         linkedin_access_token: string;
     };
 }
@@ -26,6 +27,7 @@ export interface PROSetupPayload {
     x_access_token?: string;
     x_access_token_secret?: string;
     telegram_channel_id?: string;
+    telegram_channels?: string[];
     linkedin_access_token?: string;
 }
 

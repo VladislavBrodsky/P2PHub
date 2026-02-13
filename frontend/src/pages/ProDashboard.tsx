@@ -30,7 +30,7 @@ export const ProDashboard = () => {
     const { t, i18n } = useTranslation();
     const { selection, impact, notification } = useHaptic();
     const { user } = useUser();
-    const { setFooterVisible } = useUI();
+    const { setFooterVisible, setHeaderVisible } = useUI();
 
     const [status, setStatus] = useState<PROStatus | null>(null);
     const [activeTab, setActiveTab] = useState<Tab>('studio');
@@ -61,7 +61,8 @@ export const ProDashboard = () => {
         x_api_secret: '',
         x_access_token: '',
         x_access_token_secret: '',
-        telegram_channel_id: '',
+        telegram_channel_id: '', // Main channel
+        telegram_channels: [] as string[], // Additional channels
         linkedin_access_token: ''
     });
 
@@ -77,13 +78,18 @@ export const ProDashboard = () => {
     const [publishedPlatforms, setPublishedPlatforms] = useState<string[]>([]);
 
     useEffect(() => {
-        if (showSetup) {
+        if (showSetup || showPublishModal) {
             setFooterVisible(false);
+            setHeaderVisible(false);
         } else {
             setFooterVisible(true);
+            setHeaderVisible(true);
         }
-        return () => setFooterVisible(true);
-    }, [showSetup, setFooterVisible]);
+        return () => {
+            setFooterVisible(true);
+            setHeaderVisible(true);
+        };
+    }, [showSetup, showPublishModal, setFooterVisible, setHeaderVisible]);
 
     useEffect(() => {
         let interval: any;
@@ -111,6 +117,7 @@ export const ProDashboard = () => {
                     x_access_token: data.setup.x_access_token || '',
                     x_access_token_secret: data.setup.x_access_token_secret || '',
                     telegram_channel_id: data.setup.telegram_channel_id || '',
+                    telegram_channels: data.setup.telegram_channels || [],
                     linkedin_access_token: data.setup.linkedin_access_token || ''
                 });
             }
@@ -358,7 +365,7 @@ export const ProDashboard = () => {
     return (
         <div className={`flex flex-col min-h-screen ${showSetup ? 'pb-10' : 'pb-32'} bg-(--color-bg-app)`}>
             {/* Header - Premium Liquid Style */}
-            <div className="px-6 pt-10 pb-6">
+            <div className="px-6 pt-4 pb-6">
                 <div className="flex items-center justify-between glass-panel-premium p-4 rounded-3xl border-(--color-border-glass) relative overflow-hidden group shadow-2xl">
                     <div className="absolute inset-0 bg-linear-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 animate-liquid pointer-events-none" />
                     <div className="flex items-center gap-3 relative z-10">
@@ -399,14 +406,27 @@ export const ProDashboard = () => {
                             exit={{ opacity: 0, y: -10 }}
                             className="space-y-6"
                         >
-                            {/* Step Progress */}
-                            <div className="flex items-center justify-between px-4">
+                            {/* Stepper */}
+                            <div className="flex items-center justify-center gap-4 py-6">
                                 {[1, 2, 3].map((s) => (
                                     <div key={s} className="flex items-center">
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-xs transition-all ${step >= s ? 'bg-indigo-500 text-white' : 'bg-(--color-bg-surface) text-(--color-text-secondary)'}`}>
-                                            {s}
+                                        <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-xs font-black transition-all shadow-lg ${step === s
+                                            ? 'vibing-blue-animated text-white scale-110 shadow-blue-500/30'
+                                            : step > s
+                                                ? 'bg-emerald-500 text-white shadow-emerald-500/20'
+                                                : 'bg-(--color-bg-surface) text-(--color-text-secondary) border border-(--color-border-glass) opacity-50'
+                                            }`}>
+                                            {step > s ? <CheckCircle2 size={16} /> : s}
                                         </div>
-                                        {s < 3 && <div className={`w-12 h-0.5 mx-2 rounded-full ${step > s ? 'bg-indigo-500' : 'bg-(--color-border-glass)'}`} />}
+                                        {s < 3 && (
+                                            <div className="w-10 h-[2px] mx-2 bg-(--color-border-glass) rounded-full overflow-hidden">
+                                                <motion.div
+                                                    className="h-full vibing-blue-gradient"
+                                                    initial={{ width: "0%" }}
+                                                    animate={{ width: step > s ? "100%" : "0%" }}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -939,148 +959,180 @@ export const ProDashboard = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-101 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-2xl"
+                        className="fixed inset-0 z-1000 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-3xl"
                     >
                         <motion.div
                             initial={{ scale: 0.9, y: 30, opacity: 0 }}
                             animate={{ scale: 1, y: 0, opacity: 1 }}
                             exit={{ scale: 0.9, y: 30, opacity: 0 }}
-                            className="bg-white dark:bg-slate-900 w-full max-w-md rounded-[2.5rem] p-6 space-y-4 max-h-[92vh] flex flex-col relative overflow-hidden shadow-2xl border border-black/5 dark:border-white/10"
+                            className="bg-(--color-bg-surface) w-full max-w-md rounded-[2.5rem] p-6 space-y-4 max-h-[92vh] flex flex-col relative overflow-hidden shadow-3xl border border-(--color-border-glass)"
                         >
-                            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 via-purple-500 to-indigo-500 opacity-30" />
+                            <div className="absolute top-0 left-0 w-full h-1.5 vibing-blue-animated opacity-60" />
 
-                            <div className="flex justify-between items-center shrink-0">
+                            <div className="flex justify-between items-center shrink-0 pt-2">
                                 <div className="flex flex-col">
-                                    <h3 className="text-xl font-black uppercase tracking-tight text-slate-800 dark:text-white">
+                                    <h3 className="text-2xl font-black uppercase tracking-tight text-brand-text">
                                         {t('pro_dashboard.tab_setup')}
                                     </h3>
                                     <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500 leading-none">{t('pro_dashboard.setup.global_integration')}</span>
                                 </div>
                                 <button
                                     onClick={() => { selection(); setShowSetup(false); }}
-                                    className="p-2.5 bg-slate-100 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-xl opacity-80 hover:opacity-100 active:scale-90 transition-all text-slate-600 dark:text-white"
+                                    className="p-3 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-2xl text-brand-text shadow-sm hover:border-indigo-500/30 active:scale-90 transition-all"
                                 >
-                                    <ArrowLeft className="w-4 h-4" />
+                                    <ArrowLeft size={20} />
                                 </button>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto no-scrollbar space-y-6 pr-1">
+                            <div className="flex-1 overflow-y-auto no-scrollbar space-y-6 pr-1 pt-2">
+                                {/* Protocol Instructions */}
+                                <div className="p-6 bg-indigo-500/5 rounded-3xl border border-indigo-500/20 relative overflow-hidden group">
+                                    <div className="absolute -right-4 -top-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-1000"><Zap size={100} /></div>
+                                    <h4 className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-indigo-500 mb-4">
+                                        <Zap size={14} /> {t('pro_dashboard.setup.instructions_title')}
+                                    </h4>
+                                    <ul className="space-y-3">
+                                        <li className="flex items-start gap-3">
+                                            <div className="w-5 h-5 rounded-lg bg-indigo-500/20 flex items-center justify-center text-[10px] font-black text-indigo-500 shrink-0 mt-0.5">1</div>
+                                            <p className="text-[11px] font-bold text-brand-text/70 leading-relaxed">Get X API credentials from <a href="https://developer.x.com" target="_blank" className="text-indigo-500 underline">Developer Portal</a></p>
+                                        </li>
+                                        <li className="flex items-start gap-3">
+                                            <div className="w-5 h-5 rounded-lg bg-indigo-500/20 flex items-center justify-center text-[10px] font-black text-indigo-500 shrink-0 mt-0.5">2</div>
+                                            <p className="text-[11px] font-bold text-brand-text/70 leading-relaxed">Add Bot as Admin to your Telegram Channels with message permissions</p>
+                                        </li>
+                                        <li className="flex items-start gap-3">
+                                            <div className="w-5 h-5 rounded-lg bg-indigo-500/20 flex items-center justify-center text-[10px] font-black text-indigo-500 shrink-0 mt-0.5">3</div>
+                                            <p className="text-[11px] font-bold text-brand-text/70 leading-relaxed">Save keys to enable automated 24/7 viral ecosystem reach</p>
+                                        </li>
+                                    </ul>
+                                </div>
+
                                 {/* X Integration */}
-                                <div className="space-y-4 p-5 bg-slate-50 dark:bg-white/5 rounded-3xl border border-black/5 dark:border-white/5">
+                                <div className="space-y-4 p-5 bg-(--color-bg-surface) rounded-3xl border border-(--color-border-glass) shadow-inner">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-indigo-400/60">
-                                            <Twitter size={12} className="text-blue-400" /> {t('pro_dashboard.setup.x_integration')}
+                                        <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-brand-text">
+                                            <Twitter size={14} className="text-blue-400" /> X (Twitter) API
+                                            <Info size={12} className="text-brand-muted opacity-50 cursor-pointer hover:opacity-100" onClick={() => alert('Steps: 1. Developer Portal 2. Create App 3. Keys & Tokens')} />
                                         </div>
-                                        {status?.has_x_setup && (
-                                            <button
-                                                onClick={() => handleTestIntegration('x')}
-                                                className="text-[9px] font-black uppercase tracking-widest text-indigo-500 hover:text-indigo-600 transition-colors flex items-center gap-1 bg-indigo-500/10 px-2 py-1 rounded-full"
-                                            >
-                                                <Zap size={10} /> TEST
-                                            </button>
-                                        )}
+                                        <button
+                                            onClick={() => handleTestIntegration('x')}
+                                            className="text-[9px] font-black uppercase tracking-widest text-brand-text bg-linear-to-r from-blue-500/10 to-indigo-500/10 h-7 px-3 rounded-xl border border-blue-500/20 hover:border-blue-500/40 transition-all flex items-center gap-2"
+                                        >
+                                            <Send size={10} /> Test Connection
+                                        </button>
                                     </div>
-                                    <div className="space-y-3">
-                                        <div className="grid gap-2">
-                                            <input
-                                                type="password"
-                                                value={apiData.x_api_key}
-                                                onChange={(e) => setApiData({ ...apiData, x_api_key: e.target.value })}
-                                                placeholder="X API Key"
-                                                className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all dark:text-white"
-                                            />
-                                            <input
-                                                type="password"
-                                                value={apiData.x_api_secret}
-                                                onChange={(e) => setApiData({ ...apiData, x_api_secret: e.target.value })}
-                                                placeholder="X API Secret"
-                                                className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all dark:text-white"
-                                            />
-                                            <input
-                                                type="password"
-                                                value={apiData.x_access_token}
-                                                onChange={(e) => setApiData({ ...apiData, x_access_token: e.target.value })}
-                                                placeholder="X Access Token"
-                                                className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all dark:text-white"
-                                            />
-                                            <input
-                                                type="password"
-                                                value={apiData.x_access_token_secret}
-                                                onChange={(e) => setApiData({ ...apiData, x_access_token_secret: e.target.value })}
-                                                placeholder="X Token Secret"
-                                                className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all dark:text-white"
-                                            />
-                                        </div>
-                                        <div className="p-3 bg-white dark:bg-black/40 rounded-2xl border border-black/5 dark:border-white/5 space-y-1">
-                                            <div className="text-[9px] font-black uppercase text-indigo-500 tracking-tighter">Instructions:</div>
-                                            <p className="text-[10px] text-slate-500 dark:text-brand-muted leading-relaxed font-medium">{t('pro_dashboard.setup.x_hint')}</p>
-                                        </div>
+                                    <div className="grid gap-3">
+                                        <input
+                                            type="password"
+                                            value={apiData.x_api_key}
+                                            onChange={(e) => setApiData({ ...apiData, x_api_key: e.target.value })}
+                                            placeholder="API Key"
+                                            className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                        />
+                                        <input
+                                            type="password"
+                                            value={apiData.x_api_secret}
+                                            onChange={(e) => setApiData({ ...apiData, x_api_secret: e.target.value })}
+                                            placeholder="API Secret"
+                                            className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                        />
+                                        <input
+                                            type="password"
+                                            value={apiData.x_access_token}
+                                            onChange={(e) => setApiData({ ...apiData, x_access_token: e.target.value })}
+                                            placeholder="Access Token"
+                                            className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                        />
+                                        <input
+                                            type="password"
+                                            value={apiData.x_access_token_secret}
+                                            onChange={(e) => setApiData({ ...apiData, x_access_token_secret: e.target.value })}
+                                            placeholder="Access Token Secret"
+                                            className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                        />
                                     </div>
                                 </div>
 
                                 {/* Telegram Sync */}
-                                <div className="space-y-4 p-5 bg-slate-50 dark:bg-white/5 rounded-3xl border border-black/5 dark:border-white/5">
+                                <div className="space-y-4 p-5 bg-(--color-bg-surface) rounded-3xl border border-(--color-border-glass) shadow-inner">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-indigo-400/60">
-                                            <Send size={12} className="text-blue-500" /> {t('pro_dashboard.setup.tg_sync')}
+                                        <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-brand-text">
+                                            <Send size={14} className="text-blue-500" /> Telegram Channels
+                                            <Info size={12} className="text-brand-muted opacity-50 cursor-pointer hover:opacity-100" onClick={() => alert('Sync your P2PHub bot with your channels by adding it as an administrator.')} />
                                         </div>
-                                        {status?.has_telegram_setup && (
-                                            <button
-                                                onClick={() => handleTestIntegration('telegram')}
-                                                className="text-[9px] font-black uppercase tracking-widest text-indigo-500 hover:text-indigo-600 transition-colors flex items-center gap-1 bg-indigo-500/10 px-2 py-1 rounded-full"
-                                            >
-                                                <Zap size={10} /> TEST
-                                            </button>
-                                        )}
+                                        <button
+                                            onClick={() => handleTestIntegration('telegram')}
+                                            className="text-[9px] font-black uppercase tracking-widest text-brand-text bg-linear-to-r from-blue-500/10 to-emerald-500/10 h-7 px-3 rounded-xl border border-blue-500/20 hover:border-blue-500/40 transition-all flex items-center gap-2"
+                                        >
+                                            <Send size={10} /> Test Connection
+                                        </button>
                                     </div>
-                                    <input
-                                        type="text"
-                                        value={apiData.telegram_channel_id}
-                                        onChange={(e) => setApiData({ ...apiData, telegram_channel_id: e.target.value })}
-                                        placeholder="@channelname or -100..."
-                                        className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all dark:text-white"
-                                    />
-                                    <div className="p-3 bg-white dark:bg-black/40 rounded-2xl border border-black/5 dark:border-white/5 space-y-1">
-                                        <div className="text-[9px] font-black uppercase text-indigo-500 tracking-tighter">Instructions:</div>
-                                        <p className="text-[10px] text-slate-500 dark:text-brand-muted leading-relaxed font-medium">{t('pro_dashboard.setup.tg_hint')}</p>
+                                    <div className="grid gap-3">
+                                        <input
+                                            type="text"
+                                            value={apiData.telegram_channel_id}
+                                            onChange={(e) => setApiData({ ...apiData, telegram_channel_id: e.target.value })}
+                                            placeholder="@channelname (Main)"
+                                            className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                        />
+                                        {apiData.telegram_channels.map((ch, idx) => (
+                                            <div key={idx} className="flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={ch}
+                                                    onChange={(e) => {
+                                                        const newChannels = [...apiData.telegram_channels];
+                                                        newChannels[idx] = e.target.value;
+                                                        setApiData({ ...apiData, telegram_channels: newChannels });
+                                                    }}
+                                                    placeholder={`@channelname ${idx + 2}`}
+                                                    className="flex-1 h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text"
+                                                />
+                                                <button
+                                                    onClick={() => {
+                                                        const newChannels = apiData.telegram_channels.filter((_, i) => i !== idx);
+                                                        setApiData({ ...apiData, telegram_channels: newChannels });
+                                                    }}
+                                                    className="w-12 h-12 rounded-2xl bg-red-500/10 text-red-500 flex items-center justify-center active:scale-90 transition-all"
+                                                >
+                                                    <AlertCircle size={18} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                        <button
+                                            onClick={() => setApiData({ ...apiData, telegram_channels: [...apiData.telegram_channels, ''] })}
+                                            className="w-full h-10 border-2 border-dashed border-(--color-border-glass) rounded-xl text-[10px] font-black uppercase text-brand-muted hover:text-brand-text hover:border-indigo-500/30 transition-all"
+                                        >
+                                            + Add Another Channel
+                                        </button>
                                     </div>
                                 </div>
 
-                                {/* LinkedIn INTEGRATION */}
-                                <div className="space-y-4 p-5 bg-slate-50 dark:bg-white/5 rounded-3xl border border-black/5 dark:border-white/5">
+                                {/* LinkedIn Integration */}
+                                <div className="space-y-4 p-5 bg-(--color-bg-surface) rounded-3xl border border-(--color-border-glass) shadow-inner">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-indigo-400/60">
-                                            <Linkedin size={12} className="text-blue-700" /> {t('pro_dashboard.setup.professional_network')}
+                                        <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-brand-text">
+                                            <Linkedin size={14} className="text-blue-700" /> LinkedIn
+                                            <Info size={12} className="text-brand-muted opacity-50 cursor-pointer hover:opacity-100" onClick={() => alert('LinkedIn requires an active Access Token from your Developer App.')} />
                                         </div>
-                                        {status?.has_linkedin_setup && (
-                                            <button
-                                                onClick={() => handleTestIntegration('linkedin')}
-                                                className="text-[9px] font-black uppercase tracking-widest text-indigo-500 hover:text-indigo-600 transition-colors flex items-center gap-1 bg-indigo-500/10 px-2 py-1 rounded-full"
-                                            >
-                                                <Zap size={10} /> TEST
-                                            </button>
-                                        )}
                                     </div>
                                     <input
                                         type="password"
                                         value={apiData.linkedin_access_token}
                                         onChange={(e) => setApiData({ ...apiData, linkedin_access_token: e.target.value })}
                                         placeholder="LinkedIn Access Token"
-                                        className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all dark:text-white"
+                                        className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                     />
-                                    <div className="p-3 bg-white dark:bg-black/40 rounded-2xl border border-black/5 dark:border-white/5 space-y-1">
-                                        <div className="text-[9px] font-black uppercase text-indigo-500 tracking-tighter">Instructions:</div>
-                                        <p className="text-[10px] text-slate-500 dark:text-brand-muted leading-relaxed font-medium">{t('pro_dashboard.setup.linkedin_hint')}</p>
-                                    </div>
                                 </div>
                             </div>
 
-                            <div className="pt-2 shrink-0">
+                            <div className="pt-4 shrink-0">
                                 <button
                                     onClick={() => { selection(); handleSaveSetup(); }}
-                                    className="w-full h-14 bg-linear-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 rounded-2xl font-black text-[12px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all text-white"
+                                    className="w-full h-16 vibing-blue-animated rounded-2xl font-black text-white text-[12px] uppercase tracking-[0.3em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:grayscale disabled:opacity-50"
+                                    disabled={isLoading}
                                 >
-                                    {t('pro_dashboard.setup.save_btn')}
+                                    {isLoading ? <Loader2 className="animate-spin" /> : t('pro_dashboard.setup.save_btn')}
                                 </button>
                             </div>
                         </motion.div>
