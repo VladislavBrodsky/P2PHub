@@ -158,115 +158,109 @@ class ViralMarketingStudio:
         generation_start = datetime.utcnow()
         tokens_openai = 0
 
-        try:
-            response = await self.openai_client.chat.completions.create(
-                model="gpt-4o",
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt}
-                ],
-                response_format={"type": "json_object"}
-            )
-            
-            if response.usage:
-                tokens_openai = response.usage.total_tokens
+        # Construction of the Image Prompt Template (to allow parallel start)
+        # We don't wait for OpenAI to give us the prompt; we build a high-quality one immediately
+        base_image_prompt = (
+            f"Ultra-realistic cinematic shot of {target_audience} lifestyle, themed around '{post_type}'. "
+            f"Setting: Modern, high-end, 2026 aesthetics. "
+            f"Vibe: Success, financial freedom, premium fintech branding. {self.IMAGE_RULES}"
+        )
 
-            content = json.loads(response.choices[0].message.content)
-            image_prompt = content.get("image_description") or content.get("title") or f"Cinematic shot for {post_type}"
+        async def get_text_content():
+            try:
+                response = await self.openai_client.chat.completions.create(
+                    model="gpt-4o", # Keep 4o for quality, but it's now parallel
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt}
+                    ],
+                    response_format={"type": "json_object"}
+                )
+                tokens = response.usage.total_tokens if response.usage else 0
+                return json.loads(response.choices[0].message.content), tokens
+            except Exception as e:
+                logger.error(f"Text generation error: {e}")
+                return None, 0
+
+        async def get_image_content(prompt):
+            if not self.genai_client:
+                return None
+            
+            # Prefer fast models for optimization
+            imagen_models = [
+                'imagen-3.0-fast-001', # Fast first
+                'imagen-4.0-generate-001',
+                'imagen-3.0-generate-001'
+            ]
+            
+            method = getattr(self.genai_client.models, 'generate_images', 
+                           getattr(self.genai_client.models, 'generate_image', None))
+            
+            if not method:
+                return None
+
+            loop = asyncio.get_event_loop()
+            for model_name in imagen_models:
+                try:
+                    img_response = await asyncio.wait_for(
+                        loop.run_in_executor(
+                            None, 
+                            lambda m=model_name: method(
+                                model=m,
+                                prompt=prompt,
+                                config={
+                                    'number_of_images': 1,
+                                    'output_mime_type': 'image/png'
+                                }
+                            )
+                        ),
+                        timeout=20.0 # Faster timeout
+                    )
+                    
+                    if img_response and getattr(img_response, 'generated_images', None):
+                        image = img_response.generated_images[0]
+                        filename = f"viral_{partner.id}_{secrets.token_hex(4)}.png"
+                        save_path = os.path.join("app_images", "generated", filename)
+                        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                        image.image.save(save_path)
+                        return f"/images/generated/{filename}"
+                except Exception as e:
+                    logger.warning(f"⚠️ Imagen {model_name} failed/timed out: {e}")
+                    continue
+            return None
+
+        try:
+            # 🚀 PARALLEL EXECUTION: OpenAI and Imagen start at the SAME TIME
+            text_task = get_text_content()
+            image_task = get_image_content(base_image_prompt)
+            
+            (content_data, tokens_openai), image_url = await asyncio.gather(text_task, image_task)
+            
+            if not content_data:
+                return {"error": "Failed to generate content"}
+
+            content = content_data
+            image_prompt = content.get("image_description") or base_image_prompt
             
             # Ensure hashtags is a list
             hashtags_raw = content.get("hashtags", [])
-            if isinstance(hashtags_raw, str):
-                hashtags = [tag.strip() for tag in hashtags_raw.split(',')]
-            elif isinstance(hashtags_raw, list):
-                hashtags = hashtags_raw
-            else:
-                hashtags = []
+            hashtags = [tag.strip() for tag in hashtags_raw.split(',')] if isinstance(hashtags_raw, str) else (hashtags_raw if isinstance(hashtags_raw, list) else [])
 
-            # 2. Generate Image via Gemini (Imagen 3)
-            image_url = None
-            if self.genai_client and image_prompt:
-                try:
-                    # Dynamically check for available methods to avoid crashing on version mismatches
-                    method = None
-                    if hasattr(self.genai_client.models, 'generate_images'): # Standard new SDK
-                        method = self.genai_client.models.generate_images
-                    elif hasattr(self.genai_client.models, 'generate_image'): # Singular variant
-                        method = self.genai_client.models.generate_image
-                    
-                    if method:
-                        # Run the sync GenAI call in a separate thread to avoid blocking the event loop
-                        loop = asyncio.get_event_loop()
-                        
-                        # Try multiple models in order of preference
-                        imagen_models = [
-                            'imagen-4.0-generate-001', 
-                            'imagen-3.0-generate-001',
-                            'imagen-3.0-fast-001'
-                        ]
-                        
-                        img_response = None
-                        last_err = None
-                        
-                        for model_name in imagen_models:
-                            try:
-                                img_response = await asyncio.wait_for(
-                                    loop.run_in_executor(
-                                        None, 
-                                        lambda m=model_name: method(
-                                            model=m,
-                                            prompt=image_prompt,
-                                            config={
-                                                'number_of_images': 1,
-                                                'output_mime_type': 'image/png'
-                                            }
-                                        )
-                                    ),
-                                    timeout=25.0
-                                )
-                                if img_response:
-                                    break
-                            except Exception as e:
-                                logger.warning(f"⚠️ Model {model_name} failed or timed out: {e}")
-                                last_err = e
-                                continue
-                        
-                        if not img_response and last_err:
-                            raise last_err
-                        
-                        # Handle response structure
-                        if getattr(img_response, 'generated_images', None):
-                            image = img_response.generated_images[0]
-                            filename = f"viral_{partner.id}_{secrets.token_hex(4)}.png"
-                            save_path = os.path.join("app_images", "generated", filename)
-                            os.makedirs(os.path.dirname(save_path), exist_ok=True)
-                            # image.image is a PIL object
-                            image.image.save(save_path)
-                            image_url = f"/images/generated/{filename}"
-                    else:
-                        logger.warning("⚠️ Google GenAI Client found but no known content generation method available.")
-
-                except Exception as img_err:
-                    # Log error but DO NOT crash the request. Return text only.
-                    logger.error(f"❌ Imagen generation failed (graceful fallback): {img_err}")
-
-            # 3. Log to Google Sheets
             generation_end = datetime.utcnow()
             duration = (generation_end - generation_start).total_seconds()
             
-            # Prepare result
             result = {
                 "text": str(content.get("body") or content.get("content") or "No content generated"),
                 "title": str(content.get("title") or f"{post_type} Strategy"),
                 "hashtags": hashtags,
-                "image_prompt": str(image_prompt),
+                "image_prompt": image_prompt, # Return the refined one for logging
                 "image_url": image_url,
                 "status": "success",
                 "tokens_openai": tokens_openai,
                 "duration": duration
             }
 
-            # Fire and forget logging (async)
+            # Fire and forget logging
             asyncio.create_task(self.log_generation_to_sheets(
                 partner=partner,
                 topic=post_type,
@@ -276,7 +270,7 @@ class ViralMarketingStudio:
                 gemini_prompt=image_prompt,
                 duration=duration,
                 tokens_openai=tokens_openai,
-                tokens_gemini=0, # Fixed for Imagen gen
+                tokens_gemini=0,
                 title=result["title"],
                 body=result["text"],
                 image_url=image_url
