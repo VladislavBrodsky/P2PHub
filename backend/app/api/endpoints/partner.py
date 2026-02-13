@@ -1078,28 +1078,34 @@ async def get_partner_photo(request: Request, file_id: str):
     """
     from fastapi.responses import Response
     from app.services.partner_service import ensure_photo_cached
+    import time
 
+    start_time = time.time()
     try:
         # Use shared service logic which handles caching, fetching, resizing
         image_data = await ensure_photo_cached(file_id)
+        elapsed = (time.time() - start_time) * 1000  # ms
         
         if image_data:
+            logger.info(f"📸 Photo served for {file_id[:12]}... in {elapsed:.0f}ms")
             return Response(
                 content=image_data,
                 media_type="image/webp",
                 headers={
                     "Cache-Control": "public, max-age=31536000, immutable",
                     "Access-Control-Allow-Origin": "*",
-                    "X-Cache": "HIT" # We don't know if it was a HIT or MISS from/to cache inside service, but result is served from "internal" cache
+                    "X-Response-Time": f"{elapsed:.0f}ms"
                 }
             )
         else:
+            logger.warning(f"⚠️ Photo not found: {file_id[:12]}... (took {elapsed:.0f}ms)")
             raise HTTPException(status_code=404, detail="Photo not found or could not be processed")
 
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"❌ Error in get_partner_photo: {e}")
+        elapsed = (time.time() - start_time) * 1000
+        logger.error(f"❌ Error in get_partner_photo for {file_id[:12]}...: {e} (took {elapsed:.0f}ms)")
         raise HTTPException(status_code=500, detail="Internal server error fetching photo")
 
 @router.post("/notification/seen")
