@@ -249,9 +249,12 @@ export const ProDashboard = () => {
                                     exit={{ opacity: 0, x: -20 }}
                                     className="space-y-4"
                                 >
-                                    <div className="bg-(--color-bg-surface) rounded-[2rem] p-5 border border-(--color-border-glass) shadow-sm">
-                                        <h3 className="text-sm font-black mb-4 flex items-center gap-2 uppercase tracking-wide opacity-70">
-                                            <Bot size={16} className="text-indigo-500" /> Configuration
+                                    <div className="glass-panel-premium rounded-[2rem] p-5 relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                                            <Terminal size={80} />
+                                        </div>
+                                        <h3 className="text-[10px] font-black mb-5 flex items-center gap-2 uppercase tracking-[0.2em] text-indigo-500">
+                                            <Cpu size={14} className="animate-pulse" /> Configuration Matrix
                                         </h3>
 
                                         <div className="space-y-3">
@@ -311,50 +314,101 @@ export const ProDashboard = () => {
                                     </div>
 
                                     <button
-                                        onClick={() => setStep(2)}
+                                        onClick={() => { selection(); setStep(2); }}
                                         disabled={!postType || !audience}
-                                        className="w-full h-14 bg-linear-to-r from-indigo-500 to-purple-700 rounded-2xl font-black text-white text-sm shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:shadow-none"
+                                        className="w-full h-12 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:grayscale disabled:scale-100"
                                     >
-                                        INITIATE AI AGENT <ChevronRight size={18} />
+                                        INITIATE AI AGENT <ChevronRight size={14} />
                                     </button>
                                 </motion.div>
                             )}
 
                             {step === 2 && (
-                                <div className="bg-(--color-bg-surface) rounded-[2.5rem] p-8 border border-(--color-border-glass) text-center space-y-6">
-                                    <div className="w-20 h-20 mx-auto bg-indigo-500/10 rounded-full flex items-center justify-center relative">
-                                        <Bot className="w-8 h-8 text-indigo-500" />
-                                        <div className="absolute inset-0 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="glass-panel-premium rounded-[2rem] p-6 text-center space-y-5 relative overflow-hidden"
+                                >
+                                    <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-blue-500 via-indigo-500 to-purple-500 opacity-20" />
+
+                                    <div className="w-16 h-16 mx-auto bg-indigo-500/10 rounded-2xl flex items-center justify-center relative group">
+                                        <Bot className="w-7 h-7 text-indigo-500 group-hover:scale-110 transition-transform" />
+                                        <div className="absolute -inset-1 border border-indigo-500/30 rounded-2xl animate-pulse" />
+                                        <div className="absolute inset-0 border-2 border-indigo-500 border-t-transparent rounded-2xl animate-spin [animation-duration:3s]" />
                                     </div>
-                                    <h3 className="text-xl font-black uppercase">AI CMO READY</h3>
-                                    <p className="text-xs font-medium opacity-60">Ready to synthesize 2026 viral trends.</p>
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <button onClick={() => setStep(1)} className="h-14 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-2xl font-black text-xs">BACK</button>
-                                        <button onClick={handleGenerate} disabled={isGenerating} className="h-14 bg-indigo-500 rounded-2xl font-black text-white shadow-lg flex items-center justify-center gap-2">
-                                            {isGenerating ? <Loader2 className="animate-spin w-4 h-4" /> : "GO VIRAL 🚀"}
+
+                                    <div className="space-y-1">
+                                        <h3 className="text-lg font-black uppercase tracking-tight text-brand-text">AI CMO READY</h3>
+                                        <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted">Quantum Synthesis Active</p>
+                                    </div>
+
+                                    <div className="p-3 bg-white/5 dark:bg-black/20 rounded-xl border border-white/10">
+                                        <p className="text-[11px] font-medium leading-relaxed opacity-70">
+                                            Our agent is ready to synthesize 2026 viral narratives specifically for your audience.
+                                        </p>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-3 pt-2">
+                                        <button
+                                            onClick={() => { selection(); setStep(1); }}
+                                            className="h-11 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-wider active:scale-95 transition-all"
+                                        >
+                                            BACK
+                                        </button>
+                                        <button
+                                            onClick={handleGenerate}
+                                            disabled={isGenerating}
+                                            className="h-11 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                        >
+                                            {isGenerating ? <Loader2 className="animate-spin w-4 h-4" /> : (
+                                                <>GO VIRAL <Send size={12} /></>
+                                            )}
                                         </button>
                                     </div>
-                                </div>
+                                </motion.div>
                             )}
 
                             {step === 3 && generatedResult && (
-                                <div className="space-y-4">
-                                    <div className="bg-(--color-bg-surface) rounded-[2rem] overflow-hidden border border-(--color-border-glass)">
-                                        <div className="aspect-video bg-indigo-900/20 relative flex items-center justify-center overflow-hidden">
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="space-y-4"
+                                >
+                                    <div className="glass-panel-premium rounded-[2rem] overflow-hidden">
+                                        <div className="aspect-video bg-indigo-950/20 relative flex items-center justify-center overflow-hidden">
+                                            <div className="absolute inset-0 bg-linear-to-b from-transparent to-black/60 z-1" />
                                             {generatedResult.image_url ? (
                                                 <img src={generatedResult.image_url.startsWith('http') ? generatedResult.image_url : `${getApiUrl().replace(/\/api$/, '')}${generatedResult.image_url}`} alt="Viral" className="w-full h-full object-cover" />
                                             ) : (
-                                                <div className="p-6 text-center"><ImageIcon className="w-8 h-8 text-indigo-500 mx-auto mb-2 opacity-50" /><p className="text-[9px] uppercase tracking-widest text-indigo-300">{generatedResult.image_prompt}</p></div>
+                                                <div className="p-6 text-center z-2">
+                                                    <ImageIcon className="w-10 h-10 text-indigo-500 mx-auto mb-3 opacity-50" />
+                                                    <p className="text-[10px] uppercase tracking-[0.2em] text-indigo-300 font-bold">{generatedResult.image_prompt}</p>
+                                                </div>
                                             )}
+                                            <div className="absolute top-4 right-4 z-2">
+                                                <span className="bg-indigo-500 text-white text-[8px] font-black px-2 py-1 rounded-full uppercase tracking-widest">AI Generated</span>
+                                            </div>
                                         </div>
-                                        <div className="p-5 space-y-3">
-                                            <h4 className="text-lg font-black leading-tight">{generatedResult.title}</h4>
-                                            <p className="text-sm opacity-80 whitespace-pre-wrap">{generatedResult.body}</p>
-                                            <div className="flex flex-wrap gap-2">{generatedResult.hashtags?.map((t: string) => <span key={t} className="text-[10px] font-black text-indigo-500">#{t}</span>)}</div>
+                                        <div className="p-6 space-y-4">
+                                            <div className="space-y-2">
+                                                <h4 className="text-base font-black leading-tight text-brand-text uppercase tracking-tight">{generatedResult.title}</h4>
+                                                <div className="h-0.5 w-12 bg-indigo-500 rounded-full" />
+                                            </div>
+                                            <p className="text-xs font-medium leading-relaxed opacity-80 whitespace-pre-wrap">{generatedResult.body}</p>
+                                            <div className="flex flex-wrap gap-2 pt-2">
+                                                {generatedResult.hashtags?.map((t: string) => (
+                                                    <span key={t} className="text-[9px] font-black text-indigo-500 bg-indigo-500/10 px-2 py-1 rounded-lg border border-indigo-500/20">#{t}</span>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
-                                    <button onClick={() => setStep(1)} className="w-full h-14 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-2xl font-black text-xs">CREATE NEW</button>
-                                </div>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <button onClick={() => { selection(); setStep(1); }} className="h-11 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-wider active:scale-95 transition-all">CREATE NEW</button>
+                                        <button onClick={() => { impact('light'); notification('success'); }} className="h-11 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all">
+                                            PUSH TO SOCIAL <Share2 size={12} />
+                                        </button>
+                                    </div>
+                                </motion.div>
                             )}
                         </motion.div>
                     )}
@@ -369,19 +423,22 @@ export const ProDashboard = () => {
                             className="space-y-4"
                         >
                             {/* Headline Fixer */}
-                            <div className="bg-(--color-bg-surface) p-6 rounded-[2rem] border border-(--color-border-glass)">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="p-2 bg-pink-500/10 rounded-xl"><Sparkles className="w-5 h-5 text-pink-500" /></div>
+                            <div className="glass-panel-premium p-6 rounded-[2rem] relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                                    <Sparkles size={60} />
+                                </div>
+                                <div className="flex items-center gap-3 mb-5">
+                                    <div className="p-2.5 bg-pink-500/10 rounded-xl border border-pink-500/20"><Sparkles className="w-5 h-5 text-pink-500" /></div>
                                     <div>
-                                        <h3 className="text-sm font-black uppercase">{t('pro_dashboard.tools.headline.title')}</h3>
-                                        <p className="text-[10px] opacity-60">{t('pro_dashboard.tools.headline.desc')}</p>
+                                        <h3 className="text-[10px] font-black uppercase tracking-[0.2em]">{t('pro_dashboard.tools.headline.title')}</h3>
+                                        <p className="text-[10px] opacity-60 font-medium">{t('pro_dashboard.tools.headline.desc')}</p>
                                     </div>
                                 </div>
                                 <input
                                     value={headlineInput}
                                     onChange={(e) => setHeadlineInput(e.target.value)}
                                     placeholder={t('pro_dashboard.tools.headline.placeholder')}
-                                    className="w-full h-12 bg-black/5 dark:bg-white/5 rounded-xl px-4 text-xs font-bold mb-3 outline-hidden"
+                                    className="w-full h-11 bg-white/5 dark:bg-black/20 border border-white/10 rounded-xl px-4 text-xs font-bold mb-4 outline-hidden focus:border-pink-500/50 transition-all"
                                 />
                                 {fixedHeadline && (
                                     <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl mb-3">
@@ -389,21 +446,24 @@ export const ProDashboard = () => {
                                     </div>
                                 )}
                                 <button
-                                    onClick={handleFixHeadline}
+                                    onClick={() => { selection(); handleFixHeadline(); }}
                                     disabled={isFixingHeadline || !headlineInput}
-                                    className="w-full h-12 bg-pink-500 rounded-xl font-black text-white text-xs shadow-lg active:scale-95 transition-transform flex items-center justify-center"
+                                    className="w-full h-11 bg-pink-500 rounded-xl font-black text-white text-[10px] uppercase tracking-wider shadow-lg shadow-pink-500/20 active:scale-95 transition-all flex items-center justify-center disabled:opacity-30 disabled:grayscale"
                                 >
                                     {isFixingHeadline ? <Loader2 className="animate-spin w-4 h-4" /> : t('pro_dashboard.tools.headline.btn')}
                                 </button>
                             </div>
 
                             {/* Trend Hunter */}
-                            <div className="bg-(--color-bg-surface) p-6 rounded-[2rem] border border-(--color-border-glass)">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="p-2 bg-orange-500/10 rounded-xl"><Flame className="w-5 h-5 text-orange-500" /></div>
+                            <div className="glass-panel-premium p-6 rounded-[2rem] relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                                    <Flame size={60} />
+                                </div>
+                                <div className="flex items-center gap-3 mb-5">
+                                    <div className="p-2.5 bg-orange-500/10 rounded-xl border border-orange-500/20"><Flame className="w-5 h-5 text-orange-500" /></div>
                                     <div>
-                                        <h3 className="text-sm font-black uppercase">{t('pro_dashboard.tools.trends.title')}</h3>
-                                        <p className="text-[10px] opacity-60">{t('pro_dashboard.tools.trends.desc')}</p>
+                                        <h3 className="text-[10px] font-black uppercase tracking-[0.2em]">{t('pro_dashboard.tools.trends.title')}</h3>
+                                        <p className="text-[10px] opacity-60 font-medium">{t('pro_dashboard.tools.trends.desc')}</p>
                                     </div>
                                 </div>
                                 {trends.length > 0 && (
@@ -419,9 +479,9 @@ export const ProDashboard = () => {
                                     </div>
                                 )}
                                 <button
-                                    onClick={handleFetchTrends}
+                                    onClick={() => { selection(); handleFetchTrends(); }}
                                     disabled={isHuntingTrends}
-                                    className="w-full h-12 bg-orange-500 rounded-xl font-black text-white text-xs shadow-lg active:scale-95 transition-transform flex items-center justify-center"
+                                    className="w-full h-11 bg-orange-500 rounded-xl font-black text-white text-[10px] uppercase tracking-wider shadow-lg shadow-orange-500/20 active:scale-95 transition-all flex items-center justify-center disabled:opacity-30 disabled:grayscale"
                                 >
                                     {isHuntingTrends ? <Loader2 className="animate-spin w-4 h-4" /> : t('pro_dashboard.tools.trends.btn')}
                                 </button>

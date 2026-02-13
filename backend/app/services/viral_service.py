@@ -2,6 +2,7 @@ import logging
 import json
 import os
 import secrets
+import asyncio
 from datetime import datetime
 from typing import Dict, List, Optional, Any
 
@@ -56,20 +57,27 @@ class ViralMarketingStudio:
     """
 
     def __init__(self):
-        self.openai_client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY) if settings.OPENAI_API_KEY else None
+        # 1. Initialize OpenAI with fallback to os.getenv
+        openai_key = settings.OPENAI_API_KEY or os.getenv("OPENAI_API_KEY")
+        if openai_key:
+            self.openai_client = AsyncOpenAI(api_key=openai_key)
+            logger.info("✅ ViralMarketingStudio: OpenAI client initialized.")
+        else:
+            self.openai_client = None
+            logger.warning("⚠️ ViralMarketingStudio: OpenAI API Key missing.")
         
-        # Initialize Gemini 1.5 Pro for content assistance (using new GenAI client)
-        # Initialize Gemini 1.5 Pro/Imagen 3 (Safe Init)
+        # 2. Initialize Google GenAI with fallback to os.getenv
+        google_key = os.getenv("GOOGLE_API_KEY")
         self.genai_client = None
-        if os.getenv("GOOGLE_API_KEY"):
+        if google_key:
             try:
                 # Initialize Gemini GenAI Client for Imagen 3
-                self.genai_client = google_genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+                self.genai_client = google_genai.Client(api_key=google_key)
+                logger.info("✅ ViralMarketingStudio: Google GenAI client initialized.")
             except Exception as e:
                 logger.error(f"⚠️ Failed to initialize Google GenAI Client: {e}")
         else:
-            self.gemini_model = None
-            logger.warning("⚠️ Google API Key for Gemini/Imagen missing.")
+            logger.warning("⚠️ ViralMarketingStudio: Google API Key missing.")
 
     def get_capabilities(self) -> Dict[str, bool]:
         """
@@ -139,7 +147,7 @@ class ViralMarketingStudio:
             )
             
             content = json.loads(response.choices[0].message.content)
-            image_prompt = content.get("image_description")
+            image_prompt = content.get("image_description") or content.get("title") or f"Cinematic shot for {post_type}"
             
             # Ensure hashtags is a list
             hashtags_raw = content.get("hashtags", [])
@@ -152,7 +160,7 @@ class ViralMarketingStudio:
 
             # 2. Generate Image via Gemini (Imagen 3)
             image_url = None
-            if self.genai_client:
+            if self.genai_client and image_prompt:
                 try:
                     # Dynamically check for available methods to avoid crashing on version mismatches
                     method = None
@@ -162,15 +170,40 @@ class ViralMarketingStudio:
                         method = self.genai_client.models.generate_image
                     
                     if method:
-                        img_response = method(
-                            model='imagen-3.0-generate-001',
-                            prompt=image_prompt,
-                            config={
-                                'number_of_images': 1,
-                                'include_rai_reasoning': True,
-                                'output_mime_type': 'image/png'
-                            }
-                        )
+                        # Run the sync GenAI call in a separate thread to avoid blocking the event loop
+                        loop = asyncio.get_event_loop()
+                        
+                        # Try multiple models in order of preference
+                        imagen_models = [
+                            'imagen-4.0-generate-001', 
+                            'imagen-3.0-generate-001',
+                            'imagen-3.0-fast-001'
+                        ]
+                        
+                        img_response = None
+                        last_err = None
+                        
+                        for model_name in imagen_models:
+                            try:
+                                img_response = await loop.run_in_executor(
+                                    None, 
+                                    lambda m=model_name: method(
+                                        model=m,
+                                        prompt=image_prompt,
+                                        config={
+                                            'number_of_images': 1,
+                                            'output_mime_type': 'image/png'
+                                        }
+                                    )
+                                )
+                                if img_response:
+                                    break
+                            except Exception as e:
+                                last_err = e
+                                continue
+                        
+                        if not img_response and last_err:
+                            raise last_err
                         
                         # Handle response structure
                         if getattr(img_response, 'generated_images', None):
@@ -178,6 +211,7 @@ class ViralMarketingStudio:
                             filename = f"viral_{partner.id}_{secrets.token_hex(4)}.png"
                             save_path = os.path.join("app_images", "generated", filename)
                             os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                            # image.image is a PIL object
                             image.image.save(save_path)
                             image_url = f"/images/generated/{filename}"
                     else:
@@ -188,10 +222,10 @@ class ViralMarketingStudio:
                     logger.error(f"❌ Imagen generation failed (graceful fallback): {img_err}")
 
             return {
-                "text": content.get("body"),
-                "title": content.get("title"),
+                "text": str(content.get("body") or content.get("content") or "No content generated"),
+                "title": str(content.get("title") or f"{post_type} Strategy"),
                 "hashtags": hashtags,
-                "image_prompt": image_prompt,
+                "image_prompt": str(image_prompt),
                 "image_url": image_url,
                 "status": "success"
             }

@@ -14,27 +14,32 @@ try:
     possible_env_paths = [
         Path(".env"),
         Path("backend/.env"),
-        Path("backend/.env.backend"),
-        Path("../backend/.env"),
+        Path("../../backend/.env"),
         Path("/app/.env"),
         Path("/app/backend/.env")
     ]
 
     loaded_env = False
+    
+    # Try find_dotenv first (very robust)
+    from dotenv import find_dotenv
+    try:
+        found_env = find_dotenv()
+        if found_env:
+            load_dotenv(found_env, override=True)
+            logger.info(f"✅ Loaded environment via find_dotenv: {found_env}")
+            loaded_env = True
+    except Exception as e:
+        logger.warning(f"find_dotenv failed: {e}")
+
     for p in possible_env_paths:
         try:
             if p.exists():
-                load_dotenv(dotenv_path=p)
-                logger.info(f"✅ Loaded environment from {p.absolute()} (took {time.time() - start_time:.4f}s)")
+                load_dotenv(dotenv_path=p, override=True)
+                logger.info(f"✅ Loaded environment from {p.absolute()}")
                 loaded_env = True
-                break
         except Exception:
             continue
-
-    if not loaded_env:
-        # Fallback to default load_dotenv (current dir)
-        load_dotenv()
-        logger.info(f"ℹ️ Fallback to default .env loading (took {time.time() - start_time:.4f}s)")
 except Exception as e:
     logger.warning(f"Warning: Unexpected error during .env loading: {e}")
 
