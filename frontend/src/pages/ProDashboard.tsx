@@ -4,7 +4,8 @@ import {
     Zap, Sparkles, Send, Globe, ChevronRight,
     ArrowLeft, Terminal, Bot, Image as ImageIcon,
     Share2, CheckCircle2, AlertCircle, Loader2,
-    Lock, Instagram, Twitter, Cpu, BookOpen, Flame, Settings
+    Lock, Instagram, Twitter, Cpu, BookOpen, Flame, Settings,
+    Linkedin, Info
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
@@ -509,20 +510,21 @@ export const ProDashboard = () => {
                             exit={{ opacity: 0, x: -20 }}
                             className="space-y-4"
                         >
-                            <div className="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-center">
-                                <h3 className="text-xs font-black text-indigo-400 uppercase tracking-widest mb-1">Expert Level</h3>
-                                <p className="text-2xl font-black text-indigo-500">GRANDMASTER</p>
+                            <div className="glass-panel-premium p-4 rounded-2xl border border-indigo-500/20 text-center relative overflow-hidden">
+                                <div className="absolute inset-0 bg-indigo-500/5 animate-pulse" />
+                                <h3 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-1 relative z-1">Current Protocol Rank</h3>
+                                <p className="text-2xl font-black text-indigo-500 relative z-1 tracking-tight">GRANDMASTER</p>
                             </div>
 
                             {['hook_rule', 'algorithm', 'psycho'].map((key) => (
-                                <div key={key} className="bg-(--color-bg-surface) p-5 rounded-[2rem] border border-(--color-border-glass) relative overflow-hidden group">
-                                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                                        <BookOpen className="w-12 h-12" />
+                                <div key={key} className="glass-panel-premium p-5 rounded-[2rem] border border-(--color-border-glass) relative overflow-hidden group active:scale-[0.98] transition-all">
+                                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
+                                        <BookOpen className="w-16 h-16" />
                                     </div>
-                                    <h4 className="text-sm font-black uppercase mb-1">{t(`pro_dashboard.academy.${key}.title`)}</h4>
-                                    <p className="text-[10px] font-bold opacity-50 mb-3">{t(`pro_dashboard.academy.${key}.desc`)}</p>
-                                    <div className="p-3 bg-black/5 dark:bg-white/5 rounded-xl">
-                                        <p className="text-xs font-medium leading-relaxed">{t(`pro_dashboard.academy.${key}.content`)}</p>
+                                    <h4 className="text-xs font-black uppercase mb-1 tracking-tight text-brand-text">{t(`pro_dashboard.academy.${key}.title`)}</h4>
+                                    <p className="text-[9px] font-bold opacity-40 uppercase tracking-widest mb-3">{t(`pro_dashboard.academy.${key}.desc`)}</p>
+                                    <div className="p-4 bg-white/5 dark:bg-black/20 rounded-2xl border border-white/5">
+                                        <p className="text-[11px] font-medium leading-relaxed opacity-80">{t(`pro_dashboard.academy.${key}.content`)}</p>
                                     </div>
                                 </div>
                             ))}
@@ -538,77 +540,113 @@ export const ProDashboard = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-md"
+                        className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-xl"
+                        onClick={(e) => {
+                            if (e.target === e.currentTarget) {
+                                selection();
+                                setShowSetup(false);
+                            }
+                        }}
                     >
                         <motion.div
-                            initial={{ scale: 0.9, y: 20 }}
-                            animate={{ scale: 1, y: 0 }}
-                            className="bg-(--color-bg-surface) w-full max-w-sm rounded-[2.5rem] p-6 space-y-4 max-h-[90vh] overflow-y-auto no-scrollbar border border-(--color-border-glass)"
+                            initial={{ scale: 0.9, y: 30, opacity: 0 }}
+                            animate={{ scale: 1, y: 0, opacity: 1 }}
+                            exit={{ scale: 0.9, y: 30, opacity: 0 }}
+                            className="glass-panel-premium w-full max-w-sm rounded-[2.5rem] p-6 space-y-5 max-h-[90vh] overflow-y-auto no-scrollbar relative"
                         >
-                            <div className="flex justify-between items-center pb-2">
-                                <h3 className="text-xl font-black uppercase tracking-tight">{t('pro_dashboard.tab_setup')}</h3>
-                                <button onClick={() => setShowSetup(false)} className="p-2 -mr-2 opacity-50 active:scale-90 transition-transform"><ArrowLeft className="w-5 h-5" /></button>
+                            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 via-transparent to-indigo-500 opacity-20" />
+
+                            <div className="flex justify-between items-center">
+                                <div className="flex flex-col">
+                                    <h3 className="text-xl font-black uppercase tracking-tight text-brand-text">
+                                        {t('pro_dashboard.tab_setup')}
+                                    </h3>
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500/60 leading-none">Global Integration</span>
+                                </div>
+                                <button
+                                    onClick={() => { selection(); setShowSetup(false); }}
+                                    className="p-2.5 bg-white/5 dark:bg-white/5 border border-white/10 rounded-xl opacity-80 hover:opacity-100 active:scale-90 transition-all"
+                                >
+                                    <ArrowLeft className="w-4 h-4" />
+                                </button>
                             </div>
 
                             <div className="space-y-4">
-                                <div className="p-4 bg-indigo-500/5 border border-indigo-500/10 rounded-2xl">
-                                    <h4 className="text-[10px] font-black uppercase text-indigo-500 mb-2">Instructions</h4>
-                                    <p className="text-[10px] font-medium opacity-60 leading-relaxed">
-                                        1. Get X API keys from Developer Portal.<br />
-                                        2. Get Telegram Channel ID and add our Bot as Admin.<br />
-                                        3. Paste your credentials below to enable autoposting.
-                                    </p>
+                                <div className="p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl relative overflow-hidden">
+                                    <div className="absolute -right-2 -top-2 opacity-10"><Info size={40} /></div>
+                                    <h4 className="text-[10px] font-black uppercase text-indigo-500 mb-2 flex items-center gap-2">
+                                        <Zap size={10} /> Protocol Instructions
+                                    </h4>
+                                    <div className="space-y-1.5">
+                                        {[
+                                            "Get X API credentials from Dev Portal",
+                                            "Add Bot as Admin to your Telegram Channel",
+                                            "Sync keys to enable automated viral reach"
+                                        ].map((step, idx) => (
+                                            <div key={idx} className="flex gap-2 text-[10px] font-bold text-brand-text/70">
+                                                <span className="text-indigo-500">{idx + 1}.</span>
+                                                <span className="leading-tight">{step}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
 
-                                <div className="space-y-3">
-                                    <div>
-                                        <label className="text-[10px] font-black uppercase opacity-50 ml-2 mb-1 block">X API Key</label>
-                                        <input
-                                            type="password"
-                                            value={apiData.x_api_key}
-                                            onChange={(e) => setApiData({ ...apiData, x_api_key: e.target.value })}
-                                            placeholder="••••••••••••"
-                                            className="w-full h-11 bg-black/5 dark:bg-white/5 border border-transparent focus:border-indigo-500 rounded-xl px-4 text-xs outline-hidden"
-                                        />
+                                <div className="space-y-4 pt-2">
+                                    <div className="space-y-3">
+                                        <div className="flex items-center gap-2 px-2 text-[10px] font-black uppercase tracking-widest opacity-40">
+                                            <Twitter size={10} className="text-blue-400" /> X Integration
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <input
+                                                type="password"
+                                                value={apiData.x_api_key}
+                                                onChange={(e) => setApiData({ ...apiData, x_api_key: e.target.value })}
+                                                placeholder="X API Key"
+                                                className="w-full h-11 bg-white/5 dark:bg-black/20 border border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all"
+                                            />
+                                            <input
+                                                type="password"
+                                                value={apiData.x_access_token}
+                                                onChange={(e) => setApiData({ ...apiData, x_access_token: e.target.value })}
+                                                placeholder="X Access Token"
+                                                className="w-full h-11 bg-white/5 dark:bg-black/20 border border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all"
+                                            />
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label className="text-[10px] font-black uppercase opacity-50 ml-2 mb-1 block">X Access Token</label>
-                                        <input
-                                            type="password"
-                                            value={apiData.x_access_token}
-                                            onChange={(e) => setApiData({ ...apiData, x_access_token: e.target.value })}
-                                            placeholder="••••••••••••"
-                                            className="w-full h-11 bg-black/5 dark:bg-white/5 border border-transparent focus:border-indigo-500 rounded-xl px-4 text-xs outline-hidden"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="text-[10px] font-black uppercase opacity-50 ml-2 mb-1 block">Telegram Channel ID</label>
+
+                                    <div className="space-y-3">
+                                        <div className="flex items-center gap-2 px-2 text-[10px] font-black uppercase tracking-widest opacity-40">
+                                            <Send size={10} className="text-blue-500" /> Telegram Sync
+                                        </div>
                                         <input
                                             type="text"
                                             value={apiData.telegram_channel_id}
                                             onChange={(e) => setApiData({ ...apiData, telegram_channel_id: e.target.value })}
-                                            placeholder="@channelname or id"
-                                            className="w-full h-11 bg-black/5 dark:bg-white/5 border border-transparent focus:border-indigo-500 rounded-xl px-4 text-xs outline-hidden"
+                                            placeholder="@channelname or -100..."
+                                            className="w-full h-11 bg-white/5 dark:bg-black/20 border border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all"
                                         />
                                     </div>
-                                    <div>
-                                        <label className="text-[10px] font-black uppercase opacity-50 ml-2 mb-1 block">LinkedIn Token</label>
+
+                                    <div className="space-y-3">
+                                        <div className="flex items-center gap-2 px-2 text-[10px] font-black uppercase tracking-widest opacity-40">
+                                            <Linkedin size={10} className="text-blue-700" /> Professional Network
+                                        </div>
                                         <input
                                             type="password"
                                             value={apiData.linkedin_access_token}
                                             onChange={(e) => setApiData({ ...apiData, linkedin_access_token: e.target.value })}
-                                            placeholder="••••••••••••"
-                                            className="w-full h-11 bg-black/5 dark:bg-white/5 border border-transparent focus:border-indigo-500 rounded-xl px-4 text-xs outline-hidden"
+                                            placeholder="LinkedIn Access Token"
+                                            className="w-full h-11 bg-white/5 dark:bg-black/20 border border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all"
                                         />
                                     </div>
                                 </div>
                             </div>
 
                             <button
-                                onClick={handleSaveSetup}
-                                className="w-full h-12 bg-indigo-500 text-white rounded-2xl font-black text-xs shadow-lg shadow-indigo-500/20 active:scale-95 transition-transform uppercase tracking-wider"
+                                onClick={() => { selection(); handleSaveSetup(); }}
+                                className="w-full h-12 vibing-blue-animated rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all text-white mt-4"
                             >
-                                SAVE CONFIGURATION
+                                SAVE PROTOCOL CONFIG
                             </button>
                         </motion.div>
                     </motion.div>

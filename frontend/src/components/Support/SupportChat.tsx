@@ -55,7 +55,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                 {
                     id: 'welcome',
                     role: 'assistant',
-                    content: "Hello! I'm your Pintopay Support Manager. How can I help you today? Please choose a category or type your question below.",
+                    content: t('support.welcome'),
                     timestamp: new Date()
                 }
             ]);
@@ -87,11 +87,11 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
             count++;
             if (count <= 3) {
                 // Ask each minute
-                addMessage('assistant', "Are you still here? I'm ready to help you with any questions about Pintopay.");
+                addMessage('assistant', t('support.still_here'));
                 notification('warning');
             } else {
                 // Close after 3 pings
-                handleCloseSession("Session closed due to inactivity.");
+                handleCloseSession(t('support.session_closed'));
             }
         }, 60 * 1000);
     };
@@ -151,12 +151,12 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
             }, delay);
         } catch (e) {
             setIsTyping(false);
-            addMessage('assistant', "I'm sorry, I'm having temporary technical difficulties. Please try again or visit our FAQ.");
+            addMessage('assistant', t('support.error_technical'));
         }
     };
 
-    const handleCategoryClick = (category: string) => {
-        handleSendMessage(`I want to know about: ${category}`);
+    const handleCategoryClick = (categoryKey: string) => {
+        handleSendMessage(t(`support.categories.${categoryKey}`));
     };
 
     return (
@@ -191,11 +191,11 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                 </div>
                                 <div>
                                     <h3 className="text-sm font-black uppercase tracking-wider text-(--color-text-primary)">
-                                        Support Manager
+                                        {t('support.manager')}
                                     </h3>
                                     <div className="flex items-center gap-1.5">
                                         <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest opacity-80">Online</span>
+                                        <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest opacity-80">{t('support.online')}</span>
                                     </div>
                                 </div>
                             </div>
@@ -248,16 +248,16 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                     animate={{ opacity: 1, y: 0 }}
                                     className="pt-2 grid grid-cols-1 gap-2"
                                 >
-                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary) mb-1 ml-1 opacity-60">Suggested Topics</p>
+                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary) mb-1 ml-1 opacity-60">{t('support.suggested_topics')}</p>
                                     <div className="flex flex-wrap gap-2">
-                                        {CATEGORIES.map((cat) => (
+                                        {Object.keys(t('support.categories', { returnObjects: true }) as any).map((key) => (
                                             <button
-                                                key={cat}
-                                                onClick={() => handleCategoryClick(cat)}
+                                                key={key}
+                                                onClick={() => handleCategoryClick(key)}
                                                 className="rounded-xl border border-(--color-border-glass) bg-(--color-bg-surface)/40 px-3 py-2 text-xs font-bold text-(--color-text-primary) hover:bg-blue-500/10 hover:border-blue-500/30 transition-all flex items-center gap-2"
                                             >
                                                 <ChevronRight className="h-3 w-3 text-blue-500" />
-                                                {cat}
+                                                {t(`support.categories.${key}`)}
                                             </button>
                                         ))}
                                     </div>
@@ -275,7 +275,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                         onChange={(e) => setInputValue(e.target.value)}
                                         onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                                         disabled={sessionClosed}
-                                        placeholder={sessionClosed ? "Session Closed" : "Ask anything about Pintopay..."}
+                                        placeholder={sessionClosed ? t('support.session_closed') : t('support.input_placeholder')}
                                         className="w-full rounded-2xl border border-(--color-border-glass) bg-black/20 px-4 py-3 text-sm text-(--color-text-primary) placeholder:text-(--color-text-secondary)/40 focus:border-blue-500/50 focus:outline-none transition-all disabled:opacity-50"
                                     />
                                 </div>
@@ -288,7 +288,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                 </button>
                             </div>
                             <p className="mt-3 text-center text-[9px] font-bold uppercase tracking-widest text-(--color-text-secondary) opacity-40">
-                                Pintopay Support Agent • Powered by Elite Intelligence
+                                {t('support.powered_by')}
                             </p>
                         </div>
                     </motion.div>
