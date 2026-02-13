@@ -929,7 +929,7 @@ export const ProDashboard = () => {
                             >
                                 {/* Academy Header - Intelligence Report */}
                                 <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden bg-linear-to-br from-indigo-500/10 via-transparent to-transparent shadow-2xl">
-                                    <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(ellipse_at_center,black,transparent)]" />
+                                    <div className="absolute inset-0 bg-grid-white/5 mask-[radial-gradient(ellipse_at_center,black,transparent)]" />
                                     <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 blur-[80px] rounded-full animate-pulse" />
 
                                     <div className="relative z-1">
@@ -1006,7 +1006,7 @@ export const ProDashboard = () => {
                                                     <ImageIcon className="text-indigo-500 w-7 h-7" />
                                                 </div>
                                                 <div>
-                                                    <h4 className="text-sm font-black uppercase tracking-[0.1em] text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.viral_assets.title')}</h4>
+                                                    <h4 className="text-sm font-black uppercase tracking-widest text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.viral_assets.title')}</h4>
                                                     <p className="text-[10px] font-bold text-indigo-500/60 uppercase tracking-widest">{t('pro_dashboard.academy.viral_assets.subtitle')}</p>
                                                 </div>
                                             </div>
@@ -1016,7 +1016,7 @@ export const ProDashboard = () => {
                                             {(t('pro_dashboard.academy.viral_assets.cards', { returnObjects: true }) as any[]).map((card: any, i: number) => (
                                                 <div key={i} className="relative group/card cursor-pointer">
                                                     <div className="absolute -inset-8 bg-indigo-500/15 blur-3xl opacity-0 group-hover/card:opacity-100 transition-all duration-700" />
-                                                    <div className="relative aspect-[1.586/1] w-full max-w-sm mx-auto bg-slate-950 rounded-[2.5rem] p-10 border border-white/10 overflow-hidden shadow-3xl transition-all duration-500 group-hover/card:translate-y-[-8px] group-hover/card:rotate-[-1deg]">
+                                                    <div className="relative aspect-[1.586/1] w-full max-w-sm mx-auto bg-slate-950 rounded-[2.5rem] p-10 border border-white/10 overflow-hidden shadow-3xl transition-all duration-500 group-hover/card:translate-y-[-8px] group-hover/card:-rotate-1">
                                                         {/* Mesh Gradient Inside Card */}
                                                         <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-[50px] pointer-events-none" />
 
