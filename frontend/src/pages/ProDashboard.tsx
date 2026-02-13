@@ -341,42 +341,99 @@ export const ProDashboard = () => {
                                     animate={{ opacity: 1, scale: 1 }}
                                     className="glass-panel-premium rounded-[2rem] p-6 text-center space-y-5 relative overflow-hidden"
                                 >
-                                    <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-blue-500 via-indigo-500 to-purple-500 opacity-20" />
+                                    {isGenerating ? (
+                                        <div className="py-10 flex flex-col items-center justify-center space-y-6 relative">
+                                            {/* Cooking Animation */}
+                                            <div className="relative">
+                                                <div className="absolute inset-0 bg-indigo-500/20 blur-xl animate-pulse rounded-full" />
+                                                <div className="w-24 h-24 bg-black/20 rounded-full border border-indigo-500/30 flex items-center justify-center relative overflow-hidden">
+                                                    <motion.div
+                                                        animate={{ rotate: 360 }}
+                                                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                                        className="absolute inset-0 bg-[conic-gradient(var(--tw-gradient-stops))] from-transparent via-indigo-500/50 to-transparent opacity-50"
+                                                    />
+                                                    <Bot className="w-10 h-10 text-indigo-400 relative z-10 animate-pulse" />
+                                                </div>
 
-                                    <div className="w-16 h-16 mx-auto bg-indigo-500/10 rounded-2xl flex items-center justify-center relative group">
-                                        <Bot className="w-7 h-7 text-indigo-500 group-hover:scale-110 transition-transform" />
-                                        <div className="absolute -inset-1 border border-indigo-500/30 rounded-2xl animate-pulse" />
-                                        <div className="absolute inset-0 border-2 border-indigo-500 border-t-transparent rounded-2xl animate-spin [animation-duration:3s]" />
-                                    </div>
+                                                {/* Floating Particles */}
+                                                <motion.div
+                                                    animate={{ y: [-10, -20], opacity: [0, 1, 0] }}
+                                                    transition={{ duration: 2, repeat: Infinity, delay: 0.2 }}
+                                                    className="absolute -top-4 right-0 text-amber-400"
+                                                >
+                                                    <Sparkles size={16} />
+                                                </motion.div>
+                                                <motion.div
+                                                    animate={{ y: [-5, -15], opacity: [0, 1, 0] }}
+                                                    transition={{ duration: 2.5, repeat: Infinity, delay: 0.8 }}
+                                                    className="absolute -top-2 left-0 text-pink-400"
+                                                >
+                                                    <Sparkles size={12} />
+                                                </motion.div>
+                                            </div>
 
-                                    <div className="space-y-1">
-                                        <h3 className="text-lg font-black uppercase tracking-tight text-brand-text">AI CMO READY</h3>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted">Quantum Synthesis Active</p>
-                                    </div>
+                                            <div className="space-y-2 relative z-10 w-full max-w-[200px]">
+                                                <h3 className="text-sm font-black uppercase tracking-widest text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-purple-400 animate-pulse">
+                                                    Cooking Viral Post...
+                                                </h3>
 
-                                    <div className="p-3 bg-white/5 dark:bg-black/20 rounded-xl border border-white/10">
-                                        <p className="text-[11px] font-medium leading-relaxed opacity-70">
-                                            Our agent is ready to synthesize 2026 viral narratives specifically for your audience.
-                                        </p>
-                                    </div>
+                                                {/* Percentage & Progress Bar */}
+                                                <div className="flex flex-col items-center gap-2">
+                                                    <span className="text-2xl font-black text-white px-2">
+                                                        {Math.min(Math.floor(((45 - countdown) / 45) * 100), 99)}%
+                                                    </span>
+                                                    <div className="h-1.5 w-full bg-black/20 rounded-full overflow-hidden border border-white/5">
+                                                        <motion.div
+                                                            className="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500"
+                                                            initial={{ width: "0%" }}
+                                                            animate={{ width: `${Math.min(((45 - countdown) / 45) * 100, 99)}%` }}
+                                                            transition={{ duration: 0.5 }}
+                                                        />
+                                                    </div>
+                                                </div>
 
-                                    <div className="grid grid-cols-2 gap-3 pt-2">
-                                        <button
-                                            onClick={() => { selection(); setStep(1); }}
-                                            className="h-11 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-wider active:scale-95 transition-all"
-                                        >
-                                            BACK
-                                        </button>
-                                        <button
-                                            onClick={handleGenerate}
-                                            disabled={isGenerating}
-                                            className="h-11 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all"
-                                        >
-                                            {isGenerating ? <Loader2 className="animate-spin w-4 h-4" /> : (
-                                                <>GO VIRAL <Send size={12} /></>
-                                            )}
-                                        </button>
-                                    </div>
+                                                <p className="text-[9px] font-bold text-indigo-300/60 uppercase tracking-widest pt-2">
+                                                    Synthesizing Context • {countdown}s remaining
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-blue-500 via-indigo-500 to-purple-500 opacity-20" />
+
+                                            <div className="w-16 h-16 mx-auto bg-indigo-500/10 rounded-2xl flex items-center justify-center relative group">
+                                                <Bot className="w-7 h-7 text-indigo-500 group-hover:scale-110 transition-transform" />
+                                                <div className="absolute -inset-1 border border-indigo-500/30 rounded-2xl animate-pulse" />
+                                                <div className="absolute inset-0 border-2 border-indigo-500 border-t-transparent rounded-2xl animate-spin [animation-duration:3s]" />
+                                            </div>
+
+                                            <div className="space-y-1">
+                                                <h3 className="text-lg font-black uppercase tracking-tight text-brand-text">AI CMO READY</h3>
+                                                <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted">Quantum Synthesis Active</p>
+                                            </div>
+
+                                            <div className="p-3 bg-white/5 dark:bg-black/20 rounded-xl border border-white/10">
+                                                <p className="text-[11px] font-medium leading-relaxed opacity-70">
+                                                    Our agent is ready to synthesize 2026 viral narratives specifically for your audience.
+                                                </p>
+                                            </div>
+
+                                            <div className="grid grid-cols-2 gap-3 pt-2">
+                                                <button
+                                                    onClick={() => { selection(); setStep(1); }}
+                                                    className="h-11 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-wider active:scale-95 transition-all"
+                                                >
+                                                    BACK
+                                                </button>
+                                                <button
+                                                    onClick={handleGenerate}
+                                                    className="h-11 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                                >
+                                                    GO VIRAL <Send size={12} />
+                                                </button>
+                                            </div>
+                                        </>
+                                    )}
                                 </motion.div>
                             )}
 
