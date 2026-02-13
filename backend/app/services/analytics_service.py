@@ -158,46 +158,49 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
 async def get_network_time_series(session: AsyncSession, partner_id: int, timeframe: str = '7D') -> List[dict]:
     """
     Returns data points for a growth chart using Materialized Path.
+    Optimized for high-concurrency and large networks.
     """
     partner = await session.get(Partner, partner_id)
     if not partner: return []
 
     now = datetime.utcnow()
-    if timeframe == '24H':
-        interval, start_time, points = 'hour', now - timedelta(hours=24), 24
-    elif timeframe == '7D':
-        interval, start_time, points = 'day', now - timedelta(days=7), 7
-    elif timeframe == '1M':
-        interval, start_time, points = 'day', now - timedelta(days=30), 30
-    else:
-        interval, start_time, points = 'month', now - timedelta(days=365), 12
+    # Configuration Mapping
+    TF_CONFIG = {
+        '24H': ('hour', now - timedelta(hours=24), 24),
+        '7D':  ('day',  now - timedelta(days=7),   7),
+        '1M':  ('day',  now - timedelta(days=30),  30),
+        '3M':  ('day',  now - timedelta(days=90),  9), # Changed to 9 buckets for 90 days (10 days each)
+        '6M':  ('month',now - timedelta(days=180), 6),
+        '1Y':  ('month',now - timedelta(days=365), 12)
+    }
+    interval, start_time, points = TF_CONFIG.get(timeframe, TF_CONFIG['7D'])
 
     search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
     base_depth = len(search_path.split('.'))
     is_sqlite = "sqlite" in settings.DATABASE_URL
 
+    # Database-specific bucketing logic
     if is_sqlite:
-        if interval == 'hour': bucket_column = "strftime('%Y-%m-%d %H:00:00', created_at)"
-        elif interval == 'day': bucket_column = "strftime('%Y-%m-%d 00:00:00', created_at)"
-        else: bucket_column = "strftime('%Y-%m-01 00:00:00', created_at)"
+        bucket_column = {
+            'hour': "strftime('%Y-%m-%d %H:00:00', created_at)",
+            'day':  "strftime('%Y-%m-%d 00:00:00', created_at)",
+            'month':"strftime('%Y-%m-01 00:00:00', created_at)"
+        }.get(interval)
     else:
-        valid_intervals = {'hour', 'day', 'month', 'week'}
-        safe_interval = interval if interval in valid_intervals else 'day'
-        bucket_column = f"date_trunc('{safe_interval}', created_at)"
+        bucket_column = f"date_trunc('{interval}', created_at)"
 
+    # Query 1: Fetch buckatized counts for the timeframe
     query = text(f"""
-        SELECT bucket, level, COUNT(*) as count
-        FROM (
-            SELECT
-                {bucket_column} as bucket,
-                depth - :base_depth + 1 as level
-            FROM partner
-            WHERE (path = :search_path OR path LIKE :search_wildcard)
-            AND created_at >= :start
-        ) as subquery
-        WHERE level >= 1 AND level <= 9
+        SELECT 
+            {bucket_column} as bucket,
+            depth - :base_depth + 1 as level, 
+            COUNT(*) as count
+        FROM partner
+        WHERE (path = :search_path OR path LIKE :search_wildcard)
+        AND created_at >= :start
+        AND (depth - :base_depth + 1) BETWEEN 1 AND 9
         GROUP BY 1, 2
-        ORDER BY bucket ASC, level ASC;
+        ORDER BY 1 ASC;
     """)
 
     result = await session.execute(query, {
@@ -207,6 +210,7 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         "base_depth": base_depth
     })
 
+    # Prepare data map {bucket_dt: {level: count}}
     data_map = {}
     for row in result.all():
         bucket = row[0]
@@ -218,12 +222,13 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
             data_map[bucket] = {lvl: 0 for lvl in range(1, 10)}
         data_map[bucket][level] = count
 
+    # Query 2: Fetch Base Totals (Cumulative count before timeframe)
     stmt_base = text("""
         SELECT depth - :base_depth + 1 as level, COUNT(*)
         FROM partner
         WHERE (path = :search_path OR path LIKE :search_wildcard)
         AND created_at < :start
-        AND depth BETWEEN :base_depth AND :base_depth + 8
+        AND (depth - :base_depth + 1) BETWEEN 1 AND 9
         GROUP BY 1
     """)
     res_base = await session.execute(stmt_base, {
@@ -237,23 +242,25 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     for row in res_base.all():
         running_totals[int(row[0])] = int(row[1])
 
+    # Assemble Output Data Points
     data = []
     curr = start_time
-    for i in range(points + 1):
-        if interval == 'hour':
-            bucket = curr.replace(minute=0, second=0, microsecond=0)
-            label, next_step = f"{bucket.hour:02d}:00", timedelta(hours=1)
-        elif interval == 'day':
-            bucket = curr.replace(hour=0, minute=0, second=0, microsecond=0)
-            label, next_step = f"{bucket.day:02d}/{bucket.month:02d}", timedelta(days=1)
-        else:
-            bucket = curr.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-            label = bucket.strftime("%b")
-            if bucket.month == 12: next_bucket = bucket.replace(year=bucket.year + 1, month=1)
-            else: next_bucket = bucket.replace(month=bucket.month + 1)
-            next_step = next_bucket - bucket
+    
+    # Pre-calculate steps to avoid repeated timedelta addition logic
+    def get_next_bucket(c):
+        if interval == 'hour': return c + timedelta(hours=1), f"{c.hour:02d}:00", c.replace(minute=0, second=0, microsecond=0)
+        if interval == 'day': return c + timedelta(days=1), f"{c.day:02d}/{c.month:02d}", c.replace(hour=0, minute=0, second=0, microsecond=0)
+        # Month-aware step
+        next_month = c.month % 12 + 1
+        year_step = 1 if c.month == 12 else 0
+        nb = c.replace(year=c.year + year_step, month=next_month, day=1, hour=0, minute=0, second=0, microsecond=0)
+        return nb, c.strftime("%b"), c.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
 
-        bucket_data = data_map.get(bucket, {lvl: 0 for lvl in range(1, 10)})
+    for i in range(points + 1):
+        next_curr, label, bucket_key = get_next_bucket(curr)
+        bucket_data = data_map.get(bucket_key, {lvl: 0 for lvl in range(1, 10)})
+        
+        # Accumulate totals
         for lvl in range(1, 10):
             running_totals[lvl] += bucket_data[lvl]
 
@@ -263,6 +270,6 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
             "levels": [running_totals[lvl] for lvl in range(1, 10)],
             "joined_per_level": [bucket_data[lvl] for lvl in range(1, 10)]
         })
-        curr += next_step
+        curr = next_curr
 
     return data

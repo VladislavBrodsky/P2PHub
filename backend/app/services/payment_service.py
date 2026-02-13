@@ -38,7 +38,7 @@ class PaymentService:
             status="pending"
         )
         session.add(transaction)
-        await session.commit()
+        await session.flush()
         await session.refresh(transaction)
         return transaction
 
@@ -46,32 +46,42 @@ class PaymentService:
         self,
         session: AsyncSession,
         partner_id: int,
-        amount_usd: float = PRO_PRICE_USD
+        amount_usd: float = PRO_PRICE_USD,
+        currency: str = "TON",
+        network: str = "TON"
     ) -> dict:
         """
-        Creates a 10-minute TON payment session.
-        Returns amount in TON and the admin address.
+        Creates a payment session. 
+        TON: 10 minutes.
+        USDT/Crypto: 30 minutes.
         """
-        ton_price = await self.get_ton_price()
-        # Add 2% buffer for spread/volatility to ensure they pay enough
-        amount_ton = (amount_usd / ton_price) * 1.02
+        expires_in_minutes = 30 if currency == "USDT" else 10
+        
+        if currency == "TON":
+            ton_price = await self.get_ton_price()
+            # Add 2% buffer for spread/volatility to ensure they pay enough
+            amount_ton = (amount_usd / ton_price) * 1.02
+        else:
+            amount_ton = amount_usd # For USDT it's 1:1
 
         transaction = PartnerTransaction(
             partner_id=partner_id,
             amount=amount_usd,
-            currency="TON",
-            network="TON",
+            currency=currency,
+            network=network,
             status="pending"
         )
         session.add(transaction)
-        await session.commit()
+        await session.flush()
         await session.refresh(transaction)
 
         return {
             "transaction_id": transaction.id,
-            "amount_ton": round(amount_ton, 4),
-            "address": settings.ADMIN_TON_ADDRESS,
-            "expires_at": (transaction.created_at + timedelta(minutes=10)).isoformat()
+            "amount": round(amount_ton, 4),
+            "currency": currency,
+            "network": network,
+            "address": settings.ADMIN_TON_ADDRESS if currency == "TON" else settings.ADMIN_USDT_ADDRESS,
+            "expires_at": (transaction.created_at + timedelta(minutes=expires_in_minutes)).isoformat()
         }
 
     async def get_ton_price(self) -> float:

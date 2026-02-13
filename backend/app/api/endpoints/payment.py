@@ -52,17 +52,20 @@ async def create_invoice(
     transaction = await payment_service.create_transaction(
         session, partner.id, amount, currency, network
     )
+    await session.commit()
 
     return transaction
 
 @router.post("/session")
 async def create_payment_session(
     amount: float = Body(39.0, embed=True),
+    currency: str = Body("TON", embed=True),
+    network: str = Body("TON", embed=True),
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
     """
-    Creates a 10-minute TON payment session.
+    Creates a payment session (TON or Crypto).
     """
     try:
         if "user" in user_data:
@@ -80,8 +83,9 @@ async def create_payment_session(
         raise HTTPException(status_code=404, detail="Partner not found")
 
     payment_data = await payment_service.create_payment_session(
-        session, partner.id, amount
+        session, partner.id, amount, currency, network
     )
+    await session.commit()
 
     return payment_data
 
@@ -150,11 +154,10 @@ async def submit_manual_payment(
             session, partner.id, amount, currency, network, tx_hash
         )
         transaction.status = "manual_review"
-        session.add(transaction)
         await session.commit()
 
-        # Notify Admins
-        try:
+        # Notify Admins (Background-style)
+        async def notify_admins():
             admin_msg = (
                 "🚨 *NEW MANUAL PAYMENT SUBMITTED*\n\n"
                 f"👤 *Partner:* {partner.first_name} (@{partner.username})\n"
@@ -170,8 +173,8 @@ async def submit_manual_payment(
                     )
                 except Exception:
                     pass
-        except Exception as e:
-            print(f"[DEBUG] Admin notification failed: {e}")
+        
+        asyncio.create_task(notify_admins())
 
         return {"status": "submitted", "message": "Payment submitted for manual review"}
 
