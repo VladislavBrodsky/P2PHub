@@ -14,6 +14,16 @@ import { useUI } from '../context/UIContext';
 import { proService, PROStatus } from '../services/proService';
 import { getApiUrl } from '../utils/api';
 
+const renderMarkdown = (text: string) => {
+    if (!text) return null;
+    let html = text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/_(.*?)_/g, '<em>$1</em>')
+        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" class="text-indigo-500 font-bold underline">$1</a>')
+        .replace(/\n/g, '<br />');
+    return <div dangerouslySetInnerHTML={{ __html: html }} />;
+};
+
 type Tab = 'studio' | 'tools' | 'academy';
 
 export const ProDashboard = () => {
@@ -58,6 +68,11 @@ export const ProDashboard = () => {
     // History and Cache for Viral Generations
     const [history, setHistory] = useState<any[]>([]);
     const [historyIndex, setHistoryIndex] = useState(-1);
+
+    // Publishing State
+    const [showPublishModal, setShowPublishModal] = useState(false);
+    const [isPublishing, setIsPublishing] = useState(false);
+    const [publishedPlatforms, setPublishedPlatforms] = useState<string[]>([]);
 
     useEffect(() => {
         if (showSetup) {
@@ -125,9 +140,30 @@ export const ProDashboard = () => {
 
     const handleCopyText = () => {
         if (!generatedResult) return;
-        const text = `${generatedResult.title}\n\n${generatedResult.body}\n\n${generatedResult.hashtags?.map((t: string) => `#${t}`).join(' ')}`;
-        navigator.clipboard.writeText(text);
-        notification('success');
+        const hashtagsStr = generatedResult.hashtags?.map((t: string) => `#${t}`).join(' ') || '';
+        const text = `${generatedResult.title}\n\n${generatedResult.body}\n\n${hashtagsStr}`;
+
+        const copyToClipboard = (str: string) => {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                return navigator.clipboard.writeText(str);
+            } else {
+                const el = document.createElement('textarea');
+                el.value = str;
+                document.body.appendChild(el);
+                el.select();
+                const success = document.execCommand('copy');
+                document.body.removeChild(el);
+                return success ? Promise.resolve() : Promise.reject();
+            }
+        };
+
+        copyToClipboard(text)
+            .then(() => {
+                notification('success');
+            })
+            .catch(() => {
+                notification('error');
+            });
     };
 
     const handleSharePost = async () => {
@@ -218,6 +254,25 @@ export const ProDashboard = () => {
             alert('Failed to save API setup');
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handlePublishToPlatform = async (platform: 'x' | 'telegram' | 'linkedin') => {
+        if (!generatedResult) return;
+        setIsPublishing(true);
+        impact('heavy');
+        try {
+            const hashtagsStr = generatedResult.hashtags?.map((t: string) => `#${t}`).join(' ') || '';
+            const fullContent = `${generatedResult.title}\n\n${generatedResult.body}\n\n${hashtagsStr}`;
+
+            await proService.publishContent(platform, fullContent, generatedResult.image_url);
+            setPublishedPlatforms([...publishedPlatforms, platform]);
+            notification('success');
+        } catch (error: any) {
+            alert(error.response?.data?.detail || `Failed to publish to ${platform.toUpperCase()}`);
+            notification('error');
+        } finally {
+            setIsPublishing(false);
         }
     };
 
@@ -327,12 +382,22 @@ export const ProDashboard = () => {
                                     className="space-y-4"
                                 >
                                     <div className="glass-panel-premium rounded-[2rem] p-5 relative overflow-hidden">
-                                        <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                                            <Terminal size={80} />
+                                        <div className="absolute -top-10 -left-10 w-40 h-40 bg-indigo-500/20 blur-[60px] pointer-events-none" />
+                                        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-500/10 blur-[60px] pointer-events-none" />
+
+                                        <div className="flex items-center gap-4 mb-6 relative z-10">
+                                            <div className="w-10 h-10 rounded-2xl vibing-blue-animated flex items-center justify-center shadow-lg shadow-indigo-500/40 shrink-0 animate-pulse">
+                                                <Terminal size={20} className="text-white" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500 leading-none mb-1">
+                                                    Configuration Matrix
+                                                </h3>
+                                                <p className="text-[9px] font-bold text-(--color-text-secondary) uppercase tracking-wider opacity-70 flex items-center gap-1">
+                                                    Synthesize Selection <Sparkles size={8} className="text-amber-500 animate-pulse" />
+                                                </p>
+                                            </div>
                                         </div>
-                                        <h3 className="text-[10px] font-black mb-5 flex items-center gap-2 uppercase tracking-[0.2em] text-indigo-500">
-                                            <Cpu size={14} className="animate-pulse" /> Configuration Matrix
-                                        </h3>
 
                                         <div className="space-y-3">
                                             {/* Post Type */}
@@ -554,7 +619,9 @@ export const ProDashboard = () => {
                                                     </button>
                                                 </div>
                                             </div>
-                                            <p className="text-xs font-medium leading-relaxed opacity-80 whitespace-pre-wrap">{generatedResult.body}</p>
+                                            <div className="text-xs font-medium leading-relaxed opacity-80 whitespace-pre-wrap">
+                                                {renderMarkdown(generatedResult.body)}
+                                            </div>
                                             <div className="flex flex-wrap gap-2 pt-2">
                                                 {generatedResult.hashtags?.map((t: string) => (
                                                     <span key={t} className="text-[9px] font-black text-indigo-500 bg-indigo-500/10 px-2 py-1 rounded-lg border border-indigo-500/20">#{t}</span>
@@ -563,9 +630,11 @@ export const ProDashboard = () => {
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-3">
-                                        <button onClick={() => { selection(); setStep(1); }} className="h-11 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-wider active:scale-95 transition-all">CREATE NEW</button>
-                                        <button onClick={() => { impact('light'); handleSharePost(); }} className="h-11 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all">
-                                            SHARE EVERYTHING <Share size={12} />
+                                        <button onClick={() => { selection(); setShowPublishModal(true); }} className="h-11 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all">
+                                            PUBLISH <Send size={12} />
+                                        </button>
+                                        <button onClick={() => { impact('light'); handleSharePost(); }} className="h-11 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-wider active:scale-95 transition-all">
+                                            SHARE POST <Share size={12} />
                                         </button>
                                     </div>
                                 </motion.div>
@@ -796,6 +865,113 @@ export const ProDashboard = () => {
                             >
                                 SAVE PROTOCOL CONFIG
                             </button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Publish Modal */}
+            <AnimatePresence>
+                {showPublishModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-101 flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-2xl"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, y: 30, opacity: 0 }}
+                            animate={{ scale: 1, y: 0, opacity: 1 }}
+                            exit={{ scale: 0.9, y: 30, opacity: 0 }}
+                            className="glass-panel-premium w-full max-w-sm rounded-[2.5rem] p-8 space-y-6 relative overflow-hidden"
+                        >
+                            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500" />
+
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <h3 className="text-2xl font-black uppercase tracking-tight text-brand-text">OmniPublish</h3>
+                                    <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest mt-1 italic">PRO Protocol Active</p>
+                                </div>
+                                <button
+                                    onClick={() => setShowPublishModal(false)}
+                                    className="p-2 bg-white/5 border border-white/10 rounded-xl active:scale-90 transition-all"
+                                >
+                                    <ArrowLeft className="w-4 h-4" />
+                                </button>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                                    <h4 className="text-[10px] font-black uppercase mb-3 text-brand-muted flex items-center gap-2">
+                                        <Info size={12} className="text-indigo-500" />
+                                        PRO Content Management
+                                    </h4>
+                                    <p className="text-[11px] leading-relaxed opacity-70">
+                                        Select your target platforms. Our AI agents will use your connected API keys to push this content instantly.
+                                        <em> Tip: Publishing across multiple platforms increases viral probability by 400%.</em>
+                                    </p>
+                                </div>
+
+                                <div className="space-y-2">
+                                    {(['telegram', 'x', 'linkedin'] as const).map((platform) => {
+                                        const isPublished = publishedPlatforms.includes(platform);
+                                        const hasSetup = status?.[`has_${platform === 'x' ? 'x' : platform}_setup` as keyof PROStatus];
+
+                                        return (
+                                            <button
+                                                key={platform}
+                                                disabled={!hasSetup || isPublishing || isPublished}
+                                                onClick={() => handlePublishToPlatform(platform)}
+                                                className={`w-full group relative flex items-center justify-between p-4 rounded-2xl border transition-all active:scale-[0.98] ${isPublished
+                                                        ? 'bg-emerald-500/10 border-emerald-500/30'
+                                                        : !hasSetup
+                                                            ? 'bg-white/5 border-white/5 opacity-40 grayscale pointer-events-none'
+                                                            : 'bg-white/5 border-white/10 hover:border-indigo-500/50 hover:bg-white/10'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`p-2 rounded-lg ${platform === 'x' ? 'bg-slate-900' :
+                                                            platform === 'telegram' ? 'bg-blue-500' : 'bg-blue-700'
+                                                        }`}>
+                                                        {platform === 'x' && <Twitter size={16} className="text-white" />}
+                                                        {platform === 'telegram' && <Send size={16} className="text-white" />}
+                                                        {platform === 'linkedin' && <Linkedin size={16} className="text-white" />}
+                                                    </div>
+                                                    <div className="text-left">
+                                                        <span className="text-xs font-black uppercase text-brand-text">{platform}</span>
+                                                        <div className="text-[9px] font-bold text-brand-muted leading-tight">
+                                                            {!hasSetup ? 'NOT CONFIGURED' : isPublished ? 'POSTED SUCCESSFULLY' : 'TAP TO PUBLISH'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {isPublished ? (
+                                                    <CheckCircle2 size={18} className="text-emerald-500" />
+                                                ) : (
+                                                    <ChevronRight size={16} className="text-brand-muted group-hover:text-indigo-500 transition-colors" />
+                                                )}
+
+                                                {isPublishing && !isPublished && (
+                                                    <div className="absolute inset-0 bg-black/20 backdrop-blur-xs rounded-2xl flex items-center justify-end px-4">
+                                                        <Loader2 className="animate-spin w-5 h-5 text-indigo-500" />
+                                                    </div>
+                                                )}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            <div className="space-y-3 pt-2">
+                                <button
+                                    onClick={() => { selection(); setShowPublishModal(false); setStep(1); }}
+                                    className="w-full h-11 bg-white/5 border border-white/10 rounded-xl font-black text-[10px] uppercase tracking-wider text-brand-muted hover:text-brand-text transition-colors"
+                                >
+                                    CREATE ANOTHER POST
+                                </button>
+                                <p className="text-[9px] text-center font-bold opacity-30 uppercase tracking-[0.2em]">
+                                    Pintopay Global Sync • 2026
+                                </p>
+                            </div>
                         </motion.div>
                     </motion.div>
                 )}

@@ -42,12 +42,18 @@ class ViralMarketingStudio:
     ]
 
     CMO_PERSONA = """
-    You are the CMO of Pintopay, a Top Partner, Community Leader, and Influencer. 
-    You are a Professional Copywriter and a Progressive, Rich Digital Nomad.
-    You are a Problem Solver who uses emotional triggers, marketing tricks, social proof, 
-    and FOMO to generate viral engagement. 
-    You write with authority, charisma, and a focus on financial freedom and elite lifestyle.
-    Your style is premium, cinematic (in descriptions), and highly persuasive.
+    You are the CMO of Pintopay, a world-class Marketing Strategist and Digital Nomad Influencer.
+    Your voice is authoritative, charismatic, and persuasive, using emotional triggers and social proof.
+    You write high-fidelity, premium content that inspires action and financial ambition.
+    """
+
+    TEXT_RULES = """
+    1. EXCELLENT FORMATTING: Use bold (**text**) for impact, italics (_text_) for subtle emphasis, and clear paragraphs.
+    2. HYPERLINKS: ALWAYS use the provided referral link seamlessly in the text using markdown format: [Call to Action](link).
+    3. NO GLITCHES: Ensure all markdown markers are opened and closed correctly. No trailing asterisks or broken links.
+    4. TONALITY: Avoid generic "business speak". Sound human, elite, and successful.
+    5. STRUCTURE: Start with a powerful hook, follow with the value proposition, and end with a strong CTA.
+    6. BAN LIST: Do not use generic phrases like "freelancers and crypto enthusiasts" or "Don't miss out on your chance!" in a cheesy way. Be more creative and specific.
     """
 
     IMAGE_RULES = """
@@ -148,8 +154,8 @@ class ViralMarketingStudio:
         
         # 1. Generate Viral Text via OpenAI
         # Optimized Prompt for Faster Inference (Compressed)
-        system_prompt = f"{self.CMO_PERSONA}\nTask: Viral post for {post_type} ({target_audience}) in {language}."
-        user_prompt = f"CMO Mode. Keyword-driven viral post for Pintopay. Referral: {ref_link}. Include FOMO/Social Proof. Format: JSON {{'title', 'body', 'hashtags', 'image_description'}}. Rules: {self.IMAGE_RULES}"
+        system_prompt = f"{self.CMO_PERSONA}\nRules:\n{self.TEXT_RULES}\nTask: Viral post for {post_type} ({target_audience}) in {language}."
+        user_prompt = f"CMO Mode. Keyword-driven viral post for Pintopay. Referral: {ref_link}. Include FOMO/Social Proof. Format: JSON {{'title', 'body', 'hashtags', 'image_description'}}. JSON ONLY. Rules: {self.IMAGE_RULES}"
 
         generation_start = datetime.utcnow()
         tokens_openai = 0
