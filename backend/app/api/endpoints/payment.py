@@ -138,39 +138,47 @@ async def submit_manual_payment(
     except:
         raise HTTPException(status_code=400, detail="Invalid user data")
 
-    statement = select(Partner).where(Partner.telegram_id == tg_id)
-    result = await session.exec(statement)
-    partner = result.first()
-
-    if not partner:
-        raise HTTPException(status_code=404, detail="Partner not found")
-
-    transaction = await payment_service.create_transaction(
-        session, partner.id, amount, currency, network, tx_hash
-    )
-    transaction.status = "manual_review"
-    session.add(transaction)
-    await session.commit()
-
-    # Notify Admins
     try:
-        admin_msg = (
-            "🚨 *NEW MANUAL PAYMENT SUBMITTED*\n\n"
-            f"👤 *Partner:* {partner.first_name} (@{partner.username})\n"
-            f"💰 *Amount:* ${amount} {currency} ({network})\n"
-            f"📝 *Hash:* `{tx_hash or 'Not Provided'}`\n\n"
-            "Please verify and approve in the Admin Panel."
-        )
-        for admin_id in settings.ADMIN_USER_IDS:
-            try:
-                await notification_service.enqueue_notification(
-                    chat_id=int(admin_id),
-                    text=admin_msg
-                )
-            except Exception:
-                pass
-    except Exception as e:
-        print(f"[DEBUG] Admin notification failed: {e}")
+        statement = select(Partner).where(Partner.telegram_id == tg_id)
+        result = await session.exec(statement)
+        partner = result.first()
 
-    return {"status": "submitted", "message": "Payment submitted for manual review"}
+        if not partner:
+            raise HTTPException(status_code=404, detail="Partner not found")
+
+        transaction = await payment_service.create_transaction(
+            session, partner.id, amount, currency, network, tx_hash
+        )
+        transaction.status = "manual_review"
+        session.add(transaction)
+        await session.commit()
+
+        # Notify Admins
+        try:
+            admin_msg = (
+                "🚨 *NEW MANUAL PAYMENT SUBMITTED*\n\n"
+                f"👤 *Partner:* {partner.first_name} (@{partner.username})\n"
+                f"💰 *Amount:* ${amount} {currency} ({network})\n"
+                f"📝 *Hash:* `{tx_hash or 'Not Provided'}`\n\n"
+                "Please verify and approve in the Admin Panel."
+            )
+            for admin_id in settings.ADMIN_USER_IDS:
+                try:
+                    await notification_service.enqueue_notification(
+                        chat_id=int(admin_id),
+                        text=admin_msg
+                    )
+                except Exception:
+                    pass
+        except Exception as e:
+            print(f"[DEBUG] Admin notification failed: {e}")
+
+        return {"status": "submitted", "message": "Payment submitted for manual review"}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
 

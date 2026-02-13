@@ -82,15 +82,17 @@ export default function SubscriptionPage() {
         setIsLoading(true);
         try {
             await apiClient.post('/api/payment/submit-manual', {
-                tx_hash: manualHash || null,
+                tx_hash: manualHash?.trim() || null,
                 currency: 'USDT',
                 network: 'TRC20',
                 amount: proPrice
             });
             setStatus('manual_review');
             notification('success');
-        } catch (error) {
-            alert('Submission failed');
+        } catch (error: any) {
+            console.error('Manual submission error:', error);
+            const errorMessage = error.response?.data?.detail || error.message || 'Submission failed';
+            alert(`Submission failed: ${errorMessage}`);
         } finally {
             setIsLoading(false);
         }
