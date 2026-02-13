@@ -85,7 +85,7 @@ class ViralMarketingStudio:
         self.gs_client = None
         self._gs_sheet_cache = {} 
         self._init_google_sheets_client()
-        self._last_working_imagen_model = 'imagen-3.0-fast-001' # Memory for optimization
+        self._last_working_imagen_model = 'imagen-4.0-generate-001' # Memory for optimization
 
     def _init_google_sheets_client(self):
         """Initializes Google Sheets client for audit logging."""
@@ -182,11 +182,12 @@ class ViralMarketingStudio:
             if not self.genai_client:
                 return None
             
-            # Prioritize last working model, then fallback to stable Imagen 3
+            # Prioritize Imagen 4.0 Generate (Standard) and Fast variant
             imagen_models = [
                 self._last_working_imagen_model,
-                'imagen-3.0-generate-001',
-                'imagen-3.0-fast-001',
+                'imagen-4.0-generate-001',
+                'imagen-4.0-fast-generate-001',
+                'imagen-3.0-generate-001' # Extreme fallback
             ]
             # Remove duplicates while preserving order
             imagen_models = [m for i, m in enumerate(imagen_models) if m and m not in imagen_models[:i]]
@@ -197,11 +198,11 @@ class ViralMarketingStudio:
                 logger.error("❌ ViralMarketingStudio: genai_client.models is missing")
                 return None
 
-            method = getattr(models_obj, 'generate_image', 
-                           getattr(models_obj, 'generate_images', None))
+            method = getattr(models_obj, 'generate_images', 
+                           getattr(models_obj, 'generate_image', None))
             
             if not method:
-                logger.error("❌ ViralMarketingStudio: generate_image method not found in SDK")
+                logger.error("❌ ViralMarketingStudio: No image generation method found in SDK")
                 return None
 
             loop = asyncio.get_event_loop()
@@ -219,7 +220,7 @@ class ViralMarketingStudio:
                                 }
                             )
                         ),
-                        timeout=15.0 # Even faster timeout for fast model
+                        timeout=25.0 # Increased timeout for Imagen 4.0 Quality
                     )
                     
                     if img_response and getattr(img_response, 'generated_images', None):
