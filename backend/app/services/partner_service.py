@@ -12,53 +12,82 @@ from app.services.leaderboard_service import leaderboard_service
 from app.services.redis_service import redis_service
 from app.worker import broker
 
+import io
+import httpx
+from PIL import Image
+from bot import bot
+
 logger = logging.getLogger(__name__)
+
+# #comment: Global HTTPX client to reuse connections across requests.
+# This significantly reduces latency and overhead compared to creating a client per request.
+http_client = httpx.AsyncClient(timeout=10.0, limits=httpx.Limits(max_keepalive_connections=50, max_connections=100))
+
+# #comment: In-memory lock map to prevent "dog-pile" effect.
+# When multiple requests come for the SAME file_id that isn't cached yet,
+# only one will perform the heavy processing, while others will wait for the result.
+_photo_processing_locks = {}
 
 async def ensure_photo_cached(file_id: str) -> Optional[bytes]:
     """
     Ensures the Telegram photo is cached in Redis (WebP optimized).
     Returns the binary content if successful, None otherwise.
     """
-    import io
-    import httpx
-    from PIL import Image
-    from bot import bot
-
     cache_key_binary = f"tg_photo_bin_v1:{file_id}"
     cache_key_url = f"tg_photo_url:{file_id}"
 
+    # Try reading from Redis first (Fast Path)
     try:
         cached_binary = await redis_service.get_bytes(cache_key_binary)
         if cached_binary: return cached_binary
     except Exception as e:
-        # Log debug only as a cache miss isn't critical
         logger.debug(f"Binary cache read failed: {e}")
 
-    try:
-        photo_url = await redis_service.get(cache_key_url)
-        if not photo_url:
-            file = await bot.get_file(file_id)
-            photo_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
-            await redis_service.set(cache_key_url, photo_url, expire=3600)
-    except Exception as e:
-        logger.error(f"Failed to get photo URL for {file_id}: {e}")
-        return None
-
-    try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(photo_url)
-            if response.status_code == 200:
-                img = Image.open(io.BytesIO(response.content))
-                if img.width > 128 or img.height > 128:
-                    img.thumbnail((128, 128), Image.Resampling.LANCZOS)
-                output = io.BytesIO()
-                img.save(output, format="WEBP", quality=80)
-                optimized_binary = output.getvalue()
-                await redis_service.set_bytes(cache_key_binary, optimized_binary, expire=86400)
-                return optimized_binary
-    except Exception as e:
-        logger.error(f"Failed to optimize/cache photo {file_id}: {e}")
+    # Enter lock to prevent concurrent processing of the same file_id (Dog-pile Protection)
+    if file_id not in _photo_processing_locks:
+        _photo_processing_locks[file_id] = asyncio.Lock()
     
+    async with _photo_processing_locks[file_id]:
+        # Check again after acquiring lock (it might have been processed while we waited)
+        try:
+            cached_binary = await redis_service.get_bytes(cache_key_binary)
+            if cached_binary: return cached_binary
+        except: pass
+
+        try:
+            # Check secondary cache for URL
+            photo_url = await redis_service.get(cache_key_url)
+            if not photo_url or photo_url == "EMPTY":
+                # This is a network call to Telegram
+                file = await bot.get_file(file_id)
+                photo_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
+                await redis_service.set(cache_key_url, photo_url, expire=7200) # Increased to 2h
+
+            # Fetch image content
+            response = await http_client.get(photo_url)
+            if response.status_code == 200:
+                # Heavy CPU blocking task: Resize and Convert
+                # We do this in a threadpool to avoid blocking the event loop
+                def process_image():
+                    img = Image.open(io.BytesIO(response.content))
+                    # Only resize if larger than target
+                    if img.width > 128 or img.height > 128:
+                        img.thumbnail((128, 128), Image.Resampling.LANCZOS)
+                    output = io.BytesIO()
+                    img.save(output, format="WEBP", quality=80)
+                    return output.getvalue()
+
+                optimized_binary = await asyncio.to_thread(process_image)
+                await redis_service.set_bytes(cache_key_binary, optimized_binary, expire=86400 * 7) # Increased to 7 days
+                return optimized_binary
+            
+            elif response.status_code == 404:
+                # If Telegram says it's gone, don't keep trying too often
+                await redis_service.set(cache_key_url, "EMPTY", expire=3600)
+                
+        except Exception as e:
+            logger.error(f"❌ Failed to optimize/cache photo {file_id}: {e}")
+        
     return None
 
 @broker.task(task_name="warm_up_partner_photos")

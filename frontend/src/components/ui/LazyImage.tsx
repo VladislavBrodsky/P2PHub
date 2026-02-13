@@ -71,6 +71,10 @@ export const LazyImage: React.FC<LazyImageProps> = ({
                     src={displaySrc}
                     alt={alt}
                     onLoad={() => setIsLoaded(true)}
+                    onError={(e) => {
+                        setIsLoaded(true); // Stop the pulse
+                        if (props.onError) props.onError(e);
+                    }}
                     className={`${className} transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
                     {...props}
                 />
