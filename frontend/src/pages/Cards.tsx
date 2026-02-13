@@ -32,7 +32,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
         selection();
         setIsPremiumModalOpen(false);
         if (setActiveTab) {
-            setActiveTab('earn');
+            setActiveTab('subscription');
         }
     };
 

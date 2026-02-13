@@ -141,7 +141,13 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                     </ul>
                                 </div>
 
-                                <button className="w-full py-5 rounded-2xl bg-amber-500 text-white font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-amber-500/30 active:scale-95 transition-all">
+                                <button
+                                    onClick={() => {
+                                        onClose();
+                                        window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                                    }}
+                                    className="w-full py-5 rounded-2xl bg-amber-500 text-white font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-amber-500/30 active:scale-95 transition-all"
+                                >
                                     {t('academy.upgrade_btn')}
                                 </button>
                             </div>

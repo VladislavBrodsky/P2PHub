@@ -353,7 +353,7 @@ export const ProDashboard = () => {
                     {t('pro_dashboard.locked.desc')}
                 </p>
                 <button
-                    onClick={() => window.location.hash = '/subscription'}
+                    onClick={() => window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }))}
                     className="px-8 h-14 bg-linear-to-r from-amber-400 to-orange-600 rounded-2xl font-black text-white shadow-lg active:scale-95 transition-all"
                 >
                     {t('pro_dashboard.locked.upgrade_btn')}
@@ -893,29 +893,62 @@ export const ProDashboard = () => {
                     {activeTab === 'academy' && (
                         <motion.div
                             key="academy"
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            className="space-y-4"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            className="space-y-8"
                         >
-                            <div className="glass-panel-premium p-4 rounded-2xl border border-indigo-500/20 text-center relative overflow-hidden">
-                                <div className="absolute inset-0 bg-indigo-500/5 animate-pulse" />
-                                <h3 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-1 relative z-1">{t('pro_dashboard.academy.protocol_rank')}</h3>
-                                <p className="text-2xl font-black text-indigo-500 relative z-1 tracking-tight">{t('pro_dashboard.academy.rank_name')}</p>
-                            </div>
-
-                            {['hook_rule', 'algorithm', 'psycho'].map((key) => (
-                                <div key={key} className="glass-panel-premium p-6 rounded-[2.5rem] border border-(--color-border-glass) relative overflow-hidden group active:scale-[0.98] transition-all bg-(--color-bg-surface) shadow-sm">
-                                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
-                                        <BookOpen className="w-16 h-16 text-indigo-500" />
+                            {/* Academy Header - Intelligence Report */}
+                            <div className="glass-panel-premium p-8 rounded-[3rem] border border-indigo-500/20 relative overflow-hidden bg-linear-to-br from-indigo-500/10 via-transparent to-transparent shadow-2xl">
+                                <div className="absolute top-0 right-0 p-8 opacity-10 animate-pulse">
+                                    <Globe className="w-24 h-24 text-indigo-500" />
+                                </div>
+                                <div className="relative z-1">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.5)]" />
+                                        <span className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em]">Live Protocol Feed</span>
                                     </div>
-                                    <h4 className="text-xs font-black uppercase mb-1 tracking-tight text-brand-text">{t(`pro_dashboard.academy.${key}.title`)}</h4>
-                                    <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest mb-3">{t(`pro_dashboard.academy.${key}.desc`)}</p>
-                                    <div className="p-4 bg-indigo-500/5 dark:bg-black/20 rounded-2xl border border-indigo-500/10 dark:border-white/5">
-                                        <p className="text-[11px] font-medium leading-relaxed text-brand-text/90">{t(`pro_dashboard.academy.${key}.content`)}</p>
+                                    <h3 className="text-2xl font-black text-brand-text leading-tight mb-2">
+                                        {t('pro_dashboard.academy.title')}
+                                    </h3>
+                                    <p className="text-xs font-medium text-brand-muted leading-relaxed max-w-[80%] mb-6 italic">
+                                        {t('pro_dashboard.academy.desc')}
+                                    </p>
+                                    <div className="flex items-center gap-4">
+                                        <div className="px-4 py-2 bg-indigo-500/10 rounded-xl border border-indigo-500/20 backdrop-blur-md">
+                                            <p className="text-[9px] font-black text-indigo-500 uppercase tracking-widest">{t('pro_dashboard.academy.protocol_rank')}</p>
+                                            <p className="text-lg font-black text-brand-text">{t('pro_dashboard.academy.rank_name')}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            ))}
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="col-span-2 glass-panel-premium p-8 rounded-[2.5rem] border border-indigo-500/20 relative overflow-hidden group active:scale-[0.99] transition-all bg-(--color-bg-surface) shadow-sm">
+                                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
+                                        <BookOpen className="w-20 h-20 text-indigo-500" />
+                                    </div>
+                                    <h4 className="text-sm font-black uppercase mb-1 tracking-tight text-brand-text flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                                        {t(`pro_dashboard.academy.hook_rule.title`)}
+                                    </h4>
+                                    <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-[0.2em] mb-4">{t(`pro_dashboard.academy.hook_rule.desc`)}</p>
+                                    <div className="p-5 bg-indigo-500/5 dark:bg-black/20 rounded-2xl border border-indigo-500/10 dark:border-white/5">
+                                        <p className="text-xs font-medium leading-relaxed text-brand-text/90 italic">"{t(`pro_dashboard.academy.hook_rule.content`)}"</p>
+                                    </div>
+                                </div>
+
+                                {['algorithm', 'psycho'].map((key) => (
+                                    <div key={key} className="glass-panel-premium p-6 rounded-[2rem] border border-(--color-border-glass) relative overflow-hidden group active:scale-[0.98] transition-all bg-(--color-bg-surface) shadow-sm">
+                                        <div className="absolute -right-2 -top-2 opacity-5">
+                                            <Sparkles className="w-12 h-12 text-indigo-500" />
+                                        </div>
+                                        <h4 className="text-[11px] font-black uppercase mb-1 tracking-tight text-brand-text">{t(`pro_dashboard.academy.${key}.title`)}</h4>
+                                        <p className="text-[8px] font-black text-brand-muted uppercase tracking-widest mb-3">{t(`pro_dashboard.academy.${key}.desc`)}</p>
+                                        <p className="text-[10px] font-medium leading-[1.6] text-brand-text/80">{t(`pro_dashboard.academy.${key}.content`)}</p>
+                                    </div>
+                                ))}
+                            </div>
 
                             {/* Hook Library */}
                             <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 hover:border-indigo-500/30 transition-all group overflow-hidden relative">
@@ -932,16 +965,21 @@ export const ProDashboard = () => {
                                         <div key={idx} className="p-5 bg-indigo-500/5 dark:bg-white/5 rounded-2xl border border-indigo-500/10 dark:border-white/5 space-y-2 group/hook hover:bg-indigo-500/10 dark:hover:bg-white/10 transition-all">
                                             <div className="flex items-center justify-between">
                                                 <span className="text-[9px] font-black px-2 py-0.5 bg-indigo-500/20 text-indigo-400 rounded-full uppercase tracking-widest">{hook.category}</span>
-                                                <Copy
-                                                    size={12}
-                                                    className="text-brand-muted hover:text-white cursor-pointer transition-colors"
-                                                    onClick={() => {
-                                                        navigator.clipboard.writeText(hook.template);
-                                                        notification('success');
-                                                    }}
-                                                />
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-indigo-500/50 hover:text-indigo-500 cursor-pointer transition-colors" onClick={() => { setActiveTab('studio'); selection(); }}>
+                                                        <RefreshCw size={12} />
+                                                    </span>
+                                                    <Copy
+                                                        size={12}
+                                                        className="text-brand-muted hover:text-white cursor-pointer transition-colors"
+                                                        onClick={() => {
+                                                            navigator.clipboard.writeText(hook.template);
+                                                            notification('success');
+                                                        }}
+                                                    />
+                                                </div>
                                             </div>
-                                            <p className="text-xs font-black text-brand-text italic">"{hook.template}"</p>
+                                            <p className="text-[11px] font-black text-brand-text italic leading-tight mb-1">"{hook.template}"</p>
                                             <p className="text-[10px] text-brand-muted leading-relaxed">{hook.explanation}</p>
                                         </div>
                                     ))}
@@ -957,13 +995,16 @@ export const ProDashboard = () => {
                                 </h3>
                                 <div className="space-y-4">
                                     {((t('pro_dashboard.academy.lifehacks.items', { returnObjects: true }) as any[]) || []).map((item: any, i: number) => (
-                                        <div key={i} className="flex gap-4 p-4 rounded-2xl bg-orange-500/5 border border-orange-500/10">
-                                            <div className="w-8 h-8 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
-                                                <span className="text-xs font-black text-orange-500">{i + 1}</span>
+                                        <div key={i} className="flex gap-5 p-5 rounded-[2rem] bg-orange-500/5 border border-orange-500/10 hover:bg-orange-500/10 transition-colors shadow-sm">
+                                            <div className="w-10 h-10 rounded-2xl bg-orange-500/10 flex items-center justify-center shrink-0 border border-orange-500/20">
+                                                <Flame className="w-5 h-5 text-orange-500" />
                                             </div>
                                             <div>
-                                                <p className="text-xs font-black text-orange-500 uppercase tracking-tight">{item.title}</p>
-                                                <p className="text-[10px] text-brand-muted leading-relaxed mt-0.5">{item.desc}</p>
+                                                <p className="text-xs font-black text-orange-500 uppercase tracking-tight flex items-center gap-2">
+                                                    {item.title}
+                                                    <Sparkles size={10} className="animate-pulse" />
+                                                </p>
+                                                <p className="text-[11px] text-brand-muted leading-relaxed mt-1">{item.desc}</p>
                                             </div>
                                         </div>
                                     ))}
@@ -971,20 +1012,59 @@ export const ProDashboard = () => {
                             </div>
 
                             {/* Studio manual */}
-                            <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden">
-                                <h3 className="text-sm font-black text-brand-text uppercase tracking-[0.2em] mb-6">{t('pro_dashboard.academy.studio_manual.title')}</h3>
+                            <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden bg-indigo-500/5">
+                                <h3 className="text-xs font-black text-brand-text uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+                                    <Terminal size={14} className="text-indigo-500" />
+                                    {t('pro_dashboard.academy.studio_manual.title')}
+                                </h3>
                                 <div className="space-y-6">
                                     {((t('pro_dashboard.academy.studio_manual.steps', { returnObjects: true }) as any[]) || []).map((step: any, i: number) => (
                                         <div key={i} className="relative pl-8">
-                                            <div className="absolute left-0 top-0 w-6 h-6 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-[10px] font-black text-indigo-500">
+                                            <div className="absolute left-0 top-0 w-6 h-6 rounded-lg bg-indigo-500 shadow-lg shadow-indigo-500/20 flex items-center justify-center text-[10px] font-black text-white">
                                                 {i + 1}
                                             </div>
-                                            {i < 3 && <div className="absolute left-3 top-6 bottom-0 w-px bg-indigo-500/10" />}
+                                            {i < 3 && <div className="absolute left-3 top-6 bottom-0 w-px bg-indigo-500/20" />}
                                             <h4 className="text-xs font-bold text-brand-text uppercase">{step.title}</h4>
                                             <p className="text-[10px] text-brand-muted leading-relaxed mt-1">{step.desc}</p>
                                         </div>
                                     ))}
                                 </div>
+                            </div>
+
+                            {/* Channel Architecture */}
+                            <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-8 opacity-5"><Cpu size={100} /></div>
+                                <h3 className="text-sm font-black text-brand-text uppercase tracking-[0.2em] mb-2">{t('pro_dashboard.academy.social_setup.title')}</h3>
+                                <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-8">{t('pro_dashboard.academy.social_setup.subtitle')}</p>
+
+                                <div className="space-y-4">
+                                    {((t('pro_dashboard.academy.social_setup.platforms', { returnObjects: true }) as any[]) || []).map((platform: any, i: number) => (
+                                        <div key={i} className="p-6 bg-(--color-bg-surface) rounded-2xl border border-(--color-border-glass) shadow-sm space-y-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
+                                                    {platform.name.includes('Telegram') && <Send className="w-5 h-5 text-indigo-500" />}
+                                                    {platform.name.includes('X') && <Twitter className="w-5 h-5 text-indigo-500" />}
+                                                    {platform.name.includes('LinkedIn') && <Linkedin className="w-5 h-5 text-indigo-500" />}
+                                                </div>
+                                                <span className="text-xs font-black text-brand-text uppercase tracking-tight">{platform.name}</span>
+                                            </div>
+                                            <div className="space-y-2">
+                                                {platform.steps.map((step: string, j: number) => (
+                                                    <div key={j} className="flex items-center gap-3">
+                                                        <div className="w-1 h-1 rounded-full bg-indigo-500/40" />
+                                                        <span className="text-[10px] font-medium text-brand-muted">{step}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <button
+                                    onClick={() => { selection(); setShowSetup(true); }}
+                                    className="w-full mt-8 py-4 bg-linear-to-r from-indigo-600 to-indigo-500 text-white font-black text-[11px] uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-indigo-500/20 active:scale-95 transition-all"
+                                >
+                                    {t('pro_dashboard.tab_setup')}
+                                </button>
                             </div>
                         </motion.div>
                     )}

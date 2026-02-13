@@ -54,10 +54,10 @@ export const UpgradeButton = ({ onClick, className = '', showPrice = true }: Upg
                     </div>
                     <div className="flex flex-col items-start gap-0.5">
                         <span className="text-xs font-black text-(--color-text-primary) uppercase tracking-wider flex items-center gap-1.5">
-                            Upgrade to PRO
+                            {t('common.upgrade_pro')}
                             <Sparkles className="w-3 h-3 text-yellow-200 animate-pulse" />
                         </span>
-                        <span className="text-[9px] font-bold text-(--color-text-secondary)">Unlock 2x Rewards & Perks</span>
+                        <span className="text-[9px] font-bold text-(--color-text-secondary)">{t('common.unlock_rewards')}</span>
                     </div>
                 </div>
 
