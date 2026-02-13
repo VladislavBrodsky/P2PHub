@@ -14,6 +14,10 @@ const SubscriptionPage = lazy(prefetchPages.subscription);
 const BlogPage = lazy(prefetchPages.blog);
 const AdminPage = lazy(prefetchPages.admin);
 const ProPage = lazy(prefetchPages.pro);
+// #comment: Strategic Lazy Loading for non-critical features.
+// SupportChat is a heavy component (icons + framer-motion animations).
+// By lazy-loading it, we reduce the initial bundle size, speeding up TTI.
+const SupportChat = lazy(() => import('./components/Support/SupportChat').then(m => ({ default: m.SupportChat })));
 
 
 import { miniApp, backButton, viewport, swipeBehavior } from '@telegram-apps/sdk-react';
@@ -28,10 +32,9 @@ import { FeatureErrorBoundary } from './components/FeatureErrorBoundary';
 import { StartupLoader } from './components/ui/StartupLoader';
 import { useStartupProgress } from './context/StartupProgressContext';
 
-import { RevealSkeleton } from './components/Skeletons/RevealSkeleton';
 import { UIProvider } from './context/UIContext';
 
-import { SupportChat } from './components/Support/SupportChat';
+// #comment: Removed hard import of SupportChat to enable the Lazy load strategy defined above.
 import { useUI } from './context/UIContext';
 
 function AppContent({ onReady }: { onReady: () => void }) {
@@ -231,8 +234,14 @@ function AppContent({ onReady }: { onReady: () => void }) {
                         </p>
                     </div>
                 )}
+                )}
             </Suspense>
-            <SupportChat isOpen={isSupportOpen} onClose={() => setSupportOpen(false)} />
+            {/* #comment: Render SupportChat within Suspense to handle lazy loading transition */}
+            <Suspense fallback={null}>
+                {isSupportOpen && (
+                    <SupportChat isOpen={isSupportOpen} onClose={() => setSupportOpen(false)} />
+                )}
+            </Suspense>
         </Layout>
     );
 }

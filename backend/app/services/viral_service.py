@@ -83,7 +83,9 @@ class ViralMarketingStudio:
 
         # 3. Google Sheets for Logging
         self.gs_client = None
+        self._gs_sheet_cache = {} 
         self._init_google_sheets_client()
+        self._last_working_imagen_model = 'imagen-3.0-fast-001' # Memory for optimization
 
     def _init_google_sheets_client(self):
         """Initializes Google Sheets client for audit logging."""
@@ -144,16 +146,10 @@ class ViralMarketingStudio:
 
         ref_link = referral_link or f"https://t.me/pintopaybot?start={partner.referral_code}"
         
-        # 1. Generate Viral Text via OpenAI (acting as CMO)
-        system_prompt = f"{self.CMO_PERSONA}\n\nObjective: Generate a viral post for {post_type} targeting {target_audience} in {language}."
-        user_prompt = f"""
-        Act as CMO. Collect data on keywords, hashtags, and problems to solve with Pintopay Cards in 2026.
-        Generate a viral, engaging, and provocative post.
-        Include the referral link: {ref_link}
-        Include emotional triggers, social proof, and FOMO.
-        Format: JSON with 'title', 'body', 'hashtags', 'image_description'.
-        The 'image_description' should be a detailed prompt for an image generator following these rules: {self.IMAGE_RULES}
-        """
+        # 1. Generate Viral Text via OpenAI
+        # Optimized Prompt for Faster Inference (Compressed)
+        system_prompt = f"{self.CMO_PERSONA}\nTask: Viral post for {post_type} ({target_audience}) in {language}."
+        user_prompt = f"CMO Mode. Keyword-driven viral post for Pintopay. Referral: {ref_link}. Include FOMO/Social Proof. Format: JSON {{'title', 'body', 'hashtags', 'image_description'}}. Rules: {self.IMAGE_RULES}"
 
         generation_start = datetime.utcnow()
         tokens_openai = 0
@@ -186,12 +182,14 @@ class ViralMarketingStudio:
             if not self.genai_client:
                 return None
             
-            # Prefer fast models for optimization
+            # Prioritize last working model, then fallback to fast
             imagen_models = [
-                'imagen-3.0-fast-001', # Fast first
-                'imagen-4.0-generate-001',
-                'imagen-3.0-generate-001'
+                self._last_working_imagen_model,
+                'imagen-3.0-fast-001',
+                'imagen-4.0-generate-001'
             ]
+            # Remove duplicates while preserving order
+            imagen_models = list(dict.fromkeys(imagen_models))
             
             method = getattr(self.genai_client.models, 'generate_images', 
                            getattr(self.genai_client.models, 'generate_image', None))
@@ -222,7 +220,11 @@ class ViralMarketingStudio:
                         filename = f"viral_{partner.id}_{secrets.token_hex(4)}.png"
                         save_path = os.path.join("app_images", "generated", filename)
                         os.makedirs(os.path.dirname(save_path), exist_ok=True)
-                        image.image.save(save_path)
+                        
+                        # Use thread pool for blocking PIL save
+                        await loop.run_in_executor(None, lambda: image.image.save(save_path))
+                        
+                        self._last_working_imagen_model = model_name # Update memory
                         return f"/images/generated/{filename}"
                 except Exception as e:
                     logger.warning(f"⚠️ Imagen {model_name} failed/timed out: {e}")
@@ -394,31 +396,32 @@ class ViralMarketingStudio:
         try:
             sheet_id = os.getenv("VIRAL_MARKETING_SPREADSHEET_ID") or "1JCxW4ANBthKy3Qeu9RBE3Ds3fFpX8993Q_6JPdmg-_k"
             gid = os.getenv("VIRAL_MARKETING_GID") or "633034160"
+            cache_key = f"{sheet_id}_{gid}"
             
-            spreadsheet = self.gs_client.open_by_key(sheet_id)
-            sheet = spreadsheet.get_worksheet_by_id(int(gid))
+            loop = asyncio.get_event_loop()
+            
+            def get_sheet_sync():
+                if cache_key not in self._gs_sheet_cache:
+                    spreadsheet = self.gs_client.open_by_key(sheet_id)
+                    self._gs_sheet_cache[cache_key] = spreadsheet.get_worksheet_by_id(int(gid))
+                return self._gs_sheet_cache[cache_key]
+
+            # Offload blocking GS API calls to thread pool
+            sheet = await loop.run_in_executor(None, get_sheet_sync)
             
             if sheet:
-                # Row format:
-                # User | Topic | Audience | Language | Time | Status | OA Prompt | Gem Prompt | Duration | OA Tokens | Gem Tokens | Title | Body | Image URL
+                # Row format
                 row = [
                     f"@{partner.username or partner.id}",
-                    topic,
-                    audience,
-                    language,
+                    topic, audience, language,
                     datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
-                    "created",
-                    openai_prompt,
-                    gemini_prompt,
-                    f"{duration:.2f}s",
-                    tokens_openai,
-                    tokens_gemini,
-                    title,
-                    body,
-                    image_url or "None"
+                    "created", openai_prompt, gemini_prompt,
+                    f"{duration:.2f}s", tokens_openai, tokens_gemini,
+                    title, body, image_url or "None"
                 ]
-                sheet.append_row(row)
-                logger.info(f"✅ Viral generation logged to Google Sheets for @{partner.username}")
+                # Offload blocking append to thread pool
+                await loop.run_in_executor(None, lambda: sheet.append_row(row))
+                logger.info(f"✅ Background audit logged for @{partner.username}")
         except Exception as e:
             logger.error(f"❌ Failed to log viral generation to Google Sheets: {e}")
 

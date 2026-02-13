@@ -74,17 +74,33 @@ class SupportAgentService:
         self._init_google_sheets_client()
 
     def _init_google_sheets_client(self):
-        """Initializes Google Sheets client using service account info from environment."""
+        """
+        # #comment: Lazy/Async initialization to prevent blocking the event loop at startup.
+        # Authenticating with Google APIs can be slow; we handle it gracefully here.
+        """
+        self._gs_client_init_task = None
+        creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
+        if not creds_json:
+             logger.warning("❌ SupportService: Google Credentials missing.")
+
+    async def _get_gs_client(self):
+        """Returns authorized GS client, initializing if needed (Non-blocking)."""
+        if self.gs_client:
+            return self.gs_client
+        
         creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
         if creds_json:
             try:
+                # #comment: Synchronous authorize is wrapped in a thread to keep the loop free
                 creds_dict = json.loads(creds_json)
                 scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
                 credentials = Credentials.from_service_account_info(creds_dict, scopes=scopes)
-                self.gs_client = gspread.authorize(credentials)
-                logger.info("✅ SupportService: Google Sheets client initialized.")
+                self.gs_client = await asyncio.to_thread(gspread.authorize, credentials)
+                logger.info("✅ SupportService: Google Sheets client authorized in background.")
+                return self.gs_client
             except Exception as e:
-                logger.error(f"❌ SupportService: Failed to init Google Sheets: {e}")
+                logger.error(f"❌ SupportService: GS Auth Failed: {e}")
+        return None
 
     async def _get_cached_kb(self) -> Dict[str, str]:
         """
@@ -308,17 +324,15 @@ class SupportAgentService:
                 # Operating on in-memory list (fast) instead of making external API calls
                 query_words = set(query.lower().split())
                 
-                # Rank matches by keyword overlap
+                # #comment: High-performance word-set intersection for ranking.
+                # Significantly faster than linear 'in' checks for large records.
                 scored_matches = []
                 for r in records:
-                    q_text = str(r.get('Question', '')).lower()
-                    a_text = str(r.get('Answer', '')).lower()
+                    q_text_set = set(str(r.get('Question', '')).lower().split())
                     
-                    # Simple scoring: count how many query words appear in the Question
-                    score = sum(1 for word in query_words if word in q_text)
-                    if score > 0:
-                        # Append tuple: (score, formatted_text, category)
-                        scored_matches.append((score, f"Q: {r.get('Question')}\nA: {r.get('Answer')}", r.get('Category', 'General')))
+                    overlap = len(query_words.intersection(q_text_set))
+                    if overlap > 0:
+                        scored_matches.append((overlap, f"Q: {r.get('Question')}\nA: {r.get('Answer')}", r.get('Category', 'General')))
                 
                 # Sort by score descending
                 scored_matches.sort(key=lambda x: x[0], reverse=True)
@@ -350,7 +364,10 @@ class SupportAgentService:
 
         chat_session_id = f"SID-{user_id}-{int(datetime.utcnow().timestamp())}"
         
-        if self.gs_client:
+        # #comment: Fetching client lazily
+        gs_client = await self._get_gs_client()
+        
+        if gs_client:
             try:
                 sheet_id = os.getenv("SUPPORT_SPREADSHEET_ID")
                 history_gid = os.getenv("HISTORY_GID")
@@ -413,10 +430,13 @@ class SupportAgentService:
 
     async def close_session(self, user_id: str):
         """Finalizes and removes session."""
-        await self.save_conversation_to_sheets(user_id)
+        # #comment: Non-blocking Background Archiving.
+        # User session closes instantly; Google Sheets work happens in parallel.
+        asyncio.create_task(self.save_conversation_to_sheets(user_id))
+        
         session_key = f"support_session:{user_id}"
         await redis_service.delete(session_key)
-        logger.info(f"🏁 Support session for {user_id} closed and salvaged.")
+        logger.info(f"🏁 Support session for {user_id} salvaged to background tasks.")
 
 # Singleton Instance
 support_service = SupportAgentService()
