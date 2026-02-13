@@ -412,7 +412,7 @@ export const ProDashboard = () => {
                                 </div>
                             </div>
                             <div>
-                                <h1 className="text-[11px] font-black tracking-[0.1em] leading-tight uppercase text-brand-text drop-shadow-sm flex items-center gap-2">
+                                <h1 className="text-[11px] font-black tracking-widest leading-tight uppercase text-brand-text drop-shadow-sm flex items-center gap-2">
                                     {t('pro_dashboard.title_studio')}
                                     <span className="px-1.5 py-0.5 rounded-sm bg-indigo-500 text-[7px] text-white">PRO</span>
                                 </h1>
@@ -981,7 +981,7 @@ export const ProDashboard = () => {
                                 exit={{ opacity: 0, y: -20 }}
                                 className="space-y-8"
                             >
-                                {/* Academy Header - Intelligence Report */}
+                                {/* Academy Header - Intelligence Report - #comment: Knowledge repository for advanced content strategy and proprietary viral mechanics */}
                                 <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden bg-linear-to-br from-indigo-500/10 via-transparent to-transparent shadow-2xl">
                                     <div className="absolute inset-0 bg-grid-white/5 mask-[radial-gradient(ellipse_at_center,black,transparent)]" />
                                     <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 blur-[80px] rounded-full animate-pulse" />
@@ -1051,7 +1051,7 @@ export const ProDashboard = () => {
                                     </div>
                                 </div>
 
-                                {/* Visual Branding Prototype */}
+                                {/* Visual Branding Prototype - #comment: Design system blueprints for high-impact social media assets */}
                                 <div className="glass-panel-premium p-0.5 rounded-[3rem] border border-white/10 relative overflow-hidden group shadow-2xl">
                                     <div className="p-8 space-y-10 bg-(--color-bg-surface)">
                                         <div className="flex items-center justify-between">

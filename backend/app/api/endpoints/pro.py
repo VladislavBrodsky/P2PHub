@@ -105,12 +105,18 @@ async def generate_content(
         referral_link=payload.referral_link
     )
     
-    if "error" in result:
+    if result.get("status") == "failed":
         # Refund tokens on error
         partner.pro_tokens += 2
         session.add(partner)
         await session.commit()
-        raise HTTPException(status_code=500, detail=result["error"])
+        
+        error_code = result.get("error_code", "V999")
+        error_msg = result.get("error", "Unknown error")
+        raise HTTPException(
+            status_code=500, 
+            detail=f"[{error_code}] {error_msg}"
+        )
     
     return {
         "title": result["title"],

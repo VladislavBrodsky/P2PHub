@@ -67,6 +67,7 @@ class ViralGenerateResponse(BaseModel):
     image_prompt: str
     image_url: Optional[str] = None
     tokens_remaining: int
+    error_code: Optional[str] = None
 
 class SocialPostRequest(BaseModel):
     platform: str # 'x', 'telegram', 'linkedin'

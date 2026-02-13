@@ -17,6 +17,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
 from app.models.partner import Partner
+from app.core.errors import ViralStudioErrorCode, get_error_msg
 
 logger = logging.getLogger(__name__)
 
@@ -141,7 +142,11 @@ class ViralMarketingStudio:
         Generates text (OpenAI) and Image Suggestion/Prompt (Gemini).
         """
         if not self.openai_client:
-            return {"error": "OpenAI not configured"}
+            return {
+                "error": "OpenAI not configured. Elite content engine is offline.",
+                "error_code": ViralStudioErrorCode.OPENAI_AUTH_ERROR,
+                "status": "failed"
+            }
 
         ref_link = referral_link or f"https://t.me/pintopaybot?start={partner.referral_code}"
         
@@ -162,21 +167,25 @@ class ViralMarketingStudio:
         tokens_openai = 0
 
         # Construction of the Image Prompt Template (to allow parallel start)
-        # Enhanced with storytelling and emotional elements to match the narrative
+        # Enhanced for Gemini 3 Pro (Nano Banana Pro) reasoning capabilities
         base_image_prompt = (
-            f"Professional DSLR photography, ultra-realistic cinematic shot: A real person from {target_audience}, "
-            f"captured in an authentic moment that tells the story of '{post_type}'. "
-            f"Show genuine emotion - aspiration, success, or transformation. Natural lighting, 35mm lens, f/2.8, sharp focus. "
-            f"Setting: Contemporary 2026 luxury environment (modern office, rooftop cafe, or co-working space) with warm ambient light. "
-            f"The person's expression and body language should convey the narrative - make it eye-catching and emotionally resonant. "
-            f"Atmosphere: financial freedom, digital nomad lifestyle, achievement. Film grain texture, cinematic color grading. "
-            f"Composition: Rule of thirds, the subject is the hero of the story. Photorealistic, 4K quality. "
+            f"PROFESSIONAL STUDIO PHOTOGRAPHY - NANO BANANA PRO QUALITY: A real person from {target_audience}, "
+            f"captured in an authentic, high-fidelity cinematic moment for '{post_type}'. "
+            f"The scene must be grounded in realism with complex lighting, shallow depth of field, and 4K detail. "
+            f"Subject: {target_audience} expressing peak success/transformation. "
+            f"Setting: Ultra-modern 2026 digital infrastructure or luxury lifestyle environment. "
+            f"Atmosphere: Sophisticated, authoritative, financial freedom. "
+            f"Technical specs: 35mm lens, sharp focus, natural skin textures, volumetric lighting. "
+            f"Creative Rule: Follow the emotional narrative of the blog post and render text if applicable. "
             f"NEGATIVE PROMPT: cartoon, CGI, anime, illustration, stock photo smile, distorted faces, extra limbs, blurry, "
-            f"futuristic sci-fi, neon lights, flying cars, unrealistic proportions, oversaturated colors, glitchy textures, generic poses"
+            f"futuristic sci-fi, neon lights, flying cars, unrealistic proportions, oversaturated colors, generic poses"
         )
 
         async def get_text_content():
             try:
+                if not self.openai_client:
+                    return None, (ViralStudioErrorCode.OPENAI_AUTH_ERROR, "OpenAI client not initialized")
+
                 # Try OpenAI first with High Standard Model
                 response = await self.openai_client.chat.completions.create(
                     model="gpt-4o",
@@ -189,34 +198,47 @@ class ViralMarketingStudio:
                 tokens = response.usage.total_tokens if response.usage else 0
                 return json.loads(response.choices[0].message.content), tokens
             except Exception as e:
-                logger.error(f"OpenAI text generation error: {e}")
+                err_msg = str(e)
+                logger.error(f"❌ ViralStudio [OpenAI Error]: {err_msg}")
+                
+                # Check for common OpenAI errors
+                error_code = ViralStudioErrorCode.OPENAI_AUTH_ERROR if "auth" in err_msg.lower() or "401" in err_msg else \
+                             ViralStudioErrorCode.OPENAI_RATE_LIMIT if "rate" in err_msg.lower() or "429" in err_msg else \
+                             ViralStudioErrorCode.OPENAI_QUOTA_EXCEEDED if "quota" in err_msg.lower() or "insufficient" in err_msg.lower() else \
+                             ViralStudioErrorCode.GENERIC_GENERATION_FAILED
+
                 # Fallback to Gemini if OpenAI fails
                 if self.genai_client:
                     try:
-                        logger.info("🔄 Switching to Gemini 1.5 Flash for text generation...")
+                        logger.info(f"🔄 Switching to Gemini 1.5 Flash for text generation (OpenAI failed with {error_code})...")
                         gemini_response = self.genai_client.models.generate_content(
                             model='gemini-1.5-flash',
                             contents=f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}",
-                            config={'response_mime_type': 'application/json'}
+                            config=genai_types.GenerateContentConfig(
+                                response_mime_type='application/json',
+                                temperature=0.7
+                            )
                         )
                         return json.loads(gemini_response.text), 0
                     except Exception as gemini_e:
-                        logger.error(f"Gemini fallback text generation failed: {gemini_e}")
-                        return None, f"OpenAI: {e} | Gemini: {gemini_e}"
-                return None, str(e)
+                        logger.error(f"❌ ViralStudio [Gemini Fallback Failed]: {gemini_e}")
+                        return None, (ViralStudioErrorCode.GEMINI_TEXT_FAILED, f"OpenAI: {err_msg} | Gemini: {gemini_e}")
+                
+                return None, (error_code, err_msg)
 
         async def get_image_content(prompt):
             if not self.genai_client:
                 return None
             
-            # Prioritize Imagen 4.0 Generate (Standard) and Fast variant
+            # Correct model names for AI Studio (including Nano Banana latest releases)
             imagen_models = [
                 self._last_working_imagen_model,
-                'imagen-4.0-generate-001',
-                'imagen-4.0-fast-generate-001',
-                'imagen-3.0-generate-001' # Extreme fallback
+                'gemini-3-pro-image-preview',  # Nano Banana Pro (4K, Reasoning)
+                'gemini-2.5-flash-image',      # Nano Banana (Fast, High-Volume)
+                'imagen-3',                    # Legacy HQ Fallback
+                'imagen-3-fast',
             ]
-            # Remove duplicates while preserving order
+            # Remove duplicates and None values
             imagen_models = [m for i, m in enumerate(imagen_models) if m and m not in imagen_models[:i]]
             
             # Defensive check for models attribute and methods
@@ -246,7 +268,14 @@ class ViralMarketingStudio:
                                     'output_mime_type': 'image/png',
                                     'aspect_ratio': '16:9',
                                     'safety_filter_level': 'block_low_and_above',
-                                    'person_generation': 'allow_adult'
+                                    'person_generation': 'allow_adult',
+                                    'add_watermark': True # SynthID per Google policy
+                                } if 'imagen' in model_name else {
+                                    # Nano Banana specific configs (Gemini 3 Pro)
+                                    'number_of_images': 1,
+                                    'aspect_ratio': '16:9',
+                                    'output_mime_type': 'image/png',
+                                    'quality': '4k' if 'pro' in model_name else 'standard'
                                 }
                             )
                         ),
@@ -256,11 +285,19 @@ class ViralMarketingStudio:
                     if img_response and getattr(img_response, 'generated_images', None):
                         image = img_response.generated_images[0]
                         filename = f"viral_{partner.id}_{secrets.token_hex(4)}.png"
-                        save_path = os.path.join("app_images", "generated", filename)
-                        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                        # Ensure absolute path regardless of CWD
+                        backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                        save_dir = os.path.join(backend_dir, "app_images", "generated")
+                        os.makedirs(save_dir, exist_ok=True)
+                        save_path = os.path.join(save_dir, filename)
                         
                         # Use thread pool for blocking PIL save
-                        await loop.run_in_executor(None, lambda: image.image.save(save_path))
+                        try:
+                            await loop.run_in_executor(None, lambda: image.image.save(save_path))
+                            logger.info(f"✅ Imagen: Successfully saved {model_name} output to {save_path}")
+                        except Exception as save_err:
+                            logger.error(f"❌ Failed to save image to disk: {save_err}")
+                            return None # Skip this model if we can't save anyway
                         
                         self._last_working_imagen_model = model_name # Update memory
                         return f"/images/generated/{filename}"
@@ -274,10 +311,15 @@ class ViralMarketingStudio:
             text_task = get_text_content()
             image_task = get_image_content(base_image_prompt)
             
-            (content_data, tokens_openai), image_url = await asyncio.gather(text_task, image_task)
+            (content_data, text_error_info), image_url = await asyncio.gather(text_task, image_task)
             
-            if not content_data:
-                return {"error": "Failed to generate content"}
+            if content_data is None:
+                error_code, detailed_msg = text_error_info
+                return {
+                    "error": detailed_msg,
+                    "error_code": error_code,
+                    "status": "failed"
+                }
 
             content = content_data
             image_prompt = content.get("image_description") or base_image_prompt
@@ -424,20 +466,63 @@ class ViralMarketingStudio:
 
     async def _post_to_x(self, partner: Partner, content: str, image_path: Optional[str]) -> Dict[str, Any]:
         if not (partner.x_api_key and partner.x_access_token):
-            return {"error": "X API not configured"}
-        # Simple placeholder for Tweepy integration
-        return {"status": "success", "platform": "x", "msg": "Posted to X (Simulation)"}
+            return {"error": "X (Twitter) API not configured. Please sync your keys in API Setup."}
+        
+        # Simulation: For real X posting, we would use Tweepy.
+        # However, X API is often paid/restricted, so we provide an elite simulation for PRO users
+        # while waiting for their App approvals.
+        return {"status": "success", "platform": "x", "msg": "Content pushed to X-Global Protocol (Simulation)"}
 
     async def _post_to_telegram(self, partner: Partner, content: str, image_path: Optional[str]) -> Dict[str, Any]:
         if not partner.telegram_channel_id:
-            return {"error": "Telegram Channel ID missing"}
-        # Use bot.py's bot instance to send message
-        return {"status": "success", "platform": "telegram", "msg": "Posted to Telegram (Simulation)"}
+            return {"error": "Telegram Channel ID missing. Please configure it in API Setup."}
+        
+        try:
+            from bot import bot
+            import os
+            
+            # Remove any Markdown markers that could break Telegram's parser if not careful
+            # We use MarkdownV2 or HTML, but the AI generates standard Markdown.
+            # For simplicity, we'll try to send with Markdown (V1) first.
+            
+            if image_path:
+                # Resolve absolute path to image
+                backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                full_image_path = os.path.join(backend_dir, "app_images", image_path.lstrip('/images/'))
+                
+                if os.path.exists(full_image_path):
+                    from aiogram.types import FSInputFile
+                    photo = FSInputFile(full_image_path)
+                    await bot.send_photo(
+                        chat_id=partner.telegram_channel_id,
+                        photo=photo,
+                        caption=content[:1024], # Telegram caption limit
+                        parse_mode="Markdown"
+                    )
+                else:
+                    # Fallback to text only if image not found
+                    await bot.send_message(
+                        chat_id=partner.telegram_channel_id,
+                        text=content,
+                        parse_mode="Markdown"
+                    )
+            else:
+                await bot.send_message(
+                    chat_id=partner.telegram_channel_id,
+                    text=content,
+                    parse_mode="Markdown"
+                )
+            
+            return {"status": "success", "platform": "telegram", "msg": f"Successfully posted to {partner.telegram_channel_id}"}
+        except Exception as e:
+            logger.error(f"❌ Telegram posting failed: {e}")
+            return {"error": f"Telegram API Error: {str(e)}"}
 
     async def _post_to_linkedin(self, partner: Partner, content: str, image_path: Optional[str]) -> Dict[str, Any]:
         if not partner.linkedin_access_token:
-            return {"error": "LinkedIn API not configured"}
-        return {"status": "success", "platform": "linkedin", "msg": "Posted to LinkedIn (Simulation)"}
+            return {"error": "LinkedIn API not configured. Upgrade to ELITE integration required."}
+        # Simulation for now as LinkedIn requires formal App approval and OAuth flow
+        return {"status": "success", "platform": "linkedin", "msg": "Syndicated to LinkedIn Network (PRO Simulation)"}
 
     async def log_generation_to_sheets(
         self,
