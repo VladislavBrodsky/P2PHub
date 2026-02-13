@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends
+# Leaderboard endpoint with high-performance caching
+import logging
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -8,7 +10,6 @@ from app.services.leaderboard_service import leaderboard_service
 
 router = APIRouter()
 
-import logging
 from app.middleware.rate_limit import limiter
 from fastapi import Request
 
