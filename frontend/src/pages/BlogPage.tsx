@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
@@ -98,7 +98,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
         };
     }, [selectedPost, setActiveTab, currentTab, selection]); // Added selection dependency
 
-    const categories = ['All', ...new Set(blogPosts.map(post => post.category))];
+    const categories = useMemo(() => ['All', ...new Set(blogPosts.map(post => post.category))], []);
     // Removed unused variables featuredPost/otherPosts to clean up code
 
     const handleLike = async () => {
@@ -151,27 +151,34 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
     };
 
     const isRussian = i18n.language === 'ru';
-    const localizedPosts = blogPosts.map(post => {
-        const localized = t(`blog.posts.${post.id}`, { returnObjects: true }) as any;
-        return {
-            ...post,
-            title: localized.title || post.title,
-            excerpt: localized.excerpt || post.excerpt,
-            category: localized.category || post.category
-        };
-    });
 
-    // Re-filter with localized content
-    const currentFilteredPosts = localizedPosts.filter(post => {
-        const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;
-        const matchesSearch =
-            post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchesCategory && matchesSearch;
-    });
+    // Memoize localized posts to avoid re-mapping on every search keystroke
+    const localizedPosts = useMemo(() => {
+        return blogPosts.map(post => {
+            const localized = t(`blog.posts.${post.id}`, { returnObjects: true }) as any;
+            return {
+                ...post,
+                title: (localized && localized.title) || post.title,
+                excerpt: (localized && localized.excerpt) || post.excerpt,
+                category: (localized && localized.category) || post.category
+            };
+        });
+    }, [blogPosts, t]);
 
-    const currentFeaturedPost = currentFilteredPosts[0];
-    const currentOtherPosts = currentFilteredPosts.slice(1);
+    // Memoize filtered posts for instant search performance
+    const currentFilteredPosts = useMemo(() => {
+        const query = searchQuery.toLowerCase();
+        return localizedPosts.filter(post => {
+            const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;
+            const matchesSearch =
+                post.title.toLowerCase().includes(query) ||
+                post.excerpt.toLowerCase().includes(query);
+            return matchesCategory && matchesSearch;
+        });
+    }, [localizedPosts, selectedCategory, searchQuery]);
+
+    const currentFeaturedPost = useMemo(() => currentFilteredPosts[0], [currentFilteredPosts]);
+    const currentOtherPosts = useMemo(() => currentFilteredPosts.slice(1), [currentFilteredPosts]);
 
     return (
         <motion.div
@@ -252,6 +259,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                                 src={currentFeaturedPost.image}
                                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                                 alt={currentFeaturedPost.title}
+                                                loading="lazy"
                                             />
                                             <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
                                         </div>
@@ -300,7 +308,12 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                     >
                                         {post.image && (
                                             <div className="shrink-0 w-20 h-20 rounded-2xl overflow-hidden border border-(--color-border-glass)">
-                                                <img src={post.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" />
+                                                <img
+                                                    src={post.image}
+                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                    alt=""
+                                                    loading="lazy"
+                                                />
                                             </div>
                                         )}
                                         <div className="flex-1 space-y-3">
@@ -464,6 +477,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                                 src={post.image}
                                 className="absolute inset-0 w-full h-full object-cover"
                                 alt={post.title}
+                                loading="eager"
                             />
                             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/60 to-transparent" />
                         </div>

@@ -8,6 +8,7 @@ from aiogram import types
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
 
 logger = logging.getLogger(__name__)
@@ -310,6 +311,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# #comment: Enable GZip compression for all responses > 500 bytes.
+# This significantly reduces payload size for leaderboard, transaction history, etc.
+app.add_middleware(GZipMiddleware, minimum_size=500)
 
 app.include_router(partner.router, prefix="/api/partner", tags=["partner"])
 app.include_router(earnings.router, prefix="/api/earnings", tags=["earnings"])

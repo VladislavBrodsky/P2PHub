@@ -150,6 +150,11 @@ async def process_referral_logic(partner_id: int):
                     async with redis_service.client.pipeline(transaction=True) as pipe:
                         pipe.delete(f"partner:profile:{referrer.telegram_id}")
                         pipe.delete(f"ref_tree_stats:{referrer.id}")
+                        # Optimized: Invalidate growth metrics and charts to avoid stale data
+                        for tf in ["24H", "7D", "1M", "3M", "6M", "1Y"]:
+                            pipe.delete(f"growth_metrics:{referrer.id}:{tf}")
+                            pipe.delete(f"growth_chart:{referrer.id}:{tf}")
+                        
                         if level == 1:
                             pipe.delete(f"ref_tree_members:{referrer.id}:1")
                         await pipe.execute()
