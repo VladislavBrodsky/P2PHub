@@ -69,7 +69,9 @@ class SubscriptionService:
             from app.services.redis_service import redis_service
             try:
                 await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
-            except Exception: pass
+            except Exception as e:
+                # Log warning as cache invalidation failure might show stale data for a short while
+                logger.warning(f"Failed to invalidate cache for expired user {partner.telegram_id}: {e}")
             
             await self.send_expired_notification(partner)
 

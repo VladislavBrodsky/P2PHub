@@ -45,7 +45,8 @@ async def get_network_activity(
         cached = await redis_service.get_json(cache_key)
         if cached:
             return cached
-    except Exception: pass
+    except Exception as e:
+        logger.warning(f"Cache read failed (activity): {e}")
 
     # Fetch latest XP transactions with partner details
     from app.models.partner import Partner, XPTransaction
@@ -72,7 +73,8 @@ async def get_network_activity(
 
     try:
         await redis_service.set_json(cache_key, activity, expire=30) # 30s cache
-    except Exception: pass
+    except Exception as e:
+        logger.warning(f"Cache write failed (activity): {e}")
 
     return activity
 
@@ -95,7 +97,8 @@ async def get_my_profile(
         cached_partner = await redis_service.get_json(cache_key)
         if cached_partner:
             return cached_partner
-    except Exception: pass
+    except Exception as e:
+        logger.warning(f"Profile cache read failed: {e}")
 
     # 2. Query DB and/or Register
     from app.services.partner_service import create_partner
@@ -301,7 +304,8 @@ async def get_my_profile(
 
     try:
         await redis_service.set_json(cache_key, partner_dict, expire=300)
-    except Exception: pass
+    except Exception as e:
+        logger.warning(f"Profile cache write failed: {e}")
 
     return partner_dict
 
@@ -320,8 +324,8 @@ async def get_top_partners(
         cached = await redis_service.get_json(cache_key)
         if cached:
             return cached
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"Top partners cache read failed: {e}")
 
     statement = select(Partner).order_by(Partner.xp.desc()).limit(5)
     result = await session.exec(statement)
@@ -343,8 +347,8 @@ async def get_top_partners(
 
     try:
         await redis_service.set_json(cache_key, top_data, expire=600)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"Top partners cache write failed: {e}")
 
     return top_data
 
@@ -373,8 +377,8 @@ async def get_recent_partners(
         cached = await redis_service.get_json(cache_key)
         if cached:
             return cached
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"Recent partners cache read failed: {e}")
 
     # 2. Check DB Persistence
     snapshot_setting = await session.get(SystemSetting, db_settings_key)
@@ -391,7 +395,9 @@ async def get_recent_partners(
             refresh_partners = False
             try:
                 partners_list = json.loads(snapshot_setting.value)
-            except:
+            except Exception as e:
+                # #comment: Invalid JSON in DB snapshot, force refresh.
+                logger.warning(f"Failed to parse partner snapshot: {e}")
                 refresh_partners = True
 
     # Check if we need to refresh the randomized count (every 60m)
@@ -467,8 +473,8 @@ async def get_recent_partners(
     # 5. Populate Redis
     try:
         await redis_service.set_json(cache_key, partners_data, expire=300) # 5 mins
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"Recent partners cache write failed: {e}")
 
 
 @router.get("/tree", response_model=NetworkStats)
@@ -845,7 +851,9 @@ async def complete_academy_stage(
 
     try:
         completed = json.loads(partner.completed_stages or "[]")
-    except:
+    except Exception as e:
+        # #comment: Corrupt JSON in completed_stages, defaulting to empty list.
+        logger.error(f"JSON parse error for partner {partner.id} completed_stages: {e}")
         completed = []
 
     if stage_id not in completed:
@@ -998,7 +1006,9 @@ async def get_prepared_share_id(
     try:
         bot_info = await bot.get_me()
         bot_username = bot_info.username.replace("@", "")
-    except:
+    except Exception as e:
+        # #comment: Network error or bot blocked, fall back to default username.
+        logger.warning(f"Failed to fetch bot_me: {e}")
         bot_username = "pintopay_probot"
 
     ref_link = f"https://t.me/{bot_username}?start={ref_code}"

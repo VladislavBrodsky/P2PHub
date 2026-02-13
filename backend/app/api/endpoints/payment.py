@@ -1,4 +1,7 @@
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 from fastapi import APIRouter, Body, Depends, HTTPException
 from sqlmodel import select
@@ -39,7 +42,8 @@ async def create_invoice(
             tg_id = str(json.loads(user_data["user"]).get("id"))
         else:
             tg_id = str(user_data.get("id"))
-    except:
+    except Exception as e:
+        logger.warning(f"Invalid user data in create_invoice: {e}")
         raise HTTPException(status_code=400, detail="Invalid user data")
 
     statement = select(Partner).where(Partner.telegram_id == tg_id)
@@ -72,7 +76,8 @@ async def create_payment_session(
             tg_id = str(json.loads(user_data["user"]).get("id"))
         else:
             tg_id = str(user_data.get("id"))
-    except:
+    except Exception as e:
+        logger.warning(f"Invalid user data in create_payment_session: {e}")
         raise HTTPException(status_code=400, detail="Invalid user data")
 
     statement = select(Partner).where(Partner.telegram_id == tg_id)
@@ -104,7 +109,8 @@ async def verify_ton(
             tg_id = str(json.loads(user_data["user"]).get("id"))
         else:
             tg_id = str(user_data.get("id"))
-    except:
+    except Exception as e:
+        logger.warning(f"Invalid user data in verify_ton: {e}")
         raise HTTPException(status_code=400, detail="Invalid user data")
 
     statement = select(Partner).where(Partner.telegram_id == tg_id)
@@ -139,7 +145,8 @@ async def submit_manual_payment(
             tg_id = str(json.loads(user_data["user"]).get("id"))
         else:
             tg_id = str(user_data.get("id"))
-    except:
+    except Exception as e:
+        logger.warning(f"Invalid user data in submit_manual_payment: {e}")
         raise HTTPException(status_code=400, detail="Invalid user data")
 
     try:
@@ -159,10 +166,10 @@ async def submit_manual_payment(
         # Notify Admins (Background-style)
         async def notify_admins():
             admin_msg = (
-                "🚨 *NEW MANUAL PAYMENT SUBMITTED*\n\n"
-                f"👤 *Partner:* {partner.first_name} (@{partner.username})\n"
-                f"💰 *Amount:* ${amount} {currency} ({network})\n"
-                f"📝 *Hash:* `{tx_hash or 'Not Provided'}`\n\n"
+                "🚨 *NEW MANUAL PAYMENT SUBMITTED*\\n\\n"
+                f"👤 *Partner:* {partner.first_name} (@{partner.username})\\n"
+                f"💰 *Amount:* ${amount} {currency} ({network})\\n"
+                f"📝 *Hash:* `{tx_hash or 'Not Provided'}`\\n\\n"
                 "Please verify and approve in the Admin Panel."
             )
             for admin_id in settings.ADMIN_USER_IDS:
@@ -171,8 +178,8 @@ async def submit_manual_payment(
                         chat_id=int(admin_id),
                         text=admin_msg
                     )
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.error(f"Failed to notify admin {admin_id} about manual payment: {e}")
         
         asyncio.create_task(notify_admins())
 
@@ -184,4 +191,3 @@ async def submit_manual_payment(
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
-

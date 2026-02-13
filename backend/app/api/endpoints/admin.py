@@ -119,8 +119,8 @@ async def reject_payment(
                 chat_id=partner.telegram_id,
                 text="❌ *PAYMENT REJECTED*\n\nYour manual payment confirmation was rejected. Please try again or contact support."
             )
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error(f"Failed to send rejection notification: {e}")
 
     return {"status": "success", "message": f"Payment {transaction_id} rejected"}
 

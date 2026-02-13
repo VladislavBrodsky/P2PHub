@@ -1,4 +1,5 @@
 from typing import List
+import logging
 
 from app.middleware.rate_limit import limiter
 from fastapi import APIRouter, Depends, Request
@@ -9,6 +10,9 @@ from app.core.security import get_current_user, get_tg_user
 from app.models.partner import Earning, Partner, get_session
 from app.models.schemas import EarningSchema
 from app.services.redis_service import redis_service
+
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -28,8 +32,8 @@ async def get_my_earnings(
         cached_earnings = await redis_service.get_json(cache_key)
         if cached_earnings:
             return cached_earnings
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"Earnings cache read failed: {e}")
 
     # 2. Query DB
     result = await session.exec(select(Partner).where(Partner.telegram_id == tg_id))
@@ -48,7 +52,7 @@ async def get_my_earnings(
     # 3. Store in Redis Cache (expires in 2 minutes for a good balance of freshness/speed)
     try:
         await redis_service.set_json(cache_key, earnings_data, expire=120)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"Earnings cache write failed: {e}")
 
     return earnings_data

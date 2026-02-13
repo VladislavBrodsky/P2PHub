@@ -30,7 +30,9 @@ async def ensure_photo_cached(file_id: str) -> Optional[bytes]:
     try:
         cached_binary = await redis_service.get_bytes(cache_key_binary)
         if cached_binary: return cached_binary
-    except Exception: pass
+    except Exception as e:
+        # Log debug only as a cache miss isn't critical
+        logger.debug(f"Binary cache read failed: {e}")
 
     try:
         photo_url = await redis_service.get(cache_key_url)
@@ -101,7 +103,8 @@ async def create_partner(
             referrer = ref_res.first()
             if referrer: referrer_id = referrer.id
         except Exception as e:
-            logger.error(f"Error resolving referrer_code {referrer_code}: {e}")
+            # Important to log if referral resolution fails
+            logger.error(f"Error resolving referring partner {referrer_code}: {e}")
 
     path = None
     depth = 0
@@ -145,7 +148,8 @@ async def create_partner(
     # Side Effects
     try:
         await leaderboard_service.update_score(partner.id, partner.xp)
-    except Exception: pass
+    except Exception as e:
+        logger.warning(f"Failed to sync new partner to leaderboard: {e}")
 
     if is_new and referrer:
         try:
@@ -156,11 +160,13 @@ async def create_partner(
                     if anc_id == referrer.id:
                         pipe.delete(f"ref_tree_members:{anc_id}:1")
                 await pipe.execute()
-        except Exception: pass
+        except Exception as e:
+            logger.error(f"Failed to invalidate referral stats cache: {e}")
 
     try:
         await redis_service.client.delete("partners:recent_v2")
-    except Exception: pass
+    except Exception as e:
+        logger.warning(f"Failed to invalidate recent partners cache: {e}")
 
     return partner, is_new
 

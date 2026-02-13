@@ -38,7 +38,9 @@ try:
                 load_dotenv(dotenv_path=p, override=True)
                 logger.info(f"✅ Loaded environment from {p.absolute()}")
                 loaded_env = True
-        except Exception:
+        except Exception as e:
+            # #comment: Log debug info if an env file path fails to load, avoiding silent failure while continuing to try other paths.
+            logger.debug(f"Failed to load env from {p}: {e}")
             continue
 except Exception as e:
     logger.warning(f"Warning: Unexpected error during .env loading: {e}")

@@ -27,7 +27,9 @@ def get_user_key(request: Request) -> str:
                 tg_id = user_data.get("id")
                 if tg_id:
                     return f"user:{tg_id}"
-        except Exception:
+        except Exception as e:
+            # #comment: Failed to parse Telegram Init Data, falling back to IP.
+            # This is expected for standard HTTP requests or invalid headers.
             pass
 
     # 2. Fallback to IP address
@@ -41,7 +43,11 @@ try:
         storage_uri=settings.REDIS_URL,
         default_limits=["100/minute"]  # Global rate limit
     )
-except Exception:
+except Exception as e:
+    # #comment: Redis connection failed using configured settings.
+    # Falling back to in-memory storage to keep the app running.
+    import logging
+    logging.getLogger(__name__).warning(f"⚠️ Redis Rate Limiter Init Failed: {e}")
     # Fallback to in-memory storage if Redis unavailable
     limiter = Limiter(
         key_func=get_user_key,

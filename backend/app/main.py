@@ -205,7 +205,10 @@ async def lifespan(app: FastAPI):
         try:
             await app.state.polling_task
         except asyncio.CancelledError:
-            pass
+            # #comment: Expected behavior when cancelling the polling task during shutdown.
+            logger.info("ℹ️ Polling task cancelled successfully.")
+        except Exception as e:
+            logger.error(f"❌ Error cancelling polling task: {e}")
 
 app = FastAPI(title="Pintopay Partner Hub API", lifespan=lifespan)
 
