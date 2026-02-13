@@ -14,7 +14,7 @@ from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision = 'audit_log_001'
-down_revision = None  # Update this to your latest migration
+down_revision = '20260211_1800'  # Point to task_status_fields migration
 branch_labels = None
 depends_on = None
 
