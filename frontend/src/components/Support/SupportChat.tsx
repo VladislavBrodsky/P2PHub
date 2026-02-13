@@ -130,7 +130,9 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
         setShowCategories(false);
         setIsTyping(true);
 
-        const delay = Math.floor(Math.random() * 1500) + 1000;
+        // #comment: Hyper-snappy response delay (0.4s-0.8s) for an elite reactive feel.
+        // We moved from 2.5s down to sub-second to match GPT-4o-Mini backend speed.
+        const delay = Math.floor(Math.random() * 400) + 400;
 
         try {
             const response = await apiClient.post('/api/support/chat', { message: messageText });
