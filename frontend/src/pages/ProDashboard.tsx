@@ -321,14 +321,14 @@ export const ProDashboard = () => {
     const languages = ["English", "Russian", "Spanish", "French", "German"];
 
     const renderTabs = () => (
-        <div className="flex items-center gap-2 px-6 mb-8 overflow-x-auto no-scrollbar py-2">
+        <div className="flex items-center gap-2 px-6 mb-6 overflow-x-auto no-scrollbar py-2">
             {(['studio', 'tools', 'academy'] as Tab[]).map((tab) => (
                 <button
                     key={tab}
                     onClick={() => { setActiveTab(tab); selection(); }}
-                    className={`px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${activeTab === tab
-                        ? 'bg-indigo-500 text-white shadow-[0_10px_25px_-5px_rgba(99,102,241,0.4)] border-indigo-400/50 scale-105'
-                        : 'bg-white/5 text-(--color-text-secondary) border-white/5 hover:border-white/10'
+                    className={`px-6 h-10 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${activeTab === tab
+                        ? 'vibing-blue-animated text-white shadow-lg scale-105 border-blue-400/50'
+                        : 'bg-(--color-bg-surface) text-(--color-text-secondary) border-(--color-border-glass) hover:border-indigo-500/30'
                         }`}
                 >
                     {t(`pro_dashboard.tab_${tab}`)}
@@ -356,35 +356,33 @@ export const ProDashboard = () => {
     }
 
     return (
-        <div className={`flex flex-col min-h-screen ${showSetup ? 'pb-10' : 'pb-32'}`}>
-            {/* Header */}
-            <div className="px-6 pt-12 pb-6 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-2xl bg-linear-to-br from-indigo-500 to-purple-700 shadow-xl shadow-indigo-500/20">
-                        <Zap className="text-white w-6 h-6" />
-                    </div>
-                    <div>
-                        <h1 className="text-lg font-black tracking-tight leading-none uppercase">{t('pro_dashboard.title_studio')}</h1>
-                        <div className="flex items-center gap-2 mt-1.5">
-                            {status && (
-                                <span className="text-[10px] font-black text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
-                                    {t('pro_dashboard.tokens_left', { count: status.pro_tokens })}
-                                </span>
-                            )}
-                            {status && !status.capabilities?.text_generation && (
-                                <span className="text-[10px] font-bold text-red-500 bg-red-500/10 px-2 py-0.5 rounded-full border border-red-500/20">
-                                    {t('pro_dashboard.system_offline')}
-                                </span>
-                            )}
+        <div className={`flex flex-col min-h-screen ${showSetup ? 'pb-10' : 'pb-32'} bg-(--color-bg-app)`}>
+            {/* Header - Premium Liquid Style */}
+            <div className="px-6 pt-10 pb-6">
+                <div className="flex items-center justify-between glass-panel-premium p-4 rounded-3xl border-(--color-border-glass) relative overflow-hidden group shadow-2xl">
+                    <div className="absolute inset-0 bg-linear-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 animate-liquid pointer-events-none" />
+                    <div className="flex items-center gap-3 relative z-10">
+                        <div className="w-11 h-11 rounded-2xl vibing-blue-animated flex items-center justify-center shadow-lg shadow-blue-500/20">
+                            <Zap className="text-white w-5 h-5" />
+                        </div>
+                        <div>
+                            <h1 className="text-sm font-black tracking-tight leading-none uppercase text-brand-text">{t('pro_dashboard.title_studio')}</h1>
+                            <div className="flex items-center gap-2 mt-1.5">
+                                {status && (
+                                    <span className="text-[9px] font-black text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 uppercase tracking-tighter">
+                                        {t('pro_dashboard.tokens_left', { count: status.pro_tokens })}
+                                    </span>
+                                )}
+                            </div>
                         </div>
                     </div>
+                    <button
+                        onClick={() => { selection(); setShowSetup(true); }}
+                        className="p-3 rounded-xl bg-(--color-bg-surface) border border-(--color-border-glass) active:scale-95 transition-all shadow-sm relative z-10"
+                    >
+                        <Settings className="w-5 h-5 text-(--color-text-secondary)" />
+                    </button>
                 </div>
-                <button
-                    onClick={() => setShowSetup(true)}
-                    className="p-3 rounded-2xl bg-(--color-bg-surface) border border-(--color-border-glass) active:scale-90 transition-transform"
-                >
-                    <Settings className="w-5 h-5 text-(--color-text-secondary)" />
-                </button>
             </div>
 
             {renderTabs()}
@@ -517,15 +515,15 @@ export const ProDashboard = () => {
                                         <div className="py-8 flex flex-col items-center justify-center space-y-8 relative">
                                             {/* Cooking Animation */}
                                             <div className="relative">
-                                                <div className="absolute inset-0 bg-indigo-500/30 blur-3xl animate-pulse rounded-full" />
-                                                <div className="w-28 h-28 bg-slate-950 rounded-[2rem] border border-white/10 flex items-center justify-center relative overflow-hidden shadow-2xl">
+                                                <div className="absolute inset-0 bg-indigo-500/20 blur-3xl animate-pulse rounded-full" />
+                                                <div className="w-28 h-28 bg-(--color-bg-surface) rounded-[2.5rem] border border-(--color-border-glass) flex items-center justify-center relative overflow-hidden shadow-2xl">
                                                     <motion.div
                                                         animate={{ rotate: 360 }}
                                                         transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                                                        className="absolute inset-0 bg-[conic-gradient(var(--tw-gradient-stops))] from-transparent via-indigo-500/40 to-transparent opacity-60"
+                                                        className="absolute inset-0 bg-[conic-gradient(var(--tw-gradient-stops))] from-transparent via-indigo-500/20 to-transparent opacity-60"
                                                     />
-                                                    <div className="absolute inset-2 bg-slate-950 rounded-[1.5rem] border border-white/5 flex items-center justify-center z-10">
-                                                        <Bot className="w-12 h-12 text-indigo-400 animate-pulse" />
+                                                    <div className="absolute inset-1.5 bg-(--color-bg-surface) rounded-[2.2rem] border border-(--color-border-glass) flex items-center justify-center z-10 shadow-sm">
+                                                        <Bot className="w-12 h-12 text-indigo-500 animate-pulse" />
                                                     </div>
                                                 </div>
 
@@ -545,7 +543,7 @@ export const ProDashboard = () => {
                                                             delay: i * 0.7,
                                                             ease: "easeOut"
                                                         }}
-                                                        className={`absolute -top-4 ${i === 0 ? 'left-0 text-amber-400' : i === 1 ? 'right-0 text-pink-400' : 'left-1/2 text-emerald-400'}`}
+                                                        className={`absolute -top-4 ${i === 0 ? 'left-0 text-amber-500' : i === 1 ? 'right-0 text-pink-500' : 'left-1/2 text-emerald-500'}`}
                                                     >
                                                         <Sparkles size={i === 1 ? 20 : 16} />
                                                     </motion.div>
@@ -554,10 +552,10 @@ export const ProDashboard = () => {
 
                                             <div className="space-y-4 relative z-10 w-full max-w-xs">
                                                 <div className="space-y-1">
-                                                    <h3 className="text-lg font-black uppercase tracking-[0.3em] text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-white to-purple-400 animate-shimmer bg-size-[200%_auto]">
+                                                    <h3 className="text-lg font-black uppercase tracking-[0.3em] text-transparent bg-clip-text vibing-blue-animated bg-size-[200%_auto]">
                                                         {t('pro_dashboard.studio.cooking_title')}
                                                     </h3>
-                                                    <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+                                                    <p className="text-[10px] font-bold text-brand-muted uppercase tracking-widest opacity-60">
                                                         Deep Learning Optimization Active
                                                     </p>
                                                 </div>
@@ -565,16 +563,16 @@ export const ProDashboard = () => {
                                                 {/* Percentage & Progress Bar */}
                                                 <div className="space-y-3">
                                                     <div className="flex justify-between items-end px-1">
-                                                        <span className="text-3xl font-black text-white italic">
-                                                            {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-sm not-italic opacity-40 ml-1">%</span>
+                                                        <span className="text-3xl font-black text-brand-text italic leading-none">
+                                                            {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-sm not-italic opacity-30 ml-1.5">%</span>
                                                         </span>
-                                                        <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest pb-1">
+                                                        <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest pb-1 border-b border-indigo-500/20">
                                                             {t('pro_dashboard.studio.cooking_remaining', { count: countdown })}
                                                         </span>
                                                     </div>
-                                                    <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 p-0.5">
+                                                    <div className="h-2.5 w-full bg-(--color-bg-surface) rounded-full overflow-hidden border border-(--color-border-glass) p-0.5 shadow-inner">
                                                         <motion.div
-                                                            className="h-full bg-linear-to-r from-indigo-600 via-purple-500 to-pink-500 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.5)]"
+                                                            className="h-full vibing-blue-animated rounded-full shadow-[0_0_15px_rgba(0,102,255,0.4)]"
                                                             initial={{ width: "0%" }}
                                                             animate={{ width: `${Math.min(((30 - countdown) / 30) * 100, 99)}%` }}
                                                             transition={{ duration: 0.5 }}
@@ -629,7 +627,7 @@ export const ProDashboard = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     className="space-y-4"
                                 >
-                                    <div className="glass-panel-premium rounded-[2.5rem] border border-white/10 shadow-3xl overflow-hidden bg-slate-950/40 backdrop-blur-2xl">
+                                    <div className="glass-panel-premium rounded-[2rem] border border-(--color-border-glass) shadow-2xl overflow-hidden bg-(--color-bg-surface)/40 backdrop-blur-2xl">
                                         <div className="aspect-square sm:aspect-video bg-slate-900 relative flex items-center justify-center overflow-hidden group/img">
                                             <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/80 z-1" />
                                             {generatedResult.image_url ? (
@@ -662,37 +660,37 @@ export const ProDashboard = () => {
                                                 <span className="bg-indigo-500/90 backdrop-blur-md text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.2em] border border-indigo-400/30 shadow-lg shadow-indigo-500/40">{t('pro_dashboard.studio.ai_generated_badge')}</span>
                                             </div>
                                         </div>
-                                        <div className="p-8 space-y-6 relative">
+                                        <div className="p-7 space-y-5 relative">
                                             <div className="flex justify-between items-start gap-4">
-                                                <div className="space-y-3">
-                                                    <h4 className="text-xl font-black leading-tight text-white uppercase tracking-tight">{generatedResult.title}</h4>
-                                                    <div className="h-1 w-16 bg-linear-to-r from-indigo-500 to-purple-500 rounded-full" />
+                                                <div className="space-y-2">
+                                                    <h4 className="text-lg font-black leading-tight text-brand-text uppercase tracking-tight">{generatedResult.title}</h4>
+                                                    <div className="h-1 w-12 vibing-blue-gradient rounded-full" />
                                                 </div>
                                                 <div className="flex gap-2 shrink-0">
-                                                    <button onClick={handleCopyText} className="p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 text-brand-muted hover:text-white transition-all active:scale-90">
-                                                        <Copy size={16} />
+                                                    <button onClick={handleCopyText} className="p-2.5 bg-(--color-bg-surface) hover:bg-indigo-500/10 rounded-xl border border-(--color-border-glass) text-brand-muted hover:text-indigo-500 transition-all active:scale-90 shadow-sm">
+                                                        <Copy size={14} />
                                                     </button>
-                                                    <button onClick={handleGenerate} className="p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 text-brand-muted hover:text-white transition-all active:scale-90">
-                                                        <RefreshCw size={16} className={isGenerating ? "animate-spin" : ""} />
+                                                    <button onClick={handleGenerate} className="p-2.5 bg-(--color-bg-surface) hover:bg-indigo-500/10 rounded-xl border border-(--color-border-glass) text-brand-muted hover:text-indigo-500 transition-all active:scale-90 shadow-sm">
+                                                        <RefreshCw size={14} className={isGenerating ? "animate-spin" : ""} />
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div className="text-[13px] font-medium leading-relaxed text-brand-text/90 whitespace-pre-wrap selection:bg-indigo-500/30">
+                                            <div className="text-[13px] font-medium leading-relaxed text-brand-text/80 whitespace-pre-wrap selection:bg-indigo-500/20">
                                                 {renderMarkdown(generatedResult.body)}
                                             </div>
-                                            <div className="flex flex-wrap gap-2.5 pt-4">
+                                            <div className="flex flex-wrap gap-2 pt-2">
                                                 {generatedResult.hashtags?.map((t: string) => (
-                                                    <span key={t} className="text-[10px] font-black text-indigo-400 bg-indigo-500/10 px-3 py-1.5 rounded-xl border border-indigo-500/20 hover:bg-indigo-500/20 transition-colors cursor-default">#{t}</span>
+                                                    <span key={t} className="text-[9px] font-black text-indigo-500 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/10">#{t}</span>
                                                 ))}
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="grid grid-cols-2 gap-4 pb-4">
-                                        <button onClick={() => { selection(); setShowPublishModal(true); }} className="h-16 vibing-blue-animated rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.2em] shadow-[0_15px_30px_-5px_rgba(37,99,235,0.4)] active:scale-95 transition-all flex items-center justify-center gap-3">
-                                            {t('pro_dashboard.studio.publish_btn')} <Send size={16} className="animate-pulse" />
+                                    <div className="grid grid-cols-2 gap-3 pb-4">
+                                        <button onClick={() => { selection(); setShowPublishModal(true); }} className="h-12 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2">
+                                            {t('pro_dashboard.studio.publish_btn')} <Send size={14} className="animate-pulse" />
                                         </button>
-                                        <button onClick={() => { impact('light'); handleSharePost(); }} className="h-16 bg-white/5 border border-white/10 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] text-brand-muted hover:text-white hover:bg-white/10 active:scale-95 transition-all flex items-center justify-center gap-3">
-                                            {t('pro_dashboard.studio.share_btn')} <Share size={16} />
+                                        <button onClick={() => { impact('light'); handleSharePost(); }} className="h-12 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm">
+                                            {t('pro_dashboard.studio.share_btn')} <Share size={14} />
                                         </button>
                                     </div>
                                 </motion.div>
@@ -1121,15 +1119,15 @@ export const ProDashboard = () => {
                             </div>
 
                             <div className="space-y-6">
-                                <div className="p-6 bg-indigo-500/5 rounded-[2rem] border border-indigo-500/10 relative overflow-hidden group">
-                                    <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-700"><Zap size={80} /></div>
-                                    <h4 className="text-[10px] font-black uppercase mb-3 text-indigo-400 flex items-center gap-2 tracking-widest">
-                                        <Info size={14} />
+                                <div className="p-5 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 relative overflow-hidden group shadow-inner">
+                                    <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-700"><Zap size={60} /></div>
+                                    <h4 className="text-[10px] font-black uppercase mb-2 text-indigo-500 flex items-center gap-2 tracking-widest">
+                                        <Info size={12} />
                                         {t('pro_dashboard.publish.mgmt_title')}
                                     </h4>
-                                    <p className="text-xs leading-relaxed text-brand-text/70 font-medium">
+                                    <p className="text-[11px] leading-relaxed text-brand-text/70 font-medium">
                                         {t('pro_dashboard.publish.mgmt_p')}
-                                        <em className="block mt-2 text-indigo-300/80 italic"> {t('pro_dashboard.publish.mgmt_tip')}</em>
+                                        <em className="block mt-1 text-indigo-500/60 italic"> {t('pro_dashboard.publish.mgmt_tip')}</em>
                                     </p>
                                 </div>
 
@@ -1143,24 +1141,24 @@ export const ProDashboard = () => {
                                                 key={platform}
                                                 disabled={!hasSetup || isPublishing || isPublished}
                                                 onClick={() => handlePublishToPlatform(platform)}
-                                                className={`w-full group relative flex items-center justify-between p-5 rounded-[1.5rem] border transition-all active:scale-[0.97] ${isPublished
+                                                className={`w-full group relative flex items-center justify-between p-4 rounded-2xl border transition-all active:scale-[0.98] ${isPublished
                                                     ? 'bg-emerald-500/10 border-emerald-500/30'
                                                     : !hasSetup
-                                                        ? 'bg-slate-900/40 border-white/5 opacity-40 grayscale pointer-events-none'
-                                                        : 'bg-white/5 border-white/5 hover:border-indigo-500/40 hover:bg-white/10'
+                                                        ? 'bg-(--color-bg-surface)/40 border-(--color-border-glass) opacity-40 grayscale pointer-events-none'
+                                                        : 'bg-(--color-bg-surface) border-(--color-border-glass) hover:border-indigo-500/40 hover:bg-indigo-500/5'
                                                     }`}
                                             >
-                                                <div className="flex items-center gap-4">
-                                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg transition-transform group-hover:scale-110 ${platform === 'x' ? 'bg-slate-950 border border-white/10' :
+                                                <div className="flex items-center gap-3.5">
+                                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition-transform group-hover:scale-105 ${platform === 'x' ? 'bg-slate-950 border border-white/10' :
                                                         platform === 'telegram' ? 'bg-linear-to-br from-blue-400 to-blue-600' : 'bg-linear-to-br from-blue-600 to-blue-800'
                                                         }`}>
-                                                        {platform === 'x' && <Twitter size={20} className="text-white" />}
-                                                        {platform === 'telegram' && <Send size={20} className="text-white" />}
-                                                        {platform === 'linkedin' && <Linkedin size={20} className="text-white" />}
+                                                        {platform === 'x' && <Twitter size={18} className="text-white" />}
+                                                        {platform === 'telegram' && <Send size={18} className="text-white" />}
+                                                        {platform === 'linkedin' && <Linkedin size={18} className="text-white" />}
                                                     </div>
                                                     <div className="text-left space-y-0.5">
-                                                        <span className="text-sm font-black uppercase tracking-wide text-white">{platform}</span>
-                                                        <div className={`text-[10px] font-bold uppercase tracking-wider ${isPublished ? 'text-emerald-400' : 'text-brand-muted'}`}>
+                                                        <span className="text-[13px] font-black uppercase tracking-tight text-brand-text">{platform}</span>
+                                                        <div className={`text-[9px] font-bold uppercase tracking-wider ${isPublished ? 'text-emerald-500' : 'text-brand-muted'}`}>
                                                             {!hasSetup ? t('pro_dashboard.publish.platform_not_configured') : isPublished ? t('pro_dashboard.publish.platform_success') : t('pro_dashboard.publish.platform_tap')}
                                                         </div>
                                                     </div>
@@ -1189,7 +1187,7 @@ export const ProDashboard = () => {
                             <div className="space-y-4 pt-4">
                                 <button
                                     onClick={() => { selection(); setShowPublishModal(false); setStep(1); }}
-                                    className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] text-brand-muted hover:text-white hover:bg-white/10 transition-all active:scale-95"
+                                    className="w-full h-12 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text transition-all active:scale-95 shadow-sm"
                                 >
                                     {t('pro_dashboard.publish.create_another_btn')}
                                 </button>
