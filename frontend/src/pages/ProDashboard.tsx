@@ -9,6 +9,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
 import { useUser } from '../context/UserContext';
+import { useUI } from '../context/UIContext';
 import { proService, PROStatus } from '../services/proService';
 import { getApiUrl } from '../utils/api';
 
@@ -18,6 +19,7 @@ export const ProDashboard = () => {
     const { t, i18n } = useTranslation();
     const { selection, impact, notification } = useHaptic();
     const { user } = useUser();
+    const { setFooterVisible } = useUI();
 
     const [status, setStatus] = useState<PROStatus | null>(null);
     const [activeTab, setActiveTab] = useState<Tab>('studio');
@@ -51,6 +53,15 @@ export const ProDashboard = () => {
     });
 
     const [countdown, setCountdown] = useState(15);
+
+    useEffect(() => {
+        if (showSetup) {
+            setFooterVisible(false);
+        } else {
+            setFooterVisible(true);
+        }
+        return () => setFooterVisible(true);
+    }, [showSetup, setFooterVisible]);
 
     useEffect(() => {
         let interval: any;
@@ -184,7 +195,7 @@ export const ProDashboard = () => {
     }
 
     return (
-        <div className="flex flex-col min-h-screen pb-32">
+        <div className={`flex flex-col min-h-screen ${showSetup ? 'pb-10' : 'pb-32'}`}>
             {/* Header */}
             <div className="px-6 pt-12 pb-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -532,11 +543,11 @@ export const ProDashboard = () => {
                         <motion.div
                             initial={{ scale: 0.9, y: 20 }}
                             animate={{ scale: 1, y: 0 }}
-                            className="bg-(--color-bg-surface) w-full max-w-sm rounded-[2.5rem] p-8 space-y-6 max-h-[90vh] overflow-y-auto no-scrollbar"
+                            className="bg-(--color-bg-surface) w-full max-w-sm rounded-[2.5rem] p-6 space-y-4 max-h-[90vh] overflow-y-auto no-scrollbar border border-(--color-border-glass)"
                         >
-                            <div className="flex justify-between items-center">
+                            <div className="flex justify-between items-center pb-2">
                                 <h3 className="text-xl font-black uppercase tracking-tight">{t('pro_dashboard.tab_setup')}</h3>
-                                <button onClick={() => setShowSetup(false)} className="opacity-50"><ArrowLeft /></button>
+                                <button onClick={() => setShowSetup(false)} className="p-2 -mr-2 opacity-50 active:scale-90 transition-transform"><ArrowLeft className="w-5 h-5" /></button>
                             </div>
 
                             <div className="space-y-4">
@@ -549,7 +560,7 @@ export const ProDashboard = () => {
                                     </p>
                                 </div>
 
-                                <div className="space-y-4">
+                                <div className="space-y-3">
                                     <div>
                                         <label className="text-[10px] font-black uppercase opacity-50 ml-2 mb-1 block">X API Key</label>
                                         <input
@@ -557,7 +568,7 @@ export const ProDashboard = () => {
                                             value={apiData.x_api_key}
                                             onChange={(e) => setApiData({ ...apiData, x_api_key: e.target.value })}
                                             placeholder="••••••••••••"
-                                            className="w-full h-12 bg-black/5 dark:bg-white/5 border border-transparent focus:border-indigo-500 rounded-xl px-4 text-xs outline-hidden"
+                                            className="w-full h-11 bg-black/5 dark:bg-white/5 border border-transparent focus:border-indigo-500 rounded-xl px-4 text-xs outline-hidden"
                                         />
                                     </div>
                                     <div>
@@ -567,7 +578,7 @@ export const ProDashboard = () => {
                                             value={apiData.x_access_token}
                                             onChange={(e) => setApiData({ ...apiData, x_access_token: e.target.value })}
                                             placeholder="••••••••••••"
-                                            className="w-full h-12 bg-black/5 dark:bg-white/5 border border-transparent focus:border-indigo-500 rounded-xl px-4 text-xs outline-hidden"
+                                            className="w-full h-11 bg-black/5 dark:bg-white/5 border border-transparent focus:border-indigo-500 rounded-xl px-4 text-xs outline-hidden"
                                         />
                                     </div>
                                     <div>
@@ -577,7 +588,7 @@ export const ProDashboard = () => {
                                             value={apiData.telegram_channel_id}
                                             onChange={(e) => setApiData({ ...apiData, telegram_channel_id: e.target.value })}
                                             placeholder="@channelname or id"
-                                            className="w-full h-12 bg-black/5 dark:bg-white/5 border border-transparent focus:border-indigo-500 rounded-xl px-4 text-xs outline-hidden"
+                                            className="w-full h-11 bg-black/5 dark:bg-white/5 border border-transparent focus:border-indigo-500 rounded-xl px-4 text-xs outline-hidden"
                                         />
                                     </div>
                                     <div>
@@ -587,7 +598,7 @@ export const ProDashboard = () => {
                                             value={apiData.linkedin_access_token}
                                             onChange={(e) => setApiData({ ...apiData, linkedin_access_token: e.target.value })}
                                             placeholder="••••••••••••"
-                                            className="w-full h-12 bg-black/5 dark:bg-white/5 border border-transparent focus:border-indigo-500 rounded-xl px-4 text-xs outline-hidden"
+                                            className="w-full h-11 bg-black/5 dark:bg-white/5 border border-transparent focus:border-indigo-500 rounded-xl px-4 text-xs outline-hidden"
                                         />
                                     </div>
                                 </div>
@@ -595,7 +606,7 @@ export const ProDashboard = () => {
 
                             <button
                                 onClick={handleSaveSetup}
-                                className="w-full h-16 bg-indigo-500 text-white rounded-3xl font-black shadow-lg shadow-indigo-500/20 active:scale-95 transition-transform"
+                                className="w-full h-12 bg-indigo-500 text-white rounded-2xl font-black text-xs shadow-lg shadow-indigo-500/20 active:scale-95 transition-transform uppercase tracking-wider"
                             >
                                 SAVE CONFIGURATION
                             </button>

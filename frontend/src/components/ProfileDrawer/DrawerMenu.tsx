@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
+import { useUI } from '../../context/UIContext';
 
 interface DrawerMenuProps {
     onClose: () => void;
@@ -23,6 +24,7 @@ interface DrawerMenuProps {
 export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
     const { t } = useTranslation();
     const { user } = useUser();
+    const { setSupportOpen } = useUI();
     const [expandedItem, setExpandedItem] = React.useState<string | null>(null);
 
     const toggleSection = (id: string) => {
@@ -72,10 +74,16 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                 );
             case 'support':
                 return (
-                    <div className="pt-2 text-center">
+                    <div className="pt-2 text-center text-(--color-text-primary)">
                         <p className="text-xs text-(--color-text-secondary) mb-3">Our support team is available 24/7.</p>
-                        <button className="w-full py-3 rounded-xl bg-(--color-text-primary) text-(--color-bg-surface) text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2">
-                            <Headphones className="h-3.5 w-3.5" />
+                        <button
+                            onClick={() => {
+                                onClose();
+                                setSupportOpen(true);
+                            }}
+                            className="w-full py-4 rounded-xl bg-(--color-text-primary) text-(--color-bg-surface) text-xs font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg shadow-blue-500/10"
+                        >
+                            <Headphones className="h-4 w-4" />
                             {t('menu.support')}
                         </button>
                     </div>

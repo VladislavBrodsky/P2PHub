@@ -21,13 +21,10 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
     base_depth = len(search_path.split('.'))
 
     query = text("""
-        SELECT level, COUNT(*) as count
-        FROM (
-            SELECT (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level
-            FROM partner
-            WHERE (path = :search_path OR path LIKE :search_wildcard)
-        ) as subquery
-        WHERE level >= 1 AND level <= 9
+        SELECT depth - :base_depth + 1 as level, COUNT(*) as count
+        FROM partner
+        WHERE (path = :search_path OR path LIKE :search_wildcard)
+        AND depth BETWEEN :base_depth AND :base_depth + 8
         GROUP BY 1
         ORDER BY level;
     """)
@@ -64,12 +61,9 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
     query = text("""
         SELECT telegram_id, username, first_name, last_name, xp, photo_url, created_at,
                balance, level as partner_level, referral_code, is_pro, updated_at, id, photo_file_id
-        FROM (
-            SELECT *, (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) as depth
-            FROM partner
-            WHERE (path = :search_path OR path LIKE :search_wildcard)
-        ) as subquery
-        WHERE depth = :target_depth
+        FROM partner
+        WHERE (path = :search_path OR path LIKE :search_wildcard)
+        AND depth = :target_depth
         ORDER BY xp DESC
         LIMIT 100;
     """)
@@ -196,7 +190,7 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         FROM (
             SELECT
                 {bucket_column} as bucket,
-                (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level
+                depth - :base_depth + 1 as level
             FROM partner
             WHERE (path = :search_path OR path LIKE :search_wildcard)
             AND created_at >= :start
@@ -225,15 +219,11 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         data_map[bucket][level] = count
 
     stmt_base = text("""
-        SELECT level, COUNT(*)
-        FROM (
-            SELECT
-                (LENGTH(path) - LENGTH(REPLACE(path, '.', '')) + 1) - :base_depth + 1 as level
-            FROM partner
-            WHERE (path = :search_path OR path LIKE :search_wildcard)
-            AND created_at < :start
-        ) as base_subquery
-        WHERE level >= 1 AND level <= 9
+        SELECT depth - :base_depth + 1 as level, COUNT(*)
+        FROM partner
+        WHERE (path = :search_path OR path LIKE :search_wildcard)
+        AND created_at < :start
+        AND depth BETWEEN :base_depth AND :base_depth + 8
         GROUP BY 1
     """)
     res_base = await session.execute(stmt_base, {

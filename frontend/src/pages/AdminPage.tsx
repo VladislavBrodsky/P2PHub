@@ -37,6 +37,12 @@ interface DashboardStats {
         total_partners: number;
         total_pro: number;
         total_tasks: number;
+        active_24h: number;
+    };
+    kpis: {
+        conversion_rate: number;
+        arpu: number;
+        retention_estimate: number;
     };
     financials: {
         total_revenue: number;
@@ -44,6 +50,7 @@ interface DashboardStats {
         net_profit: number;
         commissions_breakdown: CommissionLine[];
     };
+    tasks: Record<string, number>;
 }
 
 interface Transaction {
@@ -76,7 +83,7 @@ export const AdminPage = () => {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [approvingIds, setApprovingIds] = useState<Set<number>>(new Set());
-    const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials'>('kpis');
+    const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'maintenance'>('kpis');
 
     const fetchData = async (silent = false) => {
         if (!silent) setIsLoading(true);
@@ -93,6 +100,20 @@ export const AdminPage = () => {
             setError(err.response?.data?.detail || 'Failed to load admin data');
         } finally {
             setIsLoading(false);
+            setIsRefreshing(false);
+        }
+    };
+
+    const handleRecalculate = async () => {
+        if (!confirm('This will recalculate all referral counts and lineage. Continue?')) return;
+        setIsRefreshing(true);
+        try {
+            await apiClient.post('/api/admin/recalculate-stats');
+            alert('Recalculation complete!');
+            await fetchData(true);
+        } catch (err: any) {
+            alert('Failed: ' + (err.response?.data?.detail || 'Unknown error'));
+        } finally {
             setIsRefreshing(false);
         }
     };
@@ -175,7 +196,7 @@ export const AdminPage = () => {
 
             {/* Navigation Tabs */}
             <div className="flex gap-2 p-1 bg-slate-100 dark:bg-white/5 rounded-2xl">
-                {(['kpis', 'financials', 'payments'] as const).map((mode) => (
+                {(['kpis', 'financials', 'payments', 'maintenance'] as const).map((mode) => (
                     <button
                         key={mode}
                         onClick={() => setViewMode(mode)}
@@ -227,10 +248,47 @@ export const AdminPage = () => {
                                 </div>
                                 <div>
                                     <div className="text-[9px] font-black uppercase opacity-60 flex items-center gap-1">
-                                        <CheckCircle size={10} /> Tasks Done
+                                        <Users size={10} /> 24h Active
                                     </div>
-                                    <div className="text-lg font-black">{stats?.events.total_tasks}</div>
+                                    <div className="text-lg font-black">{stats?.events.active_24h}</div>
                                 </div>
+                            </div>
+                        </div>
+
+                        {/* Middle Stats Grid */}
+                        <div className="grid grid-cols-3 gap-3">
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
+                                <div className="text-[8px] font-black uppercase text-slate-500">Conv. Rate</div>
+                                <div className="text-sm font-black text-blue-500">{stats?.kpis.conversion_rate}%</div>
+                            </div>
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
+                                <div className="text-[8px] font-black uppercase text-slate-500">ARPU</div>
+                                <div className="text-sm font-black text-emerald-500">${stats?.kpis.arpu}</div>
+                            </div>
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
+                                <div className="text-[8px] font-black uppercase text-slate-500">Retention</div>
+                                <div className="text-sm font-black text-amber-500">{stats?.kpis.retention_estimate}%</div>
+                            </div>
+                        </div>
+
+                        {/* Task Completion Breakdown */}
+                        <div className="p-5 rounded-3xl glass-panel-premium border border-white/5 space-y-4">
+                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Task Performance</h2>
+                            <div className="space-y-2">
+                                {Object.entries(stats?.tasks || {}).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([taskId, count]) => (
+                                    <div key={taskId} className="flex items-center justify-between">
+                                        <div className="text-[10px] font-bold text-slate-400 truncate max-w-[150px]">{taskId}</div>
+                                        <div className="flex items-center gap-2 flex-1 mx-4">
+                                            <div className="h-1.5 bg-slate-100 dark:bg-white/5 rounded-full flex-1 overflow-hidden">
+                                                <div
+                                                    className="h-full bg-blue-500 rounded-full"
+                                                    style={{ width: `${(count / (stats?.events.total_tasks || 1)) * 100}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="text-[10px] font-black text-slate-200">{count}</div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
 
@@ -548,6 +606,45 @@ export const AdminPage = () => {
                                 ))
                             )}
                         </AnimatePresence>
+                    </motion.div>
+                )}
+                {viewMode === 'maintenance' && (
+                    <motion.div
+                        key="maintenance"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="space-y-6"
+                    >
+                        <div className="p-6 rounded-[2.5rem] bg-slate-900 border border-white/10 space-y-6 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                                <RefreshCw size={120} />
+                            </div>
+                            <div className="space-y-2 relative z-10">
+                                <h3 className="text-xl font-black text-white">System Maintenance</h3>
+                                <p className="text-slate-400 text-xs">Critical tools for database consistency and performance optimization.</p>
+                            </div>
+
+                            <div className="space-y-4 pt-4 border-t border-white/5 relative z-10">
+                                <div className="p-4 rounded-2xl bg-white/5 space-y-3">
+                                    <div className="flex items-center gap-2 text-amber-500 font-bold text-[10px] uppercase tracking-widest">
+                                        <AlertTriangle size={14} />
+                                        Data Consistency Fix
+                                    </div>
+                                    <p className="text-[10px] text-slate-500 font-medium">
+                                        Recalculates all referral counts, 9-level lineage paths, and caches depth for every partner.
+                                        Use this if @uslincoln or other users report "wrong stats" or network discrepancies.
+                                    </p>
+                                    <button
+                                        onClick={handleRecalculate}
+                                        disabled={isRefreshing}
+                                        className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-amber-500/20"
+                                    >
+                                        {isRefreshing ? 'Processing...' : 'Recalculate Network Stats'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>

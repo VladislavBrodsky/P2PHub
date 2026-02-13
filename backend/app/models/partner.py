@@ -21,6 +21,7 @@ class Partner(SQLModel, table=True):
     referral_code: str = Field(unique=True, index=True) # Optimized for lookups
     referrer_id: Optional[int] = Field(default=None, foreign_key="partner.id", index=True) # Optimized for joins
     path: Optional[str] = Field(default=None, index=True) # Materialized path (e.g. "1.5.23")
+    depth: int = Field(default=0, index=True) # Cached depth level for faster hierarchy queries
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True) # Optimized for sorting
     updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}, index=True)
     completed_tasks: str = Field(default="[]") # Store task IDs as JSON string

@@ -7,6 +7,8 @@ interface UIContextType {
     setFooterVisible: (visible: boolean) => void;
     isNotificationsVisible: boolean;
     setNotificationsVisible: (visible: boolean) => void;
+    isSupportOpen: boolean;
+    setSupportOpen: (open: boolean) => void;
 }
 
 const UIContext = createContext<UIContextType | undefined>(undefined);
@@ -15,6 +17,7 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isHeaderVisible, setHeaderVisible] = useState(true);
     const [isFooterVisible, setFooterVisible] = useState(true);
     const [isNotificationsVisible, setNotificationsVisible] = useState(true);
+    const [isSupportOpen, setSupportOpen] = useState(false);
 
     const value = useMemo(() => ({
         isHeaderVisible,
@@ -23,7 +26,9 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setFooterVisible,
         isNotificationsVisible,
         setNotificationsVisible,
-    }), [isHeaderVisible, isFooterVisible, isNotificationsVisible]);
+        isSupportOpen,
+        setSupportOpen,
+    }), [isHeaderVisible, isFooterVisible, isNotificationsVisible, isSupportOpen]);
 
     return (
         <UIContext.Provider value={value}>

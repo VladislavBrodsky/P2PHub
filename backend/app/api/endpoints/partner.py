@@ -168,7 +168,12 @@ async def get_my_profile(
         referrer = (await session.exec(r_stmt)).first()
         if referrer:
             partner.path = f"{referrer.path or ''}.{referrer.id}".lstrip(".")
+            partner.depth = referrer.depth + 1
             migration_needed = True
+
+    if partner.depth == 0 and partner.path:
+        partner.depth = len(partner.path.split('.'))
+        migration_needed = True
 
     correct_level = get_level(partner.xp)
     if partner.level != correct_level:

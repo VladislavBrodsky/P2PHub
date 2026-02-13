@@ -26,6 +26,25 @@
         "chat": "Chat",
         "blog": "Blog"
     },
+    "support": {
+        "manager": "Support Manager",
+        "online": "Online",
+        "welcome": "Hello! I'm your Pintopay Support Manager. How can I help you today? Please choose a category or type your question below.",
+        "input_placeholder": "Ask anything about Pintopay...",
+        "session_closed": "Session Closed",
+        "still_here": "Are you still here? I'm ready to help you with any questions about Pintopay.",
+        "error_technical": "I'm sorry, I'm having temporary technical difficulties. Please try again or visit our FAQ.",
+        "suggested_topics": "Suggested Topics",
+        "powered_by": "Pintopay Support Agent • Powered by Elite Intelligence",
+        "categories": {
+            "card_details": "Pintopay Card Details",
+            "issue_setup": "Card Issue & Setup",
+            "topup_limits": "Top-up & Limits",
+            "apple_google": "ApplePay / GooglePay",
+            "earnings": "Earnings & Network",
+            "security": "Security & Technical"
+        }
+    },
     "faq": {
         "withdraw": "How to withdraw?",
         "level": "What is Partner Level?",

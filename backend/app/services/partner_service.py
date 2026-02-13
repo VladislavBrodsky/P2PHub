@@ -101,9 +101,11 @@ async def create_partner(
             logger.error(f"Error resolving referrer_code {referrer_code}: {e}")
 
     path = None
+    depth = 0
     if referrer:
         parent_path = referrer.path or ""
         path = f"{parent_path}.{referrer.id}".lstrip(".")
+        depth = referrer.depth + 1
 
     partner = Partner(
         telegram_id=telegram_id,
@@ -114,7 +116,8 @@ async def create_partner(
         referral_code=f"P2P-{secrets.token_hex(4).upper()}",
         referrer_id=referrer_id,
         photo_file_id=photo_file_id,
-        path=path
+        path=path,
+        depth=depth
     )
     session.add(partner)
     await session.commit()
@@ -181,18 +184,22 @@ async def sync_profile_photos(bot, session: AsyncSession):
     logger.info(f"✅ Sync complete. Updated {updated} photos.")
 
 async def migrate_paths(session: AsyncSession):
-    async def update_children(parent_id: int, parent_path: str):
+    async def update_children(parent_id: int, parent_path: str, parent_depth: int):
         res = await session.exec(select(Partner).where(Partner.referrer_id == parent_id))
         for child in res.all():
-            if not child.path or child.path != f"{parent_path}.{parent_id}".lstrip("."):
-                child.path = f"{parent_path}.{parent_id}".lstrip(".")
+            new_path = f"{parent_path}.{parent_id}".lstrip(".")
+            new_depth = parent_depth + 1
+            if child.path != new_path or child.depth != new_depth:
+                child.path = new_path
+                child.depth = new_depth
                 session.add(child)
-            await update_children(child.id, child.path)
+            await update_children(child.id, child.path, child.depth)
 
     res = await session.exec(select(Partner).where(Partner.referrer_id == None))
     for root in res.all():
-        if root.path is not None:
+        if root.path is not None or root.depth != 0:
             root.path = None
+            root.depth = 0
             session.add(root)
-        await update_children(root.id, "")
+        await update_children(root.id, "", 0)
     await session.commit()

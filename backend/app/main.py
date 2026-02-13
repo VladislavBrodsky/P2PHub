@@ -325,6 +325,9 @@ app.include_router(health.router, tags=["health"])
 app.include_router(health.router, prefix="/api", tags=["health"])
 app.include_router(config.router, prefix="/api/config", tags=["config"])
 
+from app.api.endpoints import support
+app.include_router(support.router, prefix="/api/support", tags=["support"])
+
 # #comment: Custom StaticFiles handler to inject aggressive Cache-Control headers.
 # This ensures that images are cached by the browser/CDN for 1 year,
 # which is perfect since our optimized WebP assets rarely change.

@@ -31,8 +31,12 @@ import { useStartupProgress } from './context/StartupProgressContext';
 import { RevealSkeleton } from './components/Skeletons/RevealSkeleton';
 import { UIProvider } from './context/UIContext';
 
+import { SupportChat } from './components/Support/SupportChat';
+import { useUI } from './context/UIContext';
+
 function AppContent({ onReady }: { onReady: () => void }) {
     const { config } = useConfig();
+    const { isSupportOpen, setSupportOpen } = useUI();
     const [activeTab, setActiveTab] = useState('home');
     const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set(['home']));
     // #comment: Removed unused showOnboarding state in AppContent as it is managed in the parent App component
@@ -228,6 +232,7 @@ function AppContent({ onReady }: { onReady: () => void }) {
                     </div>
                 )}
             </Suspense>
+            <SupportChat isOpen={isSupportOpen} onClose={() => setSupportOpen(false)} />
         </Layout>
     );
 }

@@ -123,3 +123,31 @@ async def reject_payment(
             pass
 
     return {"status": "success", "message": f"Payment {transaction_id} rejected"}
+
+@router.get("/tree")
+async def get_global_tree_stats(
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Returns the total number of partners at each level (1-9) globally.
+    """
+    return await admin_service.get_global_network_stats()
+
+@router.get("/network/{level}")
+async def get_global_network_level(
+    level: int,
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Returns the list of top partners at a specific level in the whole system.
+    """
+    return await admin_service.get_global_network_members(level)
+
+@router.post("/recalculate-stats")
+async def recalculate_stats(
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Triggers a global recalculation of referral counts and depths.
+    """
+    return await admin_service.recalculate_all_referral_counts()

@@ -33,7 +33,9 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
     const [level, setLevel] = useState(1);
     const [members, setMembers] = useState<NetworkMember[]>([]);
     const [levelCache, setLevelCache] = useState<Record<number, NetworkMember[]>>({});
+    const [treeStats, setTreeStats] = useState<Record<string, number>>({});
     const [isLoading, setIsLoading] = useState(false);
+    const [isGlobalMode, setIsGlobalMode] = useState(false);
     const [error, setError] = useState('');
     const [isShareOpen, setIsShareOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -48,22 +50,35 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
     // #comment: Wrapped fetchLevel in useCallback to stabilize its reference and resolve exhaustive-deps warnings in effects
     const fetchLevel = useCallback(async (targetLevel: number) => {
         // Skip if already cached
-        if (levelCache[targetLevel]) {
+        if (levelCache[targetLevel] && !isGlobalMode) {
             return levelCache[targetLevel];
         }
 
         try {
-            const res = await apiClient.get(`/api/partner/network/${targetLevel}`);
+            const url = isGlobalMode
+                ? `/api/admin/network/${targetLevel}`
+                : `/api/partner/network/${targetLevel}`;
+            const res = await apiClient.get(url);
             const data = Array.isArray(res.data) ? res.data : [];
 
             // Update cache
-            setLevelCache(prev => ({ ...prev, [targetLevel]: data }));
+            if (!isGlobalMode) setLevelCache(prev => ({ ...prev, [targetLevel]: data }));
             return data;
         } catch (err) {
             console.error(`Failed to fetch level ${targetLevel}:`, err);
             return null;
         }
-    }, [levelCache]);
+    }, [levelCache, isGlobalMode]);
+
+    const fetchTreeStats = useCallback(async () => {
+        try {
+            const url = isGlobalMode ? '/api/admin/tree' : '/api/partner/tree';
+            const res = await apiClient.get(url);
+            setTreeStats(res.data || {});
+        } catch (err) {
+            console.error('Failed to fetch tree stats:', err);
+        }
+    }, [isGlobalMode]);
 
     // Prefetch levels 1-3 on mount for instant browsing
     useEffect(() => {
@@ -74,7 +89,8 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                 const [l1] = await Promise.all([
                     fetchLevel(1),
                     fetchLevel(2),
-                    fetchLevel(3)
+                    fetchLevel(3),
+                    fetchTreeStats()
                 ]);
 
                 // Set initial display to level 1
@@ -128,7 +144,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
 
         updateLevel();
         // #comment: Added fetchLevel and levelCache to dependency array to ensure effect runs with latest functions/state
-    }, [level, fetchLevel, levelCache]);
+    }, [level, fetchLevel, levelCache, isGlobalMode]);
 
     // Auto-scroll logic for level selector
     useEffect(() => {
@@ -199,26 +215,45 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                         ref={scrollContainerRef}
                         className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none px-6" // Added px-6 to prevent first item clipping
                     >
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((l) => (
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((l) => {
+                            const count = treeStats[`level_${l}`] || treeStats[l.toString()] || 0;
+                            return (
+                                <button
+                                    key={l}
+                                    onClick={() => { selection(); setLevel(l); }}
+                                    className={cn(
+                                        "relative flex flex-col items-center justify-center min-w-[56px] h-11 rounded-2xl text-xs font-black transition-all active:scale-95 shrink-0 z-10",
+                                        level === l ? "text-white" : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5"
+                                    )}
+                                >
+                                    {level === l && (
+                                        <motion.div
+                                            layoutId="activeLevel"
+                                            className="absolute inset-0 bg-blue-600 rounded-2xl shadow-lg shadow-blue-500/30 -z-10"
+                                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                        />
+                                    )}
+                                    <span className="leading-tight">L{l}</span>
+                                    {count > 0 && <span className={cn("text-[8px] font-bold opacity-70", level === l ? "text-white" : "text-blue-500")}>{count}</span>}
+                                </button>
+                            );
+                        })}
+                    </div>
+                    {user?.is_admin && (
+                        <div className="flex justify-center mt-2 px-6">
                             <button
-                                key={l}
-                                onClick={() => { selection(); setLevel(l); }}
+                                onClick={() => { setIsGlobalMode(!isGlobalMode); setLevelCache({}); setLevel(1); }}
                                 className={cn(
-                                    "relative flex items-center justify-center min-w-[48px] h-9 rounded-full text-xs font-black transition-all active:scale-95 shrink-0 z-10",
-                                    level === l ? "text-white" : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5"
+                                    "w-full py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border",
+                                    isGlobalMode
+                                        ? "bg-amber-500 border-amber-500 text-white shadow-lg shadow-amber-500/20"
+                                        : "bg-white/5 border-white/10 text-slate-500"
                                 )}
                             >
-                                {level === l && (
-                                    <motion.div
-                                        layoutId="activeLevel"
-                                        className="absolute inset-0 bg-blue-600 rounded-full shadow-lg shadow-blue-500/30 -z-10"
-                                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                    />
-                                )}
-                                L{l}
+                                {isGlobalMode ? '⚡️ Global Admin Mode' : 'Explorer Mode'}
                             </button>
-                        ))}
-                    </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
