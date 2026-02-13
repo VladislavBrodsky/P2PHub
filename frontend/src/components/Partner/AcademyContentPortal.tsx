@@ -61,7 +61,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
     }, [setHeaderVisible, setFooterVisible, setNotificationsVisible]);
 
     return createPortal(
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 touch-none">
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-0 sm:p-4 touch-none">
             {/* Backdrop */}
             <motion.div
                 initial={{ opacity: 0 }}
