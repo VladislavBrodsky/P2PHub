@@ -26,7 +26,6 @@ async def process_referral_notifications(bot, session: AsyncSession, partner: Pa
     if is_new and partner.referrer_id:
         # Run logic in background via TaskIQ worker
         await process_referral_logic.kiq(partner.id)
-from app.utils.text import escape_markdown_v1
 
 def format_partner_name(p: Partner) -> str:
     """Construct Full Name: First Last (@username)"""

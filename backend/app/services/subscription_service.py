@@ -64,6 +64,13 @@ class SubscriptionService:
         for partner in res_expired.all():
             partner.is_pro = False
             session.add(partner)
+            
+            # Invalidate Redis Cache to ensure UI reflects the change immediately
+            from app.services.redis_service import redis_service
+            try:
+                await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
+            except Exception: pass
+            
             await self.send_expired_notification(partner)
 
         await session.commit()

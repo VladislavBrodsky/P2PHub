@@ -194,9 +194,16 @@ class PaymentService:
     ):
         # 1. Update Partner
         now = datetime.utcnow()
+        if partner.is_pro and partner.pro_expires_at and partner.pro_expires_at > now:
+            # Extension: Add 30 days to existing expiry
+            partner.pro_expires_at += timedelta(days=30)
+        else:
+            # New or re-activation
+            partner.pro_expires_at = now + timedelta(days=30)
+            
         partner.is_pro = True
-        partner.pro_expires_at = now + timedelta(days=30) # 1 month
-        partner.pro_started_at = now
+        if not partner.pro_started_at:
+            partner.pro_started_at = now
         if not partner.pro_purchased_at:
             partner.pro_purchased_at = now
 

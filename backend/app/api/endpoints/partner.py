@@ -698,69 +698,69 @@ async def claim_task_reward(
         session.add(partner_task_record)
 
         # 1.1 Add XP Transaction record
-        new_xp_tx = XPTransaction(
-            partner_id=partner.id,
-            amount=xp_reward,
-            type="TASK",
-            description=f"Completed Task: {task_id}",
-            reference_id=task_id
-        )
-        session.add(new_xp_tx)
+    new_xp_tx = XPTransaction(
+        partner_id=partner.id,
+        amount=xp_reward,
+        type="TASK",
+        description=f"Completed Task: {task_id}",
+        reference_id=task_id
+    )
+    session.add(new_xp_tx)
 
-        # 1.2 Unified Transaction: Log Task XP as an Earning
-        from app.models.partner import Earning
-        task_earning = Earning(
-            partner_id=partner.id,
-            amount=xp_reward,
-            description=f"Task Reward: {task_id}",
-            type="TASK_XP",
-            currency="XP"
-        )
-        session.add(task_earning)
+    # 1.2 Unified Transaction: Log Task XP as an Earning
+    from app.models.partner import Earning
+    task_earning = Earning(
+        partner_id=partner.id,
+        amount=xp_reward,
+        description=f"Task Reward: {task_id}",
+        type="TASK_XP",
+        currency="XP"
+    )
+    session.add(task_earning)
 
-        # 2. Update partner stats
-        # #comment: Upgraded multiplier to 5x as per Phase 2 requirements and marketing alignment.
-        effective_xp = xp_reward * 5 if partner.is_pro else xp_reward  # PRO members get 5x XP bonus
-        
-        # Capture for audit
-        xp_before = partner.xp
-        partner.xp += effective_xp
-        partner.level = get_level(partner.xp)
+    # 2. Update partner stats
+    # #comment: Upgraded multiplier to 5x as per Phase 2 requirements and marketing alignment.
+    effective_xp = xp_reward * 5 if partner.is_pro else xp_reward  # PRO members get 5x XP bonus
+    
+    # Capture for audit
+    xp_before = partner.xp
+    partner.xp += effective_xp
+    partner.level = get_level(partner.xp)
 
-        # Audit logging
-        from app.services.audit_service import audit_service
-        await audit_service.log_task_completion(
-            session=session,
-            partner_id=partner.id,
-            task_id=task_id,
-            xp_amount=effective_xp,
-            xp_before=xp_before,
-            xp_after=partner.xp
-        )
+    # Audit logging
+    from app.services.audit_service import audit_service
+    await audit_service.log_task_completion(
+        session=session,
+        partner_id=partner.id,
+        task_id=task_id,
+        xp_amount=effective_xp,
+        xp_before=xp_before,
+        xp_after=partner.xp
+    )
 
-        session.add(partner)
-        await session.commit()
-        await session.refresh(partner)
+    session.add(partner)
+    await session.commit()
+    await session.refresh(partner)
 
-        # 2.1 Sync to Redis Leaderboard
-        from app.services.leaderboard_service import leaderboard_service
-        try:
-            await leaderboard_service.update_score(partner.id, partner.xp)
-        except Exception as e:
-            logger.error(f"Leaderboard Sync Failed: {e}", exc_info=True)
+    # 2.1 Sync to Redis Leaderboard
+    from app.services.leaderboard_service import leaderboard_service
+    try:
+        await leaderboard_service.update_score(partner.id, partner.xp)
+    except Exception as e:
+        logger.error(f"Leaderboard Sync Failed: {e}", exc_info=True)
 
-        # 3. Invalidate profile cache
-        await redis_service.client.delete(f"partner:profile:{tg_id}")
+    # 3. Invalidate profile cache
+    await redis_service.client.delete(f"partner:profile:{tg_id}")
 
-        # 4. Send Notification
-        try:
-            from app.core.i18n import get_msg
-            from app.services.notification_service import notification_service
-            lang = partner.language_code or "en"
-            msg = get_msg(lang, "task_completed", reward=int(xp_reward))
-            await notification_service.enqueue_notification(chat_id=int(tg_id), text=msg)
-        except Exception as e:
-            logger.error(f"Failed to send task notification: {e}")
+    # 4. Send Notification
+    try:
+        from app.core.i18n import get_msg
+        from app.services.notification_service import notification_service
+        lang = partner.language_code or "en"
+        msg = get_msg(lang, "task_completed", reward=int(xp_reward))
+        await notification_service.enqueue_notification(chat_id=int(tg_id), text=msg)
+    except Exception as e:
+        logger.error(f"Failed to send task notification: {e}")
 
     return partner
 
@@ -801,6 +801,7 @@ async def complete_academy_stage(
             
         # Apply PRO multiplier (5x)
         effective_xp = xp_reward * 5 if partner.is_pro else xp_reward
+        xp_before = partner.xp
         partner.xp += effective_xp
         
         # Log XP Transaction
@@ -812,6 +813,28 @@ async def complete_academy_stage(
             reference_id=f"academy_{stage_id}"
         )
         session.add(new_xp_tx)
+
+        # Log to Earnings (to show in "Recent Earnings")
+        from app.models.partner import Earning
+        new_earning = Earning(
+            partner_id=partner.id,
+            amount=effective_xp,
+            description=f"Academy Reward (Stage {stage_id})",
+            type="TASK_XP",
+            currency="XP"
+        )
+        session.add(new_earning)
+
+        # Audit logging
+        from app.services.audit_service import audit_service
+        await audit_service.log_task_completion(
+            session=session,
+            partner_id=partner.id,
+            task_id=f"academy_{stage_id}",
+            xp_amount=effective_xp,
+            xp_before=xp_before,
+            xp_after=partner.xp
+        )
         
         from app.utils.ranking import get_level
         partner.level = get_level(partner.xp)

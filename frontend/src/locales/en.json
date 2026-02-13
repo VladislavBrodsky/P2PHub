@@ -386,6 +386,17 @@
                 "excerpt": "Take control of your destiny by leveraging the ultimate bridge between traditional finance and the decentralized future.",
                 "category": "Vision"
             }
+        },
+        "navigation": {
+            "back": "Back",
+            "next": "Next",
+            "prev": "Previous",
+            "forward": "Forward",
+            "search_placeholder": "Search insights...",
+            "no_results": "No insights found",
+            "no_results_desc": "Try adjusting your search or filters to find what you're looking for.",
+            "support_article": "Tap to support this insight",
+            "featured": "Featured"
         }
     },
     "leaderboard": {

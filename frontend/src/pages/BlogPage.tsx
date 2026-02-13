@@ -219,7 +219,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-(--color-text-secondary) group-focus-within:text-blue-500 transition-colors" />
                                 <input
                                     type="text"
-                                    placeholder={isRussian ? "Поиск идей..." : "Search insights..."}
+                                    placeholder={t('blog.navigation.search_placeholder')}
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     className="w-full h-14 pl-12 pr-4 rounded-2xl bg-(--color-bg-surface) border border-(--color-border-glass) focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 outline-hidden font-medium text-sm transition-all"
@@ -268,7 +268,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                     <div className="p-6 sm:p-8 space-y-3 sm:space-y-4">
                                         <div className="flex items-center gap-2">
                                             <span className="px-2.5 py-1 rounded-full bg-blue-500 text-[9px] font-black uppercase tracking-widest text-white">
-                                                {isRussian ? "Главное" : "Featured"}
+                                                {t('blog.navigation.featured')}
                                             </span>
                                             <span className="text-[9px] font-bold text-(--color-text-secondary) opacity-60">
                                                 {currentFeaturedPost.date}
@@ -344,9 +344,9 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                         <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto">
                                             <Search className="w-8 h-8 text-slate-400" />
                                         </div>
-                                        <h3 className="text-xl font-black">{isRussian ? "Ничего не найдено" : "No insights found"}</h3>
+                                        <h3 className="text-xl font-black">{t('blog.navigation.no_results')}</h3>
                                         <p className="text-sm text-(--color-text-secondary) max-w-[200px] mx-auto">
-                                            {isRussian ? "Попробуйте изменить поиск или фильтры." : "Try adjusting your search or filters to find what you're looking for."}
+                                            {t('blog.navigation.no_results_desc')}
                                         </p>
                                     </div>
                                 )}
@@ -363,7 +363,6 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                         onShare={handleShare}
                         onNext={() => navigatePost('next')}
                         onPrev={() => navigatePost('prev')}
-                        isRussian={isRussian}
                         setActiveTab={setActiveTab}
                     />
                 )}
@@ -381,13 +380,12 @@ interface BlogDetailProps {
     onShare: () => void;
     onNext: () => void;
     onPrev: () => void;
-    isRussian: boolean;
     setActiveTab?: (tab: string) => void;
 }
 
-const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNext, onPrev, isRussian, setActiveTab }: BlogDetailProps) => {
-    // #comment: Removed unused 't' variable from useTranslation in BlogDetail to address linting warnings
-    useTranslation();
+const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNext, onPrev, setActiveTab }: BlogDetailProps) => {
+    const { t, i18n } = useTranslation();
+    const isRussian = i18n.language === 'ru';
     const { selection } = useHaptic();
 
     // Marketing "Between the lines" snippets
@@ -553,7 +551,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                         </span>
                     </motion.button>
                     <p className="text-[9px] font-bold text-(--color-text-secondary) uppercase tracking-widest opacity-60">
-                        {isRussian ? "Нажмите, чтобы поддержать статью" : "Tap to support this insight"}
+                        {t('blog.navigation.support_article')}
                     </p>
                 </div>
 
@@ -567,8 +565,8 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                             <ChevronLeft className="w-4 h-4" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-[8px] font-extrabold text-(--color-text-secondary) uppercase tracking-wider">{isRussian ? "Назад" : "Back"}</span>
-                            <span className="text-[9px] font-black">{isRussian ? "Предыдущая" : "Previous"}</span>
+                            <span className="text-[8px] font-extrabold text-(--color-text-secondary) uppercase tracking-wider">{t('blog.navigation.back')}</span>
+                            <span className="text-[9px] font-black">{t('blog.navigation.prev')}</span>
                         </div>
                     </button>
                     <button
@@ -576,8 +574,8 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                         className="p-3.5 rounded-[1.25rem] bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-blue-500/30 active:scale-95 transition-all flex items-center justify-end gap-2.5 group text-right"
                     >
                         <div className="flex flex-col items-end">
-                            <span className="text-[8px] font-extrabold text-(--color-text-secondary) uppercase tracking-wider">{isRussian ? "Далее" : "Next"}</span>
-                            <span className="text-[9px] font-black">{isRussian ? "Следующая статья" : "Forward"}</span>
+                            <span className="text-[8px] font-extrabold text-(--color-text-secondary) uppercase tracking-wider">{t('blog.navigation.next')}</span>
+                            <span className="text-[9px] font-black">{t('blog.navigation.forward')}</span>
                         </div>
                         <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all">
                             <ChevronRight className="w-4 h-4" />
