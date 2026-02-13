@@ -85,6 +85,32 @@ class Settings(BaseSettings):
 
     # Admin settings
     ADMIN_USER_IDS: list[str] = ["12345678", "537873096", "716720099"] # uslincoln added here
+    
+    # --- System Constants (Business Logic) ---
+    # Moved from services to core config to prevent desync
+    
+    # XP Distribution per level (1-9)
+    # L1=35, L2=10, L3-9=1
+    REFERRAL_XP_MAP: dict[int, int] = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
+    PRO_XP_MULTIPLIER: int = 5
+
+    # Commission Distribution for PRO Upgrades
+    # Total: ~44% (30% L1, 5% L2, 3% L3, 1% L4-9)
+    COMMISSION_MAP: dict[int, float] = {
+        1: 0.30, 2: 0.05, 3: 0.03, 4: 0.01, 5: 0.01, 
+        6: 0.01, 7: 0.01, 8: 0.01, 9: 0.01
+    }
+
+    # Viral Marketing Categories (Synced with Frontend ProDashboard.tsx)
+    VIRAL_POST_TYPES: list[str] = [
+        "Product Launch", "FOMO Builder", "System Authority", 
+        "Lifestyle Flex", "Passive Income Proof", "Network Growth", "Web3 Tutorial"
+    ]
+    
+    VIRAL_AUDIENCES: list[str] = [
+        "Cryptocurrency Traders", "Digital Nomads", "Affiliate Marketers", 
+        "Network Builders", "Stay-at-home Parents", "Student Hustlers", "Corporate Burnouts"
+    ]
 
 
 

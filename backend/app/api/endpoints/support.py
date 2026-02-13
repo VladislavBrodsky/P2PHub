@@ -1,7 +1,8 @@
 import logging
 import asyncio
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
+from app.middleware.rate_limit import limiter
 from pydantic import BaseModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -73,7 +74,9 @@ async def get_support_status(partner: Partner = Depends(get_current_partner)):
     }
 
 @router.post("/chat", response_model=ChatResponse)
+@limiter.limit("10/minute")
 async def chat_with_agent(
+    request: Request,
     payload: ChatRequest,
     partner: Partner = Depends(get_current_partner)
 ):

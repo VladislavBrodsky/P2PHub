@@ -724,7 +724,15 @@ async def claim_task_reward(
     
     # Capture for audit
     xp_before = partner.xp
-    partner.xp += effective_xp
+    
+    # Atomic XP Increment
+    await session.execute(
+        text("UPDATE partner SET xp = xp + :inc WHERE id = :p_id"),
+        {"inc": effective_xp, "p_id": partner.id}
+    )
+    await session.flush()
+    await session.refresh(partner)
+    
     partner.level = get_level(partner.xp)
 
     # Audit logging
@@ -802,7 +810,14 @@ async def complete_academy_stage(
         # Apply PRO multiplier (5x)
         effective_xp = xp_reward * 5 if partner.is_pro else xp_reward
         xp_before = partner.xp
-        partner.xp += effective_xp
+        
+        # Atomic XP Increment
+        await session.execute(
+            text("UPDATE partner SET xp = xp + :inc WHERE id = :p_id"),
+            {"inc": effective_xp, "p_id": partner.id}
+        )
+        await session.flush()
+        await session.refresh(partner)
         
         # Log XP Transaction
         new_xp_tx = XPTransaction(

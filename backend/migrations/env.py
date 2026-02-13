@@ -84,7 +84,7 @@ async def run_migrations_online() -> None:
         
     import sys
     # Removed raw URL logging for security
-    print(f"DEBUG: Using database (sanitized): {url.split('@')[-1] if '@' in url else 'local'}", file=sys.stderr)
+    print(f"DEBUG: Using database (sanitized): {url.split('@')[-1] if '@' in url else 'local'}")
 
     connectable = create_async_engine(
         url,

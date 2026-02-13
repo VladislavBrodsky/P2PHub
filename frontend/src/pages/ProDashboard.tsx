@@ -185,6 +185,32 @@ export const ProDashboard = () => {
             });
     };
 
+    const handleCopyAnyText = (text: string) => {
+        if (!text) return;
+
+        const copyToClipboard = (str: string) => {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                return navigator.clipboard.writeText(str);
+            } else {
+                const el = document.createElement('textarea');
+                el.value = str;
+                document.body.appendChild(el);
+                el.select();
+                const success = document.execCommand('copy');
+                document.body.removeChild(el);
+                return success ? Promise.resolve() : Promise.reject();
+            }
+        };
+
+        copyToClipboard(text)
+            .then(() => {
+                notification('success');
+            })
+            .catch(() => {
+                notification('error');
+            });
+    };
+
     const handleSharePost = async () => {
         if (!generatedResult) return;
         try {

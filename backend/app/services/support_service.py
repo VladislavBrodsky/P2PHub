@@ -396,6 +396,10 @@ class SupportAgentService:
             # Accumulate total session cost
             session["total_cost"] = session.get("total_cost", 0.0) + cost
             
+            # Trim history to prevent memory bloat (keep last 50 messages = 25 turns)
+            if len(session["history"]) > 50:
+                session["history"] = session["history"][-50:]
+                
             await self.update_session(user_id, session)
             return answer
         except Exception as e:

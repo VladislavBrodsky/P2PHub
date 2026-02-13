@@ -83,12 +83,15 @@ async def create_partner(
 ) -> Tuple[Partner, bool]:
     """
     Creates a new partner or retrieves an existing one.
+    Handles potential race conditions during registration via database unique constraints.
     """
+    # 1. Primary check
     statement = select(Partner).where(Partner.telegram_id == telegram_id)
     result = await session.exec(statement)
     partner = result.first()
     if partner: return partner, False
 
+    # 2. Resolve Referrer
     referrer_id = None
     referrer = None
     if referrer_code:
@@ -107,6 +110,7 @@ async def create_partner(
         path = f"{parent_path}.{referrer.id}".lstrip(".")
         depth = referrer.depth + 1
 
+    # 3. Create Record
     partner = Partner(
         telegram_id=telegram_id,
         username=username,
@@ -119,15 +123,31 @@ async def create_partner(
         path=path,
         depth=depth
     )
+    
     session.add(partner)
-    await session.commit()
-    await session.refresh(partner)
+    
+    from sqlalchemy.exc import IntegrityError
+    try:
+        await session.commit()
+        await session.refresh(partner)
+        is_new = True
+    except IntegrityError:
+        # Race condition: Another worker inserted this TG_ID simultaneously
+        await session.rollback()
+        stmt = select(Partner).where(Partner.telegram_id == telegram_id)
+        res = await session.exec(stmt)
+        partner = res.first()
+        is_new = False
+        if not partner:
+            # This should theoretically never happen if IntegrityError was caught
+            raise RuntimeError("Database integrity error on user creation followed by missing record.")
 
+    # Side Effects
     try:
         await leaderboard_service.update_score(partner.id, partner.xp)
     except Exception: pass
 
-    if referrer:
+    if is_new and referrer:
         try:
             async with redis_service.client.pipeline(transaction=True) as pipe:
                 anc_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
@@ -142,7 +162,7 @@ async def create_partner(
         await redis_service.client.delete("partners:recent_v2")
     except Exception: pass
 
-    return partner, True
+    return partner, is_new
 
 async def get_partner_by_telegram_id(session: AsyncSession, telegram_id: str) -> Optional[Partner]:
     statement = select(Partner).where(Partner.telegram_id == telegram_id)
@@ -164,42 +184,100 @@ async def sync_profile_photos_task():
         await sync_profile_photos(bot, session)
 
 async def sync_profile_photos(bot, session: AsyncSession):
-    logger.info("📅 Starting Profile Photo Sync...")
-    result = await session.exec(select(Partner))
+    """
+    Optimized: Only sync users who have been active in the last 7 days and use chunks.
+    """
+    logger.info("📅 Starting Profile Photo Sync (Selective)...")
+    seven_days_ago = datetime.utcnow() - timedelta(days=7)
+    
+    # Query only active users to save API calls and DB load
+    stmt = select(Partner).where(Partner.updated_at >= seven_days_ago)
+    result = await session.exec(stmt)
     partners = result.all()
+    
     updated = 0
-    for partner in partners:
-        try:
-            await asyncio.sleep(0.05)
-            user_photos = await bot.get_user_profile_photos(partner.telegram_id, limit=1)
-            if user_photos.total_count > 0:
-                new_file_id = user_photos.photos[0][0].file_id
-                if partner.photo_file_id != new_file_id:
-                    partner.photo_file_id = new_file_id
-                    session.add(partner)
-                    updated += 1
-        except Exception as e:
-            logger.error(f"Failed to sync photo for {partner.telegram_id}: {e}")
+    # Process in batches with high concurrency but respecting rate limits
+    chunk_size = 20
+    for i in range(0, len(partners), chunk_size):
+        chunk = partners[i : i + chunk_size]
+        tasks = []
+        for partner in chunk:
+            tasks.append(sync_single_photo(bot, session, partner))
+        
+        # Gather results to keep pushing
+        results = await asyncio.gather(*tasks)
+        updated += sum(1 for r in results if r)
+        
+        # Small sleep between batches to avoid TG flood limits
+        await asyncio.sleep(0.5)
+
     await session.commit()
-    logger.info(f"✅ Sync complete. Updated {updated} photos.")
+    logger.info(f"✅ Selective Sync complete. Updated {updated} photos.")
+
+async def sync_single_photo(bot, session, partner: Partner) -> bool:
+    """Helper for parallel photo sync with error handling."""
+    try:
+        user_photos = await bot.get_user_profile_photos(partner.telegram_id, limit=1)
+        if user_photos.total_count > 0:
+            new_file_id = user_photos.photos[0][0].file_id
+            if partner.photo_file_id != new_file_id:
+                partner.photo_file_id = new_file_id
+                session.add(partner)
+                return True
+    except Exception as e:
+        # Don't log spam for users who blocked the bot
+        if "bot was blocked" not in str(e).lower():
+            logger.error(f"Photo sync error for {partner.telegram_id}: {e}")
+    return False
 
 async def migrate_paths(session: AsyncSession):
-    async def update_children(parent_id: int, parent_path: str, parent_depth: int):
-        res = await session.exec(select(Partner).where(Partner.referrer_id == parent_id))
-        for child in res.all():
-            new_path = f"{parent_path}.{parent_id}".lstrip(".")
-            new_depth = parent_depth + 1
-            if child.path != new_path or child.depth != new_depth:
-                child.path = new_path
-                child.depth = new_depth
-                session.add(child)
-            await update_children(child.id, child.path, child.depth)
-
-    res = await session.exec(select(Partner).where(Partner.referrer_id == None))
-    for root in res.all():
+    """
+    Iterative Queue-based path migration (Non-recursive).
+    Handles large trees efficiently without hitting recursion limits.
+    """
+    logger.info("🛠 Starting path migration (Iterative BFS)...")
+    
+    # Use a queue for BFS: (parent_id, parent_path, parent_depth)
+    queue = []
+    
+    # Find all root users (no referrer)
+    root_stmt = select(Partner).where(Partner.referrer_id == None)
+    root_res = await session.exec(root_stmt)
+    for root in root_res.all():
         if root.path is not None or root.depth != 0:
             root.path = None
             root.depth = 0
             session.add(root)
-        await update_children(root.id, "", 0)
+        queue.append((root.id, "", 0))
+        
+    processed_count = 0
+    while queue:
+        # Process in chunks of 100 for memory efficiency
+        current_batch = queue[:100]
+        queue = queue[100:]
+        
+        for parent_id, parent_path, parent_depth in current_batch:
+            # Find children
+            child_stmt = select(Partner).where(Partner.referrer_id == parent_id)
+            child_res = await session.exec(child_stmt)
+            
+            for child in child_res.all():
+                new_path = f"{parent_path}.{parent_id}".lstrip(".")
+                new_depth = parent_depth + 1
+                
+                if child.path != new_path or child.depth != new_depth:
+                    child.path = new_path
+                    child.depth = new_depth
+                    session.add(child)
+                
+                queue.append((child.id, child.path, child.depth))
+                processed_count += 1
+
+        # Commit periodically
+        if processed_count % 500 == 0:
+            await session.commit()
+            logger.info(f"🛠 Migration progress: {processed_count} partners processed...")
+
     await session.commit()
+    logger.info(f"✅ Migration complete. Processed {processed_count} partners.")
+

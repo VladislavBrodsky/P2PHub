@@ -387,6 +387,11 @@
                 "category": "Vision"
             }
         },
+        "content": {
+            "p1": "In a world where borders are becoming more tangible, digital freedom is no longer a luxury, but a necessity. Traditional financial systems are stuck in the last century, offering slow settlements and endless bureaucracy.",
+            "p2": "We believe in a future without intermediaries. Our mission is to provide every partner with the tools to achieve true sovereignty. With Pintopay, you are not just a user, you are part of a global decentralized infrastructure.",
+            "p3": "Evolution is inevitable. Those who adapt today will lead tomorrow. Start building your empire now, using the best fintech solutions on the market."
+        },
         "navigation": {
             "back": "Back",
             "next": "Next",
@@ -397,6 +402,12 @@
             "no_results_desc": "Try adjusting your search or filters to find what you're looking for.",
             "support_article": "Tap to support this insight",
             "featured": "Featured"
+        },
+        "marketing": {
+            "get_card": "Get your Pintopay Card 💳",
+            "upgrade_pro": "Upgrade to PRO Status 🚀",
+            "spend_everywhere": "Spend your crypto everywhere in 180+ countries.",
+            "unlock_tools": "Unlock viral marketing automation tools."
         }
     },
     "leaderboard": {

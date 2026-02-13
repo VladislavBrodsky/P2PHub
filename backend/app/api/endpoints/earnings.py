@@ -1,6 +1,7 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from app.middleware.rate_limit import limiter
+from fastapi import APIRouter, Depends, Request
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -12,7 +13,9 @@ from app.services.redis_service import redis_service
 router = APIRouter()
 
 @router.get("/", response_model=List[EarningSchema])
+@limiter.limit("20/minute")
 async def get_my_earnings(
+    request: Request,
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):

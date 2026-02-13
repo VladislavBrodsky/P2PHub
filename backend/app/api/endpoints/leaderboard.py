@@ -8,12 +8,15 @@ from app.services.leaderboard_service import leaderboard_service
 
 router = APIRouter()
 
-import logging
+from app.middleware.rate_limit import limiter
+from fastapi import Request
 
 logger = logging.getLogger(__name__)
 
 @router.get("/global")
+@limiter.limit("10/minute")
 async def get_global_leaderboard(
+    request: Request,
     limit: int = 20,
     session: AsyncSession = Depends(get_session)
 ):
@@ -69,7 +72,9 @@ async def get_global_leaderboard(
     return data
 
 @router.get("/me")
+@limiter.limit("30/minute")
 async def get_my_leaderboard_stats(
+    request: Request,
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):

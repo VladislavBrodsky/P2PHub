@@ -61,7 +61,7 @@ class AuditLog(SQLModel, table=True):
     class Config:
         # #comment: Make created_at immutable after creation
         # This prevents accidental modification of audit trail
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "event_type": "COMMISSION_PAID",
                 "event_category": "financial",
