@@ -73,7 +73,7 @@ export const useRealtimeAlerts = () => {
 
     useEffect(() => {
         fetchActivity();
-        const interval = setInterval(fetchActivity, 25000);
+        const interval = setInterval(fetchActivity, 213000);
         return () => clearInterval(interval);
     }, [fetchActivity]);
 };

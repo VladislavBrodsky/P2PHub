@@ -49,25 +49,13 @@ export const NotificationOverlay = () => {
                                 'border-amber-500/20'}
                     `}>
                         {notification.icon && (
-                            <div className="relative">
-                                {/* #comment Accent glow for the icon */}
-                                <div className={`absolute inset-0 blur-lg opacity-30 animate-pulse ${notification.type === 'success' ? 'bg-blue-500' :
-                                    notification.type === 'warning' ? 'bg-emerald-500' :
-                                        'bg-amber-500'
-                                    }`} />
-                                <div className="relative z-10 shrink-0">
-                                    {notification.icon}
-                                </div>
+                            <div className="relative z-10 shrink-0">
+                                {notification.icon}
                             </div>
                         )}
                         <div className="flex-1 overflow-hidden">
-                            <div className="flex items-center gap-2">
-                                <h4 className="text-xs font-semibold text-slate-900 dark:text-white truncate tracking-tight">{notification.title}</h4>
-                                <span className="text-[7px] font-medium px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/5 text-slate-400 tracking-widest whitespace-nowrap">
-                                    Just Now
-                                </span>
-                            </div>
-                            <p className="text-[10px] text-slate-600 dark:text-slate-300 truncate font-medium">{notification.message}</p>
+                            <h4 className="text-xs font-semibold text-slate-900 dark:text-white truncate tracking-tight">{notification.title}</h4>
+                            <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate font-medium mt-0.5">{notification.message}</p>
                         </div>
                         <button
                             onClick={hideNotification}
@@ -77,7 +65,8 @@ export const NotificationOverlay = () => {
                         </button>
                     </div>
                 </motion.div>
-            )}
-        </AnimatePresence>
+            )
+            }
+        </AnimatePresence >
     );
 };

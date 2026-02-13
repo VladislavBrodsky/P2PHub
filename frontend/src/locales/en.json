@@ -920,159 +920,126 @@
                     }
                 ]
             },
+            "studio_manual": {
+                "title": "Viral Studio Manual",
+                "subtitle": "Quantum Content Synthesis",
+                "steps": [
+                    {
+                        "title": "Define Strategy",
+                        "desc": "Select a post type (FOMO, Launch, Tutorial) to align the AI's persona with your current growth objective."
+                    },
+                    {
+                        "title": "Calibrate Audience",
+                        "desc": "Choose your target market. The AI will adjust tone, vocabulary, and cultural hooks for maximum resonance."
+                    },
+                    {
+                        "title": "Synthesize & Refine",
+                        "desc": "Initiate the AI agent. Use the 'Rewrite' button if you need a different angle. Perfect content takes 2-3 iterations."
+                    },
+                    {
+                        "title": "OmniPublish Deployment",
+                        "desc": "Post to all connected channels at once. Consistency is the only multiplier that matters."
+                    }
+                ]
+            },
+            "social_setup": {
+                "title": "Channel Architecture",
+                "subtitle": "Step-by-Step Deployment",
+                "platforms": [
+                    {
+                        "name": "Telegram Empire",
+                        "icon": "Send",
+                        "steps": [
+                            "Create a Public Channel",
+                            "Add @ViralStudioBot as Admin",
+                            "Enable 'Post Messages' permission",
+                            "Sync Channel ID in API Setup"
+                        ]
+                    },
+                    {
+                        "name": "X (Twitter) Reach",
+                        "icon": "Twitter",
+                        "steps": [
+                            "Register as Developer at developer.x.com",
+                            "Create a New Project & App",
+                            "Generate API Key & Secret",
+                            "Enable Write Permissions for OAuth 1.0a"
+                        ]
+                    },
+                    {
+                        "name": "LinkedIn Authority",
+                        "icon": "Linkedin",
+                        "steps": [
+                            "Optimize Profile for 'Growth Specialist'",
+                            "Connect via our OAuth Protocol",
+                            "Focus on B2B Passive Income Proofs",
+                            "Engage with 5 posts daily to boost reach"
+                        ]
+                    }
+                ]
+            },
+            "lifehacks": {
+                "title": "Viral Lifehacks 2026",
+                "subtitle": "Algorithm Mastery",
+                "items": [
+                    {
+                        "title": "The 3-Second Hook",
+                        "desc": "Pattern disrupt in the first 3s. Use bold claims or visual contrast to stop the scroll. No hook = No reach."
+                    },
+                    {
+                        "title": "Comment Velocity",
+                        "desc": "The first 10 minutes decide everything. Ask a polarising question to trigger immediate debate and engagement."
+                    },
+                    {
+                        "title": "The 'Curiosity' Loop",
+                        "desc": "Don't sell in the post. Tease the result. Make them comment 'INFO' or click your link out of pure intrigue."
+                    }
+                ]
+            },
             "checklist": {
                 "title": "Viral Audit Checklist",
-                "subtitle": "VERIFY BEFORE YOU POST",
+                "subtitle": "CHECK BEFORE PUBLISHING",
                 "items": [
                     "Is the Hook visible in the first 2 lines?",
-                    "Did you include a clear Call to Action (CTA)?",
+                    "Did you add a clear Call to Action (CTA)?",
                     "Is the image high-contrast and relevant?",
-                    "Are you using at least 5 targeted hashtags?",
+                    "Are you using at least 5 target hashtags?",
                     "Did you include your referral link?"
                 ]
             },
             "roadmap": {
-                "title": "PRO Daily Roadmap",
+                "title": "Daily PRO Roadmap",
                 "subtitle": "24/7 GROWTH PROTOCOL",
                 "items": [
                     {
                         "title": "09:00 - Sync",
-                        "desc": "Check Trends & Generate 3 different Hooks for the day."
+                        "desc": "Check Trends and generate 3 different Hooks for the day."
                     },
                     {
-                        "title": "12:00 - Blast",
+                        "title": "12:00 - Launch",
                         "desc": "Use OmniPublish to reach your entire network ecosystem."
                     },
                     {
                         "title": "18:00 - Scale",
-                        "desc": "Engage with your referrals and help them use the Studio."
+                        "desc": "Interact with referrals and help them use the Studio."
                     },
                     {
                         "title": "22:00 - Audit",
-                        "desc": "Review stats and optimize your target audience for tomorrow."
+                        "desc": "Review stats and optimize target audience for tomorrow."
+                    }
+                ]
+            },
+            "viral_assets": {
+                "title": "Viral Design Assets",
+                "subtitle": "High-Conversion Prototypes",
+                "cards": [
+                    {
+                        "title": "OFF-GRID ASSET",
+                        "hook": "Looks like a bank card. Works like a bank card.",
+                        "desc": "But it connects directly to your crypto liquidity. No bank account needed. Total separation of state and money."
                     }
                 ]
             }
-        },
-        "studio_manual": {
-            "title": "Viral Studio Manual",
-            "subtitle": "Quantum Content Synthesis",
-            "steps": [
-                {
-                    "title": "Define Strategy",
-                    "desc": "Select a post type (FOMO, Launch, Tutorial) to align the AI's persona with your current growth objective."
-                },
-                {
-                    "title": "Calibrate Audience",
-                    "desc": "Choose your target market. The AI will adjust tone, vocabulary, and cultural hooks for maximum resonance."
-                },
-                {
-                    "title": "Synthesize & Refine",
-                    "desc": "Initiate the AI agent. Use the 'Rewrite' button if you need a different angle. Perfect content takes 2-3 iterations."
-                },
-                {
-                    "title": "OmniPublish Deployment",
-                    "desc": "Post to all connected channels at once. Consistency is the only multiplier that matters."
-                }
-            ]
-        },
-        "social_setup": {
-            "title": "Channel Architecture",
-            "subtitle": "Step-by-Step Deployment",
-            "platforms": [
-                {
-                    "name": "Telegram Empire",
-                    "icon": "Send",
-                    "steps": [
-                        "Create a Public Channel",
-                        "Add @ViralStudioBot as Admin",
-                        "Enable 'Post Messages' permission",
-                        "Sync Channel ID in API Setup"
-                    ]
-                },
-                {
-                    "name": "X (Twitter) Reach",
-                    "icon": "Twitter",
-                    "steps": [
-                        "Register as Developer at developer.x.com",
-                        "Create a New Project & App",
-                        "Generate API Key & Secret",
-                        "Enable Write Permissions for OAuth 1.0a"
-                    ]
-                },
-                {
-                    "name": "LinkedIn Authority",
-                    "icon": "Linkedin",
-                    "steps": [
-                        "Optimize Profile for 'Growth Specialist'",
-                        "Connect via our OAuth Protocol",
-                        "Focus on B2B Passive Income Proofs",
-                        "Engage with 5 posts daily to boost reach"
-                    ]
-                }
-            ]
-        },
-        "lifehacks": {
-            "title": "Viral Lifehacks 2026",
-            "subtitle": "Algorithm Mastery",
-            "items": [
-                {
-                    "title": "The 3-Second Hook",
-                    "desc": "Pattern disrupt in the first 3s. Use bold claims or visual contrast to stop the scroll. No hook = No reach."
-                },
-                {
-                    "title": "Comment Velocity",
-                    "desc": "The first 10 minutes decide everything. Ask a polarising question to trigger immediate debate and engagement."
-                },
-                {
-                    "title": "The 'Curiosity' Loop",
-                    "desc": "Don't sell in the post. Tease the result. Make them comment 'INFO' or click your link out of pure intrigue."
-                }
-            ]
-        },
-        "checklist": {
-            "title": "Viral Audit Checklist",
-            "subtitle": "CHECK BEFORE PUBLISHING",
-            "items": [
-                "Is the Hook visible in the first 2 lines?",
-                "Did you add a clear Call to Action (CTA)?",
-                "Is the image high-contrast and relevant?",
-                "Are you using at least 5 target hashtags?",
-                "Did you include your referral link?"
-            ]
-        },
-        "roadmap": {
-            "title": "Daily PRO Roadmap",
-            "subtitle": "24/7 GROWTH PROTOCOL",
-            "items": [
-                {
-                    "title": "09:00 - Sync",
-                    "desc": "Check Trends and generate 3 different Hooks for the day."
-                },
-                {
-                    "title": "12:00 - Launch",
-                    "desc": "Use OmniPublish to reach your entire network ecosystem."
-                },
-                {
-                    "title": "18:00 - Scale",
-                    "desc": "Interact with referrals and help them use the Studio."
-                },
-                {
-                    "title": "22:00 - Audit",
-                    "desc": "Review stats and optimize target audience for tomorrow."
-                }
-            ]
-        },
-        "viral_assets": {
-            "title": "Viral Design Assets",
-            "subtitle": "High-Conversion Prototypes",
-            "cards": [
-                {
-                    "title": "OFF-GRID ASSET",
-                    "hook": "Looks like a bank card. Works like a bank card.",
-                    "desc": "But it connects directly to your crypto liquidity. No bank account needed. Total separation of state and money."
-                }
-            ]
         }
     },
     "subscription": {

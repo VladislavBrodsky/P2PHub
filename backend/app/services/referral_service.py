@@ -160,58 +160,76 @@ async def process_referral_logic(partner_id: int):
                     await leaderboard_service.update_score(referrer.id, referrer.xp)
                     async with redis_service.client.pipeline(transaction=True) as pipe:
                         pipe.delete(f"partner:profile:{referrer.telegram_id}")
+                        pipe.delete(f"partner:earnings:{referrer.telegram_id}") # Invalidate earnings cache
                         pipe.delete(f"ref_tree_stats:{referrer.id}")
                         # Optimized: Invalidate growth metrics and charts to avoid stale data
                         for tf in ["24H", "7D", "1M", "3M", "6M", "1Y"]:
                             pipe.delete(f"growth_metrics:{referrer.id}:{tf}")
                             pipe.delete(f"growth_chart:{referrer.id}:{tf}")
                         
-                        if level == 1:
-                            pipe.delete(f"ref_tree_members:{referrer.id}:1")
+                        # Invalidate membership list for this specific level
+                        pipe.delete(f"ref_tree_members:{referrer.id}:{level}")
                         await pipe.execute()
                 except Exception as e:
                     logger.error(f"⚠️ Redis sync/invalidation failed for {referrer.id}: {e}")
 
-                # Referral Notifications
-                try:
-                    lang = referrer.language_code or "en"
-                    new_partner_name = f"{partner.first_name}"
-                    if partner.username:
-                        new_partner_name += f" (@{partner.username})"
+            # Referral Notifications
+            try:
+                from app.utils.text import escape_markdown_v1 # Import escape function
 
-                    msg = None
-                    if level == 1:
-                        msg = get_msg(lang, "referral_l1_congrats", name=new_partner_name)
+                lang = referrer.language_code or "en"
+                
+                # Construct Full Name: First Last (@username)
+                def format_partner_name(p):
+                    parts = []
+                    if p.first_name:
+                        parts.append(p.first_name)
+                    if p.last_name:
+                        parts.append(p.last_name)
+                    
+                    if not parts:
+                        name_display = "Partner"
                     else:
-                        path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-                        try:
-                            # Direct path to the new partner including intermediate names
-                            if referrer.id in path_ids:
-                                start_idx = path_ids.index(referrer.id)
-                                intermediary_ids = path_ids[start_idx+1:]
-                                chain_names = []
-                                for mid_id in intermediary_ids:
-                                    mid_user = ancestor_map.get(mid_id)
-                                    if mid_user:
-                                        name = mid_user.first_name or "Partner"
-                                        if mid_user.username:
-                                            name += f" (@{mid_user.username})"
-                                        chain_names.append(name)
-                                chain_names.append(new_partner_name)
-                                referral_chain = "\n".join([f"➜ {name}" for name in chain_names])
+                        name_display = " ".join(parts)
+                    
+                    if p.username:
+                        name_display += f" (@{p.username})"
+                    
+                    return escape_markdown_v1(name_display)
 
-                                if level == 2:
-                                    msg = get_msg(lang, "referral_l2_congrats", referral_chain=referral_chain)
-                                else:
-                                    msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=referral_chain)
+                new_partner_name = format_partner_name(partner)
+
+                msg = None
+                if level == 1:
+                    msg = get_msg(lang, "referral_l1_congrats", name=new_partner_name)
+                else:
+                    path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+                    try:
+                        # Direct path to the new partner including intermediate names
+                        if referrer.id in path_ids:
+                            start_idx = path_ids.index(referrer.id)
+                            intermediary_ids = path_ids[start_idx+1:]
+                            chain_names = []
+                            for mid_id in intermediary_ids:
+                                mid_user = ancestor_map.get(mid_id)
+                                if mid_user:
+                                    chain_names.append(format_partner_name(mid_user))
+                                    
+                            chain_names.append(new_partner_name) # already escaped
+                            referral_chain = "\n".join([f"➜ {name}" for name in chain_names])
+
+                            if level == 2:
+                                msg = get_msg(lang, "referral_l2_congrats", referral_chain=referral_chain)
                             else:
-                                # Fallback if path reconstruction fails for some reason
-                                if level == 2:
-                                    msg = get_msg(lang, "referral_l2_congrats", referral_chain=f"➜ {new_partner_name}")
-                                else:
-                                    msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=f"➜ {new_partner_name}")
-                        except Exception as e:
-                            logger.error(f"Error building referral chain msg: {e}")
+                                msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=referral_chain)
+                        else:
+                            # Fallback if path reconstruction fails for some reason
+                            if level == 2:
+                                msg = get_msg(lang, "referral_l2_congrats", referral_chain=f"➜ {new_partner_name}")
+                            else:
+                                msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=f"➜ {new_partner_name}")
+                    except Exception as e:
+                        logger.error(f"Error building referral chain msg: {e}")
 
                     if msg:
                         await notification_service.enqueue_notification(chat_id=referrer.telegram_id, text=msg)

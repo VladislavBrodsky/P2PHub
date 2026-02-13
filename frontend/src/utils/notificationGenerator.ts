@@ -26,17 +26,15 @@ const REAL_NAMES = [
     'Profit_Pilot', 'Veronika_G', 'Stanislav_T', 'Angela_Web3', 'Arthur_Rich'
 ];
 
-const EMOJIS = ['🔥', '🚀', '💰', '💎', '⚡', '📈', '🎊', '🌟', '✨', '🤝', '👑', '💸', '🔝', '🎯', '💪'];
-
 const ADJECTIVES = [
     'Ambitious', 'Smart', 'Active', 'Strategic', 'Elite',
-    'Hungry', 'unstoppable', 'Pro', 'Legendary', 'Future'
+    'Hungry', 'Unstoppable', 'Pro', 'Legendary', 'Future'
 ];
 
 const REFERRAL_ACTIONS = [
-    'just joined', 'entered', 'started', 'arrived in',
-    'claimed their spot in', 'unlocked access to', 'jumped into',
-    'is officially in', 'secured a seat in', 'joined the ranks of'
+    'joined', 'entered', 'started', 'arrived in',
+    'claimed a spot in', 'unlocked access to', 'joined',
+    'is officially in', 'secured a seat in', 'joined'
 ];
 
 const PLACES = [
@@ -46,16 +44,16 @@ const PLACES = [
 ];
 
 const URGENCY = [
-    "don't miss out!", 'your turn next!', 'time to earn!',
-    'are you coming?', 'catch up!', 'start now!',
-    'join the wave!', 'no time to waste!', 'the clock is ticking!',
-    'get in while it\'s hot!'
+    "Don't miss out.", 'Your turn next.', 'Time to earn.',
+    'Are you coming?', 'Catch up.', 'Start now.',
+    'Join the wave.', 'No time to waste.', 'The clock is ticking.',
+    'Get in now.'
 ];
 
 const TASK_ACTIONS = [
-    'just crushed', 'completed', 'finished', 'conquered',
-    'successfully handled', 'mastered', 'knocked out',
-    'claimed rewards for', 'is stacking XP from', 'won'
+    'completed', 'finished', 'conquered',
+    'handled', 'mastered', 'knocked out',
+    'claimed rewards for', 'stacking XP from', 'won'
 ];
 
 const TASK_MODIFIERS = [
@@ -64,14 +62,14 @@ const TASK_MODIFIERS = [
 ];
 
 const LEVEL_ACTIONS = [
-    'just reached', 'soared to', 'ascended to', 'climbed to',
-    'unlocked', 'hit', 'is now at', 'broke through to'
+    'reached', 'advanced to', 'ascended to', 'climbed to',
+    'unlocked', 'hit', 'is now at', 'achieved'
 ];
 
 const LEVEL_CELEBRATIONS = [
-    'Incredible progress!', 'Unstoppable!', 'Elite performance!',
-    'Pure fire!', 'What a legend!', 'Taking over!',
-    'Setting the pace!', 'Watch out!'
+    'Solid progress.', 'Unstoppable.', 'Elite performance.',
+    'On fire.', 'Legendary status.', 'Taking over.',
+    'Setting the pace.', 'Watch out.'
 ];
 
 export const generateNotificationMessage = (type: NotificationType, firstName?: string) => {
@@ -90,7 +88,11 @@ export const generateNotificationMessage = (type: NotificationType, firstName?: 
         activeName = randomItem(REAL_NAMES);
     }
 
-    const emoji = randomItem(EMOJIS);
+    // Clean up name by removing emojis just in case they came from the REAL_NAMES list or input
+    activeName = activeName.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
+    // Also remove suffixes like .eth, .web3, etc for cleaner look if requested, but user just said "remove Emoji from that notifications"
+    // I will keep the suffixes as they add "crypto" flavor without being emojis.
+
     const adj = randomItem(ADJECTIVES);
 
     let message = '';
@@ -98,39 +100,39 @@ export const generateNotificationMessage = (type: NotificationType, firstName?: 
 
     if (type === 'REFERRAL') {
         const templates = [
-            () => `${emoji} ${activeName} ${randomItem(REFERRAL_ACTIONS)} ${randomItem(PLACES)} ${randomItem(URGENCY)}`,
-            () => `${activeName} ${emoji} ${adj} move! Just joined ${randomItem(PLACES)}.`,
-            () => `💰 Wealth alert! ${activeName} ${randomItem(REFERRAL_ACTIONS)} ${randomItem(PLACES)}.`,
-            () => `🚀 Space is filling up! ${activeName} ${randomItem(REFERRAL_ACTIONS)} ${randomItem(PLACES)}.`
+            () => `${activeName} ${randomItem(REFERRAL_ACTIONS)} ${randomItem(PLACES)}. ${randomItem(URGENCY)}`,
+            () => `${activeName} made a ${adj.toLowerCase()} move. Just joined ${randomItem(PLACES)}.`,
+            () => `Wealth alert. ${activeName} ${randomItem(REFERRAL_ACTIONS)} ${randomItem(PLACES)}.`,
+            () => `Space is filling up. ${activeName} ${randomItem(REFERRAL_ACTIONS)} ${randomItem(PLACES)}.`
         ];
         message = randomItem(templates)();
         title = randomItem([
-            'New VIP 👑', 'Partner Alert 🤝', 'Network Growth 📈',
-            'Member Status: Active 🔥', 'Position Secured 💎'
+            'New VIP', 'Partner Alert', 'Network Growth',
+            'Member Status: Active', 'Position Secured'
         ]);
     } else if (type === 'TASK') {
         const templates = [
-            () => `${emoji} ${activeName} ${randomItem(TASK_ACTIONS)} ${randomItem(TASK_MODIFIERS)}! Your turn?`,
-            () => `💰 Payout time! ${activeName} ${randomItem(TASK_ACTIONS)} rewards.`,
-            () => `${activeName} is on a roll! ${emoji} Just ${randomItem(TASK_ACTIONS)} ${randomItem(TASK_MODIFIERS)}.`,
-            () => `🎯 Target hit! ${activeName} ${randomItem(TASK_ACTIONS)} ${randomItem(TASK_MODIFIERS)}.`
+            () => `${activeName} ${randomItem(TASK_ACTIONS)} ${randomItem(TASK_MODIFIERS)}. Your turn?`,
+            () => `Payout time. ${activeName} ${randomItem(TASK_ACTIONS)} rewards.`,
+            () => `${activeName} is on a roll. Just ${randomItem(TASK_ACTIONS)} ${randomItem(TASK_MODIFIERS)}.`,
+            () => `Target hit. ${activeName} ${randomItem(TASK_ACTIONS)} ${randomItem(TASK_MODIFIERS)}.`
         ];
         message = randomItem(templates)();
         title = randomItem([
-            'Task Victory 🏆', 'Reward Hunter 💰', 'Mission Success 🎯',
-            'Payout Pending 💸', 'XP Boosted ⚡'
+            'Task Victory', 'Reward Hunter', 'Mission Success',
+            'Payout Pending', 'XP Boosted'
         ]);
     } else { // LEVEL_UP
         const templates = [
-            () => `${emoji} ${randomItem(ADJECTIVES)} growth! ${activeName} ${randomItem(LEVEL_ACTIONS)} a new Level!`,
-            () => `📈 New Rank! ${activeName} ${randomItem(LEVEL_ACTIONS)} next milestone. ${randomItem(LEVEL_CELEBRATIONS)}`,
-            () => `${activeName} ${emoji} is rising! Just ${randomItem(LEVEL_ACTIONS)} next milestone.`,
-            () => `🏆 Achievement! ${activeName} ${randomItem(LEVEL_ACTIONS)} elite status.`
+            () => `${adj} growth. ${activeName} ${randomItem(LEVEL_ACTIONS)} a new Level.`,
+            () => `New Rank. ${activeName} ${randomItem(LEVEL_ACTIONS)} next milestone. ${randomItem(LEVEL_CELEBRATIONS)}`,
+            () => `${activeName} is rising. Just ${randomItem(LEVEL_ACTIONS)} next milestone.`,
+            () => `Achievement unlocked. ${activeName} ${randomItem(LEVEL_ACTIONS)} elite status.`
         ];
         message = randomItem(templates)();
         title = randomItem([
-            'Rank Up 🚀', 'Elite Evolution 👑', 'Status Update 📈',
-            'Milestone Hit 💎', 'Power Leveling ⚡'
+            'Rank Up', 'Elite Evolution', 'Status Update',
+            'Milestone Hit', 'Power Leveling'
         ]);
     }
 
