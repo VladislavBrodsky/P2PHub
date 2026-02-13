@@ -182,19 +182,26 @@ class ViralMarketingStudio:
             if not self.genai_client:
                 return None
             
-            # Prioritize last working model, then fallback to fast
+            # Prioritize last working model, then fallback to stable Imagen 3
             imagen_models = [
                 self._last_working_imagen_model,
+                'imagen-3.0-generate-001',
                 'imagen-3.0-fast-001',
-                'imagen-4.0-generate-001'
             ]
             # Remove duplicates while preserving order
-            imagen_models = list(dict.fromkeys(imagen_models))
+            imagen_models = [m for i, m in enumerate(imagen_models) if m and m not in imagen_models[:i]]
             
-            method = getattr(self.genai_client.models, 'generate_images', 
-                           getattr(self.genai_client.models, 'generate_image', None))
+            # Defensive check for models attribute and methods
+            models_obj = getattr(self.genai_client, 'models', None)
+            if not models_obj:
+                logger.error("❌ ViralMarketingStudio: genai_client.models is missing")
+                return None
+
+            method = getattr(models_obj, 'generate_image', 
+                           getattr(models_obj, 'generate_images', None))
             
             if not method:
+                logger.error("❌ ViralMarketingStudio: generate_image method not found in SDK")
                 return None
 
             loop = asyncio.get_event_loop()
@@ -244,9 +251,16 @@ class ViralMarketingStudio:
             content = content_data
             image_prompt = content.get("image_description") or base_image_prompt
             
-            # Ensure hashtags is a list
+            # Ensure hashtags is a list of clean tags
             hashtags_raw = content.get("hashtags", [])
-            hashtags = [tag.strip() for tag in hashtags_raw.split(',')] if isinstance(hashtags_raw, str) else (hashtags_raw if isinstance(hashtags_raw, list) else [])
+            if isinstance(hashtags_raw, str):
+                # Handle both comma and space separation
+                # First replace commas with spaces, then split
+                hashtags = [tag.strip() for tag in hashtags_raw.replace(',', ' ').split() if tag.strip()]
+            elif isinstance(hashtags_raw, list):
+                hashtags = [str(tag).strip() for tag in hashtags_raw if tag]
+            else:
+                hashtags = []
 
             generation_end = datetime.utcnow()
             duration = (generation_end - generation_start).total_seconds()
