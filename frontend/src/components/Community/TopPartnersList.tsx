@@ -62,7 +62,7 @@ export const TopPartnersList = ({ onOpenInfo }: { onOpenInfo?: () => void }) => 
                     onClick={onOpenInfo}
                     className="bg-blue-100 dark:bg-blue-500/20 hover:bg-blue-200 dark:hover:bg-blue-500/30 active:scale-95 transition-all text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-full flex items-center justify-center shadow-sm"
                 >
-                    <span className="text-[10px] font-black uppercase tracking-widest">REFERRAL.INFO</span>
+                    <span className="text-[10px] font-black tracking-widest">Network Info</span>
                 </button>
             </div>
 
