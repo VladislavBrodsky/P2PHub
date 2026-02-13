@@ -76,8 +76,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             completed_stages: user?.completed_stages ? [...user.completed_stages, id] : [id]
         });
 
-        // TODO: Implement backend API call to persist stage completion
-        // await apiClient.post(`/api/academy/stages/${id}/complete`);
+        try {
+            await apiClient.post(`/api/partner/academy/stages/${id}/complete`);
+        } catch (error) {
+            console.error('Failed to persist stage completion:', error);
+            // Optionally rollback if needed, but usually optimistic is fine for this
+        }
     }, [user, updateUser]);
 
     const refreshUser = React.useCallback(async () => {

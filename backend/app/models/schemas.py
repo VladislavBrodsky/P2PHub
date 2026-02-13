@@ -35,6 +35,8 @@ class PartnerResponse(PartnerBase):
     updated_at: datetime
     referrals: Optional[List[PartnerBase]] = None
     active_tasks: Optional[List["ActiveTaskResponse"]] = None
+    completed_tasks: str = "[]"
+    completed_stages: List[int] = []
     
     # Social Setup Status (not returning keys themselves for safety)
     has_x_setup: bool = False

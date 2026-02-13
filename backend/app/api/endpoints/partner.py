@@ -230,6 +230,13 @@ async def get_my_profile(
 
     partner_dict = partner.model_dump()
     partner_dict["completed_tasks"] = json.dumps(completed_tasks)
+    
+    # Parse completed_stages from JSON string
+    try:
+        partner_dict["completed_stages"] = json.loads(partner.completed_stages or "[]")
+    except Exception:
+        partner_dict["completed_stages"] = []
+
     partner_dict["active_tasks"] = active_tasks
     partner_dict["total_earned"] = partner.total_earned_usdt
     partner_dict["total_network_size"] = partner.referral_count
@@ -756,6 +763,43 @@ async def claim_task_reward(
             logger.error(f"Failed to send task notification: {e}")
 
     return partner
+
+@router.post("/academy/stages/{stage_id}/complete")
+async def complete_academy_stage(
+    stage_id: int,
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Persists completion of an Academy stage.
+    """
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
+
+    stmt = select(Partner).where(Partner.telegram_id == tg_id)
+    result = await session.exec(stmt)
+    partner = result.first()
+
+    if not partner:
+        raise HTTPException(status_code=404, detail="Partner not found")
+
+    try:
+        completed = json.loads(partner.completed_stages or "[]")
+    except:
+        completed = []
+
+    if stage_id not in completed:
+        completed.append(stage_id)
+        partner.completed_stages = json.dumps(completed)
+        session.add(partner)
+        await session.commit()
+        await session.refresh(partner)
+        
+        # Invalidate cache
+        cache_key = f"partner:profile:{tg_id}"
+        await redis_service.client.delete(cache_key)
+
+    return {"status": "success", "completed_stages": completed}
 
 @router.get("/earnings", response_model=List[EarningSchema])
 async def get_my_earnings(
