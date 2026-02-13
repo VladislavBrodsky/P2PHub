@@ -187,57 +187,70 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: '100%', opacity: 0 }}
                         transition={{ type: 'spring', damping: 30, stiffness: 250 }}
-                        className="relative flex h-full sm:h-[90dvh] w-full max-w-[480px] flex-col overflow-hidden bg-(--color-bg-deep) sm:rounded-3xl shadow-2xl safe-pt safe-pb"
+                        className="relative flex h-full sm:h-[90dvh] w-full max-w-[480px] flex-col overflow-hidden bg-(--color-bg-deep) sm:rounded-[32px] shadow-[0_32px_80px_-20px_rgba(0,0,0,0.5)] safe-pt safe-pb border-x border-t sm:border border-(--color-border-glass)"
                         style={{
-                            // Account for Telegram Header/Footer
                             height: '100dvh',
                             maxHeight: '100dvh'
                         }}
                     >
                         {/* Premium Header */}
-                        <div className="relative border-b border-(--color-border-glass) px-4 py-4 shrink-0 bg-(--color-bg-surface)/80 backdrop-blur-xl z-20">
-                            {/* Inset for Telegram Header (dots/close) */}
-                            <div className="pt-[calc(env(safe-area-inset-top,0px)+12px)] sm:pt-0">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-3 sm:gap-4">
-                                        <div className="relative shrink-0">
-                                            <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-linear-to-br from-blue-500/20 to-indigo-500/20 text-blue-500 border border-blue-500/30">
-                                                <ShieldCheck className="h-6 w-6 sm:h-7 sm:w-7" />
+                        <div className="relative shrink-0 z-20">
+                            {/* Mesh Gradient Background for Header */}
+                            <div className="absolute inset-0 mesh-gradient-dark opacity-40" />
+                            <div className="relative border-b border-(--color-border-glass) px-5 py-4 bg-(--color-bg-surface)/40 backdrop-blur-2xl">
+                                {/* Inset for Telegram Header (dots/close) */}
+                                <div className="pt-[calc(env(safe-area-inset-top,0px)+12px)] sm:pt-0">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-4">
+                                            <div className="relative shrink-0">
+                                                <div className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-linear-to-br from-blue-500/20 to-indigo-600/20 text-blue-500 border border-blue-500/30 shadow-[0_8px_20px_-4px_rgba(59,130,246,0.3)]">
+                                                    <ShieldCheck className="h-7 w-7" />
+                                                </div>
+                                                <motion.div
+                                                    animate={{ scale: [1, 1.2, 1] }}
+                                                    transition={{ repeat: Infinity, duration: 2 }}
+                                                    className="absolute -top-1 -right-1 h-4 w-4 rounded-full border-2 border-(--color-bg-deep) bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)]"
+                                                />
                                             </div>
-                                            <div className="absolute -bottom-1 -right-1 h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border-2 border-(--color-bg-deep) bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                                            <div className="flex flex-col">
+                                                <div className="flex items-center gap-2">
+                                                    <h3 className="text-sm font-black uppercase tracking-[0.15em] text-(--color-text-primary)">
+                                                        {t('support.manager')}
+                                                    </h3>
+                                                    {(user?.level || 0) >= 5 && (
+                                                        <span className="flex items-center gap-1 rounded-full bg-blue-500/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-blue-500 border border-blue-500/20 shadow-sm">
+                                                            <BadgeCheck className="h-2.5 w-2.5" />
+                                                            {t('support.priority_badge')}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div className="flex items-center gap-2 pt-0.5 mt-0.5">
+                                                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                                                    <span className="text-[10px] font-black text-emerald-500/90 uppercase tracking-[0.25em]">{t('support.online')}</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col">
-                                            <div className="flex items-center gap-2">
-                                                <h3 className="text-xs sm:text-sm font-black uppercase tracking-widest text-(--color-text-primary)">
-                                                    {t('support.manager')}
-                                                </h3>
-                                                {(user?.level || 0) >= 5 && (
-                                                    <span className="hidden xs:flex items-center gap-1 rounded-full bg-blue-500/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-blue-500 border border-blue-500/20">
-                                                        <BadgeCheck className="h-2.5 w-2.5" />
-                                                        {t('support.priority_badge')}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <div className="flex items-center gap-1.5 pt-0.5">
-                                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                                <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80">{t('support.online')}</span>
-                                            </div>
+                                        <button
+                                            onClick={onClose}
+                                            className="rounded-2xl bg-(--color-text-primary)/5 p-3 text-(--color-text-secondary) hover:bg-(--color-text-primary)/10 transition-all active:scale-90 border border-(--color-border-glass)"
+                                        >
+                                            <X className="h-5 w-5" />
+                                        </button>
+                                    </div>
+
+                                    {/* User Meta Line - "Elite Console Style" */}
+                                    <div className="mt-4 flex items-center gap-3 rounded-xl bg-black/20 dark:bg-white/5 px-3 py-2 border border-(--color-border-glass) shadow-inner">
+                                        <div className="flex h-5 w-5 items-center justify-center rounded-md bg-blue-500/10 border border-blue-500/20">
+                                            <Terminal className="h-3 w-3 text-blue-400 opacity-70" />
+                                        </div>
+                                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary) truncate">
+                                            {t('support.user_context', { name: user?.first_name || 'PARTNER', level: user?.level || 1 })}
+                                        </span>
+                                        <div className="ml-auto flex items-center gap-1">
+                                            <Zap className="h-2.5 w-2.5 text-amber-400" />
+                                            <span className="text-[8px] font-black text-amber-400/80 uppercase">{user?.balance?.toFixed(2) || '0.00'}</span>
                                         </div>
                                     </div>
-                                    <button
-                                        onClick={onClose}
-                                        className="rounded-xl bg-(--color-text-primary)/5 p-2.5 text-(--color-text-secondary) hover:bg-(--color-text-primary)/10 transition-all active:scale-95"
-                                    >
-                                        <X className="h-5 w-5" />
-                                    </button>
-                                </div>
-
-                                {/* User Meta Line */}
-                                <div className="mt-3 flex items-center gap-2 rounded-lg bg-(--color-text-primary)/5 px-2 py-1.5 border border-(--color-border-glass)">
-                                    <Terminal className="h-3 w-3 text-(--color-text-secondary) opacity-30" />
-                                    <span className="text-[9px] font-black uppercase tracking-widest text-(--color-text-secondary) opacity-60">
-                                        {t('support.user_context', { name: user?.first_name || 'PARTNER', level: user?.level || 1 })}
-                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -245,26 +258,35 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         {/* Messages Area */}
                         <div
                             ref={scrollRef}
-                            className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-hide overscroll-contain"
+                            className="flex-1 overflow-y-auto px-5 py-6 space-y-8 custom-scrollbar hide-scrollbar overscroll-contain relative"
                         >
+                            {/* Subtle background element */}
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-40 bg-linear-to-b from-blue-500/5 to-transparent pointer-events-none" />
+
                             {messages.map((msg, idx) => (
                                 <motion.div
                                     key={msg.id}
-                                    initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    transition={{ duration: 0.3 }}
+                                    transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
                                     className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                                 >
-                                    <div className={`relative max-w-[85%] rounded-2xl px-4 py-3 shadow-lg ${msg.role === 'user'
-                                        ? 'bg-linear-to-br from-blue-600 to-blue-700 text-white rounded-tr-none border border-blue-500/20'
-                                        : 'bg-(--color-bg-surface) border border-(--color-border-glass) text-(--color-text-primary) rounded-tl-none'
+                                    <div className={`relative max-w-[88%] rounded-3xl px-5 py-4 shadow-2xl ${msg.role === 'user'
+                                        ? 'vibing-blue-animated text-white rounded-tr-none border border-white/10'
+                                        : 'bg-(--color-bg-surface)/60 backdrop-blur-md border border-(--color-border-glass) text-(--color-text-primary) rounded-tl-none shadow-[0_8px_32px_-8px_rgba(0,0,0,0.15)]'
                                         }`}>
-                                        <p className="text-[13px] leading-relaxed">
+
+                                        {/* Assistant Message Glow */}
+                                        {msg.role === 'assistant' && (
+                                            <div className="absolute -inset-0.5 rounded-[inherit] bg-linear-to-br from-blue-500/10 to-indigo-500/10 opacity-50 blur-sm -z-10" />
+                                        )}
+
+                                        <p className="text-[14px] leading-relaxed font-medium">
                                             {msg.content}
                                         </p>
-                                        <div className={`mt-1.5 flex items-center gap-1.5 text-[8px] font-black uppercase tracking-widest opacity-40 ${msg.role === 'user' ? 'justify-end text-blue-100' : 'text-(--color-text-secondary)'
+                                        <div className={`mt-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.15em] opacity-40 ${msg.role === 'user' ? 'justify-end text-blue-50' : 'text-(--color-text-secondary)'
                                             }`}>
-                                            <Clock className="h-2.5 w-2.5" />
+                                            <Clock className="h-3 w-3" />
                                             {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </div>
                                     </div>
@@ -272,12 +294,25 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                             ))}
 
                             {isTyping && (
-                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
-                                    <div className="bg-(--color-bg-surface) border border-(--color-border-glass) rounded-2xl rounded-tl-none px-4 py-3 shadow-lg">
-                                        <div className="flex gap-1">
-                                            <motion.span animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1 }} className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-                                            <motion.span animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.2 }} className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-                                            <motion.span animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.4 }} className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+                                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex justify-start">
+                                    <div className="bg-(--color-bg-surface)/40 backdrop-blur-md border border-(--color-border-glass) rounded-2xl rounded-tl-none px-5 py-4 shadow-lg">
+                                        <div className="flex gap-1.5 px-1">
+                                            {[0, 0.2, 0.4].map((delay) => (
+                                                <motion.span
+                                                    key={delay}
+                                                    animate={{
+                                                        y: [0, -5, 0],
+                                                        opacity: [0.3, 1, 0.3],
+                                                        scale: [1, 1.2, 1]
+                                                    }}
+                                                    transition={{
+                                                        repeat: Infinity,
+                                                        duration: 1.2,
+                                                        delay
+                                                    }}
+                                                    className="h-2 w-2 rounded-full bg-blue-500"
+                                                />
+                                            ))}
                                         </div>
                                     </div>
                                 </motion.div>
@@ -285,32 +320,38 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
 
                             {showCategories && !isTyping && (
                                 <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
+                                    initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="pt-2 animate-in fade-in slide-in-from-bottom-2 duration-500"
+                                    transition={{ delay: 0.3 }}
+                                    className="pt-4"
                                 >
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <div className="h-px flex-1 bg-(--color-border-glass)" />
-                                        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary) opacity-40">
+                                    <div className="flex items-center gap-3 mb-5">
+                                        <div className="h-px flex-1 bg-linear-to-r from-transparent via-(--color-border-glass) to-transparent" />
+                                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-(--color-text-secondary) opacity-50">
                                             {t('support.suggested_topics')}
                                         </p>
-                                        <div className="h-px flex-1 bg-(--color-border-glass)" />
+                                        <div className="h-px flex-1 bg-linear-to-r from-transparent via-(--color-border-glass) to-transparent" />
                                     </div>
-                                    <div className="grid gap-2">
-                                        {Object.keys(t('support.categories', { returnObjects: true }) as any).map((key) => (
-                                            <button
+                                    <div className="grid gap-3">
+                                        {Object.keys(t('support.categories', { returnObjects: true }) as any).map((key, i) => (
+                                            <motion.button
                                                 key={key}
+                                                initial={{ opacity: 0, x: -10 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: 0.5 + (i * 0.1) }}
                                                 onClick={() => handleCategoryClick(key)}
-                                                className="group flex items-center justify-between rounded-xl border border-(--color-border-glass) bg-(--color-bg-surface) p-3 text-xs font-bold text-(--color-text-primary) hover:border-blue-500/40 transition-all active:scale-[0.98] shadow-sm"
+                                                className="group flex items-center justify-between rounded-2xl border border-(--color-border-glass) bg-(--color-bg-surface)/40 backdrop-blur-md p-4 text-sm font-bold text-(--color-text-primary) hover:border-blue-500/40 hover:bg-blue-500/5 transition-all active:scale-[0.98] shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)]"
                                             >
-                                                <div className="flex items-center gap-3">
-                                                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-(--color-bg-deep) text-(--color-text-secondary) group-hover:text-blue-500 transition-colors">
-                                                        <Cpu className="h-4 w-4" />
+                                                <div className="flex items-center gap-4">
+                                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-(--color-bg-deep) text-(--color-text-secondary) group-hover:text-blue-500 group-hover:bg-blue-500/10 border border-(--color-border-glass) transition-all">
+                                                        <Cpu className="h-5 w-5" />
                                                     </div>
-                                                    {t(`support.categories.${key}`)}
+                                                    <span className="tracking-tight">{t(`support.categories.${key}`)}</span>
                                                 </div>
-                                                <ChevronRight className="h-4 w-4 text-(--color-text-secondary) opacity-30 group-hover:translate-x-1" />
-                                            </button>
+                                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-(--color-bg-deep) opacity-0 group-hover:opacity-100 transition-all">
+                                                    <ChevronRight className="h-4 w-4 text-blue-500 group-hover:translate-x-0.5 transition-transform" />
+                                                </div>
+                                            </motion.button>
                                         ))}
                                     </div>
                                 </motion.div>
@@ -318,9 +359,12 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         </div>
 
                         {/* Input Area */}
-                        <div className="border-t border-(--color-border-glass) bg-(--color-bg-surface)/80 p-4 pt-4 backdrop-blur-2xl shrink-0">
-                            <div className="flex items-center gap-3">
-                                <div className="relative flex-1">
+                        <div className="relative border-t border-(--color-border-glass) bg-(--color-bg-surface)/60 p-5 pt-5 pb-8 backdrop-blur-3xl shrink-0">
+                            {/* Glass background overlay */}
+                            <div className="absolute inset-0 mesh-gradient-dark opacity-10 pointer-events-none" />
+
+                            <div className="relative flex items-center gap-3">
+                                <div className="relative flex-1 group">
                                     <input
                                         type="text"
                                         value={inputValue}
@@ -328,27 +372,27 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                         onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                                         disabled={sessionClosed}
                                         placeholder={sessionClosed ? t('support.session_closed') : t('support.input_placeholder')}
-                                        className="w-full rounded-2xl border border-(--color-border-glass) bg-(--color-bg-deep) px-4 py-3.5 text-sm text-(--color-text-primary) placeholder:text-(--color-text-secondary)/40 focus:border-blue-500/50 focus:outline-none transition-all disabled:opacity-50"
+                                        className="w-full rounded-[20px] border border-(--color-border-glass) bg-black/10 dark:bg-white/5 pr-12 pl-5 py-4 text-sm font-medium text-(--color-text-primary) placeholder:text-(--color-text-secondary)/30 focus:border-blue-500/40 focus:bg-black/20 dark:focus:bg-white/10 focus:outline-none transition-all disabled:opacity-50 shadow-inner"
                                     />
-                                    <Terminal className="absolute right-4 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-(--color-text-secondary) opacity-20" />
+                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none opacity-20 group-focus-within:opacity-40 transition-opacity">
+                                        <div className="h-4 w-px bg-(--color-text-secondary) mx-1" />
+                                        <Terminal className="h-4 w-4 text-(--color-text-secondary)" />
+                                    </div>
                                 </div>
                                 <button
                                     onClick={() => handleSendMessage()}
                                     disabled={!inputValue.trim() || isTyping || sessionClosed}
-                                    className="flex h-[48px] w-[48px] items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-500/20 active:scale-95 transition-all disabled:opacity-30"
+                                    className="flex h-[54px] w-[54px] items-center justify-center rounded-[20px] vibing-blue-animated text-white shadow-[0_12px_24px_-8px_rgba(59,130,246,0.6)] active:scale-90 transition-all disabled:opacity-30 disabled:shadow-none shrink-0"
                                 >
-                                    <Send className="h-5 w-5" />
+                                    <Send className="h-6 w-6" />
                                 </button>
                             </div>
 
-                            {/* Final Bottom Space for Telegram Gestures */}
-                            <div className="h-[env(safe-area-inset-bottom,0px)] sm:h-2 mt-4" />
-
-                            <div className="flex flex-col items-center gap-1 opacity-20">
-                                <p className="text-[8px] font-bold uppercase tracking-[0.3em] text-(--color-text-secondary)">
+                            <div className="mt-5 flex flex-col items-center gap-2 opacity-30 select-none">
+                                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-(--color-text-secondary)">
                                     {t('support.powered_by')}
                                 </p>
-                                <div className="h-0.5 w-6 rounded-full bg-blue-500" />
+                                <div className="h-[3px] w-8 rounded-full bg-linear-to-r from-blue-500/50 to-indigo-500/50" />
                             </div>
                         </div>
                     </motion.div>
