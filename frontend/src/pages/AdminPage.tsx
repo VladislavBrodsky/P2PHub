@@ -298,8 +298,10 @@ export const AdminPage = () => {
                         {/* Task Completion Breakdown */}
                         <div className="p-6 rounded-[2rem] glass-panel-premium border border-white/5 space-y-6 shadow-sm">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Task Performance</h2>
-                                <Zap size={14} className="text-blue-500 animate-pulse" />
+                                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Task Performance Breakdown</h2>
+                                <div className="p-2 bg-blue-500/10 rounded-xl">
+                                    <Zap size={14} className="text-blue-500 animate-pulse" />
+                                </div>
                             </div>
                             <div className="space-y-4">
                                 {Object.entries(stats?.tasks || {}).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([taskId, count]) => (
@@ -328,7 +330,7 @@ export const AdminPage = () => {
                         {/* Top Partners Leaderboard */}
                         <div className="p-6 rounded-[2rem] glass-panel-premium border border-white/5 space-y-6 shadow-sm">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Top Earners</h2>
+                                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Elite Earners Leaderboard</h2>
                                 <div className="p-2 bg-blue-500/10 rounded-xl">
                                     <TrendingUp size={14} className="text-blue-500" />
                                 </div>

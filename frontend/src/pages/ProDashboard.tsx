@@ -398,7 +398,7 @@ export const ProDashboard = () => {
 
     return (
         <div className="relative w-full min-h-full flex flex-col bg-(--color-bg-app)">
-            <div className={`flex-1 ${showSetup ? 'pb-10' : 'pb-32'} custom-scrollbar`}>
+            <div className={`flex-1 ${showSetup ? 'pb-10' : 'pb-32'} custom-scrollbar scroll-smooth overflow-y-auto overscroll-contain`}>
                 {/* Header - Premium Liquid Style */}
                 <div className="px-6 pt-2 pb-6">
                     <div className="flex items-center justify-between glass-panel-premium p-4 rounded-3xl border-(--color-border-glass) relative overflow-hidden group shadow-2xl">
@@ -1154,8 +1154,8 @@ export const ProDashboard = () => {
                                 </div>
                             </motion.div>
                         )}
-                    </AnimatePresence >
-                </div >
+                    </AnimatePresence>
+                </div>
 
                 {/* API Setup Modal */}
                 <AnimatePresence>
@@ -1171,7 +1171,7 @@ export const ProDashboard = () => {
                                     initial={{ scale: 0.9, y: 30, opacity: 0 }}
                                     animate={{ scale: 1, y: 0, opacity: 1 }}
                                     exit={{ scale: 0.9, y: 30, opacity: 0 }}
-                                    className="bg-(--color-bg-surface) w-full max-w-md rounded-[2.5rem] p-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] pb-[calc(env(safe-area-inset-bottom)+1.5rem)] space-y-4 max-h-[96vh] flex flex-col relative overflow-hidden shadow-3xl border border-(--color-border-glass)"
+                                    className="bg-(--color-bg-surface) w-full max-w-md rounded-[2.5rem] p-6 pt-[calc(env(safe-area-inset-top)+2rem)] pb-[calc(env(safe-area-inset-bottom)+2rem)] space-y-4 max-h-[96vh] flex flex-col relative overflow-hidden shadow-3xl border border-(--color-border-glass)"
                                 >
                                     <div className="absolute top-0 left-0 w-full h-1.5 vibing-blue-animated opacity-60" />
 

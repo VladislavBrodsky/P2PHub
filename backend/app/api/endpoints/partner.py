@@ -200,25 +200,32 @@ async def get_my_profile(
             
             # Award XP
             checkin_xp = settings.DAILY_CHECKIN_XP
+            
+            # 7-Day Streak Bonus
+            is_streak_milestone = (partner.checkin_streak % 7 == 0)
+            bonus_xp = settings.STREAK_7DAY_XP_BONUS if is_streak_milestone else 0
+            
+            total_reward = checkin_xp + bonus_xp
             if partner.is_pro:
-                checkin_xp *= settings.PRO_XP_MULTIPLIER
+                total_reward *= settings.PRO_XP_MULTIPLIER
                 
             await session.execute(
                 text("UPDATE partner SET xp = xp + :inc WHERE id = :p_id"),
-                {"inc": checkin_xp, "p_id": partner.id}
+                {"inc": total_reward, "p_id": partner.id}
             )
             
             from app.models.partner import Earning, XPTransaction
+            # Log Base Reward
             session.add(XPTransaction(
                 partner_id=partner.id,
-                amount=checkin_xp,
+                amount=total_reward,
                 type="CHECKIN",
-                description="Daily Check-in Reward"
+                description=f"Daily Check-in Reward {'(7-Day Streak Bonus Included)' if is_streak_milestone else ''}"
             ))
             session.add(Earning(
                 partner_id=partner.id,
-                amount=checkin_xp,
-                description="Daily Check-in Bonus",
+                amount=total_reward,
+                description=f"Daily Reward {'+ Streak Bonus' if is_streak_milestone else ''}",
                 type="DAILY_REWARD",
                 currency="XP"
             ))
@@ -768,6 +775,8 @@ async def claim_task_reward(
     session.add(task_earning)
 
     # 2. Update partner stats
+    xp_before = partner.xp
+    
     # Atomic XP Increment
     await session.execute(
         text("UPDATE partner SET xp = xp + :inc WHERE id = :p_id"),
