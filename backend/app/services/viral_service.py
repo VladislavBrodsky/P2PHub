@@ -184,7 +184,7 @@ class ViralMarketingStudio:
             f"Composition: Rule of thirds, the subject is the hero of the story. Photorealistic, 4K quality. "
             f"NEGATIVE PROMPT: cartoon, CGI, anime, illustration, stock photo smile, distorted faces, extra limbs, blurry, "
             f"futuristic sci-fi, neon lights, flying cars, unrealistic proportions, oversaturated colors, glitchy textures, generic poses"
-        ))
+        )
 
         async def get_text_content():
             try:
