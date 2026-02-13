@@ -205,8 +205,16 @@ export const ProDashboard = () => {
 
     const handleSaveImageToDevice = async () => {
         if (!generatedResult?.image_url) return;
-        const url = generatedResult.image_url.startsWith('http') ? generatedResult.image_url : `${getApiUrl().replace(/\/api$/, '')}${generatedResult.image_url}`;
-        const finalUrl = url.replace('https://p2phub-production.up.railway.app/api', 'https://p2phub-production.up.railway.app');
+
+        let finalUrl = generatedResult.image_url;
+        if (!finalUrl.startsWith('http')) {
+            // Handle relative paths - ensure base URL doesn't have double slashes
+            const baseUrl = getApiUrl().replace(/\/api\/?$/, '');
+            finalUrl = `${baseUrl}${finalUrl.startsWith('/') ? '' : '/'}${finalUrl}`;
+        }
+
+        // Fix potential double '/api' issues if present in generated URL
+        finalUrl = finalUrl.replace(/\/api\/images/, '/images');
 
         try {
             const response = await fetch(finalUrl);
