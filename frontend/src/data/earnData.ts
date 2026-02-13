@@ -77,6 +77,17 @@ export const EARN_TASKS: Task[] = [
 
     // Level 1: Viral Loop (The core mechanic)
     {
+        id: 'invite_1_friend',
+        title: 'Invite 1 Friend',
+        description: 'Your first step to building a network.',
+        platform: 'internal',
+        icon: Users,
+        reward: 250,
+        type: 'referral',
+        requirement: 1,
+        minLevel: 1
+    },
+    {
         id: 'invite_3_friends',
         title: 'Invite 3 Friends',
         description: 'Build your initial network to unlock Level 2.',
@@ -88,8 +99,6 @@ export const EARN_TASKS: Task[] = [
         minLevel: 1,
         image: '/images/2026-02-05_03.35.36.webp'
     },
-
-    // Level 5: Consistency
     {
         id: 'daily_checkin_5',
         title: '5 Day Streak',
@@ -98,11 +107,20 @@ export const EARN_TASKS: Task[] = [
         icon: CheckCircle2,
         reward: 250,
         type: 'action',
-        minLevel: 5,
-        requirement: 5
+        requirement: 5,
+        minLevel: 1
     },
-
-    // Level 10: Expansion
+    {
+        id: 'invite_5_friends',
+        title: 'Squad Goals',
+        description: 'Expand your circle to 5 partners.',
+        platform: 'internal',
+        icon: Users,
+        reward: 750,
+        type: 'referral',
+        requirement: 5,
+        minLevel: 2
+    },
     {
         id: 'invite_10_friends',
         title: 'Network Builder',
@@ -112,7 +130,62 @@ export const EARN_TASKS: Task[] = [
         reward: 1000,
         type: 'referral',
         requirement: 10,
+        minLevel: 3
+    },
+    {
+        id: 'invite_25_friends',
+        title: 'Community Leader',
+        description: 'Lead a team of 25 partners.',
+        platform: 'internal',
+        icon: Users,
+        reward: 2500,
+        type: 'referral',
+        requirement: 25,
+        minLevel: 5
+    },
+    {
+        id: 'invite_50_friends',
+        title: 'Influencer Status',
+        description: 'Grow your network to 50 partners.',
+        platform: 'internal',
+        icon: Crown,
+        reward: 5000,
+        type: 'referral',
+        requirement: 50,
         minLevel: 10
+    },
+    {
+        id: 'invite_100_friends',
+        title: 'Viral Master',
+        description: 'Reach 100 direct referrals.',
+        platform: 'internal',
+        icon: Zap,
+        reward: 10000,
+        type: 'referral',
+        requirement: 100,
+        minLevel: 15
+    },
+    {
+        id: 'invite_250_friends',
+        title: 'Grand Connector',
+        description: 'Build a massive network of 250 partners.',
+        platform: 'internal',
+        icon: Star,
+        reward: 25000,
+        type: 'referral',
+        requirement: 250,
+        minLevel: 20
+    },
+    {
+        id: 'invite_500_friends',
+        title: 'Network Legend',
+        description: 'Achieve the ultimate goal: 500 referrals.',
+        platform: 'internal',
+        icon: Trophy,
+        reward: 50000,
+        type: 'referral',
+        requirement: 500,
+        minLevel: 25
     }
 ];
 
