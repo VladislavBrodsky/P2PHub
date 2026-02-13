@@ -78,8 +78,8 @@ export const ProDashboard = () => {
     const [publishedPlatforms, setPublishedPlatforms] = useState<string[]>([]);
 
     useEffect(() => {
-        // Hide global header/footer to provide a bespoke PRO experience
-        setHeaderVisible(false);
+        // #comment: Global header and footer are now preserved to maintain app identity. 
+        // Modals still hide footer for focus.
         if (showSetup || showPublishModal) {
             setFooterVisible(false);
         } else {
@@ -399,73 +399,34 @@ export const ProDashboard = () => {
 
     return (
         <div className="relative w-full h-full flex flex-col bg-(--color-bg-deep) overflow-hidden">
-            {/* Bespoke Header - Responsive to Notch */}
-            <header className="pt-safe-top bg-(--color-bg-app)/80 backdrop-blur-xl border-b border-white/5 relative z-50 shadow-2xl">
-                <div className="px-6 py-4 space-y-4">
-                    {/* Row 1: App Title & Tokens - #comment: Premium branding row with pulse effects and high-fidelity icons */}
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <div className="relative">
-                                <div className="absolute inset-0 bg-blue-500/20 blur-lg rounded-xl animate-pulse" />
-                                <div className="w-11 h-11 rounded-xl vibing-blue-animated flex items-center justify-center shadow-lg shadow-blue-500/20 relative z-10 border border-white/10">
-                                    <Zap className="text-white w-5 h-5" />
+            {/* #comment: Studio Branding & Tabs - Now positioned below global header for better integration */}
+            <div className="pt-32 pb-4 space-y-6">
+                <div className="px-6 flex items-center justify-between">
+                    <div>
+                        <h1 className="text-sm font-black tracking-widest leading-tight uppercase text-brand-text drop-shadow-sm flex items-center gap-2">
+                            {t('pro_dashboard.title_studio')}
+                            <span className="px-1.5 py-0.5 rounded-sm bg-indigo-500 text-[7px] text-white">PRO</span>
+                        </h1>
+                        <div className="mt-2">
+                            {status && (
+                                <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/5 border border-amber-500/10 shadow-sm w-fit">
+                                    <div className="w-1 h-1 rounded-full bg-amber-500 animate-pulse" />
+                                    <span className="text-[8px] font-black text-amber-500/80 uppercase tracking-tighter">
+                                        {t('pro_dashboard.tokens_left', { count: status.pro_tokens })}
+                                    </span>
                                 </div>
-                            </div>
-                            <div>
-                                <h1 className="text-[11px] font-black tracking-widest leading-tight uppercase text-brand-text drop-shadow-sm flex items-center gap-2">
-                                    {t('pro_dashboard.title_studio')}
-                                    <span className="px-1.5 py-0.5 rounded-sm bg-indigo-500 text-[7px] text-white">PRO</span>
-                                </h1>
-                                <div className="mt-1.5">
-                                    {status && (
-                                        <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/5 border border-amber-500/10 shadow-inner group cursor-default">
-                                            <div className="w-1 h-1 rounded-full bg-amber-500 animate-pulse" />
-                                            <span className="text-[8px] font-black text-amber-500/80 uppercase tracking-tighter">
-                                                {t('pro_dashboard.tokens_left', { count: status.pro_tokens })}
-                                            </span>
-                                            <Sparkles size={8} className="text-amber-500/40 group-hover:rotate-12 transition-transform" />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                        <button
-                            onClick={() => { selection(); setShowSetup(true); }}
-                            className="p-3.5 rounded-2xl bg-white/5 border border-white/5 active:scale-95 transition-all shadow-sm hover:bg-white/10"
-                        >
-                            <Settings className="w-4 h-4 text-brand-muted" />
-                        </button>
-                    </div>
-
-                    {/* Row 2: Menu & Quick Stats (Replica of global header) */}
-                    <div className="flex items-center justify-between gap-3">
-                        <button
-                            onClick={() => window.dispatchEvent(new CustomEvent('open-menu'))}
-                            className="flex items-center gap-2 rounded-xl border border-(--color-border-glass) bg-white/5 px-4 py-2.5 shadow-sm active:scale-95"
-                        >
-                            <Menu className="h-4 w-4 text-brand-text" />
-                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-brand-text">
-                                {t('common.menu')}
-                            </span>
-                        </button>
-
-                        <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 shadow-sm">
-                            <div className="flex items-center gap-1.5 focus:outline-hidden">
-                                <span className="text-[9px] font-black uppercase tracking-wider text-brand-muted">{t('common.lvl')}</span>
-                                <span className="text-xs font-black text-brand-text leading-none">{user?.level ?? 2}</span>
-                                <Crown size={10} className="text-amber-500 fill-amber-500/10" />
-                            </div>
-                            <div className="h-3 w-px bg-white/10" />
-                            <div className="flex items-center gap-1.5">
-                                <span className="text-xs font-black text-brand-text leading-none">{user?.xp ?? 200}</span>
-                                <span className="text-[9px] font-black uppercase tracking-wider text-emerald-500">XP</span>
-                            </div>
+                            )}
                         </div>
                     </div>
+                    <button
+                        onClick={() => { selection(); setShowSetup(true); }}
+                        className="p-3 rounded-2xl bg-white/5 border border-white/5 active:scale-95 transition-all"
+                    >
+                        <Settings className="w-4 h-4 text-brand-muted" />
+                    </button>
                 </div>
 
-                {/* Row 3: Internal Tabs - #comment: Compact pill-style navigation for single-hand reachability */}
-                <div className="px-6 pb-4">
+                <div className="px-6">
                     <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
                         {(['studio', 'tools', 'academy'] as Tab[]).map((tab) => (
                             <button
@@ -481,7 +442,7 @@ export const ProDashboard = () => {
                         ))}
                     </div>
                 </div>
-            </header>
+            </div>
 
             <div className={`flex-1 ${showSetup ? 'pb-10' : 'pb-32'} custom-scrollbar scroll-smooth overflow-y-auto overscroll-contain`}>
 
