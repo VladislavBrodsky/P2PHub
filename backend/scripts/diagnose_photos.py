@@ -8,8 +8,32 @@ import asyncio
 import sys
 import os
 
+import asyncio
+import sys
+import os
+
 # Add project root to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+
+# Load .env manually
+env_path = os.path.join(parent_dir, ".env")
+if os.path.exists(env_path):
+    print(f"📄 Loading environment from {env_path}")
+    with open(env_path, "r") as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith("#"):
+                try:
+                    key, value = line.split("=", 1)
+                    os.environ[key.strip()] = value.strip().strip("'").strip('"')
+                except ValueError:
+                    pass
+else:
+    print(f"⚠️ .env file not found at {env_path}")
+
+from sqlalchemy.ext.asyncio import create_async_engine
 
 async def diagnose_photo_flow():
     from app.models.partner import async_session_maker, Partner
