@@ -213,19 +213,20 @@ class SupportAgentService:
             
             # 2. Fetch from Google Sheets
             # #comment: Fallback to Google Sheets API if cache is empty
-            if self.gs_client:
+            gs_client = await self._get_gs_client()
+            if gs_client:
                 sheet_id = os.getenv("SUPPORT_SPREADSHEET_ID")
                 if sheet_id:
                     logger.info("🔄 Refreshing Knowledge Base Cache from Google Sheets...")
-                    spreadsheet = self.gs_client.open_by_key(sheet_id)
+                    spreadsheet = await asyncio.to_thread(gs_client.open_by_key, sheet_id)
                     
                     # TOV
                     tov_info = ""
                     try:
                         tov_gid = os.getenv("TOV_GID", "0")
-                        tov_sheet = spreadsheet.get_worksheet_by_id(int(tov_gid))
+                        tov_sheet = await asyncio.to_thread(spreadsheet.get_worksheet_by_id, int(tov_gid))
                         if tov_sheet:
-                            tov_records = tov_sheet.get_all_records()
+                            tov_records = await asyncio.to_thread(tov_sheet.get_all_records)
                             tov_info = "\n".join([f"{r.get('Rule', '')}: {r.get('Value', '')}" for r in tov_records])
                     except Exception as e:
                         logger.warning(f"Could not load TOV tab: {e}")
@@ -234,9 +235,9 @@ class SupportAgentService:
                     kb_records = []
                     try:
                         kb_gid = os.getenv("KB_GID", "0")
-                        kb_sheet = spreadsheet.get_worksheet_by_id(int(kb_gid))
+                        kb_sheet = await asyncio.to_thread(spreadsheet.get_worksheet_by_id, int(kb_gid))
                         if kb_sheet:
-                            kb_records = kb_sheet.get_all_records()
+                            kb_records = await asyncio.to_thread(kb_sheet.get_all_records)
                     except Exception as e:
                         logger.warning(f"Could not load KB tab: {e}")
                     
@@ -517,8 +518,8 @@ class SupportAgentService:
                 history_gid = os.getenv("HISTORY_GID")
                 
                 if sheet_id and history_gid:
-                    spreadsheet = self.gs_client.open_by_key(sheet_id)
-                    sheet = spreadsheet.get_worksheet_by_id(int(history_gid))
+                    spreadsheet = await asyncio.to_thread(gs_client.open_by_key, sheet_id)
+                    sheet = await asyncio.to_thread(spreadsheet.get_worksheet_by_id, int(history_gid))
                     
                     if sheet:
                         rows = []
@@ -567,7 +568,7 @@ class SupportAgentService:
                         rows.append(["-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 20])
                         rows.append([]) # Empty row
                         
-                        sheet.append_rows(rows)
+                        await asyncio.to_thread(sheet.append_rows, rows)
                         logger.info(f"✅ Saved support history block for {user_id}.")
             except Exception as e:
                 logger.error(f"❌ Failed to save history to Google Sheets: {e}")

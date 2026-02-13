@@ -63,8 +63,12 @@ async def get_current_partner(
 @router.get("/status", response_model=SessionStatusResponse)
 async def get_support_status(partner: Partner = Depends(get_current_partner)):
     """Returns categorized entry points and session status."""
+    from app.services.redis_service import redis_service
+    session_key = f"support_session:{partner.telegram_id}"
+    session_exists = await redis_service.get(session_key) is not None
+    
     return {
-        "is_active": True,
+        "is_active": session_exists,
         "categories": support_service.CATEGORIES
     }
 

@@ -49,5 +49,3 @@ async def get_my_earnings(
         pass
 
     return earnings_data
-
-    return earnings_data

@@ -50,7 +50,8 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
 
             try {
                 // Fetch status to check if there's an active session
-                await apiClient.get('/api/support/status');
+                const response = await apiClient.get('/api/support/status');
+                const isActive = response.data.is_active;
 
                 if (messages.length === 0) {
                     setMessages([
@@ -63,7 +64,8 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                     ]);
                 }
                 resetInactivityTimer();
-                setShowCategories(true);
+                // Only show categories if it's a NEW session (not active in backend)
+                setShowCategories(!isActive);
                 setSessionClosed(false);
             } catch (e) {
                 console.error("Failed to init support session", e);
