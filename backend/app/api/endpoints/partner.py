@@ -791,6 +791,31 @@ async def complete_academy_stage(
     if stage_id not in completed:
         completed.append(stage_id)
         partner.completed_stages = json.dumps(completed)
+        
+        # Award XP based on stage ID
+        xp_reward = 0
+        if stage_id <= 20:
+            xp_reward = 100 + (stage_id - 1) * 50
+        else:
+            xp_reward = 1000 + (stage_id - 21) * 100
+            
+        # Apply PRO multiplier (5x)
+        effective_xp = xp_reward * 5 if partner.is_pro else xp_reward
+        partner.xp += effective_xp
+        
+        # Log XP Transaction
+        new_xp_tx = XPTransaction(
+            partner_id=partner.id,
+            amount=effective_xp,
+            type="BONUS",
+            description=f"Academy Stage {stage_id} Completed",
+            reference_id=f"academy_{stage_id}"
+        )
+        session.add(new_xp_tx)
+        
+        from app.utils.ranking import get_level
+        partner.level = get_level(partner.xp)
+        
         session.add(partner)
         await session.commit()
         await session.refresh(partner)
@@ -799,7 +824,7 @@ async def complete_academy_stage(
         cache_key = f"partner:profile:{tg_id}"
         await redis_service.client.delete(cache_key)
 
-    return {"status": "success", "completed_stages": completed}
+    return {"status": "success", "completed_stages": completed, "xp_awarded": effective_xp if stage_id in completed else 0}
 
 @router.get("/earnings", response_model=List[EarningSchema])
 async def get_my_earnings(
