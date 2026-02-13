@@ -13,10 +13,10 @@ TASK_CONFIG = {
     'invite_5_friends': {'reward': 750, 'type': 'referral', 'requirement': 5},
     'invite_10_friends': {'reward': 1000, 'type': 'referral', 'requirement': 10},
     'invite_25_friends': {'reward': 2500, 'type': 'referral', 'requirement': 25},
-    'invite_50_friends': {'reward': 5000, 'type': 'referral', 'requirement': 50},
-    'invite_100_friends': {'reward': 10000, 'type': 'referral', 'requirement': 100},
-    'invite_250_friends': {'reward': 25000, 'type': 'referral', 'requirement': 250},
-    'invite_500_friends': {'reward': 50000, 'type': 'referral', 'requirement': 500},
+    'invite_50_friends': {'reward': 3000, 'type': 'referral', 'requirement': 50},
+    'invite_100_friends': {'reward': 5000, 'type': 'referral', 'requirement': 100},
+    'invite_250_friends': {'reward': 7000, 'type': 'referral', 'requirement': 250},
+    'invite_500_friends': {'reward': 10000, 'type': 'referral', 'requirement': 500},
 
     'daily_checkin_5': {'reward': 250, 'type': 'action', 'requirement': 5},
 }

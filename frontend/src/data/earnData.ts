@@ -149,7 +149,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Grow your network to 50 partners.',
         platform: 'internal',
         icon: Crown,
-        reward: 5000,
+        reward: 3000,
         type: 'referral',
         requirement: 50,
         minLevel: 10
@@ -160,7 +160,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Reach 100 direct referrals.',
         platform: 'internal',
         icon: Zap,
-        reward: 10000,
+        reward: 5000,
         type: 'referral',
         requirement: 100,
         minLevel: 15
@@ -171,7 +171,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Build a massive network of 250 partners.',
         platform: 'internal',
         icon: Star,
-        reward: 25000,
+        reward: 7000,
         type: 'referral',
         requirement: 250,
         minLevel: 20
@@ -182,7 +182,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Achieve the ultimate goal: 500 referrals.',
         platform: 'internal',
         icon: Trophy,
-        reward: 50000,
+        reward: 10000,
         type: 'referral',
         requirement: 500,
         minLevel: 25
