@@ -53,7 +53,7 @@ export const ProDashboard = () => {
         linkedin_access_token: ''
     });
 
-    const [countdown, setCountdown] = useState(45);
+    const [countdown, setCountdown] = useState(30);
 
     useEffect(() => {
         if (showSetup) {
@@ -67,7 +67,7 @@ export const ProDashboard = () => {
     useEffect(() => {
         let interval: any;
         if (isGenerating) {
-            setCountdown(45);
+            setCountdown(30);
             interval = setInterval(() => {
                 setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
             }, 1000);
@@ -380,13 +380,13 @@ export const ProDashboard = () => {
                                                 {/* Percentage & Progress Bar */}
                                                 <div className="flex flex-col items-center gap-2">
                                                     <span className="text-2xl font-black text-white px-2">
-                                                        {Math.min(Math.floor(((45 - countdown) / 45) * 100), 99)}%
+                                                        {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}%
                                                     </span>
                                                     <div className="h-1.5 w-full bg-black/20 rounded-full overflow-hidden border border-white/5">
                                                         <motion.div
                                                             className="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500"
                                                             initial={{ width: "0%" }}
-                                                            animate={{ width: `${Math.min(((45 - countdown) / 45) * 100, 99)}%` }}
+                                                            animate={{ width: `${Math.min(((30 - countdown) / 30) * 100, 99)}%` }}
                                                             transition={{ duration: 0.5 }}
                                                         />
                                                     </div>

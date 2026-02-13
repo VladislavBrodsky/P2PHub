@@ -169,7 +169,7 @@ class ViralMarketingStudio:
         async def get_text_content():
             try:
                 response = await self.openai_client.chat.completions.create(
-                    model="gpt-4o", # Keep 4o for quality, but it's now parallel
+                    model="gpt-4o-mini", # Switch to Mini for lightning fast text generation
                     messages=[
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": user_prompt}
@@ -214,7 +214,7 @@ class ViralMarketingStudio:
                                 }
                             )
                         ),
-                        timeout=20.0 # Faster timeout
+                        timeout=15.0 # Even faster timeout for fast model
                     )
                     
                     if img_response and getattr(img_response, 'generated_images', None):
@@ -291,7 +291,7 @@ class ViralMarketingStudio:
             
         try:
             response = await self.openai_client.chat.completions.create(
-                model="gpt-4o",
+                model="gpt-4o-mini",
                 messages=[
                     {"role": "system", "content": "You are a viral marketing expert. Rewrite the user's headline to be highly engaging, click-worthy, and FOMO-inducing for the crypto/fintech niche. Return ONLY the best new headline. No quotes."},
                     {"role": "user", "content": f"Make this viral: {headline}"}
