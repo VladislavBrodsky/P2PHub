@@ -1,5 +1,4 @@
-// #comment: Removed unused useEffect from react import to address linting warnings
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Crown, CheckCircle2, Wallet, CreditCard, ChevronRight, Loader2, Sparkles, Send } from 'lucide-react';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
@@ -17,7 +16,40 @@ export default function SubscriptionPage() {
     const [paymentMethod, setPaymentMethod] = useState<'TON' | 'CRYPTO' | null>(null);
     const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'manual_review'>('idle');
     const [manualHash, setManualHash] = useState('');
-    // #comment: Removed unused tonPrice state and fetch effect to clean up the code as it was not being displayed
+    const [sessionData, setSessionData] = useState<{ expires_at: string; transaction_id: number } | null>(null);
+    const [timeLeft, setTimeLeft] = useState<number | null>(null);
+
+    // #comment: Timer logic to calculate and update remaining time for the payment session.
+    // This provides urgency and clarity to the user about their payment window.
+    useEffect(() => {
+        if (!sessionData?.expires_at) {
+            setTimeLeft(null);
+            return;
+        }
+
+        const interval = setInterval(() => {
+            const expires = new Date(sessionData.expires_at).getTime();
+            const now = new Date().getTime();
+            const diff = Math.max(0, Math.floor((expires - now) / 1000));
+            setTimeLeft(diff);
+
+            if (diff === 0) {
+                clearInterval(interval);
+                setPaymentMethod(null);
+                setSessionData(null);
+                alert("Session expired. Please restart the process.");
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [sessionData]);
+
+    const formattedTime = useMemo(() => {
+        if (timeLeft === null) return null;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }, [timeLeft]);
 
     const proPrice = 39; // Base price
     const adminUsdt = globalConfig?.admin_usdt_address || "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM";
@@ -227,14 +259,32 @@ export default function SubscriptionPage() {
                     {!paymentMethod ? (
                         <div className="grid grid-cols-2 gap-3">
                             <button
-                                onClick={() => { setPaymentMethod('TON'); selection(); }}
+                                onClick={async () => {
+                                    setPaymentMethod('TON');
+                                    selection();
+                                    try {
+                                        const res = await apiClient.post('/api/payment/session', { amount: proPrice, currency: 'TON', network: 'TON' });
+                                        setSessionData(res.data);
+                                    } catch (e) {
+                                        console.error("Failed to create TON session");
+                                    }
+                                }}
                                 className="h-12 bg-white text-slate-900 rounded-xl font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-transform"
                             >
                                 <Wallet size={16} />
                                 TON
                             </button>
                             <button
-                                onClick={() => { setPaymentMethod('CRYPTO'); selection(); }}
+                                onClick={async () => {
+                                    setPaymentMethod('CRYPTO');
+                                    selection();
+                                    try {
+                                        const res = await apiClient.post('/api/payment/session', { amount: proPrice, currency: 'USDT', network: 'TRC20' });
+                                        setSessionData(res.data);
+                                    } catch (e) {
+                                        console.error("Failed to create USDT session");
+                                    }
+                                }}
                                 className="h-12 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-transform"
                             >
                                 <CreditCard size={16} />
@@ -243,12 +293,20 @@ export default function SubscriptionPage() {
                         </div>
                     ) : (
                         <div className="flex flex-col gap-4">
-                            <button
-                                onClick={() => setPaymentMethod(null)}
-                                className="text-xs font-bold opacity-50 hover:opacity-100 transition-opacity flex items-center gap-1"
-                            >
-                                <ChevronRight size={14} className="rotate-180" /> Change Method
-                            </button>
+                            <div className="flex justify-between items-center">
+                                <button
+                                    onClick={() => { setPaymentMethod(null); setSessionData(null); }}
+                                    className="text-xs font-bold opacity-50 hover:opacity-100 transition-opacity flex items-center gap-1"
+                                >
+                                    <ChevronRight size={14} className="rotate-180" /> Change Method
+                                </button>
+                                {formattedTime && (
+                                    <div className="px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse" />
+                                        <span className="text-[10px] font-black text-amber-500 font-mono tracking-tighter">{formattedTime}</span>
+                                    </div>
+                                )}
+                            </div>
 
                             {paymentMethod === 'TON' && (
                                 <div className="space-y-4">
@@ -297,8 +355,9 @@ export default function SubscriptionPage() {
                                             </button>
                                         </div>
                                     </div>
-                                    <p className="text-[10px] opacity-40 text-center italic">
-                                        Verified within 24 hours by our team.
+                                    <p className="text-[10px] opacity-60 text-center italic leading-tight">
+                                        Verified within 24 hours by our team.<br />
+                                        <span className="text-amber-500 font-bold">Please complete your transfer within 30 minutes.</span>
                                     </p>
                                 </div>
                             )}
