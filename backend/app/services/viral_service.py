@@ -135,12 +135,11 @@ You are a PROFESSIONAL, not a hype artist. You're the trusted advisor who happen
    - Aspirational outcome that feels achievable
    - Social proof that triggers FOMO
    
-5. **BANNED PHRASES:**
+5. **BANNED PHRASES & FORMATTING:**
    - "Don't miss out" (too generic)
    - "Click here" (weak CTA)
-   - "Game changer" (unless audience-appropriate)
-   - "Amazing opportunity" (vague)
-   - "Revolutionary" (overused)
+   - DO NOT use quadruple asterisks (****) for bolding. ONLY use double (**text**).
+   - DO NOT leave orphaned markdown symbols.
    
 Use FRESH, audience-specific language that feels authentic.
     """
@@ -184,7 +183,7 @@ Use FRESH, audience-specific language that feels authentic.
         self.gs_client = None
         self._gs_sheet_cache = {} 
         self._init_google_sheets_client()
-        self._last_working_imagen_model = 'imagen-4.0-generate-001' # Memory for optimization
+        self._last_working_imagen_model = 'imagen-3.0-generate-001' # Memory for optimization
 
     def _init_google_sheets_client(self):
         """Initializes Google Sheets client for audit logging."""
@@ -444,10 +443,9 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             # Correct model names for AI Studio (including Nano Banana latest releases)
             imagen_models = [
                 self._last_working_imagen_model,
-                'gemini-3-pro-image-preview',  # Nano Banana Pro (4K, Reasoning)
-                'gemini-2.5-flash-image',      # Nano Banana (Fast, High-Volume)
-                'imagen-3',                    # Legacy HQ Fallback
-                'imagen-3-fast',
+                'imagen-3.0-generate-001',     # Standard HQ
+                'imagen-3.0-fast-generate-001', # Fast for previews
+                'imagen-3.0-capability-001',
             ]
             # Remove duplicates and None values
             imagen_models = [m for i, m in enumerate(imagen_models) if m and m not in imagen_models[:i]]

@@ -14,13 +14,18 @@ import { useUI } from '../context/UIContext';
 import { proService, PROStatus } from '../services/proService';
 import { getApiUrl } from '../utils/api';
 
-const renderMarkdown = (text: string) => {
+const renderMarkdown = (text: string, isInline = false) => {
     if (!text) return null;
     const html = text
+        .replace(/\*\*\*\*(.*?)\*\*\*\*/g, '<strong>$1</strong>') // Handle quadruple stars just in case
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/_(.*?)_/g, '<em>$1</em>')
         .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" class="text-indigo-500 font-bold underline">$1</a>')
-        .replace(/\n/g, '<br />');
+        .replace(/\n/g, isInline ? ' ' : '<br />');
+
+    if (isInline) {
+        return <span dangerouslySetInnerHTML={{ __html: html }} />;
+    }
     return <div dangerouslySetInnerHTML={{ __html: html }} />;
 };
 
@@ -399,19 +404,19 @@ export const ProDashboard = () => {
 
     return (
         <div className="relative w-full h-full flex flex-col bg-(--color-bg-deep) overflow-hidden">
-            {/* #comment: Studio Branding & Tabs - Now positioned below global header for better integration */}
-            <div className="pt-8 pb-4 space-y-6">
+            {/* #comment: Fixed Header Section - Static and compact for better focus */}
+            <div className="shrink-0 pt-6 pb-2 space-y-4 bg-(--color-bg-deep) z-10">
                 <div className="px-6 flex items-center justify-between">
                     <div>
-                        <h1 className="text-sm font-black tracking-widest leading-tight uppercase text-brand-text drop-shadow-sm flex items-center gap-2">
+                        <h1 className="text-[10px] font-black tracking-widest leading-tight uppercase text-brand-text drop-shadow-sm flex items-center gap-2">
                             {t('pro_dashboard.title_studio')}
-                            <span className="px-1.5 py-0.5 rounded-sm bg-indigo-500 text-[7px] text-white">PRO</span>
+                            <span className="px-1.5 py-0.5 rounded-sm bg-indigo-500 text-[6px] text-white">PRO</span>
                         </h1>
-                        <div className="mt-2">
+                        <div className="mt-1">
                             {status && (
-                                <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/5 border border-amber-500/10 shadow-sm w-fit">
+                                <div className="flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-500/5 border border-amber-500/10 shadow-sm w-fit">
                                     <div className="w-1 h-1 rounded-full bg-amber-500 animate-pulse" />
-                                    <span className="text-[8px] font-black text-amber-500/80 uppercase tracking-tighter">
+                                    <span className="text-[7px] font-black text-amber-500/80 uppercase tracking-tighter">
                                         {t('pro_dashboard.tokens_left', { count: status.pro_tokens })}
                                     </span>
                                 </div>
@@ -420,23 +425,32 @@ export const ProDashboard = () => {
                     </div>
                     <button
                         onClick={() => { selection(); setShowSetup(true); }}
-                        className="p-3 rounded-2xl bg-white/5 border border-white/5 active:scale-95 transition-all"
+                        className="p-2.5 rounded-xl bg-(--color-bg-surface) border border-white/5 active:scale-95 transition-all shadow-sm"
                     >
-                        <Settings className="w-4 h-4 text-brand-muted" />
+                        <Settings className="w-3.5 h-3.5 text-brand-muted" />
                     </button>
                 </div>
 
-                <div className="px-6">
-                    <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+                <div className="px-6 relative">
+                    <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-4 px-1">
                         {(['studio', 'tools', 'academy'] as Tab[]).map((tab) => (
                             <button
                                 key={tab}
                                 onClick={() => { setActiveTab(tab); selection(); }}
-                                className={`px-4 h-8 rounded-full text-[8.5px] font-black uppercase tracking-[0.15em] transition-all whitespace-nowrap border ${activeTab === tab
-                                    ? 'vibing-blue-animated text-white shadow-lg border-blue-400/50'
-                                    : 'bg-white/5 text-brand-muted border-white/5 hover:border-indigo-500/30'
+                                className={`px-4 h-8 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap border flex items-center gap-2 relative overflow-hidden ${activeTab === tab
+                                    ? 'vibing-blue-animated text-white shadow-[0_8px_20px_-6px_rgba(59,130,246,0.5)] border-blue-400/30 scale-105 z-2'
+                                    : 'bg-(--color-bg-surface) text-brand-muted border-white/5 hover:border-indigo-500/30 opacity-70 hover:opacity-100'
                                     }`}
                             >
+                                {activeTab === tab && (
+                                    <motion.div
+                                        layoutId="tab-shine"
+                                        className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"
+                                    />
+                                )}
+                                {tab === 'studio' && <Sparkles size={10} className={activeTab === tab ? 'text-white' : 'text-indigo-400/50'} />}
+                                {tab === 'tools' && <Zap size={10} className={activeTab === tab ? 'text-white' : 'text-pink-400/50'} />}
+                                {tab === 'academy' && <BookOpen size={10} className={activeTab === tab ? 'text-white' : 'text-emerald-400/50'} />}
                                 {t(`pro_dashboard.tab_${tab}`)}
                             </button>
                         ))}
@@ -722,7 +736,9 @@ export const ProDashboard = () => {
                                             <div className="p-7 space-y-5 relative">
                                                 <div className="flex justify-between items-start gap-4">
                                                     <div className="space-y-2">
-                                                        <h4 className="text-lg font-black leading-tight text-brand-text uppercase tracking-tight">{generatedResult.title}</h4>
+                                                        <h4 className="text-lg font-black leading-tight text-brand-text uppercase tracking-tight">
+                                                            {renderMarkdown(generatedResult.title, true)}
+                                                        </h4>
                                                         <div className="h-1 w-12 vibing-blue-gradient rounded-full" />
                                                     </div>
                                                     <div className="flex gap-2 shrink-0">
@@ -766,90 +782,91 @@ export const ProDashboard = () => {
                                 exit={{ opacity: 0, x: -20 }}
                                 className="space-y-4"
                             >
-                                {/* Headline Fixer - #comment: AI-driven copywriting utility to optimize content hooks for maximum retention */}
-                                <div className="glass-panel-premium p-8 rounded-[2.5rem] border border-white/10 relative overflow-hidden group shadow-2xl bg-grid-white/5">
-                                    <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-1000">
-                                        <Sparkles size={120} />
-                                    </div>
-                                    <div className="flex items-center gap-5 mb-8">
-                                        <div className="w-14 h-14 bg-pink-500/10 rounded-2xl border border-pink-500/20 flex items-center justify-center shadow-lg shadow-pink-500/10"><Sparkles className="w-7 h-7 text-pink-500" /></div>
+                                {/* Headline Fixer */}
+                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/10 relative overflow-hidden group shadow-xl bg-(--color-bg-surface)">
+                                    <div className="absolute -right-4 -top-4 w-24 h-24 bg-pink-500/5 blur-3xl rounded-full" />
+                                    <div className="flex items-center gap-3 mb-5">
+                                        <div className="w-10 h-10 bg-pink-500/10 rounded-xl border border-pink-500/20 flex items-center justify-center shadow-sm">
+                                            <Sparkles size={18} className="text-pink-500" />
+                                        </div>
                                         <div>
-                                            <h3 className="text-sm font-black uppercase tracking-[0.3em] text-pink-400">{t('pro_dashboard.tools.headline.title')}</h3>
-                                            <p className="text-[10px] font-bold text-brand-muted uppercase tracking-widest leading-relaxed">{t('pro_dashboard.tools.headline.desc')}</p>
+                                            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-pink-500/90 leading-none mb-1">{t('pro_dashboard.tools.headline.title')}</h3>
+                                            <p className="text-[8px] font-bold text-brand-muted uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.headline.desc')}</p>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-4">
-                                        <div className="relative">
-                                            <input
-                                                value={headlineInput}
-                                                onChange={(e) => setHeadlineInput(e.target.value)}
-                                                placeholder={t('pro_dashboard.tools.headline.placeholder')}
-                                                className="w-full h-16 bg-black/40 border border-white/5 focus:border-pink-500/40 focus:ring-4 focus:ring-pink-500/5 rounded-2xl px-6 text-xs font-bold outline-hidden transition-all shadow-inner"
-                                            />
-                                        </div>
+                                    <div className="space-y-3">
+                                        <input
+                                            value={headlineInput}
+                                            onChange={(e) => setHeadlineInput(e.target.value)}
+                                            placeholder={t('pro_dashboard.tools.headline.placeholder')}
+                                            className="w-full h-12 bg-black/5 dark:bg-white/5 border border-white/5 focus:border-pink-500/30 rounded-xl px-4 text-[10px] font-bold outline-hidden transition-all shadow-inner"
+                                        />
 
                                         {fixedHeadline && (
                                             <motion.div
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                className="p-6 bg-emerald-500/5 border border-emerald-500/20 rounded-2xl relative overflow-hidden shadow-2xl"
+                                                initial={{ opacity: 0, scale: 0.98 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl relative overflow-hidden group/copy cursor-pointer active:scale-[0.98] transition-all"
+                                                onClick={() => { handleCopyAnyText(fixedHeadline); selection(); }}
                                             >
-                                                <div className="absolute top-2 right-2"><CheckCircle2 size={12} className="text-emerald-500 opacity-40" /></div>
-                                                <p className="text-sm font-black text-emerald-400 leading-relaxed italic select-all cursor-copy">"{fixedHeadline}"</p>
+                                                <div className="absolute top-2 right-2 text-emerald-500/40 group-hover/copy:text-emerald-500 transition-colors">
+                                                    <Copy size={10} />
+                                                </div>
+                                                <p className="text-[10px] font-black text-emerald-500/80 leading-relaxed italic pr-4">
+                                                    "{renderMarkdown(fixedHeadline, true)}"
+                                                </p>
                                             </motion.div>
                                         )}
 
                                         <button
                                             onClick={() => { selection(); handleFixHeadline(); }}
                                             disabled={isFixingHeadline || !headlineInput}
-                                            className="w-full h-16 bg-linear-to-r from-pink-600 to-rose-500 rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.3em] shadow-[0_15px_30px_-5px_rgba(244,63,94,0.3)] active:scale-95 transition-all flex items-center justify-center disabled:opacity-30 disabled:grayscale disabled:shadow-none"
+                                            className="w-full h-11 bg-linear-to-r from-pink-600 to-rose-500 rounded-xl font-black text-white text-[9px] uppercase tracking-[0.25em] shadow-lg active:scale-95 transition-all flex items-center justify-center disabled:opacity-30 disabled:grayscale"
                                         >
-                                            {isFixingHeadline ? <Loader2 className="animate-spin w-5 h-5" /> : (
-                                                <span className="flex items-center gap-3">
-                                                    {t('pro_dashboard.tools.headline.btn')} <Zap size={14} className="animate-pulse" />
+                                            {isFixingHeadline ? <Loader2 className="animate-spin w-4 h-4" /> : (
+                                                <span className="flex items-center gap-2">
+                                                    {t('pro_dashboard.tools.headline.btn')} <Zap size={12} className="animate-pulse" />
                                                 </span>
                                             )}
                                         </button>
                                     </div>
                                 </div>
 
-                                {/* Viral Bio Generator - #comment: High-conversion profile optimization tool using social engineering patterns */}
-                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden group shadow-2xl">
-                                    <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-blue-500/5 pointer-events-none" />
-
-                                    <div className="flex items-center gap-4 mb-8 relative z-10">
-                                        <div className="w-12 h-12 rounded-[1.25rem] bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shadow-lg shrink-0">
-                                            <Wand2 size={20} className="text-indigo-400" />
+                                {/* Viral Bio Generator */}
+                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/10 relative overflow-hidden group shadow-xl bg-(--color-bg-surface)">
+                                    <div className="absolute -right-4 -top-4 w-24 h-24 bg-indigo-500/5 blur-3xl rounded-full" />
+                                    <div className="flex items-center gap-3 mb-5">
+                                        <div className="w-10 h-10 bg-indigo-500/10 rounded-xl border border-indigo-500/20 flex items-center justify-center shadow-sm">
+                                            <Wand2 size={18} className="text-indigo-500" />
                                         </div>
                                         <div>
-                                            <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-indigo-400 leading-none mb-1.5">{t('pro_dashboard.tools.bio.title')}</h3>
-                                            <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest leading-none">{t('pro_dashboard.tools.bio.desc')}</p>
+                                            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500/90 leading-none mb-1">{t('pro_dashboard.tools.bio.title')}</h3>
+                                            <p className="text-[8px] font-bold text-brand-muted uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.bio.desc')}</p>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-5 relative z-10">
-                                        <div className="relative group/input">
-                                            <div className="absolute inset-x-0 -bottom-px h-px bg-linear-to-r from-transparent via-indigo-500/40 to-transparent scale-x-0 group-focus-within/input:scale-x-100 transition-transform duration-500" />
-                                            <textarea
-                                                value={bioInput}
-                                                onChange={(e) => setBioInput(e.target.value)}
-                                                placeholder={t('pro_dashboard.tools.bio.placeholder')}
-                                                className="w-full h-32 bg-black/20 backdrop-blur-sm border border-white/5 focus:border-indigo-500/30 rounded-2xl p-5 text-[11px] font-medium text-brand-text outline-hidden transition-all placeholder:text-brand-muted/40 resize-none custom-scrollbar"
-                                            />
-                                        </div>
+                                    <div className="space-y-3">
+                                        <textarea
+                                            value={bioInput}
+                                            onChange={(e) => setBioInput(e.target.value)}
+                                            placeholder={t('pro_dashboard.tools.bio.placeholder')}
+                                            className="w-full h-24 bg-black/5 dark:bg-white/5 border border-white/5 focus:border-indigo-500/30 rounded-xl p-4 text-[10px] font-medium text-brand-text outline-hidden transition-all resize-none shadow-inner"
+                                        />
 
                                         {fixedBio && (
                                             <motion.div
-                                                initial={{ opacity: 0, scale: 0.95 }}
+                                                initial={{ opacity: 0, scale: 0.98 }}
                                                 animate={{ opacity: 1, scale: 1 }}
-                                                className="p-5 bg-indigo-500/5 border border-indigo-500/10 rounded-2xl relative overflow-hidden shadow-inner group/copy cursor-pointer active:scale-[0.98] transition-all"
+                                                className="p-4 bg-indigo-500/5 border border-indigo-500/10 rounded-xl relative overflow-hidden group/copy cursor-pointer active:scale-[0.98] transition-all"
                                                 onClick={() => { handleCopyAnyText(fixedBio); selection(); }}
                                             >
-                                                <div className="absolute top-3 right-3 text-indigo-500/40 group-hover/copy:text-indigo-500 transition-colors">
-                                                    <Copy size={12} />
+                                                <div className="absolute top-2 right-2 text-indigo-500/40 group-hover/copy:text-indigo-500 transition-colors">
+                                                    <Copy size={10} />
                                                 </div>
-                                                <p className="text-[11px] font-medium text-brand-text/90 leading-relaxed italic pr-6">{fixedBio}</p>
+                                                <p className="text-[10px] font-medium text-brand-text/80 leading-relaxed italic pr-4">
+                                                    {renderMarkdown(fixedBio, true)}
+                                                </p>
                                             </motion.div>
                                         )}
 
@@ -869,50 +886,48 @@ export const ProDashboard = () => {
                                                 }
                                             }}
                                             disabled={isFixingBio || !bioInput}
-                                            className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-[10px] uppercase tracking-[0.3em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale"
+                                            className="w-full h-11 vibing-blue-animated rounded-xl font-black text-white text-[9px] uppercase tracking-[0.25em] shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:grayscale"
                                         >
-                                            {isFixingBio ? <Loader2 className="animate-spin w-5 h-5" /> : (
+                                            {isFixingBio ? <Loader2 className="animate-spin w-4 h-4" /> : (
                                                 <>
-                                                    {t('pro_dashboard.tools.bio.btn')} <Terminal size={14} />
+                                                    {t('pro_dashboard.tools.bio.btn')} <Terminal size={12} />
                                                 </>
                                             )}
                                         </button>
                                     </div>
                                 </div>
 
-                                {/* Trend Hunter - #comment: Real-time cultural intelligence system to identify emerging narratives before they peak */}
-                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden group shadow-2xl">
-                                    <div className="absolute inset-0 bg-linear-to-br from-orange-500/5 via-transparent to-amber-500/5 pointer-events-none" />
-
-                                    <div className="flex items-center gap-4 mb-8 relative z-10">
-                                        <div className="w-12 h-12 rounded-[1.25rem] bg-orange-500/10 border border-orange-500/20 flex items-center justify-center shadow-lg shrink-0">
-                                            <Flame size={20} className="text-orange-400" />
+                                {/* Trend Hunter */}
+                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/10 relative overflow-hidden group shadow-xl bg-(--color-bg-surface)">
+                                    <div className="absolute -right-4 -top-4 w-24 h-24 bg-orange-500/5 blur-3xl rounded-full" />
+                                    <div className="flex items-center gap-3 mb-5">
+                                        <div className="w-10 h-10 bg-orange-500/10 rounded-xl border border-orange-500/20 flex items-center justify-center shadow-sm">
+                                            <Flame size={18} className="text-orange-500" />
                                         </div>
                                         <div>
-                                            <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-orange-400 leading-none mb-1.5">{t('pro_dashboard.tools.trends.title')}</h3>
-                                            <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest leading-none">{t('pro_dashboard.tools.trends.desc')}</p>
+                                            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500/90 leading-none mb-1">{t('pro_dashboard.tools.trends.title')}</h3>
+                                            <p className="text-[8px] font-bold text-brand-muted uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.trends.desc')}</p>
                                         </div>
                                     </div>
 
                                     {trends.length > 0 && (
-                                        <div className="space-y-3 mb-6 relative z-10">
+                                        <div className="grid grid-cols-1 gap-2 mb-4">
                                             {trends.map((trend, i) => (
                                                 <motion.div
                                                     key={i}
                                                     initial={{ opacity: 0, x: -10 }}
                                                     animate={{ opacity: 1, x: 0 }}
-                                                    transition={{ delay: i * 0.1 }}
-                                                    className="p-4 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 transition-all group/item relative overflow-hidden"
+                                                    transition={{ delay: i * 0.05 }}
+                                                    className="p-3 bg-white/5 border border-white/5 rounded-xl hover:bg-white/10 transition-all flex justify-between items-center"
                                                 >
-                                                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-orange-500/20 group-hover/item:bg-orange-500 transition-all" />
-                                                    <div className="flex justify-between items-center mb-1.5">
-                                                        <span className="text-[10px] font-black text-orange-400 uppercase tracking-tight flex items-center gap-2">
-                                                            <span className="w-5 h-5 bg-orange-500/20 rounded-lg flex items-center justify-center text-[9px]">0{i + 1}</span>
-                                                            {trend.topic}
-                                                        </span>
-                                                        <Sparkles size={10} className="text-orange-400/40" />
+                                                    <div className="flex items-center gap-3">
+                                                        <span className="text-[8px] font-black bg-orange-500/10 text-orange-500 p-1 rounded-md min-w-[18px] text-center">0{i + 1}</span>
+                                                        <div className="space-y-0.5">
+                                                            <p className="text-[9px] font-black text-brand-text/90 uppercase truncate max-w-[180px]">{trend.topic}</p>
+                                                            <p className="text-[8px] font-medium text-brand-muted italic truncate max-w-[180px]">{trend.viral_angle}</p>
+                                                        </div>
                                                     </div>
-                                                    <p className="text-[10px] font-medium text-brand-text/70 leading-relaxed italic pl-1">{trend.viral_angle}</p>
+                                                    <Sparkles size={10} className="text-orange-500/30" />
                                                 </motion.div>
                                             ))}
                                         </div>
@@ -921,11 +936,11 @@ export const ProDashboard = () => {
                                     <button
                                         onClick={() => { selection(); handleFetchTrends(); }}
                                         disabled={isHuntingTrends}
-                                        className="w-full h-14 bg-linear-to-r from-orange-600 to-amber-500 rounded-2xl font-black text-white text-[10px] uppercase tracking-[0.3em] shadow-[0_15px_30px_-5px_rgba(245,158,11,0.3)] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale"
+                                        className="w-full h-11 bg-linear-to-r from-orange-600 to-amber-500 rounded-xl font-black text-white text-[9px] uppercase tracking-[0.25em] shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:grayscale"
                                     >
-                                        {isHuntingTrends ? <Loader2 className="animate-spin w-5 h-5" /> : (
+                                        {isHuntingTrends ? <Loader2 className="animate-spin w-4 h-4" /> : (
                                             <>
-                                                {t('pro_dashboard.tools.trends.btn')} <Compass size={14} className="animate-[spin_4s_linear_infinite]" />
+                                                {t('pro_dashboard.tools.trends.btn')} <Compass size={12} className="animate-[spin_4s_linear_infinite]" />
                                             </>
                                         )}
                                     </button>
@@ -933,133 +948,76 @@ export const ProDashboard = () => {
                             </motion.div>
                         )}
 
-                        {/* ACADEMY TAB */}
+                        {/* GROW HACKS (ACADEMY) TAB */}
                         {activeTab === 'academy' && (
                             <motion.div
                                 key="academy"
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 0, y: 15 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                                className="space-y-8"
+                                exit={{ opacity: 0, y: -15 }}
+                                className="space-y-6 pb-12"
                             >
-                                {/* Grow Hacks Header - Intelligence Report - #comment: Knowledge repository for advanced content strategy and proprietary viral mechanics */}
-                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/5 relative overflow-hidden bg-indigo-500/3 shadow-xl">
-                                    <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-indigo-500/20 to-transparent" />
-                                    <div className="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500/5 blur-[60px] rounded-full animate-pulse" />
+                                {/* Intelligence Report Header */}
+                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 relative overflow-hidden bg-indigo-500/5 shadow-xl">
+                                    <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-indigo-500/30 to-transparent" />
+                                    <div className="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500/10 blur-[60px] rounded-full animate-pulse" />
 
                                     <div className="relative z-1">
-                                        <div className="flex items-center gap-2 mb-4">
-                                            <div className="px-2.5 py-0.5 bg-indigo-500/10 rounded-full border border-indigo-500/20 flex items-center gap-1.5">
-                                                <div className="w-1 h-1 rounded-full bg-red-500 animate-pulse" />
-                                                <span className="text-[8px] font-black text-indigo-400 uppercase tracking-[0.2em]">Live Intelligence Protocol</span>
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <div className="px-2 py-0.5 bg-indigo-500/10 rounded-full border border-indigo-500/20 flex items-center gap-1.5">
+                                                <div className="w-1 h-1 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.5)]" />
+                                                <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">Live intelligence</span>
                                             </div>
                                         </div>
-                                        <h3 className="text-2xl font-black text-brand-text leading-tight mb-2 tracking-tight">
+                                        <h3 className="text-xl font-black text-brand-text leading-tight mb-2 tracking-tight">
                                             {t('pro_dashboard.title_academy')}
                                         </h3>
-                                        <p className="text-[10px] font-medium text-brand-muted leading-relaxed max-w-[95%] mb-5 italic opacity-80">
+                                        <p className="text-[9px] font-medium text-brand-muted leading-relaxed max-w-[95%] mb-4 italic opacity-70">
                                             {t('pro_dashboard.academy.desc')}
                                         </p>
-                                        <div className="flex items-center gap-3">
-                                            <div className="px-4 py-2 bg-black/10 dark:bg-white/5 rounded-xl border border-white/5 backdrop-blur-xl group/rank cursor-default transition-all">
-                                                <p className="text-[7px] font-black text-indigo-400/60 uppercase tracking-widest mb-0.5">{t('pro_dashboard.academy.protocol_rank')}</p>
-                                                <div className="flex items-center gap-1.5">
-                                                    <span className="text-xs font-black text-brand-text uppercase tracking-tighter">{t('pro_dashboard.academy.rank_name')}</span>
-                                                    <ShieldCheck size={14} className="text-indigo-500 group-hover:rotate-12 transition-transform" />
-                                                </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="px-3 py-1.5 bg-black/20 dark:bg-white/5 rounded-lg border border-white/5 backdrop-blur-xl flex items-center gap-2 transition-all">
+                                                <ShieldCheck size={12} className="text-indigo-500" />
+                                                <span className="text-[8px] font-black text-brand-text uppercase tracking-tight">{t('pro_dashboard.academy.rank_name')}</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-3">
+                                {/* Compact Growth Grid */}
+                                <div className="grid grid-cols-2 gap-2.5">
                                     {['hook_rule', 'algorithm', 'psycho'].map((key) => (
-                                        <div key={key} className={`glass-panel-premium p-4 rounded-[2rem] border border-white/5 relative overflow-hidden group active:scale-[0.98] transition-all bg-(--color-bg-surface) shadow-sm ${key === 'hook_rule' ? 'col-span-2' : 'col-span-1'}`}>
-                                            <div className="flex items-center gap-3 mb-2">
-                                                <div className="w-9 h-9 bg-indigo-500/5 rounded-xl flex items-center justify-center border border-indigo-500/10 group-hover:scale-110 transition-transform shrink-0">
-                                                    {key === 'hook_rule' && <Zap size={18} className="text-indigo-500" />}
-                                                    {key === 'algorithm' && <Cpu size={18} className="text-indigo-500" />}
-                                                    {key === 'psycho' && <Sparkles size={18} className="text-indigo-500" />}
+                                        <div key={key} className={`glass-panel-premium p-3.5 rounded-2xl border border-white/5 relative overflow-hidden group active:scale-[0.98] transition-all bg-(--color-bg-surface) shadow-sm hover:border-indigo-500/20 ${key === 'hook_rule' ? 'col-span-2' : 'col-span-1'}`}>
+                                            <div className="flex items-center gap-2.5 mb-1.5">
+                                                <div className="w-8 h-8 bg-indigo-500/5 rounded-lg flex items-center justify-center border border-indigo-500/10 group-hover:scale-110 transition-transform shrink-0">
+                                                    {key === 'hook_rule' && <Zap size={14} className="text-indigo-500" />}
+                                                    {key === 'algorithm' && <Cpu size={14} className="text-indigo-500" />}
+                                                    {key === 'psycho' && <Sparkles size={14} className="text-indigo-500" />}
                                                 </div>
-                                                <h4 className="text-[9px] font-black uppercase tracking-widest text-brand-text leading-tight">{t(`pro_dashboard.academy.${key}.title`)}</h4>
+                                                <h4 className="text-[8.5px] font-black uppercase tracking-widest text-brand-text leading-tight">{t(`pro_dashboard.academy.${key}.title`)}</h4>
                                             </div>
-                                            <p className="text-[9px] font-medium leading-relaxed text-brand-muted italic opacity-70">
+                                            <p className="text-[8.5px] font-medium leading-relaxed text-brand-muted italic opacity-60 line-clamp-2">
                                                 {t(`pro_dashboard.academy.${key}.desc`)}
                                             </p>
                                         </div>
                                     ))}
 
-                                    {/* Checklist */}
-                                    <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 relative overflow-hidden bg-(--color-bg-surface)">
-                                        <div className="flex items-center gap-3 mb-5">
-                                            <div className="w-10 h-10 bg-emerald-500/5 rounded-xl flex items-center justify-center border border-emerald-500/10 scale-90">
-                                                <CheckCircle2 size={18} className="text-emerald-500" />
+                                    {/* Compact Checklist */}
+                                    <div className="glass-panel-premium p-4 rounded-2xl border border-white/5 relative overflow-hidden bg-(--color-bg-surface) col-span-2">
+                                        <div className="flex items-center gap-2.5 mb-3">
+                                            <div className="w-8 h-8 bg-emerald-500/5 rounded-lg flex items-center justify-center border border-emerald-500/10 shrink-0">
+                                                <CheckCircle2 size={16} className="text-emerald-500" />
                                             </div>
                                             <div>
-                                                <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-text leading-none mb-1">{t('pro_dashboard.academy.checklist.title')}</h4>
-                                                <p className="text-[7px] font-black text-emerald-500/60 uppercase tracking-widest">{t('pro_dashboard.academy.checklist.subtitle')}</p>
+                                                <h4 className="text-[9px] font-black uppercase tracking-widest text-brand-text leading-none mb-0.5">{t('pro_dashboard.academy.checklist.title')}</h4>
+                                                <p className="text-[6.5px] font-black text-emerald-500/50 uppercase tracking-widest">{t('pro_dashboard.academy.checklist.subtitle')}</p>
                                             </div>
                                         </div>
-                                        <div className="space-y-2.5">
+                                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                                             {(t('pro_dashboard.academy.checklist.items', { returnObjects: true }) as string[]).map((item: string, i: number) => (
-                                                <div key={i} className="flex items-start gap-2.5 px-1">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/40 mt-1 shrink-0" />
-                                                    <span className="text-[9px] font-bold text-brand-muted leading-snug">{item}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Visual Branding Prototype - #comment: Design system blueprints for high-impact social media assets */}
-                                <div className="glass-panel-premium p-0.5 rounded-[2.5rem] border border-white/5 relative overflow-hidden group shadow-2xl">
-                                    <div className="p-6 space-y-8 bg-(--color-bg-surface)">
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-11 h-11 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 group-hover:scale-110 transition-transform">
-                                                    <ImageIcon size={20} className="text-indigo-500" />
-                                                </div>
-                                                <div>
-                                                    <h4 className="text-xs font-black uppercase tracking-widest text-brand-text leading-none mb-1">{t('pro_dashboard.academy.viral_assets.title')}</h4>
-                                                    <p className="text-[8px] font-bold text-indigo-500/60 uppercase tracking-widest">{t('pro_dashboard.academy.viral_assets.subtitle')}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-1 gap-6">
-                                            {(t('pro_dashboard.academy.viral_assets.cards', { returnObjects: true }) as any[]).map((card: any, i: number) => (
-                                                <div key={i} className="relative group/card cursor-pointer">
-                                                    <div className="absolute -inset-4 bg-indigo-500/10 blur-2xl opacity-0 group-hover/card:opacity-100 transition-all duration-700" />
-                                                    <div className="relative aspect-[1.586/1] w-full max-w-[280px] mx-auto bg-slate-950 rounded-[2rem] p-7 border border-white/10 overflow-hidden shadow-3xl transition-all duration-500 group-hover/card:translate-y-[-4px]">
-                                                        {/* Mesh Gradient Inside Card */}
-                                                        <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/10 blur-2xl pointer-events-none" />
-
-                                                        {/* Chip */}
-                                                        <div className="w-11 h-8 bg-linear-to-br from-amber-400 via-amber-200 to-amber-600 rounded-lg mb-8 relative overflow-hidden shadow-lg border border-amber-300/30">
-                                                            <div className="absolute inset-0 bg-white/20 grid grid-cols-3 gap-0.5 p-1 opacity-40">
-                                                                {[...Array(9)].map((_, j) => <div key={j} className="bg-black/20 rounded-xs" />)}
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="space-y-3.5">
-                                                            <div className="space-y-1">
-                                                                <div className="flex items-center gap-1.5">
-                                                                    <div className="w-1 h-1 rounded-full bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.6)] animate-pulse" />
-                                                                    <p className="text-[7px] font-black uppercase tracking-[0.3em] text-indigo-400/80">Security: Alpha 01</p>
-                                                                </div>
-                                                                <h5 className="text-xl font-black text-white italic tracking-tighter leading-none">{card.title}</h5>
-                                                            </div>
-                                                            <p className="text-[8px] font-bold text-slate-400 leading-relaxed pr-4 opacity-70">{card.hook}</p>
-                                                            <div className="pt-4 flex justify-between items-end">
-                                                                <div className="flex items-center gap-2">
-                                                                    <div className="w-6 h-6 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
-                                                                        <Cpu size={10} className="text-indigo-400" />
-                                                                    </div>
-                                                                    <span className="text-[7px] font-black text-slate-500 tracking-widest">ENCRYPTED</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <div key={i} className="flex items-center gap-2">
+                                                    <div className="w-1 h-1 rounded-full bg-emerald-500/40 shrink-0" />
+                                                    <span className="text-[8.5px] font-bold text-brand-muted leading-none truncate">{item}</span>
                                                 </div>
                                             ))}
                                         </div>
@@ -1067,88 +1025,120 @@ export const ProDashboard = () => {
                                 </div>
 
                                 {/* Hook Library */}
-                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/5 hover:border-indigo-500/20 transition-all group overflow-hidden relative shadow-lg">
+                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 hover:border-indigo-500/20 transition-all group overflow-hidden relative shadow-lg bg-(--color-bg-surface)">
                                     <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-indigo-500/30 to-transparent" />
-                                    <div className="flex items-center gap-4 mb-6 relative z-10">
-                                        <div className="w-11 h-11 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
-                                            <BookOpen size={20} className="text-indigo-500" />
+                                    <div className="flex items-center gap-3 mb-5 relative z-10">
+                                        <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-sm">
+                                            <BookOpen size={18} className="text-indigo-500" />
                                         </div>
                                         <div>
-                                            <h4 className="text-sm font-black uppercase tracking-tight text-brand-text leading-none mb-1">{t('pro_dashboard.academy.hooks.title')}</h4>
-                                            <span className="text-[8px] font-black text-brand-muted uppercase tracking-widest">{t('pro_dashboard.academy.hooks.subtitle')}</span>
+                                            <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-text leading-none mb-1">{t('pro_dashboard.academy.hooks.title')}</h4>
+                                            <span className="text-[7px] font-black text-brand-muted uppercase tracking-[0.2em]">{t('pro_dashboard.academy.hooks.subtitle')}</span>
                                         </div>
                                     </div>
-                                    <div className="space-y-3 relative z-10">
+                                    <div className="space-y-2.5 relative z-10">
                                         {(t('pro_dashboard.academy.hooks.items', { returnObjects: true }) as any[]).map((hook: any, i: number) => (
-                                            <div key={i} className="p-4 bg-indigo-500/5 rounded-2xl border border-white/5 hover:border-indigo-500/20 transition-all group/hook relative cursor-pointer active:scale-[0.99]" onClick={() => { handleCopyAnyText(hook.template); selection(); }}>
-                                                <div className="absolute right-4 top-4 opacity-0 group-hover/hook:opacity-100 transition-all scale-75">
-                                                    <Copy size={16} className="text-indigo-500" />
+                                            <div key={i} className="p-3 bg-indigo-500/5 rounded-xl border border-white/5 hover:border-indigo-500/20 transition-all group/hook relative cursor-pointer active:scale-[0.99] shadow-sm" onClick={() => { handleCopyAnyText(hook.template); selection(); }}>
+                                                <div className="absolute right-3 top-3 opacity-0 group-hover/hook:opacity-100 transition-all scale-75">
+                                                    <Copy size={12} className="text-indigo-500" />
                                                 </div>
-                                                <div className="flex items-center gap-2 mb-1.5">
-                                                    <div className="w-1 h-2 rounded-full bg-indigo-500" />
-                                                    <p className="text-[8px] font-black text-indigo-500 uppercase tracking-widest leading-none">{hook.category}</p>
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <div className="w-1 h-3 rounded-full bg-indigo-500/50" />
+                                                    <p className="text-[7px] font-black text-indigo-500/80 uppercase tracking-widest leading-none">{hook.category}</p>
                                                 </div>
-                                                <p className="text-[10px] font-bold text-brand-text italic leading-relaxed pr-8 opacity-90">"{hook.template}"</p>
+                                                <p className="text-[9.5px] font-bold text-brand-text italic leading-relaxed pr-6 opacity-80 line-clamp-2">"{hook.template}"</p>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
 
-                                {/* Viral Lifehacks */}
-                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/5 relative overflow-hidden group bg-indigo-500/2 shadow-xl">
-                                    <div className="flex items-center gap-4 mb-8">
-                                        <div className="w-11 h-11 bg-pink-500/10 rounded-xl flex items-center justify-center border border-pink-500/20 shadow-lg">
-                                            <Flame size={20} className="text-pink-500" />
+                                {/* Viral Assets Prototype - #comment: Compact, high-impact design blueprints */}
+                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 relative overflow-hidden group shadow-xl bg-(--color-bg-surface)">
+                                    <div className="flex items-center gap-3 mb-5">
+                                        <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-sm">
+                                            <ImageIcon size={18} className="text-indigo-500" />
                                         </div>
                                         <div>
-                                            <h4 className="text-sm font-black uppercase tracking-tight text-brand-text leading-none mb-1">{t('pro_dashboard.academy.lifehacks.title')}</h4>
-                                            <span className="text-[8px] font-black text-brand-muted uppercase tracking-widest">{t('pro_dashboard.academy.lifehacks.subtitle')}</span>
+                                            <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-text leading-none mb-1">{t('pro_dashboard.academy.viral_assets.title')}</h4>
+                                            <span className="text-[7px] font-black text-brand-muted uppercase tracking-[0.2em]">{t('pro_dashboard.academy.viral_assets.subtitle')}</span>
                                         </div>
                                     </div>
-                                    <div className="grid grid-cols-1 gap-3">
-                                        {(t('pro_dashboard.academy.lifehacks.items', { returnObjects: true }) as any[]).map((hack: any, i: number) => (
-                                            <div key={i} className="flex gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-pink-500/20 transition-all group/hack active:scale-[0.99] cursor-default">
-                                                <div className="w-8 h-8 rounded-lg bg-pink-500/5 flex items-center justify-center text-pink-500 font-black text-[10px] shrink-0 border border-pink-500/10">{i + 1}</div>
-                                                <div>
-                                                    <h5 className="text-[10px] font-black uppercase text-brand-text tracking-tight mb-1">{hack.title}</h5>
-                                                    <p className="text-[9px] font-medium text-brand-muted leading-relaxed italic opacity-70">{hack.desc}</p>
+
+                                    <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2 pt-1 px-1">
+                                        {(t('pro_dashboard.academy.viral_assets.cards', { returnObjects: true }) as any[]).map((card: any, i: number) => (
+                                            <div key={i} className="relative shrink-0 w-[200px] aspect-[1.586/1] bg-slate-950 rounded-2xl p-4 border border-white/10 overflow-hidden shadow-2xl transition-all hover:scale-[1.02] hover:-translate-y-1">
+                                                <div className="absolute top-0 right-0 w-16 h-16 bg-indigo-500/10 blur-xl pointer-events-none" />
+                                                <div className="w-8 h-6 bg-linear-to-br from-amber-400 via-amber-200 to-amber-600 rounded-md mb-4 relative overflow-hidden shadow-md border border-amber-300/30">
+                                                    <div className="absolute inset-0 bg-white/10 grid grid-cols-3 gap-0.5 p-0.5 opacity-40">
+                                                        {[...Array(6)].map((_, j) => <div key={j} className="bg-black/20 rounded-[1px]" />)}
+                                                    </div>
+                                                </div>
+                                                <div className="space-y-1.5">
+                                                    <div className="flex items-center gap-1">
+                                                        <div className="w-1 h-1 rounded-full bg-red-500 shadow-[0_0_4px_rgba(239,68,68,0.6)] animate-pulse" />
+                                                        <p className="text-[5px] font-black uppercase tracking-[0.2em] text-indigo-400/80">Security: Alpha 01</p>
+                                                    </div>
+                                                    <h5 className="text-xs font-black text-white italic tracking-tight leading-none truncate">{card.title}</h5>
+                                                    <p className="text-[6.5px] font-medium text-slate-400 leading-tight line-clamp-2 opacity-60">{card.hook}</p>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
 
-                                {/* Channel Architecture */}
-                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/5 relative overflow-hidden bg-indigo-500/1 shadow-xl">
-                                    <div className="absolute bottom-[-50px] right-[-50px] w-64 h-64 bg-indigo-500/5 blur-[80px] rounded-full" />
-
-                                    <div className="space-y-8 relative z-10">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-11 h-11 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-lg">
-                                                <Globe size={20} className="text-indigo-500" />
+                                {/* Lifehacks & Setup Stack */}
+                                <div className="grid grid-cols-1 gap-4">
+                                    <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 relative overflow-hidden group bg-pink-500/5 shadow-xl">
+                                        <div className="flex items-center gap-3 mb-6">
+                                            <div className="w-10 h-10 bg-pink-500/10 rounded-xl flex items-center justify-center border border-pink-500/20 shadow-sm">
+                                                <Flame size={18} className="text-pink-500" />
                                             </div>
                                             <div>
-                                                <h4 className="text-sm font-black uppercase tracking-tight text-brand-text leading-none mb-1">{t('pro_dashboard.academy.social_setup.title')}</h4>
-                                                <span className="text-[8px] font-black text-brand-muted uppercase tracking-widest">{t('pro_dashboard.academy.social_setup.subtitle')}</span>
+                                                <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-text leading-none mb-1">{t('pro_dashboard.academy.lifehacks.title')}</h4>
+                                                <span className="text-[7px] font-black text-brand-muted uppercase tracking-[0.2em]">{t('pro_dashboard.academy.lifehacks.subtitle')}</span>
+                                            </div>
+                                        </div>
+                                        <div className="space-y-2.5">
+                                            {(t('pro_dashboard.academy.lifehacks.items', { returnObjects: true }) as any[]).map((hack: any, i: number) => (
+                                                <div key={i} className="flex gap-3 p-3 bg-white/5 rounded-xl border border-white/5 hover:border-pink-500/20 transition-all group/hack active:scale-[0.99] cursor-default">
+                                                    <div className="w-7 h-7 rounded-lg bg-pink-500/5 flex items-center justify-center text-pink-500 font-black text-[9px] shrink-0 border border-pink-500/10 shadow-inner">{i + 1}</div>
+                                                    <div>
+                                                        <h5 className="text-[9px] font-black uppercase text-brand-text tracking-tight mb-0.5">{hack.title}</h5>
+                                                        <p className="text-[8.5px] font-medium text-brand-muted leading-relaxed italic opacity-60 line-clamp-1">{hack.desc}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 relative overflow-hidden bg-indigo-500/2 shadow-xl">
+                                        <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-indigo-500/5 blur-[50px] rounded-full" />
+                                        <div className="flex items-center gap-3 mb-6 relative z-10">
+                                            <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-sm">
+                                                <Globe size={18} className="text-indigo-500" />
+                                            </div>
+                                            <div>
+                                                <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-text leading-none mb-1">{t('pro_dashboard.academy.social_setup.title')}</h4>
+                                                <span className="text-[7px] font-black text-brand-muted uppercase tracking-[0.2em]">{t('pro_dashboard.academy.social_setup.subtitle')}</span>
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-1 gap-4">
+                                        <div className="space-y-3 relative z-10 mb-6">
                                             {(t('pro_dashboard.academy.social_setup.platforms', { returnObjects: true }) as any[]).map((platform: any, i: number) => (
-                                                <div key={i} className="p-5 bg-white/5 rounded-2xl border border-white/5 space-y-4 hover:bg-white/10 transition-colors">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-9 h-9 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
-                                                            {platform.name.includes('Telegram') && <Send size={16} className="text-indigo-500" />}
-                                                            {platform.name.includes('X') && <Twitter size={16} className="text-indigo-500" />}
-                                                            {platform.name.includes('LinkedIn') && <Linkedin size={16} className="text-indigo-500" />}
+                                                <div key={i} className="p-4 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors group/platform">
+                                                    <div className="flex items-center gap-3 mb-2">
+                                                        <div className="w-8 h-8 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20 group-hover/platform:scale-110 transition-transform">
+                                                            {platform.name.includes('Telegram') && <Send size={14} className="text-indigo-500" />}
+                                                            {platform.name.includes('X') && <Twitter size={14} className="text-indigo-500" />}
+                                                            {platform.name.includes('LinkedIn') && <Linkedin size={14} className="text-indigo-500" />}
                                                         </div>
-                                                        <span className="text-xs font-black text-brand-text uppercase tracking-tight">{platform.name}</span>
+                                                        <span className="text-[9.5px] font-black text-brand-text uppercase tracking-tight">{platform.name}</span>
                                                     </div>
-                                                    <div className="space-y-2.5">
-                                                        {platform.steps.map((step: string, j: number) => (
-                                                            <div key={j} className="flex items-start gap-3">
-                                                                <div className="w-1 h-3 rounded-full bg-indigo-500/40 mt-1" />
-                                                                <span className="text-[9px] font-medium text-brand-muted leading-relaxed">{step}</span>
+                                                    <div className="grid grid-cols-1 gap-1.5 opacity-60">
+                                                        {platform.steps.slice(0, 2).map((step: string, j: number) => (
+                                                            <div key={j} className="flex items-center gap-2">
+                                                                <div className="w-1 h-2 rounded-full bg-indigo-500/30" />
+                                                                <span className="text-[8px] font-medium text-brand-muted truncate">{step}</span>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -1158,9 +1148,10 @@ export const ProDashboard = () => {
 
                                         <button
                                             onClick={() => { selection(); setShowSetup(true); }}
-                                            className="w-full h-14 vibing-blue-animated text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3"
+                                            className="w-full h-11 vibing-blue-animated text-white font-black text-[9px] uppercase tracking-[0.2em] rounded-xl shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 relative overflow-hidden group/btn"
                                         >
-                                            {t('pro_dashboard.tab_setup')} <ChevronRight size={16} />
+                                            <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
+                                            {t('pro_dashboard.tab_setup')} <ChevronRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
                                         </button>
                                     </div>
                                 </div>

@@ -836,14 +836,14 @@
         "elite": "Elite"
     },
     "pro_dashboard": {
+        "tab_studio": "Studio",
+        "tab_tools": "Tools",
+        "tab_academy": "Grow Hacks",
         "title_studio": "Viral Marketing Studio",
         "title_tools": "Power Tools",
         "title_academy": "Grow Hacks",
         "tokens_left": "{{count}} TOKENS LEFT",
         "system_offline": "SYSTEM OFFLINE",
-        "tab_studio": "Studio",
-        "tab_tools": "Tools",
-        "tab_academy": "Grow Hacks",
         "tab_setup": "API Setup",
         "locked": {
             "title": "PRO MEMBERS ONLY",

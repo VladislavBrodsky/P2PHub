@@ -843,12 +843,12 @@
     "pro_dashboard": {
         "title_studio": "Студия Вирусного Маркетинга",
         "title_tools": "PRO-инструменты",
-        "title_academy": "Grow Hacks",
+        "title_academy": "Гроу-хаки",
         "tokens_left": "{{count}} ТОКЕНОВ",
         "system_offline": "СИСТЕМА ОФФЛАЙН",
         "tab_studio": "Студия",
         "tab_tools": "Инструменты",
-        "tab_academy": "Grow Hacks",
+        "tab_academy": "Гроу-хаки",
         "tab_setup": "Настройки API",
         "locked": {
             "title": "ТОЛЬКО ДЛЯ PRO",
