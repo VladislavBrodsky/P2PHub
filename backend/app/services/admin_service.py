@@ -95,9 +95,22 @@ class AdminService:
             total_tasks = (await session.exec(select(func.count(PartnerTask.id)))).one()
 
             # Financials
-            # 1. Total Revenue (Completed transactions)
-            revenue_stmt = select(func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed")
-            total_revenue = (await session.exec(revenue_stmt)).one() or 0.0
+            # 1. Total Revenue (Completed transactions) - Breaking down by currency
+            revenue_stmt_ton = select(func.sum(PartnerTransaction.amount)).where(
+                PartnerTransaction.status == "completed",
+                PartnerTransaction.currency == "TON"
+            )
+            revenue_stmt_usdt = select(func.sum(PartnerTransaction.amount)).where(
+                PartnerTransaction.status == "completed",
+                PartnerTransaction.currency == "USDT"
+            )
+            total_revenue_ton = (await session.exec(revenue_stmt_ton)).one() or 0.0
+            total_revenue_usdt = (await session.exec(revenue_stmt_usdt)).one() or 0.0
+            
+            # Simple conversion for display (Mock rate or just total)
+            total_revenue = total_revenue_usdt + (total_revenue_ton * 5.0) # Mock conversion: 1 TON = 5 USDT if needed, or just keep separate
+            # Actually, let's keep it clean as separate fields but return a combined total in USDT-equivalent if possible.
+            # For now, let's just return both.
 
             # 2. Commissions by Level (1-9)
             commissions_by_level = []
@@ -204,13 +217,66 @@ class AdminService:
                 },
                 "financials": {
                     "total_revenue": round(total_revenue, 2),
+                    "total_revenue_ton": round(total_revenue_ton, 2),
+                    "total_revenue_usdt": round(total_revenue_usdt, 2),
                     "total_commissions": round(total_commissions, 2),
                     "net_profit": round(net_profit, 2),
                     "commissions_breakdown": commissions_by_level
                 },
                 "tasks": task_breakdown,
+                "top_partners": await self.get_top_partners(limit=5),
                 "server_time": now.isoformat()
             }
+
+    async def get_top_partners(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """
+        Returns top partners by total earnings.
+        """
+        async for session in get_session():
+            # Join Partner with Earning to get total earnings
+            stmt = select(
+                Partner.username,
+                Partner.telegram_id,
+                func.sum(Earning.amount).label("total_earnings")
+            ).join(Earning, Partner.id == Earning.partner_id) \
+             .group_by(Partner.id) \
+             .order_by(text("total_earnings DESC")) \
+             .limit(limit)
+            
+            result = await session.exec(stmt)
+            top_partners = []
+            for username, tg_id, earnings in result.all():
+                top_partners.append({
+                    "username": username,
+                    "telegram_id": tg_id,
+                    "earnings": round(earnings or 0.0, 2)
+                })
+            return top_partners
+
+    async def search_partners(self, query: str) -> List[Dict[str, Any]]:
+        """
+        Search partners by username or telegram_id.
+        """
+        async for session in get_session():
+            stmt = select(Partner).where(
+                (Partner.username.ilike(f"%{query}%")) |
+                (Partner.telegram_id.ilike(f"%{query}%"))
+            ).limit(20)
+            
+            result = await session.exec(stmt)
+            partners = result.all()
+            
+            return [{
+                "id": p.id,
+                "telegram_id": p.telegram_id,
+                "username": p.username,
+                "first_name": p.first_name,
+                "last_name": p.last_name,
+                "is_pro": p.is_pro,
+                "xp": p.xp,
+                "referral_count": p.referral_count,
+                "level": p.level
+            } for p in partners]
 
     async def get_global_network_stats(self) -> Dict[str, int]:
         """

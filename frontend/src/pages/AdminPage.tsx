@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     CheckCircle, Clock, AlertTriangle, ShieldCheck, RefreshCw,
     User, ExternalLink, TrendingUp, TrendingDown, Users,
-    Zap, PieChart, Wallet, Calendar
+    Zap, PieChart, Wallet, Calendar, Search
 } from 'lucide-react';
 import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -46,11 +46,14 @@ interface DashboardStats {
     };
     financials: {
         total_revenue: number;
+        total_revenue_ton: number;
+        total_revenue_usdt: number;
         total_commissions: number;
         net_profit: number;
         commissions_breakdown: CommissionLine[];
     };
     tasks: Record<string, number>;
+    top_partners: { username: string; telegram_id: string; earnings: number }[];
 }
 
 interface Transaction {
@@ -84,7 +87,10 @@ export const AdminPage = () => {
     const [error, setError] = useState<string | null>(null);
     const [approvingIds, setApprovingIds] = useState<Set<number>>(new Set());
     const [health, setHealth] = useState<{ status: string; latency_ms: number; orphaned_count: number; timestamp: string } | null>(null);
-    const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'maintenance'>('kpis');
+    const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'maintenance' | 'search'>('kpis');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState<any[]>([]);
+    const [isSearching, setIsSearching] = useState(false);
 
     const fetchData = async (silent = false) => {
         if (!silent) setIsLoading(true);
@@ -154,6 +160,21 @@ export const AdminPage = () => {
         }
     };
 
+    const handleSearch = async (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+        if (!searchQuery.trim()) return;
+
+        setIsSearching(true);
+        try {
+            const res = await apiClient.get(`/api/admin/search-partners?query=${encodeURIComponent(searchQuery)}`);
+            setSearchResults(res.data);
+        } catch (err: any) {
+            console.error('[Admin] Search failed:', err);
+        } finally {
+            setIsSearching(false);
+        }
+    };
+
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
@@ -198,12 +219,12 @@ export const AdminPage = () => {
             )}
 
             {/* Navigation Tabs */}
-            <div className="flex gap-2 p-1 bg-slate-100 dark:bg-white/5 rounded-2xl">
-                {(['kpis', 'financials', 'payments', 'maintenance'] as const).map((mode) => (
+            <div className="flex gap-1 p-1 bg-slate-100 dark:bg-white/5 rounded-2xl overflow-x-auto scrollbar-none">
+                {(['kpis', 'financials', 'payments', 'search', 'maintenance'] as const).map((mode) => (
                     <button
                         key={mode}
                         onClick={() => setViewMode(mode)}
-                        className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${viewMode === mode
+                        className={`px-3 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all whitespace-nowrap ${viewMode === mode
                             ? 'bg-white dark:bg-white/10 shadow-sm text-blue-500'
                             : 'text-slate-500'
                             }`}

@@ -161,3 +161,14 @@ async def get_system_health(
     """
     from app.services.maintenance_service import check_database_health
     return await check_database_health()
+
+@router.get("/search-partners", response_model=List[Dict[str, Any]])
+async def search_partners(
+    query: str,
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Search for partners by username or Telegram ID.
+    Only accessible by admins.
+    """
+    return await admin_service.search_partners(query)
