@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Send,
@@ -159,10 +160,12 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
         handleSendMessage(t(`support.categories.${categoryKey}`));
     };
 
-    return (
+    if (!isOpen) return null;
+
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-10000 flex items-end sm:items-center justify-center p-0 sm:p-4">
+                <div className="fixed inset-0 z-[10000] flex items-end sm:items-center justify-center p-0 sm:p-4">
                     {/* Backdrop */}
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -178,10 +181,10 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: '100%', opacity: 0 }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className="relative flex h-[90vh] w-full max-w-[450px] flex-col overflow-hidden bg-(--color-bg-deep) border-t sm:border border-(--color-border-glass) rounded-t-3xl sm:rounded-3xl shadow-2xl"
+                        className="relative flex h-[90dvh] w-full max-w-[450px] flex-col overflow-hidden bg-(--color-bg-deep) border-t sm:border border-(--color-border-glass) rounded-t-3xl sm:rounded-3xl shadow-2xl"
                     >
                         {/* Header */}
-                        <div className="flex items-center justify-between border-b border-(--color-border-glass) bg-white/5 px-4 py-3 backdrop-blur-xl">
+                        <div className="flex items-center justify-between border-b border-(--color-border-glass) bg-white/5 px-4 py-3 backdrop-blur-xl shrink-0">
                             <div className="flex items-center gap-3">
                                 <div className="relative">
                                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/20 text-blue-500">
@@ -266,7 +269,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         </div>
 
                         {/* Input Area */}
-                        <div className="border-t border-(--color-border-glass) bg-white/5 p-4 backdrop-blur-xl">
+                        <div className="border-t border-(--color-border-glass) bg-white/5 p-4 backdrop-blur-xl shrink-0 safe-pb">
                             <div className="flex items-center gap-2">
                                 <div className="relative flex-1">
                                     <input
@@ -294,6 +297,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                     </motion.div>
                 </div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 }

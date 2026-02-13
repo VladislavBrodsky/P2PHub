@@ -52,15 +52,15 @@ export const TopPartnersList = ({ onOpenInfo }: { onOpenInfo?: () => void }) => 
         <div className="space-y-4">
             <div className="flex items-center justify-between px-1">
                 <div className="flex items-center gap-2">
-                    {/* #comment: Renamed title to 'Top Partners' as requested */}
-                    <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                    {/* #comment: Renamed title to 'Top Partners' and matched casing */}
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white tracking-tight">
                         Top Partners
                     </h3>
                 </div>
-                {/* #comment: Replaced 'Live Updates' with 'REFERRAL.INFO' button */}
+                {/* #comment: Replaced 'Live Updates' with 'REFERRAL.INFO' button with pill styling */}
                 <button
                     onClick={onOpenInfo}
-                    className="bg-blue-500/10 dark:bg-blue-500/20 hover:bg-blue-500/20 active:scale-95 transition-all text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-lg flex items-center justify-center shadow-sm"
+                    className="bg-blue-100 dark:bg-blue-500/20 hover:bg-blue-200 dark:hover:bg-blue-500/30 active:scale-95 transition-all text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-full flex items-center justify-center shadow-sm"
                 >
                     <span className="text-[10px] font-black uppercase tracking-widest">REFERRAL.INFO</span>
                 </button>
