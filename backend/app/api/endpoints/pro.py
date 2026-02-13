@@ -102,7 +102,8 @@ async def generate_content(
         post_type=payload.post_type,
         target_audience=payload.target_audience,
         language=payload.language,
-        referral_link=payload.referral_link
+        referral_link=payload.referral_link,
+        session=session
     )
     
     if result.get("status") == "failed":
