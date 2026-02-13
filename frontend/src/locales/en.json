@@ -27,22 +27,24 @@
         "blog": "Blog"
     },
     "support": {
-        "manager": "Support Manager",
-        "online": "Online",
-        "welcome": "Hello! I'm your Pintopay Support Manager. How can I help you today? Please choose a category or type your question below.",
-        "input_placeholder": "Ask anything about Pintopay...",
-        "session_closed": "Session Closed",
-        "still_here": "Are you still here? I'm ready to help you with any questions about Pintopay.",
-        "error_technical": "I'm sorry, I'm having temporary technical difficulties. Please try again or visit our FAQ.",
-        "suggested_topics": "Suggested Topics",
-        "powered_by": "Pintopay Support Agent • Powered by Elite Intelligence",
+        "manager": "Executive Manager",
+        "online": "Direct Line Active",
+        "priority_badge": "Priority Elite Support",
+        "welcome": "Welcome back, Partner. I am your Executive Support Manager. My mission is to ensure your Pintopay journey is frictionless and high-velocity. How can I assist you in dominating the market today?",
+        "input_placeholder": "Command your request here...",
+        "user_context": "Connected: {{name}} • Lvl {{level}}",
+        "session_closed": "Protocol Terminated • History Saved",
+        "still_here": "Partner, our mission is active. Are you still with us? I'm standing by to solve any friction.",
+        "error_technical": "Network interference detected. Re-establishing connection... Please visit our Priority Intel (FAQ) in the meantime.",
+        "suggested_topics": "Operational Intelligence",
+        "powered_by": "Pintopay Tactical Suite • Neural Intel v4.0",
         "categories": {
-            "card_details": "Pintopay Card Details",
-            "issue_setup": "Card Issue & Setup",
-            "topup_limits": "Top-up & Limits",
-            "apple_google": "ApplePay / GooglePay",
-            "earnings": "Earnings & Network",
-            "security": "Security & Technical"
+            "card_details": "Card Architecture",
+            "issue_setup": "Rapid Deployment",
+            "topup_limits": "Liquidity & Scale",
+            "apple_google": "Mobile Integration",
+            "earnings": "Network Dividends",
+            "security": "Asset Protection"
         }
     },
     "faq": {
