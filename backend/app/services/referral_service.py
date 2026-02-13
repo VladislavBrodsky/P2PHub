@@ -42,7 +42,7 @@ def format_partner_name(p: Partner) -> str:
     
     return escape_markdown_v1(name_display)
 
-@broker.task
+@broker.task(retry=3)
 async def process_referral_logic(partner_id: int):
     """
     Optimized 9-level referral logic.
@@ -176,7 +176,6 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     if not partner or not partner.referrer_id:
         return
 
-    COMMISSION_PCT = {1: 0.30, 2: 0.05, 3: 0.03, 4: 0.01, 5: 0.01, 6: 0.01, 7: 0.01, 8: 0.01, 9: 0.01}
     # Path already includes ancestors, just deduplicate and fetch
     lineage_ids = list(dict.fromkeys([int(x) for x in partner.path.split('.')] if partner.path else []))[-9:]
 

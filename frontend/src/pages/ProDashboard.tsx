@@ -800,29 +800,6 @@ export const ProDashboard = () => {
                                     </div>
                                 </div>
 
-                                {/* Viral Bio Generator */}
-                                <div className="glass-panel-premium p-8 rounded-[2.5rem] border border-white/10 relative overflow-hidden group shadow-2xl bg-grid-white/5">
-                                    <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-1000">
-                                        <Bot size={120} />
-                                    </div>
-                                    <div className="flex items-center gap-5 mb-8">
-                                        <div className="w-14 h-14 bg-indigo-500/10 rounded-2xl border border-indigo-500/20 flex items-center justify-center shadow-lg shadow-indigo-500/10"><Bot className="w-7 h-7 text-indigo-500" /></div>
-                                        <div>
-                                            <h3 className="text-sm font-black uppercase tracking-[0.3em] text-indigo-400">{t('pro_dashboard.tools.bio.title')}</h3>
-                                            <p className="text-[10px] font-bold text-brand-muted uppercase tracking-widest leading-relaxed">{t('pro_dashboard.tools.bio.desc')}</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        <div className="relative">
-                                            <textarea
-                                                value={bioInput}
-                                                onChange={(e) => setBioInput(e.target.value)}
-                                                placeholder={t('pro_dashboard.tools.bio.placeholder')}
-                                                className="w-full h-32 bg-black/40 border border-white/5 focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 rounded-2xl p-6 text-xs font-bold outline-hidden transition-all shadow-inner resize-none"
-                                            />
-                                        </div>
-
                                         {/* Viral Bio Generator */}
                                         <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden group shadow-2xl">
                                             <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-blue-500/5 pointer-events-none" />
