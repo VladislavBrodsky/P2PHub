@@ -13,6 +13,7 @@ from app.core.config import settings
 
 # #comment: Import redis service for caching KB responses
 from app.services.redis_service import redis_service
+from app.worker import broker
 
 logger = logging.getLogger(__name__)
 
@@ -580,6 +581,48 @@ class SupportAgentService:
         session_key = f"support_session:{user_id}"
         await redis_service.delete(session_key)
         logger.info(f"🏁 Support session for {user_id} salvaged to background tasks.")
+
+    @broker.task(task_name="cleanup_stale_support_sessions", schedule=[{"cron": "*/5 * * * *"}])
+    async def cleanup_stale_support_sessions(self):
+        """
+        Periodically checks for sessions with no activity for >5 minutes and closes them.
+        This ensures logs are saved to Google Sheets even if the user just leaves.
+        """
+        logger.info("🧹 Starting cleanup of stale support sessions...")
+        try:
+            # 1. Find all session keys
+            keys = await redis_service.client.keys("support_session:*")
+            if not keys:
+                return
+
+            now = datetime.utcnow()
+            closed_count = 0
+            
+            for key in keys:
+                try:
+                    session = await redis_service.get_json(key)
+                    if not session:
+                        continue
+                    
+                    last_activity_str = session.get("last_activity")
+                    if not last_activity_str:
+                        continue
+                    
+                    last_activity = datetime.fromisoformat(last_activity_str)
+                    
+                    # If inactive for more than 5 minutes
+                    if (now - last_activity).total_seconds() > 300:
+                        user_id = session.get("user_id")
+                        if user_id:
+                            await self.close_session(user_id)
+                            closed_count += 1
+                except Exception as e:
+                    logger.error(f"Error processing key {key} during cleanup: {e}")
+            
+            if closed_count > 0:
+                logger.info(f"✅ Cleanup complete. Closed {closed_count} stale sessions.")
+        except Exception as e:
+            logger.error(f"❌ Failed to run stale session cleanup: {e}")
 
 # Singleton Instance
 support_service = SupportAgentService()

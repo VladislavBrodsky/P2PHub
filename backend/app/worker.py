@@ -43,4 +43,5 @@ TASKS_TO_IMPORT: List[str] = [
     "app.services.subscription_service",
     "app.services.referral_service",
     "app.services.analytics_service",
+    "app.services.support_service",
 ]
