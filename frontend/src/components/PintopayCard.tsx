@@ -163,34 +163,44 @@ export const PintopayCard = ({
 
                     {/* BACK SIDE */}
                     <div
-                        className={`absolute inset-0 backface-hidden overflow-hidden rounded-3xl shadow-2xl p-6 flex flex-col justify-center items-center text-center ${cardStyles[variant]} border border-white/20`}
+                        className={`absolute inset-0 backface-hidden overflow-hidden rounded-3xl shadow-2xl pt-16 px-6 pb-6 flex flex-col justify-center items-center text-center ${cardStyles[variant]} border border-white/20`}
                         style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
                     >
                         {/* Global Grain Texture - Inherited */}
                         <div className="absolute inset-0 z-0 opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
-                        {/* Dark Overlay for Readability - slightly heavier for text contrast */}
-                        <div className="absolute inset-0 z-0 bg-black/40 mix-blend-multiply" />
+                        {/* Dark Overlay for Readability - Only for non-platinum to keep platinum bright */}
+                        {variant !== 'platinum' && (
+                            <div className="absolute inset-0 z-0 bg-black/40 mix-blend-multiply" />
+                        )}
 
                         {variant === 'platinum' && (
                             <div className="absolute inset-0 z-0 bg-linear-to-tr from-transparent via-white/20 to-transparent opacity-40" />
                         )}
 
                         <div className="relative z-10 w-full h-full flex flex-col justify-center">
-                            <h3 className={`text-lg font-black uppercase tracking-tight mb-3 ${variant === 'platinum' ? 'text-slate-900' : 'text-white'}`}>
-                                {t(`cards.${variant}.back_title`)}
-                            </h3>
-                            <p className={`text-xs font-medium leading-relaxed ${variant === 'platinum' ? 'text-slate-800' : 'text-white/90'}`}>
+                            {variant !== 'platinum' && (
+                                <h3 className={`text-lg font-black uppercase tracking-tight mb-3 text-white`}>
+                                    {t(`cards.${variant}.back_title`)}
+                                </h3>
+                            )}
+                            <p className={`text-xs font-medium leading-relaxed ${variant === 'platinum' ? 'text-slate-900 font-semibold' : 'text-white/90'}`}>
                                 {t(`cards.${variant}.back_desc`)}
                             </p>
                         </div>
 
                         {/* Magnetic Strip Visual */}
-                        <div className="absolute top-6 left-0 right-0 h-10 bg-black/80 z-1" />
+                        <div className={`absolute top-6 left-0 right-0 h-10 z-20 flex items-center justify-center ${variant === 'platinum' ? 'bg-black' : 'bg-black/80'}`}>
+                            {variant === 'platinum' && (
+                                <span className="text-white font-black tracking-widest uppercase text-sm drop-shadow-md">
+                                    {t(`cards.${variant}.back_title`)}
+                                </span>
+                            )}
+                        </div>
 
                         {/* CVV/Security Code Visual */}
                         <div className="absolute bottom-6 left-6 right-6 flex justify-between items-center z-10">
-                            <div className="h-6 w-10 bg-white/20 rounded-sm border border-white/10" />
+                            <div className={`h-6 w-10 rounded-sm border ${variant === 'platinum' ? 'bg-slate-200 border-slate-300' : 'bg-white/20 border-white/10'}`} />
                             <span className={`text-[10px] font-mono tracking-widest opacity-80 ${variant === 'platinum' ? 'text-slate-900' : 'text-white'}`}>000 / CVV</span>
                         </div>
                     </div>

@@ -9,6 +9,8 @@ from typing import Dict, List, Optional, Any
 
 from google import genai as google_genai
 from google.genai import types as genai_types
+from google.oauth2.service_account import Credentials
+import gspread
 from openai import AsyncOpenAI
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -79,6 +81,23 @@ class ViralMarketingStudio:
         else:
             logger.warning("⚠️ ViralMarketingStudio: Google API Key missing.")
 
+        # 3. Google Sheets for Logging
+        self.gs_client = None
+        self._init_google_sheets_client()
+
+    def _init_google_sheets_client(self):
+        """Initializes Google Sheets client for audit logging."""
+        creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
+        if creds_json:
+            try:
+                creds_dict = json.loads(creds_json)
+                scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
+                credentials = Credentials.from_service_account_info(creds_dict, scopes=scopes)
+                self.gs_client = gspread.authorize(credentials)
+                logger.info("✅ ViralMarketingStudio: Google Sheets logging initialized.")
+            except Exception as e:
+                logger.error(f"❌ ViralMarketingStudio: Failed to init Google Sheets: {e}")
+
     def get_capabilities(self) -> Dict[str, bool]:
         """
         Returns the operational status of the studio's AI dependencies.
@@ -136,6 +155,9 @@ class ViralMarketingStudio:
         The 'image_description' should be a detailed prompt for an image generator following these rules: {self.IMAGE_RULES}
         """
 
+        generation_start = datetime.utcnow()
+        tokens_openai = 0
+
         try:
             response = await self.openai_client.chat.completions.create(
                 model="gpt-4o",
@@ -146,6 +168,9 @@ class ViralMarketingStudio:
                 response_format={"type": "json_object"}
             )
             
+            if response.usage:
+                tokens_openai = response.usage.total_tokens
+
             content = json.loads(response.choices[0].message.content)
             image_prompt = content.get("image_description") or content.get("title") or f"Cinematic shot for {post_type}"
             
@@ -225,14 +250,39 @@ class ViralMarketingStudio:
                     # Log error but DO NOT crash the request. Return text only.
                     logger.error(f"❌ Imagen generation failed (graceful fallback): {img_err}")
 
-            return {
+            # 3. Log to Google Sheets
+            generation_end = datetime.utcnow()
+            duration = (generation_end - generation_start).total_seconds()
+            
+            # Prepare result
+            result = {
                 "text": str(content.get("body") or content.get("content") or "No content generated"),
                 "title": str(content.get("title") or f"{post_type} Strategy"),
                 "hashtags": hashtags,
                 "image_prompt": str(image_prompt),
                 "image_url": image_url,
-                "status": "success"
+                "status": "success",
+                "tokens_openai": tokens_openai,
+                "duration": duration
             }
+
+            # Fire and forget logging (async)
+            asyncio.create_task(self.log_generation_to_sheets(
+                partner=partner,
+                topic=post_type,
+                audience=target_audience,
+                language=language,
+                openai_prompt=user_prompt,
+                gemini_prompt=image_prompt,
+                duration=duration,
+                tokens_openai=tokens_openai,
+                tokens_gemini=0, # Fixed for Imagen gen
+                title=result["title"],
+                body=result["text"],
+                image_url=image_url
+            ))
+
+            return result
 
         except Exception as e:
             logger.error(f"Error in viral generation: {e}")
@@ -326,6 +376,57 @@ class ViralMarketingStudio:
         if not partner.linkedin_access_token:
             return {"error": "LinkedIn API not configured"}
         return {"status": "success", "platform": "linkedin", "msg": "Posted to LinkedIn (Simulation)"}
+
+    async def log_generation_to_sheets(
+        self,
+        partner: Partner,
+        topic: str,
+        audience: str,
+        language: str,
+        openai_prompt: str,
+        gemini_prompt: str,
+        duration: float,
+        tokens_openai: int,
+        tokens_gemini: int,
+        title: str,
+        body: str,
+        image_url: Optional[str]
+    ):
+        """Audit logging to the specified Viral Marketing tracker sheet."""
+        if not self.gs_client:
+            logger.warning("⚠️ Google Sheets client not initialized, skipping log.")
+            return
+
+        try:
+            sheet_id = "1JCxW4ANBthKy3Qeu9RBE3Ds3fFpX8993Q_6JPdmg-_k"
+            gid = "633034160"
+            
+            spreadsheet = self.gs_client.open_by_key(sheet_id)
+            sheet = spreadsheet.get_worksheet_by_id(int(gid))
+            
+            if sheet:
+                # Row format:
+                # User | Topic | Audience | Language | Time | Status | OA Prompt | Gem Prompt | Duration | OA Tokens | Gem Tokens | Title | Body | Image URL
+                row = [
+                    f"@{partner.username or partner.id}",
+                    topic,
+                    audience,
+                    language,
+                    datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+                    "created",
+                    openai_prompt,
+                    gemini_prompt,
+                    f"{duration:.2f}s",
+                    tokens_openai,
+                    tokens_gemini,
+                    title,
+                    body,
+                    image_url or "None"
+                ]
+                sheet.append_row(row)
+                logger.info(f"✅ Viral generation logged to Google Sheets for @{partner.username}")
+        except Exception as e:
+            logger.error(f"❌ Failed to log viral generation to Google Sheets: {e}")
 
 # Singleton
 viral_studio = ViralMarketingStudio()
