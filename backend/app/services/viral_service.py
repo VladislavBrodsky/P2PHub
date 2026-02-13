@@ -235,7 +235,8 @@ Use FRESH, audience-specific language that feels authentic.
         post_type: str, 
         target_audience: str, 
         language: str,
-        referral_link: Optional[str] = None
+        referral_link: Optional[str] = None,
+        session: Optional[AsyncSession] = None
     ) -> Dict[str, Any]:
         """
         Generates text (OpenAI) and Image Suggestion/Prompt (Gemini).
@@ -254,7 +255,7 @@ Use FRESH, audience-specific language that feels authentic.
         audience_intel = AudienceProfile.PROFILES.get(target_audience, {})
         category_strategy = ContentCategory.STRATEGIES.get(post_type, {})
         language_dna = NativeLanguageOptimization.LANGUAGE_DNA.get(language, {})
-        best_practices = KnowledgeInsights.get_best_practices()
+        best_practices = await KnowledgeInsights.get_best_practices(session)
         
         # Build audience-specific psychological context
         psycho_context = ""

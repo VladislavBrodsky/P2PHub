@@ -497,11 +497,73 @@ class ViralFormulas:
     }
 
 
+from app.models.knowledge_base_item import KnowledgeBaseItem
+from sqlmodel.ext.asyncio.session import AsyncSession
+from sqlmodel import select
+
 class KnowledgeInsights:
     """Self-learning system for continuous improvement."""
     
+    _CACHE = {}
+    
     @staticmethod
-    def get_best_practices():
+    async def get_best_practices(session: AsyncSession = None):
+        """
+        Retrieves best practices from DB if available, falling back to static rules.
+        """
+        if session:
+            try:
+                # fetch dynamic rules
+                result = await session.exec(select(KnowledgeBaseItem).where(KnowledgeBaseItem.confidence_score > 0.7))
+                items = result.all()
+                
+                # If we have items, merge them into cache or return them
+                if items:
+                    dynamic_rules = [item.value for item in items if item.category == "universal_rules"]
+                    if dynamic_rules:
+                        # Override or extend static rules
+                        return {
+                            "universal_rules": dynamic_rules,
+                            # Keep other static parts for now unless we structure DB better
+                            "psychological_triggers": KnowledgeInsights._get_static_triggers(),
+                            "formatting_precision": KnowledgeInsights._get_static_formatting()
+                        }
+            except Exception as e:
+                # Log error but fallback gracefully
+                print(f"⚠️ Failed to fetch KnowledgeBaseItems: {e}")
+        
+        return KnowledgeInsights._get_static_defaults()
+
+    @staticmethod
+    def _get_static_triggers():
+        return {
+            "curiosity_gap": "Tease information without full reveal in hook",
+            "social_proof": "Mention specific numbers of users/success stories",
+            "authority": "Reference data, studies, or expert consensus",
+            "reciprocity": "Provide value upfront before asking for action",
+            "consistency": "Appeal to audience's self-image and values",
+            "liking": "Mirror audience's language and pain points",
+            "scarcity": "Time limits or quantity limits (be honest)",
+            "urgency": "Tie to real deadlines or market conditions"
+        }
+
+    @staticmethod
+    def _get_static_formatting():
+        return {
+            "bold_usage": "Reserve for: Stats, key benefits, WARNING/NEW, power words, CTA text",
+            "italic_usage": "Use for: Personal asides, subtle urgency, disclaimers, quotes",
+            "hyperlink_rules": [
+                "ALWAYS use markdown format: [Anchor Text](https://url)",
+                "Anchor text should be action-oriented: 'Get Started', 'Unlock Now', 'Join Free'",
+                "Place primary CTA hyperlink in final paragraph",
+                "Can include secondary hyperlink mid-body if educational",
+                "NEVER use bare URLs - always wrap in markdown"
+            ],
+            "structure": "Hook (1-2 lines) → Body (3-5 short paragraphs) → CTA (final paragraph with hyperlink)"
+        }
+
+    @staticmethod
+    def _get_static_defaults():
         return {
             "universal_rules": [
                 "Always include ONE clear hyperlink CTA in markdown format: [Text](URL)",
@@ -515,28 +577,6 @@ class KnowledgeInsights:
                 "Include specific numbers (not 'many' or 'some') for credibility",
                 "Use active voice 90% of the time for urgency"
             ],
-            
-            "psychological_triggers": {
-                "curiosity_gap": "Tease information without full reveal in hook",
-                "social_proof": "Mention specific numbers of users/success stories",
-                "authority": "Reference data, studies, or expert consensus",
-                "reciprocity": "Provide value upfront before asking for action",
-                "consistency": "Appeal to audience's self-image and values",
-                "liking": "Mirror audience's language and pain points",
-                "scarcity": "Time limits or quantity limits (be honest)",
-                "urgency": "Tie to real deadlines or market conditions"
-            },
-            
-            "formatting_precision": {
-                "bold_usage": "Reserve for: Stats, key benefits, WARNING/NEW, power words, CTA text",
-                "italic_usage": "Use for: Personal asides, subtle urgency, disclaimers, quotes",
-                "hyperlink_rules": [
-                    "ALWAYS use markdown format: [Anchor Text](https://url)",
-                    "Anchor text should be action-oriented: 'Get Started', 'Unlock Now', 'Join Free'",
-                    "Place primary CTA hyperlink in final paragraph",
-                    "Can include secondary hyperlink mid-body if educational",
-                    "NEVER use bare URLs - always wrap in markdown"
-                ],
-                "structure": "Hook (1-2 lines) → Body (3-5 short paragraphs) → CTA (final paragraph with hyperlink)"
-            }
+            "psychological_triggers": KnowledgeInsights._get_static_triggers(),
+            "formatting_precision": KnowledgeInsights._get_static_formatting()
         }
