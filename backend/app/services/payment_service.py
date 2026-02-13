@@ -173,12 +173,34 @@ class PaymentService:
                 tx_hash=tx_hash,
                 transaction_id=active_session.id
             )
+            
+            # #comment: Service-level audit log (covers Bot & API)
+            from app.services.audit_service import audit_service
+            await audit_service.log_event(
+                session=session,
+                entity_type="transaction",
+                entity_id=tx_hash,
+                action="ton_verification_success",
+                actor_id=str(partner.telegram_id),
+                details={"amount": active_session.amount}
+            )
+            
             return True
 
         # If it failed but session is still valid, we keep it pending.
         # If we wanted to cancel it explicitly on failure, we could,
         # but the 10-min check handles it.
-
+        
+        # #comment: Audit failure
+        from app.services.audit_service import audit_service
+        await audit_service.log_event(
+            session=session,
+            entity_type="transaction",
+            entity_id=tx_hash,
+            action="ton_verification_failed",
+            actor_id=str(partner.telegram_id),
+            details={"error": "Invalid Hash or Amount mismatch"}
+        )
 
         return False
 
