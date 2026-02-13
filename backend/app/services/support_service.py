@@ -136,10 +136,9 @@ class SupportAgentService:
 
     async def _search_knowledge_base(self, query: str) -> str:
         """
-        Searches built-in FAQ and Google Sheet KB.
-        For now, returns a curated combined context.
+        Searches built-in FAQ and Google Sheet KB using specific tab GIDs.
         """
-        # Hardcoded core Pintopay facts (as specified in Task)
+        # 1. Core Facts
         core_info = """
         - Pintopay Card: USD-denominated Mastercard (Virtual or Physical).
         - Setup: Instant issuance via the app. Must select card type and pay fee.
@@ -149,25 +148,56 @@ class SupportAgentService:
         - Tone: Pintopay is elite, fast, and borderless.
         """
         
-        # Dynamic search from Google Sheet if available
+        # 2. Dynamic TOV & Rules from Google Sheet
+        tov_info = ""
+        # 3. Knowledge Base from Google Sheet
         gs_info = ""
+
         if self.gs_client:
             try:
-                kb_sheet_id = os.getenv("GOOGLE_KNOWLEDGE_BASE_SHEET_ID")
-                if kb_sheet_id:
-                    # Simulation of search: would typically fetch all and filter or use a search API
-                    sheet = self.gs_client.open_by_key(kb_sheet_id).sheet1
-                    # Simple first-page fetch for context
-                    records = sheet.get_all_records()
-                    # Filter records by keyword or just provide a summary
-                    gs_info = "\n".join([f"{r['Question']}: {r['Answer']}" for r in records[:5]])
+                sheet_id = os.getenv("SUPPORT_SPREADSHEET_ID")
+                if sheet_id:
+                    spreadsheet = self.gs_client.open_by_key(sheet_id)
+                    
+                    # Fetch TOV & Rules (GID from env)
+                    try:
+                        tov_gid = os.getenv("TOV_GID", "0")
+                        tov_sheet = spreadsheet.get_worksheet_by_id(int(tov_gid))
+                        if tov_sheet:
+                            tov_records = tov_sheet.get_all_records()
+                            tov_info = "\n".join([f"{r.get('Rule', '')}: {r.get('Value', '')}" for r in tov_records])
+                    except Exception as e:
+                        logger.warning(f"Could not load TOV tab: {e}")
+
+                    # Fetch Knowledge Base (GID from env)
+                    try:
+                        kb_gid = os.getenv("KB_GID", "0")
+                        kb_sheet = spreadsheet.get_worksheet_by_id(int(kb_gid))
+                        if kb_sheet:
+                            records = kb_sheet.get_all_records()
+                            # Simple search: intersection of keywords
+                            query_words = set(query.lower().split())
+                            matches = []
+                            for r in records:
+                                q_text = str(r.get('Question', '')).lower()
+                                if any(word in q_text for word in query_words):
+                                    matches.append(f"Q: {r.get('Question')}\nA: {r.get('Answer')}")
+                            
+                            if matches:
+                                gs_info = "\n\n".join(matches[:5])
+                            else:
+                                # Fallback: first 3 entries
+                                gs_info = "\n\n".join([f"Q: {r.get('Question')}\nA: {r.get('Answer')}" for r in records[:3]])
+                    except Exception as e:
+                        logger.warning(f"Could not load KB tab: {e}")
+
             except Exception as e:
-                logger.error(f"⚠️ KB Sheet Search Error: {e}")
+                logger.error(f"⚠️ Spreadsheet Search Error: {e}")
         
-        return f"{core_info}\n\nAdditional KB Info:\n{gs_info}"
+        return f"CORE RULES:\n{core_info}\n\nTONE OF VOICE & SPECIFIC RULES:\n{tov_info}\n\nKNOWLEDGE BASE MATCHES:\n{gs_info}"
 
     async def save_conversation_to_sheets(self, user_id: str):
-        """Saves the entire session history to a structured Google Sheet."""
+        """Saves the entire session history to the specific History tab (GID)."""
         session = await self.get_session(user_id)
         if not session.get("history"):
             return
@@ -176,25 +206,28 @@ class SupportAgentService:
         
         if self.gs_client:
             try:
-                history_sheet_id = os.getenv("SUPPORT_HISTORY_SHEET_ID")
-                if history_sheet_id:
-                    sheet = self.gs_client.open_by_key(history_sheet_id).sheet1
+                sheet_id = os.getenv("SUPPORT_SPREADSHEET_ID")
+                history_gid = os.getenv("HISTORY_GID")
+                
+                if sheet_id and history_gid:
+                    spreadsheet = self.gs_client.open_by_key(sheet_id)
+                    sheet = spreadsheet.get_worksheet_by_id(int(history_gid))
                     
-                    # Columns: SessionID, UserID, Timestamp, Role, Message, Category
-                    rows = []
-                    category = session.get("category", "General")
-                    for entry in session["history"]:
-                        rows.append([
-                            chat_session_id,
-                            user_id,
-                            entry.get("timestamp", datetime.utcnow().isoformat()),
-                            entry["role"],
-                            entry["content"],
-                            category
-                        ])
-                    
-                    sheet.append_rows(rows)
-                    logger.info(f"✅ Saved support history for {user_id} to Google Sheets.")
+                    if sheet:
+                        rows = []
+                        category = session.get("category", "General")
+                        for entry in session["history"]:
+                            rows.append([
+                                chat_session_id,
+                                user_id,
+                                entry.get("timestamp", datetime.utcnow().isoformat()),
+                                entry["role"],
+                                entry["content"],
+                                category
+                            ])
+                        
+                        sheet.append_rows(rows)
+                        logger.info(f"✅ Saved support history for {user_id} to Google Sheets.")
             except Exception as e:
                 logger.error(f"❌ Failed to save history to Google Sheets: {e}")
 

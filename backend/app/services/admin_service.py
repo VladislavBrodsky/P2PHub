@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
-from typing import Any, Dict
+from typing import Any, Dict, List
 
-from sqlmodel import func, select
+from sqlmodel import func, select, text
 
 from app.models.partner import Earning, Partner, PartnerTask, get_session
 from app.models.transaction import PartnerTransaction
