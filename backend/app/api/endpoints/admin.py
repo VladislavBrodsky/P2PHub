@@ -151,3 +151,13 @@ async def recalculate_stats(
     Triggers a global recalculation of referral counts and depths.
     """
     return await admin_service.recalculate_all_referral_counts()
+
+@router.get("/health")
+async def get_system_health(
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Returns high-level system health metrics.
+    """
+    from app.services.maintenance_service import check_database_health
+    return await check_database_health()

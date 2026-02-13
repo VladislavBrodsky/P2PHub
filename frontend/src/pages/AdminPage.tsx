@@ -83,18 +83,21 @@ export const AdminPage = () => {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [approvingIds, setApprovingIds] = useState<Set<number>>(new Set());
+    const [health, setHealth] = useState<{ status: string; latency_ms: number; orphaned_count: number; timestamp: string } | null>(null);
     const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'maintenance'>('kpis');
 
     const fetchData = async (silent = false) => {
         if (!silent) setIsLoading(true);
         setError(null);
         try {
-            const [statsRes, pendingRes] = await Promise.all([
+            const [statsRes, pendingRes, healthRes] = await Promise.all([
                 apiClient.get('/api/admin/stats'),
-                apiClient.get('/api/admin/pending-payments')
+                apiClient.get('/api/admin/pending-payments'),
+                apiClient.get('/api/admin/health')
             ]);
             setStats(statsRes.data);
             setTransactions(pendingRes.data);
+            setHealth(healthRes.data);
         } catch (err: any) {
             console.error('[Admin] Fetch failed:', err);
             setError(err.response?.data?.detail || 'Failed to load admin data');
@@ -625,6 +628,22 @@ export const AdminPage = () => {
                                 <p className="text-slate-400 text-xs">Critical tools for database consistency and performance optimization.</p>
                             </div>
 
+                            {/* System Health Cards */}
+                            <div className="grid grid-cols-2 gap-3 relative z-10">
+                                <div className="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-2">
+                                    <div className="text-[9px] font-black text-slate-500 uppercase">DB Latency</div>
+                                    <div className={`text-lg font-black ${health && health.latency_ms > 200 ? 'text-amber-500' : 'text-emerald-500'}`}>
+                                        {health ? `${health.latency_ms}ms` : '--'}
+                                    </div>
+                                </div>
+                                <div className="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-2">
+                                    <div className="text-[9px] font-black text-slate-500 uppercase">Orphaned Nodes</div>
+                                    <div className={`text-lg font-black ${health && health.orphaned_count > 0 ? 'text-red-500' : 'text-emerald-500'}`}>
+                                        {health ? health.orphaned_count : '--'}
+                                    </div>
+                                </div>
+                            </div>
+
                             <div className="space-y-4 pt-4 border-t border-white/5 relative z-10">
                                 <div className="p-4 rounded-2xl bg-white/5 space-y-3">
                                     <div className="flex items-center gap-2 text-amber-500 font-bold text-[10px] uppercase tracking-widest">
@@ -633,7 +652,7 @@ export const AdminPage = () => {
                                     </div>
                                     <p className="text-[10px] text-slate-500 font-medium">
                                         Recalculates all referral counts, 9-level lineage paths, and caches depth for every partner.
-                                        Use this if @uslincoln or other users report "wrong stats" or network discrepancies.
+                                        Optimized batch execution.
                                     </p>
                                     <button
                                         onClick={handleRecalculate}
