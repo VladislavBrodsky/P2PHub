@@ -326,6 +326,27 @@ class ViralMarketingStudio:
             logger.error(f"Headline fix failed: {e}")
             return headline # Fallback to original
 
+    async def generate_bio(self, bio: str) -> str:
+        """
+        Generates a viral social media bio. Cost: 2 Tokens.
+        """
+        if not self.openai_client:
+            return "Error: AI Service Unavailable"
+            
+        try:
+            response = await self.openai_client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are a branding expert. Rewrite the user's bio to be elite, high-converting, and aligned with the Digital Nomad/Crypto Wealth niche. Use emojis sparingly but effectively. Return ONLY the new bio."},
+                    {"role": "user", "content": f"Optimize this bio: {bio}"}
+                ],
+                max_tokens=150
+            )
+            return response.choices[0].message.content.strip()
+        except Exception as e:
+            logger.error(f"Bio generation failed: {e}")
+            return bio
+
     async def fetch_trends(self) -> List[dict]:
         """
         Fetches 3 trending topics. Cost: 3 Tokens.

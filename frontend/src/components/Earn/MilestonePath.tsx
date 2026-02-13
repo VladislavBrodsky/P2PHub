@@ -116,7 +116,7 @@ export const MilestonePath = () => {
 
                             <div className="text-center space-y-0.5 relative z-10 w-full">
                                 <div className={`text-[8px] font-black uppercase tracking-wider ${isUnlocked ? 'text-blue-500' : 'text-slate-400 dark:text-slate-600'}`}>
-                                    {isLocked ? `Lvl ${item.level}` : `LVL ${item.level}`}
+                                    {isLocked ? `${t('common.lvl')} ${item.level}` : `${t('common.lvl')} ${item.level}`}
                                 </div>
                                 <h5 className={`text-[9px] font-bold leading-tight line-clamp-1 w-full px-0.5 ${isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-600'}`}>
                                     {isLocked ? '???' : t(item.reward, { level: item.level })}
@@ -165,8 +165,8 @@ export const MilestonePath = () => {
                         )}
                     </div>
 
-                    {chapter.achs.length > 0 && renderGrid(chapter.achs, 'Exclusive Achievements', 'bg-amber-400')}
-                    {chapter.mils.length > 0 && renderGrid(chapter.mils, 'Global Milestones', 'bg-brand-blue')}
+                    {chapter.achs.length > 0 && renderGrid(chapter.achs, t('achievements_path.exclusive_achievements'), 'bg-amber-400')}
+                    {chapter.mils.length > 0 && renderGrid(chapter.mils, t('achievements_path.global_milestones'), 'bg-brand-blue')}
 
                     {/* Progress Connecting Line between Chapters */}
                     {idx < visibleChapters - 1 && (
@@ -238,7 +238,7 @@ export const MilestonePath = () => {
                                             ))}
                                         </div>
                                         <span className="text-[9px] font-black text-blue-200/50 uppercase tracking-widest">
-                                            Elite 0.1% Recognition
+                                            {t('achievements_path.elite_recognition')}
                                         </span>
                                     </div>
                                 </div>
@@ -263,10 +263,10 @@ export const MilestonePath = () => {
                             </div>
                             <div className="flex flex-col items-center text-center">
                                 <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">
-                                    Reveal Part {visibleChapters + 1}
+                                    {t('achievements_path.reveal_part', { index: visibleChapters + 1 })}
                                 </span>
                                 <span className="text-[7px] font-bold text-slate-500 uppercase tracking-widest">
-                                    Unlock next Level Horizons
+                                    {t('achievements_path.unlock_horizons')}
                                 </span>
                             </div>
                         </button>
@@ -287,7 +287,7 @@ export const MilestonePath = () => {
                             </div>
                             <div className="flex flex-col items-center text-center">
                                 <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">
-                                    Show Less
+                                    {t('achievements_path.show_less')}
                                 </span>
                             </div>
                         </button>
@@ -348,7 +348,7 @@ export const MilestonePath = () => {
                                                     </div>
                                                 )}
                                                 <div className="flex flex-col min-w-0 flex-1">
-                                                    <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">LEVEL {selectedItem?.level || 0} MISSION</span>
+                                                    <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">{t('achievements_path.mission', { level: selectedItem?.level || 0 })}</span>
                                                     <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight wrap-break-word">
                                                         {currentLevel >= (selectedItem?.level || 0) ? t(selectedItem?.reward || '', { level: selectedItem?.level }) : '???'}
                                                     </h3>
@@ -361,10 +361,10 @@ export const MilestonePath = () => {
                                             <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 blur-2xl -mr-8 -mt-8" />
                                             <div className="flex items-center gap-2 relative z-10">
                                                 <Info className="w-4 h-4 text-blue-500 shrink-0" />
-                                                <span className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">HOW TO UNLOCK</span>
+                                                <span className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">{t('achievements_path.how_to_unlock')}</span>
                                             </div>
                                             <p className="text-sm font-bold text-slate-700 dark:text-slate-300 leading-relaxed relative z-10">
-                                                {selectedItem?.instruction || `Achieve Level ${selectedItem?.level || 0} to unlock this unique recognition and its associated rewards.`}
+                                                {selectedItem?.instruction || t('achievements_path.unlock_locked', { level: selectedItem?.level || 0 })}
                                             </p>
                                         </div>
 
@@ -373,7 +373,7 @@ export const MilestonePath = () => {
                                             <div className="space-y-4">
                                                 <div className="flex items-center gap-3 px-2">
                                                     <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shrink-0" />
-                                                    <p className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">PRO TIP: VIRAL GROWTH</p>
+                                                    <p className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">{t('achievements_path.pro_tip')}</p>
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-3">
                                                     <button
@@ -388,7 +388,7 @@ export const MilestonePath = () => {
                                                         className="h-16 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all shadow-xl shadow-blue-500/20"
                                                     >
                                                         <Share2 className="w-5 h-5 shrink-0" />
-                                                        <span className="truncate">SHARE LINK</span>
+                                                        <span className="truncate">{t('achievements_path.share_link')}</span>
                                                     </button>
                                                     <button
                                                         onClick={() => {
@@ -399,7 +399,7 @@ export const MilestonePath = () => {
                                                         className="h-16 rounded-2xl bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all"
                                                     >
                                                         <UserPlus className="w-5 h-5 shrink-0" />
-                                                        <span className="truncate">INVITE</span>
+                                                        <span className="truncate">{t('achievements_path.invite')}</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -410,12 +410,12 @@ export const MilestonePath = () => {
                                             {selectedItem && currentLevel >= selectedItem.level ? (
                                                 <div className="px-6 py-3 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2 shadow-inner">
                                                     <Sparkles className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                                                    <span className="whitespace-nowrap">ACHIEVEMENT UNLOCKED</span>
+                                                    <span className="whitespace-nowrap">{t('achievements_path.unlocked_badge')}</span>
                                                 </div>
                                             ) : (
                                                 <div className="px-6 py-3 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
                                                     <Lock className="w-3.5 h-3.5 shrink-0" />
-                                                    <span className="whitespace-nowrap">STILL LOCKED</span>
+                                                    <span className="whitespace-nowrap">{t('achievements_path.locked_badge')}</span>
                                                 </div>
                                             )}
                                         </div>

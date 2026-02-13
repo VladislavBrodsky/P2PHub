@@ -136,6 +136,9 @@ async def publish_content(
 class HeadlineRequest(BaseModel):
     headline: str
 
+class BioRequest(BaseModel):
+    bio: str
+
 @router.post("/tools/headline")
 async def fix_headline_api(
     payload: HeadlineRequest,
@@ -174,3 +177,24 @@ async def get_trends_api(
     
     trends = await viral_studio.fetch_trends()
     return {"trends": trends, "tokens_remaining": partner.pro_tokens}
+
+@router.post("/tools/bio")
+async def generate_bio_api(
+    payload: BioRequest,
+    partner: Partner = Depends(get_current_partner),
+    session: AsyncSession = Depends(get_session)
+):
+    if not partner.is_pro:
+        raise HTTPException(status_code=403, detail="PRO membership required")
+        
+    # Bio generation costs 2 tokens
+    has_tokens = await viral_studio.check_tokens_and_reset(partner, session, min_tokens=2)
+    if not has_tokens:
+        raise HTTPException(status_code=402, detail="Insufficient tokens (2 required)")
+    
+    partner.pro_tokens -= 2
+    session.add(partner)
+    await session.commit()
+    
+    new_bio = await viral_studio.generate_bio(payload.bio)
+    return {"bio": new_bio, "tokens_remaining": partner.pro_tokens}

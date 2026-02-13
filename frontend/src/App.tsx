@@ -23,6 +23,7 @@ const SupportChat = lazy(() => import('./components/Support/SupportChat').then(m
 import { miniApp, backButton, viewport, swipeBehavior } from '@telegram-apps/sdk-react';
 import { isTMA } from './utils/tma';
 import { useUser } from './context/UserContext';
+import { useTranslation } from 'react-i18next';
 // #comment: Removed unused apiClient, Skeleton and PageSkeleton imports to clean up the dependency list
 import { NotificationOverlay } from './components/ui/NotificationOverlay';
 import { useRealtimeAlerts } from './hooks/useRealtimeAlerts';
@@ -39,6 +40,7 @@ import { UIProvider } from './context/UIContext';
 import { useUI } from './context/UIContext';
 
 function AppContent({ onReady }: { onReady: () => void }) {
+    const { t } = useTranslation();
     const { config } = useConfig();
     const { isSupportOpen, setSupportOpen } = useUI();
     const [activeTab, setActiveTab] = useState('home');
@@ -51,7 +53,7 @@ function AppContent({ onReady }: { onReady: () => void }) {
     // Signal completion when both user and config are ready
     useEffect(() => {
         if (!isUserLoading && config) {
-            updateProgress(95, 'Finalizing UI...');
+            updateProgress(95, t('system.loading.finalizing'));
             // Small delay to ensure smooth transition
             const timer = setTimeout(onReady, 500);
             return () => clearTimeout(timer);
@@ -126,7 +128,7 @@ function AppContent({ onReady }: { onReady: () => void }) {
                 }
 
                 console.log('[DEBUG] initTMA: Complete');
-                updateProgress(98, 'Interface Ready');
+                updateProgress(98, t('system.loading.ready'));
             } catch (e) {
                 console.log('Not in TMA environment or SDK error:', e);
             }
@@ -229,9 +231,9 @@ function AppContent({ onReady }: { onReady: () => void }) {
                 {['coming_soon'].includes(activeTab) && (
                     <div className="flex flex-col items-center justify-center text-center px-10 h-full">
                         <div className="text-4xl mb-4">🚀</div>
-                        <h2 className="text-2xl font-black mb-2 uppercase">Coming Soon</h2>
+                        <h2 className="text-2xl font-black mb-2 uppercase">{t('system.coming_soon.title')}</h2>
                         <p className="text-(--color-text-secondary) font-medium">
-                            We're building something amazing for our partners. Stay tuned!
+                            {t('system.coming_soon.desc')}
                         </p>
                     </div>
                 )}
@@ -247,6 +249,7 @@ function AppContent({ onReady }: { onReady: () => void }) {
 }
 
 function App() {
+    const { t } = useTranslation();
     const { isLoading: isConfigLoading } = useConfig();
     const { progress, status, isComplete, complete, updateProgress } = useStartupProgress();
     const [showOnboarding, setShowOnboarding] = useState(false);
@@ -265,7 +268,7 @@ function App() {
     // provides smooth visual feedback to the user.
     useEffect(() => {
         if (!isConfigLoading) {
-            updateProgress(50, 'Config Loaded');
+            updateProgress(50, t('system.loading.config_loaded'));
 
             // #comment: Aggressive Prefetch Strategy
             // Immediately start loading all core route chunks to ensure instant navigation.

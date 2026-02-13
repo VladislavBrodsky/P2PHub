@@ -75,10 +75,10 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
                                 transition={{ delay: 0.2 }}
                             >
                                 <h2 className="text-[12px] font-black tracking-[0.4em] text-yellow-600 dark:text-yellow-500 uppercase">
-                                    {t('referral.levelup.title', { defaultValue: 'LEVEL UP!' })}
+                                    {t('referral.levelup.title')}
                                 </h2>
                                 <h3 className="text-5xl font-black tracking-tighter text-slate-900 dark:text-white mt-2">
-                                    Rank <span className="text-yellow-500">{level}</span>
+                                    {t('referral.levelup.rank')} <span className="text-yellow-500">{level}</span>
                                 </h3>
                             </motion.div>
 
@@ -88,7 +88,7 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
                                 transition={{ delay: 0.4 }}
                                 className="text-slate-600 dark:text-slate-400 font-bold leading-relaxed max-w-[200px] mx-auto"
                             >
-                                {t('referral.levelup.reached', { level: level, defaultValue: `You've reached Level ${level}` })}
+                                {t('referral.levelup.reached', { level: level })}
                             </motion.p>
                         </div>
 
@@ -100,7 +100,7 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
                             onClick={onClose}
                             className="w-full py-5 rounded-2xl bg-yellow-500 active:scale-95 transition-transform shadow-[0_10px_20px_-5px_rgba(234,179,8,0.4)]"
                         >
-                            <span className="text-lg font-black text-white tracking-tight">AWESOME!</span>
+                            <span className="text-lg font-black text-white tracking-tight">{t('referral.levelup.awesome')}</span>
                         </motion.button>
 
                         {/* Close button (top right) */}

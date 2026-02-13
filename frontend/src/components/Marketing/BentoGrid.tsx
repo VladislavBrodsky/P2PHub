@@ -186,7 +186,7 @@ export const BentoGrid = () => {
 
                                         <div className="pt-2 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
                                             <span className="text-[9px] font-black text-blue-500 flex items-center gap-1">
-                                                TAP TO FLIP <RotateCcw size={10} />
+                                                {t('common.tap_to_flip')} <RotateCcw size={10} />
                                             </span>
                                         </div>
                                     </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Crown, CheckCircle2, Wallet, CreditCard, ChevronRight, Loader2, Sparkles, Send } from 'lucide-react';
+import { useTranslation, Trans } from 'react-i18next';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
 import { useUser } from '../context/UserContext';
 import { apiClient } from '../api/client';
@@ -8,6 +9,7 @@ import { useHaptic } from '../hooks/useHaptic';
 import { useConfig } from '../context/ConfigContext';
 
 export default function SubscriptionPage() {
+    const { t } = useTranslation();
     const { user, refreshUser } = useUser();
     const { config: globalConfig } = useConfig();
     const { selection, notification } = useHaptic();
@@ -37,7 +39,7 @@ export default function SubscriptionPage() {
                 clearInterval(interval);
                 setPaymentMethod(null);
                 setSessionData(null);
-                alert("Session expired. Please restart the process.");
+                alert(t('subscription.alerts.expired'));
             }
         }, 1000);
 
@@ -99,7 +101,7 @@ export default function SubscriptionPage() {
         } catch (error: any) {
             console.error('Payment failed:', error);
             if (error.response?.status === 400) {
-                alert("Payment session expired or failed. Please try again.");
+                alert(t('subscription.alerts.failed'));
             }
             setStatus('idle');
             notification('error');
@@ -156,7 +158,9 @@ export default function SubscriptionPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-4xl font-black mb-4 tracking-tighter text-(--color-text-primary)"
                 >
-                    WELCOME TO THE <span className="text-linear-to-r from-amber-400 to-orange-600 bg-clip-text text-transparent">ELITE</span>
+                    <Trans i18nKey="subscription.pro_active.title">
+                        WELCOME TO THE <span className="text-linear-to-r from-amber-400 to-orange-600 bg-clip-text text-transparent">ELITE</span>
+                    </Trans>
                 </motion.h1>
 
                 <motion.p
@@ -165,7 +169,7 @@ export default function SubscriptionPage() {
                     transition={{ delay: 0.2 }}
                     className="text-(--color-text-secondary) font-medium text-sm leading-relaxed max-w-[280px] mb-10"
                 >
-                    You've unlocked the full potential of Pintopay. Your journey to x10 profits has officially begun.
+                    {t('subscription.pro_active.desc')}
                 </motion.p>
 
                 <div className="w-full space-y-4 max-w-xs">
@@ -175,8 +179,8 @@ export default function SubscriptionPage() {
                                 <Sparkles size={20} className="text-amber-500" />
                             </div>
                             <div className="text-left">
-                                <p className="text-[10px] font-bold opacity-50 uppercase">Active Until</p>
-                                <p className="text-sm font-black">{user.pro_expires_at ? new Date(user.pro_expires_at).toLocaleDateString() : 'Lifetime Plan'}</p>
+                                <p className="text-[10px] font-bold opacity-50 uppercase">{t('subscription.pro_active.active_until')}</p>
+                                <p className="text-sm font-black">{user.pro_expires_at ? new Date(user.pro_expires_at).toLocaleDateString() : t('subscription.pro_active.lifetime')}</p>
                             </div>
                         </div>
                         <CheckCircle2 className="text-emerald-500" />
@@ -186,7 +190,7 @@ export default function SubscriptionPage() {
                         onClick={() => window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' }))}
                         className="w-full h-16 bg-linear-to-r from-indigo-500 to-purple-700 rounded-2xl font-black text-white shadow-lg active:scale-95 transition-all flex items-center justify-center gap-3"
                     >
-                        PRO Command Center
+                        {t('subscription.pro_active.command_center')}
                         <Sparkles size={20} />
                     </button>
 
@@ -194,7 +198,7 @@ export default function SubscriptionPage() {
                         onClick={() => window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'partner' }))}
                         className="w-full h-16 bg-white/5 border border-white/10 rounded-2xl font-black text-(--color-text-secondary) active:scale-95 transition-all flex items-center justify-center gap-3"
                     >
-                        Explore Your Empire
+                        {t('subscription.pro_active.explore_empire')}
                         <ChevronRight size={20} />
                     </button>
                 </div>
@@ -212,13 +216,15 @@ export default function SubscriptionPage() {
             >
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 mb-4">
                     <Sparkles size={12} className="text-amber-500" />
-                    <span className="text-[9px] font-black uppercase tracking-widest text-amber-600">Premium Membership</span>
+                    <span className="text-[9px] font-black uppercase tracking-widest text-amber-600">{t('subscription.upgrade.badge')}</span>
                 </div>
                 <h1 className="text-3xl font-black text-(--color-text-primary) mb-2 tracking-tight">
-                    Upgrade to <span className="text-linear-to-br from-amber-500 to-orange-600 bg-clip-text text-transparent">PRO</span>
+                    <Trans i18nKey="subscription.upgrade.title">
+                        Upgrade to <span className="text-linear-to-br from-amber-500 to-orange-600 bg-clip-text text-transparent">PRO</span>
+                    </Trans>
                 </h1>
                 <p className="text-(--color-text-secondary) font-medium text-xs leading-relaxed max-w-[260px] mx-auto">
-                    Unlock exclusive benefits, higher referral rewards, and premium features.
+                    {t('subscription.upgrade.desc')}
                 </p>
             </motion.div>
 
@@ -233,8 +239,8 @@ export default function SubscriptionPage() {
                 <div className="relative z-10">
                     <div className="flex justify-between items-center mb-6">
                         <div>
-                            <h2 className="text-lg font-bold opacity-80 mb-0.5">Lifetime PRO</h2>
-                            <p className="text-[10px] font-medium opacity-50 uppercase tracking-widest">One-time payment</p>
+                            <h2 className="text-lg font-bold opacity-80 mb-0.5">{t('subscription.upgrade.lifetime_pro')}</h2>
+                            <p className="text-[10px] font-medium opacity-50 uppercase tracking-widest">{t('subscription.upgrade.one_time')}</p>
                         </div>
                         <div className="text-right">
                             <span className="text-3xl font-black">${proPrice}</span>
@@ -242,13 +248,7 @@ export default function SubscriptionPage() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-x-2 gap-y-2 mb-6 border-y border-white/5 py-4">
-                        {[
-                            '9-Level Affiliate',
-                            'X5 Fast XP',
-                            'Priority Pay',
-                            'VIP Support',
-                            'Custom Refs'
-                        ].map((benefit, i) => (
+                        {(t('subscription.upgrade.benefits', { returnObjects: true }) as string[]).map((benefit, i) => (
                             <div key={i} className="flex items-center gap-1.5 min-w-0">
                                 <CheckCircle2 size={12} className="text-amber-400 shrink-0" />
                                 <span className="text-[10px] font-bold opacity-90 truncate">{benefit}</span>
@@ -298,7 +298,7 @@ export default function SubscriptionPage() {
                                     onClick={() => { setPaymentMethod(null); setSessionData(null); }}
                                     className="text-xs font-bold opacity-50 hover:opacity-100 transition-opacity flex items-center gap-1"
                                 >
-                                    <ChevronRight size={14} className="rotate-180" /> Change Method
+                                    <ChevronRight size={14} className="rotate-180" /> {t('subscription.upgrade.change_method')}
                                 </button>
                                 {formattedTime && (
                                     <div className="px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full flex items-center gap-2">
@@ -319,7 +319,7 @@ export default function SubscriptionPage() {
                                         className="w-full h-14 bg-amber-500 rounded-2xl font-black flex items-center justify-center gap-3 active:scale-95 transition-transform disabled:opacity-50"
                                     >
                                         {isLoading ? <Loader2 className="animate-spin" /> : <Crown size={20} />}
-                                        {isLoading ? 'Processing...' : 'Complete Payment'}
+                                        {isLoading ? t('subscription.upgrade.processing') : t('subscription.upgrade.complete_payment')}
                                     </button>
                                 </div>
                             )}
@@ -327,19 +327,19 @@ export default function SubscriptionPage() {
                             {paymentMethod === 'CRYPTO' && (
                                 <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-4">
                                     <div>
-                                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">USDT TRC20 Address</p>
+                                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">{t('subscription.upgrade.usdt_address')}</p>
                                         <div className="flex items-center gap-2 p-3 bg-white/5 rounded-xl border border-white/5">
                                             <code className="text-xs font-mono break-all flex-1">{adminUsdt}</code>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">Transaction Hash (Optional)</p>
+                                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">{t('subscription.upgrade.tx_hash_label')}</p>
                                         <div className="flex gap-2">
                                             <input
                                                 value={manualHash}
                                                 onChange={(e) => setManualHash(e.target.value)}
-                                                placeholder="Paste TX hash (optional)"
+                                                placeholder={t('subscription.upgrade.tx_hash_placeholder')}
                                                 className="flex-1 min-w-0 bg-white/5 border border-white/10 rounded-xl px-3 md:px-4 text-xs focus:outline-none focus:border-amber-500"
                                             />
                                             <button
@@ -351,13 +351,15 @@ export default function SubscriptionPage() {
                                                     }`}
                                             >
                                                 {manualHash ? <Send size={16} /> : <CheckCircle2 size={16} />}
-                                                {manualHash ? "" : "I Paid"}
+                                                {manualHash ? "" : t('subscription.upgrade.i_paid')}
                                             </button>
                                         </div>
                                     </div>
                                     <p className="text-[10px] opacity-60 text-center italic leading-tight">
-                                        Verified within 24 hours by our team.<br />
-                                        <span className="text-amber-500 font-bold">Please complete your transfer within 30 minutes.</span>
+                                        <Trans i18nKey="subscription.upgrade.manual_review_p">
+                                            Verified within 24 hours by our team.<br />
+                                            <span className="text-amber-500 font-bold">Please complete your transfer within 30 minutes.</span>
+                                        </Trans>
                                     </p>
                                 </div>
                             )}
@@ -386,9 +388,9 @@ export default function SubscriptionPage() {
                                         <div className="w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                                             <Loader2 size={40} className="text-amber-500 animate-spin" />
                                         </div>
-                                        <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">Verifying...</h2>
+                                        <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">{t('subscription.status.verifying')}</h2>
                                         <p className="text-sm text-(--color-text-secondary) mb-8">
-                                            Checking on-chain data. This usually takes 30-60 seconds.
+                                            {t('subscription.status.verifying_p')}
                                         </p>
                                     </>
                                 )}
@@ -398,15 +400,15 @@ export default function SubscriptionPage() {
                                         <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                                             <CheckCircle2 size={40} className="text-emerald-500" />
                                         </div>
-                                        <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">Welcome to PRO!</h2>
+                                        <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">{t('subscription.status.welcome_pro')}</h2>
                                         <p className="text-sm text-(--color-text-secondary) mb-8">
-                                            Your account has been successfully upgraded.
+                                            {t('subscription.status.welcome_pro_p')}
                                         </p>
                                         <button
                                             onClick={() => setStatus('idle')}
                                             className="w-full h-14 bg-linear-to-r from-emerald-500 to-teal-600 text-white rounded-2xl font-black"
                                         >
-                                            Get Started
+                                            {t('subscription.status.get_started')}
                                         </button>
                                     </>
                                 )}
@@ -416,15 +418,15 @@ export default function SubscriptionPage() {
                                         <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                                             <CreditCard size={40} className="text-blue-500" />
                                         </div>
-                                        <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">Submitted</h2>
+                                        <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">{t('subscription.status.submitted')}</h2>
                                         <p className="text-sm text-(--color-text-secondary) mb-8">
-                                            Our team is verifying your payment. You'll be notified once approved.
+                                            {t('subscription.status.submitted_p')}
                                         </p>
                                         <button
                                             onClick={() => setStatus('idle')}
                                             className="w-full h-14 bg-slate-900 text-white rounded-2xl font-black"
                                         >
-                                            Got it
+                                            {t('subscription.status.got_it')}
                                         </button>
                                     </>
                                 )}

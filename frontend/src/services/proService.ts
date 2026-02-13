@@ -67,5 +67,10 @@ export const proService = {
     fetchTrends: async (): Promise<{ trends: any[], tokens_remaining: number }> => {
         const response = await apiClient.post('/api/pro/tools/trends', {});
         return response.data;
+    },
+
+    generateBio: async (bio: string): Promise<{ bio: string, tokens_remaining: number }> => {
+        const response = await apiClient.post('/api/pro/tools/bio', { bio });
+        return response.data;
     }
 };

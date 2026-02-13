@@ -2,6 +2,7 @@ import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
 // #comment: Removed unused ChevronDown and X icons from lucide-react to clean up the import list
 import { Menu, Crown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useUser } from '../context/UserContext';
 
 interface HeaderProps {
@@ -9,6 +10,7 @@ interface HeaderProps {
 }
 
 export const Header = ({ onOpenMenu }: HeaderProps) => {
+    const { t } = useTranslation();
     const { user } = useUser();
     const controls = useAnimation();
 
@@ -45,7 +47,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                     >
                         <Menu className="text-slate-900 h-5 w-5 dark:text-white transition-transform group-hover:scale-110" />
                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white">
-                            Menu
+                            {t('common.menu')}
                         </span>
                     </button>
 
@@ -56,7 +58,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         className="flex items-center gap-3 rounded-2xl border border-white/20 bg-white/90 dark:bg-[#0f172a] px-4 py-2 shadow-premium backdrop-blur-2xl transition-all shrink-0"
                     >
                         <div className="flex items-center gap-1.5">
-                            <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-blue-400">Lvl</span>
+                            <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-blue-400">{t('common.lvl')}</span>
                             <span className="text-sm font-black text-slate-900 dark:text-white leading-none">
                                 {user?.level ?? 2}
                             </span>

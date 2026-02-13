@@ -14,7 +14,10 @@
         "show_more": "Show More",
         "show_less": "Show Less",
         "unlock_at": "Unlock at level",
-        "pro_active": "PRO Active"
+        "pro_active": "PRO Active",
+        "menu": "Menu",
+        "lvl": "Lvl",
+        "tap_to_flip": "TAP TO FLIP"
     },
     "menu": {
         "settings": "Settings",
@@ -56,7 +59,31 @@
         "welcome": "Welcome to Pintopay Partner",
         "early": "You are early!",
         "join": "Join the revolution",
-        "start": "Start your journey"
+        "start": "Start your journey",
+        "stories": [
+            {
+                "title": "The Velocity Era",
+                "desc": "Traditional finance is slow and restricted. We're building a bridge to borderless, instant P2P wealth."
+            },
+            {
+                "title": "The $1 Strategy",
+                "desc": "Unlock the secret to high-velocity settlements. Every minute counts in the new digital economy."
+            },
+            {
+                "title": "Network Sovereignty",
+                "desc": "Build a multi-level matrix. Your network is your net worth, 5 levels deep in true sovereignty."
+            },
+            {
+                "title": "Launch Readiness",
+                "desc": "Your journey starts now. Expand the perimeter, earn XP, and reach the Physical Platinum Tier."
+            }
+        ],
+        "terms": "By tapping get started, you confirm that you have read and agree to our <1>Terms of Service</1>, <3>Cookie Policy</3> and consent to our <5>Marketing Activities</5>.",
+        "term_1": "Terms of Service",
+        "term_2": "Cookie Policy",
+        "term_3": "Marketing Activities",
+        "get_started": "GET STARTED",
+        "next": "NEXT"
     },
     "dashboard": {
         "hero_badge": "Partner Network 2.0",
@@ -401,7 +428,9 @@
         },
         "levelup": {
             "title": "LEVEL UP!",
-            "reached": "You reached Level {{level}}"
+            "rank": "Rank",
+            "reached": "You've reached Level {{level}}",
+            "awesome": "AWESOME!"
         },
         "tree": {
             "title": "Your Partner Matrix"
@@ -663,6 +692,9 @@
         "pro_tip": "PRO TIP: VIRAL GROWTH",
         "share_link": "SHARE LINK",
         "invite": "INVITE",
+        "elite_recognition": "Elite 0.1% Recognition",
+        "exclusive_achievements": "Exclusive Achievements",
+        "global_milestones": "Global Milestones",
         "unlocked_badge": "ACHIEVEMENT UNLOCKED",
         "locked_badge": "STILL LOCKED"
     },
@@ -754,12 +786,86 @@
         "tab_tools": "Tools",
         "tab_academy": "Academy",
         "tab_setup": "API Setup",
+        "locked": {
+            "title": "PRO MEMBERS ONLY",
+            "desc": "Unlock the Viral Marketing Studio and Autocontent creation by upgrading to PRO.",
+            "upgrade_btn": "Upgrade Now"
+        },
+        "studio": {
+            "matrix_title": "Configuration Matrix",
+            "matrix_subtitle": "Synthesize Selection",
+            "strategy_label": "Strategy",
+            "strategy_placeholder": "Select Viral Strategy",
+            "target_label": "Target",
+            "target_placeholder": "Select Audience",
+            "language_label": "Language",
+            "initiate_btn": "INITIATE AI AGENT",
+            "cooking_title": "Cooking Viral Post...",
+            "cooking_remaining": "Synthesizing Context • {{count}}s remaining",
+            "ready_title": "AI CMO READY",
+            "ready_subtitle": "Quantum Synthesis Active",
+            "ready_p": "Our agent is ready to synthesize 2026 viral narratives specifically for your audience.",
+            "back_btn": "BACK",
+            "go_viral_btn": "GO VIRAL",
+            "ai_generated_badge": "AI Generated",
+            "publish_btn": "PUBLISH",
+            "share_btn": "SHARE POST",
+            "post_types": {
+                "launch": "Product Launch",
+                "fomo": "FOMO Builder",
+                "authority": "System Authority",
+                "lifestyle": "Lifestyle Flex",
+                "income": "Passive Income Proof",
+                "network": "Network Growth",
+                "tutorial": "Web3 Tutorial"
+            },
+            "audiences": {
+                "traders": "Cryptocurrency Traders",
+                "nomads": "Digital Nomads",
+                "affiliates": "Affiliate Marketers",
+                "builders": "Network Builders",
+                "parents": "Stay-at-home Parents",
+                "hustlers": "Student Hustlers",
+                "burnouts": "Corporate Burnouts"
+            }
+        },
+        "setup": {
+            "protocol_title": "Protocol Instructions",
+            "instructions": [
+                "Get X API credentials from Dev Portal",
+                "Add Bot as Admin to your Telegram Channel",
+                "Sync keys to enable automated viral reach"
+            ],
+            "x_integration": "X Integration",
+            "tg_sync": "Telegram Sync",
+            "professional_network": "Professional Network",
+            "save_btn": "SAVE PROTOCOL CONFIG",
+            "global_integration": "Global Integration"
+        },
+        "publish": {
+            "title": "OmniPublish",
+            "subtitle": "PRO Protocol Active",
+            "mgmt_title": "PRO Content Management",
+            "mgmt_p": "Select your target platforms. Our AI agents will use your connected API keys to push this content instantly.",
+            "mgmt_tip": "Tip: Publishing across multiple platforms increases viral probability by 400%.",
+            "platform_not_configured": "NOT CONFIGURED",
+            "platform_success": "POSTED SUCCESSFULLY",
+            "platform_tap": "TAP TO PUBLISH",
+            "create_another_btn": "CREATE ANOTHER POST",
+            "footer": "Pintopay Global Sync • 2026"
+        },
         "tools": {
             "headline": {
                 "title": "Viral Headline Fixer",
                 "desc": "Turn boring titles into click-magnets. (1 Token)",
                 "placeholder": "e.g. How to buy Bitcoin",
                 "btn": "Rewrite Headline"
+            },
+            "bio": {
+                "title": "Viral Bio Generator",
+                "desc": "Optimize your profile for maximum conversions. (2 Tokens)",
+                "placeholder": "Enter your current bio or a brief description of yourself...",
+                "btn": "Synthesize Bio"
             },
             "trends": {
                 "title": "Trend Hunter 2026",
@@ -768,21 +874,164 @@
             }
         },
         "academy": {
-            "hook_rule": {
-                "title": "The 3-Second Hook Rule",
-                "desc": "You lose 80% of viewers in 3 seconds. Here is the formula to keep them.",
-                "content": "1. Disrupt Pattern (Visual/Audio). 2. State Big Benefit. 3. Open Loop (Curiosity)."
+            "title": "Elite Growth Engine",
+            "desc": "Master the art of high-velocity branding and viral loops. These protocols are designed to scale your network to 100k+ partners on autopilot.",
+            "protocol_rank": "Protocol Efficiency: 98.4%",
+            "rank_name": "GRANDMASTER VANGUARD",
+            "studio_manual": {
+                "title": "Viral Studio Manual",
+                "subtitle": "Quantum Content Synthesis",
+                "steps": [
+                    {
+                        "title": "Define Strategy",
+                        "desc": "Select a post type (FOMO, Launch, Tutorial) to align the AI's persona with your current growth objective."
+                    },
+                    {
+                        "title": "Calibrate Audience",
+                        "desc": "Choose your target market. The AI will adjust tone, vocabulary, and cultural hooks for maximum resonance."
+                    },
+                    {
+                        "title": "Synthesize & Refine",
+                        "desc": "Initiate the AI agent. Use the 'Rewrite' button if you need a different angle. Perfect content takes 2-3 iterations."
+                    },
+                    {
+                        "title": "OmniPublish Deployment",
+                        "desc": "Post to all connected channels at once. Consistency is the only multiplier that matters."
+                    }
+                ]
             },
-            "algorithm": {
-                "title": "Algorithm Hacking 2026",
-                "desc": "How the new AI feed really works.",
-                "content": "Engagement velocity > Total Likes. You need comments in the first 10 mins."
+            "social_setup": {
+                "title": "Channel Architecture",
+                "subtitle": "Step-by-Step Deployment",
+                "platforms": [
+                    {
+                        "name": "Telegram Empire",
+                        "icon": "Send",
+                        "steps": [
+                            "Create a Public Channel",
+                            "Add @ViralStudioBot as Admin",
+                            "Enable 'Post Messages' permission",
+                            "Sync Channel ID in API Setup"
+                        ]
+                    },
+                    {
+                        "name": "X (Twitter) Reach",
+                        "icon": "Twitter",
+                        "steps": [
+                            "Register as Developer at developer.x.com",
+                            "Create a New Project & App",
+                            "Generate API Key & Secret",
+                            "Enable Write Permissions for OAuth 1.0a"
+                        ]
+                    },
+                    {
+                        "name": "LinkedIn Authority",
+                        "icon": "Linkedin",
+                        "steps": [
+                            "Optimize Profile for 'Growth Specialist'",
+                            "Connect via our OAuth Protocol",
+                            "Focus on B2B Passive Income Proofs",
+                            "Engage with 5 posts daily to boost reach"
+                        ]
+                    }
+                ]
             },
-            "psycho": {
-                "title": "Psychological Triggers",
-                "desc": "Why people click.",
-                "content": "Fear of Missing Out (FOMO), Greed (Profit), and Tribalism (Us vs Them) are the top 3 drivers."
+            "lifehacks": {
+                "title": "Viral Lifehacks 2026",
+                "subtitle": "Algorithm Mastery",
+                "items": [
+                    {
+                        "title": "The 3-Second Hook",
+                        "desc": "Pattern disrupt in the first 3s. Use bold claims or visual contrast to stop the scroll. No hook = No reach."
+                    },
+                    {
+                        "title": "Comment Velocity",
+                        "desc": "The first 10 minutes decide everything. Ask a polarising question to trigger immediate debate and engagement."
+                    },
+                    {
+                        "title": "The 'Curiosity' Loop",
+                        "desc": "Don't sell in the post. Tease the result. Make them comment 'INFO' or click your link out of pure intrigue."
+                    }
+                ]
+            },
+            "hooks": {
+                "title": "Elite Hook Library",
+                "subtitle": "Stop the Scroll Instantly",
+                "items": [
+                    {
+                        "category": "FOMO",
+                        "template": "99% of people are missing [Target] because of [Common Mistake]...",
+                        "explanation": "Triggers the fear of being left behind while offering a solution."
+                    },
+                    {
+                        "category": "Authority",
+                        "template": "How I built a [Result] in [Time] without [Pain Point]...",
+                        "explanation": "Establishes immediate credibility and social proof."
+                    },
+                    {
+                        "category": "Controversy",
+                        "template": "The [Industry] is lying to you about [Topic]...",
+                        "explanation": "Creates a curiosity gap and 'Us vs Them' tribalism."
+                    }
+                ]
             }
+        }
+    },
+    "subscription": {
+        "pro_active": {
+            "title": "WELCOME TO THE <1>ELITE</1>",
+            "desc": "You've unlocked the full potential of Pintopay. Your journey to x10 profits has officially begun.",
+            "active_until": "Active Until",
+            "lifetime": "Lifetime Plan",
+            "command_center": "PRO Command Center",
+            "explore_empire": "Explore Your Empire"
+        },
+        "upgrade": {
+            "badge": "Premium Membership",
+            "title": "Upgrade to <1>PRO</1>",
+            "desc": "Unlock exclusive benefits, higher referral rewards, and premium features.",
+            "lifetime_pro": "Lifetime PRO",
+            "one_time": "One-time payment",
+            "benefits": [
+                "9-Level Affiliate",
+                "X5 Fast XP",
+                "Priority Pay",
+                "VIP Support",
+                "Custom Refs"
+            ],
+            "change_method": "Change Method",
+            "processing": "Processing...",
+            "complete_payment": "Complete Payment",
+            "usdt_address": "USDT TRC20 Address",
+            "tx_hash_label": "Transaction Hash (Optional)",
+            "tx_hash_placeholder": "Paste TX hash (optional)",
+            "i_paid": "I Paid",
+            "manual_review_p": "Verified within 24 hours by our team.<1/>Please complete your transfer within 30 minutes."
+        },
+        "status": {
+            "verifying": "Verifying...",
+            "verifying_p": "Checking on-chain data. This usually takes 30-60 seconds.",
+            "welcome_pro": "Welcome to PRO!",
+            "welcome_pro_p": "Your account has been successfully upgraded.",
+            "get_started": "Get Started",
+            "submitted": "Submitted",
+            "submitted_p": "Our team is verifying your payment. You'll be notified once approved.",
+            "got_it": "Got it"
+        },
+        "alerts": {
+            "expired": "Session expired. Please restart the process.",
+            "failed": "Payment session expired or failed. Please try again."
+        }
+    },
+    "system": {
+        "loading": {
+            "finalizing": "Finalizing UI...",
+            "config_loaded": "Config Loaded",
+            "ready": "Interface Ready"
+        },
+        "coming_soon": {
+            "title": "Coming Soon",
+            "desc": "We're building something amazing for our partners. Stay tuned!"
         }
     }
 }
