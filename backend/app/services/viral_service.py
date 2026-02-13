@@ -188,8 +188,9 @@ class ViralMarketingStudio:
 
         async def get_text_content():
             try:
+                # Try OpenAI first
                 response = await self.openai_client.chat.completions.create(
-                    model="gpt-4o-mini", # Switch to Mini for lightning fast text generation
+                    model="gpt-4o-mini",
                     messages=[
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": user_prompt}
@@ -199,8 +200,21 @@ class ViralMarketingStudio:
                 tokens = response.usage.total_tokens if response.usage else 0
                 return json.loads(response.choices[0].message.content), tokens
             except Exception as e:
-                logger.error(f"Text generation error: {e}")
-                return None, 0
+                logger.error(f"OpenAI text generation error: {e}")
+                # Fallback to Gemini if OpenAI fails
+                if self.genai_client:
+                    try:
+                        logger.info("🔄 Switching to Gemini 1.5 Flash for text generation...")
+                        gemini_response = self.genai_client.models.generate_content(
+                            model='gemini-1.5-flash',
+                            contents=f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}",
+                            config={'response_mime_type': 'application/json'}
+                        )
+                        return json.loads(gemini_response.text), 0
+                    except Exception as gemini_e:
+                        logger.error(f"Gemini fallback text generation failed: {gemini_e}")
+                        return None, f"OpenAI: {e} | Gemini: {gemini_e}"
+                return None, str(e)
 
         async def get_image_content(prompt):
             if not self.genai_client:
@@ -242,7 +256,7 @@ class ViralMarketingStudio:
                                     'number_of_images': 1,
                                     'output_mime_type': 'image/png',
                                     'aspect_ratio': '16:9',
-                                    'safety_filter_level': 'block_some',
+                                    'safety_filter_level': 'block_low_and_above',
                                     'person_generation': 'allow_adult'
                                 }
                             )
