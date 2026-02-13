@@ -96,8 +96,8 @@ export const PintopayCard = ({
                     )}
 
                     <div
-                        className={`absolute inset-0 backface-hidden overflow-hidden rounded-3xl shadow-2xl ${cardStyles[variant]} border border-white/20 translate-z-0 will-change-transform`}
-                        style={{ backfaceVisibility: 'hidden' }}
+                        className={`absolute inset-0 backface-hidden overflow-hidden rounded-3xl shadow-2xl ${cardStyles[variant]} border border-white/20 will-change-transform`}
+                        style={{ backfaceVisibility: 'hidden', transform: 'translateZ(1px)' }}
                     >
                         {/* Global Grain Texture */}
                         <div className="absolute inset-0 z-0 opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
@@ -164,7 +164,7 @@ export const PintopayCard = ({
                     {/* BACK SIDE */}
                     <div
                         className={`absolute inset-0 backface-hidden overflow-hidden rounded-3xl shadow-2xl pt-16 px-6 pb-6 flex flex-col justify-center items-center text-center ${cardStyles[variant]} border border-white/20`}
-                        style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+                        style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg) translateZ(1px)' }}
                     >
                         {/* Global Grain Texture - Inherited */}
                         <div className="absolute inset-0 z-0 opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
