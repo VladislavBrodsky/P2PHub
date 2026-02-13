@@ -57,11 +57,15 @@ class ViralMarketingStudio:
     """
 
     IMAGE_RULES = """
-    The image must be 1K quality, ultra-realistic, and cinematic.
-    Theme: Digital Nomad Lifestyle, Crypto Payments, Fintech Ambassadors, Crypto Leaders and Influencers.
-    Strict Rule: DO NOT use futuristic elements (no space-age cities, no flying cars). 
-    Keep it modern, sleek, and high-end (Luxe offices, beach-side workstations, private jets, premium cards).
-    The image must perfectly match the context of the generated text.
+    ULTRA-REALISTIC CINEMATIC IMAGE SPECIFICATION:
+    - Photography Style: Professional DSLR shot, 35mm lens, f/2.8 aperture, natural lighting with subtle rim light
+    - Quality: 4K resolution, photorealistic rendering, film grain texture, cinematic color grading
+    - Composition: Rule of thirds, balanced depth of field, professional framing
+    - Subject Matter: Real people in authentic settings (modern offices, luxury co-working spaces, rooftop cafes, premium lifestyle)
+    - Environment: Contemporary 2025-2026 aesthetics - sleek minimalism, natural materials, warm ambient lighting
+    - Brand Vibe: Success, financial freedom, digital nomad lifestyle, crypto/fintech elegance
+    - STRICT EXCLUSIONS: No cartoons, no CGI characters, no futuristic sci-fi elements, no flying cars, no neon cyberpunk, no unrealistic poses
+    - Technical Requirements: Sharp focus on subject, natural skin tones, realistic shadows and highlights, authentic materials and textures
     """
 
     def __init__(self):
@@ -155,18 +159,32 @@ class ViralMarketingStudio:
         # 1. Generate Viral Text via OpenAI
         # Optimized Prompt for Faster Inference (Compressed)
         system_prompt = f"{self.CMO_PERSONA}\nRules:\n{self.TEXT_RULES}\nTask: Viral post for {post_type} ({target_audience}) in {language}."
-        user_prompt = f"CMO Mode. Keyword-driven viral post for Pintopay. Referral: {ref_link}. Include FOMO/Social Proof. Format: JSON {{'title', 'body', 'hashtags', 'image_description'}}. JSON ONLY. Rules: {self.IMAGE_RULES}"
+        user_prompt = (
+            f"CMO Mode. Create keyword-driven viral post for Pintopay targeting {target_audience}. "
+            f"Theme: {post_type}. Referral link: {ref_link}. Include FOMO/Social Proof. "
+            f"CRITICAL: Generate a detailed 'image_description' that tells the SAME STORY as your text. "
+            f"The image must be emotionally resonant, showing a real person in a moment that captures the narrative. "
+            f"Describe their expression, setting, and atmosphere to evoke empathy and aspiration. "
+            f"Format: JSON {{'title', 'body', 'hashtags', 'image_description'}}. JSON ONLY. "
+            f"Image must follow these rules: {self.IMAGE_RULES}"
+        )
 
         generation_start = datetime.utcnow()
         tokens_openai = 0
 
         # Construction of the Image Prompt Template (to allow parallel start)
-        # We don't wait for OpenAI to give us the prompt; we build a high-quality one immediately
+        # Enhanced with storytelling and emotional elements to match the narrative
         base_image_prompt = (
-            f"Ultra-realistic cinematic shot of {target_audience} lifestyle, themed around '{post_type}'. "
-            f"Setting: Modern, high-end, 2026 aesthetics. "
-            f"Vibe: Success, financial freedom, premium fintech branding. {self.IMAGE_RULES}"
-        )
+            f"Professional DSLR photography, ultra-realistic cinematic shot: A real person from {target_audience}, "
+            f"captured in an authentic moment that tells the story of '{post_type}'. "
+            f"Show genuine emotion - aspiration, success, or transformation. Natural lighting, 35mm lens, f/2.8, sharp focus. "
+            f"Setting: Contemporary 2026 luxury environment (modern office, rooftop cafe, or co-working space) with warm ambient light. "
+            f"The person's expression and body language should convey the narrative - make it eye-catching and emotionally resonant. "
+            f"Atmosphere: financial freedom, digital nomad lifestyle, achievement. Film grain texture, cinematic color grading. "
+            f"Composition: Rule of thirds, the subject is the hero of the story. Photorealistic, 4K quality. "
+            f"NEGATIVE PROMPT: cartoon, CGI, anime, illustration, stock photo smile, distorted faces, extra limbs, blurry, "
+            f"futuristic sci-fi, neon lights, flying cars, unrealistic proportions, oversaturated colors, glitchy textures, generic poses"
+        ))
 
         async def get_text_content():
             try:
@@ -222,7 +240,10 @@ class ViralMarketingStudio:
                                 prompt=prompt,
                                 config={
                                     'number_of_images': 1,
-                                    'output_mime_type': 'image/png'
+                                    'output_mime_type': 'image/png',
+                                    'aspect_ratio': '16:9',
+                                    'safety_filter_level': 'block_some',
+                                    'person_generation': 'allow_adult'
                                 }
                             )
                         ),
