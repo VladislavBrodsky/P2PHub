@@ -418,7 +418,14 @@ body {
     font-weight: var(--font-weight-medium);
   }
 
-  /* Utilities */
+  .safe-pt {
+    padding-top: var(--spacing-safe-top);
+  }
+
+  .safe-pb {
+    padding-bottom: var(--spacing-safe-bottom);
+  }
+
   .center-flex {
     display: flex;
     align-items: center;
