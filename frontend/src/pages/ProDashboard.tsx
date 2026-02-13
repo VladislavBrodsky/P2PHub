@@ -53,7 +53,7 @@ export const ProDashboard = () => {
         linkedin_access_token: ''
     });
 
-    const [countdown, setCountdown] = useState(15);
+    const [countdown, setCountdown] = useState(45);
 
     useEffect(() => {
         if (showSetup) {
@@ -67,7 +67,7 @@ export const ProDashboard = () => {
     useEffect(() => {
         let interval: any;
         if (isGenerating) {
-            setCountdown(15);
+            setCountdown(45);
             interval = setInterval(() => {
                 setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
             }, 1000);

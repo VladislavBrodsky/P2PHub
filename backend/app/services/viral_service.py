@@ -185,20 +185,24 @@ class ViralMarketingStudio:
                         
                         for model_name in imagen_models:
                             try:
-                                img_response = await loop.run_in_executor(
-                                    None, 
-                                    lambda m=model_name: method(
-                                        model=m,
-                                        prompt=image_prompt,
-                                        config={
-                                            'number_of_images': 1,
-                                            'output_mime_type': 'image/png'
-                                        }
-                                    )
+                                img_response = await asyncio.wait_for(
+                                    loop.run_in_executor(
+                                        None, 
+                                        lambda m=model_name: method(
+                                            model=m,
+                                            prompt=image_prompt,
+                                            config={
+                                                'number_of_images': 1,
+                                                'output_mime_type': 'image/png'
+                                            }
+                                        )
+                                    ),
+                                    timeout=25.0
                                 )
                                 if img_response:
                                     break
                             except Exception as e:
+                                logger.warning(f"⚠️ Model {model_name} failed or timed out: {e}")
                                 last_err = e
                                 continue
                         

@@ -5,7 +5,7 @@ import { getApiUrl } from '../utils/api';
 // Create a centralized Axios instance
 export const apiClient = axios.create({
     baseURL: getApiUrl(),
-    timeout: 10000,
+    timeout: 60000,
 });
 
 // Request Interceptor: Automatically inject Telegram Init Data

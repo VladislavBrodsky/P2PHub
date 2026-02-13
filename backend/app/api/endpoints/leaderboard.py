@@ -77,8 +77,19 @@ async def get_my_leaderboard_stats(
     Returns the current user's rank and relative position.
     Cached for 60 seconds to improve performance.
     """
-    tg_user = get_tg_user(user_data)
-    tg_id = str(tg_user.get("id"))
+    try:
+        if not user_data:
+            raise ValueError("No user data")
+        tg_user = get_tg_user(user_data)
+        tg_id = str(tg_user.get("id"))
+    except (HTTPException, ValueError, AttributeError):
+        # Return guest stats so the UI doesn't break
+        return {
+            "rank": 0,
+            "xp": 0,
+            "level": 1,
+            "referrals": 0
+        }
 
     from app.services.redis_service import redis_service
     cache_key = f"leaderboard:me:{tg_id}"
