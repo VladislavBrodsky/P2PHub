@@ -1,5 +1,7 @@
+import asyncio
 import json
 import secrets
+import logging
 from typing import List
 # Added datetime for tracking task start times
 from datetime import datetime, timedelta
@@ -288,10 +290,10 @@ async def get_my_profile(
                 "task_id": pt.task_id,
                 "status": pt.status,
                 "initial_metric_value": pt.initial_metric_value,
-                "started_at": pt.started_at
+                "started_at": pt.started_at.isoformat() if pt.started_at else None
             })
 
-    partner_dict = partner.model_dump()
+    partner_dict = partner.model_dump(mode="json")
     partner_dict["completed_tasks"] = json.dumps(completed_tasks)
     
     # Parse completed_stages from JSON string
