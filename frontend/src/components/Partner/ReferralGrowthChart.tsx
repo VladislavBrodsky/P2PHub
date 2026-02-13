@@ -79,10 +79,13 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
             color: LEVEL_COLORS[i],
             bounds: chartData.map(point => {
                 let bottom = 0;
-                for (let j = 8; j > i; j--) {
-                    bottom += point.levels[j] || 0;
+                // Defensive check if levels property exists and is an array/object with index access
+                if (point.levels) {
+                    for (let j = 8; j > i; j--) {
+                        bottom += point.levels[j] || 0;
+                    }
                 }
-                const value = point.levels[i] || 0;
+                const value = (point.levels && point.levels[i]) || 0;
                 return { bottom, top: bottom + value };
             })
         }));

@@ -31,8 +31,7 @@ export const PartnerAcademy = () => {
                             </h2>
                             <p className="text-slate-700 text-[10px] font-bold leading-relaxed max-w-[300px] mx-auto opacity-90 uppercase tracking-wide">
                                 <Trans i18nKey="academy.hero_desc">
-                                    Master the 100-Stage roadmap to <br />
-                                    <span className="text-blue-700 font-black">$1 Per Minute</span> with AI Automation.
+                                    Master the 100-Stage roadmap to <span className="text-blue-700 font-black">$1 Per Minute</span> with AI Automation.
                                 </Trans>
                             </p>
                         </div>

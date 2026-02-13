@@ -132,7 +132,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                         <span className="text-[11px] font-black text-amber-500 uppercase tracking-widest">{t('academy.pro_benefits')}</span>
                                     </div>
                                     <ul className="space-y-2 text-left">
-                                        {(t('academy.pro_items', { returnObjects: true }) as string[]).map((item, i) => (
+                                        {Array.isArray(t('academy.pro_items', { returnObjects: true })) && (t('academy.pro_items', { returnObjects: true }) as string[]).map((item, i) => (
                                             <li key={i} className="flex items-center gap-3 text-[11px] font-bold text-slate-700 dark:text-slate-300">
                                                 <CheckCircle2 className="w-3.5 h-3.5 text-amber-500" />
                                                 {item}
@@ -166,7 +166,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                 <div className="space-y-7 text-slate-600 dark:text-slate-400 text-[15px] leading-relaxed font-medium">
                                     <p className="text-lg text-slate-900 dark:text-white font-bold leading-snug">
                                         <Trans i18nKey="academy.elite_training">
-                                            Welcome to the elite training floor. To reach the result of <span className="text-blue-600"><strong>$1 per minute</strong></span>, we must first master the art of  leverage.
+                                            Welcome to the elite training floor. To reach the result of <span className="text-blue-600"><strong>$1 per minute</strong></span>, we must first master the art of <strong>leverage</strong>.
                                         </Trans>
                                     </p>
 

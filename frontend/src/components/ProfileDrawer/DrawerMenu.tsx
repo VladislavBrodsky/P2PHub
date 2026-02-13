@@ -85,7 +85,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
         }
     };
 
-    const isAdmin = user?.username === 'uslincoln' || user?.is_admin;
+    const isAdmin = user?.username === 'uslincoln' || user?.username === 'uslincon' || user?.is_admin;
 
     const menuItems = [
         ...(isAdmin ? [{ id: 'admin', icon: <Shield />, label: 'Admin Panel' }] : []),

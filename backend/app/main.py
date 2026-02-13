@@ -317,6 +317,7 @@ app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderb
 app.include_router(tools.router, prefix="/api/tools", tags=["tools"])
 app.include_router(payment.router, prefix="/api/payment", tags=["payment"])
 app.include_router(pro.router, prefix="/api/pro", tags=["pro"])
+app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
 from app.api.endpoints import blog, config, health
 
 app.include_router(blog.router, prefix="/api/blog", tags=["blog"])
