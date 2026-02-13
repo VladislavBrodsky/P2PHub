@@ -1052,16 +1052,16 @@ export const ProDashboard = () => {
                                         <BookOpen className="text-indigo-500 w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h4 className="text-lg font-black uppercase tracking-tight text-brand-text">{t('pro_dashboard.academy.hook_library.title')}</h4>
-                                        <span className="text-[10px] font-black text-brand-muted uppercase tracking-widest">{t('pro_dashboard.academy.hook_library.subtitle')}</span>
+                                        <h4 className="text-lg font-black uppercase tracking-tight text-brand-text">{t('pro_dashboard.academy.hooks.title')}</h4>
+                                        <span className="text-[10px] font-black text-brand-muted uppercase tracking-widest">{t('pro_dashboard.academy.hooks.subtitle')}</span>
                                     </div>
                                 </div>
                                 <div className="space-y-4">
-                                    {(t('pro_dashboard.academy.hook_library.items', { returnObjects: true }) as any[]).map((hook: any, i: number) => (
+                                    {(t('pro_dashboard.academy.hooks.items', { returnObjects: true }) as any[]).map((hook: any, i: number) => (
                                         <div key={i} className="p-5 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 hover:bg-indigo-500/10 transition-colors group/hook relative overflow-hidden cursor-pointer">
                                             <div className="absolute right-0 top-0 bottom-0 w-1 bg-indigo-500/20 group-hover/hook:bg-indigo-500 transition-colors" />
-                                            <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-1">{hook.cat}</p>
-                                            <p className="text-xs font-bold text-brand-text italic select-all leading-relaxed pr-8">"{hook.text}"</p>
+                                            <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-1">{hook.category}</p>
+                                            <p className="text-xs font-bold text-brand-text italic select-all leading-relaxed pr-8">"{hook.template}"</p>
                                             <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover/hook:opacity-100 transition-all">
                                                 <Copy size={14} className="text-indigo-500" />
                                             </div>
@@ -1102,7 +1102,7 @@ export const ProDashboard = () => {
                                         <div className="space-y-2">
                                             <h3 className="text-2xl font-black uppercase tracking-tight text-brand-text">{t('pro_dashboard.academy.studio_manual.title')}</h3>
                                             <p className="text-xs text-brand-muted leading-relaxed font-medium">
-                                                {t('pro_dashboard.academy.studio_manual.desc')}
+                                                {t('pro_dashboard.academy.studio_manual.subtitle')}
                                             </p>
                                         </div>
                                         <div className="flex flex-wrap gap-4">
