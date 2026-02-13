@@ -24,6 +24,7 @@ async def process_referral_notifications(bot, session: AsyncSession, partner: Pa
     if is_new and partner.referrer_id:
         # Run logic in background via TaskIQ worker
         await process_referral_logic.kiq(partner.id)
+@broker.task
 async def process_referral_logic(partner_id: int):
     """
     Optimized 9-level referral logic.
@@ -37,11 +38,21 @@ async def process_referral_logic(partner_id: int):
             if not partner or not partner.referrer_id:
                 return
 
-            # reconstruct lineage (L1 to L9)
+            # 0. Idempotency Check: Prevent double-awarding XP if task is retried
+            check_stmt = select(XPTransaction).where(
+                XPTransaction.reference_id == str(partner.id),
+                XPTransaction.type.in_(["REFERRAL_L1", "REFERRAL_DEEP"])
+            ).limit(1)
+            existing_reward = (await session.exec(check_stmt)).first()
+            if existing_reward:
+                logger.info(f"ℹ️ Referral XP already awarded for partner {partner_id}. Skipping...")
+                return
+
+            # 1. Reconstruct lineage (L1 to L9)
+            # partner.path already ends with referrer_id if set correctly in create_partner
             lineage_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-            if partner.referrer_id:
-                lineage_ids.append(partner.referrer_id)
-            lineage_ids = lineage_ids[-9:]
+            # Ensure we only fetch ancestors, not self (path doesn't include self)
+            lineage_ids = list(dict.fromkeys(lineage_ids))[-9:] # Remove potential duplicates and keep last 9
 
             # Bulk Fetch all ancestors
             statement = select(Partner).where(Partner.id.in_(lineage_ids))
@@ -174,24 +185,33 @@ async def process_referral_logic(partner_id: int):
                     else:
                         path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
                         try:
-                            start_idx = path_ids.index(referrer.id)
-                            intermediary_ids = path_ids[start_idx+1:]
-                            chain_names = []
-                            for mid_id in intermediary_ids:
-                                mid_user = ancestor_map.get(mid_id)
-                                if mid_user:
-                                    name = mid_user.first_name or "Unknown"
-                                    if mid_user.username:
-                                        name += f" (@{mid_user.username})"
-                                    chain_names.append(name)
-                            chain_names.append(new_partner_name)
-                            referral_chain = "\n".join([f"➜ {name}" for name in chain_names])
+                            # Direct path to the new partner including intermediate names
+                            if referrer.id in path_ids:
+                                start_idx = path_ids.index(referrer.id)
+                                intermediary_ids = path_ids[start_idx+1:]
+                                chain_names = []
+                                for mid_id in intermediary_ids:
+                                    mid_user = ancestor_map.get(mid_id)
+                                    if mid_user:
+                                        name = mid_user.first_name or "Partner"
+                                        if mid_user.username:
+                                            name += f" (@{mid_user.username})"
+                                        chain_names.append(name)
+                                chain_names.append(new_partner_name)
+                                referral_chain = "\n".join([f"➜ {name}" for name in chain_names])
 
-                            if level == 2:
-                                msg = get_msg(lang, "referral_l2_congrats", referral_chain=referral_chain)
+                                if level == 2:
+                                    msg = get_msg(lang, "referral_l2_congrats", referral_chain=referral_chain)
+                                else:
+                                    msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=referral_chain)
                             else:
-                                msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=referral_chain)
-                        except Exception: pass
+                                # Fallback if path reconstruction fails for some reason
+                                if level == 2:
+                                    msg = get_msg(lang, "referral_l2_congrats", referral_chain=f"➜ {new_partner_name}")
+                                else:
+                                    msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=f"➜ {new_partner_name}")
+                        except Exception as e:
+                            logger.error(f"Error building referral chain msg: {e}")
 
                     if msg:
                         await notification_service.enqueue_notification(chat_id=referrer.telegram_id, text=msg)

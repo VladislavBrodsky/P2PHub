@@ -74,7 +74,7 @@ class AuditService:
             currency=currency,
             balance_before=balance_before,
             balance_after=balance_after,
-            metadata=json.dumps(metadata or {}),
+            extra_data=json.dumps(metadata or {}),
             success=success,
             error_message=error_message,
             request_id=request_id,
@@ -223,6 +223,32 @@ class AuditService:
             request_id=request_id,
         )
     
+    async def log_task_completion(
+        self,
+        session: AsyncSession,
+        partner_id: int,
+        task_id: str,
+        xp_amount: int,
+        xp_before: int,
+        xp_after: int,
+        request_id: Optional[str] = None,
+    ) -> AuditLog:
+        """Log a task completion."""
+        return await self.log_event(
+            session=session,
+            event_type=AuditEventType.TASK_COMPLETED,
+            category=AuditCategory.SYSTEM,
+            partner_id=partner_id,
+            amount=xp_amount,
+            currency="XP",
+            balance_before=xp_before,
+            balance_after=xp_after,
+            metadata={
+                "task_id": task_id,
+            },
+            request_id=request_id,
+        )
+
     async def log_admin_action(
         self,
         session: AsyncSession,
@@ -238,7 +264,7 @@ class AuditService:
             event_category=AuditCategory.ADMIN,
             partner_id=target_partner_id,
             admin_id=admin_id,
-            metadata=json.dumps(metadata or {}),
+            extra_data=json.dumps(metadata or {}),
             request_id=request_id,
         )
         session.add(log)

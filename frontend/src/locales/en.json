@@ -881,6 +881,42 @@
             "desc": "Master the art of high-velocity branding and viral loops. These protocols are designed to scale your network to 100k+ partners on autopilot.",
             "protocol_rank": "Protocol Efficiency: 98.4%",
             "rank_name": "GRANDMASTER VANGUARD",
+            "hook_rule": {
+                "title": "The Hook Rule",
+                "desc": "STOP THE SCROLL",
+                "content": "You have 1.2 seconds to capture attention. A great hook addresses a specific pain point or a massive desire immediately. Without a hook, your content is invisible."
+            },
+            "algorithm": {
+                "title": "Algorithm Mastery",
+                "desc": "FEED THE MACHINE",
+                "content": "Algorithms favor engagement early on. Use controversial statements or open loops to keep users commenting and sharing. The goal is to maximize the initial 15 minutes of reach."
+            },
+            "psycho": {
+                "title": "High-Ticket Psychology",
+                "desc": "TRIGGER THE BUY",
+                "content": "People buy on emotion and justify with logic. Use FOMO (Fear of Missing Out) and Social Proof to bypass skepticism and build instant authority."
+            },
+            "hooks": {
+                "title": "Elite Hook Library",
+                "subtitle": "STOP THE SCROLL INSTANTLY",
+                "items": [
+                    {
+                        "category": "FOMO",
+                        "template": "99% of people are missing [Target] because of [Common Mistake]...",
+                        "explanation": "Triggers the fear of being left behind while offering a solution."
+                    },
+                    {
+                        "category": "AUTHORITY",
+                        "template": "How I built a [Result] in [Time] without [Pain Point]...",
+                        "explanation": "Establishes immediate credibility and social proof."
+                    },
+                    {
+                        "category": "INCOME",
+                        "template": "This simple [Task] generates [Amount] on autopilot...",
+                        "explanation": "Direct, result-oriented hook for financial interest."
+                    }
+                ]
+            },
             "studio_manual": {
                 "title": "Viral Studio Manual",
                 "subtitle": "Quantum Content Synthesis",
@@ -954,27 +990,6 @@
                     {
                         "title": "The 'Curiosity' Loop",
                         "desc": "Don't sell in the post. Tease the result. Make them comment 'INFO' or click your link out of pure intrigue."
-                    }
-                ]
-            },
-            "hooks": {
-                "title": "Elite Hook Library",
-                "subtitle": "Stop the Scroll Instantly",
-                "items": [
-                    {
-                        "category": "FOMO",
-                        "template": "99% of people are missing [Target] because of [Common Mistake]...",
-                        "explanation": "Triggers the fear of being left behind while offering a solution."
-                    },
-                    {
-                        "category": "Authority",
-                        "template": "How I built a [Result] in [Time] without [Pain Point]...",
-                        "explanation": "Establishes immediate credibility and social proof."
-                    },
-                    {
-                        "category": "Controversy",
-                        "template": "The [Industry] is lying to you about [Topic]...",
-                        "explanation": "Creates a curiosity gap and 'Us vs Them' tribalism."
                     }
                 ]
             }

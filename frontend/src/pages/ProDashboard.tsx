@@ -16,7 +16,7 @@ import { getApiUrl } from '../utils/api';
 
 const renderMarkdown = (text: string) => {
     if (!text) return null;
-    let html = text
+    const html = text
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/_(.*?)_/g, '<em>$1</em>')
         .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" class="text-indigo-500 font-bold underline">$1</a>')
@@ -905,14 +905,14 @@ export const ProDashboard = () => {
                             </div>
 
                             {['hook_rule', 'algorithm', 'psycho'].map((key) => (
-                                <div key={key} className="glass-panel-premium p-5 rounded-[2rem] border border-(--color-border-glass) relative overflow-hidden group active:scale-[0.98] transition-all">
+                                <div key={key} className="glass-panel-premium p-6 rounded-[2.5rem] border border-(--color-border-glass) relative overflow-hidden group active:scale-[0.98] transition-all bg-(--color-bg-surface) shadow-sm">
                                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
-                                        <BookOpen className="w-16 h-16" />
+                                        <BookOpen className="w-16 h-16 text-indigo-500" />
                                     </div>
                                     <h4 className="text-xs font-black uppercase mb-1 tracking-tight text-brand-text">{t(`pro_dashboard.academy.${key}.title`)}</h4>
-                                    <p className="text-[9px] font-bold opacity-40 uppercase tracking-widest mb-3">{t(`pro_dashboard.academy.${key}.desc`)}</p>
-                                    <div className="p-4 bg-white/5 dark:bg-black/20 rounded-2xl border border-white/5">
-                                        <p className="text-[11px] font-medium leading-relaxed opacity-80">{t(`pro_dashboard.academy.${key}.content`)}</p>
+                                    <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest mb-3">{t(`pro_dashboard.academy.${key}.desc`)}</p>
+                                    <div className="p-4 bg-indigo-500/5 dark:bg-black/20 rounded-2xl border border-indigo-500/10 dark:border-white/5">
+                                        <p className="text-[11px] font-medium leading-relaxed text-brand-text/90">{t(`pro_dashboard.academy.${key}.content`)}</p>
                                     </div>
                                 </div>
                             ))}
@@ -923,13 +923,13 @@ export const ProDashboard = () => {
                                 <div className="flex items-center gap-5 mb-8">
                                     <div className="w-16 h-16 bg-yellow-500/10 rounded-2xl flex items-center justify-center border border-yellow-500/20 shadow-xl"><Zap className="w-8 h-8 text-yellow-400" /></div>
                                     <div>
-                                        <h3 className="text-xl font-black uppercase tracking-tight text-white">{t('pro_dashboard.academy.hooks.title')}</h3>
-                                        <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">{t('pro_dashboard.academy.hooks.subtitle')}</p>
+                                        <h3 className="text-xl font-black uppercase tracking-tight text-brand-text">{t('pro_dashboard.academy.hooks.title')}</h3>
+                                        <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">{t('pro_dashboard.academy.hooks.subtitle')}</p>
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-1 gap-4">
                                     {((t('pro_dashboard.academy.hooks.items', { returnObjects: true }) as any[]) || []).map((hook: any, idx: number) => (
-                                        <div key={idx} className="p-5 bg-white/5 rounded-2xl border border-white/5 space-y-2 group/hook hover:bg-white/10 transition-all">
+                                        <div key={idx} className="p-5 bg-indigo-500/5 dark:bg-white/5 rounded-2xl border border-indigo-500/10 dark:border-white/5 space-y-2 group/hook hover:bg-indigo-500/10 dark:hover:bg-white/10 transition-all">
                                             <div className="flex items-center justify-between">
                                                 <span className="text-[9px] font-black px-2 py-0.5 bg-indigo-500/20 text-indigo-400 rounded-full uppercase tracking-widest">{hook.category}</span>
                                                 <Copy
@@ -941,8 +941,47 @@ export const ProDashboard = () => {
                                                     }}
                                                 />
                                             </div>
-                                            <p className="text-xs font-black text-white italic">"{hook.template}"</p>
+                                            <p className="text-xs font-black text-brand-text italic">"{hook.template}"</p>
                                             <p className="text-[10px] text-brand-muted leading-relaxed">{hook.explanation}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Viral Lifehacks */}
+                            <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden group">
+                                <div className="absolute -right-4 -top-4 opacity-5"><Flame size={120} /></div>
+                                <h3 className="text-sm font-black text-brand-text uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
+                                    <Flame size={16} className="text-orange-500" />
+                                    {t('pro_dashboard.academy.lifehacks.title')}
+                                </h3>
+                                <div className="space-y-4">
+                                    {((t('pro_dashboard.academy.lifehacks.items', { returnObjects: true }) as any[]) || []).map((item: any, i: number) => (
+                                        <div key={i} className="flex gap-4 p-4 rounded-2xl bg-orange-500/5 border border-orange-500/10">
+                                            <div className="w-8 h-8 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
+                                                <span className="text-xs font-black text-orange-500">{i + 1}</span>
+                                            </div>
+                                            <div>
+                                                <p className="text-xs font-black text-orange-500 uppercase tracking-tight">{item.title}</p>
+                                                <p className="text-[10px] text-brand-muted leading-relaxed mt-0.5">{item.desc}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Studio manual */}
+                            <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden">
+                                <h3 className="text-sm font-black text-brand-text uppercase tracking-[0.2em] mb-6">{t('pro_dashboard.academy.studio_manual.title')}</h3>
+                                <div className="space-y-6">
+                                    {((t('pro_dashboard.academy.studio_manual.steps', { returnObjects: true }) as any[]) || []).map((step: any, i: number) => (
+                                        <div key={i} className="relative pl-8">
+                                            <div className="absolute left-0 top-0 w-6 h-6 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-[10px] font-black text-indigo-500">
+                                                {i + 1}
+                                            </div>
+                                            {i < 3 && <div className="absolute left-3 top-6 bottom-0 w-px bg-indigo-500/10" />}
+                                            <h4 className="text-xs font-bold text-brand-text uppercase">{step.title}</h4>
+                                            <p className="text-[10px] text-brand-muted leading-relaxed mt-1">{step.desc}</p>
                                         </div>
                                     ))}
                                 </div>

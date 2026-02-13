@@ -44,7 +44,7 @@ class AuditLog(SQLModel, table=True):
     balance_after: Optional[float] = Field(default=None)  # For balance changes
     
     # Additional context (JSON)
-    metadata: str = Field(default="{}")  # JSON string with extra details
+    extra_data: str = Field(default="{}")  # JSON string with extra details
     
     # Request tracking
     request_id: Optional[str] = Field(default=None, index=True)  # From request middleware
@@ -71,7 +71,7 @@ class AuditLog(SQLModel, table=True):
                 "currency": "USDT",
                 "balance_before": 0.0,
                 "balance_after": 11.70,
-                "metadata": '{"level": 1, "percentage": 0.30, "pro_buyer_id": 456}',
+                "extra_data": '{"level": 1, "percentage": 0.30, "pro_buyer_id": 456}',
                 "success": True
             }
         }
