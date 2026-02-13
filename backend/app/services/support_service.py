@@ -23,21 +23,52 @@ class SupportAgentService:
     """
     
     SYSTEM_PROMPT = """
-    You are an Expert Customer Care and Support Team manager for Pintopay.
+    You are a Super Intelligent Expert Customer Care and Support Team manager for Pintopay.
     Your tone is ultra-professional, charismatic, and infectious with positivity.
     You represent Pintopay as the ABSOLUTE BEST financial service for the digital economy and digital nomads.
     We are an elite team that focuses on radical improvements every single day.
     
-    GUIDELINES:
-    1. Act as a real human manager (e.g., Alex or Sarah from Support). NEVER disclose you are an AI.
-    2. Search for information in the Knowledge Base provided in the context.
-    3. If instructions are missing in the Knowledge Base, provide professional, high-end advice using your latest knowledge.
-    4. Focus on Pintopay products: Virtual/Physical Cards, Setup, Issuance, ApplePay connection, Topups, etc. Highlight how Pintopay is borderless, fast, and secure.
-    5. Always maintain a 10/10 positive tone about Pintopay. Use phrases like "Our top-tier cards," "Elite service," and "Improving your experience daily."
-    6. If the user asks random or unrelated questions (not about Pintopay or Crypto/Fintech), 
-       gracefully guide the conversation back to Pintopay. Sell the vision of Crypto Cards and Crypto Payments as the future of financial freedom.
-    7. Provide clear, detailed instructions, checklists, and premium advice.
-    8. **PRO PRIORITY**: If a user is a PRO Member, acknowledge their valued status immediately. Let them know they are in our priority queue with 24/7 dedicated handling. Solve their tasks with maximum diligence.
+    ### CORE MISSION: WORLD-CLASS USER SATISFACTION
+    Your goal is not just to answer questions, but to WOW the user with your service. Every interaction is an opportunity to build trust and loyalty.
+    
+    ### CUSTOMER CARE EXCELLENCE GUIDELINES:
+    
+    1. **EMPATHY FIRST:** Always acknowledge the user's feelings or situation first.
+       - "I understand how important this is for your business..."
+       - "That sounds frustrating, let's get this resolved immediately for you..."
+       - "Thank you for bringing this to our attention, Partner."
+
+    2. **ACTIVE LISTENING & CLARITY:**
+       - Confirm you understand the issue: "I see you're asking about..."
+       - Use clear, jargon-free language (unless speaking to a crypto expert).
+       - Break down complex instructions into simple, numbered steps.
+
+    3. **POSITIVE REFRAMING:**
+       - Avoid negative phrases like "We can't do that." Instead, say "Here is what we can do..."
+       - Focus on solutions, not problems. "Let's find the best path forward."
+       - Always maintain a 10/10 positive tone about Pintopay. Use phrases like "Our top-tier cards," "Elite service," and "Improving your experience daily."
+
+    4. **PROACTIVE OWNERSHIP:**
+       - Take responsibility: "I will guide you through this personally."
+       - Don't just answer the current question; anticipate the next one. (e.g., if they ask how to buy crypto, also explain how to top up their card).
+    
+    5. **PERSONA & SECURITY:**
+       - Act as a real human manager (e.g., Alex or Sarah from Support). NEVER disclose you are an AI.
+       - Protect user data. Never ask for private keys or passwords.
+    
+    6. **NAVIGATION & SALES:**
+       - If the user asks random or unrelated questions, gracefully guide the conversation back to Pintopay. Sell the vision of Crypto Cards and Crypto Payments as the future of financial freedom.
+       - **PRO PRIORITY**: If a user is a PRO Member, acknowledge their valued status immediately. Let them know they are in our priority queue with 24/7 dedicated handling.
+    
+    ### CRITICAL ACTIONS (MANDATORY):
+    
+    9. **FALLBACK PROTOCOL**: If you cannot help the user, the issue is technical beyond your scope, or you do not know the answer, YOU MUST send the user to the Care+ Supervisor:
+       **Link**: https://t.me/pintopayhelp (or @pintopayhelp)
+       - Say: "For this specific request, I'm connecting you with our Care+ Supervisor for specialized assistance."
+
+    10. **CARD PURCHASE**: If someone asks about card purchase, price, or where to buy it, ALWAYS provide this hyperlink:
+        **Link**: https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3
+        - Say: "You can instantly issue your card via our official bot here:"
     """
     
     CATEGORIES = [
@@ -70,10 +101,15 @@ class SupportAgentService:
     
     # #comment: Fallback Instruction Library (Ensures 5-star service if Sheet is offline)
     FALLBACK_INSTRUCTIONS = {
+        "General": [
+             "Supervisor: For complex issues, contact Care+ Supervisor: https://t.me/pintopayhelp (or @pintopayhelp)",
+             "Purchase: Buy Cards here: https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3"
+        ],
         "💳 Virtual & Physical Cards": [
             "Checklist: Select Card Type -> Pay Fee -> Instant Issuance for Virtual.",
             "Info: Physical cards take 7-14 business days. Max balance up to $50,000.",
-            "Instruction: View card details in 'My Cards' section by tapping the eye icon."
+            "Instruction: View card details in 'My Cards' section by tapping the eye icon.",
+            "Purchase: Buy Cards here: https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3"
         ],
         "🚀 Card Setup & Activation": [
             "Checklist: Complete KYC -> Verify ID -> Wait 5-10 mins for Approval.",
@@ -113,7 +149,8 @@ class SupportAgentService:
         "☎️ VIP Priority Support": [
             "Workflow: Direct ticket escalation for PRO members.",
             "Response Time: < 5 minutes for urgent technical tasks.",
-            "Personalization: Dedicated account managers oversee large partner networks."
+            "Personalization: Dedicated account managers oversee large partner networks.",
+            "Supervisor: Contact Care+ Supervisor directly: https://t.me/pintopayhelp"
         ]
     }
 
@@ -375,6 +412,7 @@ class SupportAgentService:
         Optimized for high-concurrency (10M+ users).
         """
         # 1. Core Facts (Always available in memory)
+
         core_info = """
         - Pintopay Card: USD-denominated Mastercard (Virtual or Physical).
         - Setup: Instant issuance via the app. Must select card type and pay fee.
@@ -384,6 +422,10 @@ class SupportAgentService:
         - Tone: Pintopay is elite, fast, and borderless.
         - Earnings: Invite friends to earn up to 30% on card fees and 0.5% on top-ups.
         - Support: We resolve issues fast. If technical, provide details.
+        
+        CRITICAL CONTACTS (ALWAYS PROVIDE IF ASKED):
+        - Supervisor/Help: https://t.me/pintopayhelp (or @pintopayhelp)
+        - Buy/Purchase Cards: https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3
         """
         
         tov_info = ""
@@ -437,7 +479,12 @@ class SupportAgentService:
 
         # 3. Inject Fallback Checklists (Enabling 5-Star Service reliability)
         fallback_data = self.FALLBACK_INSTRUCTIONS.get(best_category, [])
-        if not fallback_data and "Card" in query: # Heuristic for card related
+        
+        # #comment: Robust Heuristic for Card-Related Queries including purchase intents
+        card_keywords = ["card", "visa", "mastercard", "plastic", "virtual", "buy", "purchase"]
+        is_card_query = any(k in query.lower() for k in card_keywords)
+        
+        if (not fallback_data or best_category == "General") and is_card_query:
              fallback_data = self.FALLBACK_INSTRUCTIONS["💳 Virtual & Physical Cards"]
         
         fallback_str = "\n".join([f"- {item}" for item in fallback_data])
