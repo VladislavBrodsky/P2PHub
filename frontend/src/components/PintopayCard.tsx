@@ -59,7 +59,7 @@ export const PintopayCard = ({
     const cardStyles = {
         virtual: 'bg-linear-to-br from-blue-600 to-blue-800',
         physical: 'bg-black', // Sleek matte black
-        platinum: 'bg-linear-to-br from-slate-200 via-white to-slate-300',
+        platinum: 'bg-linear-to-br from-white via-slate-50 to-slate-200',
     };
 
     // Reset flip when variant changes
@@ -69,7 +69,7 @@ export const PintopayCard = ({
 
     return (
         <div
-            className="perspective-1000 aspect-[1.58/1] w-full cursor-pointer max-w-[320px]"
+            className="perspective-1000 aspect-[1.58/1] w-full cursor-pointer max-w-[340px] relative group"
             onMouseMove={handleMouseMove}
             onTouchMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
@@ -91,8 +91,12 @@ export const PintopayCard = ({
                     className="w-full h-full relative"
                 >
                     {/* FRONT SIDE */}
+                    {variant === 'platinum' && (
+                        <div className="absolute -inset-4 z-0 bg-linear-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 blur-2xl opacity-60 rounded-full" />
+                    )}
+
                     <div
-                        className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl shadow-2xl ${cardStyles[variant]}`}
+                        className={`absolute inset-0 backface-hidden overflow-hidden rounded-3xl shadow-2xl ${cardStyles[variant]} border border-white/20 translate-z-0 will-change-transform`}
                         style={{ backfaceVisibility: 'hidden' }}
                     >
                         {/* Global Grain Texture */}
@@ -101,9 +105,8 @@ export const PintopayCard = ({
                         {/* Variant Specific Overlays */}
                         {variant === 'platinum' && (
                             <>
-                                <div className="absolute inset-0 z-1 card-shine opacity-60 mix-blend-soft-light" />
-                                <div className="absolute inset-0 z-1 bg-linear-to-tr from-transparent via-white/40 to-transparent opacity-80" />
-                                <div className="absolute -inset-1 z-0 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-20 blur-xl" />
+                                <div className="absolute inset-0 z-1 card-shine opacity-40 mix-blend-overlay" />
+                                <div className="absolute inset-0 z-1 bg-linear-to-tr from-transparent via-white/60 to-transparent opacity-40" />
                             </>
                         )}
 
@@ -128,8 +131,8 @@ export const PintopayCard = ({
                         {/* Platinum Badge */}
                         {variant === 'platinum' && (
                             <div className="absolute top-6 right-6 z-20">
-                                <div className="bg-slate-900/5 backdrop-blur-md border border-slate-900/10 rounded-full px-3 py-1 shadow-sm">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-900">
+                                <div className="bg-slate-900/10 backdrop-blur-md border border-slate-900/10 rounded-full px-4 py-1.5 shadow-sm">
+                                    <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-900">
                                         Platinum
                                     </span>
                                 </div>
@@ -160,7 +163,7 @@ export const PintopayCard = ({
 
                     {/* BACK SIDE */}
                     <div
-                        className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl shadow-2xl p-6 flex flex-col justify-center items-center text-center ${cardStyles[variant]}`}
+                        className={`absolute inset-0 backface-hidden overflow-hidden rounded-3xl shadow-2xl p-6 flex flex-col justify-center items-center text-center ${cardStyles[variant]} border border-white/20`}
                         style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
                     >
                         {/* Global Grain Texture - Inherited */}

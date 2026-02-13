@@ -81,7 +81,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
             {/* Card Display Area */}
             <div className="flex-1 px-6 pb-48 flex flex-col items-center">
                 {/* 3D Card Visual */}
-                <div className="mb-8 w-full max-w-[320px] flex justify-center relative min-h-[220px]">
+                <div className="mb-8 w-full max-w-[340px] flex justify-center relative min-h-[220px]">
                     <AnimatePresence initial={true} mode="wait">
                         <motion.div
                             key={selectedTab}
