@@ -5,7 +5,7 @@ import {
     ArrowLeft, Terminal, Bot, Image as ImageIcon,
     Share2, CheckCircle2, AlertCircle, Loader2,
     Lock, Instagram, Twitter, Cpu, BookOpen, Flame, Settings,
-    Linkedin, Info
+    Linkedin, Info, Copy, Download, RefreshCw, Undo2, Share
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
@@ -55,6 +55,10 @@ export const ProDashboard = () => {
 
     const [countdown, setCountdown] = useState(30);
 
+    // History and Cache for Viral Generations
+    const [history, setHistory] = useState<any[]>([]);
+    const [historyIndex, setHistoryIndex] = useState(-1);
+
     useEffect(() => {
         if (showSetup) {
             setFooterVisible(false);
@@ -101,7 +105,13 @@ export const ProDashboard = () => {
 
         try {
             const result = await proService.generateContent(postType, audience, language);
+
+            // Manage History
+            const newHistory = [...history.slice(0, historyIndex + 1), result];
+            setHistory(newHistory);
+            setHistoryIndex(newHistory.length - 1);
             setGeneratedResult(result);
+
             setStatus(prev => prev ? { ...prev, pro_tokens: result.tokens_remaining } : null);
             setStep(3);
             notification('success');
@@ -110,6 +120,61 @@ export const ProDashboard = () => {
             alert(error.response?.data?.detail || 'Generation failed');
         } finally {
             setIsGenerating(false);
+        }
+    };
+
+    const handleCopyText = () => {
+        if (!generatedResult) return;
+        const text = `${generatedResult.title}\n\n${generatedResult.body}\n\n${generatedResult.hashtags?.map((t: string) => `#${t}`).join(' ')}`;
+        navigator.clipboard.writeText(text);
+        notification('success');
+    };
+
+    const handleSharePost = async () => {
+        if (!generatedResult) return;
+        try {
+            const shareData = {
+                title: generatedResult.title,
+                text: generatedResult.body,
+                url: window.location.href
+            };
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                handleCopyText();
+            }
+        } catch (err) {
+            console.log('Share failed', err);
+        }
+    };
+
+    const handleSaveImageToDevice = async () => {
+        if (!generatedResult?.image_url) return;
+        const url = generatedResult.image_url.startsWith('http') ? generatedResult.image_url : `${getApiUrl().replace(/\/api$/, '')}${generatedResult.image_url}`;
+        const finalUrl = url.replace('https://p2phub-production.up.railway.app/api', 'https://p2phub-production.up.railway.app');
+
+        try {
+            const response = await fetch(finalUrl);
+            const blob = await response.blob();
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = `viral_p2p_${Date.now()}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            notification('success');
+        } catch (err) {
+            window.open(finalUrl, '_blank');
+        }
+    };
+
+    const handleUndoVersion = () => {
+        if (historyIndex > 0) {
+            const newIndex = historyIndex - 1;
+            setHistoryIndex(newIndex);
+            setGeneratedResult(history[newIndex]);
+            impact('medium');
         }
     };
 
@@ -444,7 +509,7 @@ export const ProDashboard = () => {
                                     className="space-y-4"
                                 >
                                     <div className="glass-panel-premium rounded-[2rem] overflow-hidden">
-                                        <div className="aspect-video bg-indigo-950/20 relative flex items-center justify-center overflow-hidden">
+                                        <div className="aspect-video bg-indigo-950/20 relative flex items-center justify-center overflow-hidden group/img">
                                             <div className="absolute inset-0 bg-linear-to-b from-transparent to-black/60 z-1" />
                                             {generatedResult.image_url ? (
                                                 <img src={generatedResult.image_url.startsWith('http') ? generatedResult.image_url : `${getApiUrl().replace(/\/api$/, '')}${generatedResult.image_url}`} alt="Viral" className="w-full h-full object-cover" />
@@ -454,14 +519,40 @@ export const ProDashboard = () => {
                                                     <p className="text-[10px] uppercase tracking-[0.2em] text-indigo-300 font-bold">{generatedResult.image_prompt}</p>
                                                 </div>
                                             )}
+
+                                            {/* Image Actions Overlay */}
+                                            <div className="absolute inset-0 z-2 opacity-0 group-hover/img:opacity-100 transition-opacity bg-black/40 backdrop-blur-xs flex items-center justify-center gap-4">
+                                                <button onClick={handleSaveImageToDevice} className="p-3 bg-white/10 hover:bg-white/20 rounded-full border border-white/20 text-white backdrop-blur-md transition-all">
+                                                    <Download size={20} />
+                                                </button>
+                                                <button onClick={handleGenerate} className="p-3 bg-white/10 hover:bg-white/20 rounded-full border border-white/20 text-white backdrop-blur-md transition-all">
+                                                    <RefreshCw size={20} />
+                                                </button>
+                                                {historyIndex > 0 && (
+                                                    <button onClick={handleUndoVersion} className="p-3 bg-white/10 hover:bg-white/20 rounded-full border border-white/20 text-white backdrop-blur-md transition-all">
+                                                        <Undo2 size={20} />
+                                                    </button>
+                                                )}
+                                            </div>
+
                                             <div className="absolute top-4 right-4 z-2">
                                                 <span className="bg-indigo-500 text-white text-[8px] font-black px-2 py-1 rounded-full uppercase tracking-widest">AI Generated</span>
                                             </div>
                                         </div>
-                                        <div className="p-6 space-y-4">
-                                            <div className="space-y-2">
-                                                <h4 className="text-base font-black leading-tight text-brand-text uppercase tracking-tight">{generatedResult.title}</h4>
-                                                <div className="h-0.5 w-12 bg-indigo-500 rounded-full" />
+                                        <div className="p-6 space-y-4 relative">
+                                            <div className="flex justify-between items-start">
+                                                <div className="space-y-2">
+                                                    <h4 className="text-base font-black leading-tight text-brand-text uppercase tracking-tight">{generatedResult.title}</h4>
+                                                    <div className="h-0.5 w-12 bg-indigo-500 rounded-full" />
+                                                </div>
+                                                <div className="flex gap-2">
+                                                    <button onClick={handleCopyText} className="p-2 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 text-brand-muted transition-all">
+                                                        <Copy size={14} />
+                                                    </button>
+                                                    <button onClick={handleGenerate} className="p-2 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 text-brand-muted transition-all">
+                                                        <RefreshCw size={14} className={isGenerating ? "animate-spin" : ""} />
+                                                    </button>
+                                                </div>
                                             </div>
                                             <p className="text-xs font-medium leading-relaxed opacity-80 whitespace-pre-wrap">{generatedResult.body}</p>
                                             <div className="flex flex-wrap gap-2 pt-2">
@@ -473,8 +564,8 @@ export const ProDashboard = () => {
                                     </div>
                                     <div className="grid grid-cols-2 gap-3">
                                         <button onClick={() => { selection(); setStep(1); }} className="h-11 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-wider active:scale-95 transition-all">CREATE NEW</button>
-                                        <button onClick={() => { impact('light'); notification('success'); }} className="h-11 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all">
-                                            PUSH TO SOCIAL <Share2 size={12} />
+                                        <button onClick={() => { impact('light'); handleSharePost(); }} className="h-11 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all">
+                                            SHARE EVERYTHING <Share size={12} />
                                         </button>
                                     </div>
                                 </motion.div>
