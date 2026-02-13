@@ -8,6 +8,7 @@ from app.core.security import get_current_user, get_tg_user
 from app.models.partner import Partner, get_session
 from app.services.leaderboard_service import leaderboard_service
 
+from app.schemas.leaderboard import LeaderboardPartner
 router = APIRouter()
 
 from app.middleware.rate_limit import limiter
@@ -50,8 +51,7 @@ async def get_global_leaderboard(
         statement = select(Partner).order_by(Partner.xp.desc()).limit(limit)
         result = await session.exec(statement)
         partners = result.all()
-        from app.schemas.leaderboard import LeaderboardPartner
-        data = [LeaderboardPartner(**p.dict()).model_dump() for p in partners]
+        data = [LeaderboardPartner(**p.model_dump()).model_dump() for p in partners]
 
         try:
             await redis_service.set_json(cache_key, data, expire=60)

@@ -55,7 +55,7 @@ async def get_current_partner(
     
     # Update cache for next turn
     try:
-        await redis_service.set_json(cache_key, partner.dict(), expire=120)
+        await redis_service.set_json(cache_key, partner.model_dump(), expire=120)
     except:
         pass
         
