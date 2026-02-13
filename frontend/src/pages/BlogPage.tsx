@@ -189,7 +189,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                         className="flex flex-col"
                     >
                         {/* Header Area - Sticky with Glassmorphism */}
-                        <div className="px-4 pt-[calc(env(safe-area-inset-top,0px)+3rem)] pb-2 flex items-center justify-between">
+                        <div className="px-4 pt-2 pb-2 flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => { selection(); setActiveTab?.('home'); }}
