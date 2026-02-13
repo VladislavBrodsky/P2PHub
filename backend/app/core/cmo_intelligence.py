@@ -301,8 +301,8 @@ class ContentCategory:
                 "Scarcity principle"
             ],
             "formatting_rules": {
-                "bold": ["NEW", "EXCLUSIVE", "LAUNCH", "LIMITED", key benefits],
-                "italic": [Subtle urgency phrases, timestamps],
+                "bold": ["NEW", "EXCLUSIVE", "LAUNCH", "LIMITED", "key benefits"],
+                "italic": ["Subtle urgency phrases", "timestamps"],
                 "hyperlink": ["Product link", "Waitlist", "Early access"]
             }
         },
@@ -321,8 +321,8 @@ class ContentCategory:
                 "Temporal scarcity"
             ],
             "formatting_rules": {
-                "bold": ["WARNING", stats, "DON'T WAIT", "CLOSING SOON"],
-                "italic": [Whispers of insider info],
+                "bold": ["WARNING", "stats", "DON'T WAIT", "CLOSING SOON"],
+                "italic": ["Whispers of insider info"],
                 "hyperlink": ["Join now", "Secure spot", "Limited access"]
             }
         },
@@ -339,10 +339,10 @@ class ContentCategory:
                 "Contrarian appeal",
                 "Social proof from experts",
                 "Thought leadership"
-            },
+            ],
             "formatting_rules": {
-                "bold": ["TRUTH", statistics, expert quotes, "THE REAL PROBLEM"],
-                "italic": [Industry myths, common assumptions],
+                "bold": ["TRUTH", "statistics", "expert quotes", "THE REAL PROBLEM"],
+                "italic": ["Industry myths", "common assumptions"],
                 "hyperlink": ["Case study", "Whitepaper", "Proof"]
             }
         },
@@ -359,10 +359,10 @@ class ContentCategory:
                 "Relatability",
                 "Transformation promise",
                 "Social comparison"
-            },
+            ],
             "formatting_rules": {
-                "bold": ["FROM", "TO", transformation keywords, lifestyle benefits],
-                "italic": [Personal reflections, quotes],
+                "bold": ["FROM", "TO", "transformation keywords", "lifestyle benefits"],
+                "italic": ["Personal reflections", "quotes"],
                 "hyperlink": ["Start your journey", "See how", "Transform now"]
             }
         },
@@ -381,8 +381,8 @@ class ContentCategory:
                 "Concrete results"
             ],
             "formatting_rules": {
-                "bold": [Income figures, "PASSIVE", "MONTHLY", "RECURRING", key mechanisms],
-                "italic": [Disclaimers, personal journey],
+                "bold": ["Income figures", "PASSIVE", "MONTHLY", "RECURRING", "key mechanisms"],
+                "italic": ["Disclaimers", "personal journey"],
                 "hyperlink": ["See my results", "Start earning", "Join network"]
             }
         },
@@ -399,10 +399,10 @@ class ContentCategory:
                 "Leverage principle",
                 "Team/tribe belonging",
                 "Exponential thinking"
-            },
+            ],
             "formatting_rules": {
-                "bold": ["SCALE", growth metrics, "TEAM", "EXPONENTIAL", multiplication factors],
-                "italic": [Visionary statements],
+                "bold": ["SCALE", "growth metrics", "TEAM", "EXPONENTIAL", "multiplication factors"],
+                "italic": ["Visionary statements"],
                 "hyperlink": ["Build your network", "Join movement", "Partner program"]
             }
         },
@@ -421,8 +421,8 @@ class ContentCategory:
                 "Empowerment"
             ],
             "formatting_rules": {
-                "bold": ["STEP 1", "STEP 2", action items, key concepts],
-                "italic": [Pro tips, warnings],
+                "bold": ["STEP 1", "STEP 2", "action items", "key concepts"],
+                "italic": ["Pro tips", "warnings"],
                 "hyperlink": ["Tutorial", "Resources", "Start here", "Guide"]
             }
         }
