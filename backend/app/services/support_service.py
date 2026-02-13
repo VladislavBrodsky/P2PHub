@@ -58,6 +58,7 @@ class SupportAgentService:
 
     # #comment: Local Memory Cache for Knowledge Base (Scale bypass for Redis)
     _kb_memory_cache: Optional[Dict[str, Any]] = None
+    _kb_index: Dict[str, List[int]] = {} # Word-to-Record Index
     _kb_last_refresh: datetime = datetime.min
     KB_MEMORY_TTL = 300  # 5 minutes in-memory TTL
 
@@ -74,13 +75,15 @@ class SupportAgentService:
         self._init_google_sheets_client()
 
     def _init_google_sheets_client(self):
-        """
-        # #comment: Lazy/Async initialization to prevent blocking the event loop at startup.
-        # Authenticating with Google APIs can be slow; we handle it gracefully here.
-        """
-        self._gs_client_init_task = None
+        """Lazy/Async initialization to prevent blocking the event loop at startup."""
         creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
-        if not creds_json:
+        if creds_json:
+            # #comment: Proactive background authentication to pre-warm the service.
+            # This ensures the GS client is ready before the first user even opens support.
+            asyncio.create_task(self._get_gs_client())
+            # #comment: Trigger KB pre-fetch to warm up in-memory caches and index.
+            asyncio.create_task(self._get_cached_kb())
+        else:
              logger.warning("❌ SupportService: Google Credentials missing.")
 
     async def _get_gs_client(self):
@@ -159,12 +162,33 @@ class SupportAgentService:
                     
                     # Save to Cache
                     await redis_service.set_json(self.KB_CACHE_KEY, kb_data, expire=self.KB_TTL)
-                    logger.info("✅ Knowledge Base Cached Successfully.")
+                    
+                    # #comment: Build In-memory Index for sub-millisecond lookups
+                    self._build_kb_index(kb_data)
+                    
+                    logger.info("✅ Knowledge Base Cached and Indexed Successfully.")
                     return kb_data
         except Exception as e:
             logger.error(f"⚠️ Knowledge Base Cache/Fetch Error: {e}")
             
         return None
+
+    def _build_kb_index(self, kb_data: Dict[str, Any]):
+        """Builds an inverted index of words to record indices for O(1) keyword lookups."""
+        index = {}
+        records = kb_data.get("qa", [])
+        for i, r in enumerate(records):
+            # Focus indexing on Questions for maximum relevance
+            text = str(r.get('Question', '')).lower()
+            words = set(text.split())
+            for word in words:
+                if len(word) > 2: # Skip stop-chars
+                    if word not in index:
+                        index[word] = []
+                    index[word].append(i)
+        self._kb_index = index
+        self._kb_memory_cache = kb_data
+        self._kb_last_refresh = datetime.utcnow()
 
 
     async def get_session(self, user_id: str) -> Dict[str, Any]:
@@ -320,35 +344,40 @@ class SupportAgentService:
             records = kb_data.get("qa", [])
             
             if records:
-                # #comment: Optimized linear search for high concurrency
-                # Operating on in-memory list (fast) instead of making external API calls
-                query_words = set(query.lower().split())
+                # #comment: Advanced Inverted Index Search.
+                # Instead of scanning ALL records, we only look at records containing our query words.
+                # This makes the search complexity O(query_words) instead of O(total_records).
+                query_words = [w for w in query.lower().split() if len(w) > 2]
                 
-                # #comment: High-performance word-set intersection for ranking.
-                # Significantly faster than linear 'in' checks for large records.
+                # If index is missing (e.g. cold start), build it
+                if not self._kb_index:
+                    self._build_kb_index(kb_data)
+
+                candidate_indices = set()
+                for word in query_words:
+                    if word in self._kb_index:
+                        candidate_indices.update(self._kb_index[word])
+                
                 scored_matches = []
-                for r in records:
+                # Only score the candidate records (massive speedup for large KB)
+                for idx in candidate_indices:
+                    r = records[idx]
                     q_text_set = set(str(r.get('Question', '')).lower().split())
-                    
-                    overlap = len(query_words.intersection(q_text_set))
+                    overlap = len(set(query_words).intersection(q_text_set))
                     if overlap > 0:
                         scored_matches.append((overlap, f"Q: {r.get('Question')}\nA: {r.get('Answer')}", r.get('Category', 'General')))
                 
-                # Sort by score descending
+                # Sort and take top 3
                 scored_matches.sort(key=lambda x: x[0], reverse=True)
-                
-                # Take top 3
                 top_matches = scored_matches[:3]
                 matches = [m[1] for m in top_matches]
                 
-                # #comment: Auto-detect category from the highest scoring match
                 if top_matches:
-                    best_category = top_matches[0][2] # Get category from first match
+                    best_category = top_matches[0][2]
 
                 if matches:
                     gs_info = "\n\n".join(matches)
                 else:
-                    # Fallback if no specific match
                     gs_info = "No specific match found in KB. Use general knowledge."
                     best_category = "General"
 

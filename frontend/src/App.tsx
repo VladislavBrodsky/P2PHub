@@ -32,6 +32,7 @@ import { FeatureErrorBoundary } from './components/FeatureErrorBoundary';
 import { StartupLoader } from './components/ui/StartupLoader';
 import { useStartupProgress } from './context/StartupProgressContext';
 
+import { RevealSkeleton } from './components/Skeletons/RevealSkeleton';
 import { UIProvider } from './context/UIContext';
 
 // #comment: Removed hard import of SupportChat to enable the Lazy load strategy defined above.
@@ -233,7 +234,6 @@ function AppContent({ onReady }: { onReady: () => void }) {
                             We're building something amazing for our partners. Stay tuned!
                         </p>
                     </div>
-                )}
                 )}
             </Suspense>
             {/* #comment: Render SupportChat within Suspense to handle lazy loading transition */}

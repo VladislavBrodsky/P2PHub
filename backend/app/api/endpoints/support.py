@@ -31,6 +31,19 @@ async def get_current_partner(
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
     
+    # #comment: Rapid Profile Caching (Redis) to avoid PostgreSQL bottlenecks
+    # We cache the core partner object for 2 minutes during active support sessions.
+    cache_key = f"partner_cache:{tg_id}"
+    try:
+        from app.services.redis_service import redis_service
+        cached_partner = await redis_service.get_json(cache_key)
+        if cached_partner:
+            # Reconstruct model from dict (Fast Path)
+            return Partner(**cached_partner)
+    except Exception as e:
+        logger.debug(f"Partner cache skip: {e}")
+
+    # Fallback to DB (Slow Path)
     from sqlmodel import select
     stmt = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(stmt)
@@ -38,6 +51,13 @@ async def get_current_partner(
     
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
+    
+    # Update cache for next turn
+    try:
+        await redis_service.set_json(cache_key, partner.dict(), expire=120)
+    except:
+        pass
+        
     return partner
 
 @router.get("/status", response_model=SessionStatusResponse)
