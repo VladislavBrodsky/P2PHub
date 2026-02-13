@@ -55,7 +55,16 @@ async def chat_with_agent(
 ):
     """Entry point for chatting with AI agent."""
     try:
-        answer = await support_service.generate_response(partner.telegram_id, payload.message)
+        # #comment: Extract rich user metadata for better logging
+        user_metadata = {
+            "username": partner.username,
+            "first_name": partner.first_name,
+            "last_name": partner.last_name,
+            "language": partner.language_code,
+            "level": partner.level,
+            "balance": partner.balance
+        }
+        answer = await support_service.generate_response(partner.telegram_id, payload.message, user_metadata)
         return {"answer": answer, "status": "success"}
     except Exception as e:
         logger.error(f"Chat endpoint error: {e}")

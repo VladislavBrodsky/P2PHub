@@ -10,6 +10,8 @@ from google.oauth2.service_account import Credentials
 from openai import AsyncOpenAI
 
 from app.core.config import settings
+
+# #comment: Import redis service for caching KB responses
 from app.services.redis_service import redis_service
 
 logger = logging.getLogger(__name__)
@@ -45,6 +47,13 @@ class SupportAgentService:
         "Earnings & Network",
         "Security & Technical"
     ]
+    
+    KB_CACHE_KEY = "knowledge_base_cache"
+    KB_TTL = 3600  # 1 hour cache
+    
+    # #comment: Cost tracking constants (GPT-4o pricing)
+    COST_INPUT_1M = 2.50
+    COST_OUTPUT_1M = 10.00
 
     def __init__(self):
         openai_key = settings.OPENAI_API_KEY or os.getenv("OPENAI_API_KEY")
@@ -55,9 +64,10 @@ class SupportAgentService:
             logger.warning("SupportService: OpenAI API Key missing.")
 
         self.gs_client = None
-        self._init_google_sheets()
+        # Initialize Google Sheets (synchronous part)
+        self._init_google_sheets_client()
 
-    def _init_google_sheets(self):
+    def _init_google_sheets_client(self):
         """Initializes Google Sheets client using service account info from environment."""
         creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
         if creds_json:
@@ -69,6 +79,60 @@ class SupportAgentService:
                 logger.info("✅ SupportService: Google Sheets client initialized.")
             except Exception as e:
                 logger.error(f"❌ SupportService: Failed to init Google Sheets: {e}")
+
+    async def _get_cached_kb(self) -> Dict[str, str]:
+        """Retrieves KB from Redis cache or fetches from Google Sheets if missing."""
+        try:
+            # 1. Try Cache
+            cached_kb = await redis_service.get_json(self.KB_CACHE_KEY)
+            # #comment: Check Redis cache first to avoid API latency
+            if cached_kb:
+                return cached_kb
+            
+            # 2. Fetch from Google Sheets
+            # #comment: Fallback to Google Sheets API if cache is empty
+            if self.gs_client:
+                sheet_id = os.getenv("SUPPORT_SPREADSHEET_ID")
+                if sheet_id:
+                    logger.info("🔄 Refreshing Knowledge Base Cache from Google Sheets...")
+                    spreadsheet = self.gs_client.open_by_key(sheet_id)
+                    
+                    # TOV
+                    tov_info = ""
+                    try:
+                        tov_gid = os.getenv("TOV_GID", "0")
+                        tov_sheet = spreadsheet.get_worksheet_by_id(int(tov_gid))
+                        if tov_sheet:
+                            tov_records = tov_sheet.get_all_records()
+                            tov_info = "\n".join([f"{r.get('Rule', '')}: {r.get('Value', '')}" for r in tov_records])
+                    except Exception as e:
+                        logger.warning(f"Could not load TOV tab: {e}")
+
+                    # KB
+                    kb_records = []
+                    try:
+                        kb_gid = os.getenv("KB_GID", "0")
+                        kb_sheet = spreadsheet.get_worksheet_by_id(int(kb_gid))
+                        if kb_sheet:
+                            kb_records = kb_sheet.get_all_records()
+                    except Exception as e:
+                        logger.warning(f"Could not load KB tab: {e}")
+                    
+                    # Construct Cache Object
+                    kb_data = {
+                        "tov": tov_info,
+                        "qa": kb_records
+                    }
+                    
+                    # Save to Cache
+                    await redis_service.set_json(self.KB_CACHE_KEY, kb_data, expire=self.KB_TTL)
+                    logger.info("✅ Knowledge Base Cached Successfully.")
+                    return kb_data
+        except Exception as e:
+            logger.error(f"⚠️ Knowledge Base Cache/Fetch Error: {e}")
+            
+        return None
+
 
     async def get_session(self, user_id: str) -> Dict[str, Any]:
         """Retrieves or creates a support session for a user."""
@@ -113,13 +177,17 @@ class SupportAgentService:
         except Exception as e:
             logger.error(f"❌ Redis Update Error (update_session): {e}")
 
-    async def generate_response(self, user_id: str, message: str) -> str:
+    async def generate_response(self, user_id: str, message: str, user_metadata: Dict[str, Any] = None) -> str:
         """Generates an AI response based on KB and history."""
         if not self.openai_client:
             return "Support service is currently unavailable. Please try again later."
 
         try:
             session = await self.get_session(user_id)
+            
+            # #comment: Update session with latest user metadata (if provided)
+            if user_metadata:
+                session["user_metadata"] = user_metadata
             
             # 1. Search Knowledge Base (FAQ + Google Sheet)
             kb_context = await self._search_knowledge_base(message)
@@ -142,9 +210,24 @@ class SupportAgentService:
             )
             answer = response.choices[0].message.content
             
-            # Update local history
+            # #comment: Calculate cost for this turn
+            usage = response.usage
+            cost = 0.0
+            if usage:
+                cost = (usage.prompt_tokens / 1_000_000 * self.COST_INPUT_1M) + \
+                       (usage.completion_tokens / 1_000_000 * self.COST_OUTPUT_1M)
+
+            # Update local history with cost tracking
             session["history"].append({"role": "user", "content": message, "timestamp": datetime.utcnow().isoformat()})
-            session["history"].append({"role": "assistant", "content": answer, "timestamp": datetime.utcnow().isoformat()})
+            session["history"].append({
+                "role": "assistant", 
+                "content": answer, 
+                "timestamp": datetime.utcnow().isoformat(),
+                "cost": cost
+            })
+            
+            # Accumulate total session cost
+            session["total_cost"] = session.get("total_cost", 0.0) + cost
             
             await self.update_session(user_id, session)
             return answer
@@ -155,9 +238,10 @@ class SupportAgentService:
 
     async def _search_knowledge_base(self, query: str) -> str:
         """
-        Searches built-in FAQ and Google Sheet KB using specific tab GIDs.
+        Searches built-in FAQ and Google Sheet KB using cached data for speed.
+        Optimized for high-concurrency (10M+ users).
         """
-        # 1. Core Facts
+        # 1. Core Facts (Always available in memory)
         core_info = """
         - Pintopay Card: USD-denominated Mastercard (Virtual or Physical).
         - Setup: Instant issuance via the app. Must select card type and pay fee.
@@ -165,58 +249,55 @@ class SupportAgentService:
         - Top-up: Use crypto (USDT/TON) to top up your card balance instantly.
         - Mission: Best service for digital nomads. Improving every single day.
         - Tone: Pintopay is elite, fast, and borderless.
+        - Earnings: Invite friends to earn up to 30% on card fees and 0.5% on top-ups.
+        - Support: We resolve issues fast. If technical, provide details.
         """
         
-        # 2. Dynamic TOV & Rules from Google Sheet
         tov_info = ""
-        # 3. Knowledge Base from Google Sheet
         gs_info = ""
 
-        if self.gs_client:
-            try:
-                sheet_id = os.getenv("SUPPORT_SPREADSHEET_ID")
-                if sheet_id:
-                    spreadsheet = self.gs_client.open_by_key(sheet_id)
-                    
-                    # Fetch TOV & Rules (GID from env)
-                    try:
-                        tov_gid = os.getenv("TOV_GID", "0")
-                        tov_sheet = spreadsheet.get_worksheet_by_id(int(tov_gid))
-                        if tov_sheet:
-                            tov_records = tov_sheet.get_all_records()
-                            tov_info = "\n".join([f"{r.get('Rule', '')}: {r.get('Value', '')}" for r in tov_records])
-                    except Exception as e:
-                        logger.warning(f"Could not load TOV tab: {e}")
-
-                    # Fetch Knowledge Base (GID from env)
-                    try:
-                        kb_gid = os.getenv("KB_GID", "0")
-                        kb_sheet = spreadsheet.get_worksheet_by_id(int(kb_gid))
-                        if kb_sheet:
-                            records = kb_sheet.get_all_records()
-                            # Simple search: intersection of keywords
-                            query_words = set(query.lower().split())
-                            matches = []
-                            for r in records:
-                                q_text = str(r.get('Question', '')).lower()
-                                if any(word in q_text for word in query_words):
-                                    matches.append(f"Q: {r.get('Question')}\nA: {r.get('Answer')}")
-                            
-                            if matches:
-                                gs_info = "\n\n".join(matches[:5])
-                            else:
-                                # Fallback: first 3 entries
-                                gs_info = "\n\n".join([f"Q: {r.get('Question')}\nA: {r.get('Answer')}" for r in records[:3]])
-                    except Exception as e:
-                        logger.warning(f"Could not load KB tab: {e}")
-
-            except Exception as e:
-                logger.error(f"⚠️ Spreadsheet Search Error: {e}")
+        # 2. Fetch from Cache (Fast Path)
+        kb_data = await self._get_cached_kb()
         
+        if kb_data:
+            tov_info = kb_data.get("tov", "")
+            records = kb_data.get("qa", [])
+            
+            if records:
+                # #comment: Optimized linear search for high concurrency
+                # Operating on in-memory list (fast) instead of making external API calls
+                query_words = set(query.lower().split())
+                matches = []
+                
+                # Rank matches by keyword overlap
+                scored_matches = []
+                for r in records:
+                    q_text = str(r.get('Question', '')).lower()
+                    a_text = str(r.get('Answer', '')).lower()
+                    
+                    # Simple scoring: count how many query words appear in the Question
+                    score = sum(1 for word in query_words if word in q_text)
+                    if score > 0:
+                        scored_matches.append((score, f"Q: {r.get('Question')}\nA: {r.get('Answer')}"))
+                
+                # Sort by score descending
+                scored_matches.sort(key=lambda x: x[0], reverse=True)
+                
+                # Take top 3
+                matches = [m[1] for m in scored_matches[:3]]
+                
+                if matches:
+                    gs_info = "\n\n".join(matches)
+                else:
+                    # Fallback if no specific match: show general helpful items
+                    gs_info = "No specific match found in KB. Use general knowledge."
+
         return f"CORE RULES:\n{core_info}\n\nTONE OF VOICE & SPECIFIC RULES:\n{tov_info}\n\nKNOWLEDGE BASE MATCHES:\n{gs_info}"
+        
+
 
     async def save_conversation_to_sheets(self, user_id: str):
-        """Saves the entire session history to the specific History tab (GID)."""
+        """Saves the entire session history to the specific History tab (GID) in a structured block format."""
         session = await self.get_session(user_id)
         if not session.get("history"):
             return
@@ -235,18 +316,52 @@ class SupportAgentService:
                     if sheet:
                         rows = []
                         category = session.get("category", "General")
+                        metadata = session.get("user_metadata", {})
+                        
+                        # #comment: Calculate Metrics
+                        start_time = datetime.fromisoformat(session["created_at"])
+                        end_time = datetime.utcnow()
+                        duration_sec = int((end_time - start_time).total_seconds())
+                        total_cost = session.get("total_cost", 0.0)
+                        msg_count = len(session["history"])
+                        
+                        # #comment: Construct "Session Block" Header with detailed metrics
+                        # Format: [Session ID] [Date] [Category] [User Info] [User ID] [Duration(s)] [Cost($)] [Msg Count] [Level]
+                        
+                        header_row = [
+                            f"IDs: {chat_session_id}",
+                            start_time.strftime("%Y-%m-%d %H:%M:%S"),
+                            category,
+                            f"@{metadata.get('username','N/A')}",
+                            str(user_id),
+                            f"{duration_sec}s",
+                            f"${total_cost:.5f}",
+                            f"{msg_count} msgs",
+                            f"Lvl {metadata.get('level', 1)}"
+                        ]
+                        
+                        rows.append(header_row)
+                        
+                        # #comment: Add individual message rows
                         for entry in session["history"]:
+                            # Format: [Time] [Role] [Content] [Cost (visible only for assistant)]
+                            cost_str = f"${entry.get('cost', 0):.5f}" if entry.get("cost") else ""
                             rows.append([
-                                chat_session_id,
-                                user_id,
+                                "", # Indent
                                 entry.get("timestamp", datetime.utcnow().isoformat()),
-                                entry["role"],
+                                entry["role"].upper(),
                                 entry["content"],
-                                category
+                                "",
+                                "",
+                                cost_str # Metric column alignment
                             ])
                         
+                        # #comment: Add a separator row for visual clarity
+                        rows.append(["-" * 20, "-" * 20, "-" * 20, "-" * 20, "-" * 20])
+                        rows.append([]) # Empty row
+                        
                         sheet.append_rows(rows)
-                        logger.info(f"✅ Saved support history for {user_id} to Google Sheets.")
+                        logger.info(f"✅ Saved support history block for {user_id}.")
             except Exception as e:
                 logger.error(f"❌ Failed to save history to Google Sheets: {e}")
 
