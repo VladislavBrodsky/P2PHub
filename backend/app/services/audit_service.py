@@ -103,6 +103,7 @@ class AuditService:
         level: int,
         balance_before: float,
         balance_after: float,
+        transaction_id: Optional[str] = None,
         request_id: Optional[str] = None,
     ) -> AuditLog:
         """Log a commission payment."""
@@ -120,6 +121,7 @@ class AuditService:
                 "level": level,
                 "percentage": self._get_commission_percentage(level),
                 "pro_buyer_id": buyer_id,
+                "transaction_id": transaction_id
             },
             request_id=request_id,
         )
@@ -274,9 +276,7 @@ class AuditService:
     # Helper methods
     def _get_commission_percentage(self, level: int) -> float:
         """Get commission percentage for a given level."""
-        percentages = { 1: 0.30, 2: 0.05, 3: 0.03, 4: 0.01, 5: 0.01, 
-                       6: 0.01, 7: 0.01, 8: 0.01, 9: 0.01}
-        return percentages.get(level, 0.0)
+        return settings.COMMISSION_MAP.get(level, 0.0)
     
     # Query methods for retrieving audit logs
     async def get_partner_audit_logs(

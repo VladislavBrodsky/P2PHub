@@ -66,24 +66,23 @@ async def process_referral_logic(partner_id: int):
                 logger.info(f"ℹ️ Referral XP already awarded for partner {partner_id}. Skipping...")
                 return
 
-            # 1. Reconstruct lineage (L1 to L9)
-            lineage_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-            # Ensure we only fetch ancestors and keep last 9
-            lineage_ids = list(dict.fromkeys(lineage_ids))[-9:]
-
             # Bulk Fetch all ancestors
+            lineage_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+            lineage_ids = list(dict.fromkeys(lineage_ids))[-9:]
+            
             statement = select(Partner).where(Partner.id.in_(lineage_ids))
             result = await session.exec(statement)
             ancestor_list = result.all()
             ancestor_map = {p.id: p for p in ancestor_list}
 
-            # XP distribution configuration
-            XP_MAP = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
-
             logger.info(f"🔄 Processing referral logic for partner {partner_id} (@{partner.username}).")
 
             new_partner_name = format_partner_name(partner)
             current_referrer_id = partner.referrer_id
+            
+            # Batch Redis Invalidation & Task Management
+            redis_pipe = redis_service.client.pipeline(transaction=True)
+            deferred_tasks = []
 
             for level in range(1, 10):
                 if not current_referrer_id:
@@ -95,21 +94,17 @@ async def process_referral_logic(partner_id: int):
                     break
 
                 try:
-                    # XP Distribution
-                    xp_gain = XP_MAP.get(level, 0)
+                    # 1. Award XP
+                    xp_gain = settings.REFERRAL_XP_MAP.get(level, 0)
                     if referrer.is_pro:
-                        xp_gain *= 5  # PRO members get 5x XP bonus
+                        xp_gain *= settings.PRO_XP_MULTIPLIER
 
-                    # Capture state for audit BEFORE atomic update
                     xp_before = referrer.xp
 
-                    # ATOMIC SQL INCREMENT
                     await session.execute(
                         text("UPDATE partner SET xp = xp + :gain, referral_count = referral_count + 1 WHERE id = :p_id"),
                         {"gain": xp_gain, "p_id": referrer.id}
                     )
-
-                    # Refresh referrer to get updated state for subsequent logic
                     await session.flush()
                     await session.refresh(referrer)
 
@@ -122,17 +117,7 @@ async def process_referral_logic(partner_id: int):
                     )
                     session.add(xp_tx)
 
-                    xp_earning = Earning(
-                        partner_id=referrer.id,
-                        amount=xp_gain,
-                        description=f"Referral XP Reward (L{level})",
-                        type="REFERRAL_XP",
-                        level=level,
-                        created_at=datetime.utcnow()
-                    )
-                    session.add(xp_earning)
-
-                    # Audit logging
+                    # 2. Audit & Notification Data
                     await audit_service.log_xp_award(
                         session=session,
                         partner_id=referrer.id,
@@ -144,104 +129,41 @@ async def process_referral_logic(partner_id: int):
                         xp_after=referrer.xp,
                     )
 
-                    logger.info(f"💰 [Level {level}] XP Awarded: {xp_gain} to {referrer.id}")
-
-                except Exception as core_error:
-                    logger.critical(f"❌ CRITICAL: Failed to award XP for {referrer.id} at level {level}: {core_error}")
-                    current_referrer_id = referrer.referrer_id
-                    continue
-
-                # Level Up Side Effect
-                try:
+                    # 3. Level Up Logic
                     new_level = get_level(referrer.xp)
                     if new_level > referrer.level:
                         for lvl in range(referrer.level + 1, new_level + 1):
-                            try:
-                                lang = referrer.language_code or "en"
-                                msg = get_msg(lang, "level_up", level=lvl)
-                                await notification_service.enqueue_notification(chat_id=referrer.telegram_id, text=msg)
-
-                                if lvl >= 50:
-                                    admin_msg = (
-                                        f"⭐️ *ELITE MILESTONE* ⭐️\n\n"
-                                        f"👤 *Partner:* {referrer.first_name} (@{referrer.username})\n"
-                                        f"🚀 *Reached Level:* {lvl}\n"
-                                        f"💎 *XP:* {referrer.xp}\n\n"
-                                        "A new leader is rising!"
-                                    )
-                                    for admin_id in settings.ADMIN_USER_IDS:
-                                        try:
-                                            await notification_service.enqueue_notification(chat_id=admin_id, text=admin_msg)
-                                        except Exception: pass
-                            except Exception: pass
+                            lang = referrer.language_code or "en"
+                            deferred_tasks.append(
+                                notification_service.enqueue_notification(
+                                    chat_id=int(referrer.telegram_id), 
+                                    text=get_msg(lang, "level_up", level=lvl)
+                                )
+                            )
                         referrer.level = new_level
-                except Exception as e:
-                    logger.error(f"⚠️ Level up logic failed for {referrer.id}: {e}")
+                        session.add(referrer)
 
-                # Redis Side Effects
-                try:
+                    # 4. Queue Redis Invalidation
                     await leaderboard_service.update_score(referrer.id, referrer.xp)
-                    async with redis_service.client.pipeline(transaction=True) as pipe:
-                        pipe.delete(f"partner:profile:{referrer.telegram_id}")
-                        pipe.delete(f"partner:earnings:{referrer.telegram_id}") # Invalidate earnings cache
-                        pipe.delete(f"ref_tree_stats:{referrer.id}")
-                        # Optimized: Invalidate growth metrics and charts to avoid stale data
-                        for tf in ["24H", "7D", "1M", "3M", "6M", "1Y"]:
-                            pipe.delete(f"growth_metrics:{referrer.id}:{tf}")
-                            pipe.delete(f"growth_chart:{referrer.id}:{tf}")
-                        
-                        # Invalidate membership list for this specific level
-                        pipe.delete(f"ref_tree_members:{referrer.id}:{level}")
-                        await pipe.execute()
-                except Exception as e:
-                    logger.error(f"⚠️ Redis sync/invalidation failed for {referrer.id}: {e}")
-
-                # Referral Notifications
-                try:
-                    # Construct Full Name: First Last (@username)
-                    def format_partner_name(p):
-                        parts = []
-                        if p.first_name: parts.append(p.first_name)
-                        if p.last_name: parts.append(p.last_name)
-                        name_display = " ".join(parts) if parts else "Partner"
-                        if p.username: name_display += f" (@{p.username})"
-                        return escape_markdown_v1(name_display)
-
-                    new_partner_name = format_partner_name(partner)
+                    redis_pipe.delete(f"partner:profile:{referrer.telegram_id}")
+                    redis_pipe.delete(f"partner:earnings:{referrer.telegram_id}")
+                    redis_pipe.delete(f"ref_tree_stats:{referrer.id}")
+                    for tf in ["24H", "7D", "1M", "3M", "6M", "1Y"]:
+                        redis_pipe.delete(f"growth_metrics:{referrer.id}:{tf}")
+                    
+                    # 5. Queue Notification
                     lang = referrer.language_code or "en"
-                    msg = None
-                    if level == 1:
-                        msg = get_msg(lang, "referral_l1_congrats", name=new_partner_name)
-                    else:
-                        path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-                        try:
-                            # Direct path to the new partner including intermediate names
-                            if referrer.id in path_ids:
-                                start_idx = path_ids.index(referrer.id)
-                                intermediary_ids = path_ids[start_idx+1:]
-                                chain_names = [format_partner_name(ancestor_map[mid_id]) for mid_id in intermediary_ids if mid_id in ancestor_map]
-                                    
-                                chain_names.append(new_partner_name)
-                                referral_chain = "\n".join([f"➜ {name}" for name in chain_names])
+                    msg = get_msg(lang, "referral_l1" if level == 1 else "referral_deep", name=new_partner_name, xp=xp_gain, level=level)
+                    deferred_tasks.append(notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg))
 
-                                if level == 2:
-                                    msg = get_msg(lang, "referral_l2_congrats", referral_chain=referral_chain)
-                                else:
-                                    msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=referral_chain)
-                            else:
-                                # Fallback if path reconstruction fails
-                                msg = get_msg(lang, "referral_l2_congrats" if level == 2 else "referral_deep_activity", level=level, referral_chain=f"➜ {new_partner_name}")
-                        except Exception as e:
-                            logger.error(f"Error building referral chain msg: {e}")
-
-                    if msg:
-                        await notification_service.enqueue_notification(chat_id=referrer.telegram_id, text=msg)
-                except Exception as e:
-                    logger.error(f"⚠️ Notification failed for {referrer.id}: {e}")
-
+                except Exception as core_error:
+                    logger.error(f"❌ Failed level {level} rewards for {referrer.id}: {core_error}")
+                
                 current_referrer_id = referrer.referrer_id
 
             await session.commit()
+            await redis_pipe.execute()
+            await asyncio.gather(*deferred_tasks, return_exceptions=True)
 
     except Exception as e:
         logger.error(f"Error in process_referral_logic: {e}", exc_info=True)
@@ -271,7 +193,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
         if not referrer:
             break
 
-        pct = COMMISSION_PCT.get(level, 0)
+        pct = settings.COMMISSION_MAP.get(level, 0)
         commission = total_amount * pct
 
         if commission > 0:
@@ -291,7 +213,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 partner_id=referrer.id,
                 amount=commission,
                 description=f"PRO Commission (L{level})",
-                type="PRO_COMMISSION",
+                type="COMMISSION",
                 level=level,
                 currency="USDT"
             )
@@ -307,6 +229,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 balance_after=referrer.balance,
             )
 
+            # Batch Redis Invalidation
             async with redis_service.client.pipeline(transaction=True) as pipe:
                 pipe.delete(f"partner:profile:{referrer.telegram_id}")
                 pipe.delete(f"partner:earnings:{referrer.telegram_id}")
@@ -314,8 +237,11 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
 
             try:
                 lang = referrer.language_code or "en"
-                msg = get_msg(lang, "commission_received", amount=round(commission, 2), level=level)
-                await notification_service.enqueue_notification(chat_id=referrer.telegram_id, text=msg)
-            except Exception: pass
+                # Consistently use the same message key
+                buyer_name = format_partner_name(partner)
+                msg = get_msg(lang, "referral_commission", amount=round(commission, 2), level=level, from_user=buyer_name)
+                await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
+            except Exception as e:
+                logger.error(f"Failed to notify {referrer.id} about commission: {e}")
 
         current_referrer_id = referrer.referrer_id

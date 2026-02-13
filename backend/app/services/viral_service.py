@@ -26,20 +26,9 @@ class ViralMarketingStudio:
     Acts as CMO of Pintopay to generate viral content and autopost across social media.
     """
 
-    POST_TYPES = [
-        "Viral Strategy", "Financial Shift", "Growth Hack", 
-        "Wealth Creation", "Tech Insider", "Digital Nomad Lifestyle"
-    ]
-
-    TARGET_AUDIENCES = [
-        "Crypto Investors", "Digital Nomads", "Freelancers", 
-        "E-commerce Owners", "Tech Enthusiasts", "High-Net-Worth Individuals"
-    ]
-
-    LANGUAGES = [
-        "English", "Russian", "Spanish", "French", "German", 
-        "Portuguese", "Chinese", "Japanese", "Arabic", "Hindi"
-    ]
+    POST_TYPES = settings.VIRAL_POST_TYPES
+    TARGET_AUDIENCES = settings.VIRAL_AUDIENCES
+    LANGUAGES = ["English", "Russian", "Spanish", "French", "German"]
 
     CMO_PERSONA = """
     You are the CMO of Pintopay, a world-class Marketing Strategist and Digital Nomad Influencer.
