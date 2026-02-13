@@ -190,10 +190,30 @@ class SupportAgentService:
                 session["user_metadata"] = user_metadata
             
             # 1. Search Knowledge Base (FAQ + Google Sheet)
-            kb_context = await self._search_knowledge_base(message)
+            kb_context, detected_category = await self._search_knowledge_base(message)
+            
+            # #comment: Update session category if a specific one was found (and not just General)
+            if detected_category and detected_category != "General":
+                session["category"] = detected_category
             
             # 2. Build messages for LLM
-            messages = [{"role": "system", "content": f"{self.SYSTEM_PROMPT}\n\nContext from Knowledge Base:\n{kb_context}"}]
+            # #comment: Inject Rich User Context into System Prompt
+            user_context_str = "Unknown User"
+            if user_metadata:
+                user_context_str = (
+                    f"User: {user_metadata.get('first_name', '')} {user_metadata.get('last_name', '')} "
+                    f"(@{user_metadata.get('username', 'N/A')})\n"
+                    f"Level: {user_metadata.get('level', 1)}\n"
+                    f"Balance: {user_metadata.get('balance', 0.0)} USDT"
+                )
+            
+            system_msg = (
+                f"{self.SYSTEM_PROMPT}\n\n"
+                f"--- USER PROFILE ---\n{user_context_str}\n\n"
+                f"--- KNOWLEDGE BASE ---\n{kb_context}"
+            )
+            
+            messages = [{"role": "system", "content": system_msg}]
             
             # History window (last 10 messages)
             relevant_history = session.get("history", [])[-10:]
@@ -236,9 +256,10 @@ class SupportAgentService:
             return "I apologize, but I'm processing multiple requests. One moment, please."
 
 
-    async def _search_knowledge_base(self, query: str) -> str:
+    async def _search_knowledge_base(self, query: str) -> tuple[str, str]:
         """
         Searches built-in FAQ and Google Sheet KB using cached data for speed.
+        Returns: (kb_context_string, detected_category)
         Optimized for high-concurrency (10M+ users).
         """
         # 1. Core Facts (Always available in memory)
@@ -255,6 +276,7 @@ class SupportAgentService:
         
         tov_info = ""
         gs_info = ""
+        best_category = "General"
 
         # 2. Fetch from Cache (Fast Path)
         kb_data = await self._get_cached_kb()
@@ -267,7 +289,6 @@ class SupportAgentService:
                 # #comment: Optimized linear search for high concurrency
                 # Operating on in-memory list (fast) instead of making external API calls
                 query_words = set(query.lower().split())
-                matches = []
                 
                 # Rank matches by keyword overlap
                 scored_matches = []
@@ -278,21 +299,28 @@ class SupportAgentService:
                     # Simple scoring: count how many query words appear in the Question
                     score = sum(1 for word in query_words if word in q_text)
                     if score > 0:
-                        scored_matches.append((score, f"Q: {r.get('Question')}\nA: {r.get('Answer')}"))
+                        # Append tuple: (score, formatted_text, category)
+                        scored_matches.append((score, f"Q: {r.get('Question')}\nA: {r.get('Answer')}", r.get('Category', 'General')))
                 
                 # Sort by score descending
                 scored_matches.sort(key=lambda x: x[0], reverse=True)
                 
                 # Take top 3
-                matches = [m[1] for m in scored_matches[:3]]
+                top_matches = scored_matches[:3]
+                matches = [m[1] for m in top_matches]
                 
+                # #comment: Auto-detect category from the highest scoring match
+                if top_matches:
+                    best_category = top_matches[0][2] # Get category from first match
+
                 if matches:
                     gs_info = "\n\n".join(matches)
                 else:
-                    # Fallback if no specific match: show general helpful items
+                    # Fallback if no specific match
                     gs_info = "No specific match found in KB. Use general knowledge."
+                    best_category = "General"
 
-        return f"CORE RULES:\n{core_info}\n\nTONE OF VOICE & SPECIFIC RULES:\n{tov_info}\n\nKNOWLEDGE BASE MATCHES:\n{gs_info}"
+        return f"CORE RULES:\n{core_info}\n\nTONE OF VOICE & SPECIFIC RULES:\n{tov_info}\n\nKNOWLEDGE BASE MATCHES:\n{gs_info}", best_category
         
 
 
