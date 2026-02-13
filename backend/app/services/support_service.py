@@ -206,9 +206,8 @@ class SupportAgentService:
             cached_kb = await redis_service.get_json(self.KB_CACHE_KEY)
             
             if cached_kb:
-                # Update memory cache
-                self._kb_memory_cache = cached_kb
-                self._kb_last_refresh = now
+                # Update memory cache and rebuild index
+                self._build_kb_index(cached_kb)
                 return cached_kb
             
             # 2. Fetch from Google Sheets
