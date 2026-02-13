@@ -398,8 +398,8 @@ class ViralMarketingStudio:
             return
 
         try:
-            sheet_id = "1JCxW4ANBthKy3Qeu9RBE3Ds3fFpX8993Q_6JPdmg-_k"
-            gid = "633034160"
+            sheet_id = os.getenv("VIRAL_MARKETING_SPREADSHEET_ID") or "1JCxW4ANBthKy3Qeu9RBE3Ds3fFpX8993Q_6JPdmg-_k"
+            gid = os.getenv("VIRAL_MARKETING_GID") or "633034160"
             
             spreadsheet = self.gs_client.open_by_key(sheet_id)
             sheet = spreadsheet.get_worksheet_by_id(int(gid))
