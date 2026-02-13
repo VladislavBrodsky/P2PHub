@@ -17,11 +17,42 @@ frontend/local_npm_cache/
 # OS
 .DS_Store
 Thumbs.db
+*.exe
+*.dll
+*.so
+*.dylib
 
 # Logs
 archive_logs/
 *.db
 debug_output*.txt
-# Audit Reports
+debug_viral_output.txt
+
+# Generated Assets & AI Artifacts
+app_images/generated/
+backend/app_images/generated/
+*.png
+*.jpg
+*.jpeg
+*.webp
+!frontend/public/**/*.webp
+!frontend/src/assets/**/*
+
+# Audit Reports & Checklists
 *_report.json
 security_summary.md
+knowledge_base_checklist.md
+
+# Cache & Temp
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+.eslintcache
+.stylelintcache
+node_modules/
+dist/
+coverage/
+.next/
+.turbo/
+.vercel/
+*.log

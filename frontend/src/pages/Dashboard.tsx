@@ -1,7 +1,7 @@
 // #comment: Removed unused useHaptic import from Dashboard.tsx to address linting warnings
 import { ShieldCheck } from 'lucide-react';
 import { useUser } from '../context/UserContext';
-import { lazy } from 'react';
+import { lazy, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 
@@ -38,9 +38,9 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
     };
 
     // Calculate rotation index (0, 1, or 2) based on current day
-    const rotationIndex = Math.floor(Date.now() / (1000 * 60 * 60 * 24)) % 3;
-    const heroTitle1 = t(`dashboard.hero_rotation.${rotationIndex}.title_1`, { defaultValue: "Everything You Know" });
-    const heroTitle2 = t(`dashboard.hero_rotation.${rotationIndex}.title_2`, { defaultValue: "About Money Is a Lie" });
+    const rotationIndex = useMemo(() => Math.floor(Date.now() / (1000 * 60 * 60 * 24)) % 3, []);
+    const heroTitle1 = useMemo(() => t(`dashboard.hero_rotation.${rotationIndex}.title_1`, { defaultValue: "Everything You Know" }), [rotationIndex, t]);
+    const heroTitle2 = useMemo(() => t(`dashboard.hero_rotation.${rotationIndex}.title_2`, { defaultValue: "About Money Is a Lie" }), [rotationIndex, t]);
 
     return (
         <motion.div
