@@ -19,7 +19,8 @@
         "lvl": "Lvl",
         "tap_to_flip": "TAP TO FLIP",
         "upgrade_pro": "Upgrade to PRO",
-        "unlock_rewards": "Unlock 2x Rewards & Perks"
+        "unlock_rewards": "Unlock 2x Rewards & Perks",
+        "download_asset": "Download Prototype"
     },
     "menu": {
         "settings": "Settings",
@@ -1029,6 +1030,39 @@
                 }
             ]
         },
+        "checklist": {
+            "title": "Viral Audit Checklist",
+            "subtitle": "CHECK BEFORE PUBLISHING",
+            "items": [
+                "Is the Hook visible in the first 2 lines?",
+                "Did you add a clear Call to Action (CTA)?",
+                "Is the image high-contrast and relevant?",
+                "Are you using at least 5 target hashtags?",
+                "Did you include your referral link?"
+            ]
+        },
+        "roadmap": {
+            "title": "Daily PRO Roadmap",
+            "subtitle": "24/7 GROWTH PROTOCOL",
+            "items": [
+                {
+                    "title": "09:00 - Sync",
+                    "desc": "Check Trends and generate 3 different Hooks for the day."
+                },
+                {
+                    "title": "12:00 - Launch",
+                    "desc": "Use OmniPublish to reach your entire network ecosystem."
+                },
+                {
+                    "title": "18:00 - Scale",
+                    "desc": "Interact with referrals and help them use the Studio."
+                },
+                {
+                    "title": "22:00 - Audit",
+                    "desc": "Review stats and optimize target audience for tomorrow."
+                }
+            ]
+        },
         "viral_assets": {
             "title": "Viral Design Assets",
             "subtitle": "High-Conversion Prototypes",
@@ -1040,63 +1074,61 @@
                 }
             ]
         }
-    }
-},
-"subscription": {
-    "pro_active": {
-        "title": "WELCOME TO THE <1>ELITE</1>",
-        "desc": "You've unlocked the full potential of Pintopay. Your journey to x10 profits has officially begun.",
-        "active_until": "Active Until",
-        "lifetime": "Lifetime Plan",
-        "command_center": "PRO Command Center",
-        "explore_empire": "Explore Your Empire"
     },
-    "upgrade": {
-        "badge": "Premium Membership",
-        "title": "Upgrade to <1>PRO</1>",
-        "desc": "Unlock exclusive benefits, higher referral rewards, and premium features.",
-        "lifetime_pro": "Lifetime PRO",
-        "one_time": "One-time payment",
-        "benefits": [
-            "9-Level Affiliate",
-            "X5 Fast XP",
-            "Priority Pay",
-            "VIP Support",
-            "Custom Refs"
-        ],
-        "change_method": "Change Method",
-        "processing": "Processing...",
-        "complete_payment": "Complete Payment",
-        "usdt_address": "USDT TRC20 Address",
-        "tx_hash_label": "Transaction Hash (Optional)",
-        "tx_hash_placeholder": "Paste TX hash (optional)",
-        "i_paid": "I Paid",
-        "manual_review_p": "Verified within 24 hours by our team.<1/>Please complete your transfer within 30 minutes."
+    "subscription": {
+        "pro_active": {
+            "title": "WELCOME TO THE <1>ELITE</1>",
+            "desc": "You've unlocked the full potential of Pintopay. Your journey to x10 profits has officially begun.",
+            "active_until": "Active Until",
+            "lifetime": "Lifetime Plan",
+            "command_center": "PRO Command Center",
+            "explore_empire": "Explore Your Empire"
+        },
+        "upgrade": {
+            "badge": "Premium Membership",
+            "title": "Upgrade to <1>PRO</1>",
+            "desc": "Unlock exclusive benefits, higher referral rewards, and premium features.",
+            "lifetime_pro": "Lifetime PRO",
+            "one_time": "One-time payment",
+            "benefits": [
+                "9-Level Affiliate",
+                "X5 Fast XP",
+                "Priority Pay",
+                "VIP Support",
+                "Custom Refs"
+            ],
+            "change_method": "Change Method",
+            "processing": "Processing...",
+            "complete_payment": "Complete Payment",
+            "usdt_address": "USDT TRC20 Address",
+            "tx_hash_label": "Transaction Hash (Optional)",
+            "tx_hash_placeholder": "Paste TX hash (optional)",
+            "i_paid": "I Paid",
+            "manual_review_p": "Verified within 24 hours by our team.<1/>Please complete your transfer within 30 minutes."
+        },
+        "status": {
+            "verifying": "Verifying...",
+            "verifying_p": "Checking on-chain data. This usually takes 30-60 seconds.",
+            "welcome_pro": "Welcome to PRO!",
+            "welcome_pro_p": "Your account has been successfully upgraded.",
+            "get_started": "Get Started",
+            "submitted": "Submitted",
+            "submitted_p": "Our team is verifying your payment. You'll be notified once approved.",
+            "got_it": "Got it"
+        },
+        "alerts": {
+            "expired": "Session expired. Please restart the process.",
+            "failed": "Payment session expired or failed. Please try again."
+        }
     },
-    "status": {
-        "verifying": "Verifying...",
-        "verifying_p": "Checking on-chain data. This usually takes 30-60 seconds.",
-        "welcome_pro": "Welcome to PRO!",
-        "welcome_pro_p": "Your account has been successfully upgraded.",
-        "get_started": "Get Started",
-        "submitted": "Submitted",
-        "submitted_p": "Our team is verifying your payment. You'll be notified once approved.",
-        "got_it": "Got it"
-    },
-    "alerts": {
-        "expired": "Session expired. Please restart the process.",
-        "failed": "Payment session expired or failed. Please try again."
-    }
-},
-"system": {
-    "loading": {
-        "finalizing": "Finalizing UI...",
-        "config_loaded": "Config Loaded",
-        "ready": "Interface Ready"
-    },
-    "coming_soon": {
-        "title": "Coming Soon",
-        "desc": "We're building something amazing for our partners. Stay tuned!"
-    }
-}
-}
+    "system": {
+        "loading": {
+            "finalizing": "Finalizing UI...",
+            "config_loaded": "Config Loaded",
+            "ready": "Interface Ready"
+        },
+        "coming_soon": {
+            "title": "Coming Soon",
+            "desc": "We're building something amazing for our partners. Stay tuned!"
+        }
+    }}

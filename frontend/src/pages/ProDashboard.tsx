@@ -5,7 +5,7 @@ import {
     ArrowLeft, Terminal, Bot, Image as ImageIcon,
     Share2, CheckCircle2, AlertCircle, Loader2,
     Lock, Instagram, Twitter, Cpu, BookOpen, Flame, Settings,
-    Linkedin, Info, Copy, Download, RefreshCw, Undo2, Share, Compass
+    Linkedin, Info, Copy, Download, RefreshCw, Undo2, Share, Compass, Milestone
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
@@ -923,493 +923,563 @@ export const ProDashboard = () => {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="col-span-2 glass-panel-premium p-8 rounded-[2.5rem] border border-indigo-500/20 relative overflow-hidden group active:scale-[0.99] transition-all bg-(--color-bg-surface) shadow-sm">
-                                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
-                                        <BookOpen className="w-20 h-20 text-indigo-500" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {['hook_rule', 'algorithm', 'psycho'].map((key) => (
+                                    <div key={key} className="glass-panel-premium p-6 rounded-[2.5rem] border border-(--color-border-glass) relative overflow-hidden group active:scale-[0.98] transition-all bg-(--color-bg-surface) shadow-sm">
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
+                                                {key === 'hook_rule' && <Zap className="w-5 h-5 text-indigo-500" />}
+                                                {key === 'algorithm' && <Cpu className="w-5 h-5 text-indigo-500" />}
+                                                {key === 'psycho' && <Sparkles className="w-5 h-5 text-indigo-500" />}
+                                            </div>
+                                            <h4 className="text-xs font-black uppercase tracking-widest text-brand-text">{t(`pro_dashboard.academy.${key}.title`)}</h4>
+                                        </div>
+                                        <p className="text-[11px] font-medium leading-relaxed text-brand-muted italic">
+                                            {t(`pro_dashboard.academy.${key}.desc`)}
+                                        </p>
                                     </div>
-                                    <h4 className="text-sm font-black uppercase mb-1 tracking-tight text-brand-text flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                                        {t(`pro_dashboard.academy.hook_rule.title`)}
-                                    </h4>
-                                    <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-[0.2em] mb-4">{t(`pro_dashboard.academy.hook_rule.desc`)}</p>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {['hook_rule', 'algorithm', 'psycho'].map((key) => (
-                                            <div key={key} className="glass-panel-premium p-6 rounded-[2.5rem] border border-(--color-border-glass) relative overflow-hidden group active:scale-[0.98] transition-all bg-(--color-bg-surface) shadow-sm">
-                                                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
-                                                    <BookOpen className="w-16 h-16 text-indigo-500" />
+                                ))}
+
+                                {/* Checklist */}
+                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden bg-(--color-bg-surface)">
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-500/20">
+                                            <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-xs font-black uppercase tracking-widest text-brand-text">{t('pro_dashboard.academy.checklist.title')}</h4>
+                                            <p className="text-[9px] font-black text-emerald-500/60 uppercase tracking-tighter">{t('pro_dashboard.academy.checklist.subtitle')}</p>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-3">
+                                        {(t('pro_dashboard.academy.checklist.items', { returnObjects: true }) as string[]).map((item: string, i: number) => (
+                                            <div key={i} className="flex items-center gap-3">
+                                                <div className="w-5 h-5 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-500">
+                                                    <CheckCircle2 size={12} />
                                                 </div>
-                                                <h4 className="text-xs font-black uppercase mb-1 tracking-tight text-brand-text">{t(`pro_dashboard.academy.${key}.title`)}</h4>
-                                                <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest mb-3">{t(`pro_dashboard.academy.${key}.desc`)}</p>
-                                                <div className="p-4 bg-indigo-500/5 dark:bg-black/20 rounded-2xl border border-indigo-500/10 dark:border-white/5">
-                                                    <p className="text-[11px] font-medium leading-relaxed text-brand-text/90">{t(`pro_dashboard.academy.${key}.content`)}</p>
+                                                <span className="text-[10px] font-bold text-brand-muted">{item}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Roadmap */}
+                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden bg-(--color-bg-surface)">
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center border border-amber-500/20">
+                                            <Milestone className="w-5 h-5 text-amber-500" />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-xs font-black uppercase tracking-widest text-brand-text">{t('pro_dashboard.academy.roadmap.title')}</h4>
+                                            <p className="text-[9px] font-black text-amber-500/60 uppercase tracking-tighter">{t('pro_dashboard.academy.roadmap.subtitle')}</p>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-4">
+                                        {(t('pro_dashboard.academy.roadmap.items', { returnObjects: true }) as any[]).map((item: any, i: number) => (
+                                            <div key={i} className="flex items-start gap-3">
+                                                <div className="w-1 h-8 bg-amber-500/20 rounded-full mt-1" />
+                                                <div>
+                                                    <p className="text-[10px] font-black text-brand-text uppercase leading-none mb-1">{item.title}</p>
+                                                    <p className="text-[9px] font-medium text-brand-muted leading-tight">{item.desc}</p>
                                                 </div>
                                             </div>
                                         ))}
-
-                                        {/* Checklist & Roadmap grid */}
-                                        <div className="col-span-full grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            {/* Checklist */}
-                                            <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden bg-(--color-bg-surface)">
-                                                <h3 className="text-xs font-black text-brand-text uppercase tracking-widest mb-4 flex items-center gap-2">
-                                                    <div className="p-1.5 rounded-lg bg-emerald-500/10"><CheckCircle2 size={14} className="text-emerald-500" /></div>
-                                                    {t('pro_dashboard.academy.checklist.title')}
-                                                </h3>
-                                                <div className="space-y-3">
-                                                    {((t('pro_dashboard.academy.checklist.items', { returnObjects: true }) as string[]) || []).map((item, i) => (
-                                                        <div key={i} className="flex gap-3 items-start group">
-                                                            <div className="w-4 h-4 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-emerald-500/20 transition-colors">
-                                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                                                            </div>
-                                                            <span className="text-[10px] font-bold text-brand-muted leading-tight group-hover:text-brand-text transition-colors">{item}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            {/* Roadmap */}
-                                            <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden bg-(--color-bg-surface)">
-                                                <h3 className="text-xs font-black text-brand-text uppercase tracking-widest mb-4 flex items-center gap-2">
-                                                    <div className="p-1.5 rounded-lg bg-indigo-500/10"><Milestone size={14} className="text-indigo-500" /></div>
-                                                    {t('pro_dashboard.academy.roadmap.title')}
-                                                </h3>
-                                                <div className="space-y-4">
-                                                    {((t('pro_dashboard.academy.roadmap.items', { returnObjects: true }) as any[]) || []).map((item, i) => (
-                                                        <div key={i} className="flex gap-3 group">
-                                                            <div className="text-[9px] font-black text-indigo-500/60 uppercase tracking-tighter w-12 pt-0.5">{item.title}</div>
-                                                            <div className="space-y-0.5">
-                                                                <p className="text-[10px] font-black text-brand-text uppercase tracking-tight leading-none">{item.desc}</p>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
+                                </div>
+                            </div>
 
-                                    {/* Hook Library */}
-                                    <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 hover:border-indigo-500/30 transition-all group overflow-hidden relative">
-                                        <div className="absolute top-0 right-0 p-8 opacity-5"><Zap size={100} /></div>
-                                        <div className="flex items-center gap-5 mb-8">
-                                            <div className="w-16 h-16 bg-yellow-500/10 rounded-2xl flex items-center justify-center border border-yellow-500/20 shadow-xl"><Zap className="w-8 h-8 text-yellow-400" /></div>
+                            {/* Visual Branding Prototype - OFF-GRID ASSET */}
+                            <div className="glass-panel-premium p-0.5 rounded-[2.5rem] border border-white/10 relative overflow-hidden group shadow-2xl">
+                                <div className="p-8 space-y-8 bg-(--color-bg-surface)">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 group-hover:scale-110 transition-transform">
+                                                <ImageIcon className="text-indigo-500 w-6 h-6" />
+                                            </div>
                                             <div>
-                                                <h3 className="text-xl font-black uppercase tracking-tight text-brand-text">{t('pro_dashboard.academy.hooks.title')}</h3>
-                                                <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">{t('pro_dashboard.academy.hooks.subtitle')}</p>
+                                                <h4 className="text-sm font-black uppercase tracking-widest text-brand-text">{t('pro_dashboard.academy.viral_assets.title')}</h4>
+                                                <p className="text-[10px] font-bold text-indigo-500/60 uppercase">{t('pro_dashboard.academy.viral_assets.subtitle')}</p>
                                             </div>
                                         </div>
-                                        <div className="grid grid-cols-1 gap-4">
-                                            {((t('pro_dashboard.academy.hooks.items', { returnObjects: true }) as any[]) || []).map((hook: any, idx: number) => (
-                                                <div key={idx} className="p-5 bg-indigo-500/5 dark:bg-white/5 rounded-2xl border border-indigo-500/10 dark:border-white/5 space-y-2 group/hook hover:bg-indigo-500/10 dark:hover:bg-white/10 transition-all">
-                                                    <div className="flex items-center justify-between">
-                                                        <span className="text-[9px] font-black px-2 py-0.5 bg-indigo-500/20 text-indigo-400 rounded-full uppercase tracking-widest">{hook.category}</span>
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="text-indigo-500/50 hover:text-indigo-500 cursor-pointer transition-colors" onClick={() => { setActiveTab('studio'); selection(); }}>
-                                                                <RefreshCw size={12} />
-                                                            </span>
-                                                            <Copy
-                                                                size={12}
-                                                                className="text-brand-muted hover:text-white cursor-pointer transition-colors"
-                                                                onClick={() => {
-                                                                    navigator.clipboard.writeText(hook.template);
-                                                                    notification('success');
-                                                                }}
-                                                            />
+                                    </div>
+
+                                    {/* Mock Card Preview */}
+                                    <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+                                        {(t('pro_dashboard.academy.viral_assets.cards', { returnObjects: true }) as any[]).map((card: any, i: number) => (
+                                            <div key={i} className="relative group/card cursor-pointer">
+                                                <div className="absolute -inset-4 bg-indigo-500/10 blur-2xl opacity-0 group-hover/card:opacity-100 transition-opacity" />
+                                                <div className="relative aspect-[1.586/1] w-full max-w-sm mx-auto bg-slate-900 rounded-3xl p-8 border border-white/10 overflow-hidden shadow-2xl transition-transform group-hover/card:scale-[1.02]">
+                                                    {/* Chip */}
+                                                    <div className="w-12 h-10 bg-linear-to-br from-amber-400 to-amber-600 rounded-lg mb-8 relative overflow-hidden shadow-lg">
+                                                        <div className="absolute inset-0 bg-white/20 grid grid-cols-3 gap-0.5 p-1 opacity-40">
+                                                            {[...Array(9)].map((_, j) => <div key={j} className="bg-black/20 rounded-xs" />)}
                                                         </div>
                                                     </div>
-                                                    <p className="text-[11px] font-black text-brand-text italic leading-tight mb-1">"{hook.template}"</p>
-                                                    <p className="text-[10px] text-brand-muted leading-relaxed">{hook.explanation}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Viral Lifehacks */}
-                                    <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden group">
-                                        <div className="absolute -right-4 -top-4 opacity-5"><Flame size={120} /></div>
-                                        <h3 className="text-sm font-black text-brand-text uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
-                                            <Flame size={16} className="text-orange-500" />
-                                            {t('pro_dashboard.academy.lifehacks.title')}
-                                        </h3>
-                                        <div className="space-y-4">
-                                            {((t('pro_dashboard.academy.lifehacks.items', { returnObjects: true }) as any[]) || []).map((item: any, i: number) => (
-                                                <div key={i} className="flex gap-5 p-5 rounded-[2rem] bg-orange-500/5 border border-orange-500/10 hover:bg-orange-500/10 transition-colors shadow-sm">
-                                                    <div className="w-10 h-10 rounded-2xl bg-orange-500/10 flex items-center justify-center shrink-0 border border-orange-500/20">
-                                                        <Flame className="w-5 h-5 text-orange-500" />
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs font-black text-orange-500 uppercase tracking-tight flex items-center gap-2">
-                                                            {item.title}
-                                                            <Sparkles size={10} className="animate-pulse" />
-                                                        </p>
-                                                        <p className="text-[11px] text-brand-muted leading-relaxed mt-1">{item.desc}</p>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Studio manual */}
-                                    <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden bg-indigo-500/5">
-                                        <h3 className="text-xs font-black text-brand-text uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-                                            <Terminal size={14} className="text-indigo-500" />
-                                            {t('pro_dashboard.academy.studio_manual.title')}
-                                        </h3>
-                                        <div className="space-y-6">
-                                            {((t('pro_dashboard.academy.studio_manual.steps', { returnObjects: true }) as any[]) || []).map((step: any, i: number) => (
-                                                <div key={i} className="relative pl-8">
-                                                    <div className="absolute left-0 top-0 w-6 h-6 rounded-lg bg-indigo-500 shadow-lg shadow-indigo-500/20 flex items-center justify-center text-[10px] font-black text-white">
-                                                        {i + 1}
-                                                    </div>
-                                                    {i < 3 && <div className="absolute left-3 top-6 bottom-0 w-px bg-indigo-500/20" />}
-                                                    <h4 className="text-xs font-bold text-brand-text uppercase">{step.title}</h4>
-                                                    <p className="text-[10px] text-brand-muted leading-relaxed mt-1">{step.desc}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Channel Architecture */}
-                                    <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden">
-                                        <div className="absolute top-0 right-0 p-8 opacity-5"><Cpu size={100} /></div>
-                                        <h3 className="text-sm font-black text-brand-text uppercase tracking-[0.2em] mb-2">{t('pro_dashboard.academy.social_setup.title')}</h3>
-                                        <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-8">{t('pro_dashboard.academy.social_setup.subtitle')}</p>
-
-                                        <div className="space-y-4">
-                                            {((t('pro_dashboard.academy.social_setup.platforms', { returnObjects: true }) as any[]) || []).map((platform: any, i: number) => (
-                                                <div key={i} className="p-6 bg-(--color-bg-surface) rounded-2xl border border-(--color-border-glass) shadow-sm space-y-4">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
-                                                            {platform.name.includes('Telegram') && <Send className="w-5 h-5 text-indigo-500" />}
-                                                            {platform.name.includes('X') && <Twitter className="w-5 h-5 text-indigo-500" />}
-                                                            {platform.name.includes('LinkedIn') && <Linkedin className="w-5 h-5 text-indigo-500" />}
+                                                    {/* Card Details */}
+                                                    <div className="space-y-4">
+                                                        <div className="space-y-1">
+                                                            <p className="text-[8px] font-black uppercase tracking-[0.3em] text-indigo-400">Security Protocol Alpha</p>
+                                                            <h5 className="text-2xl font-black text-white italic tracking-tighter leading-none">{card.title}</h5>
                                                         </div>
-                                                        <span className="text-xs font-black text-brand-text uppercase tracking-tight">{platform.name}</span>
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        {platform.steps.map((step: string, j: number) => (
-                                                            <div key={j} className="flex items-center gap-3">
-                                                                <div className="w-1 h-1 rounded-full bg-indigo-500/40" />
-                                                                <span className="text-[10px] font-medium text-brand-muted">{step}</span>
+                                                        <p className="text-[10px] font-bold text-slate-400 leading-tight pr-12">{card.hook}</p>
+                                                        <div className="pt-6 flex justify-between items-end">
+                                                            <div className="flex items-center gap-2">
+                                                                <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center">
+                                                                    <Cpu size={10} className="text-indigo-400" />
+                                                                </div>
+                                                                <span className="text-[9px] font-black text-slate-500 tracking-widest">ENCRYPTED</span>
                                                             </div>
-                                                        ))}
+                                                            <div className="flex -space-x-2">
+                                                                <div className="w-8 h-8 rounded-full border-2 border-slate-900 bg-indigo-600 shadow-lg" />
+                                                                <div className="w-8 h-8 rounded-full border-2 border-slate-900 bg-indigo-400/30 backdrop-blur-sm" />
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            ))}
-                                        </div>
-                                        <button
-                                            onClick={() => { selection(); setShowSetup(true); }}
-                                            className="w-full mt-8 py-4 bg-linear-to-r from-indigo-600 to-indigo-500 text-white font-black text-[11px] uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-indigo-500/20 active:scale-95 transition-all"
-                                        >
-                                            {t('pro_dashboard.tab_setup')}
-                                        </button>
+                                            </div>
+                                        ))}
                                     </div>
-                                </motion.div>
+                                </div>
+                            </div>
+
+                            {/* Hook Library */}
+                            <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 hover:border-indigo-500/30 transition-all group overflow-hidden relative">
+                                <div className="absolute top-0 right-0 p-8 opacity-5">
+                                    <BookOpen className="w-32 h-32" />
+                                </div>
+                                <div className="flex items-center gap-4 mb-8">
+                                    <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20">
+                                        <BookOpen className="text-indigo-500 w-6 h-6" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-lg font-black uppercase tracking-tight text-brand-text">{t('pro_dashboard.academy.hook_library.title')}</h4>
+                                        <span className="text-[10px] font-black text-brand-muted uppercase tracking-widest">{t('pro_dashboard.academy.hook_library.subtitle')}</span>
+                                    </div>
+                                </div>
+                                <div className="space-y-4">
+                                    {(t('pro_dashboard.academy.hook_library.items', { returnObjects: true }) as any[]).map((hook: any, i: number) => (
+                                        <div key={i} className="p-5 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 hover:bg-indigo-500/10 transition-colors group/hook relative overflow-hidden cursor-pointer">
+                                            <div className="absolute right-0 top-0 bottom-0 w-1 bg-indigo-500/20 group-hover/hook:bg-indigo-500 transition-colors" />
+                                            <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-1">{hook.cat}</p>
+                                            <p className="text-xs font-bold text-brand-text italic select-all leading-relaxed pr-8">"{hook.text}"</p>
+                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover/hook:opacity-100 transition-all">
+                                                <Copy size={14} className="text-indigo-500" />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Viral Lifehacks */}
+                            <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden group">
+                                <div className="absolute bottom-0 right-0 p-8 opacity-5">
+                                    <Sparkles className="w-32 h-32" />
+                                </div>
+                                <div className="flex items-center gap-4 mb-8">
+                                    <div className="w-12 h-12 bg-pink-500/10 rounded-2xl flex items-center justify-center border border-pink-500/20">
+                                        <Flame className="text-pink-500 w-6 h-6" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-lg font-black uppercase tracking-tight text-brand-text">{t('pro_dashboard.academy.lifehacks.title')}</h4>
+                                        <span className="text-[10px] font-black text-brand-muted uppercase tracking-widest">{t('pro_dashboard.academy.lifehacks.subtitle')}</span>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    {(t('pro_dashboard.academy.lifehacks.items', { returnObjects: true }) as any[]).map((hack: any, i: number) => (
+                                        <div key={i} className="space-y-3 p-6 bg-white/5 rounded-3xl border border-white/5 hover:border-pink-500/20 transition-all">
+                                            <div className="w-8 h-8 rounded-xl bg-pink-500/10 flex items-center justify-center text-pink-500 font-black text-xs">{i + 1}</div>
+                                            <h5 className="text-xs font-black uppercase text-brand-text">{hack.title}</h5>
+                                            <p className="text-[10px] font-medium text-brand-muted leading-relaxed italic">{hack.desc}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Studio manual */}
+                            <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden bg-indigo-500/5">
+                                <div className="flex flex-col md:flex-row gap-8 items-center">
+                                    <div className="flex-1 space-y-6">
+                                        <div className="space-y-2">
+                                            <h3 className="text-2xl font-black uppercase tracking-tight text-brand-text">{t('pro_dashboard.academy.studio_manual.title')}</h3>
+                                            <p className="text-xs text-brand-muted leading-relaxed font-medium">
+                                                {t('pro_dashboard.academy.studio_manual.desc')}
+                                            </p>
+                                        </div>
+                                        <div className="flex flex-wrap gap-4">
+                                            <div className="flex items-center gap-3 px-5 py-3 bg-white/10 rounded-2xl border border-white/10">
+                                                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-brand-text">Production Ready</span>
+                                            </div>
+                                            <div className="flex items-center gap-3 px-5 py-3 bg-white/10 rounded-2xl border border-white/10">
+                                                <div className="w-2 h-2 rounded-full bg-indigo-500" />
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-brand-text">Viral Optimized</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="w-full md:w-64 aspect-video bg-slate-900 rounded-2xl border border-white/10 flex items-center justify-center relative group overflow-hidden cursor-pointer">
+                                        <div className="absolute inset-0 bg-indigo-500/10 group-hover:bg-indigo-500/20 transition-colors" />
+                                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-2xl scale-1 group-hover:scale-110 transition-transform">
+                                            <ChevronRight className="w-6 h-6 text-black ml-1" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Channel Architecture */}
+                            <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden">
+                                <div className="space-y-8">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20">
+                                            <Globe className="text-indigo-500 w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-lg font-black uppercase tracking-tight text-brand-text">{t('pro_dashboard.academy.social_setup.title')}</h4>
+                                            <span className="text-[10px] font-black text-brand-muted uppercase tracking-widest">{t('pro_dashboard.academy.social_setup.subtitle')}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        {(t('pro_dashboard.academy.social_setup.platforms', { returnObjects: true }) as any[]).map((platform: any, i: number) => (
+                                            <div key={i} className="p-6 bg-white/5 rounded-3xl border border-white/5 space-y-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
+                                                        {platform.name.includes('Telegram') && <Send className="w-5 h-5 text-indigo-500" />}
+                                                        {platform.name.includes('X') && <Twitter className="w-5 h-5 text-indigo-500" />}
+                                                        {platform.name.includes('LinkedIn') && <Linkedin className="w-5 h-5 text-indigo-500" />}
+                                                    </div>
+                                                    <span className="text-xs font-black text-brand-text uppercase tracking-tight">{platform.name}</span>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    {platform.steps.map((step: string, j: number) => (
+                                                        <div key={j} className="flex items-center gap-3">
+                                                            <div className="w-1 h-1 rounded-full bg-indigo-500/40" />
+                                                            <span className="text-[10px] font-medium text-brand-muted">{step}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <button
+                                        onClick={() => { selection(); setShowSetup(true); }}
+                                        className="w-full mt-8 py-4 bg-linear-to-r from-indigo-600 to-indigo-500 text-white font-black text-[11px] uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-indigo-500/20 active:scale-95 transition-all"
+                                    >
+                                        {t('pro_dashboard.tab_setup')}
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
                     )}
-                            </AnimatePresence>
-                        </div>
+                </AnimatePresence >
+            </div >
 
             {/* API Setup Modal */}
-                    <AnimatePresence>
-                        {showSetup && (
+            <AnimatePresence>
+                {
+                    showSetup && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-1000 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-3xl"
+                        >
                             <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="fixed inset-0 z-1000 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-3xl"
+                                initial={{ scale: 0.9, y: 30, opacity: 0 }}
+                                animate={{ scale: 1, y: 0, opacity: 1 }}
+                                exit={{ scale: 0.9, y: 30, opacity: 0 }}
+                                className="bg-(--color-bg-surface) w-full max-w-md rounded-[2.5rem] p-6 space-y-4 max-h-[92vh] flex flex-col relative overflow-hidden shadow-3xl border border-(--color-border-glass)"
                             >
-                                <motion.div
-                                    initial={{ scale: 0.9, y: 30, opacity: 0 }}
-                                    animate={{ scale: 1, y: 0, opacity: 1 }}
-                                    exit={{ scale: 0.9, y: 30, opacity: 0 }}
-                                    className="bg-(--color-bg-surface) w-full max-w-md rounded-[2.5rem] p-6 space-y-4 max-h-[92vh] flex flex-col relative overflow-hidden shadow-3xl border border-(--color-border-glass)"
-                                >
-                                    <div className="absolute top-0 left-0 w-full h-1.5 vibing-blue-animated opacity-60" />
+                                <div className="absolute top-0 left-0 w-full h-1.5 vibing-blue-animated opacity-60" />
 
-                                    <div className="flex justify-between items-center shrink-0 pt-2">
-                                        <div className="flex flex-col">
-                                            <h3 className="text-2xl font-black uppercase tracking-tight text-brand-text">
-                                                {t('pro_dashboard.tab_setup')}
-                                            </h3>
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500 leading-none">{t('pro_dashboard.setup.global_integration')}</span>
-                                        </div>
-                                        <button
-                                            onClick={() => { selection(); setShowSetup(false); }}
-                                            className="p-3 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-2xl text-brand-text shadow-sm hover:border-indigo-500/30 active:scale-90 transition-all"
-                                        >
-                                            <ArrowLeft size={20} />
-                                        </button>
+                                <div className="flex justify-between items-center shrink-0 pt-2">
+                                    <div className="flex flex-col">
+                                        <h3 className="text-2xl font-black uppercase tracking-tight text-brand-text">
+                                            {t('pro_dashboard.tab_setup')}
+                                        </h3>
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500 leading-none">{t('pro_dashboard.setup.global_integration')}</span>
+                                    </div>
+                                    <button
+                                        onClick={() => { selection(); setShowSetup(false); }}
+                                        className="p-3 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-2xl text-brand-text shadow-sm hover:border-indigo-500/30 active:scale-90 transition-all"
+                                    >
+                                        <ArrowLeft size={20} />
+                                    </button>
+                                </div>
+
+                                <div className="flex-1 overflow-y-auto no-scrollbar space-y-6 pr-1 pt-2">
+                                    {/* Protocol Instructions */}
+                                    <div className="p-6 bg-indigo-500/5 rounded-3xl border border-indigo-500/20 relative overflow-hidden group">
+                                        <div className="absolute -right-4 -top-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-1000"><Zap size={100} /></div>
+                                        <h4 className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-indigo-500 mb-4">
+                                            <Zap size={14} /> {t('pro_dashboard.setup.instructions_title')}
+                                        </h4>
+                                        <ul className="space-y-3">
+                                            <li className="flex items-start gap-3">
+                                                <div className="w-5 h-5 rounded-lg bg-indigo-500/20 flex items-center justify-center text-[10px] font-black text-indigo-500 shrink-0 mt-0.5">1</div>
+                                                <p className="text-[11px] font-bold text-brand-text/70 leading-relaxed">Get X API credentials from <a href="https://developer.x.com" target="_blank" className="text-indigo-500 underline">Developer Portal</a></p>
+                                            </li>
+                                            <li className="flex items-start gap-3">
+                                                <div className="w-5 h-5 rounded-lg bg-indigo-500/20 flex items-center justify-center text-[10px] font-black text-indigo-500 shrink-0 mt-0.5">2</div>
+                                                <p className="text-[11px] font-bold text-brand-text/70 leading-relaxed">Add Bot as Admin to your Telegram Channels with message permissions</p>
+                                            </li>
+                                            <li className="flex items-start gap-3">
+                                                <div className="w-5 h-5 rounded-lg bg-indigo-500/20 flex items-center justify-center text-[10px] font-black text-indigo-500 shrink-0 mt-0.5">3</div>
+                                                <p className="text-[11px] font-bold text-brand-text/70 leading-relaxed">Save keys to enable automated 24/7 viral ecosystem reach</p>
+                                            </li>
+                                        </ul>
                                     </div>
 
-                                    <div className="flex-1 overflow-y-auto no-scrollbar space-y-6 pr-1 pt-2">
-                                        {/* Protocol Instructions */}
-                                        <div className="p-6 bg-indigo-500/5 rounded-3xl border border-indigo-500/20 relative overflow-hidden group">
-                                            <div className="absolute -right-4 -top-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-1000"><Zap size={100} /></div>
-                                            <h4 className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-indigo-500 mb-4">
-                                                <Zap size={14} /> {t('pro_dashboard.setup.instructions_title')}
-                                            </h4>
-                                            <ul className="space-y-3">
-                                                <li className="flex items-start gap-3">
-                                                    <div className="w-5 h-5 rounded-lg bg-indigo-500/20 flex items-center justify-center text-[10px] font-black text-indigo-500 shrink-0 mt-0.5">1</div>
-                                                    <p className="text-[11px] font-bold text-brand-text/70 leading-relaxed">Get X API credentials from <a href="https://developer.x.com" target="_blank" className="text-indigo-500 underline">Developer Portal</a></p>
-                                                </li>
-                                                <li className="flex items-start gap-3">
-                                                    <div className="w-5 h-5 rounded-lg bg-indigo-500/20 flex items-center justify-center text-[10px] font-black text-indigo-500 shrink-0 mt-0.5">2</div>
-                                                    <p className="text-[11px] font-bold text-brand-text/70 leading-relaxed">Add Bot as Admin to your Telegram Channels with message permissions</p>
-                                                </li>
-                                                <li className="flex items-start gap-3">
-                                                    <div className="w-5 h-5 rounded-lg bg-indigo-500/20 flex items-center justify-center text-[10px] font-black text-indigo-500 shrink-0 mt-0.5">3</div>
-                                                    <p className="text-[11px] font-bold text-brand-text/70 leading-relaxed">Save keys to enable automated 24/7 viral ecosystem reach</p>
-                                                </li>
-                                            </ul>
+                                    {/* X Integration */}
+                                    <div className="space-y-4 p-5 bg-(--color-bg-surface) rounded-3xl border border-(--color-border-glass) shadow-inner">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-brand-text">
+                                                <Twitter size={14} className="text-blue-400" /> X (Twitter) API
+                                                <Info size={12} className="text-brand-muted opacity-50 cursor-pointer hover:opacity-100" onClick={() => alert('Steps: 1. Developer Portal 2. Create App 3. Keys & Tokens')} />
+                                            </div>
+                                            <button
+                                                onClick={() => handleTestIntegration('x')}
+                                                className="text-[9px] font-black uppercase tracking-widest text-brand-text bg-linear-to-r from-blue-500/10 to-indigo-500/10 h-7 px-3 rounded-xl border border-blue-500/20 hover:border-blue-500/40 transition-all flex items-center gap-2"
+                                            >
+                                                <Send size={10} /> Test Connection
+                                            </button>
                                         </div>
-
-                                        {/* X Integration */}
-                                        <div className="space-y-4 p-5 bg-(--color-bg-surface) rounded-3xl border border-(--color-border-glass) shadow-inner">
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-brand-text">
-                                                    <Twitter size={14} className="text-blue-400" /> X (Twitter) API
-                                                    <Info size={12} className="text-brand-muted opacity-50 cursor-pointer hover:opacity-100" onClick={() => alert('Steps: 1. Developer Portal 2. Create App 3. Keys & Tokens')} />
-                                                </div>
-                                                <button
-                                                    onClick={() => handleTestIntegration('x')}
-                                                    className="text-[9px] font-black uppercase tracking-widest text-brand-text bg-linear-to-r from-blue-500/10 to-indigo-500/10 h-7 px-3 rounded-xl border border-blue-500/20 hover:border-blue-500/40 transition-all flex items-center gap-2"
-                                                >
-                                                    <Send size={10} /> Test Connection
-                                                </button>
-                                            </div>
-                                            <div className="grid gap-3">
-                                                <input
-                                                    type="password"
-                                                    value={apiData.x_api_key}
-                                                    onChange={(e) => setApiData({ ...apiData, x_api_key: e.target.value })}
-                                                    placeholder="API Key"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
-                                                />
-                                                <input
-                                                    type="password"
-                                                    value={apiData.x_api_secret}
-                                                    onChange={(e) => setApiData({ ...apiData, x_api_secret: e.target.value })}
-                                                    placeholder="API Secret"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
-                                                />
-                                                <input
-                                                    type="password"
-                                                    value={apiData.x_access_token}
-                                                    onChange={(e) => setApiData({ ...apiData, x_access_token: e.target.value })}
-                                                    placeholder="Access Token"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
-                                                />
-                                                <input
-                                                    type="password"
-                                                    value={apiData.x_access_token_secret}
-                                                    onChange={(e) => setApiData({ ...apiData, x_access_token_secret: e.target.value })}
-                                                    placeholder="Access Token Secret"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        {/* Telegram Sync */}
-                                        <div className="space-y-4 p-5 bg-(--color-bg-surface) rounded-3xl border border-(--color-border-glass) shadow-inner">
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-brand-text">
-                                                    <Send size={14} className="text-blue-500" /> Telegram Channels
-                                                    <Info size={12} className="text-brand-muted opacity-50 cursor-pointer hover:opacity-100" onClick={() => alert('Sync your P2PHub bot with your channels by adding it as an administrator.')} />
-                                                </div>
-                                                <button
-                                                    onClick={() => handleTestIntegration('telegram')}
-                                                    className="text-[9px] font-black uppercase tracking-widest text-brand-text bg-linear-to-r from-blue-500/10 to-emerald-500/10 h-7 px-3 rounded-xl border border-blue-500/20 hover:border-blue-500/40 transition-all flex items-center gap-2"
-                                                >
-                                                    <Send size={10} /> Test Connection
-                                                </button>
-                                            </div>
-                                            <div className="grid gap-3">
-                                                <input
-                                                    type="text"
-                                                    value={apiData.telegram_channel_id}
-                                                    onChange={(e) => setApiData({ ...apiData, telegram_channel_id: e.target.value })}
-                                                    placeholder="@channelname (Main)"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
-                                                />
-                                                {apiData.telegram_channels.map((ch, idx) => (
-                                                    <div key={idx} className="flex gap-2">
-                                                        <input
-                                                            type="text"
-                                                            value={ch}
-                                                            onChange={(e) => {
-                                                                const newChannels = [...apiData.telegram_channels];
-                                                                newChannels[idx] = e.target.value;
-                                                                setApiData({ ...apiData, telegram_channels: newChannels });
-                                                            }}
-                                                            placeholder={`@channelname ${idx + 2}`}
-                                                            className="flex-1 h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text"
-                                                        />
-                                                        <button
-                                                            onClick={() => {
-                                                                const newChannels = apiData.telegram_channels.filter((_, i) => i !== idx);
-                                                                setApiData({ ...apiData, telegram_channels: newChannels });
-                                                            }}
-                                                            className="w-12 h-12 rounded-2xl bg-red-500/10 text-red-500 flex items-center justify-center active:scale-90 transition-all"
-                                                        >
-                                                            <AlertCircle size={18} />
-                                                        </button>
-                                                    </div>
-                                                ))}
-                                                <button
-                                                    onClick={() => setApiData({ ...apiData, telegram_channels: [...apiData.telegram_channels, ''] })}
-                                                    className="w-full h-10 border-2 border-dashed border-(--color-border-glass) rounded-xl text-[10px] font-black uppercase text-brand-muted hover:text-brand-text hover:border-indigo-500/30 transition-all"
-                                                >
-                                                    + Add Another Channel
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        {/* LinkedIn Integration */}
-                                        <div className="space-y-4 p-5 bg-(--color-bg-surface) rounded-3xl border border-(--color-border-glass) shadow-inner">
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-brand-text">
-                                                    <Linkedin size={14} className="text-blue-700" /> LinkedIn
-                                                    <Info size={12} className="text-brand-muted opacity-50 cursor-pointer hover:opacity-100" onClick={() => alert('LinkedIn requires an active Access Token from your Developer App.')} />
-                                                </div>
-                                            </div>
+                                        <div className="grid gap-3">
                                             <input
                                                 type="password"
-                                                value={apiData.linkedin_access_token}
-                                                onChange={(e) => setApiData({ ...apiData, linkedin_access_token: e.target.value })}
-                                                placeholder="LinkedIn Access Token"
+                                                value={apiData.x_api_key}
+                                                onChange={(e) => setApiData({ ...apiData, x_api_key: e.target.value })}
+                                                placeholder="API Key"
+                                                className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                            />
+                                            <input
+                                                type="password"
+                                                value={apiData.x_api_secret}
+                                                onChange={(e) => setApiData({ ...apiData, x_api_secret: e.target.value })}
+                                                placeholder="API Secret"
+                                                className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                            />
+                                            <input
+                                                type="password"
+                                                value={apiData.x_access_token}
+                                                onChange={(e) => setApiData({ ...apiData, x_access_token: e.target.value })}
+                                                placeholder="Access Token"
+                                                className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                            />
+                                            <input
+                                                type="password"
+                                                value={apiData.x_access_token_secret}
+                                                onChange={(e) => setApiData({ ...apiData, x_access_token_secret: e.target.value })}
+                                                placeholder="Access Token Secret"
                                                 className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                             />
                                         </div>
                                     </div>
 
-                                    <div className="pt-4 shrink-0">
-                                        <button
-                                            onClick={() => { selection(); handleSaveSetup(); }}
-                                            className="w-full h-16 vibing-blue-animated rounded-2xl font-black text-white text-[12px] uppercase tracking-[0.3em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:grayscale disabled:opacity-50"
-                                            disabled={isLoading}
-                                        >
-                                            {isLoading ? <Loader2 className="animate-spin" /> : t('pro_dashboard.setup.save_btn')}
-                                        </button>
-                                    </div>
-                                </motion.div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    {/* Publish Modal */}
-                    <AnimatePresence>
-                        {showPublishModal && (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="fixed inset-0 z-101 flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-2xl"
-                            >
-                                <motion.div
-                                    initial={{ scale: 0.9, y: 30, opacity: 0 }}
-                                    animate={{ scale: 1, y: 0, opacity: 1 }}
-                                    exit={{ scale: 0.9, y: 30, opacity: 0 }}
-                                    className="glass-panel-premium w-full max-w-sm rounded-[3rem] p-10 space-y-8 relative overflow-hidden border border-white/10 shadow-3xl"
-                                >
-                                    <div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_15px_rgba(99,102,241,0.5)]" />
-
-                                    <div className="flex justify-between items-start">
-                                        <div className="space-y-1">
-                                            <h3 className="text-3xl font-black uppercase tracking-tight text-white">{t('pro_dashboard.publish.title')}</h3>
-                                            <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em]">{t('pro_dashboard.publish.subtitle')}</p>
+                                    {/* Telegram Sync */}
+                                    <div className="space-y-4 p-5 bg-(--color-bg-surface) rounded-3xl border border-(--color-border-glass) shadow-inner">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-brand-text">
+                                                <Send size={14} className="text-blue-500" /> Telegram Channels
+                                                <Info size={12} className="text-brand-muted opacity-50 cursor-pointer hover:opacity-100" onClick={() => alert('Sync your P2PHub bot with your channels by adding it as an administrator.')} />
+                                            </div>
+                                            <button
+                                                onClick={() => handleTestIntegration('telegram')}
+                                                className="text-[9px] font-black uppercase tracking-widest text-brand-text bg-linear-to-r from-blue-500/10 to-emerald-500/10 h-7 px-3 rounded-xl border border-blue-500/20 hover:border-blue-500/40 transition-all flex items-center gap-2"
+                                            >
+                                                <Send size={10} /> Test Connection
+                                            </button>
                                         </div>
-                                        <button
-                                            onClick={() => { selection(); setShowPublishModal(false); }}
-                                            className="p-3 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 active:scale-90 transition-all text-brand-muted hover:text-white"
-                                        >
-                                            <ArrowLeft size={18} />
-                                        </button>
-                                    </div>
-
-                                    <div className="space-y-6">
-                                        <div className="p-5 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 relative overflow-hidden group shadow-inner">
-                                            <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-700"><Zap size={60} /></div>
-                                            <h4 className="text-[10px] font-black uppercase mb-2 text-indigo-500 flex items-center gap-2 tracking-widest">
-                                                <Info size={12} />
-                                                {t('pro_dashboard.publish.mgmt_title')}
-                                            </h4>
-                                            <p className="text-[11px] leading-relaxed text-brand-text/70 font-medium">
-                                                {t('pro_dashboard.publish.mgmt_p')}
-                                                <em className="block mt-1 text-indigo-500/60 italic"> {t('pro_dashboard.publish.mgmt_tip')}</em>
-                                            </p>
-                                        </div>
-
-                                        <div className="space-y-3">
-                                            {(['telegram', 'x', 'linkedin'] as const).map((platform) => {
-                                                const isPublished = publishedPlatforms.includes(platform);
-                                                const hasSetup = status?.[`has_${platform === 'x' ? 'x' : platform}_setup` as keyof PROStatus];
-
-                                                return (
+                                        <div className="grid gap-3">
+                                            <input
+                                                type="text"
+                                                value={apiData.telegram_channel_id}
+                                                onChange={(e) => setApiData({ ...apiData, telegram_channel_id: e.target.value })}
+                                                placeholder="@channelname (Main)"
+                                                className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                            />
+                                            {apiData.telegram_channels.map((ch, idx) => (
+                                                <div key={idx} className="flex gap-2">
+                                                    <input
+                                                        type="text"
+                                                        value={ch}
+                                                        onChange={(e) => {
+                                                            const newChannels = [...apiData.telegram_channels];
+                                                            newChannels[idx] = e.target.value;
+                                                            setApiData({ ...apiData, telegram_channels: newChannels });
+                                                        }}
+                                                        placeholder={`@channelname ${idx + 2}`}
+                                                        className="flex-1 h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text"
+                                                    />
                                                     <button
-                                                        key={platform}
-                                                        disabled={!hasSetup || isPublishing || isPublished}
-                                                        onClick={() => handlePublishToPlatform(platform)}
-                                                        className={`w-full group relative flex items-center justify-between p-4 rounded-2xl border transition-all active:scale-[0.98] ${isPublished
-                                                            ? 'bg-emerald-500/10 border-emerald-500/30'
-                                                            : !hasSetup
-                                                                ? 'bg-(--color-bg-surface)/40 border-(--color-border-glass) opacity-40 grayscale pointer-events-none'
-                                                                : 'bg-(--color-bg-surface) border-(--color-border-glass) hover:border-indigo-500/40 hover:bg-indigo-500/5'
-                                                            }`}
+                                                        onClick={() => {
+                                                            const newChannels = apiData.telegram_channels.filter((_, i) => i !== idx);
+                                                            setApiData({ ...apiData, telegram_channels: newChannels });
+                                                        }}
+                                                        className="w-12 h-12 rounded-2xl bg-red-500/10 text-red-500 flex items-center justify-center active:scale-90 transition-all"
                                                     >
-                                                        <div className="flex items-center gap-3.5">
-                                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition-transform group-hover:scale-105 ${platform === 'x' ? 'bg-slate-950 border border-white/10' :
-                                                                platform === 'telegram' ? 'bg-linear-to-br from-blue-400 to-blue-600' : 'bg-linear-to-br from-blue-600 to-blue-800'
-                                                                }`}>
-                                                                {platform === 'x' && <Twitter size={18} className="text-white" />}
-                                                                {platform === 'telegram' && <Send size={18} className="text-white" />}
-                                                                {platform === 'linkedin' && <Linkedin size={18} className="text-white" />}
-                                                            </div>
-                                                            <div className="text-left space-y-0.5">
-                                                                <span className="text-[13px] font-black uppercase tracking-tight text-brand-text">{platform}</span>
-                                                                <div className={`text-[9px] font-bold uppercase tracking-wider ${isPublished ? 'text-emerald-500' : 'text-brand-muted'}`}>
-                                                                    {!hasSetup ? t('pro_dashboard.publish.platform_not_configured') : isPublished ? t('pro_dashboard.publish.platform_success') : t('pro_dashboard.publish.platform_tap')}
-                                                                </div>
+                                                        <AlertCircle size={18} />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            <button
+                                                onClick={() => setApiData({ ...apiData, telegram_channels: [...apiData.telegram_channels, ''] })}
+                                                className="w-full h-10 border-2 border-dashed border-(--color-border-glass) rounded-xl text-[10px] font-black uppercase text-brand-muted hover:text-brand-text hover:border-indigo-500/30 transition-all"
+                                            >
+                                                + Add Another Channel
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* LinkedIn Integration */}
+                                    <div className="space-y-4 p-5 bg-(--color-bg-surface) rounded-3xl border border-(--color-border-glass) shadow-inner">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-brand-text">
+                                                <Linkedin size={14} className="text-blue-700" /> LinkedIn
+                                                <Info size={12} className="text-brand-muted opacity-50 cursor-pointer hover:opacity-100" onClick={() => alert('LinkedIn requires an active Access Token from your Developer App.')} />
+                                            </div>
+                                        </div>
+                                        <input
+                                            type="password"
+                                            value={apiData.linkedin_access_token}
+                                            onChange={(e) => setApiData({ ...apiData, linkedin_access_token: e.target.value })}
+                                            placeholder="LinkedIn Access Token"
+                                            className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="pt-4 shrink-0">
+                                    <button
+                                        onClick={() => { selection(); handleSaveSetup(); }}
+                                        className="w-full h-16 vibing-blue-animated rounded-2xl font-black text-white text-[12px] uppercase tracking-[0.3em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:grayscale disabled:opacity-50"
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? <Loader2 className="animate-spin" /> : t('pro_dashboard.setup.save_btn')}
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )
+                }
+            </AnimatePresence >
+
+            {/* Publish Modal */}
+            <AnimatePresence>
+                {
+                    showPublishModal && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-101 flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-2xl"
+                        >
+                            <motion.div
+                                initial={{ scale: 0.9, y: 30, opacity: 0 }}
+                                animate={{ scale: 1, y: 0, opacity: 1 }}
+                                exit={{ scale: 0.9, y: 30, opacity: 0 }}
+                                className="glass-panel-premium w-full max-w-sm rounded-[3rem] p-10 space-y-8 relative overflow-hidden border border-white/10 shadow-3xl"
+                            >
+                                <div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_15px_rgba(99,102,241,0.5)]" />
+
+                                <div className="flex justify-between items-start">
+                                    <div className="space-y-1">
+                                        <h3 className="text-3xl font-black uppercase tracking-tight text-white">{t('pro_dashboard.publish.title')}</h3>
+                                        <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em]">{t('pro_dashboard.publish.subtitle')}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => { selection(); setShowPublishModal(false); }}
+                                        className="p-3 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 active:scale-90 transition-all text-brand-muted hover:text-white"
+                                    >
+                                        <ArrowLeft size={18} />
+                                    </button>
+                                </div>
+
+                                <div className="space-y-6">
+                                    <div className="p-5 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 relative overflow-hidden group shadow-inner">
+                                        <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-700"><Zap size={60} /></div>
+                                        <h4 className="text-[10px] font-black uppercase mb-2 text-indigo-500 flex items-center gap-2 tracking-widest">
+                                            <Info size={12} />
+                                            {t('pro_dashboard.publish.mgmt_title')}
+                                        </h4>
+                                        <p className="text-[11px] leading-relaxed text-brand-text/70 font-medium">
+                                            {t('pro_dashboard.publish.mgmt_p')}
+                                            <em className="block mt-1 text-indigo-500/60 italic"> {t('pro_dashboard.publish.mgmt_tip')}</em>
+                                        </p>
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        {(['telegram', 'x', 'linkedin'] as const).map((platform) => {
+                                            const isPublished = publishedPlatforms.includes(platform);
+                                            const hasSetup = status?.[`has_${platform === 'x' ? 'x' : platform}_setup` as keyof PROStatus];
+
+                                            return (
+                                                <button
+                                                    key={platform}
+                                                    disabled={!hasSetup || isPublishing || isPublished}
+                                                    onClick={() => handlePublishToPlatform(platform)}
+                                                    className={`w-full group relative flex items-center justify-between p-4 rounded-2xl border transition-all active:scale-[0.98] ${isPublished
+                                                        ? 'bg-emerald-500/10 border-emerald-500/30'
+                                                        : !hasSetup
+                                                            ? 'bg-(--color-bg-surface)/40 border-(--color-border-glass) opacity-40 grayscale pointer-events-none'
+                                                            : 'bg-(--color-bg-surface) border-(--color-border-glass) hover:border-indigo-500/40 hover:bg-indigo-500/5'
+                                                        }`}
+                                                >
+                                                    <div className="flex items-center gap-3.5">
+                                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition-transform group-hover:scale-105 ${platform === 'x' ? 'bg-slate-950 border border-white/10' :
+                                                            platform === 'telegram' ? 'bg-linear-to-br from-blue-400 to-blue-600' : 'bg-linear-to-br from-blue-600 to-blue-800'
+                                                            }`}>
+                                                            {platform === 'x' && <Twitter size={18} className="text-white" />}
+                                                            {platform === 'telegram' && <Send size={18} className="text-white" />}
+                                                            {platform === 'linkedin' && <Linkedin size={18} className="text-white" />}
+                                                        </div>
+                                                        <div className="text-left space-y-0.5">
+                                                            <span className="text-[13px] font-black uppercase tracking-tight text-brand-text">{platform}</span>
+                                                            <div className={`text-[9px] font-bold uppercase tracking-wider ${isPublished ? 'text-emerald-500' : 'text-brand-muted'}`}>
+                                                                {!hasSetup ? t('pro_dashboard.publish.platform_not_configured') : isPublished ? t('pro_dashboard.publish.platform_success') : t('pro_dashboard.publish.platform_tap')}
                                                             </div>
                                                         </div>
-                                                        {isPublished ? (
-                                                            <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/40">
-                                                                <CheckCircle2 size={18} className="text-emerald-400" />
-                                                            </div>
-                                                        ) : (
-                                                            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/5 group-hover:border-indigo-500/30 transition-colors">
-                                                                <ChevronRight size={18} className="text-brand-muted group-hover:text-indigo-400 transition-colors" />
-                                                            </div>
-                                                        )}
+                                                    </div>
+                                                    {isPublished ? (
+                                                        <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/40">
+                                                            <CheckCircle2 size={18} className="text-emerald-400" />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/5 group-hover:border-indigo-500/30 transition-colors">
+                                                            <ChevronRight size={18} className="text-brand-muted group-hover:text-indigo-400 transition-colors" />
+                                                        </div>
+                                                    )}
 
-                                                        {isPublishing && !isPublished && (
-                                                            <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-xs rounded-[1.5rem] flex items-center justify-center">
-                                                                <Loader2 className="animate-spin w-6 h-6 text-indigo-500" />
-                                                            </div>
-                                                        )}
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
+                                                    {isPublishing && !isPublished && (
+                                                        <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-xs rounded-[1.5rem] flex items-center justify-center">
+                                                            <Loader2 className="animate-spin w-6 h-6 text-indigo-500" />
+                                                        </div>
+                                                    )}
+                                                </button>
+                                            );
+                                        })}
                                     </div>
+                                </div>
 
-                                    <div className="space-y-4 pt-4">
-                                        <button
-                                            onClick={() => { selection(); setShowPublishModal(false); setStep(1); }}
-                                            className="w-full h-12 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text transition-all active:scale-95 shadow-sm"
-                                        >
-                                            {t('pro_dashboard.publish.create_another_btn')}
-                                        </button>
-                                        <div className="flex flex-col items-center gap-1 opacity-30">
-                                            <div className="h-px w-12 bg-white/20 mb-1" />
-                                            <p className="text-[9px] font-black uppercase tracking-[0.3em]">
-                                                {t('pro_dashboard.publish.footer')}
-                                            </p>
-                                        </div>
+                                <div className="space-y-4 pt-4">
+                                    <button
+                                        onClick={() => { selection(); setShowPublishModal(false); setStep(1); }}
+                                        className="w-full h-12 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text transition-all active:scale-95 shadow-sm"
+                                    >
+                                        {t('pro_dashboard.publish.create_another_btn')}
+                                    </button>
+                                    <div className="flex flex-col items-center gap-1 opacity-30">
+                                        <div className="h-px w-12 bg-white/20 mb-1" />
+                                        <p className="text-[9px] font-black uppercase tracking-[0.3em]">
+                                            {t('pro_dashboard.publish.footer')}
+                                        </p>
                                     </div>
-                                </motion.div>
+                                </div>
                             </motion.div>
-                        )}
-                    </AnimatePresence>
-            </div>
-            );
+                        </motion.div>
+                    )
+                }
+            </AnimatePresence >
+        </div >
+    );
 };
