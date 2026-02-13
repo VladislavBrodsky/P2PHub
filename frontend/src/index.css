@@ -222,7 +222,7 @@ body {
 
   /* Premium Glass Utilities */
   .glass-panel-premium {
-    @apply bg-white/10 backdrop-blur-md border border-white/20 shadow-xl;
+    @apply bg-white/70 dark:bg-white/5 backdrop-blur-xl border border-black/[0.03] dark:border-white/10 shadow-sm dark:shadow-2xl;
   }
 
   .glass-button {

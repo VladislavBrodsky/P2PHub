@@ -320,50 +320,9 @@ class AdminService:
     async def recalculate_all_referral_counts(self) -> Dict[str, Any]:
         """
         Force recalculates structural fields (path, depth, referral_count) for all partners.
-        Optimized high-speed implementation.
+        Uses the high-performance unified maintenance service.
         """
-        async for session in get_session():
-            logger.info("🚀 Global Statistics Recalculation Triggered")
-            
-            # 1. Reset all referral counts atomically
-            await session.execute(text("UPDATE partner SET referral_count = 0"))
-            
-            # 2. Re-fetch all partners to build structural map
-            result = await session.exec(select(Partner.id, Partner.path, Partner.referrer_id, Partner.depth))
-            partners = result.all()
-            
-            # 3. Memory-optimized aggregation
-            # Level 1-9 ancestors only per business rules
-            updates = {}
-            for p_id, p_path, p_ref_id, p_depth in partners:
-                if p_path:
-                    # In our system, path stores parent hierarchy (e.g. "1.5.23")
-                    anc_ids = [int(x) for x in p_path.split('.') if x.isdigit()]
-                    # We only care about ancestors who actually have this user in their 9-level matrix
-                    # This means depth difference <= 9
-                    for anc_id in anc_ids[-9:]:
-                        updates[anc_id] = updates.get(anc_id, 0) + 1
-            
-            # 4. Batch Updates (Atomic batches of 500)
-            items = list(updates.items())
-            batch_size = 500
-            for i in range(0, len(items), batch_size):
-                batch = items[i:i + batch_size]
-                # Build a single multi-row update or use a CASE statement for speed
-                # For compatibility across engines, we'll use individual but pooled executes
-                # Or better: use a temporary table and join (if on Postgres)
-                for anc_id, count in batch:
-                    await session.execute(
-                        text("UPDATE partner SET referral_count = :c WHERE id = :p_id"),
-                        {"c": count, "p_id": anc_id}
-                    )
-                await session.commit()
-                
-            return {
-                "status": "success", 
-                "message": "Global structural reconciliation complete",
-                "processed": len(partners),
-                "updated": len(updates)
-            }
+        from app.services.maintenance_service import reconcile_network_stats
+        return await reconcile_network_stats()
 
 admin_service = AdminService()

@@ -687,7 +687,7 @@ export const ProDashboard = () => {
                                                 {/* Image Actions Overlay */}
                                                 <div className="absolute inset-x-0 bottom-0 z-10 opacity-0 group-hover/img:opacity-100 transition-all duration-300 bg-linear-to-t from-black/90 to-transparent p-6 translate-y-4 group-hover/img:translate-y-0">
                                                     <div className="flex items-center justify-center gap-4">
-                                                        <button onClick={handleSaveImageToDevice} className="p-4 bg-white/10 hover:bg-emerald-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all shadow-lg active:scale-90">
+                                                        <button onClick={() => { selection(); handleSaveImageToDevice(); }} className="p-4 bg-white/10 hover:bg-emerald-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all shadow-lg active:scale-90">
                                                             <Download size={20} />
                                                         </button>
                                                         <button onClick={handleGenerate} className="p-4 bg-white/10 hover:bg-indigo-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all shadow-lg active:scale-90">
@@ -712,7 +712,7 @@ export const ProDashboard = () => {
                                                         <div className="h-1 w-12 vibing-blue-gradient rounded-full" />
                                                     </div>
                                                     <div className="flex gap-2 shrink-0">
-                                                        <button onClick={handleCopyText} className="p-2.5 bg-(--color-bg-surface) hover:bg-indigo-500/10 rounded-xl border border-(--color-border-glass) text-brand-muted hover:text-indigo-500 transition-all active:scale-90 shadow-sm">
+                                                        <button onClick={() => { selection(); handleCopyText(); }} className="p-2.5 bg-(--color-bg-surface) hover:bg-indigo-500/10 rounded-xl border border-(--color-border-glass) text-brand-muted hover:text-indigo-500 transition-all active:scale-90 shadow-sm">
                                                             <Copy size={14} />
                                                         </button>
                                                         <button onClick={handleGenerate} className="p-2.5 bg-(--color-bg-surface) hover:bg-indigo-500/10 rounded-xl border border-(--color-border-glass) text-brand-muted hover:text-indigo-500 transition-all active:scale-90 shadow-sm">
@@ -823,7 +823,7 @@ export const ProDashboard = () => {
                                             />
                                         </div>
 
-                                        {/* Headline Fixer / Bio Generator */}
+                                        {/* Viral Bio Generator */}
                                         <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden group shadow-2xl">
                                             <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-blue-500/5 pointer-events-none" />
 
@@ -853,7 +853,7 @@ export const ProDashboard = () => {
                                                         initial={{ opacity: 0, scale: 0.95 }}
                                                         animate={{ opacity: 1, scale: 1 }}
                                                         className="p-5 bg-indigo-500/5 border border-indigo-500/10 rounded-2xl relative overflow-hidden shadow-inner group/copy cursor-pointer active:scale-[0.98] transition-all"
-                                                        onClick={() => { handleCopyText(fixedBio); impact('medium'); }}
+                                                        onClick={() => { handleCopyAnyText(fixedBio); selection(); }}
                                                     >
                                                         <div className="absolute top-3 right-3 text-indigo-500/40 group-hover/copy:text-indigo-500 transition-colors">
                                                             <Copy size={12} />
@@ -1094,7 +1094,7 @@ export const ProDashboard = () => {
                                                 </div>
                                                 <div className="space-y-4 relative z-10">
                                                     {(t('pro_dashboard.academy.hooks.items', { returnObjects: true }) as any[]).map((hook: any, i: number) => (
-                                                        <div key={i} className="p-6 bg-indigo-500/5 rounded-3xl border border-white/5 hover:border-indigo-500/20 transition-all group/hook relative overflow-hidden cursor-pointer active:scale-[0.99]" onClick={() => { handleCopyText(hook.template); impact('light'); }}>
+                                                        <div key={i} className="p-6 bg-indigo-500/5 rounded-3xl border border-white/5 hover:border-indigo-500/20 transition-all group/hook relative overflow-hidden cursor-pointer active:scale-[0.99]" onClick={() => { handleCopyAnyText(hook.template); selection(); }}>
                                                             <div className="absolute right-6 top-6 opacity-0 group-hover/hook:opacity-100 transition-all">
                                                                 <Copy size={16} className="text-indigo-500" />
                                                             </div>
@@ -1245,7 +1245,7 @@ export const ProDashboard = () => {
                                                             <Info size={12} className="text-brand-muted opacity-50 cursor-pointer hover:opacity-100" onClick={() => alert('Steps: 1. Developer Portal 2. Create App 3. Keys & Tokens')} />
                                                         </div>
                                                         <button
-                                                            onClick={() => handleTestIntegration('x')}
+                                                            onClick={() => { selection(); handleTestIntegration('x'); }}
                                                             className="text-[9px] font-black uppercase tracking-widest text-brand-text bg-linear-to-r from-blue-500/10 to-indigo-500/10 h-7 px-3 rounded-xl border border-blue-500/20 hover:border-blue-500/40 transition-all flex items-center gap-2"
                                                         >
                                                             <Send size={10} /> Test Connection
@@ -1291,7 +1291,7 @@ export const ProDashboard = () => {
                                                             <Info size={12} className="text-brand-muted opacity-50 cursor-pointer hover:opacity-100" onClick={() => alert('Sync your P2PHub bot with your channels by adding it as an administrator.')} />
                                                         </div>
                                                         <button
-                                                            onClick={() => handleTestIntegration('telegram')}
+                                                            onClick={() => { selection(); handleTestIntegration('telegram'); }}
                                                             className="text-[9px] font-black uppercase tracking-widest text-brand-text bg-linear-to-r from-blue-500/10 to-emerald-500/10 h-7 px-3 rounded-xl border border-blue-500/20 hover:border-blue-500/40 transition-all flex items-center gap-2"
                                                         >
                                                             <Send size={10} /> Test Connection

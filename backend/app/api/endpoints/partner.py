@@ -193,22 +193,69 @@ async def get_my_profile(
         last_date = partner.last_checkin_at.date()
         if last_date < today_date:
             if last_date == today_date - timedelta(days=1):
-                # Consecutive day
                 partner.checkin_streak += 1
             else:
-                # Streak broken
                 partner.checkin_streak = 1
             partner.last_checkin_at = now_dt
-            session.add(partner)
+            
+            # Award XP
+            checkin_xp = settings.DAILY_CHECKIN_XP
+            if partner.is_pro:
+                checkin_xp *= settings.PRO_XP_MULTIPLIER
+                
+            await session.execute(
+                text("UPDATE partner SET xp = xp + :inc WHERE id = :p_id"),
+                {"inc": checkin_xp, "p_id": partner.id}
+            )
+            
+            from app.models.partner import Earning, XPTransaction
+            session.add(XPTransaction(
+                partner_id=partner.id,
+                amount=checkin_xp,
+                type="CHECKIN",
+                description="Daily Check-in Reward"
+            ))
+            session.add(Earning(
+                partner_id=partner.id,
+                amount=checkin_xp,
+                description="Daily Check-in Bonus",
+                type="DAILY_REWARD",
+                currency="XP"
+            ))
+            
             await session.commit()
             await session.refresh(partner)
-            # Invalidate cache since streak changed
             await redis_service.client.delete(cache_key)
     else:
         # First check-in
         partner.checkin_streak = 1
         partner.last_checkin_at = now_dt
-        session.add(partner)
+        
+        # Award Daily XP
+        checkin_xp = settings.DAILY_CHECKIN_XP
+        if partner.is_pro:
+            checkin_xp *= settings.PRO_XP_MULTIPLIER
+            
+        await session.execute(
+            text("UPDATE partner SET xp = xp + :inc WHERE id = :p_id"),
+            {"inc": checkin_xp, "p_id": partner.id}
+        )
+        
+        from app.models.partner import Earning, XPTransaction
+        session.add(XPTransaction(
+            partner_id=partner.id,
+            amount=checkin_xp,
+            type="CHECKIN",
+            description="Daily Check-in Reward"
+        ))
+        session.add(Earning(
+            partner_id=partner.id,
+            amount=checkin_xp,
+            description="Daily Check-in Bonus",
+            type="DAILY_REWARD",
+            currency="XP"
+        ))
+        
         await session.commit()
         await session.refresh(partner)
         await redis_service.client.delete(cache_key)
@@ -707,11 +754,13 @@ async def claim_task_reward(
     )
     session.add(new_xp_tx)
 
+    effective_xp = xp_reward * 5 if partner.is_pro else xp_reward  # PRO members get 5x XP bonus
+    
     # 1.2 Unified Transaction: Log Task XP as an Earning
     from app.models.partner import Earning
     task_earning = Earning(
         partner_id=partner.id,
-        amount=xp_reward,
+        amount=effective_xp,
         description=f"Task Reward: {task_id}",
         type="TASK_XP",
         currency="XP"
@@ -719,12 +768,6 @@ async def claim_task_reward(
     session.add(task_earning)
 
     # 2. Update partner stats
-    # #comment: Upgraded multiplier to 5x as per Phase 2 requirements and marketing alignment.
-    effective_xp = xp_reward * 5 if partner.is_pro else xp_reward  # PRO members get 5x XP bonus
-    
-    # Capture for audit
-    xp_before = partner.xp
-    
     # Atomic XP Increment
     await session.execute(
         text("UPDATE partner SET xp = xp + :inc WHERE id = :p_id"),
@@ -805,7 +848,8 @@ async def complete_academy_stage(
         if stage_id <= 20:
             xp_reward = 100 + (stage_id - 1) * 50
         else:
-            xp_reward = 1000 + (stage_id - 21) * 100
+            # Stage 20 is 1050 XP. Stage 21 should start at 1150 XP.
+            xp_reward = 1150 + (stage_id - 21) * 100
             
         # Apply PRO multiplier (5x)
         effective_xp = xp_reward * 5 if partner.is_pro else xp_reward

@@ -296,42 +296,65 @@ export const AdminPage = () => {
                         </div>
 
                         {/* Task Completion Breakdown */}
-                        <div className="p-5 rounded-3xl glass-panel-premium border border-white/5 space-y-4">
-                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Task Performance</h2>
-                            <div className="space-y-2">
+                        <div className="p-6 rounded-[2rem] glass-panel-premium border border-white/5 space-y-6 shadow-sm">
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Task Performance</h2>
+                                <Zap size={14} className="text-blue-500 animate-pulse" />
+                            </div>
+                            <div className="space-y-4">
                                 {Object.entries(stats?.tasks || {}).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([taskId, count]) => (
-                                    <div key={taskId} className="flex items-center justify-between">
-                                        <div className="text-[10px] font-bold text-slate-400 truncate max-w-[150px]">{taskId}</div>
-                                        <div className="flex items-center gap-2 flex-1 mx-4">
-                                            <div className="h-1.5 bg-slate-100 dark:bg-white/5 rounded-full flex-1 overflow-hidden">
-                                                <div
-                                                    className="h-full bg-blue-500 rounded-full"
-                                                    style={{ width: `${(count / (stats?.events.total_tasks || 1)) * 100}%` }}
-                                                />
+                                    <div key={taskId} className="group flex flex-col gap-2">
+                                        <div className="flex items-center justify-between">
+                                            <div className="text-[11px] font-black text-slate-700 dark:text-slate-100 uppercase tracking-tight">
+                                                {taskId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+                                            </div>
+                                            <div className="text-[11px] font-black text-blue-500 dark:text-blue-400">
+                                                {count} <span className="text-[9px] opacity-60 ml-0.5">COMPLETED</span>
                                             </div>
                                         </div>
-                                        <div className="text-[10px] font-black text-slate-200">{count}</div>
+                                        <div className="h-2 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden border border-black/5 dark:border-white/5">
+                                            <motion.div
+                                                initial={{ width: 0 }}
+                                                animate={{ width: `${(count / (stats?.events.total_tasks || 1)) * 100}%` }}
+                                                className="h-full bg-linear-to-r from-blue-500 to-indigo-600 rounded-full"
+                                                transition={{ duration: 1, ease: "easeOut" }}
+                                            />
+                                        </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
 
                         {/* Top Partners Leaderboard */}
-                        <div className="p-5 rounded-3xl glass-panel-premium border border-white/5 space-y-4">
+                        <div className="p-6 rounded-[2rem] glass-panel-premium border border-white/5 space-y-6 shadow-sm">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Top Earners</h2>
-                                <TrendingUp size={14} className="text-blue-500" />
+                                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Top Earners</h2>
+                                <div className="p-2 bg-blue-500/10 rounded-xl">
+                                    <TrendingUp size={14} className="text-blue-500" />
+                                </div>
                             </div>
-                            <div className="space-y-3">
+                            <div className="space-y-4">
                                 {stats?.top_partners?.map((p, idx) => (
-                                    <div key={p.telegram_id} className="flex items-center justify-between group">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-6 h-6 rounded-lg bg-white/5 flex items-center justify-center text-[10px] font-black text-slate-500">
+                                    <div key={p.telegram_id} className="flex items-center justify-between group p-3 rounded-2xl hover:bg-white/5 transition-all">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center text-[11px] font-black text-slate-500 dark:text-slate-400 border border-black/5 dark:border-white/5">
                                                 #{idx + 1}
                                             </div>
-                                            <div className="text-[11px] font-bold text-slate-200">@{p.username || p.telegram_id}</div>
+                                            <div>
+                                                <div className="text-xs font-black text-slate-800 dark:text-slate-100 italic transition-colors group-hover:text-blue-500">
+                                                    @{p.username || p.telegram_id}
+                                                </div>
+                                                <div className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-tighter">
+                                                    MASTER HUB PARTNER
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="text-[11px] font-black text-emerald-500">${p.earnings}</div>
+                                        <div className="text-right">
+                                            <div className="text-xs font-black text-emerald-500 dark:text-emerald-400 flex items-center gap-1 justify-end">
+                                                <span className="text-[10px] opacity-60 font-bold">$</span>
+                                                {p.earnings.toLocaleString()}
+                                            </div>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -340,7 +363,7 @@ export const AdminPage = () => {
                         {/* Performance Chart: User Growth */}
                         <div className="p-5 rounded-3xl glass-panel-premium border border-white/5 space-y-4">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Network Growth (14d)</h2>
+                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Network Growth (14d)</h2>
                                 <Calendar size={14} className="text-slate-500" />
                             </div>
                             <div className="h-[180px] w-full mt-2">
@@ -395,7 +418,7 @@ export const AdminPage = () => {
                                             </div>
                                         </div>
                                         <div className="text-2xl font-black">{data.count}</div>
-                                        <div className="text-[9px] text-slate-400 font-bold uppercase">Prev: {data.previous}</div>
+                                        <div className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase">Prev: {data.previous}</div>
                                     </div>
                                 ))}
                             </div>
@@ -450,7 +473,7 @@ export const AdminPage = () => {
                         {/* Revenue Performance Chart */}
                         <div className="p-5 rounded-3xl glass-panel-premium border border-white/5 space-y-4">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Revenue Performance</h2>
+                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Revenue Performance</h2>
                                 <PieChart size={14} className="text-slate-500" />
                             </div>
                             <div className="h-[180px] w-full">
@@ -485,7 +508,7 @@ export const AdminPage = () => {
 
                         {/* Recent Successful Sales */}
                         <div className="space-y-3">
-                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 px-1">Recent Successful Sales</h2>
+                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 px-1">Recent Successful Sales</h2>
                             <div className="space-y-2">
                                 {stats?.recent_sales.map((sale) => (
                                     <div key={sale.id} className="p-3 rounded-2xl glass-panel-premium border border-white/5 flex items-center justify-between">
@@ -494,7 +517,7 @@ export const AdminPage = () => {
                                                 <Zap size={20} />
                                             </div>
                                             <div>
-                                                <div className="text-sm font-black text-slate-200">
+                                                <div className="text-sm font-black text-slate-900 dark:text-slate-100">
                                                     @{sale.username || sale.telegram_id}
                                                 </div>
                                                 <div className="text-[9px] font-bold text-slate-500 uppercase flex items-center gap-1">
@@ -509,7 +532,7 @@ export const AdminPage = () => {
                                                     href={`https://tonviewer.com/transaction/${sale.tx_hash}`}
                                                     target="_blank"
                                                     rel="noreferrer"
-                                                    className="p-1 px-1.5 bg-white/5 rounded-lg text-slate-400 hover:text-blue-400 transition-colors"
+                                                    className="p-1 px-1.5 bg-white/5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-blue-400 transition-colors"
                                                 >
                                                     <ExternalLink size={10} />
                                                 </a>
@@ -523,7 +546,7 @@ export const AdminPage = () => {
                         {/* Commissions Breakdown */}
                         <div className="space-y-3">
                             <div className="flex items-center justify-between px-1">
-                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">9-Level Comission Split</h2>
+                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">9-Level Comission Split</h2>
                                 <PieChart size={14} className="text-slate-500" />
                             </div>
                             <div className="space-y-2">
@@ -535,7 +558,7 @@ export const AdminPage = () => {
                                             </div>
                                             <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Level {line.level} Partners</span>
                                         </div>
-                                        <span className="text-sm font-black text-slate-700 dark:text-slate-200">${line.amount}</span>
+                                        <span className="text-sm font-black text-slate-700 dark:text-slate-100">${line.amount}</span>
                                     </div>
                                 ))}
                             </div>
@@ -566,7 +589,7 @@ export const AdminPage = () => {
                         </div>
 
                         <div className="flex items-center justify-between px-1">
-                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Pending Review ({transactions.length})</h2>
+                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Pending Review ({transactions.length})</h2>
                             <div className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-[10px] font-black uppercase">Action Required</div>
                         </div>
 
@@ -581,7 +604,7 @@ export const AdminPage = () => {
                                         <CheckCircle className="text-blue-500" size={32} />
                                     </div>
                                     <div className="text-slate-500 font-bold">Queue Empty</div>
-                                    <p className="text-slate-400 text-xs">All payments are up to date</p>
+                                    <p className="text-slate-500 dark:text-slate-400 text-xs">All payments are up to date</p>
                                 </motion.div>
                             ) : (
                                 transactions.map((tx) => (
@@ -599,7 +622,7 @@ export const AdminPage = () => {
                                                     <Clock className="text-amber-500" size={24} />
                                                 </div>
                                                 <div>
-                                                    <div className="font-black text-lg flex items-center gap-2 text-slate-200">
+                                                    <div className="font-black text-lg flex items-center gap-2 text-slate-900 dark:text-slate-100">
                                                         {tx.amount} {tx.currency}
                                                         <span className="text-[10px] bg-white/5 px-2 py-0.5 rounded-full text-slate-500 font-bold">
                                                             {tx.network}
@@ -612,7 +635,7 @@ export const AdminPage = () => {
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <div className="text-[10px] font-black text-slate-400 uppercase">
+                                                <div className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase">
                                                     {tx.created_at ? new Date(tx.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Recently'}
                                                 </div>
                                             </div>
@@ -620,7 +643,7 @@ export const AdminPage = () => {
 
                                         <div className="p-3 rounded-2xl bg-black/20 font-mono text-[10px] break-all flex items-start justify-between gap-3 border border-white/5">
                                             <span className="text-slate-500 shrink-0 uppercase font-black">TX Hash:</span>
-                                            <span className={`select-all flex-1 ${!tx.tx_hash ? "text-red-400 italic" : "text-slate-400"}`}>
+                                            <span className={`select-all flex-1 ${!tx.tx_hash ? "text-red-400 italic" : "text-slate-500 dark:text-slate-400"}`}>
                                                 {tx.tx_hash || "Manual Verification Required"}
                                             </span>
                                             {tx.tx_hash && (
@@ -677,7 +700,7 @@ export const AdminPage = () => {
                             </div>
                             <div className="space-y-2 relative z-10">
                                 <h3 className="text-xl font-black text-white">System Maintenance</h3>
-                                <p className="text-slate-400 text-xs">Critical tools for database consistency and performance optimization.</p>
+                                <p className="text-slate-500 dark:text-slate-400 text-xs">Critical tools for database consistency and performance optimization.</p>
                             </div>
 
                             {/* System Health Cards */}
@@ -728,7 +751,7 @@ export const AdminPage = () => {
                         className="space-y-6"
                     >
                         <div className="p-5 rounded-3xl glass-panel-premium border border-white/5 space-y-4">
-                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Partner Search</h2>
+                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Partner Search</h2>
                             <form onSubmit={handleSearch} className="relative">
                                 <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                                 <input
@@ -749,7 +772,7 @@ export const AdminPage = () => {
                                     <div key={p.id} className="p-4 rounded-2xl glass-panel-premium border border-white/5 space-y-2">
                                         <div className="flex items-center justify-between">
                                             <div>
-                                                <div className="text-sm font-black text-slate-200">@{p.username || p.telegram_id}</div>
+                                                <div className="text-sm font-black text-slate-900 dark:text-slate-100">@{p.username || p.telegram_id}</div>
                                                 <div className="text-[10px] text-slate-500 font-bold uppercase">ID: {p.telegram_id}</div>
                                             </div>
                                             <div className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase ${p.is_pro ? 'bg-amber-500/20 text-amber-500' : 'bg-slate-500/20 text-slate-500'}`}>
@@ -759,11 +782,11 @@ export const AdminPage = () => {
                                         <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5">
                                             <div className="text-center">
                                                 <div className="text-[8px] text-slate-500 font-black uppercase">Level</div>
-                                                <div className="text-xs font-black text-slate-200">{p.level}</div>
+                                                <div className="text-xs font-black text-slate-900 dark:text-slate-100">{p.level}</div>
                                             </div>
                                             <div className="text-center">
                                                 <div className="text-[8px] text-slate-500 font-black uppercase">Network</div>
-                                                <div className="text-xs font-black text-slate-200">{p.referral_count}</div>
+                                                <div className="text-xs font-black text-slate-900 dark:text-slate-100">{p.referral_count}</div>
                                             </div>
                                             <div className="text-center">
                                                 <div className="text-[8px] text-slate-500 font-black uppercase">XP</div>
