@@ -1,7 +1,7 @@
 {
     "common": {
         "dashboard": "Панель",
-        "academy": "Академия",
+        "academy": "Гроу-хаки",
         "wallet": "Кошелек",
         "connect_wallet": "Подключить",
         "language": "Язык",
@@ -282,7 +282,7 @@
     "community": {
         "tabs": {
             "dashboard": "Панель",
-            "academy": "Академия"
+            "academy": "Гроу-хаки"
         }
     },
     "blog": {
