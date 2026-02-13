@@ -10,6 +10,14 @@ export interface PROStatus {
         text_generation: boolean;
         image_generation: boolean;
     };
+    setup?: {
+        x_api_key: string;
+        x_api_secret: string;
+        x_access_token: string;
+        x_access_token_secret: string;
+        telegram_channel_id: string;
+        linkedin_access_token: string;
+    };
 }
 
 export interface PROSetupPayload {
@@ -55,6 +63,14 @@ export const proService = {
             platform,
             content,
             image_path
+        });
+        return response.data;
+    },
+
+    testIntegration: async (platform: 'x' | 'telegram' | 'linkedin') => {
+        const response = await apiClient.post('/api/pro/test', {
+            platform,
+            content: "Test Message", // Backend ignores this for test
         });
         return response.data;
     },

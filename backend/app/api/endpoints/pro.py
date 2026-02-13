@@ -45,6 +45,14 @@ async def get_pro_status(
         "has_x_setup": bool(partner.x_api_key),
         "has_telegram_setup": bool(partner.telegram_channel_id),
         "has_linkedin_setup": bool(partner.linkedin_access_token),
+        "setup": {
+            "x_api_key": partner.x_api_key or "",
+            "x_api_secret": partner.x_api_secret or "",
+            "x_access_token": partner.x_access_token or "",
+            "x_access_token_secret": partner.x_access_token_secret or "",
+            "telegram_channel_id": partner.telegram_channel_id or "",
+            "linkedin_access_token": partner.linkedin_access_token or ""
+        },
         "capabilities": viral_studio.get_capabilities()
     }
 
@@ -126,6 +134,28 @@ async def publish_content(
         platform=payload.platform,
         content=payload.content,
         image_path=payload.image_path
+    )
+    
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    
+    return result
+
+@router.post("/test")
+async def test_integration(
+    payload: SocialPostRequest,
+    partner: Partner = Depends(get_current_partner)
+):
+    if not partner.is_pro:
+        raise HTTPException(status_code=403, detail="PRO membership required")
+    
+    test_content = f"🚀 Pintopay Integration Test\n\nProtocol Status: ACTIVE\nTimestamp: {logger.name}"
+    
+    result = await viral_studio.post_to_social(
+        partner=partner,
+        platform=payload.platform,
+        content=test_content,
+        image_path=None
     )
     
     if "error" in result:

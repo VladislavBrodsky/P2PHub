@@ -839,6 +839,9 @@
             "x_integration": "X Integration",
             "tg_sync": "Telegram Sync",
             "professional_network": "Professional Network",
+            "x_hint": "1. Visit developer.x.com. 2. Create project/app. 3. Enable OAuth 1.0a (Read/Write). 4. Generate & Sync keys here.",
+            "tg_hint": "1. Add @ViralStudioBot to your channel. 2. Give 'Admin' rights with 'Post Messages' permission. 3. Enter Channel Username/ID.",
+            "linkedin_hint": "Connect your LinkedIn Profile using our secure OAuth protocol to syndicate professional content automatically.",
             "save_btn": "SAVE PROTOCOL CONFIG",
             "global_integration": "Global Integration"
         },

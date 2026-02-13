@@ -104,6 +104,16 @@ export const ProDashboard = () => {
         try {
             const data = await proService.getStatus();
             setStatus(data);
+            if (data.setup) {
+                setApiData({
+                    x_api_key: data.setup.x_api_key || '',
+                    x_api_secret: data.setup.x_api_secret || '',
+                    x_access_token: data.setup.x_access_token || '',
+                    x_access_token_secret: data.setup.x_access_token_secret || '',
+                    telegram_channel_id: data.setup.telegram_channel_id || '',
+                    linkedin_access_token: data.setup.linkedin_access_token || ''
+                });
+            }
         } catch (error) {
             console.error('Failed to load PRO status', error);
         } finally {
@@ -256,6 +266,17 @@ export const ProDashboard = () => {
             alert('Failed to save API setup');
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleTestIntegration = async (platform: 'x' | 'telegram' | 'linkedin') => {
+        try {
+            notification('success');
+            await proService.testIntegration(platform);
+            alert(`Test message successfully sent to ${platform.toUpperCase()}`);
+        } catch (error: any) {
+            alert(error.response?.data?.detail || `Test failed for ${platform.toUpperCase()}. Please check your keys.`);
+            notification('error');
         }
     };
 
@@ -920,110 +941,150 @@ export const ProDashboard = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-xl"
-                        onClick={(e) => {
-                            if (e.target === e.currentTarget) {
-                                selection();
-                                setShowSetup(false);
-                            }
-                        }}
+                        className="fixed inset-0 z-101 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-2xl"
                     >
                         <motion.div
                             initial={{ scale: 0.9, y: 30, opacity: 0 }}
                             animate={{ scale: 1, y: 0, opacity: 1 }}
                             exit={{ scale: 0.9, y: 30, opacity: 0 }}
-                            className="glass-panel-premium w-full max-w-sm rounded-[2.5rem] p-6 space-y-5 max-h-[90vh] overflow-y-auto no-scrollbar relative"
+                            className="bg-white dark:bg-slate-900 w-full max-w-md rounded-[2.5rem] p-6 space-y-4 max-h-[92vh] flex flex-col relative overflow-hidden shadow-2xl border border-black/5 dark:border-white/10"
                         >
-                            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 via-transparent to-indigo-500 opacity-20" />
+                            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 via-purple-500 to-indigo-500 opacity-30" />
 
-                            <div className="flex justify-between items-center">
+                            <div className="flex justify-between items-center shrink-0">
                                 <div className="flex flex-col">
-                                    <h3 className="text-xl font-black uppercase tracking-tight text-brand-text">
+                                    <h3 className="text-xl font-black uppercase tracking-tight text-slate-800 dark:text-white">
                                         {t('pro_dashboard.tab_setup')}
                                     </h3>
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500/60 leading-none">{t('pro_dashboard.setup.global_integration')}</span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500 leading-none">{t('pro_dashboard.setup.global_integration')}</span>
                                 </div>
                                 <button
                                     onClick={() => { selection(); setShowSetup(false); }}
-                                    className="p-2.5 bg-white/5 dark:bg-white/5 border border-white/10 rounded-xl opacity-80 hover:opacity-100 active:scale-90 transition-all"
+                                    className="p-2.5 bg-slate-100 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-xl opacity-80 hover:opacity-100 active:scale-90 transition-all text-slate-600 dark:text-white"
                                 >
                                     <ArrowLeft className="w-4 h-4" />
                                 </button>
                             </div>
 
-                            <div className="space-y-4">
-                                <div className="p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl relative overflow-hidden">
-                                    <div className="absolute -right-2 -top-2 opacity-10"><Info size={40} /></div>
-                                    <h4 className="text-[10px] font-black uppercase text-indigo-500 mb-2 flex items-center gap-2">
-                                        <Zap size={10} /> {t('pro_dashboard.setup.protocol_title')}
-                                    </h4>
-                                    <div className="space-y-1.5">
-                                        {(t('pro_dashboard.setup.instructions', { returnObjects: true }) as string[]).map((step, idx) => (
-                                            <div key={idx} className="flex gap-2 text-[10px] font-bold text-brand-text/70">
-                                                <span className="text-indigo-500">{idx + 1}.</span>
-                                                <span className="leading-tight">{step}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="space-y-4 pt-2">
-                                    <div className="space-y-3">
-                                        <div className="flex items-center gap-2 px-2 text-[10px] font-black uppercase tracking-widest opacity-40">
-                                            <Twitter size={10} className="text-blue-400" /> {t('pro_dashboard.setup.x_integration')}
+                            <div className="flex-1 overflow-y-auto no-scrollbar space-y-6 pr-1">
+                                {/* X Integration */}
+                                <div className="space-y-4 p-5 bg-slate-50 dark:bg-white/5 rounded-3xl border border-black/5 dark:border-white/5">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-indigo-400/60">
+                                            <Twitter size={12} className="text-blue-400" /> {t('pro_dashboard.setup.x_integration')}
                                         </div>
+                                        {status?.has_x_setup && (
+                                            <button
+                                                onClick={() => handleTestIntegration('x')}
+                                                className="text-[9px] font-black uppercase tracking-widest text-indigo-500 hover:text-indigo-600 transition-colors flex items-center gap-1 bg-indigo-500/10 px-2 py-1 rounded-full"
+                                            >
+                                                <Zap size={10} /> TEST
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className="space-y-3">
                                         <div className="grid gap-2">
                                             <input
                                                 type="password"
                                                 value={apiData.x_api_key}
                                                 onChange={(e) => setApiData({ ...apiData, x_api_key: e.target.value })}
                                                 placeholder="X API Key"
-                                                className="w-full h-11 bg-white/5 dark:bg-black/20 border border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all"
+                                                className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all dark:text-white"
+                                            />
+                                            <input
+                                                type="password"
+                                                value={apiData.x_api_secret}
+                                                onChange={(e) => setApiData({ ...apiData, x_api_secret: e.target.value })}
+                                                placeholder="X API Secret"
+                                                className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all dark:text-white"
                                             />
                                             <input
                                                 type="password"
                                                 value={apiData.x_access_token}
                                                 onChange={(e) => setApiData({ ...apiData, x_access_token: e.target.value })}
                                                 placeholder="X Access Token"
-                                                className="w-full h-11 bg-white/5 dark:bg-black/20 border border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all"
+                                                className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all dark:text-white"
+                                            />
+                                            <input
+                                                type="password"
+                                                value={apiData.x_access_token_secret}
+                                                onChange={(e) => setApiData({ ...apiData, x_access_token_secret: e.target.value })}
+                                                placeholder="X Token Secret"
+                                                className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all dark:text-white"
                                             />
                                         </div>
-                                    </div>
-
-                                    <div className="space-y-3">
-                                        <div className="flex items-center gap-2 px-2 text-[10px] font-black uppercase tracking-widest opacity-40">
-                                            <Send size={10} className="text-blue-500" /> {t('pro_dashboard.setup.tg_sync')}
+                                        <div className="p-3 bg-white dark:bg-black/40 rounded-2xl border border-black/5 dark:border-white/5 space-y-1">
+                                            <div className="text-[9px] font-black uppercase text-indigo-500 tracking-tighter">Instructions:</div>
+                                            <p className="text-[10px] text-slate-500 dark:text-brand-muted leading-relaxed font-medium">{t('pro_dashboard.setup.x_hint')}</p>
                                         </div>
-                                        <input
-                                            type="text"
-                                            value={apiData.telegram_channel_id}
-                                            onChange={(e) => setApiData({ ...apiData, telegram_channel_id: e.target.value })}
-                                            placeholder="@channelname or -100..."
-                                            className="w-full h-11 bg-white/5 dark:bg-black/20 border border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all"
-                                        />
                                     </div>
+                                </div>
 
-                                    <div className="space-y-3">
-                                        <div className="flex items-center gap-2 px-2 text-[10px] font-black uppercase tracking-widest opacity-40">
-                                            <Linkedin size={10} className="text-blue-700" /> {t('pro_dashboard.setup.professional_network')}
+                                {/* Telegram Sync */}
+                                <div className="space-y-4 p-5 bg-slate-50 dark:bg-white/5 rounded-3xl border border-black/5 dark:border-white/5">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-indigo-400/60">
+                                            <Send size={12} className="text-blue-500" /> {t('pro_dashboard.setup.tg_sync')}
                                         </div>
-                                        <input
-                                            type="password"
-                                            value={apiData.linkedin_access_token}
-                                            onChange={(e) => setApiData({ ...apiData, linkedin_access_token: e.target.value })}
-                                            placeholder="LinkedIn Access Token"
-                                            className="w-full h-11 bg-white/5 dark:bg-black/20 border border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all"
-                                        />
+                                        {status?.has_telegram_setup && (
+                                            <button
+                                                onClick={() => handleTestIntegration('telegram')}
+                                                className="text-[9px] font-black uppercase tracking-widest text-indigo-500 hover:text-indigo-600 transition-colors flex items-center gap-1 bg-indigo-500/10 px-2 py-1 rounded-full"
+                                            >
+                                                <Zap size={10} /> TEST
+                                            </button>
+                                        )}
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={apiData.telegram_channel_id}
+                                        onChange={(e) => setApiData({ ...apiData, telegram_channel_id: e.target.value })}
+                                        placeholder="@channelname or -100..."
+                                        className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all dark:text-white"
+                                    />
+                                    <div className="p-3 bg-white dark:bg-black/40 rounded-2xl border border-black/5 dark:border-white/5 space-y-1">
+                                        <div className="text-[9px] font-black uppercase text-indigo-500 tracking-tighter">Instructions:</div>
+                                        <p className="text-[10px] text-slate-500 dark:text-brand-muted leading-relaxed font-medium">{t('pro_dashboard.setup.tg_hint')}</p>
+                                    </div>
+                                </div>
+
+                                {/* LinkedIn INTEGRATION */}
+                                <div className="space-y-4 p-5 bg-slate-50 dark:bg-white/5 rounded-3xl border border-black/5 dark:border-white/5">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-indigo-400/60">
+                                            <Linkedin size={12} className="text-blue-700" /> {t('pro_dashboard.setup.professional_network')}
+                                        </div>
+                                        {status?.has_linkedin_setup && (
+                                            <button
+                                                onClick={() => handleTestIntegration('linkedin')}
+                                                className="text-[9px] font-black uppercase tracking-widest text-indigo-500 hover:text-indigo-600 transition-colors flex items-center gap-1 bg-indigo-500/10 px-2 py-1 rounded-full"
+                                            >
+                                                <Zap size={10} /> TEST
+                                            </button>
+                                        )}
+                                    </div>
+                                    <input
+                                        type="password"
+                                        value={apiData.linkedin_access_token}
+                                        onChange={(e) => setApiData({ ...apiData, linkedin_access_token: e.target.value })}
+                                        placeholder="LinkedIn Access Token"
+                                        className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl px-4 text-xs font-bold outline-hidden transition-all dark:text-white"
+                                    />
+                                    <div className="p-3 bg-white dark:bg-black/40 rounded-2xl border border-black/5 dark:border-white/5 space-y-1">
+                                        <div className="text-[9px] font-black uppercase text-indigo-500 tracking-tighter">Instructions:</div>
+                                        <p className="text-[10px] text-slate-500 dark:text-brand-muted leading-relaxed font-medium">{t('pro_dashboard.setup.linkedin_hint')}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <button
-                                onClick={() => { selection(); handleSaveSetup(); }}
-                                className="w-full h-12 vibing-blue-animated rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all text-white mt-4"
-                            >
-                                {t('pro_dashboard.setup.save_btn')}
-                            </button>
+                            <div className="pt-2 shrink-0">
+                                <button
+                                    onClick={() => { selection(); handleSaveSetup(); }}
+                                    className="w-full h-14 bg-linear-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 rounded-2xl font-black text-[12px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all text-white"
+                                >
+                                    {t('pro_dashboard.setup.save_btn')}
+                                </button>
+                            </div>
                         </motion.div>
                     </motion.div>
                 )}
