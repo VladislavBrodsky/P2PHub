@@ -400,7 +400,7 @@ export const ProDashboard = () => {
     return (
         <div className="relative w-full h-full flex flex-col bg-(--color-bg-deep) overflow-hidden">
             {/* #comment: Studio Branding & Tabs - Now positioned below global header for better integration */}
-            <div className="pt-32 pb-4 space-y-6">
+            <div className="pt-8 pb-4 space-y-6">
                 <div className="px-6 flex items-center justify-between">
                     <div>
                         <h1 className="text-sm font-black tracking-widest leading-tight uppercase text-brand-text drop-shadow-sm flex items-center gap-2">
@@ -942,70 +942,69 @@ export const ProDashboard = () => {
                                 exit={{ opacity: 0, y: -20 }}
                                 className="space-y-8"
                             >
-                                {/* Academy Header - Intelligence Report - #comment: Knowledge repository for advanced content strategy and proprietary viral mechanics */}
-                                <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden bg-linear-to-br from-indigo-500/10 via-transparent to-transparent shadow-2xl">
-                                    <div className="absolute inset-0 bg-grid-white/5 mask-[radial-gradient(ellipse_at_center,black,transparent)]" />
-                                    <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 blur-[80px] rounded-full animate-pulse" />
+                                {/* Grow Hacks Header - Intelligence Report - #comment: Knowledge repository for advanced content strategy and proprietary viral mechanics */}
+                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/5 relative overflow-hidden bg-indigo-500/3 shadow-xl">
+                                    <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-indigo-500/20 to-transparent" />
+                                    <div className="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500/5 blur-[60px] rounded-full animate-pulse" />
 
                                     <div className="relative z-1">
-                                        <div className="flex items-center gap-3 mb-6">
-                                            <div className="px-3 py-1 bg-indigo-500/10 rounded-full border border-indigo-500/20 flex items-center gap-2">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                                                <span className="text-[9px] font-black text-indigo-400 uppercase tracking-[0.2em]">Live Intelligence Protocol</span>
+                                        <div className="flex items-center gap-2 mb-4">
+                                            <div className="px-2.5 py-0.5 bg-indigo-500/10 rounded-full border border-indigo-500/20 flex items-center gap-1.5">
+                                                <div className="w-1 h-1 rounded-full bg-red-500 animate-pulse" />
+                                                <span className="text-[8px] font-black text-indigo-400 uppercase tracking-[0.2em]">Live Intelligence Protocol</span>
                                             </div>
                                         </div>
-                                        <h3 className="text-3xl font-black text-brand-text leading-tight mb-3 tracking-tight">
-                                            {t('pro_dashboard.academy.title')}
+                                        <h3 className="text-2xl font-black text-brand-text leading-tight mb-2 tracking-tight">
+                                            {t('pro_dashboard.title_academy')}
                                         </h3>
-                                        <p className="text-[11px] font-medium text-brand-muted leading-relaxed max-w-[90%] mb-8 italic">
+                                        <p className="text-[10px] font-medium text-brand-muted leading-relaxed max-w-[95%] mb-5 italic opacity-80">
                                             {t('pro_dashboard.academy.desc')}
                                         </p>
-                                        <div className="flex items-center gap-4">
-                                            <div className="px-5 py-3 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-xl group/rank cursor-default transition-all hover:bg-white/10">
-                                                <p className="text-[8px] font-black text-indigo-400/60 uppercase tracking-widest mb-1">{t('pro_dashboard.academy.protocol_rank')}</p>
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-base font-black text-brand-text uppercase tracking-tighter">{t('pro_dashboard.academy.rank_name')}</span>
-                                                    <ShieldCheck size={16} className="text-indigo-500 group-hover:rotate-12 transition-transform" />
+                                        <div className="flex items-center gap-3">
+                                            <div className="px-4 py-2 bg-black/10 dark:bg-white/5 rounded-xl border border-white/5 backdrop-blur-xl group/rank cursor-default transition-all">
+                                                <p className="text-[7px] font-black text-indigo-400/60 uppercase tracking-widest mb-0.5">{t('pro_dashboard.academy.protocol_rank')}</p>
+                                                <div className="flex items-center gap-1.5">
+                                                    <span className="text-xs font-black text-brand-text uppercase tracking-tighter">{t('pro_dashboard.academy.rank_name')}</span>
+                                                    <ShieldCheck size={14} className="text-indigo-500 group-hover:rotate-12 transition-transform" />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-2 gap-3">
                                     {['hook_rule', 'algorithm', 'psycho'].map((key) => (
-                                        <div key={key} className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden group active:scale-[0.98] transition-all bg-(--color-bg-surface) shadow-sm">
-                                            <div className="absolute inset-x-0 -bottom-px h-[2px] bg-linear-to-r from-transparent via-indigo-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                            <div className="flex items-center gap-4 mb-4">
-                                                <div className="w-12 h-12 bg-indigo-500/5 rounded-[1.25rem] flex items-center justify-center border border-indigo-500/10 group-hover:scale-110 transition-transform">
-                                                    {key === 'hook_rule' && <Zap className="w-6 h-6 text-indigo-500" />}
-                                                    {key === 'algorithm' && <Cpu className="w-6 h-6 text-indigo-500" />}
-                                                    {key === 'psycho' && <Sparkles className="w-6 h-6 text-indigo-500" />}
+                                        <div key={key} className={`glass-panel-premium p-4 rounded-[2rem] border border-white/5 relative overflow-hidden group active:scale-[0.98] transition-all bg-(--color-bg-surface) shadow-sm ${key === 'hook_rule' ? 'col-span-2' : 'col-span-1'}`}>
+                                            <div className="flex items-center gap-3 mb-2">
+                                                <div className="w-9 h-9 bg-indigo-500/5 rounded-xl flex items-center justify-center border border-indigo-500/10 group-hover:scale-110 transition-transform shrink-0">
+                                                    {key === 'hook_rule' && <Zap size={18} className="text-indigo-500" />}
+                                                    {key === 'algorithm' && <Cpu size={18} className="text-indigo-500" />}
+                                                    {key === 'psycho' && <Sparkles size={18} className="text-indigo-500" />}
                                                 </div>
-                                                <h4 className="text-[11px] font-black uppercase tracking-widest text-brand-text">{t(`pro_dashboard.academy.${key}.title`)}</h4>
+                                                <h4 className="text-[9px] font-black uppercase tracking-widest text-brand-text leading-tight">{t(`pro_dashboard.academy.${key}.title`)}</h4>
                                             </div>
-                                            <p className="text-[10px] font-medium leading-relaxed text-brand-muted italic opacity-80 pl-2">
+                                            <p className="text-[9px] font-medium leading-relaxed text-brand-muted italic opacity-70">
                                                 {t(`pro_dashboard.academy.${key}.desc`)}
                                             </p>
                                         </div>
                                     ))}
 
                                     {/* Checklist */}
-                                    <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden bg-(--color-bg-surface)">
-                                        <div className="flex items-center gap-4 mb-6">
-                                            <div className="w-12 h-12 bg-emerald-500/5 rounded-[1.25rem] flex items-center justify-center border border-emerald-500/10">
-                                                <CheckCircle2 className="w-6 h-6 text-emerald-500" />
+                                    <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 relative overflow-hidden bg-(--color-bg-surface)">
+                                        <div className="flex items-center gap-3 mb-5">
+                                            <div className="w-10 h-10 bg-emerald-500/5 rounded-xl flex items-center justify-center border border-emerald-500/10 scale-90">
+                                                <CheckCircle2 size={18} className="text-emerald-500" />
                                             </div>
                                             <div>
-                                                <h4 className="text-[11px] font-black uppercase tracking-widest text-brand-text">{t('pro_dashboard.academy.checklist.title')}</h4>
-                                                <p className="text-[8px] font-black text-emerald-500/60 uppercase tracking-widest">{t('pro_dashboard.academy.checklist.subtitle')}</p>
+                                                <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-text leading-none mb-1">{t('pro_dashboard.academy.checklist.title')}</h4>
+                                                <p className="text-[7px] font-black text-emerald-500/60 uppercase tracking-widest">{t('pro_dashboard.academy.checklist.subtitle')}</p>
                                             </div>
                                         </div>
-                                        <div className="space-y-3">
+                                        <div className="space-y-2.5">
                                             {(t('pro_dashboard.academy.checklist.items', { returnObjects: true }) as string[]).map((item: string, i: number) => (
-                                                <div key={i} className="flex items-center gap-3 px-2">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/40" />
-                                                    <span className="text-[10px] font-bold text-brand-muted leading-tight">{item}</span>
+                                                <div key={i} className="flex items-start gap-2.5 px-1">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/40 mt-1 shrink-0" />
+                                                    <span className="text-[9px] font-bold text-brand-muted leading-snug">{item}</span>
                                                 </div>
                                             ))}
                                         </div>
@@ -1013,54 +1012,50 @@ export const ProDashboard = () => {
                                 </div>
 
                                 {/* Visual Branding Prototype - #comment: Design system blueprints for high-impact social media assets */}
-                                <div className="glass-panel-premium p-0.5 rounded-[3rem] border border-white/10 relative overflow-hidden group shadow-2xl">
-                                    <div className="p-8 space-y-10 bg-(--color-bg-surface)">
+                                <div className="glass-panel-premium p-0.5 rounded-[2.5rem] border border-white/5 relative overflow-hidden group shadow-2xl">
+                                    <div className="p-6 space-y-8 bg-(--color-bg-surface)">
                                         <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-5">
-                                                <div className="w-14 h-14 bg-indigo-500/10 rounded-[1.5rem] flex items-center justify-center border border-indigo-500/20 group-hover:scale-110 transition-transform">
-                                                    <ImageIcon className="text-indigo-500 w-7 h-7" />
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-11 h-11 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 group-hover:scale-110 transition-transform">
+                                                    <ImageIcon size={20} className="text-indigo-500" />
                                                 </div>
                                                 <div>
-                                                    <h4 className="text-sm font-black uppercase tracking-widest text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.viral_assets.title')}</h4>
-                                                    <p className="text-[10px] font-bold text-indigo-500/60 uppercase tracking-widest">{t('pro_dashboard.academy.viral_assets.subtitle')}</p>
+                                                    <h4 className="text-xs font-black uppercase tracking-widest text-brand-text leading-none mb-1">{t('pro_dashboard.academy.viral_assets.title')}</h4>
+                                                    <p className="text-[8px] font-bold text-indigo-500/60 uppercase tracking-widest">{t('pro_dashboard.academy.viral_assets.subtitle')}</p>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-1 gap-8">
+                                        <div className="grid grid-cols-1 gap-6">
                                             {(t('pro_dashboard.academy.viral_assets.cards', { returnObjects: true }) as any[]).map((card: any, i: number) => (
                                                 <div key={i} className="relative group/card cursor-pointer">
-                                                    <div className="absolute -inset-8 bg-indigo-500/15 blur-3xl opacity-0 group-hover/card:opacity-100 transition-all duration-700" />
-                                                    <div className="relative aspect-[1.586/1] w-full max-w-sm mx-auto bg-slate-950 rounded-[2.5rem] p-10 border border-white/10 overflow-hidden shadow-3xl transition-all duration-500 group-hover/card:translate-y-[-8px] group-hover/card:-rotate-1">
+                                                    <div className="absolute -inset-4 bg-indigo-500/10 blur-2xl opacity-0 group-hover/card:opacity-100 transition-all duration-700" />
+                                                    <div className="relative aspect-[1.586/1] w-full max-w-[280px] mx-auto bg-slate-950 rounded-[2rem] p-7 border border-white/10 overflow-hidden shadow-3xl transition-all duration-500 group-hover/card:translate-y-[-4px]">
                                                         {/* Mesh Gradient Inside Card */}
-                                                        <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-[50px] pointer-events-none" />
+                                                        <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/10 blur-2xl pointer-events-none" />
 
                                                         {/* Chip */}
-                                                        <div className="w-14 h-11 bg-linear-to-br from-amber-400 via-amber-200 to-amber-600 rounded-xl mb-10 relative overflow-hidden shadow-lg border border-amber-300/30">
-                                                            <div className="absolute inset-0 bg-white/20 grid grid-cols-3 gap-0.5 p-1.5 opacity-40">
+                                                        <div className="w-11 h-8 bg-linear-to-br from-amber-400 via-amber-200 to-amber-600 rounded-lg mb-8 relative overflow-hidden shadow-lg border border-amber-300/30">
+                                                            <div className="absolute inset-0 bg-white/20 grid grid-cols-3 gap-0.5 p-1 opacity-40">
                                                                 {[...Array(9)].map((_, j) => <div key={j} className="bg-black/20 rounded-xs" />)}
                                                             </div>
                                                         </div>
 
-                                                        <div className="space-y-5">
-                                                            <div className="space-y-1.5">
-                                                                <div className="flex items-center gap-2">
-                                                                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
-                                                                    <p className="text-[9px] font-black uppercase tracking-[0.4em] text-indigo-400">Security: Alpha 01</p>
+                                                        <div className="space-y-3.5">
+                                                            <div className="space-y-1">
+                                                                <div className="flex items-center gap-1.5">
+                                                                    <div className="w-1 h-1 rounded-full bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.6)] animate-pulse" />
+                                                                    <p className="text-[7px] font-black uppercase tracking-[0.3em] text-indigo-400/80">Security: Alpha 01</p>
                                                                 </div>
-                                                                <h5 className="text-3xl font-black text-white italic tracking-tighter leading-none">{card.title}</h5>
+                                                                <h5 className="text-xl font-black text-white italic tracking-tighter leading-none">{card.title}</h5>
                                                             </div>
-                                                            <p className="text-[11px] font-bold text-slate-400 leading-relaxed pr-8 opacity-80">{card.hook}</p>
-                                                            <div className="pt-8 flex justify-between items-end">
-                                                                <div className="flex items-center gap-3">
-                                                                    <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-                                                                        <Cpu size={12} className="text-indigo-400" />
+                                                            <p className="text-[8px] font-bold text-slate-400 leading-relaxed pr-4 opacity-70">{card.hook}</p>
+                                                            <div className="pt-4 flex justify-between items-end">
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="w-6 h-6 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
+                                                                        <Cpu size={10} className="text-indigo-400" />
                                                                     </div>
-                                                                    <span className="text-[10px] font-black text-slate-500 tracking-[0.2em]">ENCRYPTED</span>
-                                                                </div>
-                                                                <div className="flex -space-x-4">
-                                                                    <div className="w-10 h-10 rounded-full border-4 border-slate-950 bg-indigo-600 shadow-xl" />
-                                                                    <div className="w-10 h-10 rounded-full border-4 border-slate-950 bg-indigo-400/20 backdrop-blur-md" />
+                                                                    <span className="text-[7px] font-black text-slate-500 tracking-widest">ENCRYPTED</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1072,86 +1067,88 @@ export const ProDashboard = () => {
                                 </div>
 
                                 {/* Hook Library */}
-                                <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 hover:border-indigo-500/20 transition-all group overflow-hidden relative">
+                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/5 hover:border-indigo-500/20 transition-all group overflow-hidden relative shadow-lg">
                                     <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-indigo-500/30 to-transparent" />
-                                    <div className="flex items-center gap-5 mb-10 relative z-10">
-                                        <div className="w-14 h-14 bg-indigo-500/10 rounded-[1.5rem] flex items-center justify-center border border-indigo-500/20 shadow-lg">
-                                            <BookOpen className="text-indigo-500 w-7 h-7" />
+                                    <div className="flex items-center gap-4 mb-6 relative z-10">
+                                        <div className="w-11 h-11 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
+                                            <BookOpen size={20} className="text-indigo-500" />
                                         </div>
                                         <div>
-                                            <h4 className="text-lg font-black uppercase tracking-tight text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.hooks.title')}</h4>
-                                            <span className="text-[10px] font-black text-brand-muted uppercase tracking-widest">{t('pro_dashboard.academy.hooks.subtitle')}</span>
+                                            <h4 className="text-sm font-black uppercase tracking-tight text-brand-text leading-none mb-1">{t('pro_dashboard.academy.hooks.title')}</h4>
+                                            <span className="text-[8px] font-black text-brand-muted uppercase tracking-widest">{t('pro_dashboard.academy.hooks.subtitle')}</span>
                                         </div>
                                     </div>
-                                    <div className="space-y-4 relative z-10">
+                                    <div className="space-y-3 relative z-10">
                                         {(t('pro_dashboard.academy.hooks.items', { returnObjects: true }) as any[]).map((hook: any, i: number) => (
-                                            <div key={i} className="p-6 bg-indigo-500/5 rounded-3xl border border-white/5 hover:border-indigo-500/20 transition-all group/hook relative overflow-hidden cursor-pointer active:scale-[0.99]" onClick={() => { handleCopyAnyText(hook.template); selection(); }}>
-                                                <div className="absolute right-6 top-6 opacity-0 group-hover/hook:opacity-100 transition-all">
+                                            <div key={i} className="p-4 bg-indigo-500/5 rounded-2xl border border-white/5 hover:border-indigo-500/20 transition-all group/hook relative cursor-pointer active:scale-[0.99]" onClick={() => { handleCopyAnyText(hook.template); selection(); }}>
+                                                <div className="absolute right-4 top-4 opacity-0 group-hover/hook:opacity-100 transition-all scale-75">
                                                     <Copy size={16} className="text-indigo-500" />
                                                 </div>
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <div className="w-1 h-3 rounded-full bg-indigo-500" />
-                                                    <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest leading-none">{hook.category}</p>
+                                                <div className="flex items-center gap-2 mb-1.5">
+                                                    <div className="w-1 h-2 rounded-full bg-indigo-500" />
+                                                    <p className="text-[8px] font-black text-indigo-500 uppercase tracking-widest leading-none">{hook.category}</p>
                                                 </div>
-                                                <p className="text-xs font-bold text-brand-text italic leading-relaxed pr-10">"{hook.template}"</p>
+                                                <p className="text-[10px] font-bold text-brand-text italic leading-relaxed pr-8 opacity-90">"{hook.template}"</p>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
 
                                 {/* Viral Lifehacks */}
-                                <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden group">
-                                    <div className="flex items-center gap-5 mb-10">
-                                        <div className="w-14 h-14 bg-pink-500/10 rounded-[1.5rem] flex items-center justify-center border border-pink-500/20 shadow-lg">
-                                            <Flame className="text-pink-500 w-7 h-7" />
+                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/5 relative overflow-hidden group bg-indigo-500/2 shadow-xl">
+                                    <div className="flex items-center gap-4 mb-8">
+                                        <div className="w-11 h-11 bg-pink-500/10 rounded-xl flex items-center justify-center border border-pink-500/20 shadow-lg">
+                                            <Flame size={20} className="text-pink-500" />
                                         </div>
                                         <div>
-                                            <h4 className="text-lg font-black uppercase tracking-tight text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.lifehacks.title')}</h4>
-                                            <span className="text-[10px] font-black text-brand-muted uppercase tracking-widest">{t('pro_dashboard.academy.lifehacks.subtitle')}</span>
+                                            <h4 className="text-sm font-black uppercase tracking-tight text-brand-text leading-none mb-1">{t('pro_dashboard.academy.lifehacks.title')}</h4>
+                                            <span className="text-[8px] font-black text-brand-muted uppercase tracking-widest">{t('pro_dashboard.academy.lifehacks.subtitle')}</span>
                                         </div>
                                     </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="grid grid-cols-1 gap-3">
                                         {(t('pro_dashboard.academy.lifehacks.items', { returnObjects: true }) as any[]).map((hack: any, i: number) => (
-                                            <div key={i} className="space-y-4 p-7 bg-white/5 rounded-[2rem] border border-white/5 hover:border-pink-500/20 transition-all group/hack">
-                                                <div className="w-10 h-10 rounded-2xl bg-pink-500/10 flex items-center justify-center text-pink-500 font-black text-xs group-hover/hack:scale-110 transition-transform">{i + 1}</div>
-                                                <h5 className="text-[11px] font-black uppercase text-brand-text tracking-tight">{hack.title}</h5>
-                                                <p className="text-[10px] font-medium text-brand-muted leading-relaxed italic opacity-80">{hack.desc}</p>
+                                            <div key={i} className="flex gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-pink-500/20 transition-all group/hack active:scale-[0.99] cursor-default">
+                                                <div className="w-8 h-8 rounded-lg bg-pink-500/5 flex items-center justify-center text-pink-500 font-black text-[10px] shrink-0 border border-pink-500/10">{i + 1}</div>
+                                                <div>
+                                                    <h5 className="text-[10px] font-black uppercase text-brand-text tracking-tight mb-1">{hack.title}</h5>
+                                                    <p className="text-[9px] font-medium text-brand-muted leading-relaxed italic opacity-70">{hack.desc}</p>
+                                                </div>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
 
                                 {/* Channel Architecture */}
-                                <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden">
+                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/5 relative overflow-hidden bg-indigo-500/1 shadow-xl">
                                     <div className="absolute bottom-[-50px] right-[-50px] w-64 h-64 bg-indigo-500/5 blur-[80px] rounded-full" />
 
-                                    <div className="space-y-10 relative z-10">
-                                        <div className="flex items-center gap-5">
-                                            <div className="w-14 h-14 bg-indigo-500/10 rounded-[1.5rem] flex items-center justify-center border border-indigo-500/20 shadow-lg">
-                                                <Globe className="text-indigo-500 w-7 h-7" />
+                                    <div className="space-y-8 relative z-10">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-11 h-11 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-lg">
+                                                <Globe size={20} className="text-indigo-500" />
                                             </div>
                                             <div>
-                                                <h4 className="text-lg font-black uppercase tracking-tight text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.social_setup.title')}</h4>
-                                                <span className="text-[10px] font-black text-brand-muted uppercase tracking-widest">{t('pro_dashboard.academy.social_setup.subtitle')}</span>
+                                                <h4 className="text-sm font-black uppercase tracking-tight text-brand-text leading-none mb-1">{t('pro_dashboard.academy.social_setup.title')}</h4>
+                                                <span className="text-[8px] font-black text-brand-muted uppercase tracking-widest">{t('pro_dashboard.academy.social_setup.subtitle')}</span>
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <div className="grid grid-cols-1 gap-4">
                                             {(t('pro_dashboard.academy.social_setup.platforms', { returnObjects: true }) as any[]).map((platform: any, i: number) => (
-                                                <div key={i} className="p-7 bg-white/5 rounded-[2rem] border border-white/5 space-y-6 hover:bg-white/10 transition-colors">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-sm">
-                                                            {platform.name.includes('Telegram') && <Send className="w-6 h-6 text-indigo-500" />}
-                                                            {platform.name.includes('X') && <Twitter className="w-6 h-6 text-indigo-500" />}
-                                                            {platform.name.includes('LinkedIn') && <Linkedin className="w-6 h-6 text-indigo-500" />}
+                                                <div key={i} className="p-5 bg-white/5 rounded-2xl border border-white/5 space-y-4 hover:bg-white/10 transition-colors">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-9 h-9 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
+                                                            {platform.name.includes('Telegram') && <Send size={16} className="text-indigo-500" />}
+                                                            {platform.name.includes('X') && <Twitter size={16} className="text-indigo-500" />}
+                                                            {platform.name.includes('LinkedIn') && <Linkedin size={16} className="text-indigo-500" />}
                                                         </div>
-                                                        <span className="text-[13px] font-black text-brand-text uppercase tracking-tight">{platform.name}</span>
+                                                        <span className="text-xs font-black text-brand-text uppercase tracking-tight">{platform.name}</span>
                                                     </div>
-                                                    <div className="space-y-3">
+                                                    <div className="space-y-2.5">
                                                         {platform.steps.map((step: string, j: number) => (
                                                             <div key={j} className="flex items-start gap-3">
                                                                 <div className="w-1 h-3 rounded-full bg-indigo-500/40 mt-1" />
-                                                                <span className="text-[10px] font-medium text-brand-muted leading-relaxed">{step}</span>
+                                                                <span className="text-[9px] font-medium text-brand-muted leading-relaxed">{step}</span>
                                                             </div>
                                                         ))}
                                                     </div>

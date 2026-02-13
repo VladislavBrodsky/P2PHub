@@ -162,13 +162,13 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                         </button>
                     ) : status === 'VERIFYING' ? (
                         <div className="flex items-center gap-2 text-[10px] font-bold text-blue-400 uppercase tracking-wider">
-                            <span className="animate-pulse">Verifying...</span>
+                            <span className="animate-pulse">{t('tasks.verifying')}</span>
                             <span className="font-mono bg-blue-500/10 px-1.5 py-0.5 rounded text-[9px]">{countdown}s</span>
                         </div>
                     ) : status === 'STARTED' ? (
                         // #comment: Show "In Progress" when mission is started but not yet completed
                         <div className="flex items-center gap-1 text-[10px] font-bold text-blue-400 uppercase tracking-wider group-hover:gap-2 transition-all">
-                            <span className="animate-pulse">In Progress</span> <ArrowRight className="w-3 h-3" />
+                            <span className="animate-pulse">{t('tasks.in_progress')}</span> <ArrowRight className="w-3 h-3" />
                         </div>
                     ) : (
                         // #comment: Default state is "Start Mission"

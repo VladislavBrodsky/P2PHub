@@ -518,6 +518,12 @@
         }
     },
     "tasks": {
+        "active_missions": "Active Missions",
+        "available": "Available",
+        "all_clear_title": "All Missions Clear!",
+        "all_clear_desc": "New missions arriving soon.",
+        "verifying": "Verifying...",
+        "in_progress": "In Progress",
         "progress": "Progress",
         "claim": "Claim Reward",
         "start": "Start Mission",
@@ -538,9 +544,17 @@
             "title": "Web3 Ambassador Hub",
             "desc": "Follow for growth tips and updates."
         },
+        "invite_1_friend": {
+            "title": "Invite 1 Friend",
+            "desc": "Your first step to building a network."
+        },
         "invite_3_friends": {
             "title": "Invite 3 Friends",
             "desc": "Build your initial network to unlock Level 2."
+        },
+        "invite_5_friends": {
+            "title": "Squad Goals",
+            "desc": "Expand your circle to 5 partners."
         },
         "daily_checkin_5": {
             "title": "5 Day Streak",
@@ -549,6 +563,26 @@
         "invite_10_friends": {
             "title": "Network Builder",
             "desc": "Expand your team to 10 partners."
+        },
+        "invite_25_friends": {
+            "title": "Community Leader",
+            "desc": "Lead a team of 25 partners."
+        },
+        "invite_50_friends": {
+            "title": "Influencer Status",
+            "desc": "Grow your network to 50 partners."
+        },
+        "invite_100_friends": {
+            "title": "Viral Master",
+            "desc": "Reach 100 direct referrals."
+        },
+        "invite_250_friends": {
+            "title": "Grand Connector",
+            "desc": "Build a massive network of 250 partners."
+        },
+        "invite_500_friends": {
+            "title": "Network Legend",
+            "desc": "Achieve the ultimate goal: 500 referrals."
         }
     },
     "milestones": {
@@ -804,12 +838,12 @@
     "pro_dashboard": {
         "title_studio": "Viral Marketing Studio",
         "title_tools": "Power Tools",
-        "title_academy": "Viral Academy",
+        "title_academy": "Grow Hacks",
         "tokens_left": "{{count}} TOKENS LEFT",
         "system_offline": "SYSTEM OFFLINE",
         "tab_studio": "Studio",
         "tab_tools": "Tools",
-        "tab_academy": "Academy",
+        "tab_academy": "Grow Hacks",
         "tab_setup": "API Setup",
         "locked": {
             "title": "PRO MEMBERS ONLY",

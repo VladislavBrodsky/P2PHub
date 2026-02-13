@@ -2,6 +2,7 @@ import { Task } from '../../data/earnData';
 import { TaskCard } from './TaskCard';
 import { CheckCircle2 } from 'lucide-react';
 import { ActiveTask } from '../../context/UserContext';
+import { useTranslation } from 'react-i18next';
 
 interface TaskGridProps {
     tasks: Task[];
@@ -28,6 +29,7 @@ export const TaskGrid = ({
     onTaskClick,
     onClaim
 }: TaskGridProps) => {
+    const { t } = useTranslation();
 
     // Filter out completed tasks and then sort
     const visibleTasks = tasks.filter(t => !completedTaskIds.includes(t.id));
@@ -41,10 +43,10 @@ export const TaskGrid = ({
             <div className="flex items-center justify-between px-2">
                 <h3 className="text-lg font-bold flex items-center gap-2 text-text-primary">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    Active Missions
+                    {t('tasks.active_missions')}
                 </h3>
                 <span className="text-xs font-semibold text-brand-muted glass-panel px-3 py-1 rounded-lg">
-                    {tasks.filter(t => !completedTaskIds.includes(t.id)).length} Available
+                    {tasks.filter(t => !completedTaskIds.includes(t.id)).length} {t('tasks.available')}
                 </span>
             </div>
 
@@ -105,8 +107,8 @@ export const TaskGrid = ({
                             <CheckCircle2 className="w-8 h-8 text-emerald-500" />
                         </div>
                         <div className="text-center">
-                            <p className="text-text-primary font-bold">All Missions Clear!</p>
-                            <p className="text-xs text-text-secondary">New missions arriving soon.</p>
+                            <p className="text-text-primary font-bold">{t('tasks.all_clear_title')}</p>
+                            <p className="text-xs text-text-secondary">{t('tasks.all_clear_desc')}</p>
                         </div>
                     </div>
                 )}
