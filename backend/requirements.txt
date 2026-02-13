@@ -1,7 +1,8 @@
 aiofiles==24.1.0
-aiogram==3.22.0
-aiohappyeyeballs==2.6.1
-aiohttp>=3.9.0,<3.13.0
+aiogram>=3.25.0
+aiohappyeyeballs>=2.6.1
+# WARN: Pinned <3.13 for aiogram compatibility. Vulnerable to CVE-2025-69223.
+aiohttp>=3.12.0,<3.13
 aiosignal==1.4.0
 alembic==1.18.3
 annotated-doc==0.0.4
