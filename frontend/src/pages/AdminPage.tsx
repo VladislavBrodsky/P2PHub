@@ -342,7 +342,7 @@ export const AdminPage = () => {
                                             </div>
                                             <div>
                                                 <div className="text-xs font-black text-slate-800 dark:text-slate-100 italic transition-colors group-hover:text-blue-500">
-                                                    @{p.username || p.telegram_id}
+                                                    {p.username ? `@${p.username}` : `Partner #${p.telegram_id.toString().slice(-4)}`}
                                                 </div>
                                                 <div className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-tighter">
                                                     MASTER HUB PARTNER
