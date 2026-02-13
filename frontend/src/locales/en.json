@@ -1028,6 +1028,17 @@
                     "desc": "Don't sell in the post. Tease the result. Make them comment 'INFO' or click your link out of pure intrigue."
                 }
             ]
+        },
+        "viral_assets": {
+            "title": "Viral Design Assets",
+            "subtitle": "High-Conversion Prototypes",
+            "cards": [
+                {
+                    "title": "OFF-GRID ASSET",
+                    "hook": "Looks like a bank card. Works like a bank card.",
+                    "desc": "But it connects directly to your crypto liquidity. No bank account needed. Total separation of state and money."
+                }
+            ]
         }
     }
 },
