@@ -25,8 +25,17 @@ async def process_referral_notifications(bot, session: AsyncSession, partner: Pa
     Wrapper to trigger the recursive referral logic for new signups.
     """
     if is_new and partner.referrer_id:
-        # Run logic in background via TaskIQ worker
-        await process_referral_logic.kiq(partner.id)
+        try:
+            # Run logic in background via TaskIQ worker
+            await process_referral_logic.kiq(partner.id)
+            logger.info(f"🚀 Referral logic task enqueued for partner {partner.id}")
+        except Exception as e:
+            logger.error(f"⚠️ Failed to enqueue referral logic task: {e}")
+            # Fallback: Run it in the current process (but non-blocking if possible)
+            # Since we are in an async context, we can just await it directly
+            # This is safer than losing the referral data.
+            logger.info(f"🔄 Running referral logic in fallback mode for partner {partner.id}")
+            asyncio.create_task(process_referral_logic(partner.id))
 
 def format_partner_name(p: Partner) -> str:
     """Construct Full Name: First Last (@username)"""
@@ -137,14 +146,14 @@ async def process_referral_logic(partner_id: int):
                     # 3. Level Up Logic
                     new_level = get_level(referrer.xp)
                     if new_level > referrer.level:
-                        for lvl in range(referrer.level + 1, new_level + 1):
-                            lang = referrer.language_code or "en"
-                            deferred_tasks.append(
-                                notification_service.enqueue_notification(
-                                    chat_id=int(referrer.telegram_id), 
-                                    text=get_msg(lang, "level_up", level=lvl)
-                                )
+                        deferred_tasks.append(
+                            notification_service.send_level_up_notification(
+                                chat_id=int(referrer.telegram_id),
+                                old_level=referrer.level,
+                                new_level=new_level,
+                                lang=referrer.language_code or "en"
                             )
+                        )
                         referrer.level = new_level
                         session.add(referrer)
 

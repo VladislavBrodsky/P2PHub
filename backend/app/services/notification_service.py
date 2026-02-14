@@ -51,4 +51,17 @@ class NotificationService:
 
 
 
+    async def send_level_up_notification(self, chat_id: int, old_level: int, new_level: int, lang: str = "en"):
+        """Sends notifications for each level gained."""
+        if new_level > old_level:
+            from app.core.i18n import get_msg
+            for lvl in range(old_level + 1, new_level + 1):
+                msg = get_msg(lang, "level_up", level=lvl)
+                await self.enqueue_notification(chat_id=chat_id, text=msg)
+
+    async def send_system_message(self, chat_id: int, title: str, content: str):
+        """Sends a standardized system announcement."""
+        text = f"📢 *{title}*\n\n{content}"
+        await self.enqueue_notification(chat_id=chat_id, text=text)
+
 notification_service = NotificationService()

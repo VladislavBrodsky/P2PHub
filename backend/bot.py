@@ -78,12 +78,12 @@ async def cmd_start(message: types.Message):
             # Construct direct sharing URL
             share_url = f"https://t.me/share/url?url={urllib.parse.quote(referral_link)}&text={urllib.parse.quote(share_text)}"
             
+            # Always show the informative welcome message
+            welcome_text = get_msg(lang, "welcome", referral_link=referral_link, id=partner.id)
+            
             if is_new:
-                welcome_text = get_msg(lang, "welcome", referral_link=referral_link, id=partner.id)
                 logging.info(f"✨ New partner registered: {partner.id}")
             else:
-                # Optimized welcome for returning users
-                welcome_text = get_msg(lang, "welcome_back", name=partner.first_name or "Partner")
                 logging.info(f"👋 Returning partner: {partner.id}")
 
             await message.answer(

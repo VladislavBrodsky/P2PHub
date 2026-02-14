@@ -122,7 +122,13 @@ async def create_partner(
     statement = select(Partner).where(Partner.telegram_id == telegram_id)
     result = await session.exec(statement)
     partner = result.first()
-    if partner: return partner, False
+    
+    # If partner exists and already has a referrer, or no new referrer code provided, just return
+    if partner:
+        if partner.referrer_id or not referrer_code:
+            return partner, False
+        # If partner exists but has NO referrer, we proceed to try and attach one
+        logger.info(f"Existing partner {telegram_id} found without referrer. Attempting to attach via code: {referrer_code}")
 
     # 2. Resolve Referrer
     referrer_id = None
@@ -132,10 +138,26 @@ async def create_partner(
             ref_stmt = select(Partner).where(Partner.referral_code == referrer_code)
             ref_res = await session.exec(ref_stmt)
             referrer = ref_res.first()
-            if referrer: referrer_id = referrer.id
+            if referrer: 
+                referrer_id = referrer.id
+                # Avoid self-referral
+                if partner and partner.id == referrer_id:
+                    referrer_id = None
+                    referrer = None
         except Exception as e:
             # Important to log if referral resolution fails
             logger.error(f"Error resolving referring partner {referrer_code}: {e}")
+
+    # 2.5 Handle Existing Partner Case (Updating Referrer)
+    if partner and referrer:
+        partner.referrer_id = referrer_id
+        parent_path = referrer.path or ""
+        partner.path = f"{parent_path}.{referrer.id}".lstrip(".")
+        partner.depth = referrer.depth + 1
+        session.add(partner)
+        await session.commit()
+        await session.refresh(partner)
+        return partner, True # Treat as new for the purpose of referral notifications
 
     path = None
     depth = 0
