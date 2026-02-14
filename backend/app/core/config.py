@@ -92,11 +92,11 @@ class Settings(BaseSettings):
     # Moved from services to core config to prevent desync
     
     # XP Distribution per level (1-9)
-    # L1=35, L2=10, L3-9=1
-    REFERRAL_XP_MAP: dict[int, int] = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
+    # Target: 25 refs = 2500 XP for PRO (100/ref) -> Base = 20 XP
+    REFERRAL_XP_MAP: dict[int, int] = {1: 20, 2: 5, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
     PRO_XP_MULTIPLIER: int = 5
-    DAILY_CHECKIN_XP: int = 10
-    STREAK_7DAY_XP_BONUS: int = 150
+    DAILY_CHECKIN_XP: int = 5
+    STREAK_7DAY_XP_BONUS: int = 50
 
     # Commission Distribution for PRO Upgrades
     # Total: ~44% (30% L1, 5% L2, 3% L3, 1% L4-9)

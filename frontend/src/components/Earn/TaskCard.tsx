@@ -34,12 +34,11 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
     // Visual Variations
     const variants = {
         LOCKED: 'opacity-40 grayscale-[0.8] cursor-not-allowed border-(--color-border-glass) bg-slate-900/40',
-        AVAILABLE: 'glass-panel hover:border-blue-500/50 hover:bg-blue-500/5 cursor-pointer text-text-primary group/card',
-        VERIFYING: 'glass-panel border-blue-500/30 bg-blue-500/10 cursor-wait',
-        CLAIMABLE: 'glass-panel border-emerald-500/60 bg-emerald-500/15 shadow-[0_0_25px_rgba(16,185,129,0.25)] animate-pulse cursor-pointer group/card',
-        COMPLETED: 'glass-panel border-emerald-500/20 bg-emerald-500/5 cursor-default opacity-80',
-        // #comment: Added specific style for STARTED state (active but not yet claimable)
-        STARTED: 'glass-panel border-blue-500/40 bg-blue-500/10 cursor-default group/card'
+        AVAILABLE: 'bg-white/80 dark:bg-slate-900/60 border-slate-200 dark:border-white/10 hover:border-blue-500/50 hover:shadow-premium-xl dark:hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] cursor-pointer text-text-primary group/card backdrop-blur-3xl shadow-sm',
+        VERIFYING: 'bg-blue-500/5 border-blue-500/30 dark:bg-blue-500/10 cursor-wait backdrop-blur-2xl',
+        CLAIMABLE: 'bg-emerald-500/5 dark:bg-emerald-500/10 border-emerald-500/60 shadow-[0_0_25px_rgba(16,185,129,0.15)] animate-premium-pulse cursor-pointer group/card backdrop-blur-3xl',
+        COMPLETED: 'bg-white/40 dark:bg-slate-900/40 border-slate-100 dark:border-emerald-500/10 cursor-default opacity-80',
+        STARTED: 'bg-blue-500/5 dark:bg-blue-500/10 border-blue-500/40 cursor-default group/card backdrop-blur-2xl'
     };
 
     const handleCardClick = () => {
@@ -52,8 +51,6 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
         }
     };
 
-    // #comment: Calculate current progress to show. If progress prop is provided (from activeTask), use it.
-    // Otherwise fallback to absolute values for backward compatibility or valid absolute checks.
     const currentProgress = progress !== undefined ? progress : (
         task.type === 'referral' ? userReferrals : (
             task.type === 'action' ? checkinStreak : 0
@@ -63,58 +60,72 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
     return (
         <motion.div
             layout
-            className={`relative rounded-3xl p-5 border transition-all duration-500 overflow-hidden ${variants[status]}`}
+            className={`relative rounded-[2rem] p-6 border transition-all duration-500 overflow-hidden ${variants[status]}`}
             onClick={handleCardClick}
-            whileHover={isAvailable || isClaimable || isStarted ? { y: -2, scale: 1.01 } : {}}
-            whileTap={isAvailable || isClaimable || isStarted ? { scale: 0.98 } : {}}
+            whileHover={isAvailable || isClaimable || isStarted ? { y: -3, scale: 1.01 } : {}}
+            whileTap={isAvailable || isClaimable || isStarted ? { scale: 0.985 } : {}}
         >
-            {/* Glossy Reflection Overlay */}
-            <div className="absolute inset-0 bg-linear-to-tr from-white/5 via-transparent to-transparent pointer-events-none" />
+            {/* Subtle Gradient Glow Background */}
+            <div className={`absolute -top-24 -right-24 w-48 h-48 blur-[80px] rounded-full transition-opacity duration-1000 ${isClaimable ? 'bg-emerald-500/20' : isStarted ? 'bg-blue-500/20' : 'bg-blue-500/5'
+                }`} />
 
             {/* Locked Overlay */}
             {isLocked && (
-                <div className="absolute inset-0 z-20 flex items-center justify-center bg-slate-950/20 backdrop-blur-[2px] rounded-3xl">
-                    <div className="bg-slate-900/80 backdrop-blur-xl px-5 py-2.5 rounded-2xl border border-white/10 flex items-center gap-2.5 shadow-2xl scale-110">
-                        <div className="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center">
-                            <Lock className="w-3.5 h-3.5 text-blue-400" />
+                <div className="absolute inset-0 z-20 flex items-center justify-center bg-slate-950/30 backdrop-blur-[3px] rounded-[2rem]">
+                    <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl px-6 py-3 rounded-2xl border border-slate-200 dark:border-white/10 flex items-center gap-3 shadow-2xl scale-110">
+                        <div className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                            <Lock className="w-3.5 h-3.5 text-blue-500" />
                         </div>
-                        <span className="text-[11px] font-black text-white uppercase tracking-widest">{t('tasks.level_short')} {task.minLevel}</span>
+                        <div className="flex flex-col">
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{t('common.unlock_at')}</span>
+                            <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-tighter">{t('tasks.level_short')} {task.minLevel}</span>
+                        </div>
                     </div>
                 </div>
             )}
 
-            <div className="flex items-start justify-between gap-4 relative z-10">
-                {/* Icon Container */}
-                <div className={`shrink-0 p-3.5 rounded-2xl border transition-all duration-500 ${isClaimable
-                    ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.4)]'
-                    : isCompleted
-                        ? 'bg-emerald-500/10 text-emerald-500/60 border-emerald-500/20'
-                        : 'bg-blue-500/10 border-blue-500/20 text-blue-400 group-hover/card:bg-blue-500/20 group-hover/card:border-blue-500/40 group-hover/card:text-blue-300'
-                    }`}>
-                    {status === 'VERIFYING' ? (
-                        <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                    ) : isCompleted ? (
-                        <CheckCircle2 className="w-5 h-5" />
-                    ) : (
-                        <task.icon className="w-5 h-5" />
-                    )}
+            <div className="flex items-start gap-5 relative z-10">
+                {/* Icon Container - Premium Circle Style */}
+                <div className="shrink-0 relative">
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border transition-all duration-700 ${isClaimable
+                        ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.5)] rotate-3'
+                        : isCompleted
+                            ? 'bg-emerald-500/10 text-emerald-500/40 border-emerald-500/10'
+                            : 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-blue-400 group-hover/card:border-blue-500/40 group-hover/card:scale-110 group-hover/card:-rotate-2'
+                        }`}>
+                        {status === 'VERIFYING' ? (
+                            <div className="w-6 h-6 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                        ) : isCompleted ? (
+                            <CheckCircle2 className="w-6 h-6" />
+                        ) : (
+                            <task.icon className="w-6 h-6" />
+                        )}
+                    </div>
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 space-y-1.5 min-w-0">
-                    <div className="flex justify-between items-start mb-0.5">
-                        <h4 className="text-sm font-black text-text-primary tracking-tight truncate pr-2">{task.title}</h4>
-                        {/* XP Badge */}
+                <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-start">
+                        <div className="flex flex-col gap-0.5 min-w-0 flex-1 pr-2">
+                            <h4 className="text-base font-black text-slate-900 dark:text-white tracking-tight truncate leading-tight">
+                                {task.title}
+                            </h4>
+                            <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 line-clamp-1 opacity-70 group-hover/card:opacity-100 transition-opacity uppercase tracking-tight">
+                                {task.description}
+                            </p>
+                        </div>
+
+                        {/* XP Badge - Premium Floating Tablet */}
                         {!isCompleted && (
-                            <div className={`shrink-0 flex flex-col items-end gap-0.5`}>
-                                <div className={`text-[11px] font-black px-3 py-1 rounded-lg border transition-all ${isClaimable
-                                    ? 'bg-emerald-500 text-white border-emerald-400 shadow-lg'
-                                    : 'bg-blue-500/10 text-blue-400 border-blue-500/20 group-hover/card:bg-blue-500/20 group-hover/card:border-blue-500/30'
+                            <div className="shrink-0 flex flex-col items-end">
+                                <div className={`px-3 py-1.5 rounded-xl border font-black text-xs transition-all duration-500 ${isClaimable
+                                    ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_5px_15px_rgba(16,185,129,0.3)]'
+                                    : 'bg-blue-500 text-white border-blue-400 shadow-premium-sm group-hover/card:shadow-blue-500/20'
                                     }`}>
                                     +{reward} XP
                                 </div>
                                 {isPro && (
-                                    <span className="text-[8px] font-black text-emerald-500 uppercase tracking-tighter animate-pulse">
+                                    <span className="text-[8px] font-black text-emerald-500 uppercase tracking-tighter mt-1 animate-pulse">
                                         {t('tasks.pro_multiplier')}
                                     </span>
                                 )}
@@ -122,43 +133,44 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                         )}
                     </div>
 
-                    <p className="text-[11px] font-medium text-text-secondary line-clamp-2 leading-relaxed opacity-80 group-hover/card:opacity-100 transition-opacity">
-                        {task.description}
-                    </p>
-
-                    {/* Progress UI */}
+                    {/* Progress Segment */}
                     {(task.type === 'referral' || task.type === 'action') && (
-                        <div className="pt-3 space-y-2">
-                            <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-text-secondary/60">
-                                <span className="flex items-center gap-1.5">
-                                    <div className={`w-1 h-1 rounded-full ${task.type === 'referral' ? 'bg-blue-400' : 'bg-emerald-400'}`} />
+                        <div className="mt-5 space-y-2">
+                            <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
+                                <span className="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                                    <div className={`w-1.5 h-1.5 rounded-full ${task.type === 'referral' ? 'bg-blue-400' : 'bg-emerald-400'}`} />
                                     {t('tasks.progress')}
                                 </span>
-                                <span className="font-mono text-text-primary">
-                                    {Math.min(currentProgress, task.requirement || 0)} <span className="opacity-30">/</span> {task.requirement}
+                                <span className="text-slate-900 dark:text-white tracking-tighter">
+                                    <span className="text-blue-500 dark:text-blue-400">{Math.min(currentProgress, task.requirement || 0)}</span>
+                                    <span className="mx-1 opacity-20">/</span>
+                                    <span className="opacity-60">{task.requirement}</span>
                                 </span>
                             </div>
-                            <div className="h-1.5 w-full bg-slate-800/50 rounded-full overflow-hidden p-px border border-white/5">
+                            <div className="h-2 w-full bg-slate-100 dark:bg-slate-800/80 rounded-full overflow-hidden p-0.5 border border-slate-200 dark:border-white/5 shadow-inner">
                                 <motion.div
                                     className="h-full rounded-full relative"
                                     style={{
-                                        backgroundColor: task.type === 'referral' ? '#3b82f6' : '#10b981',
+                                        background: task.type === 'referral'
+                                            ? 'linear-gradient(90deg, #3b82f6, #60a5fa)'
+                                            : 'linear-gradient(90deg, #10b981, #34d399)',
                                         boxShadow: task.type === 'referral'
-                                            ? '0 0 12px rgba(59, 130, 246, 0.4)'
-                                            : '0 0 12px rgba(16, 185, 129, 0.4)'
+                                            ? '0 0 15px rgba(59, 130, 246, 0.4)'
+                                            : '0 0 15px rgba(16, 185, 129, 0.4)'
                                     }}
                                     initial={{ width: 0 }}
                                     animate={{
                                         width: `${Math.min((currentProgress / (task.requirement || 1)) * 100, 100)}%`
                                     }}
-                                    transition={{ type: 'spring', damping: 20, stiffness: 100 }}
+                                    transition={{ type: 'spring', damping: 25, stiffness: 100 }}
                                 >
-                                    {/* High-end Reflection Layer */}
+                                    {/* Glass reflection layer */}
                                     <div className="absolute inset-0 bg-linear-to-b from-white/30 to-transparent" />
+                                    {/* Scanline Animation */}
                                     <motion.div
-                                        animate={{ x: ['-200%', '300%'] }}
-                                        transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
-                                        className="absolute inset-0 w-1/2 bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"
+                                        animate={{ x: ['-200%', '400%'] }}
+                                        transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                                        className="absolute inset-0 w-1/4 bg-linear-to-r from-transparent via-white/50 to-transparent skew-x-12"
                                     />
                                 </motion.div>
                             </div>
@@ -167,18 +179,17 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                 </div>
             </div>
 
-            {/* Action Footer */}
+            {/* Action Area */}
             {!isCompleted && !isLocked && (
-                <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
-                    <div className="flex -space-x-1">
-                        {/* Status Micro-indicator */}
-                        <div className={`w-1.5 h-1.5 rounded-full ${isClaimable ? 'bg-emerald-500 animate-pulse' : 'bg-blue-400 opacity-30 group-hover/card:opacity-60'
-                            }`} />
+                <div className="mt-6 flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                        <div className={`w-1.5 h-1.5 rounded-full ${isClaimable ? 'bg-emerald-500 animate-pulse' : 'bg-blue-400 opacity-20'}`} />
+                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest opacity-60">Mission Status</span>
                     </div>
 
                     {isClaimable ? (
                         <button
-                            className="flex items-center gap-2 text-[10px] font-black text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition-all hover:gap-3"
+                            className="bg-emerald-500 hover:bg-emerald-400 text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 Haptic.notification('success');
@@ -189,31 +200,40 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                             {t('tasks.claim')}
                         </button>
                     ) : status === 'VERIFYING' ? (
-                        <div className="flex items-center gap-2.5 text-[10px] font-black text-blue-400 uppercase tracking-widest">
-                            <span className="animate-pulse">{t('tasks.verifying')}</span>
-                            <span className="font-mono bg-blue-500/20 px-2 py-0.5 rounded-lg text-[9px] border border-blue-500/30">
+                        <div className="bg-blue-500/20 dark:bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-xl flex items-center gap-3">
+                            <span className="text-[10px] font-black text-blue-500 dark:text-blue-400 uppercase tracking-widest animate-pulse">{t('tasks.verifying')}</span>
+                            <span className="font-mono text-[10px] font-black text-blue-500 dark:text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-md">
                                 {countdown}s
                             </span>
                         </div>
-                    ) : status === 'STARTED' ? (
-                        <div className="flex items-center gap-1.5 text-[10px] font-black text-blue-400 uppercase tracking-widest group-hover/card:gap-2.5 transition-all">
-                            <span className="animate-pulse">{t('tasks.in_progress')}</span>
-                            <ArrowRight className="w-3.5 h-3.5" />
-                        </div>
                     ) : (
-                        <div className="flex items-center gap-1.5 text-[10px] font-black text-blue-400 uppercase tracking-widest group-hover/card:gap-2.5 transition-all">
-                            {t('tasks.start')}
-                            <ArrowRight className="w-3.5 h-3.5" />
-                        </div>
+                        <button
+                            className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 group/btn ${isStarted
+                                ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20'
+                                : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-premium-sm hover:shadow-premium-lg'
+                                }`}
+                        >
+                            {status === 'STARTED' ? (
+                                <>
+                                    <span className="animate-pulse">{t('tasks.in_progress')}</span>
+                                    <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                                </>
+                            ) : (
+                                <>
+                                    {t('tasks.start')}
+                                    <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                                </>
+                            )}
+                        </button>
                     )}
                 </div>
             )}
 
             {isCompleted && (
-                <div className="mt-4 pt-3 flex items-center justify-center opacity-50">
-                    <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-500/60 uppercase tracking-widest">
-                        <CheckCircle2 className="w-3 h-3" />
-                        Done
+                <div className="mt-6 flex items-center justify-center">
+                    <div className="bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/20 px-6 py-2 rounded-2xl flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500 animate-in zoom-in duration-500" />
+                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Protocol Accomplished</span>
                     </div>
                 </div>
             )}
