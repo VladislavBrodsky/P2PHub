@@ -36,7 +36,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Start your journey with our official bot.',
         platform: 'telegram',
         icon: Send,
-        reward: 100,
+        reward: 60, // PRO: 300
         type: 'social',
         link: 'https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3',
         minLevel: 1
@@ -47,7 +47,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Connect with the future of finance.',
         platform: 'telegram',
         icon: CreditCard,
-        reward: 150,
+        reward: 80, // PRO: 400
         type: 'social',
         link: 'https://t.me/+voIV_gzh0ag0ZWE5',
         minLevel: 1
@@ -58,7 +58,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Meet other partners and share strategies.',
         platform: 'telegram',
         icon: MessageCircle,
-        reward: 100,
+        reward: 60, // PRO: 300
         type: 'social',
         link: 'https://t.me/pintopayworld',
         minLevel: 1
@@ -69,7 +69,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Follow for growth tips and updates.',
         platform: 'telegram',
         icon: Users,
-        reward: 200,
+        reward: 100, // PRO: 500
         type: 'social',
         link: 'https://t.me/pintopaygrowth',
         minLevel: 1
@@ -82,7 +82,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Your first step to building a network.',
         platform: 'internal',
         icon: Users,
-        reward: 250,
+        reward: 100,
         type: 'referral',
         requirement: 1,
         minLevel: 1
@@ -93,7 +93,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Build your initial network to unlock Level 2.',
         platform: 'internal',
         icon: Users,
-        reward: 500,
+        reward: 150,
         type: 'referral',
         requirement: 3,
         minLevel: 1,
@@ -105,7 +105,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Open the app 5 days in a row.',
         platform: 'internal',
         icon: CheckCircle2,
-        reward: 250,
+        reward: 100,
         type: 'action',
         requirement: 5,
         minLevel: 1
@@ -116,7 +116,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Expand your circle to 5 partners.',
         platform: 'internal',
         icon: Users,
-        reward: 750,
+        reward: 200,
         type: 'referral',
         requirement: 5,
         minLevel: 2
@@ -127,7 +127,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Expand your team to 10 partners.',
         platform: 'internal',
         icon: Users,
-        reward: 1000,
+        reward: 350,
         type: 'referral',
         requirement: 10,
         minLevel: 3
@@ -138,7 +138,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Lead a team of 25 partners.',
         platform: 'internal',
         icon: Users,
-        reward: 2500,
+        reward: 500, // PRO: 2500 (As requested)
         type: 'referral',
         requirement: 25,
         minLevel: 5
@@ -149,7 +149,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Grow your network to 50 partners.',
         platform: 'internal',
         icon: Crown,
-        reward: 3000,
+        reward: 700, // PRO: 3500
         type: 'referral',
         requirement: 50,
         minLevel: 10
@@ -160,7 +160,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Reach 100 direct referrals.',
         platform: 'internal',
         icon: Zap,
-        reward: 5000,
+        reward: 1200,
         type: 'referral',
         requirement: 100,
         minLevel: 15
@@ -171,7 +171,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Build a massive network of 250 partners.',
         platform: 'internal',
         icon: Star,
-        reward: 7000,
+        reward: 2500,
         type: 'referral',
         requirement: 250,
         minLevel: 20
@@ -182,7 +182,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Achieve the ultimate goal: 500 referrals.',
         platform: 'internal',
         icon: Trophy,
-        reward: 10000,
+        reward: 5000,
         type: 'referral',
         requirement: 500,
         minLevel: 25
