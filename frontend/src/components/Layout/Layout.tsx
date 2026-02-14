@@ -44,7 +44,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
     }, [setActiveTab]);
 
     return (
-        <div className="selection:bg-brand-blue/10 fixed inset-0 flex flex-col overflow-hidden bg-(--color-bg-app) text-(--color-text-primary)">
+        <div className="selection:bg-blue-500/10 fixed inset-0 flex flex-col overflow-hidden bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white">
             {/* Staging Ribbon */}
             {isStaging && (
                 <div className="fixed top-0 left-0 z-100 w-full bg-yellow-400 text-center text-xs font-bold text-slate-900 shadow-sm py-1">
