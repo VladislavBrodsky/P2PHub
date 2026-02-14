@@ -29,17 +29,17 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                         className="w-full max-w-md bg-(--color-surface) border border-(--color-border-glass) rounded-t-[2rem] md:rounded-[2rem] relative shadow-2xl overflow-hidden h-[85vh] md:max-h-[85vh] flex flex-col z-[100]"
                     >
                         {/* Header */}
-                        <div className="p-6 pb-4 border-b border-(--color-border-glass) bg-(--color-bg-glass) backdrop-blur-md sticky top-0 z-10">
+                        <div className="p-6 pb-4 border-b border-white/10 bg-slate-900/80 backdrop-blur-md sticky top-0 z-10">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-xl font-black text-(--color-text-primary) tracking-tight flex items-center gap-2">
+                                <h2 className="text-xl font-black text-white tracking-tight flex items-center gap-2">
                                     <ShieldCheck className="w-5 h-5 text-emerald-500" />
                                     {t('referral.brief.title')}
                                 </h2>
                                 <button
                                     onClick={onClose}
-                                    className="w-8 h-8 rounded-full bg-(--color-text-primary)/5 hover:bg-(--color-text-primary)/10 flex items-center justify-center transition-colors"
+                                    className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
                                 >
-                                    <X className="w-4 h-4 text-(--color-text-secondary)" />
+                                    <X className="w-4 h-4 text-slate-400" />
                                 </button>
                             </div>
                         </div>
@@ -54,10 +54,10 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                                     <h3 className="text-xs font-bold uppercase tracking-wider">{t('referral.brief.goal_title')}</h3>
                                 </div>
                                 <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20">
-                                    <p className="text-sm font-medium text-(--color-text-primary) leading-relaxed">
+                                    <p className="text-sm font-medium text-slate-900 dark:text-white leading-relaxed">
                                         <Trans i18nKey="referral.brief.goal_desc">
                                             Our mission is to build the world's largest decentralized partner network.
-                                            <span className="text-(--color-text-primary) font-bold"> Your goal is simple:</span> Expand the network, earn XP, and unlock the <span className="text-emerald-500 font-bold">$1/minute passive income stream.</span>
+                                            <span className="text-slate-900 dark:text-white font-bold"> Your goal is simple:</span> Expand the network, earn XP, and unlock the <span className="text-emerald-500 font-bold">$1/minute passive income stream.</span>
                                         </Trans>
                                     </p>
                                 </div>
@@ -71,11 +71,11 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                                 </div>
                                 <ul className="space-y-3">
                                     {[1, 2, 3].map((step) => (
-                                        <li key={step} className="flex gap-3 items-start p-3 rounded-xl bg-(--color-text-primary)/5 border border-(--color-border-glass)">
+                                        <li key={step} className="flex gap-3 items-start p-3 rounded-xl bg-slate-500/5 border border-white/10">
                                             <div className="w-6 h-6 rounded-full bg-violet-500/20 flex items-center justify-center shrink-0 mt-0.5 border border-violet-500/30">
                                                 <span className="text-xs font-bold text-violet-500">{step}</span>
                                             </div>
-                                            <p className="text-xs text-(--color-text-secondary) leading-5">
+                                            <p className="text-xs text-slate-500 dark:text-slate-400 leading-5">
                                                 {t(`referral.brief.manual_step_${step}`)}
                                             </p>
                                         </li>
@@ -95,7 +95,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                                             <div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
                                         </div>
                                         <p className="text-xs font-medium text-rose-600 dark:text-rose-200 leading-relaxed">
-                                            <span className="text-(--color-text-primary) font-bold block mb-1">{t('referral.brief.rule_1_title')}</span>
+                                            <span className="text-slate-900 dark:text-white font-bold block mb-1">{t('referral.brief.rule_1_title')}</span>
                                             {t('referral.brief.rule_1_desc')}
                                         </p>
                                     </div>
@@ -105,7 +105,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                                             <div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
                                         </div>
                                         <p className="text-xs font-medium text-rose-600 dark:text-rose-200 leading-relaxed">
-                                            <span className="text-(--color-text-primary) font-bold block mb-1">{t('referral.brief.rule_2_title')}</span>
+                                            <span className="text-slate-900 dark:text-white font-bold block mb-1">{t('referral.brief.rule_2_title')}</span>
                                             {t('referral.brief.rule_2_desc')}
                                         </p>
                                     </div>
@@ -122,10 +122,10 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                                     <div className="absolute top-0 right-0 p-3 opacity-10">
                                         <Zap className="w-24 h-24 text-emerald-500" />
                                     </div>
-                                    <h3 className="text-lg font-black text-(--color-text-primary) mb-2 relative z-10">
+                                    <h3 className="text-lg font-black text-slate-900 dark:text-white mb-2 relative z-10">
                                         {t('referral.brief.motivation_title')}
                                     </h3>
-                                    <p className="text-xs text-(--color-text-secondary) mb-4 relative z-10 leading-relaxed">
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 relative z-10 leading-relaxed">
                                         {t('referral.brief.motivation_desc')}
                                     </p>
                                     <button
