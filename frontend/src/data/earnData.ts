@@ -36,7 +36,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Start your journey with our official bot.',
         platform: 'telegram',
         icon: Send,
-        reward: 60, // PRO: 300
+        reward: 25, // PRO: 125
         type: 'social',
         link: 'https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3',
         minLevel: 1
@@ -47,7 +47,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Connect with the future of finance.',
         platform: 'telegram',
         icon: CreditCard,
-        reward: 80, // PRO: 400
+        reward: 25, // PRO: 125
         type: 'social',
         link: 'https://t.me/+voIV_gzh0ag0ZWE5',
         minLevel: 1
@@ -58,7 +58,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Meet other partners and share strategies.',
         platform: 'telegram',
         icon: MessageCircle,
-        reward: 60, // PRO: 300
+        reward: 25, // PRO: 125
         type: 'social',
         link: 'https://t.me/pintopayworld',
         minLevel: 1
@@ -69,7 +69,7 @@ export const EARN_TASKS: Task[] = [
         description: 'Follow for growth tips and updates.',
         platform: 'telegram',
         icon: Users,
-        reward: 100, // PRO: 500
+        reward: 25, // PRO: 125
         type: 'social',
         link: 'https://t.me/pintopaygrowth',
         minLevel: 1
