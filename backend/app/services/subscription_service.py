@@ -8,6 +8,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.models.partner import Partner
 from app.services.notification_service import notification_service
 from app.worker import broker
+from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +82,7 @@ class SubscriptionService:
         text = (
             f"⚠️ *PRO Subscription Notice*\n\n"
             f"Your PRO membership will expire in *{days_left} day{'s' if days_left > 1 else ''}*.\n\n"
-            f"💰 *Price to Extend:* $39\n\n"
+            f"💰 *Price to Extend:* ${settings.PRO_PRICE_USD}\n\n"
             f"Extend it now to keep all your premium benefits and affiliate bonuses!\n"
             f"👉 Use /start and click 'Open App' to go to the Subscription section."
         )
@@ -93,7 +94,7 @@ class SubscriptionService:
         text = (
             "❌ *Subscription Expired*\n\n"
             "Your PRO membership has expired. You have lost access to premium features.\n\n"
-            "👉 Use /start and click 'Open App' to re-activate your PRO status for $39."
+            f"👉 Use /start and click 'Open App' to re-activate your PRO status for ${settings.PRO_PRICE_USD}."
         )
         await notification_service.enqueue_notification(int(partner.telegram_id), text)
 

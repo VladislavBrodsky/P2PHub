@@ -84,6 +84,7 @@ class Settings(BaseSettings):
     TON_API_KEY: Optional[str] = None
     TON_MANIFEST_URL: str = "https://p2phub-frontend.up.railway.app/tonconnect-manifest.json"
     PAYMENT_SERVICE_MODE: str = "ton_api" # Enum: auto_approve, ton_api, manual
+    PRO_PRICE_USD: float = 39.0
 
     # Admin settings
     ADMIN_USER_IDS: list[str] = ["12345678", "537873096", "716720099"] # uslincoln added here

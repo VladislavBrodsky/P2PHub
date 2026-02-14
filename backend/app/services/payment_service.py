@@ -17,7 +17,6 @@ from app.core.http_client import http_client
 logger = logging.getLogger(__name__)
 
 # Constants for Subscription
-PRO_PRICE_USD = 39.0
 TON_API_BASE = "https://tonapi.io/v2"
 NANO_TON = 10**9
 
@@ -48,7 +47,7 @@ class PaymentService:
         self,
         session: AsyncSession,
         partner_id: int,
-        amount_usd: float = PRO_PRICE_USD,
+        amount_usd: float = settings.PRO_PRICE_USD,
         currency: str = "TON",
         network: str = "TON"
     ) -> dict:

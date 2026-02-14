@@ -27,6 +27,8 @@ from app.models.schemas import (
 from app.services.redis_service import redis_service
 from app.utils.ranking import get_level
 from bot import bot, types
+from app.core.i18n import get_msg
+from app.services.notification_service import notification_service
 from sqlalchemy import text
 
 logger = logging.getLogger(__name__)
@@ -868,10 +870,10 @@ async def claim_task_reward(
 
     # 4. Send Notification
     try:
-        from app.core.i18n import get_msg
-        from app.services.notification_service import notification_service
         lang = partner.language_code or "en"
-        msg = get_msg(lang, "task_completed", reward=int(xp_reward))
+        # #comment: Ensure the notification reflects the ACTUAL XP awarded (including PRO multipliers) 
+        # to satisfy elite users and provide immediate positive reinforcement.
+        msg = get_msg(lang, "task_completed", reward=int(effective_xp))
         await notification_service.enqueue_notification(chat_id=int(tg_id), text=msg)
     except Exception as e:
         logger.error(f"Failed to send task notification: {e}")

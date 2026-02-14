@@ -740,14 +740,18 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             from bot import bot
             import os
             
-            # Remove any Markdown markers that could break Telegram's parser if not careful
-            # We use MarkdownV2 or HTML, but the AI generates standard Markdown.
-            # For simplicity, we'll try to send with Markdown (V1) first.
-            
             if image_path:
                 # Resolve absolute path to image
                 backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-                full_image_path = os.path.join(backend_dir, "app_images", image_path.lstrip('/images/'))
+                
+                # #comment: Support for both static assets and AI generated media.
+                # Static images are in /app_images/, generated ones in /generated_media/.
+                if "generated_media" in image_path:
+                    filename = image_path.split("/")[-1]
+                    full_image_path = os.path.join(backend_dir, "generated_media", filename)
+                else:
+                    filename = image_path.lstrip('/').replace("images/", "")
+                    full_image_path = os.path.join(backend_dir, "app_images", filename)
                 
                 if os.path.exists(full_image_path):
                     from aiogram.types import FSInputFile
@@ -759,7 +763,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                         parse_mode="Markdown"
                     )
                 else:
-                    # Fallback to text only if image not found
+                    logger.warning(f"⚠️ Image not found at {full_image_path}, sending text only.")
                     await bot.send_message(
                         chat_id=partner.telegram_channel_id,
                         text=content,
