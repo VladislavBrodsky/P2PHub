@@ -50,6 +50,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
     const [isShareOpen, setIsShareOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         setIsScrolled(e.currentTarget.scrollTop > 10);
@@ -68,6 +69,10 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
             const data = Array.isArray(res.data) ? res.data : [];
 
             if (!isGlobalMode) setLevelCache(prev => ({ ...prev, [targetLevel]: data }));
+
+            // #comment: Fix for data sync - update stats if we have real data
+            setTreeStats(prev => ({ ...prev, [targetLevel]: data.length }));
+
             return data;
         } catch (err) {
             console.error(`Failed to fetch level ${targetLevel}:`, err);
@@ -108,11 +113,18 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
 
     useEffect(() => {
         const updateLevel = async () => {
+            // #comment: Reset scroll to top to prevent layout disorientation
+            if (contentRef.current) {
+                contentRef.current.scrollTo({ top: 0, behavior: 'instant' });
+            }
+
             if (levelCache[level]) {
                 setMembers(levelCache[level]);
+                setIsLoading(false); // #comment: Ensure loading is cleared if cached
                 setError('');
             } else {
-                setIsLoading(true);
+                // Loading is already set in onClick, but ensure it's set here if triggered otherwise
+                if (!isLoading) setIsLoading(true);
                 setError('');
                 const data = await fetchLevel(level);
                 if (data !== null) {
@@ -206,7 +218,14 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                             return (
                                 <button
                                     key={l}
-                                    onClick={() => { selection(); setLevel(l); }}
+                                    onClick={() => {
+                                        selection();
+                                        // #comment: Prevent data glitch (seeing old members) by checking cache
+                                        if (!levelCache[l] && !isGlobalMode && l !== level) {
+                                            setIsLoading(true);
+                                        }
+                                        setLevel(l);
+                                    }}
                                     className={cn(
                                         "relative flex flex-col items-center justify-center w-12 h-12 rounded-full transition-all duration-500 active:scale-90 shrink-0 group",
                                         isActive
@@ -244,6 +263,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
 
             {/* Content Area */}
             <div
+                ref={contentRef}
                 onScroll={handleScroll}
                 className="flex-1 overflow-y-auto p-4 pt-0 custom-scrollbar relative z-10"
             >
@@ -265,7 +285,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                     </div>
                 </div>
 
-                <AnimatePresence mode="wait">
+                <AnimatePresence mode="popLayout">
                     {isLoading ? (
                         <motion.div
                             key="loading"
@@ -417,4 +437,3 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
         </div>
     );
 };
-

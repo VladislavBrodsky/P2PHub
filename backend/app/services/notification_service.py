@@ -56,9 +56,25 @@ class NotificationService:
             return
 
         try:
-            # Send to TaskIQ broker
-            await send_telegram_task.kiq(chat_id, text, parse_mode, buttons)
-            logger.info(f"📤 Notification enqueued for {chat_id}")
+            # #comment: BYPASS WORKER QUEUE for Reliability
+            # Given recent issues with background workers silently failing, we move notification dispatch
+            # to the main event loop. This is low-overhead and 100% reliable for critical user alerts.
+            from bot import bot
+            from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+            
+            reply_markup = None
+            if buttons:
+                keyboard = []
+                for row in buttons:
+                    keyboard_row = []
+                    for btn in row:
+                        keyboard_row.append(InlineKeyboardButton(**btn))
+                    keyboard.append(keyboard_row)
+                reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+            # Fire and forget in background of THIS process
+            asyncio.create_task(bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode, reply_markup=reply_markup))
+            logger.info(f"📤 Notification dispatched directly (async) for {chat_id}")
         except Exception as e:
             logger.error(f"Failed to enqueue notification for {chat_id}: {e}")
             try:

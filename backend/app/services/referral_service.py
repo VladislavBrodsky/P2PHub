@@ -27,15 +27,15 @@ async def process_referral_notifications(bot, session: AsyncSession, partner: Pa
     """
     if is_new and partner.referrer_id:
         try:
-            # Run logic in background via TaskIQ worker
-            await process_referral_logic.kiq(partner.id)
-            logger.info(f"🚀 Referral logic task enqueued for partner {partner.id}")
+            # #comment: CRITICAL FIX for Production
+            # We use asyncio.create_task instead of internal taskiq broker (.kiq)
+            # just to guarantee looking at the logs that it RUNS.
+            # If the worker container is down or redis is flaky, we still want this to run.
+            logger.info(f"🚀 Referral logic triggering DIRECTLY (async) for partner {partner.id}")
+            asyncio.create_task(process_referral_logic(partner.id))
         except Exception as e:
-            logger.error(f"⚠️ Failed to enqueue referral logic task: {e}")
-            # Fallback: Run it in the current process (but non-blocking if possible)
-            # Since we are in an async context, we can just await it directly
-            # This is safer than losing the referral data.
-            logger.info(f"🔄 Running referral logic in fallback mode for partner {partner.id}")
+            logger.error(f"⚠️ Failed to trigger referral logic task: {e}")
+            # Fallback (shouldn't be needed with create_task but keeping for safety)
             asyncio.create_task(process_referral_logic(partner.id))
 
 def format_partner_name(p: Partner) -> str:
