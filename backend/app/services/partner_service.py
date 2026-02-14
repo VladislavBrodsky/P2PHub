@@ -187,9 +187,9 @@ async def create_partner(
             async with redis_service.client.pipeline(transaction=True) as pipe:
                 anc_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
                 for anc_id in anc_ids[-9:]:
-                    pipe.delete(f"ref_tree_stats:{anc_id}")
+                    pipe.delete(f"ref_tree_stats_v2:{anc_id}")
                     if anc_id == referrer.id:
-                        pipe.delete(f"ref_tree_members:{anc_id}:1")
+                        pipe.delete(f"ref_tree_members_v2:{anc_id}:1")
                 await pipe.execute()
         except Exception as e:
             logger.error(f"Failed to invalidate referral stats cache: {e}")

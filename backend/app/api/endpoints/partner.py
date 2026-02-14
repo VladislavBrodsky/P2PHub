@@ -274,6 +274,21 @@ async def get_my_profile(
         await session.commit()
         await session.refresh(partner)
         await redis_service.client.delete(cache_key)
+        
+    # 4.5. Pre-warm Referral Tree Stats (Background)
+    # Why: User likely navigates to Partner tab next. Pre-calculating this 
+    # saves 100-300ms of wait time on the first tab switch.
+    try:
+        from app.services.analytics_service import get_referral_tree_stats
+        bg_cache_key = f"ref_tree_stats_v2:{partner.id}"
+        background_tasks.add_task(
+            redis_service.get_or_compute,
+            bg_cache_key,
+            lambda: get_referral_tree_stats(session, partner.id),
+            expire=600
+        )
+    except Exception as e:
+        logger.warning(f"Tree pre-warm failed: {e}")
 
     # 5. Prepare Response - O(1) using materialized totals
     completed_tasks = []
@@ -521,12 +536,12 @@ async def get_my_referral_tree(
 
     from app.services.analytics_service import get_referral_tree_stats
 
-    # 2. Use Intelligent Caching (300s TTL)
-    cache_key = f"ref_tree_stats:{partner.id}"
+    # 2. Use Intelligent Caching (600s TTL) - V2 Cache Key
+    cache_key = f"ref_tree_stats_v2:{partner.id}"
     return await redis_service.get_or_compute(
         cache_key,
         lambda: get_referral_tree_stats(session, partner.id),
-        expire=300
+        expire=600
     )
 
 @router.get("/network/{level}", response_model=List[PartnerResponse])
@@ -557,11 +572,12 @@ async def get_network_level_members(
 
     from app.services.analytics_service import get_referral_tree_members
 
-    cache_key = f"ref_tree_members:{partner.id}:{level}"
+    # V2 Cache Key for robust data refresh
+    cache_key = f"ref_tree_members_v2:{partner.id}:{level}"
     return await redis_service.get_or_compute(
         cache_key,
         lambda: get_referral_tree_members(session, partner.id, level),
-        expire=300
+        expire=600
     )
 
 @router.get("/growth/metrics", response_model=GrowthMetrics)
@@ -875,6 +891,7 @@ async def complete_academy_stage(
         logger.error(f"JSON parse error for partner {partner.id} completed_stages: {e}")
         completed = []
 
+    effective_xp = 0
     if stage_id not in completed:
         completed.append(stage_id)
         partner.completed_stages = json.dumps(completed)
@@ -942,7 +959,7 @@ async def complete_academy_stage(
         cache_key = f"partner:profile:{tg_id}"
         await redis_service.client.delete(cache_key)
 
-    return {"status": "success", "completed_stages": completed, "xp_awarded": effective_xp if stage_id in completed else 0}
+    return {"status": "success", "completed_stages": completed, "xp_awarded": effective_xp}
 
 @router.get("/earnings", response_model=List[EarningSchema])
 async def get_my_earnings(

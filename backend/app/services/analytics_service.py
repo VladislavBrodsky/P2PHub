@@ -35,12 +35,12 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
         "base_depth": base_depth
     })
 
-    stats = {f"level_{i}": 0 for i in range(1, 10)}
+    stats = {str(i): 0 for i in range(1, 10)}
     rows = result.all()
     for row in rows:
         lvl = int(row[0])
         if 1 <= lvl <= 9:
-            stats[f"level_{lvl}"] = row[1]
+            stats[str(lvl)] = row[1]
 
     return stats
 

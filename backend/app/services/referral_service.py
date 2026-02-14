@@ -152,7 +152,9 @@ async def process_referral_logic(partner_id: int):
                     await leaderboard_service.update_score(referrer.id, referrer.xp)
                     redis_pipe.delete(f"partner:profile:{referrer.telegram_id}")
                     redis_pipe.delete(f"partner:earnings:{referrer.telegram_id}")
-                    redis_pipe.delete(f"ref_tree_stats:{referrer.id}")
+                    redis_pipe.delete(f"ref_tree_stats_v2:{referrer.id}")
+                    # Clear member lists for the affected level
+                    redis_pipe.delete(f"ref_tree_members_v2:{referrer.id}:{level}")
                     for tf in ["24H", "7D", "1M", "3M", "6M", "1Y"]:
                         redis_pipe.delete(f"growth_metrics:{referrer.id}:{tf}")
                     

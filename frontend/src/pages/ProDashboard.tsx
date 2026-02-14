@@ -533,18 +533,18 @@ export const ProDashboard = () => {
                                                 {/* Post Type */}
                                                 <div className="space-y-2 relative z-10">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] border-2 border-[#0f172a] relative z-10 shrink-0" />
-                                                        <label className="text-[10px] font-black uppercase text-indigo-400 tracking-[0.2em]">{t('pro_dashboard.studio.strategy_label')}</label>
+                                                        <div className="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] border-2 border-(--color-bg-surface) relative z-10 shrink-0" />
+                                                        <label className="text-[10px] font-black uppercase text-indigo-500 dark:text-indigo-400 tracking-[0.2em]">{t('pro_dashboard.studio.strategy_label')}</label>
                                                     </div>
                                                     <div className="relative group/sel pl-6">
-                                                        <div className="absolute inset-y-0 left-6 right-0 bg-linear-to-r from-indigo-500/5 to-purple-500/5 rounded-2xl pointer-events-none transition-opacity opacity-50 group-hover/sel:opacity-100" />
+                                                        <div className="absolute inset-y-0 left-6 right-0 bg-indigo-500/5 rounded-2xl pointer-events-none transition-opacity opacity-50 group-hover/sel:opacity-100" />
                                                         <select
                                                             value={postType}
                                                             onChange={(e) => { selection(); setPostType(e.target.value); }}
-                                                            className="relative w-full h-14 bg-white/5 backdrop-blur-md border border-white/10 focus:border-indigo-500/50 rounded-2xl px-5 text-base font-bold text-white outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-sm"
+                                                            className="relative w-full h-14 bg-black/5 dark:bg-white/5 backdrop-blur-md border border-black/5 dark:border-white/10 focus:border-indigo-500/50 rounded-2xl px-5 text-base font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-xs"
                                                         >
-                                                            <option value="" disabled className="text-slate-500 bg-slate-900">{t('pro_dashboard.studio.strategy_placeholder')}</option>
-                                                            {postTypes.map(pt => <option key={pt.key} value={pt.key} className="bg-slate-900 text-white py-2">{pt.label}</option>)}
+                                                            <option value="" disabled className="text-slate-500">{t('pro_dashboard.studio.strategy_placeholder')}</option>
+                                                            {postTypes.map(pt => <option key={pt.key} value={pt.key} className="text-brand-text">{pt.label}</option>)}
                                                         </select>
                                                         <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-50 group-hover/sel:opacity-100 transition-opacity">
                                                             <ChevronRight className="rotate-90 w-5 h-5 text-indigo-500" />
@@ -555,18 +555,18 @@ export const ProDashboard = () => {
                                                 {/* Target Audience */}
                                                 <div className="space-y-2 relative z-10">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="w-3 h-3 rounded-full bg-pink-500 shadow-[0_0_10px_rgba(236,72,153,0.5)] border-2 border-[#0f172a] relative z-10 shrink-0" />
-                                                        <label className="text-[10px] font-black uppercase text-pink-400 tracking-[0.2em]">{t('pro_dashboard.studio.target_label')}</label>
+                                                        <div className="w-3 h-3 rounded-full bg-pink-500 shadow-[0_0_10px_rgba(236,72,153,0.5)] border-2 border-(--color-bg-surface) relative z-10 shrink-0" />
+                                                        <label className="text-[10px] font-black uppercase text-pink-500 dark:text-pink-400 tracking-[0.2em]">{t('pro_dashboard.studio.target_label')}</label>
                                                     </div>
                                                     <div className="relative group/sel pl-6">
-                                                        <div className="absolute inset-y-0 left-6 right-0 bg-linear-to-r from-pink-500/5 to-rose-500/5 rounded-2xl pointer-events-none transition-opacity opacity-50 group-hover/sel:opacity-100" />
+                                                        <div className="absolute inset-y-0 left-6 right-0 bg-pink-500/5 rounded-2xl pointer-events-none transition-opacity opacity-50 group-hover/sel:opacity-100" />
                                                         <select
                                                             value={audience}
                                                             onChange={(e) => { selection(); setAudience(e.target.value); }}
-                                                            className="relative w-full h-14 bg-white/5 backdrop-blur-md border border-white/10 focus:border-pink-500/50 rounded-2xl px-5 text-base font-bold text-white outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-sm"
+                                                            className="relative w-full h-14 bg-black/5 dark:bg-white/5 backdrop-blur-md border border-black/5 dark:border-white/10 focus:border-pink-500/50 rounded-2xl px-5 text-base font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-xs"
                                                         >
-                                                            <option value="" disabled className="text-slate-500 bg-slate-900">{t('pro_dashboard.studio.target_placeholder')}</option>
-                                                            {audiences.map(a => <option key={a.key} value={a.key} className="bg-slate-900 text-white py-2">{a.label}</option>)}
+                                                            <option value="" disabled className="text-slate-500">{t('pro_dashboard.studio.target_placeholder')}</option>
+                                                            {audiences.map(a => <option key={a.key} value={a.key} className="text-brand-text">{a.label}</option>)}
                                                         </select>
                                                         <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-50 group-hover/sel:opacity-100 transition-opacity">
                                                             <ChevronRight className="rotate-90 w-5 h-5 text-pink-500" />
@@ -577,17 +577,17 @@ export const ProDashboard = () => {
                                                 {/* Language */}
                                                 <div className="space-y-2 relative z-10">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] border-2 border-[#0f172a] relative z-10 shrink-0" />
-                                                        <label className="text-[10px] font-black uppercase text-emerald-400 tracking-[0.2em]">{t('pro_dashboard.studio.language_label')}</label>
+                                                        <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] border-2 border-(--color-bg-surface) relative z-10 shrink-0" />
+                                                        <label className="text-[10px] font-black uppercase text-emerald-600 dark:text-emerald-400 tracking-[0.2em]">{t('pro_dashboard.studio.language_label')}</label>
                                                     </div>
                                                     <div className="relative group/sel pl-6">
-                                                        <div className="absolute inset-y-0 left-6 right-0 bg-linear-to-r from-emerald-500/5 to-teal-500/5 rounded-2xl pointer-events-none transition-opacity opacity-50 group-hover/sel:opacity-100" />
+                                                        <div className="absolute inset-y-0 left-6 right-0 bg-emerald-500/5 rounded-2xl pointer-events-none transition-opacity opacity-50 group-hover/sel:opacity-100" />
                                                         <select
                                                             value={language}
                                                             onChange={(e) => setLanguage(e.target.value)}
-                                                            className="relative w-full h-14 bg-white/5 backdrop-blur-md border border-white/10 focus:border-emerald-500/50 rounded-2xl px-5 pr-12 text-base font-bold text-white outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-sm"
+                                                            className="relative w-full h-14 bg-black/5 dark:bg-white/5 backdrop-blur-md border border-black/5 dark:border-white/10 focus:border-emerald-500/50 rounded-2xl px-5 pr-12 text-base font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-xs"
                                                         >
-                                                            {languages.map(l => <option key={l} value={l} className="bg-slate-900 text-white py-2">{l}</option>)}
+                                                            {languages.map(l => <option key={l} value={l} className="text-brand-text">{l}</option>)}
                                                         </select>
                                                         <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-50 flex items-center gap-1.5">
                                                             <Globe size={16} className="text-emerald-500" />
