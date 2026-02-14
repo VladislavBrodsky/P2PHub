@@ -42,14 +42,49 @@ const server = http.createServer((req, res) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
 
     let filePath = path.join(DIST_DIR, req.url === '/' ? 'index.html' : req.url);
+    let originalFilePath = filePath;
 
     // Basic SPA routing: if file doesn't exist, serve index.html
-    if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
+    // We check existence later for compression handling
+    if (!fs.existsSync(filePath) || (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory())) {
         filePath = path.join(DIST_DIR, 'index.html');
+        originalFilePath = filePath;
     }
 
     const extname = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[extname] || 'application/octet-stream';
+
+    // Compression Handling
+    const acceptEncoding = req.headers['accept-encoding'] || '';
+    let contentEncoding = null;
+
+    if (/\.(js|css|html|svg|json|map)$/.test(filePath)) {
+        if (acceptEncoding.includes('br') && fs.existsSync(filePath + '.br')) {
+            filePath = filePath + '.br';
+            contentEncoding = 'br';
+        } else if (acceptEncoding.includes('gzip') && fs.existsSync(filePath + '.gz')) {
+            filePath = filePath + '.gz';
+            contentEncoding = 'gzip';
+        }
+    }
+
+    // Cache Control
+    const headers = { 'Content-Type': contentType };
+    if (contentEncoding) {
+        headers['Content-Encoding'] = contentEncoding;
+    }
+
+    // #comment: Strategic Caching Policy
+    // 1. Assets (hashed): Immutable forever (1 year)
+    // 2. Images/Fonts: Long cache (24h)
+    // 3. HTML/JSON: No cache to ensure instant updates on deployment
+    if (req.url.startsWith('/assets/')) {
+        headers['Cache-Control'] = 'public, max-age=31536000, immutable';
+    } else if (/\.(png|jpg|jpeg|gif|webp|svg|woff|woff2)$/.test(req.url)) {
+        headers['Cache-Control'] = 'public, max-age=86400';
+    } else {
+        headers['Cache-Control'] = 'no-cache';
+    }
 
     fs.readFile(filePath, (error, content) => {
         if (error) {
@@ -61,7 +96,7 @@ const server = http.createServer((req, res) => {
                 res.end(`Server error: ${error.code}`);
             }
         } else {
-            res.writeHead(200, { 'Content-Type': contentType });
+            res.writeHead(200, headers);
             res.end(content, 'utf-8');
         }
     });
