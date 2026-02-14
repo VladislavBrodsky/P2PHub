@@ -12,6 +12,7 @@ export interface PROStatus {
     };
     academy_score?: number;
     completed_stages?: string; // JSON string from backend
+    bot_username?: string;
     setup?: {
         x_api_key: string;
         x_api_secret: string;

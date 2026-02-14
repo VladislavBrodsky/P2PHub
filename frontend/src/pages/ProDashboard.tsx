@@ -1541,7 +1541,7 @@ export const ProDashboard = () => {
                                                     <div className="pb-1">
                                                         <h5 className="text-[12px] font-black text-white uppercase tracking-wide mb-1.5">Telegram Broadcast Node</h5>
                                                         <p className="text-[10px] font-medium text-slate-400 leading-relaxed">
-                                                            Authorize <span className="text-indigo-400 font-bold">@ViralStudioBot</span> as Admin in your target channel for automated cross-platform sync.
+                                                            Authorize <span className="text-indigo-400 font-bold">@{status?.bot_username || 'ViralStudioBot'}</span> as Admin in your target channel for automated cross-platform sync.
                                                         </p>
                                                     </div>
                                                 </div>

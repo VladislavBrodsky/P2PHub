@@ -171,7 +171,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                         <TrendingUp className="w-4 h-4 text-blue-500" />
                         Network Growth
                     </h3>
-                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400">Total Active Partners: <span className="text-blue-500">{metrics.current_count}</span></p>
+                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400">Partners Joined ({timeframe}): <span className="text-blue-500">{metrics.current_count}</span></p>
                 </div>
 
                 {/* Timeframe Selector - Dropdown */}

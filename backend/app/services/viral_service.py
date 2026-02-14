@@ -731,13 +731,72 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             return {"error": "Unsupported platform"}
 
     async def _post_to_x(self, partner: Partner, content: str, image_path: Optional[str]) -> Dict[str, Any]:
-        if not (partner.x_api_key and partner.x_access_token):
-            return {"error": "X (Twitter) API not configured. Please sync your keys in API Setup."}
+        if not (partner.x_api_key and partner.x_api_secret and partner.x_access_token and partner.x_access_token_secret):
+            return {"error": "X (Twitter) API not fully configured. Please sync all 4 keys in API Setup."}
         
-        # Simulation: For real X posting, we would use Tweepy.
-        # However, X API is often paid/restricted, so we provide an elite simulation for PRO users
-        # while waiting for their App approvals.
-        return {"status": "success", "platform": "x", "msg": "Content pushed to X-Global Protocol (Simulation)"}
+        try:
+            import tweepy
+            
+            # 1. Initialize Async Client for v2 API (Post Tweet)
+            client = tweepy.AsyncClient(
+                consumer_key=partner.x_api_key,
+                consumer_secret=partner.x_api_secret,
+                access_token=partner.x_access_token,
+                access_token_secret=partner.x_access_token_secret
+            )
+            
+            media_ids = []
+            
+            # 2. Handle Image Upload (v1.1 API required for media upload)
+            if image_path:
+                # Resolve absolute path to image
+                backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                if "generated_media" in image_path:
+                    filename = image_path.split("/")[-1]
+                    full_image_path = os.path.join(backend_dir, "generated_media", filename)
+                else:
+                    filename = image_path.lstrip('/').replace("images/", "")
+                    full_image_path = os.path.join(backend_dir, "app_images", filename)
+
+                if os.path.exists(full_image_path):
+                    # Use synchronous API for media upload as Tweepy's media upload is primarily v1.1 sync
+                    auth = tweepy.OAuth1UserHandler(
+                        partner.x_api_key, partner.x_api_secret,
+                        partner.x_access_token, partner.x_access_token_secret
+                    )
+                    api_v1 = tweepy.API(auth)
+                    
+                    # Run in executor to avoid blocking
+                    loop = asyncio.get_event_loop()
+                    media = await loop.run_in_executor(
+                        None, 
+                        lambda: api_v1.media_upload(filename=full_image_path)
+                    )
+                    media_ids = [media.media_id]
+                    logger.info(f"✅ X Media Upload Successful: {media.media_id}")
+
+            # 3. Post Tweet
+            response = await client.create_tweet(text=content[:280], media_ids=media_ids if media_ids else None)
+            
+            tweet_id = response.data.get("id")
+            logger.info(f"✅ X Posting Successful: Tweet ID {tweet_id}")
+            
+            return {
+                "status": "success", 
+                "platform": "x", 
+                "msg": f"Successfully posted to X! Tweet ID: {tweet_id}",
+                "tweet_id": tweet_id
+            }
+            
+        except tweepy.errors.Forbidden as e:
+            logger.error(f"❌ X API Forbidden (Auth Error): {e}")
+            return {"error": "X API Permission Error: Ensure your App has 'Read and Write' permissions in Developer Portal."}
+        except tweepy.errors.Unauthorized as e:
+            logger.error(f"❌ X API Unauthorized (Invalid Keys): {e}")
+            return {"error": "X API Auth Error: Invalid API Keys or Access Tokens. Please re-check."}
+        except Exception as e:
+            logger.error(f"❌ X Posting failed: {e}")
+            return {"error": f"X API error: {str(e)}"}
 
     async def _post_to_telegram(self, partner: Partner, content: str, image_path: Optional[str]) -> Dict[str, Any]:
         if not partner.telegram_channel_id:

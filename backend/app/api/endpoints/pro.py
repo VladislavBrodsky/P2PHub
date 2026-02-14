@@ -11,6 +11,7 @@ from app.models.schemas import (
     SocialPostRequest, PartnerResponse
 )
 from app.services.viral_service import viral_studio
+from bot import bot
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +56,8 @@ async def get_pro_status(
             "telegram_channel_id": partner.telegram_channel_id or "",
             "linkedin_access_token": partner.linkedin_access_token or ""
         },
-        "capabilities": viral_studio.get_capabilities()
+        "capabilities": viral_studio.get_capabilities(),
+        "bot_username": (await bot.get_me()).username
     }
 
 @router.post("/academy/complete")
