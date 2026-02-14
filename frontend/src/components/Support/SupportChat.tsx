@@ -171,6 +171,28 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
         const delay = Math.floor(Math.random() * 400) + 400;
 
         try {
+            // Local Knowledge Base (Instant Feedback Layer)
+            const localKB: Record<string, string> = {
+                "card_details": "To issue a card: Go to the 'Cards' tab, select Virtual or Physical, and click 'Issue Card'. Virtual cards are instant. We accept USDT (TRC20) and TON for issuance and top-ups. Apple Pay and Google Pay are supported immediately!",
+                "issue_setup": "For activation: Ensure your KYC level is appropriate for the card type. Verification typically takes 5-10 minutes. If you experience issues with 3DS, make sure your internet connection is stable.",
+                "topup_limits": "Daily top-up limits start at $5,000 for verified users and go up to $50,000 for Level 2 partners. We use TRC20 for the fastest liquidity and lowest fees.",
+                "apple_google": "Absoluteled! Pintopay Virtual Cards are fully compatible with Apple Pay and Google Pay. Just add your card details to your mobile wallet app and use it at any NFC-enabled terminal worldwide.",
+                "earnings": "Our network strategy is simple: Share your link, earn on issuance fees (up to 30%), and receive lifetime transaction rewards (up to 0.5%). Build a network of 5,000 partners to reach our $1/minute milestone!",
+                "security": "Pintopay uses banking-grade 3DS security and encrypted asset storage. If your card is lost, you can Freeze it instantly in the app. Pintopay will never ask for your private keys or passwords."
+            };
+
+            // If it's a category key, we know what to say immediately for 'Top-Notch' feel
+            const categoryMatch = Object.keys(localKB).find(k => t(`support.categories.${k}`) === messageText);
+
+            if (categoryMatch) {
+                setTimeout(() => {
+                    addMessage('assistant', localKB[categoryMatch]);
+                    setIsTyping(false);
+                    resetInactivityTimer();
+                }, delay + 400); // Small extra delay for deep-thinking feel
+                return;
+            }
+
             const response = await apiClient.post('/api/support/chat', { message: messageText });
             setTimeout(() => {
                 addMessage('assistant', response.data.answer);
@@ -179,7 +201,19 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
             }, delay);
         } catch (e) {
             setIsTyping(false);
-            addMessage('assistant', t('support.error_technical'));
+            console.error("Chat error:", e);
+
+            // Intelligent Fallback Logic if backend fails
+            const lowerMsg = messageText.toLowerCase();
+            const fallbackKey = Object.keys(localKB).find(k => lowerMsg.includes(k.replace('_', '')))
+                || (lowerMsg.includes('card') ? 'card_details' : null)
+                || (lowerMsg.includes('earn') ? 'earnings' : null);
+
+            if (fallbackKey && localKB[fallbackKey]) {
+                addMessage('assistant', localKB[fallbackKey]);
+            } else {
+                addMessage('assistant', t('support.error_technical'));
+            }
         }
     }, [addMessage, inputValue, isTyping, resetInactivityTimer, selection, sessionClosed, t]);
 
@@ -220,7 +254,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                             <div className="absolute inset-0 mesh-gradient-dark opacity-30" />
                             <div className="relative border-b border-slate-200 dark:border-white/10 px-4 py-3 bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl">
                                 {/* Inset for Telegram Header (dots/close) */}
-                                <div className="pt-2 sm:pt-0">
+                                <div className="pt-10 sm:pt-2">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-4">
                                             <div className="relative shrink-0">
