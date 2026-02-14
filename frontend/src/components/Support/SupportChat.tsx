@@ -209,8 +209,8 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                             target="_blank"
                             rel="noopener noreferrer"
                             className={`inline-flex items-center gap-2 px-3 py-2 my-1 mx-0.5 rounded-xl transition-all font-bold text-[13px] no-underline group align-middle shadow-sm ${role === 'user'
-                                    ? 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
-                                    : 'bg-blue-500/10 dark:bg-blue-500/20 hover:bg-blue-500/20 dark:hover:bg-blue-500/30 text-blue-600 dark:text-blue-400 border border-blue-500/20'
+                                ? 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
+                                : 'bg-blue-500/10 dark:bg-blue-500/20 hover:bg-blue-500/20 dark:hover:bg-blue-500/30 text-blue-600 dark:text-blue-400 border border-blue-500/20'
                                 }`}
                         >
                             <span>{match[1]}</span>
@@ -276,8 +276,8 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                             target="_blank"
                             rel="noopener noreferrer"
                             className={`font-bold transition-colors break-all ${role === 'user'
-                                    ? 'text-white underline decoration-white/40 decoration-2 underline-offset-4 hover:decoration-white'
-                                    : 'text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 underline decoration-blue-500/30 underline-offset-4'
+                                ? 'text-white underline decoration-white/40 decoration-2 underline-offset-4 hover:decoration-white'
+                                : 'text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 underline decoration-blue-500/30 underline-offset-4'
                                 }`}
                         >
                             {match[0]}
@@ -341,8 +341,8 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                 ru: "Конечно! **Виртуальные карты Pintopay** полностью совместимы с **Apple Pay** и **Google Pay**. Просто добавьте данные карты в приложение кошелька на телефоне и используйте её в любом терминале с поддержкой NFC."
             },
             "earnings": {
-                en: "Our network strategy is simple:\n\n• Share your link\n• Earn on issuance fees (up to **30%**)\n• Receive lifetime transaction rewards (up to **0.5%**)\n\nBuild a network of **5,000 partners** to reach our **$1/minute** milestone!",
-                ru: "Наша сетевая стратегия проста:\n\n• Делитесь ссылкой\n• Зарабатывайте на комиссиях за выпуск (до **30%**)\n• Получайте пожизненные вознаграждения за транзакции (до **0,5%**)\n\nПостройте сеть из **5 000 партнеров**, чтобы достичь цели **$1 в минуту**!"
+                en: "Our network strategy is simple:\n\n• Share your link\n• Earn on issuance fees (up to **30%**)\n• Receive lifetime transaction rewards (up to **0.3%**)\n\nBuild a network of **5,000 partners** to reach our **$1/minute** milestone!",
+                ru: "Наша сетевая стратегия проста:\n\n• Делитесь ссылкой\n• Зарабатывайте на комиссиях за выпуск (до **30%**)\n• Получайте пожизненные вознаграждения за транзакции (до **0,3%**)\n\nПостройте сеть из **5 000 партнеров**, чтобы достичь цели **$1 в минуту**!"
             },
             "security": {
                 en: "Pintopay uses **banking-grade 3DS security** and encrypted asset storage. If your card is lost, you can **Freeze** it instantly in the app. Pintopay will never ask for your private keys or passwords.",
@@ -563,55 +563,58 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                 </motion.div>
                             )}
 
-                            {showCategories && !isTyping && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.3 }}
-                                    className="pt-4"
-                                >
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
-                                        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 opacity-60">
-                                            {t('support.suggested_topics')}
-                                        </p>
-                                        <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        {Object.keys(t('support.categories', { returnObjects: true }) as any).map((key, i) => {
-                                            const icons: Record<string, any> = {
-                                                card_details: CreditCard,
-                                                issue_setup: Settings2,
-                                                topup_limits: Activity,
-                                                apple_google: Smartphone,
-                                                earnings: TrendingUp,
-                                                security: ShieldCheck,
-                                                trading_hub: Activity,
-                                                vip_line: Zap
-                                            };
-                                            const Icon = icons[key] || Cpu;
+                            <AnimatePresence mode="wait">
+                                {showCategories && !isTyping && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                        transition={{ duration: 0.3, ease: 'easeOut' }}
+                                        className="pt-2"
+                                    >
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
+                                            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 opacity-60">
+                                                {t('support.suggested_topics')}
+                                            </p>
+                                            <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            {Object.keys(t('support.categories', { returnObjects: true }) as any).map((key, i) => {
+                                                const icons: Record<string, any> = {
+                                                    card_details: CreditCard,
+                                                    issue_setup: Settings2,
+                                                    topup_limits: Activity,
+                                                    apple_google: Smartphone,
+                                                    earnings: TrendingUp,
+                                                    security: ShieldCheck,
+                                                    trading_hub: Activity,
+                                                    vip_line: Zap
+                                                };
+                                                const Icon = icons[key] || Cpu;
 
-                                            return (
-                                                <motion.button
-                                                    key={key}
-                                                    initial={{ opacity: 0, scale: 0.9 }}
-                                                    animate={{ opacity: 1, scale: 1 }}
-                                                    transition={{ delay: 0.4 + (i * 0.05) }}
-                                                    onClick={() => handleCategoryClick(key)}
-                                                    className="group flex flex-col items-start gap-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md p-3 text-left hover:border-blue-500/40 hover:bg-blue-500/5 transition-all active:scale-[0.96] shadow-sm"
-                                                >
-                                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-950 text-slate-500 dark:text-slate-400 group-hover:text-blue-500 group-hover:bg-blue-500/10 transition-all">
-                                                        <Icon className="h-4 w-4" />
-                                                    </div>
-                                                    <span className="text-xs font-bold leading-tight tracking-tight text-slate-900 dark:text-white">
-                                                        {t(`support.categories.${key}`)}
-                                                    </span>
-                                                </motion.button>
-                                            );
-                                        })}
-                                    </div>
-                                </motion.div>
-                            )}
+                                                return (
+                                                    <motion.button
+                                                        key={key}
+                                                        initial={{ opacity: 0, scale: 0.9 }}
+                                                        animate={{ opacity: 1, scale: 1 }}
+                                                        transition={{ delay: 0.4 + (i * 0.05) }}
+                                                        onClick={() => handleCategoryClick(key)}
+                                                        className="flex flex-col items-center justify-center gap-2 p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all active:scale-95"
+                                                    >
+                                                        <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5">
+                                                            <Icon className="h-4 w-4 text-slate-400 dark:text-slate-500" />
+                                                        </div>
+                                                        <span className="text-[11px] font-black uppercase tracking-tight text-slate-900 dark:text-white text-center leading-tight">
+                                                            {t(`support.categories.${key}`)}
+                                                        </span>
+                                                    </motion.button>
+                                                );
+                                            })}
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
 
                         {/* Input Area */}
