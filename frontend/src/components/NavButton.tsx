@@ -24,8 +24,8 @@ export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavBut
             onMouseEnter={onMouseEnter}
             onPointerEnter={onMouseEnter}
             className={`relative flex h-full min-w-0 flex-1 flex-col items-center justify-center gap-1 transition-all duration-300 active:scale-90 ${active
-                ? 'text-(--nav-active)'
-                : 'text-(--nav-inactive) hover:text-(--color-text-primary)'
+                ? 'text-blue-500'
+                : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
         >
             <div
@@ -41,7 +41,7 @@ export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavBut
             {active && (
                 <motion.div
                     layoutId="nav-dot"
-                    className="bg-(--color-brand-blue) absolute bottom-2 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full"
+                    className="bg-blue-500 absolute bottom-2 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full"
                     transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
             )}
