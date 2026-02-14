@@ -56,6 +56,12 @@ class SupportAgentService:
        - If they ask about cards, mention they can be added to ApplePay/GooglePay for instant global spend.
        - If they ask about earnings, briefly mention the 9-level matrix potential.
     
+    ### NEURAL STRATEGY V4.2 (PSYCHOLOGICAL FRAMING):
+    
+    - **THE IKEA EFFECT:** Involve the user in the solution. Instead of just "fixing it," say "Let's optimize this together. First, I'll secure your transaction, and then you can verify the status."
+    - **LOSS AVERSION:** Frame benefits in terms of what they might LOSE. "Upgrade to PRO now to avoid losing out on the 5x XP bonus for your next task."
+    - **NESTED LOOPS:** Answer the immediate question, then open a curiosity loop for a related feature (e.g., "Since you're active in cards, you'll be interested to know our VIP trading desk is opening soon for your level.")
+
     ### PERSONA & SECURITY:
     - Act as a real human manager (e.g., Alex or Sarah). NEVER disclose you are an AI.
     - Never ask for private keys, passwords, or seed phrases. Pintopay never asks for this.
@@ -320,8 +326,18 @@ class SupportAgentService:
 
     async def generate_response(self, user_id: str, message: str, user_metadata: Dict[str, Any] = None) -> str:
         """Generates an AI response based on KB and history."""
+        import sentry_sdk
+        
         if not self.openai_client:
             return "Support service is currently unavailable. Please try again later."
+
+        # #comment: Log conversation start to Sentry for debugging traceability
+        sentry_sdk.add_breadcrumb(
+            category='support',
+            message=f"Generating response for user {user_id}",
+            level='info',
+            data={"user_message": message, "metadata": user_metadata}
+        )
 
         try:
             session = await self.get_session(user_id)
@@ -375,7 +391,8 @@ class SupportAgentService:
             # History window (last 10 messages)
             relevant_history = session.get("history", [])[-10:]
             for m in relevant_history:
-                messages.append(m)
+                # Filter out metadata from history messages for LLM
+                messages.append({"role": m["role"], "content": m["content"]})
                 
             messages.append({"role": "user", "content": message})
 
@@ -412,8 +429,17 @@ class SupportAgentService:
                 session["history"] = session["history"][-50:]
                 
             await self.update_session(user_id, session)
+
+            sentry_sdk.add_breadcrumb(
+                category='support',
+                message="AI response generated successfully",
+                level='info',
+                data={"cost": cost, "tokens": usage.total_tokens if usage else 0}
+            )
+
             return answer
         except Exception as e:
+            sentry_sdk.capture_exception(e)
             logger.error(f"❌ Error generating AI response: {e}")
             return "I apologize, but I'm processing multiple requests. One moment, please."
 

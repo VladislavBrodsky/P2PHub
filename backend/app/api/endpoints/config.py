@@ -14,5 +14,6 @@ async def get_public_config():
         "payment_mode": settings.PAYMENT_SERVICE_MODE,
         "admin_ton_address": settings.ADMIN_TON_ADDRESS,
         "admin_usdt_address": settings.ADMIN_USDT_ADDRESS,
-        "is_debug": settings.DEBUG
+        "is_debug": settings.DEBUG,
+        "sentry_dsn": settings.SENTRY_FRONTEND_DSN or settings.SENTRY_DSN
     }

@@ -14,90 +14,94 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
     """
     Uses Materialized Path for ultra-fast 9-level tree counting.
     """
-    partner = await session.get(Partner, partner_id)
-    if not partner: return {f"level_{i}": 0 for i in range(1, 10)}
+    import sentry_sdk
+    with sentry_sdk.start_span(op="db.query", description="get_referral_tree_stats"):
+        partner = await session.get(Partner, partner_id)
+        if not partner: return {f"level_{i}": 0 for i in range(1, 10)}
 
-    search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
-    base_depth = len(search_path.split('.'))
+        search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
+        base_depth = len(search_path.split('.'))
 
-    query = text("""
-        SELECT depth - :base_depth + 1 as level, COUNT(*) as count
-        FROM partner
-        WHERE (path = :search_path OR path LIKE :search_wildcard)
-        AND depth BETWEEN :base_depth AND :base_depth + 8
-        GROUP BY 1
-        ORDER BY level;
-    """)
+        query = text("""
+            SELECT depth - :base_depth + 1 as level, COUNT(*) as count
+            FROM partner
+            WHERE (path = :search_path OR path LIKE :search_wildcard)
+            AND depth BETWEEN :base_depth AND :base_depth + 8
+            GROUP BY 1
+            ORDER BY level;
+        """)
 
-    result = await session.execute(query, {
-        "search_path": search_path,
-        "search_wildcard": f"{search_path}.%",
-        "base_depth": base_depth
-    })
+        result = await session.execute(query, {
+            "search_path": search_path,
+            "search_wildcard": f"{search_path}.%",
+            "base_depth": base_depth
+        })
 
-    stats = {str(i): 0 for i in range(1, 10)}
-    rows = result.all()
-    for row in rows:
-        lvl = int(row[0])
-        if 1 <= lvl <= 9:
-            stats[str(lvl)] = row[1]
+        stats = {str(i): 0 for i in range(1, 10)}
+        rows = result.all()
+        for row in rows:
+            lvl = int(row[0])
+            if 1 <= lvl <= 9:
+                stats[str(lvl)] = row[1]
 
-    return stats
+        return stats
 
 async def get_referral_tree_members(session: AsyncSession, partner_id: int, target_level: int) -> List[dict]:
     """
     Fetches details of partners at a specific level using Materialized Path.
     """
-    if not (1 <= target_level <= 9):
-        return []
+    import sentry_sdk
+    with sentry_sdk.start_span(op="db.query", description="get_referral_tree_members"):
+        if not (1 <= target_level <= 9):
+            return []
 
-    partner = await session.get(Partner, partner_id)
-    if not partner: return []
+        partner = await session.get(Partner, partner_id)
+        if not partner: return []
 
-    search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
-    base_depth = len(search_path.split('.'))
-    target_depth = base_depth + target_level - 1
+        search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
+        base_depth = len(search_path.split('.'))
+        target_depth = base_depth + target_level - 1
 
-    query = text("""
-        SELECT telegram_id, username, first_name, last_name, xp, photo_url, created_at,
-               balance, level as partner_level, referral_code, is_pro, updated_at, id, photo_file_id
-        FROM partner
-        WHERE (path = :search_path OR path LIKE :search_wildcard)
-        AND depth = :target_depth
-        ORDER BY xp DESC
-        LIMIT 100;
-    """)
+        query = text("""
+            SELECT telegram_id, username, first_name, last_name, xp, photo_url, created_at,
+                   balance, level as partner_level, referral_code, is_pro, updated_at, id, photo_file_id
+            FROM partner
+            WHERE (path = :search_path OR path LIKE :search_wildcard)
+            AND depth = :target_depth
+            ORDER BY xp DESC
+            LIMIT 100;
+        """)
 
-    try:
-        result = await session.execute(query, {
-            "search_path": search_path,
-            "search_wildcard": f"{search_path}.%",
-            "target_depth": target_depth
-        })
-        members = []
-        rows = result.all()
-        for row in rows:
-            members.append({
-                "telegram_id": row[0],
-                "username": row[1],
-                "first_name": row[2],
-                "last_name": row[3],
-                "xp": row[4],
-                "photo_url": row[5],
-                "created_at": row[6].isoformat() if row[6] else None,
-                "balance": row[7],
-                "level": row[8],
-                "referral_code": row[9],
-                "is_pro": bool(row[10]),
-                "updated_at": row[11].isoformat() if row[11] else None,
-                "id": row[12],
-                "photo_file_id": row[13]
+        try:
+            result = await session.execute(query, {
+                "search_path": search_path,
+                "search_wildcard": f"{search_path}.%",
+                "target_depth": target_depth
             })
+            members = []
+            rows = result.all()
+            for row in rows:
+                members.append({
+                    "telegram_id": row[0],
+                    "username": row[1],
+                    "first_name": row[2],
+                    "last_name": row[3],
+                    "xp": row[4],
+                    "photo_url": row[5],
+                    "created_at": row[6].isoformat() if row[6] else None,
+                    "balance": row[7],
+                    "level": row[8],
+                    "referral_code": row[9],
+                    "is_pro": bool(row[10]),
+                    "updated_at": row[11].isoformat() if row[11] else None,
+                    "id": row[12],
+                    "photo_file_id": row[13]
+                })
 
-        return members
-    except Exception as e:
-        logger.error(f"Error fetching tree members: {e}")
-        return []
+            return members
+        except Exception as e:
+            logger.error(f"Error fetching tree members: {e}")
+            return []
 
 async def get_network_growth_metrics(session: AsyncSession, partner_id: int, timeframe: str = '7D') -> dict:
     """

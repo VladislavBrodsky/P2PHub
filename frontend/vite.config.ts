@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import viteCompression from 'vite-plugin-compression';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 // #comment: Simplified build configuration to resolve deployment EPERM issues
 // and ensure compatibility with Railway monorepo structure.
@@ -36,6 +37,13 @@ export default defineConfig({
       cache: false, // Disable cache to prevent permission issues
       // logStats: false, // Reduce noise
     }),
+    // Sentry Vite plugin for source map uploads
+    sentryVitePlugin({
+      authToken: process.env.SENTRY_API_KEY,
+      org: "web3-fintech",
+      project: "p2phub-frontend",
+      disable: !process.env.SENTRY_API_KEY, // Only run if API key is present
+    }),
   ],
   server: {
     host: '0.0.0.0',
@@ -43,7 +51,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: false,
+    sourcemap: true,
     rollupOptions: {
       output: {
         manualChunks: {

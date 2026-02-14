@@ -10,6 +10,7 @@ interface PublicConfig {
     admin_ton_address: string;
     admin_usdt_address: string;
     is_debug: boolean;
+    sentry_dsn?: string;
 }
 
 interface ConfigContextType {

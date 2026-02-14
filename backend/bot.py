@@ -3,6 +3,7 @@ import logging
 import secrets
 import sys
 import urllib.parse
+import sentry_sdk
 
 from aiogram import Bot, Dispatcher, F, types
 from aiogram.filters import Command, CommandStart
@@ -96,6 +97,7 @@ async def cmd_start(message: types.Message):
             break # We only need one session
     except Exception as e:
         logging.error(f"Error in cmd_start: {e}")
+        sentry_sdk.capture_exception(e)
         await message.answer(f"⚠️ Error: {str(e)}")
 
 
@@ -134,6 +136,7 @@ async def cmd_my_network(message: types.Message):
             break
     except Exception as e:
         logging.error(f"Error in cmd_my_network: {e}")
+        sentry_sdk.capture_exception(e)
         await message.answer(f"⚠️ Error fetching stats: {str(e)}")
 
 
@@ -313,6 +316,7 @@ async def handle_buy_pro(message: types.Message):
             break
     except Exception as e:
         logging.error(f"Error in handle_buy_pro: {e}")
+        sentry_sdk.capture_exception(e)
         await message.answer("⚠️ Session creation failed. Please try again later.")
 
 @dp.callback_query(F.data == "verify_pro_payment")
@@ -373,6 +377,7 @@ async def handle_tx_hash(message: types.Message):
             break
     except Exception as e:
         logging.error(f"Error in handle_tx_hash: {e}")
+        sentry_sdk.capture_exception(e)
         await wait_msg.edit_text("⚠️ Verification error. Please contact support.")
 
 @dp.callback_query(F.data == "cancel_payment")
@@ -429,6 +434,7 @@ async def handle_support_chat(message: types.Message):
             break
     except Exception as e:
         logging.error(f"❌ Error in support chat handler: {e}")
+        sentry_sdk.capture_exception(e)
         await message.answer("I apologize, but my circuits are currently busy improving our elite services. Please try again in 30 seconds!")
 
 async def main():

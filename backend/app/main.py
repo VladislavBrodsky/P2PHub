@@ -27,6 +27,21 @@ if settings.SENTRY_DSN:
     from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
     from sentry_sdk.integrations.redis import RedisIntegration
     
+    # #comment: Add advanced filtering to keep Sentry clean of noise and PII
+    def before_send(event, hint):
+        # 1. Filter out health check spam (don't waste Sentry quota)
+        if event.get('transaction') in ['/health', settings.WEBHOOK_PATH]:
+            return None
+            
+        # 2. Scrub sensitive data from logs (Security best practice)
+        if 'request' in event:
+            headers = event['request'].get('headers', {})
+            # Remove keys that might contain secrets
+            for key in ['Authorization', 'X-Telegram-Bot-Api-Secret-Token', 'Cookie']:
+                if key in headers: headers.pop(key)
+        
+        return event
+
     sentry_sdk.init(
         dsn=settings.SENTRY_DSN,
         environment=settings.SENTRY_ENVIRONMENT,
@@ -36,10 +51,15 @@ if settings.SENTRY_DSN:
             SqlalchemyIntegration(),
             RedisIntegration(),
         ],
-        # #comment: Send meaningful context with each error for easier debugging
-        send_default_pii=False,  # Don't send user IPs/cookies for privacy
-        attach_stacktrace=True,   # Include full stack traces
-        before_send=lambda event, hint: event,  # Can filter events here if needed
+        # #comment: Security & Privacy
+        send_default_pii=False,
+        attach_stacktrace=True,
+        before_send=before_send,
+        # #comment: Ignore common noise
+        ignore_errors=[
+            asyncio.CancelledError,
+            HTTPException, # Expected 4xx errors
+        ]
     )
     logger.info(f"✅ Sentry initialized (Environment: {settings.SENTRY_ENVIRONMENT}, Sample Rate: {settings.SENTRY_TRACES_SAMPLE_RATE})")
 else:
@@ -240,6 +260,12 @@ async def health_check():
 async def root_health():
     return {"status": "healthy", "service": "P2PHub Backend"}
 
+@app.get("/sentry-test")
+async def trigger_error():
+    """Endpoint for testing Sentry integration."""
+    division_by_zero = 1 / 0
+    return {"result": division_by_zero}
+
 # Webhook Endpoint
 @app.post(settings.WEBHOOK_PATH)
 async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = Header(None)):
@@ -313,8 +339,13 @@ async def global_exception_handler(request: Request, exc: Exception):
 @app.middleware("http")
 async def add_request_id_middleware(request: Request, call_next):
     import uuid
+    import sentry_sdk
+    
     request_id = str(uuid.uuid4())
     request.state.request_id = request_id
+    
+    # #comment: Synchronize request_id with Sentry for perfect searchability
+    sentry_sdk.set_tag("request_id", request_id)
     
     # Add to response headers so clients can include it in bug reports
     response = await call_next(request)

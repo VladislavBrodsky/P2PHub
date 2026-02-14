@@ -74,6 +74,7 @@ class Settings(BaseSettings):
     # Get this from https://sentry.io after creating a project.
     # Sentry automatically captures all exceptions and performance metrics.
     SENTRY_DSN: Optional[str] = None
+    SENTRY_FRONTEND_DSN: Optional[str] = None # Optional: different DSN for frontend
     SENTRY_ENVIRONMENT: str = "production"  # Can be: production, staging, development
     SENTRY_TRACES_SAMPLE_RATE: float = 0.1  # 10% of transactions for performance monitoring
 
