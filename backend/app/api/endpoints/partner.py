@@ -775,7 +775,6 @@ async def claim_task_reward(
 
     if not partner_task_record:
         # 1. Add record to PartnerTask table (for social tasks that don't have /start)
-        # 1. Add record to PartnerTask table (for social tasks that don't have /start)
         from app.models.partner import PartnerTask
         partner_task_record = PartnerTask(
             partner_id=partner.id,
@@ -785,6 +784,10 @@ async def claim_task_reward(
             completed_at=datetime.utcnow()
         )
         session.add(partner_task_record)
+        # Ensure it's in the collection for response serialization
+        if partner.completed_task_records is None:
+            partner.completed_task_records = []
+        partner.completed_task_records.append(partner_task_record)
     else:
         # Update existing STARTED record
         partner_task_record.status = "COMPLETED"
@@ -792,18 +795,19 @@ async def claim_task_reward(
         partner_task_record.completed_at = datetime.utcnow()
         session.add(partner_task_record)
 
-        # 1.1 Add XP Transaction record
+    # 1.1 Calculate effective XP (PRO members get 5x XP bonus)
+    effective_xp = xp_reward * 5 if partner.is_pro else xp_reward
+    
+    # 1.2 Add XP Transaction record
     new_xp_tx = XPTransaction(
         partner_id=partner.id,
-        amount=xp_reward,
+        amount=effective_xp, # Log the actual XP received
         type="TASK",
         description=f"Completed Task: {task_id}",
         reference_id=task_id
     )
     session.add(new_xp_tx)
 
-    effective_xp = xp_reward * 5 if partner.is_pro else xp_reward  # PRO members get 5x XP bonus
-    
     # 1.2 Unified Transaction: Log Task XP as an Earning
     # 1.2 Unified Transaction: Log Task XP as an Earning
     task_earning = Earning(
