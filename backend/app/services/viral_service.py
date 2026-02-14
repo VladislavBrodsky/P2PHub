@@ -819,7 +819,10 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         body: str,
         image_url: Optional[str]
     ):
-        """Audit logging to the specified Viral Marketing tracker sheet."""
+        """
+        Audit logging to AI Marketing Studio Log with detailed time and cost tracking.
+        Logs each generation with comprehensive metrics for performance monitoring.
+        """
         if not self.gs_client:
             logger.warning("⚠️ Google Sheets client not initialized, skipping log.")
             return
@@ -834,27 +837,83 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             def get_sheet_sync():
                 if cache_key not in self._gs_sheet_cache:
                     spreadsheet = self.gs_client.open_by_key(sheet_id)
-                    self._gs_sheet_cache[cache_key] = spreadsheet.get_worksheet_by_id(int(gid))
+                    # Try to get by name first, fallback to GID
+                    try:
+                        self._gs_sheet_cache[cache_key] = spreadsheet.worksheet("AI Marketing Studio Log")
+                        logger.info("✅ Using 'AI Marketing Studio Log' sheet")
+                    except:
+                        self._gs_sheet_cache[cache_key] = spreadsheet.get_worksheet_by_id(int(gid))
+                        logger.info(f"✅ Using sheet GID: {gid}")
                 return self._gs_sheet_cache[cache_key]
 
             # Offload blocking GS API calls to thread pool
             sheet = await loop.run_in_executor(None, get_sheet_sync)
             
             if sheet:
-                # Row format
+                # Calculate costs (OpenAI GPT-4 pricing: $0.01/1K input, $0.03/1K output tokens)
+                # Simplified: assuming avg 50/50 split, ~$0.02/1K tokens
+                openai_cost = (tokens_openai / 1000) * 0.015
+                
+                # Imagen 4.0 pricing: ~$0.004 per image
+                imagen_cost = 0.004 if image_url else 0.0
+                
+                total_cost = openai_cost + imagen_cost
+                
+                # Calculate time components (estimate based on parallel execution)
+                # Duration is total time, but we can estimate breakdown
+                text_time = duration * 0.45  # ~45% of time
+                image_time = duration * 0.50  # ~50% of time
+                processing_time = duration * 0.05  # ~5% overhead
+                
+                # Current timestamp
+                timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+                
+                # Enhanced row format with time and cost tracking
                 row = [
-                    f"@{partner.username or partner.id}",
-                    topic, audience, language,
-                    datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
-                    "created", openai_prompt, gemini_prompt,
-                    f"{duration:.2f}s", tokens_openai, tokens_gemini,
-                    title, body, image_url or "None"
+                    # Basic Info
+                    timestamp,
+                    f"@{partner.username or partner.telegram_id}",
+                    str(partner.id),
+                    
+                    # Generation Config
+                    topic,
+                    audience,
+                    language,
+                    
+                    # Performance Metrics
+                    f"{duration:.2f}",  # Total time in seconds
+                    f"{text_time:.2f}",  # Text gen time (est)
+                    f"{image_time:.2f}",  # Image gen time (est)
+                    
+                    # Cost Tracking
+                    f"{total_cost:.4f}",  # Total cost in USD
+                    f"{openai_cost:.4f}",  # OpenAI cost
+                    f"{imagen_cost:.4f}",  # Imagen cost
+                    
+                    # Token Usage
+                    tokens_openai,
+                    tokens_gemini,
+                    
+                    # Content
+                    title[:100],  # Truncate title
+                    len(body),  # Body length
+                    "Yes" if image_url else "No",  # Image generated?
+                    image_url or "N/A",
+                    
+                    # Status
+                    "SUCCESS"
                 ]
-                # Offload blocking append to thread pool
-                await loop.run_in_executor(None, lambda: sheet.append_row(row))
-                logger.info(f"✅ Background audit logged for @{partner.username}")
+                
+                # Append row to sheet (thread executor)
+                await loop.run_in_executor(None, lambda: sheet.append_row(row, value_input_option='USER_ENTERED'))
+                
+                logger.info(
+                    f"✅ Logged to AI Marketing Studio: "
+                    f"Duration={duration:.2f}s, Cost=${total_cost:.4f}, "
+                    f"User=@{partner.username or partner.id}"
+                )
         except Exception as e:
-            logger.error(f"❌ Failed to log viral generation to Google Sheets: {e}")
+            logger.error(f"❌ Failed to log to Google Sheets: {e}")
 
 # Singleton
 viral_studio = ViralMarketingStudio()
