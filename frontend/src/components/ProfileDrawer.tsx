@@ -97,7 +97,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                         key="drawer-backdrop"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                        exit={{ opacity: 0, pointerEvents: 'none' }}
                         transition={{ duration: 0.15 }}
                         onClick={onClose}
                         className="fixed inset-0 bg-black/30 backdrop-blur-[2px] cursor-pointer pointer-events-auto"
@@ -109,7 +109,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             key="drawer-panel"
                             initial={{ x: '-100%' }}
                             animate={{ x: 0 }}
-                            exit={{ x: '-100%' }}
+                            exit={{ x: '-100%', pointerEvents: 'none' }}
                             transition={{ type: 'tween', ease: 'easeOut', duration: 0.25 }}
                             className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-white/10 pt-[env(safe-area-inset-top)] shadow-2xl ml-0 mr-auto"
                             style={{

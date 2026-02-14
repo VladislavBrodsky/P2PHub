@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, lazy, Suspense, useCallback } from 'react';
 import { Header } from '../Header';
 const ProfileDrawer = lazy(() => import('../ProfileDrawer')); // Lazy load
 import BottomNav from '../BottomNav';
@@ -43,6 +43,8 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
         return () => window.removeEventListener('nav-tab', handleNav);
     }, [setActiveTab]);
 
+    const handleCloseMenu = useCallback(() => setIsMenuOpen(false), []);
+
     return (
         <div className="selection:bg-blue-500/10 fixed inset-0 flex flex-col overflow-hidden bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white">
             {/* Staging Ribbon */}
@@ -84,7 +86,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 <Suspense fallback={null}>
                     <ProfileDrawer
                         isOpen={isMenuOpen}
-                        onClose={() => setIsMenuOpen(false)}
+                        onClose={handleCloseMenu}
                         activeTab={activeTab}
                     />
                 </Suspense>
