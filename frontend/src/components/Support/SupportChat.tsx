@@ -182,26 +182,132 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
         return () => clearInterval(interval);
     }, [isTyping, intelligenceLabels]);
 
-    const renderMessageContent = React.useCallback((content: string) => {
-        // Simple link detection and rendering
-        const urlRegex = /(https?:\/\/[^\s]+)/g;
-        const parts = content.split(urlRegex);
+    const renderMessageContent = React.useCallback((content: string, role: 'user' | 'assistant') => {
+        if (!content) return null;
 
-        return parts.map((part, i) => {
-            if (part.match(urlRegex)) {
-                return (
-                    <a
-                        key={i}
-                        href={part}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-white/90 hover:text-white underline decoration-white/30 underline-offset-4 font-bold break-all"
-                    >
-                        {part}
-                    </a>
-                );
-            }
-            return part;
+        // 1. Split by paragraphs (double newline)
+        const paragraphs = content.split(/\n\n+/);
+
+        return paragraphs.map((paragraph, pIdx) => {
+            // 2. Within each paragraph, handle markdown elements
+            // We use a flatMap strategy to replace strings with components/formatted text
+            let parts: (string | React.ReactNode)[] = [paragraph.trim()];
+
+            // A. Handle Markdown Links: [label](url)
+            parts = parts.flatMap((part, idx) => {
+                if (typeof part !== 'string') return part;
+                const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
+                const result: (string | React.ReactNode)[] = [];
+                let lastIndex = 0;
+                let match;
+                while ((match = linkRegex.exec(part)) !== null) {
+                    result.push(part.substring(lastIndex, match.index));
+                    result.push(
+                        <a
+                            key={`link-${idx}-${match.index}`}
+                            href={match[2]}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`inline-flex items-center gap-2 px-3 py-2 my-1 mx-0.5 rounded-xl transition-all font-bold text-[13px] no-underline group align-middle shadow-sm ${role === 'user'
+                                    ? 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
+                                    : 'bg-blue-500/10 dark:bg-blue-500/20 hover:bg-blue-500/20 dark:hover:bg-blue-500/30 text-blue-600 dark:text-blue-400 border border-blue-500/20'
+                                }`}
+                        >
+                            <span>{match[1]}</span>
+                            <ChevronRight className="h-3.5 w-3.5 opacity-50 group-hover:translate-x-0.5 transition-transform" />
+                        </a>
+                    );
+                    lastIndex = match.index + match[0].length;
+                }
+                result.push(part.substring(lastIndex));
+                return result;
+            });
+
+            // B. Handle Bold: **text**
+            parts = parts.flatMap((part, idx) => {
+                if (typeof part !== 'string') return part;
+                const boldRegex = /\*\*([^*]+)\*\*/g;
+                const result: (string | React.ReactNode)[] = [];
+                let lastIndex = 0;
+                let match;
+                while ((match = boldRegex.exec(part)) !== null) {
+                    result.push(part.substring(lastIndex, match.index));
+                    result.push(
+                        <strong key={`bold-${idx}-${match.index}`} className={`font-black tracking-tight ${role === 'user' ? 'text-white' : 'text-slate-900 dark:text-blue-50'
+                            }`}>
+                            {match[1]}
+                        </strong>
+                    );
+                    lastIndex = match.index + match[0].length;
+                }
+                result.push(part.substring(lastIndex));
+                return result;
+            });
+
+            // C. Handle Italic: *text* (avoiding double stars)
+            parts = parts.flatMap((part, idx) => {
+                if (typeof part !== 'string') return part;
+                const italicRegex = /\*([^*]+)\*/g;
+                const result: (string | React.ReactNode)[] = [];
+                let lastIndex = 0;
+                let match;
+                while ((match = italicRegex.exec(part)) !== null) {
+                    result.push(part.substring(lastIndex, match.index));
+                    result.push(<em key={`italic-${idx}-${match.index}`} className="opacity-80 italic italic-normal leading-normal">{match[1]}</em>);
+                    lastIndex = match.index + match[0].length;
+                }
+                result.push(part.substring(lastIndex));
+                return result;
+            });
+
+            // D. Handle Naked URLs (unprocessed strings only)
+            parts = parts.flatMap((part, idx) => {
+                if (typeof part !== 'string') return part;
+                const urlRegex = /https?:\/\/[^\s)]+/g;
+                const result: (string | React.ReactNode)[] = [];
+                let lastIndex = 0;
+                let match;
+                while ((match = urlRegex.exec(part)) !== null) {
+                    result.push(part.substring(lastIndex, match.index));
+                    result.push(
+                        <a
+                            key={`url-${idx}-${match.index}`}
+                            href={match[0]}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`font-bold transition-colors break-all ${role === 'user'
+                                    ? 'text-white underline decoration-white/40 decoration-2 underline-offset-4 hover:decoration-white'
+                                    : 'text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 underline decoration-blue-500/30 underline-offset-4'
+                                }`}
+                        >
+                            {match[0]}
+                        </a>
+                    );
+                    lastIndex = match.index + match[0].length;
+                }
+                result.push(part.substring(lastIndex));
+                return result;
+            });
+
+            // E. Final string cleanup + line breaks
+            const finalParts = parts.map((part, idx) => {
+                if (typeof part === 'string') {
+                    const lines = part.split('\n');
+                    return lines.map((line, lIdx) => (
+                        <React.Fragment key={`${idx}-${lIdx}`}>
+                            {line}
+                            {lIdx < lines.length - 1 && <br />}
+                        </React.Fragment>
+                    ));
+                }
+                return part;
+            });
+
+            return (
+                <div key={pIdx} className={pIdx > 0 ? 'mt-3 pt-1 border-t border-slate-200/5 dark:border-white/5' : ''}>
+                    {finalParts}
+                </div>
+            );
         });
     }, []);
 
@@ -219,36 +325,36 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
 
         const localKB: Record<string, { en: string; ru: string }> = {
             "card_details": {
-                en: "To issue a card: Go to the 'Cards' tab, select Virtual or Physical, and click 'Issue Card'. Virtual cards are instant. We accept USDT (TRC20) and TON for issuance and top-ups. Apple Pay and Google Pay are supported immediately!",
-                ru: "Для получения карты: Перейдите во вкладку «Карты», выберите Виртуальную или Физическую и нажмите «Выпустить карту». Виртуальные карты выпускаются мгновенно. Мы принимаем USDT (TRC20) и TON для выпуска и пополнения. Apple Pay и Google Pay поддерживаются сразу!"
+                en: "To issue a card:\n\n1. Go to the **Cards** tab\n2. Select **Virtual** or **Physical**\n3. Click **Issue Card**\n\nVirtual cards are instant. We accept **USDT (TRC20)** and **TON** for issuance and top-ups. **Apple Pay** and **Google Pay** are supported immediately!",
+                ru: "Для получения карты:\n\n1. Перейдите во вкладку **«Карты»**\n2. Выберите **Виртуальную** или **Физическую**\n3. Нажмите **«Выпустить карту»**\n\nВиртуальные карты выпускаются мгновенно. Мы принимаем **USDT (TRC20)** и **TON** для выпуска и пополнения. **Apple Pay** и **Google Pay** поддерживаются сразу!"
             },
             "issue_setup": {
-                en: "For activation: Ensure your KYC level is appropriate for the card type. Verification typically takes 5-10 minutes. If you experience issues with 3DS, make sure your internet connection is stable.",
-                ru: "Для активации: Убедитесь, что ваш уровень KYC соответствует типу карты. Верификация обычно занимает 5-10 минут. Если возникли проблемы с 3DS, проверьте стабильность интернет-соединения."
+                en: "For activation:\n\n• Ensure your **KYC level** is appropriate for the card type.\n• Verification typically takes **5-10 minutes**.\n• If you experience issues with 3DS, ensure your internet connection is stable.",
+                ru: "Для активации:\n\n• Убедитесь, что ваш **уровень KYC** соответствует типу карты.\n• Верификация обычно занимает **5-10 минут**.\n• Если возникли проблемы с 3DS, проверьте стабильность интернет-соединения."
             },
             "topup_limits": {
-                en: "Daily top-up limits start at $5,000 for verified users and go up to $50,000 for Level 2 partners. We use TRC20 for the fastest liquidity and lowest fees.",
-                ru: "Дневные лимиты на пополнение начинаются от $5,000 для верифицированных пользователей и доходят до $50,000 для партнеров 2-го уровня. Мы используем TRC20 для максимальной скорости и низких комиссий."
+                en: "Daily top-up limits start at **$5,000** for verified users and go up to **$50,000** for **Level 2** partners. We use **TRC20** for the fastest liquidity and lowest fees.",
+                ru: "Дневные лимиты на пополнение начинаются от **$5,000** для верифицированных пользователей и доходят до **$50,000** для **партнеров 2-го уровня**. Мы используем **TRC20** для максимальной скорости и низких комиссий."
             },
             "apple_google": {
-                en: "Absolutely! Pintopay Virtual Cards are fully compatible with Apple Pay and Google Pay. Just add your card details to your mobile wallet app and use it at any NFC-enabled terminal worldwide.",
-                ru: "Конечно! Виртуальные карты Pintopay полностью совместимы с Apple Pay и Google Pay. Просто добавьте данные карты в приложение кошелька на телефоне и используйте её в любом терминале с поддержкой NFC."
+                en: "Absolutely! **Pintopay Virtual Cards** are fully compatible with **Apple Pay** and **Google Pay**. Just add your card details to your mobile wallet app and use it at any NFC-enabled terminal worldwide.",
+                ru: "Конечно! **Виртуальные карты Pintopay** полностью совместимы с **Apple Pay** и **Google Pay**. Просто добавьте данные карты в приложение кошелька на телефоне и используйте её в любом терминале с поддержкой NFC."
             },
             "earnings": {
-                en: "Our network strategy is simple: Share your link, earn on issuance fees (up to 30%), and receive lifetime transaction rewards (up to 0.5%). Build a network of 5,000 partners to reach our $1/minute milestone!",
-                ru: "Наша сетевая стратегия проста: делитесь ссылкой, зарабатывайте на комиссиях за выпуск (до 30%) и получайте пожизненные вознаграждения за транзакции (до 0,5%). Постройте сеть из 5 000 партнеров, чтобы достичь цели $1 в минуту!"
+                en: "Our network strategy is simple:\n\n• Share your link\n• Earn on issuance fees (up to **30%**)\n• Receive lifetime transaction rewards (up to **0.5%**)\n\nBuild a network of **5,000 partners** to reach our **$1/minute** milestone!",
+                ru: "Наша сетевая стратегия проста:\n\n• Делитесь ссылкой\n• Зарабатывайте на комиссиях за выпуск (до **30%**)\n• Получайте пожизненные вознаграждения за транзакции (до **0,5%**)\n\nПостройте сеть из **5 000 партнеров**, чтобы достичь цели **$1 в минуту**!"
             },
             "security": {
-                en: "Pintopay uses banking-grade 3DS security and encrypted asset storage. If your card is lost, you can Freeze it instantly in the app. Pintopay will never ask for your private keys or passwords.",
-                ru: "Pintopay использует банковскую защиту 3DS и зашифрованное хранение активов. Если карта потеряна, вы можете мгновенно заморозить её в приложении. Pintopay никогда не запрашивает ваши приватные ключи или пароли."
+                en: "Pintopay uses **banking-grade 3DS security** and encrypted asset storage. If your card is lost, you can **Freeze** it instantly in the app. Pintopay will never ask for your private keys or passwords.",
+                ru: "Pintopay использует **банковскую защиту 3DS** и зашифрованное хранение активов. Если карта потеряна, вы можете **заморозить** её в приложении. Pintopay никогда не запрашивает ваши приватные ключи или пароли."
             },
             "trading_hub": {
-                en: "Our P2P Trading Hub is protected by a 24/7 Escrow system. If you encounter an issue during a trade, simply click the 'Dispute' button and a human moderator will join within minutes to resolve the situation.",
-                ru: "Наш P2P-хаб защищен системой Escrow, работающей 24/7. Если у вас возникла проблема во время сделки, просто нажмите кнопку «Апелляция», и наш модератор подключится в течение нескольких минут для решения вопроса."
+                en: "Our **P2P Trading Hub** is protected by a 24/7 **Escrow system**. If you encounter an issue during a trade, simply click the **'Dispute'** button and a human moderator will join within minutes to resolve the situation.",
+                ru: "Наш **P2P-хаб** защищен системой **Escrow**, работающей 24/7. Если у вас возникла проблема во время сделки, просто нажмите кнопку **«Апелляция»**, и наш модератор подключится в течение нескольких минут для решения вопроса."
             },
             "vip_line": {
-                en: "PRO members at Level 5+ get direct access to our Priority Executive Line. Your inquiries are handled by our top-tier neural agents and senior human supervisors with sub-5 minute response times.",
-                ru: "Партнеры уровня 5+ с PRO-статусом получают прямой доступ к Приоритетной Линии. Ваши запросы обрабатываются лучшими ИИ-агентами и старшими менеджерами с временем ответа менее 5 минут."
+                en: "**PRO members** at Level 5+ get direct access to our **Priority Executive Line**. Your inquiries are handled by our top-tier neural agents and senior human supervisors with sub-5 minute response times.",
+                ru: "**Партнеры уровня 5+ с PRO-статусом** получают прямой доступ к **Приоритетной Линии**. Ваши запросы обрабатываются лучшими ИИ-агентами и старшими менеджерами с временем ответа менее 5 минут."
             }
         };
 
@@ -415,9 +521,9 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                             <div className="absolute -inset-0.5 rounded-[inherit] bg-linear-to-br from-blue-500/10 to-indigo-500/10 opacity-50 blur-sm -z-10" />
                                         )}
 
-                                        <p className="text-[14px] leading-relaxed font-medium">
-                                            {renderMessageContent(msg.content)}
-                                        </p>
+                                        <div className="text-[14px] leading-relaxed font-medium">
+                                            {renderMessageContent(msg.content, msg.role)}
+                                        </div>
                                         <div className={`mt-1.5 flex items-center gap-1.5 text-[8px] font-black uppercase tracking-widest opacity-30 ${msg.role === 'user' ? 'justify-end text-blue-50' : 'text-slate-500 dark:text-slate-400'
                                             }`}>
                                             <Clock className="h-2.5 w-2.5" />

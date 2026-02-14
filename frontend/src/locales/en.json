@@ -37,7 +37,7 @@
         "manager": "Executive Manager",
         "online": "Direct Line Active",
         "priority_badge": "Priority Elite Support",
-        "welcome": "Welcome back, Partner. I am your Executive Support Manager. My mission is to ensure your Pintopay journey is frictionless and high-velocity. How can I assist you in dominating the market today?",
+        "welcome": "Welcome back, **Partner**. I am your **Executive Support Manager**. My mission is to ensure your Pintopay journey is **frictionless** and **high-velocity**. How can I assist you in **dominating the market** today?",
         "input_placeholder": "Command your request here...",
         "user_context": "Connected: {{name}} • Lvl {{level}}",
         "session_closed": "Protocol Terminated • History Saved",
