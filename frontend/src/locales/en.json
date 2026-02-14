@@ -1,7 +1,7 @@
 {
     "common": {
         "dashboard": "Dashboard",
-        "academy": "Grow Hacks",
+        "academy": "Academy",
         "wallet": "Wallet",
         "connect_wallet": "Connect Wallet",
         "language": "Language",
@@ -282,7 +282,7 @@
     "community": {
         "tabs": {
             "dashboard": "Dashboard",
-            "academy": "Grow Hacks"
+            "academy": "Academy"
         }
     },
     "blog": {
