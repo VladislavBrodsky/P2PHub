@@ -15,10 +15,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         const baseStyles = "inline-flex items-center justify-center rounded-xl font-bold transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none";
 
         const variants = {
-            primary: "bg-(--color-text-primary) text-(--color-bg-surface) hover:bg-opacity-90 shadow-lg",
-            secondary: "bg-(--color-bg-surface) text-(--color-text-primary) border border-(--color-brand-border) hover:bg-(--color-bg-app)",
+            primary: "bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-opacity-90 shadow-lg",
+            secondary: "bg-white text-slate-900 dark:bg-slate-900 dark:text-white border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-slate-800",
             danger: "bg-red-500 text-white hover:bg-red-600",
-            ghost: "text-(--color-text-primary) hover:bg-(--color-bg-app)"
+            ghost: "text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
         };
 
         const sizes = {
