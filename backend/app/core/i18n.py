@@ -18,7 +18,7 @@ MESSAGES = {
             "🤝 *New Direct Partner!* (L1)\n\n"
             "👤 {name}\n"
             "📈 *Status:* Just joined your first line!\n"
-            "💰 *Reward:* `+35 XP` credited.\n\n"
+            "💰 *Reward:* `+{xp} XP` credited.\n\n"
             "🚀 *Keep going!* Every direct invite builds your foundation."
         ),
         "referral_l2_congrats": (
@@ -26,7 +26,7 @@ MESSAGES = {
             "Someone just joined your *2nd level*!\n\n"
             "📊 *Referral Line:*\n"
             "{referral_chain}\n\n"
-            "💰 *Reward:* `+10 XP` credited.\n"
+            "💰 *Reward:* `+{xp} XP` credited.\n"
             "🚀 Your network is growing automatically!"
         ),
         "referral_deep_activity": (
@@ -34,7 +34,7 @@ MESSAGES = {
             "New partner joined at *Level {level}*!\n\n"
             "📊 *Referral Line:*\n"
             "{referral_chain}\n\n"
-            "💰 *Reward:* `+1 XP` credited.\n"
+            "💰 *Reward:* `+{xp} XP` credited.\n"
             "🏰 Your empire is expanding deep! 🌍"
         ),
         "level_up": (
@@ -95,7 +95,7 @@ MESSAGES = {
             "🤝 *Новый прямой партнер!* (L1)\n\n"
             "👤 {name}\n"
             "📈 *Статус:* Присоединился к вашей первой линии!\n"
-            "💰 *Награда:* `+35 XP` зачислено.\n\n"
+            "💰 *Награда:* `+{xp} XP` зачислено.\n\n"
             "🚀 *Так держать!* Каждое приглашение укрепляет ваш фундамент."
         ),
         "referral_l2_congrats": (
@@ -103,7 +103,7 @@ MESSAGES = {
             "Кто-то присоединился на ваш *2-й уровень*!\n\n"
             "📊 *Цепочка приглашений:*\n"
             "{referral_chain}\n\n"
-            "💰 *Награда:* `+10 XP` зачислено.\n"
+            "💰 *Награда:* `+{xp} XP` зачислено.\n"
             "🚀 Ваша сеть растет автоматически!"
         ),
         "referral_deep_activity": (
@@ -111,7 +111,7 @@ MESSAGES = {
             "Новый партнер на *Уровне {level}*!\n\n"
             "📊 *Цепочка приглашений:*\n"
             "{referral_chain}\n\n"
-            "💰 *Награда:* `+1 XP` зачислено.\n"
+            "💰 *Награда:* `+{xp} XP` зачислено.\n"
             "🏰 Ваша империя растет вглубь! 🌍"
         ),
         "level_up": (

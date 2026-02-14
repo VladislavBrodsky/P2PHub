@@ -76,8 +76,11 @@ async def process_referral_logic(partner_id: int):
                 logger.info(f"ℹ️ Referral XP already awarded for partner {partner_id}. Skipping...")
                 return
 
-            # Bulk Fetch all ancestors
+            # Bulk Fetch all ancestors (including direct referrer)
             lineage_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+            if partner.referrer_id and partner.referrer_id not in lineage_ids:
+                lineage_ids.append(partner.referrer_id)
+            
             lineage_ids = list(dict.fromkeys(lineage_ids))[-9:]
             
             statement = select(Partner).where(Partner.id.in_(lineage_ids))
@@ -87,6 +90,13 @@ async def process_referral_logic(partner_id: int):
 
             logger.info(f"🔄 Processing referral logic for partner {partner_id} (@{partner.username}).")
 
+            # #comment: Fetch bot info once to avoid repeated network calls inside the loop.
+            # This is a critical performance optimization to avoid rate-limiting.
+            from bot import bot
+            bot_info = await bot.get_me()
+            bot_username = bot_info.username.replace("@", "")
+            app_link = f"https://t.me/{bot_username}/app"
+
             new_partner_name = format_partner_name(partner)
             current_referrer_id = partner.referrer_id
             
@@ -95,7 +105,7 @@ async def process_referral_logic(partner_id: int):
             deferred_tasks = []
 
             # Prepare referral chain text for level 2+
-            # Chain looks like: You <- Referrer 1 <- Referrer 2 ... <- New Joiner
+            # Chain looks like: You ← Referrer 1 ← Referrer 2 ... ← New Joiner
             chain_list = ["You"]
             
             for level in range(1, 10):
@@ -166,11 +176,9 @@ async def process_referral_logic(partner_id: int):
                     redis_pipe.delete(f"ref_tree_members_v2:{referrer.id}:{level}")
                     for tf in ["24H", "7D", "1M", "3M", "6M", "1Y"]:
                         redis_pipe.delete(f"growth_metrics:{referrer.id}:{tf}")
-                    
+
                     # 5. Build Referral Chain for deeper levels
-                    # Chain: You <- Ref A <- Ref B ... <- New User
-                    # For Ref A (L1), they just see New User.
-                    # For Ref B (L2), they see You (Ref B) <- Ref A <- New User.
+                    # Chain: You ← Ref A ← Ref B ... ← New User
                     chain_text = " ← ".join(chain_list + [new_partner_name])
                     chain_list.append(format_partner_name(referrer))
 
@@ -178,10 +186,7 @@ async def process_referral_logic(partner_id: int):
                     lang = referrer.language_code or "en"
                     
                     # #comment: Add interactive "Premium" buttons to the notification.
-                    # This allows referrers to jump directly to their tree stats or the main app,
-                    # creating a high-velocity feedback loop and increasing platform retention.
-                    bot_info = await bot.get_me()
-                    app_link = f"https://t.me/{bot_info.username}/app"
+                    # Direct links to the app increase engagement and user retention.
                     buttons = [[
                         {"text": "📊 View Network", "url": app_link},
                         {"text": "🚀 Open App", "url": app_link}
@@ -205,9 +210,17 @@ async def process_referral_logic(partner_id: int):
                 
                 current_referrer_id = referrer.referrer_id
 
+            # 7. Finalize batch operations
             await session.commit()
+            
+            # #comment: Execute Redis invalidations after DB commit to ensure consistency.
+            # Using a pipeline reduces round-trips to Redis.
             await redis_pipe.execute()
-            await asyncio.gather(*deferred_tasks, return_exceptions=True)
+            
+            # #comment: Await all enqueued notifications in parallel.
+            # This ensures we don't leave lingering coroutines.
+            if deferred_tasks:
+                await asyncio.gather(*deferred_tasks, return_exceptions=True)
 
     except Exception as e:
         logger.error(f"Error in process_referral_logic: {e}", exc_info=True)
@@ -227,6 +240,12 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     result = await session.exec(statement)
     ancestor_map = {p.id: p for p in result.all()}
 
+    # #comment: Fetch bot info once to avoid repeated network calls inside the loop.
+    from bot import bot
+    bot_info = await bot.get_me()
+    bot_username = bot_info.username.replace("@", "")
+    app_link = f"https://t.me/{bot_username}/app"
+    
     current_referrer_id = partner.referrer_id
     for level in range(1, 10):
         if not current_referrer_id:
@@ -283,9 +302,6 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 # #comment: Embed "Check Balance" button in commission alerts.
                 # Direct links to financial summaries drive repetitive app usage and
                 # reinforce the reward value of being a partner.
-                from bot import bot
-                bot_info = await bot.get_me()
-                app_link = f"https://t.me/{bot_info.username}/app"
                 buttons = [[
                     {"text": "💰 Check Balance", "url": app_link},
                     {"text": "🚀 Open App", "url": app_link}
