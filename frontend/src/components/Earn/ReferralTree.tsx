@@ -17,7 +17,7 @@ export const ReferralTree = ({ stats }: ReferralTreeProps) => {
     const totalPartners = Object.values(stats).reduce((acc, curr) => acc + curr, 0);
 
     return (
-        <div className="bg-(--color-bg-surface) border border-(--color-brand-border) rounded-3xl p-6 shadow-sm overflow-hidden relative">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-3xl p-6 shadow-sm overflow-hidden relative">
             {/* Background Accent */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
 

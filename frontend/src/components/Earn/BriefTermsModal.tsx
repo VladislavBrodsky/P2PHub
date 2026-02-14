@@ -13,7 +13,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -26,7 +26,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                         animate={{ y: 0, opacity: 1, scale: 1 }}
                         exit={{ y: 100, opacity: 0, scale: 0.95 }}
                         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                        className="w-full max-w-md bg-(--color-surface) border border-(--color-border-glass) rounded-t-[2rem] md:rounded-[2rem] relative shadow-2xl overflow-hidden h-[85vh] md:max-h-[85vh] flex flex-col z-[100]"
+                        className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-t-[2rem] md:rounded-[2rem] relative shadow-2xl overflow-hidden h-[85vh] md:max-h-[85vh] flex flex-col z-100"
                     >
                         {/* Header */}
                         <div className="p-6 pb-4 border-b border-white/10 bg-slate-900/80 backdrop-blur-md sticky top-0 z-10">

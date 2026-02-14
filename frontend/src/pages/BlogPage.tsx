@@ -519,7 +519,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                 </div>
 
                 {/* Engagement Footer */}
-                <div className="pt-8 border-t border-(--color-border-glass) flex flex-col items-center gap-4 pb-12">
+                <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col items-center gap-4 pb-12">
                     <motion.button
                         whileTap={{ scale: 0.9 }}
                         onClick={onLike}

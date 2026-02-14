@@ -107,7 +107,7 @@ export const Footer = () => {
                                     animate={{ y: 0 }}
                                     exit={{ y: "100%" }}
                                     transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                                    className="pointer-events-auto bg-(--color-surface) border-t sm:border border-(--color-border-glass) w-full max-w-lg sm:rounded-3xl rounded-t-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col"
+                                    className="pointer-events-auto bg-white dark:bg-slate-900 border-t sm:border border-slate-200 dark:border-white/10 w-full max-w-lg sm:rounded-3xl rounded-t-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col"
                                 >
                                     {/* Header */}
                                     <div className="p-5 border-b border-slate-200 dark:border-white/10 flex justify-between items-center bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl relative z-10">
