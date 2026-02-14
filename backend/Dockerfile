@@ -22,8 +22,12 @@ RUN uv pip install --system --no-cache -r requirements.txt
 
 # Create non-root user and set permissions
 RUN groupadd -r appuser && useradd -r -g appuser appuser
-COPY --chown=appuser:appuser . .
 
+# Create generated_media directory with proper ownership for production image generation
+# This prevents "Permission denied" errors when Viral Studio generates images
+RUN mkdir -p /app/generated_media && chown -R appuser:appuser /app/generated_media
+
+COPY --chown=appuser:appuser . .
 
 ENV PYTHONUNBUFFERED=1
 

@@ -530,30 +530,13 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                     if img_response and getattr(img_response, 'generated_images', None):
                         image = img_response.generated_images[0]
                         filename = f"viral_{partner.id}_{secrets.token_hex(4)}.png"
-                        # Ensure absolute path regardless of CWD
-                        backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
                         
-                        # Try generated_media first (production), fallback to /tmp (local dev with macOS restrictions)
+                        # Production path: /app/generated_media (created with proper permissions in Dockerfile)
+                        backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
                         save_dir = os.path.join(backend_dir, "generated_media")
-                        os.makedirs(save_dir, exist_ok=True)
                         save_path = os.path.join(save_dir, filename)
                         
-                        # Test write permission with binary write (matches actual operation)
-                        use_tmp_fallback = False
-                        try:
-                            test_file = os.path.join(save_dir, ".write_test.png")
-                            with open(test_file, 'wb') as f:
-                                f.write(b"test")
-                            os.remove(test_file)
-                        except (OSError, PermissionError) as e:
-                            # Fallback to /tmp for local development with restrictions
-                            logger.warning(f"⚠️ Cannot write binary to {save_dir} ({e}), using /tmp for local dev")
-                            save_dir = "/tmp/p2phub_generated"
-                            os.makedirs(save_dir, exist_ok=True)
-                            save_path = os.path.join(save_dir, filename)
-                            use_tmp_fallback = True
-                        
-                        # Save image directly now that we have /tmp fallback for local dev
+                        # Save image to production directory
                         try:
                             from io import BytesIO
                             
@@ -567,20 +550,16 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                             with open(save_path, 'wb') as f:
                                 f.write(buffer.getvalue())
                             
-                            logger.info(f"✅ Imagen: Successfully saved {model_name} output to {save_path}")
+                            logger.info(f"✅ Imagen: Saved {model_name} image to {save_path}")
                         except Exception as save_err:
-                            logger.error(f"❌ Failed to save image to disk: {save_err}")
+                            logger.error(f"❌ Failed to save image: {save_err}")
                             return None
                         
-                        self._last_working_imagen_model = model_name # Update memory
+                        # Remember working model for optimization
+                        self._last_working_imagen_model = model_name
                         
-                        # Return correct URL based on storage location
-                        if use_tmp_fallback:
-                            # For local dev with /tmp, return file:// URL (won't work in production but this is dev-only)
-                            return f"file://{save_path}"
-                        else:
-                            # Production path served by FastAPI
-                            return f"/generated_media/{filename}"
+                        # Return production URL served by FastAPI
+                        return f"/generated_media/{filename}"
                 except Exception as e:
                     logger.warning(f"⚠️ Imagen {model_name} failed/timed out: {e}")
                     continue
