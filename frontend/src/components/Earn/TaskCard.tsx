@@ -33,7 +33,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
 
     // Visual Variations
     const variants = {
-        LOCKED: 'opacity-40 grayscale-[0.8] cursor-not-allowed border-(--color-border-glass) bg-slate-900/40',
+        LOCKED: 'opacity-40 grayscale-[0.8] cursor-not-allowed border-white/10 bg-slate-900/40',
         AVAILABLE: 'bg-white/80 dark:bg-slate-900/60 border-slate-200 dark:border-white/10 hover:border-blue-500/50 hover:shadow-premium-xl dark:hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] cursor-pointer text-text-primary group/card backdrop-blur-3xl shadow-sm',
         VERIFYING: 'bg-blue-500/5 border-blue-500/30 dark:bg-blue-500/10 cursor-wait backdrop-blur-2xl',
         CLAIMABLE: 'bg-emerald-500/5 dark:bg-emerald-500/10 border-emerald-500/60 shadow-[0_0_25px_rgba(16,185,129,0.15)] animate-premium-pulse cursor-pointer group/card backdrop-blur-3xl',
