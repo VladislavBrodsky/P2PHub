@@ -31,7 +31,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
     };
 
     return (
-        <div className="fixed inset-0 z-200 overflow-hidden">
+        <div className="fixed inset-0 z-200 overflow-hidden bg-slate-950">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={index}

@@ -156,7 +156,7 @@ export default function SubscriptionPage() {
                 <motion.h1
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-4xl font-black mb-4 tracking-tighter text-(--color-text-primary)"
+                    className="text-4xl font-black mb-4 tracking-tighter text-slate-900 dark:text-white"
                 >
                     <Trans i18nKey="subscription.pro_active.title">
                         WELCOME TO THE <span className="text-linear-to-r from-amber-400 to-orange-600 bg-clip-text text-transparent">ELITE</span>
@@ -167,7 +167,7 @@ export default function SubscriptionPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
-                    className="text-(--color-text-secondary) font-medium text-sm leading-relaxed max-w-[280px] mb-10"
+                    className="text-slate-500 dark:text-slate-400 font-medium text-sm leading-relaxed max-w-[280px] mb-10"
                 >
                     {t('subscription.pro_active.desc')}
                 </motion.p>
@@ -196,7 +196,7 @@ export default function SubscriptionPage() {
 
                     <button
                         onClick={() => window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'partner' }))}
-                        className="w-full h-16 bg-white/5 border border-white/10 rounded-2xl font-black text-(--color-text-secondary) active:scale-95 transition-all flex items-center justify-center gap-3"
+                        className="w-full h-16 bg-white/5 border border-white/10 rounded-2xl font-black text-slate-500 dark:text-slate-400 active:scale-95 transition-all flex items-center justify-center gap-3"
                     >
                         {t('subscription.pro_active.explore_empire')}
                         <ChevronRight size={20} />
@@ -218,12 +218,12 @@ export default function SubscriptionPage() {
                     <Sparkles size={12} className="text-amber-500" />
                     <span className="text-[9px] font-black uppercase tracking-widest text-amber-600">{t('subscription.upgrade.badge')}</span>
                 </div>
-                <h1 className="text-3xl font-black text-(--color-text-primary) mb-2 tracking-tight">
+                <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">
                     <Trans i18nKey="subscription.upgrade.title">
                         Upgrade to <span className="text-linear-to-br from-amber-500 to-orange-600 bg-clip-text text-transparent">PRO</span>
                     </Trans>
                 </h1>
-                <p className="text-(--color-text-secondary) font-medium text-xs leading-relaxed max-w-[260px] mx-auto">
+                <p className="text-slate-500 dark:text-slate-400 font-medium text-xs leading-relaxed max-w-[260px] mx-auto">
                     {t('subscription.upgrade.desc')}
                 </p>
             </motion.div>
@@ -381,15 +381,15 @@ export default function SubscriptionPage() {
                             <motion.div
                                 initial={{ scale: 0.9, y: 20 }}
                                 animate={{ scale: 1, y: 0 }}
-                                className="bg-(--color-bg-surface) rounded-[2.5rem] p-8 w-full max-w-sm text-center shadow-2xl"
+                                className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 w-full max-w-sm text-center shadow-2xl"
                             >
                                 {status === 'pending' && (
                                     <>
                                         <div className="w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                                             <Loader2 size={40} className="text-amber-500 animate-spin" />
                                         </div>
-                                        <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">{t('subscription.status.verifying')}</h2>
-                                        <p className="text-sm text-(--color-text-secondary) mb-8">
+                                        <h2 className="text-2xl font-black mb-3 text-slate-900 dark:text-white">{t('subscription.status.verifying')}</h2>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">
                                             {t('subscription.status.verifying_p')}
                                         </p>
                                     </>
@@ -400,8 +400,8 @@ export default function SubscriptionPage() {
                                         <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                                             <CheckCircle2 size={40} className="text-emerald-500" />
                                         </div>
-                                        <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">{t('subscription.status.welcome_pro')}</h2>
-                                        <p className="text-sm text-(--color-text-secondary) mb-8">
+                                        <h2 className="text-2xl font-black mb-3 text-slate-900 dark:text-white">{t('subscription.status.welcome_pro')}</h2>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">
                                             {t('subscription.status.welcome_pro_p')}
                                         </p>
                                         <button
@@ -418,8 +418,8 @@ export default function SubscriptionPage() {
                                         <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                                             <CreditCard size={40} className="text-blue-500" />
                                         </div>
-                                        <h2 className="text-2xl font-black mb-3 text-(--color-text-primary)">{t('subscription.status.submitted')}</h2>
-                                        <p className="text-sm text-(--color-text-secondary) mb-8">
+                                        <h2 className="text-2xl font-black mb-3 text-slate-900 dark:text-white">{t('subscription.status.submitted')}</h2>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">
                                             {t('subscription.status.submitted_p')}
                                         </p>
                                         <button

@@ -41,7 +41,7 @@ import { useUI } from './context/UIContext';
 
 const OnboardingStory = lazy(() => import('./components/Onboarding/OnboardingStory').then(m => ({ default: m.OnboardingStory })));
 
-function AppContent({ onReady }: { onReady: () => void }) {
+function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnboarding: boolean }) {
     const { t } = useTranslation();
     const { config } = useConfig();
     const { isSupportOpen, setSupportOpen } = useUI();
@@ -162,6 +162,9 @@ function AppContent({ onReady }: { onReady: () => void }) {
             if (cleanup) cleanup();
         };
     }, [activeTab]);
+
+    // If strictly onboarding, don't render heavy layout/pages to save resources
+    if (showOnboarding) return null;
 
     return (
         <Layout activeTab={activeTab} setActiveTab={setActiveTab} prefetchPages={prefetchPages}>
@@ -329,7 +332,7 @@ function App() {
                             </Suspense>
                         )}
                     </AnimatePresence>
-                    <AppContent onReady={complete} />
+                    <AppContent onReady={complete} showOnboarding={showOnboarding} />
                 </LazyMotion>
             </div>
         </UIProvider>
