@@ -318,9 +318,9 @@ class PaymentService:
 
             logger.info(f"Partner {partner.telegram_id} upgraded to PRO via {currency}")
             return True
-    except Exception as e:
-        sentry_sdk.capture_exception(e)
-        logger.error(f"❌ PRO Upgrade Failed for {partner.telegram_id}: {e}")
-        raise e
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            logger.error(f"❌ PRO Upgrade Failed for {partner.telegram_id}: {e}")
+            raise e
 
 payment_service = PaymentService()
