@@ -122,6 +122,9 @@ export default function ReferralPage() {
         notification('success');
 
         try {
+            // PRO members get 5x XP bonus
+            const effectiveXP = user?.is_pro ? task.reward * 5 : task.reward;
+
             // Persist to backend - Payload matches TaskClaimRequest schema
             await apiClient.post(`/api/partner/tasks/${task.id}/claim`, {
                 xp_reward: task.reward
@@ -135,7 +138,7 @@ export default function ReferralPage() {
             setClaimableTasks(newClaimable);
             localStorage.setItem('p2p_claimable_tasks', JSON.stringify(newClaimable));
 
-            const newXP = currentXP + task.reward;
+            const newXP = currentXP + effectiveXP;
             const newLevel = getLevel(newXP);
 
             // Update local user state immediately for UI feedback
@@ -514,6 +517,7 @@ export default function ReferralPage() {
                 currentLevel={currentLevel}
                 referrals={referrals}
                 checkinStreak={user?.checkin_streak || 0}
+                isPro={user?.is_pro}
                 // #comment: Pass active tasks to grid for status determination
                 activeTasks={user?.active_tasks}
                 onTaskClick={handleTaskClick}

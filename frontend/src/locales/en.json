@@ -528,6 +528,7 @@
         "claim": "Claim Reward",
         "start": "Start Mission",
         "level_short": "Lvl",
+        "pro_multiplier": "x5 XP Bonus",
         "telegram_bot": {
             "title": "Open Pintopay Bot",
             "desc": "Start your journey with our official bot."

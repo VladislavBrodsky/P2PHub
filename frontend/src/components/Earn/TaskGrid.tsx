@@ -12,6 +12,7 @@ interface TaskGridProps {
     currentLevel: number;
     referrals: number;
     checkinStreak: number;
+    isPro?: boolean;
     activeTasks?: ActiveTask[];
     onTaskClick: (task: Task) => void;
     onClaim: (task: Task) => void;
@@ -25,6 +26,7 @@ export const TaskGrid = ({
     currentLevel,
     referrals,
     checkinStreak,
+    isPro,
     activeTasks,
     onTaskClick,
     onClaim
@@ -96,6 +98,7 @@ export const TaskGrid = ({
                                 userReferrals={referrals} // Keep for legacy or debug?
                                 checkinStreak={checkinStreak}
                                 countdown={verifyingTasks[task.id]}
+                                isPro={!!isPro} // Pass pro status
                                 onClick={() => onTaskClick(task)}
                                 onClaim={() => onClaim(task)}
                             />
