@@ -12,11 +12,11 @@ export function CardTabSwitcher({ selectedTab, onSelect }: CardTabSwitcherProps)
 
     return (
         <div className="px-6 mb-8 flex justify-center">
-            <div className="bg-(--color-brand-border)/30 p-1 rounded-xl flex gap-1 w-full max-w-sm relative">
+            <div className="bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl flex gap-1 w-full max-w-sm relative">
                 {/* Active Indicator Background */}
                 <div className="absolute inset-1 flex pointer-events-none" aria-hidden="true">
                     <motion.div
-                        className="absolute inset-y-0 bg-(--color-bg-surface) rounded-lg shadow-sm z-0"
+                        className="absolute inset-y-0 bg-white dark:bg-slate-900 rounded-lg shadow-sm z-0"
                         layout={false}
                         initial={false}
                         animate={{
@@ -34,7 +34,7 @@ export function CardTabSwitcher({ selectedTab, onSelect }: CardTabSwitcherProps)
                     <button
                         key={tab}
                         onClick={() => onSelect(tab)}
-                        className={`relative z-10 flex-1 py-1.5 text-xs font-semibold rounded-lg capitalize transition-colors duration-200 ${selectedTab === tab ? 'text-(--color-text-primary)' : 'text-(--color-text-secondary) hover:text-(--color-text-primary)'
+                        className={`relative z-10 flex-1 py-1.5 text-xs font-semibold rounded-lg capitalize transition-colors duration-200 ${selectedTab === tab ? 'text-slate-900 dark:text-white' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
                             }`}
                     >
                         {t(`cards.tabs.${tab}`)}
