@@ -55,7 +55,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
             viewport={{ once: true, margin: "-50px" }}
             whileHover={{ scale: 1.02, zIndex: 50 }}
             whileTap={{ scale: 0.98 }}
-            style={{ transformStyle: "preserve-3d" }}
+            style={{}}
             onClick={() => !isLocked && onClick(stage)}
             className={cn(
                 "relative group cursor-pointer w-full flex justify-center py-5",
@@ -85,7 +85,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                     isCompleted ? "bg-emerald-500/10 border-emerald-500/30" :
                         isLocked ? "bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10" :
                             "bg-white dark:bg-white/10 border-slate-200 dark:border-white/20 shadow-md"
-            )} style={{ transform: "translateZ(30px)" }}>
+            )} style={{}}>
                 {/* Visual indicator for current stage */}
                 {isCurrent && (
                     <motion.div
@@ -135,7 +135,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                 "absolute top-1/2 -translate-y-1/2 w-[130px] min-[375px]:w-[145px] sm:w-[160px] flex flex-col p-3.5 rounded-2xl glass-panel-premium border-white/5 transition-all duration-500 group-hover:border-blue-500/30 group-hover:bg-white/10 dark:group-hover:bg-white/5",
                 isLeft ? "left-[calc(50%+42px)] text-left" : "right-[calc(50%+42px)] text-right items-end",
                 isLocked ? "opacity-30 grayscale blur-[0.5px]" : "opacity-100 shadow-xl"
-            )} style={{ transform: "translateZ(20px)" }}>
+            )} style={{}}>
                 <h4 className={cn(
                     "text-[10px] font-black uppercase tracking-tight leading-tight",
                     isLocked ? "text-slate-500" : "text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors"

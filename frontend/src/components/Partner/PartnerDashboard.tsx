@@ -345,6 +345,7 @@ export const PartnerDashboard = () => {
 const EarningsList = () => {
     const [earnings, setEarnings] = React.useState<any[]>([]);
     const [loading, setLoading] = React.useState(true);
+    const { t } = useTranslation();
 
     React.useEffect(() => {
         const fetchEarnings = async () => {
@@ -359,6 +360,29 @@ const EarningsList = () => {
         };
         fetchEarnings();
     }, []);
+
+    const formatEarningDescription = (desc: string) => {
+        if (!desc) return '';
+
+        // Handle "Task Reward: invite_10_friends" -> "Task Reward: Network Builder"
+        if (desc.startsWith('Task Reward: ')) {
+            const taskId = desc.replace('Task Reward: ', '').trim();
+            // Try to find translation for task title
+            const taskTitleKey = `tasks.${taskId}.title`;
+            const translatedTitle = t(taskTitleKey);
+
+            // If translation exists and is different from key, use it
+            if (translatedTitle && translatedTitle !== taskTitleKey) {
+                return `${translatedTitle}`;
+            }
+
+            // Fallback: prettier format of the key
+            return taskId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        }
+
+        // Handle "(Level X)" -> "(LX)"
+        return desc.replace('(Level ', '(L');
+    };
 
     if (loading) {
         return (
@@ -422,7 +446,9 @@ const EarningsList = () => {
                                 {React.cloneElement(styles.icon as React.ReactElement, { className: 'w-3 h-3' })}
                             </div>
                             <div className='flex flex-col'>
-                                <span className="font-bold text-slate-900 dark:text-white text-[10.5px] leading-tight">{earning.description.replace('(Level ', '(L')}</span>
+                                <span className="font-bold text-slate-900 dark:text-white text-[10.5px] leading-tight">
+                                    {formatEarningDescription(earning.description)}
+                                </span>
                                 <span className="text-[7.5px] text-slate-500 opacity-50 font-medium">
                                     {new Date(earning.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                 </span>

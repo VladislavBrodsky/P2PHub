@@ -11,7 +11,7 @@ export const PartnerAcademy = () => {
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700 pt-4">
             {/* Academy Elite Header */}
-            <div className="relative group overflow-hidden rounded-[3rem] p-1 shadow-2xl perspective-1000">
+            <div className="relative group overflow-hidden rounded-[3rem] p-1 shadow-2xl">
                 <div className="absolute inset-0 branding-liquid-gradient opacity-95 group-hover:opacity-100 transition-opacity" />
                 <div className="absolute inset-0 vibing-blue-animated opacity-10" />
 
@@ -64,11 +64,11 @@ export const PartnerAcademy = () => {
 
             {/* Sticky Bottom Footer (Educational Callout) */}
             {isFooterVisible && (
-                <div className="fixed bottom-32 left-1/2 -translate-x-1/2 z-40 w-full max-w-[260px] px-2">
+                <div className="fixed bottom-32 left-1/2 -translate-x-1/2 z-40 w-full max-w-[260px] px-2 pointer-events-none">
                     <motion.div
                         initial={{ y: 50, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        className="glass-panel-premium rounded-[1.5rem] p-2 border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex items-center justify-between gap-3 bg-white/80 dark:bg-[#0f172a]/40 backdrop-blur-3xl ring-1 ring-white/10"
+                        className="glass-panel-premium rounded-[1.5rem] p-2 border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex items-center justify-between gap-3 bg-white/80 dark:bg-[#0f172a]/40 backdrop-blur-3xl ring-1 ring-white/10 pointer-events-auto"
                     >
                         <div className="flex items-center gap-2 pl-2">
                             <div className="w-9 h-9 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg ring-1 ring-white/30 text-white">

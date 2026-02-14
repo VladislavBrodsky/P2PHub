@@ -42,7 +42,7 @@ export const AcademyCareerStair = () => {
     };
 
     return (
-        <div className="relative flex flex-col items-center w-full mx-auto perspective-1000">
+        <div className="relative flex flex-col items-center w-full mx-auto">
             <div className="w-full flex flex-col items-center">
                 {stages.map((stage, index) => {
                     const isCompleted = user?.completed_stages?.includes(stage.id);

@@ -62,6 +62,14 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
         }
     }, [isUserLoading, config, onReady, updateProgress, t]);
 
+    // Handle deep linking via startapp param
+    useEffect(() => {
+        const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
+        if (startParam === 'network') {
+            setActiveTab('partner');
+        }
+    }, []);
+
     // Track visited tabs to keep components mounted after first load
     useEffect(() => {
         if (!visitedTabs.has(activeTab)) {

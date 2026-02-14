@@ -200,7 +200,7 @@ async def process_referral_logic(partner_id: int):
                     # #comment: Add interactive "Premium" buttons to the notification.
                     # Direct links to the app increase engagement and user retention.
                     buttons = [[
-                        {"text": "📊 View Network", "url": app_link},
+                        {"text": "📊 View Network", "url": f"{app_link}?startapp=network"},
                         {"text": "🚀 Open App", "url": app_link}
                     ]]
 
