@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
 
-// #comment: Added onOpenInfo prop to support opening the briefing modal from the header button
-export const TopPartnersList = ({ onOpenInfo }: { onOpenInfo?: () => void }) => {
+export const TopPartnersList = () => {
     // #comment: Removed unused 't' variable from useTranslation to address linting warnings
     const { t } = useTranslation();
     const [topPartners, setTopPartners] = React.useState<any[]>([]);
@@ -22,18 +21,16 @@ export const TopPartnersList = ({ onOpenInfo }: { onOpenInfo?: () => void }) => 
             } catch (e) {
                 // Fallback / Mock for UI dev
                 setTopPartners([
-                    { id: 1, first_name: 'Alex', last_name: 'V.', username: 'alexv', xp: 12500, referrals_count: 84, rank: 'Global Partner' },
-                    { id: 2, first_name: 'Elena', last_name: 'S.', username: 'elenas', xp: 9800, referrals_count: 52, rank: 'President' },
-                    { id: 3, first_name: 'Dmitry', last_name: 'K.', username: 'dimk', xp: 8200, referrals_count: 41, rank: 'Director' },
-                    { id: 4, first_name: 'Sarah', last_name: 'J.', username: 'sarahj', xp: 7500, referrals_count: 38, rank: 'Director' },
-                    { id: 5, first_name: 'Mike', last_name: 'T.', username: 'miket', xp: 6800, referrals_count: 35, rank: 'Manager' },
-                    { id: 6, first_name: 'Jessica', last_name: 'L.', username: 'jessl', xp: 6200, referrals_count: 32, rank: 'Manager' },
-                    { id: 7, first_name: 'David', last_name: 'W.', username: 'davidw', xp: 5900, referrals_count: 29, rank: 'Manager' },
-                    { id: 8, first_name: 'Anna', last_name: 'M.', username: 'annam', xp: 5500, referrals_count: 27, rank: 'Partner' },
-                    { id: 9, first_name: 'Chris', last_name: 'P.', username: 'chrisp', xp: 5100, referrals_count: 25, rank: 'Partner' },
-                    { id: 10, first_name: 'John', last_name: 'D.', username: 'johnd', xp: 4800, referrals_count: 22, rank: 'Partner' },
-                    { id: 11, first_name: 'Maria', last_name: 'G.', username: 'mariag', xp: 4500, referrals_count: 20, rank: 'Partner' },
-                    { id: 12, first_name: 'Tom', last_name: 'H.', username: 'tomh', xp: 4200, referrals_count: 18, rank: 'Partner' }
+                    { id: 1, first_name: 'Vitaliy', last_name: '', username: 'vitaliy', xp: 4750, referrals_count: 432, rank: 'CONTRIBUTOR' },
+                    { id: 2, first_name: 'Den', last_name: '', username: 'den', xp: 4636, referrals_count: 387, rank: 'CONTRIBUTOR' },
+                    { id: 3, first_name: 'Stas', last_name: '', username: 'stas', xp: 4626, referrals_count: 354, rank: 'CONTRIBUTOR' },
+                    { id: 4, first_name: 'Alex', last_name: 'V.', username: 'alexv', xp: 4250, referrals_count: 312, rank: 'Partner' },
+                    { id: 5, first_name: 'Elena', last_name: 'S.', username: 'elenas', xp: 3800, referrals_count: 284, rank: 'Partner' },
+                    { id: 6, first_name: 'Dmitry', last_name: 'K.', username: 'dimk', xp: 3200, referrals_count: 241, rank: 'Partner' },
+                    { id: 7, first_name: 'Sarah', last_name: 'J.', username: 'sarahj', xp: 2500, referrals_count: 198, rank: 'Partner' },
+                    { id: 8, first_name: 'Mike', last_name: 'T.', username: 'miket', xp: 1800, referrals_count: 165, rank: 'Partner' },
+                    { id: 9, first_name: 'Jessica', last_name: 'L.', username: 'jessl', xp: 1200, referrals_count: 142, rank: 'Partner' },
+                    { id: 10, first_name: 'David', last_name: 'W.', username: 'davidw', xp: 900, referrals_count: 138, rank: 'Partner' }
                 ]);
             } finally {
                 setLoading(false);
@@ -57,13 +54,6 @@ export const TopPartnersList = ({ onOpenInfo }: { onOpenInfo?: () => void }) => 
                         {t('leaderboard.top_partners')}
                     </h3>
                 </div>
-                {/* #comment: Replaced 'Live Updates' with 'REFERRAL.INFO' button with pill styling */}
-                <button
-                    onClick={onOpenInfo}
-                    className="bg-blue-100 dark:bg-blue-500/20 hover:bg-blue-200 dark:hover:bg-blue-500/30 active:scale-95 transition-all text-blue-600 dark:text-blue-400 px-4 py-1.5 rounded-full flex items-center justify-center shadow-sm border border-blue-500/10"
-                >
-                    <span className="text-[10px] font-black tracking-widest uppercase">{t('referral.info')}</span>
-                </button>
             </div>
 
             <div className="space-y-2">

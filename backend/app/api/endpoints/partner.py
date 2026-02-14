@@ -340,6 +340,12 @@ async def get_top_partners(
 
     top_data = []
     for p in partners:
+        # #comment: Deterministic realism injection for social proof (user request)
+        # Ensures top partners always appear to have 133-437 members if actual count is low.
+        display_refs = p.referral_count
+        if display_refs < 133:
+            display_refs = 133 + ((p.id * 17) % (437 - 133 + 1))
+
         top_data.append({
             "id": p.id,
             "first_name": p.first_name,
@@ -348,7 +354,7 @@ async def get_top_partners(
             "photo_file_id": p.photo_file_id,
             "photo_url": p.photo_url,
             "xp": p.xp,
-            "referrals_count": p.referral_count,
+            "referrals_count": display_refs,
             "rank": get_rank(p.xp)
         })
 
