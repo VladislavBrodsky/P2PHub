@@ -85,6 +85,10 @@ async def process_referral_logic(partner_id: int):
             redis_pipe = redis_service.client.pipeline(transaction=True)
             deferred_tasks = []
 
+            # Prepare referral chain text for level 2+
+            # Chain looks like: You <- Referrer 1 <- Referrer 2 ... <- New Joiner
+            chain_list = ["You"]
+            
             for level in range(1, 10):
                 if not current_referrer_id:
                     break
@@ -152,9 +156,22 @@ async def process_referral_logic(partner_id: int):
                     for tf in ["24H", "7D", "1M", "3M", "6M", "1Y"]:
                         redis_pipe.delete(f"growth_metrics:{referrer.id}:{tf}")
                     
-                    # 5. Queue Notification
+                    # 5. Build Referral Chain for deeper levels
+                    # Chain: You <- Ref A <- Ref B ... <- New User
+                    # For Ref A (L1), they just see New User.
+                    # For Ref B (L2), they see You (Ref B) <- Ref A <- New User.
+                    chain_text = " ← ".join(chain_list + [new_partner_name])
+                    chain_list.append(format_partner_name(referrer))
+
+                    # 6. Queue Notification with CORRECT Keys
                     lang = referrer.language_code or "en"
-                    msg = get_msg(lang, "referral_l1" if level == 1 else "referral_deep", name=new_partner_name, xp=xp_gain, level=level)
+                    if level == 1:
+                        msg = get_msg(lang, "referral_l1_congrats", name=new_partner_name, xp=xp_gain)
+                    elif level == 2:
+                        msg = get_msg(lang, "referral_l2_congrats", referral_chain=chain_text, xp=xp_gain)
+                    else:
+                        msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=chain_text, xp=xp_gain)
+                    
                     deferred_tasks.append(notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg))
 
                 except Exception as core_error:
@@ -237,9 +254,9 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
 
             try:
                 lang = referrer.language_code or "en"
-                # Consistently use the same message key
+                # Fixed: Use CORRECT key from i18n.py (commission_received)
                 buyer_name = format_partner_name(partner)
-                msg = get_msg(lang, "referral_commission", amount=round(commission, 2), level=level, from_user=buyer_name)
+                msg = get_msg(lang, "commission_received", amount=round(commission, 2), level=level, from_user=buyer_name)
                 await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
             except Exception as e:
                 logger.error(f"Failed to notify {referrer.id} about commission: {e}")

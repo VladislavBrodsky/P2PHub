@@ -72,13 +72,19 @@ async def cmd_start(message: types.Message):
             # Personal referral link
             bot_info = await bot.get_me()
             referral_link = f"https://t.me/{bot_info.username}?start={partner.referral_code}"
-
-            # Get localized messages
-            welcome_text = get_msg(lang, "welcome", referral_link=referral_link)
+            
+            # Localized messaging
             share_text = get_msg(lang, "share_text")
-
             # Construct direct sharing URL
             share_url = f"https://t.me/share/url?url={urllib.parse.quote(referral_link)}&text={urllib.parse.quote(share_text)}"
+            
+            if is_new:
+                welcome_text = get_msg(lang, "welcome", referral_link=referral_link, id=partner.id)
+                logging.info(f"✨ New partner registered: {partner.id}")
+            else:
+                # Optimized welcome for returning users
+                welcome_text = get_msg(lang, "welcome_back", name=partner.first_name or "Partner")
+                logging.info(f"👋 Returning partner: {partner.id}")
 
             await message.answer(
                 welcome_text,
@@ -257,6 +263,11 @@ async def callback_support_category(callback: types.CallbackQuery):
 async def callback_buy_pro(callback: types.CallbackQuery):
     await handle_buy_pro(callback.message)
     await callback.answer()
+
+@dp.message(Command("pro", "upgrade", "elite"))
+async def cmd_buy_pro(message: types.Message):
+    """Direct command to open PRO upgrade flow."""
+    await handle_buy_pro(message)
 
 async def handle_buy_pro(message: types.Message):
     from app.core.keyboards import get_pro_payment_keyboard

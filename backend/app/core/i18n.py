@@ -2,11 +2,17 @@ MESSAGES = {
     "en": {
         "welcome": (
             "💎 **Welcome to Pintopay Partner**\n\n"
-            "🥳 You are early! \n\n"
+            "🥳 You are early! \n"
+            "You are Elite Partner **#{id}**. \n\n"
             "Join the revolution in Fintech & Web3 payments!\n"
             "Earn XP, grow your influence, and unlock exclusive rewards!\n\n"
             "🔗 Your Referral Link:\n`{referral_link}`\n\n"
             "👇 Open Partner App"
+        ),
+        "welcome_back": (
+            "👋 **Welcome Back, {name}!**\n\n"
+            "Your network never sleeps. Check your latest growth and earnings in the Partner App below!\n\n"
+            "🚀 Let's reach the next tier today."
         ),
         "referral_l1_congrats": (
             "🤝 *New Direct Partner!* (L1)\n\n"
@@ -61,7 +67,7 @@ MESSAGES = {
         "commission_received": (
             "💰 *COMMISSION ALERT!* (Level {level})\n\n"
             "You just received `${amount} USDT`! 💸\n"
-            "Someone in your deep network (Level {level}) just upgraded to PRO.\n\n"
+            "Partner **{from_user}** in your deep network (Level {level}) just upgraded to PRO.\n\n"
             "🌟 *The Power of Passivity:* Your network is working for you 24/7. This is just the beginning of your x10 profit journey! 📈"
         ),
         "viral_share_caption": (
@@ -73,11 +79,17 @@ MESSAGES = {
     "ru": {
         "welcome": (
             "💎 **Добро пожаловать в Pintopay Partner**\n\n"
-            "🥳 Вы в числе первых!\n\n"
+            "🥳 Вы в числе первых!\n"
+            "Вы стали Элитным Партнером **#{id}**. \n\n"
             "Присоединяйтесь к революции в Fintech и Web3 платежах!\n"
             "Зарабатывайте XP, растите свое влияние и открывайте эксклюзивные награды!\n\n"
             "🔗 Ваша реферальная ссылка:\n`{referral_link}`\n\n"
             "👇 Открыть Partner App"
+        ),
+        "welcome_back": (
+            "👋 **С возвращением, {name}!**\n\n"
+            "Ваша сеть никогда не спит. Проверьте последние обновления и рост вашей структуры в приложении!\n\n"
+            "🚀 Время достичь новых вершин сегодня."
         ),
         "referral_l1_congrats": (
             "🤝 *Новый прямой партнер!* (L1)\n\n"
@@ -132,7 +144,7 @@ MESSAGES = {
         "commission_received": (
             "💰 *АЛЕРТ О КОМИССИИ!* (Уровень {level})\n\n"
             "Вы только что получили `${amount} USDT`! 💸\n"
-            "Кто-то в вашей глубокой сети (Уровень {level}) только что перешел на PRO.\n\n"
+            "Партнер **{from_user}** из вашей сети (Уровень {level}) только что перешел на PRO.\n\n"
             "🌟 *Сила Пассивности:* Ваша сеть работает на вас 24/7. Это только начало вашего пути к x10 прибыли! 📈"
         ),
         "viral_share_caption": (
