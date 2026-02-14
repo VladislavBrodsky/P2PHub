@@ -1,6 +1,6 @@
-/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { apiClient } from '../api/client';
+import * as Sentry from "@sentry/react";
 import { getSafeLaunchParams } from '../utils/tma';
 import { useStartupProgress } from './StartupProgressContext';
 
@@ -230,6 +230,22 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         window.addEventListener('focus', handleFocus);
         return () => window.removeEventListener('focus', handleFocus);
     }, [refreshUser]);
+
+    // #comment: Sentry User Context Sync
+    // This allows us to search Sentry issues by telegram_id or username.
+    useEffect(() => {
+        if (user) {
+            Sentry.setUser({
+                id: user.telegram_id,
+                username: user.username || undefined,
+                email: undefined, // TWA users don't have email in initial payload
+            });
+            Sentry.setTag("is_pro", user.is_pro);
+            Sentry.setTag("level", user.level);
+        } else {
+            Sentry.setUser(null);
+        }
+    }, [user]);
 
     const contextValue = React.useMemo(() => ({
         user,

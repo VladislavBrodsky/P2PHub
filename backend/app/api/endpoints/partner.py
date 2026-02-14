@@ -839,6 +839,7 @@ async def claim_task_reward(
     session.add(task_earning)
 
     # 2. Update partner stats
+    xp_before = partner.xp
     
     # Atomic XP Increment
     await session.execute(
@@ -849,6 +850,17 @@ async def claim_task_reward(
     await session.refresh(partner)
     
     partner.level = get_level(partner.xp)
+
+    # Audit logging
+    from app.services.audit_service import audit_service
+    await audit_service.log_task_completion(
+        session=session,
+        partner_id=partner.id,
+        task_id=task_id,
+        xp_amount=effective_xp,
+        xp_before=xp_before,
+        xp_after=partner.xp
+    )
 
     # 2.1 Sync to Redis Leaderboard
     from app.services.leaderboard_service import leaderboard_service

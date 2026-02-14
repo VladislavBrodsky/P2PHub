@@ -603,12 +603,12 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                                         animate={{ opacity: 1, scale: 1 }}
                                                         transition={{ delay: 0.4 + (i * 0.05) }}
                                                         onClick={() => handleCategoryClick(key)}
-                                                        className="flex flex-col items-center justify-center gap-2 p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all active:scale-95"
+                                                        className="flex items-center gap-2.5 p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all active:scale-95 text-left"
                                                     >
-                                                        <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5">
-                                                            <Icon className="h-4 w-4 text-slate-400 dark:text-slate-500" />
+                                                        <div className="flex-shrink-0 p-1.5 rounded-lg bg-slate-50 dark:bg-white/5">
+                                                            <Icon className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                                                         </div>
-                                                        <span className="text-[11px] font-black uppercase tracking-tight text-slate-900 dark:text-white text-center leading-tight">
+                                                        <span className="text-[10px] font-black uppercase tracking-tight text-slate-900 dark:text-white leading-tight truncate">
                                                             {t(`support.categories.${key}`)}
                                                         </span>
                                                     </motion.button>

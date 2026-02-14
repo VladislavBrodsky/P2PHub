@@ -1,4 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import * as Sentry from "@sentry/react";
 
 interface Props {
     children?: ReactNode;
@@ -7,21 +8,27 @@ interface Props {
 interface State {
     hasError: boolean;
     error: Error | null;
+    eventId: string | null;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
     public state: State = {
         hasError: false,
-        error: null
+        error: null,
+        eventId: null
     };
 
     public static getDerivedStateFromError(error: Error): State {
         // Update state so the next render will show the fallback UI.
-        return { hasError: true, error };
+        return { hasError: true, error, eventId: null };
     }
 
     public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         console.error('Uncaught error:', error, errorInfo);
+
+        // Capture error in Sentry
+        const eventId = Sentry.captureException(error, { extra: { ...errorInfo } });
+        this.setState({ eventId });
     }
 
     private handleReload = () => {
@@ -42,10 +49,19 @@ export class ErrorBoundary extends Component<Props, State> {
 
                     <button
                         onClick={this.handleReload}
-                        className="w-full max-w-xs h-14 bg-blue-600 rounded-2xl font-black uppercase tracking-widest text-sm shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
+                        className="w-full max-w-xs h-14 bg-blue-600 rounded-2xl font-black uppercase tracking-widest text-sm shadow-lg shadow-blue-500/20 active:scale-95 transition-all mb-4"
                     >
                         Reload App
                     </button>
+
+                    {this.state.eventId && (
+                        <button
+                            onClick={() => Sentry.showReportDialog({ eventId: this.state.eventId! })}
+                            className="text-slate-500 text-xs hover:text-white transition-colors uppercase tracking-widest font-bold"
+                        >
+                            Report Issue to Developers
+                        </button>
+                    )}
 
                     {import.meta.env.DEV && (
                         <div className="mt-10 p-4 bg-red-950/20 border border-red-900/50 rounded-xl text-left overflow-auto max-w-full">

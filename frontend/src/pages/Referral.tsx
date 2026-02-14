@@ -122,14 +122,14 @@ export default function ReferralPage() {
         notification('success');
 
         try {
-            // PRO members get 5x XP bonus
-            const effectiveXP = user?.is_pro ? task.reward * 5 : task.reward;
-
-            // Persist to backend - Payload matches TaskClaimRequest schema
-            await apiClient.post(`/api/partner/tasks/${task.id}/claim`, {
+            // Persist to backend - authoritative response
+            const response = await apiClient.post(`/api/partner/tasks/${task.id}/claim`, {
                 xp_reward: task.reward
             });
 
+            const updatedData = response.data;
+
+            // Update local state for task visibility immediately
             const newCompleted = [...completedTaskIds, task.id];
             setCompletedTaskIds(newCompleted);
             localStorage.setItem('p2p_completed_tasks', JSON.stringify(newCompleted));
@@ -138,21 +138,14 @@ export default function ReferralPage() {
             setClaimableTasks(newClaimable);
             localStorage.setItem('p2p_claimable_tasks', JSON.stringify(newClaimable));
 
+            // Feedback effects
             setConfettiActive(true);
             setTimeout(() => setConfettiActive(false), 3000);
 
-            const newXP = currentXP + effectiveXP;
-            const newLevel = getLevel(newXP);
-
-            // Update local user state immediately for UI feedback
-            updateUser?.({
-                xp: newXP,
-                level: newLevel,
-                completed_tasks: JSON.stringify(newCompleted)
-            });
-
-            if (newLevel > currentLevel) {
-                setReachedLevel(newLevel);
+            // Level up calculation based on PREVIOUS state to trigger modal
+            const nextLevel = updatedData.level;
+            if (nextLevel > currentLevel) {
+                setReachedLevel(nextLevel);
                 setLevelUp(true);
                 setConfettiActive(true);
                 setTimeout(() => {
@@ -160,6 +153,10 @@ export default function ReferralPage() {
                     setConfettiActive(false);
                 }, 4000);
             }
+
+            // Trust backend for the full user state sync
+            updateUser?.(updatedData);
+
         } catch (e) {
             console.error("Failed to claim task reward", e);
         }

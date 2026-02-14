@@ -22,6 +22,22 @@ dp = Dispatcher()
 # TMA URL (Railway URL or local tunnel)
 WEB_APP_URL = settings.FRONTEND_URL
 
+# #comment: Sentry Middleware for Telegram Bot
+# This middleware runs for every update (message, callback, etc.)
+# and sets the Sentry user context so we know WHO encountered the error.
+@dp.update.outer_middleware()
+async def sentry_middleware(handler, event, data):
+    user = getattr(event, "from_user", None)
+    if user:
+        with sentry_sdk.configure_scope() as scope:
+            scope.set_user({
+                "id": str(user.id),
+                "username": user.username,
+                "language": user.language_code
+            })
+            scope.set_tag("telegram_id", str(user.id))
+    return await handler(event, data)
+
 
 @dp.message(CommandStart())
 async def cmd_start(message: types.Message):

@@ -51,10 +51,10 @@ if settings.SENTRY_DSN:
             SqlalchemyIntegration(),
             RedisIntegration(),
         ],
-        # #comment: Security & Privacy
-        send_default_pii=False,
-        attach_stacktrace=True,
-        before_send=before_send,
+        # #comment: Send meaningful context with each error for easier debugging
+        send_default_pii=True,  # User IP and headers are useful for debugging TWA
+        attach_stacktrace=True,   # Include full stack traces
+        before_send=before_send, 
         # #comment: Ignore common noise
         ignore_errors=[
             asyncio.CancelledError,
@@ -260,7 +260,7 @@ async def health_check():
 async def root_health():
     return {"status": "healthy", "service": "P2PHub Backend"}
 
-@app.get("/sentry-test")
+@app.get("/sentry-debug")
 async def trigger_error():
     """Endpoint for testing Sentry integration."""
     division_by_zero = 1 / 0
