@@ -18,6 +18,7 @@ import {
     TrendingUp
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 import { useHaptic } from '../../hooks/useHaptic';
 import { apiClient } from '../../api/client';
 import { useUser } from '../../context/UserContext';
@@ -170,23 +171,44 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
 
         const delay = Math.floor(Math.random() * 400) + 400;
 
-        try {
-            // Local Knowledge Base (Instant Feedback Layer)
-            const localKB: Record<string, string> = {
-                "card_details": "To issue a card: Go to the 'Cards' tab, select Virtual or Physical, and click 'Issue Card'. Virtual cards are instant. We accept USDT (TRC20) and TON for issuance and top-ups. Apple Pay and Google Pay are supported immediately!",
-                "issue_setup": "For activation: Ensure your KYC level is appropriate for the card type. Verification typically takes 5-10 minutes. If you experience issues with 3DS, make sure your internet connection is stable.",
-                "topup_limits": "Daily top-up limits start at $5,000 for verified users and go up to $50,000 for Level 2 partners. We use TRC20 for the fastest liquidity and lowest fees.",
-                "apple_google": "Absoluteled! Pintopay Virtual Cards are fully compatible with Apple Pay and Google Pay. Just add your card details to your mobile wallet app and use it at any NFC-enabled terminal worldwide.",
-                "earnings": "Our network strategy is simple: Share your link, earn on issuance fees (up to 30%), and receive lifetime transaction rewards (up to 0.5%). Build a network of 5,000 partners to reach our $1/minute milestone!",
-                "security": "Pintopay uses banking-grade 3DS security and encrypted asset storage. If your card is lost, you can Freeze it instantly in the app. Pintopay will never ask for your private keys or passwords."
-            };
+        const localKB: Record<string, { en: string; ru: string }> = {
+            "card_details": {
+                en: "To issue a card: Go to the 'Cards' tab, select Virtual or Physical, and click 'Issue Card'. Virtual cards are instant. We accept USDT (TRC20) and TON for issuance and top-ups. Apple Pay and Google Pay are supported immediately!",
+                ru: "Для получения карты: Перейдите во вкладку «Карты», выберите Виртуальную или Физическую и нажмите «Выпустить карту». Виртуальные карты выпускаются мгновенно. Мы принимаем USDT (TRC20) и TON для выпуска и пополнения. Apple Pay и Google Pay поддерживаются сразу!"
+            },
+            "issue_setup": {
+                en: "For activation: Ensure your KYC level is appropriate for the card type. Verification typically takes 5-10 minutes. If you experience issues with 3DS, make sure your internet connection is stable.",
+                ru: "Для активации: Убедитесь, что ваш уровень KYC соответствует типу карты. Верификация обычно занимает 5-10 минут. Если возникли проблемы с 3DS, проверьте стабильность интернет-соединения."
+            },
+            "topup_limits": {
+                en: "Daily top-up limits start at $5,000 for verified users and go up to $50,000 for Level 2 partners. We use TRC20 for the fastest liquidity and lowest fees.",
+                ru: "Дневные лимиты на пополнение начинаются от $5,000 для верифицированных пользователей и доходят до $50,000 для партнеров 2-го уровня. Мы используем TRC20 для максимальной скорости и низких комиссий."
+            },
+            "apple_google": {
+                en: "Absolutely! Pintopay Virtual Cards are fully compatible with Apple Pay and Google Pay. Just add your card details to your mobile wallet app and use it at any NFC-enabled terminal worldwide.",
+                ru: "Конечно! Виртуальные карты Pintopay полностью совместимы с Apple Pay и Google Pay. Просто добавьте данные карты в приложение кошелька на телефоне и используйте её в любом терминале с поддержкой NFC."
+            },
+            "earnings": {
+                en: "Our network strategy is simple: Share your link, earn on issuance fees (up to 30%), and receive lifetime transaction rewards (up to 0.5%). Build a network of 5,000 partners to reach our $1/minute milestone!",
+                ru: "Наша сетевая стратегия проста: делитесь ссылкой, зарабатывайте на комиссиях за выпуск (до 30%) и получайте пожизненные вознаграждения за транзакции (до 0,5%). Постройте сеть из 5 000 партнеров, чтобы достичь цели $1 в минуту!"
+            },
+            "security": {
+                en: "Pintopay uses banking-grade 3DS security and encrypted asset storage. If your card is lost, you can Freeze it instantly in the app. Pintopay will never ask for your private keys or passwords.",
+                ru: "Pintopay использует банковскую защиту 3DS и зашифрованное хранение активов. Если карта потеряна, вы можете мгновенно заморозить её в приложении. Pintopay никогда не запрашивает ваши приватные ключи или пароли."
+            }
+        };
 
+        const currentLang = i18n.language.startsWith('ru') ? 'ru' : 'en';
+
+        try {
             // If it's a category key, we know what to say immediately for 'Top-Notch' feel
-            const categoryMatch = Object.keys(localKB).find(k => t(`support.categories.${k}`) === messageText);
+            const categoryMatch = Object.keys(localKB).find(k =>
+                t(`support.categories.${k}`).toLowerCase().trim() === messageText.toLowerCase().trim()
+            );
 
             if (categoryMatch) {
                 setTimeout(() => {
-                    addMessage('assistant', localKB[categoryMatch]);
+                    addMessage('assistant', localKB[categoryMatch][currentLang]);
                     setIsTyping(false);
                     resetInactivityTimer();
                 }, delay + 400); // Small extra delay for deep-thinking feel
@@ -206,11 +228,11 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
             // Intelligent Fallback Logic if backend fails
             const lowerMsg = messageText.toLowerCase();
             const fallbackKey = Object.keys(localKB).find(k => lowerMsg.includes(k.replace('_', '')))
-                || (lowerMsg.includes('card') ? 'card_details' : null)
-                || (lowerMsg.includes('earn') ? 'earnings' : null);
+                || (lowerMsg.includes('card') || lowerMsg.includes('карт') ? 'card_details' : null)
+                || (lowerMsg.includes('earn') || lowerMsg.includes('доход') ? 'earnings' : null);
 
             if (fallbackKey && localKB[fallbackKey]) {
-                addMessage('assistant', localKB[fallbackKey]);
+                addMessage('assistant', localKB[fallbackKey][currentLang]);
             } else {
                 addMessage('assistant', t('support.error_technical'));
             }
