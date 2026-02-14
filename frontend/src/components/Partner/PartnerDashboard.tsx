@@ -105,7 +105,7 @@ export const PartnerDashboard = () => {
                             <span>Network Size</span>
                             <ExternalLink className="w-3 h-3 opacity-50" />
                         </div>
-                        <div className="text-2xl font-black text-(--color-text-primary) flex items-center gap-2">
+                        <div className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
                             {totalNetworkSize}
                             <span className="text-[10px] bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-sm">
                                 {growthPct >= 0 ? '+' : ''}{growthPct}%
