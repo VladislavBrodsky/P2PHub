@@ -435,7 +435,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 relative"
         >
             {/* Header Area - Non-sticky to avoid overlapping */}
-            <div className="w-full pt-[var(--header-total-height)] pb-3 px-4 bg-transparent transition-all">
+            <div className="w-full pt-(--header-total-height) pb-3 px-4 bg-transparent transition-all">
                 <div className="flex items-center justify-between w-full">
                     <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-white dark:hover:bg-slate-900 active:scale-90 transition-all text-slate-900 dark:text-white">
                         <ArrowLeft className="w-6 h-6" />
