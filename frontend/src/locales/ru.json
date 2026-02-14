@@ -1,7 +1,7 @@
 {
     "common": {
         "dashboard": "Панель",
-        "academy": "Гроу-хаки",
+        "academy": "Влияние",
         "wallet": "Кошелек",
         "connect_wallet": "Подключить",
         "language": "Язык",
@@ -282,7 +282,7 @@
     "community": {
         "tabs": {
             "dashboard": "Панель",
-            "academy": "Гроу-хаки"
+            "academy": "Влияние"
         }
     },
     "blog": {
@@ -533,6 +533,7 @@
         "claim": "Забрать XP",
         "start": "Начать миссию",
         "level_short": "Ур.",
+        "pro_multiplier": "Бонус x5 XP",
         "telegram_bot": {
             "title": "Открыть Pintopay Бот",
             "desc": "Начни свой путь с официальным ботом."
@@ -843,12 +844,12 @@
     "pro_dashboard": {
         "title_studio": "Студия Вирусного Маркетинга",
         "title_tools": "PRO-инструменты",
-        "title_academy": "Гроу-хаки",
+        "title_academy": "Влияние",
         "tokens_left": "{{count}} ТОКЕНОВ",
         "system_offline": "СИСТЕМА ОФФЛАЙН",
         "tab_studio": "Студия",
         "tab_tools": "Инструменты",
-        "tab_academy": "Гроу-хаки",
+        "tab_academy": "Влияние",
         "tab_setup": "Настройки API",
         "locked": {
             "title": "ТОЛЬКО ДЛЯ PRO",
