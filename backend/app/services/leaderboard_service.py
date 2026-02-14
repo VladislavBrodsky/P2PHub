@@ -57,6 +57,12 @@ class LeaderboardService:
         # Map to schema and sort by score
         hydrated = []
         for p in partners:
+            # #comment: Deterministic realism injection for social proof (user request)
+            # Ensures top partners always appear to have 133-437 members if actual count is low.
+            display_refs = p.referral_count
+            if display_refs < 133:
+                display_refs = 133 + ((p.id * 17) % (437 - 133 + 1))
+
             item = LeaderboardPartner(
                 id=p.id,
                 username=p.username,
@@ -65,7 +71,7 @@ class LeaderboardService:
                 photo_file_id=p.photo_file_id,
                 xp=scores.get(p.id, p.xp),
                 level=p.level,
-                referral_count=p.referral_count
+                referral_count=display_refs
             )
             hydrated.append(item.model_dump())
 

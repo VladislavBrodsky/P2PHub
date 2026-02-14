@@ -88,14 +88,6 @@ export default function LeaderboardPage() {
 
             <Section
                 title={t('leaderboard.top_partners')}
-                headerAction={
-                    <button
-                        onClick={() => setIsModalOpen(true)}
-                        className="text-[10px] font-black text-blue-500 uppercase tracking-widest bg-blue-500/10 px-3 py-1.5 rounded-full border border-blue-500/20 active:scale-95 transition-all"
-                    >
-                        {t('referral.info')}
-                    </button>
-                }
             >
                 <div className="space-y-2">
                     {visiblePartners.map((user, index) => (
