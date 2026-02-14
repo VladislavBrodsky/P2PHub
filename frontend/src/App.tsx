@@ -237,7 +237,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                     <div className="flex flex-col items-center justify-center text-center px-10 h-full">
                         <div className="text-4xl mb-4">🚀</div>
                         <h2 className="text-2xl font-black mb-2 uppercase">{t('system.coming_soon.title')}</h2>
-                        <p className="text-(--color-text-secondary) font-medium">
+                        <p className="text-slate-500 dark:text-slate-400 font-medium">
                             {t('system.coming_soon.desc')}
                         </p>
                     </div>
