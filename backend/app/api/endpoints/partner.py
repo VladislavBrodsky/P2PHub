@@ -2,6 +2,7 @@ import asyncio
 import json
 import secrets
 import logging
+import sentry_sdk
 from typing import List
 # Added datetime for tracking task start times
 from datetime import datetime, timedelta
@@ -738,6 +739,12 @@ async def claim_task_reward(
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
+    sentry_sdk.add_breadcrumb(
+        category="task",
+        message=f"Attempting to claim reward for task {task_id}",
+        level="info"
+    )
+
     # 1. SECURITY FIX: Use backend source of truth for reward and configuration
     from app.core.tasks import get_task_config
     config = get_task_config(task_id)
@@ -880,6 +887,7 @@ async def claim_task_reward(
         msg = get_msg(lang, "task_completed", reward=int(effective_xp))
         await notification_service.enqueue_notification(chat_id=int(tg_id), text=msg)
     except Exception as e:
+        sentry_sdk.capture_exception(e)
         logger.error(f"Failed to send task notification: {e}")
 
     # Final commit and refresh with relationships for response
@@ -906,6 +914,12 @@ async def complete_academy_stage(
     """
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
+
+    sentry_sdk.add_breadcrumb(
+        category="academy",
+        message=f"Attempting to complete academy stage {stage_id}",
+        level="info"
+    )
 
     stmt = select(Partner).where(Partner.telegram_id == tg_id)
     result = await session.exec(stmt)

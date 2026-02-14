@@ -17,6 +17,7 @@ from app.services.audit_service import audit_service
 from app.utils.ranking import get_level
 from app.utils.text import escape_markdown_v1
 from app.worker import broker
+import sentry_sdk
 
 logger = logging.getLogger(__name__)
 
@@ -87,6 +88,17 @@ async def process_referral_logic(partner_id: int):
             result = await session.exec(statement)
             ancestor_list = result.all()
             ancestor_map = {p.id: p for p in ancestor_list}
+
+            sentry_sdk.set_context("referral_context", {
+                "partner_id": partner_id,
+                "referrer_id": partner.referrer_id,
+                "ancestors_count": len(ancestor_list)
+            })
+            sentry_sdk.add_breadcrumb(
+                category="referral",
+                message=f"Processing 9-level logic for partner {partner_id}",
+                level="info"
+            )
 
             logger.info(f"🔄 Processing referral logic for partner {partner_id} (@{partner.username}).")
 
@@ -206,6 +218,7 @@ async def process_referral_logic(partner_id: int):
                     ))
 
                 except Exception as core_error:
+                    sentry_sdk.capture_exception(core_error)
                     logger.error(f"❌ Failed level {level} rewards for {referrer.id}: {core_error}")
                 
                 current_referrer_id = referrer.referrer_id
@@ -223,6 +236,7 @@ async def process_referral_logic(partner_id: int):
                 await asyncio.gather(*deferred_tasks, return_exceptions=True)
 
     except Exception as e:
+        sentry_sdk.capture_exception(e)
         logger.error(f"Error in process_referral_logic: {e}", exc_info=True)
 
 async def distribute_pro_commissions(session: AsyncSession, partner_id: int, total_amount: float):
@@ -239,6 +253,12 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     statement = select(Partner).where(Partner.id.in_(lineage_ids))
     result = await session.exec(statement)
     ancestor_map = {p.id: p for p in result.all()}
+
+    sentry_sdk.add_breadcrumb(
+        category="commission",
+        message=f"Distributing PRO commissions for partner {partner_id} (Amount: {total_amount})",
+        level="info"
+    )
 
     # #comment: Fetch bot info once to avoid repeated network calls inside the loop.
     from bot import bot
@@ -316,6 +336,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                     buttons=buttons
                 )
             except Exception as e:
+                sentry_sdk.capture_exception(e)
                 logger.error(f"Failed to notify {referrer.id} about commission: {e}")
 
         current_referrer_id = referrer.referrer_id

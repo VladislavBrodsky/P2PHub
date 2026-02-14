@@ -13,6 +13,7 @@ from app.models.transaction import PartnerTransaction
 from app.services.ton_verification_service import ton_verification_service
 from app.services.redis_service import redis_service
 from app.core.http_client import http_client
+import sentry_sdk
 
 logger = logging.getLogger(__name__)
 
@@ -125,6 +126,11 @@ class PaymentService:
         Verifies a TON transaction hash via TonVerificationService.
         Checks if the destination address matches admin wallet and amount is correct.
         """
+        sentry_sdk.add_breadcrumb(
+            category="payment",
+            message=f"Verifying TON transaction for partner {partner.telegram_id}: {tx_hash}",
+            level="info"
+        )
         # 1. Check if TX already processed (Global Uniqueness per hash)
         stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
         res = await session.exec(stmt)
@@ -213,98 +219,108 @@ class PaymentService:
         tx_hash: Optional[str] = None,
         transaction_id: Optional[int] = None
     ):
-        # 1. Update Partner
-        now = datetime.utcnow()
-        if partner.is_pro and partner.pro_expires_at and partner.pro_expires_at > now:
-            # Extension: Add 30 days to existing expiry
-            partner.pro_expires_at += timedelta(days=30)
-        else:
-            # New or re-activation
-            partner.pro_expires_at = now + timedelta(days=30)
-            
-        partner.is_pro = True
-        if not partner.pro_started_at:
-            partner.pro_started_at = now
-        if not partner.pro_purchased_at:
-            partner.pro_purchased_at = now
-
-        partner.subscription_plan = "PRO_MONTHLY"
-        session.add(partner)
-
-        # 2. Update or Create Transaction
-        transaction = None
-        if transaction_id:
-            transaction = await session.get(PartnerTransaction, transaction_id)
-        elif tx_hash:
-            stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
-            res = await session.exec(stmt)
-            transaction = res.first()
-
-        if not transaction:
-            transaction = PartnerTransaction(
-                partner_id=partner.id,
-                amount=amount,
-                currency=currency,
-                network=network,
-                tx_hash=tx_hash,
-                status="completed"
+        try:
+            sentry_sdk.add_breadcrumb(
+                category="payment",
+                message=f"Executing PRO upgrade for partner {partner.telegram_id}",
+                level="info"
             )
-            session.add(transaction)
-            await session.flush() # Get the ID
-        else:
-            transaction.status = "completed"
-            # Update hash if provided and missing
-            if tx_hash and not transaction.tx_hash:
-                transaction.tx_hash = tx_hash
-            session.add(transaction)
+            # 1. Update Partner
+            now = datetime.utcnow()
+            if partner.is_pro and partner.pro_expires_at and partner.pro_expires_at > now:
+                # Extension: Add 30 days to existing expiry
+                partner.pro_expires_at += timedelta(days=30)
+            else:
+                # New or re-activation
+                partner.pro_expires_at = now + timedelta(days=30)
+                
+            partner.is_pro = True
+            if not partner.pro_started_at:
+                partner.pro_started_at = now
+            if not partner.pro_purchased_at:
+                partner.pro_purchased_at = now
 
-        # Update Partner with verification details
-        partner.last_transaction_id = transaction.id
-        partner.payment_details = json.dumps({
-            "currency": currency,
-            "network": network,
-            "tx_hash": transaction.tx_hash or "MANUAL_CONFIRMATION",
-            "amount": amount,
-            "verified_at": now.isoformat()
-        })
+            partner.subscription_plan = "PRO_MONTHLY"
+            session.add(partner)
 
-        session.add(partner)
+            # 2. Update or Create Transaction
+            transaction = None
+            if transaction_id:
+                transaction = await session.get(PartnerTransaction, transaction_id)
+            elif tx_hash:
+                stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
+                res = await session.exec(stmt)
+                transaction = res.first()
 
-        # 3. Distribute Commissions to Ancestors (BEFORE commit for transaction atomicity)
-        # #comment: CRITICAL - Commission distribution must happen in the same transaction as the upgrade.
-        # If we commit first, then commissions fail, the user gets upgraded but referrers don't get paid.
-        # By doing this before commit, we ensure both succeed or both rollback on error.
-        from app.services.referral_service import distribute_pro_commissions
-        await distribute_pro_commissions(session, partner.id, amount)
-        
-        # Commit everything atomically
-        await session.commit()
+            if not transaction:
+                transaction = PartnerTransaction(
+                    partner_id=partner.id,
+                    amount=amount,
+                    currency=currency,
+                    network=network,
+                    tx_hash=tx_hash,
+                    status="completed"
+                )
+                session.add(transaction)
+                await session.flush() # Get the ID
+            else:
+                transaction.status = "completed"
+                # Update hash if provided and missing
+                if tx_hash and not transaction.tx_hash:
+                    transaction.tx_hash = tx_hash
+                session.add(transaction)
+
+            # Update Partner with verification details
+            partner.last_transaction_id = transaction.id
+            partner.payment_details = json.dumps({
+                "currency": currency,
+                "network": network,
+                "tx_hash": transaction.tx_hash or "MANUAL_CONFIRMATION",
+                "amount": amount,
+                "verified_at": now.isoformat()
+            })
+
+            session.add(partner)
+
+            # 3. Distribute Commissions to Ancestors (BEFORE commit for transaction atomicity)
+            # #comment: CRITICAL - Commission distribution must happen in the same transaction as the upgrade.
+            # If we commit first, then commissions fail, the user gets upgraded but referrers don't get paid.
+            # By doing this before commit, we ensure both succeed or both rollback on error.
+            from app.services.referral_service import distribute_pro_commissions
+            await distribute_pro_commissions(session, partner.id, amount)
+            
+            # Commit everything atomically
+            await session.commit()
 
 
-        # 4. Send Visionary & Viral Messages
-        from app.core.i18n import get_msg
-        from app.services.notification_service import notification_service
+            # 4. Send Visionary & Viral Messages
+            from app.core.i18n import get_msg
+            from app.services.notification_service import notification_service
 
-        lang = partner.language_code or "en"
+            lang = partner.language_code or "en"
 
-        # 4.1 Welcome Message
-        welcome_msg = get_msg(lang, "pro_welcome")
-        await notification_service.enqueue_notification(
-            chat_id=int(partner.telegram_id),
-            text=welcome_msg
-        )
+            # 4.1 Welcome Message
+            welcome_msg = get_msg(lang, "pro_welcome")
+            await notification_service.enqueue_notification(
+                chat_id=int(partner.telegram_id),
+                text=welcome_msg
+            )
 
-        # 4.2 Viral Congrats Message (Instruction to user to share)
-        ref_link = f"{settings.FRONTEND_URL}?startapp={partner.referral_code}"
-        viral_msg = get_msg(lang, "pro_viral_announcement", referral_link=ref_link)
-        # We send it to them so they can forward/copy it
-        await notification_service.enqueue_notification(
-            chat_id=int(partner.telegram_id),
-            text=f"🎁 *VIRAL KIT UNLOCKED!*\n\nShare this message to announce your PRO status and attract more partners:\n\n---\n{viral_msg}"
-        )
+            # 4.2 Viral Congrats Message (Instruction to user to share)
+            ref_link = f"{settings.FRONTEND_URL}?startapp={partner.referral_code}"
+            viral_msg = get_msg(lang, "pro_viral_announcement", referral_link=ref_link)
+            # We send it to them so they can forward/copy it
+            await notification_service.enqueue_notification(
+                chat_id=int(partner.telegram_id),
+                text=f"🎁 *VIRAL KIT UNLOCKED!*\n\nShare this message to announce your PRO status and attract more partners:\n\n---\n{viral_msg}"
+            )
 
 
-        logger.info(f"Partner {partner.telegram_id} upgraded to PRO via {currency}")
-        return True
+            logger.info(f"Partner {partner.telegram_id} upgraded to PRO via {currency}")
+            return True
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logger.error(f"❌ PRO Upgrade Failed for {partner.telegram_id}: {e}")
+        raise e
 
 payment_service = PaymentService()

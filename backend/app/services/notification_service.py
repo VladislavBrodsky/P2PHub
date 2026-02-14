@@ -3,6 +3,7 @@ import logging
 
 # from bot import bot (Moved inside functions to break circular dependency)
 from app.worker import broker
+import sentry_sdk
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +40,7 @@ async def send_telegram_task(chat_id: str | int, text: str, parse_mode: str = "M
         await bot.send_message(chat_id=target_id, text=text, parse_mode=parse_mode, reply_markup=reply_markup)
         return True
     except Exception as e:
+        sentry_sdk.capture_exception(e)
         logger.error(f"Worker failed to send notification to {chat_id}: {e}")
         return False
 
@@ -79,6 +81,7 @@ class NotificationService:
                 asyncio.create_task(bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode, reply_markup=reply_markup))
                 logger.info(f"📤 Fallback notification sent directly for {chat_id}")
             except Exception as fe:
+                sentry_sdk.capture_exception(fe)
                 logger.error(f"Fallback notification also failed for {chat_id}: {fe}")
 
 
