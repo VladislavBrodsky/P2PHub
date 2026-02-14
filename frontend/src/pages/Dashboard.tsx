@@ -44,7 +44,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
     return (
         <motion.div
-            className="flex w-full flex-col pb-32 px-0 min-h-dvh transition-colors duration-500 relative"
+            className="flex w-full flex-col pb-safe-bottom px-0 min-h-dvh transition-colors duration-500 relative"
             variants={container}
             initial="hidden"
             animate="show"

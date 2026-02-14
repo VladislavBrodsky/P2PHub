@@ -10,6 +10,7 @@ import { getApiUrl } from '../utils/api';
 import { useState } from 'react';
 import { PartnerBriefingModal } from '../components/Partner/PartnerBriefingModal';
 import { Trophy, Shield, Star, Crown } from 'lucide-react';
+import { useHaptic } from '../hooks/useHaptic';
 
 interface LeaderboardUser {
     id: number;
@@ -33,6 +34,7 @@ export default function LeaderboardPage() {
     const { t } = useTranslation();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showAll, setShowAll] = useState(false);
+    const { selection } = useHaptic();
 
     const { data: leaderboard = [], isLoading: isLeaderboardLoading } = useQuery<LeaderboardUser[]>({
         queryKey: ['leaderboard', 'global'],
@@ -93,7 +95,10 @@ export default function LeaderboardPage() {
                     {visiblePartners.map((user, index) => (
                         <button
                             key={user.id}
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={() => {
+                                selection();
+                                setIsModalOpen(true);
+                            }}
                             // #comment Reduced padding to p-2.5 and border-radius to rounded-2xl for a tighter, more data-dense look on mobile.
                             className="w-full flex items-center justify-between rounded-2xl border border-(--color-brand-border) bg-(--color-bg-surface) p-2.5 shadow-premium transition-all active:scale-[0.98] group relative overflow-hidden"
                         >
@@ -178,7 +183,10 @@ export default function LeaderboardPage() {
                     {/* #comment Show All toggle button implementation */}
                     {leaderboard.length > 10 && (
                         <button
-                            onClick={() => setShowAll(!showAll)}
+                            onClick={() => {
+                                selection();
+                                setShowAll(!showAll);
+                            }}
                             className="w-full mt-2 py-3 rounded-xl border border-dashed border-(--color-brand-border) text-xs font-black text-(--color-text-secondary) uppercase tracking-tighter hover:bg-(--color-bg-surface) hover:text-(--color-text-primary) transition-all active:scale-95"
                         >
                             {showAll ? t('common.show_less') : `${t('common.show_more')} (TOP 50)`}

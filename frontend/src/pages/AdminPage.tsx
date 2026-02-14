@@ -179,7 +179,7 @@ export const AdminPage = () => {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
                 <RefreshCw className="w-8 h-8 text-blue-500 animate-spin" />
-                <p className="text-slate-500 font-medium">Loading Dashboard...</p>
+                <p className="text-(--color-text-secondary) font-medium">Loading Dashboard...</p>
             </div>
         );
     }
@@ -200,7 +200,7 @@ export const AdminPage = () => {
                             <ShieldCheck className="text-blue-500" size={20} />
                             Master Hub
                         </h1>
-                        <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Performance control</p>
+                        <p className="text-(--color-text-secondary) text-[10px] font-bold uppercase tracking-wider">Performance control</p>
                     </div>
                 </div>
                 <button
@@ -282,15 +282,15 @@ export const AdminPage = () => {
                         {/* Middle Stats Grid */}
                         <div className="grid grid-cols-3 gap-3">
                             <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
-                                <div className="text-[8px] font-black uppercase text-slate-500">Conv. Rate</div>
+                                <div className="text-[8px] font-black uppercase text-(--color-text-secondary)">Conv. Rate</div>
                                 <div className="text-sm font-black text-blue-500">{stats?.kpis.conversion_rate}%</div>
                             </div>
                             <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
-                                <div className="text-[8px] font-black uppercase text-slate-500">ARPU</div>
+                                <div className="text-[8px] font-black uppercase text-(--color-text-secondary)">ARPU</div>
                                 <div className="text-sm font-black text-emerald-500">${stats?.kpis.arpu}</div>
                             </div>
                             <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
-                                <div className="text-[8px] font-black uppercase text-slate-500">Retention</div>
+                                <div className="text-[8px] font-black uppercase text-(--color-text-secondary)">Retention</div>
                                 <div className="text-sm font-black text-amber-500">{stats?.kpis.retention_estimate}%</div>
                             </div>
                         </div>

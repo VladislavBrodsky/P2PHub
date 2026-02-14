@@ -204,7 +204,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                     <ArrowLeft className="w-5 h-5" />
                                 </button>
                                 <div>
-                                    <h2 className="text-xl font-black tracking-tight leading-none">{t('blog.title')}</h2>
+                                    <h1 className="text-xl font-black tracking-tight leading-none">{t('blog.title')}</h1>
                                     <p className="text-[9px] font-bold text-(--color-text-secondary) uppercase tracking-widest opacity-60 mt-1">
                                         {blogPosts.length} {t('blog.latest')}
                                     </p>
@@ -435,7 +435,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             className="flex flex-col min-h-screen bg-(--color-bg-app) relative"
         >
             {/* Header Area - Non-sticky to avoid overlapping */}
-            <div className="w-full pt-[calc(env(safe-area-inset-top,0px)+3rem)] pb-3 px-4 bg-transparent transition-all">
+            <div className="w-full pt-(--header-total-height) pb-3 px-4 bg-transparent transition-all">
                 <div className="flex items-center justify-between w-full">
                     <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-(--color-bg-surface) active:scale-90 transition-all text-(--color-text-primary)">
                         <ArrowLeft className="w-6 h-6" />
