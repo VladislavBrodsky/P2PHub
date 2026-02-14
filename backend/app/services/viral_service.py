@@ -187,16 +187,52 @@ Use FRESH, audience-specific language that feels authentic.
 
     def _init_google_sheets_client(self):
         """Initializes Google Sheets client for audit logging."""
-        creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
-        if creds_json:
-            try:
-                creds_dict = json.loads(creds_json)
-                scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
-                credentials = Credentials.from_service_account_info(creds_dict, scopes=scopes)
-                self.gs_client = gspread.authorize(credentials)
-                logger.info("✅ ViralMarketingStudio: Google Sheets logging initialized.")
-            except Exception as e:
-                logger.error(f"❌ ViralMarketingStudio: Failed to init Google Sheets: {e}")
+        creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "").strip()
+        
+        # #comment: Defensive validation to prevent JSON parse crashes in production
+        # Railway and other platforms may set empty env vars or have copy/paste formatting issues.
+        # This validation ensures we fail gracefully instead of crashing all worker processes.
+        if not creds_json:
+            logger.info("ℹ️ GOOGLE_SERVICE_ACCOUNT_JSON not set. Google Sheets logging disabled.")
+            return
+        
+        # Check if it's actually JSON-like (basic sanity check)
+        if not (creds_json.startswith('{') and creds_json.endswith('}')):
+            logger.error(
+                "❌ GOOGLE_SERVICE_ACCOUNT_JSON is malformed "
+                "(should be a JSON object starting with { and ending with }). "
+                "Google Sheets logging disabled. Please verify your Railway environment variables."
+            )
+            return
+        
+        try:
+            creds_dict = json.loads(creds_json)
+            
+            # Validate that it has required service account fields
+            required_fields = ['type', 'project_id', 'private_key', 'client_email']
+            missing_fields = [f for f in required_fields if f not in creds_dict]
+            
+            if missing_fields:
+                logger.error(
+                    f"❌ GOOGLE_SERVICE_ACCOUNT_JSON is missing required fields: {', '.join(missing_fields)}. "
+                    "Verify you copied the complete service account JSON from Google Cloud Console."
+                )
+                return
+            
+            scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
+            credentials = Credentials.from_service_account_info(creds_dict, scopes=scopes)
+            self.gs_client = gspread.authorize(credentials)
+            logger.info("✅ ViralMarketingStudio: Google Sheets logging initialized.")
+        except json.JSONDecodeError as e:
+            logger.error(
+                f"❌ ViralMarketingStudio: GOOGLE_SERVICE_ACCOUNT_JSON contains invalid JSON at {e.msg} "
+                f"(line {e.lineno}, column {e.colno}). "
+                "This typically happens when copying from the Google Cloud Console - "
+                "make sure you copied the ENTIRE JSON object, including opening and closing braces."
+            )
+        except Exception as e:
+            logger.error(f"❌ ViralMarketingStudio: Failed to init Google Sheets: {e}")
+
 
     def get_capabilities(self) -> Dict[str, bool]:
         """

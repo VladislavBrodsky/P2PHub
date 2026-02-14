@@ -378,8 +378,18 @@ class CachedStaticFiles(StaticFiles):
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Serve generated media (Fix for viral studio permissions)
 generated_media_dir = os.path.join(base_dir, "generated_media")
-os.makedirs(generated_media_dir, exist_ok=True) # Ensure it exists
-app.mount("/generated_media", CachedStaticFiles(directory=generated_media_dir), name="generated_media")
+
+# #comment: Defensively handle directory creation in Docker environments
+# Railway containers may not have write permissions to /app during startup,
+# or the directory might be owned by a different user (root vs app user).
+# We catch the error and proceed - the viral_service.py has its own fallback to /tmp.
+try:
+    os.makedirs(generated_media_dir, exist_ok=True)
+    logger.info(f"✅ Generated media directory ready: {generated_media_dir}")
+    app.mount("/generated_media", CachedStaticFiles(directory=generated_media_dir), name="generated_media")
+except (OSError, PermissionError) as e:
+    logger.warning(f"⚠️ Cannot create {generated_media_dir} ({e}). Viral Studio will use /tmp fallback for image generation.")
+    # Don't mount the directory if it doesn't exist - requests will gracefully 404
 
 # Serve legacy promo images
 images_dir = os.path.join(base_dir, "app_images")
