@@ -1,5 +1,6 @@
-// #comment: Revamped NetworkExplorer with a premium design, improved responsiveness, and high-quality visual feedback
-import { useState, useEffect, useRef, useCallback } from 'react';
+// #comment: Optimized NetworkExplorer with React Query for intelligent caching, prefetching, and smooth data flow
+import { useState, useEffect, useRef } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Users, X, UserPlus, AlertCircle, TrendingUp, Award, Zap, ChevronRight } from 'lucide-react';
@@ -41,120 +42,80 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
     const { t } = useTranslation();
     const { selection, impact } = useHaptic();
     const { user } = useUser();
+    const queryClient = useQueryClient();
+
+    // UI State
     const [level, setLevel] = useState(1);
-    const [members, setMembers] = useState<NetworkMember[]>([]);
-    const [levelCache, setLevelCache] = useState<Record<number, NetworkMember[]>>({});
-    const [treeStats, setTreeStats] = useState<Record<string, number>>({});
-    const [isLoading, setIsLoading] = useState(false);
     const [isGlobalMode, setIsGlobalMode] = useState(false);
-    const [error, setError] = useState('');
     const [isShareOpen, setIsShareOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+
+    // Refs
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
-    const [totalOverride, setTotalOverride] = useState(initialTotalCount);
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         setIsScrolled(e.currentTarget.scrollTop > 10);
     };
 
-    const fetchLevel = useCallback(async (targetLevel: number) => {
-        // If we have cached data, use it immediately
-        if (levelCache[targetLevel] && !isGlobalMode) {
-            return levelCache[targetLevel];
-        }
+    // --- Data Fetching Logic (React Query) ---
 
-        try {
-            const url = isGlobalMode
-                ? `/api/admin/network/${targetLevel}`
-                : `/api/partner/network/${targetLevel}`;
-            const res = await apiClient.get(url);
-            const data = Array.isArray(res.data) ? res.data : [];
-
-            if (!isGlobalMode) setLevelCache(prev => ({ ...prev, [targetLevel]: data }));
-
-            // Sync tree stats for this level immediately
-            setTreeStats(prev => ({ ...prev, [targetLevel]: data.length }));
-
-            return data;
-        } catch (err) {
-            console.error(`Failed to fetch level ${targetLevel}:`, err);
-            return null;
-        }
-    }, [levelCache, isGlobalMode]);
-
-    const fetchTreeStats = useCallback(async () => {
-        try {
+    // 1. Fetch Tree Stats (Counts per level)
+    const { data: treeStats = {} } = useQuery({
+        queryKey: ['network', 'stats', isGlobalMode ? 'global' : 'partner'],
+        queryFn: async () => {
             const url = isGlobalMode ? '/api/admin/tree' : '/api/partner/tree';
             const res = await apiClient.get(url);
-            // Ensure we merge with existing distinct level counts if api returns partial
-            setTreeStats(prev => ({ ...prev, ...res.data }));
-        } catch (err) {
-            console.error('Failed to fetch tree stats:', err);
-        }
-    }, [isGlobalMode]);
+            return res.data as Record<string, number>;
+        },
+        staleTime: 1000 * 60 * 5, // 5 minutes
+    });
 
-    // Initial load: fetch stats + first 2 levels
+    // 2. Fetch Members for Current Level
+    const fetchLevelData = async (lvl: number, global: boolean) => {
+        const url = global
+            ? `/api/admin/network/${lvl}`
+            : `/api/partner/network/${lvl}`;
+        const res = await apiClient.get(url);
+        return Array.isArray(res.data) ? res.data : ([] as NetworkMember[]);
+    };
+
+    const {
+        data: members = [],
+        isLoading,
+        isError,
+        error
+    } = useQuery({
+        queryKey: ['network', 'level', level, isGlobalMode ? 'global' : 'partner'],
+        queryFn: () => fetchLevelData(level, isGlobalMode),
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        placeholderData: (previousData) => undefined, // Ensure we show loading state on level switch if not cached
+    });
+
+    // 3. Intelligent Prefetching
     useEffect(() => {
-        const prefetchInitialLevels = async () => {
-            setIsLoading(true);
-            try {
-                // Fetch stats first to populate total quickly
-                await fetchTreeStats();
+        // Prefetch adjacent levels for instant navigation flow
+        const neighbors = [];
+        if (level < 9) neighbors.push(level + 1);
+        if (level > 1) neighbors.push(level - 1);
 
-                const [l1] = await Promise.all([
-                    fetchLevel(1),
-                    fetchLevel(2), // Prefetch next
-                ]);
-                if (l1) setMembers(l1);
-            } catch (err) {
-                console.error('Failed to prefetch levels:', err);
-                setError('Failed to load network data');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        prefetchInitialLevels();
-    }, [fetchLevel, fetchTreeStats]);
-
-    // Handle level changes
-    useEffect(() => {
-        const updateLevel = async () => {
-            if (contentRef.current) {
-                contentRef.current.scrollTo({ top: 0, behavior: 'instant' });
-            }
-
-            if (levelCache[level]) {
-                setMembers(levelCache[level]);
-                setIsLoading(false);
-                setError('');
-            } else {
-                setIsLoading(true);
-                setMembers([]); // Wipe old data immediately
-                setError('');
-
-                const data = await fetchLevel(level);
-                if (data !== null) {
-                    setMembers(data);
-                } else {
-                    setError('Failed to load network data');
-                }
-                setIsLoading(false);
-            }
-
-            // Prefetch neighbors
-            const adjacentLevels = [];
-            if (level > 1) adjacentLevels.push(level - 1);
-            if (level < 9) adjacentLevels.push(level + 1);
-
-            adjacentLevels.forEach(l => {
-                if (!levelCache[l]) fetchLevel(l);
+        neighbors.forEach(bgLevel => {
+            queryClient.prefetchQuery({
+                queryKey: ['network', 'level', bgLevel, isGlobalMode ? 'global' : 'partner'],
+                queryFn: () => fetchLevelData(bgLevel, isGlobalMode),
+                staleTime: 1000 * 60 * 5,
             });
-        };
-        updateLevel();
-    }, [level, fetchLevel, levelCache, isGlobalMode]);
+        });
+    }, [level, isGlobalMode, queryClient]);
 
-    // Scroll active level pill into view
+    // Scroll to top on level change
+    useEffect(() => {
+        if (contentRef.current) {
+            contentRef.current.scrollTo({ top: 0, behavior: 'instant' });
+        }
+    }, [level]);
+
+    // Scroll active pill into view
     useEffect(() => {
         if (scrollContainerRef.current) {
             const activeButton = scrollContainerRef.current.children[level - 1] as HTMLElement;
@@ -164,17 +125,9 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
         }
     }, [level]);
 
-    // Robust total calculation
-    const calculatedTotal = Object.values(treeStats).reduce((acc, curr) => acc + (typeof curr === 'number' ? curr : 0), 0);
-    // Use the greater of the two to ensure we don't show a lower number than the dashboard
-    const displayTotal = Math.max(calculatedTotal, totalOverride);
-
-    // Update override if calculated became larger (e.g. fresh data found more people)
-    useEffect(() => {
-        if (calculatedTotal > totalOverride) {
-            setTotalOverride(calculatedTotal);
-        }
-    }, [calculatedTotal, totalOverride]);
+    // Stats Calculation
+    const statsTotal = Object.values(treeStats).reduce((acc, curr) => acc + (typeof curr === 'number' ? curr : 0), 0);
+    const displayTotal = Math.max(statsTotal, initialTotalCount);
 
     return (
         <div className="bg-[#f8fafc] dark:bg-[#0b1120] rounded-[2rem] overflow-hidden flex flex-col h-full max-h-[85vh] shadow-[0_20px_50px_rgba(0,0,0,0.3)] relative border border-white dark:border-white/5">
@@ -202,7 +155,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                 </span>
                                 {user?.is_admin && (
                                     <button
-                                        onClick={() => { impact('medium'); setIsGlobalMode(!isGlobalMode); setLevelCache({}); setLevel(1); }}
+                                        onClick={() => { impact('medium'); setIsGlobalMode(!isGlobalMode); setLevel(1); }}
                                         className={cn(
                                             "text-[8px] font-black uppercase tracking-tighter px-1.5 py-0.5 rounded-full transition-all border",
                                             isGlobalMode
@@ -237,7 +190,6 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                     key={l}
                                     onClick={() => {
                                         selection();
-                                        if (!levelCache[l] && !isGlobalMode && l !== level) setIsLoading(true);
                                         setLevel(l);
                                     }}
                                     className={cn(
@@ -310,7 +262,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                         >
                             {[1, 2, 3, 4, 5, 6].map(i => <MemberSkeleton key={i} />)}
                         </motion.div>
-                    ) : error ? (
+                    ) : isError ? (
                         <motion.div
                             key="error"
                             initial={{ opacity: 0, y: 10 }}
@@ -318,9 +270,11 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                             className="flex flex-col items-center justify-center py-8 text-center"
                         >
                             <AlertCircle className="w-8 h-8 text-red-500 mb-3" />
-                            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-4">{error}</p>
+                            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-4">
+                                {error instanceof Error ? error.message : 'Failed to load data'}
+                            </p>
                             <button
-                                onClick={() => setLevel(level)}
+                                onClick={() => queryClient.invalidateQueries({ queryKey: ['network', 'level', level] })}
                                 className="px-5 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg text-xs font-black"
                             >
                                 Retry
