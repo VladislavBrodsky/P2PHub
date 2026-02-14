@@ -203,7 +203,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: '100%', opacity: 0 }}
                         transition={{ type: 'spring', damping: 30, stiffness: 250 }}
-                        className="relative flex h-full sm:h-[90dvh] w-full max-w-[480px] flex-col overflow-hidden bg-(--color-bg-deep) sm:rounded-[32px] shadow-[0_32px_80px_-20px_rgba(0,0,0,0.5)] safe-pt safe-pb border-x border-t sm:border border-(--color-border-glass)"
+                        className="relative flex h-full sm:h-[90dvh] w-full max-w-[480px] flex-col overflow-hidden bg-slate-50 dark:bg-slate-950 sm:rounded-[32px] shadow-[0_32px_80px_-20px_rgba(0,0,0,0.5)] safe-pt safe-pb border-x border-t sm:border border-slate-200 dark:border-white/10"
                         style={{
                             height: '100dvh',
                             maxHeight: '100dvh'
@@ -213,7 +213,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         <div className="relative shrink-0 z-20">
                             {/* Mesh Gradient Background for Header */}
                             <div className="absolute inset-0 mesh-gradient-dark opacity-40" />
-                            <div className="relative border-b border-(--color-border-glass) px-5 py-4 bg-(--color-bg-surface)/40 backdrop-blur-2xl">
+                            <div className="relative border-b border-slate-200 dark:border-white/10 px-5 py-4 bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl">
                                 {/* Inset for Telegram Header (dots/close) */}
                                 <div className="pt-2 sm:pt-0">
                                     <div className="flex items-center justify-between">
@@ -225,12 +225,12 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                                 <motion.div
                                                     animate={{ scale: [1, 1.2, 1] }}
                                                     transition={{ repeat: Infinity, duration: 2 }}
-                                                    className="absolute -top-1 -right-1 h-4 w-4 rounded-full border-2 border-(--color-bg-deep) bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)]"
+                                                    className="absolute -top-1 -right-1 h-4 w-4 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)]"
                                                 />
                                             </div>
                                             <div className="flex flex-col">
                                                 <div className="flex items-center gap-2">
-                                                    <h3 className="text-sm font-black uppercase tracking-[0.15em] text-(--color-text-primary)">
+                                                    <h3 className="text-sm font-black uppercase tracking-[0.15em] text-slate-900 dark:text-white">
                                                         {t('support.manager')}
                                                     </h3>
                                                     {(user?.level || 0) >= 5 && (
@@ -248,18 +248,18 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                         </div>
                                         <button
                                             onClick={onClose}
-                                            className="rounded-2xl bg-(--color-text-primary)/5 p-3 text-(--color-text-secondary) hover:bg-(--color-text-primary)/10 transition-all active:scale-90 border border-(--color-border-glass)"
+                                            className="rounded-2xl bg-slate-900/5 dark:bg-white/5 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-900/10 dark:hover:bg-white/10 transition-all active:scale-90 border border-slate-200 dark:border-white/10"
                                         >
                                             <X className="h-5 w-5" />
                                         </button>
                                     </div>
 
                                     {/* User Meta Line - "Elite Console Style" */}
-                                    <div className="mt-4 flex items-center gap-3 rounded-xl bg-black/20 dark:bg-white/5 px-3 py-2 border border-(--color-border-glass) shadow-inner">
+                                    <div className="mt-4 flex items-center gap-3 rounded-xl bg-black/20 dark:bg-white/5 px-3 py-2 border border-slate-200 dark:border-white/10 shadow-inner">
                                         <div className="flex h-5 w-5 items-center justify-center rounded-md bg-blue-500/10 border border-blue-500/20">
                                             <Terminal className="h-3 w-3 text-blue-400 opacity-70" />
                                         </div>
-                                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary) truncate">
+                                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 truncate">
                                             {t('support.user_context', { name: user?.first_name || 'PARTNER', level: user?.level || 1 })}
                                         </span>
                                         <div className="ml-auto flex items-center gap-1">
@@ -289,7 +289,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                 >
                                     <div className={`relative max-w-[88%] rounded-3xl px-5 py-4 shadow-2xl ${msg.role === 'user'
                                         ? 'vibing-blue-animated text-white rounded-tr-none border border-white/10'
-                                        : 'bg-(--color-bg-surface)/60 backdrop-blur-md border border-(--color-border-glass) text-(--color-text-primary) rounded-tl-none shadow-[0_8px_32px_-8px_rgba(0,0,0,0.15)]'
+                                        : 'bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white rounded-tl-none shadow-[0_8px_32px_-8px_rgba(0,0,0,0.15)]'
                                         }`}>
 
                                         {/* Assistant Message Glow */}
@@ -300,7 +300,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                         <p className="text-[14px] leading-relaxed font-medium">
                                             {msg.content}
                                         </p>
-                                        <div className={`mt-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.15em] opacity-40 ${msg.role === 'user' ? 'justify-end text-blue-50' : 'text-(--color-text-secondary)'
+                                        <div className={`mt-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.15em] opacity-40 ${msg.role === 'user' ? 'justify-end text-blue-50' : 'text-slate-500 dark:text-slate-400'
                                             }`}>
                                             <Clock className="h-3 w-3" />
                                             {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -311,7 +311,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
 
                             {isTyping && (
                                 <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex justify-start">
-                                    <div className="bg-(--color-bg-surface)/40 backdrop-blur-md border border-(--color-border-glass) rounded-2xl rounded-tl-none px-5 py-4 shadow-lg">
+                                    <div className="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-2xl rounded-tl-none px-5 py-4 shadow-lg">
                                         <div className="flex gap-1.5 px-1">
                                             {[0, 0.2, 0.4].map((delay) => (
                                                 <motion.span
@@ -342,11 +342,11 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                     className="pt-4"
                                 >
                                     <div className="flex items-center gap-3 mb-5">
-                                        <div className="h-px flex-1 bg-linear-to-r from-transparent via-(--color-border-glass) to-transparent" />
-                                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-(--color-text-secondary) opacity-50">
+                                        <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
+                                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500 opacity-50">
                                             {t('support.suggested_topics')}
                                         </p>
-                                        <div className="h-px flex-1 bg-linear-to-r from-transparent via-(--color-border-glass) to-transparent" />
+                                        <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
                                     </div>
                                     <div className="grid gap-3">
                                         {Object.keys(t('support.categories', { returnObjects: true }) as any).map((key, i) => (
@@ -356,15 +356,15 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                                 animate={{ opacity: 1, x: 0 }}
                                                 transition={{ delay: 0.5 + (i * 0.1) }}
                                                 onClick={() => handleCategoryClick(key)}
-                                                className="group flex items-center justify-between rounded-2xl border border-(--color-border-glass) bg-(--color-bg-surface)/40 backdrop-blur-md p-4 text-sm font-bold text-(--color-text-primary) hover:border-blue-500/40 hover:bg-blue-500/5 transition-all active:scale-[0.98] shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)]"
+                                                className="group flex items-center justify-between rounded-2xl border border-slate-200 dark:border-white/10 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-4 text-sm font-bold text-slate-900 dark:text-white hover:border-blue-500/40 hover:bg-blue-500/5 transition-all active:scale-[0.98] shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)]"
                                             >
                                                 <div className="flex items-center gap-4">
-                                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-(--color-bg-deep) text-(--color-text-secondary) group-hover:text-blue-500 group-hover:bg-blue-500/10 border border-(--color-border-glass) transition-all">
+                                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 group-hover:text-blue-500 group-hover:bg-blue-500/10 border border-slate-200 dark:border-white/10 transition-all">
                                                         <Cpu className="h-5 w-5" />
                                                     </div>
                                                     <span className="tracking-tight">{t(`support.categories.${key}`)}</span>
                                                 </div>
-                                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-(--color-bg-deep) opacity-0 group-hover:opacity-100 transition-all">
+                                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-950 opacity-0 group-hover:opacity-100 transition-all">
                                                     <ChevronRight className="h-4 w-4 text-blue-500 group-hover:translate-x-0.5 transition-transform" />
                                                 </div>
                                             </motion.button>
@@ -375,7 +375,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         </div>
 
                         {/* Input Area */}
-                        <div className="relative border-t border-(--color-border-glass) bg-(--color-bg-surface)/60 p-5 pt-5 pb-8 backdrop-blur-3xl shrink-0">
+                        <div className="relative border-t border-slate-200 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 p-5 pt-5 pb-8 backdrop-blur-3xl shrink-0">
                             {/* Glass background overlay */}
                             <div className="absolute inset-0 mesh-gradient-dark opacity-10 pointer-events-none" />
 
@@ -388,11 +388,11 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                         onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                                         disabled={sessionClosed}
                                         placeholder={sessionClosed ? t('support.session_closed') : t('support.input_placeholder')}
-                                        className="w-full rounded-[20px] border border-(--color-border-glass) bg-black/10 dark:bg-white/5 pr-12 pl-5 py-4 text-sm font-medium text-(--color-text-primary) placeholder:text-(--color-text-secondary)/30 focus:border-blue-500/40 focus:bg-black/20 dark:focus:bg-white/10 focus:outline-none transition-all disabled:opacity-50 shadow-inner"
+                                        className="w-full rounded-[20px] border border-slate-200 dark:border-white/10 bg-black/10 dark:bg-white/5 pr-12 pl-5 py-4 text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400/30 focus:border-blue-500/40 focus:bg-black/20 dark:focus:bg-white/10 focus:outline-none transition-all disabled:opacity-50 shadow-inner"
                                     />
                                     <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none opacity-20 group-focus-within:opacity-40 transition-opacity">
-                                        <div className="h-4 w-px bg-(--color-text-secondary) mx-1" />
-                                        <Terminal className="h-4 w-4 text-(--color-text-secondary)" />
+                                        <div className="h-4 w-px bg-slate-400 dark:bg-slate-500 mx-1" />
+                                        <Terminal className="h-4 w-4 text-slate-400 dark:text-slate-500" />
                                     </div>
                                 </div>
                                 <button
@@ -405,7 +405,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                             </div>
 
                             <div className="mt-5 flex flex-col items-center gap-2 opacity-30 select-none">
-                                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-(--color-text-secondary)">
+                                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-400 dark:text-slate-500">
                                     {t('support.powered_by')}
                                 </p>
                                 <div className="h-[3px] w-8 rounded-full bg-linear-to-r from-blue-500/50 to-indigo-500/50" />
