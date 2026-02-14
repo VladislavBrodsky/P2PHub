@@ -6,7 +6,7 @@ export const ListSkeleton = ({ count = 5 }: { count?: number }) => {
             {[...Array(count)].map((_, i) => (
                 <div
                     key={i}
-                    className="flex items-center gap-4 rounded-3xl border border-(--color-brand-border) bg-(--color-bg-surface) p-4"
+                    className="flex items-center gap-4 rounded-3xl border border-white/10 bg-slate-900/40 p-4"
                 >
                     <Skeleton className="h-12 w-12 rounded-full shrink-0" />
                     <div className="flex-1 space-y-2">
