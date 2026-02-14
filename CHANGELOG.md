@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.7.0] - 2026-02-14 "Go-to-Market"
+### Added
+- **UI Experience**: Complete overhaul of Loading Animation for a premium, logo-free entrance.
+- **Visuals**: Vertical connector lines in Pro Dashboard for clearer workflow visualization.
+
+### Changed
+- **Pro Dashboard UX**: Prevented iOS zoom on inputs, improved typography, and polished element spacing.
+- **Deployment**: Validated Railway deployment flow and database provisioning.
+
+### Fixed
+- **Bot Flow**: Audited and verified `/start` command and image generation pipelines.
+
 ## [1.6.1] - 2026-02-13
 ### Changed
 - **Terminology**: Reverted "Grow Hacks" button label back to "Academy" in Partner section (English locale).

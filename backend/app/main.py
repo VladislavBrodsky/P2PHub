@@ -376,6 +376,12 @@ class CachedStaticFiles(StaticFiles):
 
 # Serve promo images
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Serve generated media (Fix for viral studio permissions)
+generated_media_dir = os.path.join(base_dir, "generated_media")
+os.makedirs(generated_media_dir, exist_ok=True) # Ensure it exists
+app.mount("/generated_media", CachedStaticFiles(directory=generated_media_dir), name="generated_media")
+
+# Serve legacy promo images
 images_dir = os.path.join(base_dir, "app_images")
 if os.path.exists(images_dir):
     app.mount("/images", CachedStaticFiles(directory=images_dir), name="images")

@@ -26,4 +26,4 @@ This project follows [Semantic Versioning (SemVer)](https://semver.org/) and use
 -   **Patch (v1.1.1)**: Bug fixes (e.g., Fix typo, color adjustment).
 
 ## Current Version
-**v1.5.0** (Feb 10, 2026) - "Improved" Version Control
+**v1.7.0** (Feb 14, 2026) - "Go-to-Market"

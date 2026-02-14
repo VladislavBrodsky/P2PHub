@@ -496,20 +496,32 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                         filename = f"viral_{partner.id}_{secrets.token_hex(4)}.png"
                         # Ensure absolute path regardless of CWD
                         backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-                        save_dir = os.path.join(backend_dir, "app_images", "generated")
+                        save_dir = os.path.join(backend_dir, "generated_media")
                         os.makedirs(save_dir, exist_ok=True)
                         save_path = os.path.join(save_dir, filename)
                         
+                        # DEBUG: Verify we can write to this path
+                        logger.info(f"DEBUG: Attempting to save to {save_path}")
+                        try:
+                            with open(save_path + ".test", "w") as f:
+                                f.write("test")
+                            logger.info(f"DEBUG: Successfully wrote test file to {save_path}.test")
+                            os.remove(save_path + ".test")
+                        except Exception as e:
+                            logger.error(f"DEBUG: Failed to write test file: {e}")
+
                         # Use thread pool for blocking PIL save
                         try:
-                            await loop.run_in_executor(None, lambda: image.image.save(save_path))
+                            # await loop.run_in_executor(None, lambda: image.image.save(save_path))
+                            # Try saving directly to see if executor is the issue
+                            image.image.save(save_path)
                             logger.info(f"✅ Imagen: Successfully saved {model_name} output to {save_path}")
                         except Exception as save_err:
                             logger.error(f"❌ Failed to save image to disk: {save_err}")
                             return None # Skip this model if we can't save anyway
                         
                         self._last_working_imagen_model = model_name # Update memory
-                        return f"/images/generated/{filename}"
+                        return f"/generated_media/{filename}"
                 except Exception as e:
                     logger.warning(f"⚠️ Imagen {model_name} failed/timed out: {e}")
                     continue
