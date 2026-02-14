@@ -322,7 +322,7 @@ function App() {
                 <LazyMotion features={domAnimation}>
                     <AnimatePresence mode="wait">
                         {showOnboarding && (
-                            <Suspense fallback={null}>
+                            <Suspense fallback={<div className="fixed inset-0 bg-slate-950 z-200" />}>
                                 <OnboardingStory
                                     onComplete={() => {
                                         setShowOnboarding(false);

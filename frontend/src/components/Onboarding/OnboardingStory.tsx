@@ -30,17 +30,21 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
         }
     };
 
+    const currentStory = STORIES_LIST[index];
+
     return (
         <div className="fixed inset-0 z-200 overflow-hidden bg-slate-950">
-            <AnimatePresence mode="wait">
+            <AnimatePresence initial={false}>
                 <motion.div
                     key={index}
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    className={`relative w-full h-full flex flex-col items-center justify-center p-8 bg-linear-to-br ${STORIES_LIST[index].color}`}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className={`absolute inset-0 flex flex-col items-center justify-center p-8 bg-linear-to-br ${currentStory.color}`}
                     style={{ paddingTop: 'calc(env(safe-area-inset-top) + 3rem)' }}
                 >
+                    <div className="absolute inset-0 bg-black/20 pointer-events-none" />
                     {/* Progress Bar */}
                     <div className="absolute left-6 right-6 flex gap-1.5 z-10" style={{ top: 'calc(env(safe-area-inset-top) + 4rem)' }}>
                         {STORIES_LIST.map((_, i) => (
