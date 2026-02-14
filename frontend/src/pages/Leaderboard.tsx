@@ -73,7 +73,7 @@ export default function LeaderboardPage() {
 
     return (
         <div className="flex flex-col min-h-[85vh] px-4 pt-4 pb-32">
-            <h1 className="text-2xl font-black text-(--color-text-primary) mb-6 tracking-tight uppercase text-center">
+            <h1 className="text-2xl font-black text-slate-900 dark:text-white mb-6 tracking-tight uppercase text-center">
                 {t('leaderboard.title')}
             </h1>
 
@@ -100,7 +100,7 @@ export default function LeaderboardPage() {
                                 setIsModalOpen(true);
                             }}
                             // #comment Reduced padding to p-2.5 and border-radius to rounded-2xl for a tighter, more data-dense look on mobile.
-                            className="w-full flex items-center justify-between rounded-2xl border border-(--color-brand-border) bg-(--color-bg-surface) p-2.5 shadow-premium transition-all active:scale-[0.98] group relative overflow-hidden"
+                            className="w-full flex items-center justify-between rounded-2xl border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 p-2.5 shadow-premium transition-all active:scale-[0.98] group relative overflow-hidden"
                         >
                             {/* Background Glow for Top 3 */}
                             {index < 3 && (
@@ -114,7 +114,7 @@ export default function LeaderboardPage() {
                                     <div className={`flex h-8 w-8 items-center justify-center rounded-full text-[10px] font-black shadow-sm ${index === 0 ? 'bg-amber-500 text-white' :
                                         index === 1 ? 'bg-slate-300 text-slate-700' :
                                             index === 2 ? 'bg-orange-300 text-orange-800' :
-                                                'bg-slate-100 dark:bg-slate-800 text-(--color-text-secondary)'
+                                                'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                                         }`}>
                                         {index < 3 ? (
                                             index === 0 ? <Trophy size={14} /> :
@@ -134,7 +134,7 @@ export default function LeaderboardPage() {
 
                                 <div className="flex items-center gap-2.5">
                                     {/* #comment Forced perfect circle with rounded-full and aspect-square. Removed rounded-2xl. */}
-                                    <div className={`h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 shadow-sm transition-transform group-hover:scale-105 ${index < 3 ? 'border-white dark:border-white/20 ring-2 ring-amber-500/20' : 'border-(--color-brand-border)'
+                                    <div className={`h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 shadow-sm transition-transform group-hover:scale-105 ${index < 3 ? 'border-white dark:border-white/20 ring-2 ring-amber-500/20' : 'border-slate-200 dark:border-white/10'
                                         } bg-slate-200 dark:bg-slate-700 aspect-square`}>
                                         {(user.photo_file_id || user.photo_url) ? (
                                             <LazyImage
@@ -154,9 +154,9 @@ export default function LeaderboardPage() {
                                         )}
                                     </div>
                                     <div className="text-left">
-                                        <p className="text-xs font-black text-(--color-text-primary) line-clamp-1 leading-tight">{user.first_name || user.username}</p>
+                                        <p className="text-xs font-black text-slate-900 dark:text-white line-clamp-1 leading-tight">{user.first_name || user.username}</p>
                                         <div className="flex items-center gap-1.5 flex-wrap">
-                                            <div className="flex items-center gap-1 text-[9px] font-bold text-(--color-text-secondary)">
+                                            <div className="flex items-center gap-1 text-[9px] font-bold text-slate-500 dark:text-slate-400">
                                                 <span>LVL {user.level}</span>
                                                 <div className="h-0.5 w-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
                                                 <div className="flex items-center gap-1 text-blue-500/70">
@@ -170,7 +170,7 @@ export default function LeaderboardPage() {
                             </div>
 
                             <div className="flex flex-col items-end gap-0.5 relative z-10">
-                                <span className="text-xs font-black text-(--color-text-primary) font-mono tracking-tighter">
+                                <span className="text-xs font-black text-slate-900 dark:text-white font-mono tracking-tighter">
                                     {user.xp.toLocaleString()}
                                 </span>
                                 <span className="text-[8px] font-black uppercase tracking-widest text-emerald-500/80 leading-none">
@@ -187,7 +187,7 @@ export default function LeaderboardPage() {
                                 selection();
                                 setShowAll(!showAll);
                             }}
-                            className="w-full mt-2 py-3 rounded-xl border border-dashed border-(--color-brand-border) text-xs font-black text-(--color-text-secondary) uppercase tracking-tighter hover:bg-(--color-bg-surface) hover:text-(--color-text-primary) transition-all active:scale-95"
+                            className="w-full mt-2 py-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-tighter hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"
                         >
                             {showAll ? t('common.show_less') : `${t('common.show_more')} (TOP 50)`}
                         </button>
