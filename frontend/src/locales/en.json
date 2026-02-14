@@ -414,6 +414,10 @@
         "title": "Global Leaderboard",
         "top_partners": "Top Partners",
         "xp": "XP",
+        "current_league": "Current League",
+        "global_rank": "Global Rank",
+        "xp_score": "XP Score",
+        "referrals": "Referrals",
         "levels": {
             "wooden": "Wooden League",
             "silver": "Silver League",

@@ -379,7 +379,7 @@ export const ProDashboard = () => {
                 </p>
                 <button
                     onClick={() => window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }))}
-                    className="px-8 h-14 bg-linear-to-r from-amber-400 to-orange-600 rounded-2xl font-black text-white shadow-lg active:scale-95 transition-all"
+                    className="px-8 h-14 bg-linear-to-r from-amber-400 to-orange-600 rounded-2xl font-black text-white active:scale-95 transition-all"
                 >
                     {t('pro_dashboard.locked.upgrade_btn')}
                 </button>
@@ -410,7 +410,7 @@ export const ProDashboard = () => {
                     </div>
                     <button
                         onClick={() => { selection(); setShowSetup(true); }}
-                        className="p-2.5 rounded-xl bg-(--color-bg-surface) border border-white/5 active:scale-95 transition-all shadow-sm"
+                        className="p-2.5 rounded-xl bg-(--color-bg-surface) border border-white/5 active:scale-95 transition-all"
                     >
                         <Settings className="w-3.5 h-3.5 text-brand-muted" />
                     </button>
@@ -423,7 +423,7 @@ export const ProDashboard = () => {
                                 key={tab}
                                 onClick={() => { setActiveTab(tab); selection(); }}
                                 className={`px-4 h-8 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap border flex items-center gap-2 relative overflow-hidden ${activeTab === tab
-                                    ? 'vibing-blue-animated text-white shadow-[0_8px_20px_-6px_rgba(59,130,246,0.5)] border-blue-400/30 scale-105 z-2'
+                                    ? 'vibing-blue-animated text-white border-blue-400/30 scale-105 z-2'
                                     : 'bg-(--color-bg-surface) text-brand-muted border-white/5 hover:border-indigo-500/30 opacity-70 hover:opacity-100'
                                     }`}
                             >
@@ -461,10 +461,10 @@ export const ProDashboard = () => {
                                 <div className="flex items-center justify-center gap-3 py-4">
                                     {[1, 2, 3].map((s) => (
                                         <div key={s} className="flex items-center">
-                                            <div className={`w-9 h-9 rounded-2xl flex items-center justify-center text-[10px] font-black transition-all shadow-lg ${step === s
-                                                ? 'vibing-blue-animated text-white scale-110 shadow-blue-500/30'
+                                            <div className={`w-9 h-9 rounded-2xl flex items-center justify-center text-[10px] font-black transition-all ${step === s
+                                                ? 'vibing-blue-animated text-white scale-110'
                                                 : step > s
-                                                    ? 'bg-emerald-500 text-white shadow-emerald-500/20'
+                                                    ? 'bg-emerald-500 text-white'
                                                     : 'bg-(--color-bg-surface) text-(--color-text-secondary) border border-(--color-border-glass) opacity-40'
                                                 }`}>
                                                 {step > s ? <CheckCircle2 size={14} /> : s}
@@ -494,7 +494,7 @@ export const ProDashboard = () => {
                                             <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-pink-500/5 pointer-events-none" />
 
                                             <div className="flex items-center gap-4 mb-8 relative z-10">
-                                                <div className="w-12 h-12 rounded-[1.25rem] vibing-blue-animated flex items-center justify-center shadow-[0_10px_20px_-5px_rgba(0,102,255,0.4)] shrink-0">
+                                                <div className="w-12 h-12 rounded-[1.25rem] vibing-blue-animated flex items-center justify-center shrink-0">
                                                     <Terminal size={20} className="text-white" />
                                                 </div>
                                                 <div>
@@ -579,7 +579,7 @@ export const ProDashboard = () => {
                                         <button
                                             onClick={() => { selection(); setStep(2); }}
                                             disabled={!postType || !audience}
-                                            className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-[10px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:grayscale disabled:shadow-none"
+                                            className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-[10px] uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:grayscale"
                                         >
                                             {t('pro_dashboard.studio.initiate_btn')} <ChevronRight size={16} />
                                         </button>
@@ -663,7 +663,7 @@ export const ProDashboard = () => {
                                                 <div className="flex flex-col gap-3 pt-2">
                                                     <button
                                                         onClick={handleGenerate}
-                                                        className="w-full h-14 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 group"
+                                                        className="w-full h-14 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3 group"
                                                     >
                                                         {t('pro_dashboard.studio.go_viral_btn')} <Send size={14} className="group-active:translate-x-1 group-active:-translate-y-1 transition-transform" />
                                                     </button>
@@ -700,14 +700,14 @@ export const ProDashboard = () => {
                                                 {/* Image Actions Overlay */}
                                                 <div className="absolute inset-x-0 bottom-0 z-10 opacity-0 group-hover/img:opacity-100 transition-all duration-300 bg-linear-to-t from-black/90 to-transparent p-6 translate-y-4 group-hover/img:translate-y-0">
                                                     <div className="flex items-center justify-center gap-4">
-                                                        <button onClick={() => { selection(); handleSaveImageToDevice(); }} className="p-4 bg-white/10 hover:bg-emerald-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all shadow-lg active:scale-90">
+                                                        <button onClick={() => { selection(); handleSaveImageToDevice(); }} className="p-4 bg-white/10 hover:bg-emerald-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90">
                                                             <Download size={20} />
                                                         </button>
-                                                        <button onClick={handleGenerate} className="p-4 bg-white/10 hover:bg-indigo-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all shadow-lg active:scale-90">
+                                                        <button onClick={handleGenerate} className="p-4 bg-white/10 hover:bg-indigo-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90">
                                                             <RefreshCw size={20} />
                                                         </button>
                                                         {historyIndex > 0 && (
-                                                            <button onClick={handleUndoVersion} className="p-4 bg-white/10 hover:bg-amber-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all shadow-lg active:scale-90">
+                                                            <button onClick={handleUndoVersion} className="p-4 bg-white/10 hover:bg-amber-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90">
                                                                 <Undo2 size={20} />
                                                             </button>
                                                         )}
@@ -715,7 +715,7 @@ export const ProDashboard = () => {
                                                 </div>
 
                                                 <div className="absolute top-6 right-6 z-2">
-                                                    <span className="bg-indigo-500/90 backdrop-blur-md text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.2em] border border-indigo-400/30 shadow-lg shadow-indigo-500/40">{t('pro_dashboard.studio.ai_generated_badge')}</span>
+                                                    <span className="bg-indigo-500/90 backdrop-blur-md text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.2em] border border-indigo-400/30">{t('pro_dashboard.studio.ai_generated_badge')}</span>
                                                 </div>
                                             </div>
                                             <div className="p-7 space-y-5 relative">
@@ -727,10 +727,10 @@ export const ProDashboard = () => {
                                                         <div className="h-1 w-12 vibing-blue-gradient rounded-full" />
                                                     </div>
                                                     <div className="flex gap-2 shrink-0">
-                                                        <button onClick={() => { selection(); handleCopyText(); }} className="p-2.5 bg-(--color-bg-surface) hover:bg-indigo-500/10 rounded-xl border border-(--color-border-glass) text-brand-muted hover:text-indigo-500 transition-all active:scale-90 shadow-sm">
+                                                        <button onClick={() => { selection(); handleCopyText(); }} className="p-2.5 bg-(--color-bg-surface) hover:bg-indigo-500/10 rounded-xl border border-(--color-border-glass) text-brand-muted hover:text-indigo-500 transition-all active:scale-90">
                                                             <Copy size={14} />
                                                         </button>
-                                                        <button onClick={handleGenerate} className="p-2.5 bg-(--color-bg-surface) hover:bg-indigo-500/10 rounded-xl border border-(--color-border-glass) text-brand-muted hover:text-indigo-500 transition-all active:scale-90 shadow-sm">
+                                                        <button onClick={handleGenerate} className="p-2.5 bg-(--color-bg-surface) hover:bg-indigo-500/10 rounded-xl border border-(--color-border-glass) text-brand-muted hover:text-indigo-500 transition-all active:scale-90">
                                                             <RefreshCw size={14} className={isGenerating ? "animate-spin" : ""} />
                                                         </button>
                                                     </div>
@@ -746,10 +746,10 @@ export const ProDashboard = () => {
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-2 gap-3 pb-4">
-                                            <button onClick={() => { selection(); setShowPublishModal(true); }} className="h-12 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2">
+                                            <button onClick={() => { selection(); setShowPublishModal(true); }} className="h-12 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2">
                                                 {t('pro_dashboard.studio.publish_btn')} <Send size={14} className="animate-pulse" />
                                             </button>
-                                            <button onClick={() => { impact('light'); handleSharePost(); }} className="h-12 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm">
+                                            <button onClick={() => { impact('light'); handleSharePost(); }} className="h-12 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text active:scale-95 transition-all flex items-center justify-center gap-2">
                                                 {t('pro_dashboard.studio.share_btn')} <Share size={14} />
                                             </button>
                                         </div>
@@ -807,7 +807,7 @@ export const ProDashboard = () => {
                                         <button
                                             onClick={() => { selection(); handleFixHeadline(); }}
                                             disabled={isFixingHeadline || !headlineInput}
-                                            className="w-full h-11 bg-linear-to-r from-pink-600 to-rose-500 rounded-xl font-black text-white text-[9px] uppercase tracking-[0.25em] shadow-lg active:scale-95 transition-all flex items-center justify-center disabled:opacity-30 disabled:grayscale"
+                                            className="w-full h-11 bg-linear-to-r from-pink-600 to-rose-500 rounded-xl font-black text-white text-[9px] uppercase tracking-[0.25em] active:scale-95 transition-all flex items-center justify-center disabled:opacity-30 disabled:grayscale"
                                         >
                                             {isFixingHeadline ? <Loader2 className="animate-spin w-4 h-4" /> : (
                                                 <span className="flex items-center gap-2">
@@ -871,7 +871,7 @@ export const ProDashboard = () => {
                                                 }
                                             }}
                                             disabled={isFixingBio || !bioInput}
-                                            className="w-full h-11 vibing-blue-animated rounded-xl font-black text-white text-[9px] uppercase tracking-[0.25em] shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:grayscale"
+                                            className="w-full h-11 vibing-blue-animated rounded-xl font-black text-white text-[9px] uppercase tracking-[0.25em] active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:grayscale"
                                         >
                                             {isFixingBio ? <Loader2 className="animate-spin w-4 h-4" /> : (
                                                 <>
@@ -921,7 +921,7 @@ export const ProDashboard = () => {
                                     <button
                                         onClick={() => { selection(); handleFetchTrends(); }}
                                         disabled={isHuntingTrends}
-                                        className="w-full h-11 bg-linear-to-r from-orange-600 to-amber-500 rounded-xl font-black text-white text-[9px] uppercase tracking-[0.25em] shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:grayscale"
+                                        className="w-full h-11 bg-linear-to-r from-orange-600 to-amber-500 rounded-xl font-black text-white text-[9px] uppercase tracking-[0.25em] active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:grayscale"
                                     >
                                         {isHuntingTrends ? <Loader2 className="animate-spin w-4 h-4" /> : (
                                             <>
@@ -1172,7 +1172,7 @@ export const ProDashboard = () => {
                                         </div>
                                         <button
                                             onClick={() => { selection(); setShowSetup(false); }}
-                                            className="p-3 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-2xl text-brand-text shadow-sm hover:border-indigo-500/30 active:scale-90 transition-all"
+                                            className="p-3 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-2xl text-brand-text hover:border-indigo-500/30 active:scale-90 transition-all"
                                         >
                                             <ArrowLeft size={20} />
                                         </button>
@@ -1321,7 +1321,7 @@ export const ProDashboard = () => {
                                         <div className="pt-4 shrink-0">
                                             <button
                                                 onClick={() => { selection(); handleSaveSetup(); }}
-                                                className="w-full h-16 vibing-blue-animated rounded-2xl font-black text-white text-[12px] uppercase tracking-[0.3em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:grayscale disabled:opacity-50"
+                                                className="w-full h-16 vibing-blue-animated rounded-2xl font-black text-white text-[12px] uppercase tracking-[0.3em] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:grayscale disabled:opacity-50"
                                                 disabled={isLoading}
                                             >
                                                 {isLoading ? <Loader2 className="animate-spin" /> : t('pro_dashboard.setup.save_btn')}
@@ -1396,7 +1396,7 @@ export const ProDashboard = () => {
                                                             }`}
                                                     >
                                                         <div className="flex items-center gap-3.5">
-                                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition-transform group-hover:scale-105 ${platform === 'x' ? 'bg-slate-950 border border-white/10' :
+                                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105 ${platform === 'x' ? 'bg-slate-950 border border-white/10' :
                                                                 platform === 'telegram' ? 'bg-linear-to-br from-blue-400 to-blue-600' : 'bg-linear-to-br from-blue-600 to-blue-800'
                                                                 }`}>
                                                                 {platform === 'x' && <Twitter size={18} className="text-white" />}
@@ -1434,7 +1434,7 @@ export const ProDashboard = () => {
                                     <div className="space-y-4 pt-4">
                                         <button
                                             onClick={() => { selection(); setShowPublishModal(false); setStep(1); }}
-                                            className="w-full h-12 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text transition-all active:scale-95 shadow-sm"
+                                            className="w-full h-12 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text transition-all active:scale-95"
                                         >
                                             {t('pro_dashboard.publish.create_another_btn')}
                                         </button>

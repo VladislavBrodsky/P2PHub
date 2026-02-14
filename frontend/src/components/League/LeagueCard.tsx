@@ -69,45 +69,48 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, ref
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className={`relative overflow-hidden rounded-[2rem] border ${config.borderColor} bg-linear-to-br ${config.color} p-8 shadow-2xl`}
+            className={`relative overflow-hidden rounded-[2rem] border ${config.borderColor} bg-linear-to-br ${config.color} p-6 sm:p-8 shadow-2xl`}
         >
             {/* Background Decoration */}
-            <div className="absolute -right-8 -top-8 h-40 w-40 opacity-10">
+            <div className="absolute -right-8 -top-8 h-48 w-48 opacity-[0.03] text-white">
                 <Icon className="h-full w-full rotate-12" />
             </div>
 
+            {/* Glossy Highlight */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.15),transparent)] pointer-events-none" />
+
             <div className="relative z-10">
                 <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/10">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/10">
                         <Icon className={`h-6 w-6 ${config.textColor}`} />
                     </div>
                     <div>
-                        <span className="text-[9px] font-black uppercase tracking-[0.2em] opacity-50 text-white leading-none">
+                        <span className="text-[8px] font-black uppercase tracking-wider opacity-50 text-white leading-none block">
                             {t('leaderboard.current_league')}
                         </span>
-                        <h2 className={`text-2xl font-black tracking-tighter ${config.textColor} mt-1`}>{config.name}</h2>
+                        <h2 className={`text-2xl font-black tracking-tighter ${config.textColor} mt-0.5`}>{config.name}</h2>
                     </div>
                 </div>
 
-                <p className={`mt-5 text-[11px] font-medium ${config.textColor} opacity-70 leading-relaxed max-w-[85%]`}>
+                <p className={`mt-4 text-[11px] font-medium ${config.textColor} opacity-70 leading-relaxed max-w-[90%]`}>
                     {config.description}
                 </p>
 
-                <div className="mt-10 grid grid-cols-3 gap-6 border-t border-white/10 pt-8">
-                    <div>
-                        <p className="text-[9px] font-black uppercase tracking-widest opacity-50 text-white mb-2">
+                <div className="mt-8 grid grid-cols-3 gap-4 border-t border-white/10 pt-6">
+                    <div className="min-w-0">
+                        <p className="text-[8px] font-black uppercase tracking-wider opacity-50 text-white mb-1.5 truncate">
                             {t('leaderboard.global_rank')}
                         </p>
                         <p className={`text-xl font-black tracking-tighter ${config.textColor}`}>#{rank}</p>
                     </div>
-                    <div>
-                        <p className="text-[9px] font-black uppercase tracking-widest opacity-50 text-white mb-2">
+                    <div className="min-w-0">
+                        <p className="text-[8px] font-black uppercase tracking-wider opacity-50 text-white mb-1.5 truncate">
                             {t('leaderboard.xp_score')}
                         </p>
                         <p className={`text-xl font-black tracking-tighter ${config.textColor}`}>{score.toLocaleString()}</p>
                     </div>
-                    <div>
-                        <p className="text-[9px] font-black uppercase tracking-widest opacity-50 text-white mb-2">
+                    <div className="min-w-0">
+                        <p className="text-[8px] font-black uppercase tracking-wider opacity-50 text-white mb-1.5 truncate">
                             {t('leaderboard.referrals')}
                         </p>
                         <p className={`text-xl font-black tracking-tighter ${config.textColor}`}>{referrals}</p>
