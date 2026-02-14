@@ -89,7 +89,7 @@ async def simulate_join():
                 expected_gain *= 5
                 print(f"Expected Gain (PRO): 35 * 5 = {expected_gain}")
             else:
-                print(f"Expected Gain (Normal): 35")
+                print("Expected Gain (Normal): 35")
 
             if xp_gain == expected_gain:
                 print("✅ XP correct!")

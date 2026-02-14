@@ -348,13 +348,6 @@ async def get_my_profile(
 
     return partner_response
 
-    try:
-        await redis_service.set_json(cache_key, partner_dict, expire=300)
-    except Exception as e:
-        logger.warning(f"Profile cache write failed: {e}")
-
-    return partner_dict
-
 
 @router.get("/top", response_model=List[PartnerTopResponse])
 async def get_top_partners(
@@ -846,7 +839,6 @@ async def claim_task_reward(
     session.add(task_earning)
 
     # 2. Update partner stats
-    xp_before = partner.xp
     
     # Atomic XP Increment
     await session.execute(

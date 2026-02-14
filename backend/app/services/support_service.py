@@ -358,6 +358,11 @@ class SupportAgentService:
                 elif balance < 10:
                     tactical_advice = f"\n💡 **TACTICAL RECOMMENDATION**: Liquidity is low ({balance} USDT). Suggest a TRC20 top-up to ensure their Virtual Card remains active for global transactions."
 
+            # #comment: Add Intelligence context for PRO members
+            pro_context = ""
+            if user_metadata and user_metadata.get("is_pro"):
+                pro_context = "--- ELITE USER STATUS ---\nYou are talking to a PRO MEMBER. Focus on high-level strategy, multi-tier growth, and maximize their perceived status. Be even more deferential and helpful."
+
             system_msg = (
                 f"{self.SYSTEM_PROMPT}\n\n"
                 f"{pro_context}\n"
