@@ -50,7 +50,7 @@ async def get_network_activity(
         logger.warning(f"Cache read failed (activity): {e}")
 
     # Fetch latest XP transactions with partner details
-    from app.models.partner import Partner, XPTransaction
+    # Fetch latest XP transactions with partner details
     stmt = (
         select(XPTransaction, Partner.first_name, Partner.username, Partner.photo_file_id)
         .join(Partner, XPTransaction.partner_id == Partner.id)
@@ -150,7 +150,7 @@ async def get_my_profile(
         await process_referral_notifications(bot, session, partner, is_new)
     else:
         # Update profile if changed (Throttled)
-        from datetime import datetime, timedelta
+        # Update profile if changed (Throttled)
         now = datetime.utcnow()
         if not partner.updated_at or partner.updated_at < (now - timedelta(hours=1)):
             has_changed = False
@@ -224,7 +224,6 @@ async def get_my_profile(
                 {"inc": total_reward, "p_id": partner.id}
             )
             
-            from app.models.partner import Earning, XPTransaction
             # Log Base Reward
             session.add(XPTransaction(
                 partner_id=partner.id,
@@ -258,7 +257,6 @@ async def get_my_profile(
             {"inc": checkin_xp, "p_id": partner.id}
         )
         
-        from app.models.partner import Earning, XPTransaction
         session.add(XPTransaction(
             partner_id=partner.id,
             amount=checkin_xp,
@@ -324,6 +322,9 @@ async def get_top_partners(
     """
     Fetches the top 5 partners by XP for social proof.
     """
+    """
+    Fetches the top 5 partners by XP for social proof.
+    """
     from app.utils.ranking import get_rank
 
     cache_key = "partners:top"
@@ -365,7 +366,7 @@ async def get_top_partners(
 
     return top_data
 
-from app.models.partner import SystemSetting, get_session
+from app.models.partner import SystemSetting
 
 
 @router.get("/recent")
@@ -758,6 +759,7 @@ async def claim_task_reward(
 
     if not partner_task_record:
         # 1. Add record to PartnerTask table (for social tasks that don't have /start)
+        # 1. Add record to PartnerTask table (for social tasks that don't have /start)
         from app.models.partner import PartnerTask
         partner_task_record = PartnerTask(
             partner_id=partner.id,
@@ -787,7 +789,7 @@ async def claim_task_reward(
     effective_xp = xp_reward * 5 if partner.is_pro else xp_reward  # PRO members get 5x XP bonus
     
     # 1.2 Unified Transaction: Log Task XP as an Earning
-    from app.models.partner import Earning
+    # 1.2 Unified Transaction: Log Task XP as an Earning
     task_earning = Earning(
         partner_id=partner.id,
         amount=effective_xp,

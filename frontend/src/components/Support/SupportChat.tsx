@@ -151,7 +151,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
         if (isOpen) {
             initSession();
         }
-    }, [isOpen, messages.length, resetInactivityTimer, t]);
+    }, [resetInactivityTimer, t]);
 
     const handleSendMessage = React.useCallback(async (text_val?: string) => {
         const messageText = text_val || inputValue;

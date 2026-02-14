@@ -208,7 +208,8 @@ async def inline_handler(inline_query: types.InlineQuery):
         logging.error(f"❌ Inline handler error: {e}")
         try:
             await inline_query.answer([], is_personal=True, cache_time=0)
-        except: pass
+        except Exception:
+            pass
 
 
 @dp.message(Command("support", "care", "help"))
@@ -396,7 +397,8 @@ async def handle_support_chat(message: types.Message):
     # Show typing indicator for a premium human-like feel
     try:
         await bot.send_chat_action(chat_id=message.chat.id, action="typing")
-    except: pass
+    except Exception:
+        pass
     
     try:
         async for session_db in get_session():

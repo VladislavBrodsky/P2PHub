@@ -53,7 +53,8 @@ async def ensure_photo_cached(file_id: str) -> Optional[bytes]:
         try:
             cached_binary = await redis_service.get_bytes(cache_key_binary)
             if cached_binary: return cached_binary
-        except: pass
+        except Exception:
+            pass
 
         try:
             # Check secondary cache for URL
@@ -212,7 +213,6 @@ async def get_partner_by_referral_code(session: AsyncSession, code: str) -> Opti
 
 @broker.task(task_name="sync_profile_photos_task", schedule=[{"cron": "0 0 * * *"}])
 async def sync_profile_photos_task():
-    from bot import bot
     from app.models.partner import engine
     from sqlalchemy.orm import sessionmaker
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
