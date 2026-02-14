@@ -215,13 +215,13 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                         {/* Search and Filters */}
                         <div className="px-4 py-4 space-y-4">
                             <div className="relative group">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-(--color-text-secondary) group-focus-within:text-blue-500 transition-colors" />
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-slate-400 group-focus-within:text-blue-500 transition-colors" />
                                 <input
                                     type="text"
                                     placeholder={t('blog.navigation.search_placeholder')}
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full h-14 pl-12 pr-4 rounded-2xl bg-(--color-bg-surface) border border-(--color-border-glass) focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 outline-hidden font-medium text-sm transition-all"
+                                    className="w-full h-14 pl-12 pr-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 outline-hidden font-medium text-sm transition-all"
                                 />
                             </div>
 
@@ -232,7 +232,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                         onClick={() => { selection(); setSelectedCategory(category); }}
                                         className={`px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${selectedCategory === category
                                             ? 'bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/20'
-                                            : 'bg-(--color-bg-surface) text-(--color-text-secondary) border-(--color-border-glass) hover:border-blue-500/30'
+                                            : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-white/10 hover:border-blue-500/30'
                                             }`}
                                     >
                                         {category}
@@ -250,7 +250,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     onClick={() => handlePostClick(currentFeaturedPost)}
-                                    className="group overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) bg-(--color-bg-surface) flex flex-col shadow-sm"
+                                    className="group overflow-hidden rounded-[2.5rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 flex flex-col shadow-sm"
                                 >
                                     {currentFeaturedPost.image && (
                                         <div className="aspect-video w-full overflow-hidden relative">
@@ -269,14 +269,14 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                             <span className="px-2.5 py-1 rounded-full bg-blue-500 text-[9px] font-black uppercase tracking-widest text-white">
                                                 {t('blog.navigation.featured')}
                                             </span>
-                                            <span className="text-[9px] font-bold text-(--color-text-secondary) opacity-60">
+                                            <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
                                                 {currentFeaturedPost.date}
                                             </span>
                                         </div>
-                                        <h3 className="text-xl sm:text-2xl font-black leading-tight text-(--color-text-primary) group-hover:text-blue-500 transition-colors line-clamp-3">
+                                        <h3 className="text-xl sm:text-2xl font-black leading-tight text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors line-clamp-3">
                                             {currentFeaturedPost.title}
                                         </h3>
-                                        <p className="text-xs sm:text-sm font-medium text-(--color-text-secondary) line-clamp-2">
+                                        <p className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 line-clamp-2">
                                             {currentFeaturedPost.excerpt}
                                         </p>
                                         <div className="pt-2 sm:pt-4 flex items-center justify-between">
@@ -284,7 +284,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                                 <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
                                                     <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
                                                 </div>
-                                                <span className="text-[10px] sm:text-xs font-bold text-(--color-text-secondary)">{currentFeaturedPost.author}</span>
+                                                <span className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">{currentFeaturedPost.author}</span>
                                             </div>
                                             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/5 flex items-center justify-center border border-blue-500/10 group-hover:bg-blue-500 group-hover:text-white group-hover:scale-110 transition-all duration-500">
                                                 <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -303,10 +303,10 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: index * 0.05 }}
                                         onClick={() => handlePostClick(post)}
-                                        className="group p-5 rounded-[2rem] bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-blue-500/30 transition-all active:scale-[0.98] flex gap-4 items-center"
+                                        className="group p-5 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 transition-all active:scale-[0.98] flex gap-4 items-center"
                                     >
                                         {post.image && (
-                                            <div className="shrink-0 w-20 h-20 rounded-2xl overflow-hidden border border-(--color-border-glass)">
+                                            <div className="shrink-0 w-20 h-20 rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10">
                                                 <img
                                                     src={post.image}
                                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -320,7 +320,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                                 <span className="text-[9px] font-black uppercase tracking-widest text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/10">
                                                     {post.category}
                                                 </span>
-                                                <div className="flex items-center gap-1 text-[9px] font-bold text-(--color-text-secondary) opacity-60">
+                                                <div className="flex items-center gap-1 text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
                                                     <Clock className="w-3 h-3" />
                                                     {post.date}
                                                 </div>
@@ -328,11 +328,11 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                             <h4 className="text-[15px] font-extrabold leading-tight group-hover:text-blue-500 transition-colors line-clamp-2">
                                                 {post.title}
                                             </h4>
-                                            <p className="text-[11px] font-medium text-(--color-text-secondary) line-clamp-2 leading-relaxed">
+                                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
                                                 {post.excerpt}
                                             </p>
                                         </div>
-                                        <div className="shrink-0 w-10 h-10 rounded-full bg-(--color-bg-app) border border-(--color-border-glass) flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                                        <div className="shrink-0 w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
                                             <ChevronRight className="w-5 h-5" />
                                         </div>
                                     </motion.div>
@@ -344,7 +344,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                             <Search className="w-8 h-8 text-slate-400" />
                                         </div>
                                         <h3 className="text-xl font-black">{t('blog.navigation.no_results')}</h3>
-                                        <p className="text-sm text-(--color-text-secondary) max-w-[200px] mx-auto">
+                                        <p className="text-sm text-slate-500 dark:text-slate-400 max-w-[200px] mx-auto">
                                             {t('blog.navigation.no_results_desc')}
                                         </p>
                                     </div>
@@ -432,23 +432,23 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -10 }}
-            className="flex flex-col min-h-screen bg-(--color-bg-app) relative"
+            className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 relative"
         >
             {/* Header Area - Non-sticky to avoid overlapping */}
-            <div className="w-full pt-(--header-total-height) pb-3 px-4 bg-transparent transition-all">
+            <div className="w-full pt-[var(--header-total-height)] pb-3 px-4 bg-transparent transition-all">
                 <div className="flex items-center justify-between w-full">
-                    <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-(--color-bg-surface) active:scale-90 transition-all text-(--color-text-primary)">
+                    <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-white dark:hover:bg-slate-900 active:scale-90 transition-all text-slate-900 dark:text-white">
                         <ArrowLeft className="w-6 h-6" />
                     </button>
                     <div className="flex items-center gap-3">
-                        <button onClick={onShare} className="p-2.5 rounded-full bg-(--color-bg-surface) border border-(--color-border-glass) active:scale-90 transition-all hover:border-blue-500/30">
-                            <Share2 className="w-5 h-5 text-(--color-text-secondary)" />
+                        <button onClick={onShare} className="p-2.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-90 transition-all hover:border-blue-500/30">
+                            <Share2 className="w-5 h-5 text-slate-500 dark:text-slate-400" />
                         </button>
                         <button
                             onClick={onLike}
                             className={`p-2.5 rounded-full border transition-all active:scale-95 flex items-center justify-center ${engagement.liked
                                 ? 'bg-red-500/15 border-red-500/30 text-red-500 shadow-lg shadow-red-500/10'
-                                : 'bg-(--color-bg-surface) border-(--color-border-glass) text-(--color-text-secondary) hover:border-red-500/20'
+                                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:border-red-500/20'
                                 }`}
                         >
                             <Heart className={`w-5 h-5 ${engagement.liked ? 'fill-current' : ''}`} />
@@ -462,7 +462,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                 {/* Meta */}
                 <div className="space-y-4">
                     {post.image && (
-                        <div className="relative w-full aspect-video rounded-3xl overflow-hidden border border-(--color-border-glass) shadow-2xl">
+                        <div className="relative w-full aspect-video rounded-3xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-2xl">
                             <img
                                 src={post.image}
                                 className="absolute inset-0 w-full h-full object-cover"
@@ -476,27 +476,27 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                         <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-widest border border-blue-500/20">
                             {post.category}
                         </span>
-                        <div className="flex items-center gap-1 text-[10px] font-bold text-(--color-text-secondary) opacity-60">
+                        <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
                             <Clock className="w-3 h-3" />
                             {post.date}
                         </div>
                     </div>
-                    <h1 className="text-2xl sm:text-3xl font-black leading-tight tracking-tight text-(--color-text-primary)">
+                    <h1 className="text-2xl sm:text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-white">
                         {post.title}
                     </h1>
-                    <div className="flex items-center gap-3 py-1.5 border-y border-(--color-border-glass)">
+                    <div className="flex items-center gap-3 py-1.5 border-y border-slate-200 dark:border-white/10">
                         <div className="w-10 h-10 rounded-full bg-linear-to-br from-slate-400 to-slate-600 dark:from-slate-700 dark:to-slate-900 flex items-center justify-center font-black text-sm text-white shadow-inner">
                             {post.author[0]}
                         </div>
                         <div>
                             <p className="text-xs font-black">{post.author}</p>
-                            <p className="text-[10px] font-bold text-(--color-text-secondary) opacity-60">Pintopay Intelligence Hub</p>
+                            <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-60">Pintopay Intelligence Hub</p>
                         </div>
                     </div>
                 </div>
 
                 {/* Body Text (Simulated content structure) */}
-                <div className="space-y-6 text-lg leading-relaxed text-(--color-text-primary)/90 font-medium whitespace-pre-wrap">
+                <div className="space-y-6 text-lg leading-relaxed text-slate-900/90 dark:text-white/90 font-medium whitespace-pre-wrap">
                     <p className="first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left first-letter:text-blue-500 first-letter:leading-none first-letter:pt-2">
                         {post.excerpt}
                     </p>
@@ -525,7 +525,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                         onClick={onLike}
                         className={`group px-7 py-3.5 rounded-full flex items-center gap-3 transition-all ${engagement.liked
                             ? 'liquid-red-premium scale-105 shadow-red-500/40'
-                            : 'bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-red-500/30 text-(--color-text-secondary)'
+                            : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-red-500/30 text-slate-500 dark:text-slate-400'
                             }`}
                     >
                         <Heart className={`w-5 h-5 ${engagement.liked ? 'fill-current' : 'group-hover:text-red-500 transition-colors'}`} />
@@ -533,7 +533,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                             {isLoading ? '...' : engagement.likes}
                         </span>
                     </motion.button>
-                    <p className="text-[9px] font-bold text-(--color-text-secondary) uppercase tracking-widest opacity-60">
+                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60">
                         {t('blog.navigation.support_article')}
                     </p>
                 </div>
@@ -542,22 +542,22 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                 <div className="pt-8 grid grid-cols-2 gap-3">
                     <button
                         onClick={() => { selection(); onPrev(); }}
-                        className="p-3.5 rounded-[1.25rem] bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-blue-500/30 active:scale-95 transition-all flex items-center gap-2.5 group text-left"
+                        className="p-3.5 rounded-[1.25rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center gap-2.5 group text-left"
                     >
                         <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all">
                             <ChevronLeft className="w-4 h-4" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-[8px] font-extrabold text-(--color-text-secondary) uppercase tracking-wider">{t('blog.navigation.back')}</span>
+                            <span className="text-[8px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('blog.navigation.back')}</span>
                             <span className="text-[9px] font-black">{t('blog.navigation.prev')}</span>
                         </div>
                     </button>
                     <button
                         onClick={() => { selection(); onNext(); }}
-                        className="p-3.5 rounded-[1.25rem] bg-(--color-bg-surface) border border-(--color-border-glass) hover:border-blue-500/30 active:scale-95 transition-all flex items-center justify-end gap-2.5 group text-right"
+                        className="p-3.5 rounded-[1.25rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center justify-end gap-2.5 group text-right"
                     >
                         <div className="flex flex-col items-end">
-                            <span className="text-[8px] font-extrabold text-(--color-text-secondary) uppercase tracking-wider">{t('blog.navigation.next')}</span>
+                            <span className="text-[8px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('blog.navigation.next')}</span>
                             <span className="text-[9px] font-black">{t('blog.navigation.forward')}</span>
                         </div>
                         <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all">
