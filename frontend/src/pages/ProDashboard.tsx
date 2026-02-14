@@ -1427,7 +1427,7 @@ export const ProDashboard = () => {
                                         </div>
 
                                         <div className="space-y-3 relative z-10 mb-6">
-                                            {(t('pro_dashboard.academy.social_setup.platforms', { returnObjects: true }) as any[]).map((platform: any, i: number) => (
+                                            {(t('pro_dashboard.academy.social_setup.platforms', { returnObjects: true, bot_username: status?.bot_username || 'pintopay_probot' }) as any[]).map((platform: any, i: number) => (
                                                 <div key={i} className="p-4 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors group/platform">
                                                     <div className="flex items-center gap-3 mb-2">
                                                         <div className="w-8 h-8 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20 group-hover/platform:scale-110 transition-transform">
@@ -1541,7 +1541,7 @@ export const ProDashboard = () => {
                                                     <div className="pb-1">
                                                         <h5 className="text-[12px] font-black text-white uppercase tracking-wide mb-1.5">Telegram Broadcast Node</h5>
                                                         <p className="text-[10px] font-medium text-slate-400 leading-relaxed">
-                                                            Authorize <span className="text-indigo-400 font-bold">@{status?.bot_username || 'ViralStudioBot'}</span> as Admin in your target channel for automated cross-platform sync.
+                                                            Authorize <a href={`https://t.me/${status?.bot_username || 'pintopay_probot'}`} target="_blank" rel="noreferrer" className="text-indigo-400 font-bold hover:underline">@{status?.bot_username || 'pintopay_probot'}</a> as Admin in your target channel for automated cross-platform sync.
                                                         </p>
                                                     </div>
                                                 </div>
