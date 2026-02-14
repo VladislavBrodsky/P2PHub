@@ -12,6 +12,7 @@ import {
 import { useHaptic } from '../hooks/useHaptic';
 import { useUser } from '../context/UserContext';
 import { useTonConnectUI, useTonAddress, useTonWallet } from '@tonconnect/ui-react';
+import { backButton } from '@telegram-apps/sdk-react';
 import { PersonalizationCard } from './PersonalizationCard';
 import { UpgradeButton } from './ui/UpgradeButton';
 import { useTranslation } from 'react-i18next';
@@ -22,14 +23,54 @@ import { DrawerSettings } from './ProfileDrawer/DrawerSettings';
 interface ProfileDrawerProps {
     isOpen: boolean;
     onClose: () => void;
+    activeTab?: string;
 }
 
-export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
+export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDrawerProps) {
     const { selection } = useHaptic();
     const { user } = useUser();
     const { t } = useTranslation();
 
     const [copied, setCopied] = React.useState(false);
+
+    // Scroll Lock & Back Button handling
+    React.useEffect(() => {
+        let cleanup: VoidFunction | undefined;
+
+        if (isOpen) {
+            // Lock background scroll
+            const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+            document.body.style.overflow = 'hidden';
+            if (scrollBarWidth > 0) document.body.style.paddingRight = `${scrollBarWidth}px`;
+
+            // Telegram Back Button interaction
+            try {
+                if (backButton.show.isAvailable()) {
+                    backButton.show();
+                    cleanup = backButton.onClick(() => {
+                        onClose();
+                    });
+                }
+            } catch (e) {
+                console.warn('Telegram SDK backButton error:', e);
+            }
+        }
+
+        return () => {
+            // Success/Safety Cleanup
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+
+            // If we're closing and on the home tab, ensure backButton is hidden
+            if (isOpen && activeTab === 'home') {
+                try {
+                    if (backButton.hide.isAvailable()) backButton.hide();
+                } catch (e) { /* ignore */ }
+            }
+
+            if (cleanup) cleanup();
+        };
+    }, [isOpen, onClose, activeTab]);
 
     // TON Connect
     const [tonConnectUI] = useTonConnectUI();

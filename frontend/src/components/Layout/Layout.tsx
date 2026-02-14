@@ -83,6 +83,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                     <ProfileDrawer
                         isOpen={isMenuOpen}
                         onClose={() => setIsMenuOpen(false)}
+                        activeTab={activeTab}
                     />
                 </Suspense>
             )}
