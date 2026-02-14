@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Task } from '../../data/earnData';
 import { TaskCard } from './TaskCard';
 import { CheckCircle2 } from 'lucide-react';
@@ -36,9 +37,36 @@ export const TaskGrid = ({
     // Filter out completed tasks and then sort
     const visibleTasks = tasks.filter(t => !completedTaskIds.includes(t.id));
 
-    const sortedTasks = [...visibleTasks].sort((a, b) => {
-        return a.minLevel - b.minLevel;
-    });
+    const sortedTasks = useMemo(() => {
+        return [...visibleTasks].sort((a, b) => {
+            const getTaskStatus = (task: Task) => {
+                const isLocked = Number(currentLevel) < Number(task.minLevel);
+                const isVerifying = !!verifyingTasks[task.id];
+                const isClaimableTimed = claimableTasks.includes(task.id);
+                const activeTask = activeTasks?.find(at => at.task_id === task.id);
+
+                if (isLocked) return 0; // Locked - lowest priority
+                if (isVerifying) return 3; // Verifying - high
+                if (isClaimableTimed) return 4; // Claimable - highest
+
+                if (task.type === 'referral' || task.type === 'action') {
+                    if (activeTask) {
+                        const val = task.type === 'referral' ? referrals : checkinStreak;
+                        const prog = Math.max(0, val - activeTask.initial_metric_value);
+                        if (prog >= (task.requirement || 0)) return 4; // Claimable
+                        return 2; // Started
+                    }
+                }
+                return 1; // Available
+            };
+
+            const statusA = getTaskStatus(a);
+            const statusB = getTaskStatus(b);
+
+            if (statusA !== statusB) return statusB - statusA;
+            return a.minLevel - b.minLevel;
+        });
+    }, [visibleTasks, currentLevel, verifyingTasks, claimableTasks, activeTasks, referrals, checkinStreak]);
 
     return (
         <div className="space-y-6">

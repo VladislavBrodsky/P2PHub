@@ -138,6 +138,9 @@ export default function ReferralPage() {
             setClaimableTasks(newClaimable);
             localStorage.setItem('p2p_claimable_tasks', JSON.stringify(newClaimable));
 
+            setConfettiActive(true);
+            setTimeout(() => setConfettiActive(false), 3000);
+
             const newXP = currentXP + effectiveXP;
             const newLevel = getLevel(newXP);
 

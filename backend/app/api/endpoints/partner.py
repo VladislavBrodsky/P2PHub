@@ -30,8 +30,54 @@ from bot import bot, types
 from sqlalchemy import text
 
 logger = logging.getLogger(__name__)
-
 router = APIRouter()
+
+def prepare_partner_response(partner: Partner, tg_id: str) -> dict:
+    """
+    Unified transformer to convert Partner model + Relations into PartnerResponse schema.
+    Handles JSON parsing for completed_tasks/stages and prepares active_tasks list.
+    """
+    completed_task_ids = []
+    active_tasks = []
+    
+    # Process task records
+    for pt in partner.completed_task_records:
+        if pt.status == "COMPLETED" or not pt.status:
+            completed_task_ids.append(pt.task_id)
+        elif pt.status == "STARTED":
+            active_tasks.append({
+                "task_id": pt.task_id,
+                "status": pt.status,
+                "initial_metric_value": pt.initial_metric_value,
+                "started_at": pt.started_at.isoformat() if pt.started_at else None
+            })
+
+    # Base dump
+    partner_dict = partner.model_dump(mode="json")
+    
+    # Materialize Task Fields
+    partner_dict["completed_tasks"] = json.dumps(completed_task_ids)
+    partner_dict["active_tasks"] = active_tasks
+    
+    # Materialize Academy Fields
+    try:
+        partner_dict["completed_stages"] = json.loads(partner.completed_stages or "[]")
+    except Exception:
+        partner_dict["completed_stages"] = []
+
+    # Map materialized totals
+    partner_dict["total_earned"] = partner.total_earned_usdt
+    partner_dict["total_network_size"] = partner.referral_count
+    
+    # Permission context
+    partner_dict["is_admin"] = tg_id in settings.ADMIN_USER_IDS
+    
+    # Social state
+    partner_dict["has_x_setup"] = bool(partner.x_api_key)
+    partner_dict["has_telegram_setup"] = bool(partner.telegram_channel_id)
+    partner_dict["has_linkedin_setup"] = bool(partner.linkedin_access_token)
+    
+    return partner_dict
 
 @router.get("/activity")
 async def get_network_activity(
@@ -291,36 +337,14 @@ async def get_my_profile(
         logger.warning(f"Tree pre-warm failed: {e}")
 
     # 5. Prepare Response - O(1) using materialized totals
-    completed_tasks = []
-    active_tasks = []
-    
-    for pt in partner.completed_task_records:
-        if pt.status == "COMPLETED" or not pt.status: # Handle legacy/null as completed
-            completed_tasks.append(pt.task_id)
-        elif pt.status == "STARTED":
-            active_tasks.append({
-                "task_id": pt.task_id,
-                "status": pt.status,
-                "initial_metric_value": pt.initial_metric_value,
-                "started_at": pt.started_at.isoformat() if pt.started_at else None
-            })
+    partner_response = prepare_partner_response(partner, tg_id)
 
-    partner_dict = partner.model_dump(mode="json")
-    partner_dict["completed_tasks"] = json.dumps(completed_tasks)
-    
-    # Parse completed_stages from JSON string
     try:
-        partner_dict["completed_stages"] = json.loads(partner.completed_stages or "[]")
-    except Exception:
-        partner_dict["completed_stages"] = []
+        await redis_service.set_json(cache_key, partner_response, expire=300)
+    except Exception as e:
+        logger.warning(f"Profile cache write failed: {e}")
 
-    partner_dict["active_tasks"] = active_tasks
-    partner_dict["total_earned"] = partner.total_earned_usdt
-    partner_dict["total_network_size"] = partner.referral_count
-    partner_dict["is_admin"] = tg_id in settings.ADMIN_USER_IDS
-    partner_dict["has_x_setup"] = bool(partner.x_api_key)
-    partner_dict["has_telegram_setup"] = bool(partner.telegram_channel_id)
-    partner_dict["has_linkedin_setup"] = bool(partner.linkedin_access_token)
+    return partner_response
 
     try:
         await redis_service.set_json(cache_key, partner_dict, expire=300)
@@ -832,21 +856,6 @@ async def claim_task_reward(
     
     partner.level = get_level(partner.xp)
 
-    # Audit logging
-    from app.services.audit_service import audit_service
-    await audit_service.log_task_completion(
-        session=session,
-        partner_id=partner.id,
-        task_id=task_id,
-        xp_amount=effective_xp,
-        xp_before=xp_before,
-        xp_after=partner.xp
-    )
-
-    session.add(partner)
-    await session.commit()
-    await session.refresh(partner)
-
     # 2.1 Sync to Redis Leaderboard
     from app.services.leaderboard_service import leaderboard_service
     try:
@@ -867,7 +876,18 @@ async def claim_task_reward(
     except Exception as e:
         logger.error(f"Failed to send task notification: {e}")
 
-    return partner
+    # Final commit and refresh with relationships for response
+    # Final commit for all changes
+    session.add(partner)
+    await session.commit()
+    
+    # Re-query with relations for preparation
+    stmt = select(Partner).where(Partner.id == partner.id).options(
+        selectinload(Partner.completed_task_records)
+    )
+    partner = (await session.exec(stmt)).one()
+
+    return prepare_partner_response(partner, tg_id)
 
 @router.post("/academy/stages/{stage_id}/complete")
 async def complete_academy_stage(
