@@ -87,8 +87,10 @@ export const ProDashboard = () => {
         // Modals still hide footer for focus.
         if (showSetup || showPublishModal) {
             setFooterVisible(false);
+            setHeaderVisible(false); // Hide header when modal is open to avoid system button collision
         } else {
             setFooterVisible(true);
+            setHeaderVisible(true);
         }
         return () => {
             setHeaderVisible(true);
@@ -441,7 +443,7 @@ export const ProDashboard = () => {
                 </div>
             </div>
 
-            <div className={`flex-1 ${showSetup ? 'pb-10' : 'pb-32'} custom-scrollbar scroll-smooth overflow-y-auto overscroll-contain`}>
+            <div className={`flex-1 ${showSetup ? 'pb-10' : 'pb-16'} custom-scrollbar scroll-smooth overflow-y-auto overscroll-contain`}>
 
                 {/* Main Content Areas */}
                 <div className="px-6 space-y-6 flex-1">
@@ -1157,7 +1159,7 @@ export const ProDashboard = () => {
                                     initial={{ scale: 0.9, y: 30, opacity: 0 }}
                                     animate={{ scale: 1, y: 0, opacity: 1 }}
                                     exit={{ scale: 0.9, y: 30, opacity: 0 }}
-                                    className="bg-(--color-bg-surface) w-full max-w-md rounded-[2.5rem] p-6 pt-[calc(env(safe-area-inset-top)+2rem)] pb-[calc(env(safe-area-inset-bottom)+2rem)] space-y-4 max-h-[96vh] flex flex-col relative overflow-hidden shadow-3xl border border-(--color-border-glass)"
+                                    className="bg-(--color-bg-surface) w-full max-w-md rounded-[2.5rem] p-6 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(env(safe-area-inset-bottom)+2rem)] space-y-4 max-h-[96vh] flex flex-col relative overflow-hidden shadow-3xl border border-(--color-border-glass)"
                                 >
                                     <div className="absolute top-0 left-0 w-full h-1.5 vibing-blue-animated opacity-60" />
 
@@ -1316,16 +1318,15 @@ export const ProDashboard = () => {
                                                 className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                             />
                                         </div>
-                                    </div>
-
-                                    <div className="pt-4 shrink-0">
-                                        <button
-                                            onClick={() => { selection(); handleSaveSetup(); }}
-                                            className="w-full h-16 vibing-blue-animated rounded-2xl font-black text-white text-[12px] uppercase tracking-[0.3em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:grayscale disabled:opacity-50"
-                                            disabled={isLoading}
-                                        >
-                                            {isLoading ? <Loader2 className="animate-spin" /> : t('pro_dashboard.setup.save_btn')}
-                                        </button>
+                                        <div className="pt-4 shrink-0">
+                                            <button
+                                                onClick={() => { selection(); handleSaveSetup(); }}
+                                                className="w-full h-16 vibing-blue-animated rounded-2xl font-black text-white text-[12px] uppercase tracking-[0.3em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:grayscale disabled:opacity-50"
+                                                disabled={isLoading}
+                                            >
+                                                {isLoading ? <Loader2 className="animate-spin" /> : t('pro_dashboard.setup.save_btn')}
+                                            </button>
+                                        </div>
                                     </div>
                                 </motion.div>
                             </motion.div>
@@ -1347,7 +1348,7 @@ export const ProDashboard = () => {
                                     initial={{ scale: 0.9, y: 30, opacity: 0 }}
                                     animate={{ scale: 1, y: 0, opacity: 1 }}
                                     exit={{ scale: 0.9, y: 30, opacity: 0 }}
-                                    className="glass-panel-premium w-full max-w-sm rounded-[3rem] p-10 pt-[calc(env(safe-area-inset-top)+2rem)] pb-[calc(env(safe-area-inset-bottom)+2rem)] space-y-8 relative overflow-hidden border border-white/10 shadow-3xl"
+                                    className="glass-panel-premium w-full max-w-sm rounded-[3rem] p-10 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(env(safe-area-inset-bottom)+2rem)] space-y-8 relative overflow-hidden border border-white/10 shadow-3xl"
                                 >
                                     <div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_15px_rgba(99,102,241,0.5)]" />
 

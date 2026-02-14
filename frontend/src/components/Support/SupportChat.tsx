@@ -215,7 +215,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                             <div className="absolute inset-0 mesh-gradient-dark opacity-40" />
                             <div className="relative border-b border-(--color-border-glass) px-5 py-4 bg-(--color-bg-surface)/40 backdrop-blur-2xl">
                                 {/* Inset for Telegram Header (dots/close) */}
-                                <div className="pt-[calc(env(safe-area-inset-top,0px)+12px)] sm:pt-0">
+                                <div className="pt-2 sm:pt-0">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-4">
                                             <div className="relative shrink-0">
