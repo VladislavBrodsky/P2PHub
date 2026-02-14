@@ -392,7 +392,7 @@ export const ProDashboard = () => {
             <div className="flex flex-col items-center justify-center p-10 text-center min-h-[70vh]">
                 <Lock size={64} className="text-amber-500 mb-6 opacity-20" />
                 <h2 className="text-2xl font-black mb-4">{t('pro_dashboard.locked.title')}</h2>
-                <p className="text-(--color-text-secondary) mb-8 max-w-xs">
+                <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-xs">
                     {t('pro_dashboard.locked.desc')}
                 </p>
                 <button
@@ -406,9 +406,9 @@ export const ProDashboard = () => {
     }
 
     return (
-        <div className="relative w-full h-full flex flex-col bg-(--color-bg-deep) overflow-hidden">
+        <div className="relative w-full h-full flex flex-col bg-slate-50 dark:bg-slate-950 overflow-hidden">
             {/* #comment: Fixed Header Section - Static and compact for better focus */}
-            <div className="shrink-0 pt-6 pb-2 space-y-4 bg-(--color-bg-deep) z-10">
+            <div className="shrink-0 pt-6 pb-2 space-y-4 bg-slate-50 dark:bg-slate-950 z-10">
                 <div className="px-6 flex items-center justify-between">
                     <div>
                         <h1 className="text-[10px] font-black tracking-widest leading-tight uppercase text-brand-text drop-shadow-sm flex items-center gap-2">
@@ -428,7 +428,7 @@ export const ProDashboard = () => {
                     </div>
                     <button
                         onClick={() => { selection(); setShowSetup(true); }}
-                        className="p-2.5 rounded-xl bg-(--color-bg-surface) border border-white/5 active:scale-95 transition-all"
+                        className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-white/5 active:scale-95 transition-all"
                     >
                         <Settings className="w-3.5 h-3.5 text-brand-muted" />
                     </button>
@@ -442,7 +442,7 @@ export const ProDashboard = () => {
                                 onClick={() => { setActiveTab(tab); selection(); }}
                                 className={`px-4 h-8 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap border flex items-center gap-2 relative overflow-hidden ${activeTab === tab
                                     ? 'vibing-blue-animated text-white border-blue-400/30 scale-105 z-2'
-                                    : 'bg-(--color-bg-surface) text-brand-muted border-white/5 hover:border-indigo-500/30 opacity-70 hover:opacity-100'
+                                    : 'bg-white/60 dark:bg-slate-900/60 text-brand-muted border-white/5 hover:border-indigo-500/30 opacity-70 hover:opacity-100'
                                     }`}
                             >
                                 {activeTab === tab && (
@@ -483,12 +483,12 @@ export const ProDashboard = () => {
                                                 ? 'vibing-blue-animated text-white scale-110'
                                                 : step > s
                                                     ? 'bg-emerald-500 text-white'
-                                                    : 'bg-(--color-bg-surface) text-(--color-text-secondary) border border-(--color-border-glass) opacity-40'
+                                                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-white/10 opacity-40'
                                                 }`}>
                                                 {step > s ? <CheckCircle2 size={14} /> : s}
                                             </div>
                                             {s < 3 && (
-                                                <div className="w-8 h-[2px] mx-1.5 bg-(--color-border-glass) rounded-full overflow-hidden">
+                                                <div className="w-8 h-[2px] mx-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
                                                     <motion.div
                                                         className="h-full vibing-blue-gradient"
                                                         initial={{ width: "0%" }}
@@ -533,7 +533,7 @@ export const ProDashboard = () => {
                                                 {/* Post Type */}
                                                 <div className="space-y-2 relative z-10">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] border-2 border-(--color-bg-surface) relative z-10 shrink-0" />
+                                                        <div className="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] border-2 border-slate-50 dark:border-slate-900 relative z-10 shrink-0" />
                                                         <label className="text-[10px] font-black uppercase text-indigo-500 dark:text-indigo-400 tracking-[0.2em]">{t('pro_dashboard.studio.strategy_label')}</label>
                                                     </div>
                                                     <div className="relative group/sel pl-6">
@@ -555,7 +555,7 @@ export const ProDashboard = () => {
                                                 {/* Target Audience */}
                                                 <div className="space-y-2 relative z-10">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="w-3 h-3 rounded-full bg-pink-500 shadow-[0_0_10px_rgba(236,72,153,0.5)] border-2 border-(--color-bg-surface) relative z-10 shrink-0" />
+                                                        <div className="w-3 h-3 rounded-full bg-pink-500 shadow-[0_0_10px_rgba(236,72,153,0.5)] border-2 border-slate-50 dark:border-slate-900 relative z-10 shrink-0" />
                                                         <label className="text-[10px] font-black uppercase text-pink-500 dark:text-pink-400 tracking-[0.2em]">{t('pro_dashboard.studio.target_label')}</label>
                                                     </div>
                                                     <div className="relative group/sel pl-6">
@@ -577,7 +577,7 @@ export const ProDashboard = () => {
                                                 {/* Language */}
                                                 <div className="space-y-2 relative z-10">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] border-2 border-(--color-bg-surface) relative z-10 shrink-0" />
+                                                        <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] border-2 border-slate-50 dark:border-slate-900 relative z-10 shrink-0" />
                                                         <label className="text-[10px] font-black uppercase text-emerald-600 dark:text-emerald-400 tracking-[0.2em]">{t('pro_dashboard.studio.language_label')}</label>
                                                     </div>
                                                     <div className="relative group/sel pl-6">
@@ -722,7 +722,7 @@ export const ProDashboard = () => {
                                         animate={{ opacity: 1, y: 0 }}
                                         className="space-y-4"
                                     >
-                                        <div className="glass-panel-premium rounded-[2rem] border border-(--color-border-glass) shadow-2xl overflow-hidden bg-(--color-bg-surface)/40 backdrop-blur-2xl">
+                                        <div className="glass-panel-premium rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl">
                                             <div className="aspect-square sm:aspect-video bg-slate-900 relative flex items-center justify-center overflow-hidden group/img">
                                                 <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/80 z-1" />
                                                 {generatedResult.image_url ? (
@@ -764,10 +764,10 @@ export const ProDashboard = () => {
                                                         <div className="h-1 w-12 vibing-blue-gradient rounded-full" />
                                                     </div>
                                                     <div className="flex gap-2 shrink-0">
-                                                        <button onClick={() => { selection(); handleCopyText(); }} className="p-2.5 bg-(--color-bg-surface) hover:bg-indigo-500/10 rounded-xl border border-(--color-border-glass) text-brand-muted hover:text-indigo-500 transition-all active:scale-90">
+                                                        <button onClick={() => { selection(); handleCopyText(); }} className="p-2.5 bg-white/60 dark:bg-slate-900/60 hover:bg-indigo-500/10 rounded-xl border border-slate-200 dark:border-white/10 text-brand-muted hover:text-indigo-500 transition-all active:scale-90">
                                                             <Copy size={14} />
                                                         </button>
-                                                        <button onClick={handleGenerate} className="p-2.5 bg-(--color-bg-surface) hover:bg-indigo-500/10 rounded-xl border border-(--color-border-glass) text-brand-muted hover:text-indigo-500 transition-all active:scale-90">
+                                                        <button onClick={handleGenerate} className="p-2.5 bg-white/60 dark:bg-slate-900/60 hover:bg-indigo-500/10 rounded-xl border border-slate-200 dark:border-white/10 text-brand-muted hover:text-indigo-500 transition-all active:scale-90">
                                                             <RefreshCw size={14} className={isGenerating ? "animate-spin" : ""} />
                                                         </button>
                                                     </div>
@@ -786,7 +786,7 @@ export const ProDashboard = () => {
                                             <button onClick={() => { selection(); setShowPublishModal(true); }} className="h-12 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2">
                                                 {t('pro_dashboard.studio.publish_btn')} <Send size={14} className="animate-pulse" />
                                             </button>
-                                            <button onClick={() => { impact('light'); handleSharePost(); }} className="h-12 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text active:scale-95 transition-all flex items-center justify-center gap-2">
+                                            <button onClick={() => { impact('light'); handleSharePost(); }} className="h-12 bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text active:scale-95 transition-all flex items-center justify-center gap-2">
                                                 {t('pro_dashboard.studio.share_btn')} <Share size={14} />
                                             </button>
                                         </div>
@@ -805,7 +805,7 @@ export const ProDashboard = () => {
                                 className="space-y-4"
                             >
                                 {/* Headline Fixer */}
-                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/10 relative overflow-hidden group shadow-xl bg-(--color-bg-surface)">
+                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/10 relative overflow-hidden group shadow-xl bg-white/60 dark:bg-slate-900/40">
                                     <div className="absolute -right-4 -top-4 w-24 h-24 bg-pink-500/5 blur-3xl rounded-full" />
                                     <div className="flex items-center gap-3 mb-5">
                                         <div className="w-10 h-10 bg-pink-500/10 rounded-xl border border-pink-500/20 flex items-center justify-center shadow-sm">
@@ -856,7 +856,7 @@ export const ProDashboard = () => {
                                 </div>
 
                                 {/* Viral Bio Generator */}
-                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/10 relative overflow-hidden group shadow-xl bg-(--color-bg-surface)">
+                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/10 relative overflow-hidden group shadow-xl bg-white/60 dark:bg-slate-900/40">
                                     <div className="absolute -right-4 -top-4 w-24 h-24 bg-indigo-500/5 blur-3xl rounded-full" />
                                     <div className="flex items-center gap-3 mb-5">
                                         <div className="w-10 h-10 bg-indigo-500/10 rounded-xl border border-indigo-500/20 flex items-center justify-center shadow-sm">
@@ -920,7 +920,7 @@ export const ProDashboard = () => {
                                 </div>
 
                                 {/* Trend Hunter */}
-                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/10 relative overflow-hidden group shadow-xl bg-(--color-bg-surface)">
+                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/10 relative overflow-hidden group shadow-xl bg-white/60 dark:bg-slate-900/40">
                                     <div className="absolute -right-4 -top-4 w-24 h-24 bg-orange-500/5 blur-3xl rounded-full" />
                                     <div className="flex items-center gap-3 mb-5">
                                         <div className="w-10 h-10 bg-orange-500/10 rounded-xl border border-orange-500/20 flex items-center justify-center shadow-sm">
@@ -1009,7 +1009,7 @@ export const ProDashboard = () => {
                                 {/* Compact Growth Grid */}
                                 <div className="grid grid-cols-2 gap-2.5">
                                     {['hook_rule', 'algorithm', 'psycho'].map((key) => (
-                                        <div key={key} className={`glass-panel-premium p-3.5 rounded-2xl border border-white/5 relative overflow-hidden group active:scale-[0.98] transition-all bg-(--color-bg-surface) shadow-sm hover:border-indigo-500/20 ${key === 'hook_rule' ? 'col-span-2' : 'col-span-1'}`}>
+                                        <div key={key} className={`glass-panel-premium p-3.5 rounded-2xl border border-white/5 relative overflow-hidden group active:scale-[0.98] transition-all bg-white/60 dark:bg-slate-900/40 shadow-sm hover:border-indigo-500/20 ${key === 'hook_rule' ? 'col-span-2' : 'col-span-1'}`}>
                                             <div className="flex items-center gap-2.5 mb-1.5">
                                                 <div className="w-8 h-8 bg-indigo-500/5 rounded-lg flex items-center justify-center border border-indigo-500/10 group-hover:scale-110 transition-transform shrink-0">
                                                     {key === 'hook_rule' && <Zap size={14} className="text-indigo-500" />}
@@ -1025,7 +1025,7 @@ export const ProDashboard = () => {
                                     ))}
 
                                     {/* Compact Checklist */}
-                                    <div className="glass-panel-premium p-4 rounded-2xl border border-white/5 relative overflow-hidden bg-(--color-bg-surface) col-span-2">
+                                    <div className="glass-panel-premium p-4 rounded-2xl border border-white/5 relative overflow-hidden bg-white/60 dark:bg-slate-900/40 col-span-2">
                                         <div className="flex items-center gap-2.5 mb-3">
                                             <div className="w-8 h-8 bg-emerald-500/5 rounded-lg flex items-center justify-center border border-emerald-500/10 shrink-0">
                                                 <CheckCircle2 size={16} className="text-emerald-500" />
@@ -1047,7 +1047,7 @@ export const ProDashboard = () => {
                                 </div>
 
                                 {/* Hook Library */}
-                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 hover:border-indigo-500/20 transition-all group overflow-hidden relative shadow-lg bg-(--color-bg-surface)">
+                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 hover:border-indigo-500/20 transition-all group overflow-hidden relative shadow-lg bg-white/60 dark:bg-slate-900/40">
                                     <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-indigo-500/30 to-transparent" />
                                     <div className="flex items-center gap-3 mb-5 relative z-10">
                                         <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-sm">
@@ -1075,7 +1075,7 @@ export const ProDashboard = () => {
                                 </div>
 
                                 {/* Viral Assets Prototype - #comment: Compact, high-impact design blueprints */}
-                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 relative overflow-hidden group shadow-xl bg-(--color-bg-surface)">
+                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 relative overflow-hidden group shadow-xl bg-white/60 dark:bg-slate-900/40">
                                     <div className="flex items-center gap-3 mb-5">
                                         <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-sm">
                                             <ImageIcon size={18} className="text-indigo-500" />
@@ -1196,7 +1196,7 @@ export const ProDashboard = () => {
                                     initial={{ scale: 0.9, y: 30, opacity: 0 }}
                                     animate={{ scale: 1, y: 0, opacity: 1 }}
                                     exit={{ scale: 0.9, y: 30, opacity: 0 }}
-                                    className="bg-(--color-bg-surface) w-full max-w-md rounded-[2.5rem] p-6 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(env(safe-area-inset-bottom)+2rem)] space-y-4 max-h-[96vh] flex flex-col relative overflow-hidden shadow-3xl border border-(--color-border-glass)"
+                                    className="bg-white/95 dark:bg-slate-900/95 w-full max-w-md rounded-[2.5rem] p-6 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(env(safe-area-inset-bottom)+2rem)] space-y-4 max-h-[96vh] flex flex-col relative overflow-hidden shadow-3xl border border-slate-200 dark:border-white/10"
                                 >
                                     <div className="absolute top-0 left-0 w-full h-1.5 vibing-blue-animated opacity-60" />
 
@@ -1209,7 +1209,7 @@ export const ProDashboard = () => {
                                         </div>
                                         <button
                                             onClick={() => { selection(); setShowSetup(false); }}
-                                            className="p-3 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-2xl text-brand-text hover:border-indigo-500/30 active:scale-90 transition-all"
+                                            className="p-3 bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-2xl text-brand-text hover:border-indigo-500/30 active:scale-90 transition-all"
                                         >
                                             <ArrowLeft size={20} />
                                         </button>
@@ -1239,7 +1239,7 @@ export const ProDashboard = () => {
                                         </div>
 
                                         {/* X Integration */}
-                                        <div className="space-y-4 p-5 bg-(--color-bg-surface) rounded-3xl border border-(--color-border-glass) shadow-inner">
+                                        <div className="space-y-4 p-5 bg-white/60 dark:bg-slate-900/60 rounded-3xl border border-slate-200 dark:border-white/10 shadow-inner">
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-brand-text">
                                                     <Twitter size={14} className="text-blue-400" /> X (Twitter) API
@@ -1258,34 +1258,34 @@ export const ProDashboard = () => {
                                                     value={apiData.x_api_key}
                                                     onChange={(e) => setApiData({ ...apiData, x_api_key: e.target.value })}
                                                     placeholder="API Key"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                                 />
                                                 <input
                                                     type="password"
                                                     value={apiData.x_api_secret}
                                                     onChange={(e) => setApiData({ ...apiData, x_api_secret: e.target.value })}
                                                     placeholder="API Secret"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                                 />
                                                 <input
                                                     type="password"
                                                     value={apiData.x_access_token}
                                                     onChange={(e) => setApiData({ ...apiData, x_access_token: e.target.value })}
                                                     placeholder="Access Token"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                                 />
                                                 <input
                                                     type="password"
                                                     value={apiData.x_access_token_secret}
                                                     onChange={(e) => setApiData({ ...apiData, x_access_token_secret: e.target.value })}
                                                     placeholder="Access Token Secret"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                                 />
                                             </div>
                                         </div>
 
                                         {/* Telegram Sync */}
-                                        <div className="space-y-4 p-5 bg-(--color-bg-surface) rounded-3xl border border-(--color-border-glass) shadow-inner">
+                                        <div className="space-y-4 p-5 bg-white/60 dark:bg-slate-900/60 rounded-3xl border border-slate-200 dark:border-white/10 shadow-inner">
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-brand-text">
                                                     <Send size={14} className="text-blue-500" /> Telegram Channels
@@ -1304,7 +1304,7 @@ export const ProDashboard = () => {
                                                     value={apiData.telegram_channel_id}
                                                     onChange={(e) => setApiData({ ...apiData, telegram_channel_id: e.target.value })}
                                                     placeholder="@channelname (Main)"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                                 />
                                                 {apiData.telegram_channels.map((ch, idx) => (
                                                     <div key={idx} className="flex gap-2">
@@ -1317,7 +1317,7 @@ export const ProDashboard = () => {
                                                                 setApiData({ ...apiData, telegram_channels: newChannels });
                                                             }}
                                                             placeholder={`@channelname ${idx + 2}`}
-                                                            className="flex-1 h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text"
+                                                            className="flex-1 h-12 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text"
                                                         />
                                                         <button
                                                             onClick={() => {
@@ -1332,7 +1332,7 @@ export const ProDashboard = () => {
                                                 ))}
                                                 <button
                                                     onClick={() => setApiData({ ...apiData, telegram_channels: [...apiData.telegram_channels, ''] })}
-                                                    className="w-full h-10 border-2 border-dashed border-(--color-border-glass) rounded-xl text-[10px] font-black uppercase text-brand-muted hover:text-brand-text hover:border-indigo-500/30 transition-all"
+                                                    className="w-full h-10 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-[10px] font-black uppercase text-brand-muted hover:text-brand-text hover:border-indigo-500/30 transition-all"
                                                 >
                                                     + Add Another Channel
                                                 </button>
@@ -1340,7 +1340,7 @@ export const ProDashboard = () => {
                                         </div>
 
                                         {/* LinkedIn Integration */}
-                                        <div className="space-y-4 p-5 bg-(--color-bg-surface) rounded-3xl border border-(--color-border-glass) shadow-inner">
+                                        <div className="space-y-4 p-5 bg-white/60 dark:bg-slate-900/60 rounded-3xl border border-slate-200 dark:border-white/10 shadow-inner">
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-brand-text">
                                                     <Linkedin size={14} className="text-blue-700" /> LinkedIn
@@ -1352,7 +1352,7 @@ export const ProDashboard = () => {
                                                 value={apiData.linkedin_access_token}
                                                 onChange={(e) => setApiData({ ...apiData, linkedin_access_token: e.target.value })}
                                                 placeholder="LinkedIn Access Token"
-                                                className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                                className="w-full h-12 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                             />
                                         </div>
                                         <div className="pt-4 shrink-0">
@@ -1428,8 +1428,8 @@ export const ProDashboard = () => {
                                                         className={`w-full group relative flex items-center justify-between p-4 rounded-2xl border transition-all active:scale-[0.98] ${isPublished
                                                             ? 'bg-emerald-500/10 border-emerald-500/30'
                                                             : !hasSetup
-                                                                ? 'bg-(--color-bg-surface)/40 border-(--color-border-glass) opacity-40 grayscale pointer-events-none'
-                                                                : 'bg-(--color-bg-surface) border-(--color-border-glass) hover:border-indigo-500/40 hover:bg-indigo-500/5'
+                                                                ? 'bg-white/40 dark:bg-slate-900/40 border-slate-200/40 dark:border-white/5 opacity-40 grayscale pointer-events-none'
+                                                                : 'bg-white/60 dark:bg-slate-900/60 border-slate-200 dark:border-white/10 hover:border-indigo-500/40 hover:bg-indigo-500/5'
                                                             }`}
                                                     >
                                                         <div className="flex items-center gap-3.5">
@@ -1471,7 +1471,7 @@ export const ProDashboard = () => {
                                     <div className="space-y-4 pt-4">
                                         <button
                                             onClick={() => { selection(); setShowPublishModal(false); setStep(1); }}
-                                            className="w-full h-12 bg-(--color-bg-surface) border border-(--color-border-glass) rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text transition-all active:scale-95"
+                                            className="w-full h-12 bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text transition-all active:scale-95"
                                         >
                                             {t('pro_dashboard.publish.create_another_btn')}
                                         </button>
