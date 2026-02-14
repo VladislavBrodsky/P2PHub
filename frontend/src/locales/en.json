@@ -51,7 +51,9 @@
             "topup_limits": "Limits & Fees",
             "apple_google": "Wallet & Pay",
             "earnings": "Rewards",
-            "security": "Security"
+            "security": "Security",
+            "trading_hub": "Trading Hub",
+            "vip_line": "VIP Line"
         }
     },
     "faq": {

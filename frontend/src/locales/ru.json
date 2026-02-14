@@ -51,7 +51,9 @@
             "topup_limits": "Лимиты",
             "apple_google": "Wallet & Pay",
             "earnings": "Доход",
-            "security": "Защита"
+            "security": "Защита",
+            "trading_hub": "P2P Хаб",
+            "vip_line": "VIP Линия"
         }
     },
     "faq": {

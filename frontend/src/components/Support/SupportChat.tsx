@@ -44,6 +44,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
     const [isTyping, setIsTyping] = React.useState(false);
     const [showCategories, setShowCategories] = React.useState(true);
     const [sessionClosed, setSessionClosed] = React.useState(false);
+    const [typingLabel, setTypingLabel] = React.useState('Analyzing inquiry...');
 
     const scrollRef = React.useRef<HTMLDivElement>(null);
     const inactivityTimerRef = React.useRef<any>(null);
@@ -159,6 +160,51 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
         }
     }, [resetInactivityTimer, t, isOpen, messages.length]);
 
+    const intelligenceLabels = React.useMemo(() => [
+        'Syncing with Neural Intel v4.0...',
+        'Accessing Knowledge Base...',
+        'Consulting AI Protocol...',
+        'Analyzing inquiry...',
+        'Structuring tactical response...',
+        'Optimizing solution...'
+    ], []);
+
+    React.useEffect(() => {
+        let interval: any;
+        if (isTyping) {
+            let i = 0;
+            setTypingLabel(intelligenceLabels[0]);
+            interval = setInterval(() => {
+                i = (i + 1) % intelligenceLabels.length;
+                setTypingLabel(intelligenceLabels[i]);
+            }, 1200);
+        }
+        return () => clearInterval(interval);
+    }, [isTyping, intelligenceLabels]);
+
+    const renderMessageContent = React.useCallback((content: string) => {
+        // Simple link detection and rendering
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        const parts = content.split(urlRegex);
+
+        return parts.map((part, i) => {
+            if (part.match(urlRegex)) {
+                return (
+                    <a
+                        key={i}
+                        href={part}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-white/90 hover:text-white underline decoration-white/30 underline-offset-4 font-bold break-all"
+                    >
+                        {part}
+                    </a>
+                );
+            }
+            return part;
+        });
+    }, []);
+
     const handleSendMessage = React.useCallback(async (text_val?: string) => {
         const messageText = text_val || inputValue;
         if (!messageText.trim() || isTyping || sessionClosed) return;
@@ -196,11 +242,11 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                 en: "Pintopay uses banking-grade 3DS security and encrypted asset storage. If your card is lost, you can Freeze it instantly in the app. Pintopay will never ask for your private keys or passwords.",
                 ru: "Pintopay использует банковскую защиту 3DS и зашифрованное хранение активов. Если карта потеряна, вы можете мгновенно заморозить её в приложении. Pintopay никогда не запрашивает ваши приватные ключи или пароли."
             },
-            "trading": {
+            "trading_hub": {
                 en: "Our P2P Trading Hub is protected by a 24/7 Escrow system. If you encounter an issue during a trade, simply click the 'Dispute' button and a human moderator will join within minutes to resolve the situation.",
                 ru: "Наш P2P-хаб защищен системой Escrow, работающей 24/7. Если у вас возникла проблема во время сделки, просто нажмите кнопку «Апелляция», и наш модератор подключится в течение нескольких минут для решения вопроса."
             },
-            "vip": {
+            "vip_line": {
                 en: "PRO members at Level 5+ get direct access to our Priority Executive Line. Your inquiries are handled by our top-tier neural agents and senior human supervisors with sub-5 minute response times.",
                 ru: "Партнеры уровня 5+ с PRO-статусом получают прямой доступ к Приоритетной Линии. Ваши запросы обрабатываются лучшими ИИ-агентами и старшими менеджерами с временем ответа менее 5 минут."
             }
@@ -382,25 +428,30 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                             ))}
 
                             {isTyping && (
-                                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex justify-start">
-                                    <div className="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-2xl rounded-tl-none px-5 py-4 shadow-lg">
-                                        <div className="flex gap-1.5 px-1">
-                                            {[0, 0.2, 0.4].map((delay) => (
-                                                <motion.span
-                                                    key={delay}
-                                                    animate={{
-                                                        y: [0, -5, 0],
-                                                        opacity: [0.3, 1, 0.3],
-                                                        scale: [1, 1.2, 1]
-                                                    }}
-                                                    transition={{
-                                                        repeat: Infinity,
-                                                        duration: 1.2,
-                                                        delay
-                                                    }}
-                                                    className="h-2 w-2 rounded-full bg-blue-500"
-                                                />
-                                            ))}
+                                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex justify-start mb-6">
+                                    <div className="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-2xl rounded-tl-none px-4 py-3 shadow-lg">
+                                        <div className="flex flex-col gap-2">
+                                            <div className="flex gap-1.5 px-1">
+                                                {[0, 0.2, 0.4].map((delay) => (
+                                                    <motion.span
+                                                        key={delay}
+                                                        animate={{
+                                                            y: [0, -5, 0],
+                                                            opacity: [0.3, 1, 0.3],
+                                                            scale: [1, 1.2, 1]
+                                                        }}
+                                                        transition={{
+                                                            repeat: Infinity,
+                                                            duration: 1.2,
+                                                            delay
+                                                        }}
+                                                        className="h-1.5 w-1.5 rounded-full bg-blue-500"
+                                                    />
+                                                ))}
+                                            </div>
+                                            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 animate-pulse">
+                                                {typingLabel}
+                                            </span>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -428,7 +479,9 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                                 topup_limits: Activity,
                                                 apple_google: Smartphone,
                                                 earnings: TrendingUp,
-                                                security: ShieldCheck
+                                                security: ShieldCheck,
+                                                trading_hub: Activity,
+                                                vip_line: Zap
                                             };
                                             const Icon = icons[key] || Cpu;
 
