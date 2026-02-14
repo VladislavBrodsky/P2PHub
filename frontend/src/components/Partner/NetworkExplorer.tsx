@@ -1,8 +1,8 @@
-// #comment: Refined imports by removing unused Lucide icons and the ListSkeleton component to reduce bundle size and clean up the code
+// #comment: Revamped NetworkExplorer with a premium design, improved responsiveness, and high-quality visual feedback
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Users, X, UserPlus, AlertCircle } from 'lucide-react';
+import { Users, X, UserPlus, AlertCircle, TrendingUp, Award, Zap } from 'lucide-react';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
 import { cn } from '../../lib/utils';
@@ -25,10 +25,20 @@ interface NetworkExplorerProps {
     onClose?: () => void;
 }
 
+const MemberSkeleton = () => (
+    <div className="flex items-center gap-4 p-4 bg-white/50 dark:bg-white/5 rounded-3xl animate-pulse border border-slate-100 dark:border-white/5">
+        <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-white/10 shrink-0" />
+        <div className="flex-1 space-y-2">
+            <div className="h-4 w-1/3 bg-slate-200 dark:bg-white/10 rounded-lg" />
+            <div className="h-3 w-1/4 bg-slate-100 dark:bg-white/5 rounded-lg" />
+        </div>
+        <div className="w-16 h-8 bg-slate-200 dark:bg-white/10 rounded-xl" />
+    </div>
+);
+
 export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
-    // #comment: Removed unused 't' from useTranslation to address linting warning
-    useTranslation();
-    const { selection } = useHaptic();
+    const { t } = useTranslation();
+    const { selection, impact } = useHaptic();
     const { user } = useUser();
     const [level, setLevel] = useState(1);
     const [members, setMembers] = useState<NetworkMember[]>([]);
@@ -45,11 +55,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
         setIsScrolled(e.currentTarget.scrollTop > 20);
     };
 
-    // #comment: Memoized fetchLevel is not strictly necessary here since it's used within effects that handle their own states, 
-    // but we'll include it in dependency arrays as required by linting rules.
-    // #comment: Wrapped fetchLevel in useCallback to stabilize its reference and resolve exhaustive-deps warnings in effects
     const fetchLevel = useCallback(async (targetLevel: number) => {
-        // Skip if already cached
         if (levelCache[targetLevel] && !isGlobalMode) {
             return levelCache[targetLevel];
         }
@@ -61,7 +67,6 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
             const res = await apiClient.get(url);
             const data = Array.isArray(res.data) ? res.data : [];
 
-            // Update cache
             if (!isGlobalMode) setLevelCache(prev => ({ ...prev, [targetLevel]: data }));
             return data;
         } catch (err) {
@@ -80,23 +85,17 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
         }
     }, [isGlobalMode]);
 
-    // Prefetch levels 1-3 on mount for instant browsing
     useEffect(() => {
         const prefetchInitialLevels = async () => {
             setIsLoading(true);
             try {
-                // #comment: Removed unused l2, l3 variables from destructuring to clean up the prefetch logic
                 const [l1] = await Promise.all([
                     fetchLevel(1),
                     fetchLevel(2),
                     fetchLevel(3),
                     fetchTreeStats()
                 ]);
-
-                // Set initial display to level 1
-                if (l1) {
-                    setMembers(l1);
-                }
+                if (l1) setMembers(l1);
             } catch (err) {
                 console.error('Failed to prefetch levels:', err);
                 setError('Failed to load network data');
@@ -104,20 +103,15 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                 setIsLoading(false);
             }
         };
-
         prefetchInitialLevels();
-        // #comment: Added fetchLevel to dependency array to comply with exhaustive-deps rule
     }, [fetchLevel, fetchTreeStats]);
 
-    // When level changes, update display and prefetch adjacent levels
     useEffect(() => {
         const updateLevel = async () => {
-            // If already cached, instant switch
             if (levelCache[level]) {
                 setMembers(levelCache[level]);
                 setError('');
             } else {
-                // Not cached, fetch it
                 setIsLoading(true);
                 setError('');
                 const data = await fetchLevel(level);
@@ -130,23 +124,17 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                 setIsLoading(false);
             }
 
-            // Prefetch adjacent levels in background (no await)
             const adjacentLevels = [];
             if (level > 1) adjacentLevels.push(level - 1);
             if (level < 9) adjacentLevels.push(level + 1);
 
             adjacentLevels.forEach(l => {
-                if (!levelCache[l]) {
-                    fetchLevel(l); // Fire and forget
-                }
+                if (!levelCache[l]) fetchLevel(l);
             });
         };
-
         updateLevel();
-        // #comment: Added fetchLevel and levelCache to dependency array to ensure effect runs with latest functions/state
     }, [level, fetchLevel, levelCache, isGlobalMode]);
 
-    // Auto-scroll logic for level selector
     useEffect(() => {
         if (scrollContainerRef.current) {
             const activeButton = scrollContainerRef.current.children[level - 1] as HTMLElement;
@@ -156,101 +144,103 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
         }
     }, [level]);
 
+    const totalActivePartners = Object.values(treeStats).reduce((acc, curr) => acc + (typeof curr === 'number' ? curr : 0), 0);
+
     return (
-        <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-white/20 dark:border-white/5 rounded-[2rem] overflow-hidden flex flex-col h-full max-h-[85vh] shadow-2xl relative">
-            {/* Glossy Overlay */}
-            <div className="absolute inset-0 bg-linear-to-b from-white/10 to-transparent pointer-events-none" />
+        <div className="bg-[#f8fafc] dark:bg-[#0f172a] rounded-[2.5rem] overflow-hidden flex flex-col h-full max-h-[90vh] shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] relative border border-white dark:border-white/5">
+            {/* Soft Ambient Background Glows */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-64 bg-linear-to-b from-blue-500/5 to-transparent pointer-events-none" />
+            <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-400/10 rounded-full blur-[80px] pointer-events-none" />
 
             {/* Header */}
-            <div className={`border-b border-black/5 dark:border-white/5 relative z-10 transition-all duration-300 ${isScrolled ? 'p-3' : 'p-5'}`}>
-                <AnimatePresence>
-                    {!isScrolled && (
-                        <motion.div
-                            initial={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="flex items-center justify-between mb-4 overflow-hidden"
-                        >
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                                    <Users className="w-5 h-5" />
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-black text-slate-900 dark:text-white leading-none">Network Explorer</h3>
-                                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1">9-Level Deep Dive</p>
-                                </div>
+            <div className={`relative z-20 transition-all duration-500 ease-in-out ${isScrolled ? 'p-4 pb-0' : 'p-7 pb-4'}`}>
+                <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-[1.25rem] bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/25 ring-4 ring-blue-500/10">
+                            <Users className="w-6 h-6 outline-hidden" />
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-black text-slate-900 dark:text-white leading-tight tracking-tight">
+                                {t('network.explorer.title', 'Network Explorer')}
+                            </h3>
+                            <div className="flex items-center gap-2 mt-1">
+                                <span className="flex items-center gap-1 text-[11px] font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-widest bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded-full">
+                                    <Zap className="w-3 h-3" />
+                                    {t('network.explorer.deep_dive', '9-Level Deep Dive')}
+                                </span>
                             </div>
-                            {onClose && (
-                                <button
-                                    onClick={onClose}
-                                    className="w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors active:scale-95"
-                                >
-                                    <X className="w-5 h-5" />
-                                </button>
-                            )}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                {/* Compact Header for Scrolled State */}
-                {isScrolled && (
-                    <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Level {level} Network</span>
-                        {onClose && (
-                            <button
-                                onClick={onClose}
-                                className="w-6 h-6 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors active:scale-95"
-                            >
-                                <X className="w-3.5 h-3.5" />
-                            </button>
-                        )}
+                        </div>
                     </div>
-                )}
+                    {onClose && (
+                        <button
+                            onClick={onClose}
+                            className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-white/10 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-all active:scale-90 hover:rotate-90"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+                    )}
+                </div>
 
-                {/* Compact Level Selector */}
-                <div className="relative mx-[-20px] px-[20px]"> {/* Negative margin hack to stretch full width but keep padding */}
-                    <div className="absolute left-0 top-0 bottom-0 w-8 bg-linear-to-r from-white dark:from-slate-900 to-transparent z-10 pointer-events-none" />
-                    <div className="absolute right-0 top-0 bottom-0 w-8 bg-linear-to-l from-white dark:from-slate-900 to-transparent z-10 pointer-events-none" />
-
-                    <div
-                        ref={scrollContainerRef}
-                        className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none px-6" // Added px-6 to prevent first item clipping
-                    >
+                {/* Advanced Level Selector */}
+                <div className="relative">
+                    <div className="flex items-center gap-1.5 overflow-x-auto pb-4 scrollbar-none px-1" ref={scrollContainerRef}>
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((l) => {
                             const count = treeStats[`level_${l}`] || treeStats[l.toString()] || 0;
+                            const isActive = level === l;
                             return (
                                 <button
                                     key={l}
                                     onClick={() => { selection(); setLevel(l); }}
                                     className={cn(
-                                        "relative flex flex-col items-center justify-center min-w-[56px] h-11 rounded-2xl text-xs font-black transition-all active:scale-95 shrink-0 z-10",
-                                        level === l ? "text-white" : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5"
+                                        "relative flex flex-col items-center justify-center min-w-[64px] h-14 rounded-2xl transition-all duration-300 active:scale-95 shrink-0",
+                                        isActive
+                                            ? "text-white"
+                                            : "text-slate-500 dark:text-slate-400 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 hover:border-blue-300 dark:hover:border-blue-500/30"
                                     )}
                                 >
-                                    {level === l && (
+                                    {isActive && (
                                         <motion.div
-                                            layoutId="activeLevel"
-                                            className="absolute inset-0 bg-blue-600 rounded-2xl shadow-lg shadow-blue-500/30 -z-10"
-                                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                            layoutId="activeLevelBackground"
+                                            className="absolute inset-0 bg-linear-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-xl shadow-blue-500/40"
+                                            transition={{ type: "spring", stiffness: 400, damping: 30 }}
                                         />
                                     )}
-                                    <span className="leading-tight">L{l}</span>
-                                    {count > 0 && <span className={cn("text-[8px] font-bold opacity-70", level === l ? "text-white" : "text-blue-500")}>{count}</span>}
+                                    <span className={cn("text-sm font-black relative z-10", isActive ? "text-white" : "text-slate-900 dark:text-white/80")}>L{l}</span>
+                                    {count > 0 && (
+                                        <span className={cn(
+                                            "text-[10px] font-bold relative z-10 px-1.5 rounded-full mt-0.5",
+                                            isActive ? "bg-white/20 text-white" : "text-blue-600 dark:text-blue-400"
+                                        )}>
+                                            {count}
+                                        </span>
+                                    )}
                                 </button>
                             );
                         })}
                     </div>
+
+                    {/* Level Progress Track */}
+                    <div className="h-1.5 w-full bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden mt-1 mb-2 relative">
+                        <motion.div
+                            className="absolute inset-y-0 left-0 bg-linear-to-r from-blue-400 to-blue-600 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.5)]"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${(level / 9) * 100}%` }}
+                            transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                        />
+                    </div>
+
                     {user?.is_admin && (
-                        <div className="flex justify-center mt-2 px-6">
+                        <div className="flex justify-center mb-2">
                             <button
-                                onClick={() => { setIsGlobalMode(!isGlobalMode); setLevelCache({}); setLevel(1); }}
+                                onClick={() => { impact('medium'); setIsGlobalMode(!isGlobalMode); setLevelCache({}); setLevel(1); }}
                                 className={cn(
-                                    "w-full py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border",
+                                    "flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all border-2",
                                     isGlobalMode
-                                        ? "bg-amber-500 border-amber-500 text-white shadow-lg shadow-amber-500/20"
-                                        : "bg-white/5 border-white/10 text-slate-500"
+                                        ? "bg-amber-500 border-amber-400 text-white shadow-lg shadow-amber-500/25"
+                                        : "bg-slate-100 dark:bg-white/5 border-transparent text-slate-500 dark:text-slate-400"
                                 )}
                             >
-                                {isGlobalMode ? '⚡️ Global Admin Mode' : 'Explorer Mode'}
+                                {isGlobalMode ? '⚡️ Admin: Global View' : 'Standard View'}
                             </button>
                         </div>
                     )}
@@ -260,8 +250,21 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
             {/* Content Area */}
             <div
                 onScroll={handleScroll}
-                className="flex-1 overflow-y-auto p-4 custom-scrollbar bg-slate-50/50 dark:bg-black/20 relative z-0"
+                className="flex-1 overflow-y-auto p-6 pt-2 custom-scrollbar relative z-10"
             >
+                <div className="flex items-center justify-between mb-4 px-1">
+                    <div className="flex items-center gap-2">
+                        <TrendingUp className="w-4 h-4 text-emerald-500" />
+                        <span className="text-[11px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-wider">
+                            {isLoading ? 'Scanning...' : `${members.length} Active in L${level}`}
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-500/10 px-3 py-1 rounded-full border border-blue-100 dark:border-blue-500/20">
+                        <Award className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                        <span className="text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-wide">XP Focus</span>
+                    </div>
+                </div>
+
                 <AnimatePresence mode="wait">
                     {isLoading ? (
                         <motion.div
@@ -269,90 +272,97 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="space-y-3"
+                            className="space-y-4"
                         >
-                            <div className="h-16 w-full bg-slate-200 dark:bg-white/5 rounded-2xl animate-pulse" />
-                            <div className="h-16 w-full bg-slate-200 dark:bg-white/5 rounded-2xl animate-pulse delay-75" />
-                            <div className="h-16 w-full bg-slate-200 dark:bg-white/5 rounded-2xl animate-pulse delay-150" />
+                            {[1, 2, 3, 4, 5].map(i => <MemberSkeleton key={i} />)}
                         </motion.div>
                     ) : error ? (
                         <motion.div
                             key="error"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="flex flex-col items-center justify-center h-[40vh] text-center px-6"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="flex flex-col items-center justify-center py-12 text-center"
                         >
-                            <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
-                                <AlertCircle className="w-8 h-8 text-red-500" />
+                            <div className="w-20 h-20 bg-red-50 dark:bg-red-500/10 rounded-3xl flex items-center justify-center mb-6 ring-8 ring-red-500/5">
+                                <AlertCircle className="w-10 h-10 text-red-500" />
                             </div>
-                            <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Could not load network</h4>
-                            <p className="text-xs text-slate-500 max-w-[200px]">{error}</p>
+                            <h4 className="text-xl font-black text-slate-900 dark:text-white mb-2">{t('common.error', 'Something went wrong')}</h4>
+                            <p className="text-sm font-medium text-slate-500 dark:text-slate-400 max-w-[240px] mb-8 leading-relaxed">
+                                {error}
+                            </p>
                             <button
-                                onClick={() => setLevel(level)} // Trigger re-fetch
-                                className="mt-4 px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl text-xs font-bold"
+                                onClick={() => setLevel(level)}
+                                className="px-8 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl text-sm font-black shadow-xl active:scale-95 transition-all"
                             >
-                                Try Again
+                                {t('common.retry', 'Try Again')}
                             </button>
                         </motion.div>
                     ) : members.length > 0 ? (
                         <motion.div
                             key="content"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="space-y-2"
+                            initial={{ opacity: 1 }}
+                            className="space-y-3 pb-20"
                         >
-                            <div className="flex items-center justify-between px-2 mb-2">
-                                <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">{members.length} Active Partners</span>
-                                <span className="text-[10px] font-black uppercase text-blue-500 tracking-wider">Total XP</span>
-                            </div>
-
                             {members.map((member, index) => (
                                 <motion.div
                                     key={member.telegram_id}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: index * 0.05 }}
-                                    className="group flex items-center gap-3 p-3 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-2xl shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.04, type: "spring", stiffness: 260, damping: 20 }}
+                                    className="group flex items-center gap-4 p-4 bg-white dark:bg-white/5 border border-slate-200/60 dark:border-white/5 rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-none hover:shadow-xl hover:shadow-blue-500/5 hover:border-blue-200 dark:hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden"
                                 >
-                                    <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/10 overflow-hidden shrink-0 ring-2 ring-white dark:ring-white/10 shadow-inner">
-                                        {(member.photo_file_id || member.photo_url) ? (
-                                            <img
-                                                src={member.photo_file_id
-                                                    ? `${getApiUrl()}/api/partner/photo/${member.photo_file_id}`
-                                                    : member.photo_url
-                                                }
-                                                alt={member.first_name}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center text-slate-400 font-black text-sm">
-                                                {member.first_name?.charAt(0)}
-                                            </div>
-                                        )}
+                                    {/* Subtle Gradient Hover Effect */}
+                                    <div className="absolute inset-0 bg-linear-to-r from-blue-500/0 via-blue-500/0 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                                    <div className="relative shrink-0">
+                                        <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-white/10 overflow-hidden ring-4 ring-white dark:ring-slate-800 shadow-xl">
+                                            {(member.photo_file_id || member.photo_url) ? (
+                                                <img
+                                                    src={member.photo_file_id
+                                                        ? `${getApiUrl()}/api/partner/photo/${member.photo_file_id}`
+                                                        : member.photo_url
+                                                    }
+                                                    alt={member.first_name}
+                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center text-slate-400 font-black text-xl bg-linear-to-br from-slate-100 to-slate-200 dark:from-white/5 dark:to-white/10">
+                                                    {member.first_name?.charAt(0)}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-white dark:bg-slate-900 rounded-full flex items-center justify-center shadow-md">
+                                            <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                                        </div>
                                     </div>
 
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center gap-1.5">
-                                            <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
+                                    <div className="flex-1 min-w-0 relative z-10">
+                                        <div className="flex items-center gap-2">
+                                            <h4 className="text-base font-black text-slate-900 dark:text-white truncate">
                                                 {member.first_name} {member.last_name}
                                             </h4>
-                                            {member.xp > 1000 && ( // Simple mock logic for "TOP" badge
-                                                <span className="text-[9px] bg-amber-500/10 text-amber-600 dark:text-amber-400 px-1.5 rounded-md font-black">TOP</span>
+                                            {member.xp > 500 && (
+                                                <div className="bg-amber-400 rounded-md p-0.5 shadow-xs">
+                                                    <Award className="w-3 h-3 text-white" />
+                                                </div>
                                             )}
                                         </div>
                                         <div className="flex items-center gap-2 mt-0.5">
-                                            <span className="text-[10px] font-medium text-slate-400 flex items-center gap-1">
+                                            <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 flex items-center gap-1.5 uppercase tracking-wider">
+                                                <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
                                                 Joined {new Date(member.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                                             </span>
                                         </div>
                                     </div>
 
-                                    <div className="text-right">
-                                        <span className="text-sm font-black text-slate-900 dark:text-white block tabular-nums tracking-tight">
-                                            +{member.xp} XP
+                                    <div className="text-right relative z-10">
+                                        <div className="text-base font-black text-blue-600 dark:text-blue-400 tabular-nums tracking-tighter">
+                                            +{member.xp.toLocaleString()}
+                                            <span className="text-[10px] ml-1 opacity-70">XP</span>
+                                        </div>
+                                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mt-0.5 block">
+                                            Active
                                         </span>
-                                        <span className="text-[9px] font-bold text-emerald-500">Active</span>
                                     </div>
                                 </motion.div>
                             ))}
@@ -360,32 +370,57 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
                     ) : (
                         <motion.div
                             key="empty"
-                            initial={{ opacity: 0, scale: 0.95 }}
+                            initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="flex flex-col items-center justify-center h-[40vh] text-center px-6"
+                            className="flex flex-col items-center justify-center py-16 text-center px-6"
                         >
-                            <div className="w-24 h-24 bg-slate-100 dark:bg-white/5 rounded-full flex items-center justify-center mb-6 relative group">
-                                <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-700 opacity-50" />
-                                <UserPlus className="w-8 h-8 text-slate-300 dark:text-slate-600 relative z-10" />
+                            <div className="w-28 h-28 bg-white dark:bg-white/5 rounded-[2.5rem] flex items-center justify-center mb-8 relative group shadow-2xl shadow-blue-500/5">
+                                <div className="absolute inset-0 bg-linear-to-br from-blue-500 to-indigo-600 rounded-[2.5rem] blur-2xl opacity-10 group-hover:opacity-20 transition-all duration-700" />
+                                <div className="absolute inset-0 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-[2.5rem] animate-[spin_20s_linear_infinite]" />
+                                <UserPlus className="w-10 h-10 text-slate-300 dark:text-white/20 relative z-10" />
                             </div>
-                            <h4 className="text-lg font-black text-slate-900 dark:text-white mb-2">Quiet on Level {level}</h4>
-                            <p className="text-sm font-medium text-slate-500 dark:text-slate-400 max-w-[240px] leading-relaxed">
-                                No partners found in this tier yet. <br />
-                                <button
-                                    onClick={() => setIsShareOpen(true)}
-                                    className="text-blue-500 hover:text-blue-400 font-bold hover:underline transition-all"
-                                >
-                                    Share your link
-                                </button> to start growing!
+                            <h4 className="text-2xl font-black text-slate-900 dark:text-white mb-3">Quiet on Level {level}</h4>
+                            <p className="text-sm font-medium text-slate-500 dark:text-slate-400 max-w-[260px] leading-relaxed mb-10">
+                                Growth is just one invite away. Expand your network to unlock this leaf.
                             </p>
+                            <button
+                                onClick={() => { impact('heavy'); setIsShareOpen(true); }}
+                                className="group relative px-8 py-4 bg-linear-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white rounded-[1.5rem] font-black text-sm shadow-xl shadow-blue-500/25 active:scale-95 transition-all overflow-hidden"
+                            >
+                                <span className="relative z-10 flex items-center gap-2">
+                                    <UserPlus className="w-4 h-4" />
+                                    {t('network.explorer.share_link', 'Share Growth Link')}
+                                </span>
+                                <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                            </button>
                         </motion.div>
                     )}
                 </AnimatePresence>
             </div>
 
-            {/* Footer with Gradient Fade */}
-            <div className="absolute bottom-0 left-0 right-0 h-12 bg-linear-to-t from-white dark:from-slate-900 to-transparent pointer-events-none z-10" />
+            {/* Premium Stats Footer */}
+            <div className="relative z-30 p-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-200 dark:border-white/5">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-1">Total Network Strength</p>
+                        <div className="flex items-end gap-2">
+                            <h4 className="text-2xl font-black text-slate-900 dark:text-white leading-none tabular-nums">
+                                {totalActivePartners.toLocaleString()}
+                            </h4>
+                            <span className="text-xs font-bold text-emerald-500 pb-0.5 flex items-center gap-0.5">
+                                <TrendingUp className="w-3 h-3" />
+                                Partners
+                            </span>
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => { impact('medium'); setIsShareOpen(true); }}
+                        className="w-14 h-14 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center shadow-lg active:scale-90 transition-all"
+                    >
+                        <UserPlus className="w-6 h-6" />
+                    </button>
+                </div>
+            </div>
 
             {/* Share Sheet Modal */}
             <ShareSheet
@@ -396,3 +431,4 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
         </div>
     );
 };
+

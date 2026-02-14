@@ -20,7 +20,8 @@
         "tap_to_flip": "TAP TO FLIP",
         "upgrade_pro": "Upgrade to PRO",
         "unlock_rewards": "Unlock 2x Rewards & Perks",
-        "download_asset": "Download Prototype"
+        "download_asset": "Download Prototype",
+        "retry": "Try Again"
     },
     "menu": {
         "settings": "Settings",
@@ -45,12 +46,12 @@
         "suggested_topics": "Operational Intelligence",
         "powered_by": "Pintopay Tactical Suite • Neural Intel v4.0",
         "categories": {
-            "card_details": "Card Architecture",
-            "issue_setup": "Rapid Deployment",
-            "topup_limits": "Liquidity & Scale",
-            "apple_google": "Mobile Integration",
-            "earnings": "Network Dividends",
-            "security": "Asset Protection"
+            "card_details": "Card Issue",
+            "issue_setup": "Setup Guide",
+            "topup_limits": "Limits & Fees",
+            "apple_google": "Wallet & Pay",
+            "earnings": "Rewards",
+            "security": "Security"
         }
     },
     "faq": {
@@ -1158,6 +1159,20 @@
         "coming_soon": {
             "title": "Coming Soon",
             "desc": "We're building something amazing for our partners. Stay tuned!"
+        }
+    },
+    "network": {
+        "explorer": {
+            "title": "Network Explorer",
+            "deep_dive": "9-Level Deep Dive",
+            "share_link": "Share Growth Link",
+            "level": "Level {{level}}",
+            "active_partners": "{{count}} Active Partners",
+            "scanning": "Scanning Matrix...",
+            "stats_footer": "Total Network Strength",
+            "quiet_on_level": "Quiet on Level {{level}}",
+            "growth_desc": "Growth is just one invite away. Expand your network to unlock this leaf.",
+            "xp_focus": "XP Focus"
         }
     }
 }

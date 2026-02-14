@@ -10,7 +10,12 @@ import {
     BadgeCheck,
     Terminal,
     Zap,
-    ChevronRight
+    ChevronRight,
+    CreditCard,
+    Settings2,
+    Activity,
+    Smartphone,
+    TrendingUp
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
@@ -203,7 +208,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: '100%', opacity: 0 }}
                         transition={{ type: 'spring', damping: 30, stiffness: 250 }}
-                        className="relative flex h-full sm:h-[90dvh] w-full max-w-[480px] flex-col overflow-hidden bg-slate-50 dark:bg-slate-950 sm:rounded-[32px] shadow-[0_32px_80px_-20px_rgba(0,0,0,0.5)] safe-pt safe-pb border-x border-t sm:border border-slate-200 dark:border-white/10"
+                        className="relative flex h-full sm:h-[85dvh] w-full max-w-[440px] flex-col overflow-hidden bg-white dark:bg-slate-950 sm:rounded-[32px] shadow-[0_32px_80px_-20px_rgba(0,0,0,0.5)] safe-pt border-x border-t sm:border border-slate-200 dark:border-white/5"
                         style={{
                             height: '100dvh',
                             maxHeight: '100dvh'
@@ -212,20 +217,20 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         {/* Premium Header */}
                         <div className="relative shrink-0 z-20">
                             {/* Mesh Gradient Background for Header */}
-                            <div className="absolute inset-0 mesh-gradient-dark opacity-40" />
-                            <div className="relative border-b border-slate-200 dark:border-white/10 px-5 py-4 bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl">
+                            <div className="absolute inset-0 mesh-gradient-dark opacity-30" />
+                            <div className="relative border-b border-slate-200 dark:border-white/10 px-4 py-3 bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl">
                                 {/* Inset for Telegram Header (dots/close) */}
                                 <div className="pt-2 sm:pt-0">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-4">
                                             <div className="relative shrink-0">
-                                                <div className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-linear-to-br from-blue-500/20 to-indigo-600/20 text-blue-500 border border-blue-500/30 shadow-[0_8px_20px_-4px_rgba(59,130,246,0.3)]">
-                                                    <ShieldCheck className="h-7 w-7" />
+                                                <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-linear-to-br from-blue-500/20 to-indigo-600/20 text-blue-500 border border-blue-500/30 shadow-[0_4px_12px_-4px_rgba(59,130,246,0.3)]">
+                                                    <ShieldCheck className="h-6 w-6" />
                                                 </div>
                                                 <motion.div
                                                     animate={{ scale: [1, 1.2, 1] }}
                                                     transition={{ repeat: Infinity, duration: 2 }}
-                                                    className="absolute -top-1 -right-1 h-4 w-4 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)]"
+                                                    className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white dark:border-slate-950 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"
                                                 />
                                             </div>
                                             <div className="flex flex-col">
@@ -248,9 +253,9 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                         </div>
                                         <button
                                             onClick={onClose}
-                                            className="rounded-2xl bg-slate-900/5 dark:bg-white/5 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-900/10 dark:hover:bg-white/10 transition-all active:scale-90 border border-slate-200 dark:border-white/10"
+                                            className="rounded-xl bg-slate-900/5 dark:bg-white/5 p-2.5 text-slate-500 dark:text-slate-400 hover:bg-slate-900/10 dark:hover:bg-white/10 transition-all active:scale-90 border border-slate-200 dark:border-white/10"
                                         >
-                                            <X className="h-5 w-5" />
+                                            <X className="h-4 w-4" />
                                         </button>
                                     </div>
 
@@ -259,7 +264,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                         <div className="flex h-5 w-5 items-center justify-center rounded-md bg-blue-500/10 border border-blue-500/20">
                                             <Terminal className="h-3 w-3 text-blue-400 opacity-70" />
                                         </div>
-                                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 truncate">
+                                        <span className="text-[8px] font-black uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 truncate">
                                             {t('support.user_context', { name: user?.first_name || 'PARTNER', level: user?.level || 1 })}
                                         </span>
                                         <div className="ml-auto flex items-center gap-1">
@@ -274,7 +279,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         {/* Messages Area */}
                         <div
                             ref={scrollRef}
-                            className="flex-1 overflow-y-auto px-5 py-6 space-y-8 custom-scrollbar hide-scrollbar overscroll-contain relative"
+                            className="flex-1 overflow-y-auto px-4 py-4 space-y-6 custom-scrollbar hide-scrollbar overscroll-contain relative"
                         >
                             {/* Subtle background element */}
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-40 bg-linear-to-b from-blue-500/5 to-transparent pointer-events-none" />
@@ -287,9 +292,9 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                     transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
                                     className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                                 >
-                                    <div className={`relative max-w-[88%] rounded-3xl px-5 py-4 shadow-2xl ${msg.role === 'user'
+                                    <div className={`relative max-w-[90%] rounded-2xl px-4 py-3 shadow-xl ${msg.role === 'user'
                                         ? 'vibing-blue-animated text-white rounded-tr-none border border-white/10'
-                                        : 'bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white rounded-tl-none shadow-[0_8px_32px_-8px_rgba(0,0,0,0.15)]'
+                                        : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white rounded-tl-none shadow-[0_4px_24px_-8px_rgba(0,0,0,0.12)]'
                                         }`}>
 
                                         {/* Assistant Message Glow */}
@@ -300,9 +305,9 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                         <p className="text-[14px] leading-relaxed font-medium">
                                             {msg.content}
                                         </p>
-                                        <div className={`mt-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.15em] opacity-40 ${msg.role === 'user' ? 'justify-end text-blue-50' : 'text-slate-500 dark:text-slate-400'
+                                        <div className={`mt-1.5 flex items-center gap-1.5 text-[8px] font-black uppercase tracking-widest opacity-30 ${msg.role === 'user' ? 'justify-end text-blue-50' : 'text-slate-500 dark:text-slate-400'
                                             }`}>
-                                            <Clock className="h-3 w-3" />
+                                            <Clock className="h-2.5 w-2.5" />
                                             {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </div>
                                     </div>
@@ -341,45 +346,54 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                     transition={{ delay: 0.3 }}
                                     className="pt-4"
                                 >
-                                    <div className="flex items-center gap-3 mb-5">
+                                    <div className="flex items-center gap-3 mb-4">
                                         <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
-                                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500 opacity-50">
+                                        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 opacity-60">
                                             {t('support.suggested_topics')}
                                         </p>
                                         <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
                                     </div>
-                                    <div className="grid gap-3">
-                                        {Object.keys(t('support.categories', { returnObjects: true }) as any).map((key, i) => (
-                                            <motion.button
-                                                key={key}
-                                                initial={{ opacity: 0, x: -10 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                transition={{ delay: 0.5 + (i * 0.1) }}
-                                                onClick={() => handleCategoryClick(key)}
-                                                className="group flex items-center justify-between rounded-2xl border border-slate-200 dark:border-white/10 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-4 text-sm font-bold text-slate-900 dark:text-white hover:border-blue-500/40 hover:bg-blue-500/5 transition-all active:scale-[0.98] shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)]"
-                                            >
-                                                <div className="flex items-center gap-4">
-                                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 group-hover:text-blue-500 group-hover:bg-blue-500/10 border border-slate-200 dark:border-white/10 transition-all">
-                                                        <Cpu className="h-5 w-5" />
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {Object.keys(t('support.categories', { returnObjects: true }) as any).map((key, i) => {
+                                            const icons: Record<string, any> = {
+                                                card_details: CreditCard,
+                                                issue_setup: Settings2,
+                                                topup_limits: Activity,
+                                                apple_google: Smartphone,
+                                                earnings: TrendingUp,
+                                                security: ShieldCheck
+                                            };
+                                            const Icon = icons[key] || Cpu;
+
+                                            return (
+                                                <motion.button
+                                                    key={key}
+                                                    initial={{ opacity: 0, scale: 0.9 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    transition={{ delay: 0.4 + (i * 0.05) }}
+                                                    onClick={() => handleCategoryClick(key)}
+                                                    className="group flex flex-col items-start gap-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md p-3 text-left hover:border-blue-500/40 hover:bg-blue-500/5 transition-all active:scale-[0.96] shadow-sm"
+                                                >
+                                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-950 text-slate-500 dark:text-slate-400 group-hover:text-blue-500 group-hover:bg-blue-500/10 transition-all">
+                                                        <Icon className="h-4 w-4" />
                                                     </div>
-                                                    <span className="tracking-tight">{t(`support.categories.${key}`)}</span>
-                                                </div>
-                                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-950 opacity-0 group-hover:opacity-100 transition-all">
-                                                    <ChevronRight className="h-4 w-4 text-blue-500 group-hover:translate-x-0.5 transition-transform" />
-                                                </div>
-                                            </motion.button>
-                                        ))}
+                                                    <span className="text-xs font-bold leading-tight tracking-tight text-slate-900 dark:text-white">
+                                                        {t(`support.categories.${key}`)}
+                                                    </span>
+                                                </motion.button>
+                                            );
+                                        })}
                                     </div>
                                 </motion.div>
                             )}
                         </div>
 
                         {/* Input Area */}
-                        <div className="relative border-t border-slate-200 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 p-5 pt-5 pb-8 backdrop-blur-3xl shrink-0">
+                        <div className="relative border-t border-slate-200 dark:border-white/10 bg-white/80 dark:bg-slate-900/80 p-4 pt-4 pb-6 backdrop-blur-3xl shrink-0 safe-pb">
                             {/* Glass background overlay */}
-                            <div className="absolute inset-0 mesh-gradient-dark opacity-10 pointer-events-none" />
+                            <div className="absolute inset-0 mesh-gradient-dark opacity-5 pointer-events-none" />
 
-                            <div className="relative flex items-center gap-3">
+                            <div className="relative flex items-center gap-2">
                                 <div className="relative flex-1 group">
                                     <input
                                         type="text"
@@ -388,27 +402,27 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                         onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                                         disabled={sessionClosed}
                                         placeholder={sessionClosed ? t('support.session_closed') : t('support.input_placeholder')}
-                                        className="w-full rounded-[20px] border border-slate-200 dark:border-white/10 bg-black/10 dark:bg-white/5 pr-12 pl-5 py-4 text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400/30 focus:border-blue-500/40 focus:bg-black/20 dark:focus:bg-white/10 focus:outline-none transition-all disabled:opacity-50 shadow-inner"
+                                        className="w-full rounded-xl border border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-white/5 pr-10 pl-4 py-3 text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500/50 focus:border-blue-500/40 focus:bg-white dark:focus:bg-white/10 focus:outline-none transition-all disabled:opacity-50 shadow-inner"
                                     />
-                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none opacity-20 group-focus-within:opacity-40 transition-opacity">
-                                        <div className="h-4 w-px bg-slate-400 dark:bg-slate-500 mx-1" />
-                                        <Terminal className="h-4 w-4 text-slate-400 dark:text-slate-500" />
+                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none opacity-20 group-focus-within:opacity-40 transition-opacity">
+                                        <div className="h-3 w-px bg-slate-400 dark:bg-slate-500 mx-0.5" />
+                                        <Terminal className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                                     </div>
                                 </div>
                                 <button
                                     onClick={() => handleSendMessage()}
                                     disabled={!inputValue.trim() || isTyping || sessionClosed}
-                                    className="flex h-[54px] w-[54px] items-center justify-center rounded-[20px] vibing-blue-animated text-white shadow-[0_12px_24px_-8px_rgba(59,130,246,0.6)] active:scale-90 transition-all disabled:opacity-30 disabled:shadow-none shrink-0"
+                                    className="flex h-[46px] w-[46px] items-center justify-center rounded-xl vibing-blue-animated text-white shadow-lg active:scale-90 transition-all disabled:opacity-30 disabled:shadow-none shrink-0"
                                 >
-                                    <Send className="h-6 w-6" />
+                                    <Send className="h-5 w-5" />
                                 </button>
                             </div>
 
-                            <div className="mt-5 flex flex-col items-center gap-2 opacity-30 select-none">
-                                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-400 dark:text-slate-500">
+                            <div className="mt-4 flex flex-col items-center gap-1.5 opacity-20 select-none">
+                                <p className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">
                                     {t('support.powered_by')}
                                 </p>
-                                <div className="h-[3px] w-8 rounded-full bg-linear-to-r from-blue-500/50 to-indigo-500/50" />
+                                <div className="h-[2px] w-6 rounded-full bg-linear-to-r from-blue-500/50 to-indigo-500/50" />
                             </div>
                         </div>
                     </motion.div>

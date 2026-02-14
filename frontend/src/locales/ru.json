@@ -20,7 +20,8 @@
         "tap_to_flip": "НАЖМИТЕ, ЧТОБЫ ПЕРЕВЕРНУТЬ",
         "upgrade_pro": "Апгрейд до PRO",
         "unlock_rewards": "Разблокируйте х2 Наград и Бонусов",
-        "download_asset": "Скачать Прототип"
+        "download_asset": "Скачать Прототип",
+        "retry": "Повторить"
     },
     "menu": {
         "settings": "Настройки",
@@ -45,12 +46,12 @@
         "suggested_topics": "Оперативная информация",
         "powered_by": "Тактический комплекс Pintopay • Neural Intel v4.0",
         "categories": {
-            "card_details": "Архитектура карт",
-            "issue_setup": "Быстрое развертывание",
-            "topup_limits": "Ликвидность и Масштаб",
-            "apple_google": "Мобильная интеграция",
-            "earnings": "Сетевые дивиденды",
-            "security": "Защита активов"
+            "card_details": "Выпуск карты",
+            "issue_setup": "Настройка",
+            "topup_limits": "Лимиты",
+            "apple_google": "Wallet & Pay",
+            "earnings": "Доход",
+            "security": "Защита"
         }
     },
     "faq": {
@@ -1159,6 +1160,20 @@
         "coming_soon": {
             "title": "Скоро открытие",
             "desc": "Мы создаем нечто потрясающее для наших партнеров. Следите за обновлениями!"
+        }
+    },
+    "network": {
+        "explorer": {
+            "title": "Сетевой сканер",
+            "deep_dive": "Глубина 9 уровней",
+            "share_link": "Поделиться ссылкой",
+            "level": "Уровень {{level}}",
+            "active_partners": "{{count}} Активных в L{{level}}",
+            "scanning": "Сканирование...",
+            "stats_footer": "Общая мощность сети",
+            "quiet_on_level": "Тишина на уровне {{level}}",
+            "growth_desc": "Рост на расстоянии одного приглашения. Расширьте свою сеть, чтобы открыть этот лист.",
+            "xp_focus": "Фокус на XP"
         }
     }
 }
