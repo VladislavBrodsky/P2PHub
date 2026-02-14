@@ -195,13 +195,24 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
             "security": {
                 en: "Pintopay uses banking-grade 3DS security and encrypted asset storage. If your card is lost, you can Freeze it instantly in the app. Pintopay will never ask for your private keys or passwords.",
                 ru: "Pintopay использует банковскую защиту 3DS и зашифрованное хранение активов. Если карта потеряна, вы можете мгновенно заморозить её в приложении. Pintopay никогда не запрашивает ваши приватные ключи или пароли."
+            },
+            "trading": {
+                en: "Our P2P Trading Hub is protected by a 24/7 Escrow system. If you encounter an issue during a trade, simply click the 'Dispute' button and a human moderator will join within minutes to resolve the situation.",
+                ru: "Наш P2P-хаб защищен системой Escrow, работающей 24/7. Если у вас возникла проблема во время сделки, просто нажмите кнопку «Апелляция», и наш модератор подключится в течение нескольких минут для решения вопроса."
+            },
+            "vip": {
+                en: "PRO members at Level 5+ get direct access to our Priority Executive Line. Your inquiries are handled by our top-tier neural agents and senior human supervisors with sub-5 minute response times.",
+                ru: "Партнеры уровня 5+ с PRO-статусом получают прямой доступ к Приоритетной Линии. Ваши запросы обрабатываются лучшими ИИ-агентами и старшими менеджерами с временем ответа менее 5 минут."
             }
         };
 
         const currentLang = i18n.language.startsWith('ru') ? 'ru' : 'en';
 
         try {
-            // If it's a category key, we know what to say immediately for 'Top-Notch' feel
+            // Contextual Auto-Intelligence
+            const lowerMsg = messageText.toLowerCase();
+
+            // If it's a category click or exact question
             const categoryMatch = Object.keys(localKB).find(k =>
                 t(`support.categories.${k}`).toLowerCase().trim() === messageText.toLowerCase().trim()
             );
@@ -211,7 +222,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                     addMessage('assistant', localKB[categoryMatch][currentLang]);
                     setIsTyping(false);
                     resetInactivityTimer();
-                }, delay + 400); // Small extra delay for deep-thinking feel
+                }, delay + 800);
                 return;
             }
 
@@ -359,7 +370,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                         )}
 
                                         <p className="text-[14px] leading-relaxed font-medium">
-                                            {msg.content}
+                                            {renderMessageContent(msg.content)}
                                         </p>
                                         <div className={`mt-1.5 flex items-center gap-1.5 text-[8px] font-black uppercase tracking-widest opacity-30 ${msg.role === 'user' ? 'justify-end text-blue-50' : 'text-slate-500 dark:text-slate-400'
                                             }`}>

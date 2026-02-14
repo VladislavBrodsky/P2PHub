@@ -538,12 +538,12 @@ export const ProDashboard = () => {
                                         exit={{ opacity: 0, x: -20 }}
                                         className="space-y-4"
                                     >
-                                        <div className="glass-panel-premium rounded-[2rem] p-6 border border-white/10 shadow-2xl relative overflow-hidden group">
+                                        <div className="glass-panel-premium rounded-[2rem] p-4 border border-white/10 shadow-2xl relative overflow-hidden group">
                                             <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-pink-500/5 pointer-events-none" />
 
-                                            <div className="flex items-center gap-4 mb-8 relative z-10">
-                                                <div className="w-12 h-12 rounded-[1.25rem] vibing-blue-animated flex items-center justify-center shrink-0">
-                                                    <Terminal size={20} className="text-white" />
+                                            <div className="flex items-center gap-3 mb-4 relative z-10">
+                                                <div className="w-10 h-10 rounded-xl vibing-blue-animated flex items-center justify-center shrink-0">
+                                                    <Terminal size={18} className="text-white" />
                                                 </div>
                                                 <div>
                                                     <h3 className="text-[11px] font-black uppercase tracking-[0.25em] vibing-blue-text leading-none mb-1.5">
@@ -556,12 +556,12 @@ export const ProDashboard = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="space-y-6 relative z-10 px-1">
+                                            <div className="space-y-3.5 relative z-10 px-1">
                                                 {/* Connector Line for Flow Visualization */}
-                                                <div className="absolute left-[5px] top-6 bottom-16 w-0.5 bg-linear-to-b from-indigo-500/30 via-pink-500/30 to-emerald-500/30 rounded-full z-0 pointer-events-none" />
+                                                <div className="absolute left-[5px] top-6 bottom-12 w-0.5 bg-linear-to-b from-indigo-500/30 via-pink-500/30 to-emerald-500/30 rounded-full z-0 pointer-events-none" />
 
                                                 {/* Post Type */}
-                                                <div className="space-y-2 relative z-10">
+                                                <div className="space-y-1.5 relative z-10">
                                                     <div className="flex items-center gap-3">
                                                         <div className="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] border-2 border-slate-50 dark:border-slate-900 relative z-10 shrink-0" />
                                                         <label className="text-[10px] font-black uppercase text-indigo-500 dark:text-indigo-400 tracking-[0.2em]">{t('pro_dashboard.studio.strategy_label')}</label>
@@ -571,7 +571,7 @@ export const ProDashboard = () => {
                                                         <select
                                                             value={postType}
                                                             onChange={(e) => { selection(); setPostType(e.target.value); }}
-                                                            className="relative w-full h-14 bg-black/5 dark:bg-white/5 backdrop-blur-md border border-black/5 dark:border-white/10 focus:border-indigo-500/50 rounded-2xl px-5 text-base font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-xs"
+                                                            className="relative w-full h-11 bg-black/5 dark:bg-white/5 backdrop-blur-md border border-black/5 dark:border-white/10 focus:border-indigo-500/50 rounded-2xl px-5 text-sm font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-xs"
                                                         >
                                                             <option value="" disabled className="text-slate-500">{t('pro_dashboard.studio.strategy_placeholder')}</option>
                                                             {postTypes.map(pt => <option key={pt.key} value={pt.key} className="text-brand-text">{pt.label}</option>)}
@@ -583,7 +583,7 @@ export const ProDashboard = () => {
                                                 </div>
 
                                                 {/* Target Audience */}
-                                                <div className="space-y-2 relative z-10">
+                                                <div className="space-y-1.5 relative z-10">
                                                     <div className="flex items-center gap-3">
                                                         <div className="w-3 h-3 rounded-full bg-pink-500 shadow-[0_0_10px_rgba(236,72,153,0.5)] border-2 border-slate-50 dark:border-slate-900 relative z-10 shrink-0" />
                                                         <label className="text-[10px] font-black uppercase text-pink-500 dark:text-pink-400 tracking-[0.2em]">{t('pro_dashboard.studio.target_label')}</label>
@@ -593,7 +593,7 @@ export const ProDashboard = () => {
                                                         <select
                                                             value={audience}
                                                             onChange={(e) => { selection(); setAudience(e.target.value); }}
-                                                            className="relative w-full h-14 bg-black/5 dark:bg-white/5 backdrop-blur-md border border-black/5 dark:border-white/10 focus:border-pink-500/50 rounded-2xl px-5 text-base font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-xs"
+                                                            className="relative w-full h-11 bg-black/5 dark:bg-white/5 backdrop-blur-md border border-black/5 dark:border-white/10 focus:border-pink-500/50 rounded-2xl px-5 text-sm font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-xs"
                                                         >
                                                             <option value="" disabled className="text-slate-500">{t('pro_dashboard.studio.target_placeholder')}</option>
                                                             {audiences.map(a => <option key={a.key} value={a.key} className="text-brand-text">{a.label}</option>)}
@@ -605,7 +605,7 @@ export const ProDashboard = () => {
                                                 </div>
 
                                                 {/* Language */}
-                                                <div className="space-y-2 relative z-10">
+                                                <div className="space-y-1.5 relative z-10">
                                                     <div className="flex items-center gap-3">
                                                         <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] border-2 border-slate-50 dark:border-slate-900 relative z-10 shrink-0" />
                                                         <label className="text-[10px] font-black uppercase text-emerald-600 dark:text-emerald-400 tracking-[0.2em]">{t('pro_dashboard.studio.language_label')}</label>
@@ -615,7 +615,7 @@ export const ProDashboard = () => {
                                                         <select
                                                             value={language}
                                                             onChange={(e) => setLanguage(e.target.value)}
-                                                            className="relative w-full h-14 bg-black/5 dark:bg-white/5 backdrop-blur-md border border-black/5 dark:border-white/10 focus:border-emerald-500/50 rounded-2xl px-5 pr-12 text-base font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-xs"
+                                                            className="relative w-full h-11 bg-black/5 dark:bg-white/5 backdrop-blur-md border border-black/5 dark:border-white/10 focus:border-emerald-500/50 rounded-2xl px-5 pr-12 text-sm font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-xs"
                                                         >
                                                             {languages.map(l => <option key={l} value={l} className="text-brand-text">{l}</option>)}
                                                         </select>
@@ -627,13 +627,13 @@ export const ProDashboard = () => {
                                             </div>
 
                                             {/* Action Area */}
-                                            <div className="pt-8 mt-2 relative z-20 pl-6">
+                                            <div className="pt-5 mt-1 relative z-20 pl-6">
                                                 <div className="absolute top-0 left-6 right-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
                                                 <button
                                                     onClick={() => { selection(); setStep(2); }}
                                                     disabled={!postType || !audience}
                                                     style={{ backgroundSize: '200% auto' }}
-                                                    className="w-full h-14 bg-linear-to-r from-indigo-600 via-violet-600 to-fuchsia-600 animate-gradient-xy hover:bg-right transition-all duration-700 rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.2em] shadow-[0_8px_32px_rgba(99,102,241,0.4)] hover:shadow-[0_12px_40px_rgba(99,102,241,0.6)] active:scale-95 flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale disabled:shadow-none relative overflow-hidden group/btn border border-white/20"
+                                                    className="w-full h-12 bg-linear-to-r from-indigo-600 via-violet-600 to-fuchsia-600 animate-gradient-xy hover:bg-right transition-all duration-700 rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.2em] shadow-[0_8px_32px_rgba(99,102,241,0.4)] hover:shadow-[0_12px_40px_rgba(99,102,241,0.6)] active:scale-95 flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale disabled:shadow-none relative overflow-hidden group/btn border border-white/20"
                                                 >
                                                     <div className="absolute inset-0 bg-white/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 pointer-events-none mix-blend-overlay" />
                                                     <span className="relative z-10 flex items-center gap-2 drop-shadow-md">
@@ -642,7 +642,7 @@ export const ProDashboard = () => {
                                                         <ChevronRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
                                                     </span>
                                                 </button>
-                                                <div className="flex justify-center mt-3 gap-1.5 items-center opacity-40">
+                                                <div className="flex justify-center mt-2 gap-1.5 items-center opacity-40">
                                                     <div className="w-1 h-1 rounded-full bg-indigo-500 animate-pulse" />
                                                     <p className="text-[8px] font-bold text-brand-muted uppercase tracking-widest">
                                                         Using Advanced Pro Model
