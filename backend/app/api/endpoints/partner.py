@@ -14,7 +14,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.config import settings
 from app.core.security import get_current_user, get_tg_user
 from app.middleware.rate_limit import limiter
-from app.models.partner import Partner, XPTransaction, get_session
+from app.models.partner import Partner, XPTransaction, Earning, get_session
 from app.models.schemas import (
     EarningSchema,
     GrowthMetrics,

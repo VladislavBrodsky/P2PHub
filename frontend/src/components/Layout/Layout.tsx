@@ -2,7 +2,6 @@ import { useState, useEffect, lazy, Suspense, useCallback } from 'react';
 import { Header } from '../Header';
 const ProfileDrawer = lazy(() => import('../ProfileDrawer')); // Lazy load
 import BottomNav from '../BottomNav';
-import { backButton } from '@telegram-apps/sdk-react';
 import { useUI } from '../../context/UIContext';
 
 interface LayoutProps {

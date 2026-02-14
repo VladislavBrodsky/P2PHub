@@ -57,7 +57,7 @@ def setup_sheets():
         # Try to get existing sheet or create new one
         try:
             worksheet = spreadsheet.worksheet("AI Marketing Studio Log")
-            print(f"✅ Found existing sheet: 'AI Marketing Studio Log'")
+            print("✅ Found existing sheet: 'AI Marketing Studio Log'")
             print(f"   Current rows: {worksheet.row_count}")
             
             # Ask if user wants to clear and reset headers
@@ -158,7 +158,7 @@ def setup_sheets():
         print("\n" + "=" * 80)
         print("✅ SETUP COMPLETE!")
         print("=" * 80)
-        print(f"📊 Sheet Name: AI Marketing Studio Log")
+        print("📊 Sheet Name: AI Marketing Studio Log")
         print(f"📋 Spreadsheet: {spreadsheet.title}")
         print(f"🔗 URL: {spreadsheet.url}")
         print(f"✅ Headers: {len(headers)} columns configured")
@@ -172,7 +172,7 @@ def setup_sheets():
         return True
         
     except json.JSONDecodeError as e:
-        print(f"❌ ERROR: Invalid JSON in GOOGLE_SERVICE_ACCOUNT_JSON")
+        print("❌ ERROR: Invalid JSON in GOOGLE_SERVICE_ACCOUNT_JSON")
         print(f"   {e}")
         return False
     except Exception as e:

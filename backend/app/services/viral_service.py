@@ -842,7 +842,6 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                 # Duration is total time, but we can estimate breakdown
                 text_time = duration * 0.45  # ~45% of time
                 image_time = duration * 0.50  # ~50% of time
-                processing_time = duration * 0.05  # ~5% overhead
                 
                 # Current timestamp
                 timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")

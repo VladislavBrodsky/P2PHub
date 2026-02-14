@@ -136,7 +136,7 @@ except Exception as e:
 print("\n📋 Step 6: Checking for 'AI Marketing Studio Log' sheet...")
 try:
     worksheet = spreadsheet.worksheet("AI Marketing Studio Log")
-    print(f"✅ Found 'AI Marketing Studio Log' sheet")
+    print("✅ Found 'AI Marketing Studio Log' sheet")
     print(f"   Rows: {worksheet.row_count}")
     print(f"   Columns: {worksheet.col_count}")
     
@@ -187,7 +187,7 @@ try:
     
 except gspread.exceptions.APIError as e:
     if "PERMISSION_DENIED" in str(e):
-        print(f"❌ FAILED: No write permission")
+        print("❌ FAILED: No write permission")
         print(f"   Service account: {creds_dict.get('client_email')}")
         print("   Please share the spreadsheet with this email address (Editor access)")
     else:
@@ -202,11 +202,11 @@ print("\n" + "=" * 80)
 print("✅ ALL TESTS PASSED!")
 print("=" * 80)
 print("\n📊 Connection Status:")
-print(f"   ✅ Environment variable configured")
-print(f"   ✅ JSON structure valid")
-print(f"   ✅ Service account authenticated")
-print(f"   ✅ Spreadsheet accessible")
-print(f"   ✅ Write permissions verified")
+print("   ✅ Environment variable configured")
+print("   ✅ JSON structure valid")
+print("   ✅ Service account authenticated")
+print("   ✅ Spreadsheet accessible")
+print("   ✅ Write permissions verified")
 print("\n🎯 Google Sheets logging is READY TO USE!")
 print("=" * 80)
 

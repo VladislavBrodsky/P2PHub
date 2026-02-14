@@ -86,24 +86,24 @@ async def main():
         results.append(metrics)
         
         # Display results
-        print(f"\n⏱️  TIMING:")
+        print("\n⏱️  TIMING:")
         print(f"   Total Duration: {duration:.2f}s")
         
-        print(f"\n📊 CONTENT:")
+        print("\n📊 CONTENT:")
         print(f"   Title: {result.get('title', 'N/A')[:60]}...")
         print(f"   Text Length: {text_length:,} chars")
         print(f"   Hashtags: {len(result.get('hashtags', []))} tags")
         
-        print(f"\n🖼️  IMAGE:")
+        print("\n🖼️  IMAGE:")
         print(f"   Generated: {'✅' if has_image else '❌'}")
         print(f"   URL: {result.get('image_url', 'None')}")
         
-        print(f"\n💰 RESOURCES:")
+        print("\n💰 RESOURCES:")
         print(f"   OpenAI Tokens: {tokens:,}")
         
         # Small delay between tests
         if idx < total_runs:
-            print(f"\n⏳ Waiting 2s before next test...")
+            print("\n⏳ Waiting 2s before next test...")
             await asyncio.sleep(2)
     
     # Overall statistics
@@ -118,16 +118,16 @@ async def main():
         success_rate = sum(1 for r in results if r['has_image']) / len(results) * 100
         avg_tokens = sum(r['tokens'] for r in results) / len(results)
         
-        print(f"\n⏱️  TIMING ANALYSIS:")
+        print("\n⏱️  TIMING ANALYSIS:")
         print(f"   Average: {avg_duration:.2f}s")
         print(f"   Fastest: {min_duration:.2f}s")
         print(f"   Slowest: {max_duration:.2f}s")
         
-        print(f"\n✅ SUCCESS METRICS:")
+        print("\n✅ SUCCESS METRICS:")
         print(f"   Image Generation Rate: {success_rate:.0f}%")
         print(f"   Successful Runs: {sum(1 for r in results if r['has_image'])}/{len(results)}")
         
-        print(f"\n💰 RESOURCE USAGE:")
+        print("\n💰 RESOURCE USAGE:")
         print(f"   Avg Tokens/Generation: {avg_tokens:.0f}")
         print(f"   Est. Cost/Generation: ${(avg_tokens / 1000 * 0.015):.4f}")
         
