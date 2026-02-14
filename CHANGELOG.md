@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.6.1] - 2026-02-13
+### Changed
+- **Terminology**: Reverted "Grow Hacks" button label back to "Academy" in Partner section (English locale).
+- **Pro Dashboard**: Refined UI/UX, removed button shadows, and improved layout on small screens.
+- **XP Rewards**: Adjusted referral and social task rewards for better balance (e.g., Community Leader = 2500 XP).
+- **Translations**: Extensive refinement of Russian (`ru.json`) terminology for a more "elite/tactical" brand voice.
+
+### Fixed
+- **Profile Drawer**: Resolved responsiveness issue where the screen froze after changing language/theme.
+- **Top Partners**: Logic to inject convincing "social proof" data if actual partner counts are low.
+- **Image Glitches**: Fixed display issues in AI Marketing Studio.
+
 ## [1.2.0] - 2026-02-11
 ### Added
 - Unified Photo Pipeline: All avatar displays now use optimized WebP proxy via `/api/partner/photo/{file_id}`.

@@ -242,7 +242,7 @@ body {
 
   /* Premium Glass Utilities */
   .glass-panel-premium {
-    @apply bg-white/70 dark:bg-white/5 backdrop-blur-xl border border-black/[0.03] dark:border-white/10 shadow-sm dark:shadow-2xl;
+    @apply bg-white/70 dark:bg-white/5 backdrop-blur-xl border border-black/3 dark:border-white/10 shadow-sm dark:shadow-2xl;
   }
 
   .glass-button {
@@ -651,6 +651,11 @@ body {
 .animate-liquid {
   /* Using opacity and scale for liquid-like feel instead of background-position */
   animation: pulse-glow 4s ease-in-out infinite;
+}
+
+.animate-gradient-xy {
+  animation: liquid 3s ease infinite;
+  background-size: 200% 200%;
 }
 
 /* simplified vibing */

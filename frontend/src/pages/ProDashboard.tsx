@@ -111,6 +111,24 @@ export const ProDashboard = () => {
 
     useEffect(() => {
         loadStatus();
+
+        // Telegram Web App Expansion & Swipe Prevention
+        const tg = (window as any).Telegram?.WebApp;
+        if (tg) {
+            tg.expand();
+            tg.enableClosingConfirmation();
+            // Prevent vertical swipes if supported
+            if (tg.isVerticalSwipesEnabled !== undefined) {
+                tg.isVerticalSwipesEnabled = false;
+            }
+            // Set header color to match
+            if (tg.setHeaderColor) {
+                tg.setHeaderColor('#0f172a'); // slate-950
+            }
+            if (tg.setBackgroundColor) {
+                tg.setBackgroundColor('#0f172a');
+            }
+        }
     }, []);
 
     const loadStatus = async () => {
@@ -443,7 +461,7 @@ export const ProDashboard = () => {
                 </div>
             </div>
 
-            <div className={`flex-1 ${showSetup ? 'pb-10' : 'pb-16'} custom-scrollbar scroll-smooth overflow-y-auto overscroll-contain`}>
+            <div className={`flex-1 ${showSetup ? 'pb-20' : 'pb-32'} custom-scrollbar scroll-smooth overflow-y-auto overscroll-none`}>
 
                 {/* Main Content Areas */}
                 <div className="px-6 space-y-6 flex-1">
@@ -508,81 +526,100 @@ export const ProDashboard = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="space-y-5 relative z-10">
+                                            <div className="space-y-6 relative z-10 px-1">
+                                                {/* Connector Line for Flow Visualization */}
+                                                <div className="absolute left-[5px] top-6 bottom-16 w-0.5 bg-linear-to-b from-indigo-500/30 via-pink-500/30 to-emerald-500/30 rounded-full z-0 pointer-events-none" />
+
                                                 {/* Post Type */}
-                                                <div className="space-y-2">
-                                                    <div className="flex items-center gap-2 ml-1">
-                                                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]" />
-                                                        <label className="text-[9px] font-black uppercase text-brand-muted tracking-widest opacity-80">{t('pro_dashboard.studio.strategy_label')}</label>
+                                                <div className="space-y-2 relative z-10">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] border-2 border-[#0f172a] relative z-10 shrink-0" />
+                                                        <label className="text-[10px] font-black uppercase text-indigo-400 tracking-[0.2em]">{t('pro_dashboard.studio.strategy_label')}</label>
                                                     </div>
-                                                    <div className="relative group/sel">
-                                                        <div className="absolute inset-0 bg-linear-to-r from-indigo-500/5 to-purple-500/5 rounded-2xl pointer-events-none" />
+                                                    <div className="relative group/sel pl-6">
+                                                        <div className="absolute inset-y-0 left-6 right-0 bg-linear-to-r from-indigo-500/5 to-purple-500/5 rounded-2xl pointer-events-none transition-opacity opacity-50 group-hover/sel:opacity-100" />
                                                         <select
                                                             value={postType}
                                                             onChange={(e) => { selection(); setPostType(e.target.value); }}
-                                                            className="relative w-full h-14 bg-(--color-bg-surface)/40 backdrop-blur-sm border border-(--color-border-glass) focus:border-indigo-500/40 rounded-2xl px-5 text-[11px] font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-sm"
+                                                            className="relative w-full h-14 bg-white/5 backdrop-blur-md border border-white/10 focus:border-indigo-500/50 rounded-2xl px-5 text-base font-bold text-white outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-sm"
                                                         >
-                                                            <option value="" disabled className="text-brand-muted">{t('pro_dashboard.studio.strategy_placeholder')}</option>
-                                                            {postTypes.map(pt => <option key={pt.key} value={pt.key} className="bg-(--color-bg-surface) text-brand-text">{pt.label}</option>)}
+                                                            <option value="" disabled className="text-slate-500 bg-slate-900">{t('pro_dashboard.studio.strategy_placeholder')}</option>
+                                                            {postTypes.map(pt => <option key={pt.key} value={pt.key} className="bg-slate-900 text-white py-2">{pt.label}</option>)}
                                                         </select>
-                                                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-40 group-hover/sel:opacity-100 transition-opacity">
-                                                            <ChevronRight className="rotate-90 w-4 h-4" />
+                                                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-50 group-hover/sel:opacity-100 transition-opacity">
+                                                            <ChevronRight className="rotate-90 w-5 h-5 text-indigo-500" />
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 {/* Target Audience */}
-                                                <div className="space-y-2">
-                                                    <div className="flex items-center gap-2 ml-1">
-                                                        <div className="w-1.5 h-1.5 rounded-full bg-pink-500 shadow-[0_0_8px_rgba(236,72,153,0.6)]" />
-                                                        <label className="text-[9px] font-black uppercase text-brand-muted tracking-widest opacity-80">{t('pro_dashboard.studio.target_label')}</label>
+                                                <div className="space-y-2 relative z-10">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-3 h-3 rounded-full bg-pink-500 shadow-[0_0_10px_rgba(236,72,153,0.5)] border-2 border-[#0f172a] relative z-10 shrink-0" />
+                                                        <label className="text-[10px] font-black uppercase text-pink-400 tracking-[0.2em]">{t('pro_dashboard.studio.target_label')}</label>
                                                     </div>
-                                                    <div className="relative group/sel">
-                                                        <div className="absolute inset-0 bg-linear-to-r from-pink-500/5 to-rose-500/5 rounded-2xl pointer-events-none" />
+                                                    <div className="relative group/sel pl-6">
+                                                        <div className="absolute inset-y-0 left-6 right-0 bg-linear-to-r from-pink-500/5 to-rose-500/5 rounded-2xl pointer-events-none transition-opacity opacity-50 group-hover/sel:opacity-100" />
                                                         <select
                                                             value={audience}
                                                             onChange={(e) => { selection(); setAudience(e.target.value); }}
-                                                            className="relative w-full h-14 bg-(--color-bg-surface)/40 backdrop-blur-sm border border-(--color-border-glass) focus:border-pink-500/40 rounded-2xl px-5 text-[11px] font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-sm"
+                                                            className="relative w-full h-14 bg-white/5 backdrop-blur-md border border-white/10 focus:border-pink-500/50 rounded-2xl px-5 text-base font-bold text-white outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-sm"
                                                         >
-                                                            <option value="" disabled className="text-brand-muted">{t('pro_dashboard.studio.target_placeholder')}</option>
-                                                            {audiences.map(a => <option key={a.key} value={a.key} className="bg-(--color-bg-surface) text-brand-text">{a.label}</option>)}
+                                                            <option value="" disabled className="text-slate-500 bg-slate-900">{t('pro_dashboard.studio.target_placeholder')}</option>
+                                                            {audiences.map(a => <option key={a.key} value={a.key} className="bg-slate-900 text-white py-2">{a.label}</option>)}
                                                         </select>
-                                                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-40 group-hover/sel:opacity-100 transition-opacity">
-                                                            <ChevronRight className="rotate-90 w-4 h-4" />
+                                                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-50 group-hover/sel:opacity-100 transition-opacity">
+                                                            <ChevronRight className="rotate-90 w-5 h-5 text-pink-500" />
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 {/* Language */}
-                                                <div className="space-y-2">
-                                                    <div className="flex items-center gap-2 ml-1">
-                                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
-                                                        <label className="text-[9px] font-black uppercase text-brand-muted tracking-widest opacity-80">{t('pro_dashboard.studio.language_label')}</label>
+                                                <div className="space-y-2 relative z-10">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] border-2 border-[#0f172a] relative z-10 shrink-0" />
+                                                        <label className="text-[10px] font-black uppercase text-emerald-400 tracking-[0.2em]">{t('pro_dashboard.studio.language_label')}</label>
                                                     </div>
-                                                    <div className="relative group/sel">
-                                                        <div className="absolute inset-0 bg-linear-to-r from-emerald-500/5 to-teal-500/5 rounded-2xl pointer-events-none" />
+                                                    <div className="relative group/sel pl-6">
+                                                        <div className="absolute inset-y-0 left-6 right-0 bg-linear-to-r from-emerald-500/5 to-teal-500/5 rounded-2xl pointer-events-none transition-opacity opacity-50 group-hover/sel:opacity-100" />
                                                         <select
                                                             value={language}
                                                             onChange={(e) => setLanguage(e.target.value)}
-                                                            className="relative w-full h-14 bg-(--color-bg-surface)/40 backdrop-blur-sm border border-(--color-border-glass) focus:border-emerald-500/40 rounded-2xl px-5 pr-12 text-[11px] font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-sm"
+                                                            className="relative w-full h-14 bg-white/5 backdrop-blur-md border border-white/10 focus:border-emerald-500/50 rounded-2xl px-5 pr-12 text-base font-bold text-white outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-sm"
                                                         >
-                                                            {languages.map(l => <option key={l} value={l} className="bg-(--color-bg-surface) text-brand-text">{l}</option>)}
+                                                            {languages.map(l => <option key={l} value={l} className="bg-slate-900 text-white py-2">{l}</option>)}
                                                         </select>
-                                                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-40 flex items-center gap-1.5">
-                                                            <Globe size={14} className="text-emerald-500" />
+                                                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-50 flex items-center gap-1.5">
+                                                            <Globe size={16} className="text-emerald-500" />
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <button
-                                            onClick={() => { selection(); setStep(2); }}
-                                            disabled={!postType || !audience}
-                                            className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-[10px] uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:grayscale"
-                                        >
-                                            {t('pro_dashboard.studio.initiate_btn')} <ChevronRight size={16} />
-                                        </button>
+                                            {/* Action Area */}
+                                            <div className="pt-8 mt-2 relative z-20 pl-6">
+                                                <div className="absolute top-0 left-6 right-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
+                                                <button
+                                                    onClick={() => { selection(); setStep(2); }}
+                                                    disabled={!postType || !audience}
+                                                    style={{ backgroundSize: '200% auto' }}
+                                                    className="w-full h-14 bg-linear-to-r from-indigo-600 via-violet-600 to-fuchsia-600 animate-gradient-xy hover:bg-right transition-all duration-700 rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.2em] shadow-[0_8px_32px_rgba(99,102,241,0.4)] hover:shadow-[0_12px_40px_rgba(99,102,241,0.6)] active:scale-95 flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale disabled:shadow-none relative overflow-hidden group/btn border border-white/20"
+                                                >
+                                                    <div className="absolute inset-0 bg-white/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 pointer-events-none mix-blend-overlay" />
+                                                    <span className="relative z-10 flex items-center gap-2 drop-shadow-md">
+                                                        <Sparkles size={14} className="animate-pulse" />
+                                                        {t('pro_dashboard.studio.initiate_btn')}
+                                                        <ChevronRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
+                                                    </span>
+                                                </button>
+                                                <div className="flex justify-center mt-3 gap-1.5 items-center opacity-40">
+                                                    <div className="w-1 h-1 rounded-full bg-indigo-500 animate-pulse" />
+                                                    <p className="text-[8px] font-bold text-brand-muted uppercase tracking-widest">
+                                                        Using Advanced Pro Model
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </motion.div>
                                 )}
 
@@ -785,7 +822,7 @@ export const ProDashboard = () => {
                                             value={headlineInput}
                                             onChange={(e) => setHeadlineInput(e.target.value)}
                                             placeholder={t('pro_dashboard.tools.headline.placeholder')}
-                                            className="w-full h-12 bg-black/5 dark:bg-white/5 border border-white/5 focus:border-pink-500/30 rounded-xl px-4 text-[10px] font-bold outline-hidden transition-all shadow-inner"
+                                            className="w-full h-12 bg-black/5 dark:bg-white/5 border border-white/5 focus:border-pink-500/30 rounded-xl px-4 text-base font-bold outline-hidden transition-all shadow-inner placeholder:text-slate-500 text-brand-text"
                                         />
 
                                         {fixedHeadline && (
@@ -836,7 +873,7 @@ export const ProDashboard = () => {
                                             value={bioInput}
                                             onChange={(e) => setBioInput(e.target.value)}
                                             placeholder={t('pro_dashboard.tools.bio.placeholder')}
-                                            className="w-full h-24 bg-black/5 dark:bg-white/5 border border-white/5 focus:border-indigo-500/30 rounded-xl p-4 text-[10px] font-medium text-brand-text outline-hidden transition-all resize-none shadow-inner"
+                                            className="w-full h-24 bg-black/5 dark:bg-white/5 border border-white/5 focus:border-indigo-500/30 rounded-xl p-4 text-base font-medium text-brand-text outline-hidden transition-all resize-none shadow-inner placeholder:text-slate-500"
                                         />
 
                                         {fixedBio && (
@@ -1221,28 +1258,28 @@ export const ProDashboard = () => {
                                                     value={apiData.x_api_key}
                                                     onChange={(e) => setApiData({ ...apiData, x_api_key: e.target.value })}
                                                     placeholder="API Key"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                                 />
                                                 <input
                                                     type="password"
                                                     value={apiData.x_api_secret}
                                                     onChange={(e) => setApiData({ ...apiData, x_api_secret: e.target.value })}
                                                     placeholder="API Secret"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                                 />
                                                 <input
                                                     type="password"
                                                     value={apiData.x_access_token}
                                                     onChange={(e) => setApiData({ ...apiData, x_access_token: e.target.value })}
                                                     placeholder="Access Token"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                                 />
                                                 <input
                                                     type="password"
                                                     value={apiData.x_access_token_secret}
                                                     onChange={(e) => setApiData({ ...apiData, x_access_token_secret: e.target.value })}
                                                     placeholder="Access Token Secret"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                                 />
                                             </div>
                                         </div>
@@ -1267,7 +1304,7 @@ export const ProDashboard = () => {
                                                     value={apiData.telegram_channel_id}
                                                     onChange={(e) => setApiData({ ...apiData, telegram_channel_id: e.target.value })}
                                                     placeholder="@channelname (Main)"
-                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                                    className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                                 />
                                                 {apiData.telegram_channels.map((ch, idx) => (
                                                     <div key={idx} className="flex gap-2">
@@ -1280,7 +1317,7 @@ export const ProDashboard = () => {
                                                                 setApiData({ ...apiData, telegram_channels: newChannels });
                                                             }}
                                                             placeholder={`@channelname ${idx + 2}`}
-                                                            className="flex-1 h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text"
+                                                            className="flex-1 h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text"
                                                         />
                                                         <button
                                                             onClick={() => {
@@ -1315,7 +1352,7 @@ export const ProDashboard = () => {
                                                 value={apiData.linkedin_access_token}
                                                 onChange={(e) => setApiData({ ...apiData, linkedin_access_token: e.target.value })}
                                                 placeholder="LinkedIn Access Token"
-                                                className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
+                                                className="w-full h-12 bg-black/5 dark:bg-white/5 border border-(--color-border-glass) rounded-2xl px-5 text-base font-bold outline-hidden transition-all text-brand-text placeholder:opacity-30"
                                             />
                                         </div>
                                         <div className="pt-4 shrink-0">

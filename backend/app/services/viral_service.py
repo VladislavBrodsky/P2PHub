@@ -183,7 +183,7 @@ Use FRESH, audience-specific language that feels authentic.
         self.gs_client = None
         self._gs_sheet_cache = {} 
         self._init_google_sheets_client()
-        self._last_working_imagen_model = 'imagen-3.0-generate-001' # Memory for optimization
+        self._last_working_imagen_model = 'imagen-4.0-generate-001' # Memory for optimization
 
     def _init_google_sheets_client(self):
         """Initializes Google Sheets client for audit logging."""
@@ -442,9 +442,10 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             # Correct model names for AI Studio (including Nano Banana latest releases)
             imagen_models = [
                 self._last_working_imagen_model,
-                'imagen-3.0-generate-001',     # Standard HQ
-                'imagen-3.0-fast-generate-001', # Fast for previews
-                'imagen-3.0-capability-001',
+                'imagen-4.0-generate-001',      # Standard HQ 
+                'imagen-4.0-fast-generate-001', # Fast for previews
+                'imagen-4.0-ultra-generate-001', # Ultra Quality
+                'imagen-3.0-generate-001',      # Fallback
             ]
             # Remove duplicates and None values
             imagen_models = [m for i, m in enumerate(imagen_models) if m and m not in imagen_models[:i]]
@@ -477,7 +478,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                                     'aspect_ratio': '16:9',
                                     'safety_filter_level': 'block_low_and_above',
                                     'person_generation': 'allow_adult',
-                                    'add_watermark': True # SynthID per Google policy
+                                    # 'add_watermark': True # Removed: Not supported in Gemini API anymore
                                 } if 'imagen' in model_name else {
                                     # Nano Banana specific configs (Gemini 3 Pro)
                                     'number_of_images': 1,
