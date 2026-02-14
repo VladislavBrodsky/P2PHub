@@ -30,6 +30,15 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
+    // #comment: Added health check endpoint for Railway/Load Balancer.
+    // This allows Railway to verify that the frontend container is alive and 
+    // serving traffic before routing domain requests to it.
+    if (req.url === '/health') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'healthy', service: 'frontend' }));
+        return;
+    }
+
     console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
 
     let filePath = path.join(DIST_DIR, req.url === '/' ? 'index.html' : req.url);

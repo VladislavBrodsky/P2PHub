@@ -1,0 +1,59 @@
+📋 RAILWAY FIX: Google Sheets Credentials
+==========================================
+
+IMPORTANT: The validation error shows Railway has the variable in the wrong format.
+The fix below will resolve the "malformed JSON" error.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OPTION 1: Use RAW Editor (RECOMMENDED)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Go to Railway → P2PHub Backend → Variables
+2. Click "RAW Editor" button (top right)
+3. Find the GOOGLE_SERVICE_ACCOUNT_JSON line
+4. Replace it EXACTLY with the content of your service account JSON.
+   Example format:
+   GOOGLE_SERVICE_ACCOUNT_JSON={"type": "service_account", "project_id": "...", ...}
+
+5. Save the RAW editor
+6. Railway will auto-redeploy
+
+⚠️  CRITICAL: Do NOT wrap it in additional quotes!
+   ❌ WRONG: GOOGLE_SERVICE_ACCOUNT_JSON='{"type...}'
+   ❌ WRONG: GOOGLE_SERVICE_ACCOUNT_JSON="{"type...}"
+   ✅ RIGHT: GOOGLE_SERVICE_ACCOUNT_JSON={"type...}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OPTION 2: Delete & Re-add in UI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Delete the existing GOOGLE_SERVICE_ACCOUNT_JSON variable
+2. Click "+ New Variable"
+3. Name: GOOGLE_SERVICE_ACCOUNT_JSON
+4. Value: Paste your JSON object (no outer quotes)
+
+5. Click "Add"
+6. Railway will auto-redeploy
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+VERIFICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After Railway redeploys, check logs for:
+✅ Expected: "✅ ViralMarketingStudio: Google Sheets logging initialized."
+
+❌ If you still see malformed error:
+   - Check that there are NO outer quotes in Railway
+   - Verify \n are literal characters (not escaped as \\n)
+   - Make sure Railway didn't auto-escape anything
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHY THIS HAPPENS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Railway's UI sometimes adds extra escaping or quotes when:
+- You paste in the "Add Variable" dialog
+- You edit the variable after creation
+- You copy from a file with quotes
+
+The RAW editor is more reliable for complex JSON values.

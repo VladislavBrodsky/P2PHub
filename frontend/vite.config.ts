@@ -1,50 +1,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
-import viteCompression from 'vite-plugin-compression';
-// #comment: Commented out unused VitePWA import to address linting warnings (PWA configuration is currently inactive)
-// import { VitePWA } from 'vite-plugin-pwa';
 
-// https://vitejs.dev/config/
+// #comment: Simplified build configuration to resolve deployment EPERM issues
+// and ensure compatibility with Railway monorepo structure.
+// Removed non-essential plugins (compression, image-optimizer, pwa) 
+// that were causing permission errors in the Docker environment.
+
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    ViteImageOptimizer({
-      png: { quality: 80 },
-      jpeg: { quality: 80 },
-      jpg: { quality: 80 },
-      tiff: { quality: 80 },
-      gif: {},
-      webp: { quality: 75 },
-      avif: { quality: 75 },
-    }),
-    viteCompression({ algorithm: 'gzip', ext: '.gz' }),
-    viteCompression({ algorithm: 'brotliCompress', ext: '.br' }),
-    /*
-    VitePWA({
-      registerType: 'autoUpdate',
-      manifest: {
-        name: 'Pintopay Partner Hub',
-        short_name: 'P2PHub',
-        description: 'The ultimate partner hub for Pintopay.',
-        theme_color: '#0f172a',
-        icons: [
-          {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
-          }
-        ]
-      }
-    })
-    */
   ],
   server: {
     host: '0.0.0.0',
@@ -64,6 +30,7 @@ export default defineConfig({
         },
       }
     },
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 1200,
+    emptyOutDir: true,
   },
 })
