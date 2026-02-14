@@ -37,12 +37,12 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
             case 'settings':
                 return (
                     <div className="space-y-3 pt-2">
-                        <div className="flex items-center justify-between p-2 rounded-lg bg-(--color-bg-app)/50">
+                        <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-900/50">
                             <div className="flex items-center gap-2">
-                                <Bell className="h-3.5 w-3.5 text-(--color-text-secondary)" />
-                                <span className="text-xs font-bold text-(--color-text-primary)">{t('menu.notifications')}</span>
+                                <Bell className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
+                                <span className="text-xs font-bold text-slate-900 dark:text-white">{t('menu.notifications')}</span>
                             </div>
-                            <div className="h-4 w-7 rounded-full bg-(--color-success) relative">
+                            <div className="h-4 w-7 rounded-full bg-emerald-500 relative">
                                 <div className="absolute right-0.5 top-0.5 h-3 w-3 rounded-full bg-white shadow-sm" />
                             </div>
                         </div>
@@ -51,13 +51,13 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
             case 'community':
                 return (
                     <div className="grid grid-cols-2 gap-2 pt-2">
-                        <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-(--color-bg-app)/50 hover:bg-(--color-brand-blue)/10 transition-colors border border-(--color-brand-border)">
+                        <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 hover:bg-blue-500/10 transition-colors border border-slate-200 dark:border-white/10">
                             <MessageCircle className="h-5 w-5 text-[#0088cc]" />
-                            <span className="text-[10px] font-black uppercase text-(--color-text-primary)">{t('menu.channel')}</span>
+                            <span className="text-[10px] font-black uppercase text-slate-900 dark:text-white">{t('menu.channel')}</span>
                         </button>
-                        <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-(--color-bg-app)/50 hover:bg-(--color-brand-blue)/10 transition-colors border border-(--color-brand-border)">
+                        <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 hover:bg-blue-500/10 transition-colors border border-slate-200 dark:border-white/10">
                             <Users className="h-5 w-5 text-[#0088cc]" />
-                            <span className="text-[10px] font-black uppercase text-(--color-text-primary)">{t('menu.chat')}</span>
+                            <span className="text-[10px] font-black uppercase text-slate-900 dark:text-white">{t('menu.chat')}</span>
                         </button>
                     </div>
                 );
@@ -65,23 +65,23 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                 return (
                     <div className="space-y-2 pt-2">
                         {[t('faq.withdraw'), t('faq.level'), t('faq.limits')].map((q, i) => (
-                            <div key={i} className="p-2 rounded-lg bg-(--color-bg-app)/50 text-xs font-medium text-(--color-text-secondary) flex justify-between items-center group active:bg-(--color-brand-blue)/10 transition-colors">
+                            <div key={i} className="p-2 rounded-lg bg-slate-50 dark:bg-slate-900/50 text-xs font-medium text-slate-500 dark:text-slate-400 flex justify-between items-center group active:bg-blue-500/10 transition-colors">
                                 {q}
-                                <ChevronRight className="h-3 w-3 opacity-50 text-(--color-text-primary)" />
+                                <ChevronRight className="h-3 w-3 opacity-50 text-slate-900 dark:text-white" />
                             </div>
                         ))}
                     </div>
                 );
             case 'support':
                 return (
-                    <div className="pt-2 text-center text-(--color-text-primary)">
-                        <p className="text-xs text-(--color-text-secondary) mb-3">Our support team is available 24/7.</p>
+                    <div className="pt-2 text-center text-slate-900 dark:text-white">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Our support team is available 24/7.</p>
                         <button
                             onClick={() => {
                                 onClose();
                                 setSupportOpen(true);
                             }}
-                            className="w-full py-4 rounded-xl bg-(--color-text-primary) text-(--color-bg-surface) text-xs font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg shadow-blue-500/10"
+                            className="w-full py-4 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg shadow-blue-500/10"
                         >
                             <Headphones className="h-4 w-4" />
                             {t('menu.support')}
@@ -108,7 +108,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
     return (
         <div className="flex flex-1 flex-col gap-2">
             {menuItems.map((item) => (
-                <div key={item.id} className="rounded-2xl bg-(--color-bg-surface)/60 backdrop-blur-sm border border-(--color-border-glass) overflow-hidden shadow-sm group">
+                <div key={item.id} className="rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-white/10 overflow-hidden shadow-sm group">
                     <button
                         onClick={() => {
                             if (item.id === 'blog') {
@@ -127,10 +127,10 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                         className="w-full flex items-center justify-between p-3 bg-transparent active:bg-white/5 transition-colors"
                     >
                         <div className="flex items-center gap-3">
-                            <div className={`p-2 rounded-xl bg-(--color-bg-app)/50 border border-(--color-border-glass) text-(--color-text-secondary) group-hover:text-(--color-text-primary) transition-colors`}>
+                            <div className={`p-2 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors`}>
                                 {React.cloneElement(item.icon as React.ReactElement, { className: "h-4 w-4" })}
                             </div>
-                            <span className="text-sm font-bold text-(--color-text-primary) group-hover:translate-x-0.5 transition-transform">{item.label}</span>
+                            <span className="text-sm font-bold text-slate-900 dark:text-white group-hover:translate-x-0.5 transition-transform">{item.label}</span>
                         </div>
                         <motion.div
                             animate={{ rotate: expandedItem === item.id ? 90 : 0 }}
