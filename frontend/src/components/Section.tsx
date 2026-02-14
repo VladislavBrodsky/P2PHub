@@ -13,7 +13,7 @@ export const Section = ({ title, children, headerAction, className = '' }: Secti
             {(title || headerAction) && (
                 <div className="flex items-center justify-between px-1">
                     {title && (
-                        <h3 className="text-lg font-black tracking-tight text-(--color-text-primary)">
+                        <h3 className="text-lg font-black tracking-tight text-slate-900 dark:text-white">
                             {title}
                         </h3>
                     )}
