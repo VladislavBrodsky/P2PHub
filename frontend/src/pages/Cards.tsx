@@ -66,7 +66,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
         <div className="flex flex-col relative min-h-dvh">
             {/* Header */}
             <div className="px-6 pb-6 text-center">
-                <h2 className="text-(--color-text-primary) text-lg font-bold">{t('cards.title')}</h2>
+                <h2 className="text-slate-900 dark:text-white text-lg font-bold">{t('cards.title')}</h2>
             </div>
 
             {/* Switcher Component */}
@@ -105,34 +105,34 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                     className="w-full max-w-sm space-y-6 text-center"
                 >
                     <div className="space-y-2">
-                        <h3 className="text-2xl font-bold text-(--color-text-primary) leading-tight">
+                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white leading-tight">
                             {currentCard.title}
                         </h3>
-                        <p className="text-(--color-text-secondary) font-medium text-sm px-4 leading-relaxed">
+                        <p className="text-slate-500 dark:text-slate-400 font-medium text-sm px-4 leading-relaxed">
                             {currentCard.description}
                         </p>
                     </div>
 
                     {/* Promo/Bonus Pill */}
-                    <div className="bg-(--color-bg-surface) rounded-[2rem] p-3 pl-3 pr-4 flex items-center justify-between shadow-premium border border-(--color-border-glass)">
+                    <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-3 pl-3 pr-4 flex items-center justify-between shadow-premium border border-slate-200 dark:border-white/10">
                         <div className="flex items-center gap-4">
-                            <div className="relative group overflow-hidden bg-(--color-text-primary) rounded-[0.75rem] px-3 py-2 flex items-center gap-1.5 shadow-md">
-                                <div className="w-1.5 h-1.5 rounded-full bg-(--color-bg-surface) opacity-90 shrink-0" />
-                                <span className="text-[11px] font-black text-(--color-bg-surface) whitespace-nowrap tracking-wider">
+                            <div className="relative group overflow-hidden bg-slate-900 dark:bg-white rounded-[0.75rem] px-3 py-2 flex items-center gap-1.5 shadow-md">
+                                <div className="w-1.5 h-1.5 rounded-full bg-white dark:bg-slate-900 opacity-90 shrink-0" />
+                                <span className="text-[11px] font-black text-white dark:text-slate-900 whitespace-nowrap tracking-wider">
                                     {currentCard.bonus}
                                 </span>
                             </div>
 
                             <div className="text-left">
-                                <p className="text-[11px] font-bold text-(--color-text-primary) leading-[1.3] max-w-[140px]">
+                                <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-[1.3] max-w-[140px]">
                                     {currentCard.bonus} {currentCard.bonusText}
                                 </p>
                             </div>
                         </div>
 
-                        <div className="bg-(--color-bg-surface) px-3.5 py-2 rounded-[1rem] border border-(--color-border-glass) shadow-sm flex items-center gap-2 active:bg-(--color-bg-app) transition-colors">
-                            <Apple size={16} strokeWidth={0} className="fill-(--color-text-primary)" />
-                            <span className="text-[13px] font-extrabold text-(--color-text-primary)">Pay</span>
+                        <div className="bg-white dark:bg-slate-900 px-3.5 py-2 rounded-[1rem] border border-slate-200 dark:border-white/10 shadow-sm flex items-center gap-2 active:bg-slate-50 dark:active:bg-slate-950 transition-colors">
+                            <Apple size={16} strokeWidth={0} className="fill-slate-900 dark:fill-white" />
+                            <span className="text-[13px] font-extrabold text-slate-900 dark:text-white">Pay</span>
                         </div>
                     </div>
 
@@ -143,9 +143,9 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                 setIsTermsOpen(!isTermsOpen);
                                 selection();
                             }}
-                            className="w-full py-4 flex items-center justify-between border-t border-(--color-brand-border) group cursor-pointer"
+                            className="w-full py-4 flex items-center justify-between border-t border-slate-200 dark:border-white/10 group cursor-pointer"
                         >
-                            <span className="text-xs font-bold text-(--color-text-secondary) uppercase tracking-wider group-hover:text-(--color-text-primary) transition-colors">
+                            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
                                 {t('cards.terms')}
                             </span>
                             <motion.div
@@ -174,8 +174,8 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                             ].map((term, i) => (
                                                 <div key={i} className="flex items-center gap-3">
                                                     <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
-                                                    <span className="text-sm text-(--color-text-secondary)">
-                                                        <strong className="text-(--color-text-primary)">{term.label}</strong>
+                                                    <span className="text-sm text-slate-500 dark:text-slate-400">
+                                                        <strong className="text-slate-900 dark:text-white">{term.label}</strong>
                                                     </span>
                                                 </div>
                                             ))}
@@ -216,7 +216,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             )}
                         </motion.button>
 
-                        <p className="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary) opacity-60">
+                        <p className="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
                             {t('cards.instant_delivery')}
                         </p>
                     </div>
