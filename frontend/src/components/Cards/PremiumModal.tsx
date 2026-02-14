@@ -66,11 +66,11 @@ export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) 
                             {/* Instruction List */}
                             <div className="w-full space-y-3 mb-8 text-left">
                                 {(t('cards.modal.steps', { returnObjects: true }) as string[]).map((step, i) => (
-                                    <div key={i} className="flex items-center gap-3 p-3 rounded-2xl bg-(--color-bg-app)/50 border border-(--color-border-glass)">
-                                        <div className="h-6 w-6 rounded-lg bg-(--color-bg-surface) shadow-sm flex items-center justify-center text-[10px] font-black text-indigo-500 border border-(--color-border-glass)">
+                                    <div key={i} className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-white/10">
+                                        <div className="h-6 w-6 rounded-lg bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center text-[10px] font-black text-indigo-500 border border-slate-100 dark:border-white/10">
                                             {i + 1}
                                         </div>
-                                        <span className="text-xs font-bold text-(--color-text-secondary)">{step}</span>
+                                        <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{step}</span>
                                     </div>
                                 ))}
                             </div>
@@ -85,7 +85,7 @@ export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) 
 
                             <button
                                 onClick={onClose}
-                                className="mt-4 text-[11px] font-black uppercase tracking-widest text-(--color-text-secondary) hover:text-(--color-text-primary) transition-colors"
+                                className="mt-4 text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white transition-colors"
                             >
                                 {t('cards.modal.later')}
                             </button>
