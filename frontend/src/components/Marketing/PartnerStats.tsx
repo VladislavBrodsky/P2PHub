@@ -82,8 +82,8 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     className="flex flex-col items-center justify-center p-4 rounded-[2rem] bg-blue-500/10 border border-blue-500/20 shadow-[0_0_20px_rgba(59,130,246,0.1)] text-center space-y-1"
                 >
                     <Users className="w-4 h-4 text-blue-500" />
-                    <span className="text-lg font-black text-(--color-text-primary) uppercase leading-none">{stats.total}</span>
-                    <span className="text-[8px] font-bold text-(--color-text-secondary) uppercase tracking-widest leading-none">
+                    <span className="text-lg font-black text-slate-900 dark:text-white uppercase leading-none">{stats.total}</span>
+                    <span className="text-[8px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none">
                         {t('dashboard.stats.global_partners')}
                     </span>
                 </motion.div>
@@ -96,8 +96,8 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     className="flex flex-col items-center justify-center p-4 rounded-[2rem] bg-emerald-500/10 border border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.1)] text-center space-y-1"
                 >
                     <Zap className="w-4 h-4 text-emerald-500" />
-                    <span className="text-lg font-black text-(--color-text-primary) uppercase leading-none">{stats.volume}</span>
-                    <span className="text-[8px] font-bold text-(--color-text-secondary) uppercase tracking-widest leading-none">
+                    <span className="text-lg font-black text-slate-900 dark:text-white uppercase leading-none">{stats.volume}</span>
+                    <span className="text-[8px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none">
                         {t('dashboard.stats.volume_shifted')}
                     </span>
                 </motion.div>
@@ -110,8 +110,8 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     className="flex flex-col items-center justify-center p-4 rounded-[2rem] bg-purple-500/10 border border-purple-500/20 shadow-[0_0_20px_rgba(168,85,247,0.1)] text-center space-y-1"
                 >
                     <Globe2 className="w-4 h-4 text-purple-500" />
-                    <span className="text-lg font-black text-(--color-text-primary) uppercase leading-none">{stats.countries}</span>
-                    <span className="text-[8px] font-bold text-(--color-text-secondary) uppercase tracking-widest leading-none">
+                    <span className="text-lg font-black text-slate-900 dark:text-white uppercase leading-none">{stats.countries}</span>
+                    <span className="text-[8px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none">
                         {t('dashboard.stats.countries_active')}
                     </span>
                 </motion.div>
@@ -122,25 +122,25 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 onClick={onNavigateToEarn}
-                className="mt-4 p-3 rounded-2xl bg-(--color-bg-surface)/60 backdrop-blur-sm border border-(--color-border-glass) flex items-center justify-center gap-3 shadow-premium cursor-pointer hover:bg-(--color-bg-surface)/80 transition-colors active:scale-[0.98]"
+                className="mt-4 p-3 rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-white/10 flex items-center justify-center gap-3 shadow-premium cursor-pointer hover:bg-white/80 dark:hover:bg-slate-900/80 transition-colors active:scale-[0.98]"
             >
                 <div className="flex -space-x-2">
                     {recentPartners.length > 0 ? (
                         recentPartners.slice(0, 4).map((partner, i) => (
-                            <div key={partner.id || i} className="w-7 h-7 rounded-full border-2 border-(--color-bg-deep) bg-slate-800 flex items-center justify-center overflow-hidden shadow-lg transition-transform hover:scale-110">
+                            <div key={partner.id || i} className="w-7 h-7 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-800 flex items-center justify-center overflow-hidden shadow-lg transition-transform hover:scale-110">
                                 <PartnerAvatar partner={partner} index={i} />
                             </div>
                         ))
                     ) : (
                         // Skeleton/Fallback when no data yet
                         [1, 2, 3, 4].map((i) => (
-                            <div key={i} className="w-7 h-7 rounded-full border-2 border-(--color-bg-deep) bg-slate-100/10 dark:bg-white/5 animate-pulse" />
+                            <div key={i} className="w-7 h-7 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-100/10 dark:bg-white/5 animate-pulse" />
                         ))
                     )}
                 </div>
-                <p className="text-[10px] font-bold text-(--color-text-secondary)">
+                <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
                     <Trans i18nKey="dashboard.stats.recent_join" values={{ count: stats.lastHourCount }}>
-                        <span className="text-(--color-text-primary) font-black">+{stats.lastHourCount} new partners</span> joined the movement in the last 60m
+                        <span className="text-slate-900 dark:text-white font-black">+{stats.lastHourCount} new partners</span> joined the movement in the last 60m
                     </Trans>
                 </p>
             </motion.div>
