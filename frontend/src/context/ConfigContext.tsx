@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { apiClient } from '../api/client';
 // #comment: Added missing import for useStartupProgress to track initialization progress in the config context

@@ -27,7 +27,7 @@ def get_user_key(request: Request) -> str:
                 tg_id = user_data.get("id")
                 if tg_id:
                     return f"user:{tg_id}"
-        except Exception as e:
+        except Exception:
             # #comment: Failed to parse Telegram Init Data, falling back to IP.
             # This is expected for standard HTTP requests or invalid headers.
             pass

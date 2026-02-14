@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { CreditCard, Smartphone, Zap, Globe, Coins, QrCode, RotateCcw, AlertTriangle, Lock, TrendingUp, Infinity as IconInfinity, History, Landmark, Wallet, ShieldCheck } from 'lucide-react';
+import { CreditCard, Smartphone, Zap, Globe, Coins, QrCode, RotateCcw, TrendingUp, History, Landmark, Wallet, ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const shiftSteps = [

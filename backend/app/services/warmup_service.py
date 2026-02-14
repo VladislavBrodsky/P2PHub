@@ -70,7 +70,6 @@ async def warmup_redis():
             from datetime import datetime, timedelta
             
             cache_key = "partners:recent_v2"
-            db_settings_key = "partners_recent_snapshot"
             
             # Query recent partners directly
             statement = select(

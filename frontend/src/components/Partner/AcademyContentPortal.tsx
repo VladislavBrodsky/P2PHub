@@ -1,7 +1,7 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { X, Zap, CheckCircle2, ArrowRight, Lock, Trophy, Lightbulb, Wand2 } from 'lucide-react';
+import { X, Zap, CheckCircle2, ArrowRight, Lock, Lightbulb, Wand2 } from 'lucide-react';
 import { AcademyStage } from '../../data/academyData';
 import { useTranslation, Trans } from 'react-i18next';
 import { useUser } from '../../context/UserContext';

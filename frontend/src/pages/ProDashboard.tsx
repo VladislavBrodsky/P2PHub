@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Zap, Sparkles, Send, Globe, ChevronRight,
     ArrowLeft, Terminal, Bot, Image as ImageIcon,
-    Share2, CheckCircle2, AlertCircle, Loader2,
-    Lock, Instagram, Twitter, Cpu, BookOpen, Flame, Settings, Wand2, ShieldCheck,
-    Linkedin, Info, Copy, Download, RefreshCw, Undo2, Share, Compass, Milestone, Menu, Crown
+    CheckCircle2, AlertCircle, Loader2,
+    Lock, Twitter, Cpu, BookOpen, Flame, Settings, Wand2, ShieldCheck,
+    Linkedin, Info, Copy, Download, RefreshCw, Undo2, Share, Compass
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
@@ -366,23 +366,6 @@ export const ProDashboard = () => {
     ];
     const languages = ["English", "Russian", "Spanish", "French", "German"];
 
-    // #comment: Custom tab rendering for ProDashboard - Optimized for mobile view with compact pill styling
-    const renderTabs = () => (
-        <div className="flex items-center gap-2 px-6 mb-6 overflow-x-auto no-scrollbar py-2">
-            {(['studio', 'tools', 'academy'] as Tab[]).map((tab) => (
-                <button
-                    key={tab}
-                    onClick={() => { setActiveTab(tab); selection(); }}
-                    className={`px-4 h-8 rounded-full text-[8.5px] font-black uppercase tracking-[0.15em] transition-all whitespace-nowrap border ${activeTab === tab
-                        ? 'vibing-blue-animated text-white shadow-lg border-blue-400/50'
-                        : 'bg-white/5 text-brand-muted border-white/5 hover:border-indigo-500/30'
-                        }`}
-                >
-                    {t(`pro_dashboard.tab_${tab}`)}
-                </button>
-            ))}
-        </div>
-    );
 
     if (!user?.is_pro && !isLoading) {
         return (

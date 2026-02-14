@@ -338,7 +338,6 @@ Referral Link (MUST INCLUDE): {ref_link}
         
         # Refined user prompt leveraging hooks from knowledge base
         hook_examples = audience_intel.get("hooks", []) if audience_intel else []
-        viral_formulas = ViralFormulas.HOOK_TEMPLATES
         
         user_prompt = f"""
 EXECUTE CMO AGENT MODE.

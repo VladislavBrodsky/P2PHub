@@ -44,7 +44,7 @@ export default function SubscriptionPage() {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [sessionData]);
+    }, [sessionData, t]);
 
     const formattedTime = useMemo(() => {
         if (timeLeft === null) return null;

@@ -57,7 +57,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 )
 
 // Helper to access config for TonConnect
-function TonConnectContextWrapper({ children }: { children: React.ReactNode }) {
+export function TonConnectContextWrapper({ children }: { children: React.ReactNode }) {
     const { config } = useConfig();
     const manifestUrl = config?.ton_manifest_url || "https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json";
 

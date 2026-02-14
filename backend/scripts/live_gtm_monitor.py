@@ -34,7 +34,7 @@ async def monitor_gtm():
         
         # 3. PRO Conversions
         pro_partners = await session.execute(
-            select(func.count(Partner.id)).where(Partner.is_pro == True)
+            select(func.count(Partner.id)).where(Partner.is_pro)
         )
         pro_count = pro_partners.scalar()
         

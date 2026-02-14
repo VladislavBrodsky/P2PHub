@@ -1,7 +1,7 @@
 // #comment: Removed unused useHaptic import from Dashboard.tsx to address linting warnings
 import { ShieldCheck } from 'lucide-react';
 import { useUser } from '../context/UserContext';
-import { lazy, useMemo } from 'react';
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 

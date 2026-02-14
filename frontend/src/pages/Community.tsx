@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useHaptic } from '../hooks/useHaptic';
-import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 import { PartnerDashboard } from '../components/Partner/PartnerDashboard';
 import { PartnerAcademy } from '../components/Partner/PartnerAcademy';
 import { cn } from '../lib/utils';

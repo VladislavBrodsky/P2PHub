@@ -43,6 +43,82 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
     const inactivityTimerRef = React.useRef<any>(null);
     const pingTimerRef = React.useRef<any>(null);
 
+
+    // Scroll to bottom
+    React.useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+    }, [messages, isTyping]);
+
+    // State-only functions or those with minimal dependencies
+    const handleCloseSession = React.useCallback(async (reason?: string) => {
+        if (pingTimerRef.current) clearInterval(pingTimerRef.current);
+        if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
+
+        if (reason) {
+            const newMessage: Message = {
+                id: Math.random().toString(36).substring(2, 11),
+                role: 'assistant',
+                content: reason,
+                timestamp: new Date()
+            };
+            setMessages(prev => [...prev, newMessage]);
+        }
+
+        try {
+            await apiClient.post('/api/support/close');
+            setSessionClosed(true);
+            setTimeout(onClose, 3000);
+        } catch (e) {
+            onClose();
+        }
+    }, [onClose]);
+
+    // Use a ref for resetInactivityTimer to resolve circular dependency with addMessage
+    const resetTimerRef = React.useRef<() => void>(() => { });
+
+    const addMessage = React.useCallback((role: 'user' | 'assistant', content: string) => {
+        const newMessage: Message = {
+            id: Math.random().toString(36).substring(2, 11),
+            role,
+            content,
+            timestamp: new Date()
+        };
+        setMessages(prev => [...prev, newMessage]);
+        if (role === 'user') {
+            resetTimerRef.current();
+        }
+    }, []);
+
+    const startInactivityPings = React.useCallback(() => {
+        let count = 0;
+        pingTimerRef.current = setInterval(() => {
+            count++;
+            if (count === 1) {
+                addMessage('assistant', t('support.still_here'));
+                notification('warning');
+            } else if (count >= 2) {
+                handleCloseSession(t('support.session_closed'));
+            }
+        }, 30 * 1000); // 30s * 2 = 1min warning
+    }, [addMessage, handleCloseSession, notification, t]);
+
+    const resetInactivityTimer = React.useCallback(() => {
+        if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
+        if (pingTimerRef.current) clearInterval(pingTimerRef.current);
+
+        // 5 minutes total inactivity closure: 4m wait + 1m warning
+        inactivityTimerRef.current = setTimeout(() => {
+            startInactivityPings();
+        }, 4 * 60 * 1000);
+    }, [startInactivityPings]);
+
+    // Sync the ref
+    React.useEffect(() => {
+        resetTimerRef.current = resetInactivityTimer;
+    }, [resetInactivityTimer]);
+
     // Initialize and sync session
     React.useEffect(() => {
         const initSession = async () => {
@@ -75,70 +151,10 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
         if (isOpen) {
             initSession();
         }
-    }, [isOpen]);
+    }, [isOpen, messages.length, resetInactivityTimer, t]);
 
-    // Scroll to bottom
-    React.useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-        }
-    }, [messages, isTyping]);
-
-    const resetInactivityTimer = () => {
-        if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
-        if (pingTimerRef.current) clearInterval(pingTimerRef.current);
-
-        // 5 minutes total inactivity closure: 4m wait + 1m warning
-        inactivityTimerRef.current = setTimeout(() => {
-            startInactivityPings();
-        }, 4 * 60 * 1000);
-    };
-
-    const startInactivityPings = () => {
-        let count = 0;
-        pingTimerRef.current = setInterval(() => {
-            count++;
-            if (count === 1) {
-                addMessage('assistant', t('support.still_here'));
-                notification('warning');
-            } else if (count >= 2) {
-                handleCloseSession(t('support.session_closed'));
-            }
-        }, 30 * 1000); // 30s * 2 = 1min warning
-    };
-
-    const handleCloseSession = async (reason?: string) => {
-        if (pingTimerRef.current) clearInterval(pingTimerRef.current);
-        if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
-
-        if (reason) {
-            addMessage('assistant', reason);
-        }
-
-        try {
-            await apiClient.post('/api/support/close');
-            setSessionClosed(true);
-            setTimeout(onClose, 3000);
-        } catch (e) {
-            onClose();
-        }
-    };
-
-    const addMessage = (role: 'user' | 'assistant', content: string) => {
-        const newMessage: Message = {
-            id: Math.random().toString(36).substr(2, 9),
-            role,
-            content,
-            timestamp: new Date()
-        };
-        setMessages(prev => [...prev, newMessage]);
-        if (role === 'user') {
-            resetInactivityTimer();
-        }
-    };
-
-    const handleSendMessage = async (text?: string) => {
-        const messageText = text || inputValue;
+    const handleSendMessage = React.useCallback(async (text_val?: string) => {
+        const messageText = text_val || inputValue;
         if (!messageText.trim() || isTyping || sessionClosed) return;
 
         selection();
@@ -160,7 +176,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
             setIsTyping(false);
             addMessage('assistant', t('support.error_technical'));
         }
-    };
+    }, [addMessage, inputValue, isTyping, resetInactivityTimer, selection, sessionClosed, t]);
 
     const handleCategoryClick = (categoryKey: string) => {
         handleSendMessage(t(`support.categories.${categoryKey}`));
@@ -263,7 +279,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                             {/* Subtle background element */}
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-40 bg-linear-to-b from-blue-500/5 to-transparent pointer-events-none" />
 
-                            {messages.map((msg, idx) => (
+                            {messages.map((msg) => (
                                 <motion.div
                                     key={msg.id}
                                     initial={{ opacity: 0, y: 20, scale: 0.95 }}

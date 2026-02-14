@@ -107,7 +107,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
 
         prefetchInitialLevels();
         // #comment: Added fetchLevel to dependency array to comply with exhaustive-deps rule
-    }, [fetchLevel]);
+    }, [fetchLevel, fetchTreeStats]);
 
     // When level changes, update display and prefetch adjacent levels
     useEffect(() => {

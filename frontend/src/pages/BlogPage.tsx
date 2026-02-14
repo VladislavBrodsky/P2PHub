@@ -19,7 +19,7 @@ interface BlogPageProps {
 }
 
 export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
     const { selection, impact, notification } = useHaptic();
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -150,7 +150,6 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
         }
     };
 
-    const isRussian = i18n.language === 'ru';
 
     // Memoize localized posts to avoid re-mapping on every search keystroke
     const localizedPosts = useMemo(() => {
@@ -163,7 +162,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                 category: (localized && localized.category) || post.category
             };
         });
-    }, [blogPosts, t]);
+    }, [t]);
 
     // Memoize filtered posts for instant search performance
     const currentFilteredPosts = useMemo(() => {
@@ -384,8 +383,7 @@ interface BlogDetailProps {
 }
 
 const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNext, onPrev, setActiveTab }: BlogDetailProps) => {
-    const { t, i18n } = useTranslation();
-    const isRussian = i18n.language === 'ru';
+    const { t } = useTranslation();
     const { selection } = useHaptic();
 
     // Marketing "Between the lines" snippets

@@ -58,7 +58,7 @@ function AppContent({ onReady }: { onReady: () => void }) {
             const timer = setTimeout(onReady, 500);
             return () => clearTimeout(timer);
         }
-    }, [isUserLoading, config, onReady, updateProgress]);
+    }, [isUserLoading, config, onReady, updateProgress, t]);
 
     // Track visited tabs to keep components mounted after first load
     useEffect(() => {
@@ -135,7 +135,7 @@ function AppContent({ onReady }: { onReady: () => void }) {
         };
 
         initTMA();
-    }, [updateProgress]);
+    }, [updateProgress, t]);
 
     // Handle Back Button state based on active tab
     useEffect(() => {
@@ -294,7 +294,7 @@ function App() {
 
             prefetchCoreRoutes();
         }
-    }, [isConfigLoading, updateProgress]);
+    }, [isConfigLoading, updateProgress, t]);
 
     return (
         <UIProvider>

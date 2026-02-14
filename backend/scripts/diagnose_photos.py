@@ -8,10 +8,6 @@ import asyncio
 import sys
 import os
 
-import asyncio
-import sys
-import os
-
 # Add project root to path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
@@ -67,10 +63,10 @@ async def diagnose_photo_flow():
                 if cached:
                     print(f"   ✅ Redis Cache: {len(cached)} bytes")
                 else:
-                    print(f"   ⚠️ Redis Cache: MISS")
+                    print("   ⚠️ Redis Cache: MISS")
                     
                     # Try to fetch and cache
-                    print(f"   🔄 Attempting to fetch from Telegram...")
+                    print("   🔄 Attempting to fetch from Telegram...")
                     try:
                         import time
                         start = time.time()

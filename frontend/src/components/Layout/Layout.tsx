@@ -23,42 +23,14 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
         }
     }, [isMenuOpen, hasOpened]);
 
-    // Handle Back Button, Scroll Lock for Drawer, and Scroll Reset
+    // Scroll Reset on Tab Change
     useEffect(() => {
-        let cleanup: VoidFunction | undefined;
-        try {
-            if (isMenuOpen) {
-                // Scroll Lock logic centralized in parent
-                const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-                document.body.style.overflow = 'hidden';
-                if (scrollBarWidth > 0) document.body.style.paddingRight = `${scrollBarWidth}px`;
-
-                backButton.show();
-                cleanup = backButton.onClick(() => setIsMenuOpen(false));
-            } else {
-                // Release Scroll Lock
-                document.body.style.overflow = '';
-                document.body.style.paddingRight = '';
-
-                if (activeTab === 'home') {
-                    backButton.hide();
-                }
-
-                // Scroll Reset on Tab Change
-                const mainElement = document.querySelector('main');
-                if (mainElement) {
-                    mainElement.scrollTop = 0;
-                }
+        if (!isMenuOpen) {
+            const mainElement = document.querySelector('main');
+            if (mainElement) {
+                mainElement.scrollTop = 0;
             }
-        } catch (e) {
-            console.warn('SDK interaction error:', e);
         }
-        return () => {
-            if (cleanup) cleanup();
-            // Safety release on unmount
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
-        };
     }, [isMenuOpen, activeTab]);
 
     const isStaging = import.meta.env.VITE_APP_ENV === 'staging';

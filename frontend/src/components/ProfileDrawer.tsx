@@ -48,22 +48,24 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
     };
 
     return createPortal(
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
             {isOpen && (
-                <React.Fragment key="drawer-portal-content">
+                <div key="drawer-portal-root" className="fixed inset-0 z-9998 overflow-hidden pointer-events-none">
                     {/* Backdrop */}
                     <motion.div
+                        key="drawer-backdrop"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.15 }}
                         onClick={onClose}
-                        className="fixed inset-0 z-9998 bg-black/30 backdrop-blur-[2px]"
+                        className="fixed inset-0 bg-black/30 backdrop-blur-[2px] cursor-pointer pointer-events-auto"
                     />
 
-                    {/* Drawer Content */}
+                    {/* Drawer Content Wrapper */}
                     <div className="fixed inset-0 z-10000 pointer-events-none flex justify-center">
                         <motion.div
+                            key="drawer-panel"
                             initial={{ x: '-100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '-100%' }}
@@ -159,7 +161,7 @@ export default function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                             </div>
                         </motion.div>
                     </div>
-                </React.Fragment>
+                </div>
             )}
         </AnimatePresence>,
         document.body

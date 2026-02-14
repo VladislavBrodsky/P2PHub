@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 # Leaderboard endpoint with high-performance caching
 import logging
 from sqlmodel import select

@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import secrets
+from datetime import datetime, timedelta
 from typing import List, Optional, Tuple
 
 from sqlmodel import select, text
@@ -276,7 +277,7 @@ async def migrate_paths(session: AsyncSession):
     queue = []
     
     # Find all root users (no referrer)
-    root_stmt = select(Partner).where(Partner.referrer_id == None)
+    root_stmt = select(Partner).where(Partner.referrer_id.is_(None))
     root_res = await session.exec(root_stmt)
     for root in root_res.all():
         if root.path is not None or root.depth != 0:

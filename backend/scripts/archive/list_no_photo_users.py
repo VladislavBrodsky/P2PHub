@@ -7,7 +7,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 async def main():
     async_session = sessionmaker(engine, class_=AsyncSession)
     async with async_session() as s:
-        res = await s.exec(select(Partner).where(Partner.photo_url == None))
+        res = await s.exec(select(Partner).where(Partner.photo_url.is_(None)))
         users = res.all()
         for u in users:
             print(f"{u.id}|{u.first_name}|{u.username}")

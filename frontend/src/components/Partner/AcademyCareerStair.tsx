@@ -48,7 +48,6 @@ export const AcademyCareerStair = () => {
                     const isCompleted = user?.completed_stages?.includes(stage.id);
                     const isAvailable = stage.id === 1 || user?.completed_stages?.includes(stage.id - 1);
                     const isCurrent = isAvailable && !isCompleted;
-                    const isLocked = !isAvailable && !isCompleted;
 
                     let status: 'locked' | 'available' | 'completed' | 'current' = 'locked';
                     if (isCompleted) status = 'completed';

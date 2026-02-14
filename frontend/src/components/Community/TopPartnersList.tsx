@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, TrendingUp, Users, Crown, ChevronDown, ChevronUp } from 'lucide-react';
+import { TrendingUp, Users, Crown, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';

@@ -8,7 +8,7 @@ interface DrawerSettingsProps {
 }
 
 export function DrawerSettings({ selection }: DrawerSettingsProps) {
-    const { t, i18n } = useTranslation();
+    const { i18n } = useTranslation();
     const { theme, setTheme } = useTheme();
 
     return (

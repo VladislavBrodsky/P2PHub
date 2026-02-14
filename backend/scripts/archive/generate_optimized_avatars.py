@@ -52,8 +52,8 @@ async def update_users(avatar_paths):
     async with async_session() as session:
         # Find users without photos
         statement = select(Partner).where(
-            (Partner.photo_url == None) & 
-            (Partner.photo_file_id == None)
+            (Partner.photo_url.is_(None)) & 
+            (Partner.photo_file_id.is_(None))
         )
         result = await session.exec(statement)
         users = result.all()

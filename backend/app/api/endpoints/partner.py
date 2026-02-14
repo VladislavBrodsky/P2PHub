@@ -27,8 +27,7 @@ from app.models.schemas import (
 from app.services.redis_service import redis_service
 from app.utils.ranking import get_level
 from bot import bot, types
-from app.core.tasks import get_task_reward
-import logging
+from sqlalchemy import text
 
 logger = logging.getLogger(__name__)
 
