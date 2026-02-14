@@ -3,6 +3,15 @@
 This document tracks the detailed version history and improvements for each specific section of the P2P Partner Hub.
 Use this to see the evolution of individual components.
 
+## 🏫 Academy & Community
+**Current Status**: v1.6.1 (Updated)
+
+### v1.6.1 (2026-02-13)
+- **TERMINOLOGY**: Reverted "Grow Hacks" button label back to "Academy" in the Partner section to align with users' expectations and brand clarity.
+- **RUSSIAN LOCALIZATION**: Extensive refinement of "Academy" and "Impact" terminology in `ru.json`.
+
+--------------------------------------------------------------------------------
+
 ## 🟢 Earn Hub & Missions
 **Current Status**: v1.5.1 (Fixed)
 
