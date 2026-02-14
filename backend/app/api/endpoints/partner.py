@@ -64,7 +64,9 @@ def prepare_partner_response(partner: Partner, tg_id: str) -> dict:
     
     # Materialize Academy Fields
     try:
-        partner_dict["completed_stages"] = json.loads(partner.completed_stages or "[]")
+        raw_stages = json.loads(partner.completed_stages or "[]")
+        # Schema requires List[int], so specific legacy string tags like "m1" must be filtered out
+        partner_dict["completed_stages"] = [s for s in raw_stages if isinstance(s, int)]
     except Exception:
         partner_dict["completed_stages"] = []
 
