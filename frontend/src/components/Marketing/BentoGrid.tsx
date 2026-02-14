@@ -113,7 +113,7 @@ export const BentoGrid = () => {
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-3xl font-black tracking-tight text-(--color-text-primary) leading-[1.1] whitespace-pre-line"
+                    className="text-3xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.1] whitespace-pre-line"
                 >
                     {t('evolution.title')}
                 </motion.h3>
@@ -122,7 +122,7 @@ export const BentoGrid = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 }}
-                    className="text-sm text-(--color-text-secondary) font-medium max-w-[280px] mx-auto"
+                    className="text-sm text-slate-500 dark:text-slate-400 font-medium max-w-[280px] mx-auto"
                 >
                     {t('evolution.desc')}
                 </motion.p>
@@ -156,14 +156,14 @@ export const BentoGrid = () => {
                             >
                                 {/* FRONT SIDE */}
                                 <div
-                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) p-6 glass-panel-premium transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
+                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-6 glass-panel-premium transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
                                     style={{ transform: 'rotateY(0deg)' }}
                                 >
                                     <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
 
                                     <div className="relative z-10 space-y-4 h-full flex flex-col">
                                         <div className="flex items-center justify-between">
-                                            <div className="p-3 w-fit rounded-2xl bg-(--color-bg-app)/50 dark:bg-black/40 backdrop-blur-xl border border-(--color-border-glass) shadow-lg transition-transform group-hover:scale-110">
+                                            <div className="p-3 w-fit rounded-2xl bg-white/50 dark:bg-black/40 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-lg transition-transform group-hover:scale-110">
                                                 {step.icon}
                                             </div>
                                             <span className={`text-[9px] font-black px-2.5 py-1 rounded-full ${step.statusColor} tracking-widest`}>
@@ -172,15 +172,15 @@ export const BentoGrid = () => {
                                         </div>
 
                                         <div className="space-y-1">
-                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary) opacity-60">
+                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
                                                 {t(`evolution.steps.${step.id}.title`)}
                                             </p>
-                                            <h4 className={`text-xl font-black leading-tight ${step.featured ? 'text-blue-500' : 'text-(--color-text-primary)'}`}>
+                                            <h4 className={`text-xl font-black leading-tight ${step.featured ? 'text-blue-500' : 'text-slate-900 dark:text-white'}`}>
                                                 {t(`evolution.steps.${step.id}.subtitle`)}
                                             </h4>
                                         </div>
 
-                                        <p className="text-xs font-semibold leading-relaxed text-(--color-text-secondary) opacity-80 grow">
+                                        <p className="text-xs font-semibold leading-relaxed text-slate-500 dark:text-slate-400 opacity-80 grow">
                                             {t(`evolution.steps.${step.id}.desc`)}
                                         </p>
 
@@ -202,23 +202,23 @@ export const BentoGrid = () => {
 
                                 {/* BACK SIDE */}
                                 <div
-                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-[2.5rem] border border-(--color-border-glass) p-6 glass-panel-premium flex flex-col text-center justify-center items-center shadow-2xl transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
+                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-6 glass-panel-premium flex flex-col text-center justify-center items-center shadow-2xl transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
                                     style={{ transform: 'rotateY(180deg)' }}
                                 >
                                     <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
 
                                     <div className="relative z-10 flex flex-col items-center justify-center h-full space-y-4">
                                         {/* Icon based on step */}
-                                        <div className="p-4 rounded-full bg-(--color-bg-app)/50 dark:bg-black/40 backdrop-blur-xl border border-(--color-border-glass) shadow-lg mb-2">
+                                        <div className="p-4 rounded-full bg-white/50 dark:bg-black/40 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-lg mb-2">
                                             {getBackIcon(index)}
                                         </div>
 
                                         <div className="space-y-2">
-                                            <h4 className="text-sm font-black uppercase text-(--color-text-primary) tracking-widest leading-tight">
+                                            <h4 className="text-sm font-black uppercase text-slate-900 dark:text-white tracking-widest leading-tight">
                                                 {t(`evolution.steps.${step.id}.back_title`)}
                                             </h4>
 
-                                            <p className="text-[11px] font-medium text-(--color-text-secondary) leading-relaxed opacity-90 max-w-[260px] mx-auto">
+                                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed opacity-90 max-w-[260px] mx-auto">
                                                 {t(`evolution.steps.${step.id}.back_desc`)}
                                             </p>
                                         </div>
