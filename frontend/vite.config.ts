@@ -31,6 +31,6 @@ export default defineConfig({
       }
     },
     chunkSizeWarningLimit: 1200,
-    emptyOutDir: true,
+    emptyOutDir: false,
   },
 })

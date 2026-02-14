@@ -24,12 +24,12 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
         // #comment: Fixed visibility glitch where loader was hardcoded to dark styles only. 
         // Now uses semantic CSS variables (--color-bg-deep, --color-text-primary) to sync perfectly 
         // with both Light and Dark themes. Added transition-colors for a premium fading effect.
-        <div className="fixed inset-0 z-100 flex flex-col items-center justify-center bg-(--color-bg-deep) transition-colors duration-500 overflow-hidden">
+        <div className="fixed inset-0 z-100 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 transition-colors duration-500 overflow-hidden">
             {/* #comment: Premium Background Mesh - Adds depth and a "premium" feel using brand-primary 
                 blurs that adapt based on the active theme. */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50">
-                <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-linear-to-br from-(--color-brand-primary)/20 to-transparent blur-[120px] animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-linear-to-tl from-(--color-brand-primary)/10 to-transparent blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+                <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-linear-to-br from-blue-500/20 to-transparent blur-[120px] animate-pulse" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-linear-to-tl from-blue-500/10 to-transparent blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
             </div>
 
             <div className="relative flex flex-col items-center justify-center">
@@ -45,16 +45,16 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                     >
                         {/* Recursive Blue Glow Layers */}
                         <motion.div
-                            className="absolute inset-0 rounded-full bg-(--color-brand-primary)/20 blur-[30px]"
+                            className="absolute inset-0 rounded-full bg-blue-500/20 blur-[30px]"
                             animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.7, 0.4] }}
                             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                         />
-                        <div className="absolute inset-4 rounded-full bg-(--color-brand-primary)/30 blur-[20px]" />
+                        <div className="absolute inset-4 rounded-full bg-blue-500/30 blur-[20px]" />
 
                         <img
                             src="/logo.webp"
                             alt="P2P Hub"
-                            className="relative w-16 h-16 object-contain z-10 drop-shadow-[0_0_25px_rgba(var(--color-brand-primary-rgb),0.5)]"
+                            className="relative w-16 h-16 object-contain z-10 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
                         />
                     </motion.div>
                 </div>
@@ -62,15 +62,15 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                 {/* Progress Text - Compact & Refined */}
                 <div className="mt-8 flex flex-col items-center space-y-2">
                     <div className="flex items-baseline space-x-1">
-                        <span className="text-3xl font-black text-(--color-text-primary) tracking-tighter tabular-nums">
+                        <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter tabular-nums">
                             {displayProgress}
                         </span>
-                        <span className="text-sm font-bold text-(--color-brand-primary) opacity-80">%</span>
+                        <span className="text-sm font-bold text-blue-500 opacity-80">%</span>
                     </div>
 
                     <div className="flex flex-col items-center space-y-1">
                         <motion.p
-                            className="text-(--color-text-primary) font-bold tracking-[0.2em] uppercase text-[10px] opacity-90"
+                            className="text-slate-900 dark:text-white font-bold tracking-[0.2em] uppercase text-[10px] opacity-90"
                             animate={{ opacity: [0.6, 1, 0.6] }}
                             transition={{ duration: 3, repeat: Infinity }}
                         >
@@ -78,9 +78,9 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                         </motion.p>
 
                         {/* Status Indicator Bar */}
-                        <div className="w-12 h-0.5 rounded-full bg-(--color-text-primary)/10 overflow-hidden mt-2">
+                        <div className="w-12 h-0.5 rounded-full bg-slate-500/20 overflow-hidden mt-2">
                             <motion.div
-                                className="h-full bg-(--color-brand-primary)"
+                                className="h-full bg-blue-500"
                                 initial={{ width: 0 }}
                                 animate={{ width: `${displayProgress}%` }}
                                 transition={{ duration: 0.5 }}
@@ -93,11 +93,11 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
             {/* Bottom Branding - Ultra Minimal */}
             <div className="absolute bottom-12 left-0 right-0 flex flex-col items-center">
                 <div className="flex items-center space-x-3 opacity-30 grayscale hover:grayscale-0 transition-all duration-500">
-                    <div className="h-[1px] w-8 bg-linear-to-r from-transparent to-(--color-text-primary)" />
-                    <span className="text-[9px] font-bold tracking-[0.4em] uppercase text-(--color-text-primary)">
+                    <div className="h-[1px] w-8 bg-linear-to-r from-transparent to-slate-500" />
+                    <span className="text-[9px] font-bold tracking-[0.4em] uppercase text-slate-500 dark:text-slate-400">
                         Advanced Ecosystem
                     </span>
-                    <div className="h-[1px] w-8 bg-linear-to-l from-transparent to-(--color-text-primary)" />
+                    <div className="h-[1px] w-8 bg-linear-to-l from-transparent to-slate-500" />
                 </div>
             </div>
         </div>
