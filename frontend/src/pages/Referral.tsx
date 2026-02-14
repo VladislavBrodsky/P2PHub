@@ -27,7 +27,7 @@ import { PageSkeleton } from '../components/Skeletons/PageSkeleton';
 export default function ReferralPage() {
     const { t } = useTranslation();
     const { notification, selection } = useHaptic();
-    const { user, updateUser, isLoading } = useUser();
+    const { user, updateUser, refreshUser, isLoading } = useUser();
 
 
     // Local State for Instant Feedback
@@ -47,7 +47,7 @@ export default function ReferralPage() {
     // Derived User State (with defaults)
     const currentLevel = user?.level || 1;
     const currentXP = user?.xp || 0;
-    const referrals = user?.referrals?.length || 0;
+    const referrals = user?.total_network_size || 0;
     const referralCode = user?.referral_code || 'ref_dev';
     const referralLink = `https://t.me/pintopay_probot?start=${referralCode}`;
 
@@ -166,8 +166,8 @@ export default function ReferralPage() {
     const handleTaskStart = async (task: Task) => {
         try {
             await apiClient.post(`/api/partner/tasks/${task.id}/start`);
-            // #comment: Refresh user to get updated active_tasks state immediately
-            await updateUser({});
+            // #comment: Force refresh user to get updated active_tasks state immediately
+            await refreshUser(true);
             window.dispatchEvent(new Event('focus'));
         } catch (e) {
             console.error("Failed to start task", e);

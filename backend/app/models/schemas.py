@@ -28,6 +28,7 @@ class PartnerResponse(PartnerBase):
     is_pro: bool
     pro_notification_seen: bool = False
     pro_tokens: int = 500
+    referral_count: int = 0
     total_network_size: int = 0
     last_checkin_at: Optional[datetime] = None
     checkin_streak: int = 0

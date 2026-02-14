@@ -897,6 +897,7 @@
             }
         },
         "setup": {
+            "instructions_title": "Protocol Instructions",
             "protocol_title": "Protocol Instructions",
             "instructions": [
                 "Get X API credentials from Dev Portal",

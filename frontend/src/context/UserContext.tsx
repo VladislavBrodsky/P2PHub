@@ -16,6 +16,7 @@ interface User {
     level: number;
     xp: number;
     referral_code: string;
+    referral_count: number;
     referrals: any[]; // Extended for Earn Hub
     completed_tasks: string;
     completed_stages: number[]; // Added for Academy
@@ -40,7 +41,7 @@ export interface ActiveTask {
 interface UserContextType {
     user: User | null;
     isLoading: boolean;
-    refreshUser: () => Promise<void>;
+    refreshUser: (force?: boolean) => Promise<void>;
     updateUser: (updates: Partial<User>) => void;
     completeStage: (id: number) => Promise<void>;
 }
@@ -85,10 +86,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
     }, [user, updateUser]);
 
-    const refreshUser = React.useCallback(async () => {
+    const refreshUser = React.useCallback(async (force = false) => {
         const now = Date.now();
         // Throttle refreshes to once every 10 seconds unless forced
-        if (now - lastRefresh.current < 10000) return;
+        if (!force && now - lastRefresh.current < 10000) return;
         lastRefresh.current = now;
 
         updateProgress(60, 'Fetching Profile...');
@@ -137,6 +138,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         level: 1,
                         xp: 0,
                         referral_code: 'UNVERIFIED',
+                        referral_count: 0,
                         referrals: [],
                         completed_tasks: "[]",
                         completed_stages: [],
@@ -174,6 +176,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         level: 5,
                         xp: 150,
                         referral_code: 'DEV-TEST',
+                        referral_count: 10,
                         referrals: [],
                         completed_tasks: "[]",
                         completed_stages: [1, 2, 3], // Mock stages

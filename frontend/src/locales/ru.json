@@ -898,6 +898,7 @@
             }
         },
         "setup": {
+            "instructions_title": "Инструкции Протокола",
             "protocol_title": "Инструкции Протокола",
             "instructions": [
                 "Получите API ключи X в Dev Portal",
