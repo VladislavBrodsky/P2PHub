@@ -2,12 +2,12 @@ MESSAGES = {
     "en": {
         "welcome": (
             "💎 **Welcome, {name}!**\n\n"
-            "🥳 You are early! \n"
-            "You are Elite Partner **#{id}**. \n\n"
-            "Join the revolution in Fintech & Web3 payments!\n"
-            "Earn XP, grow your influence, and unlock exclusive rewards!\n\n"
-            "🔗 Your Referral Link:\n`{referral_link}`\n\n"
-            "👇 Open Partner App"
+            "🔥 *Stop being just a user. Become an owner.*\n"
+            "You are officially **Elite Partner #{id}**! 🚀\n\n"
+            "You’ve just entered the *future of decentralized finance*. While others wait, you’re already building an empire.\n\n"
+            "💰 *Earn XP. Grow your influence. Unlock limitless rewards.*\n\n"
+            "🔗 **Your Personal Gateway:**\n`{referral_link}`\n\n"
+            "👇 **Tap below to start your journey**"
         ),
         "welcome_back": (
             "👋 **Welcome Back, {name}!**\n\n"
@@ -79,12 +79,12 @@ MESSAGES = {
     "ru": {
         "welcome": (
             "💎 **Добро пожаловать, {name}!**\n\n"
-            "🥳 Вы в числе первых!\n"
-            "Вы стали Элитным Партнером **#{id}**. \n\n"
-            "Присоединяйтесь к революции в Fintech и Web3 платежах!\n"
-            "Зарабатывайте XP, растите свое влияние и открывайте эксклюзивные награды!\n\n"
-            "🔗 Ваша реферальная ссылка:\n`{referral_link}`\n\n"
-            "👇 Открыть Partner App"
+            "🔥 *Хватит быть просто пользователем. Станьте владельцем.*\n"
+            "Вы официально — **Элитный Партнер #{id}**! 🚀\n\n"
+            "Вы только что вошли в *будущее децентрализованных финансов*. Пока другие ждут, вы уже строите свою империю.\n\n"
+            "💰 *Зарабатывайте XP. Растите влияние. Открывайте безграничные награды.*\n\n"
+            "🔗 **Ваш персональный вход:**\n`{referral_link}`\n\n"
+            "👇 **Нажмите ниже, чтобы начать путь**"
         ),
         "welcome_back": (
             "👋 **С возвращением, {name}!**\n\n"
