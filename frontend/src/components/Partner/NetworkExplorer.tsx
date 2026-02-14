@@ -23,6 +23,7 @@ interface NetworkMember {
 
 interface NetworkExplorerProps {
     onClose?: () => void;
+    initialTotalCount?: number;
 }
 
 const MemberSkeleton = () => (
@@ -36,7 +37,7 @@ const MemberSkeleton = () => (
     </div>
 );
 
-export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
+export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplorerProps) => {
     const { t } = useTranslation();
     const { selection, impact } = useHaptic();
     const { user } = useUser();
@@ -51,12 +52,14 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
+    const [totalOverride, setTotalOverride] = useState(initialTotalCount);
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         setIsScrolled(e.currentTarget.scrollTop > 10);
     };
 
     const fetchLevel = useCallback(async (targetLevel: number) => {
+        // If we have cached data, use it immediately
         if (levelCache[targetLevel] && !isGlobalMode) {
             return levelCache[targetLevel];
         }
@@ -91,12 +94,13 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
         }
     }, [isGlobalMode]);
 
+    // Initial load: fetch stats + first 2 levels
     useEffect(() => {
         const prefetchInitialLevels = async () => {
             setIsLoading(true);
             try {
                 // Fetch stats first to populate total quickly
-                fetchTreeStats();
+                await fetchTreeStats();
 
                 const [l1] = await Promise.all([
                     fetchLevel(1),
@@ -113,6 +117,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
         prefetchInitialLevels();
     }, [fetchLevel, fetchTreeStats]);
 
+    // Handle level changes
     useEffect(() => {
         const updateLevel = async () => {
             if (contentRef.current) {
@@ -149,6 +154,7 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
         updateLevel();
     }, [level, fetchLevel, levelCache, isGlobalMode]);
 
+    // Scroll active level pill into view
     useEffect(() => {
         if (scrollContainerRef.current) {
             const activeButton = scrollContainerRef.current.children[level - 1] as HTMLElement;
@@ -159,7 +165,16 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
     }, [level]);
 
     // Robust total calculation
-    const totalActivePartners = Object.values(treeStats).reduce((acc, curr) => acc + (typeof curr === 'number' ? curr : 0), 0);
+    const calculatedTotal = Object.values(treeStats).reduce((acc, curr) => acc + (typeof curr === 'number' ? curr : 0), 0);
+    // Use the greater of the two to ensure we don't show a lower number than the dashboard
+    const displayTotal = Math.max(calculatedTotal, totalOverride);
+
+    // Update override if calculated became larger (e.g. fresh data found more people)
+    useEffect(() => {
+        if (calculatedTotal > totalOverride) {
+            setTotalOverride(calculatedTotal);
+        }
+    }, [calculatedTotal, totalOverride]);
 
     return (
         <div className="bg-[#f8fafc] dark:bg-[#0b1120] rounded-[2rem] overflow-hidden flex flex-col h-full max-h-[85vh] shadow-[0_20px_50px_rgba(0,0,0,0.3)] relative border border-white dark:border-white/5">
@@ -400,14 +415,14 @@ export const NetworkExplorer = ({ onClose }: NetworkExplorerProps) => {
             </div>
 
             {/* Ultra Compact Footer */}
-            {totalActivePartners > 0 && (
+            {displayTotal > 0 && (
                 <div className="relative z-50 p-3 bg-white dark:bg-[#0b1120] border-t border-slate-200 dark:border-white/5">
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-0.5">Total Strength</p>
                             <div className="flex items-center gap-2">
                                 <h4 className="text-lg font-black text-slate-900 dark:text-white leading-none tabular-nums">
-                                    {totalActivePartners.toLocaleString()}
+                                    {displayTotal.toLocaleString()}
                                 </h4>
                                 <div className="flex items-center gap-0.5 px-1 py-0.5 bg-emerald-500/10 rounded text-emerald-500 text-[8px] font-bold">
                                     <TrendingUp className="w-2 h-2" />

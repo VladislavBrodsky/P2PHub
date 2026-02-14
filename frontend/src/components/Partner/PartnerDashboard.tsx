@@ -24,6 +24,13 @@ export const PartnerDashboard = () => {
     const [isBriefingOpen, setIsBriefingOpen] = React.useState(false);
     const [isProWelcomeOpen, setIsProWelcomeOpen] = React.useState(false);
 
+    React.useEffect(() => {
+        const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
+        if (startParam === 'network') {
+            setIsExplorerOpen(true);
+        }
+    }, []);
+
     // Show Pro Welcome if user is pro but hasn't seen the notification
     React.useEffect(() => {
         if (user?.is_pro && !user?.pro_notification_seen) {
@@ -292,7 +299,7 @@ export const PartnerDashboard = () => {
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                             className="w-full max-w-lg h-[85vh] sm:h-[600px] relative z-10"
                         >
-                            <NetworkExplorer onClose={() => setIsExplorerOpen(false)} />
+                            <NetworkExplorer onClose={() => setIsExplorerOpen(false)} initialTotalCount={totalNetworkSize} />
                         </motion.div>
                     </div>
                 )}
