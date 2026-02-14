@@ -158,8 +158,8 @@ async def inline_handler(inline_query: types.InlineQuery):
         else:
             base_api_url = (settings.FRONTEND_URL or "https://p2phub-production.up.railway.app").rstrip('/')
 
-        photo1 = f"{base_api_url}/images/2026-02-05 03.35.03.jpg".replace(" ", "%20")
-        photo2 = f"{base_api_url}/images/2026-02-05 03.35.36.jpg".replace(" ", "%20")
+        photo1 = f"{base_api_url}/images/2026-02-05_03.35.03.webp"
+        photo2 = f"{base_api_url}/images/2026-02-05_03.35.36.webp"
 
         # Try to find partner language
         # Try to find partner language
@@ -327,7 +327,7 @@ async def callback_verify_pro(callback: types.CallbackQuery):
     )
     await callback.answer()
 
-@dp.message(F.text.regexp(r'^[a-fA-F0-9]{64}$')) # Simple regex for TON hash
+@dp.message(F.text.regexp(r'^[a-fA-F0-9]{64}$|^[a-zA-Z0-9+/]{43,44}=*$')) # Support Hex and Base64 TON hashes
 async def handle_tx_hash(message: types.Message):
     from app.core.keyboards import get_main_menu_keyboard
     from app.services.partner_service import get_partner_by_telegram_id

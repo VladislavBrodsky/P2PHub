@@ -95,8 +95,11 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
         setMessages(prev => [...prev, newMessage]);
         if (role === 'user') {
             resetTimerRef.current();
+            selection();
+        } else {
+            notification('success');
         }
-    }, []);
+    }, [notification, selection]);
 
     const startInactivityPings = React.useCallback(() => {
         let count = 0;
@@ -161,12 +164,12 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
     }, [resetInactivityTimer, t, isOpen, messages.length]);
 
     const intelligenceLabels = React.useMemo(() => [
-        'Syncing with Neural Intel v4.0...',
-        'Accessing Knowledge Base...',
-        'Consulting AI Protocol...',
-        'Analyzing inquiry...',
-        'Structuring tactical response...',
-        'Optimizing solution...'
+        'Syncing Neural Intel v4.2...',
+        'Scanning Knowledge Protocol...',
+        'Analyzing User Trajectory...',
+        'Consulting Executive Directives...',
+        'Constructing Tactical Response...',
+        'Optimizing NPS Outcome...'
     ], []);
 
     React.useEffect(() => {
@@ -638,6 +641,17 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                         <Terminal className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                                     </div>
                                 </div>
+                                <button
+                                    onClick={() => {
+                                        if (window.confirm('Terminate active protocol and save history?')) {
+                                            handleCloseSession();
+                                        }
+                                    }}
+                                    className="flex h-[46px] w-[46px] items-center justify-center rounded-xl bg-slate-100 dark:bg-white/5 text-slate-400 hover:text-red-500 hover:bg-red-500/10 transition-all active:scale-90 border border-slate-200 dark:border-white/10 shrink-0"
+                                    title="Tactical Reset"
+                                >
+                                    <Activity className="h-5 w-5" />
+                                </button>
                                 <button
                                     onClick={() => handleSendMessage()}
                                     disabled={!inputValue.trim() || isTyping || sessionClosed}

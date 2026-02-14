@@ -348,14 +348,20 @@ class SupportAgentService:
                     f"Balance: {user_metadata.get('balance', 0.0)} USDT"
                 )
             
-            # #comment: Handle PRO Priority logic
-            is_pro = user_metadata.get("is_pro", False) if user_metadata else False
-            pro_context = "\n⚠️ **PRIORITY USER**: This is a PRO Member. Treat this request with 24/7 VIP priority handling. Emphasize their contribution to the Pintopay ecosystem." if is_pro else ""
+            # #comment: Add Tactical Recommendation based on user stats
+            tactical_advice = ""
+            if user_metadata:
+                level = user_metadata.get("level", 1)
+                balance = user_metadata.get("balance", 0.0)
+                if level < 5:
+                    tactical_advice = f"\n💡 **TACTICAL RECOMMENDATION**: Current level is {level}. Advise the user to invite 5 more partners to unlock Level 5 benefits, which include 2x transaction rewards and priority support."
+                elif balance < 10:
+                    tactical_advice = f"\n💡 **TACTICAL RECOMMENDATION**: Liquidity is low ({balance} USDT). Suggest a TRC20 top-up to ensure their Virtual Card remains active for global transactions."
 
             system_msg = (
                 f"{self.SYSTEM_PROMPT}\n\n"
                 f"{pro_context}\n"
-                f"--- USER PROFILE ---\n{user_context_str}\n\n"
+                f"--- USER PROFILE ---\n{user_context_str}\n{tactical_advice}\n\n"
                 f"--- KNOWLEDGE BASE ---\n{kb_context}"
             )
             
@@ -422,7 +428,7 @@ class SupportAgentService:
         - Top-up: Use crypto (USDT/TON) to top up your card balance instantly.
         - Mission: Best service for digital nomads. Improving every single day.
         - Tone: Pintopay is elite, fast, and borderless.
-        - Earnings: Invite friends to earn up to 30% on card fees and 0.5% on top-ups.
+        - Earnings: Invite friends to earn up to 30% on card fees and 0.3% on top-ups.
         - Support: We resolve issues fast. If technical, provide details.
         
         CRITICAL CONTACTS (ALWAYS PROVIDE IF ASKED):

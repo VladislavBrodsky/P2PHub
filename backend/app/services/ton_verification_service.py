@@ -16,17 +16,36 @@ class TonVerificationService:
     async def verify_transaction(self, tx_hash: str, expected_amount_ton: float, expected_address: str) -> bool:
         """
         Verifies a transaction on the TON blockchain with fallback support.
+        Supports both Hex and Base64 hash formats.
         """
         if not self.api_key:
             logger.warning("TON_API_KEY is missing. Verification will fail.")
             return False
 
+        # Normalize hash to Hex (APIs generally prefer Hex)
+        normalized_hash = self._normalize_hash(tx_hash)
+        logger.info(f"🔍 Verifying TON transaction: {tx_hash} (Normalized: {normalized_hash})")
+
         # 1. Try TONCenter (Primary)
-        if await self._verify_via_toncenter(tx_hash, expected_amount_ton, expected_address):
+        if await self._verify_via_toncenter(normalized_hash, expected_amount_ton, expected_address):
             return True
             
         # 2. Try TonAPI.io (Fallback)
-        return await self._verify_via_tonapi(tx_hash, expected_amount_ton, expected_address)
+        return await self._verify_via_tonapi(normalized_hash, expected_amount_ton, expected_address)
+
+    def _normalize_hash(self, tx_hash: str) -> str:
+        """Converts Base64 hash to Hex if necessary."""
+        import base64
+        tx_hash = tx_hash.strip()
+        
+        # If it looks like base64 (not all hex, length ~44)
+        if len(tx_hash) <= 44 and not all(c in "0123456789abcdefABCDEF" for c in tx_hash):
+            try:
+                decoded = base64.b64decode(tx_hash)
+                return decoded.hex()
+            except Exception:
+                pass
+        return tx_hash.lower()
 
     async def _verify_via_toncenter(self, tx_hash: str, expected_amount_ton: float, expected_address: str) -> bool:
         try:
