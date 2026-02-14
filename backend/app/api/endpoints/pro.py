@@ -42,6 +42,8 @@ async def get_pro_status(
     return {
         "is_pro": partner.is_pro,
         "pro_tokens": partner.pro_tokens,
+        "academy_score": partner.academy_score,
+        "completed_stages": partner.completed_stages,
         "has_x_setup": bool(partner.x_api_key),
         "has_telegram_setup": bool(partner.telegram_channel_id),
         "has_linkedin_setup": bool(partner.linkedin_access_token),
@@ -55,6 +57,24 @@ async def get_pro_status(
         },
         "capabilities": viral_studio.get_capabilities()
     }
+
+@router.post("/academy/complete")
+async def complete_academy_stage(
+    stage_id: str,
+    partner: Partner = Depends(get_current_partner),
+    session: AsyncSession = Depends(get_session)
+):
+    import json
+    completed = json.loads(partner.completed_stages)
+    if stage_id not in completed:
+        completed.append(stage_id)
+        partner.completed_stages = json.dumps(completed)
+        # Award 100 academy points per stage
+        partner.academy_score += 100
+        session.add(partner)
+        await session.commit()
+    
+    return {"status": "success", "academy_score": partner.academy_score}
 
 @router.post("/setup")
 async def setup_social_api(

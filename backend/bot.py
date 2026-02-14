@@ -80,7 +80,7 @@ async def cmd_start(message: types.Message):
             
             # Always show the informative welcome message
             full_name = f"{partner.first_name or ''} {partner.last_name or ''}".strip() or "Partner"
-            welcome_text = get_msg(lang, "welcome", name=full_name, referral_link=referral_link, id=partner.id)
+            welcome_text = get_msg(lang, "welcome", name=full_name, referral_link=referral_link)
             
             if is_new:
                 logging.info(f"✨ New partner registered: {partner.id}")

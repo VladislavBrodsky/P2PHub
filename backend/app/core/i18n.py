@@ -3,7 +3,7 @@ MESSAGES = {
         "welcome": (
             "💎 **Welcome, {name}!**\n\n"
             "🔥 *Stop being just a user. Become an owner.*\n\n"
-            "You are officially **Elite Partner #{id}**! 🚀\n\n"
+            "You are officially **Elite Partner**! You are early 🚀\n\n"
             "You’ve just entered the *future of decentralized finance*. While others wait, you’re already building an empire.\n\n"
             "💰 *Earn XP. Grow your influence. Unlock limitless rewards.*\n\n"
             "🔗 **Your Personal Gateway:**\n`{referral_link}`\n\n"
@@ -80,7 +80,7 @@ MESSAGES = {
         "welcome": (
             "💎 **Добро пожаловать, {name}!**\n\n"
             "🔥 *Хватит быть просто пользователем. Станьте владельцем.*\n\n"
-            "Вы официально — **Элитный Партнер #{id}**! 🚀\n\n"
+            "Вы официально — **Элитный Партнер**! Вы в числе первых 🚀\n\n"
             "Вы только что вошли в *будущее децентрализованных финансов*. Пока другие ждут, вы уже строите свою империю.\n\n"
             "💰 *Зарабатывайте XP. Растите влияние. Открывайте безграничные награды.*\n\n"
             "🔗 **Ваш персональный вход:**\n`{referral_link}`\n\n"

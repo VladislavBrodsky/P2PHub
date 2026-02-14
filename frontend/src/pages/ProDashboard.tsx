@@ -5,7 +5,7 @@ import {
     ArrowLeft, Terminal, Bot, Image as ImageIcon,
     CheckCircle2, AlertCircle, Loader2,
     Lock, Twitter, Cpu, BookOpen, Flame, Settings, Wand2, ShieldCheck,
-    Linkedin, Info, Copy, Download, RefreshCw, Undo2, Share, Compass
+    Linkedin, Info, Copy, Download, RefreshCw, Undo2, Share, Compass, X
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
@@ -58,6 +58,11 @@ export const ProDashboard = () => {
     const [isFixingBio, setIsFixingBio] = useState(false);
     const [trends, setTrends] = useState<any[]>([]);
     const [isHuntingTrends, setIsHuntingTrends] = useState(false);
+    const [selectedAsset, setSelectedAsset] = useState<any>(null);
+    const [academyScore, setAcademyScore] = useState(0);
+    const [completedStages, setCompletedStages] = useState<string[]>([]);
+    const [isCompletingStage, setIsCompletingStage] = useState<string | null>(null);
+    const [selectedArticle, setSelectedArticle] = useState<any>(null);
 
     // API Setup State
     const [showSetup, setShowSetup] = useState(false);
@@ -146,10 +151,35 @@ export const ProDashboard = () => {
                     linkedin_access_token: data.setup.linkedin_access_token || ''
                 });
             }
+            if (data.academy_score !== undefined) setAcademyScore(data.academy_score);
+            if (data.completed_stages) {
+                try {
+                    setCompletedStages(JSON.parse(data.completed_stages));
+                } catch (e) {
+                    console.error("Failed to parse academy stages", e);
+                }
+            }
         } catch (error) {
             console.error('Failed to load PRO status', error);
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleCompleteAcademyStage = async (stage_id: string) => {
+        if (completedStages.includes(stage_id)) return;
+        setIsCompletingStage(stage_id);
+        impact('medium');
+        try {
+            const data = await proService.completeAcademyStage(stage_id);
+            setAcademyScore(data.academy_score);
+            setCompletedStages(prev => [...prev, stage_id]);
+            notification('success');
+        } catch (error) {
+            console.error('Failed to complete academy stage', error);
+            notification('error');
+        } finally {
+            setIsCompletingStage(null);
         }
     };
 
@@ -985,126 +1015,313 @@ export const ProDashboard = () => {
                                     <div className="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500/10 blur-[60px] rounded-full animate-pulse" />
 
                                     <div className="relative z-1">
-                                        <div className="flex items-center gap-2 mb-3">
+                                        <div className="flex items-center gap-2">
                                             <div className="px-2 py-0.5 bg-indigo-500/10 rounded-full border border-indigo-500/20 flex items-center gap-1.5">
-                                                <div className="w-1 h-1 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.5)]" />
-                                                <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">Live intelligence</span>
+                                                <div className="w-1 h-1 rounded-full bg-red-500 animate-pulse" />
+                                                <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">Growth Expert Protocol</span>
                                             </div>
                                         </div>
-                                        <h3 className="text-xl font-black text-brand-text leading-tight mb-2 tracking-tight">
-                                            {t('pro_dashboard.title_academy')}
+                                        <h3 className="text-2xl font-black text-brand-text tracking-tight uppercase leading-none">
+                                            {t('pro_dashboard.academy.protocols.title')}
                                         </h3>
-                                        <p className="text-[9px] font-medium text-brand-muted leading-relaxed max-w-[95%] mb-4 italic opacity-70">
-                                            {t('pro_dashboard.academy.desc')}
-                                        </p>
-                                        <div className="flex items-center gap-2">
-                                            <div className="px-3 py-1.5 bg-black/20 dark:bg-white/5 rounded-lg border border-white/5 backdrop-blur-xl flex items-center gap-2 transition-all">
-                                                <ShieldCheck size={12} className="text-indigo-500" />
-                                                <span className="text-[8px] font-black text-brand-text uppercase tracking-tight">{t('pro_dashboard.academy.rank_name')}</span>
-                                            </div>
+                                        <div className="text-right">
+                                            <p className="text-[8px] font-black text-brand-muted uppercase tracking-widest mb-1">{t('pro_dashboard.academy.protocols.stats_label')}</p>
+                                            <div className="text-2xl font-black text-indigo-500 tabular-nums leading-none">{academyScore}</div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between items-center text-[8px] font-black uppercase tracking-widest text-brand-muted">
+                                            <span>{t('pro_dashboard.academy.protocols.progress_label')}</span>
+                                            <span>{Math.round((completedStages.length / 5) * 100)}%</span>
+                                        </div>
+                                        <div className="h-2 w-full bg-slate-200 dark:bg-white/5 rounded-full border border-white/5 overflow-hidden">
+                                            <motion.div
+                                                initial={{ width: 0 }}
+                                                animate={{ width: `${(completedStages.length / 5) * 100}%` }}
+                                                className="h-full bg-linear-to-r from-indigo-500 to-purple-500 rounded-full"
+                                            />
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Compact Growth Grid */}
-                                <div className="grid grid-cols-2 gap-2.5">
-                                    {['hook_rule', 'algorithm', 'psycho'].map((key) => (
-                                        <div key={key} className={`glass-panel-premium p-3.5 rounded-2xl border border-white/5 relative overflow-hidden group active:scale-[0.98] transition-all bg-white/60 dark:bg-slate-900/40 shadow-sm hover:border-indigo-500/20 ${key === 'hook_rule' ? 'col-span-2' : 'col-span-1'}`}>
-                                            <div className="flex items-center gap-2.5 mb-1.5">
-                                                <div className="w-8 h-8 bg-indigo-500/5 rounded-lg flex items-center justify-center border border-indigo-500/10 group-hover:scale-110 transition-transform shrink-0">
-                                                    {key === 'hook_rule' && <Zap size={14} className="text-indigo-500" />}
-                                                    {key === 'algorithm' && <Cpu size={14} className="text-indigo-500" />}
-                                                    {key === 'psycho' && <Sparkles size={14} className="text-indigo-500" />}
-                                                </div>
-                                                <h4 className="text-[8.5px] font-black uppercase tracking-widest text-brand-text leading-tight">{t(`pro_dashboard.academy.${key}.title`)}</h4>
-                                            </div>
-                                            <p className="text-[8.5px] font-medium leading-relaxed text-brand-muted italic opacity-60 line-clamp-2">
-                                                {t(`pro_dashboard.academy.${key}.desc`)}
-                                            </p>
-                                        </div>
-                                    ))}
 
-                                    {/* Compact Checklist */}
-                                    <div className="glass-panel-premium p-4 rounded-2xl border border-white/5 relative overflow-hidden bg-white/60 dark:bg-slate-900/40 col-span-2">
-                                        <div className="flex items-center gap-2.5 mb-3">
-                                            <div className="w-8 h-8 bg-emerald-500/5 rounded-lg flex items-center justify-center border border-emerald-500/10 shrink-0">
-                                                <CheckCircle2 size={16} className="text-emerald-500" />
+                                {/* Expert Introduction */}
+                                <div className="px-1 space-y-2">
+                                    <p className="text-[10px] font-black text-brand-text uppercase tracking-widest flex items-center gap-2">
+                                        <Bot size={14} className="text-indigo-500" />
+                                        Message from Top Partner
+                                    </p>
+                                    <p className="text-xs font-medium text-brand-muted leading-relaxed italic opacity-85 backdrop-blur-sm p-4 bg-white/5 rounded-2xl border border-white/5">
+                                        "{t('pro_dashboard.academy.desc')}"
+                                    </p>
+                                </div>
+
+                                {/* Viral Article Hub */}
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between px-1">
+                                        <div className="flex items-center gap-3">
+                                            <BookOpen size={18} className="text-indigo-500" />
+                                            <div>
+                                                <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-text leading-none mb-1">{t('pro_dashboard.academy.articles.title')}</h4>
+                                                <span className="text-[7px] font-black text-indigo-500 uppercase tracking-[0.2em]">{t('pro_dashboard.academy.articles.subtitle')}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
+                                        {(t('pro_dashboard.academy.articles.items', { returnObjects: true }) as any[]).map((article: any, i: number) => (
+                                            <motion.div
+                                                key={article.id}
+                                                whileHover={{ y: -5 }}
+                                                onClick={() => { setSelectedArticle(article); selection(); impact('light'); }}
+                                                className="min-w-[280px] snap-center glass-panel-premium p-5 rounded-[2rem] border border-white/10 relative overflow-hidden group cursor-pointer active:scale-95 transition-all bg-white/60 dark:bg-slate-900/60 shadow-xl"
+                                            >
+                                                <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 blur-2xl group-hover:bg-indigo-500/10 transition-colors" />
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-[7px] font-black text-indigo-500 uppercase tracking-widest">{article.category}</span>
+                                                    <span className="text-[7px] font-black text-brand-muted uppercase tracking-widest">{article.readTime} {t('pro_dashboard.academy.articles.read_time')}</span>
+                                                </div>
+                                                <h5 className="text-[14px] font-black text-brand-text uppercase tracking-tight mb-2 group-hover:text-indigo-500 transition-colors">{article.title}</h5>
+                                                <p className="text-[10px] font-medium text-brand-muted leading-relaxed line-clamp-2 mb-4 italic opacity-70">"{article.desc}"</p>
+                                                <div className="flex items-center gap-2 text-[9px] font-black text-indigo-500 uppercase tracking-widest group-hover:gap-3 transition-all">
+                                                    {t('pro_dashboard.academy.articles.btn_read')} <ChevronRight size={12} />
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Masterclass Modules */}
+                                <div className="space-y-4">
+                                    {(t('pro_dashboard.academy.protocols.modules', { returnObjects: true }) as any[]).map((module: any, i: number) => {
+                                        const isCompleted = completedStages.includes(module.id);
+                                        const isLoading = isCompletingStage === module.id;
+
+                                        const diffColors: any = {
+                                            easy: 'border-emerald-500/20 bg-emerald-500/5 text-emerald-500',
+                                            medium: 'border-amber-500/20 bg-amber-500/5 text-amber-500',
+                                            hard: 'border-red-500/20 bg-red-500/5 text-red-500'
+                                        };
+
+                                        return (
+                                            <motion.div
+                                                key={module.id}
+                                                initial={{ opacity: 0, x: -20 }}
+                                                whileInView={{ opacity: 1, x: 0 }}
+                                                viewport={{ once: true }}
+                                                transition={{ delay: i * 0.1 }}
+                                                className={`glass-panel-premium rounded-[2.2rem] border overflow-hidden relative transition-all ${isCompleted
+                                                    ? 'opacity-60 grayscale border-slate-200 dark:border-white/5'
+                                                    : 'border-white/10 shadow-lg'
+                                                    }`}
+                                            >
+                                                <div className="p-6 space-y-5">
+                                                    <div className="flex justify-between items-start">
+                                                        <div className="space-y-2">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className={`px-2 py-0.5 rounded-full border text-[7px] font-black uppercase tracking-widest ${diffColors[module.diff]}`}>
+                                                                    {t(`pro_dashboard.academy.protocols.difficulty_levels.${module.diff}`)}
+                                                                </span>
+                                                                {isCompleted && (
+                                                                    <div className="flex items-center gap-1 text-emerald-500 text-[8px] font-black uppercase">
+                                                                        <CheckCircle2 size={10} />
+                                                                        Completed
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            <h4 className="text-lg font-black text-brand-text uppercase tracking-tight">{module.title}</h4>
+                                                            <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">{module.hook}</p>
+                                                        </div>
+                                                        <div className="w-10 h-10 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 flex items-center justify-center text-indigo-500 font-black text-[10px]">
+                                                            +{module.points}
+                                                        </div>
+                                                    </div>
+
+                                                    <p className="text-[11px] font-medium text-brand-muted leading-relaxed">
+                                                        {renderMarkdown(module.content)}
+                                                    </p>
+
+                                                    <div className="p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-white/5 space-y-3">
+                                                        <div className="flex items-center gap-2">
+                                                            <Terminal size={12} className="text-brand-muted" />
+                                                            <span className="text-[8px] font-black uppercase tracking-widest text-brand-muted">Active Homework Task</span>
+                                                        </div>
+                                                        <p className="text-[10px] font-bold text-brand-text leading-tight">
+                                                            {module.task}
+                                                        </p>
+                                                        {module.link && (
+                                                            <a
+                                                                href={module.link}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                onClick={() => selection()}
+                                                                className="flex items-center gap-1.5 text-indigo-500 text-[10px] font-black uppercase tracking-wider hover:underline"
+                                                            >
+                                                                {module.cta || 'Practice Now'} <Share size={10} />
+                                                            </a>
+                                                        )}
+                                                    </div>
+
+                                                    {!isCompleted && (
+                                                        <button
+                                                            onClick={() => handleCompleteAcademyStage(module.id)}
+                                                            disabled={isLoading}
+                                                            className="w-full h-12 bg-indigo-500 hover:bg-indigo-600 rounded-2xl font-black text-white text-[10px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 shadow-xl shadow-indigo-500/20"
+                                                        >
+                                                            {isLoading ? <Loader2 size={16} className="animate-spin" /> : (
+                                                                <>
+                                                                    Complete Lesson <Sparkles size={14} />
+                                                                </>
+                                                            )}
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </motion.div>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* Elite Hook Library */}
+                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 hover:border-indigo-500/30 transition-all group overflow-hidden relative shadow-2xl bg-white/60 dark:bg-slate-900/40">
+                                    <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-indigo-500/40 to-transparent" />
+                                    <div className="flex items-center gap-4 mb-6 relative z-10">
+                                        <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-lg group-hover:rotate-6 transition-transform">
+                                            <RefreshCw size={22} className="text-indigo-500" />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-[12px] font-black uppercase tracking-widest text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.hooks.title')}</h4>
+                                            <span className="text-[8px] font-black text-brand-muted uppercase tracking-[0.25em]">{t('pro_dashboard.academy.hooks.subtitle')}</span>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-3 relative z-10">
+                                        {(t('pro_dashboard.academy.hooks.items', { returnObjects: true }) as any[]).map((hook: any, i: number) => (
+                                            <div key={i} className="p-4 bg-indigo-500/5 rounded-2xl border border-white/5 hover:border-indigo-500/30 transition-all group/hook relative cursor-copy active:scale-[0.99] shadow-sm" onClick={() => { handleCopyAnyText(hook.template); selection(); impact('light'); }}>
+                                                <div className="absolute right-4 top-4 opacity-0 group-hover/hook:opacity-100 transition-all scale-100 bg-white/10 p-1.5 rounded-lg backdrop-blur-md">
+                                                    <Copy size={14} className="text-indigo-500" />
+                                                </div>
+                                                <div className="flex items-center gap-2.5 mb-2">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                                                    <p className="text-[8px] font-black text-indigo-500 uppercase tracking-widest leading-none">{hook.category}</p>
+                                                </div>
+                                                <p className="text-[11px] font-bold text-brand-text italic leading-relaxed pr-8 opacity-90 line-clamp-2">"{hook.template}"</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Viral Assets Bento Grid - #comment: Elite design blueprints in a high-impact grid */}
+                                <div className="space-y-6">
+                                    <div className="flex items-center justify-between px-1">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-lg relative overflow-hidden group">
+                                                <div className="absolute inset-0 bg-indigo-500/10 animate-pulse" />
+                                                <ImageIcon size={22} className="text-indigo-500 relative z-10" />
                                             </div>
                                             <div>
-                                                <h4 className="text-[9px] font-black uppercase tracking-widest text-brand-text leading-none mb-0.5">{t('pro_dashboard.academy.checklist.title')}</h4>
-                                                <p className="text-[6.5px] font-black text-emerald-500/50 uppercase tracking-widest">{t('pro_dashboard.academy.checklist.subtitle')}</p>
+                                                <h4 className="text-xs font-black uppercase tracking-[0.15em] text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.viral_assets.title')}</h4>
+                                                <p className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.2em]">{t('pro_dashboard.academy.viral_assets.subtitle')}</p>
                                             </div>
                                         </div>
-                                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                                            {(t('pro_dashboard.academy.checklist.items', { returnObjects: true }) as string[]).map((item: string, i: number) => (
-                                                <div key={i} className="flex items-center gap-2">
-                                                    <div className="w-1 h-1 rounded-full bg-emerald-500/40 shrink-0" />
-                                                    <span className="text-[8.5px] font-bold text-brand-muted leading-none truncate">{item}</span>
-                                                </div>
-                                            ))}
-                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Hook Library */}
-                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 hover:border-indigo-500/20 transition-all group overflow-hidden relative shadow-lg bg-white/60 dark:bg-slate-900/40">
-                                    <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-indigo-500/30 to-transparent" />
-                                    <div className="flex items-center gap-3 mb-5 relative z-10">
-                                        <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-sm">
-                                            <BookOpen size={18} className="text-indigo-500" />
-                                        </div>
-                                        <div>
-                                            <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-text leading-none mb-1">{t('pro_dashboard.academy.hooks.title')}</h4>
-                                            <span className="text-[7px] font-black text-brand-muted uppercase tracking-[0.2em]">{t('pro_dashboard.academy.hooks.subtitle')}</span>
-                                        </div>
-                                    </div>
-                                    <div className="space-y-2.5 relative z-10">
-                                        {(t('pro_dashboard.academy.hooks.items', { returnObjects: true }) as any[]).map((hook: any, i: number) => (
-                                            <div key={i} className="p-3 bg-indigo-500/5 rounded-xl border border-white/5 hover:border-indigo-500/20 transition-all group/hook relative cursor-pointer active:scale-[0.99] shadow-sm" onClick={() => { handleCopyAnyText(hook.template); selection(); }}>
-                                                <div className="absolute right-3 top-3 opacity-0 group-hover/hook:opacity-100 transition-all scale-75">
-                                                    <Copy size={12} className="text-indigo-500" />
+                                    {/* Media Kit CTA - Bento Header */}
+                                    <a
+                                        href="https://drive.google.com/drive/folders/1ASIObhRIBO_RX24pc6hhDpeqTV1G6WUX?usp=sharing"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={() => impact('heavy')}
+                                        className="block group relative overflow-hidden rounded-[2.5rem] p-6 border border-white/20 shadow-2xl active:scale-[0.99] transition-all"
+                                    >
+                                        <div className="absolute inset-0 vibing-blue-animated" />
+                                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-[60px] translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+                                        <div className="relative z-10 flex items-center justify-between">
+                                            <div className="space-y-2">
+                                                <div className="flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full w-fit border border-white/20">
+                                                    <Sparkles size={12} className="text-white" />
+                                                    <span className="text-[8px] font-black uppercase tracking-widest text-white">PRO RESOURCE 2026</span>
                                                 </div>
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <div className="w-1 h-3 rounded-full bg-indigo-500/50" />
-                                                    <p className="text-[7px] font-black text-indigo-500/80 uppercase tracking-widest leading-none">{hook.category}</p>
-                                                </div>
-                                                <p className="text-[9.5px] font-bold text-brand-text italic leading-relaxed pr-6 opacity-80 line-clamp-2">"{hook.template}"</p>
+                                                <h3 className="text-lg font-black text-white uppercase tracking-tight leading-tight">
+                                                    {t('pro_dashboard.academy.viral_assets.media_kit_btn')}
+                                                </h3>
                                             </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Viral Assets Prototype - #comment: Compact, high-impact design blueprints */}
-                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 relative overflow-hidden group shadow-xl bg-white/60 dark:bg-slate-900/40">
-                                    <div className="flex items-center gap-3 mb-5">
-                                        <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-sm">
-                                            <ImageIcon size={18} className="text-indigo-500" />
+                                            <div className="w-12 h-12 bg-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-center border border-white/30 group-hover:scale-110 group-hover:rotate-12 transition-all">
+                                                <Download size={22} className="text-white" />
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-text leading-none mb-1">{t('pro_dashboard.academy.viral_assets.title')}</h4>
-                                            <span className="text-[7px] font-black text-brand-muted uppercase tracking-[0.2em]">{t('pro_dashboard.academy.viral_assets.subtitle')}</span>
-                                        </div>
-                                    </div>
+                                    </a>
 
-                                    <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2 pt-1 px-1">
-                                        {(t('pro_dashboard.academy.viral_assets.cards', { returnObjects: true }) as any[]).map((card: any, i: number) => (
-                                            <div key={i} className="relative shrink-0 w-[200px] aspect-[1.586/1] bg-slate-950 rounded-2xl p-4 border border-white/10 overflow-hidden shadow-2xl transition-all hover:scale-[1.02] hover:-translate-y-1">
-                                                <div className="absolute top-0 right-0 w-16 h-16 bg-indigo-500/10 blur-xl pointer-events-none" />
-                                                <div className="w-8 h-6 bg-linear-to-br from-amber-400 via-amber-200 to-amber-600 rounded-md mb-4 relative overflow-hidden shadow-md border border-amber-300/30">
-                                                    <div className="absolute inset-0 bg-white/10 grid grid-cols-3 gap-0.5 p-0.5 opacity-40">
-                                                        {[...Array(6)].map((_, j) => <div key={j} className="bg-black/20 rounded-[1px]" />)}
+                                    {/* Bento Grid Layout */}
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {(t('pro_dashboard.academy.viral_assets.cards', { returnObjects: true }) as any[]).map((card: any, i: number) => {
+                                            const isLarge = card.id === 'off_grid';
+                                            return (
+                                                <motion.div
+                                                    key={card.id}
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    whileInView={{ opacity: 1, y: 0 }}
+                                                    viewport={{ once: true }}
+                                                    transition={{ delay: i * 0.1 }}
+                                                    className={`glass-panel-premium relative overflow-hidden rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-xl group hover:shadow-2xl transition-all ${isLarge ? 'col-span-2 p-6' : 'col-span-1 p-5'
+                                                        }`}
+                                                >
+                                                    <div className={`absolute top-0 right-0 w-32 h-32 blur-3xl opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity ${card.id === 'off_grid' ? 'bg-indigo-500' :
+                                                        card.id === 'logos' ? 'bg-amber-500' :
+                                                            card.id === 'identity' ? 'bg-blue-500' : 'bg-pink-500'
+                                                        }`} />
+
+                                                    <div className="relative z-10 flex flex-col h-full justify-between gap-4" onClick={() => { setSelectedAsset(card); impact('light'); }}>
+                                                        <div className="space-y-4">
+                                                            <div className="flex items-center justify-between">
+                                                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shadow-sm ${card.id === 'off_grid' ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-500' :
+                                                                    card.id === 'logos' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500' :
+                                                                        card.id === 'identity' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500' : 'bg-pink-500/10 border-pink-500/20 text-pink-500'
+                                                                    }`}>
+                                                                    {card.id === 'off_grid' && <Compass size={18} />}
+                                                                    {card.id === 'logos' && <Wand2 size={18} />}
+                                                                    {card.id === 'identity' && <Terminal size={18} />}
+                                                                    {card.id === 'palette' && <Cpu size={18} />}
+                                                                </div>
+                                                                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-950/5 dark:bg-white/5 rounded-full border border-slate-200 dark:border-white/10">
+                                                                    <div className={`w-1 h-1 rounded-full animate-pulse ${isLarge ? 'bg-red-500' : 'bg-indigo-500'}`} />
+                                                                    <span className="text-[7px] font-black uppercase tracking-widest text-brand-muted">
+                                                                        {card.id === 'palette' ? 'CSS VARS' : 'VECTOR HV'}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="space-y-1.5">
+                                                                <div className="flex items-center justify-between gap-2">
+                                                                    <h5 className={`${isLarge ? 'text-xl' : 'text-xs'} font-black text-brand-text uppercase tracking-tight leading-tight group-hover:text-indigo-500 transition-colors`}>
+                                                                        {card.title}
+                                                                    </h5>
+                                                                    {!isLarge && <Info size={12} className="text-brand-muted opacity-40" />}
+                                                                </div>
+                                                                <p className={`${isLarge ? 'text-[11px]' : 'text-[9px]'} font-bold text-indigo-500/80 uppercase tracking-widest`}>
+                                                                    {card.hook}
+                                                                </p>
+                                                            </div>
+
+                                                            <p className={`${isLarge ? 'text-[13px]' : 'text-[10px]'} font-medium text-brand-muted leading-relaxed line-clamp-2`}>
+                                                                {card.desc}
+                                                            </p>
+                                                        </div>
+
+                                                        {isLarge && (
+                                                            <div className="mt-2 flex gap-3">
+                                                                <button onClick={(e) => { e.stopPropagation(); handleCopyAnyText(card.desc); selection(); impact('light'); }} className="flex-1 h-11 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex items-center justify-center gap-2 group/btn hover:bg-slate-200 dark:hover:bg-white/10 transition-all active:scale-[0.98]">
+                                                                    <Copy size={14} className="text-brand-muted group-hover/btn:text-indigo-500 transition-colors" />
+                                                                    <span className="text-[9px] font-black uppercase tracking-widest text-brand-text">Copy Info</span>
+                                                                </button>
+                                                                <button onClick={(e) => { e.stopPropagation(); setSelectedAsset(card); impact('heavy'); }} className="h-11 w-11 bg-indigo-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 active:scale-[0.98] transition-all">
+                                                                    <ChevronRight size={18} />
+                                                                </button>
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                </div>
-                                                <div className="space-y-1.5">
-                                                    <div className="flex items-center gap-1">
-                                                        <div className="w-1 h-1 rounded-full bg-red-500 shadow-[0_0_4px_rgba(239,68,68,0.6)] animate-pulse" />
-                                                        <p className="text-[5px] font-black uppercase tracking-[0.2em] text-indigo-400/80">Security: Alpha 01</p>
-                                                    </div>
-                                                    <h5 className="text-xs font-black text-white italic tracking-tight leading-none truncate">{card.title}</h5>
-                                                    <p className="text-[6.5px] font-medium text-slate-400 leading-tight line-clamp-2 opacity-60">{card.hook}</p>
-                                                </div>
-                                            </div>
-                                        ))}
+                                                </motion.div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
 
@@ -1379,43 +1596,43 @@ export const ProDashboard = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="fixed inset-0 z-101 flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-2xl"
+                                className="fixed inset-0 z-101 flex items-center justify-center p-4 bg-slate-950/60 dark:bg-slate-950/90 backdrop-blur-xl"
                             >
                                 <motion.div
-                                    initial={{ scale: 0.9, y: 30, opacity: 0 }}
+                                    initial={{ scale: 0.95, y: 20, opacity: 0 }}
                                     animate={{ scale: 1, y: 0, opacity: 1 }}
-                                    exit={{ scale: 0.9, y: 30, opacity: 0 }}
-                                    className="glass-panel-premium w-full max-w-sm rounded-[3rem] p-10 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(env(safe-area-inset-bottom)+2rem)] space-y-8 relative overflow-hidden border border-white/10 shadow-3xl"
+                                    exit={{ scale: 0.95, y: 20, opacity: 0 }}
+                                    className="glass-panel-premium w-full max-w-[340px] rounded-[2.5rem] p-6 space-y-5 relative overflow-hidden border border-slate-200 dark:border-white/10 shadow-2xl"
                                 >
-                                    <div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_15px_rgba(99,102,241,0.5)]" />
+                                    <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500" />
 
-                                    <div className="flex justify-between items-start">
-                                        <div className="space-y-1">
-                                            <h3 className="text-3xl font-black uppercase tracking-tight text-white">{t('pro_dashboard.publish.title')}</h3>
-                                            <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em]">{t('pro_dashboard.publish.subtitle')}</p>
+                                    <div className="flex justify-between items-center">
+                                        <div className="space-y-0.5">
+                                            <h3 className="text-xl font-black uppercase tracking-tight text-brand-text">{t('pro_dashboard.publish.title')}</h3>
+                                            <p className="text-[8px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-[0.2em]">{t('pro_dashboard.publish.subtitle')}</p>
                                         </div>
                                         <button
                                             onClick={() => { selection(); setShowPublishModal(false); }}
-                                            className="p-3 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 active:scale-90 transition-all text-brand-muted hover:text-white"
+                                            className="p-2.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl hover:bg-slate-200 dark:hover:bg-white/10 active:scale-90 transition-all text-brand-muted hover:text-brand-text"
                                         >
-                                            <ArrowLeft size={18} />
+                                            <ArrowLeft size={16} />
                                         </button>
                                     </div>
 
-                                    <div className="space-y-6">
-                                        <div className="p-5 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 relative overflow-hidden group shadow-inner">
-                                            <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-700"><Zap size={60} /></div>
-                                            <h4 className="text-[10px] font-black uppercase mb-2 text-indigo-500 flex items-center gap-2 tracking-widest">
-                                                <Info size={12} />
+                                    <div className="space-y-5">
+                                        <div className="p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 relative overflow-hidden group">
+                                            <div className="absolute -right-2 -bottom-2 opacity-[0.03] group-hover:scale-110 transition-transform duration-700 pointer-events-none"><Zap size={40} /></div>
+                                            <h4 className="text-[9px] font-black uppercase mb-1.5 text-indigo-500 flex items-center gap-1.5 tracking-widest">
+                                                <Info size={10} />
                                                 {t('pro_dashboard.publish.mgmt_title')}
                                             </h4>
-                                            <p className="text-[11px] leading-relaxed text-brand-text/70 font-medium">
+                                            <p className="text-[10px] leading-relaxed text-brand-text/70 font-medium">
                                                 {t('pro_dashboard.publish.mgmt_p')}
-                                                <em className="block mt-1 text-indigo-500/60 italic"> {t('pro_dashboard.publish.mgmt_tip')}</em>
+                                                <em className="block mt-1 text-indigo-500/60 italic text-[9px]"> {t('pro_dashboard.publish.mgmt_tip')}</em>
                                             </p>
                                         </div>
 
-                                        <div className="space-y-3">
+                                        <div className="space-y-2.5">
                                             {(['telegram', 'x', 'linkedin'] as const).map((platform) => {
                                                 const isPublished = publishedPlatforms.includes(platform);
                                                 const hasSetup = status?.[`has_${platform === 'x' ? 'x' : platform}_setup` as keyof PROStatus];
@@ -1425,41 +1642,41 @@ export const ProDashboard = () => {
                                                         key={platform}
                                                         disabled={!hasSetup || isPublishing || isPublished}
                                                         onClick={() => handlePublishToPlatform(platform)}
-                                                        className={`w-full group relative flex items-center justify-between p-4 rounded-2xl border transition-all active:scale-[0.98] ${isPublished
+                                                        className={`w-full group relative flex items-center justify-between p-3.5 rounded-2xl border transition-all active:scale-[0.98] ${isPublished
                                                             ? 'bg-emerald-500/10 border-emerald-500/30'
                                                             : !hasSetup
-                                                                ? 'bg-white/40 dark:bg-slate-900/40 border-slate-200/40 dark:border-white/5 opacity-40 grayscale pointer-events-none'
-                                                                : 'bg-white/60 dark:bg-slate-900/60 border-slate-200 dark:border-white/10 hover:border-indigo-500/40 hover:bg-indigo-500/5'
+                                                                ? 'bg-slate-100 dark:bg-slate-900/40 border-slate-200 dark:border-white/5 opacity-40 grayscale pointer-events-none'
+                                                                : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-white/10 hover:border-indigo-500/40 hover:bg-indigo-500/5'
                                                             }`}
                                                     >
-                                                        <div className="flex items-center gap-3.5">
-                                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105 ${platform === 'x' ? 'bg-slate-950 border border-white/10' :
+                                                        <div className="flex items-center gap-3">
+                                                            <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105 ${platform === 'x' ? 'bg-slate-950 border border-white/10' :
                                                                 platform === 'telegram' ? 'bg-linear-to-br from-blue-400 to-blue-600' : 'bg-linear-to-br from-blue-600 to-blue-800'
                                                                 }`}>
-                                                                {platform === 'x' && <Twitter size={18} className="text-white" />}
-                                                                {platform === 'telegram' && <Send size={18} className="text-white" />}
-                                                                {platform === 'linkedin' && <Linkedin size={18} className="text-white" />}
+                                                                {platform === 'x' && <Twitter size={16} className="text-white" />}
+                                                                {platform === 'telegram' && <Send size={16} className="text-white" />}
+                                                                {platform === 'linkedin' && <Linkedin size={16} className="text-white" />}
                                                             </div>
-                                                            <div className="text-left space-y-0.5">
-                                                                <span className="text-[13px] font-black uppercase tracking-tight text-brand-text">{platform}</span>
-                                                                <div className={`text-[9px] font-bold uppercase tracking-wider ${isPublished ? 'text-emerald-500' : 'text-brand-muted'}`}>
+                                                            <div className="text-left">
+                                                                <span className="text-[12px] font-black uppercase tracking-tight text-brand-text block">{platform}</span>
+                                                                <div className={`text-[8px] font-bold uppercase tracking-wider ${isPublished ? 'text-emerald-500' : 'text-brand-muted'}`}>
                                                                     {!hasSetup ? t('pro_dashboard.publish.platform_not_configured') : isPublished ? t('pro_dashboard.publish.platform_success') : t('pro_dashboard.publish.platform_tap')}
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         {isPublished ? (
-                                                            <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/40">
-                                                                <CheckCircle2 size={18} className="text-emerald-400" />
+                                                            <div className="w-7 h-7 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/40">
+                                                                <CheckCircle2 size={16} className="text-emerald-400" />
                                                             </div>
                                                         ) : (
-                                                            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/5 group-hover:border-indigo-500/30 transition-colors">
-                                                                <ChevronRight size={18} className="text-brand-muted group-hover:text-indigo-400 transition-colors" />
+                                                            <div className="w-7 h-7 rounded-full bg-slate-50 dark:bg-white/5 flex items-center justify-center border border-slate-200 dark:border-white/5 group-hover:border-indigo-500/30 transition-colors">
+                                                                <ChevronRight size={16} className="text-brand-muted group-hover:text-indigo-400 transition-colors" />
                                                             </div>
                                                         )}
 
                                                         {isPublishing && !isPublished && (
-                                                            <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-xs rounded-[1.5rem] flex items-center justify-center">
-                                                                <Loader2 className="animate-spin w-6 h-6 text-indigo-500" />
+                                                            <div className="absolute inset-0 bg-slate-950/20 dark:bg-slate-950/40 backdrop-blur-xs rounded-2xl flex items-center justify-center">
+                                                                <Loader2 className="animate-spin w-5 h-5 text-indigo-500" />
                                                             </div>
                                                         )}
                                                     </button>
@@ -1468,16 +1685,15 @@ export const ProDashboard = () => {
                                         </div>
                                     </div>
 
-                                    <div className="space-y-4 pt-4">
+                                    <div className="space-y-3 pt-2">
                                         <button
                                             onClick={() => { selection(); setShowPublishModal(false); setStep(1); }}
-                                            className="w-full h-12 bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text transition-all active:scale-95"
+                                            className="w-full h-11 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[9px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text transition-all active:scale-95"
                                         >
                                             {t('pro_dashboard.publish.create_another_btn')}
                                         </button>
-                                        <div className="flex flex-col items-center gap-1 opacity-30">
-                                            <div className="h-px w-12 bg-white/20 mb-1" />
-                                            <p className="text-[9px] font-black uppercase tracking-[0.3em]">
+                                        <div className="flex flex-col items-center gap-1 opacity-20">
+                                            <p className="text-[8px] font-black uppercase tracking-[0.3em] text-brand-text">
                                                 {t('pro_dashboard.publish.footer')}
                                             </p>
                                         </div>
@@ -1486,8 +1702,149 @@ export const ProDashboard = () => {
                             </motion.div>
                         )
                     }
+                </AnimatePresence >
+
+                {/* Asset Detail Modal */}
+                <AnimatePresence>
+                    {selectedAsset && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-102 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xl"
+                            onClick={() => setSelectedAsset(null)}
+                        >
+                            <motion.div
+                                initial={{ scale: 0.95, y: 20, opacity: 0 }}
+                                animate={{ scale: 1, y: 0, opacity: 1 }}
+                                exit={{ scale: 0.95, y: 20, opacity: 0 }}
+                                onClick={(e) => e.stopPropagation()}
+                                className="glass-panel-premium w-full max-w-[340px] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl bg-white dark:bg-slate-900"
+                            >
+                                <div className="p-6 space-y-6">
+                                    <div className="flex justify-between items-start">
+                                        <div className="space-y-1">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-indigo-500">Asset Protocol</span>
+                                            </div>
+                                            <h3 className="text-2xl font-black uppercase tracking-tight text-brand-text leading-none">{selectedAsset.title}</h3>
+                                        </div>
+                                        <button
+                                            onClick={() => { selection(); setSelectedAsset(null); }}
+                                            className="p-2.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl hover:bg-slate-200 dark:hover:bg-white/10 transition-all text-brand-muted"
+                                        >
+                                            <ArrowLeft size={16} />
+                                        </button>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <div className="p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/10">
+                                            <h4 className="text-[10px] font-black uppercase text-indigo-500 mb-2 tracking-widest">HOOK STRATEGY</h4>
+                                            <p className="text-[11px] font-medium text-brand-text/70 leading-relaxed italic pr-4">
+                                                "{selectedAsset.hook}"
+                                            </p>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <h4 className="text-[10px] font-black uppercase text-brand-muted tracking-widest">Important Information</h4>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                {selectedAsset.specs?.map((spec: string, idx: number) => (
+                                                    <div key={idx} className="p-3 bg-slate-50 dark:bg-white/2 rounded-xl border border-slate-200 dark:border-white/5">
+                                                        <p className="text-[8px] font-black text-brand-text/80 uppercase leading-tight line-clamp-2">{spec}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div className="p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/10">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <ShieldCheck size={14} className="text-emerald-500" />
+                                                <h4 className="text-[10px] font-black uppercase text-emerald-500 tracking-widest">Usage Protocol</h4>
+                                            </div>
+                                            <p className="text-[10.5px] font-medium text-brand-text/70 leading-relaxed">
+                                                {selectedAsset.usage}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex gap-3">
+                                        <button
+                                            onClick={() => { handleCopyAnyText(selectedAsset.desc); selection(); }}
+                                            className="flex-1 h-12 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl flex items-center justify-center gap-2 hover:bg-slate-200 dark:hover:bg-white/10 transition-all"
+                                        >
+                                            <Copy size={16} className="text-brand-muted" />
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-brand-text">Copy Key Info</span>
+                                        </button>
+                                        <a
+                                            href="https://drive.google.com/drive/folders/1ASIObhRIBO_RX24pc6hhDpeqTV1G6WUX?usp=sharing"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={() => impact('heavy')}
+                                            className="h-12 px-6 vibing-blue-animated text-white rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-indigo-500/20"
+                                        >
+                                            <Download size={18} />
+                                            <span className="text-[10px] font-black uppercase tracking-widest">Download</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* Article Reader Modal */}
+                <AnimatePresence>
+                    {selectedArticle && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl"
+                            onClick={() => setSelectedArticle(null)}
+                        >
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                                animate={{ scale: 1, opacity: 1, y: 0 }}
+                                exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                                onClick={(e) => e.stopPropagation()}
+                                className="w-full max-w-lg glass-panel-premium rounded-[2.5rem] border border-white/10 overflow-hidden bg-white dark:bg-slate-900 shadow-2xl"
+                            >
+                                <div className="p-8 space-y-6">
+                                    <div className="flex justify-between items-start">
+                                        <div className="space-y-1">
+                                            <div className="flex items-center gap-2">
+                                                <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-[7px] font-black text-indigo-500 uppercase tracking-widest">{selectedArticle.category}</span>
+                                                <span className="text-[7px] font-black text-brand-muted uppercase tracking-widest">{selectedArticle.readTime} min read</span>
+                                            </div>
+                                            <h3 className="text-xl font-black text-brand-text uppercase tracking-tight">{selectedArticle.title}</h3>
+                                        </div>
+                                        <button
+                                            onClick={() => setSelectedArticle(null)}
+                                            className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+                                        >
+                                            <X size={18} className="text-brand-text" />
+                                        </button>
+                                    </div>
+
+                                    <div className="prose prose-sm dark:prose-invert max-h-[60vh] overflow-y-auto no-scrollbar">
+                                        <p className="text-[13px] font-medium leading-relaxed text-brand-muted">
+                                            {selectedArticle.content}
+                                        </p>
+                                    </div>
+
+                                    <button
+                                        onClick={() => setSelectedArticle(null)}
+                                        className="w-full h-12 bg-indigo-500 hover:bg-indigo-600 rounded-2xl font-black text-white text-[10px] uppercase tracking-widest active:scale-95 transition-all shadow-lg"
+                                    >
+                                        I Understand the Protocol
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )}
                 </AnimatePresence>
             </div>
-        </div>
+        </div >
     );
 };

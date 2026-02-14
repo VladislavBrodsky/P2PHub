@@ -10,6 +10,8 @@ export interface PROStatus {
         text_generation: boolean;
         image_generation: boolean;
     };
+    academy_score?: number;
+    completed_stages?: string; // JSON string from backend
     setup?: {
         x_api_key: string;
         x_api_secret: string;
@@ -89,6 +91,11 @@ export const proService = {
 
     generateBio: async (bio: string): Promise<{ bio: string, tokens_remaining: number }> => {
         const response = await apiClient.post('/api/pro/tools/bio', { bio });
+        return response.data;
+    },
+
+    completeAcademyStage: async (stage_id: string): Promise<{ status: string, academy_score: number }> => {
+        const response = await apiClient.post(`/api/pro/academy/complete?stage_id=${stage_id}`, {});
         return response.data;
     }
 };

@@ -26,6 +26,7 @@ class Partner(SQLModel, table=True):
     updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}, index=True)
     completed_tasks: str = Field(default="[]") # Store task IDs as JSON string
     completed_stages: str = Field(default="[]") # Store Academy stage IDs as JSON string
+    academy_score: float = Field(default=0.0) # Track Academy points
 
     # PRO Subscription Status
     is_pro: bool = Field(default=False, index=True)
