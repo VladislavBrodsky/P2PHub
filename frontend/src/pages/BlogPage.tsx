@@ -199,13 +199,13 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => { selection(); setActiveTab?.('home'); }}
-                                    className="p-2 rounded-full bg-(--color-bg-surface) border border-(--color-border-glass) active:scale-90 transition-transform"
+                                    className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 active:scale-90 transition-transform"
                                 >
                                     <ArrowLeft className="w-5 h-5" />
                                 </button>
                                 <div>
                                     <h1 className="text-xl font-black tracking-tight leading-none">{t('blog.title')}</h1>
-                                    <p className="text-[9px] font-bold text-(--color-text-secondary) uppercase tracking-widest opacity-60 mt-1">
+                                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60 mt-1">
                                         {blogPosts.length} {t('blog.latest')}
                                     </p>
                                 </div>

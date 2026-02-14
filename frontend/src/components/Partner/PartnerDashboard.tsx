@@ -92,16 +92,16 @@ export const PartnerDashboard = () => {
 
                 {/* Quick Stats Row */}
                 <div className="grid grid-cols-2 gap-2">
-                    <div className="p-3 rounded-2xl bg-(--color-bg-surface)/60 border border-(--color-border-glass) backdrop-blur-md shadow-sm">
-                        <div className="text-[10px] font-black uppercase tracking-widest text-(--color-text-secondary) mb-1">Total Earned</div>
-                        <div className="text-2xl font-black text-(--color-text-primary)">${(user?.total_earned || 0).toFixed(2)}</div>
+                    <div className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm">
+                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Total Earned</div>
+                        <div className="text-2xl font-black text-slate-900 dark:text-white">${(user?.total_earned || 0).toFixed(2)}</div>
                     </div>
                     <div
-                        className="p-3 rounded-2xl bg-(--color-bg-surface)/60 border border-(--color-border-glass) backdrop-blur-md shadow-sm active:scale-95 transition-transform cursor-pointer relative group overflow-hidden"
+                        className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm active:scale-95 transition-transform cursor-pointer relative group overflow-hidden"
                         onClick={handleExplorerOpen}
                     >
                         <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-colors" />
-                        <div className="text-[10px] font-black uppercase tracking-widest text-(--color-text-secondary) mb-1 flex items-center justify-between">
+                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1 flex items-center justify-between">
                             <span>Network Size</span>
                             <ExternalLink className="w-3 h-3 opacity-50" />
                         </div>
@@ -136,10 +136,10 @@ export const PartnerDashboard = () => {
                                     <BookOpen className="w-3.5 h-3.5" />
                                 </div>
                                 <div className="flex flex-col min-w-0">
-                                    <h3 className="text-xs font-black uppercase tracking-[0.08em] text-(--color-text-primary) leading-tight truncate">
+                                    <h3 className="text-xs font-black uppercase tracking-[0.08em] text-slate-900 dark:text-white leading-tight truncate">
                                         {t('referral.brief.title')}
                                     </h3>
-                                    <span className="text-[9px] font-bold uppercase tracking-widest text-(--color-text-secondary) opacity-60 leading-none mt-0.5">
+                                    <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 opacity-60 leading-none mt-0.5">
                                         {t('referral.brief.guide')}
                                     </span>
                                 </div>
@@ -218,8 +218,8 @@ export const PartnerDashboard = () => {
                                     <div className="w-5 h-5 flex items-center justify-center text-base">🔗</div>
                                 </div>
                                 <div className="flex flex-col gap-0.5 overflow-hidden">
-                                    <span className="font-black text-(--color-text-primary) text-sm tracking-tight">Referral Network Link</span>
-                                    <span className="text-[10px] text-(--color-text-secondary) truncate max-w-[180px] font-mono font-medium opacity-60 leading-none py-0.5">{referralLink}</span>
+                                    <span className="font-black text-slate-900 dark:text-white text-sm tracking-tight">Referral Network Link</span>
+                                    <span className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[180px] font-mono font-medium opacity-60 leading-none py-0.5">{referralLink}</span>
                                 </div>
                             </div>
                             <button
