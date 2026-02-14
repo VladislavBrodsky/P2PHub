@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - **Bot Flow**: Audited and verified `/start` command and image generation pipelines.
+- **Backend Stability**: Resolved `UnboundLocalError` in Academy XP completion and clarified reward logic.
+- **Data Integrity**: Synced 9-level network metrics, Materialized Paths, and depths for all partners (100% accuracy for `uslincoln`).
 
 ## [1.6.1] - 2026-02-13
 ### Changed

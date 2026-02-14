@@ -6,6 +6,11 @@ Use this to see the evolution of individual components.
 ## 🏫 Academy & Community
 **Current Status**: v1.6.1 (Updated)
 
+### v1.7.0 (2026-02-14) - "Go-to-Market"
+- **UX IMPROVEMENT**: Overhauled loading animations for premium logo-free experience.
+- **ACADEMY FIX**: Resolved `UnboundLocalError` when completing already-finished stages; initialized `effective_xp` safely.
+- **DATA ACCURACY**: Fully synchronized 9-level referral counts for all members.
+
 ### v1.6.1 (2026-02-13)
 - **TERMINOLOGY**: Reverted "Grow Hacks" button label back to "Academy" in the Partner section to align with users' expectations and brand clarity.
 - **RUSSIAN LOCALIZATION**: Extensive refinement of "Academy" and "Impact" terminology in `ru.json`.
@@ -36,6 +41,11 @@ Use this to see the evolution of individual components.
 
 ## 🚀 Performance & Infrastructure
 **Current Status**: v1.5.0 (Improved)
+
+### v1.7.0 (2026-02-14)
+- **NETWORK DATA SYNC**: Audited 1,000+ tree relationships; recalculated materialized paths and depths for global network (144 partners).
+- **USLINCOLN AUDIT**: Confirmed 99 partners in tree, verified Mikhail Kovshov (ID 7) is in L1.
+- **ERROR HANDLING**: Implemented safer `generated_media` directory creation in production with /tmp fallbacks.
 
 ### v1.5.0 (2026-02-10)
 - **AUDIT & LOGGING**: Conducted comprehensive project audit. Improved backend lifespan logic and webhook registration resiliency.
