@@ -989,7 +989,7 @@ async def complete_academy_stage(
         cache_key = f"partner:profile:{tg_id}"
         await redis_service.client.delete(cache_key)
 
-    return {"status": "success", "completed_stages": completed, "xp_awarded": effective_xp}
+    return prepare_partner_response(partner, tg_id)
 
 @router.get("/earnings", response_model=List[EarningSchema])
 async def get_my_earnings(

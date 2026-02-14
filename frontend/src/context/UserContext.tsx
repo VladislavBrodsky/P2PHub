@@ -73,16 +73,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const { updateProgress } = useStartupProgress();
 
     const completeStage = React.useCallback(async (id: number) => {
-        // Optimistic update
-        updateUser({
-            completed_stages: user?.completed_stages ? [...user.completed_stages, id] : [id]
-        });
-
         try {
-            await apiClient.post(`/api/partner/academy/stages/${id}/complete`);
+            const response = await apiClient.post(`/api/partner/academy/stages/${id}/complete`);
+            updateUser?.(response.data);
         } catch (error) {
             console.error('Failed to persist stage completion:', error);
-            // Optionally rollback if needed, but usually optimistic is fine for this
         }
     }, [user, updateUser]);
 
@@ -242,6 +237,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             });
             Sentry.setTag("is_pro", user.is_pro);
             Sentry.setTag("level", user.level);
+            Sentry.setTag("referral_code", user.referral_code);
+            Sentry.setTag("network_size", user.total_network_size);
         } else {
             Sentry.setUser(null);
         }
