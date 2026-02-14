@@ -79,7 +79,8 @@ async def cmd_start(message: types.Message):
             share_url = f"https://t.me/share/url?url={urllib.parse.quote(referral_link)}&text={urllib.parse.quote(share_text)}"
             
             # Always show the informative welcome message
-            welcome_text = get_msg(lang, "welcome", referral_link=referral_link, id=partner.id)
+            full_name = f"{partner.first_name or ''} {partner.last_name or ''}".strip() or "Partner"
+            welcome_text = get_msg(lang, "welcome", name=full_name, referral_link=referral_link, id=partner.id)
             
             if is_new:
                 logging.info(f"✨ New partner registered: {partner.id}")

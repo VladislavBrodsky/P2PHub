@@ -1,7 +1,7 @@
 MESSAGES = {
     "en": {
         "welcome": (
-            "💎 **Welcome to Pintopay Partner**\n\n"
+            "💎 **Welcome, {name}!**\n\n"
             "🥳 You are early! \n"
             "You are Elite Partner **#{id}**. \n\n"
             "Join the revolution in Fintech & Web3 payments!\n"
@@ -78,7 +78,7 @@ MESSAGES = {
     },
     "ru": {
         "welcome": (
-            "💎 **Добро пожаловать в Pintopay Partner**\n\n"
+            "💎 **Добро пожаловать, {name}!**\n\n"
             "🥳 Вы в числе первых!\n"
             "Вы стали Элитным Партнером **#{id}**. \n\n"
             "Присоединяйтесь к революции в Fintech и Web3 платежах!\n"
