@@ -44,7 +44,7 @@ export const Footer = () => {
     };
 
     return (
-        <footer className="px-6 pb-8 pt-8 border-t border-(--color-border-glass) bg-(--color-bg-deep) relative z-50">
+        <footer className="px-6 pb-8 pt-8 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-900/50 relative z-50">
             <div className="max-w-md mx-auto space-y-6">
                 {/* Disclaimer Section */}
                 <div className="space-y-3">
@@ -110,7 +110,7 @@ export const Footer = () => {
                                     className="pointer-events-auto bg-(--color-surface) border-t sm:border border-(--color-border-glass) w-full max-w-lg sm:rounded-3xl rounded-t-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col"
                                 >
                                     {/* Header */}
-                                    <div className="p-5 border-b border-(--color-border-glass) flex justify-between items-center bg-(--color-bg-glass) backdrop-blur-xl relative z-10">
+                                    <div className="p-5 border-b border-slate-200 dark:border-white/10 flex justify-between items-center bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl relative z-10">
                                         <div className="flex items-center gap-3">
                                             {activeDoc && (() => {
                                                 const Icon = docContent[activeDoc].icon;
@@ -120,15 +120,15 @@ export const Footer = () => {
                                                     </div>
                                                 );
                                             })()}
-                                            <h3 className="text-sm font-black text-(--color-text-primary) uppercase tracking-wider">
+                                            <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
                                                 {activeDoc && docContent[activeDoc].title}
                                             </h3>
                                         </div>
                                         <button
                                             onClick={() => setActiveDoc(null)}
-                                            className="w-8 h-8 rounded-full bg-(--color-text-primary)/5 hover:bg-(--color-text-primary)/10 flex items-center justify-center transition-colors"
+                                            className="w-8 h-8 rounded-full bg-slate-500/5 hover:bg-slate-500/10 flex items-center justify-center transition-colors"
                                         >
-                                            <X className="w-4 h-4 text-(--color-text-secondary)" />
+                                            <X className="w-4 h-4 text-slate-500 dark:text-slate-400" />
                                         </button>
                                     </div>
 
