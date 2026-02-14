@@ -176,6 +176,17 @@ async def process_referral_logic(partner_id: int):
 
                     # 6. Queue Notification with CORRECT Keys
                     lang = referrer.language_code or "en"
+                    
+                    # #comment: Add interactive "Premium" buttons to the notification.
+                    # This allows referrers to jump directly to their tree stats or the main app,
+                    # creating a high-velocity feedback loop and increasing platform retention.
+                    bot_info = await bot.get_me()
+                    app_link = f"https://t.me/{bot_info.username}/app"
+                    buttons = [[
+                        {"text": "📊 View Network", "url": app_link},
+                        {"text": "🚀 Open App", "url": app_link}
+                    ]]
+
                     if level == 1:
                         msg = get_msg(lang, "referral_l1_congrats", name=new_partner_name, xp=xp_gain)
                     elif level == 2:
@@ -183,7 +194,11 @@ async def process_referral_logic(partner_id: int):
                     else:
                         msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=chain_text, xp=xp_gain)
                     
-                    deferred_tasks.append(notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg))
+                    deferred_tasks.append(notification_service.enqueue_notification(
+                        chat_id=int(referrer.telegram_id), 
+                        text=msg,
+                        buttons=buttons
+                    ))
 
                 except Exception as core_error:
                     logger.error(f"❌ Failed level {level} rewards for {referrer.id}: {core_error}")
@@ -265,10 +280,25 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
 
             try:
                 lang = referrer.language_code or "en"
+                # #comment: Embed "Check Balance" button in commission alerts.
+                # Direct links to financial summaries drive repetitive app usage and
+                # reinforce the reward value of being a partner.
+                from bot import bot
+                bot_info = await bot.get_me()
+                app_link = f"https://t.me/{bot_info.username}/app"
+                buttons = [[
+                    {"text": "💰 Check Balance", "url": app_link},
+                    {"text": "🚀 Open App", "url": app_link}
+                ]]
+
                 # Fixed: Use CORRECT key from i18n.py (commission_received)
                 buyer_name = format_partner_name(partner)
                 msg = get_msg(lang, "commission_received", amount=round(commission, 2), level=level, from_user=buyer_name)
-                await notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg)
+                await notification_service.enqueue_notification(
+                    chat_id=int(referrer.telegram_id), 
+                    text=msg,
+                    buttons=buttons
+                )
             except Exception as e:
                 logger.error(f"Failed to notify {referrer.id} about commission: {e}")
 

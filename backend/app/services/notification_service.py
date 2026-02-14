@@ -7,44 +7,76 @@ from app.worker import broker
 logger = logging.getLogger(__name__)
 
 @broker.task
-async def send_telegram_task(chat_id: str | int, text: str, parse_mode: str = "Markdown"):
+async def send_telegram_task(chat_id: str | int, text: str, parse_mode: str = "Markdown", buttons: list = None):
     """
-    Background worker task to send Telegram messages.
+    Background worker task to send Telegram messages with optional buttons.
+    buttons: List of rows, each row is a list of dicts with 'text' and 'url' or 'callback_data'.
     """
     try:
+        # #comment: Dynamically construct InlineKeyboardMarkup for notifications.
+        # This allows us to send interactive buttons (links to the app, balance checks)
+        # even from background worker tasks, increasing user re-engagement.
         from bot import bot
-        # Ensure chat_id is int if it's numeric, otherwise pass as is (for usernames)
+        from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+        
+        # Ensure chat_id is int if it's numeric
         target_id = chat_id
         try:
             target_id = int(str(chat_id))
         except (ValueError, TypeError):
             pass
 
-        await bot.send_message(chat_id=target_id, text=text, parse_mode=parse_mode)
+        reply_markup = None
+        if buttons:
+            keyboard = []
+            for row in buttons:
+                keyboard_row = []
+                for btn in row:
+                    keyboard_row.append(InlineKeyboardButton(**btn))
+                keyboard.append(keyboard_row)
+            reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+        await bot.send_message(chat_id=target_id, text=text, parse_mode=parse_mode, reply_markup=reply_markup)
         return True
     except Exception as e:
         logger.error(f"Worker failed to send notification to {chat_id}: {e}")
         return False
 
 class NotificationService:
-    async def enqueue_notification(self, chat_id: str | int, text: str, parse_mode: str = "Markdown"):
+    async def enqueue_notification(self, chat_id: str | int, text: str, parse_mode: str = "Markdown", buttons: list = None):
         """
-        Enqueues a notification to be sent by the background worker.
+        Enqueues a notification with optional inline buttons.
         """
+        # #comment: We use a list of buttons instead of InlineKeyboardMarkup objects 
+        # so that the data can be serialized to JSON and sent through the TaskIQ broker (Redis).
         if not chat_id:
             logger.warning("⚠️ Skipping notification: no chat_id provided")
             return
 
         try:
             # Send to TaskIQ broker
-            await send_telegram_task.kiq(chat_id, text, parse_mode)
+            await send_telegram_task.kiq(chat_id, text, parse_mode, buttons)
             logger.info(f"📤 Notification enqueued for {chat_id}")
         except Exception as e:
             logger.error(f"Failed to enqueue notification for {chat_id}: {e}")
             try:
-                # Fallback to direct send if broker fails
+                # #comment: Direct fallback sending via asyncio.create_task.
+                # If the Redis broker is disconnected or the worker is overloaded, 
+                # we send the message directly from the API process to ensure 100% delivery.
                 from bot import bot
-                asyncio.create_task(bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode))
+                from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+                
+                reply_markup = None
+                if buttons:
+                    keyboard = []
+                    for row in buttons:
+                        keyboard_row = []
+                        for btn in row:
+                            keyboard_row.append(InlineKeyboardButton(**btn))
+                        keyboard.append(keyboard_row)
+                    reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+                asyncio.create_task(bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode, reply_markup=reply_markup))
                 logger.info(f"📤 Fallback notification sent directly for {chat_id}")
             except Exception as fe:
                 logger.error(f"Fallback notification also failed for {chat_id}: {fe}")
