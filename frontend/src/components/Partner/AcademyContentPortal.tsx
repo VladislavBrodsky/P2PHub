@@ -50,34 +50,40 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
 
         const main = document.querySelector('main');
         const originalOverflow = main ? main.style.overflow : '';
-        if (main) main.style.overflow = 'hidden';
+        if (main) {
+            main.style.overflow = 'hidden';
+            main.style.height = '100dvh'; // Lock height to prevent TMA rubber-banding
+        }
 
         return () => {
             setHeaderVisible(true);
             setFooterVisible(true);
             setNotificationsVisible(true);
-            if (main) main.style.overflow = originalOverflow;
+            if (main) {
+                main.style.overflow = originalOverflow;
+                main.style.height = '';
+            }
         };
     }, [setHeaderVisible, setFooterVisible, setNotificationsVisible]);
 
     return createPortal(
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-0 sm:p-4 touch-none">
-            {/* Backdrop */}
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-0 sm:p-4">
+            {/* Backdrop - Blocks background interaction */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="absolute inset-0 bg-black/90 backdrop-blur-2xl"
+                className="absolute inset-0 bg-black/90 backdrop-blur-3xl touch-none"
             />
 
-            {/* Modal Content */}
+            {/* Modal Content - Allowed to receive touch events */}
             <motion.div
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 exit={{ y: "100%" }}
-                transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                className="relative w-full h-dvh sm:h-auto sm:max-w-lg bg-white dark:bg-[#030712] sm:rounded-[2rem] shadow-2xl border-t sm:border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col"
+                transition={{ type: "spring", damping: 32, stiffness: 350 }}
+                className="relative w-full h-dvh sm:h-auto sm:max-w-lg bg-white dark:bg-[#030712] sm:rounded-[2rem] shadow-2xl border-t sm:border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col touch-auto"
             >
                 {/* Fixed Header Bar - Premium Glassmorphism with Safe Area support */}
                 <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pb-4 pt-[calc(var(--spacing-safe-top)+2.5rem)] bg-white/80 dark:bg-black/40 backdrop-blur-3xl border-b border-slate-200 dark:border-white/5 shrink-0">

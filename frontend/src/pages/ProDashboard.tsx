@@ -1009,38 +1009,49 @@ export const ProDashboard = () => {
                                 exit={{ opacity: 0, y: -15 }}
                                 className="space-y-6 pb-12"
                             >
-                                {/* Intelligence Report Header */}
-                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 relative overflow-hidden bg-indigo-500/5 shadow-xl">
-                                    <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-indigo-500/30 to-transparent" />
-                                    <div className="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500/10 blur-[60px] rounded-full animate-pulse" />
+                                {/* Intelligence Report Header - Elite Data Visualization */}
+                                <div className="glass-panel-premium p-7 rounded-[2.5rem] border border-white/5 relative overflow-hidden bg-slate-900 shadow-3xl group">
+                                    <div className="absolute inset-x-0 top-0 h-[2px] bg-linear-to-r from-transparent via-indigo-500 to-transparent opacity-50" />
+                                    <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/20 blur-[100px] rounded-full animate-pulse" />
+                                    <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full" />
 
-                                    <div className="relative z-1">
-                                        <div className="flex items-center gap-2">
-                                            <div className="px-2 py-0.5 bg-indigo-500/10 rounded-full border border-indigo-500/20 flex items-center gap-1.5">
-                                                <div className="w-1 h-1 rounded-full bg-red-500 animate-pulse" />
-                                                <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">Growth Expert Protocol</span>
+                                    <div className="relative z-10 flex justify-between items-start mb-6">
+                                        <div className="space-y-4">
+                                            <div className="flex items-center gap-2">
+                                                <div className="px-3 py-1 bg-indigo-500/15 rounded-full border border-indigo-500/30 flex items-center gap-2">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+                                                    <span className="text-[8px] font-black text-indigo-100 uppercase tracking-[0.3em]">Viral Intelligence active</span>
+                                                </div>
                                             </div>
+                                            <h3 className="text-3xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-lg">
+                                                {t('pro_dashboard.academy.protocols.title')}
+                                            </h3>
                                         </div>
-                                        <h3 className="text-2xl font-black text-brand-text tracking-tight uppercase leading-none">
-                                            {t('pro_dashboard.academy.protocols.title')}
-                                        </h3>
-                                        <div className="text-right">
-                                            <p className="text-[8px] font-black text-brand-muted uppercase tracking-widest mb-1">{t('pro_dashboard.academy.protocols.stats_label')}</p>
-                                            <div className="text-2xl font-black text-indigo-500 tabular-nums leading-none">{academyScore}</div>
+                                        <div className="text-right group/score">
+                                            <p className="text-[10px] font-black text-indigo-300/60 uppercase tracking-[0.3em] mb-1.5">{t('pro_dashboard.academy.protocols.stats_label')}</p>
+                                            <div className="text-4xl font-black text-white tabular-nums leading-none group-hover:scale-110 transition-transform duration-500">
+                                                {academyScore}<span className="text-indigo-500">.0</span>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between items-center text-[8px] font-black uppercase tracking-widest text-brand-muted">
-                                            <span>{t('pro_dashboard.academy.protocols.progress_label')}</span>
-                                            <span>{Math.round((completedStages.length / 5) * 100)}%</span>
+                                    <div className="space-y-3 relative z-10">
+                                        <div className="flex justify-between items-end text-[9px] font-black uppercase tracking-[0.25em] text-indigo-200/50">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-1 h-3 bg-indigo-500 rounded-full" />
+                                                <span>{t('pro_dashboard.academy.protocols.progress_label')}</span>
+                                            </div>
+                                            <span className="text-indigo-400">{Math.round((completedStages.length / 5) * 100)}% COMPLETE</span>
                                         </div>
-                                        <div className="h-2 w-full bg-slate-200 dark:bg-white/5 rounded-full border border-white/5 overflow-hidden">
+                                        <div className="h-3 w-full bg-black/40 rounded-full border border-white/5 overflow-hidden p-0.5 shadow-inner">
                                             <motion.div
                                                 initial={{ width: 0 }}
                                                 animate={{ width: `${(completedStages.length / 5) * 100}%` }}
-                                                className="h-full bg-linear-to-r from-indigo-500 to-purple-500 rounded-full"
-                                            />
+                                                transition={{ duration: 1, ease: "easeOut" }}
+                                                className="h-full bg-linear-to-r from-indigo-600 via-indigo-400 to-purple-500 rounded-full relative overflow-hidden"
+                                            >
+                                                <div className="absolute inset-0 bg-white/20 -skew-x-12 translate-x-full animate-shimmer-slide" />
+                                            </motion.div>
                                         </div>
                                     </div>
                                 </div>
@@ -1211,111 +1222,158 @@ export const ProDashboard = () => {
                                 </div>
 
                                 {/* Viral Assets Bento Grid - #comment: Elite design blueprints in a high-impact grid */}
-                                <div className="space-y-6">
-                                    <div className="flex items-center justify-between px-1">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-lg relative overflow-hidden group">
-                                                <div className="absolute inset-0 bg-indigo-500/10 animate-pulse" />
-                                                <ImageIcon size={22} className="text-indigo-500 relative z-10" />
+                                <div className="space-y-8 mt-4">
+                                    <div className="flex items-center justify-between px-2">
+                                        <div className="flex items-center gap-5">
+                                            <div className="w-14 h-14 bg-indigo-500/10 rounded-[1.25rem] flex items-center justify-center border border-indigo-500/20 shadow-2xl relative overflow-hidden group">
+                                                <div className="absolute inset-0 bg-indigo-500/5 animate-pulse" />
+                                                <div className="absolute -inset-1 bg-linear-to-tr from-transparent via-indigo-500/10 to-transparent rotate-45 group-hover:rotate-180 transition-transform duration-1000" />
+                                                <ImageIcon size={26} className="text-indigo-500 relative z-10 drop-shadow-sm" />
                                             </div>
                                             <div>
-                                                <h4 className="text-xs font-black uppercase tracking-[0.15em] text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.viral_assets.title')}</h4>
-                                                <p className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.2em]">{t('pro_dashboard.academy.viral_assets.subtitle')}</p>
+                                                <h4 className="text-sm font-black uppercase tracking-[0.2em] text-brand-text leading-none mb-2">{t('pro_dashboard.academy.viral_assets.title')}</h4>
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                                                    <p className="text-[10px] font-black text-indigo-500/80 uppercase tracking-[0.3em]">{t('pro_dashboard.academy.viral_assets.subtitle')}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* Media Kit CTA - Bento Header */}
+                                    {/* Media Kit CTA - Mega Premium Card */}
                                     <a
                                         href="https://drive.google.com/drive/folders/1ASIObhRIBO_RX24pc6hhDpeqTV1G6WUX?usp=sharing"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         onClick={() => impact('heavy')}
-                                        className="block group relative overflow-hidden rounded-[2.5rem] p-6 border border-white/20 shadow-2xl active:scale-[0.99] transition-all"
+                                        className="block group relative overflow-hidden rounded-[3rem] p-1 border border-white/20 shadow-3xl active:scale-[0.98] transition-all duration-500"
                                     >
-                                        <div className="absolute inset-0 vibing-blue-animated" />
-                                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-[60px] translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-                                        <div className="relative z-10 flex items-center justify-between">
-                                            <div className="space-y-2">
-                                                <div className="flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full w-fit border border-white/20">
-                                                    <Sparkles size={12} className="text-white" />
-                                                    <span className="text-[8px] font-black uppercase tracking-widest text-white">PRO RESOURCE 2026</span>
+                                        <div className="absolute inset-0 vibing-blue-animated opacity-95 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+
+                                        {/* Abstract Glass Glows */}
+                                        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 blur-[100px] translate-x-1/2 -translate-y-1/2 pointer-events-none animate-pulse" />
+                                        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-black/10 blur-[80px] pointer-events-none" />
+
+                                        <div className="relative z-10 glass-panel-premium bg-white/5 border-white/10 rounded-[2.8rem] p-7 flex items-center justify-between overflow-hidden">
+                                            {/* Shimmer Effect overlay */}
+                                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1500 pointer-events-none" />
+
+                                            <div className="space-y-4">
+                                                <div className="flex items-center gap-3 px-4 py-1.5 bg-white/15 backdrop-blur-2xl rounded-full w-fit border border-white/20 shadow-lg">
+                                                    <Sparkles size={12} className="text-white animate-pulse" />
+                                                    <span className="text-[9px] font-black uppercase tracking-[0.25em] text-white">PRO RESOURCE 2026</span>
                                                 </div>
-                                                <h3 className="text-lg font-black text-white uppercase tracking-tight leading-tight">
+                                                <h3 className="text-2xl font-black text-white uppercase tracking-tight leading-tight drop-shadow-2xl">
                                                     {t('pro_dashboard.academy.viral_assets.media_kit_btn')}
                                                 </h3>
+                                                <div className="flex items-center gap-2 opacity-70">
+                                                    <CheckCircle2 size={12} className="text-white" />
+                                                    <span className="text-[9px] font-bold text-white uppercase tracking-widest">8K High-Res Assets Included</span>
+                                                </div>
                                             </div>
-                                            <div className="w-12 h-12 bg-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-center border border-white/30 group-hover:scale-110 group-hover:rotate-12 transition-all">
-                                                <Download size={22} className="text-white" />
+
+                                            <div className="w-16 h-16 bg-white/10 backdrop-blur-3xl rounded-[1.75rem] flex items-center justify-center border border-white/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-2xl">
+                                                <Download size={28} className="text-white drop-shadow-lg" />
                                             </div>
                                         </div>
                                     </a>
 
-                                    {/* Bento Grid Layout */}
-                                    <div className="grid grid-cols-2 gap-4">
+                                    {/* Bento Grid Layout - Enhanced Visual Depth */}
+                                    <div className="grid grid-cols-2 gap-5">
                                         {(t('pro_dashboard.academy.viral_assets.cards', { returnObjects: true }) as any[]).map((card: any, i: number) => {
                                             const isLarge = card.id === 'off_grid';
                                             return (
                                                 <motion.div
                                                     key={card.id}
-                                                    initial={{ opacity: 0, y: 20 }}
+                                                    initial={{ opacity: 0, y: 30 }}
                                                     whileInView={{ opacity: 1, y: 0 }}
                                                     viewport={{ once: true }}
-                                                    transition={{ delay: i * 0.1 }}
-                                                    className={`glass-panel-premium relative overflow-hidden rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-xl group hover:shadow-2xl transition-all ${isLarge ? 'col-span-2 p-6' : 'col-span-1 p-5'
-                                                        }`}
+                                                    transition={{ delay: i * 0.1, duration: 0.6 }}
+                                                    className={`glass-panel-premium relative overflow-hidden rounded-[2.5rem] border group transition-all duration-500 cursor-pointer ${isLarge
+                                                        ? 'col-span-2 p-8 bg-white/40 dark:bg-slate-900/40 border-slate-200/50 dark:border-white/15 shadow-2xl'
+                                                        : 'col-span-1 p-6 bg-white/30 dark:bg-slate-900/30 border-slate-200/30 dark:border-white/10 shadow-xl'
+                                                        } hover:shadow-indigo-500/20 hover:-translate-y-1`}
+                                                    onClick={() => { setSelectedAsset(card); impact('light'); }}
                                                 >
-                                                    <div className={`absolute top-0 right-0 w-32 h-32 blur-3xl opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity ${card.id === 'off_grid' ? 'bg-indigo-500' :
+                                                    {/* Dynamic Background Glows */}
+                                                    <div className={`absolute top-0 right-0 w-48 h-48 blur-[80px] opacity-10 pointer-events-none group-hover:opacity-30 transition-opacity duration-1000 ${card.id === 'off_grid' ? 'bg-indigo-500' :
                                                         card.id === 'logos' ? 'bg-amber-500' :
                                                             card.id === 'identity' ? 'bg-blue-500' : 'bg-pink-500'
                                                         }`} />
 
-                                                    <div className="relative z-10 flex flex-col h-full justify-between gap-4" onClick={() => { setSelectedAsset(card); impact('light'); }}>
-                                                        <div className="space-y-4">
-                                                            <div className="flex items-center justify-between">
-                                                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shadow-sm ${card.id === 'off_grid' ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-500' :
+                                                    <div className="relative z-10 flex flex-col h-full gap-6">
+                                                        <div className={`flex items-start justify-between ${isLarge ? 'flex-row' : 'flex-col gap-4'}`}>
+                                                            <div className="space-y-4">
+                                                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl transition-transform duration-500 group-hover:scale-110 ${card.id === 'off_grid' ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-500' :
                                                                     card.id === 'logos' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500' :
                                                                         card.id === 'identity' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500' : 'bg-pink-500/10 border-pink-500/20 text-pink-500'
                                                                     }`}>
-                                                                    {card.id === 'off_grid' && <Compass size={18} />}
-                                                                    {card.id === 'logos' && <Wand2 size={18} />}
-                                                                    {card.id === 'identity' && <Terminal size={18} />}
-                                                                    {card.id === 'palette' && <Cpu size={18} />}
+                                                                    {card.id === 'off_grid' && <Compass size={22} />}
+                                                                    {card.id === 'logos' && <Wand2 size={22} />}
+                                                                    {card.id === 'identity' && <Terminal size={22} />}
+                                                                    {card.id === 'palette' && <Cpu size={22} />}
                                                                 </div>
-                                                                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-950/5 dark:bg-white/5 rounded-full border border-slate-200 dark:border-white/10">
-                                                                    <div className={`w-1 h-1 rounded-full animate-pulse ${isLarge ? 'bg-red-500' : 'bg-indigo-500'}`} />
-                                                                    <span className="text-[7px] font-black uppercase tracking-widest text-brand-muted">
-                                                                        {card.id === 'palette' ? 'CSS VARS' : 'VECTOR HV'}
-                                                                    </span>
-                                                                </div>
+
+                                                                {!isLarge && (
+                                                                    <div className="space-y-1.5">
+                                                                        <h5 className="text-[13px] font-black text-brand-text uppercase tracking-tight leading-tight group-hover:text-indigo-500 transition-colors">
+                                                                            {card.title}
+                                                                        </h5>
+                                                                        <p className="text-[9px] font-black text-indigo-500/80 uppercase tracking-widest px-2 py-0.5 bg-indigo-500/5 rounded-md w-fit border border-indigo-500/10">
+                                                                            {card.hook}
+                                                                        </p>
+                                                                    </div>
+                                                                )}
                                                             </div>
 
-                                                            <div className="space-y-1.5">
-                                                                <div className="flex items-center justify-between gap-2">
-                                                                    <h5 className={`${isLarge ? 'text-xl' : 'text-xs'} font-black text-brand-text uppercase tracking-tight leading-tight group-hover:text-indigo-500 transition-colors`}>
-                                                                        {card.title}
-                                                                    </h5>
-                                                                    {!isLarge && <Info size={12} className="text-brand-muted opacity-40" />}
-                                                                </div>
-                                                                <p className={`${isLarge ? 'text-[11px]' : 'text-[9px]'} font-bold text-indigo-500/80 uppercase tracking-widest`}>
-                                                                    {card.hook}
-                                                                </p>
+                                                            <div className="flex items-center gap-2 px-3 py-1 bg-slate-950/5 dark:bg-white/5 rounded-full border border-slate-200 dark:border-white/10 shadow-sm self-start">
+                                                                <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${isLarge ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]' : 'bg-indigo-500'}`} />
+                                                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-brand-muted">
+                                                                    {card.id === 'palette' ? 'CSS VARS' : 'VECTOR HV'}
+                                                                </span>
                                                             </div>
-
-                                                            <p className={`${isLarge ? 'text-[13px]' : 'text-[10px]'} font-medium text-brand-muted leading-relaxed line-clamp-2`}>
-                                                                {card.desc}
-                                                            </p>
                                                         </div>
 
                                                         {isLarge && (
-                                                            <div className="mt-2 flex gap-3">
-                                                                <button onClick={(e) => { e.stopPropagation(); handleCopyAnyText(card.desc); selection(); impact('light'); }} className="flex-1 h-11 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex items-center justify-center gap-2 group/btn hover:bg-slate-200 dark:hover:bg-white/10 transition-all active:scale-[0.98]">
-                                                                    <Copy size={14} className="text-brand-muted group-hover/btn:text-indigo-500 transition-colors" />
-                                                                    <span className="text-[9px] font-black uppercase tracking-widest text-brand-text">Copy Info</span>
+                                                            <div className="space-y-2">
+                                                                <h5 className="text-2xl font-black text-brand-text uppercase tracking-tighter leading-none group-hover:text-indigo-500 transition-colors">
+                                                                    {card.title}
+                                                                </h5>
+                                                                <p className="text-[11px] font-black text-indigo-500/80 uppercase tracking-[0.25em]">
+                                                                    {card.hook}
+                                                                </p>
+                                                            </div>
+                                                        )}
+
+                                                        <p className={`${isLarge ? 'text-sm' : 'text-[11px]'} font-medium text-brand-muted leading-relaxed line-clamp-2 opacity-80`}>
+                                                            {card.desc}
+                                                        </p>
+
+                                                        {isLarge && (
+                                                            <div className="mt-2 flex gap-4 items-center">
+                                                                <button
+                                                                    onClick={(e) => { e.stopPropagation(); handleCopyAnyText(card.desc); selection(); impact('light'); }}
+                                                                    className="flex-1 h-14 bg-white/5 hover:bg-white/10 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200/50 dark:border-white/10 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.97] shadow-lg group/btn"
+                                                                >
+                                                                    <div className="w-8 h-8 rounded-xl bg-indigo-500/10 flex items-center justify-center group-hover/btn:bg-indigo-500/20 transition-colors">
+                                                                        <Copy size={14} className="text-indigo-500" />
+                                                                    </div>
+                                                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-text">Copy Logic</span>
                                                                 </button>
-                                                                <button onClick={(e) => { e.stopPropagation(); setSelectedAsset(card); impact('heavy'); }} className="h-11 w-11 bg-indigo-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 active:scale-[0.98] transition-all">
-                                                                    <ChevronRight size={18} />
+
+                                                                <button
+                                                                    onClick={(e) => { e.stopPropagation(); setSelectedAsset(card); impact('heavy'); }}
+                                                                    className="h-14 w-14 vibing-blue-animated rounded-2xl flex items-center justify-center shadow-2xl active:scale-[0.95] transition-all group/arrow"
+                                                                >
+                                                                    <ChevronRight size={22} className="group-hover:translate-x-1 transition-transform" />
                                                                 </button>
+                                                            </div>
+                                                        )}
+
+                                                        {!isLarge && (
+                                                            <div className="pt-2 flex justify-between items-center border-t border-slate-200/20 dark:border-white/5">
+                                                                <span className="text-[9px] font-black text-brand-muted/50 uppercase tracking-widest">Protocol V4.2</span>
+                                                                <Info size={12} className="text-indigo-500 opacity-20 group-hover:opacity-60 transition-opacity" />
                                                             </div>
                                                         )}
                                                     </div>
@@ -1325,40 +1383,46 @@ export const ProDashboard = () => {
                                     </div>
                                 </div>
 
-                                {/* Lifehacks & Setup Stack */}
-                                <div className="grid grid-cols-1 gap-4">
-                                    <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 relative overflow-hidden group bg-pink-500/5 shadow-xl">
-                                        <div className="flex items-center gap-3 mb-6">
-                                            <div className="w-10 h-10 bg-pink-500/10 rounded-xl flex items-center justify-center border border-pink-500/20 shadow-sm">
-                                                <Flame size={18} className="text-pink-500" />
+                                {/* Lifehacks & Setup Stack - Elite Integration Cards */}
+                                <div className="grid grid-cols-1 gap-6">
+                                    <div className="glass-panel-premium p-7 rounded-[2.5rem] border border-white/10 relative overflow-hidden group bg-white/40 dark:bg-slate-900/40 shadow-2xl transition-all duration-500 hover:shadow-pink-500/10 hover:-translate-y-1">
+                                        <div className="absolute top-0 right-0 w-48 h-48 bg-pink-500/5 blur-[80px] pointer-events-none group-hover:opacity-20 transition-opacity" />
+
+                                        <div className="flex items-center gap-4 mb-8">
+                                            <div className="w-12 h-12 bg-pink-500/10 rounded-2xl flex items-center justify-center border border-pink-500/20 shadow-xl group-hover:scale-110 transition-transform">
+                                                <Flame size={24} className="text-pink-500" />
                                             </div>
                                             <div>
-                                                <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-text leading-none mb-1">{t('pro_dashboard.academy.lifehacks.title')}</h4>
-                                                <span className="text-[7px] font-black text-brand-muted uppercase tracking-[0.2em]">{t('pro_dashboard.academy.lifehacks.subtitle')}</span>
+                                                <h4 className="text-[12px] font-black uppercase tracking-[0.25em] text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.lifehacks.title')}</h4>
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-4 h-0.5 bg-pink-500 rounded-full" />
+                                                    <span className="text-[8px] font-black text-brand-muted uppercase tracking-[0.3em]">{t('pro_dashboard.academy.lifehacks.subtitle')}</span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="space-y-2.5">
+
+                                        <div className="space-y-4">
                                             {(t('pro_dashboard.academy.lifehacks.items', { returnObjects: true }) as any[]).map((hack: any, i: number) => (
-                                                <div key={i} className="flex gap-3 p-3 bg-white/5 rounded-xl border border-white/5 hover:border-pink-500/20 transition-all group/hack active:scale-[0.99] cursor-default">
-                                                    <div className="w-7 h-7 rounded-lg bg-pink-500/5 flex items-center justify-center text-pink-500 font-black text-[9px] shrink-0 border border-pink-500/10 shadow-inner">{i + 1}</div>
-                                                    <div>
-                                                        <h5 className="text-[9px] font-black uppercase text-brand-text tracking-tight mb-0.5">{hack.title}</h5>
-                                                        <p className="text-[8.5px] font-medium text-brand-muted leading-relaxed italic opacity-60 line-clamp-1">{hack.desc}</p>
+                                                <div key={i} className="flex gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-pink-500/20 transition-all group/hack cursor-default shadow-sm hover:shadow-md">
+                                                    <div className="w-9 h-9 rounded-xl bg-pink-500/10 flex items-center justify-center text-pink-500 font-black text-xs shrink-0 border border-pink-500/10 shadow-inner group-hover/hack:scale-110 transition-transform">{i + 1}</div>
+                                                    <div className="space-y-1">
+                                                        <h5 className="text-[11px] font-black uppercase text-brand-text tracking-tight">{hack.title}</h5>
+                                                        <p className="text-[10px] font-medium text-brand-muted leading-relaxed italic opacity-70 line-clamp-1">"{hack.desc}"</p>
                                                     </div>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
 
-                                    <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/5 relative overflow-hidden bg-indigo-500/2 shadow-xl">
-                                        <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-indigo-500/5 blur-[50px] rounded-full" />
-                                        <div className="flex items-center gap-3 mb-6 relative z-10">
-                                            <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-sm">
-                                                <Globe size={18} className="text-indigo-500" />
+                                    <div className="glass-panel-premium p-7 rounded-[2.5rem] border border-white/10 relative overflow-hidden group bg-slate-950 shadow-3xl">
+                                        <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none" />
+                                        <div className="flex items-center gap-4 mb-8 relative z-10 font-sans">
+                                            <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-xl group-hover:rotate-6 transition-transform">
+                                                <Globe size={24} className="text-indigo-500" />
                                             </div>
                                             <div>
-                                                <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-text leading-none mb-1">{t('pro_dashboard.academy.social_setup.title')}</h4>
-                                                <span className="text-[7px] font-black text-brand-muted uppercase tracking-[0.2em]">{t('pro_dashboard.academy.social_setup.subtitle')}</span>
+                                                <h4 className="text-[12px] font-black uppercase tracking-[0.25em] text-white leading-none mb-1.5">{t('pro_dashboard.academy.social_setup.title')}</h4>
+                                                <p className="text-[8px] font-black text-indigo-400 uppercase tracking-[0.3em]">{t('pro_dashboard.academy.social_setup.subtitle')}</p>
                                             </div>
                                         </div>
 
@@ -1437,54 +1501,59 @@ export const ProDashboard = () => {
 
                                     <div className="flex-1 overflow-y-auto no-scrollbar space-y-5 pr-1 py-1">
                                         {/* Deployment Guide - Premium Steps */}
-                                        <div className="p-5 bg-linear-to-br from-indigo-500/5 to-purple-500/5 rounded-[2rem] border border-indigo-500/15 relative overflow-hidden group shadow-sm">
-                                            {/* Fixed background icon glitch - using subtle glowing marker instead */}
-                                            <div className="absolute -right-6 -top-6 w-32 h-32 bg-indigo-500/10 blur-3xl rounded-full pointer-events-none group-hover:bg-indigo-500/15 transition-colors duration-700" />
+                                        <div className="p-6 bg-slate-950 rounded-[2.5rem] border border-indigo-500/20 relative overflow-hidden group shadow-2xl">
+                                            <div className="absolute -right-10 -top-10 w-40 h-40 bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none group-hover:bg-indigo-500/20 transition-all duration-1000" />
 
-                                            <div className="flex items-center justify-between mb-4 relative z-10">
-                                                <h4 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500">
-                                                    <BookOpen size={12} /> SYNC PROTOCOL GUIDE
-                                                </h4>
-                                                <div className="px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[7px] font-black text-indigo-500 uppercase tracking-widest">
-                                                    Step-By-Step
+                                            <div className="flex items-center justify-between mb-6 relative z-10">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 bg-indigo-500/10 rounded-xl border border-indigo-500/20 flex items-center justify-center shadow-lg">
+                                                        <Zap size={18} className="text-indigo-500 animate-pulse" />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-indigo-400 leading-none mb-1">SYNC PROTOCOL</h4>
+                                                        <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Global Node Deployment</p>
+                                                    </div>
+                                                </div>
+                                                <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+                                                    <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">SECURE LINK</span>
                                                 </div>
                                             </div>
 
-                                            <div className="space-y-4 relative z-10">
+                                            <div className="space-y-6 relative z-10">
                                                 <div className="flex gap-4">
-                                                    <div className="flex flex-col items-center gap-1">
-                                                        <div className="w-6 h-6 rounded-full bg-indigo-500 flex items-center justify-center text-[10px] font-black text-white shrink-0">1</div>
-                                                        <div className="w-0.5 h-full bg-indigo-500/20 rounded-full" />
+                                                    <div className="flex flex-col items-center gap-1.5 shrink-0">
+                                                        <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-[11px] font-black text-indigo-400">01</div>
+                                                        <div className="w-[2px] h-full bg-linear-to-b from-indigo-500/30 to-transparent rounded-full" />
                                                     </div>
-                                                    <div className="pb-2">
-                                                        <h5 className="text-[11px] font-black text-brand-text uppercase tracking-wide mb-1">X (Twitter) Developer Access</h5>
-                                                        <p className="text-[10px] font-bold text-brand-muted leading-relaxed">
-                                                            Visit <a href="https://developer.x.com" target="_blank" className="text-indigo-500 underline decoration-indigo-500/30 hover:decoration-indigo-500">developer.x.com</a>, create an App, and enable <span className="text-brand-text">OAuth 1.0a</span> with <span className="text-indigo-500">Read & Write</span> permissions.
+                                                    <div className="pb-1">
+                                                        <h5 className="text-[12px] font-black text-white uppercase tracking-wide mb-1.5">X Dev Environment</h5>
+                                                        <p className="text-[10px] font-medium text-slate-400 leading-relaxed">
+                                                            Initialize App at <a href="https://developer.x.com" target="_blank" className="text-indigo-400 underline decoration-indigo-400/30 hover:text-indigo-300">developer.x.com</a>. Grant <span className="text-indigo-400 font-bold">Read/Write</span> access via OAuth 1.0a.
                                                         </p>
                                                     </div>
                                                 </div>
 
                                                 <div className="flex gap-4">
-                                                    <div className="flex flex-col items-center gap-1">
-                                                        <div className="w-6 h-6 rounded-full bg-indigo-500 flex items-center justify-center text-[10px] font-black text-white shrink-0">2</div>
-                                                        <div className="w-0.5 h-full bg-indigo-500/20 rounded-full" />
+                                                    <div className="flex flex-col items-center gap-1.5 shrink-0">
+                                                        <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-[11px] font-black text-indigo-400">02</div>
+                                                        <div className="w-[2px] h-full bg-linear-to-b from-indigo-500/30 to-transparent rounded-full" />
                                                     </div>
-                                                    <div className="pb-2">
-                                                        <h5 className="text-[11px] font-black text-brand-text uppercase tracking-wide mb-1">Telegram Bot Integration</h5>
-                                                        <p className="text-[10px] font-bold text-brand-muted leading-relaxed">
-                                                            Add <span className="text-indigo-500">@ViralStudioBot</span> to your channel as an <span className="text-brand-text">Admin</span>. Ensure 'Post Messages' permission is enabled for automated sync.
+                                                    <div className="pb-1">
+                                                        <h5 className="text-[12px] font-black text-white uppercase tracking-wide mb-1.5">Telegram Broadcast Node</h5>
+                                                        <p className="text-[10px] font-medium text-slate-400 leading-relaxed">
+                                                            Authorize <span className="text-indigo-400 font-bold">@ViralStudioBot</span> as Admin in your target channel for automated cross-platform sync.
                                                         </p>
                                                     </div>
                                                 </div>
 
                                                 <div className="flex gap-4">
-                                                    <div className="flex flex-col items-center">
-                                                        <div className="w-6 h-6 rounded-full bg-indigo-500 flex items-center justify-center text-[10px] font-black text-white shrink-0">3</div>
+                                                    <div className="flex flex-col items-center shrink-0">
+                                                        <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-[11px] font-black text-indigo-400">03</div>
                                                     </div>
                                                     <div>
-                                                        <h5 className="text-[11px] font-black text-brand-text uppercase tracking-wide mb-1">Sync & Verify</h5>
-                                                        <p className="text-[10px] font-bold text-brand-muted leading-relaxed">
-                                                            Paste your keys below and use the <span className="text-emerald-500">Test Connection</span> feature to verify your 24/7 viral ecosystem reach.
+                                                        <h5 className="text-[12px] font-black text-white uppercase tracking-wide mb-1.5">Protocol Verification</h5>
+                                                        <p className="text-[10px] font-medium text-slate-400 leading-relaxed">
+                                                            Inject API tokens below and execute <span className="text-emerald-400 font-bold">System Test</span> to verify 2026 reach capability.
                                                         </p>
                                                     </div>
                                                 </div>
