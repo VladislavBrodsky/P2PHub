@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 // #comment: Removed unused apiClient, Skeleton and PageSkeleton imports to clean up the dependency list
 import { NotificationOverlay } from './components/ui/NotificationOverlay';
 import { useRealtimeAlerts } from './hooks/useRealtimeAlerts';
-import { OnboardingStory } from './components/Onboarding/OnboardingStory';
+// import { OnboardingStory } from './components/Onboarding/OnboardingStory';
 import { useConfig } from './context/ConfigContext';
 import { FeatureErrorBoundary } from './components/FeatureErrorBoundary';
 import { StartupLoader } from './components/ui/StartupLoader';
@@ -38,6 +38,8 @@ import { UIProvider } from './context/UIContext';
 
 // #comment: Removed hard import of SupportChat to enable the Lazy load strategy defined above.
 import { useUI } from './context/UIContext';
+
+const OnboardingStory = lazy(() => import('./components/Onboarding/OnboardingStory').then(m => ({ default: m.OnboardingStory })));
 
 function AppContent({ onReady }: { onReady: () => void }) {
     const { t } = useTranslation();
@@ -252,22 +254,22 @@ function App() {
     const { t } = useTranslation();
     const { isLoading: isConfigLoading } = useConfig();
     const { progress, status, isComplete, complete, updateProgress } = useStartupProgress();
-    const [showOnboarding, setShowOnboarding] = useState(false);
 
-    // Initial check for onboarding to avoid flash if possible
-    useEffect(() => {
-        const hasOnboarded = localStorage.getItem('p2p_onboarded');
-        if (!hasOnboarded) {
-            setShowOnboarding(true);
+    // Initialize from localStorage to avoid effect flash
+    const [showOnboarding, setShowOnboarding] = useState(() => {
+        try {
+            return !localStorage.getItem('p2p_onboarded');
+        } catch {
+            return false;
         }
-    }, []);
+    });
 
     // #comment: Parallel Initialization Strategy
     // Instead of sequential waiting, we trigger config/user fetches and prefetch the dashboard
     // code immediately. This concurrently loads data and JS bundles while the StartupLoader 
     // provides smooth visual feedback to the user.
     useEffect(() => {
-        if (!isConfigLoading) {
+        if (!isConfigLoading && !showOnboarding) {
             updateProgress(50, t('system.loading.config_loaded'));
 
             // #comment: Aggressive Prefetch Strategy
@@ -294,7 +296,7 @@ function App() {
 
             prefetchCoreRoutes();
         }
-    }, [isConfigLoading, updateProgress, t]);
+    }, [isConfigLoading, showOnboarding, updateProgress, t]);
 
     return (
         <UIProvider>
@@ -317,12 +319,14 @@ function App() {
                 <LazyMotion features={domAnimation}>
                     <AnimatePresence mode="wait">
                         {showOnboarding && (
-                            <OnboardingStory
-                                onComplete={() => {
-                                    setShowOnboarding(false);
-                                    localStorage.setItem('p2p_onboarded', 'true');
-                                }}
-                            />
+                            <Suspense fallback={null}>
+                                <OnboardingStory
+                                    onComplete={() => {
+                                        setShowOnboarding(false);
+                                        localStorage.setItem('p2p_onboarded', 'true');
+                                    }}
+                                />
+                            </Suspense>
                         )}
                     </AnimatePresence>
                     <AppContent onReady={complete} />
