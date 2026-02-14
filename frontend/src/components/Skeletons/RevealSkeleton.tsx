@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 export const RevealSkeleton = () => {
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-(--color-bg-deep) z-[60] backdrop-blur-sm">
+        <div className="fixed inset-0 flex items-center justify-center bg-slate-50 dark:bg-slate-950 z-[60] backdrop-blur-sm">
             {/* Ambient Background Glow */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] max-w-[500px] max-h-[500px] bg-blue-500/10 rounded-full blur-[120px] animate-pulse" />
