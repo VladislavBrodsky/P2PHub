@@ -50,7 +50,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.01 }}
-                className="relative overflow-hidden rounded-[3.5rem] bg-(--color-bg-surface) dark:bg-neutral-950 text-(--color-text-primary) dark:text-white p-6 md:p-10 space-y-10 border border-(--color-border-glass) shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
+                className="relative overflow-hidden rounded-[3.5rem] bg-white dark:bg-neutral-950 text-slate-900 dark:text-white p-6 md:p-10 space-y-10 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
             >
                 {/* Background Glow */}
                 <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/30 blur-[120px] pointer-events-none animate-pulse" />
@@ -87,20 +87,20 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 </div>
 
                 {/* Dual Mode Calculator */}
-                <div className="p-6 rounded-[2.5rem] bg-(--color-bg-app)/50 border border-(--color-border-glass) space-y-6 relative z-10 backdrop-blur-md transition-all duration-500">
+                <div className="p-6 rounded-[2.5rem] bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 space-y-6 relative z-10 backdrop-blur-md transition-all duration-500">
                     {!isStrategyUnlocked ? (
                         <>
                             {/* Mode Toggle */}
-                            <div className="flex p-0.5 bg-(--color-bg-surface) rounded-lg border border-(--color-border-glass)">
+                            <div className="flex p-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10">
                                 <button
                                     onClick={() => setMode('profit')}
-                                    className={`flex-1 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wide transition-all ${mode === 'profit' ? 'bg-blue-500 text-white shadow-md' : 'text-(--color-text-secondary) hover:bg-white/5'}`}
+                                    className={`flex-1 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wide transition-all ${mode === 'profit' ? 'bg-blue-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
                                 >
                                     {t('income.modes.profit')}
                                 </button>
                                 <button
                                     onClick={() => setMode('inaction')}
-                                    className={`flex-1 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wide transition-all ${mode === 'inaction' ? 'bg-rose-500 text-white shadow-md' : 'text-(--color-text-secondary) hover:bg-white/5'}`}
+                                    className={`flex-1 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wide transition-all ${mode === 'inaction' ? 'bg-rose-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
                                 >
                                     {t('income.modes.inaction')}
                                 </button>
@@ -121,7 +121,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         </div>
                                         <div className="space-y-2">
                                             <div className="flex justify-between items-end">
-                                                <span className="text-xs font-bold text-(--color-text-secondary)">{t('income.profit.active_partners')}</span>
+                                                <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('income.profit.active_partners')}</span>
                                                 <span className="text-xl font-black text-blue-500">{activePartners}</span>
                                             </div>
                                             <input
@@ -133,9 +133,9 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
                                             />
                                         </div>
-                                        <div className="pt-4 border-t border-(--color-border-glass)">
+                                        <div className="pt-4 border-t border-slate-200 dark:border-white/10">
                                             <div className="flex justify-between items-center mb-4">
-                                                <span className="text-xs font-semibold text-(--color-text-secondary)">{t('income.profit.monthly_income')}</span>
+                                                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">{t('income.profit.monthly_income')}</span>
                                                 <span className="text-2xl font-black text-emerald-500">${estimatedMonthly}</span>
                                             </div>
 
@@ -165,12 +165,12 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                         <div className="space-y-4">
                                             <div className="space-y-2">
-                                                <label className="text-xs font-bold text-(--color-text-secondary)">{t('income.inaction.status')}</label>
+                                                <label className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('income.inaction.status')}</label>
                                                 <div className="relative">
                                                     <select
                                                         value={selectedLevel.id}
                                                         onChange={(e) => setSelectedLevel(JOB_LEVELS.find(l => l.id === e.target.value) || JOB_LEVELS[2])}
-                                                        className="w-full appearance-none bg-(--color-bg-surface) border border-(--color-border-glass) text-(--color-text-primary) text-xs font-bold rounded-xl px-4 py-3 focus:outline-hidden focus:ring-2 focus:ring-rose-500/50"
+                                                        className="w-full appearance-none bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-xs font-bold rounded-xl px-4 py-3 focus:outline-hidden focus:ring-2 focus:ring-rose-500/50"
                                                     >
                                                         {JOB_LEVELS.map((level) => (
                                                             <option key={level.id} value={level.id}>
@@ -186,7 +186,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                             <div className="space-y-2">
                                                 <div className="flex justify-between items-end">
-                                                    <span className="text-xs font-bold text-(--color-text-secondary)">{t('income.inaction.hours')}</span>
+                                                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('income.inaction.hours')}</span>
                                                     <span className="text-[10px] font-black text-rose-500">{hoursWorked} Hours</span>
                                                 </div>
                                                 <input
@@ -202,7 +202,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                         <div className="pt-6 text-center space-y-4">
                                             <div className="space-y-1">
-                                                <div className="text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary) opacity-60">
+                                                <div className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
                                                     {t('income.inaction.value_per_min')}
                                                 </div>
                                                 <div className={`text-4xl font-black transition-colors duration-300 ${currentValPerMin >= 1
