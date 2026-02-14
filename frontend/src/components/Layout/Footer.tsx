@@ -15,10 +15,10 @@ export const Footer = () => {
             color: 'text-blue-400',
             bg: 'bg-blue-500/10',
             content: (
-                <div className="space-y-6 text-xs leading-relaxed text-(--color-text-secondary)">
+                <div className="space-y-6 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
                     {[1, 2, 3, 4, 5].map(i => (
                         <p key={i}>
-                            <strong className="text-(--color-text-primary) block mb-1">{t(`legal.terms.${i}_title`)}</strong>
+                            <strong className="text-slate-900 dark:text-white block mb-1">{t(`legal.terms.${i}_title`)}</strong>
                             {t(`legal.terms.${i}_desc`)}
                         </p>
                     ))}
@@ -31,10 +31,10 @@ export const Footer = () => {
             color: 'text-emerald-400',
             bg: 'bg-emerald-500/10',
             content: (
-                <div className="space-y-6 text-xs leading-relaxed text-(--color-text-secondary)">
+                <div className="space-y-6 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
                     {[1, 2, 3, 4].map(i => (
                         <p key={i}>
-                            <strong className="text-(--color-text-primary) block mb-1">{t(`legal.privacy.${i}_title`)}</strong>
+                            <strong className="text-slate-900 dark:text-white block mb-1">{t(`legal.privacy.${i}_title`)}</strong>
                             {t(`legal.privacy.${i}_desc`)}
                         </p>
                     ))}
@@ -51,9 +51,9 @@ export const Footer = () => {
                     <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400/80">
                         {t('legal.disclaimer_title')}
                     </h5>
-                    <p className="text-[11px] leading-relaxed text-(--color-text-secondary) font-medium">
+                    <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 font-medium">
                         <Trans i18nKey="legal.disclaimer_desc">
-                            We are a community of digital nomads and online entrepreneurs who search for global trends. We act as a <span className="text-(--color-text-primary) font-bold">Third-Party Ambassador Agency</span> and do not have an official corporate connection to Pintopay.
+                            We are a community of digital nomads and online entrepreneurs who search for global trends. We act as a <span className="text-slate-900 dark:text-white font-bold">Third-Party Ambassador Agency</span> and do not have an official corporate connection to Pintopay.
                         </Trans>
                     </p>
                     <div className="p-3 bg-rose-500/5 border border-rose-500/10 rounded-xl flex gap-3 items-start relative overflow-hidden">
@@ -65,17 +65,17 @@ export const Footer = () => {
                 </div>
 
                 {/* Links */}
-                <div className="flex flex-wrap gap-4 justify-center items-center pt-4 border-t border-(--color-border-glass)">
+                <div className="flex flex-wrap gap-4 justify-center items-center pt-4 border-t border-slate-200 dark:border-white/10">
                     <button
                         onClick={() => setActiveDoc('terms')}
-                        className="text-[10px] font-bold text-(--color-text-secondary) hover:text-(--color-text-primary) transition-colors uppercase tracking-wider flex items-center gap-1.5"
+                        className="text-[10px] font-bold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1.5"
                     >
                         <Scale className="w-3 h-3" />
                         {t('legal.terms_title')}
                     </button>
                     <button
                         onClick={() => setActiveDoc('privacy')}
-                        className="text-[10px] font-bold text-(--color-text-secondary) hover:text-(--color-text-primary) transition-colors uppercase tracking-wider flex items-center gap-1.5"
+                        className="text-[10px] font-bold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1.5"
                     >
                         <FileText className="w-3 h-3" />
                         {t('legal.privacy_title')}
@@ -138,10 +138,10 @@ export const Footer = () => {
                                     </div>
 
                                     {/* Footer */}
-                                    <div className="p-4 border-t border-(--color-border-glass) bg-(--color-bg-glass) backdrop-blur-xl">
+                                    <div className="p-4 border-t border-slate-200 dark:border-white/10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl">
                                         <button
                                             onClick={() => setActiveDoc(null)}
-                                            className="w-full py-3 bg-(--color-text-primary) hover:opacity-90 active:scale-[0.98] text-(--color-surface) font-bold rounded-xl transition-all text-xs tracking-wider uppercase"
+                                            className="w-full py-3 bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:opacity-90 active:scale-[0.98] font-bold rounded-xl transition-all text-xs tracking-wider uppercase"
                                         >
                                             {t('legal.understand')}
                                         </button>
