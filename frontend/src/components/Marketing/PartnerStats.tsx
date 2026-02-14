@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion';
 import { Users, Zap, Globe2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+// #comment: Removed useEffect as we now use the optimized useVisibilityPolling hook.
 import { useTranslation, Trans } from 'react-i18next';
 import { apiClient } from '../../api/client';
 import { LazyImage } from '../ui/LazyImage';
+import { useVisibilityPolling } from '../../hooks/useVisibilityPolling';
 
 interface PartnerStatsProps {
     onNavigateToEarn?: () => void;
@@ -52,25 +54,21 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
     const [recentPartners, setRecentPartners] = useState<any[]>([]);
     const [stats, setStats] = useState({ total: '12.4k', volume: '$84.2M', countries: '142', lastHourCount: 342 });
 
-    useEffect(() => {
-        const fetchRecentPartners = async () => {
-            try {
-                const response = await apiClient.get('/api/partner/recent');
-                if (response.status === 200 && response.data) {
-                    const { partners, last_hour_count } = response.data;
-                    setRecentPartners(partners || []);
-                    setStats(prev => ({ ...prev, lastHourCount: last_hour_count || prev.lastHourCount }));
-                }
-            } catch (error) {
-                console.error("Failed to fetch recent partners", error);
+    // #comment: Replaced useEffect + setInterval manual logic with useVisibilityPolling hook.
+    // This optimization ensures we only poll the 'recent partners' endpoint when the user is 
+    // actually looking at the app, saving significant battery and server resources.
+    useVisibilityPolling(async () => {
+        try {
+            const response = await apiClient.get('/api/partner/recent');
+            if (response.status === 200 && response.data) {
+                const { partners, last_hour_count } = response.data;
+                setRecentPartners(partners || []);
+                setStats(prev => ({ ...prev, lastHourCount: last_hour_count || prev.lastHourCount }));
             }
-        };
-
-        fetchRecentPartners();
-        // Refresh every 5 minutes as requested
-        const interval = setInterval(fetchRecentPartners, 5 * 60 * 1000);
-        return () => clearInterval(interval);
-    }, []); // Dependencies are now truly empty as state setters and imports are stable
+        } catch (error) {
+            console.error("Failed to fetch recent partners", error);
+        }
+    }, 5 * 60 * 1000); // 5 minute polling interval
 
     return (
         <section className="px-4 py-8">

@@ -3,6 +3,8 @@ import { ChevronRight, ArrowUpRight } from 'lucide-react';
 import { getLatestPosts } from '../../data/blogPosts';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
+// #comment: Imported SectionHeader to maintain visual and semantic consistency in section titling.
+import { SectionHeader } from '../ui/SectionHeader';
 
 export const BlogCarousel = () => {
     const { t } = useTranslation();
@@ -23,14 +25,14 @@ export const BlogCarousel = () => {
     return (
         <section className="py-8 space-y-6">
             <div className="flex items-center justify-between px-4">
-                <div className="space-y-1">
-                    <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-                        {t('blog.latest')}
-                    </h3>
-                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-[0.2em] opacity-60">
-                        {t('blog.title')}
-                    </p>
-                </div>
+                {/* #comment: Phase 2 - Replaced manual h3 with SectionHeader (managed via title prop) for consistency. 
+                    Added Tailwind v4 compliant exclamation for overrides. */}
+                <SectionHeader
+                    title={t('blog.latest')}
+                    description={t('blog.title')}
+                    align="left"
+                    className="space-y-1!"
+                />
                 <button
                     onClick={() => navigateToBlog()}
                     className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-blue-500 bg-blue-500/5 px-4 py-2 rounded-full border border-blue-500/20 active:scale-95 transition-transform"

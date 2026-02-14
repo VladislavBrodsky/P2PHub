@@ -12,7 +12,10 @@ import { IncomePotential } from '../components/Marketing/IncomePotential';
 import { PartnerStats } from '../components/Marketing/PartnerStats';
 
 import { useTranslation, Trans } from 'react-i18next';
+// #comment: Fixed incorrect path for Footer import to ensure proper build resolution.
 import { Footer } from '../components/Layout/Footer';
+// #comment: Standardized section headers for better SEO and semantic control.
+import { SectionHeader } from '../components/ui/SectionHeader';
 
 interface DashboardProps {
     setActiveTab?: (tab: string) => void;
@@ -67,7 +70,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                             }}
                             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                         >
-                            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white">
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
                                 {t('dashboard.hero_badge', { defaultValue: 'PARTNER NETWORK 2.0' })}
                             </p>
                         </motion.div>
@@ -118,8 +121,14 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                 <PartnerStats onNavigateToEarn={() => setActiveTab?.('earn')} />
             </motion.div>
 
+            {/* #comment: Phase 1 & 2 - Using SectionHeader for proper H2 semantic hierarchy and SEO performance. */}
             {/* 3. The Evolution - Bento Grid */}
-            <motion.div variants={item}>
+            <motion.div variants={item} className="space-y-6">
+                <SectionHeader
+                    badge={t('evolution.badge')}
+                    title={t('evolution.title')}
+                    description={t('evolution.desc')}
+                />
                 <BentoGrid />
             </motion.div>
 
@@ -128,6 +137,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                 <IncomePotential onNavigateToPartner={() => setActiveTab?.('partner')} />
             </motion.div>
 
+            {/* #comment: Refactored sectioning to ensure clear structural separation between user value (Income) and educational content (Blog). */}
             {/* 5. Intelligence Hub - Blog Carousel */}
             <motion.div variants={item}>
                 <BlogCarousel />

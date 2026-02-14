@@ -60,6 +60,9 @@ export const BentoGrid = () => {
         }));
     };
 
+    // #comment: Custom scroll listener to track the active card in the horizontal carousel.
+    // While currently using manual scroll distance math, future iterations should move 
+    // to IntersectionObserver for even better main-thread performance on high-density displays.
     const handleScroll = () => {
         if (!scrollRef.current) return;
         const scrollLeft = scrollRef.current.scrollLeft;
@@ -98,35 +101,10 @@ export const BentoGrid = () => {
         }
     };
 
+    // #comment: Removed internal header logic as BentoGrid is now a pure-layout component. 
+    // Hierarchy is now managed by the Dashboard's SectionHeader for better semantic control.
     return (
         <section className="px-4 py-8 space-y-8 overflow-hidden">
-            <div className="space-y-3 flex flex-col items-center text-center">
-                <div className="flex items-center gap-2">
-                    <motion.div
-                        className="w-2 h-2 rounded-full bg-blue-500"
-                        animate={{ opacity: [1, 0.4, 1] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                    />
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">{t('evolution.badge')}</span>
-                </div>
-                <motion.h3
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-3xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.1] whitespace-pre-line"
-                >
-                    {t('evolution.title')}
-                </motion.h3>
-                <motion.p
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 }}
-                    className="text-sm text-slate-500 dark:text-slate-400 font-medium max-w-[280px] mx-auto"
-                >
-                    {t('evolution.desc')}
-                </motion.p>
-            </div>
 
             {/* Carousel Container */}
             <div className="relative">
@@ -241,7 +219,7 @@ export const BentoGrid = () => {
                     ))}
                 </div>
 
-                {/* Premium Pagination Indicator */}
+                {/* #comment: Enhanced pagination indicators with smooth layout transitions and better depth perception for a more premium navigation feel. */}
                 <div className="flex flex-col items-center gap-4 mt-2">
                     {/* Compact Pagination Dots */}
                     <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/5 dark:bg-white/5 border border-white/5 backdrop-blur-md shadow-inner">
