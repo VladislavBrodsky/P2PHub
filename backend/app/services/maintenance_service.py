@@ -29,15 +29,21 @@ async def reconcile_network_stats(session_override: AsyncSession = None) -> dict
     Unified high-performance network reconciliation.
     Fixes path, depth, and referral_count across the entire platform.
     
-    #comment: This replaces slow per-row queries with optimized memory-batch processing.
-    Scale: 1M users in < 5 seconds.
+    #comment: Implementing Distributed Locking via Redis (600s TTL).
+    # This prevents multiple workers from attempting structural fixes simultaneously,
+    # which could lead to race conditions or DB deadlocks.
     """
-    if session_override:
-        return await _do_reconcile(session_override)
+    from app.services.redis_service import redis_service
     
-    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session() as session:
-        return await _do_reconcile(session)
+    lock_key = "lock:maintenance:reconcile"
+    # We use a 10-minute lock for structural fixes
+    async with redis_service.client.lock(lock_key, timeout=600):
+        if session_override:
+            return await _do_reconcile(session_override)
+        
+        async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+        async with async_session() as session:
+            return await _do_reconcile(session)
 
 async def _do_reconcile(session: AsyncSession) -> dict[str, Any]:
     logger.info("🔧 Starting High-Performance Network Reconciliation...")
