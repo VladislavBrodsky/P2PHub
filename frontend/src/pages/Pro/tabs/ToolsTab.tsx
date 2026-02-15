@@ -8,9 +8,10 @@ import { renderMarkdown } from '../utils/renderMarkdown';
 interface ToolsTabProps {
     trends: any[];
     isAuditing: boolean;
+    isFetchingTrends: boolean;
     handleRunMarketingAudit: () => Promise<void>;
+    handleFetchTrends: () => Promise<void>;
     setShowHeadlineModal: (show: boolean) => void;
-    setShowTrendsModal: (show: boolean) => void;
     setShowBioModal: (show: boolean) => void;
     selection: () => void;
     impact: (style: 'light' | 'medium' | 'heavy') => void;
@@ -19,9 +20,10 @@ interface ToolsTabProps {
 export const ToolsTab = ({
     trends,
     isAuditing,
+    isFetchingTrends,
     handleRunMarketingAudit,
+    handleFetchTrends,
     setShowHeadlineModal,
-    setShowTrendsModal,
     setShowBioModal,
     selection,
     impact
@@ -100,11 +102,16 @@ export const ToolsTab = ({
                     )}
 
                     <button
-                        onClick={() => { selection(); setShowTrendsModal(true); }}
-                        className="mt-auto w-full h-14 vibing-blue-animated rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3 shadow-xl shadow-indigo-500/20"
+                        onClick={() => { selection(); handleFetchTrends(); }}
+                        disabled={isFetchingTrends}
+                        className="mt-auto w-full h-14 vibing-blue-animated rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3 shadow-xl shadow-indigo-500/20 disabled:grayscale disabled:opacity-70"
                     >
-                        {t('pro_dashboard.tools.trends.btn')}
-                        <Compass size={16} className="animate-[spin_4s_linear_infinite]" />
+                        {isFetchingTrends ? <Loader2 className="animate-spin w-5 h-5" /> : (
+                            <>
+                                {trends.length > 0 ? t('pro_dashboard.tools.trends.btn_refresh') : t('pro_dashboard.tools.trends.btn')}
+                                <Compass size={16} className={isFetchingTrends ? "animate-spin" : "animate-[spin_4s_linear_infinite]"} />
+                            </>
+                        )}
                     </button>
                 </motion.div>
 

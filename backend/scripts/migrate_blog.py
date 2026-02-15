@@ -7,11 +7,14 @@ from datetime import datetime
 from sqlmodel import select, SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-# Add backend to path to import app
+# Add backend to path to import app and scripts/data
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from app.models.blog import BlogPost, BlogPostEngagement
 from app.models.partner import get_session, async_session_maker, engine
+from data.blog_content_en import BLOG_CONTENT_EN
+from data.blog_content_ru import BLOG_CONTENT_RU
 
 # Hardcoded blog post slugs and basic info from frontend/src/data/blogPosts.ts
 BLOG_POSTS_INFO = [
@@ -46,49 +49,62 @@ async def migrate():
 
     # Load locales
     base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    with open(os.path.join(base_path, "frontend/src/locales/en.json"), "r") as f:
-        en = json.load(f)
-    with open(os.path.join(base_path, "frontend/src/locales/ru.json"), "r") as f:
-        ru = json.load(f)
+    try:
+        with open(os.path.join(base_path, "frontend/src/locales/en.json"), "r") as f:
+            en = json.load(f)
+        with open(os.path.join(base_path, "frontend/src/locales/ru.json"), "r") as f:
+            ru = json.load(f)
+    except FileNotFoundError:
+        print("Locale files not found, using empty dicts for metadata")
+        en = {"blog": {"posts": {}}}
+        ru = {"blog": {"posts": {}}}
 
-    en_posts = en["blog"]["posts"]
-    ru_posts = ru["blog"]["posts"]
-    en_content = en["blog"]["content"]
-    ru_content = ru["blog"]["content"]
-    
-    # Combined content for simulation
-    def get_content(lang_content):
-        return f"{lang_content['p1']}\n\n{lang_content['p2']}\n\n{lang_content['p3']}"
+    en_posts = en.get("blog", {}).get("posts", {})
+    ru_posts = ru.get("blog", {}).get("posts", {})
 
     async with async_session_maker() as session:
         for info in BLOG_POSTS_INFO:
             slug = info["slug"]
+            
+            # check if title exists in locales, otherwise fallback to info
+            en_p = en_posts.get(slug, {})
+            ru_p = ru_posts.get(slug, {})
+            
+            content_en = BLOG_CONTENT_EN.get(slug, "")
+            content_ru = BLOG_CONTENT_RU.get(slug, "")
             
             # Check if exists
             stmt = select(BlogPost).where(BlogPost.slug == slug)
             existing = (await session.exec(stmt)).first()
             
             if existing:
-                print(f"Skipping {slug} - already exists")
-                continue
+                print(f"Updating {slug} content...")
+                existing.content_en = content_en
+                existing.content_ru = content_ru
+                # Update metadata if available
+                if en_p.get("title"): existing.title_en = en_p.get("title")
+                if ru_p.get("title"): existing.title_ru = ru_p.get("title")
+                if en_p.get("excerpt"): existing.excerpt_en = en_p.get("excerpt")
+                if ru_p.get("excerpt"): existing.excerpt_ru = ru_p.get("excerpt")
+                if en_p.get("category"): existing.category = en_p.get("category")
                 
-            en_p = en_posts.get(slug, {})
-            ru_p = ru_posts.get(slug, {})
-            
-            post = BlogPost(
-                slug=slug,
-                title_en=en_p.get("title", ""),
-                title_ru=ru_p.get("title", ""),
-                excerpt_en=en_p.get("excerpt", ""),
-                excerpt_ru=ru_p.get("excerpt", ""),
-                content_en=get_content(en_content),
-                content_ru=get_content(ru_content),
-                category=en_p.get("category", info["category"]),
-                author=info["author"],
-                is_published=True,
-                published_at=datetime.utcnow()
-            )
-            session.add(post)
+                session.add(existing)
+            else:
+                print(f"Creating new post {slug}...")
+                post = BlogPost(
+                    slug=slug,
+                    title_en=en_p.get("title", f"Blog Post {slug}"),
+                    title_ru=ru_p.get("title", f"Блог Пост {slug}"),
+                    excerpt_en=en_p.get("excerpt", ""),
+                    excerpt_ru=ru_p.get("excerpt", ""),
+                    content_en=content_en,
+                    content_ru=content_ru,
+                    category=en_p.get("category", info["category"]),
+                    author=info["author"],
+                    is_published=True,
+                    published_at=datetime.utcnow()
+                )
+                session.add(post)
             
             # Engagement
             e_stmt = select(BlogPostEngagement).where(BlogPostEngagement.post_slug == slug)

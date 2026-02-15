@@ -40,7 +40,8 @@ export const ProDashboard = () => {
         linkedin_access_token: ''
     });
 
-    const [trends] = useState<any[]>([]); // TODO: Implement trend fetching
+    const [trends, setTrends] = useState<any[]>([]);
+    const [isFetchingTrends, setIsFetchingTrends] = useState(false);
     const [marketAudit, setMarketAudit] = useState<any>(null);
     const [isAuditing, setIsAuditing] = useState(false);
     const [showAuditModal, setShowAuditModal] = useState(false);
@@ -206,6 +207,32 @@ export const ProDashboard = () => {
         }
     };
 
+    const handleFetchTrends = async () => {
+        if (isFetchingTrends) return;
+        setIsFetchingTrends(true);
+        impact('medium');
+        try {
+            const data = await proService.fetchTrends();
+            setTrends(data.trends);
+            showNotification({
+                title: 'Trends Synced',
+                message: 'Global viral patterns updated.',
+                type: 'success'
+            });
+            hapticNotification('success');
+        } catch (error) {
+            console.error(error);
+            showNotification({
+                title: 'Sync Failed',
+                message: 'Could not fetch global trends.',
+                type: 'warning'
+            });
+            hapticNotification('error');
+        } finally {
+            setIsFetchingTrends(false);
+        }
+    };
+
     const handleCopyAnyText = (text: string) => {
         navigator.clipboard.writeText(text);
         showNotification({
@@ -319,7 +346,9 @@ export const ProDashboard = () => {
                                 key="tools"
                                 trends={trends}
                                 isAuditing={isAuditing}
+                                isFetchingTrends={isFetchingTrends}
                                 handleRunMarketingAudit={handleRunMarketingAudit}
+                                handleFetchTrends={handleFetchTrends}
                                 setShowHeadlineModal={setShowAuditModal}
                                 setShowTrendsModal={setShowAuditModal}
                                 setShowBioModal={setShowAuditModal}
