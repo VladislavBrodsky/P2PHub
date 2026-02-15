@@ -38,7 +38,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
         const newLang = i18n.language.startsWith('ru') ? 'en' : 'ru';
         await i18n.changeLanguage(newLang);
         try {
-            await apiClient.post('/partner/language', { language_code: newLang });
+            await apiClient.post('/api/partner/language', { language_code: newLang });
         } catch (e) {
             console.error('Failed to sync language', e);
         }
