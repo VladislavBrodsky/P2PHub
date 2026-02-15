@@ -578,7 +578,7 @@ export const ProDashboard = () => {
                                                         </h3>
                                                         <div className="flex items-center gap-1.5 sm:gap-2">
                                                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                                            <span className="text-[8px] sm:text-[10px] font-bold text-brand-muted uppercase tracking-[0.1em] sm:tracking-[0.2em] leading-none">
+                                                            <span className="text-[8px] sm:text-[10px] font-bold text-brand-muted uppercase tracking-widest leading-none">
                                                                 {t('pro_dashboard.studio.matrix_subtitle')}
                                                             </span>
                                                         </div>
