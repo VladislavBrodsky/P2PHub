@@ -846,10 +846,10 @@ export const ProDashboard = () => {
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-2 gap-3 pb-4">
-                                            <button onClick={() => { selection(); setShowPublishModal(true); }} className="h-12 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2">
+                                            <button onClick={() => { selection(); setShowPublishModal(true); }} className="h-12 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20">
                                                 {t('pro_dashboard.studio.publish_btn')} <Send size={14} className="animate-pulse" />
                                             </button>
-                                            <button onClick={() => { impact('light'); handleSharePost(); }} className="h-12 bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text active:scale-95 transition-all flex items-center justify-center gap-2">
+                                            <button onClick={() => { impact('light'); handleSharePost(); }} className="h-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-text dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm">
                                                 {t('pro_dashboard.studio.share_btn')} <Share size={14} />
                                             </button>
                                         </div>
@@ -891,7 +891,7 @@ export const ProDashboard = () => {
 
                                     <div className="space-y-4 relative z-10">
                                         <div className="relative">
-                                            <div className="absolute -top-3 left-4 px-2 bg-[#0f172a] text-[8px] font-black text-pink-500 uppercase tracking-widest z-20 flex items-center gap-1">
+                                            <div className="absolute -top-3 left-4 px-2 bg-slate-50 dark:bg-slate-900 text-[8px] font-black text-pink-500 uppercase tracking-widest z-20 flex items-center gap-1">
                                                 Input Headline <Info size={8} />
                                             </div>
                                             <input
@@ -1031,16 +1031,16 @@ export const ProDashboard = () => {
                                                     initial={{ opacity: 0, x: -10 }}
                                                     animate={{ opacity: 1, x: 0 }}
                                                     transition={{ delay: i * 0.1 }}
-                                                    className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all flex justify-between items-center group/card cursor-pointer shadow-sm"
+                                                    className="p-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl hover:bg-slate-100 dark:hover:bg-white/10 transition-all flex justify-between items-center group/card cursor-pointer shadow-sm hover:shadow-md"
                                                     onClick={() => { handleCopyAnyText(`${trend.topic}: ${trend.viral_angle}`); selection(); }}
                                                 >
                                                     <div className="flex items-center gap-4">
-                                                        <div className="w-8 h-8 rounded-xl bg-orange-500/10 text-orange-500 flex items-center justify-center font-black text-xs border border-orange-500/10 shadow-inner group-hover/card:scale-110 transition-transform">
+                                                        <div className="w-8 h-8 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-500 flex items-center justify-center font-black text-xs border border-orange-500/20 shadow-inner group-hover/card:scale-110 transition-transform">
                                                             {i + 1}
                                                         </div>
                                                         <div className="space-y-1">
-                                                            <p className="text-[11px] font-black text-brand-text uppercase tracking-tight">{trend.topic}</p>
-                                                            <p className="text-[10px] font-medium text-brand-muted italic opacity-70 group-hover/card:text-orange-500 transition-colors">{trend.viral_angle}</p>
+                                                            <p className="text-[11px] font-black text-brand-text dark:text-white uppercase tracking-tight">{trend.topic}</p>
+                                                            <p className="text-[10px] font-medium text-brand-muted dark:text-brand-muted/70 italic opacity-70 group-hover/card:text-orange-500 transition-colors">{trend.viral_angle}</p>
                                                         </div>
                                                     </div>
                                                     <Sparkles size={14} className="text-orange-500/20 group-hover/card:text-orange-500/60 transition-colors" />
@@ -1098,12 +1098,12 @@ export const ProDashboard = () => {
                                     </div>
 
                                     <div className="space-y-4 relative z-10">
-                                        <div className="p-5 bg-black/20 rounded-3xl border border-white/5 space-y-3">
+                                        <div className="p-5 bg-slate-50 dark:bg-black/20 rounded-3xl border border-slate-200 dark:border-white/5 space-y-3 shadow-inner">
                                             <div className="flex items-center gap-2">
-                                                <Monitor size={14} className="text-indigo-400" />
-                                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-400">System Capability</span>
+                                                <Monitor size={14} className="text-indigo-600 dark:text-indigo-400" />
+                                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-400">System Capability</span>
                                             </div>
-                                            <p className="text-[11px] font-medium text-brand-muted leading-relaxed">
+                                            <p className="text-[11px] font-medium text-brand-text dark:text-brand-muted leading-relaxed">
                                                 {renderMarkdown(t('pro_dashboard.tools.audit.capability'), true)}
                                             </p>
                                         </div>
@@ -1134,45 +1134,45 @@ export const ProDashboard = () => {
                                 className="space-y-8 pb-12"
                             >
                                 {/* Intelligence Report Header - Elite Data Visualization */}
-                                <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden bg-slate-900 shadow-3xl group noise-overlay">
-                                    <div className="absolute inset-0 bg-linear-to-br from-indigo-500/20 via-transparent to-purple-500/20 pointer-events-none" />
+                                <div className="glass-panel-premium p-8 rounded-[3rem] border border-slate-200 dark:border-white/10 relative overflow-hidden bg-white dark:bg-slate-900 shadow-3xl group noise-overlay">
+                                    <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 dark:from-indigo-500/20 dark:to-purple-500/20 pointer-events-none" />
                                     <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
 
                                     <div className="relative z-10 flex justify-between items-start mb-10">
                                         <div className="space-y-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="px-3 py-1 bg-indigo-500/20 rounded-full border border-indigo-500/30 flex items-center gap-2">
+                                                <div className="px-3 py-1 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full border border-indigo-500/20 dark:border-indigo-500/30 flex items-center gap-2">
                                                     <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
-                                                    <span className="text-[9px] font-black text-indigo-200 uppercase tracking-[0.3em]">Viral Intelligence Active</span>
+                                                    <span className="text-[9px] font-black text-indigo-600 dark:text-indigo-200 uppercase tracking-[0.3em]">Viral Intelligence Active</span>
                                                 </div>
                                                 <button
                                                     onClick={() => { selection(); setShowManual('academy'); }}
-                                                    className="w-6 h-6 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-indigo-400 hover:bg-white/10 transition-all opacity-40 hover:opacity-100"
+                                                    className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-indigo-500 dark:text-indigo-400 hover:bg-slate-200 dark:hover:bg-white/10 transition-all opacity-60 hover:opacity-100"
                                                 >
                                                     <Info size={12} />
                                                 </button>
                                             </div>
-                                            <h3 className="text-4xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-2xl">
+                                            <h3 className="text-4xl font-black text-brand-text dark:text-white tracking-tighter uppercase leading-none drop-shadow-2xl">
                                                 {t('pro_dashboard.academy.protocols.title')}
                                             </h3>
                                         </div>
                                         <div className="text-right">
-                                            <p className="text-[11px] font-black text-indigo-300/60 uppercase tracking-[0.3em] mb-2">{t('pro_dashboard.academy.protocols.stats_label')}</p>
-                                            <div className="text-5xl font-black text-white tabular-nums leading-none flex items-baseline justify-end">
+                                            <p className="text-[11px] font-black text-indigo-600/60 dark:text-indigo-300/60 uppercase tracking-[0.3em] mb-2">{t('pro_dashboard.academy.protocols.stats_label')}</p>
+                                            <div className="text-5xl font-black text-brand-text dark:text-white tabular-nums leading-none flex items-baseline justify-end">
                                                 {academyScore}<span className="text-indigo-500 text-2xl">.0</span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="space-y-4 relative z-10">
-                                        <div className="flex justify-between items-end text-[10px] font-black uppercase tracking-[0.3em] text-indigo-200/50">
+                                        <div className="flex justify-between items-end text-[10px] font-black uppercase tracking-[0.3em] text-brand-muted/60 dark:text-indigo-200/50">
                                             <div className="flex items-center gap-2">
                                                 <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
                                                 <span>{t('pro_dashboard.academy.protocols.progress_label')}</span>
                                             </div>
-                                            <span className="vibing-blue-text">{Math.round((completedStages.length / 5) * 100)}% COMPLETE</span>
+                                            <span className="vibing-blue-text font-black">{Math.round((completedStages.length / 5) * 100)}% COMPLETE</span>
                                         </div>
-                                        <div className="h-4 w-full bg-black/40 rounded-full border border-white/5 overflow-hidden p-1 shadow-inner relative flex items-center">
+                                        <div className="h-4 w-full bg-slate-100 dark:bg-black/40 rounded-full border border-slate-200 dark:border-white/5 overflow-hidden p-1 shadow-inner relative flex items-center">
                                             <motion.div
                                                 initial={{ width: 0 }}
                                                 animate={{ width: `${(completedStages.length / 5) * 100}%` }}
@@ -1349,22 +1349,22 @@ export const ProDashboard = () => {
                                         </div>
                                         <button
                                             onClick={() => { selection(); setShowManual('academy'); }}
-                                            className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-500 hover:bg-white/10 transition-all"
+                                            className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-indigo-500 hover:bg-slate-200 dark:hover:bg-white/10 transition-all shadow-sm"
                                         >
                                             <Info size={18} />
                                         </button>
                                     </div>
                                     <div className="space-y-3 relative z-10">
                                         {(t('pro_dashboard.academy.hooks.items', { returnObjects: true }) as any[]).map((hook: any, i: number) => (
-                                            <div key={i} className="p-4 bg-indigo-500/5 rounded-2xl border border-white/5 hover:border-indigo-500/30 transition-all group/hook relative cursor-copy active:scale-[0.99] shadow-sm" onClick={() => { handleCopyAnyText(hook.template); selection(); impact('light'); }}>
-                                                <div className="absolute right-4 top-4 opacity-0 group-hover/hook:opacity-100 transition-all scale-100 bg-white/10 p-1.5 rounded-lg backdrop-blur-md">
+                                            <div key={i} className="p-4 bg-slate-50 dark:bg-indigo-500/5 rounded-2xl border border-slate-100 dark:border-white/5 hover:border-indigo-500/30 transition-all group/hook relative cursor-copy active:scale-[0.99] shadow-sm" onClick={() => { handleCopyAnyText(hook.template); selection(); impact('light'); }}>
+                                                <div className="absolute right-4 top-4 opacity-0 group-hover/hook:opacity-100 transition-all scale-100 bg-white dark:bg-white/10 p-1.5 rounded-lg backdrop-blur-md shadow-sm">
                                                     <Copy size={14} className="text-indigo-500" />
                                                 </div>
                                                 <div className="flex items-center gap-2.5 mb-2">
                                                     <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                                                    <p className="text-[8px] font-black text-indigo-500 uppercase tracking-widest leading-none">{hook.category}</p>
+                                                    <p className="text-[8px] font-black text-indigo-600 dark:text-indigo-500 uppercase tracking-widest leading-none">{hook.category}</p>
                                                 </div>
-                                                <p className="text-[11px] font-bold text-brand-text italic leading-relaxed pr-8 opacity-90 line-clamp-2">"{hook.template}"</p>
+                                                <p className="text-[11px] font-bold text-brand-text dark:text-white/90 italic leading-relaxed pr-8 line-clamp-2">"{hook.template}"</p>
                                             </div>
                                         ))}
                                     </div>
@@ -1664,8 +1664,8 @@ export const ProDashboard = () => {
 
                                     <div className="flex-1 overflow-y-auto no-scrollbar space-y-5 pr-1 py-1">
                                         {/* Deployment Guide - Premium Steps */}
-                                        <div className="p-6 bg-slate-950 rounded-[2.5rem] border border-indigo-500/20 relative overflow-hidden group shadow-2xl">
-                                            <div className="absolute -right-10 -top-10 w-40 h-40 bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none group-hover:bg-indigo-500/20 transition-all duration-1000" />
+                                        <div className="p-6 bg-slate-50 dark:bg-slate-950 rounded-[2.5rem] border border-slate-200 dark:border-indigo-500/20 relative overflow-hidden group shadow-2xl">
+                                            <div className="absolute -right-10 -top-10 w-40 h-40 bg-indigo-500/5 dark:bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none group-hover:bg-indigo-500/20 transition-all duration-1000" />
 
                                             <div className="flex items-center justify-between mb-6 relative z-10">
                                                 <div className="flex items-center gap-3">
@@ -1673,50 +1673,50 @@ export const ProDashboard = () => {
                                                         <Zap size={18} className="text-indigo-500 animate-pulse" />
                                                     </div>
                                                     <div>
-                                                        <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-indigo-400 leading-none mb-1">SYNC PROTOCOL</h4>
-                                                        <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Global Node Deployment</p>
+                                                        <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-indigo-600 dark:text-indigo-400 leading-none mb-1">SYNC PROTOCOL</h4>
+                                                        <p className="text-[8px] font-bold text-brand-muted uppercase tracking-widest">Global Node Deployment</p>
                                                     </div>
                                                 </div>
-                                                <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
-                                                    <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">SECURE LINK</span>
+                                                <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center justify-center">
+                                                    <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest whitespace-nowrap">SECURE LINK</span>
                                                 </div>
                                             </div>
 
                                             <div className="space-y-6 relative z-10">
                                                 <div className="flex gap-4">
                                                     <div className="flex flex-col items-center gap-1.5 shrink-0">
-                                                        <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-[11px] font-black text-indigo-400">01</div>
+                                                        <div className="w-7 h-7 rounded-lg bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/20 dark:border-indigo-500/30 flex items-center justify-center text-[11px] font-black text-indigo-600 dark:text-indigo-400">01</div>
                                                         <div className="w-[2px] h-full bg-linear-to-b from-indigo-500/30 to-transparent rounded-full" />
                                                     </div>
                                                     <div className="pb-1">
-                                                        <h5 className="text-[12px] font-black text-white uppercase tracking-wide mb-1.5">X Dev Environment</h5>
-                                                        <p className="text-[10px] font-medium text-slate-400 leading-relaxed">
-                                                            Initialize App at <a href="https://developer.x.com" target="_blank" className="text-indigo-400 underline decoration-indigo-400/30 hover:text-indigo-300">developer.x.com</a>. Grant <span className="text-indigo-400 font-bold">Read/Write</span> access via OAuth 1.0a.
+                                                        <h5 className="text-[12px] font-black text-brand-text dark:text-white uppercase tracking-wide mb-1.5">X Dev Environment</h5>
+                                                        <p className="text-[10px] font-medium text-brand-muted dark:text-slate-400 leading-relaxed">
+                                                            Initialize App at <a href="https://developer.x.com" target="_blank" className="text-indigo-500 dark:text-indigo-400 underline decoration-indigo-400/30 hover:text-indigo-400 dark:hover:text-indigo-300">developer.x.com</a>. Grant <span className="text-indigo-500 dark:text-indigo-400 font-bold">Read/Write</span> access via OAuth 1.0a.
                                                         </p>
                                                     </div>
                                                 </div>
 
                                                 <div className="flex gap-4">
                                                     <div className="flex flex-col items-center gap-1.5 shrink-0">
-                                                        <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-[11px] font-black text-indigo-400">02</div>
+                                                        <div className="w-7 h-7 rounded-lg bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/20 dark:border-indigo-500/30 flex items-center justify-center text-[11px] font-black text-indigo-600 dark:text-indigo-400">02</div>
                                                         <div className="w-[2px] h-full bg-linear-to-b from-indigo-500/30 to-transparent rounded-full" />
                                                     </div>
                                                     <div className="pb-1">
-                                                        <h5 className="text-[12px] font-black text-white uppercase tracking-wide mb-1.5">Telegram Broadcast Node</h5>
-                                                        <p className="text-[10px] font-medium text-slate-400 leading-relaxed">
-                                                            Authorize <a href={`https://t.me/${status?.bot_username || 'pintopay_probot'}`} target="_blank" rel="noreferrer" className="text-indigo-400 font-bold hover:underline">@{status?.bot_username || 'pintopay_probot'}</a> as Admin in your target channel for automated cross-platform sync.
+                                                        <h5 className="text-[12px] font-black text-brand-text dark:text-white uppercase tracking-wide mb-1.5">Telegram Broadcast Node</h5>
+                                                        <p className="text-[10px] font-medium text-brand-muted dark:text-slate-400 leading-relaxed">
+                                                            Authorize <a href={`https://t.me/${status?.bot_username || 'pintopay_probot'}`} target="_blank" rel="noreferrer" className="text-indigo-500 dark:text-indigo-400 font-bold hover:underline">@{status?.bot_username || 'pintopay_probot'}</a> as Admin in your target channel for automated cross-platform sync.
                                                         </p>
                                                     </div>
                                                 </div>
 
                                                 <div className="flex gap-4">
                                                     <div className="flex flex-col items-center shrink-0">
-                                                        <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-[11px] font-black text-indigo-400">03</div>
+                                                        <div className="w-7 h-7 rounded-lg bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/20 dark:border-indigo-500/30 flex items-center justify-center text-[11px] font-black text-indigo-600 dark:text-indigo-400">03</div>
                                                     </div>
                                                     <div>
-                                                        <h5 className="text-[12px] font-black text-white uppercase tracking-wide mb-1.5">Protocol Verification</h5>
-                                                        <p className="text-[10px] font-medium text-slate-400 leading-relaxed">
-                                                            Inject API tokens below and execute <span className="text-emerald-400 font-bold">System Test</span> to verify 2026 reach capability.
+                                                        <h5 className="text-[12px] font-black text-brand-text dark:text-white uppercase tracking-wide mb-1.5">Protocol Verification</h5>
+                                                        <p className="text-[10px] font-medium text-brand-muted dark:text-slate-400 leading-relaxed">
+                                                            Inject API tokens below and execute <span className="text-emerald-500 dark:text-emerald-400 font-bold">System Test</span> to verify 2026 reach capability.
                                                         </p>
                                                     </div>
                                                 </div>
@@ -1735,12 +1735,20 @@ export const ProDashboard = () => {
                                                         <span className="text-[8px] font-bold text-brand-muted uppercase tracking-wider mt-1">Direct Content Push</span>
                                                     </div>
                                                 </div>
-                                                <button
-                                                    onClick={() => { selection(); handleTestIntegration('x'); }}
-                                                    className="h-8 px-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-[9px] font-black uppercase tracking-widest text-indigo-500 hover:bg-indigo-500/20 transition-all active:scale-95 flex items-center gap-2"
-                                                >
-                                                    <Send size={10} /> Test
-                                                </button>
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        onClick={() => { selection(); handleTestIntegration('x'); }}
+                                                        className="h-8 px-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-[9px] font-black uppercase tracking-widest text-indigo-500 hover:bg-indigo-500/20 transition-all active:scale-95 flex items-center gap-2"
+                                                    >
+                                                        <Send size={10} /> Test
+                                                    </button>
+                                                    <button
+                                                        onClick={() => { selection(); setShowManual('setup_x'); }}
+                                                        className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-indigo-500 hover:bg-slate-200 dark:hover:bg-white/10 transition-all active:scale-90"
+                                                    >
+                                                        <Info size={14} />
+                                                    </button>
+                                                </div>
                                             </div>
                                             <div className="grid gap-2.5">
                                                 <div className="space-y-1">
@@ -1796,12 +1804,20 @@ export const ProDashboard = () => {
                                                         <span className="text-[8px] font-bold text-brand-muted uppercase tracking-wider mt-1">Multi-Channel Broadcasting</span>
                                                     </div>
                                                 </div>
-                                                <button
-                                                    onClick={() => { selection(); handleTestIntegration('telegram'); }}
-                                                    className="h-8 px-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-[9px] font-black uppercase tracking-widest text-blue-500 hover:bg-blue-500/20 transition-all active:scale-95 flex items-center gap-2"
-                                                >
-                                                    <Send size={10} /> Test
-                                                </button>
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        onClick={() => { selection(); handleTestIntegration('telegram'); }}
+                                                        className="h-8 px-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-[9px] font-black uppercase tracking-widest text-blue-500 hover:bg-blue-500/20 transition-all active:scale-95 flex items-center gap-2"
+                                                    >
+                                                        <Send size={10} /> Test
+                                                    </button>
+                                                    <button
+                                                        onClick={() => { selection(); setShowManual('setup_tg'); }}
+                                                        className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-blue-500 hover:bg-slate-200 dark:hover:bg-white/10 transition-all active:scale-90"
+                                                    >
+                                                        <Info size={14} />
+                                                    </button>
+                                                </div>
                                             </div>
                                             <div className="grid gap-3">
                                                 <div className="space-y-1">
@@ -1856,25 +1872,33 @@ export const ProDashboard = () => {
 
                                         {/* LinkedIn Authority Card - Compact */}
                                         <div className="p-5 bg-white dark:bg-slate-800/40 rounded-[2rem] border border-slate-200 dark:border-white/5 shadow-xs flex items-center justify-between">
-                                            <div className="flex items-center gap-2.5">
-                                                <div className="w-8 h-8 rounded-xl bg-[#0077b5] flex items-center justify-center">
-                                                    <Linkedin size={14} className="text-white" />
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-12 h-12 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+                                                    <div className="p-2.5 bg-blue-600/10 rounded-xl">
+                                                        <Linkedin size={22} className="text-blue-600 grayscale opacity-40" />
+                                                    </div>
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-[11px] font-black uppercase tracking-widest text-brand-text leading-none">LinkedIn Mastery</span>
-                                                    <span className="text-[8px] font-bold text-brand-muted uppercase tracking-wider mt-1">Professional Syndicate</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-[11px] font-black text-brand-text dark:text-white uppercase tracking-tight">{t('pro_dashboard.setup.professional_network')}</span>
+                                                        <span className="px-2 py-0.5 bg-slate-100 dark:bg-white/5 rounded-md text-[7px] font-black text-slate-400 uppercase tracking-widest leading-none">SYNC LOCKED</span>
+                                                    </div>
+                                                    <p className="text-[8px] font-medium text-brand-muted uppercase tracking-wider mt-0.5">{t('pro_dashboard.setup.linkedin_hint')}</p>
                                                 </div>
                                             </div>
-                                            <div className="px-3 py-1 bg-amber-500/10 border border-amber-500/20 text-[7px] font-black text-amber-500 uppercase tracking-widest rounded-full">
-                                                Sync Locked
-                                            </div>
+                                            <button
+                                                onClick={() => { selection(); setShowManual('setup_linkedin'); }}
+                                                className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-blue-600 hover:bg-slate-200 dark:hover:bg-white/10 transition-all active:scale-90"
+                                            >
+                                                <Info size={14} />
+                                            </button>
                                         </div>
                                     </div>
 
                                     <div className="pt-2 shrink-0">
                                         <button
                                             onClick={() => { selection(); handleSaveSetup(); }}
-                                            className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.25em] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:grayscale disabled:opacity-50 shadow-[0_8px_20px_rgba(99,102,241,0.25)] hover:shadow-[0_12px_30px_rgba(99,102,241,0.4)]"
+                                            className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.25em] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:grayscale disabled:opacity-50 shadow-xl shadow-indigo-500/30"
                                             disabled={isLoading}
                                         >
                                             {isLoading ? <Loader2 className="animate-spin w-5 h-5" /> : (
@@ -2109,26 +2133,26 @@ export const ProDashboard = () => {
                                 animate={{ scale: 1, opacity: 1, y: 0 }}
                                 exit={{ scale: 0.9, opacity: 0, y: 30 }}
                                 onClick={(e) => e.stopPropagation()}
-                                className="w-full max-w-lg glass-panel-premium rounded-[3rem] border border-white/10 overflow-hidden bg-slate-900 shadow-3xl flex flex-col max-h-[90vh] noise-overlay"
+                                className="w-full max-w-lg glass-panel-premium rounded-[3rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white dark:bg-slate-900 shadow-3xl flex flex-col max-h-[90vh] noise-overlay"
                             >
                                 {/* Modal Header */}
-                                <div className="p-8 border-b border-white/5 flex justify-between items-center bg-linear-to-br from-indigo-500/10 to-transparent">
+                                <div className="p-8 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-br from-indigo-500/5 dark:from-indigo-500/10 to-transparent">
                                     <div className="flex items-center gap-4">
                                         <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shadow-lg">
                                             <TrendingUp size={24} className="text-indigo-500 animate-pulse" />
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-black text-white uppercase tracking-tight leading-none mb-1">Marketing Audit</h3>
-                                            <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] opacity-70">
+                                            <h3 className="text-xl font-black text-brand-text dark:text-white uppercase tracking-tight leading-none mb-1">Marketing Audit</h3>
+                                            <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-70">
                                                 Global Node: Active • 2026
                                             </p>
                                         </div>
                                     </div>
                                     <button
                                         onClick={() => setShowAuditModal(false)}
-                                        className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+                                        className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
                                     >
-                                        <X size={20} className="text-white/60" />
+                                        <X size={20} className="text-brand-text dark:text-white/60" />
                                     </button>
                                 </div>
 
@@ -2138,11 +2162,11 @@ export const ProDashboard = () => {
                                     <div className="space-y-4">
                                         <div className="flex items-center gap-2">
                                             <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
-                                            <h4 className="text-[12px] font-black text-white uppercase tracking-widest">CMO Executive Summary</h4>
+                                            <h4 className="text-[12px] font-black text-brand-text dark:text-white uppercase tracking-widest">CMO Executive Summary</h4>
                                         </div>
-                                        <div className="p-6 bg-white/5 rounded-3xl border border-white/5 relative">
+                                        <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-100 dark:border-white/5 relative">
                                             <Quote className="absolute -top-3 -left-3 text-indigo-500/20" size={32} />
-                                            <p className="text-[13px] font-medium text-brand-muted leading-relaxed italic pr-4">
+                                            <p className="text-[13px] font-medium text-brand-text dark:text-brand-muted leading-relaxed italic pr-4">
                                                 {marketAudit.cmo_summary}
                                             </p>
                                         </div>
@@ -2150,13 +2174,13 @@ export const ProDashboard = () => {
 
                                     {/* Sentiment & Flow */}
                                     <div className="grid grid-cols-2 gap-4">
-                                        <div className="p-5 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 space-y-2">
-                                            <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Market Sentiment</p>
-                                            <p className="text-lg font-black text-white uppercase tracking-tight">{marketAudit.market_sentiment}</p>
+                                        <div className="p-5 bg-indigo-500/5 dark:bg-indigo-500/5 rounded-2xl border border-indigo-500/10 space-y-2">
+                                            <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Market Sentiment</p>
+                                            <p className="text-lg font-black text-brand-text dark:text-white uppercase tracking-tight">{marketAudit.market_sentiment}</p>
                                         </div>
-                                        <div className="p-5 bg-purple-500/5 rounded-2xl border border-purple-500/10 space-y-2">
-                                            <p className="text-[10px] font-black text-purple-400 uppercase tracking-widest">Global Shift</p>
-                                            <p className="text-[11px] font-bold text-white leading-tight">{marketAudit.global_trend_shift}</p>
+                                        <div className="p-5 bg-purple-500/5 dark:bg-purple-500/5 rounded-2xl border border-purple-500/10 space-y-2">
+                                            <p className="text-[10px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-widest">Global Shift</p>
+                                            <p className="text-[11px] font-bold text-brand-text dark:text-white leading-tight">{marketAudit.global_trend_shift}</p>
                                         </div>
                                     </div>
 
@@ -2165,9 +2189,9 @@ export const ProDashboard = () => {
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-2">
                                                 <div className="w-1.5 h-4 bg-emerald-500 rounded-full" />
-                                                <h4 className="text-[12px] font-black text-white uppercase tracking-widest">Elite News Intelligence (Top 20)</h4>
+                                                <h4 className="text-[12px] font-black text-brand-text dark:text-white uppercase tracking-widest">Elite News Intelligence (Top 20)</h4>
                                             </div>
-                                            <span className="text-[9px] font-black text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg">LIVE FEED</span>
+                                            <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg">LIVE FEED</span>
                                         </div>
                                         <div className="space-y-3">
                                             {marketAudit.top_news?.map((news: any, idx: number) => (
@@ -2176,27 +2200,27 @@ export const ProDashboard = () => {
                                                     initial={{ opacity: 0, x: -10 }}
                                                     animate={{ opacity: 1, x: 0 }}
                                                     transition={{ delay: idx * 0.05 }}
-                                                    className="p-5 bg-white/2 border border-white/5 rounded-3xl hover:bg-white/5 transition-all group"
+                                                    className="p-5 bg-slate-50 dark:bg-white/2 border border-slate-100 dark:border-white/5 rounded-3xl hover:bg-slate-100 dark:hover:bg-white/5 transition-all group shadow-sm"
                                                 >
                                                     <div className="flex justify-between items-start mb-3">
                                                         <div className="space-y-1">
                                                             <div className="flex items-center gap-2">
-                                                                <span className="px-2 py-0.5 bg-indigo-500/10 rounded-md text-[7px] font-black text-indigo-400 uppercase tracking-[0.2em]">{news.source}</span>
+                                                                <span className="px-2 py-0.5 bg-indigo-500/10 rounded-md text-[7px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">{news.source}</span>
                                                                 <span className="text-[7px] font-black text-brand-muted uppercase tracking-[0.2em]">{news.relevance} Relevance</span>
                                                             </div>
-                                                            <h5 className="text-[14px] font-black text-white leading-tight uppercase group-hover:text-indigo-400 transition-colors">{news.title}</h5>
+                                                            <h5 className="text-[14px] font-black text-brand-text dark:text-white leading-tight uppercase group-hover:text-indigo-500 transition-colors">{news.title}</h5>
                                                         </div>
-                                                        <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-xs font-black text-indigo-500 border border-white/5">
+                                                        <div className="w-8 h-8 rounded-xl bg-indigo-500/10 dark:bg-white/5 flex items-center justify-center text-xs font-black text-indigo-600 dark:text-indigo-500 border border-indigo-500/20 dark:border-white/5">
                                                             {idx + 1}
                                                         </div>
                                                     </div>
-                                                    <div className="p-3 bg-black/40 rounded-2xl border border-white/5 space-y-2">
-                                                        <p className="text-[11px] font-medium text-brand-muted leading-relaxed">
+                                                    <div className="p-3 bg-white dark:bg-black/40 rounded-2xl border border-slate-200 dark:border-white/5 space-y-2 shadow-inner">
+                                                        <p className="text-[11px] font-medium text-brand-text dark:text-brand-muted leading-relaxed">
                                                             {news.impact}
                                                         </p>
                                                         <div className="flex items-center gap-2 pt-1">
                                                             <Zap size={12} className="text-amber-500" />
-                                                            <p className="text-[10px] font-black text-amber-500 uppercase tracking-widest">{news.fomo_trigger}</p>
+                                                            <p className="text-[10px] font-black text-amber-600 dark:text-amber-500 uppercase tracking-widest">{news.fomo_trigger}</p>
                                                         </div>
                                                     </div>
                                                 </motion.div>
@@ -2303,60 +2327,73 @@ export const ProDashboard = () => {
                                 animate={{ scale: 1, opacity: 1, y: 0 }}
                                 exit={{ scale: 0.9, opacity: 0, y: 30 }}
                                 onClick={(e) => e.stopPropagation()}
-                                className="w-full max-w-lg glass-panel-premium rounded-[3rem] border border-white/10 overflow-hidden bg-slate-900 shadow-3xl flex flex-col max-h-[85vh] noise-overlay"
+                                className="w-full max-w-lg glass-panel-premium rounded-[3rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white dark:bg-slate-900 shadow-3xl flex flex-col max-h-[85vh] noise-overlay"
                             >
-                                <div className="p-8 border-b border-white/5 flex justify-between items-center bg-linear-to-br from-indigo-500/10 to-transparent">
+                                <div className="p-8 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-br from-indigo-500/5 dark:from-indigo-500/10 to-transparent">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center shadow-xl">
-                                            <BookOpen size={24} className="text-indigo-400" />
+                                        <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/20 dark:border-indigo-500/30 flex items-center justify-center shadow-xl">
+                                            <BookOpen size={24} className="text-indigo-500 dark:text-indigo-400" />
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-black text-white uppercase tracking-tight">
+                                            <h3 className="text-xl font-black text-brand-text dark:text-white uppercase tracking-tight">
                                                 {showManual === 'studio' ? t('pro_dashboard.academy.studio_manual.title') :
                                                     showManual === 'tools' ? t('pro_dashboard.tools.headline.title') :
                                                         showManual === 'academy' ? t('pro_dashboard.academy.protocols.title') :
-                                                            t('pro_dashboard.academy.viral_assets.title')}
+                                                            showManual === 'setup_x' ? t('pro_dashboard.setup.x_manual.title') :
+                                                                showManual === 'setup_tg' ? t('pro_dashboard.setup.tg_manual.title') :
+                                                                    showManual === 'setup_linkedin' ? t('pro_dashboard.setup.linkedin_manual.title') :
+                                                                        t('pro_dashboard.academy.viral_assets.title')}
                                             </h3>
-                                            <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] opacity-70">
-                                                {t('pro_dashboard.academy.studio_manual.subtitle')}
+                                            <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-70">
+                                                {showManual === 'setup_x' ? t('pro_dashboard.setup.x_manual.subtitle') :
+                                                    showManual === 'setup_tg' ? t('pro_dashboard.setup.tg_manual.subtitle') :
+                                                        showManual === 'setup_linkedin' ? t('pro_dashboard.setup.linkedin_manual.subtitle') :
+                                                            t('pro_dashboard.academy.studio_manual.subtitle')}
                                             </p>
                                         </div>
                                     </div>
                                     <button
                                         onClick={() => setShowManual(null)}
-                                        className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+                                        className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
                                     >
-                                        <X size={20} className="text-white/60" />
+                                        <X size={20} className="text-brand-text dark:text-white/60" />
                                     </button>
                                 </div>
 
                                 <div className="flex-1 overflow-y-auto no-scrollbar p-8 space-y-8">
-                                    {showManual === 'studio' ? (
-                                        (t('pro_dashboard.academy.studio_manual.steps', { returnObjects: true }) as any[]).map((step: any, i: number) => (
-                                            <div key={i} className="flex gap-6 items-start relative group">
-                                                {i < 3 && <div className="absolute left-[23.5px] top-12 bottom-0 w-px bg-linear-to-b from-indigo-500/30 to-transparent" />}
-                                                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-lg font-black text-indigo-500 shrink-0 shadow-lg group-hover:border-indigo-500/30 transition-colors">
-                                                    {i + 1}
+                                    {showManual === 'studio' || showManual === 'setup_x' || showManual === 'setup_tg' || showManual === 'setup_linkedin' ? (
+                                        (() => {
+                                            const key = showManual === 'studio' ? 'pro_dashboard.academy.studio_manual.steps' :
+                                                showManual === 'setup_x' ? 'pro_dashboard.setup.x_manual.steps' :
+                                                    showManual === 'setup_tg' ? 'pro_dashboard.setup.tg_manual.steps' :
+                                                        'pro_dashboard.setup.linkedin_manual.steps';
+                                            const steps = t(key, { returnObjects: true }) as any[];
+                                            return steps.map((step: any, i: number) => (
+                                                <div key={i} className="flex gap-6 items-start relative group">
+                                                    {i < steps.length - 1 && <div className="absolute left-[23.5px] top-12 bottom-0 w-px bg-linear-to-b from-indigo-500/20 dark:from-indigo-500/30 to-transparent" />}
+                                                    <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-lg font-black text-indigo-500 dark:text-indigo-400 shrink-0 shadow-lg group-hover:border-indigo-500/30 transition-colors">
+                                                        {i + 1}
+                                                    </div>
+                                                    <div className="space-y-2 pt-1">
+                                                        <h4 className="text-[14px] font-black text-brand-text dark:text-white uppercase tracking-tight">{step.title}</h4>
+                                                        <p className="text-[12px] font-medium text-brand-muted leading-relaxed opacity-80">{step.desc}</p>
+                                                    </div>
                                                 </div>
-                                                <div className="space-y-2 pt-1">
-                                                    <h4 className="text-[14px] font-black text-white uppercase tracking-tight">{step.title}</h4>
-                                                    <p className="text-[12px] font-medium text-brand-muted leading-relaxed opacity-80">{step.desc}</p>
-                                                </div>
-                                            </div>
-                                        ))
+                                            ));
+                                        })()
                                     ) : showManual === 'tools' ? (
                                         <div className="space-y-8">
-                                            <div className="p-6 bg-white/5 rounded-3xl border border-white/10 space-y-4">
-                                                <h4 className="text-[12px] font-black text-pink-500 uppercase tracking-widest">Viral Headline Fixer</h4>
+                                            <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 space-y-4 shadow-sm">
+                                                <h4 className="text-[12px] font-black text-pink-600 dark:text-pink-500 uppercase tracking-widest">Viral Headline Fixer</h4>
                                                 <p className="text-[12px] font-medium text-brand-muted leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.headline.desc')}"</p>
-                                                <div className="p-4 bg-black/20 rounded-2xl border border-white/5 text-[11px] text-brand-muted leading-relaxed">
+                                                <div className="p-4 bg-white dark:bg-black/20 rounded-2xl border border-slate-100 dark:border-white/5 text-[11px] text-brand-muted leading-relaxed shadow-inner">
                                                     Our neural engine analyzes current high-performing hooks and adapts your headline to trigger curiosity loops.
                                                 </div>
                                             </div>
-                                            <div className="p-6 bg-white/5 rounded-3xl border border-white/10 space-y-4">
-                                                <h4 className="text-[12px] font-black text-amber-500 uppercase tracking-widest">Viral Bio Generator</h4>
+                                            <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 space-y-4 shadow-sm">
+                                                <h4 className="text-[12px] font-black text-amber-600 dark:text-amber-500 uppercase tracking-widest">Viral Bio Generator</h4>
                                                 <p className="text-[12px] font-medium text-brand-muted leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.bio.desc')}"</p>
-                                                <div className="p-4 bg-black/20 rounded-2xl border border-white/5 text-[11px] text-brand-muted leading-relaxed">
+                                                <div className="p-4 bg-white dark:bg-black/20 rounded-2xl border border-slate-100 dark:border-white/5 text-[11px] text-brand-muted leading-relaxed shadow-inner">
                                                     Optimizes your social identity for conversion. High-converters focus on the 'Benefit' first, not the 'Feature'.
                                                 </div>
                                             </div>
