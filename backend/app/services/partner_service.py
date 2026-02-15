@@ -288,6 +288,25 @@ async def sync_single_photo(bot, session, partner: Partner) -> bool:
             logger.error(f"Photo sync error for {partner.telegram_id}: {e}")
     return False
 
+async def sync_single_photo_background(telegram_id: str):
+    """
+    Background worker for on-demand photo sync.
+    Creates its own session to avoid sharing state with the main request.
+    """
+    from sqlalchemy.orm import sessionmaker
+    from app.models.partner import engine
+    
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    async with async_session() as session:
+        stmt = select(Partner).where(Partner.telegram_id == telegram_id)
+        result = await session.exec(stmt)
+        partner = result.first()
+        if partner:
+            if await sync_single_photo(bot, session, partner):
+                await session.commit()
+                # Invalidate profile cache
+                await redis_service.client.delete(f"partner:profile:{telegram_id}")
+
 async def migrate_paths(session: AsyncSession):
     """
     Iterative Queue-based path migration (Non-recursive).

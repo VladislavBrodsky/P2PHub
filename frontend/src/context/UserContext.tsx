@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { apiClient } from '../api/client';
 import * as Sentry from "@sentry/react";
-import { getSafeLaunchParams } from '../utils/tma';
+import { getSafeLaunchParams, isTMA } from '../utils/tma';
 import { useStartupProgress } from './StartupProgressContext';
 
 interface User {
@@ -189,6 +189,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     return;
                 }
 
+                // #comment: Strategic Delay Removal
+                // Instead of a hard 2s wait, we check if we're even in a Telegram environment.
+                // If not, we skip the polling and start the refresh immediately.
+                if (!window.Telegram?.WebApp && !isTMA()) {
+                    console.log('[DEBUG] Not in TMA, skipping SDK wait');
+                    await refreshUser();
+                    return;
+                }
+
                 // Wait for Telegram environment
                 let attempts = 0;
                 const checkData = async () => {
@@ -196,11 +205,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         if (window.Telegram?.WebApp?.initData) {
                             console.log('[DEBUG] Telegram SDK detected, refreshing user...');
                             await refreshUser();
-                        } else if (attempts < 20) { // Check every 100ms for 2 seconds
+                        } else if (attempts < 10) { // Reduced to 1 second maximum wait (10 * 100ms)
                             attempts++;
                             setTimeout(checkData, 100);
                         } else {
-                            console.log('[DEBUG] Telegram SDK timeout, proceeding with refresh anyway');
+                            console.log('[DEBUG] Telegram SDK timeout/unavailable, proceeding with refresh');
                             await refreshUser();
                         }
                     } catch (e) {

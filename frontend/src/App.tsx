@@ -56,8 +56,9 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
     useEffect(() => {
         if (!isUserLoading && config) {
             updateProgress(95, t('system.loading.finalizing'));
-            // Small delay to ensure smooth transition
-            const timer = setTimeout(onReady, 500);
+            // #comment: Reduced transition delay from 500ms to 150ms.
+            // This is enough for the exit animation to prepare without feeling sluggish.
+            const timer = setTimeout(onReady, 150);
             return () => clearTimeout(timer);
         }
     }, [isUserLoading, config, onReady, updateProgress, t]);
@@ -291,17 +292,21 @@ function App() {
             // This eliminates the RevealSkeleton flash when switching tabs.
             const prefetchCoreRoutes = async () => {
                 try {
-                    // Critical path
+                    // Critical path only: Ensure the dashboard is ready
                     await prefetchPages.home();
 
-                    // Secondary paths (Parallel fetch)
-                    Promise.all([
-                        prefetchPages.earn(),
-                        prefetchPages.cards(),
-                        prefetchPages.partner(),
-                        prefetchPages.league(),
-                        prefetchPages.subscription()
-                    ]).catch(e => console.debug('Prefetch error', e));
+                    // #comment: Background non-critical prefetching. 
+                    // We wait 2 seconds after the app is potentially ready to start 
+                    // fetching secondary routes, avoiding bandwidth competition during startup.
+                    setTimeout(() => {
+                        Promise.all([
+                            prefetchPages.earn(),
+                            prefetchPages.cards(),
+                            prefetchPages.partner(),
+                            prefetchPages.league(),
+                            prefetchPages.subscription()
+                        ]).catch(e => console.debug('Lazy prefetch error', e));
+                    }, 2000);
 
                 } catch (e) {
                     console.warn('Prefetch failed', e);

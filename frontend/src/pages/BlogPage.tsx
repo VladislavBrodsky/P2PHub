@@ -23,10 +23,42 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
     const { selection, impact, notification } = useHaptic();
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
+    const [posts, setPosts] = useState<(BlogPost & BlogEngagement)[]>([]);
+    const [total, setTotal] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+    const [selectedPost, setSelectedPost] = useState<(BlogPost & { content?: string }) | null>(null);
     const [engagement, setEngagement] = useState<BlogEngagement>({ likes: 0, liked: false });
     const [isLoadingEngagement, setIsLoadingEngagement] = useState(false);
+
+    // Fetch posts from backend
+    const fetchPosts = useCallback(async (reset: boolean = false) => {
+        setIsLoading(true);
+        try {
+            const currentOffset = reset ? 0 : posts.length;
+            const data = await blogService.getPosts({
+                offset: currentOffset,
+                limit: 10,
+                category: selectedCategory,
+                q: searchQuery
+            });
+
+            if (reset) {
+                setPosts(data.items);
+            } else {
+                setPosts(prev => [...prev, ...data.items]);
+            }
+            setTotal(data.total);
+        } catch (error) {
+            console.error('Failed to fetch posts', error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [selectedCategory, searchQuery, posts.length]);
+
+    useEffect(() => {
+        fetchPosts(true);
+    }, [selectedCategory, searchQuery]);
 
     // Sync header visibility with selectedPost
     useEffect(() => {
@@ -51,33 +83,36 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
         if (main) main.scrollTop = 0;
     }, [selectedPost]);
 
-    // Optimized: Wrapped in useCallback to suppress lint warning and ensure stable reference for useEffect
-    const handlePostClick = useCallback(async (post: BlogPost) => {
+    const handlePostClick = useCallback(async (post: BlogPost & BlogEngagement) => {
         selection();
         setSelectedPost(post);
         setIsLoadingEngagement(true);
         try {
-            const data = await blogService.getEngagement(post.id);
-            setEngagement(data);
+            // Fetch full content and fresh engagement
+            const detail = await blogService.getPostDetail(post.id);
+            setSelectedPost(detail);
+            setEngagement({ likes: detail.likes, liked: detail.liked });
         } catch (error) {
-            console.error('Failed to load engagement', error);
+            console.error('Failed to load post detail', error);
         } finally {
             setIsLoadingEngagement(false);
         }
     }, [selection]);
 
     useEffect(() => {
-        const handleDeepLink = (e: any) => {
+        const handleDeepLink = async (e: any) => {
             const postId = e.detail;
-            const post = blogPosts.find(p => p.id === postId);
-            if (post) {
-                handlePostClick(post);
+            try {
+                const detail = await blogService.getPostDetail(postId);
+                handlePostClick(detail);
+            } catch (error) {
+                console.error('Deep link fail', error);
             }
         };
 
         window.addEventListener('nav-blog-post', handleDeepLink);
         return () => window.removeEventListener('nav-blog-post', handleDeepLink);
-    }, [handlePostClick]); // Added dependency
+    }, [handlePostClick]);
 
     // Telegram Native Back Button Integration
     useEffect(() => {
@@ -96,16 +131,14 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
         return () => {
             cleanup();
         };
-    }, [selectedPost, setActiveTab, currentTab, selection]); // Added selection dependency
+    }, [selectedPost, setActiveTab, currentTab, selection]);
 
-    const categories = useMemo(() => ['All', ...new Set(blogPosts.map(post => post.category))], []);
-    // Removed unused variables featuredPost/otherPosts to clean up code
+    const categories = useMemo(() => ['All', 'Wealth Strategy', 'Financial Shift', 'Growth Mindset', 'Freedom', 'Web3', 'Innovation', 'Payments'], []);
 
     const handleLike = async () => {
         if (!selectedPost || engagement.liked) return;
 
         impact('medium');
-        // Optimistic update
         setEngagement(prev => ({ ...prev, likes: prev.likes + 1, liked: true }));
 
         try {
@@ -113,15 +146,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
             notification('success');
         } catch (error: any) {
             console.error('Fail to like', error);
-            // Check for 404 which might mean partner record missing in dev
-            if (error?.response?.status === 404) {
-                // In dev mode/local, we might not have a partner record, so we keep the optimistic update
-                // but warn in console
-                console.warn('Like failed due to missing partner record (likely Dev environment). Keeping optimistic state.');
-            } else {
-                // Revert on real errors
-                setEngagement(prev => ({ ...prev, likes: prev.likes - 1, liked: false }));
-            }
+            setEngagement(prev => ({ ...prev, likes: prev.likes - 1, liked: false }));
         }
     };
 
@@ -134,7 +159,6 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                 url: window.location.href,
             }).catch(console.error);
         } else {
-            // Fallback: Copy to clipboard
             navigator.clipboard.writeText(window.location.href);
             notification('success');
         }
@@ -142,42 +166,16 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
 
     const navigatePost = (direction: 'next' | 'prev') => {
         if (!selectedPost) return;
-        const currentIndex = blogPosts.findIndex(p => p.id === selectedPost.id);
+        const currentIndex = posts.findIndex(p => p.id === selectedPost.id);
         const nextIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
 
-        if (nextIndex >= 0 && nextIndex < blogPosts.length) {
-            handlePostClick(blogPosts[nextIndex]);
+        if (nextIndex >= 0 && nextIndex < posts.length) {
+            handlePostClick(posts[nextIndex]);
         }
     };
 
-
-    // Memoize localized posts to avoid re-mapping on every search keystroke
-    const localizedPosts = useMemo(() => {
-        return blogPosts.map(post => {
-            const localized = t(`blog.posts.${post.id}`, { returnObjects: true }) as any;
-            return {
-                ...post,
-                title: (localized && localized.title) || post.title,
-                excerpt: (localized && localized.excerpt) || post.excerpt,
-                category: (localized && localized.category) || post.category
-            };
-        });
-    }, [t]);
-
-    // Memoize filtered posts for instant search performance
-    const currentFilteredPosts = useMemo(() => {
-        const query = searchQuery.toLowerCase();
-        return localizedPosts.filter(post => {
-            const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;
-            const matchesSearch =
-                post.title.toLowerCase().includes(query) ||
-                post.excerpt.toLowerCase().includes(query);
-            return matchesCategory && matchesSearch;
-        });
-    }, [localizedPosts, selectedCategory, searchQuery]);
-
-    const currentFeaturedPost = useMemo(() => currentFilteredPosts[0], [currentFilteredPosts]);
-    const currentOtherPosts = useMemo(() => currentFilteredPosts.slice(1), [currentFilteredPosts]);
+    const currentFeaturedPost = useMemo(() => posts[0], [posts]);
+    const currentOtherPosts = useMemo(() => posts.slice(1), [posts]);
 
     return (
         <motion.div
@@ -206,7 +204,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                 <div>
                                     <h1 className="text-xl font-black tracking-tight leading-none">{t('blog.title')}</h1>
                                     <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60 mt-1">
-                                        {blogPosts.length} {t('blog.latest')}
+                                        {total} {t('blog.latest')}
                                     </p>
                                 </div>
                             </div>
@@ -296,7 +294,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
 
                             {/* Grid */}
                             <div className="grid gap-4">
-                                {(selectedCategory === 'All' && searchQuery === '' ? currentOtherPosts : currentFilteredPosts).map((post, index) => (
+                                {(selectedCategory === 'All' && searchQuery === '' ? currentOtherPosts : posts).map((post, index) => (
                                     <motion.div
                                         key={post.id}
                                         initial={{ opacity: 0, x: -20 }}
@@ -322,7 +320,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                                 </span>
                                                 <div className="flex items-center gap-1 text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
                                                     <Clock className="w-3 h-3" />
-                                                    {post.date}
+                                                    {new Date(post.published_at!).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                                                 </div>
                                             </div>
                                             <h4 className="text-[15px] font-extrabold leading-tight group-hover:text-blue-500 transition-colors line-clamp-2">
@@ -338,7 +336,17 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                     </motion.div>
                                 ))}
 
-                                {currentFilteredPosts.length === 0 && (
+                                {posts.length < total && (
+                                    <button
+                                        onClick={() => fetchPosts()}
+                                        disabled={isLoading}
+                                        className="w-full py-4 rounded-2xl border border-slate-200 dark:border-white/10 text-sm font-bold text-slate-500 hover:text-blue-500 transition-colors"
+                                    >
+                                        {isLoading ? '...' : t('common.show_more')}
+                                    </button>
+                                )}
+
+                                {posts.length === 0 && !isLoading && (
                                     <div className="py-20 text-center space-y-4">
                                         <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto">
                                             <Search className="w-8 h-8 text-slate-400" />
@@ -497,25 +505,37 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
 
                 {/* Body Text (Simulated content structure) */}
                 <div className="space-y-6 text-lg leading-relaxed text-slate-900/90 dark:text-white/90 font-medium whitespace-pre-wrap">
-                    <p className="first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left first-letter:text-blue-500 first-letter:leading-none first-letter:pt-2">
-                        {post.excerpt}
-                    </p>
+                    {post.content ? (
+                        <div className="space-y-6">
+                            {post.content.split('\n\n').map((p, i) => (
+                                <p key={i} className={i === 0 ? "first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left first-letter:text-blue-500 first-letter:leading-none first-letter:pt-2" : ""}>
+                                    {p}
+                                </p>
+                            ))}
+                        </div>
+                    ) : (
+                        <>
+                            <p className="first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left first-letter:text-blue-500 first-letter:leading-none first-letter:pt-2">
+                                {post.excerpt}
+                            </p>
 
-                    <p>
-                        {t('blog.content.p1')}
-                    </p>
+                            <p>
+                                {t('blog.content.p1')}
+                            </p>
 
-                    <MarketingBox type="card" />
+                            <MarketingBox type="card" />
 
-                    <p>
-                        {t('blog.content.p2')}
-                    </p>
+                            <p>
+                                {t('blog.content.p2')}
+                            </p>
 
-                    <MarketingBox type="pro" />
+                            <MarketingBox type="pro" />
 
-                    <p>
-                        {t('blog.content.p3')}
-                    </p>
+                            <p>
+                                {t('blog.content.p3')}
+                            </p>
+                        </>
+                    )}
                 </div>
 
                 {/* Engagement Footer */}

@@ -124,9 +124,10 @@ async def get_my_profile(
     from app.services.referral_service import process_referral_notifications
 
     # Check if photo exists in DB first to avoid blocking Telegram API calls during every /me request
-    # Use selectinload to prevent lazy loading error in async session
+    # Eagerly load all required relations to skip the refetch later
     stmt = select(Partner).where(Partner.telegram_id == tg_id).options(
-        selectinload(Partner.completed_task_records)
+        selectinload(Partner.completed_task_records),
+        selectinload(Partner.referrals)
     )
     result = await session.exec(stmt)
     partner = result.first()
@@ -178,18 +179,22 @@ async def get_my_profile(
                     has_changed = True
 
             # Sync photo specifically if missing or during this throttled window
-            try:
-                user_photos = await bot.get_user_profile_photos(tg_id, limit=1)
-                if user_photos.total_count > 0:
-                    new_file_id = user_photos.photos[0][0].file_id
-                    if partner.photo_file_id != new_file_id:
-                        partner.photo_file_id = new_file_id
+            # CRITICAL OPTIMIZATION: Move Telegram API calls to background tasks 
+            # to prevent blocking the /me response.
+            if not partner.photo_file_id:
+                try:
+                    user_photos = await bot.get_user_profile_photos(tg_id, limit=1)
+                    if user_photos.total_count > 0:
+                        partner.photo_file_id = user_photos.photos[0][0].file_id
                         has_changed = True
-                        # Eagerly cache the new photo
                         from app.services.partner_service import ensure_photo_cached
-                        background_tasks.add_task(ensure_photo_cached, new_file_id)
-            except Exception as e:
-                logger.warning(f"Failed to refresh photo during profile update for {tg_id}: {e}")
+                        background_tasks.add_task(ensure_photo_cached, partner.photo_file_id)
+                except Exception as e:
+                    logger.warning(f"Failed to fetch initial photo for {tg_id}: {e}")
+            else:
+                # Throttled background update for existing photos
+                from app.services.partner_service import sync_single_photo_background
+                background_tasks.add_task(sync_single_photo_background, tg_id)
 
             if has_changed:
                 partner.updated_at = now
@@ -325,9 +330,7 @@ async def get_my_profile(
         logger.warning(f"Tree pre-warm failed: {e}")
 
     # 5. Prepare Response - O(1) using schema-level automation
-    # #comment: Final hydration check to prevent MissingGreenlet in Pydantic mapping
-    from app.services.partner_service import get_partner_full
-    partner = await get_partner_full(session, tg_id)
+    # Redundant refetch removed - 'partner' already contains all relations from step 2
     
     from app.models.schemas import PartnerResponse
     partner_response = PartnerResponse.from_orm(partner)

@@ -1,11 +1,39 @@
 import { apiClient } from '../api/client';
+import { BlogPost } from '../data/blogPosts';
 
 export interface BlogEngagement {
     likes: number;
     liked: boolean;
 }
 
+export interface BlogListResponse {
+    items: (BlogPost & BlogEngagement)[];
+    total: number;
+    offset: number;
+    limit: number;
+}
+
 export const blogService = {
+    getPosts: async (options: { offset?: number; limit?: number; category?: string; q?: string } = {}): Promise<BlogListResponse> => {
+        try {
+            const response = await apiClient.get('/blog', { params: options });
+            return response.data;
+        } catch (error) {
+            console.error('Failed to fetch blog posts:', error);
+            throw error;
+        }
+    },
+
+    getPostDetail: async (slug: string): Promise<BlogPost & BlogEngagement & { content: string }> => {
+        try {
+            const response = await apiClient.get(`/blog/${slug}`);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to fetch blog post detail:', error);
+            throw error;
+        }
+    },
+
     getEngagement: async (slug: string): Promise<BlogEngagement> => {
         try {
             const response = await apiClient.get(`/blog/${slug}/engagement`);

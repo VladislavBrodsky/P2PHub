@@ -10,13 +10,18 @@ interface StartupLoaderProps {
 export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusText = 'Initializing P2P Hub' }) => {
     const [displayProgress, setDisplayProgress] = useState(0);
 
-    // Smooth progress interpolation
+    // #comment: Accelerated progress interpolation. 
+    // Increased step size and frequency to ensure the loader feels snappy 
+    // and doesn't trap the user in artificial wait cycles.
     useEffect(() => {
         const timer = setTimeout(() => {
             if (displayProgress < progress) {
-                setDisplayProgress(prev => Math.min(prev + 1, progress));
+                const diff = progress - displayProgress;
+                // dynamic step: larger jumps for larger gaps
+                const step = diff > 20 ? 5 : (diff > 5 ? 2 : 1);
+                setDisplayProgress(prev => Math.min(prev + step, progress));
             }
-        }, 10);
+        }, 8); // Slightly faster interval (8ms vs 10ms)
         return () => clearTimeout(timer);
     }, [progress, displayProgress]);
 
