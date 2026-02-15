@@ -22,12 +22,6 @@ logger = logging.getLogger(__name__)
 # #comment: Global HTTPX client to reuse connections across requests.
 # This significantly reduces latency and overhead compared to creating a client per request.
 http_client = httpx.AsyncClient(timeout=10.0, limits=httpx.Limits(max_keepalive_connections=50, max_connections=100))
-
-# #comment: In-memory lock map to prevent "dog-pile" effect.
-# When multiple requests come for the SAME file_id that isn't cached yet,
-# only one will perform the heavy processing, while others will wait for the result.
-_photo_processing_locks = {}
-
 async def ensure_photo_cached(file_id: str) -> bytes | None:
     """
     Ensures the Telegram photo is cached in Redis (WebP optimized).
@@ -43,11 +37,10 @@ async def ensure_photo_cached(file_id: str) -> bytes | None:
     except Exception as e:
         logger.debug(f"Binary cache read failed: {e}")
 
-    # Enter lock to prevent concurrent processing of the same file_id (Dog-pile Protection)
-    if file_id not in _photo_processing_locks:
-        _photo_processing_locks[file_id] = asyncio.Lock()
-    
-    async with _photo_processing_locks[file_id]:
+    # Enter Redis-based distributed lock to prevent concurrent processing of the same file_id (Dog-pile Protection)
+    # timeout=60s is enough for image processing (usually <1s)
+    lock_key = f"lock:photo:process:{file_id}"
+    async with redis_service.client.lock(lock_key, timeout=60):
         # Check again after acquiring lock (it might have been processed while we waited)
         try:
             cached_binary = await redis_service.get_bytes(cache_key_binary)

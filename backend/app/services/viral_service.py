@@ -520,7 +520,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                                 prompt=prompt,
                                 config={
                                     'number_of_images': 1,
-                                    'output_mime_type': 'image/png',
+                                    'output_mime_type': 'image/webp',
                                     'aspect_ratio': '16:9',
                                     'safety_filter_level': 'block_low_and_above',
                                     'person_generation': 'allow_adult',
@@ -529,7 +529,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                                     # Nano Banana specific configs (Gemini 3 Pro)
                                     'number_of_images': 1,
                                     'aspect_ratio': '16:9',
-                                    'output_mime_type': 'image/png',
+                                    'output_mime_type': 'image/webp',
                                     'quality': '4k' if 'pro' in model_name else 'standard'
                                 }
                             )
@@ -539,7 +539,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                     
                     if img_response and getattr(img_response, 'generated_images', None):
                         image = img_response.generated_images[0]
-                        filename = f"viral_{partner.id}_{secrets.token_hex(4)}.png"
+                        filename = f"viral_{partner.id}_{secrets.token_hex(4)}.webp"
                         
                         # Production path: /app/generated_media (created with proper permissions in Dockerfile)
                         backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -555,7 +555,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                             
                             # Save to BytesIO buffer then write to disk
                             buffer = BytesIO()
-                            pil_image.save(buffer, format='PNG')
+                            pil_image.save(buffer, format='WEBP', quality=85)
                             
                             with open(save_path, 'wb') as f:
                                 f.write(buffer.getvalue())

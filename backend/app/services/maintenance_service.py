@@ -145,3 +145,35 @@ async def check_database_health() -> dict:
             "orphaned_count": orphaned_count,
             "timestamp": datetime.utcnow().isoformat()
         }
+
+async def check_tree_integrity(session: AsyncSession) -> dict[str, Any]:
+    """
+    Validates the integrity of the materialized path and depth.
+    Ensures that depth matches the number of segments in the path.
+    """
+    logger.info("🔍 Running Tree Integrity Audit...")
+    
+    result = await session.exec(select(Partner.id, Partner.path, Partner.depth))
+    partners = result.all()
+    
+    anomalies = []
+    for p_id, p_path, p_depth in partners:
+        expected_depth = 0
+        if p_path:
+            # Handle possible trailing dots or empty segments if they ever occur
+            expected_depth = len([x for x in p_path.split('.') if x])
+        
+        if expected_depth != p_depth:
+            anomalies.append({
+                "id": p_id,
+                "path": p_path,
+                "current_depth": p_depth,
+                "expected_depth": expected_depth
+            })
+            
+    return {
+        "status": "healthy" if not anomalies else "anomalous",
+        "total_checked": len(partners),
+        "anomaly_count": len(anomalies),
+        "anomalies": anomalies[:100] # Limit output
+    }
