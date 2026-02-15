@@ -39,8 +39,6 @@ class PartnerResponse(PartnerBase):
     completed_tasks: str = "[]"
     completed_stages: List[int] = []
     is_admin: bool = False
-    total_earned: Optional[float] = 0.0
-    total_network_size: int = 0
 
     class Config:
         from_attributes = True
