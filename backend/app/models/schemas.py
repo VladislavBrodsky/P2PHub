@@ -13,6 +13,11 @@ class PartnerBase(BaseModel):
     photo_url: Optional[str] = None
     photo_file_id: Optional[str] = None
 
+    # #comment: CRITICAL for Pydantic v2. This allows ORM objects to be used 
+    # when validating this model, specifically for nested lists like 'referrals'.
+    class Config:
+        from_attributes = True
+
 class ActiveTaskResponse(BaseModel):
     task_id: str
     status: str
@@ -176,3 +181,7 @@ class PartnerTopResponse(BaseModel):
     xp: float
     referrals_count: int
     rank: str
+
+    # #comment: Required for leaderboard service mappings from ORM.
+    class Config:
+        from_attributes = True
