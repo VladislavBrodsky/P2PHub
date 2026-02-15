@@ -1,32 +1,47 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronRight, ArrowUpRight } from 'lucide-react';
-import { getLatestPosts } from '../../data/blogPosts';
+import { ChevronRight, ArrowUpRight, Clock } from 'lucide-react';
+import { blogService } from '../../services/blogService';
+import { BlogPost } from '../../data/blogPosts';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
-// #comment: Imported SectionHeader to maintain visual and semantic consistency in section titling.
 import { SectionHeader } from '../ui/SectionHeader';
 
 export const BlogCarousel = () => {
     const { t } = useTranslation();
     const { selection } = useHaptic();
-    const latestPosts = getLatestPosts(3);
+    const [posts, setPosts] = useState<BlogPost[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const load = async () => {
+            try {
+                const data = await blogService.getPosts({ limit: 3 });
+                setPosts(data.items);
+            } catch (e) {
+                console.error('Carousel error', e);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        load();
+    }, []);
 
     const navigateToBlog = (postId?: string) => {
         selection();
         window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'blog' }));
         if (postId) {
-            // Give a small delay for the tab to switch
             setTimeout(() => {
                 window.dispatchEvent(new CustomEvent('nav-blog-post', { detail: postId }));
-            }, 100);
+            }, 500);
         }
     };
+
+    if (isLoading) return null;
 
     return (
         <section className="py-8 space-y-6">
             <div className="flex items-center justify-between px-4">
-                {/* #comment: Phase 2 - Replaced manual h3 with SectionHeader (managed via title prop) for consistency. 
-                    Added Tailwind v4 compliant exclamation for overrides. */}
                 <SectionHeader
                     title={t('blog.latest')}
                     description={t('blog.title')}
@@ -42,7 +57,7 @@ export const BlogCarousel = () => {
             </div>
 
             <div className="flex gap-4 overflow-x-auto px-4 pb-6 no-scrollbar snap-x snap-mandatory">
-                {latestPosts.map((post, index) => (
+                {posts.map((post, index) => (
                     <motion.div
                         key={post.id}
                         initial={{ opacity: 0, scale: 0.95 }}
@@ -52,7 +67,7 @@ export const BlogCarousel = () => {
                         onClick={() => navigateToBlog(post.id)}
                         className="min-w-[280px] max-w-[280px] group flex flex-col gap-4 p-6 rounded-[2.5rem] border border-slate-200 dark:border-white/10 glass-panel-premium snap-start active:scale-95 transition-all cursor-pointer relative overflow-hidden"
                     >
-                        {post.image && (
+                        {post.image ? (
                             <>
                                 <img
                                     src={post.image}
@@ -61,24 +76,27 @@ export const BlogCarousel = () => {
                                 />
                                 <div className="absolute inset-0 bg-linear-to-t from-slate-50 via-slate-50/80 dark:from-slate-950 dark:via-slate-950/80 to-transparent z-10" />
                             </>
+                        ) : (
+                            <div className="absolute inset-0 bg-linear-to-br from-blue-500/10 to-indigo-500/10 z-0" />
                         )}
                         <div className="relative z-20 flex flex-col h-full gap-4">
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
                                     <span className="text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/10">
-                                        {t(`blog.posts.${post.id}.category`)}
+                                        {post.category}
                                     </span>
-                                    <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
-                                        {post.date}
+                                    <span className="flex items-center gap-1 text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
+                                        <Clock className="w-3 h-3" />
+                                        {post.published_at ? new Date(post.published_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : post.date}
                                     </span>
                                 </div>
 
                                 <h4 className="text-xl font-black leading-tight text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors line-clamp-2">
-                                    {t(`blog.posts.${post.id}.title`)}
+                                    {post.title}
                                 </h4>
 
                                 <p className="text-xs font-semibold leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-3 opacity-80">
-                                    {t(`blog.posts.${post.id}.excerpt`)}
+                                    {post.excerpt}
                                 </p>
                             </div>
 

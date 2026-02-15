@@ -461,21 +461,21 @@ export const ProDashboard = () => {
     return (
         <div className="relative w-full h-full flex flex-col bg-slate-50 dark:bg-slate-950 overflow-hidden cyber-grid">
             {/* #comment: Fixed Header Section - Static and compact for better focus */}
-            <div className="shrink-0 pt-6 pb-2 space-y-6 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl z-20 border-b border-white/5 shadow-2xl transition-all">
-                <div className="px-6 flex items-center justify-between">
+            <div className="shrink-0 pt-4 pb-2 space-y-3 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl z-20 border-b border-white/5 shadow-2xl transition-all">
+                <div className="px-5 flex items-center justify-between">
                     <div className="space-y-1">
-                        <div className="flex items-center gap-3">
-                            <h1 className="text-xl font-black tracking-tight leading-none uppercase text-brand-text drop-shadow-sm">
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-lg sm:text-xl font-black tracking-tight leading-none uppercase text-brand-text drop-shadow-sm">
                                 {t('pro_dashboard.title_studio')}
                             </h1>
-                            <div className="px-2 py-0.5 rounded-lg bg-linear-to-r from-indigo-500 to-purple-600 text-[10px] font-black text-white shadow-lg shadow-indigo-500/20">
+                            <div className="px-1.5 py-0.5 rounded-lg bg-linear-to-r from-indigo-500 to-purple-600 text-[8px] sm:text-[10px] font-black text-white shadow-lg shadow-indigo-500/20">
                                 PRO
                             </div>
                         </div>
                         {status && (
-                            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 shadow-xs w-fit">
-                                <Sparkles className="w-2.5 h-2.5 text-amber-500" />
-                                <span className="text-[10px] font-black text-amber-600 dark:text-amber-500 uppercase tracking-widest">
+                            <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 shadow-xs w-fit">
+                                <Sparkles className="w-2 h-2 text-amber-500" />
+                                <span className="text-[9px] font-black text-amber-600 dark:text-amber-500 uppercase tracking-widest">
                                     {t('pro_dashboard.tokens_left', { count: status.pro_tokens })}
                                 </span>
                             </div>
@@ -495,7 +495,7 @@ export const ProDashboard = () => {
                             <button
                                 key={tab}
                                 onClick={() => { setActiveTab(tab as any); selection(); impact('light'); }}
-                                className={`relative px-5 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 min-w-[90px] ${activeTab === tab
+                                className={`relative flex-1 px-3 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 ${activeTab === tab
                                     ? 'text-white'
                                     : 'text-brand-muted hover:text-brand-text'
                                     }`}
@@ -1134,32 +1134,32 @@ export const ProDashboard = () => {
                                 className="space-y-8 pb-12"
                             >
                                 {/* Intelligence Report Header - Elite Data Visualization */}
-                                <div className="glass-panel-premium p-8 rounded-[3rem] border border-slate-200 dark:border-white/10 relative overflow-hidden bg-white dark:bg-slate-900 shadow-3xl group noise-overlay">
+                                <div className="glass-panel-premium p-5 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-slate-200 dark:border-white/10 relative overflow-hidden bg-white dark:bg-slate-900 shadow-3xl group noise-overlay">
                                     <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 dark:from-indigo-500/20 dark:to-purple-500/20 pointer-events-none" />
                                     <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
 
-                                    <div className="relative z-10 flex justify-between items-start mb-10">
-                                        <div className="space-y-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="px-3 py-1 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full border border-indigo-500/20 dark:border-indigo-500/30 flex items-center gap-2">
-                                                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
-                                                    <span className="text-[9px] font-black text-indigo-600 dark:text-indigo-200 uppercase tracking-[0.3em]">Viral Intelligence Active</span>
+                                    <div className="relative z-10 flex flex-col sm:flex-row justify-between items-start gap-6 mb-8 sm:mb-10">
+                                        <div className="space-y-3 sm:space-y-4">
+                                            <div className="flex items-center gap-2 sm:gap-3">
+                                                <div className="px-2.5 py-1 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full border border-indigo-500/20 dark:border-indigo-500/30 flex items-center gap-1.5 sm:gap-2">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
+                                                    <span className="text-[8px] sm:text-[9px] font-black text-indigo-600 dark:text-indigo-200 uppercase tracking-[0.2em] sm:tracking-[0.3em]">Viral Intelligence Active</span>
                                                 </div>
                                                 <button
                                                     onClick={() => { selection(); setShowManual('academy'); }}
-                                                    className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-indigo-500 dark:text-indigo-400 hover:bg-slate-200 dark:hover:bg-white/10 transition-all opacity-60 hover:opacity-100"
+                                                    className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-indigo-500 dark:text-indigo-400 hover:bg-slate-200 dark:hover:bg-white/10 transition-all opacity-60 hover:opacity-100"
                                                 >
-                                                    <Info size={12} />
+                                                    <Info size={10} />
                                                 </button>
                                             </div>
-                                            <h3 className="text-4xl font-black text-brand-text dark:text-white tracking-tighter uppercase leading-none drop-shadow-2xl">
+                                            <h3 className="text-xl sm:text-4xl font-black text-brand-text dark:text-white tracking-tighter uppercase leading-tight sm:leading-none drop-shadow-2xl max-w-[200px] sm:max-w-none">
                                                 {t('pro_dashboard.academy.protocols.title')}
                                             </h3>
                                         </div>
-                                        <div className="text-right">
-                                            <p className="text-[11px] font-black text-indigo-600/60 dark:text-indigo-300/60 uppercase tracking-[0.3em] mb-2">{t('pro_dashboard.academy.protocols.stats_label')}</p>
-                                            <div className="text-5xl font-black text-brand-text dark:text-white tabular-nums leading-none flex items-baseline justify-end">
-                                                {academyScore}<span className="text-indigo-500 text-2xl">.0</span>
+                                        <div className="text-left sm:text-right">
+                                            <p className="text-[9px] sm:text-[11px] font-black text-indigo-600/60 dark:text-indigo-300/60 uppercase tracking-[0.3em] mb-1 sm:mb-2">{t('pro_dashboard.academy.protocols.stats_label')}</p>
+                                            <div className="text-3xl sm:text-5xl font-black text-brand-text dark:text-white tabular-nums leading-none flex items-baseline justify-start sm:justify-end">
+                                                {academyScore}<span className="text-indigo-500 text-lg sm:text-2xl">.0</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1222,7 +1222,7 @@ export const ProDashboard = () => {
                                                 key={article.id}
                                                 whileHover={{ y: -5 }}
                                                 onClick={() => { setSelectedArticle(article); selection(); impact('light'); }}
-                                                className="min-w-[280px] snap-center glass-panel-premium p-5 rounded-[2rem] border border-white/10 relative overflow-hidden group cursor-pointer active:scale-95 transition-all bg-white/60 dark:bg-slate-900/60 shadow-xl"
+                                                className="min-w-[240px] sm:min-w-[280px] snap-center glass-panel-premium p-4 sm:p-5 rounded-[1.5rem] sm:rounded-[2rem] border border-white/10 relative overflow-hidden group cursor-pointer active:scale-95 transition-all bg-white/60 dark:bg-slate-900/60 shadow-xl"
                                             >
                                                 <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 blur-2xl group-hover:bg-indigo-500/10 transition-colors" />
                                                 <div className="flex items-center gap-2 mb-3">
@@ -1434,7 +1434,7 @@ export const ProDashboard = () => {
                                     </a>
 
                                     {/* Bento Grid Layout - Enhanced Visual Depth */}
-                                    <div className="grid grid-cols-2 gap-5">
+                                    <div className="grid grid-cols-2 gap-3 sm:gap-5">
                                         {(t('pro_dashboard.academy.viral_assets.cards', { returnObjects: true }) as any[]).map((card: any, i: number) => {
                                             const isLarge = card.id === 'off_grid';
                                             return (
@@ -1444,9 +1444,9 @@ export const ProDashboard = () => {
                                                     whileInView={{ opacity: 1, y: 0 }}
                                                     viewport={{ once: true }}
                                                     transition={{ delay: i * 0.1, duration: 0.6 }}
-                                                    className={`glass-panel-premium relative overflow-hidden rounded-[2.5rem] border group transition-all duration-500 cursor-pointer ${isLarge
-                                                        ? 'col-span-2 p-8 bg-white/40 dark:bg-slate-900/40 border-slate-200/50 dark:border-white/15 shadow-2xl'
-                                                        : 'col-span-1 p-6 bg-white/30 dark:bg-slate-900/30 border-slate-200/30 dark:border-white/10 shadow-xl'
+                                                    className={`glass-panel-premium relative overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] border group transition-all duration-500 cursor-pointer ${isLarge
+                                                        ? 'col-span-2 p-5 sm:p-8 bg-white/40 dark:bg-slate-900/40 border-slate-200/50 dark:border-white/15 shadow-2xl'
+                                                        : 'col-span-1 p-4 sm:p-6 bg-white/30 dark:bg-slate-900/30 border-slate-200/30 dark:border-white/10 shadow-xl'
                                                         } hover:shadow-indigo-500/20 hover:-translate-y-1`}
                                                     onClick={() => { setSelectedAsset(card); impact('light'); }}
                                                 >
@@ -1508,19 +1508,19 @@ export const ProDashboard = () => {
                                                             <div className="mt-2 flex gap-4 items-center">
                                                                 <button
                                                                     onClick={(e) => { e.stopPropagation(); handleCopyAnyText(card.desc); selection(); impact('light'); }}
-                                                                    className="flex-1 h-14 bg-white/5 hover:bg-white/10 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200/50 dark:border-white/10 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.97] shadow-lg group/btn"
+                                                                    className="flex-1 h-12 sm:h-14 bg-white/5 hover:bg-white/10 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200/50 dark:border-white/10 rounded-xl sm:rounded-2xl flex items-center justify-center gap-2 sm:gap-3 transition-all active:scale-[0.97] shadow-lg group/btn"
                                                                 >
-                                                                    <div className="w-8 h-8 rounded-xl bg-indigo-500/10 flex items-center justify-center group-hover/btn:bg-indigo-500/20 transition-colors">
-                                                                        <Copy size={14} className="text-indigo-500" />
+                                                                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-indigo-500/10 flex items-center justify-center group-hover/btn:bg-indigo-500/20 transition-colors">
+                                                                        <Copy size={12} className="text-indigo-500" />
                                                                     </div>
-                                                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-text">Copy Logic</span>
+                                                                    <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-brand-text">Copy Logic</span>
                                                                 </button>
 
                                                                 <button
                                                                     onClick={(e) => { e.stopPropagation(); setSelectedAsset(card); impact('heavy'); }}
-                                                                    className="h-14 w-14 vibing-blue-animated rounded-2xl flex items-center justify-center shadow-2xl active:scale-[0.95] transition-all group/arrow"
+                                                                    className="h-12 w-12 sm:h-14 sm:w-14 vibing-blue-animated rounded-xl sm:rounded-2xl flex items-center justify-center shadow-2xl active:scale-[0.95] transition-all group/arrow"
                                                                 >
-                                                                    <ChevronRight size={22} className="group-hover:translate-x-1 transition-transform" />
+                                                                    <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
                                                                 </button>
                                                             </div>
                                                         )}

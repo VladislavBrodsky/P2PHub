@@ -71,6 +71,13 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
 
         if (startParam === 'network' || urlStartParam === 'network') {
             setActiveTab('partner');
+        } else if (startParam?.startsWith('blog_') || urlStartParam?.startsWith('blog_')) {
+            const slug = (startParam || urlStartParam)?.replace('blog_', '');
+            setActiveTab('blog');
+            // Small delay to ensure BlogPage component is mounted and event listener is ready
+            setTimeout(() => {
+                window.dispatchEvent(new CustomEvent('nav-blog-post', { detail: slug }));
+            }, 500);
         }
     }, []);
 

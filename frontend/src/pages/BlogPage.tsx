@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
@@ -30,6 +30,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
     const [selectedPost, setSelectedPost] = useState<(BlogPost & { content?: string }) | null>(null);
     const [engagement, setEngagement] = useState<BlogEngagement>({ likes: 0, liked: false });
     const [isLoadingEngagement, setIsLoadingEngagement] = useState(false);
+    const sentinelRef = useRef<HTMLDivElement>(null);
 
     // Fetch posts from backend
     const fetchPosts = useCallback(async (reset: boolean = false) => {
@@ -152,15 +153,21 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
 
     const handleShare = () => {
         selection();
-        if (navigator.share && selectedPost) {
-            navigator.share({
-                title: selectedPost.title,
-                text: selectedPost.excerpt,
-                url: window.location.href,
-            }).catch(console.error);
-        } else {
-            navigator.clipboard.writeText(window.location.href);
-            notification('success');
+        if (selectedPost) {
+            // Use the slug for the deep link, fallback to ID
+            const blogId = selectedPost.slug || selectedPost.id;
+            const shareUrl = `https://t.me/ViralStudioBot/app?startapp=blog_${blogId}`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: selectedPost.title,
+                    text: selectedPost.excerpt,
+                    url: shareUrl,
+                }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(shareUrl);
+                notification('success');
+            }
         }
     };
 
@@ -173,6 +180,21 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
             handlePostClick(posts[nextIndex]);
         }
     };
+
+    // Infinite Scroll Observer
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && posts.length < total && !isLoading && !selectedPost) {
+                fetchPosts();
+            }
+        }, { threshold: 0.1, rootMargin: '100px' });
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, [posts.length, total, isLoading, fetchPosts, selectedPost]);
 
     const currentFeaturedPost = useMemo(() => posts[0], [posts]);
     const currentOtherPosts = useMemo(() => posts.slice(1), [posts]);
@@ -337,13 +359,12 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                 ))}
 
                                 {posts.length < total && (
-                                    <button
-                                        onClick={() => fetchPosts()}
-                                        disabled={isLoading}
-                                        className="w-full py-4 rounded-2xl border border-slate-200 dark:border-white/10 text-sm font-bold text-slate-500 hover:text-blue-500 transition-colors"
-                                    >
-                                        {isLoading ? '...' : t('common.show_more')}
-                                    </button>
+                                    <div ref={sentinelRef} className="py-10 flex flex-col items-center justify-center gap-3">
+                                        <div className="w-6 h-6 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 animate-pulse">
+                                            Scanning Intelligence...
+                                        </p>
+                                    </div>
                                 )}
 
                                 {posts.length === 0 && !isLoading && (
