@@ -177,8 +177,8 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                 {/* Main Article Content */}
                                 <div className="space-y-7 text-slate-600 dark:text-slate-400 text-[15px] leading-relaxed font-medium">
                                     <p className="text-lg text-slate-900 dark:text-white font-bold leading-snug">
-                                        <Trans i18nKey="academy.elite_training">
-                                            Welcome to the elite training floor. To reach the result of <span className="text-blue-600"><strong>$1 per minute</strong></span>, we must first master the art of <strong>leverage</strong>.
+                                        <Trans i18nKey={`academy_content.stage_${stage.id}_lesson_intro`}>
+                                            {t(`academy_content.stage_${stage.id}_lesson_intro`, { defaultValue: t('academy.elite_training') })}
                                         </Trans>
                                     </p>
 
@@ -186,38 +186,41 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                         <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 blur-2xl -mr-8 -mt-8" />
                                         <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-500 font-black text-[11px] uppercase tracking-widest relative z-10">
                                             <Lightbulb className="w-4 h-4" />
-                                            {t('academy.profit_secret')}
+                                            {t(`academy_content.stage_${stage.id}_lesson_secret_title`, { defaultValue: t('academy.profit_secret') })}
                                         </div>
                                         <p className="text-[14px] italic leading-relaxed text-slate-700 dark:text-slate-200 relative z-10 font-bold">
-                                            "{t('academy.profit_quote')}"
+                                            "{t(`academy_content.stage_${stage.id}_lesson_secret`, { defaultValue: t('academy.profit_quote') })}"
                                         </p>
                                     </div>
 
-                                    <div className="space-y-4">
-                                        <p>
-                                            <Trans i18nKey="academy.growth_hacker">
-                                                In the year 2026, manual marketing is dead. You need to become a <span className="text-blue-600 dark:text-blue-400"><strong>Growth Hacker</strong></span>. This means using viral loops where every new member brings 3 more.
+                                    <div className="space-y-6">
+                                        <div className="prose dark:prose-invert max-w-none">
+                                            <Trans i18nKey={`academy_content.stage_${stage.id}_lesson_body`}>
+                                                {t(`academy_content.stage_${stage.id}_lesson_body`, { defaultValue: t('academy.growth_hacker') })}
                                             </Trans>
-                                        </p>
+                                        </div>
+
+                                        {/* AI Expert Section (Conditional but also translateable) */}
+                                        {(stage.category === 'ai' || (stage.id >= 5 && stage.id <= 10)) && (
+                                            <div className="p-6 rounded-[2rem] bg-linear-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 space-y-4">
+                                                <div className="flex items-center gap-2.5 text-purple-600 dark:text-purple-400 font-black text-[11px] uppercase tracking-widest">
+                                                    <Wand2 className="w-4 h-4" />
+                                                    {t('academy.ai_expert')}
+                                                </div>
+                                                <p className="text-[13px] leading-relaxed">
+                                                    {t(`academy_content.stage_${stage.id}_lesson_ai_tip`, { defaultValue: t('academy.ai_desc') })}
+                                                </p>
+                                                <button className="text-[10px] font-black text-purple-500 uppercase tracking-[0.2em] flex items-center gap-2 group">
+                                                    {t('academy.learn_how')} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
 
-                                    {stage.id >= 5 && stage.id <= 10 && (
-                                        <div className="p-6 rounded-[2rem] bg-linear-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 space-y-4">
-                                            <div className="flex items-center gap-2.5 text-purple-600 dark:text-purple-400 font-black text-[11px] uppercase tracking-widest">
-                                                <Wand2 className="w-4 h-4" />
-                                                {t('academy.ai_expert')}
-                                            </div>
-                                            <p className="text-[13px] leading-relaxed">
-                                                {t('academy.ai_desc')}
-                                            </p>
-                                            <button className="text-[10px] font-black text-purple-500 uppercase tracking-[0.2em] flex items-center gap-2 group">
-                                                {t('academy.learn_how')} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                            </button>
-                                        </div>
-                                    )}
-
-                                    <p className="opacity-90">
-                                        {t('academy.build_empire')}
+                                    <p className="opacity-90 pt-4 border-t border-slate-100 dark:border-white/5">
+                                        <Trans i18nKey={`academy_content.stage_${stage.id}_lesson_outro`}>
+                                            {t(`academy_content.stage_${stage.id}_lesson_outro`, { defaultValue: t('academy.build_empire') })}
+                                        </Trans>
                                     </p>
                                 </div>
                             </div>

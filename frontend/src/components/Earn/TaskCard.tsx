@@ -68,7 +68,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
             whileTap={isAvailable || isClaimable || isStarted ? { scale: 0.985 } : {}}
         >
             {/* Immersive Vibe Glow */}
-            <div className={`absolute -top-16 -right-16 w-32 h-32 blur-[60px] rounded-full transition-opacity duration-1000 ${isClaimable ? 'bg-emerald-500/30' : isStarted ? 'bg-blue-500/30' : 'bg-amber-400/20'
+            <div className={`absolute -top-16 -right-16 w-32 h-32 blur-[60px] rounded-full transition-opacity duration-1000 ${isClaimable ? 'bg-emerald-500/30' : isStarted ? 'bg-blue-500/30' : 'bg-yellow-400/20'
                 }`} />
 
             {/* Locked Overlay */}
@@ -84,18 +84,18 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
             <div className="flex items-start gap-3 relative z-10">
                 {/* Icon Container - Vibing Circular Shadow */}
                 <div className="shrink-0">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-700 ${isClaimable
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all duration-700 ${isClaimable
                         ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.4)]'
                         : isCompleted
                             ? 'bg-emerald-500/10 text-emerald-500/30 border-emerald-500/10'
                             : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 text-slate-500 dark:text-slate-400 group-hover/card:border-blue-500/40'
                         }`}>
                         {status === 'VERIFYING' ? (
-                            <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                            <div className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
                         ) : isCompleted ? (
-                            <CheckCircle2 className="w-5 h-5" />
+                            <CheckCircle2 className="w-4 h-4" />
                         ) : (
-                            <task.icon className="w-5 h-5" />
+                            <task.icon className="w-4 h-4" />
                         )}
                     </div>
                 </div>
@@ -113,10 +113,10 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                         </div>
 
                         {!isCompleted && (
-                            <div className="shrink-0 flex items-center gap-1.5">
-                                <div className={`px-2 py-0.5 rounded-lg border font-black text-[9px] transition-all duration-500 ${isClaimable
+                            <div className="shrink-0 flex items-center gap-2 ml-4">
+                                <div className={`px-2.5 py-1 rounded-full border font-black text-[9px] transition-all duration-500 ${isClaimable
                                     ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.3)]'
-                                    : 'bg-linear-to-br from-amber-400 to-amber-500 text-white border-amber-300 shadow-[0_2px_5px_rgba(245,158,11,0.2)]'
+                                    : 'bg-yellow-400 text-yellow-950 border-yellow-300 shadow-[0_2px_8px_rgba(251,191,36,0.3)]'
                                     }`}>
                                     +{reward} XP
                                 </div>
