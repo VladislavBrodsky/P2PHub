@@ -765,26 +765,18 @@ async def claim_task_reward(
         if not partner_task_record or partner_task_record.status != "STARTED":
              raise HTTPException(status_code=400, detail="Task must be started first")
 
-        initial_value = partner_task_record.initial_metric_value
-        current_value = 0
+        # Refactored to Absolute Check (Milestone Logic)
+        # Instead of requiring X *new* referrals since start, we check if they *have* X referrals total.
+        # This prevents punishment for existing high-performing users.
         
+        current_value = 0
         if task_type == 'referral':
             current_value = partner.referral_count
         elif task_type == 'action':
             current_value = partner.checkin_streak
             
-        progress = current_value - initial_value
-        
-        # Special case for streak: if they had a streak before, we might want to count absolute streak?
-        # User said: "Start Mission -> since that momemnt you start track"
-        # So it implies relative. But for streak, if I have 0 streak, start mission, check in 3 days -> streak 3. progress = 3-0 = 3. Correct.
-        # If I have 5 streak, start mission (requires 3), check in 1 day -> streak 6. progress = 6-5 = 1.
-        # This implies user must maintain streak for 3 MORE days. That's hard but fair for "mission".
-        # OR, maybe for streak/absolute metrics, we just check absolute value?
-        # "if a user has new referral since the mission startded" -> this confirms relative tracking.
-        
-        if progress < requirement:
-             raise HTTPException(status_code=400, detail=f"Requirement not met. Progress: {progress}/{requirement}")
+        if current_value < requirement:
+             raise HTTPException(status_code=400, detail=f"Requirement not met. Current: {current_value}/{requirement}")
 
     # 3. Check if task already completed in the new table
     if partner_task_record and partner_task_record.status == "COMPLETED":

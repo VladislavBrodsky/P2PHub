@@ -52,8 +52,7 @@ export const TaskGrid = ({
                 if (task.type === 'referral' || task.type === 'action') {
                     if (activeTask) {
                         const val = task.type === 'referral' ? referrals : checkinStreak;
-                        const prog = Math.max(0, val - activeTask.initial_metric_value);
-                        if (prog >= (task.requirement || 0)) return 4; // Claimable
+                        if (val >= (task.requirement || 0)) return 4; // Claimable
                         return 2; // Started
                     }
                 }
@@ -98,22 +97,22 @@ export const TaskGrid = ({
                         else if (isClaimableTimed) status = 'CLAIMABLE';
                         else if (task.type === 'referral') {
                             if (activeTask) {
-                                effectiveProgress = Math.max(0, referrals - activeTask.initial_metric_value);
+                                effectiveProgress = Math.max(0, referrals);
                                 if (effectiveProgress >= (task.requirement || 0)) status = 'CLAIMABLE';
                                 else status = 'STARTED';
                             } else {
                                 status = 'AVAILABLE';
-                                effectiveProgress = 0; // Not started yet
+                                effectiveProgress = referrals;
                             }
                         }
                         else if (task.type === 'action') {
                             if (activeTask) {
-                                effectiveProgress = Math.max(0, checkinStreak - activeTask.initial_metric_value);
+                                effectiveProgress = Math.max(0, checkinStreak);
                                 if (effectiveProgress >= (task.requirement || 0)) status = 'CLAIMABLE';
                                 else status = 'STARTED';
                             } else {
                                 status = 'AVAILABLE';
-                                effectiveProgress = 0;
+                                effectiveProgress = checkinStreak;
                             }
                         }
 
