@@ -150,7 +150,7 @@ export const StudioTab = ({
         setIsPublishing(true);
         impact('heavy');
         try {
-            const hashtagsStr = generatedResult.hashtags?.map((t: string) => `#${t}`).join(' ') || '';
+            const hashtagsStr = generatedResult.hashtags?.map((t: string) => t.startsWith('#') ? t : `#${t}`).join(' ') || '';
             const fullContent = `${generatedResult.title}\n\n${generatedResult.body}\n\n${hashtagsStr}`;
 
             await proService.publishContent(platform, fullContent, generatedResult.image_url);

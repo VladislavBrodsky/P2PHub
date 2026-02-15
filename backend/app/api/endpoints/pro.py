@@ -123,13 +123,18 @@ async def setup_social_api(
         
         # Merge and dedup
         all_channels = [main_channel] + [ch for ch in other_channels if ch != main_channel]
-        # Filter empty
-        all_channels = [ch for ch in all_channels if ch and ch.strip()]
+        # Filter empty and force unique
+        unique_channels = []
+        seen = set()
+        for ch in all_channels:
+            if ch and ch.strip() and ch.strip() not in seen:
+                unique_channels.append(ch.strip())
+                seen.add(ch.strip())
         
-        if len(all_channels) > 1:
-            partner.telegram_channel_id = json.dumps(all_channels)
-        elif len(all_channels) == 1:
-            partner.telegram_channel_id = all_channels[0]
+        if len(unique_channels) > 1:
+            partner.telegram_channel_id = json.dumps(unique_channels)
+        elif len(unique_channels) == 1:
+            partner.telegram_channel_id = unique_channels[0]
         else:
             partner.telegram_channel_id = None
 

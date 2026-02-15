@@ -257,7 +257,7 @@ export const ProDashboard = () => {
     };
 
     return (
-        <div className="h-[100dvh] overflow-y-auto bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-sans selection:bg-indigo-500/30 overflow-x-hidden">
+        <div className="h-dvh overflow-y-auto bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-sans selection:bg-indigo-500/30 overflow-x-hidden">
             <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(30,58,138,0.15)_0%,transparent_50%)] pointer-events-none" />
             <div className="relative z-10 max-w-5xl mx-auto px-4 pt-6 pb-24">
                 {/* Header Section */}

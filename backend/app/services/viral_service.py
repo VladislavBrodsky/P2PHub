@@ -402,7 +402,7 @@ Referral Link: {ref_link}
 3. Weave in Pintopay Card as the natural solution (not pushy)
 4. Include ONE specific number/stat for credibility
 5. Use psychological triggers: {', '.join(category_strategy.get('psychological_triggers', ['FOMO', 'Social Proof'])[:3])}
-6. Format with **bold** (4-6x), _italic_ (2-3x), [hyperlink]({ref_link}) in CTA
+6. Format with <b>bold</b> (4-6x), <i>italic</i> (2-3x), and <a href='{ref_link}'>descriptive link</a> in CTA
 7. End with compelling CTA using this link: {ref_link}
 8. Write 3-5 short paragraphs (1-3 sentences each)
 9. Add 3-5 trending hashtags for {target_audience}
@@ -520,7 +520,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                                 prompt=prompt,
                                 config={
                                     'number_of_images': 1,
-                                    'output_mime_type': 'image/webp',
+                                    'output_mime_type': 'image/png',
                                     'aspect_ratio': '16:9',
                                     'safety_filter_level': 'block_low_and_above',
                                     'person_generation': 'allow_adult',
@@ -529,7 +529,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                                     # Nano Banana specific configs (Gemini 3 Pro)
                                     'number_of_images': 1,
                                     'aspect_ratio': '16:9',
-                                    'output_mime_type': 'image/webp',
+                                    'output_mime_type': 'image/png',
                                     'quality': '4k' if 'pro' in model_name else 'standard'
                                 }
                             )
@@ -539,7 +539,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                     
                     if img_response and getattr(img_response, 'generated_images', None):
                         image = img_response.generated_images[0]
-                        filename = f"viral_{partner.id}_{secrets.token_hex(4)}.webp"
+                        filename = f"viral_{partner.id}_{secrets.token_hex(4)}.png"
                         
                         # Production path: /app/generated_media (created with proper permissions in Dockerfile)
                         backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -555,7 +555,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                             
                             # Save to BytesIO buffer then write to disk
                             buffer = BytesIO()
-                            pil_image.save(buffer, format='WEBP', quality=85)
+                            pil_image.save(buffer, format='PNG')
                             
                             with open(save_path, 'wb') as f:
                                 f.write(buffer.getvalue())
@@ -801,8 +801,9 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         try:
             import tweepy
             
-            # 1. Initialize Async Client for v2 API (Post Tweet)
-            client = tweepy.AsyncClient(
+            # 1. Initialize Client for v2 API (Post Tweet)
+            # Using sync Client with loop.run_in_executor to avoid async-lru dependency issues
+            client = tweepy.Client(
                 consumer_key=partner.x_api_key,
                 consumer_secret=partner.x_api_secret,
                 access_token=partner.x_access_token,
@@ -810,8 +811,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             )
             
             media_ids = []
-            
-            # 2. Handle Image Upload (v1.1 API required for media upload)
+            loop = asyncio.get_event_loop()
             if image_path:
                 # Resolve absolute path to image
                 backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -840,7 +840,14 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                     logger.info(f"✅ X Media Upload Successful: {media.media_id}")
 
             # 3. Post Tweet
-            response = await client.create_tweet(text=content[:280], media_ids=media_ids if media_ids else None)
+            # Strip HTML tags for X since it doesn't support them
+            import re
+            clean_content = re.sub(r'<[^>]*>', '', content)
+            
+            response = await loop.run_in_executor(
+                None,
+                lambda: client.create_tweet(text=clean_content[:280], media_ids=media_ids if media_ids else None)
+            )
             
             tweet_id = response.data.get("id")
             logger.info(f"✅ X Posting Successful: Tweet ID {tweet_id}")
@@ -881,8 +888,8 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             except:
                 channels = [partner.telegram_channel_id]
             
-            # Filter empty strings
-            channels = [ch for ch in channels if ch and ch.strip()]
+            # Filter empty strings and de-duplicate
+            channels = sorted(list(set([ch.strip() for ch in channels if ch and ch.strip()])))
             
             if not channels:
                 return {"error": "No valid Telegram channels found."}
@@ -911,7 +918,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                                 chat_id=channel_id,
                                 photo=photo,
                                 caption=content[:1024], # Telegram caption limit
-                                parse_mode="Markdown"
+                                parse_mode="HTML"
                             )
                             results.append(f"✅ {channel_id}")
                         except Exception as e:
@@ -923,8 +930,8 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                         try:
                             await bot.send_message(
                                 chat_id=channel_id,
-                                text=content,
-                                parse_mode="Markdown"
+                                text=content[:4096],
+                                parse_mode="HTML"
                             )
                             results.append(f"✅ {channel_id}")
                         except Exception as e:
@@ -935,8 +942,8 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                     try:
                         await bot.send_message(
                             chat_id=channel_id,
-                            text=content,
-                            parse_mode="Markdown"
+                            text=content[:4096],
+                            parse_mode="HTML"
                         )
                         results.append(f"✅ {channel_id}")
                     except Exception as e:

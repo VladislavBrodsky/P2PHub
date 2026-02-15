@@ -223,9 +223,10 @@ export const ProDashboardModals = ({
 
                                         <button
                                             onClick={() => setApiData({ ...apiData, telegram_channels: [...apiData.telegram_channels, ''] })}
-                                            className="w-full h-10 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-xl text-[9px] font-black uppercase text-slate-500 dark:text-slate-400 hover:text-indigo-500 hover:border-indigo-500/30 transition-all flex items-center justify-center gap-2"
+                                            disabled={apiData.telegram_channels.length >= 4}
+                                            className="w-full h-10 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-xl text-[9px] font-black uppercase text-slate-500 dark:text-slate-400 hover:text-indigo-500 hover:border-indigo-500/30 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
                                         >
-                                            <Sparkles size={10} /> + Add Network Node
+                                            <Sparkles size={10} /> {apiData.telegram_channels.length >= 4 ? 'Channel Limit Reached' : '+ Add Network Node'}
                                         </button>
                                     </div>
                                 </div>
