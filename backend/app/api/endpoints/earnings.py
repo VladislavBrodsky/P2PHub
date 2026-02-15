@@ -46,7 +46,8 @@ async def get_my_earnings(
     earnings = result.all()
 
     # Transform to serializable dicts
-    earnings_data = [e.model_dump() for e in earnings]
+    # #comment: CRITICAL - Use mode='json' so datetimes are serialized to strings.
+    earnings_data = [EarningSchema.model_validate(e).model_dump(mode='json') for e in earnings]
 
     # 3. Store in Redis Cache (expires in 2 minutes for a good balance of freshness/speed)
     try:

@@ -1,7 +1,7 @@
 import asyncio
 import contextlib
 import logging
-from typing import List, Optional
+from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
@@ -56,8 +56,10 @@ async def get_current_partner(
         raise HTTPException(status_code=404, detail="Partner not found")
     
     # Update cache for next turn
+    # #comment: CRITICAL - Use mode='json' to handle datetime fields in the Partner model.
+    # suppressed by contextlib, but was failing silently.
     with contextlib.suppress(BaseException):
-        await redis_service.set_json(cache_key, partner.model_dump(), expire=120)
+        await redis_service.set_json(cache_key, partner.model_dump(mode='json'), expire=120)
         
     return partner
 

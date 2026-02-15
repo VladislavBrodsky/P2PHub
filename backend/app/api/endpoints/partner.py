@@ -332,8 +332,10 @@ async def get_my_profile(
     partner_response = PartnerResponse.from_orm(partner)
     partner_response.is_admin = tg_id in settings.ADMIN_USER_IDS
 
+    # #comment: CRITICAL - Use mode='json' to ensure datetime objects are serialized (isoformat)
+    # before writing to Redis. Without this, json.dumps fails with a TypeError.
     try:
-        await redis_service.set_json(cache_key, partner_response.model_dump(), expire=300)
+        await redis_service.set_json(cache_key, partner_response.model_dump(mode='json'), expire=300)
     except Exception as e:
         logger.warning(f"Profile cache write failed: {e}")
 

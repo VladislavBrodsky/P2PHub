@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, List, Optional
+from typing import Optional
 
 from sqlmodel import select
 
@@ -73,7 +73,8 @@ class LeaderboardService:
                 level=p.level,
                 referral_count=display_refs
             )
-            hydrated.append(item.model_dump())
+            # #comment: Using mode='json' ensures future-proof serialization if new fields are added.
+            hydrated.append(item.model_dump(mode='json'))
 
         hydrated.sort(key=lambda x: x['xp'], reverse=True)
         return hydrated
