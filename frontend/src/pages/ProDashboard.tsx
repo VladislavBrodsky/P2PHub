@@ -564,21 +564,21 @@ export const ProDashboard = () => {
                                         exit={{ opacity: 0, scale: 0.98 }}
                                         className="space-y-6"
                                     >
-                                        <div className="glass-panel-premium rounded-[2.5rem] p-6 border border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
+                                        <div className="glass-panel-premium rounded-[1.5rem] sm:rounded-[2.5rem] p-5 sm:p-6 border border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
                                             <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 pointer-events-none" />
 
-                                            <div className="flex items-center justify-between mb-8 relative z-10">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-14 h-14 rounded-2xl vibing-blue-animated flex items-center justify-center shrink-0 shadow-2xl shadow-indigo-500/30">
-                                                        <Terminal size={24} className="text-white" />
+                                            <div className="flex items-center justify-between mb-6 sm:mb-8 relative z-10">
+                                                <div className="flex items-center gap-3 sm:gap-4">
+                                                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl vibing-blue-animated flex items-center justify-center shrink-0 shadow-2xl shadow-indigo-500/30">
+                                                        <Terminal size={18} className="sm:size-[24px] text-white" />
                                                     </div>
                                                     <div>
-                                                        <h3 className="text-sm font-black uppercase tracking-[0.3em] vibing-blue-text leading-none mb-2">
+                                                        <h3 className="text-[10px] sm:text-sm font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] vibing-blue-text leading-none mb-1.5 sm:mb-2">
                                                             {t('pro_dashboard.studio.matrix_title')}
                                                         </h3>
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                                            <span className="text-[10px] font-bold text-brand-muted uppercase tracking-[0.2em] leading-none">
+                                                        <div className="flex items-center gap-1.5 sm:gap-2">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                                            <span className="text-[8px] sm:text-[10px] font-bold text-brand-muted uppercase tracking-[0.1em] sm:tracking-[0.2em] leading-none">
                                                                 {t('pro_dashboard.studio.matrix_subtitle')}
                                                             </span>
                                                         </div>
@@ -586,99 +586,94 @@ export const ProDashboard = () => {
                                                 </div>
                                                 <button
                                                     onClick={() => { selection(); setShowManual('studio'); }}
-                                                    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-500 hover:bg-white/10 transition-all active:scale-90"
+                                                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-500 hover:bg-white/10 transition-all active:scale-90"
                                                 >
-                                                    <Info size={20} />
+                                                    <Info size={16} />
                                                 </button>
                                             </div>
 
-                                            <div className="space-y-5 relative z-10">
+                                            <div className="space-y-4 sm:space-y-5 relative z-10">
                                                 {/* Strategy Selection */}
-                                                <div className="space-y-2">
+                                                <div className="space-y-1.5">
                                                     <div className="flex items-center justify-between px-1">
-                                                        <div className="flex items-center gap-2">
-                                                            <label className="text-[10px] font-black uppercase text-indigo-500 dark:text-indigo-400 tracking-[0.25em]">
-                                                                01. {t('pro_dashboard.studio.strategy_label')}
-                                                            </label>
-                                                            <button onClick={() => { impact('light'); notification('success'); }} className="opacity-30 hover:opacity-100 transition-opacity">
-                                                                <Info size={10} className="text-indigo-500" />
-                                                            </button>
-                                                        </div>
-                                                        <Sparkles size={12} className="text-indigo-500/30" />
+                                                        <label className="text-[8px] sm:text-[10px] font-black uppercase text-indigo-500 dark:text-indigo-400 tracking-[0.2em]">
+                                                            01. {t('pro_dashboard.studio.strategy_label')}
+                                                        </label>
+                                                        <Sparkles size={10} className="text-indigo-500/30" />
                                                     </div>
                                                     <div className="relative group/sel">
                                                         <select
                                                             value={postType}
                                                             onChange={(e) => { selection(); setPostType(e.target.value); }}
-                                                            className="w-full h-14 bg-slate-100/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-2xl px-6 text-sm font-black text-brand-text outline-hidden appearance-none transition-all cursor-pointer shadow-sm group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
+                                                            className="w-full h-12 sm:h-14 bg-slate-100/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl sm:rounded-2xl px-4 sm:px-6 text-xs sm:text-sm font-black text-brand-text outline-hidden appearance-none transition-all cursor-pointer shadow-sm group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
                                                         >
                                                             <option value="" disabled className="text-slate-500">{t('pro_dashboard.studio.strategy_placeholder')}</option>
                                                             {postTypes.map(pt => <option key={pt.key} value={pt.key} className="text-brand-text bg-white dark:bg-slate-900">{pt.label}</option>)}
                                                         </select>
-                                                        <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
-                                                            <ChevronRight className="rotate-90 w-5 h-5 text-indigo-500" />
+                                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                                            <ChevronRight className="rotate-90 w-4 h-4 text-indigo-500" />
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 {/* Target Audience */}
-                                                <div className="space-y-2">
+                                                <div className="space-y-1.5">
                                                     <div className="flex items-center justify-between px-1">
-                                                        <label className="text-[10px] font-black uppercase text-purple-500 dark:text-purple-400 tracking-[0.25em]">
+                                                        <label className="text-[8px] sm:text-[10px] font-black uppercase text-purple-500 dark:text-purple-400 tracking-[0.2em]">
                                                             02. {t('pro_dashboard.studio.target_label')}
                                                         </label>
-                                                        <Zap size={12} className="text-purple-500/30" />
+                                                        <Zap size={10} className="text-purple-500/30" />
                                                     </div>
                                                     <div className="relative group/sel">
                                                         <select
                                                             value={audience}
                                                             onChange={(e) => { selection(); setAudience(e.target.value); }}
-                                                            className="w-full h-14 bg-slate-100/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 focus:border-purple-500/50 rounded-2xl px-6 text-sm font-black text-brand-text outline-hidden appearance-none transition-all cursor-pointer shadow-sm group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
+                                                            className="w-full h-12 sm:h-14 bg-slate-100/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 focus:border-purple-500/50 rounded-xl sm:rounded-2xl px-4 sm:px-6 text-xs sm:text-sm font-black text-brand-text outline-hidden appearance-none transition-all cursor-pointer shadow-sm group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
                                                         >
                                                             <option value="" disabled className="text-slate-500">{t('pro_dashboard.studio.target_placeholder')}</option>
                                                             {audiences.map(a => <option key={a.key} value={a.key} className="text-brand-text bg-white dark:bg-slate-900">{a.label}</option>)}
                                                         </select>
-                                                        <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
-                                                            <ChevronRight className="rotate-90 w-5 h-5 text-purple-500" />
+                                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                                            <ChevronRight className="rotate-90 w-4 h-4 text-purple-500" />
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 {/* Output Language */}
-                                                <div className="space-y-2">
+                                                <div className="space-y-1.5">
                                                     <div className="flex items-center justify-between px-1">
-                                                        <label className="text-[10px] font-black uppercase text-emerald-500 tracking-[0.25em]">
+                                                        <label className="text-[8px] sm:text-[10px] font-black uppercase text-emerald-500 tracking-[0.2em]">
                                                             03. {t('pro_dashboard.studio.language_label')}
                                                         </label>
-                                                        <Globe size={12} className="text-emerald-500/30" />
+                                                        <Globe size={10} className="text-emerald-500/30" />
                                                     </div>
                                                     <div className="relative group/sel">
                                                         <select
                                                             value={language}
                                                             onChange={(e) => setLanguage(e.target.value)}
-                                                            className="w-full h-14 bg-slate-100/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 focus:border-emerald-500/50 rounded-2xl px-6 text-sm font-black text-brand-text outline-hidden appearance-none transition-all cursor-pointer shadow-sm group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
+                                                            className="w-full h-12 sm:h-14 bg-slate-100/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 focus:border-emerald-500/50 rounded-xl sm:rounded-2xl px-4 sm:px-6 text-xs sm:text-sm font-black text-brand-text outline-hidden appearance-none transition-all cursor-pointer shadow-sm group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
                                                         >
                                                             {languages.map(l => <option key={l} value={l} className="text-brand-text bg-white dark:bg-slate-900">{l}</option>)}
                                                         </select>
-                                                        <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
-                                                            <Globe size={18} className="text-emerald-500/50" />
+                                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                                            <Globe size={16} className="text-emerald-500/50" />
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             {/* Action Area */}
-                                            <div className="pt-8 relative z-20">
+                                            <div className="pt-6 sm:pt-8 relative z-20">
                                                 <button
                                                     onClick={() => { selection(); setStep(2); }}
                                                     disabled={!postType || !audience}
-                                                    className="w-full h-16 vibing-blue-animated rounded-2xl font-black text-white text-xs uppercase tracking-[0.3em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-4 disabled:opacity-30 disabled:grayscale disabled:shadow-none hover:shadow-indigo-500/40 border border-white/20"
+                                                    className="w-full h-14 sm:h-16 vibing-blue-animated rounded-xl sm:rounded-2xl font-black text-white text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 sm:gap-4 disabled:opacity-30 disabled:grayscale disabled:shadow-none hover:shadow-indigo-500/40 border border-white/20"
                                                 >
-                                                    <Sparkles size={18} className="animate-pulse" />
+                                                    <Sparkles size={16} className="animate-pulse" />
                                                     {t('pro_dashboard.studio.initiate_btn')}
-                                                    <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                                                    <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                                                 </button>
-                                                <p className="text-[9px] font-black text-brand-muted text-center mt-4 uppercase tracking-[0.2em] opacity-40">
+                                                <p className="text-[8px] sm:text-[9px] font-black text-brand-muted text-center mt-3 sm:mt-4 uppercase tracking-[0.2em] opacity-40">
                                                     Powered by Claude 3.5 Sonnet & Flux PRO
                                                 </p>
                                             </div>
@@ -695,41 +690,41 @@ export const ProDashboard = () => {
                                         <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
 
                                         {isGenerating ? (
-                                            <div className="py-10 flex flex-col items-center justify-center space-y-10 relative bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-3xl border border-black/5">
+                                            <div className="py-6 sm:py-10 flex flex-col items-center justify-center space-y-6 sm:space-y-10 relative bg-white dark:bg-slate-900 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-3xl border border-black/3">
                                                 {/* Premium Synthesis View - White Square Style */}
                                                 <div className="relative">
-                                                    <div className="w-20 h-20 bg-white rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] flex items-center justify-center border border-black/3 relative z-10">
-                                                        <Bot className="w-9 h-9 text-indigo-500" />
+                                                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white dark:bg-slate-800 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] flex items-center justify-center border border-black/3 dark:border-white/5 relative z-10">
+                                                        <Bot className="w-7 h-7 sm:w-9 sm:h-9 text-indigo-500" />
                                                     </div>
                                                     <div className="absolute -inset-4 bg-indigo-500/5 blur-2xl rounded-full animate-pulse" />
                                                 </div>
 
-                                                <div className="space-y-6 w-full max-w-xs px-6">
+                                                <div className="space-y-4 sm:space-y-6 w-full max-w-[240px] sm:max-w-xs px-4 sm:px-6">
                                                     <div className="space-y-1 text-center">
-                                                        <div className="vibing-blue-animated py-3 px-6 rounded-xl shadow-lg border border-blue-400/30">
-                                                            <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-white">
+                                                        <div className="vibing-blue-animated py-2 px-4 sm:py-3 sm:px-6 rounded-xl shadow-lg border border-blue-400/30">
+                                                            <h3 className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.25em] text-white">
                                                                 {t('pro_dashboard.studio.cooking_title')}
                                                             </h3>
                                                         </div>
-                                                        <p className="text-[8px] font-bold text-brand-muted uppercase tracking-[0.3em] opacity-60 mt-2">
+                                                        <p className="text-[7px] sm:text-[8px] font-bold text-brand-muted uppercase tracking-[0.2em] sm:tracking-[0.3em] mt-2 opacity-60">
                                                             DEEP LEARNING OPTIMIZATION ACTIVE
                                                         </p>
                                                     </div>
 
                                                     <div className="space-y-4">
                                                         <div className="flex flex-col items-center">
-                                                            <div className="flex items-baseline gap-2">
-                                                                <span className="text-4xl font-black text-brand-text italic tracking-tighter">
-                                                                    {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-xs not-italic opacity-30 ml-1 font-bold">%</span>
+                                                            <div className="flex items-baseline gap-1.5 sm:gap-2">
+                                                                <span className="text-2xl sm:text-4xl font-black text-brand-text dark:text-white italic tracking-tighter">
+                                                                    {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-[10px] sm:text-xs not-italic opacity-30 ml-1 font-bold">%</span>
                                                                 </span>
-                                                                <span className="text-[9px] font-black text-indigo-500 uppercase tracking-widest border-b border-indigo-500/20 pb-1">
+                                                                <span className="text-[8px] sm:text-[9px] font-black text-indigo-500 uppercase tracking-widest border-b border-indigo-500/20 pb-0.5 sm:pb-1">
                                                                     {t('pro_dashboard.studio.cooking_remaining', { count: countdown })}
                                                                 </span>
                                                             </div>
                                                         </div>
 
                                                         {/* Simple Premium Progress Bar */}
-                                                        <div className="h-1.5 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden relative">
+                                                        <div className="h-1 sm:h-1.5 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden relative">
                                                             <motion.div
                                                                 className="h-full vibing-blue-animated rounded-full"
                                                                 initial={{ width: "0%" }}
