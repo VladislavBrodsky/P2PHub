@@ -261,3 +261,23 @@ async def generate_bio_api(
     
     new_bio = await viral_studio.generate_bio(payload.bio)
     return {"bio": new_bio, "tokens_remaining": partner.pro_tokens}
+
+@router.post("/tools/audit")
+async def get_marketing_audit_api(
+    partner: Partner = Depends(get_current_partner),
+    session: AsyncSession = Depends(get_session)
+):
+    if not partner.is_pro:
+        raise HTTPException(status_code=403, detail="PRO membership required")
+        
+    # Audit costs 3 tokens
+    has_tokens = await viral_studio.check_tokens_and_reset(partner, session, min_tokens=3)
+    if not has_tokens:
+        raise HTTPException(status_code=402, detail="Insufficient tokens (3 required)")
+    
+    partner.pro_tokens -= 3
+    session.add(partner)
+    await session.commit()
+    
+    audit = await viral_studio.run_global_marketing_audit()
+    return {"audit": audit, "tokens_remaining": partner.pro_tokens}

@@ -5,7 +5,8 @@ import {
     ArrowLeft, Terminal, Bot, Image as ImageIcon,
     CheckCircle2, AlertCircle, Loader2,
     Lock, Twitter, Cpu, BookOpen, Flame, Settings, Wand2, ShieldCheck,
-    Linkedin, Info, Copy, Download, RefreshCw, Undo2, Share, Compass, X
+    Linkedin, Info, Copy, Download, RefreshCw, Undo2, Share, Compass, X,
+    TrendingUp, Monitor, Quote, ArrowRight
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
@@ -63,9 +64,13 @@ export const ProDashboard = () => {
     const [completedStages, setCompletedStages] = useState<string[]>([]);
     const [isCompletingStage, setIsCompletingStage] = useState<string | null>(null);
     const [selectedArticle, setSelectedArticle] = useState<any>(null);
+    const [marketAudit, setMarketAudit] = useState<any>(null);
+    const [isAuditing, setIsAuditing] = useState(false);
+    const [showAuditModal, setShowAuditModal] = useState(false);
 
     // API Setup State
     const [showSetup, setShowSetup] = useState(false);
+    const [showManual, setShowManual] = useState<string | null>(null);
     const [apiData, setApiData] = useState({
         x_api_key: '',
         x_api_secret: '',
@@ -90,7 +95,7 @@ export const ProDashboard = () => {
     useEffect(() => {
         // #comment: Global header and footer are now preserved to maintain app identity. 
         // Modals still hide footer for focus.
-        if (showSetup || showPublishModal) {
+        if (showSetup || showPublishModal || showManual || selectedArticle || selectedAsset || showAuditModal) {
             setFooterVisible(false);
             setHeaderVisible(false); // Hide header when modal is open to avoid system button collision
         } else {
@@ -101,7 +106,7 @@ export const ProDashboard = () => {
             setHeaderVisible(true);
             setFooterVisible(true);
         };
-    }, [showSetup, showPublishModal, setFooterVisible, setHeaderVisible]);
+    }, [showSetup, showPublishModal, showManual, selectedArticle, selectedAsset, setFooterVisible, setHeaderVisible]);
 
     useEffect(() => {
         let interval: any;
@@ -268,19 +273,38 @@ export const ProDashboard = () => {
 
     const handleSharePost = async () => {
         if (!generatedResult) return;
+        const textToShare = `${generatedResult.title}\n\n${generatedResult.body}\n\n#PintopayPRO #FinancialFreedom`;
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: generatedResult.title,
+                    text: textToShare,
+                });
+            } catch (err) { }
+        } else {
+            handleCopyText();
+        }
+    };
+
+    const handleRunMarketingAudit = async () => {
+        if (status && status.pro_tokens < 3) {
+            notification('error');
+            return;
+        }
+        setIsAuditing(true);
+        selection();
         try {
-            const shareData = {
-                title: generatedResult.title,
-                text: generatedResult.body,
-                url: window.location.href
-            };
-            if (navigator.share) {
-                await navigator.share(shareData);
-            } else {
-                handleCopyText();
-            }
-        } catch (err) {
-            console.log('Share failed', err);
+            const res = await proService.getMarketingAudit();
+            setMarketAudit(res.audit);
+            setStatus(prev => prev ? { ...prev, pro_tokens: res.tokens_remaining } : prev);
+            setShowAuditModal(true);
+            notification('success');
+            impact('heavy');
+        } catch (e: any) {
+            console.error('Audit failed:', e);
+            notification('error');
+        } finally {
+            setIsAuditing(false);
         }
     };
 
@@ -434,57 +458,59 @@ export const ProDashboard = () => {
             </div>
         );
     }
-
     return (
-        <div className="relative w-full h-full flex flex-col bg-slate-50 dark:bg-slate-950 overflow-hidden">
+        <div className="relative w-full h-full flex flex-col bg-slate-50 dark:bg-slate-950 overflow-hidden cyber-grid">
             {/* #comment: Fixed Header Section - Static and compact for better focus */}
-            <div className="shrink-0 pt-2 pb-1 space-y-4 bg-slate-50 dark:bg-slate-950 z-10 transition-all">
+            <div className="shrink-0 pt-6 pb-2 space-y-6 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl z-20 border-b border-white/5 shadow-2xl transition-all">
                 <div className="px-6 flex items-center justify-between">
-                    <div>
-                        <h1 className="text-sm font-black tracking-widest leading-tight uppercase text-brand-text drop-shadow-sm flex items-center gap-2">
-                            {t('pro_dashboard.title_studio')}
-                            <span className="px-1.5 py-0.5 rounded-sm bg-indigo-500 text-[8px] text-white">PRO</span>
-                        </h1>
-                        <div className="mt-1">
-                            {status && (
-                                <div className="flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-500/5 border border-amber-500/10 shadow-sm w-fit">
-                                    <div className="w-1 h-1 rounded-full bg-amber-500 animate-pulse" />
-                                    <span className="text-[7px] font-black text-amber-500/80 uppercase tracking-tighter">
-                                        {t('pro_dashboard.tokens_left', { count: status.pro_tokens })}
-                                    </span>
-                                </div>
-                            )}
+                    <div className="space-y-1">
+                        <div className="flex items-center gap-3">
+                            <h1 className="text-xl font-black tracking-tight leading-none uppercase text-brand-text drop-shadow-sm">
+                                {t('pro_dashboard.title_studio')}
+                            </h1>
+                            <div className="px-2 py-0.5 rounded-lg bg-linear-to-r from-indigo-500 to-purple-600 text-[10px] font-black text-white shadow-lg shadow-indigo-500/20">
+                                PRO
+                            </div>
                         </div>
+                        {status && (
+                            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 shadow-xs w-fit">
+                                <Sparkles className="w-2.5 h-2.5 text-amber-500" />
+                                <span className="text-[10px] font-black text-amber-600 dark:text-amber-500 uppercase tracking-widest">
+                                    {t('pro_dashboard.tokens_left', { count: status.pro_tokens })}
+                                </span>
+                            </div>
+                        )}
                     </div>
                     <button
                         onClick={() => { selection(); setShowSetup(true); }}
-                        className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-white/5 active:scale-95 transition-all"
+                        className="w-11 h-11 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-95 transition-all shadow-premium hover:border-indigo-500/30"
                     >
-                        <Settings className="w-3.5 h-3.5 text-brand-muted" />
+                        <Settings className="w-5 h-5 text-brand-muted" />
                     </button>
                 </div>
 
-                <div className="px-6 relative">
-                    <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-4 px-1">
+                <div className="px-4">
+                    <div className="bg-slate-200/50 dark:bg-slate-900/50 p-1 rounded-2xl flex items-center gap-1 relative overflow-hidden backdrop-blur-md border border-white/5">
                         {(['studio', 'tools', 'academy'] as Tab[]).map((tab) => (
                             <button
                                 key={tab}
                                 onClick={() => { setActiveTab(tab); selection(); }}
-                                className={`px-4 h-8 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap border flex items-center gap-2 relative overflow-hidden ${activeTab === tab
-                                    ? 'vibing-blue-animated text-white border-blue-400/30 scale-105 z-2'
-                                    : 'bg-white/60 dark:bg-slate-900/60 text-brand-muted border-white/5 hover:border-indigo-500/30 opacity-70 hover:opacity-100'
+                                className={`flex-1 h-10 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all relative z-10 flex items-center justify-center gap-2 ${activeTab === tab
+                                    ? 'text-white'
+                                    : 'text-brand-muted hover:text-brand-text'
                                     }`}
                             >
                                 {activeTab === tab && (
                                     <motion.div
-                                        layoutId="tab-shine"
-                                        className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"
+                                        layoutId="tab-active-bg"
+                                        className="absolute inset-0 vibing-blue-animated rounded-xl shadow-lg z-[-1]"
+                                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                                     />
                                 )}
-                                {tab === 'studio' && <Sparkles size={10} className={activeTab === tab ? 'text-white' : 'text-indigo-400/50'} />}
-                                {tab === 'tools' && <Zap size={10} className={activeTab === tab ? 'text-white' : 'text-pink-400/50'} />}
-                                {tab === 'academy' && <BookOpen size={10} className={activeTab === tab ? 'text-white' : 'text-emerald-400/50'} />}
-                                {t(`pro_dashboard.tab_${tab}`)}
+                                {tab === 'studio' && <Sparkles size={12} className={activeTab === tab ? 'text-white' : 'text-indigo-400/50'} />}
+                                {tab === 'tools' && <Zap size={12} className={activeTab === tab ? 'text-white' : 'text-pink-400/50'} />}
+                                {tab === 'academy' && <BookOpen size={12} className={activeTab === tab ? 'text-white' : 'text-emerald-400/50'} />}
+                                <span className="hidden xs:block">{t(`pro_dashboard.tab_${tab}`)}</span>
                             </button>
                         ))}
                     </div>
@@ -533,121 +559,128 @@ export const ProDashboard = () => {
                                 {step === 1 && (
                                     <motion.div
                                         key="step1"
-                                        initial={{ opacity: 0, x: 20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        exit={{ opacity: 0, x: -20 }}
-                                        className="space-y-4"
+                                        initial={{ opacity: 0, scale: 0.98 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.98 }}
+                                        className="space-y-6"
                                     >
-                                        <div className="glass-panel-premium rounded-[2rem] p-4 border border-white/10 shadow-2xl relative overflow-hidden group">
-                                            <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-pink-500/5 pointer-events-none" />
+                                        <div className="glass-panel-premium rounded-[2.5rem] p-6 border border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
+                                            <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 pointer-events-none" />
 
-                                            <div className="flex items-center gap-3 mb-4 relative z-10">
-                                                <div className="w-10 h-10 rounded-xl vibing-blue-animated flex items-center justify-center shrink-0">
-                                                    <Terminal size={18} className="text-white" />
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-[11px] font-black uppercase tracking-[0.25em] vibing-blue-text leading-none mb-1.5">
-                                                        {t('pro_dashboard.studio.matrix_title')}
-                                                    </h3>
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="text-[9px] font-bold text-brand-muted uppercase tracking-widest leading-none">{t('pro_dashboard.studio.matrix_subtitle')}</span>
-                                                        <Sparkles size={10} className="text-amber-500 animate-pulse" />
+                                            <div className="flex items-center justify-between mb-8 relative z-10">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-14 h-14 rounded-2xl vibing-blue-animated flex items-center justify-center shrink-0 shadow-2xl shadow-indigo-500/30">
+                                                        <Terminal size={24} className="text-white" />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="text-sm font-black uppercase tracking-[0.3em] vibing-blue-text leading-none mb-2">
+                                                            {t('pro_dashboard.studio.matrix_title')}
+                                                        </h3>
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                                            <span className="text-[10px] font-bold text-brand-muted uppercase tracking-[0.2em] leading-none">
+                                                                {t('pro_dashboard.studio.matrix_subtitle')}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <button
+                                                    onClick={() => { selection(); setShowManual('studio'); }}
+                                                    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-500 hover:bg-white/10 transition-all active:scale-90"
+                                                >
+                                                    <Info size={20} />
+                                                </button>
                                             </div>
 
-                                            <div className="space-y-3.5 relative z-10 px-1">
-                                                {/* Connector Line for Flow Visualization */}
-                                                <div className="absolute left-[5px] top-6 bottom-12 w-0.5 bg-linear-to-b from-indigo-500/30 via-pink-500/30 to-emerald-500/30 rounded-full z-0 pointer-events-none" />
-
-                                                {/* Post Type */}
-                                                <div className="space-y-1.5 relative z-10">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] border-2 border-slate-50 dark:border-slate-900 relative z-10 shrink-0" />
-                                                        <label className="text-[10px] font-black uppercase text-indigo-500 dark:text-indigo-400 tracking-[0.2em]">{t('pro_dashboard.studio.strategy_label')}</label>
+                                            <div className="space-y-5 relative z-10">
+                                                {/* Strategy Selection */}
+                                                <div className="space-y-2">
+                                                    <div className="flex items-center justify-between px-1">
+                                                        <div className="flex items-center gap-2">
+                                                            <label className="text-[10px] font-black uppercase text-indigo-500 dark:text-indigo-400 tracking-[0.25em]">
+                                                                01. {t('pro_dashboard.studio.strategy_label')}
+                                                            </label>
+                                                            <button onClick={() => { impact('light'); notification('success'); }} className="opacity-30 hover:opacity-100 transition-opacity">
+                                                                <Info size={10} className="text-indigo-500" />
+                                                            </button>
+                                                        </div>
+                                                        <Sparkles size={12} className="text-indigo-500/30" />
                                                     </div>
-                                                    <div className="relative group/sel pl-6">
-                                                        <div className="absolute inset-y-0 left-6 right-0 bg-indigo-500/5 rounded-2xl pointer-events-none transition-opacity opacity-50 group-hover/sel:opacity-100" />
+                                                    <div className="relative group/sel">
                                                         <select
                                                             value={postType}
                                                             onChange={(e) => { selection(); setPostType(e.target.value); }}
-                                                            className="relative w-full h-11 bg-black/5 dark:bg-white/5 backdrop-blur-md border border-black/5 dark:border-white/10 focus:border-indigo-500/50 rounded-2xl px-5 text-sm font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-xs"
+                                                            className="w-full h-14 bg-slate-100/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-2xl px-6 text-sm font-black text-brand-text outline-hidden appearance-none transition-all cursor-pointer shadow-sm group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
                                                         >
                                                             <option value="" disabled className="text-slate-500">{t('pro_dashboard.studio.strategy_placeholder')}</option>
-                                                            {postTypes.map(pt => <option key={pt.key} value={pt.key} className="text-brand-text">{pt.label}</option>)}
+                                                            {postTypes.map(pt => <option key={pt.key} value={pt.key} className="text-brand-text bg-white dark:bg-slate-900">{pt.label}</option>)}
                                                         </select>
-                                                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-50 group-hover/sel:opacity-100 transition-opacity">
+                                                        <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
                                                             <ChevronRight className="rotate-90 w-5 h-5 text-indigo-500" />
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 {/* Target Audience */}
-                                                <div className="space-y-1.5 relative z-10">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-3 h-3 rounded-full bg-pink-500 shadow-[0_0_10px_rgba(236,72,153,0.5)] border-2 border-slate-50 dark:border-slate-900 relative z-10 shrink-0" />
-                                                        <label className="text-[10px] font-black uppercase text-pink-500 dark:text-pink-400 tracking-[0.2em]">{t('pro_dashboard.studio.target_label')}</label>
+                                                <div className="space-y-2">
+                                                    <div className="flex items-center justify-between px-1">
+                                                        <label className="text-[10px] font-black uppercase text-purple-500 dark:text-purple-400 tracking-[0.25em]">
+                                                            02. {t('pro_dashboard.studio.target_label')}
+                                                        </label>
+                                                        <Zap size={12} className="text-purple-500/30" />
                                                     </div>
-                                                    <div className="relative group/sel pl-6">
-                                                        <div className="absolute inset-y-0 left-6 right-0 bg-pink-500/5 rounded-2xl pointer-events-none transition-opacity opacity-50 group-hover/sel:opacity-100" />
+                                                    <div className="relative group/sel">
                                                         <select
                                                             value={audience}
                                                             onChange={(e) => { selection(); setAudience(e.target.value); }}
-                                                            className="relative w-full h-11 bg-black/5 dark:bg-white/5 backdrop-blur-md border border-black/5 dark:border-white/10 focus:border-pink-500/50 rounded-2xl px-5 text-sm font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-xs"
+                                                            className="w-full h-14 bg-slate-100/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 focus:border-purple-500/50 rounded-2xl px-6 text-sm font-black text-brand-text outline-hidden appearance-none transition-all cursor-pointer shadow-sm group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
                                                         >
                                                             <option value="" disabled className="text-slate-500">{t('pro_dashboard.studio.target_placeholder')}</option>
-                                                            {audiences.map(a => <option key={a.key} value={a.key} className="text-brand-text">{a.label}</option>)}
+                                                            {audiences.map(a => <option key={a.key} value={a.key} className="text-brand-text bg-white dark:bg-slate-900">{a.label}</option>)}
                                                         </select>
-                                                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-50 group-hover/sel:opacity-100 transition-opacity">
-                                                            <ChevronRight className="rotate-90 w-5 h-5 text-pink-500" />
+                                                        <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
+                                                            <ChevronRight className="rotate-90 w-5 h-5 text-purple-500" />
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                {/* Language */}
-                                                <div className="space-y-1.5 relative z-10">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] border-2 border-slate-50 dark:border-slate-900 relative z-10 shrink-0" />
-                                                        <label className="text-[10px] font-black uppercase text-emerald-600 dark:text-emerald-400 tracking-[0.2em]">{t('pro_dashboard.studio.language_label')}</label>
+                                                {/* Output Language */}
+                                                <div className="space-y-2">
+                                                    <div className="flex items-center justify-between px-1">
+                                                        <label className="text-[10px] font-black uppercase text-emerald-500 tracking-[0.25em]">
+                                                            03. {t('pro_dashboard.studio.language_label')}
+                                                        </label>
+                                                        <Globe size={12} className="text-emerald-500/30" />
                                                     </div>
-                                                    <div className="relative group/sel pl-6">
-                                                        <div className="absolute inset-y-0 left-6 right-0 bg-emerald-500/5 rounded-2xl pointer-events-none transition-opacity opacity-50 group-hover/sel:opacity-100" />
+                                                    <div className="relative group/sel">
                                                         <select
                                                             value={language}
                                                             onChange={(e) => setLanguage(e.target.value)}
-                                                            className="relative w-full h-11 bg-black/5 dark:bg-white/5 backdrop-blur-md border border-black/5 dark:border-white/10 focus:border-emerald-500/50 rounded-2xl px-5 pr-12 text-sm font-bold text-brand-text outline-hidden appearance-none transition-all cursor-pointer hover:bg-white/10 shadow-xs"
+                                                            className="w-full h-14 bg-slate-100/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 focus:border-emerald-500/50 rounded-2xl px-6 text-sm font-black text-brand-text outline-hidden appearance-none transition-all cursor-pointer shadow-sm group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
                                                         >
-                                                            {languages.map(l => <option key={l} value={l} className="text-brand-text">{l}</option>)}
+                                                            {languages.map(l => <option key={l} value={l} className="text-brand-text bg-white dark:bg-slate-900">{l}</option>)}
                                                         </select>
-                                                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-50 flex items-center gap-1.5">
-                                                            <Globe size={16} className="text-emerald-500" />
+                                                        <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
+                                                            <Globe size={18} className="text-emerald-500/50" />
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             {/* Action Area */}
-                                            <div className="pt-5 mt-1 relative z-20 pl-6">
-                                                <div className="absolute top-0 left-6 right-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
+                                            <div className="pt-8 relative z-20">
                                                 <button
                                                     onClick={() => { selection(); setStep(2); }}
                                                     disabled={!postType || !audience}
-                                                    style={{ backgroundSize: '200% auto' }}
-                                                    className="w-full h-12 bg-linear-to-r from-indigo-600 via-violet-600 to-fuchsia-600 animate-gradient-xy hover:bg-right transition-all duration-700 rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.2em] shadow-[0_8px_32px_rgba(99,102,241,0.4)] hover:shadow-[0_12px_40px_rgba(99,102,241,0.6)] active:scale-95 flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale disabled:shadow-none relative overflow-hidden group/btn border border-white/20"
+                                                    className="w-full h-16 vibing-blue-animated rounded-2xl font-black text-white text-xs uppercase tracking-[0.3em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-4 disabled:opacity-30 disabled:grayscale disabled:shadow-none hover:shadow-indigo-500/40 border border-white/20"
                                                 >
-                                                    <div className="absolute inset-0 bg-white/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 pointer-events-none mix-blend-overlay" />
-                                                    <span className="relative z-10 flex items-center gap-2 drop-shadow-md">
-                                                        <Sparkles size={14} className="animate-pulse" />
-                                                        {t('pro_dashboard.studio.initiate_btn')}
-                                                        <ChevronRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
-                                                    </span>
+                                                    <Sparkles size={18} className="animate-pulse" />
+                                                    {t('pro_dashboard.studio.initiate_btn')}
+                                                    <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
                                                 </button>
-                                                <div className="flex justify-center mt-2 gap-1.5 items-center opacity-40">
-                                                    <div className="w-1 h-1 rounded-full bg-indigo-500 animate-pulse" />
-                                                    <p className="text-[8px] font-bold text-brand-muted uppercase tracking-widest">
-                                                        Using Advanced Pro Model
-                                                    </p>
-                                                </div>
+                                                <p className="text-[9px] font-black text-brand-muted text-center mt-4 uppercase tracking-[0.2em] opacity-40">
+                                                    Powered by Claude 3.5 Sonnet & Flux PRO
+                                                </p>
                                             </div>
                                         </div>
                                     </motion.div>
@@ -829,98 +862,125 @@ export const ProDashboard = () => {
                         {activeTab === 'tools' && (
                             <motion.div
                                 key="tools"
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                className="space-y-4"
+                                initial={{ opacity: 0, scale: 0.98 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.98 }}
+                                className="space-y-6"
                             >
                                 {/* Headline Fixer */}
-                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/10 relative overflow-hidden group shadow-xl bg-white/60 dark:bg-slate-900/40">
-                                    <div className="absolute -right-4 -top-4 w-24 h-24 bg-pink-500/5 blur-3xl rounded-full" />
-                                    <div className="flex items-center gap-3 mb-5">
-                                        <div className="w-10 h-10 bg-pink-500/10 rounded-xl border border-pink-500/20 flex items-center justify-center shadow-sm">
-                                            <Sparkles size={18} className="text-pink-500" />
+                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden group shadow-2xl noise-overlay">
+                                    <div className="absolute -right-16 -top-16 w-48 h-48 bg-pink-500/10 blur-[80px] rounded-full pointer-events-none group-hover:bg-pink-500/20 transition-all duration-1000" />
+
+                                    <div className="flex items-center justify-between mb-6 relative z-10">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-pink-500/10 rounded-2xl border border-pink-500/20 flex items-center justify-center shadow-lg group-hover:rotate-6 transition-transform">
+                                                <Sparkles size={22} className="text-pink-500" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-[12px] font-black uppercase tracking-[0.25em] text-pink-500 leading-none mb-1.5">{t('pro_dashboard.tools.headline.title')}</h3>
+                                                <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.headline.desc')}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-pink-500/90 leading-none mb-1">{t('pro_dashboard.tools.headline.title')}</h3>
-                                            <p className="text-[8px] font-bold text-brand-muted uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.headline.desc')}</p>
-                                        </div>
+                                        <button
+                                            onClick={() => { selection(); setShowManual('tools'); }}
+                                            className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-pink-500 hover:bg-white/10 transition-all active:scale-90"
+                                        >
+                                            <Info size={18} />
+                                        </button>
                                     </div>
 
-                                    <div className="space-y-3">
-                                        <input
-                                            value={headlineInput}
-                                            onChange={(e) => setHeadlineInput(e.target.value)}
-                                            placeholder={t('pro_dashboard.tools.headline.placeholder')}
-                                            className="w-full h-12 bg-black/5 dark:bg-white/5 border border-white/5 focus:border-pink-500/30 rounded-xl px-4 text-base font-bold outline-hidden transition-all shadow-inner placeholder:text-slate-500 text-brand-text"
-                                        />
+                                    <div className="space-y-4 relative z-10">
+                                        <div className="relative">
+                                            <div className="absolute -top-3 left-4 px-2 bg-[#0f172a] text-[8px] font-black text-pink-500 uppercase tracking-widest z-20 flex items-center gap-1">
+                                                Input Headline <Info size={8} />
+                                            </div>
+                                            <input
+                                                value={headlineInput}
+                                                onChange={(e) => setHeadlineInput(e.target.value)}
+                                                placeholder={t('pro_dashboard.tools.headline.placeholder')}
+                                                className="w-full h-14 bg-slate-100/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-pink-500/50 rounded-2xl px-6 text-sm font-black outline-hidden transition-all shadow-inner text-brand-text placeholder:text-slate-500"
+                                            />
+                                            {headlineInput && (
+                                                <button
+                                                    onClick={() => setHeadlineInput('')}
+                                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-muted hover:text-pink-500 transition-colors"
+                                                >
+                                                    <X size={16} />
+                                                </button>
+                                            )}
+                                        </div>
 
-                                        {fixedHeadline && (
-                                            <motion.div
-                                                initial={{ opacity: 0, scale: 0.98 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl relative overflow-hidden group/copy cursor-pointer active:scale-[0.98] transition-all"
-                                                onClick={() => { handleCopyAnyText(fixedHeadline); selection(); }}
-                                            >
-                                                <div className="absolute top-2 right-2 text-emerald-500/40 group-hover/copy:text-emerald-500 transition-colors">
-                                                    <Copy size={10} />
-                                                </div>
-                                                <p className="text-[10px] font-black text-emerald-500/80 leading-relaxed italic pr-4">
-                                                    "{renderMarkdown(fixedHeadline, true)}"
-                                                </p>
-                                            </motion.div>
-                                        )}
+                                        <AnimatePresence>
+                                            {fixedHeadline && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: 10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="p-5 bg-pink-500/5 border border-pink-500/10 rounded-2xl relative group/copy cursor-pointer active:scale-[0.98] transition-all shadow-inner"
+                                                    onClick={() => { handleCopyAnyText(fixedHeadline); selection(); }}
+                                                >
+                                                    <div className="absolute top-3 right-3 text-pink-500/40 group-hover/copy:text-pink-500 transition-colors">
+                                                        <Copy size={12} />
+                                                    </div>
+                                                    <p className="text-[11px] font-black text-pink-600 dark:text-pink-400 leading-relaxed italic pr-6 group-hover:text-pink-500 transition-colors">
+                                                        "{renderMarkdown(fixedHeadline, true)}"
+                                                    </p>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
 
                                         <button
                                             onClick={() => { selection(); handleFixHeadline(); }}
                                             disabled={isFixingHeadline || !headlineInput}
-                                            className="w-full h-11 bg-linear-to-r from-pink-600 to-rose-500 rounded-xl font-black text-white text-[9px] uppercase tracking-[0.25em] active:scale-95 transition-all flex items-center justify-center disabled:opacity-30 disabled:grayscale"
+                                            className="w-full h-12 bg-linear-to-r from-pink-600 to-rose-500 rounded-2xl font-black text-white text-[10px] uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale shadow-xl shadow-pink-500/20"
                                         >
-                                            {isFixingHeadline ? <Loader2 className="animate-spin w-4 h-4" /> : (
-                                                <span className="flex items-center gap-2">
-                                                    {t('pro_dashboard.tools.headline.btn')} <Zap size={12} className="animate-pulse" />
-                                                </span>
+                                            {isFixingHeadline ? <Loader2 className="animate-spin w-5 h-5" /> : (
+                                                <>
+                                                    {t('pro_dashboard.tools.headline.btn')} <Zap size={14} className="animate-pulse" />
+                                                </>
                                             )}
                                         </button>
                                     </div>
                                 </div>
 
                                 {/* Viral Bio Generator */}
-                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/10 relative overflow-hidden group shadow-xl bg-white/60 dark:bg-slate-900/40">
-                                    <div className="absolute -right-4 -top-4 w-24 h-24 bg-indigo-500/5 blur-3xl rounded-full" />
-                                    <div className="flex items-center gap-3 mb-5">
-                                        <div className="w-10 h-10 bg-indigo-500/10 rounded-xl border border-indigo-500/20 flex items-center justify-center shadow-sm">
-                                            <Wand2 size={18} className="text-indigo-500" />
+                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden group shadow-2xl noise-overlay">
+                                    <div className="absolute -left-16 -bottom-16 w-48 h-48 bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none group-hover:bg-indigo-500/20 transition-all duration-1000" />
+
+                                    <div className="flex items-center gap-4 mb-6 relative z-10">
+                                        <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl border border-indigo-500/20 flex items-center justify-center shadow-lg group-hover:-rotate-6 transition-transform">
+                                            <Wand2 size={22} className="text-indigo-500" />
                                         </div>
                                         <div>
-                                            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500/90 leading-none mb-1">{t('pro_dashboard.tools.bio.title')}</h3>
-                                            <p className="text-[8px] font-bold text-brand-muted uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.bio.desc')}</p>
+                                            <h3 className="text-[12px] font-black uppercase tracking-[0.25em] text-indigo-500 leading-none mb-1.5">{t('pro_dashboard.tools.bio.title')}</h3>
+                                            <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.bio.desc')}</p>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-3">
+                                    <div className="space-y-4 relative z-10">
                                         <textarea
                                             value={bioInput}
                                             onChange={(e) => setBioInput(e.target.value)}
                                             placeholder={t('pro_dashboard.tools.bio.placeholder')}
-                                            className="w-full h-24 bg-black/5 dark:bg-white/5 border border-white/5 focus:border-indigo-500/30 rounded-xl p-4 text-base font-medium text-brand-text outline-hidden transition-all resize-none shadow-inner placeholder:text-slate-500"
+                                            className="w-full h-32 bg-slate-100/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-2xl p-6 text-sm font-black text-brand-text outline-hidden transition-all resize-none shadow-inner placeholder:text-slate-500"
                                         />
 
-                                        {fixedBio && (
-                                            <motion.div
-                                                initial={{ opacity: 0, scale: 0.98 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                className="p-4 bg-indigo-500/5 border border-indigo-500/10 rounded-xl relative overflow-hidden group/copy cursor-pointer active:scale-[0.98] transition-all"
-                                                onClick={() => { handleCopyAnyText(fixedBio); selection(); }}
-                                            >
-                                                <div className="absolute top-2 right-2 text-indigo-500/40 group-hover/copy:text-indigo-500 transition-colors">
-                                                    <Copy size={10} />
-                                                </div>
-                                                <p className="text-[10px] font-medium text-brand-text/80 leading-relaxed italic pr-4">
-                                                    {renderMarkdown(fixedBio, true)}
-                                                </p>
-                                            </motion.div>
-                                        )}
+                                        <AnimatePresence>
+                                            {fixedBio && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: 10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="p-5 bg-indigo-500/5 border border-pink-500/10 rounded-2xl relative group/copy cursor-pointer active:scale-[0.98] transition-all shadow-inner"
+                                                    onClick={() => { handleCopyAnyText(fixedBio); selection(); }}
+                                                >
+                                                    <div className="absolute top-3 right-3 text-indigo-500/40 group-hover/copy:text-indigo-500 transition-colors">
+                                                        <Copy size={12} />
+                                                    </div>
+                                                    <p className="text-[11px] font-black text-brand-text/80 leading-relaxed italic pr-6 group-hover:text-indigo-500 transition-colors">
+                                                        {renderMarkdown(fixedBio, true)}
+                                                    </p>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
 
                                         <button
                                             onClick={async () => {
@@ -938,11 +998,11 @@ export const ProDashboard = () => {
                                                 }
                                             }}
                                             disabled={isFixingBio || !bioInput}
-                                            className="w-full h-11 vibing-blue-animated rounded-xl font-black text-white text-[9px] uppercase tracking-[0.25em] active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:grayscale"
+                                            className="w-full h-12 vibing-blue-animated rounded-2xl font-black text-white text-[10px] uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale shadow-xl shadow-indigo-500/20"
                                         >
-                                            {isFixingBio ? <Loader2 className="animate-spin w-4 h-4" /> : (
+                                            {isFixingBio ? <Loader2 className="animate-spin w-5 h-5" /> : (
                                                 <>
-                                                    {t('pro_dashboard.tools.bio.btn')} <Terminal size={12} />
+                                                    {t('pro_dashboard.tools.bio.btn')} <Terminal size={14} />
                                                 </>
                                             )}
                                         </button>
@@ -950,52 +1010,116 @@ export const ProDashboard = () => {
                                 </div>
 
                                 {/* Trend Hunter */}
-                                <div className="glass-panel-premium p-5 rounded-[2rem] border border-white/10 relative overflow-hidden group shadow-xl bg-white/60 dark:bg-slate-900/40">
-                                    <div className="absolute -right-4 -top-4 w-24 h-24 bg-orange-500/5 blur-3xl rounded-full" />
-                                    <div className="flex items-center gap-3 mb-5">
-                                        <div className="w-10 h-10 bg-orange-500/10 rounded-xl border border-orange-500/20 flex items-center justify-center shadow-sm">
-                                            <Flame size={18} className="text-orange-500" />
+                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden group shadow-2xl noise-overlay">
+                                    <div className="absolute inset-0 bg-linear-to-tr from-amber-500/5 via-transparent to-orange-500/5 pointer-events-none" />
+
+                                    <div className="flex items-center gap-4 mb-6 relative z-10">
+                                        <div className="w-12 h-12 bg-orange-500/10 rounded-2xl border border-orange-500/20 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                            <Flame size={22} className="text-orange-500 animate-pulse" />
                                         </div>
                                         <div>
-                                            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500/90 leading-none mb-1">{t('pro_dashboard.tools.trends.title')}</h3>
-                                            <p className="text-[8px] font-bold text-brand-muted uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.trends.desc')}</p>
+                                            <h3 className="text-[12px] font-black uppercase tracking-[0.25em] text-orange-600 dark:text-orange-400 leading-none mb-1.5">{t('pro_dashboard.tools.trends.title')}</h3>
+                                            <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.trends.desc')}</p>
                                         </div>
                                     </div>
 
                                     {trends.length > 0 && (
-                                        <div className="grid grid-cols-1 gap-2 mb-4">
+                                        <div className="grid grid-cols-1 gap-3 mb-6 relative z-10">
                                             {trends.map((trend, i) => (
                                                 <motion.div
                                                     key={i}
                                                     initial={{ opacity: 0, x: -10 }}
                                                     animate={{ opacity: 1, x: 0 }}
-                                                    transition={{ delay: i * 0.05 }}
-                                                    className="p-3 bg-white/5 border border-white/5 rounded-xl hover:bg-white/10 transition-all flex justify-between items-center"
+                                                    transition={{ delay: i * 0.1 }}
+                                                    className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all flex justify-between items-center group/card cursor-pointer shadow-sm"
+                                                    onClick={() => { handleCopyAnyText(`${trend.topic}: ${trend.viral_angle}`); selection(); }}
                                                 >
-                                                    <div className="flex items-center gap-3">
-                                                        <span className="text-[8px] font-black bg-orange-500/10 text-orange-500 p-1 rounded-md min-w-[18px] text-center">0{i + 1}</span>
-                                                        <div className="space-y-0.5">
-                                                            <p className="text-[9px] font-black text-brand-text/90 uppercase truncate max-w-[180px]">{trend.topic}</p>
-                                                            <p className="text-[8px] font-medium text-brand-muted italic truncate max-w-[180px]">{trend.viral_angle}</p>
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-8 h-8 rounded-xl bg-orange-500/10 text-orange-500 flex items-center justify-center font-black text-xs border border-orange-500/10 shadow-inner group-hover/card:scale-110 transition-transform">
+                                                            {i + 1}
+                                                        </div>
+                                                        <div className="space-y-1">
+                                                            <p className="text-[11px] font-black text-brand-text uppercase tracking-tight">{trend.topic}</p>
+                                                            <p className="text-[10px] font-medium text-brand-muted italic opacity-70 group-hover/card:text-orange-500 transition-colors">{trend.viral_angle}</p>
                                                         </div>
                                                     </div>
-                                                    <Sparkles size={10} className="text-orange-500/30" />
+                                                    <Sparkles size={14} className="text-orange-500/20 group-hover/card:text-orange-500/60 transition-colors" />
                                                 </motion.div>
                                             ))}
                                         </div>
                                     )}
 
                                     <button
-                                        onClick={() => { selection(); handleFetchTrends(); }}
+                                        onClick={async () => {
+                                            if (status && status.pro_tokens < 3) { notification('error'); return; }
+                                            setIsHuntingTrends(true);
+                                            selection();
+                                            try {
+                                                const res = await proService.fetchTrends();
+                                                setTrends(res.trends);
+                                                setStatus(prev => prev ? { ...prev, pro_tokens: res.tokens_remaining } : prev);
+                                                notification('success');
+                                                impact('medium');
+                                            } catch (e) {
+                                                notification('error');
+                                            } finally {
+                                                setIsHuntingTrends(false);
+                                            }
+                                        }}
                                         disabled={isHuntingTrends}
-                                        className="w-full h-11 bg-linear-to-r from-orange-600 to-amber-500 rounded-xl font-black text-white text-[9px] uppercase tracking-[0.25em] active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:grayscale"
+                                        className="w-full h-12 bg-linear-to-r from-orange-600 to-amber-500 rounded-2xl font-black text-white text-[10px] uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale shadow-xl shadow-orange-500/20"
                                     >
-                                        {isHuntingTrends ? <Loader2 className="animate-spin w-4 h-4" /> : (
+                                        {isHuntingTrends ? <Loader2 className="animate-spin w-5 h-5" /> : (
                                             <>
-                                                {t('pro_dashboard.tools.trends.btn')} <Compass size={12} className="animate-[spin_4s_linear_infinite]" />
+                                                {t('pro_dashboard.tools.trends.btn')} <Compass size={16} className="animate-[spin_4s_linear_infinite]" />
                                             </>
                                         )}
                                     </button>
+                                </div>
+
+                                {/* Global Marketing Audit */}
+                                <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 relative overflow-hidden group shadow-2xl noise-overlay bg-linear-to-br from-indigo-500/5 to-purple-500/5">
+                                    <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[100px] pointer-events-none group-hover:bg-indigo-500/20 transition-all duration-1000" />
+                                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 blur-[80px] pointer-events-none group-hover:bg-purple-500/20 transition-all duration-1000" />
+
+                                    <div className="flex items-center justify-between mb-6 relative z-10">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl border border-indigo-500/20 flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
+                                                <TrendingUp size={22} className="text-indigo-500 animate-pulse" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-[12px] font-black uppercase tracking-[0.25em] text-indigo-500 leading-none mb-1.5">{t('pro_dashboard.tools.audit.title')}</h3>
+                                                <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.audit.desc')}</p>
+                                            </div>
+                                        </div>
+                                        <div className="px-3 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
+                                            <span className="text-[8px] font-black text-indigo-500 uppercase tracking-widest">3 TOKENS</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4 relative z-10">
+                                        <div className="p-5 bg-black/20 rounded-3xl border border-white/5 space-y-3">
+                                            <div className="flex items-center gap-2">
+                                                <Monitor size={14} className="text-indigo-400" />
+                                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-400">System Capability</span>
+                                            </div>
+                                            <p className="text-[11px] font-medium text-brand-muted leading-relaxed">
+                                                {renderMarkdown(t('pro_dashboard.tools.audit.capability'), true)}
+                                            </p>
+                                        </div>
+
+                                        <button
+                                            onClick={handleRunMarketingAudit}
+                                            disabled={isAuditing}
+                                            className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale shadow-2xl shadow-indigo-500/30"
+                                        >
+                                            {isAuditing ? <Loader2 className="animate-spin w-5 h-5" /> : (
+                                                <>
+                                                    {t('pro_dashboard.tools.audit.btn')} <Zap size={16} className="text-white" />
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
                                 </div>
                             </motion.div>
                         )}
@@ -1004,80 +1128,92 @@ export const ProDashboard = () => {
                         {activeTab === 'academy' && (
                             <motion.div
                                 key="academy"
-                                initial={{ opacity: 0, y: 15 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -15 }}
-                                className="space-y-6 pb-12"
+                                initial={{ opacity: 0, scale: 0.98 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.98 }}
+                                className="space-y-8 pb-12"
                             >
                                 {/* Intelligence Report Header - Elite Data Visualization */}
-                                <div className="glass-panel-premium p-7 rounded-[2.5rem] border border-white/5 relative overflow-hidden bg-slate-900 shadow-3xl group">
-                                    <div className="absolute inset-x-0 top-0 h-[2px] bg-linear-to-r from-transparent via-indigo-500 to-transparent opacity-50" />
-                                    <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/20 blur-[100px] rounded-full animate-pulse" />
-                                    <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full" />
+                                <div className="glass-panel-premium p-8 rounded-[3rem] border border-white/10 relative overflow-hidden bg-slate-900 shadow-3xl group noise-overlay">
+                                    <div className="absolute inset-0 bg-linear-to-br from-indigo-500/20 via-transparent to-purple-500/20 pointer-events-none" />
+                                    <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
 
-                                    <div className="relative z-10 flex justify-between items-start mb-6">
+                                    <div className="relative z-10 flex justify-between items-start mb-10">
                                         <div className="space-y-4">
-                                            <div className="flex items-center gap-2">
-                                                <div className="px-3 py-1 bg-indigo-500/15 rounded-full border border-indigo-500/30 flex items-center gap-2">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
-                                                    <span className="text-[8px] font-black text-indigo-100 uppercase tracking-[0.3em]">Viral Intelligence active</span>
+                                            <div className="flex items-center gap-3">
+                                                <div className="px-3 py-1 bg-indigo-500/20 rounded-full border border-indigo-500/30 flex items-center gap-2">
+                                                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
+                                                    <span className="text-[9px] font-black text-indigo-200 uppercase tracking-[0.3em]">Viral Intelligence Active</span>
                                                 </div>
+                                                <button
+                                                    onClick={() => { selection(); setShowManual('academy'); }}
+                                                    className="w-6 h-6 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-indigo-400 hover:bg-white/10 transition-all opacity-40 hover:opacity-100"
+                                                >
+                                                    <Info size={12} />
+                                                </button>
                                             </div>
-                                            <h3 className="text-3xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-lg">
+                                            <h3 className="text-4xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-2xl">
                                                 {t('pro_dashboard.academy.protocols.title')}
                                             </h3>
                                         </div>
-                                        <div className="text-right group/score">
-                                            <p className="text-[10px] font-black text-indigo-300/60 uppercase tracking-[0.3em] mb-1.5">{t('pro_dashboard.academy.protocols.stats_label')}</p>
-                                            <div className="text-4xl font-black text-white tabular-nums leading-none group-hover:scale-110 transition-transform duration-500">
-                                                {academyScore}<span className="text-indigo-500">.0</span>
+                                        <div className="text-right">
+                                            <p className="text-[11px] font-black text-indigo-300/60 uppercase tracking-[0.3em] mb-2">{t('pro_dashboard.academy.protocols.stats_label')}</p>
+                                            <div className="text-5xl font-black text-white tabular-nums leading-none flex items-baseline justify-end">
+                                                {academyScore}<span className="text-indigo-500 text-2xl">.0</span>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-3 relative z-10">
-                                        <div className="flex justify-between items-end text-[9px] font-black uppercase tracking-[0.25em] text-indigo-200/50">
+                                    <div className="space-y-4 relative z-10">
+                                        <div className="flex justify-between items-end text-[10px] font-black uppercase tracking-[0.3em] text-indigo-200/50">
                                             <div className="flex items-center gap-2">
-                                                <div className="w-1 h-3 bg-indigo-500 rounded-full" />
+                                                <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
                                                 <span>{t('pro_dashboard.academy.protocols.progress_label')}</span>
                                             </div>
-                                            <span className="text-indigo-400">{Math.round((completedStages.length / 5) * 100)}% COMPLETE</span>
+                                            <span className="vibing-blue-text">{Math.round((completedStages.length / 5) * 100)}% COMPLETE</span>
                                         </div>
-                                        <div className="h-3 w-full bg-black/40 rounded-full border border-white/5 overflow-hidden p-0.5 shadow-inner">
+                                        <div className="h-4 w-full bg-black/40 rounded-full border border-white/5 overflow-hidden p-1 shadow-inner relative flex items-center">
                                             <motion.div
                                                 initial={{ width: 0 }}
                                                 animate={{ width: `${(completedStages.length / 5) * 100}%` }}
-                                                transition={{ duration: 1, ease: "easeOut" }}
-                                                className="h-full bg-linear-to-r from-indigo-600 via-indigo-400 to-purple-500 rounded-full relative overflow-hidden"
+                                                transition={{ duration: 1.2, ease: "circOut" }}
+                                                className="h-full bg-linear-to-r from-indigo-600 via-indigo-400 to-purple-500 rounded-full relative overflow-hidden shadow-[0_0_20px_rgba(79,70,229,0.4)]"
                                             >
-                                                <div className="absolute inset-0 bg-white/20 -skew-x-12 translate-x-full animate-shimmer-slide" />
+                                                <div className="absolute inset-0 bg-white/30 -skew-x-12 translate-x-full animate-shimmer-slide" />
                                             </motion.div>
                                         </div>
                                     </div>
                                 </div>
 
-
                                 {/* Expert Introduction */}
-                                <div className="px-1 space-y-2">
-                                    <p className="text-[10px] font-black text-brand-text uppercase tracking-widest flex items-center gap-2">
-                                        <Bot size={14} className="text-indigo-500" />
-                                        Message from Top Partner
-                                    </p>
-                                    <p className="text-xs font-medium text-brand-muted leading-relaxed italic opacity-85 backdrop-blur-sm p-4 bg-white/5 rounded-2xl border border-white/5">
-                                        "{t('pro_dashboard.academy.desc')}"
-                                    </p>
+                                <div className="px-2 space-y-3 relative">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shadow-lg">
+                                            <Bot size={20} className="text-indigo-500" />
+                                        </div>
+                                        <p className="text-[11px] font-black text-brand-text uppercase tracking-[0.2em]">{t('pro_dashboard.academy.expert_label', 'MESSAGES FROM ELITE PARTNERS')}</p>
+                                    </div>
+                                    <div className="relative">
+                                        <div className="absolute left-5 top-0 bottom-0 w-px bg-linear-to-b from-indigo-500/30 to-transparent" />
+                                        <p className="text-[13px] font-medium text-brand-muted leading-relaxed italic opacity-90 backdrop-blur-md p-6 bg-slate-100/30 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 ml-5 shadow-sm">
+                                            "{t('pro_dashboard.academy.desc')}"
+                                        </p>
+                                    </div>
                                 </div>
 
                                 {/* Viral Article Hub */}
                                 <div className="space-y-4">
                                     <div className="flex items-center justify-between px-1">
-                                        <div className="flex items-center gap-3">
-                                            <BookOpen size={18} className="text-indigo-500" />
-                                            <div>
-                                                <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-text leading-none mb-1">{t('pro_dashboard.academy.articles.title')}</h4>
-                                                <span className="text-[7px] font-black text-indigo-500 uppercase tracking-[0.2em]">{t('pro_dashboard.academy.articles.subtitle')}</span>
-                                            </div>
+                                        <div className="space-y-1">
+                                            <h4 className="text-[12px] font-black uppercase tracking-[0.3em] text-indigo-500 leading-none">{t('pro_dashboard.academy.articles.title')}</h4>
+                                            <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest opacity-60 italic">{t('pro_dashboard.academy.articles.subtitle')}</p>
                                         </div>
+                                        <button
+                                            onClick={() => { selection(); setShowManual('academy'); }}
+                                            className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-500 hover:bg-white/10 transition-all"
+                                        >
+                                            <Info size={18} />
+                                        </button>
                                     </div>
 
                                     <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
@@ -1154,9 +1290,14 @@ export const ProDashboard = () => {
                                                     </p>
 
                                                     <div className="p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-white/5 space-y-3">
-                                                        <div className="flex items-center gap-2">
-                                                            <Terminal size={12} className="text-brand-muted" />
-                                                            <span className="text-[8px] font-black uppercase tracking-widest text-brand-muted">Active Homework Task</span>
+                                                        <div className="flex items-center justify-between">
+                                                            <div className="flex items-center gap-2">
+                                                                <Terminal size={12} className="text-brand-muted" />
+                                                                <span className="text-[8px] font-black uppercase tracking-widest text-brand-muted">Active Homework Task</span>
+                                                            </div>
+                                                            <button onClick={() => { impact('light'); notification('warning'); }} className="opacity-20 hover:opacity-100 transition-opacity">
+                                                                <Info size={10} className="text-indigo-500" />
+                                                            </button>
                                                         </div>
                                                         <p className="text-[10px] font-bold text-brand-text leading-tight">
                                                             {module.task}
@@ -1196,14 +1337,22 @@ export const ProDashboard = () => {
                                 {/* Elite Hook Library */}
                                 <div className="glass-panel-premium p-6 rounded-[2.5rem] border border-white/10 hover:border-indigo-500/30 transition-all group overflow-hidden relative shadow-2xl bg-white/60 dark:bg-slate-900/40">
                                     <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-indigo-500/40 to-transparent" />
-                                    <div className="flex items-center gap-4 mb-6 relative z-10">
-                                        <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-lg group-hover:rotate-6 transition-transform">
-                                            <RefreshCw size={22} className="text-indigo-500" />
+                                    <div className="flex items-center justify-between mb-6 relative z-10">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-lg group-hover:rotate-6 transition-transform">
+                                                <RefreshCw size={22} className="text-indigo-500" />
+                                            </div>
+                                            <div>
+                                                <h4 className="text-[12px] font-black uppercase tracking-widest text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.hooks.title')}</h4>
+                                                <span className="text-[8px] font-black text-brand-muted uppercase tracking-[0.25em]">{t('pro_dashboard.academy.hooks.subtitle')}</span>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h4 className="text-[12px] font-black uppercase tracking-widest text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.hooks.title')}</h4>
-                                            <span className="text-[8px] font-black text-brand-muted uppercase tracking-[0.25em]">{t('pro_dashboard.academy.hooks.subtitle')}</span>
-                                        </div>
+                                        <button
+                                            onClick={() => { selection(); setShowManual('academy'); }}
+                                            className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-500 hover:bg-white/10 transition-all"
+                                        >
+                                            <Info size={18} />
+                                        </button>
                                     </div>
                                     <div className="space-y-3 relative z-10">
                                         {(t('pro_dashboard.academy.hooks.items', { returnObjects: true }) as any[]).map((hook: any, i: number) => (
@@ -1238,6 +1387,12 @@ export const ProDashboard = () => {
                                                 </div>
                                             </div>
                                         </div>
+                                        <button
+                                            onClick={() => { selection(); setShowManual('assets'); }}
+                                            className="w-10 h-10 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-500 hover:bg-indigo-500/20 transition-all"
+                                        >
+                                            <Info size={18} />
+                                        </button>
                                     </div>
 
                                     {/* Media Kit CTA - Mega Premium Card */}
@@ -1388,17 +1543,25 @@ export const ProDashboard = () => {
                                     <div className="glass-panel-premium p-7 rounded-[2.5rem] border border-white/10 relative overflow-hidden group bg-white/40 dark:bg-slate-900/40 shadow-2xl transition-all duration-500 hover:shadow-pink-500/10 hover:-translate-y-1">
                                         <div className="absolute top-0 right-0 w-48 h-48 bg-pink-500/5 blur-[80px] pointer-events-none group-hover:opacity-20 transition-opacity" />
 
-                                        <div className="flex items-center gap-4 mb-8">
-                                            <div className="w-12 h-12 bg-pink-500/10 rounded-2xl flex items-center justify-center border border-pink-500/20 shadow-xl group-hover:scale-110 transition-transform">
-                                                <Flame size={24} className="text-pink-500" />
-                                            </div>
-                                            <div>
-                                                <h4 className="text-[12px] font-black uppercase tracking-[0.25em] text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.lifehacks.title')}</h4>
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-4 h-0.5 bg-pink-500 rounded-full" />
-                                                    <span className="text-[8px] font-black text-brand-muted uppercase tracking-[0.3em]">{t('pro_dashboard.academy.lifehacks.subtitle')}</span>
+                                        <div className="flex items-center justify-between mb-8 relative z-10">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-12 h-12 bg-pink-500/10 rounded-2xl flex items-center justify-center border border-pink-500/20 shadow-xl group-hover:scale-110 transition-transform">
+                                                    <Flame size={24} className="text-pink-500" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-[12px] font-black uppercase tracking-[0.25em] text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.lifehacks.title')}</h4>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-4 h-0.5 bg-pink-500 rounded-full" />
+                                                        <span className="text-[8px] font-black text-brand-muted uppercase tracking-[0.3em]">{t('pro_dashboard.academy.lifehacks.subtitle')}</span>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <button
+                                                onClick={() => { selection(); setShowManual('tools'); }}
+                                                className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-pink-500 hover:bg-white/10 transition-all opacity-60 hover:opacity-100"
+                                            >
+                                                <Info size={18} />
+                                            </button>
                                         </div>
 
                                         <div className="space-y-4">
@@ -1479,7 +1642,7 @@ export const ProDashboard = () => {
                                     exit={{ scale: 0.95, y: 30, opacity: 0 }}
                                     className="bg-white/95 dark:bg-slate-900/95 w-full max-w-lg rounded-[3rem] p-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] pb-[calc(env(safe-area-inset-bottom)+1.5rem)] space-y-5 max-h-[92vh] flex flex-col relative overflow-hidden shadow-3xl border border-slate-200 dark:border-white/10"
                                 >
-                                    <div className="absolute top-0 left-0 w-full h-1.5 vibing-blue-animated opacity-80" />
+                                    <div className="absolute top-0 left-0 w-full h-px vibing-blue-animated opacity-80" />
 
                                     <div className="flex justify-between items-center shrink-0">
                                         <div className="flex flex-col">
@@ -1931,6 +2094,147 @@ export const ProDashboard = () => {
                         </motion.div>
                     )}
                 </AnimatePresence>
+                {/* Market Audit Modal */}
+                <AnimatePresence>
+                    {showAuditModal && marketAudit && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-200 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-2xl"
+                            onClick={() => setShowAuditModal(false)}
+                        >
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0, y: 30 }}
+                                animate={{ scale: 1, opacity: 1, y: 0 }}
+                                exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                                onClick={(e) => e.stopPropagation()}
+                                className="w-full max-w-lg glass-panel-premium rounded-[3rem] border border-white/10 overflow-hidden bg-slate-900 shadow-3xl flex flex-col max-h-[90vh] noise-overlay"
+                            >
+                                {/* Modal Header */}
+                                <div className="p-8 border-b border-white/5 flex justify-between items-center bg-linear-to-br from-indigo-500/10 to-transparent">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shadow-lg">
+                                            <TrendingUp size={24} className="text-indigo-500 animate-pulse" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-black text-white uppercase tracking-tight leading-none mb-1">Marketing Audit</h3>
+                                            <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] opacity-70">
+                                                Global Node: Active • 2026
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowAuditModal(false)}
+                                        className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+                                    >
+                                        <X size={20} className="text-white/60" />
+                                    </button>
+                                </div>
+
+                                {/* Modal Content */}
+                                <div className="flex-1 overflow-y-auto no-scrollbar p-8 space-y-8">
+                                    {/* CMO Summary */}
+                                    <div className="space-y-4">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
+                                            <h4 className="text-[12px] font-black text-white uppercase tracking-widest">CMO Executive Summary</h4>
+                                        </div>
+                                        <div className="p-6 bg-white/5 rounded-3xl border border-white/5 relative">
+                                            <Quote className="absolute -top-3 -left-3 text-indigo-500/20" size={32} />
+                                            <p className="text-[13px] font-medium text-brand-muted leading-relaxed italic pr-4">
+                                                {marketAudit.cmo_summary}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Sentiment & Flow */}
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="p-5 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 space-y-2">
+                                            <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Market Sentiment</p>
+                                            <p className="text-lg font-black text-white uppercase tracking-tight">{marketAudit.market_sentiment}</p>
+                                        </div>
+                                        <div className="p-5 bg-purple-500/5 rounded-2xl border border-purple-500/10 space-y-2">
+                                            <p className="text-[10px] font-black text-purple-400 uppercase tracking-widest">Global Shift</p>
+                                            <p className="text-[11px] font-bold text-white leading-tight">{marketAudit.global_trend_shift}</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Top News Feed */}
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-1.5 h-4 bg-emerald-500 rounded-full" />
+                                                <h4 className="text-[12px] font-black text-white uppercase tracking-widest">Elite News Intelligence (Top 20)</h4>
+                                            </div>
+                                            <span className="text-[9px] font-black text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg">LIVE FEED</span>
+                                        </div>
+                                        <div className="space-y-3">
+                                            {marketAudit.top_news?.map((news: any, idx: number) => (
+                                                <motion.div
+                                                    key={idx}
+                                                    initial={{ opacity: 0, x: -10 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    transition={{ delay: idx * 0.05 }}
+                                                    className="p-5 bg-white/2 border border-white/5 rounded-3xl hover:bg-white/5 transition-all group"
+                                                >
+                                                    <div className="flex justify-between items-start mb-3">
+                                                        <div className="space-y-1">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="px-2 py-0.5 bg-indigo-500/10 rounded-md text-[7px] font-black text-indigo-400 uppercase tracking-[0.2em]">{news.source}</span>
+                                                                <span className="text-[7px] font-black text-brand-muted uppercase tracking-[0.2em]">{news.relevance} Relevance</span>
+                                                            </div>
+                                                            <h5 className="text-[14px] font-black text-white leading-tight uppercase group-hover:text-indigo-400 transition-colors">{news.title}</h5>
+                                                        </div>
+                                                        <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-xs font-black text-indigo-500 border border-white/5">
+                                                            {idx + 1}
+                                                        </div>
+                                                    </div>
+                                                    <div className="p-3 bg-black/40 rounded-2xl border border-white/5 space-y-2">
+                                                        <p className="text-[11px] font-medium text-brand-muted leading-relaxed">
+                                                            {news.impact}
+                                                        </p>
+                                                        <div className="flex items-center gap-2 pt-1">
+                                                            <Zap size={12} className="text-amber-500" />
+                                                            <p className="text-[10px] font-black text-amber-500 uppercase tracking-widest">{news.fomo_trigger}</p>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Viral Motivation */}
+                                    <div className="p-6 bg-linear-to-r from-indigo-600/20 to-purple-600/20 rounded-[2.5rem] border border-white/10 space-y-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center">
+                                                <Flame size={20} className="text-orange-500 animate-bounce" />
+                                            </div>
+                                            <h4 className="text-[13px] font-black text-white uppercase tracking-widest">Viral Growth Protocol</h4>
+                                        </div>
+                                        <p className="text-[12px] font-medium text-indigo-100 leading-relaxed italic px-2">
+                                            "{marketAudit.viral_motivation}"
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Modal Footer */}
+                                <div className="p-8 bg-black/40 border-t border-white/10 space-y-4">
+                                    <div className="flex items-center gap-3 text-emerald-400 text-center justify-center mb-2">
+                                        <CheckCircle2 size={16} />
+                                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Audit verified for 60m dominance</span>
+                                    </div>
+                                    <button
+                                        onClick={() => { selection(); setShowAuditModal(false); setActiveTab('studio'); }}
+                                        className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3"
+                                    >
+                                        Execute Viral Strategy Now <ArrowRight size={18} />
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
                 {/* Article Reader Modal */}
                 <AnimatePresence>
@@ -1939,7 +2243,7 @@ export const ProDashboard = () => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl"
+                            className="fixed inset-0 z-200 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl"
                             onClick={() => setSelectedArticle(null)}
                         >
                             <motion.div
@@ -1947,7 +2251,7 @@ export const ProDashboard = () => {
                                 animate={{ scale: 1, opacity: 1, y: 0 }}
                                 exit={{ scale: 0.9, opacity: 0, y: 20 }}
                                 onClick={(e) => e.stopPropagation()}
-                                className="w-full max-w-lg glass-panel-premium rounded-[2.5rem] border border-white/10 overflow-hidden bg-white dark:bg-slate-900 shadow-2xl"
+                                className="w-full max-w-lg glass-panel-premium rounded-[2.5rem] border border-white/10 overflow-hidden bg-white dark:bg-slate-900 shadow-2xl noise-overlay"
                             >
                                 <div className="p-8 space-y-6">
                                     <div className="flex justify-between items-start">
@@ -1967,14 +2271,115 @@ export const ProDashboard = () => {
                                     </div>
 
                                     <div className="prose prose-sm dark:prose-invert max-h-[60vh] overflow-y-auto no-scrollbar">
-                                        <p className="text-[13px] font-medium leading-relaxed text-brand-muted">
+                                        <p className="text-[14px] font-medium leading-relaxed text-brand-muted">
                                             {selectedArticle.content}
                                         </p>
                                     </div>
 
                                     <button
                                         onClick={() => setSelectedArticle(null)}
-                                        className="w-full h-12 bg-indigo-500 hover:bg-indigo-600 rounded-2xl font-black text-white text-[10px] uppercase tracking-widest active:scale-95 transition-all shadow-lg"
+                                        className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-[11px] uppercase tracking-widest active:scale-95 transition-all shadow-lg"
+                                    >
+                                        I Understand the Protocol
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* Manual & Instructions Modal */}
+                <AnimatePresence>
+                    {showManual && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-200 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-2xl"
+                            onClick={() => setShowManual(null)}
+                        >
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0, y: 30 }}
+                                animate={{ scale: 1, opacity: 1, y: 0 }}
+                                exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                                onClick={(e) => e.stopPropagation()}
+                                className="w-full max-w-lg glass-panel-premium rounded-[3rem] border border-white/10 overflow-hidden bg-slate-900 shadow-3xl flex flex-col max-h-[85vh] noise-overlay"
+                            >
+                                <div className="p-8 border-b border-white/5 flex justify-between items-center bg-linear-to-br from-indigo-500/10 to-transparent">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center shadow-xl">
+                                            <BookOpen size={24} className="text-indigo-400" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-black text-white uppercase tracking-tight">
+                                                {showManual === 'studio' ? t('pro_dashboard.academy.studio_manual.title') :
+                                                    showManual === 'tools' ? t('pro_dashboard.tools.headline.title') :
+                                                        showManual === 'academy' ? t('pro_dashboard.academy.protocols.title') :
+                                                            t('pro_dashboard.academy.viral_assets.title')}
+                                            </h3>
+                                            <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] opacity-70">
+                                                {t('pro_dashboard.academy.studio_manual.subtitle')}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowManual(null)}
+                                        className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+                                    >
+                                        <X size={20} className="text-white/60" />
+                                    </button>
+                                </div>
+
+                                <div className="flex-1 overflow-y-auto no-scrollbar p-8 space-y-8">
+                                    {showManual === 'studio' ? (
+                                        (t('pro_dashboard.academy.studio_manual.steps', { returnObjects: true }) as any[]).map((step: any, i: number) => (
+                                            <div key={i} className="flex gap-6 items-start relative group">
+                                                {i < 3 && <div className="absolute left-[23.5px] top-12 bottom-0 w-px bg-linear-to-b from-indigo-500/30 to-transparent" />}
+                                                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-lg font-black text-indigo-500 shrink-0 shadow-lg group-hover:border-indigo-500/30 transition-colors">
+                                                    {i + 1}
+                                                </div>
+                                                <div className="space-y-2 pt-1">
+                                                    <h4 className="text-[14px] font-black text-white uppercase tracking-tight">{step.title}</h4>
+                                                    <p className="text-[12px] font-medium text-brand-muted leading-relaxed opacity-80">{step.desc}</p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : showManual === 'tools' ? (
+                                        <div className="space-y-8">
+                                            <div className="p-6 bg-white/5 rounded-3xl border border-white/10 space-y-4">
+                                                <h4 className="text-[12px] font-black text-pink-500 uppercase tracking-widest">Viral Headline Fixer</h4>
+                                                <p className="text-[12px] font-medium text-brand-muted leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.headline.desc')}"</p>
+                                                <div className="p-4 bg-black/20 rounded-2xl border border-white/5 text-[11px] text-brand-muted leading-relaxed">
+                                                    Our neural engine analyzes current high-performing hooks and adapts your headline to trigger curiosity loops.
+                                                </div>
+                                            </div>
+                                            <div className="p-6 bg-white/5 rounded-3xl border border-white/10 space-y-4">
+                                                <h4 className="text-[12px] font-black text-amber-500 uppercase tracking-widest">Viral Bio Generator</h4>
+                                                <p className="text-[12px] font-medium text-brand-muted leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.bio.desc')}"</p>
+                                                <div className="p-4 bg-black/20 rounded-2xl border border-white/5 text-[11px] text-brand-muted leading-relaxed">
+                                                    Optimizes your social identity for conversion. High-converters focus on the 'Benefit' first, not the 'Feature'.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-6">
+                                            <p className="text-[13px] font-medium text-brand-muted leading-relaxed">
+                                                Follow the elite protocols to maximize your reach. Every asset and lesson is designed for 2026 algorithmic dominance.
+                                            </p>
+                                            <div className="p-6 bg-indigo-500/5 rounded-[2rem] border border-indigo-500/10 flex items-center gap-5">
+                                                <Sparkles className="text-indigo-400 shrink-0" size={32} />
+                                                <p className="text-[12px] font-black text-white uppercase tracking-tight leading-snug">
+                                                    PRO Members grow their network <span className="vibing-blue-text">x5 faster</span> using these assets.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="p-8 bg-black/20 border-t border-white/5">
+                                    <button
+                                        onClick={() => setShowManual(null)}
+                                        className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all"
                                     >
                                         I Understand the Protocol
                                     </button>
@@ -1984,6 +2389,6 @@ export const ProDashboard = () => {
                     )}
                 </AnimatePresence>
             </div>
-        </div >
+        </div>
     );
 };

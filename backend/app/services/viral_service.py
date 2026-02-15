@@ -720,6 +720,67 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                 {"topic": "Privacy Coins", "reason": "Regulatory crackdowns", "viral_angle": "They are banning your money"}
             ]
 
+    async def run_global_marketing_audit(self) -> dict:
+        """
+        PRO Component: Global Marketing Audit
+        Simulates CMO + Data Analytics flow fetching from RSS, Twitter, Telegram.
+        Updated every 60 minutes via Redis caching.
+        """
+        from app.services.redis_service import redis_service
+        
+        async def compute_audit():
+            prompt = """
+            ACT AS ELITE CMO & DATA ANALYTIC AGENT.
+            
+            YOUR TASK:
+            1. Simulate a real-time scan of 500+ news sources (RSS, Twitter, Telegram) for 2026.
+            2. Focus on: FinTech, Web3, DeFi, Banking System access via Pintopay, Crypto Mass Adoption, Global Payments, Viral Growth.
+            3. Provide a list of TOP 20 the most important and valuable positive news.
+            4. Provide FOMO and Viral Motivation Triggers for each group of news.
+            5. Write a CMO Executive Summary showing how the market is developing fast and why it's the "Golden Rush" era for Pintopay Partner Club.
+            6. End with a massive CTA to start creating Viral Texts.
+            
+            OUTPUT FORMAT (JSON ONLY):
+            {
+              "cmo_summary": "Intense, professional, high-energy summary of 2026 global shifts",
+              "top_news": [
+                {
+                  "title": "News Title",
+                  "source": "RSS/X/TG",
+                  "relevance": "High/Critical",
+                  "impact": "Description of why this helps Pintopay members",
+                  "fomo_trigger": "Psychological trigger to act now"
+                }
+              ],
+              "market_sentiment": "Bullish/Hyper-Growth",
+              "global_trend_shift": "Description of the shift toward decentralized banking",
+              "viral_motivation": "Triggers to inspire the user to lead and manage the rush",
+              "cta": "Massive call to action"
+            }
+            """
+            
+            try:
+                if self.genai_client:
+                    response = self.genai_client.models.generate_content(
+                        model='gemini-1.5-pro',
+                        contents=prompt,
+                        config={'response_mime_type': 'application/json'}
+                    )
+                    return json.loads(response.text)
+                elif self.openai_client:
+                    response = await self.openai_client.chat.completions.create(
+                        model="gpt-4o",
+                        messages=[{"role": "user", "content": prompt}],
+                        response_format={"type": "json_object"}
+                    )
+                    return json.loads(response.choices[0].message.content)
+            except Exception as e:
+                logger.error(f"Audit computation failed: {e}")
+                return {"error": "Elite Audit Node Temporarily Offline"}
+
+        # Cache for 1 hour (3600 seconds)
+        return await redis_service.get_or_compute("global_marketing_audit_v1", compute_audit, expire=3600)
+
     async def post_to_social(self, partner: Partner, platform: str, content: str, image_path: str | None = None) -> dict[str, Any]:
         """
         Autoposts to X, Telegram, or LinkedIn using partner's API keys.

@@ -98,5 +98,10 @@ export const proService = {
     completeAcademyStage: async (stage_id: string): Promise<{ status: string, academy_score: number }> => {
         const response = await apiClient.post(`/api/pro/academy/complete?stage_id=${stage_id}`, {});
         return response.data;
+    },
+
+    getMarketingAudit: async (): Promise<{ audit: any, tokens_remaining: number }> => {
+        const response = await apiClient.post('/api/pro/tools/audit', {});
+        return response.data;
     }
 };

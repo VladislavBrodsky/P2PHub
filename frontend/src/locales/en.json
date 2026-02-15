@@ -1230,6 +1230,12 @@
                 "title": "Trend Hunter 2026",
                 "desc": "Unlock top 3 viral narratives now. (3 Tokens)",
                 "btn": "Reveal Trends"
+            },
+            "audit": {
+                "title": "Global Marketing Audit",
+                "desc": "Elite CMO Analytics & News Intelligence. (3 Tokens)",
+                "btn": "Request Global Audit",
+                "capability": "Scrapes **500+ sources** (RSS, X, Telegram Channels). Identifies TOP 20 high-value shifts in Fintech & Web3. Updated every 60m."
             }
         },
         "academy": {
