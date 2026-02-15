@@ -23,7 +23,7 @@ export const EarnHeader = () => {
             {/* Immersive Mesh Background */}
             <div className="absolute inset-0 bg-linear-to-br from-blue-600/10 via-purple-600/5 to-transparent pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col items-center text-center space-y-4 bg-white/2 backdrop-blur-3xl rounded-[1.9rem] p-4 border border-white/5">
+            <div className="relative z-10 flex flex-col items-center text-center space-y-4 bg-white/2 backdrop-blur-3xl rounded-[1.9rem] p-5 border border-white/5">
 
                 <div className="flex items-center justify-between w-full gap-4 pt-2">
                     {/* Level Circle - Compact */}

@@ -45,7 +45,7 @@ def prepare_partner_response(partner: Partner, tg_id: str) -> dict:
     """
     from app.models.schemas import PartnerResponse
     # is_admin is the only field requiring external context (tg_id)
-    response = PartnerResponse.from_orm(partner)
+    response = PartnerResponse.model_validate(partner)
     response.is_admin = tg_id in settings.ADMIN_USER_IDS
     return response.model_dump()
 
