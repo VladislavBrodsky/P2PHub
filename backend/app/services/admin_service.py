@@ -156,34 +156,45 @@ class AdminService:
             net_profit = total_revenue - total_commissions
 
             # 4. Daily Performance Charts (Last 14 days)
+            # #comment: MISSION-CRITICAL PERF. Replaced 28 loop-driven queries with 2 grouped queries.
+            # This is vital for maintaining UI responsiveness as the transaction ledger grows.
+            from sqlalchemy import Date, cast
+            
+            cutoff_date = now - timedelta(days=14)
+            
+            # 4.1 Daily Growth
+            stmt_daily_growth = select(
+                cast(Partner.created_at, Date).label("day"),
+                func.count(Partner.id)
+            ).where(Partner.created_at >= cutoff_date).group_by("day")
+            growth_res = await session.exec(stmt_daily_growth)
+            growth_map = {row[0]: row[1] for row in growth_res.all() if row[0]}
+            
+            # 4.2 Daily Revenue
+            stmt_daily_rev = select(
+                cast(PartnerTransaction.created_at, Date).label("day"),
+                func.sum(PartnerTransaction.amount)
+            ).where(
+                PartnerTransaction.status == "completed",
+                PartnerTransaction.created_at >= cutoff_date
+            ).group_by("day")
+            rev_res = await session.exec(stmt_daily_rev)
+            rev_map = {row[0]: row[1] for row in rev_res.all() if row[0]}
+            
             daily_growth = []
             daily_revenue = []
             for i in range(13, -1, -1):
-                day = now - timedelta(days=i)
-                day_start = day.replace(hour=0, minute=0, second=0, microsecond=0)
-                day_end = day_start + timedelta(days=1)
-
-                # Daily Growth
-                stmt_growth = select(func.count(Partner.id)).where(
-                    Partner.created_at >= day_start,
-                    Partner.created_at < day_end
-                )
-                day_count = (await session.exec(stmt_growth)).one()
+                day = (now - timedelta(days=i)).date()
+                day_str = day.strftime("%m-%d")
+                
                 daily_growth.append({
-                    "date": day_start.strftime("%m-%d"),
-                    "count": day_count
+                    "date": day_str,
+                    "count": growth_map.get(day, 0)
                 })
-
-                # Daily Revenue
-                stmt_rev = select(func.sum(PartnerTransaction.amount)).where(
-                    PartnerTransaction.status == "completed",
-                    PartnerTransaction.created_at >= day_start,
-                    PartnerTransaction.created_at < day_end
-                )
-                day_rev = (await session.exec(stmt_rev)).one() or 0.0
+                
                 daily_revenue.append({
-                    "date": day_start.strftime("%m-%d"),
-                    "amount": round(day_rev, 2)
+                    "date": day_str,
+                    "amount": round(rev_map.get(day, 0.0), 2)
                 })
 
             # 5. Recent Successful Transactions
