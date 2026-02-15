@@ -195,10 +195,14 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                                 ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20 shadow-none'
                                 : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-lg'
                                 }`}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleCardClick();
+                            }}
                         >
                             {status === 'STARTED' ? (
                                 <>
-                                    <span className="animate-pulse">{t('tasks.in_progress', 'Progress')}</span>
+                                    <span className="animate-pulse">{t('tasks.in_progress', 'In Progress')}</span>
                                     <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
                                 </>
                             ) : (

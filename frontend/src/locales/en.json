@@ -534,6 +534,7 @@
         "progress": "Progress",
         "claim": "Claim Reward",
         "start": "Start Mission",
+        "status": "Status",
         "level_short": "Lvl",
         "pro_multiplier": "x5 XP Bonus",
         "telegram_bot": {
