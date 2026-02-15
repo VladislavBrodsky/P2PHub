@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Zap, Sparkles, Settings, Trophy, Cpu, Users
+    Zap, Settings, Trophy, Cpu, Users
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
-import { useUser } from '../context/UserContext';
 import { useUI } from '../context/UIContext';
 import { proService, PROStatus } from '../services/proService';
 import { useNotificationStore } from '../store/useNotificationStore';
@@ -22,7 +21,6 @@ export const ProDashboard = () => {
     const { t } = useTranslation();
     const { selection, impact, notification: hapticNotification } = useHaptic();
     const { showNotification } = useNotificationStore();
-    const { user } = useUser();
     const { setFooterVisible, setHeaderVisible } = useUI();
 
     const [status, setStatus] = useState<PROStatus | null>(null);
@@ -42,7 +40,7 @@ export const ProDashboard = () => {
         linkedin_access_token: ''
     });
 
-    const [trends, setTrends] = useState<any[]>([]);
+    const [trends] = useState<any[]>([]); // TODO: Implement trend fetching
     const [marketAudit, setMarketAudit] = useState<any>(null);
     const [isAuditing, setIsAuditing] = useState(false);
     const [showAuditModal, setShowAuditModal] = useState(false);
@@ -61,6 +59,18 @@ export const ProDashboard = () => {
             setFooterVisible(true);
         };
     }, [showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, setFooterVisible, setHeaderVisible]);
+
+    // Handle deep linking for Pro Tabs
+    useEffect(() => {
+        const handleNav = (e: CustomEvent) => {
+            const tab = e.detail;
+            if (['studio', 'tools', 'growth'].includes(tab)) {
+                setActiveTab(tab as Tab);
+            }
+        };
+        window.addEventListener('nav-pro-tab', handleNav as EventListener);
+        return () => window.removeEventListener('nav-pro-tab', handleNav as EventListener);
+    }, []);
 
     useEffect(() => {
         loadStatus();
