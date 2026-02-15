@@ -44,7 +44,7 @@ export const GrowthTab = ({
             className="space-y-10 pb-12"
         >
             {/* Master Score Card - Intelligence Hub */}
-            <div className="pro-card-extreme rounded-[3rem] sm:rounded-[4rem] p-8 sm:p-14 border border-white/10 shadow-3xl relative overflow-hidden group holographic-shine noise-overlay">
+            <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[3rem] sm:rounded-[4rem] p-8 sm:p-14 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group holographic-shine noise-overlay">
                 <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 pointer-events-none" />
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 blur-[150px] rounded-full -mr-64 -mt-64 animate-pulse" />
 
@@ -56,7 +56,7 @@ export const GrowthTab = ({
                             </div>
                             <button
                                 onClick={() => { selection(); setShowManual('academy'); }}
-                                className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-indigo-500/50 hover:text-indigo-500 transition-all hover:scale-110"
+                                className="w-10 h-10 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-indigo-500/50 hover:text-indigo-500 transition-all hover:scale-110"
                             >
                                 <Info size={16} />
                             </button>
@@ -202,7 +202,7 @@ export const GrowthTab = ({
                                     {renderMarkdown(module.content)}
                                 </p>
 
-                                <div className="p-8 bg-slate-900 dark:bg-black/40 rounded-[2.5rem] border border-white/5 space-y-5 shadow-inner group/task">
+                                <div className="p-8 bg-slate-100 dark:bg-black/40 rounded-[2.5rem] border border-slate-200 dark:border-white/5 space-y-5 shadow-inner group/task">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-4">
                                             <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">
@@ -211,7 +211,7 @@ export const GrowthTab = ({
                                             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-500">Node Configuration Task</span>
                                         </div>
                                     </div>
-                                    <p className="text-sm sm:text-lg font-bold text-white leading-relaxed opacity-90">
+                                    <p className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white leading-relaxed opacity-90">
                                         {module.task}
                                     </p>
                                     {module.link && (
@@ -269,7 +269,7 @@ export const GrowthTab = ({
 
                 <div className="space-y-4">
                     {(t('pro_dashboard.academy.lifehacks.items', { returnObjects: true }) as any[]).map((hack: any, i: number) => (
-                        <div key={i} className="flex gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-pink-500/20 transition-all group/hack cursor-default shadow-sm hover:shadow-md">
+                        <div key={i} className="flex gap-4 p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5 hover:border-pink-500/20 transition-all group/hack cursor-default shadow-sm hover:shadow-md">
                             <div className="w-9 h-9 rounded-xl bg-pink-500/10 flex items-center justify-center text-pink-500 font-black text-xs shrink-0 border border-pink-500/10 shadow-inner group-hover/hack:scale-110 transition-transform">{i + 1}</div>
                             <div className="space-y-1">
                                 <h5 className="text-[11px] font-black uppercase text-slate-900 dark:text-white tracking-tight">{hack.title}</h5>
@@ -280,21 +280,21 @@ export const GrowthTab = ({
                 </div>
             </div>
 
-            <div className="glass-panel-premium p-7 rounded-[2.5rem] border border-white/10 relative overflow-hidden group bg-slate-950 shadow-3xl">
+            <div className="glass-panel-premium p-7 rounded-[2.5rem] border border-slate-200 dark:border-white/10 relative overflow-hidden group bg-white dark:bg-slate-950 shadow-3xl">
                 <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none" />
                 <div className="flex items-center gap-4 mb-8 relative z-10 font-sans">
                     <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-xl group-hover:rotate-6 transition-transform">
                         <Globe size={24} className="text-indigo-500" />
                     </div>
                     <div>
-                        <h4 className="text-[12px] font-black uppercase tracking-[0.25em] text-white leading-none mb-1.5">{t('pro_dashboard.academy.social_setup.title')}</h4>
+                        <h4 className="text-[12px] font-black uppercase tracking-[0.25em] text-slate-900 dark:text-white leading-none mb-1.5">{t('pro_dashboard.academy.social_setup.title')}</h4>
                         <p className="text-[8px] font-black text-indigo-400 uppercase tracking-[0.3em]">{t('pro_dashboard.academy.social_setup.subtitle')}</p>
                     </div>
                 </div>
 
                 <div className="space-y-3 relative z-10 mb-6">
                     {(t('pro_dashboard.academy.social_setup.platforms', { returnObjects: true, bot_username: status?.bot_username || 'pintopay_probot' }) as any[]).map((platform: any, i: number) => (
-                        <div key={i} className="p-4 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors group/platform">
+                        <div key={i} className="p-4 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors group/platform">
                             <div className="flex items-center gap-3 mb-2">
                                 <div className="w-8 h-8 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20 group-hover/platform:scale-110 transition-transform">
                                     {platform.name.includes('Telegram') && <Send size={14} className="text-indigo-500" />}

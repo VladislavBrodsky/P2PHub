@@ -41,14 +41,14 @@ export const ToolsTab = ({
                     {/* Headline Fixer */}
                     <motion.div
                         whileHover={{ y: -5 }}
-                        className="pro-card-extreme rounded-[2.5rem] p-8 border border-white/10 group relative flex flex-col shadow-2xl h-full"
+                        className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-200 dark:border-white/10 group relative flex flex-col shadow-2xl h-full"
                     >
                         <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         <div className="flex items-center justify-between mb-8">
                             <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-500 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-500 overflow-hidden">
                                 <Zap size={24} />
                             </div>
-                            <div className="px-3 py-1 bg-white/5 rounded-full border border-white/10">
+                            <div className="px-3 py-1 bg-slate-50 dark:bg-white/5 rounded-full border border-slate-200 dark:border-white/10">
                                 <span className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.2em]">Active</span>
                             </div>
                         </div>
@@ -69,7 +69,7 @@ export const ToolsTab = ({
                 {/* Trend Hunter Module */}
                 <motion.div
                     whileHover={{ y: -5 }}
-                    className="pro-card-extreme rounded-[2.5rem] p-8 border border-white/10 group relative h-full flex flex-col shadow-2xl noise-overlay holographic-shine"
+                    className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-200 dark:border-white/10 group relative h-full flex flex-col shadow-2xl noise-overlay holographic-shine"
                 >
                     <div className="absolute inset-0 bg-linear-to-br from-orange-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     <div className="flex items-center justify-between mb-8">
@@ -86,7 +86,7 @@ export const ToolsTab = ({
                     {trends.length > 0 ? (
                         <div className="space-y-3 mb-8">
                             {trends.slice(0, 2).map((trend, i) => (
-                                <div key={i} className="p-3 bg-white/5 border border-white/5 rounded-xl text-[10px] font-bold text-slate-500 italic opacity-80">
+                                <div key={i} className="p-3 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-xl text-[10px] font-bold text-slate-500 italic opacity-80">
                                     "{trend.topic}"
                                 </div>
                             ))}
@@ -114,7 +114,7 @@ export const ToolsTab = ({
                 {/* Global Marketing Audit - Flagship Centerpiece */}
                 <motion.div
                     whileHover={{ scale: 1.01 }}
-                    className="pro-card-extreme rounded-[3rem] p-10 border border-indigo-500/30 group relative flex flex-col shadow-3xl col-span-1 sm:col-span-2 holographic-shine border-gradient-pro bg-slate-100/30 dark:bg-indigo-500/3"
+                    className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[3rem] p-10 border border-slate-200 dark:border-indigo-500/30 group relative flex flex-col shadow-3xl col-span-1 sm:col-span-2 holographic-shine border-gradient-pro"
                 >
                     <div className="absolute -right-20 -top-20 w-96 h-96 bg-indigo-500/10 blur-[120px] rounded-full group-hover/btn:scale-125 transition-transform duration-1000" />
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-8 mb-10">

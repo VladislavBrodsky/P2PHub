@@ -141,6 +141,7 @@ class PROSetupRequest(BaseModel):
     x_access_token: str | None = None
     x_access_token_secret: str | None = None
     telegram_channel_id: str | None = None
+    telegram_channels: list[str] | None = None
     linkedin_access_token: str | None = None
     
     # #comment: Standardized for audit.

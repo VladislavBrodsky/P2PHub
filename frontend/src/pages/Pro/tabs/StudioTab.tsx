@@ -204,7 +204,7 @@ export const StudioTab = ({
                     exit={{ opacity: 0, scale: 0.98 }}
                     className="space-y-6"
                 >
-                    <div className="pro-card-extreme rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 border border-white/10 shadow-3xl relative overflow-hidden group noise-overlay holographic-shine">
+                    <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay holographic-shine">
                         <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 pointer-events-none" />
                         <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[100px] rounded-full -mr-32 -mt-32 animate-pulse" />
 
@@ -388,7 +388,7 @@ export const StudioTab = ({
                                 <h3 className="text-lg font-black uppercase tracking-tight text-white">{t('pro_dashboard.studio.ready_title')}</h3>
                                 <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-indigo-400">{t('pro_dashboard.studio.ready_subtitle')}</p>
                             </div>
-                            <div className="p-4 bg-white/5 rounded-xl border border-white/10 shadow-inner">
+                            <div className="p-4 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10 shadow-inner">
                                 <p className="text-[10px] font-medium leading-relaxed text-slate-900 dark:text-white/70">
                                     {t('pro_dashboard.studio.ready_p')}
                                 </p>
@@ -518,7 +518,7 @@ export const StudioTab = ({
                                     <Send size={28} />
                                 </div>
                                 <div className="space-y-1">
-                                    <h3 className="text-xl font-black uppercase tracking-tight text-white">System Broadcast</h3>
+                                    <h3 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white">System Broadcast</h3>
                                     <p className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-500">Channel Synchronization</p>
                                 </div>
                             </div>
@@ -531,11 +531,11 @@ export const StudioTab = ({
                                         disabled={isPublishing || publishedPlatforms.includes(platform)}
                                         className={`w-full h-16 rounded-2xl border transition-all flex items-center justify-between px-6 group ${publishedPlatforms.includes(platform)
                                             ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500'
-                                            : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                                            : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10'
                                             }`}
                                     >
                                         <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+                                            <div className="w-10 h-10 rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-transparent flex items-center justify-center">
                                                 <Send size={18} />
                                             </div>
                                             <span className="text-xs font-black uppercase tracking-widest">{platform === 'x' ? 'X (Twitter)' : platform.charAt(0).toUpperCase() + platform.slice(1)}</span>

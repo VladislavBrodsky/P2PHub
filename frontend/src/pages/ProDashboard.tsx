@@ -257,11 +257,11 @@ export const ProDashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-indigo-500/30 overflow-x-hidden">
+        <div className="h-[100dvh] overflow-y-auto bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-sans selection:bg-indigo-500/30 overflow-x-hidden">
             <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(30,58,138,0.15)_0%,transparent_50%)] pointer-events-none" />
-            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-10 pb-32">
+            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-6 pb-24">
                 {/* Header Section */}
-                <div className="flex flex-col gap-8 mb-12">
+                <div className="flex flex-col gap-4 mb-6">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                         <div className="space-y-4">
                             <div className="flex items-center gap-3">
@@ -274,30 +274,30 @@ export const ProDashboard = () => {
                                     <Zap size={24} className="relative z-10" />
                                 </motion.div>
                                 <div className="space-y-0.5">
-                                    <h1 className="text-3xl font-black text-white uppercase tracking-tighter leading-none flex items-center gap-2">
-                                        PRO <span className="text-indigo-500">Node</span>
+                                    <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center gap-2">
+                                        PRO <span className="text-indigo-600 dark:text-indigo-500">Node</span>
                                     </h1>
                                     <div className="flex items-center gap-2">
                                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">{t('pro_dashboard.status_online')}</span>
+                                        <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">{t('pro_dashboard.status_online')}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-3 p-1.5 bg-white/5 backdrop-blur-3xl rounded-[2rem] border border-white/10 shadow-3xl">
-                            <div className="flex items-center gap-3 px-5 py-3 rounded-[1.5rem] bg-indigo-500/10 border border-indigo-500/20 group hover:bg-indigo-500/20 transition-all cursor-default">
-                                <Trophy size={18} className="text-indigo-400" />
+                        <div className="flex items-center gap-3 p-1.5 bg-white dark:bg-white/5 backdrop-blur-3xl rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-3xl">
+                            <div className="flex items-center gap-3 px-5 py-3 rounded-[1.5rem] bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 group hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-all cursor-default">
+                                <Trophy size={18} className="text-indigo-600 dark:text-indigo-400" />
                                 <div className="flex flex-col">
-                                    <span className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] leading-none mb-1">XP Points</span>
-                                    <span className="text-xl font-black text-white tabular-nums leading-none tracking-tight">{academyScore}</span>
+                                    <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] leading-none mb-1">XP Points</span>
+                                    <span className="text-xl font-black text-slate-900 dark:text-white tabular-nums leading-none tracking-tight">{academyScore}</span>
                                 </div>
                             </div>
                             <button
                                 onClick={() => setShowSetup(true)}
-                                className="p-3.5 bg-white/5 hover:bg-white/10 rounded-[1.5rem] border border-white/5 hover:border-white/20 transition-all group active:scale-95"
+                                className="p-3.5 bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 rounded-[1.5rem] border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20 transition-all group active:scale-95"
                             >
-                                <Settings size={18} className="text-slate-400 group-hover:text-white group-hover:rotate-45 transition-all duration-500" />
+                                <Settings size={18} className="text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white group-hover:rotate-45 transition-all duration-500" />
                             </button>
                         </div>
                     </div>

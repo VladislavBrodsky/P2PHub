@@ -868,15 +868,32 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         
         try:
             import os
-
+            import json
             from bot import bot
+
+            # Support multiple channels stored as JSON string
+            channels = []
+            try:
+                if partner.telegram_channel_id.strip().startswith("["):
+                    channels = json.loads(partner.telegram_channel_id)
+                else:
+                    channels = [partner.telegram_channel_id]
+            except:
+                channels = [partner.telegram_channel_id]
+            
+            # Filter empty strings
+            channels = [ch for ch in channels if ch and ch.strip()]
+            
+            if not channels:
+                return {"error": "No valid Telegram channels found."}
+
+            results = []
             
             if image_path:
                 # Resolve absolute path to image
                 backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
                 
                 # #comment: Support for both static assets and AI generated media.
-                # Static images are in /app_images/, generated ones in /generated_media/.
                 if "generated_media" in image_path:
                     filename = image_path.split("/")[-1]
                     full_image_path = os.path.join(backend_dir, "generated_media", filename)
@@ -886,28 +903,52 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                 
                 if os.path.exists(full_image_path):
                     from aiogram.types import FSInputFile
-                    photo = FSInputFile(full_image_path)
-                    await bot.send_photo(
-                        chat_id=partner.telegram_channel_id,
-                        photo=photo,
-                        caption=content[:1024], # Telegram caption limit
-                        parse_mode="Markdown"
-                    )
+                    
+                    for channel_id in channels:
+                        try:
+                            photo = FSInputFile(full_image_path)
+                            await bot.send_photo(
+                                chat_id=channel_id,
+                                photo=photo,
+                                caption=content[:1024], # Telegram caption limit
+                                parse_mode="Markdown"
+                            )
+                            results.append(f"✅ {channel_id}")
+                        except Exception as e:
+                            logger.error(f"Failed to post to {channel_id}: {e}")
+                            results.append(f"❌ {channel_id}")
                 else:
                     logger.warning(f"⚠️ Image not found at {full_image_path}, sending text only.")
-                    await bot.send_message(
-                        chat_id=partner.telegram_channel_id,
-                        text=content,
-                        parse_mode="Markdown"
-                    )
+                    for channel_id in channels:
+                        try:
+                            await bot.send_message(
+                                chat_id=channel_id,
+                                text=content,
+                                parse_mode="Markdown"
+                            )
+                            results.append(f"✅ {channel_id}")
+                        except Exception as e:
+                            logger.error(f"Failed to post to {channel_id}: {e}")
+                            results.append(f"❌ {channel_id}")
             else:
-                await bot.send_message(
-                    chat_id=partner.telegram_channel_id,
-                    text=content,
-                    parse_mode="Markdown"
-                )
+                for channel_id in channels:
+                    try:
+                        await bot.send_message(
+                            chat_id=channel_id,
+                            text=content,
+                            parse_mode="Markdown"
+                        )
+                        results.append(f"✅ {channel_id}")
+                    except Exception as e:
+                        logger.error(f"Failed to post to {channel_id}: {e}")
+                        results.append(f"❌ {channel_id}")
             
-            return {"status": "success", "platform": "telegram", "msg": f"Successfully posted to {partner.telegram_channel_id}"}
+            return {
+                "status": "success", 
+                "platform": "telegram", 
+                "msg": f"Broadcast complete: {', '.join(results)}",
+                "details": results
+            }
         except Exception as e:
             logger.error(f"❌ Telegram posting failed: {e}")
             return {"error": f"Telegram API Error: {e!s}"}

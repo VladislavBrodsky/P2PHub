@@ -69,7 +69,7 @@ export const ProDashboardModals = ({
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 30 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full max-w-lg glass-panel-premium rounded-[3rem] border border-white/10 overflow-hidden bg-white dark:bg-slate-900 shadow-3xl flex flex-col max-h-[90vh] noise-overlay"
+                            className="w-full max-w-lg glass-panel-premium rounded-[3rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white dark:bg-slate-900 shadow-3xl flex flex-col max-h-[90vh] noise-overlay"
                         >
                             <div className="p-8 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-br from-indigo-500/5 dark:from-indigo-500/10 to-transparent">
                                 <div className="flex items-center gap-4">
@@ -93,7 +93,7 @@ export const ProDashboardModals = ({
 
                             <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-6">
                                 {/* X (Twitter) Integration Card */}
-                                <div className="p-5 bg-white dark:bg-slate-800/40 rounded-[2rem] border border-slate-200 dark:border-white/5 shadow-xs space-y-4">
+                                <div className="p-5 bg-slate-50 dark:bg-slate-800/40 rounded-[2rem] border border-slate-200 dark:border-white/5 shadow-xs space-y-4">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2.5">
                                             <div className="w-8 h-8 rounded-xl bg-slate-950 flex items-center justify-center border border-white/10">
@@ -153,7 +153,7 @@ export const ProDashboardModals = ({
                                 </div>
 
                                 {/* Telegram Integration Card */}
-                                <div className="p-5 bg-white dark:bg-slate-800/40 rounded-[2rem] border border-slate-200 dark:border-white/5 shadow-xs space-y-4">
+                                <div className="p-5 bg-slate-50 dark:bg-slate-800/40 rounded-[2rem] border border-slate-200 dark:border-white/5 shadow-xs space-y-4">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2.5">
                                             <div className="w-8 h-8 rounded-xl bg-linear-to-br from-blue-400 to-blue-600 flex items-center justify-center">
@@ -231,7 +231,7 @@ export const ProDashboardModals = ({
                                 </div>
 
                                 {/* LinkedIn Authority Card - Compact */}
-                                <div className="p-5 bg-white dark:bg-slate-800/40 rounded-[2rem] border border-slate-200 dark:border-white/5 shadow-xs flex items-center justify-between">
+                                <div className="p-5 bg-slate-50 dark:bg-slate-800/40 rounded-[2rem] border border-slate-200 dark:border-white/5 shadow-xs flex items-center justify-between">
                                     <div className="flex items-center gap-4">
                                         <div className="w-12 h-12 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
                                             <div className="p-2.5 bg-blue-600/10 rounded-xl">
@@ -255,7 +255,7 @@ export const ProDashboardModals = ({
                                 </div>
                             </div>
 
-                            <div className="p-8 bg-black/5 dark:bg-black/20 border-t border-slate-100 dark:border-white/5">
+                            <div className="p-8 bg-slate-50 dark:bg-black/20 border-t border-slate-100 dark:border-white/5">
                                 <button
                                     onClick={() => { selection(); handleSaveSetup(); }}
                                     className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.25em] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:grayscale disabled:opacity-50 shadow-xl shadow-indigo-500/30"
@@ -481,7 +481,7 @@ export const ProDashboardModals = ({
                                 </div>
                             </div>
 
-                            <div className="p-8 bg-black/40 border-t border-white/10 space-y-4">
+                            <div className="p-8 bg-slate-50 dark:bg-black/40 border-t border-white/10 space-y-4">
                                 <div className="flex items-center gap-3 text-emerald-400 text-center justify-center mb-2">
                                     <CheckCircle2 size={16} />
                                     <span className="text-[10px] font-black uppercase tracking-[0.2em]">Audit verified for 60m dominance</span>
@@ -513,7 +513,7 @@ export const ProDashboardModals = ({
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full max-w-lg glass-panel-premium rounded-[2.5rem] border border-white/10 overflow-hidden bg-white dark:bg-slate-900 shadow-2xl noise-overlay"
+                            className="w-full max-w-lg glass-panel-premium rounded-[2.5rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white dark:bg-slate-900 shadow-2xl noise-overlay"
                         >
                             <div className="p-8 space-y-6">
                                 <div className="flex justify-between items-start">
@@ -641,7 +641,7 @@ export const ProDashboardModals = ({
                                         </p>
                                         <div className="p-6 bg-indigo-500/5 rounded-[2rem] border border-indigo-500/10 flex items-center gap-5">
                                             <Sparkles className="text-indigo-400 shrink-0" size={32} />
-                                            <p className="text-[12px] font-black text-white uppercase tracking-tight leading-snug">
+                                            <p className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-snug">
                                                 PRO Members grow their network <span className="vibing-blue-text">x5 faster</span> using these assets.
                                             </p>
                                         </div>

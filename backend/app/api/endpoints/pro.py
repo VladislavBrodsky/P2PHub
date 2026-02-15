@@ -44,6 +44,23 @@ async def get_pro_status(
     # Check for monthly token reset
     await viral_studio.check_tokens_and_reset(partner, session)
     
+    # Parse telegram channels
+    import json
+    tg_main = ""
+    tg_others = []
+    
+    if partner.telegram_channel_id:
+        try:
+            if partner.telegram_channel_id.strip().startswith("["):
+                channels = json.loads(partner.telegram_channel_id)
+                if channels:
+                    tg_main = channels[0]
+                    tg_others = channels[1:]
+            else:
+                tg_main = partner.telegram_channel_id
+        except:
+            tg_main = partner.telegram_channel_id
+
     return {
         "is_pro": partner.is_pro,
         "pro_tokens": partner.pro_tokens,
@@ -57,7 +74,8 @@ async def get_pro_status(
             "x_api_secret": partner.x_api_secret or "",
             "x_access_token": partner.x_access_token or "",
             "x_access_token_secret": partner.x_access_token_secret or "",
-            "telegram_channel_id": partner.telegram_channel_id or "",
+            "telegram_channel_id": tg_main,
+            "telegram_channels": tg_others,
             "linkedin_access_token": partner.linkedin_access_token or ""
         },
         "capabilities": viral_studio.get_capabilities(),
@@ -95,7 +113,26 @@ async def setup_social_api(
     if payload.x_api_secret: partner.x_api_secret = payload.x_api_secret
     if payload.x_access_token: partner.x_access_token = payload.x_access_token
     if payload.x_access_token_secret: partner.x_access_token_secret = payload.x_access_token_secret
-    if payload.telegram_channel_id: partner.telegram_channel_id = payload.telegram_channel_id
+    
+    # Handle Telegram Channels (Main + Others)
+    # If payload acts as full update, we reconstruct the list
+    if payload.telegram_channel_id is not None:
+        import json
+        main_channel = payload.telegram_channel_id
+        other_channels = payload.telegram_channels or []
+        
+        # Merge and dedup
+        all_channels = [main_channel] + [ch for ch in other_channels if ch != main_channel]
+        # Filter empty
+        all_channels = [ch for ch in all_channels if ch and ch.strip()]
+        
+        if len(all_channels) > 1:
+            partner.telegram_channel_id = json.dumps(all_channels)
+        elif len(all_channels) == 1:
+            partner.telegram_channel_id = all_channels[0]
+        else:
+            partner.telegram_channel_id = None
+
     if payload.linkedin_access_token: partner.linkedin_access_token = payload.linkedin_access_token
     
     session.add(partner)
@@ -182,7 +219,14 @@ async def test_integration(
     if not partner.is_pro:
         raise HTTPException(status_code=403, detail="PRO membership required")
     
-    test_content = f"🚀 Pintopay Integration Test\n\nProtocol Status: ACTIVE\nTimestamp: {logger.name}"
+    test_content = (
+        "🚀 **SYSTEM OVERRIDE: INITIATED** 🚀\n\n"
+        "The connection to the **Pintopay Partner Club** is ACTIVE.\n\n"
+        "We are not just building a network. We are architecting a **legacy**.\n\n"
+        "The algorithm has been breached. The tools are in your hands.\n\n"
+        "**It's time to dominate.**\n\n"
+        "#PintopayPRO #FinancialRevolution #ViralMode"
+    )
     
     result = await viral_studio.post_to_social(
         partner=partner,
@@ -194,7 +238,8 @@ async def test_integration(
     if "error" in result:
         raise HTTPException(status_code=400, detail=result["error"])
     
-    return result
+    # Return success but formatted for frontend notification
+    return {"status": "success", "msg": "Sync Verified! Viral Protocol Active."}
 
 class HeadlineRequest(BaseModel):
     headline: str
