@@ -78,6 +78,13 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
             setTimeout(() => {
                 window.dispatchEvent(new CustomEvent('nav-blog-post', { detail: slug }));
             }, 500);
+        } else if (startParam?.startsWith('pro_') || urlStartParam?.startsWith('pro_')) {
+            const tab = (startParam || urlStartParam)?.replace('pro_', '');
+            setActiveTab('pro');
+            // Small delay to ensure ProPage component is mounted and event listener is ready
+            setTimeout(() => {
+                window.dispatchEvent(new CustomEvent('nav-pro-tab', { detail: tab }));
+            }, 500);
         }
     }, []);
 
