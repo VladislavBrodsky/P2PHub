@@ -1,36 +1,37 @@
 import asyncio
 import json
-import secrets
 import logging
-import sentry_sdk
-from typing import List
+import secrets
+
 # Added datetime for tracking task start times
 from datetime import datetime, timedelta
+from typing import List
 
+import sentry_sdk
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
+from sqlalchemy import text
 from sqlalchemy.orm import selectinload
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
+from app.core.i18n import get_msg
 from app.core.security import get_current_user, get_tg_user
 from app.middleware.rate_limit import limiter
-from app.models.partner import Partner, XPTransaction, Earning, get_session
+from app.models.partner import Earning, Partner, XPTransaction, get_session
 from app.models.schemas import (
+    ActiveTaskResponse,
     EarningSchema,
     GrowthMetrics,
     NetworkStats,
     PartnerResponse,
     PartnerTopResponse,
     TaskClaimRequest,
-    ActiveTaskResponse,
 )
+from app.services.notification_service import notification_service
 from app.services.redis_service import redis_service
 from app.utils.ranking import get_level
 from bot import bot, types
-from app.core.i18n import get_msg
-from app.services.notification_service import notification_service
-from sqlalchemy import text
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -339,7 +340,7 @@ async def get_my_profile(
     return partner_response
 
 
-@router.get("/top", response_model=List[PartnerTopResponse])
+@router.get("/top", response_model=list[PartnerTopResponse])
 async def get_top_partners(
     session: AsyncSession = Depends(get_session)
 ):
@@ -440,13 +441,12 @@ async def get_recent_partners(
 
     # Check if we need to refresh the randomized count (every 60m)
     refresh_count = True
-    if count_setting:
-        if now - count_setting.updated_at < count_refresh_window:
-            refresh_count = False
-            try:
-                last_hour_count = int(count_setting.value)
-            except:
-                refresh_count = True
+    if count_setting and now - count_setting.updated_at < count_refresh_window:
+        refresh_count = False
+        try:
+            last_hour_count = int(count_setting.value)
+        except:
+            refresh_count = True
 
     if refresh_partners:
         # 3. Fetch Fresh from Partner Table with photo_file_id
@@ -553,7 +553,7 @@ async def get_my_referral_tree(
         expire=600
     )
 
-@router.get("/network/{level}", response_model=List[PartnerResponse])
+@router.get("/network/{level}", response_model=list[PartnerResponse])
 async def get_network_level_members(
     level: int,
     user_data: dict = Depends(get_current_user),
@@ -997,7 +997,7 @@ async def complete_academy_stage(
     partner_response.is_admin = tg_id in settings.ADMIN_USER_IDS
     return partner_response.model_dump()
 
-@router.get("/earnings", response_model=List[EarningSchema])
+@router.get("/earnings", response_model=list[EarningSchema])
 async def get_my_earnings(
     limit: int = 10,
     user_data: dict = Depends(get_current_user),
@@ -1138,9 +1138,11 @@ async def get_partner_photo(request: Request, file_id: str):
     Returns the Telegram photo content for a given file_id.
     Optimizes (WebP + Resize) and caches the binary content in Redis.
     """
-    from fastapi.responses import Response
-    from app.services.partner_service import ensure_photo_cached
     import time
+
+    from fastapi.responses import Response
+
+    from app.services.partner_service import ensure_photo_cached
 
     start_time = time.time()
     try:

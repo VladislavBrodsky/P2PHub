@@ -5,17 +5,19 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 # Mock aiogram BEFORE any app imports
 import aiogram
+
 mock_bot = AsyncMock()
 mock_bot.get_me.return_value = AsyncMock(username="pintopay_probot")
 
 with patch('aiogram.Bot', return_value=mock_bot):
-    from app.models.partner import Partner, get_session, XPTransaction
+    from sqlmodel import select
+
+    import app.services.notification_service
+    import app.services.referral_service
+    from app.core.config import settings
+    from app.models.partner import Partner, XPTransaction, get_session
     from app.services.partner_service import create_partner
     from app.services.referral_service import process_referral_logic
-    from sqlmodel import select
-    import app.services.referral_service
-    import app.services.notification_service
-    from app.core.config import settings
 
     # Ensure the services use our mock_bot
     app.services.referral_service.bot = mock_bot
@@ -58,7 +60,7 @@ async def simulate_join():
                 await session.commit()
 
             # Create new partner
-            partner, is_new = await create_partner(
+            partner, _is_new = await create_partner(
                 session=session,
                 telegram_id=TEST_TG_ID,
                 username="test_user_alpha",

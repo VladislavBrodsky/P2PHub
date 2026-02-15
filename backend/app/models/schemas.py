@@ -1,17 +1,18 @@
-from datetime import datetime
-from typing import List, Optional, Any
-from pydantic import BaseModel, Field, field_validator, computed_field
 import json
+from datetime import datetime
+from typing import Any, List, Optional
+
+from pydantic import BaseModel, Field, computed_field, field_validator
 
 
 class PartnerBase(BaseModel):
-    id: Optional[int] = None
+    id: int | None = None
     telegram_id: str
-    username: Optional[str] = None
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    photo_url: Optional[str] = None
-    photo_file_id: Optional[str] = None
+    username: str | None = None
+    first_name: str | None = None
+    last_name: str | None = None
+    photo_url: str | None = None
+    photo_file_id: str | None = None
 
     # #comment: CRITICAL for Pydantic v2. This allows ORM objects to be used 
     # when validating this model, specifically for nested lists like 'referrals'.
@@ -37,14 +38,14 @@ class PartnerResponse(PartnerBase):
     referral_count: int = 0
 # #comment: total_network_size is now a @computed_field derived from 'referral_count'
 # mapping internal ORM metrics to public API response fields.
-    last_checkin_at: Optional[datetime] = None
+    last_checkin_at: datetime | None = None
     checkin_streak: int = 0
     created_at: datetime
     updated_at: datetime
-    referrals: Optional[List[PartnerBase]] = None
-    active_tasks: List[ActiveTaskResponse] = []
+    referrals: list[PartnerBase] | None = None
+    active_tasks: list[ActiveTaskResponse] = []
     completed_tasks: str = "[]"
-    completed_stages: List[int] = []
+    completed_stages: list[int] = []
     is_admin: bool = False
 
     class Config:
@@ -113,32 +114,32 @@ class PartnerResponse(PartnerBase):
         return getattr(self, "referral_count", 0)
 
 class PROSetupRequest(BaseModel):
-    x_api_key: Optional[str] = None
-    x_api_secret: Optional[str] = None
-    x_access_token: Optional[str] = None
-    x_access_token_secret: Optional[str] = None
-    telegram_channel_id: Optional[str] = None
-    linkedin_access_token: Optional[str] = None
+    x_api_key: str | None = None
+    x_api_secret: str | None = None
+    x_access_token: str | None = None
+    x_access_token_secret: str | None = None
+    telegram_channel_id: str | None = None
+    linkedin_access_token: str | None = None
 
 class ViralGenerateRequest(BaseModel):
     post_type: str
     target_audience: str
     language: str
-    referral_link: Optional[str] = None
+    referral_link: str | None = None
 
 class ViralGenerateResponse(BaseModel):
     title: str
     body: str
-    hashtags: Optional[List[str]] = None
+    hashtags: list[str] | None = None
     image_prompt: str
-    image_url: Optional[str] = None
+    image_url: str | None = None
     tokens_remaining: int
-    error_code: Optional[str] = None
+    error_code: str | None = None
 
 class SocialPostRequest(BaseModel):
     platform: str # 'x', 'telegram', 'linkedin'
     content: str
-    image_path: Optional[str] = None
+    image_path: str | None = None
 
 class TaskClaimRequest(BaseModel):
     xp_reward: float = Field(gt=0, description="XP reward must be greater than zero")
@@ -164,7 +165,7 @@ class EarningSchema(BaseModel):
     amount: float
     description: str
     type: str
-    level: Optional[int] = None
+    level: int | None = None
     currency: str
     created_at: datetime
 
@@ -173,11 +174,11 @@ class EarningSchema(BaseModel):
 
 class PartnerTopResponse(BaseModel):
     id: int
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    username: Optional[str] = None
-    photo_url: Optional[str] = None
-    photo_file_id: Optional[str] = None
+    first_name: str | None = None
+    last_name: str | None = None
+    username: str | None = None
+    photo_url: str | None = None
+    photo_file_id: str | None = None
     xp: float
     referrals_count: int
     rank: str

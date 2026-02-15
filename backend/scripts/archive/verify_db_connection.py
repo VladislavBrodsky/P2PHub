@@ -11,10 +11,11 @@ This script helps diagnose database connection issues by:
 Usage: python scripts/verify_db_connection.py
 """
 
+import asyncio
 import os
 import sys
-import asyncio
 from urllib.parse import urlparse
+
 import asyncpg
 
 

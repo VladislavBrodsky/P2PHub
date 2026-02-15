@@ -1,22 +1,21 @@
-from typing import List
 import logging
+from typing import List
 
-from app.middleware.rate_limit import limiter
 from fastapi import APIRouter, Depends, Request
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.security import get_current_user, get_tg_user
+from app.middleware.rate_limit import limiter
 from app.models.partner import Earning, Partner, get_session
 from app.models.schemas import EarningSchema
 from app.services.redis_service import redis_service
-
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-@router.get("/", response_model=List[EarningSchema])
+@router.get("/", response_model=list[EarningSchema])
 @limiter.limit("20/minute")
 async def get_my_earnings(
     request: Request,

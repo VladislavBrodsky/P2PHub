@@ -8,7 +8,7 @@ Fixtures handle setup/teardown, database sessions, and test data creation.
 import asyncio
 import os
 import sys
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 
 # #comment: Set required environment variables BEFORE importing any app modules.
 # This prevents pydantic validation errors when Settings() tries to load DATABASE_URL.
@@ -17,16 +17,14 @@ os.environ.setdefault("BOT_TOKEN", "test_token")
 os.environ.setdefault("WEBHOOK_SECRET", "test_secret")
 
 import pytest
+from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel import create_engine, delete
 from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlalchemy.ext.asyncio import create_async_engine
 
 # Add backend to Python path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app.models.partner import Partner, XPTransaction, Earning, PartnerTask
-
-
+from app.models.partner import Earning, Partner, PartnerTask, XPTransaction
 
 # #comment: Use in-memory SQLite for ultra-fast tests.
 # Tests run 10x faster than with PostgreSQL and are completely isolated.
@@ -93,16 +91,16 @@ async def create_test_partner(session: AsyncSession):
     """
     async def _create_partner(
         telegram_id: str,
-        username: str = None,
-        referrer_id: int = None,
-        referrer_code: str = None,
+        username: str | None = None,
+        referrer_id: int | None = None,
+        referrer_code: str | None = None,
         is_pro: bool = False,
         xp: int = 0,
     ) -> Partner:
         """Create a test partner with given attributes."""
         from app.services.partner_service import create_partner
         
-        partner, is_new = await create_partner(
+        partner, _is_new = await create_partner(
             session=session,
             telegram_id=telegram_id,
             username=username or f"user_{telegram_id}",
@@ -133,7 +131,7 @@ async def create_referral_chain(session: AsyncSession, create_test_partner):
         chain = await create_referral_chain(levels=9)
         # chain[0] is the root, chain[8] is the 9th level
     """
-    async def _create_chain(levels: int = 9, make_pro: list[int] = None) -> list[Partner]:
+    async def _create_chain(levels: int = 9, make_pro: list[int] | None = None) -> list[Partner]:
         """
         Create a referral chain of specified depth.
         

@@ -5,8 +5,8 @@ Tests the complete flow: DB -> Redis -> Telegram -> Cache
 """
 
 import asyncio
-import sys
 import os
+import sys
 
 # Add project root to path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -17,7 +17,7 @@ sys.path.insert(0, parent_dir)
 env_path = os.path.join(parent_dir, ".env")
 if os.path.exists(env_path):
     print(f"📄 Loading environment from {env_path}")
-    with open(env_path, "r") as f:
+    with open(env_path) as f:
         for line in f:
             line = line.strip()
             if line and not line.startswith("#"):
@@ -31,11 +31,13 @@ else:
 
 from sqlalchemy.ext.asyncio import create_async_engine
 
+
 async def diagnose_photo_flow():
-    from app.models.partner import async_session_maker, Partner
     from sqlmodel import select
-    from app.services.redis_service import redis_service
+
+    from app.models.partner import Partner, async_session_maker
     from app.services.partner_service import ensure_photo_cached
+    from app.services.redis_service import redis_service
     from bot import bot
     
     print("=" * 70)

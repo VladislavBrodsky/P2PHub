@@ -1,9 +1,12 @@
 
 import asyncio
-from app.services.redis_service import redis_service
-from app.services.leaderboard_service import leaderboard_service
+
 from sqlmodel import select
+
 from app.models.partner import Partner, async_session_maker
+from app.services.leaderboard_service import leaderboard_service
+from app.services.redis_service import redis_service
+
 
 async def clear_all_caches():
     """

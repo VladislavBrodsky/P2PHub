@@ -22,7 +22,7 @@ async def test_security():
     async for session in get_session():
         # 1. Create a "Referrer" user
         referrer_tg_id = f"SEC_REF_{timestamp}"
-        referrer, is_new = await create_partner(
+        referrer, _is_new = await create_partner(
             session=session,
             telegram_id=referrer_tg_id,
             username=f"referrer_{timestamp}"
@@ -32,7 +32,7 @@ async def test_security():
         # 2. Try to refer a new user using the Referrer's Telegram ID (STRICTLY FORBIDDEN NOW)
         print(f"\nAttempting to join using Telegram ID '{referrer_tg_id}' as referrer_code...")
         new_user_1_tg_id = f"SEC_USER_BAD_{timestamp}"
-        partner_bad, is_new_1 = await create_partner(
+        partner_bad, _is_new_1 = await create_partner(
             session=session,
             telegram_id=new_user_1_tg_id,
             username=f"bad_user_{timestamp}",
@@ -47,7 +47,7 @@ async def test_security():
         # 3. Try to refer a new user using the valid Referral Code (SHOULD WORK)
         print(f"\nAttempting to join using valid Referral Code '{referrer.referral_code}'...")
         new_user_2_tg_id = f"SEC_USER_GOOD_{timestamp}"
-        partner_good, is_new_2 = await create_partner(
+        partner_good, _is_new_2 = await create_partner(
             session=session,
             telegram_id=new_user_2_tg_id,
             username=f"good_user_{timestamp}",

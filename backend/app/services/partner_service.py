@@ -1,9 +1,12 @@
 import asyncio
+import io
 import logging
 import secrets
 from datetime import datetime, timedelta
 from typing import List, Optional, Tuple
 
+import httpx
+from PIL import Image
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -12,10 +15,6 @@ from app.models.partner import Partner
 from app.services.leaderboard_service import leaderboard_service
 from app.services.redis_service import redis_service
 from app.worker import broker
-
-import io
-import httpx
-from PIL import Image
 from bot import bot
 
 logger = logging.getLogger(__name__)
@@ -29,7 +28,7 @@ http_client = httpx.AsyncClient(timeout=10.0, limits=httpx.Limits(max_keepalive_
 # only one will perform the heavy processing, while others will wait for the result.
 _photo_processing_locks = {}
 
-async def ensure_photo_cached(file_id: str) -> Optional[bytes]:
+async def ensure_photo_cached(file_id: str) -> bytes | None:
     """
     Ensures the Telegram photo is cached in Redis (WebP optimized).
     Returns the binary content if successful, None otherwise.
@@ -93,7 +92,7 @@ async def ensure_photo_cached(file_id: str) -> Optional[bytes]:
     return None
 
 @broker.task(task_name="warm_up_partner_photos")
-async def warm_up_partner_photos(file_ids: List[str]):
+async def warm_up_partner_photos(file_ids: list[str]):
     """
     Background task to warm up photo cache for a list of file_ids.
     """
@@ -107,13 +106,13 @@ async def warm_up_partner_photos(file_ids: List[str]):
 async def create_partner(
     session: AsyncSession,
     telegram_id: str,
-    username: Optional[str] = None,
-    first_name: Optional[str] = None,
-    last_name: Optional[str] = None,
-    language_code: Optional[str] = "en",
-    referrer_code: Optional[str] = None,
-    photo_file_id: Optional[str] = None
-) -> Tuple[Partner, bool]:
+    username: str | None = None,
+    first_name: str | None = None,
+    last_name: str | None = None,
+    language_code: str | None = "en",
+    referrer_code: str | None = None,
+    photo_file_id: str | None = None
+) -> tuple[Partner, bool]:
     """
     Creates a new partner or retrieves an existing one.
     Handles potential race conditions during registration via database unique constraints.
@@ -223,20 +222,21 @@ async def create_partner(
 
     return partner, is_new
 
-async def get_partner_by_telegram_id(session: AsyncSession, telegram_id: str) -> Optional[Partner]:
+async def get_partner_by_telegram_id(session: AsyncSession, telegram_id: str) -> Partner | None:
     statement = select(Partner).where(Partner.telegram_id == telegram_id)
     result = await session.exec(statement)
     return result.first()
 
-async def get_partner_by_referral_code(session: AsyncSession, code: str) -> Optional[Partner]:
+async def get_partner_by_referral_code(session: AsyncSession, code: str) -> Partner | None:
     statement = select(Partner).where(Partner.referral_code == code)
     result = await session.exec(statement)
     return result.first()
 
 @broker.task(task_name="sync_profile_photos_task", schedule=[{"cron": "0 0 * * *"}])
 async def sync_profile_photos_task():
-    from app.models.partner import engine
     from sqlalchemy.orm import sessionmaker
+
+    from app.models.partner import engine
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
         await sync_profile_photos(bot, session)
@@ -338,7 +338,7 @@ async def migrate_paths(session: AsyncSession):
 
     await session.commit()
     logger.info(f"✅ Migration complete. Processed {processed_count} partners.")
-async def get_partner_full(session: AsyncSession, telegram_id: str) -> Optional[Partner]:
+async def get_partner_full(session: AsyncSession, telegram_id: str) -> Partner | None:
     """
     Fetches a partner with ALL necessary relationships eagerly loaded.
     Why: Prevents 'MissingGreenlet' errors when preparing complex responses.

@@ -1,9 +1,10 @@
 
 import asyncio
 import os
-from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy import text, inspect
+
 from dotenv import load_dotenv
+from sqlalchemy import inspect, text
+from sqlalchemy.ext.asyncio import create_async_engine
 
 # Force load the .env file
 load_dotenv(dotenv_path=".env")

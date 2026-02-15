@@ -3,8 +3,8 @@ CMO Intelligence System - Elite Viral Marketing Knowledge Base
 Self-learning AI system for audience-specific copy generation.
 """
 
-from typing import Dict, List, Optional
 from enum import Enum
+from typing import Dict, List, Optional
 
 
 class CopywritingTechnique(str, Enum):
@@ -497,9 +497,11 @@ class ViralFormulas:
     }
 
 
-from app.models.knowledge_base_item import KnowledgeBaseItem
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.knowledge_base_item import KnowledgeBaseItem
+
 
 class KnowledgeInsights:
     """Self-learning system for continuous improvement."""

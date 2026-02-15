@@ -123,7 +123,7 @@ async def create_real_user():
             print(f"\n--- Level {level} Joined ---")
             print(f"🆕 Registering @{new_username} under {current_referrer_code}...")
 
-            new_partner, is_new = await ps.create_partner(
+            new_partner, _is_new = await ps.create_partner(
                 session,
                 telegram_id=new_id,
                 username=new_username,

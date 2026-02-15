@@ -65,7 +65,7 @@ class ViralCopywriter:
     # Hardcoded referral link to ensure attribution for all generated content
     REFERRAL_LINK = "https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3"
 
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: str | None = None):
         # Why: We allow passing an explicit key for testing or overriding, but default to settings
         # for seamless production usage.
         self.api_key = api_key or settings.OPENAI_API_KEY
@@ -77,7 +77,7 @@ class ViralCopywriter:
             self.client = None
             logger.warning("⚠️ ViralCopywriter: OpenAI API Key not found or openai lib missing. Service limited.")
 
-    async def generate_article(self, category: str, topic: str, language: str = "en") -> Dict[str, str]:
+    async def generate_article(self, category: str, topic: str, language: str = "en") -> dict[str, str]:
         """
         Generates a viral article based on the category and topic.
         """
@@ -111,7 +111,7 @@ class ViralCopywriter:
             logger.error(f"❌ ViralCopywriter Error: {e}", exc_info=True)
             return {"error": str(e)}
 
-    def _build_system_prompt(self, cat_config: Dict[str, str]) -> str:
+    def _build_system_prompt(self, cat_config: dict[str, str]) -> str:
         """
         Constructs the high-converting system prompt.
         Why: We prefer a structured prompt with explicit rules and examples over a simple instruction.
@@ -162,7 +162,7 @@ Hook Style: {cat_config['hook_style']}
 **Share this with 3 friends to lock in your spot.**"
 """
 
-    def _parse_response(self, content: str) -> Dict[str, str]:
+    def _parse_response(self, content: str) -> dict[str, str]:
         """
         Parses the LLM response (handling potential JSON wrapping).
         """

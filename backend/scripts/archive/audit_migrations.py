@@ -9,7 +9,7 @@ revisions = {}
 
 for f in files:
     path = os.path.join(versions_dir, f)
-    with open(path, "r") as src:
+    with open(path) as src:
         content = src.read()
         rev_match = re.search(r"revision: str = ['\"]([^'\"]+)['\"]", content)
         if not rev_match:
@@ -47,5 +47,5 @@ for down in graph.values():
     elif down:
         parents.add(down)
 
-heads = [rev for rev in graph.keys() if rev not in parents]
+heads = [rev for rev in graph if rev not in parents]
 print(f"\nHeads found: {heads}")

@@ -5,10 +5,10 @@ from datetime import datetime, timedelta
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from app.core.config import settings
 from app.models.partner import Partner
 from app.services.notification_service import notification_service
 from app.worker import broker
-from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +95,7 @@ class SubscriptionService:
         text = (
             "❌ *Subscription Expired*\n\n"
             "Your PRO membership has expired. You have lost access to premium features.\n\n"
-            f"Re-activate your PRO status now to continue earning."
+            "Re-activate your PRO status now to continue earning."
         )
         buttons = [[
             {"text": "👑 Reactivate PRO", "web_app": {"url": settings.FRONTEND_URL}},

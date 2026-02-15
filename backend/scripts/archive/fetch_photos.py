@@ -9,17 +9,19 @@ sys.path.append(project_root)
 
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.models.partner import Partner
+
 
 async def fetch_photos_from_telegram():
     """
     Fetch profile photos from Telegram for users who are missing photo_file_id.
     This function requires BOT_TOKEN to be available.
     """
-    from bot import bot
     from app.models.partner import async_session_maker
+    from bot import bot
     
     async with async_session_maker() as session:
         print("=" * 70)

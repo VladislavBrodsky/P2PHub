@@ -46,7 +46,7 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
 
         return stats
 
-async def get_referral_tree_members(session: AsyncSession, partner_id: int, target_level: int) -> List[dict]:
+async def get_referral_tree_members(session: AsyncSession, partner_id: int, target_level: int) -> list[dict]:
     """
     Fetches details of partners at a specific level using Materialized Path.
     """
@@ -159,7 +159,7 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
         "timeframe": timeframe
     }
 
-async def get_network_time_series(session: AsyncSession, partner_id: int, timeframe: str = '7D') -> List[dict]:
+async def get_network_time_series(session: AsyncSession, partner_id: int, timeframe: str = '7D') -> list[dict]:
     """
     Returns data points for a growth chart using Materialized Path.
     Optimized for high-concurrency and large networks.
@@ -260,7 +260,7 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         nb = c.replace(year=c.year + year_step, month=next_month, day=1, hour=0, minute=0, second=0, microsecond=0)
         return nb, c.strftime("%b"), c.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
 
-    for i in range(points + 1):
+    for _i in range(points + 1):
         next_curr, label, bucket_key = get_next_bucket(curr)
         bucket_data = data_map.get(bucket_key, {lvl: 0 for lvl in range(1, 10)})
         

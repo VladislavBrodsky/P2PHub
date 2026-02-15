@@ -1,17 +1,18 @@
 
-import logging
 import asyncio
-from typing import Dict, Any, List
+import logging
 from datetime import datetime
+from typing import Any, Dict, List
+
+from sqlalchemy.orm import sessionmaker
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlalchemy.orm import sessionmaker
 
 from app.models.partner import Partner, engine
 
 logger = logging.getLogger(__name__)
 
-async def reconcile_network_stats(session_override: AsyncSession = None) -> Dict[str, Any]:
+async def reconcile_network_stats(session_override: AsyncSession = None) -> dict[str, Any]:
     """
     Unified high-performance network reconciliation.
     Fixes path, depth, and referral_count across the entire platform.
@@ -26,7 +27,7 @@ async def reconcile_network_stats(session_override: AsyncSession = None) -> Dict
     async with async_session() as session:
         return await _do_reconcile(session)
 
-async def _do_reconcile(session: AsyncSession) -> Dict[str, Any]:
+async def _do_reconcile(session: AsyncSession) -> dict[str, Any]:
     logger.info("🔧 Starting High-Performance Network Reconciliation...")
     start_time = datetime.utcnow()
     

@@ -1,19 +1,20 @@
+import contextlib
 import json
 import logging
 from datetime import datetime, timedelta
 from typing import Optional
 
 import httpx
+import sentry_sdk
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
+from app.core.http_client import http_client
 from app.models.partner import Partner
 from app.models.transaction import PartnerTransaction
-from app.services.ton_verification_service import ton_verification_service
 from app.services.redis_service import redis_service
-from app.core.http_client import http_client
-import sentry_sdk
+from app.services.ton_verification_service import ton_verification_service
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +30,7 @@ class PaymentService:
         amount: float,
         currency: str,
         network: str,
-        tx_hash: Optional[str] = None
+        tx_hash: str | None = None
     ) -> PartnerTransaction:
         transaction = PartnerTransaction(
             partner_id=partner_id,
@@ -106,10 +107,8 @@ class PaymentService:
             price = float(data['rates']['TON']['prices']['USD'])
             
             # Cache for 60 seconds
-            try:
+            with contextlib.suppress(Exception):
                 await redis_service.set(cache_key, str(price), expire=60)
-            except Exception:
-                pass
                 
             return price
         except Exception as e:
@@ -216,8 +215,8 @@ class PaymentService:
         amount: float,
         currency: str,
         network: str,
-        tx_hash: Optional[str] = None,
-        transaction_id: Optional[int] = None
+        tx_hash: str | None = None,
+        transaction_id: int | None = None
     ):
         try:
             sentry_sdk.add_breadcrumb(

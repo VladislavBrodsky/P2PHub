@@ -22,7 +22,7 @@ async def check():
         print(f"👉 USER9: ID={user9[0]}, NAME={user9[1]}, PATH='{user9[2]}', REF_ID={user9[3]}")
 
         path_ids = [int(x) for x in user9[2].split('.')] if user9[2] else []
-        lineage_ids = (path_ids + [user9[3]])[-9:]
+        lineage_ids = ([*path_ids, user9[3]])[-9:]
         print(f"👉 LINEAGE IDS (calc): {lineage_ids}")
 
         # Check if ID 1 (@uslincoln) is in there

@@ -1,6 +1,7 @@
 import asyncio
-import redis.asyncio as redis
 import sys
+
+import redis.asyncio as redis
 
 # The "Long" Password from .env.backend (likely correct for Redis)
 REDIS_PASSWORD = "HXYVAM4yGCiqfe23433445sdf34serwer3242144tX345o23HCOCbAIpqYNJKLAvMt423553454"

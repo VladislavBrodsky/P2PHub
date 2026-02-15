@@ -9,18 +9,20 @@ sys.path.append(project_root)
 
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.models.partner import Partner
+
 
 async def restore_names_from_telegram():
     """
     This function should be called from within the running application
     where BOT_TOKEN is available.
     """
-    from bot import bot
     from app.core.config import settings
     from app.models.partner import async_session_maker
+    from bot import bot
     
     # Check token presence
     if not settings.BOT_TOKEN or len(settings.BOT_TOKEN) < 10:
@@ -34,7 +36,7 @@ async def restore_names_from_telegram():
         print("🔧 RESTORING ORIGINAL DATA FROM TELEGRAM")
         print("=" * 70)
         
-        from sqlalchemy import not_, String
+        from sqlalchemy import String, not_
         # Find all real users (telegram_id does not start with TEST_, SIM_, CH_, SEC_) 
         # because those cannot be checked in Telegram Bot API.
         statement = select(Partner).where(

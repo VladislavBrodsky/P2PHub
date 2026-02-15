@@ -77,8 +77,8 @@ if not STRICT:
 else:
     # In STRICT mode, we expect them to be installed and working
     try:
-        import taskiq_fastapi
         import taskiq
+        import taskiq_fastapi
         import taskiq_redis
     except ImportError:
         # Strict mode will fail naturally later or we can raise here

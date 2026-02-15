@@ -1,14 +1,18 @@
 import logging
-from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlmodel import select
 
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from app.models.partner import Partner, get_session
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.core.security import get_current_user, get_tg_user
+from app.models.partner import Partner, get_session
 from app.models.schemas import (
-    PROSetupRequest, ViralGenerateRequest, ViralGenerateResponse, 
-    SocialPostRequest, PartnerResponse
+    PartnerResponse,
+    PROSetupRequest,
+    SocialPostRequest,
+    ViralGenerateRequest,
+    ViralGenerateResponse,
 )
 from app.services.viral_service import viral_studio
 from bot import bot

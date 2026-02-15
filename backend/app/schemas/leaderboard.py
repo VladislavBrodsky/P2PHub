@@ -5,10 +5,10 @@ from pydantic import BaseModel
 
 class LeaderboardPartner(BaseModel):
     id: int
-    username: Optional[str] = None
-    first_name: Optional[str] = None
-    photo_url: Optional[str] = None
-    photo_file_id: Optional[str] = None
+    username: str | None = None
+    first_name: str | None = None
+    photo_url: str | None = None
+    photo_file_id: str | None = None
     xp: float
     level: int
     referral_count: int = 0

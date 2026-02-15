@@ -53,7 +53,7 @@ async def test_phase2_verification():
 
     # We can't easily import the decorated function because of the mock,
     # but we can verify the file structure was updated correctly by checkin the file content
-    with open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "app/services/partner_service.py"), "r") as f:
+    with open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "app/services/partner_service.py")) as f:
         content = f.read()
         if "@broker.task" in content and "process_referral_logic" in content:
              print("   ✅ partner_service.py correctly uses @broker.task")

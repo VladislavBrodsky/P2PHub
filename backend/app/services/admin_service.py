@@ -12,7 +12,7 @@ from app.services.notification_service import notification_service
 
 
 class AdminService:
-    async def broadcast_message(self, text: str, filters: dict = None):
+    async def broadcast_message(self, text: str, filters: dict | None = None):
         """
         Broadcasting a message to all or filtered partners.
         Uses the notification_service for asynchronous delivery.
@@ -30,7 +30,7 @@ class AdminService:
             partners = result.all()
 
             broadcast_count = 0
-            for tg_id, lang in partners:
+            for tg_id, _lang in partners:
                 if tg_id:
                     # Enqueue for each user
                     await notification_service.enqueue_notification(
@@ -44,7 +44,7 @@ class AdminService:
                 "count": broadcast_count
             }
 
-    async def get_dashboard_stats(self) -> Dict[str, Any]:
+    async def get_dashboard_stats(self) -> dict[str, Any]:
         """
         Calculates KPIs for the admin dashboard.
         """
@@ -228,7 +228,7 @@ class AdminService:
                 "server_time": now.isoformat()
             }
 
-    async def get_top_partners(self, limit: int = 10) -> List[Dict[str, Any]]:
+    async def get_top_partners(self, limit: int = 10) -> list[dict[str, Any]]:
         """
         Returns top partners by total earnings.
         """
@@ -253,7 +253,7 @@ class AdminService:
                 })
             return top_partners
 
-    async def search_partners(self, query: str) -> List[Dict[str, Any]]:
+    async def search_partners(self, query: str) -> list[dict[str, Any]]:
         """
         Search partners by username or telegram_id.
         """
@@ -278,7 +278,7 @@ class AdminService:
                 "level": p.level
             } for p in partners]
 
-    async def get_global_network_stats(self) -> Dict[str, int]:
+    async def get_global_network_stats(self) -> dict[str, int]:
         """
         Returns count of partners at each level 1-9 globally.
         Note: For global view, we use the 'level' field of the Partner model.
@@ -292,7 +292,7 @@ class AdminService:
                     stats[str(lvl)] = count
             return stats
 
-    async def get_global_network_members(self, level: int) -> List[Dict[str, Any]]:
+    async def get_global_network_members(self, level: int) -> list[dict[str, Any]]:
         """
         Returns top 100 partners for a specific level globally.
         """
@@ -317,7 +317,7 @@ class AdminService:
                 })
             return members
 
-    async def recalculate_all_referral_counts(self) -> Dict[str, Any]:
+    async def recalculate_all_referral_counts(self) -> dict[str, Any]:
         """
         Force recalculates structural fields (path, depth, referral_count) for all partners.
         Uses the high-performance unified maintenance service.

@@ -1,12 +1,14 @@
-import logging
 import asyncio
+import contextlib
+import logging
 from typing import List, Optional
+
 from fastapi import APIRouter, Depends, HTTPException, Request
-from app.middleware.rate_limit import limiter
 from pydantic import BaseModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.security import get_current_user, get_tg_user
+from app.middleware.rate_limit import limiter
 from app.models.partner import Partner, get_session
 from app.services.support_service import support_service
 
@@ -23,7 +25,7 @@ class ChatResponse(BaseModel):
 
 class SessionStatusResponse(BaseModel):
     is_active: bool
-    categories: List[str]
+    categories: list[str]
 
 async def get_current_partner(
     user_data: dict = Depends(get_current_user),
@@ -54,10 +56,8 @@ async def get_current_partner(
         raise HTTPException(status_code=404, detail="Partner not found")
     
     # Update cache for next turn
-    try:
+    with contextlib.suppress(BaseException):
         await redis_service.set_json(cache_key, partner.model_dump(), expire=120)
-    except:
-        pass
         
     return partner
 

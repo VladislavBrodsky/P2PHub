@@ -76,7 +76,7 @@ class TonVerificationService:
             if response.status_code == 200:
                 tx = response.json()
                 # Verify destinatary and amount in TonAPI format
-                for msg in tx.get("out_msgs", []):
+                for _msg in tx.get("out_msgs", []):
                     # In TonAPI, incoming to us is 'out_msg' of some transaction or we look at the 'in_msg' of the transaction record
                     pass # Simplified for demonstration - usually we check the traces
                 

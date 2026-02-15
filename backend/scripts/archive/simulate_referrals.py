@@ -9,7 +9,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
 print(f"Loading .env from {env_path}")
 try:
-    with open(env_path, "r") as f:
+    with open(env_path) as f:
         for line in f:
             if "=" in line and not line.strip().startswith("#"):
                 key, value = line.strip().split("=", 1)

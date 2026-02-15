@@ -37,7 +37,7 @@ taskiq_fastapi.init(
 
 # 6. Define Tasks to be imported
 # (This ensures the worker knows about them on startup)
-TASKS_TO_IMPORT: List[str] = [
+TASKS_TO_IMPORT: list[str] = [
     "app.services.partner_service",
     "app.services.notification_service",
     "app.services.subscription_service",

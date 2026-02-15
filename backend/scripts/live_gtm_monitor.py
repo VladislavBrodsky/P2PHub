@@ -7,10 +7,11 @@ from typing import List
 # Add parent directory to sys.path to import app
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from sqlmodel import select, func
-from app.models.partner import Partner, Earning, XPTransaction
+from sqlmodel import func, select
+
+from app.models.partner import Earning, Partner, XPTransaction, get_session
 from app.models.transaction import PartnerTransaction
-from app.models.partner import get_session
+
 
 async def monitor_gtm():
     """

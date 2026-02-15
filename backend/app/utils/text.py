@@ -1,6 +1,7 @@
 
 import re
 
+
 def escape_markdown_v1(text: str) -> str:
     """
     Escapes characters for Telegram Markdown V1 (legacy).

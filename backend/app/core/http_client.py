@@ -1,9 +1,11 @@
-import httpx
 import asyncio
 from typing import Optional
 
+import httpx
+
+
 class AsyncHTTPClient:
-    _instance: Optional[httpx.AsyncClient] = None
+    _instance: httpx.AsyncClient | None = None
 
     @classmethod
     async def get_client(cls) -> httpx.AsyncClient:

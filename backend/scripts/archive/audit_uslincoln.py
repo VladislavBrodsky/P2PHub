@@ -41,7 +41,7 @@ async def check_user():
         res_children = await session.exec(stmt_children)
         children = res_children.all()
         print(f"Direct Referrals (L1): {len(children)}")
-        for i, child in enumerate(children[:5]):
+        for _i, child in enumerate(children[:5]):
             print(f"  - {child.first_name} (@{child.username}) joined at {child.created_at}")
         if len(children) > 5:
             print(f"  ... and {len(children)-5} more")

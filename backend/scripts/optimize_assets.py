@@ -1,5 +1,6 @@
 
 import os
+
 from PIL import Image
 
 # #comment: Global Asset Optimization Script.

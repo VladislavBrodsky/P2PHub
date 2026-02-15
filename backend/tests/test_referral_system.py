@@ -18,8 +18,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.models.partner import Partner, XPTransaction
 from app.services.partner_service import (
     create_partner,
-    process_referral_logic,
     distribute_pro_commissions,
+    process_referral_logic,
 )
 
 

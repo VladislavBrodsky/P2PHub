@@ -1,12 +1,14 @@
 
 import asyncio
 import os
-import requests
 from io import BytesIO
+
+import requests
 from PIL import Image
-from sqlmodel import select
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.models.partner import Partner, engine
 
 # Configuration

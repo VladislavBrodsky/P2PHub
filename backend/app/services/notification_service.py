@@ -1,14 +1,16 @@
 import asyncio
+import contextlib
 import logging
+
+import sentry_sdk
 
 # from bot import bot (Moved inside functions to break circular dependency)
 from app.worker import broker
-import sentry_sdk
 
 logger = logging.getLogger(__name__)
 
 @broker.task
-async def send_telegram_task(chat_id: str | int, text: str, parse_mode: str = "Markdown", buttons: list = None):
+async def send_telegram_task(chat_id: str | int, text: str, parse_mode: str = "Markdown", buttons: list | None = None):
     """
     Background worker task to send Telegram messages with optional buttons.
     buttons: List of rows, each row is a list of dicts with 'text' and 'url' or 'callback_data'.
@@ -17,15 +19,14 @@ async def send_telegram_task(chat_id: str | int, text: str, parse_mode: str = "M
         # #comment: Dynamically construct InlineKeyboardMarkup for notifications.
         # This allows us to send interactive buttons (links to the app, balance checks)
         # even from background worker tasks, increasing user re-engagement.
-        from bot import bot
         from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+        from bot import bot
         
         # Ensure chat_id is int if it's numeric
         target_id = chat_id
-        try:
+        with contextlib.suppress(ValueError, TypeError):
             target_id = int(str(chat_id))
-        except (ValueError, TypeError):
-            pass
 
         reply_markup = None
         if buttons:
@@ -48,7 +49,7 @@ async def send_telegram_task(chat_id: str | int, text: str, parse_mode: str = "M
         return False
 
 class NotificationService:
-    async def enqueue_notification(self, chat_id: str | int, text: str, parse_mode: str = "Markdown", buttons: list = None):
+    async def enqueue_notification(self, chat_id: str | int, text: str, parse_mode: str = "Markdown", buttons: list | None = None):
         """
         Enqueues a notification with optional inline buttons.
         """
@@ -62,8 +63,9 @@ class NotificationService:
             # #comment: BYPASS WORKER QUEUE for Reliability
             # Given recent issues with background workers silently failing, we move notification dispatch
             # to the main event loop. This is low-overhead and 100% reliable for critical user alerts.
-            from bot import bot
             from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+            from bot import bot
             
             reply_markup = None
             if buttons:
@@ -87,8 +89,9 @@ class NotificationService:
                 # #comment: Direct fallback sending via asyncio.create_task.
                 # If the Redis broker is disconnected or the worker is overloaded, 
                 # we send the message directly from the API process to ensure 100% delivery.
-                from bot import bot
                 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+                from bot import bot
                 
                 reply_markup = None
                 if buttons:

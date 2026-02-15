@@ -2,10 +2,12 @@
 import asyncio
 import os
 import random
+
 from PIL import Image
-from sqlmodel import select
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.models.partner import Partner, engine
 
 # #comment Precision mapping for glitchy profiles to ensure high-quality gender-aligned portraits.

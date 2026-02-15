@@ -1,6 +1,8 @@
 
 import asyncio
+
 from app.services.redis_service import redis_service
+
 
 # #comment Cache management script to clear stale social proof and leaderboard data.
 # This ensures that naming and avatar corrections are immediately visible to users.

@@ -60,21 +60,21 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = "https://p2phub-frontend.up.railway.app"
 
     # Webhook settings
-    WEBHOOK_URL: Optional[str] = None # e.g. https://p2phub-api.up.railway.app
+    WEBHOOK_URL: str | None = None # e.g. https://p2phub-api.up.railway.app
     WEBHOOK_PATH: str = "/api/bot/webhook"
 
     # AI Services
     # Why: API Key for OpenAI integration. Required for the ViralCopywriter service.
     # We attempt to load this from multiple .env locations (see possible_env_paths above)
     # due to varying permissions in different deployment/dev environments.
-    OPENAI_API_KEY: Optional[str] = None
+    OPENAI_API_KEY: str | None = None
 
     # Monitoring & Error Tracking
     # #comment: Sentry DSN for production error tracking and monitoring.
     # Get this from https://sentry.io after creating a project.
     # Sentry automatically captures all exceptions and performance metrics.
-    SENTRY_DSN: Optional[str] = None
-    SENTRY_FRONTEND_DSN: Optional[str] = None # Optional: different DSN for frontend
+    SENTRY_DSN: str | None = None
+    SENTRY_FRONTEND_DSN: str | None = None # Optional: different DSN for frontend
     SENTRY_ENVIRONMENT: str = "production"  # Can be: production, staging, development
     SENTRY_TRACES_SAMPLE_RATE: float = 0.1  # 10% of transactions for performance monitoring
 
@@ -82,7 +82,7 @@ class Settings(BaseSettings):
     # Payment settings
     ADMIN_TON_ADDRESS: str = "UQD_n02bdxQxFztKTXpWBaFDxo713qIuETyefIeK7wiUB0DN"
     ADMIN_USDT_ADDRESS: str = "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM"
-    TON_API_KEY: Optional[str] = None
+    TON_API_KEY: str | None = None
     TON_MANIFEST_URL: str = "https://p2phub-frontend.up.railway.app/tonconnect-manifest.json"
     PAYMENT_SERVICE_MODE: str = "ton_api" # Enum: auto_approve, ton_api, manual
     PRO_PRICE_USD: float = 39.0

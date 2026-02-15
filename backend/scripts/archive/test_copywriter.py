@@ -1,11 +1,12 @@
 import asyncio
-import sys
 import os
+import sys
 
 # Add backend directory to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.services.copywriter import copywriter
+
 
 async def main():
     print("🚀 Testing Viral Copywriter Service...")

@@ -1,6 +1,6 @@
+import asyncio
 import json
 import logging
-import asyncio
 
 logger = logging.getLogger(__name__)
 
@@ -11,10 +11,10 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.config import settings
 from app.core.security import get_current_user
 from app.models.partner import Partner, get_session
+from app.models.transaction import PartnerTransaction
+from app.services.audit_service import audit_service
 from app.services.notification_service import notification_service
 from app.services.payment_service import payment_service
-from app.services.audit_service import audit_service
-from app.models.transaction import PartnerTransaction
 
 router = APIRouter()
 @router.get("/config")
@@ -269,4 +269,4 @@ async def submit_manual_payment(
     except Exception as e:
         import traceback
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e!s}")

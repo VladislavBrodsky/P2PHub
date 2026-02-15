@@ -1,5 +1,6 @@
 
 import asyncio
+import contextlib
 import os
 
 from sqlalchemy import text
@@ -39,10 +40,8 @@ async def fix_schema():
         # Check 'created_at' index
         if 'created_at' in cols:
              # Just in case, try to create index
-             try:
+             with contextlib.suppress(Exception):
                  await conn.execute(text("CREATE INDEX ix_earning_created_at ON earning (created_at)"))
-             except Exception:
-                 pass
 
     print("✅ Schema fix completed.")
     await engine.dispose()

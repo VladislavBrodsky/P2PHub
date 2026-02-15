@@ -1,11 +1,12 @@
 import asyncio
+import os
 from datetime import datetime, timedelta
+
+from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
-from dotenv import load_dotenv
-import os
 
 # Load .env explicitly
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
@@ -22,6 +23,7 @@ print(f"Connecting to: {db_url.split('@')[-1]}")  # Mask credentials
 
 # Import Partner model - need to do this after connection setup
 import sys
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 # Create engine and session factory
@@ -30,9 +32,10 @@ async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_comm
 
 
 # Define Partner model inline to avoid import issues
-from sqlalchemy import Column, String, Integer, Float, Boolean, DateTime, Text
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime as dt
+
+from sqlalchemy import Boolean, Column, DateTime, Float, Integer, String, Text
+from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
@@ -93,7 +96,7 @@ async def check_recent_users():
         print("=" * 70)
         
         for user in recent_users[:5]:  # Check first 5 users
-            user_id, telegram_id, username, first_name, last_name, referrer_id, path, xp, level, is_pro, created_at, referral_count = user
+            user_id, _telegram_id, username, first_name, last_name, referrer_id, path, _xp, _level, _is_pro, created_at, _referral_count = user
             
             if not referrer_id:
                 print(f"\n👤 User {user_id} (@{username}) - ROOT USER (no referrer)")
@@ -161,7 +164,7 @@ async def check_recent_users():
         if recent_referrals:
             print("\nNotifications that should have been sent:")
             for ref in recent_referrals[:5]:
-                ref_id, ref_telegram_id, ref_username, ref_first_name, ref_referrer_id, ref_path, ref_created = ref
+                ref_id, _ref_telegram_id, ref_username, _ref_first_name, ref_referrer_id, ref_path, ref_created = ref
                 print(f"\n   New user: {ref_id} (@{ref_username}) - Joined: {ref_created}")
                 
                 if ref_path:

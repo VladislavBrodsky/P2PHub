@@ -1,8 +1,10 @@
+import logging
 from typing import Any, Optional
+
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.models.audit_log import AuditLog
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -14,8 +16,8 @@ class AuditService:
         entity_id: str,
         action: str,
         actor_id: str = "system",
-        details: Optional[dict] = None,
-        ip_address: Optional[str] = None
+        details: dict | None = None,
+        ip_address: str | None = None
     ) -> AuditLog:
         """
         Logs a system event to the audit table.

@@ -9,9 +9,11 @@ sys.path.append(project_root)
 
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.models.partner import Partner
+
 
 async def main():
     db_url = os.environ.get("DATABASE_URL")

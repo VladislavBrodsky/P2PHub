@@ -1,9 +1,9 @@
-import os
+import asyncio
 import json
 import logging
-import asyncio
+import os
 from datetime import datetime, timedelta
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 
 import gspread
 from google.oauth2.service_account import Credentials
@@ -96,8 +96,8 @@ class SupportAgentService:
     COST_OUTPUT_1M = 0.60
 
     # #comment: Local Memory Cache for Knowledge Base (Scale bypass for Redis)
-    _kb_memory_cache: Optional[Dict[str, Any]] = None
-    _kb_index: Dict[str, List[int]] = {} # Word-to-Record Index
+    _kb_memory_cache: dict[str, Any] | None = None
+    _kb_index: dict[str, list[int]] = {} # Word-to-Record Index
     _kb_last_refresh: datetime = datetime.min
     KB_MEMORY_TTL = 300  # 5 minutes in-memory TTL
 
@@ -195,7 +195,7 @@ class SupportAgentService:
                 logger.error(f"❌ SupportService: GS Auth Failed: {e}")
         return None
 
-    async def _get_cached_kb(self) -> Dict[str, str]:
+    async def _get_cached_kb(self) -> dict[str, str]:
         """
         Retrieves KB with dual-layer caching (Memory -> Redis -> Google Sheets).
         Optimized for high-concurrency 10M+ user environments.
@@ -263,7 +263,7 @@ class SupportAgentService:
             
         return None
 
-    def _build_kb_index(self, kb_data: Dict[str, Any]):
+    def _build_kb_index(self, kb_data: dict[str, Any]):
         """Builds an inverted index of words to record indices for O(1) keyword lookups."""
         index = {}
         records = kb_data.get("qa", [])
@@ -281,7 +281,7 @@ class SupportAgentService:
         self._kb_last_refresh = datetime.utcnow()
 
 
-    async def get_session(self, user_id: str) -> Dict[str, Any]:
+    async def get_session(self, user_id: str) -> dict[str, Any]:
         """Retrieves or creates a support session for a user."""
         session_key = f"support_session:{user_id}"
         
@@ -314,7 +314,7 @@ class SupportAgentService:
                 "ping_count": 0
             }
 
-    async def update_session(self, user_id: str, session: Dict[str, Any]):
+    async def update_session(self, user_id: str, session: dict[str, Any]):
         """Updates the session in Redis and refreshes activity timestamp."""
         try:
             session_key = f"support_session:{user_id}"
@@ -324,7 +324,7 @@ class SupportAgentService:
         except Exception as e:
             logger.error(f"❌ Redis Update Error (update_session): {e}")
 
-    async def generate_response(self, user_id: str, message: str, user_metadata: Dict[str, Any] = None) -> str:
+    async def generate_response(self, user_id: str, message: str, user_metadata: dict[str, Any] | None = None) -> str:
         """Generates an AI response based on KB and history."""
         import sentry_sdk
         

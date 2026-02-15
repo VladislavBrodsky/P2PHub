@@ -6,14 +6,14 @@ from contextlib import asynccontextmanager
 
 from aiogram import types
 from fastapi import FastAPI, Header, HTTPException, Request
-from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 logger = logging.getLogger(__name__)
 
-from app.api.endpoints import admin, earnings, leaderboard, partner, payment, tools, pro
+from app.api.endpoints import admin, earnings, leaderboard, partner, payment, pro, tools
 from app.core.config import settings
 from bot import bot, dp
 
@@ -24,8 +24,8 @@ from bot import bot, dp
 if settings.SENTRY_DSN:
     import sentry_sdk
     from sentry_sdk.integrations.asyncio import AsyncioIntegration
-    from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
     from sentry_sdk.integrations.redis import RedisIntegration
+    from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
     
     # #comment: Add advanced filtering to keep Sentry clean of noise and PII
     def before_send(event, hint):
@@ -99,7 +99,9 @@ async def lifespan(app: FastAPI):
             is_leader = await redis_service.client.set(lock_key, "1", ex=300, nx=True)
             if is_leader:
                 logger.info("🔧 Leader Worker: Running user restoration from Telegram...")
-                from scripts.archive.restore_names_from_telegram import restore_names_from_telegram
+                from scripts.archive.restore_names_from_telegram import (
+                    restore_names_from_telegram,
+                )
                 restored_count = await restore_names_from_telegram()
                 
                 # Clear all caches to force refresh
@@ -166,8 +168,8 @@ async def lifespan(app: FastAPI):
     # This prevents the app from starting with a broken database connection,
     # which would cause cryptic errors later during request handling.
     try:
-        from sqlalchemy import text
         import asyncpg
+        from sqlalchemy import text
 
         from app.models.partner import engine
         logger.info("🌍 Checking Database Connection (Timeout 5s)...")
@@ -240,8 +242,9 @@ async def health_check():
     Verify Redis connectivity and general availability.
     """
     try:
-        from app.services.redis_service import redis_service
         from datetime import datetime
+
+        from app.services.redis_service import redis_service
         is_redis_ok = await redis_service.client.ping()
         return {
             "status": "healthy",
@@ -339,6 +342,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 @app.middleware("http")
 async def add_request_id_middleware(request: Request, call_next):
     import uuid
+
     import sentry_sdk
     
     request_id = str(uuid.uuid4())
@@ -394,6 +398,7 @@ app.include_router(health.router, prefix="/api", tags=["health"])
 app.include_router(config.router, prefix="/api/config", tags=["config"])
 
 from app.api.endpoints import support
+
 app.include_router(support.router, prefix="/api/support", tags=["support"])
 
 # #comment: Custom StaticFiles handler to inject aggressive Cache-Control headers.

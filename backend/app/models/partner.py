@@ -7,20 +7,20 @@ from app.core.config import settings
 
 
 class Partner(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     telegram_id: str = Field(index=True, unique=True)
-    username: Optional[str] = None
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    photo_url: Optional[str] = None
-    photo_file_id: Optional[str] = None  # Telegram file_id for profile photo
-    language_code: Optional[str] = Field(default="en")
+    username: str | None = None
+    first_name: str | None = None
+    last_name: str | None = None
+    photo_url: str | None = None
+    photo_file_id: str | None = None  # Telegram file_id for profile photo
+    language_code: str | None = Field(default="en")
     balance: float = Field(default=0.0)
     xp: float = Field(default=0.0, index=True)
     level: int = Field(default=1)
     referral_code: str = Field(unique=True, index=True) # Optimized for lookups
-    referrer_id: Optional[int] = Field(default=None, foreign_key="partner.id", index=True) # Optimized for joins
-    path: Optional[str] = Field(default=None, index=True) # Materialized path (e.g. "1.5.23")
+    referrer_id: int | None = Field(default=None, foreign_key="partner.id", index=True) # Optimized for joins
+    path: str | None = Field(default=None, index=True) # Materialized path (e.g. "1.5.23")
     depth: int = Field(default=0, index=True) # Cached depth level for faster hierarchy queries
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True) # Optimized for sorting
     updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}, index=True)
@@ -30,26 +30,26 @@ class Partner(SQLModel, table=True):
 
     # PRO Subscription Status
     is_pro: bool = Field(default=False, index=True)
-    pro_expires_at: Optional[datetime] = Field(default=None)
-    pro_purchased_at: Optional[datetime] = Field(default=None)
-    pro_started_at: Optional[datetime] = Field(default=None)
+    pro_expires_at: datetime | None = Field(default=None)
+    pro_purchased_at: datetime | None = Field(default=None)
+    pro_started_at: datetime | None = Field(default=None)
     pro_notification_seen: bool = Field(default=False)  # Track if user saw the "You are PRO" card
-    subscription_plan: Optional[str] = Field(default=None) # e.g. "PRO_LIFETIME", "PRO_YEARLY"
+    subscription_plan: str | None = Field(default=None) # e.g. "PRO_LIFETIME", "PRO_YEARLY"
     
     # PRO Content Generation Tokens
     pro_tokens: int = Field(default=500)
     pro_tokens_last_reset: datetime = Field(default_factory=datetime.utcnow)
 
     # Viral Marketing API Setup
-    x_api_key: Optional[str] = Field(default=None)
-    x_api_secret: Optional[str] = Field(default=None)
-    x_access_token: Optional[str] = Field(default=None)
-    x_access_token_secret: Optional[str] = Field(default=None)
-    telegram_channel_id: Optional[str] = Field(default=None)
-    linkedin_access_token: Optional[str] = Field(default=None)
+    x_api_key: str | None = Field(default=None)
+    x_api_secret: str | None = Field(default=None)
+    x_access_token: str | None = Field(default=None)
+    x_access_token_secret: str | None = Field(default=None)
+    telegram_channel_id: str | None = Field(default=None)
+    linkedin_access_token: str | None = Field(default=None)
 
     # Daily Check-in Tracking
-    last_checkin_at: Optional[datetime] = Field(default=None, index=True)
+    last_checkin_at: datetime | None = Field(default=None, index=True)
     checkin_streak: int = Field(default=0, index=True)
 
     # Materialized Totals (Optimized for 100K+ Users)
@@ -57,8 +57,8 @@ class Partner(SQLModel, table=True):
     referral_count: int = Field(default=0, index=True)
 
     # Verification & Payment Details
-    last_transaction_id: Optional[int] = Field(default=None, foreign_key="partnertransaction.id")
-    payment_details: Optional[str] = Field(default=None) # Store JSON of extra details if needed
+    last_transaction_id: int | None = Field(default=None, foreign_key="partnertransaction.id")
+    payment_details: str | None = Field(default=None) # Store JSON of extra details if needed
 
     # Relationships
     referrals: list["Partner"] = Relationship(
@@ -84,24 +84,24 @@ class Partner(SQLModel, table=True):
 
 class XPTransaction(SQLModel, table=True):
     __table_args__ = {"extend_existing": True}
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     partner_id: int = Field(foreign_key="partner.id", index=True)
     amount: float
     type: str = Field(index=True) # TASK, REFERRAL_L1, REFERRAL_DEEP, LEVEL_UP, BONUS
-    description: Optional[str] = None
-    reference_id: Optional[str] = Field(default=None, index=True)
+    description: str | None = None
+    reference_id: str | None = Field(default=None, index=True)
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
 
     partner: Partner = Relationship(back_populates="xp_history")
 
 class PartnerTask(SQLModel, table=True):
     __table_args__ = {"extend_existing": True}
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     partner_id: int = Field(foreign_key="partner.id", index=True)
     task_id: str = Field(index=True)
     status: str = Field(default="COMPLETED") # STARTED, COMPLETED
-    started_at: Optional[datetime] = Field(default=None)
-    completed_at: Optional[datetime] = Field(default_factory=datetime.utcnow, index=True)
+    started_at: datetime | None = Field(default=None)
+    completed_at: datetime | None = Field(default_factory=datetime.utcnow, index=True)
     initial_metric_value: int = Field(default=0) # Snapshot of metric at start
     reward_xp: float = Field(default=0.0)
 
@@ -109,12 +109,12 @@ class PartnerTask(SQLModel, table=True):
 
 class Earning(SQLModel, table=True):
     __table_args__ = {"extend_existing": True}
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     partner_id: int = Field(foreign_key="partner.id", index=True) # Optimized for user history
     amount: float
     description: str
     type: str = Field(default="COMMISSION", index=True) # COMMISSION, TASK_XP, REFERRAL_XP
-    level: Optional[int] = None # 1-9
+    level: int | None = None # 1-9
     currency: str = Field(default="USDT") # USDT, XP
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
 
@@ -124,10 +124,11 @@ class SystemSetting(SQLModel, table=True):
     value: str # JSON encoded string
     updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}, index=True)
 
+import sys
+
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlmodel.ext.asyncio.session import AsyncSession
-import sys
 
 # Standardized async database URL from settings
 database_url = settings.async_database_url

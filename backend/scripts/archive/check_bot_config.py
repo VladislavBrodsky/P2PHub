@@ -15,7 +15,7 @@ print(f"Files containing '.env': {env_files}")
 for f in env_files:
     full_path = os.path.join(backend_dir, f)
     print(f"\nChecking: '{f}' (len={len(f)})")
-    print(f"  Repr: {repr(f)}")
+    print(f"  Repr: {f!r}")
     try:
         st = os.stat(full_path)
         print(f"  Size: {st.st_size}")

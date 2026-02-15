@@ -1,11 +1,13 @@
 
 import asyncio
 import logging
+
+from sqlalchemy.orm import sessionmaker
 from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.models.partner import Partner, engine, get_session
 from app.services.partner_service import migrate_paths
-from sqlalchemy.orm import sessionmaker
-from sqlmodel.ext.asyncio.session import AsyncSession
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

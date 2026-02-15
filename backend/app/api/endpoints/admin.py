@@ -1,3 +1,4 @@
+import logging
 from typing import Any, Dict, List
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -11,13 +12,12 @@ from app.models.transaction import PartnerTransaction
 from app.services.admin_service import admin_service
 from app.services.notification_service import notification_service
 from app.services.payment_service import payment_service
-import logging
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-@router.get("/stats", response_model=Dict[str, Any])
+@router.get("/stats", response_model=dict[str, Any])
 async def get_admin_stats(
     admin: dict = Depends(get_current_admin)
 ):
@@ -26,7 +26,7 @@ async def get_admin_stats(
     """
     return await admin_service.get_dashboard_stats()
 
-@router.get("/pending-payments", response_model=List[PartnerTransaction])
+@router.get("/pending-payments", response_model=list[PartnerTransaction])
 async def list_pending_payments(
     admin: dict = Depends(get_current_admin),
     session: AsyncSession = Depends(get_session)
@@ -162,7 +162,7 @@ async def get_system_health(
     from app.services.maintenance_service import check_database_health
     return await check_database_health()
 
-@router.get("/search-partners", response_model=List[Dict[str, Any]])
+@router.get("/search-partners", response_model=list[dict[str, Any]])
 async def search_partners(
     query: str,
     admin: dict = Depends(get_current_admin)

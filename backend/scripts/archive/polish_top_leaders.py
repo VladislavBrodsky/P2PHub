@@ -1,10 +1,12 @@
 
 import asyncio
 import os
+
 from PIL import Image
-from sqlmodel import select
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.models.partner import Partner, engine
 
 # #comment Mapping top leaders to their custom-generated photorealistic matching avatars.

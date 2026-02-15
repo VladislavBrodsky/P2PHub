@@ -1,27 +1,30 @@
-import logging
+import asyncio
 import json
+import logging
 import os
 import secrets
-import asyncio
 from datetime import datetime
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
 
-
+import gspread
 from google import genai as google_genai
 from google.genai import types as genai_types
 from google.oauth2.service_account import Credentials
-import gspread
 from openai import AsyncOpenAI
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.core.config import settings
-from app.models.partner import Partner
-from app.core.errors import ViralStudioErrorCode, get_error_msg
 from app.core.cmo_intelligence import (
-    AudienceProfile, ContentCategory, NativeLanguageOptimization,
-    ViralFormulas, KnowledgeInsights, CopywritingTechnique
+    AudienceProfile,
+    ContentCategory,
+    CopywritingTechnique,
+    KnowledgeInsights,
+    NativeLanguageOptimization,
+    ViralFormulas,
 )
+from app.core.config import settings
+from app.core.errors import ViralStudioErrorCode, get_error_msg
+from app.models.partner import Partner
 
 logger = logging.getLogger(__name__)
 
@@ -241,7 +244,7 @@ Use FRESH, audience-specific language that feels authentic.
             logger.error(f"❌ ViralMarketingStudio: Failed to init Google Sheets: {e}")
 
 
-    def get_capabilities(self) -> Dict[str, bool]:
+    def get_capabilities(self) -> dict[str, bool]:
         """
         Returns the operational status of the studio's AI dependencies.
         """
@@ -277,9 +280,9 @@ Use FRESH, audience-specific language that feels authentic.
         post_type: str, 
         target_audience: str, 
         language: str,
-        referral_link: Optional[str] = None,
-        session: Optional[AsyncSession] = None
-    ) -> Dict[str, Any]:
+        referral_link: str | None = None,
+        session: AsyncSession | None = None
+    ) -> dict[str, Any]:
         """
         Generates text (OpenAI) and Image Suggestion/Prompt (Gemini).
         """
@@ -679,7 +682,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             logger.error(f"Bio generation failed: {e}")
             return bio
 
-    async def fetch_trends(self) -> List[dict]:
+    async def fetch_trends(self) -> list[dict]:
         """
         Fetches 3 trending topics. Cost: 3 Tokens.
         Uses Gemini if available for freshness, else OpenAI.
@@ -717,7 +720,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                 {"topic": "Privacy Coins", "reason": "Regulatory crackdowns", "viral_angle": "They are banning your money"}
             ]
 
-    async def post_to_social(self, partner: Partner, platform: str, content: str, image_path: Optional[str] = None) -> Dict[str, Any]:
+    async def post_to_social(self, partner: Partner, platform: str, content: str, image_path: str | None = None) -> dict[str, Any]:
         """
         Autoposts to X, Telegram, or LinkedIn using partner's API keys.
         """
@@ -730,7 +733,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         else:
             return {"error": "Unsupported platform"}
 
-    async def _post_to_x(self, partner: Partner, content: str, image_path: Optional[str]) -> Dict[str, Any]:
+    async def _post_to_x(self, partner: Partner, content: str, image_path: str | None) -> dict[str, Any]:
         if not (partner.x_api_key and partner.x_api_secret and partner.x_access_token and partner.x_access_token_secret):
             return {"error": "X (Twitter) API not fully configured. Please sync all 4 keys in API Setup."}
         
@@ -796,15 +799,16 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             return {"error": "X API Auth Error: Invalid API Keys or Access Tokens. Please re-check."}
         except Exception as e:
             logger.error(f"❌ X Posting failed: {e}")
-            return {"error": f"X API error: {str(e)}"}
+            return {"error": f"X API error: {e!s}"}
 
-    async def _post_to_telegram(self, partner: Partner, content: str, image_path: Optional[str]) -> Dict[str, Any]:
+    async def _post_to_telegram(self, partner: Partner, content: str, image_path: str | None) -> dict[str, Any]:
         if not partner.telegram_channel_id:
             return {"error": "Telegram Channel ID missing. Please configure it in API Setup."}
         
         try:
-            from bot import bot
             import os
+
+            from bot import bot
             
             if image_path:
                 # Resolve absolute path to image
@@ -845,9 +849,9 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             return {"status": "success", "platform": "telegram", "msg": f"Successfully posted to {partner.telegram_channel_id}"}
         except Exception as e:
             logger.error(f"❌ Telegram posting failed: {e}")
-            return {"error": f"Telegram API Error: {str(e)}"}
+            return {"error": f"Telegram API Error: {e!s}"}
 
-    async def _post_to_linkedin(self, partner: Partner, content: str, image_path: Optional[str]) -> Dict[str, Any]:
+    async def _post_to_linkedin(self, partner: Partner, content: str, image_path: str | None) -> dict[str, Any]:
         if not partner.linkedin_access_token:
             return {"error": "LinkedIn API not configured. Upgrade to ELITE integration required."}
         # Simulation for now as LinkedIn requires formal App approval and OAuth flow
@@ -866,7 +870,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         tokens_gemini: int,
         title: str,
         body: str,
-        image_url: Optional[str]
+        image_url: str | None
     ):
         """
         Audit logging to AI Marketing Studio Log with detailed time and cost tracking.

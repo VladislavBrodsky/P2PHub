@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class ViralStudioErrorCode(str, Enum):
     # Text Generation Errors
     OPENAI_AUTH_ERROR = "V101"

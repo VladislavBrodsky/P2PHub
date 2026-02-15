@@ -25,7 +25,7 @@ class LeaderboardService:
         except Exception as e:
             logger.error(f"Failed to increment leaderboard score for {partner_id}: {e}")
 
-    async def get_top_partners(self, limit: int = 50) -> List[Dict]:
+    async def get_top_partners(self, limit: int = 50) -> list[dict]:
         """Fetches the top partners from the Redis leaderboard."""
         try:
             # Returns list of (id, score) tuples
@@ -35,7 +35,7 @@ class LeaderboardService:
             logger.error(f"Failed to fetch top partners: {e}")
             return []
 
-    async def get_partner_rank(self, partner_id: int) -> Optional[int]:
+    async def get_partner_rank(self, partner_id: int) -> int | None:
         """Returns the 0-indexed rank of a partner (0 is top)."""
         try:
             rank = await redis_service.zrevrank(self.LEADERBOARD_KEY, str(partner_id))
@@ -43,7 +43,7 @@ class LeaderboardService:
         except Exception:
             return None
 
-    async def hydrate_leaderboard(self, partner_ids: List[int], scores: Dict[int, float], session) -> List[Dict]:
+    async def hydrate_leaderboard(self, partner_ids: list[int], scores: dict[int, float], session) -> list[dict]:
         """Hydrates partner IDs with details from DB and maps to privacy-safe schema."""
         from app.schemas.leaderboard import LeaderboardPartner
 

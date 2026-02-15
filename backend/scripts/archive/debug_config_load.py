@@ -1,6 +1,6 @@
 import asyncio
-import sys
 import os
+import sys
 
 # Add backend directory to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -8,6 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Import settings first to see what happens on load
 from app.core.config import settings
 from app.services.copywriter import copywriter
+
 
 async def main():
     print("🚀 Debugging Config Loading...")

@@ -7,12 +7,12 @@ from datetime import datetime
 # Add backend to path
 sys.path.append(os.path.join(os.getcwd(), 'backend'))
 
-from sqlmodel import select, func
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import func, select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.models.partner import Partner
-from app.models.partner import engine
+from app.models.partner import Partner, engine
+
 
 async def sync_network():
     """

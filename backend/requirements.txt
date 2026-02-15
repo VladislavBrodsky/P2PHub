@@ -1,8 +1,9 @@
 aiofiles==24.1.0
 aiogram>=3.25.0
 aiohappyeyeballs>=2.6.1
-# WARN: Pinned <3.13 for aiogram compatibility. Vulnerable to CVE-2025-69223.
-aiohttp>=3.12.0,<3.13
+# WARN: Patched to 3.13.1 for security (CVE-2025-69223)
+# #comment: aiogram 3.x is compatible with aiohttp 3.13+.
+aiohttp>=3.13.1
 aiosignal==1.4.0
 alembic==1.18.3
 annotated-doc==0.0.4
@@ -30,8 +31,7 @@ et_xmlfile==2.0.0
 factory_boy==3.3.3
 Faker==40.1.2
 fastapi==0.128.0
-Flask==3.1.2
-Flask-SQLAlchemy==3.1.1
+# #comment: REMOVED Flask/Flask-SQLAlchemy as they are unused in this FastAPI project.
 frozenlist==1.7.0
 google-ai-generativelanguage==0.6.15
 google-api-core==2.29.0
@@ -138,11 +138,10 @@ watchfiles==1.1.1
 webdriver-manager==4.0.2
 websocket-client==1.8.0
 websockets==15.0.1
-Werkzeug==3.1.5
+# #comment: REMOVED Werkzeug/WTForms as they are Flask-related overhead.
 wheel==0.45.1
 wrapt==2.0.1
 wsproto==1.2.0
-WTForms==3.1.2
 yarl==1.20.1
 greenlet>=3.1.1
 segno==1.6.6

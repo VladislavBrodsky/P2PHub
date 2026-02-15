@@ -1,9 +1,12 @@
 
 import asyncio
-from sqlmodel import select
-from app.models.partner import Partner, engine
+
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.partner import Partner, engine
+
 
 async def main():
     async_session = sessionmaker(engine, class_=AsyncSession)

@@ -49,7 +49,7 @@ async def main():
                 else:
                     f.write("No partners found.\n")
         except Exception as e:
-            f.write(f"ERROR: {str(e)}\n")
+            f.write(f"ERROR: {e!s}\n")
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -3,21 +3,21 @@ import logging
 from datetime import datetime
 from typing import List, Optional
 
+import sentry_sdk
+from sqlalchemy.orm import sessionmaker
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlalchemy.orm import sessionmaker
 
 from app.core.config import settings
 from app.core.i18n import get_msg
-from app.models.partner import Partner, XPTransaction, Earning, engine
+from app.models.partner import Earning, Partner, XPTransaction, engine
+from app.services.audit_service import audit_service
 from app.services.leaderboard_service import leaderboard_service
 from app.services.notification_service import notification_service
 from app.services.redis_service import redis_service
-from app.services.audit_service import audit_service
 from app.utils.ranking import get_level
 from app.utils.text import escape_markdown_v1
 from app.worker import broker
-import sentry_sdk
 
 logger = logging.getLogger(__name__)
 
@@ -184,7 +184,7 @@ async def process_referral_logic(partner_id: int):
 
                     # 5. Build Referral Chain for deeper levels
                     # Chain: You ← Ref A ← Ref B ... ← New User
-                    chain_text = " ← ".join(chain_list + [new_partner_name])
+                    chain_text = " ← ".join([*chain_list, new_partner_name])
                     chain_list.append(format_partner_name(referrer))
 
                     # 6. Queue Notification with CORRECT Keys

@@ -9,9 +9,11 @@ sys.path.append(project_root)
 
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.models.partner import Partner
+
 
 async def main():
     db_url = os.environ.get("DATABASE_URL")
@@ -63,7 +65,7 @@ async def main():
             # If this looks like a corrupted user, restore to Mikhail Kovshov
             if user.first_name and ("vitalik" in user.first_name.lower() or 
                                     "fan" in user.first_name.lower() or
-                                    user.photo_url and "/avatars/" in user.photo_url):
+                                    (user.photo_url and "/avatars/" in user.photo_url)):
                 print("\n  🔧 This appears to be corrupted. Restoring to Mikhail Kovshov...")
                 user.first_name = "Mikhail Kovshov"
                 user.last_name = None

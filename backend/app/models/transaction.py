@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -8,13 +8,13 @@ if TYPE_CHECKING:
 
 class PartnerTransaction(SQLModel, table=True):
     __table_args__ = {"extend_existing": True}
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     partner_id: int = Field(foreign_key="partner.id", index=True)
     amount: float
-    amount_crypto: Optional[float] = Field(default=None) # The exact crypto amount expected (fixed at session creation)
+    amount_crypto: float | None = Field(default=None) # The exact crypto amount expected (fixed at session creation)
     currency: str # TON, USDT, BTC, etc.
     network: str # TON, TRC20, ERC20, etc.
-    tx_hash: Optional[str] = Field(default=None, index=True)
+    tx_hash: str | None = Field(default=None, index=True)
     status: str = Field(default="pending") # pending, completed, failed, manual_review
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
     updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow})

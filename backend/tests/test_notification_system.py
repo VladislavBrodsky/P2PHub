@@ -4,8 +4,9 @@ Tests for notification system.
 #comment: Tests verify that notifications are sent correctly and handle failures gracefully.
 """
 
-import pytest
 from unittest.mock import AsyncMock, patch
+
+import pytest
 
 from app.services.notification_service import notification_service
 

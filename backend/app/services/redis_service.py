@@ -1,11 +1,9 @@
 import json
+import logging
 
 import redis.asyncio as redis
 
 from app.core.config import settings
-
-
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -31,13 +29,13 @@ class RedisService:
     async def get(self, key: str):
         return await self.client.get(key)
 
-    async def set(self, key: str, value: str, expire: int = None):
+    async def set(self, key: str, value: str, expire: int | None = None):
         await self.client.set(key, value, ex=expire)
 
     async def get_bytes(self, key: str):
         return await self.raw_client.get(key)
 
-    async def set_bytes(self, key: str, value: bytes, expire: int = None):
+    async def set_bytes(self, key: str, value: bytes, expire: int | None = None):
         await self.raw_client.set(key, value, ex=expire)
 
     async def get_json(self, key: str):
