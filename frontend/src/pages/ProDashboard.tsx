@@ -6,7 +6,7 @@ import {
     CheckCircle2, AlertCircle, Loader2,
     Lock, Twitter, Cpu, BookOpen, Flame, Settings, Wand2, ShieldCheck,
     Linkedin, Info, Copy, Download, RefreshCw, Undo2, Share, Compass, X,
-    TrendingUp, Monitor, Quote, ArrowRight
+    TrendingUp, Monitor, Quote, ArrowRight, Users, Trophy
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
@@ -30,7 +30,7 @@ const renderMarkdown = (text: string, isInline = false) => {
     return <div dangerouslySetInnerHTML={{ __html: html }} />;
 };
 
-type Tab = 'studio' | 'tools' | 'academy';
+type Tab = 'studio' | 'tools' | 'growth';
 
 export const ProDashboard = () => {
     const { t, i18n } = useTranslation();
@@ -460,57 +460,72 @@ export const ProDashboard = () => {
     }
     return (
         <div className="relative w-full h-full flex flex-col bg-slate-50 dark:bg-slate-950 overflow-hidden cyber-grid">
-            {/* #comment: Fixed Header Section - Static and compact for better focus */}
-            <div className="shrink-0 pt-4 pb-2 space-y-3 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl z-20 border-b border-white/5 shadow-2xl transition-all">
-                <div className="px-5 flex items-center justify-between">
-                    <div className="space-y-1">
+            {/* Dashboard Headers - PRO Command Center */}
+            <div className="shrink-0 pt-safe-top pb-6 space-y-5 bg-linear-to-b from-white via-white to-transparent dark:from-slate-950 dark:via-slate-950 dark:to-transparent z-30 relative overflow-hidden">
+                {/* Background Elite Grid */}
+                <div className="absolute inset-0 cyber-grid opacity-10 dark:opacity-20 pointer-events-none" />
+
+                <div className="px-6 flex items-center justify-between relative mt-4">
+                    <div className="space-y-1.5">
                         <div className="flex items-center gap-2">
-                            <h1 className="text-lg sm:text-xl font-black tracking-tight leading-none uppercase text-brand-text drop-shadow-sm">
-                                {t('pro_dashboard.title_studio')}
-                            </h1>
-                            <div className="px-1.5 py-0.5 rounded-lg bg-linear-to-r from-indigo-500 to-purple-600 text-[8px] sm:text-[10px] font-black text-white shadow-lg shadow-indigo-500/20">
-                                PRO
-                            </div>
+                            <motion.div
+                                animate={{ opacity: [0.4, 1, 0.4] }}
+                                transition={{ repeat: Infinity, duration: 2 }}
+                                className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6]"
+                            />
+                            <span className="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] drop-shadow-sm">
+                                Node: Global_Elite
+                            </span>
                         </div>
+                        <h1 className="text-3xl sm:text-5xl font-black tracking-tighter uppercase leading-none">
+                            <span className="vibing-crystal-text drop-shadow-2xl">
+                                {activeTab === 'studio' ? t('pro_dashboard.tab_studio') :
+                                    activeTab === 'tools' ? t('pro_dashboard.tab_tools') :
+                                        t('pro_dashboard.tab_growth')}
+                            </span>
+                        </h1>
+                    </div>
+
+                    <div className="flex items-center gap-3">
                         {status && (
-                            <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 shadow-xs w-fit">
-                                <Sparkles className="w-2 h-2 text-amber-500" />
-                                <span className="text-[9px] font-black text-amber-600 dark:text-amber-500 uppercase tracking-widest">
-                                    {t('pro_dashboard.tokens_left', { count: status.pro_tokens })}
-                                </span>
+                            <div className="hidden sm:flex flex-col items-end px-4 py-2 bg-slate-100/50 dark:bg-white/5 backdrop-blur-xl rounded-2xl border border-slate-200/50 dark:border-white/10 shadow-inner">
+                                <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest opacity-60">Neural Credits</span>
+                                <span className="text-sm font-black text-indigo-500">{status.pro_tokens}</span>
                             </div>
                         )}
+                        <button
+                            onClick={() => { selection(); setShowSetup(true); }}
+                            className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-90 transition-all shadow-premium hover:border-indigo-500/50 group pro-card-extreme"
+                        >
+                            <Settings className="w-5 h-5 text-slate-500 dark:text-slate-400 group-hover:rotate-90 transition-transform duration-500" />
+                        </button>
                     </div>
-                    <button
-                        onClick={() => { selection(); setShowSetup(true); }}
-                        className="w-11 h-11 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-95 transition-all shadow-premium hover:border-indigo-500/30"
-                    >
-                        <Settings className="w-5 h-5 text-brand-muted" />
-                    </button>
                 </div>
 
-                <div className="px-4">
-                    <div className="bg-slate-200/50 dark:bg-slate-900/50 p-1 rounded-2xl flex items-center gap-1 relative overflow-hidden backdrop-blur-md border border-white/5">
-                        {(['studio', 'tools', 'academy'] as Tab[]).map((tab) => (
+                <div className="px-6">
+                    <div className="bg-slate-200/50 dark:bg-white/5 p-1.5 rounded-[1.5rem] flex items-center gap-1.5 relative overflow-hidden border border-slate-300/50 dark:border-white/10 shadow-2xl">
+                        {(['studio', 'tools', 'growth'] as Tab[]).map((tab) => (
                             <button
                                 key={tab}
                                 onClick={() => { setActiveTab(tab as any); selection(); impact('light'); }}
-                                className={`relative flex-1 px-3 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 ${activeTab === tab
+                                className={`relative flex-1 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 group/tab ${activeTab === tab
                                     ? 'text-white'
-                                    : 'text-brand-muted hover:text-brand-text'
+                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                                     }`}
                             >
                                 {activeTab === tab && (
                                     <motion.div
-                                        layoutId="tab-active-bg"
-                                        className="absolute inset-0 vibing-blue-animated rounded-xl shadow-lg z-[-1]"
+                                        layoutId="pro-tab-active"
+                                        className="absolute inset-0 vibing-blue-animated rounded-xl shadow-[0_10px_20px_rgba(0,102,255,0.3)] z-[-1] vibrating-glow-blue"
                                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                                     />
                                 )}
-                                {tab === 'studio' && <Sparkles size={12} className={activeTab === tab ? 'text-white' : 'text-indigo-400/50'} />}
-                                {tab === 'tools' && <Zap size={12} className={activeTab === tab ? 'text-white' : 'text-pink-400/50'} />}
-                                {tab === 'academy' && <BookOpen size={12} className={activeTab === tab ? 'text-white' : 'text-emerald-400/50'} />}
-                                <span className="hidden xs:block">{t(`pro_dashboard.tab_${tab}`)}</span>
+                                <div className={`p-1.5 rounded-lg transition-all duration-300 ${activeTab === tab ? 'bg-white/20' : 'bg-slate-300/20 dark:bg-white/5 group-hover/tab:scale-110'}`}>
+                                    {tab === 'studio' && <Sparkles size={14} />}
+                                    {tab === 'tools' && <Zap size={14} />}
+                                    {tab === 'growth' && <BookOpen size={14} />}
+                                </div>
+                                <span className="hidden xs:block drop-shadow-sm">{t(`pro_dashboard.tab_${tab}`)}</span>
                             </button>
                         ))}
                     </div>
@@ -564,21 +579,22 @@ export const ProDashboard = () => {
                                         exit={{ opacity: 0, scale: 0.98 }}
                                         className="space-y-6"
                                     >
-                                        <div className="glass-panel-premium rounded-[1.5rem] sm:rounded-[2.5rem] p-5 sm:p-6 border border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
+                                        <div className="pro-card-extreme rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 border border-white/10 shadow-3xl relative overflow-hidden group noise-overlay holographic-shine">
                                             <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 pointer-events-none" />
+                                            <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[100px] rounded-full -mr-32 -mt-32 animate-pulse" />
 
-                                            <div className="flex items-center justify-between mb-6 sm:mb-8 relative z-10">
-                                                <div className="flex items-center gap-3 sm:gap-4">
-                                                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl vibing-blue-animated flex items-center justify-center shrink-0 shadow-2xl shadow-indigo-500/30">
-                                                        <Terminal size={18} className="sm:size-[24px] text-white" />
+                                            <div className="flex items-center justify-between mb-8 sm:mb-12 relative z-10">
+                                                <div className="flex items-center gap-4 sm:gap-6">
+                                                    <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-2xl sm:rounded-3xl vibing-blue-animated flex items-center justify-center shrink-0 shadow-2xl shadow-indigo-500/40 vibrating-glow-blue">
+                                                        <Terminal size={24} className="sm:size-[32px] text-white" />
                                                     </div>
                                                     <div>
-                                                        <h3 className="text-[10px] sm:text-sm font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] vibing-blue-text leading-none mb-1.5 sm:mb-2">
+                                                        <h3 className="text-sm sm:text-lg font-black uppercase tracking-[0.3em] vibing-blue-text leading-none mb-2 sm:mb-3">
                                                             {t('pro_dashboard.studio.matrix_title')}
                                                         </h3>
-                                                        <div className="flex items-center gap-1.5 sm:gap-2">
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                                            <span className="text-[8px] sm:text-[10px] font-bold text-brand-muted uppercase tracking-widest leading-none">
+                                                        <div className="flex items-center gap-2 sm:gap-3">
+                                                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
+                                                            <span className="text-[10px] sm:text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-none opacity-60">
                                                                 {t('pro_dashboard.studio.matrix_subtitle')}
                                                             </span>
                                                         </div>
@@ -586,9 +602,9 @@ export const ProDashboard = () => {
                                                 </div>
                                                 <button
                                                     onClick={() => { selection(); setShowManual('studio'); }}
-                                                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-500 hover:bg-white/10 transition-all active:scale-90"
+                                                    className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-500 hover:bg-white/10 transition-all active:scale-90 premium-border-glow"
                                                 >
-                                                    <Info size={16} />
+                                                    <Info size={20} />
                                                 </button>
                                             </div>
 
@@ -605,58 +621,67 @@ export const ProDashboard = () => {
                                                         <select
                                                             value={postType}
                                                             onChange={(e) => { selection(); setPostType(e.target.value); }}
-                                                            className="w-full h-12 sm:h-14 bg-slate-100/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl sm:rounded-2xl px-4 sm:px-6 text-xs sm:text-sm font-black text-brand-text outline-hidden appearance-none transition-all cursor-pointer shadow-sm group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
+                                                            className="w-full h-14 sm:h-16 bg-slate-100/50 dark:bg-white/5 backdrop-blur-3xl border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-2xl sm:rounded-3xl px-6 text-sm sm:text-base font-black text-slate-900 dark:text-white outline-hidden appearance-none transition-all cursor-pointer shadow-inner group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
                                                         >
                                                             <option value="" disabled className="text-slate-500">{t('pro_dashboard.studio.strategy_placeholder')}</option>
-                                                            {postTypes.map(pt => <option key={pt.key} value={pt.key} className="text-brand-text bg-white dark:bg-slate-900">{pt.label}</option>)}
+                                                            {postTypes.map(pt => <option key={pt.key} value={pt.key} className="text-slate-900 dark:text-white bg-white dark:bg-slate-900">{pt.label}</option>)}
                                                         </select>
-                                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                                            <ChevronRight className="rotate-90 w-4 h-4 text-indigo-500" />
+                                                        <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
+                                                            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+                                                                <ChevronRight className="rotate-90 w-5 h-5 text-indigo-500" />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 {/* Target Audience */}
-                                                <div className="space-y-1.5">
+                                                <div className="space-y-2">
                                                     <div className="flex items-center justify-between px-1">
-                                                        <label className="text-[8px] sm:text-[10px] font-black uppercase text-purple-500 dark:text-purple-400 tracking-[0.2em]">
+                                                        <label className="text-[10px] sm:text-xs font-black uppercase text-purple-600 dark:text-purple-400 tracking-[0.3em]">
                                                             02. {t('pro_dashboard.studio.target_label')}
                                                         </label>
-                                                        <Zap size={10} className="text-purple-500/30" />
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-ping" />
+                                                            <Users size={12} className="text-purple-500/50" />
+                                                        </div>
                                                     </div>
                                                     <div className="relative group/sel">
                                                         <select
                                                             value={audience}
                                                             onChange={(e) => { selection(); setAudience(e.target.value); }}
-                                                            className="w-full h-12 sm:h-14 bg-slate-100/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 focus:border-purple-500/50 rounded-xl sm:rounded-2xl px-4 sm:px-6 text-xs sm:text-sm font-black text-brand-text outline-hidden appearance-none transition-all cursor-pointer shadow-sm group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
+                                                            className="w-full h-14 sm:h-16 bg-slate-100/50 dark:bg-white/5 backdrop-blur-3xl border border-slate-200 dark:border-white/10 focus:border-purple-500/50 rounded-2xl sm:rounded-3xl px-6 text-sm sm:text-base font-black text-slate-900 dark:text-white outline-hidden appearance-none transition-all cursor-pointer shadow-inner group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
                                                         >
                                                             <option value="" disabled className="text-slate-500">{t('pro_dashboard.studio.target_placeholder')}</option>
-                                                            {audiences.map(a => <option key={a.key} value={a.key} className="text-brand-text bg-white dark:bg-slate-900">{a.label}</option>)}
+                                                            {audiences.map(a => <option key={a.key} value={a.key} className="text-slate-900 dark:text-white bg-white dark:bg-slate-900">{a.label}</option>)}
                                                         </select>
-                                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                                            <ChevronRight className="rotate-90 w-4 h-4 text-purple-500" />
+                                                        <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
+                                                            <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                                                                <ChevronRight className="rotate-90 w-5 h-5 text-purple-500" />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 {/* Output Language */}
-                                                <div className="space-y-1.5">
+                                                <div className="space-y-2">
                                                     <div className="flex items-center justify-between px-1">
-                                                        <label className="text-[8px] sm:text-[10px] font-black uppercase text-emerald-500 tracking-[0.2em]">
+                                                        <label className="text-[10px] sm:text-xs font-black uppercase text-emerald-600 dark:text-emerald-400 tracking-[0.3em]">
                                                             03. {t('pro_dashboard.studio.language_label')}
                                                         </label>
-                                                        <Globe size={10} className="text-emerald-500/30" />
+                                                        <Globe size={14} className="text-emerald-500/50" />
                                                     </div>
                                                     <div className="relative group/sel">
                                                         <select
                                                             value={language}
                                                             onChange={(e) => setLanguage(e.target.value)}
-                                                            className="w-full h-12 sm:h-14 bg-slate-100/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 focus:border-emerald-500/50 rounded-xl sm:rounded-2xl px-4 sm:px-6 text-xs sm:text-sm font-black text-brand-text outline-hidden appearance-none transition-all cursor-pointer shadow-sm group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
+                                                            className="w-full h-14 sm:h-16 bg-slate-100/50 dark:bg-white/5 backdrop-blur-3xl border border-slate-200 dark:border-white/10 focus:border-emerald-500/50 rounded-2xl sm:rounded-3xl px-6 text-sm sm:text-base font-black text-slate-900 dark:text-white outline-hidden appearance-none transition-all cursor-pointer shadow-inner group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
                                                         >
-                                                            {languages.map(l => <option key={l} value={l} className="text-brand-text bg-white dark:bg-slate-900">{l}</option>)}
+                                                            {languages.map(l => <option key={l} value={l} className="text-slate-900 dark:text-white bg-white dark:bg-slate-900">{l}</option>)}
                                                         </select>
-                                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                                            <Globe size={16} className="text-emerald-500/50" />
+                                                        <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
+                                                            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                                                                <Globe size={18} className="text-emerald-500" />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -673,7 +698,7 @@ export const ProDashboard = () => {
                                                     {t('pro_dashboard.studio.initiate_btn')}
                                                     <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                                                 </button>
-                                                <p className="text-[8px] sm:text-[9px] font-black text-brand-muted text-center mt-3 sm:mt-4 uppercase tracking-[0.2em] opacity-40">
+                                                <p className="text-[8px] sm:text-[9px] font-black text-slate-500 dark:text-slate-400 text-center mt-3 sm:mt-4 uppercase tracking-[0.2em] opacity-40">
                                                     Powered by Claude 3.5 Sonnet & Flux PRO
                                                 </p>
                                             </div>
@@ -706,7 +731,7 @@ export const ProDashboard = () => {
                                                                 {t('pro_dashboard.studio.cooking_title')}
                                                             </h3>
                                                         </div>
-                                                        <p className="text-[7px] sm:text-[8px] font-bold text-brand-muted uppercase tracking-[0.2em] sm:tracking-[0.3em] mt-2 opacity-60">
+                                                        <p className="text-[7px] sm:text-[8px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] sm:tracking-[0.3em] mt-2 opacity-60">
                                                             DEEP LEARNING OPTIMIZATION ACTIVE
                                                         </p>
                                                     </div>
@@ -714,7 +739,7 @@ export const ProDashboard = () => {
                                                     <div className="space-y-4">
                                                         <div className="flex flex-col items-center">
                                                             <div className="flex items-baseline gap-1.5 sm:gap-2">
-                                                                <span className="text-2xl sm:text-4xl font-black text-brand-text dark:text-white italic tracking-tighter">
+                                                                <span className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white italic tracking-tighter">
                                                                     {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-[10px] sm:text-xs not-italic opacity-30 ml-1 font-bold">%</span>
                                                                 </span>
                                                                 <span className="text-[8px] sm:text-[9px] font-black text-indigo-500 uppercase tracking-widest border-b border-indigo-500/20 pb-0.5 sm:pb-1">
@@ -750,7 +775,7 @@ export const ProDashboard = () => {
                                                 </div>
 
                                                 <div className="p-4 bg-white/5 rounded-xl border border-white/10 shadow-inner">
-                                                    <p className="text-[10px] font-medium leading-relaxed text-brand-text/70">
+                                                    <p className="text-[10px] font-medium leading-relaxed text-slate-900 dark:text-white/70">
                                                         {t('pro_dashboard.studio.ready_p')}
                                                     </p>
                                                 </div>
@@ -764,7 +789,7 @@ export const ProDashboard = () => {
                                                     </button>
                                                     <button
                                                         onClick={() => { selection(); setStep(1); }}
-                                                        className="w-full h-10 rounded-xl font-black text-[10px] uppercase tracking-widest text-brand-muted hover:text-white transition-all flex items-center justify-center gap-2"
+                                                        className="w-full h-10 rounded-xl font-black text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-white transition-all flex items-center justify-center gap-2"
                                                     >
                                                         <ArrowLeft size={12} /> {t('pro_dashboard.studio.back_btn')}
                                                     </button>
@@ -816,21 +841,21 @@ export const ProDashboard = () => {
                                             <div className="p-7 space-y-5 relative">
                                                 <div className="flex justify-between items-start gap-4">
                                                     <div className="space-y-2">
-                                                        <h4 className="text-lg font-black leading-tight text-brand-text uppercase tracking-tight">
+                                                        <h4 className="text-lg font-black leading-tight text-slate-900 dark:text-white uppercase tracking-tight">
                                                             {renderMarkdown(generatedResult.title, true)}
                                                         </h4>
                                                         <div className="h-1 w-12 vibing-blue-gradient rounded-full" />
                                                     </div>
                                                     <div className="flex gap-2 shrink-0">
-                                                        <button onClick={() => { selection(); handleCopyText(); }} className="p-2.5 bg-white/60 dark:bg-slate-900/60 hover:bg-indigo-500/10 rounded-xl border border-slate-200 dark:border-white/10 text-brand-muted hover:text-indigo-500 transition-all active:scale-90">
+                                                        <button onClick={() => { selection(); handleCopyText(); }} className="p-2.5 bg-white/60 dark:bg-slate-900/60 hover:bg-indigo-500/10 rounded-xl border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-indigo-500 transition-all active:scale-90">
                                                             <Copy size={14} />
                                                         </button>
-                                                        <button onClick={handleGenerate} className="p-2.5 bg-white/60 dark:bg-slate-900/60 hover:bg-indigo-500/10 rounded-xl border border-slate-200 dark:border-white/10 text-brand-muted hover:text-indigo-500 transition-all active:scale-90">
+                                                        <button onClick={handleGenerate} className="p-2.5 bg-white/60 dark:bg-slate-900/60 hover:bg-indigo-500/10 rounded-xl border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-indigo-500 transition-all active:scale-90">
                                                             <RefreshCw size={14} className={isGenerating ? "animate-spin" : ""} />
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <div className="text-[13px] font-medium leading-relaxed text-brand-text/80 whitespace-pre-wrap selection:bg-indigo-500/20">
+                                                <div className="text-[13px] font-medium leading-relaxed text-slate-900 dark:text-white/80 whitespace-pre-wrap selection:bg-indigo-500/20">
                                                     {renderMarkdown(generatedResult.body)}
                                                 </div>
                                                 <div className="flex flex-wrap gap-2 pt-2">
@@ -844,7 +869,7 @@ export const ProDashboard = () => {
                                             <button onClick={() => { selection(); setShowPublishModal(true); }} className="h-12 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20">
                                                 {t('pro_dashboard.studio.publish_btn')} <Send size={14} className="animate-pulse" />
                                             </button>
-                                            <button onClick={() => { impact('light'); handleSharePost(); }} className="h-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-brand-text dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm">
+                                            <button onClick={() => { impact('light'); handleSharePost(); }} className="h-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-slate-900 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm">
                                                 {t('pro_dashboard.studio.share_btn')} <Share size={14} />
                                             </button>
                                         </div>
@@ -873,7 +898,7 @@ export const ProDashboard = () => {
                                             </div>
                                             <div>
                                                 <h3 className="text-[12px] font-black uppercase tracking-[0.25em] text-pink-500 leading-none mb-1.5">{t('pro_dashboard.tools.headline.title')}</h3>
-                                                <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.headline.desc')}</p>
+                                                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.headline.desc')}</p>
                                             </div>
                                         </div>
                                         <button
@@ -893,12 +918,12 @@ export const ProDashboard = () => {
                                                 value={headlineInput}
                                                 onChange={(e) => setHeadlineInput(e.target.value)}
                                                 placeholder={t('pro_dashboard.tools.headline.placeholder')}
-                                                className="w-full h-14 bg-slate-100/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-pink-500/50 rounded-2xl px-6 text-sm font-black outline-hidden transition-all shadow-inner text-brand-text placeholder:text-slate-500"
+                                                className="w-full h-14 bg-slate-100/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-pink-500/50 rounded-2xl px-6 text-sm font-black outline-hidden transition-all shadow-inner text-slate-900 dark:text-white placeholder:text-slate-500"
                                             />
                                             {headlineInput && (
                                                 <button
                                                     onClick={() => setHeadlineInput('')}
-                                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-muted hover:text-pink-500 transition-colors"
+                                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 hover:text-pink-500 transition-colors"
                                                 >
                                                     <X size={16} />
                                                 </button>
@@ -947,7 +972,7 @@ export const ProDashboard = () => {
                                         </div>
                                         <div>
                                             <h3 className="text-[12px] font-black uppercase tracking-[0.25em] text-indigo-500 leading-none mb-1.5">{t('pro_dashboard.tools.bio.title')}</h3>
-                                            <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.bio.desc')}</p>
+                                            <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.bio.desc')}</p>
                                         </div>
                                     </div>
 
@@ -956,7 +981,7 @@ export const ProDashboard = () => {
                                             value={bioInput}
                                             onChange={(e) => setBioInput(e.target.value)}
                                             placeholder={t('pro_dashboard.tools.bio.placeholder')}
-                                            className="w-full h-32 bg-slate-100/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-2xl p-6 text-sm font-black text-brand-text outline-hidden transition-all resize-none shadow-inner placeholder:text-slate-500"
+                                            className="w-full h-32 bg-slate-100/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-2xl p-6 text-sm font-black text-slate-900 dark:text-white outline-hidden transition-all resize-none shadow-inner placeholder:text-slate-500"
                                         />
 
                                         <AnimatePresence>
@@ -970,7 +995,7 @@ export const ProDashboard = () => {
                                                     <div className="absolute top-3 right-3 text-indigo-500/40 group-hover/copy:text-indigo-500 transition-colors">
                                                         <Copy size={12} />
                                                     </div>
-                                                    <p className="text-[11px] font-black text-brand-text/80 leading-relaxed italic pr-6 group-hover:text-indigo-500 transition-colors">
+                                                    <p className="text-[11px] font-black text-slate-900 dark:text-white pr-6 group-hover:text-indigo-500 transition-colors">
                                                         {renderMarkdown(fixedBio, true)}
                                                     </p>
                                                 </motion.div>
@@ -1014,7 +1039,7 @@ export const ProDashboard = () => {
                                         </div>
                                         <div>
                                             <h3 className="text-[12px] font-black uppercase tracking-[0.25em] text-orange-600 dark:text-orange-400 leading-none mb-1.5">{t('pro_dashboard.tools.trends.title')}</h3>
-                                            <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.trends.desc')}</p>
+                                            <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.trends.desc')}</p>
                                         </div>
                                     </div>
 
@@ -1034,8 +1059,8 @@ export const ProDashboard = () => {
                                                             {i + 1}
                                                         </div>
                                                         <div className="space-y-1">
-                                                            <p className="text-[11px] font-black text-brand-text dark:text-white uppercase tracking-tight">{trend.topic}</p>
-                                                            <p className="text-[10px] font-medium text-brand-muted dark:text-brand-muted/70 italic opacity-70 group-hover/card:text-orange-500 transition-colors">{trend.viral_angle}</p>
+                                                            <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{trend.topic}</p>
+                                                            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400/70 italic opacity-70 group-hover/card:text-orange-500 transition-colors">{trend.viral_angle}</p>
                                                         </div>
                                                     </div>
                                                     <Sparkles size={14} className="text-orange-500/20 group-hover/card:text-orange-500/60 transition-colors" />
@@ -1084,7 +1109,7 @@ export const ProDashboard = () => {
                                             </div>
                                             <div>
                                                 <h3 className="text-[12px] font-black uppercase tracking-[0.25em] text-indigo-500 leading-none mb-1.5">{t('pro_dashboard.tools.audit.title')}</h3>
-                                                <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.audit.desc')}</p>
+                                                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60">{t('pro_dashboard.tools.audit.desc')}</p>
                                             </div>
                                         </div>
                                         <div className="px-3 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
@@ -1098,7 +1123,7 @@ export const ProDashboard = () => {
                                                 <Monitor size={14} className="text-indigo-600 dark:text-indigo-400" />
                                                 <span className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-400">System Capability</span>
                                             </div>
-                                            <p className="text-[11px] font-medium text-brand-text dark:text-brand-muted leading-relaxed">
+                                            <p className="text-[11px] font-medium text-slate-900 dark:text-slate-400 leading-relaxed">
                                                 {renderMarkdown(t('pro_dashboard.tools.audit.capability'), true)}
                                             </p>
                                         </div>
@@ -1119,10 +1144,10 @@ export const ProDashboard = () => {
                             </motion.div>
                         )}
 
-                        {/* GROW HACKS (ACADEMY) TAB */}
-                        {activeTab === 'academy' && (
+                        {/* GROWTH (FORMER ACADEMY) TAB */}
+                        {activeTab === 'growth' && (
                             <motion.div
-                                key="academy"
+                                key="growth"
                                 initial={{ opacity: 0, scale: 0.98 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.98 }}
@@ -1147,20 +1172,20 @@ export const ProDashboard = () => {
                                                     <Info size={10} />
                                                 </button>
                                             </div>
-                                            <h3 className="text-xl sm:text-4xl font-black text-brand-text dark:text-white tracking-tighter uppercase leading-tight sm:leading-none drop-shadow-2xl max-w-[200px] sm:max-w-none">
+                                            <h3 className="text-xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase leading-tight sm:leading-none drop-shadow-2xl max-w-[200px] sm:max-w-none">
                                                 {t('pro_dashboard.academy.protocols.title')}
                                             </h3>
                                         </div>
                                         <div className="text-left sm:text-right">
                                             <p className="text-[9px] sm:text-[11px] font-black text-indigo-600/60 dark:text-indigo-300/60 uppercase tracking-[0.3em] mb-1 sm:mb-2">{t('pro_dashboard.academy.protocols.stats_label')}</p>
-                                            <div className="text-3xl sm:text-5xl font-black text-brand-text dark:text-white tabular-nums leading-none flex items-baseline justify-start sm:justify-end">
+                                            <div className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tabular-nums leading-none flex items-baseline justify-start sm:justify-end">
                                                 {academyScore}<span className="text-indigo-500 text-lg sm:text-2xl">.0</span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="space-y-4 relative z-10">
-                                        <div className="flex justify-between items-end text-[10px] font-black uppercase tracking-[0.3em] text-brand-muted/60 dark:text-indigo-200/50">
+                                        <div className="flex justify-between items-end text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400/60">
                                             <div className="flex items-center gap-2">
                                                 <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
                                                 <span>{t('pro_dashboard.academy.protocols.progress_label')}</span>
@@ -1186,11 +1211,11 @@ export const ProDashboard = () => {
                                         <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shadow-lg">
                                             <Bot size={20} className="text-indigo-500" />
                                         </div>
-                                        <p className="text-[11px] font-black text-brand-text uppercase tracking-[0.2em]">{t('pro_dashboard.academy.expert_label', 'MESSAGES FROM ELITE PARTNERS')}</p>
+                                        <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">{t('pro_dashboard.academy.expert_label', 'MESSAGES FROM ELITE PARTNERS')}</p>
                                     </div>
                                     <div className="relative">
                                         <div className="absolute left-5 top-0 bottom-0 w-px bg-linear-to-b from-indigo-500/30 to-transparent" />
-                                        <p className="text-[13px] font-medium text-brand-muted leading-relaxed italic opacity-90 backdrop-blur-md p-6 bg-slate-100/30 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 ml-5 shadow-sm">
+                                        <p className="text-[13px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-90 backdrop-blur-md p-6 bg-slate-100/30 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 ml-5 shadow-sm">
                                             "{t('pro_dashboard.academy.desc')}"
                                         </p>
                                     </div>
@@ -1201,7 +1226,7 @@ export const ProDashboard = () => {
                                     <div className="flex items-center justify-between px-1">
                                         <div className="space-y-1">
                                             <h4 className="text-[12px] font-black uppercase tracking-[0.3em] text-indigo-500 leading-none">{t('pro_dashboard.academy.articles.title')}</h4>
-                                            <p className="text-[9px] font-bold text-brand-muted uppercase tracking-widest opacity-60 italic">{t('pro_dashboard.academy.articles.subtitle')}</p>
+                                            <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60 italic">{t('pro_dashboard.academy.articles.subtitle')}</p>
                                         </div>
                                         <button
                                             onClick={() => { selection(); setShowManual('academy'); }}
@@ -1222,10 +1247,10 @@ export const ProDashboard = () => {
                                                 <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 blur-2xl group-hover:bg-indigo-500/10 transition-colors" />
                                                 <div className="flex items-center gap-2 mb-3">
                                                     <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-[7px] font-black text-indigo-500 uppercase tracking-widest">{article.category}</span>
-                                                    <span className="text-[7px] font-black text-brand-muted uppercase tracking-widest">{article.readTime} {t('pro_dashboard.academy.articles.read_time')}</span>
+                                                    <span className="text-[7px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">{article.readTime} {t('pro_dashboard.academy.articles.read_time')}</span>
                                                 </div>
-                                                <h5 className="text-[14px] font-black text-brand-text uppercase tracking-tight mb-2 group-hover:text-indigo-500 transition-colors">{article.title}</h5>
-                                                <p className="text-[10px] font-medium text-brand-muted leading-relaxed line-clamp-2 mb-4 italic opacity-70">"{article.desc}"</p>
+                                                <h5 className="text-[14px] font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 group-hover:text-indigo-500 transition-colors">{article.title}</h5>
+                                                <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 mb-4 italic opacity-70">"{article.desc}"</p>
                                                 <div className="flex items-center gap-2 text-[9px] font-black text-indigo-500 uppercase tracking-widest group-hover:gap-3 transition-all">
                                                     {t('pro_dashboard.academy.articles.btn_read')} <ChevronRight size={12} />
                                                 </div>
@@ -1272,7 +1297,7 @@ export const ProDashboard = () => {
                                                                     </div>
                                                                 )}
                                                             </div>
-                                                            <h4 className="text-lg font-black text-brand-text uppercase tracking-tight">{module.title}</h4>
+                                                            <h4 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">{module.title}</h4>
                                                             <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">{module.hook}</p>
                                                         </div>
                                                         <div className="w-10 h-10 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 flex items-center justify-center text-indigo-500 font-black text-[10px]">
@@ -1280,21 +1305,21 @@ export const ProDashboard = () => {
                                                         </div>
                                                     </div>
 
-                                                    <p className="text-[11px] font-medium text-brand-muted leading-relaxed">
+                                                    <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
                                                         {renderMarkdown(module.content)}
                                                     </p>
 
                                                     <div className="p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-white/5 space-y-3">
                                                         <div className="flex items-center justify-between">
                                                             <div className="flex items-center gap-2">
-                                                                <Terminal size={12} className="text-brand-muted" />
-                                                                <span className="text-[8px] font-black uppercase tracking-widest text-brand-muted">Active Homework Task</span>
+                                                                <Terminal size={12} className="text-slate-500 dark:text-slate-400" />
+                                                                <span className="text-[8px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Active Homework Task</span>
                                                             </div>
                                                             <button onClick={() => { impact('light'); notification('warning'); }} className="opacity-20 hover:opacity-100 transition-opacity">
                                                                 <Info size={10} className="text-indigo-500" />
                                                             </button>
                                                         </div>
-                                                        <p className="text-[10px] font-bold text-brand-text leading-tight">
+                                                        <p className="text-[10px] font-bold text-slate-900 dark:text-white leading-tight">
                                                             {module.task}
                                                         </p>
                                                         {module.link && (
@@ -1338,8 +1363,8 @@ export const ProDashboard = () => {
                                                 <RefreshCw size={22} className="text-indigo-500" />
                                             </div>
                                             <div>
-                                                <h4 className="text-[12px] font-black uppercase tracking-widest text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.hooks.title')}</h4>
-                                                <span className="text-[8px] font-black text-brand-muted uppercase tracking-[0.25em]">{t('pro_dashboard.academy.hooks.subtitle')}</span>
+                                                <h4 className="text-[12px] font-black uppercase tracking-widest text-slate-900 dark:text-white leading-none mb-1.5">{t('pro_dashboard.academy.hooks.title')}</h4>
+                                                <span className="text-[8px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.25em]">{t('pro_dashboard.academy.hooks.subtitle')}</span>
                                             </div>
                                         </div>
                                         <button
@@ -1359,7 +1384,7 @@ export const ProDashboard = () => {
                                                     <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
                                                     <p className="text-[8px] font-black text-indigo-600 dark:text-indigo-500 uppercase tracking-widest leading-none">{hook.category}</p>
                                                 </div>
-                                                <p className="text-[11px] font-bold text-brand-text dark:text-white/90 italic leading-relaxed pr-8 line-clamp-2">"{hook.template}"</p>
+                                                <p className="text-[11px] font-bold text-slate-900 dark:text-white/90 italic leading-relaxed pr-8 line-clamp-2">"{hook.template}"</p>
                                             </div>
                                         ))}
                                     </div>
@@ -1375,7 +1400,7 @@ export const ProDashboard = () => {
                                                 <ImageIcon size={26} className="text-indigo-500 relative z-10 drop-shadow-sm" />
                                             </div>
                                             <div>
-                                                <h4 className="text-sm font-black uppercase tracking-[0.2em] text-brand-text leading-none mb-2">{t('pro_dashboard.academy.viral_assets.title')}</h4>
+                                                <h4 className="text-sm font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white leading-none mb-2">{t('pro_dashboard.academy.viral_assets.title')}</h4>
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
                                                     <p className="text-[10px] font-black text-indigo-500/80 uppercase tracking-[0.3em]">{t('pro_dashboard.academy.viral_assets.subtitle')}</p>
@@ -1466,7 +1491,7 @@ export const ProDashboard = () => {
 
                                                                 {!isLarge && (
                                                                     <div className="space-y-1.5">
-                                                                        <h5 className="text-[13px] font-black text-brand-text uppercase tracking-tight leading-tight group-hover:text-indigo-500 transition-colors">
+                                                                        <h5 className="text-[13px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-tight group-hover:text-indigo-500 transition-colors">
                                                                             {card.title}
                                                                         </h5>
                                                                         <p className="text-[9px] font-black text-indigo-500/80 uppercase tracking-widest px-2 py-0.5 bg-indigo-500/5 rounded-md w-fit border border-indigo-500/10">
@@ -1478,7 +1503,7 @@ export const ProDashboard = () => {
 
                                                             <div className="flex items-center gap-2 px-3 py-1 bg-slate-950/5 dark:bg-white/5 rounded-full border border-slate-200 dark:border-white/10 shadow-sm self-start">
                                                                 <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${isLarge ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]' : 'bg-indigo-500'}`} />
-                                                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-brand-muted">
+                                                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
                                                                     {card.id === 'palette' ? 'CSS VARS' : 'VECTOR HV'}
                                                                 </span>
                                                             </div>
@@ -1486,7 +1511,7 @@ export const ProDashboard = () => {
 
                                                         {isLarge && (
                                                             <div className="space-y-2">
-                                                                <h5 className="text-2xl font-black text-brand-text uppercase tracking-tighter leading-none group-hover:text-indigo-500 transition-colors">
+                                                                <h5 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none group-hover:text-indigo-500 transition-colors">
                                                                     {card.title}
                                                                 </h5>
                                                                 <p className="text-[11px] font-black text-indigo-500/80 uppercase tracking-[0.25em]">
@@ -1495,7 +1520,7 @@ export const ProDashboard = () => {
                                                             </div>
                                                         )}
 
-                                                        <p className={`${isLarge ? 'text-sm' : 'text-[11px]'} font-medium text-brand-muted leading-relaxed line-clamp-2 opacity-80`}>
+                                                        <p className={`${isLarge ? 'text-sm' : 'text-[11px]'} font-medium text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 opacity-80`}>
                                                             {card.desc}
                                                         </p>
 
@@ -1508,7 +1533,7 @@ export const ProDashboard = () => {
                                                                     <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-indigo-500/10 flex items-center justify-center group-hover/btn:bg-indigo-500/20 transition-colors">
                                                                         <Copy size={12} className="text-indigo-500" />
                                                                     </div>
-                                                                    <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-brand-text">Copy Logic</span>
+                                                                    <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white">Copy Logic</span>
                                                                 </button>
 
                                                                 <button
@@ -1522,7 +1547,7 @@ export const ProDashboard = () => {
 
                                                         {!isLarge && (
                                                             <div className="pt-2 flex justify-between items-center border-t border-slate-200/20 dark:border-white/5">
-                                                                <span className="text-[9px] font-black text-brand-muted/50 uppercase tracking-widest">Protocol V4.2</span>
+                                                                <span className="text-[9px] font-black text-slate-500 dark:text-slate-400/50 uppercase tracking-widest">Protocol V4.2</span>
                                                                 <Info size={12} className="text-indigo-500 opacity-20 group-hover:opacity-60 transition-opacity" />
                                                             </div>
                                                         )}
@@ -1544,10 +1569,10 @@ export const ProDashboard = () => {
                                                     <Flame size={24} className="text-pink-500" />
                                                 </div>
                                                 <div>
-                                                    <h4 className="text-[12px] font-black uppercase tracking-[0.25em] text-brand-text leading-none mb-1.5">{t('pro_dashboard.academy.lifehacks.title')}</h4>
+                                                    <h4 className="text-[12px] font-black uppercase tracking-[0.25em] text-slate-900 dark:text-white leading-none mb-1.5">{t('pro_dashboard.academy.lifehacks.title')}</h4>
                                                     <div className="flex items-center gap-2">
                                                         <div className="w-4 h-0.5 bg-pink-500 rounded-full" />
-                                                        <span className="text-[8px] font-black text-brand-muted uppercase tracking-[0.3em]">{t('pro_dashboard.academy.lifehacks.subtitle')}</span>
+                                                        <span className="text-[8px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.3em]">{t('pro_dashboard.academy.lifehacks.subtitle')}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1564,8 +1589,8 @@ export const ProDashboard = () => {
                                                 <div key={i} className="flex gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-pink-500/20 transition-all group/hack cursor-default shadow-sm hover:shadow-md">
                                                     <div className="w-9 h-9 rounded-xl bg-pink-500/10 flex items-center justify-center text-pink-500 font-black text-xs shrink-0 border border-pink-500/10 shadow-inner group-hover/hack:scale-110 transition-transform">{i + 1}</div>
                                                     <div className="space-y-1">
-                                                        <h5 className="text-[11px] font-black uppercase text-brand-text tracking-tight">{hack.title}</h5>
-                                                        <p className="text-[10px] font-medium text-brand-muted leading-relaxed italic opacity-70 line-clamp-1">"{hack.desc}"</p>
+                                                        <h5 className="text-[11px] font-black uppercase text-slate-900 dark:text-white tracking-tight">{hack.title}</h5>
+                                                        <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-70 line-clamp-1">"{hack.desc}"</p>
                                                     </div>
                                                 </div>
                                             ))}
@@ -1593,13 +1618,13 @@ export const ProDashboard = () => {
                                                             {platform.name.includes('X') && <Twitter size={14} className="text-indigo-500" />}
                                                             {platform.name.includes('LinkedIn') && <Linkedin size={14} className="text-indigo-500" />}
                                                         </div>
-                                                        <span className="text-[9.5px] font-black text-brand-text uppercase tracking-tight">{platform.name}</span>
+                                                        <span className="text-[9.5px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{platform.name}</span>
                                                     </div>
                                                     <div className="grid grid-cols-1 gap-1.5 opacity-60">
                                                         {platform.steps.slice(0, 2).map((step: string, j: number) => (
                                                             <div key={j} className="flex items-center gap-2">
                                                                 <div className="w-1 h-2 rounded-full bg-indigo-500/30" />
-                                                                <span className="text-[8px] font-medium text-brand-muted truncate">{step}</span>
+                                                                <span className="text-[8px] font-medium text-slate-500 dark:text-slate-400 truncate">{step}</span>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -1641,7 +1666,7 @@ export const ProDashboard = () => {
 
                                     <div className="flex justify-between items-center shrink-0">
                                         <div className="flex flex-col">
-                                            <h3 className="text-xl font-black uppercase tracking-tight text-brand-text leading-tight">
+                                            <h3 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white leading-tight">
                                                 {t('pro_dashboard.tab_setup')}
                                             </h3>
                                             <div className="flex items-center gap-1.5 mt-0.5">
@@ -1651,7 +1676,7 @@ export const ProDashboard = () => {
                                         </div>
                                         <button
                                             onClick={() => { selection(); setShowSetup(false); }}
-                                            className="p-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl text-brand-text hover:border-indigo-500/30 active:scale-90 transition-all shadow-sm"
+                                            className="p-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl text-slate-900 dark:text-white hover:border-indigo-500/30 active:scale-90 transition-all shadow-sm"
                                         >
                                             <ArrowLeft size={18} />
                                         </button>
@@ -1669,7 +1694,7 @@ export const ProDashboard = () => {
                                                     </div>
                                                     <div>
                                                         <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-indigo-600 dark:text-indigo-400 leading-none mb-1">SYNC PROTOCOL</h4>
-                                                        <p className="text-[8px] font-bold text-brand-muted uppercase tracking-widest">Global Node Deployment</p>
+                                                        <p className="text-[8px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Global Node Deployment</p>
                                                     </div>
                                                 </div>
                                                 <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center justify-center">
@@ -1684,8 +1709,8 @@ export const ProDashboard = () => {
                                                         <div className="w-[2px] h-full bg-linear-to-b from-indigo-500/30 to-transparent rounded-full" />
                                                     </div>
                                                     <div className="pb-1">
-                                                        <h5 className="text-[12px] font-black text-brand-text dark:text-white uppercase tracking-wide mb-1.5">X Dev Environment</h5>
-                                                        <p className="text-[10px] font-medium text-brand-muted dark:text-slate-400 leading-relaxed">
+                                                        <h5 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-wide mb-1.5">X Dev Environment</h5>
+                                                        <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
                                                             Initialize App at <a href="https://developer.x.com" target="_blank" className="text-indigo-500 dark:text-indigo-400 underline decoration-indigo-400/30 hover:text-indigo-400 dark:hover:text-indigo-300">developer.x.com</a>. Grant <span className="text-indigo-500 dark:text-indigo-400 font-bold">Read/Write</span> access via OAuth 1.0a.
                                                         </p>
                                                     </div>
@@ -1697,8 +1722,8 @@ export const ProDashboard = () => {
                                                         <div className="w-[2px] h-full bg-linear-to-b from-indigo-500/30 to-transparent rounded-full" />
                                                     </div>
                                                     <div className="pb-1">
-                                                        <h5 className="text-[12px] font-black text-brand-text dark:text-white uppercase tracking-wide mb-1.5">Telegram Broadcast Node</h5>
-                                                        <p className="text-[10px] font-medium text-brand-muted dark:text-slate-400 leading-relaxed">
+                                                        <h5 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-wide mb-1.5">Telegram Broadcast Node</h5>
+                                                        <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
                                                             Authorize <a href={`https://t.me/${status?.bot_username || 'pintopay_probot'}`} target="_blank" rel="noreferrer" className="text-indigo-500 dark:text-indigo-400 font-bold hover:underline">@{status?.bot_username || 'pintopay_probot'}</a> as Admin in your target channel for automated cross-platform sync.
                                                         </p>
                                                     </div>
@@ -1709,8 +1734,8 @@ export const ProDashboard = () => {
                                                         <div className="w-7 h-7 rounded-lg bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/20 dark:border-indigo-500/30 flex items-center justify-center text-[11px] font-black text-indigo-600 dark:text-indigo-400">03</div>
                                                     </div>
                                                     <div>
-                                                        <h5 className="text-[12px] font-black text-brand-text dark:text-white uppercase tracking-wide mb-1.5">Protocol Verification</h5>
-                                                        <p className="text-[10px] font-medium text-brand-muted dark:text-slate-400 leading-relaxed">
+                                                        <h5 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-wide mb-1.5">Protocol Verification</h5>
+                                                        <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
                                                             Inject API tokens below and execute <span className="text-emerald-500 dark:text-emerald-400 font-bold">System Test</span> to verify 2026 reach capability.
                                                         </p>
                                                     </div>
@@ -1726,8 +1751,8 @@ export const ProDashboard = () => {
                                                         <Twitter size={14} className="text-white" />
                                                     </div>
                                                     <div className="flex flex-col">
-                                                        <span className="text-[11px] font-black uppercase tracking-widest text-brand-text leading-none">X (Twitter) API</span>
-                                                        <span className="text-[8px] font-bold text-brand-muted uppercase tracking-wider mt-1">Direct Content Push</span>
+                                                        <span className="text-[11px] font-black uppercase tracking-widest text-slate-900 dark:text-white leading-none">X (Twitter) API</span>
+                                                        <span className="text-[8px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-1">Direct Content Push</span>
                                                     </div>
                                                 </div>
                                                 <div className="flex gap-2">
@@ -1747,40 +1772,40 @@ export const ProDashboard = () => {
                                             </div>
                                             <div className="grid gap-2.5">
                                                 <div className="space-y-1">
-                                                    <label className="text-[8px] font-black uppercase tracking-widest text-brand-muted ml-1">API Key & Secret</label>
+                                                    <label className="text-[8px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 ml-1">API Key & Secret</label>
                                                     <div className="grid grid-cols-2 gap-2">
                                                         <input
                                                             type="password"
                                                             value={apiData.x_api_key}
                                                             onChange={(e) => setApiData({ ...apiData, x_api_key: e.target.value })}
                                                             placeholder="API Key"
-                                                            className="h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-20"
+                                                            className="h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-slate-900 dark:text-white placeholder:opacity-20"
                                                         />
                                                         <input
                                                             type="password"
                                                             value={apiData.x_api_secret}
                                                             onChange={(e) => setApiData({ ...apiData, x_api_secret: e.target.value })}
                                                             placeholder="API Secret"
-                                                            className="h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-20"
+                                                            className="h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-slate-900 dark:text-white placeholder:opacity-20"
                                                         />
                                                     </div>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <label className="text-[8px] font-black uppercase tracking-widest text-brand-muted ml-1">Access Token & Secret</label>
+                                                    <label className="text-[8px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 ml-1">Access Token & Secret</label>
                                                     <div className="grid grid-cols-2 gap-2">
                                                         <input
                                                             type="password"
                                                             value={apiData.x_access_token}
                                                             onChange={(e) => setApiData({ ...apiData, x_access_token: e.target.value })}
                                                             placeholder="Access Token"
-                                                            className="h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-20"
+                                                            className="h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-slate-900 dark:text-white placeholder:opacity-20"
                                                         />
                                                         <input
                                                             type="password"
                                                             value={apiData.x_access_token_secret}
                                                             onChange={(e) => setApiData({ ...apiData, x_access_token_secret: e.target.value })}
                                                             placeholder="Token Secret"
-                                                            className="h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-20"
+                                                            className="h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-slate-900 dark:text-white placeholder:opacity-20"
                                                         />
                                                     </div>
                                                 </div>
@@ -1795,8 +1820,8 @@ export const ProDashboard = () => {
                                                         <Send size={14} className="text-white" />
                                                     </div>
                                                     <div className="flex flex-col">
-                                                        <span className="text-[11px] font-black uppercase tracking-widest text-brand-text leading-none">Telegram Sync</span>
-                                                        <span className="text-[8px] font-bold text-brand-muted uppercase tracking-wider mt-1">Multi-Channel Broadcasting</span>
+                                                        <span className="text-[11px] font-black uppercase tracking-widest text-slate-900 dark:text-white leading-none">Telegram Sync</span>
+                                                        <span className="text-[8px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-1">Multi-Channel Broadcasting</span>
                                                     </div>
                                                 </div>
                                                 <div className="flex gap-2">
@@ -1816,19 +1841,19 @@ export const ProDashboard = () => {
                                             </div>
                                             <div className="grid gap-3">
                                                 <div className="space-y-1">
-                                                    <label className="text-[8px] font-black uppercase tracking-widest text-brand-muted ml-1">Main Channel</label>
+                                                    <label className="text-[8px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 ml-1">Main Channel</label>
                                                     <input
                                                         type="text"
                                                         value={apiData.telegram_channel_id}
                                                         onChange={(e) => setApiData({ ...apiData, telegram_channel_id: e.target.value })}
                                                         placeholder="@channelname (Main)"
-                                                        className="w-full h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-brand-text placeholder:opacity-20"
+                                                        className="w-full h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-slate-900 dark:text-white placeholder:opacity-20"
                                                     />
                                                 </div>
 
                                                 {apiData.telegram_channels.length > 0 && (
                                                     <div className="space-y-2.5">
-                                                        <label className="text-[8px] font-black uppercase tracking-widest text-brand-muted ml-1">Additional Channels</label>
+                                                        <label className="text-[8px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 ml-1">Additional Channels</label>
                                                         {apiData.telegram_channels.map((ch, idx) => (
                                                             <div key={idx} className="flex gap-2">
                                                                 <input
@@ -1840,7 +1865,7 @@ export const ProDashboard = () => {
                                                                         setApiData({ ...apiData, telegram_channels: newChannels });
                                                                     }}
                                                                     placeholder={`@channelname ${idx + 2}`}
-                                                                    className="flex-1 h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-brand-text"
+                                                                    className="flex-1 h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-slate-900 dark:text-white"
                                                                 />
                                                                 <button
                                                                     onClick={() => {
@@ -1858,7 +1883,7 @@ export const ProDashboard = () => {
 
                                                 <button
                                                     onClick={() => setApiData({ ...apiData, telegram_channels: [...apiData.telegram_channels, ''] })}
-                                                    className="w-full h-10 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-xl text-[9px] font-black uppercase text-brand-muted hover:text-indigo-500 hover:border-indigo-500/30 transition-all flex items-center justify-center gap-2"
+                                                    className="w-full h-10 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-xl text-[9px] font-black uppercase text-slate-500 dark:text-slate-400 hover:text-indigo-500 hover:border-indigo-500/30 transition-all flex items-center justify-center gap-2"
                                                 >
                                                     <Sparkles size={10} /> + Add Network Node
                                                 </button>
@@ -1875,10 +1900,10 @@ export const ProDashboard = () => {
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <div className="flex items-center gap-2">
-                                                        <span className="text-[11px] font-black text-brand-text dark:text-white uppercase tracking-tight">{t('pro_dashboard.setup.professional_network')}</span>
+                                                        <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{t('pro_dashboard.setup.professional_network')}</span>
                                                         <span className="px-2 py-0.5 bg-slate-100 dark:bg-white/5 rounded-md text-[7px] font-black text-slate-400 uppercase tracking-widest leading-none">SYNC LOCKED</span>
                                                     </div>
-                                                    <p className="text-[8px] font-medium text-brand-muted uppercase tracking-wider mt-0.5">{t('pro_dashboard.setup.linkedin_hint')}</p>
+                                                    <p className="text-[8px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-0.5">{t('pro_dashboard.setup.linkedin_hint')}</p>
                                                 </div>
                                             </div>
                                             <button
@@ -1929,12 +1954,12 @@ export const ProDashboard = () => {
 
                                     <div className="flex justify-between items-center">
                                         <div className="space-y-0.5">
-                                            <h3 className="text-xl font-black uppercase tracking-tight text-brand-text">{t('pro_dashboard.publish.title')}</h3>
+                                            <h3 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white">{t('pro_dashboard.publish.title')}</h3>
                                             <p className="text-[8px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-[0.2em]">{t('pro_dashboard.publish.subtitle')}</p>
                                         </div>
                                         <button
                                             onClick={() => { selection(); setShowPublishModal(false); }}
-                                            className="p-2.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl hover:bg-slate-200 dark:hover:bg-white/10 active:scale-90 transition-all text-brand-muted hover:text-brand-text"
+                                            className="p-2.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl hover:bg-slate-200 dark:hover:bg-white/10 active:scale-90 transition-all text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                                         >
                                             <ArrowLeft size={16} />
                                         </button>
@@ -1947,7 +1972,7 @@ export const ProDashboard = () => {
                                                 <Info size={10} />
                                                 {t('pro_dashboard.publish.mgmt_title')}
                                             </h4>
-                                            <p className="text-[10px] leading-relaxed text-brand-text/70 font-medium">
+                                            <p className="text-[10px] leading-relaxed text-slate-900 dark:text-white/70 font-medium">
                                                 {t('pro_dashboard.publish.mgmt_p')}
                                                 <em className="block mt-1 text-indigo-500/60 italic text-[9px]"> {t('pro_dashboard.publish.mgmt_tip')}</em>
                                             </p>
@@ -1979,8 +2004,8 @@ export const ProDashboard = () => {
                                                                 {platform === 'linkedin' && <Linkedin size={16} className="text-white" />}
                                                             </div>
                                                             <div className="text-left">
-                                                                <span className="text-[12px] font-black uppercase tracking-tight text-brand-text block">{platform}</span>
-                                                                <div className={`text-[8px] font-bold uppercase tracking-wider ${isPublished ? 'text-emerald-500' : 'text-brand-muted'}`}>
+                                                                <span className="text-[12px] font-black uppercase tracking-tight text-slate-900 dark:text-white block">{platform}</span>
+                                                                <div className={`text-[8px] font-bold uppercase tracking-wider ${isPublished ? 'text-emerald-500' : 'text-slate-500 dark:text-slate-400'}`}>
                                                                     {!hasSetup ? t('pro_dashboard.publish.platform_not_configured') : isPublished ? t('pro_dashboard.publish.platform_success') : t('pro_dashboard.publish.platform_tap')}
                                                                 </div>
                                                             </div>
@@ -1991,7 +2016,7 @@ export const ProDashboard = () => {
                                                             </div>
                                                         ) : (
                                                             <div className="w-7 h-7 rounded-full bg-slate-50 dark:bg-white/5 flex items-center justify-center border border-slate-200 dark:border-white/5 group-hover:border-indigo-500/30 transition-colors">
-                                                                <ChevronRight size={16} className="text-brand-muted group-hover:text-indigo-400 transition-colors" />
+                                                                <ChevronRight size={16} className="text-slate-500 dark:text-slate-400 group-hover:text-indigo-400 transition-colors" />
                                                             </div>
                                                         )}
 
@@ -2009,12 +2034,12 @@ export const ProDashboard = () => {
                                     <div className="space-y-3 pt-2">
                                         <button
                                             onClick={() => { selection(); setShowPublishModal(false); setStep(1); }}
-                                            className="w-full h-11 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[9px] uppercase tracking-[0.15em] text-brand-muted hover:text-brand-text transition-all active:scale-95"
+                                            className="w-full h-11 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[9px] uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"
                                         >
                                             {t('pro_dashboard.publish.create_another_btn')}
                                         </button>
                                         <div className="flex flex-col items-center gap-1 opacity-20">
-                                            <p className="text-[8px] font-black uppercase tracking-[0.3em] text-brand-text">
+                                            <p className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-900 dark:text-white">
                                                 {t('pro_dashboard.publish.footer')}
                                             </p>
                                         </div>
@@ -2049,11 +2074,11 @@ export const ProDashboard = () => {
                                                 <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
                                                 <span className="text-[8px] font-black uppercase tracking-[0.2em] text-indigo-500">Asset Protocol</span>
                                             </div>
-                                            <h3 className="text-2xl font-black uppercase tracking-tight text-brand-text leading-none">{selectedAsset.title}</h3>
+                                            <h3 className="text-2xl font-black uppercase tracking-tight text-slate-900 dark:text-white leading-none">{selectedAsset.title}</h3>
                                         </div>
                                         <button
                                             onClick={() => { selection(); setSelectedAsset(null); }}
-                                            className="p-2.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl hover:bg-slate-200 dark:hover:bg-white/10 transition-all text-brand-muted"
+                                            className="p-2.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl hover:bg-slate-200 dark:hover:bg-white/10 transition-all text-slate-500 dark:text-slate-400"
                                         >
                                             <ArrowLeft size={16} />
                                         </button>
@@ -2062,17 +2087,17 @@ export const ProDashboard = () => {
                                     <div className="space-y-4">
                                         <div className="p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/10">
                                             <h4 className="text-[10px] font-black uppercase text-indigo-500 mb-2 tracking-widest">HOOK STRATEGY</h4>
-                                            <p className="text-[11px] font-medium text-brand-text/70 leading-relaxed italic pr-4">
+                                            <p className="text-[11px] font-medium text-slate-900 dark:text-white/70 leading-relaxed italic pr-4">
                                                 "{selectedAsset.hook}"
                                             </p>
                                         </div>
 
                                         <div className="space-y-2">
-                                            <h4 className="text-[10px] font-black uppercase text-brand-muted tracking-widest">Important Information</h4>
+                                            <h4 className="text-[10px] font-black uppercase text-slate-500 dark:text-slate-400 tracking-widest">Important Information</h4>
                                             <div className="grid grid-cols-2 gap-2">
                                                 {selectedAsset.specs?.map((spec: string, idx: number) => (
                                                     <div key={idx} className="p-3 bg-slate-50 dark:bg-white/2 rounded-xl border border-slate-200 dark:border-white/5">
-                                                        <p className="text-[8px] font-black text-brand-text/80 uppercase leading-tight line-clamp-2">{spec}</p>
+                                                        <p className="text-[8px] font-black text-slate-900 dark:text-white/80 uppercase leading-tight line-clamp-2">{spec}</p>
                                                     </div>
                                                 ))}
                                             </div>
@@ -2083,7 +2108,7 @@ export const ProDashboard = () => {
                                                 <ShieldCheck size={14} className="text-emerald-500" />
                                                 <h4 className="text-[10px] font-black uppercase text-emerald-500 tracking-widest">Usage Protocol</h4>
                                             </div>
-                                            <p className="text-[10.5px] font-medium text-brand-text/70 leading-relaxed">
+                                            <p className="text-[10.5px] font-medium text-slate-900 dark:text-white/70 leading-relaxed">
                                                 {selectedAsset.usage}
                                             </p>
                                         </div>
@@ -2094,8 +2119,8 @@ export const ProDashboard = () => {
                                             onClick={() => { handleCopyAnyText(selectedAsset.desc); selection(); }}
                                             className="flex-1 h-12 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl flex items-center justify-center gap-2 hover:bg-slate-200 dark:hover:bg-white/10 transition-all"
                                         >
-                                            <Copy size={16} className="text-brand-muted" />
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-brand-text">Copy Key Info</span>
+                                            <Copy size={16} className="text-slate-500 dark:text-slate-400" />
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white">Copy Key Info</span>
                                         </button>
                                         <a
                                             href="https://drive.google.com/drive/folders/1ASIObhRIBO_RX24pc6hhDpeqTV1G6WUX?usp=sharing"
@@ -2137,7 +2162,7 @@ export const ProDashboard = () => {
                                             <TrendingUp size={24} className="text-indigo-500 animate-pulse" />
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-black text-brand-text dark:text-white uppercase tracking-tight leading-none mb-1">Marketing Audit</h3>
+                                            <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">Marketing Audit</h3>
                                             <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-70">
                                                 Global Node: Active • 2026
                                             </p>
@@ -2147,7 +2172,7 @@ export const ProDashboard = () => {
                                         onClick={() => setShowAuditModal(false)}
                                         className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
                                     >
-                                        <X size={20} className="text-brand-text dark:text-white/60" />
+                                        <X size={20} className="text-slate-900 dark:text-white/60" />
                                     </button>
                                 </div>
 
@@ -2157,11 +2182,11 @@ export const ProDashboard = () => {
                                     <div className="space-y-4">
                                         <div className="flex items-center gap-2">
                                             <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
-                                            <h4 className="text-[12px] font-black text-brand-text dark:text-white uppercase tracking-widest">CMO Executive Summary</h4>
+                                            <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">CMO Executive Summary</h4>
                                         </div>
                                         <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-100 dark:border-white/5 relative">
                                             <Quote className="absolute -top-3 -left-3 text-indigo-500/20" size={32} />
-                                            <p className="text-[13px] font-medium text-brand-text dark:text-brand-muted leading-relaxed italic pr-4">
+                                            <p className="text-[13px] font-medium text-slate-900 dark:text-slate-400 leading-relaxed italic pr-4">
                                                 {marketAudit.cmo_summary}
                                             </p>
                                         </div>
@@ -2171,11 +2196,11 @@ export const ProDashboard = () => {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="p-5 bg-indigo-500/5 dark:bg-indigo-500/5 rounded-2xl border border-indigo-500/10 space-y-2">
                                             <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Market Sentiment</p>
-                                            <p className="text-lg font-black text-brand-text dark:text-white uppercase tracking-tight">{marketAudit.market_sentiment}</p>
+                                            <p className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">{marketAudit.market_sentiment}</p>
                                         </div>
                                         <div className="p-5 bg-purple-500/5 dark:bg-purple-500/5 rounded-2xl border border-purple-500/10 space-y-2">
                                             <p className="text-[10px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-widest">Global Shift</p>
-                                            <p className="text-[11px] font-bold text-brand-text dark:text-white leading-tight">{marketAudit.global_trend_shift}</p>
+                                            <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">{marketAudit.global_trend_shift}</p>
                                         </div>
                                     </div>
 
@@ -2184,7 +2209,7 @@ export const ProDashboard = () => {
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-2">
                                                 <div className="w-1.5 h-4 bg-emerald-500 rounded-full" />
-                                                <h4 className="text-[12px] font-black text-brand-text dark:text-white uppercase tracking-widest">Elite News Intelligence (Top 20)</h4>
+                                                <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">Elite News Intelligence (Top 20)</h4>
                                             </div>
                                             <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg">LIVE FEED</span>
                                         </div>
@@ -2201,16 +2226,16 @@ export const ProDashboard = () => {
                                                         <div className="space-y-1">
                                                             <div className="flex items-center gap-2">
                                                                 <span className="px-2 py-0.5 bg-indigo-500/10 rounded-md text-[7px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">{news.source}</span>
-                                                                <span className="text-[7px] font-black text-brand-muted uppercase tracking-[0.2em]">{news.relevance} Relevance</span>
+                                                                <span className="text-[7px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">{news.relevance} Relevance</span>
                                                             </div>
-                                                            <h5 className="text-[14px] font-black text-brand-text dark:text-white leading-tight uppercase group-hover:text-indigo-500 transition-colors">{news.title}</h5>
+                                                            <h5 className="text-[14px] font-black text-slate-900 dark:text-white leading-tight uppercase group-hover:text-indigo-500 transition-colors">{news.title}</h5>
                                                         </div>
                                                         <div className="w-8 h-8 rounded-xl bg-indigo-500/10 dark:bg-white/5 flex items-center justify-center text-xs font-black text-indigo-600 dark:text-indigo-500 border border-indigo-500/20 dark:border-white/5">
                                                             {idx + 1}
                                                         </div>
                                                     </div>
                                                     <div className="p-3 bg-white dark:bg-black/40 rounded-2xl border border-slate-200 dark:border-white/5 space-y-2 shadow-inner">
-                                                        <p className="text-[11px] font-medium text-brand-text dark:text-brand-muted leading-relaxed">
+                                                        <p className="text-[11px] font-medium text-slate-900 dark:text-slate-400 leading-relaxed">
                                                             {news.impact}
                                                         </p>
                                                         <div className="flex items-center gap-2 pt-1">
@@ -2277,20 +2302,20 @@ export const ProDashboard = () => {
                                         <div className="space-y-1">
                                             <div className="flex items-center gap-2">
                                                 <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-[7px] font-black text-indigo-500 uppercase tracking-widest">{selectedArticle.category}</span>
-                                                <span className="text-[7px] font-black text-brand-muted uppercase tracking-widest">{selectedArticle.readTime} min read</span>
+                                                <span className="text-[7px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">{selectedArticle.readTime} min read</span>
                                             </div>
-                                            <h3 className="text-xl font-black text-brand-text uppercase tracking-tight">{selectedArticle.title}</h3>
+                                            <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">{selectedArticle.title}</h3>
                                         </div>
                                         <button
                                             onClick={() => setSelectedArticle(null)}
                                             className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
                                         >
-                                            <X size={18} className="text-brand-text" />
+                                            <X size={18} className="text-slate-900 dark:text-white" />
                                         </button>
                                     </div>
 
                                     <div className="prose prose-sm dark:prose-invert max-h-[60vh] overflow-y-auto no-scrollbar">
-                                        <p className="text-[14px] font-medium leading-relaxed text-brand-muted">
+                                        <p className="text-[14px] font-medium leading-relaxed text-slate-500 dark:text-slate-400">
                                             {selectedArticle.content}
                                         </p>
                                     </div>
@@ -2330,7 +2355,7 @@ export const ProDashboard = () => {
                                             <BookOpen size={24} className="text-indigo-500 dark:text-indigo-400" />
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-black text-brand-text dark:text-white uppercase tracking-tight">
+                                            <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
                                                 {showManual === 'studio' ? t('pro_dashboard.academy.studio_manual.title') :
                                                     showManual === 'tools' ? t('pro_dashboard.tools.headline.title') :
                                                         showManual === 'academy' ? t('pro_dashboard.academy.protocols.title') :
@@ -2351,7 +2376,7 @@ export const ProDashboard = () => {
                                         onClick={() => setShowManual(null)}
                                         className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
                                     >
-                                        <X size={20} className="text-brand-text dark:text-white/60" />
+                                        <X size={20} className="text-slate-900 dark:text-white/60" />
                                     </button>
                                 </div>
 
@@ -2370,8 +2395,8 @@ export const ProDashboard = () => {
                                                         {i + 1}
                                                     </div>
                                                     <div className="space-y-2 pt-1">
-                                                        <h4 className="text-[14px] font-black text-brand-text dark:text-white uppercase tracking-tight">{step.title}</h4>
-                                                        <p className="text-[12px] font-medium text-brand-muted leading-relaxed opacity-80">{step.desc}</p>
+                                                        <h4 className="text-[14px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{step.title}</h4>
+                                                        <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed opacity-80">{step.desc}</p>
                                                     </div>
                                                 </div>
                                             ));
@@ -2380,22 +2405,22 @@ export const ProDashboard = () => {
                                         <div className="space-y-8">
                                             <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 space-y-4 shadow-sm">
                                                 <h4 className="text-[12px] font-black text-pink-600 dark:text-pink-500 uppercase tracking-widest">Viral Headline Fixer</h4>
-                                                <p className="text-[12px] font-medium text-brand-muted leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.headline.desc')}"</p>
-                                                <div className="p-4 bg-white dark:bg-black/20 rounded-2xl border border-slate-100 dark:border-white/5 text-[11px] text-brand-muted leading-relaxed shadow-inner">
+                                                <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.headline.desc')}"</p>
+                                                <div className="p-4 bg-white dark:bg-black/20 rounded-2xl border border-slate-100 dark:border-white/5 text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed shadow-inner">
                                                     Our neural engine analyzes current high-performing hooks and adapts your headline to trigger curiosity loops.
                                                 </div>
                                             </div>
                                             <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 space-y-4 shadow-sm">
                                                 <h4 className="text-[12px] font-black text-amber-600 dark:text-amber-500 uppercase tracking-widest">Viral Bio Generator</h4>
-                                                <p className="text-[12px] font-medium text-brand-muted leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.bio.desc')}"</p>
-                                                <div className="p-4 bg-white dark:bg-black/20 rounded-2xl border border-slate-100 dark:border-white/5 text-[11px] text-brand-muted leading-relaxed shadow-inner">
+                                                <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.bio.desc')}"</p>
+                                                <div className="p-4 bg-white dark:bg-black/20 rounded-2xl border border-slate-100 dark:border-white/5 text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed shadow-inner">
                                                     Optimizes your social identity for conversion. High-converters focus on the 'Benefit' first, not the 'Feature'.
                                                 </div>
                                             </div>
                                         </div>
                                     ) : (
                                         <div className="space-y-6">
-                                            <p className="text-[13px] font-medium text-brand-muted leading-relaxed">
+                                            <p className="text-[13px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
                                                 Follow the elite protocols to maximize your reach. Every asset and lesson is designed for 2026 algorithmic dominance.
                                             </p>
                                             <div className="p-6 bg-indigo-500/5 rounded-[2rem] border border-indigo-500/10 flex items-center gap-5">

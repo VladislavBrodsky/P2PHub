@@ -1515,14 +1515,14 @@
         "elite": "Элита"
     },
     "pro_dashboard": {
-        "title_studio": "Студия Вирусного Маркетинга",
-        "title_tools": "PRO-инструменты",
-        "title_academy": "Влияние",
+        "title_studio": "Вирусная Студия",
+        "title_tools": "Элитные Инструменты",
+        "title_growth": "Чертеж Роста",
         "tokens_left": "{{count}} ТОКЕНОВ",
         "system_offline": "СИСТЕМА ОФФЛАЙН",
         "tab_studio": "Студия",
         "tab_tools": "Инструменты",
-        "tab_academy": "Академия",
+        "tab_growth": "Рост",
         "tab_setup": "Настройки API",
         "locked": {
             "title": "ТОЛЬКО ДЛЯ PRO",
