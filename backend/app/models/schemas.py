@@ -21,7 +21,8 @@ class ActiveTaskResponse(BaseModel):
 
 class PartnerResponse(PartnerBase):
     balance: float
-    total_earned: Optional[float] = 0.0  # Sum of all PRO commissions and earnings
+# #comment: total_earned is now a @computed_field derived from 'total_earned_usdt'
+# to ensure the API matches the frontend contract while using optimized DB fields.
     xp: float
     level: int
     referral_code: str
@@ -29,7 +30,8 @@ class PartnerResponse(PartnerBase):
     pro_notification_seen: bool = False
     pro_tokens: int = 500
     referral_count: int = 0
-    total_network_size: int = 0
+# #comment: total_network_size is now a @computed_field derived from 'referral_count'
+# mapping internal ORM metrics to public API response fields.
     last_checkin_at: Optional[datetime] = None
     checkin_streak: int = 0
     created_at: datetime
