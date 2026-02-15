@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 from typing import Any, List, Optional
 
-from pydantic import BaseModel, Field, computed_field, field_validator
+from pydantic import BaseModel, Field, computed_field, field_validator, model_validator
 
 
 class PartnerBase(BaseModel):
@@ -55,42 +55,60 @@ class PartnerResponse(PartnerBase):
     class Config:
         from_attributes = True
 
-    @field_validator("active_tasks", mode="before")
+    @model_validator(mode="before")
     @classmethod
-    def map_active_tasks(cls, v, info: Any):
-        # info.data will contain other fields if already validated
-        # but since this is mode='before', we check if v is an ORM object
-        if hasattr(v, "completed_task_records"):
-             return [
-                 ActiveTaskResponse(
-                     task_id=tr.task_id,
-                     status=tr.status,
-                     initial_metric_value=tr.initial_metric_value,
-                     started_at=tr.started_at
-                 ) for tr in v.completed_task_records if tr.status == "STARTED"
-             ]
-        return v if isinstance(v, list) else []
-
-    @field_validator("completed_tasks", mode="before")
-    @classmethod
-    def parse_tasks_json(cls, v, info: Any):
-        if hasattr(v, "completed_task_records"):
-            ids = [tr.task_id for tr in v.completed_task_records if tr.status == "COMPLETED" or not tr.status]
-            return json.dumps(ids)
-        return v if isinstance(v, str) else "[]"
-
-    @field_validator("completed_stages", mode="before")
-    @classmethod
-    def parse_stages_json(cls, v):
-        if hasattr(v, "completed_stages"): # If it's the model
-             v = v.completed_stages
-        if isinstance(v, str):
+    def prepare_orm_data(cls, data: Any) -> Any:
+        if not isinstance(data, dict) and hasattr(data, "completed_task_records"):
+            # It's a Partner ORM model
+            obj = data
+            
+            # Use model_dump or similar to get all base fields
+            # Since SQLModel objects don't always have model_dump in this context,
+            # we can iterate through the schema's fields.
+            result = {}
+            for field_name in cls.model_fields:
+                if hasattr(obj, field_name):
+                    result[field_name] = getattr(obj, field_name)
+            
+            # Prepare the list of completed IDs from relational records
+            record_completed_ids = [
+                tr.task_id for tr in obj.completed_task_records 
+                if tr.status == "COMPLETED" or not tr.status
+            ]
+            
+            # Prepare legacy IDs
             try:
-                raw = json.loads(v)
-                return [s for s in raw if isinstance(s, (int, str))]
+                legacy_ids = json.loads(obj.completed_tasks or "[]")
             except:
-                return []
-        return v if isinstance(v, list) else []
+                legacy_ids = []
+            
+            # Merge and unique
+            all_completed = list(set(legacy_ids + record_completed_ids))
+            
+            # Extract active tasks
+            active_tasks = [
+                {
+                    "task_id": tr.task_id,
+                    "status": tr.status,
+                    "initial_metric_value": tr.initial_metric_value,
+                    "started_at": tr.started_at
+                } for tr in obj.completed_task_records if tr.status == "STARTED"
+            ]
+            
+            # Parse completed stages
+            try:
+                stages = json.loads(obj.completed_stages or "[]")
+            except:
+                stages = []
+
+            result['completed_tasks'] = json.dumps(all_completed)
+            result['active_tasks'] = active_tasks
+            result['completed_stages'] = stages
+            
+            # Manual mappings for computed fields if they are in model_fields
+            # Pydantic v2 handles computed_fields automatically if we return a dict
+            return result
+        return data
 
     @computed_field
     @property

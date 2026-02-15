@@ -11,7 +11,7 @@ export const ReferralWidget = ({ onInvite, onShowQR }: ReferralWidgetProps) => {
     const { t } = useTranslation();
 
     return (
-        <div className="mt-2 mb-8 relative w-full h-14">
+        <div className="mt-2 mb-4 relative w-full h-14">
             <button
                 onClick={onInvite}
                 className="w-full h-14 rounded-full flex items-center justify-center gap-2.5 font-black text-white active:scale-95 transition-all relative overflow-hidden group shadow-[0_8px_20px_-5px_rgba(37,99,235,0.5)] bg-blue-600 hover:bg-blue-500 px-16 will-change-transform"

@@ -55,14 +55,12 @@ export const TaskGrid = ({
                 if (isClaimableTimed) return 4; // Claimable - highest
 
                 if (task.type === 'referral' || task.type === 'action' || task.type === 'academy') {
-                    if (activeTask || task.type === 'academy') { // Academy tasks are auto-tracked
-                        const val = task.type === 'referral' ? referrals :
-                            task.type === 'action' ? checkinStreak :
-                                (completedStages?.length || 0);
+                    const val = task.type === 'referral' ? referrals :
+                        task.type === 'action' ? checkinStreak :
+                            (completedStages?.length || 0);
 
-                        if (val >= (task.requirement || 0)) return 4; // Claimable
-                        return 2; // Started
-                    }
+                    if (val >= (task.requirement || 0)) return 4; // Claimable
+                    if (activeTask || task.id === 'academy_basics') return 2; // Started
                 }
                 return 1; // Available
             };
@@ -103,31 +101,19 @@ export const TaskGrid = ({
                         else if (isLocked) status = 'LOCKED';
                         else if (isVerifying) status = 'VERIFYING';
                         else if (isClaimableTimed) status = 'CLAIMABLE';
-                        else if (task.type === 'referral') {
-                            if (activeTask) {
-                                effectiveProgress = Math.max(0, referrals);
-                                if (effectiveProgress >= (task.requirement || 0)) status = 'CLAIMABLE';
-                                else status = 'STARTED';
+                        else if (task.type === 'referral' || task.type === 'action' || task.type === 'academy') {
+                            const val = task.type === 'referral' ? referrals :
+                                task.type === 'action' ? checkinStreak :
+                                    (completedStages?.length || 0);
+
+                            effectiveProgress = val;
+                            if (val >= (task.requirement || 0)) {
+                                status = 'CLAIMABLE';
+                            } else if (activeTask || task.id === 'academy_basics') {
+                                status = 'STARTED';
                             } else {
                                 status = 'AVAILABLE';
-                                effectiveProgress = referrals;
                             }
-                        }
-                        else if (task.type === 'action') {
-                            if (activeTask) {
-                                effectiveProgress = Math.max(0, checkinStreak);
-                                if (effectiveProgress >= (task.requirement || 0)) status = 'CLAIMABLE';
-                                else status = 'STARTED';
-                            } else {
-                                status = 'AVAILABLE';
-                                effectiveProgress = checkinStreak;
-                            }
-                        }
-                        else if (task.type === 'academy') {
-                            const count = completedStages?.length || 0;
-                            effectiveProgress = count;
-                            if (count >= (task.requirement || 0)) status = 'CLAIMABLE';
-                            else status = 'STARTED';
                         }
 
                         return (

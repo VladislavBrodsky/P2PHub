@@ -786,8 +786,9 @@ async def claim_task_reward(
     partner_task_record = next((pt for pt in partner.completed_task_records if pt.task_id == task_id), None)
     
     if task_type in ['referral', 'action']:
-        if not partner_task_record or partner_task_record.status != "STARTED":
-             raise HTTPException(status_code=400, detail="Task must be started first")
+        # Milestones (Absolute Checks) can be claimed without an explicit STARTED record
+        # if the user already met the requirements (e.g. they have 50 referrals).
+        pass
 
         current_value = 0
         if task_type == 'referral':
@@ -806,6 +807,16 @@ async def claim_task_reward(
              if task_type == 'academy':
                  detail_msg = f"Academy milestone not reached: {current_value}/{requirement} stages completed."
              raise HTTPException(status_code=400, detail=detail_msg)
+             
+    # 2.5 VALIDATION: Legacy Sync Check
+    try:
+        legacy_completed = json.loads(partner.completed_tasks or "[]")
+        if task_id in legacy_completed:
+             raise HTTPException(status_code=400, detail="Task already completed")
+    except HTTPException:
+        raise
+    except:
+        pass
 
     # 3. Check if task already completed in the new table
     if partner_task_record and partner_task_record.status == "COMPLETED":

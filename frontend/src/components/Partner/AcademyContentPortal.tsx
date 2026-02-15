@@ -276,8 +276,9 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                     <motion.div
                                         initial={{ opacity: 0, y: 10 }}
                                         whileInView={{ opacity: 1, y: 0 }}
-                                        className="p-6 rounded-[2rem] bg-slate-900 dark:bg-white/5 border border-slate-800 dark:border-white/10 space-y-5"
+                                        className="p-6 rounded-[2rem] bg-slate-900 dark:bg-white/5 border border-slate-800 dark:border-white/10 space-y-5 relative overflow-hidden group/mission"
                                     >
+                                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover/mission:translate-x-full transition-transform duration-1000 pointer-events-none" />
                                         <div className="flex items-center gap-3">
                                             <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
                                                 <Target className="w-4 h-4" />
@@ -288,20 +289,20 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                         <div
                                             onClick={() => setMissionAccomplished(!missionAccomplished)}
                                             className={`p-4 rounded-xl border-2 transition-all cursor-pointer flex items-center gap-4 ${missionAccomplished
-                                                    ? 'bg-blue-500/10 border-blue-500 text-blue-400'
-                                                    : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
+                                                ? 'bg-blue-500/10 border-blue-500 text-blue-400'
+                                                : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
                                                 }`}
                                         >
-                                            <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${missionAccomplished ? 'bg-blue-500 border-blue-500' : 'border-white/20'
+                                            <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${missionAccomplished ? 'bg-blue-500 border-blue-500 rotate-0 scale-110 shadow-lg shadow-blue-500/20' : 'border-white/20 rotate-45 group-hover:rotate-0 group-hover:border-white/40'
                                                 }`}>
-                                                {missionAccomplished && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                                                {missionAccomplished ? <CheckCircle2 className="w-4 h-4 text-white" /> : <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />}
                                             </div>
                                             <span className="text-[13px] font-bold leading-tight">
                                                 {t(`academy_content.stage_${stage.id}_lesson_mission`, { defaultValue: t('academy.apply_knowledge') })}
                                             </span>
                                         </div>
 
-                                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.1em] text-center pt-2">
+                                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-center pt-2">
                                             {missionAccomplished ? t('academy.mission_ready') : t('academy.mission_pending')}
                                         </p>
                                     </motion.div>
@@ -318,8 +319,8 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                             onClick={() => missionAccomplished && onComplete(stage.id)}
                             disabled={!missionAccomplished}
                             className={`w-full py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-4 border touch-manipulation relative overflow-hidden ${missionAccomplished
-                                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-white/5 shadow-[0_20px_40px_rgba(0,0,0,0.3)] active:scale-95 brightness-110'
-                                    : 'bg-slate-100 dark:bg-white/5 text-slate-400 border-slate-200 dark:border-white/10 opacity-50 grayscale cursor-not-allowed shadow-none'
+                                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-white/5 shadow-[0_20px_40px_rgba(0,0,0,0.3)] active:scale-95 brightness-110'
+                                : 'bg-slate-100 dark:bg-white/5 text-slate-400 border-slate-200 dark:border-white/10 opacity-50 grayscale cursor-not-allowed shadow-none'
                                 }`}
                         >
                             {missionAccomplished && (

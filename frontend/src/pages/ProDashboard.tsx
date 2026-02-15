@@ -494,8 +494,8 @@ export const ProDashboard = () => {
                         {(['studio', 'tools', 'academy'] as Tab[]).map((tab) => (
                             <button
                                 key={tab}
-                                onClick={() => { setActiveTab(tab); selection(); }}
-                                className={`flex-1 h-10 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all relative z-10 flex items-center justify-center gap-2 ${activeTab === tab
+                                onClick={() => { setActiveTab(tab as any); selection(); impact('light'); }}
+                                className={`relative px-5 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 min-w-[90px] ${activeTab === tab
                                     ? 'text-white'
                                     : 'text-brand-muted hover:text-brand-text'
                                     }`}

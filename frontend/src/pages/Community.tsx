@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useHaptic } from '../hooks/useHaptic';
 import { PartnerDashboard } from '../components/Partner/PartnerDashboard';
@@ -9,12 +9,19 @@ import { useTranslation } from 'react-i18next';
 export default function CommunityPage() {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState<'dashboard' | 'academy'>('dashboard');
-    const { selection } = useHaptic();
+    const { selection, impact } = useHaptic();
 
     const handleTabChange = (tab: 'dashboard' | 'academy') => {
         selection();
+        impact('light');
         setActiveTab(tab);
     };
+
+    // Reset scroll on sub-tab change
+    useEffect(() => {
+        const main = document.querySelector('main');
+        if (main) main.scrollTop = 0;
+    }, [activeTab]);
 
     return (
         <div className="flex flex-col min-h-screen px-4 pb-32 relative bg-slate-50 dark:bg-[#020617] transition-colors duration-300">
@@ -31,7 +38,7 @@ export default function CommunityPage() {
                 <div className="p-1 rounded-2xl bg-slate-100/50 dark:bg-black/20 border border-white/5 backdrop-blur-2xl flex items-center relative gap-1 shadow-inner overflow-hidden">
                     {/* Sliding Background */}
                     <motion.div
-                        className="absolute inset-y-1 rounded-xl bg-white dark:bg-white/10 shadow-[0_2px_10px_rgba(0,0,0,0.1)] dark:shadow-premium border border-white/10 z-0"
+                        className="absolute inset-y-1 rounded-xl bg-white dark:bg-white/10 shadow-[0_2px_10px_rgba(0,0,0,0.1)] dark:shadow-premium border border-white/10 z-0 pointer-events-none"
                         layout={false}
                         initial={false}
                         animate={{
@@ -48,24 +55,26 @@ export default function CommunityPage() {
                         }}
                     />
 
-                    <button
+                    <motion.button
+                        whileTap={{ scale: 0.97 }}
                         onClick={() => handleTabChange('dashboard')}
                         className={cn(
-                            "relative z-10 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest transition-all w-28 text-center",
+                            "relative z-10 px-4 py-3.5 text-[10px] font-black uppercase tracking-widest transition-all w-28 text-center",
                             activeTab === 'dashboard' ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300"
                         )}
                     >
                         {t('community.tabs.dashboard')}
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
+                        whileTap={{ scale: 0.97 }}
                         onClick={() => handleTabChange('academy')}
                         className={cn(
-                            "relative z-10 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest transition-all w-28 text-center",
+                            "relative z-10 px-4 py-3.5 text-[10px] font-black uppercase tracking-widest transition-all w-28 text-center",
                             activeTab === 'academy' ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300"
                         )}
                     >
                         {t('community.tabs.academy')}
-                    </button>
+                    </motion.button>
                 </div>
             </div>
 

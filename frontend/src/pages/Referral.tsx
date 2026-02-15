@@ -297,7 +297,7 @@ export default function ReferralPage() {
     }
 
     return (
-        <div className="flex flex-col min-h-[90vh] px-4 pt-4 pb-32 relative">
+        <div className="flex flex-col min-h-[90vh] px-4 pt-4 pb-20 relative">
             {confettiActive && <Confetti />}
 
             <AnimatePresence>
@@ -510,9 +510,9 @@ export default function ReferralPage() {
                 )}
             </AnimatePresence>
 
-            <h1 className="text-3xl font-black mb-2 tracking-tighter text-gradient-primary text-center">{t('referral.title')}</h1>
+            <h1 className="text-2xl font-black mb-1 tracking-tighter text-gradient-primary text-center">{t('referral.title')}</h1>
 
-            <div className="flex justify-center mb-6">
+            <div className="flex justify-center mb-4">
                 <button
                     onClick={() => setShowBriefModal(true)}
                     className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold text-blue-500 hover:bg-slate-900/10 dark:hover:bg-white/10 transition-all active:scale-95"
@@ -525,12 +525,12 @@ export default function ReferralPage() {
             <BriefTermsModal isOpen={showBriefModal} onClose={() => setShowBriefModal(false)} />
 
             {/* Content Stack - Optimized for stability and z-index safety */}
-            <div className="flex flex-col gap-4 relative w-full">
-                <div className="relative min-h-[200px]">
+            <div className="flex flex-col gap-3 relative w-full">
+                <div className="relative min-h-[160px]">
                     <EarnHeader />
                 </div>
 
-                <div className="relative z-10 mt-2">
+                <div className="relative z-10 mt-0">
                     <ReferralWidget onInvite={() => setShowShareModal(true)} onShowQR={() => setShowQR(true)} />
                 </div>
 
@@ -565,7 +565,7 @@ export default function ReferralPage() {
                 />
             </div>
 
-            <div className="h-24" />
+            <div className="h-12" />
         </div>
     );
 }
