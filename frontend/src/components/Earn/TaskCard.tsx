@@ -62,7 +62,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
     return (
         <motion.div
             layout
-            className={`relative rounded-[2rem] p-6 border transition-all duration-500 overflow-hidden ${variants[status]}`}
+            className={`relative rounded-3xl p-4 border transition-all duration-500 overflow-hidden ${variants[status]}`}
             onClick={handleCardClick}
             whileHover={isAvailable || isClaimable || isStarted ? { y: -3, scale: 1.01 } : {}}
             whileTap={isAvailable || isClaimable || isStarted ? { scale: 0.985 } : {}}
@@ -86,10 +86,10 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                 </div>
             )}
 
-            <div className="flex items-start gap-5 relative z-10">
+            <div className="flex items-start gap-4 relative z-10">
                 {/* Icon Container - Premium Circle Style */}
                 <div className="shrink-0 relative">
-                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border transition-all duration-700 ${isClaimable
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-700 ${isClaimable
                         ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.5)] rotate-3'
                         : isCompleted
                             ? 'bg-emerald-500/10 text-emerald-500/40 border-emerald-500/10'
@@ -107,79 +107,58 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start">
-                        <div className="flex flex-col gap-0.5 min-w-0 flex-1 pr-2">
-                            <h4 className="text-base font-black text-slate-900 dark:text-white tracking-tight truncate leading-tight">
+                    <div className="flex flex-col gap-1">
+                        <div className="flex justify-between items-center gap-2">
+                            <h4 className="text-sm font-black text-slate-900 dark:text-white tracking-tight truncate leading-none">
                                 {task.title}
                             </h4>
-                            <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 line-clamp-1 opacity-70 group-hover/card:opacity-100 transition-opacity uppercase tracking-tight">
-                                {task.description}
-                            </p>
-                        </div>
-
-                        {/* XP Badge - Premium Floating Tablet */}
-                        {!isCompleted && (
-                            <div className="shrink-0 flex flex-col items-end">
-                                <div className={`px-3 py-1.5 rounded-xl border font-black text-xs transition-all duration-500 ${isClaimable
-                                    ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_5px_15px_rgba(16,185,129,0.3)]'
-                                    : 'bg-blue-500 text-white border-blue-400 shadow-premium-sm group-hover/card:shadow-blue-500/20'
-                                    }`}>
-                                    +{reward} XP
+                            {!isCompleted && (
+                                <div className="shrink-0 flex items-center gap-1">
+                                    <div className={`px-1.5 py-0.5 rounded-md border font-black text-[9px] transition-all duration-500 ${isClaimable
+                                        ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_2px_8px_rgba(16,185,129,0.3)]'
+                                        : 'bg-blue-500 text-white border-blue-400 shadow-premium-sm'
+                                        }`}>
+                                        +{reward} XP
+                                    </div>
+                                    {isPro && (
+                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" title={t('tasks.pro_multiplier')} />
+                                    )}
                                 </div>
-                                {isPro && (
-                                    <span className="text-[8px] font-black text-emerald-500 uppercase tracking-tighter mt-1 animate-pulse">
-                                        {t('tasks.pro_multiplier')}
-                                    </span>
-                                )}
-                            </div>
-                        )}
+                            )}
+                        </div>
+                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 line-clamp-1 opacity-70 group-hover/card:opacity-100 transition-opacity uppercase tracking-tight leading-none">
+                            {task.description}
+                        </p>
                     </div>
 
                     {/* Progress Segment */}
                     {(task.type === 'referral' || task.type === 'action') && (
-                        <div className="mt-5 space-y-2">
-                            <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
-                                <span className="flex items-center gap-2 text-slate-400 dark:text-slate-500">
-                                    <div className={`w-1.5 h-1.5 rounded-full ${task.type === 'referral' ? 'bg-blue-400' : 'bg-emerald-400'}`} />
+                        <div className="mt-2.5 space-y-1">
+                            <div className="flex justify-between text-[8px] font-black uppercase tracking-wider">
+                                <span className="flex items-center gap-1.5 text-slate-400">
+                                    <div className={`w-1 h-1 rounded-full ${task.type === 'referral' ? 'bg-blue-400' : 'bg-emerald-400'}`} />
                                     {t('tasks.progress')}
                                 </span>
                                 <span className="text-slate-900 dark:text-white tracking-tighter">
                                     <span className="text-blue-500 dark:text-blue-400">{Math.min(currentProgress, task.requirement || 0)}</span>
-                                    <span className="mx-1 opacity-20">/</span>
+                                    <span className="mx-0.5 opacity-20">/</span>
                                     <span className="opacity-60">{task.requirement}</span>
-                                    {isStarted && currentProgress < (task.requirement || 0) && (
-                                        <span className="ml-2 text-[8px] font-black text-blue-500 lowercase opacity-80 underline underline-offset-2">
-                                            ({(task.requirement || 0) - currentProgress} more)
-                                        </span>
-                                    )}
                                 </span>
                             </div>
-                            <div className="h-2 w-full bg-slate-100 dark:bg-slate-800/80 rounded-full overflow-hidden p-0.5 border border-slate-200 dark:border-white/5 shadow-inner">
+                            <div className="h-1 w-full bg-slate-100 dark:bg-slate-800/80 rounded-full overflow-hidden border border-slate-200 dark:border-white/5 shadow-inner">
                                 <motion.div
                                     className="h-full rounded-full relative"
                                     style={{
                                         background: task.type === 'referral'
                                             ? 'linear-gradient(90deg, #3b82f6, #60a5fa)'
                                             : 'linear-gradient(90deg, #10b981, #34d399)',
-                                        boxShadow: task.type === 'referral'
-                                            ? '0 0 15px rgba(59, 130, 246, 0.4)'
-                                            : '0 0 15px rgba(16, 185, 129, 0.4)'
                                     }}
                                     initial={{ width: 0 }}
                                     animate={{
                                         width: `${Math.min((currentProgress / (task.requirement || 1)) * 100, 100)}%`
                                     }}
                                     transition={{ type: 'spring', damping: 25, stiffness: 100 }}
-                                >
-                                    {/* Glass reflection layer */}
-                                    <div className="absolute inset-0 bg-linear-to-b from-white/30 to-transparent" />
-                                    {/* Scanline Animation */}
-                                    <motion.div
-                                        animate={{ x: ['-200%', '400%'] }}
-                                        transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                                        className="absolute inset-0 w-1/4 bg-linear-to-r from-transparent via-white/50 to-transparent skew-x-12"
-                                    />
-                                </motion.div>
+                                />
                             </div>
                         </div>
                     )}
@@ -188,16 +167,16 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
 
             {/* Action Area */}
             {!isCompleted && !isLocked && (
-                <div className="mt-6 flex items-center justify-between">
+                <div className="mt-4 pt-4 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
                         <div className={`w-1.5 h-1.5 rounded-full ${isClaimable ? 'bg-emerald-500 animate-pulse' : 'bg-blue-400 opacity-20'}`} />
-                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest opacity-60">Mission Status</span>
+                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest opacity-60">Status</span>
                     </div>
 
                     {isClaimable ? (
                         <button
                             disabled={isClaiming}
-                            className={`bg-emerald-500 hover:bg-emerald-400 text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95 ${isClaiming ? 'opacity-80 cursor-wait' : ''}`}
+                            className={`bg-emerald-500 hover:bg-emerald-400 text-white px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95 ${isClaiming ? 'opacity-80 cursor-wait' : ''}`}
                             onClick={async (e) => {
                                 e.stopPropagation();
                                 setIsClaiming(true);
@@ -225,7 +204,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                         </div>
                     ) : (
                         <button
-                            className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 group/btn ${isStarted
+                            className={`px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 group/btn ${isStarted
                                 ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20'
                                 : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-premium-sm hover:shadow-premium-lg'
                                 }`}
@@ -247,10 +226,10 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
             )}
 
             {isCompleted && (
-                <div className="mt-6 flex items-center justify-center">
-                    <div className="bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/20 px-6 py-2 rounded-2xl flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500 animate-in zoom-in duration-500" />
-                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Protocol Accomplished</span>
+                <div className="mt-4 flex items-center justify-center">
+                    <div className="bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/20 px-4 py-1.5 rounded-xl flex items-center gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 animate-in zoom-in duration-500" />
+                        <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Accomplished</span>
                     </div>
                 </div>
             )}

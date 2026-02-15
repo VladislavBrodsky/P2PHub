@@ -496,7 +496,7 @@ export default function ReferralPage() {
 
             {/* Content Stack - Optimized for stability and z-index safety */}
             <div className="flex flex-col gap-4 relative w-full">
-                <div className="relative min-h-[380px]">
+                <div className="relative min-h-[200px]">
                     <EarnHeader />
                 </div>
 

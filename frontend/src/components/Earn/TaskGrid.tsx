@@ -69,18 +69,18 @@ export const TaskGrid = ({
     }, [visibleTasks, currentLevel, verifyingTasks, claimableTasks, activeTasks, referrals, checkinStreak]);
 
     return (
-        <div className="space-y-6">
-            <div className="flex items-center justify-between px-2">
-                <h3 className="text-lg font-bold flex items-center gap-2 text-text-primary">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+        <div className="space-y-4">
+            <div className="flex items-center justify-between px-1">
+                <h3 className="text-base font-black flex items-center gap-2 text-slate-900 dark:text-white uppercase tracking-tight">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
                     {t('tasks.active_missions')}
                 </h3>
-                <span className="text-xs font-semibold text-brand-muted glass-panel px-3 py-1 rounded-lg">
+                <span className="text-[10px] font-black text-slate-400 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-md uppercase tracking-widest">
                     {tasks.filter(t => !completedTaskIds.includes(t.id)).length} {t('tasks.available')}
                 </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {sortedTasks.length > 0 ? (
                     sortedTasks.map((task) => {
                         const isLocked = Number(currentLevel) < Number(task.minLevel);
