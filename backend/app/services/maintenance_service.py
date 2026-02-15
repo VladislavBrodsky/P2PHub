@@ -9,8 +9,20 @@ from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.models.partner import Partner, engine
+from app.worker import broker
 
 logger = logging.getLogger(__name__)
+
+@broker.task(schedule=[{"cron": "*/30 * * * *"}])
+async def refresh_admin_stats():
+    """
+    Scheduled task to recalculate and cache admin dashboard KPIs.
+    Runs every 30 minutes to ensure metrics are fresh while protecting DB performance.
+    """
+    from app.services.admin_service import admin_service
+    logger.info("📡 Scheduled Task: Refreshing Admin Dashboard Stats...")
+    await admin_service.get_dashboard_stats(force_refresh=True)
+    logger.info("✅ Admin stats successfully refreshed by scheduler.")
 
 async def reconcile_network_stats(session_override: AsyncSession = None) -> dict[str, Any]:
     """

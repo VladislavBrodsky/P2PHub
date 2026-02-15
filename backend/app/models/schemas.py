@@ -25,6 +25,9 @@ class ActiveTaskResponse(BaseModel):
     initial_metric_value: int
     started_at: datetime
 
+    class Config:
+        from_attributes = True
+
 class PartnerResponse(PartnerBase):
     balance: float
 # #comment: total_earned is now a @computed_field derived from 'total_earned_usdt'
@@ -155,11 +158,17 @@ class NetworkStats(BaseModel):
     level_8: int = 0
     level_9: int = 0
 
+    class Config:
+        from_attributes = True
+
 class GrowthMetrics(BaseModel):
     growth_pct: float
     current_count: int
     previous_count: int
     timeframe: str
+
+    class Config:
+        from_attributes = True
 
 class EarningSchema(BaseModel):
     amount: float

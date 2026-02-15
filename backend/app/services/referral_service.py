@@ -122,21 +122,34 @@ async def process_referral_logic(partner_id: int):
                     logger.warning(f"⚠️ Ancestor {current_referrer_id} not found in map for partner {partner_id} at level {level}")
                     break
 
+            # 1. Calculate all rewards in a single memory pass
+            # #comment: We calculate everything first to minimize DB transaction time.
+            # Long-running transactions during growth spikes lead to row locks and deadlocks.
+            updates_to_apply = []
+            xp_txs_to_add = []
+            
+            for level in range(1, 10):
+                if not current_referrer_id:
+                    break
+
+                referrer = ancestor_map.get(current_referrer_id)
+                if not referrer:
+                    logger.warning(f"⚠️ Ancestor {current_referrer_id} not found in map for partner {partner_id}")
+                    break
+
                 try:
-                    # 1. Award XP
+                    # 1.1 Calculate XP
                     xp_gain = settings.REFERRAL_XP_MAP.get(level, 0)
                     if referrer.is_pro:
                         xp_gain *= settings.PRO_XP_MULTIPLIER
 
                     xp_before = referrer.xp
-
-                    await session.execute(
-                        text("UPDATE partner SET xp = xp + :gain, referral_count = referral_count + 1 WHERE id = :p_id"),
-                        {"gain": xp_gain, "p_id": referrer.id}
-                    )
-                    await session.flush()
-                    await session.refresh(referrer)
-
+                    
+                    # 1.2 Update Referrer Object (in-memory)
+                    referrer.xp += xp_gain
+                    referrer.referral_count += 1
+                    
+                    # 1.3 Record XP Transaction
                     xp_tx = XPTransaction(
                         partner_id=referrer.id,
                         amount=xp_gain,
@@ -144,9 +157,9 @@ async def process_referral_logic(partner_id: int):
                         description=f"Referral XP Reward (L{level})",
                         reference_id=str(partner.id)
                     )
-                    session.add(xp_tx)
+                    xp_txs_to_add.append(xp_tx)
 
-                    # 2. Audit & Notification Data
+                    # 1.4 Audit Data (Now added without immediate flush)
                     await audit_service.log_xp_award(
                         session=session,
                         partner_id=referrer.id,
@@ -158,7 +171,7 @@ async def process_referral_logic(partner_id: int):
                         xp_after=referrer.xp,
                     )
 
-                    # 3. Level Up Logic
+                    # 1.5 Level Up Logic (in-memory check)
                     new_level = get_level(referrer.xp)
                     if new_level > referrer.level:
                         deferred_tasks.append(
@@ -170,33 +183,27 @@ async def process_referral_logic(partner_id: int):
                             )
                         )
                         referrer.level = new_level
-                        session.add(referrer)
 
-                    # 4. Queue Redis Invalidation
+                    # 1.6 Stage Redis Invalidation
                     await leaderboard_service.update_score(referrer.id, referrer.xp)
                     redis_pipe.delete(f"partner:profile:{referrer.telegram_id}")
                     redis_pipe.delete(f"partner:earnings:{referrer.telegram_id}")
                     redis_pipe.delete(f"ref_tree_stats_v2:{referrer.id}")
-                    # Clear member lists for the affected level
                     redis_pipe.delete(f"ref_tree_members_v2:{referrer.id}:{level}")
                     for tf in ["24H", "7D", "1M", "3M", "6M", "1Y"]:
                         redis_pipe.delete(f"growth_metrics:{referrer.id}:{tf}")
 
-                    # 5. Build Referral Chain for deeper levels
-                    # Chain: You ← Ref A ← Ref B ... ← New User
+                    # 1.7 Prepare Data for the next level
                     chain_text = " ← ".join([*chain_list, new_partner_name])
                     chain_list.append(format_partner_name(referrer))
-
-                    # 6. Queue Notification with CORRECT Keys
-                    lang = referrer.language_code or "en"
                     
-                    # #comment: Add interactive "Premium" buttons to the notification.
-                    # Direct links to the app increase engagement and user retention.
+                    # 1.8 Queue Notification
+                    lang = referrer.language_code or "en"
                     buttons = [[
                         {"text": "📊 View Network", "web_app": {"url": f"{settings.FRONTEND_URL}?start_param=network"}},
                         {"text": "🚀 Open App", "web_app": {"url": settings.FRONTEND_URL}}
                     ]]
-
+                    
                     if level == 1:
                         msg = get_msg(lang, "referral_l1_congrats", name=new_partner_name, xp=xp_gain)
                     elif level == 2:
@@ -209,14 +216,19 @@ async def process_referral_logic(partner_id: int):
                         text=msg,
                         buttons=buttons
                     ))
+                    
+                    session.add(referrer) # Stage for bulk commit
 
                 except Exception as core_error:
                     sentry_sdk.capture_exception(core_error)
-                    logger.error(f"❌ Failed level {level} rewards for {referrer.id}: {core_error}")
+                    logger.error(f"❌ Failed level {level} processing for {referrer.id}: {core_error}")
                 
                 current_referrer_id = referrer.referrer_id
 
-            # 7. Finalize batch operations
+            # 2. Bulk Add Transactions
+            session.add_all(xp_txs_to_add)
+
+            # 3. Finalize batch operations
             await session.commit()
             
             # #comment: Execute Redis invalidations after DB commit to ensure consistency.
@@ -254,6 +266,10 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     )
 
     current_referrer_id = partner.referrer_id
+    earnings_to_add = []
+    redis_pipe = redis_service.client.pipeline(transaction=True)
+    deferred_notifications = []
+
     for level in range(1, 10):
         if not current_referrer_id:
             break
@@ -266,18 +282,12 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
         commission = total_amount * pct
 
         if commission > 0:
-            # Capture state for audit
+            # 1. Update Object State (In-Memory)
             balance_before = referrer.balance
+            referrer.balance += commission
+            referrer.total_earned_usdt += commission
 
-            await session.execute(
-                text("UPDATE partner SET balance = balance + :comm, total_earned_usdt = total_earned_usdt + :comm WHERE id = :p_id"),
-                {"comm": commission, "p_id": referrer.id}
-            )
-
-            # Refresh to get updated balance
-            await session.flush()
-            await session.refresh(referrer)
-
+            # 2. Record Earning
             earning = Earning(
                 partner_id=referrer.id,
                 amount=commission,
@@ -286,8 +296,9 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 level=level,
                 currency="USDT"
             )
-            session.add(earning)
+            earnings_to_add.append(earning)
 
+            # 3. Log Audit (No flush)
             await audit_service.log_commission(
                 session=session,
                 partner_id=referrer.id,
@@ -298,32 +309,39 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 balance_after=referrer.balance,
             )
 
-            # Batch Redis Invalidation
-            async with redis_service.client.pipeline(transaction=True) as pipe:
-                pipe.delete(f"partner:profile:{referrer.telegram_id}")
-                pipe.delete(f"partner:earnings:{referrer.telegram_id}")
-                await pipe.execute()
+            # 4. Stage Redis Invalidation
+            redis_pipe.delete(f"partner:profile:{referrer.telegram_id}")
+            redis_pipe.delete(f"partner:earnings:{referrer.telegram_id}")
 
+            # 5. Prepare Notification
             try:
                 lang = referrer.language_code or "en"
-                # #comment: Embed "Check Balance" button in commission alerts.
-                # Direct links to financial summaries drive repetitive app usage and
-                # reinforce the reward value of being a partner.
                 buttons = [[
                     {"text": "💰 Check Balance", "web_app": {"url": settings.FRONTEND_URL}},
                     {"text": "🚀 Open App", "web_app": {"url": settings.FRONTEND_URL}}
                 ]]
-
-                # Fixed: Use CORRECT key from i18n.py (commission_received)
                 buyer_name = format_partner_name(partner)
                 msg = get_msg(lang, "commission_received", amount=round(commission, 2), level=level, from_user=buyer_name)
-                await notification_service.enqueue_notification(
+                
+                # Push to list for final parallel dispatch
+                deferred_notifications.append(notification_service.enqueue_notification(
                     chat_id=int(referrer.telegram_id), 
                     text=msg,
                     buttons=buttons
-                )
+                ))
             except Exception as e:
-                sentry_sdk.capture_exception(e)
-                logger.error(f"Failed to notify {referrer.id} about commission: {e}")
+                logger.error(f"Failed to prepare notification for {referrer.id}: {e}")
+
+            session.add(referrer) # Stage for bulk commit
 
         current_referrer_id = referrer.referrer_id
+    
+    # 6. Finalize Batch Changes
+    if earnings_to_add:
+        session.add_all(earnings_to_add)
+        await session.commit()
+        await redis_pipe.execute()
+        
+        # 7. Dispatch Notifications in parallel
+        if deferred_notifications:
+            await asyncio.gather(*deferred_notifications, return_exceptions=True)

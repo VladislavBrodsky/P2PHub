@@ -44,11 +44,31 @@ class AdminService:
                 "count": broadcast_count
             }
 
-    async def get_dashboard_stats(self) -> dict[str, Any]:
+    async def get_dashboard_stats(self, force_refresh: bool = False) -> dict[str, Any]:
         """
         Calculates KPIs for the admin dashboard.
+        Uses SystemSetting as a materialized cache to prevent O(N) query sprawl.
+        #comment: This is critical for scaling. Real-time aggregation of 100K+ records 
+        # on every page refresh is a major performance bottleneck.
         """
+        from app.models.partner import SystemSetting
+        import json
+
         async for session in get_session():
+            # 1. Try to return cached snapshot if not forcing refresh
+            if not force_refresh:
+                cache_stmt = select(SystemSetting).where(SystemSetting.key == "cache:admin_stats")
+                cache_item = (await session.exec(cache_stmt)).first()
+                if cache_item:
+                    try:
+                        data = json.loads(cache_item.value)
+                        # Add a flag to show data freshness
+                        data["cached_at"] = cache_item.updated_at.isoformat()
+                        return data
+                    except Exception as e:
+                        logger.warning(f"Failed to parse admin_stats cache: {e}")
+
+            # 2. Perform Heavy Computation (Fallback or Scheduled)
             now = datetime.utcnow()
 
             periods = {
@@ -199,7 +219,8 @@ class AdminService:
             task_counts_res = await session.exec(task_stats_stmt)
             task_breakdown = {tid: count for tid, count in task_counts_res.all()}
 
-            return {
+            # 6. Materialize the result into SystemSetting for lightning-fast reads
+            stats = {
                 "growth": growth,
                 "daily_growth": daily_growth,
                 "daily_revenue": daily_revenue,
@@ -227,6 +248,22 @@ class AdminService:
                 "top_partners": await self.get_top_partners(limit=5),
                 "server_time": now.isoformat()
             }
+
+            try:
+                cache_val = json.dumps(stats)
+                # We need a fresh session because the previous one might have been yielded
+                cache_stmt = select(SystemSetting).where(SystemSetting.key == "cache:admin_stats")
+                item = (await session.exec(cache_stmt)).first()
+                if item:
+                    item.value = cache_val
+                else:
+                    session.add(SystemSetting(key="cache:admin_stats", value=cache_val))
+                await session.commit()
+                logger.info("✅ Admin Dash stats materialized correctly.")
+            except Exception as e:
+                logger.error(f"❌ Failed to materialize admin stats: {e}")
+
+            return stats
 
     async def get_top_partners(self, limit: int = 10) -> list[dict[str, Any]]:
         """
