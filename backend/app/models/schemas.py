@@ -13,6 +13,7 @@ class PartnerBase(BaseModel):
     last_name: str | None = None
     photo_url: str | None = None
     photo_file_id: str | None = None
+    language_code: str | None = None
 
     # #comment: CRITICAL for Pydantic v2. This allows ORM objects to be used 
     # when validating this model, specifically for nested lists like 'referrals'.
@@ -48,7 +49,7 @@ class PartnerResponse(PartnerBase):
     referrals: list[PartnerBase] | None = None
     active_tasks: list[ActiveTaskResponse] = []
     completed_tasks: str = "[]"
-    completed_stages: list[int] = []
+    completed_stages: list[int | str] = []
     is_admin: bool = False
 
     class Config:
@@ -86,7 +87,7 @@ class PartnerResponse(PartnerBase):
         if isinstance(v, str):
             try:
                 raw = json.loads(v)
-                return [s for s in raw if isinstance(s, int)]
+                return [s for s in raw if isinstance(s, (int, str))]
             except:
                 return []
         return v if isinstance(v, list) else []
@@ -195,3 +196,6 @@ class PartnerTopResponse(BaseModel):
     # #comment: Required for leaderboard service mappings from ORM.
     class Config:
         from_attributes = True
+
+class LanguageUpdate(BaseModel):
+    language_code: str
