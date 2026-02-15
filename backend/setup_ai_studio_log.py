@@ -7,11 +7,12 @@ for tracking time and cost metrics for each generation.
 Run once to set up the sheet, or re-run to update headers.
 """
 
+import json
 import os
 import sys
+
 import gspread
 from google.oauth2.service_account import Credentials
-import json
 
 # Add backend to path
 backend_dir = os.path.dirname(os.path.abspath(__file__))
@@ -19,6 +20,7 @@ sys.path.append(backend_dir)
 
 # Load env  
 from dotenv import load_dotenv
+
 env_file = os.path.join(backend_dir, ".env")
 if os.path.exists(env_file):
     load_dotenv(env_file)

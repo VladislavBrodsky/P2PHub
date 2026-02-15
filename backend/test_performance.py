@@ -1,6 +1,6 @@
-import sys
-import os
 import asyncio
+import os
+import sys
 import time
 
 backend_dir = os.path.dirname(os.path.abspath(__file__))
@@ -21,8 +21,9 @@ print(f"✓ Loaded GOOGLE_API_KEY: {len(os.environ.get('GOOGLE_API_KEY', ''))} c
 
 sys.path.append(backend_dir)
 
-from app.services.viral_service import viral_studio
 from app.models.partner import Partner
+from app.services.viral_service import viral_studio
+
 
 async def main():
     print("=" * 70)

@@ -8,8 +8,8 @@ Create Date: 2026-02-12
 Audit logs are critical for compliance, debugging, and user transparency.
 """
 
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.

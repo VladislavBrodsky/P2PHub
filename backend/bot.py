@@ -1,10 +1,11 @@
 import asyncio
+import contextlib
 import logging
 import secrets
 import sys
 import urllib.parse
-import sentry_sdk
 
+import sentry_sdk
 from aiogram import Bot, Dispatcher, F, types
 from aiogram.filters import Command, CommandStart
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -114,7 +115,7 @@ async def cmd_start(message: types.Message):
     except Exception as e:
         logging.error(f"Error in cmd_start: {e}")
         sentry_sdk.capture_exception(e)
-        await message.answer(f"⚠️ Error: {str(e)}")
+        await message.answer(f"⚠️ Error: {e!s}")
 
 
 
@@ -153,7 +154,7 @@ async def cmd_my_network(message: types.Message):
     except Exception as e:
         logging.error(f"Error in cmd_my_network: {e}")
         sentry_sdk.capture_exception(e)
-        await message.answer(f"⚠️ Error fetching stats: {str(e)}")
+        await message.answer(f"⚠️ Error fetching stats: {e!s}")
 
 
 # Cache bot username to avoid repeated API calls
@@ -226,10 +227,8 @@ async def inline_handler(inline_query: types.InlineQuery):
 
     except Exception as e:
         logging.error(f"❌ Inline handler error: {e}")
-        try:
+        with contextlib.suppress(Exception):
             await inline_query.answer([], is_personal=True, cache_time=0)
-        except Exception:
-            pass
 
 
 @dp.message(Command("support", "care", "help"))
@@ -244,8 +243,8 @@ async def cmd_support(message: types.Message):
 
 @dp.callback_query(F.data.startswith("sup_"))
 async def callback_support_category(callback: types.CallbackQuery):
-    from app.services.support_service import support_service
     from app.services.partner_service import get_partner_by_telegram_id
+    from app.services.support_service import support_service
     
     cat_map = {
         "sup_cards": "💳 Virtual & Physical Cards",
@@ -407,8 +406,8 @@ async def handle_support_chat(message: types.Message):
     Catch-all Support Chat handler.
     Natural language queries are routed to the AI Support Agent.
     """
-    from app.services.support_service import support_service
     from app.services.partner_service import get_partner_by_telegram_id
+    from app.services.support_service import support_service
     
     user_id = str(message.from_user.id)
     
@@ -417,10 +416,8 @@ async def handle_support_chat(message: types.Message):
         return
 
     # Show typing indicator for a premium human-like feel
-    try:
+    with contextlib.suppress(Exception):
         await bot.send_chat_action(chat_id=message.chat.id, action="typing")
-    except Exception:
-        pass
     
     try:
         async for session_db in get_session():

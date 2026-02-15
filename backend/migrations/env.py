@@ -4,10 +4,10 @@ import sqlalchemy as sa
 from alembic import context
 from sqlalchemy import pool
 from sqlmodel import SQLModel
+
 from app.models.audit_log import AuditLog
 from app.models.partner import Partner
 from app.models.transaction import PartnerTransaction
-
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -76,8 +76,9 @@ async def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    from sqlalchemy.ext.asyncio import create_async_engine
     import os
+
+    from sqlalchemy.ext.asyncio import create_async_engine
 
     # Prefer specific env vars for production if available, else fallback to settings
     url = os.getenv("DATABASE_URL") or settings.async_database_url

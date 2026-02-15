@@ -5,9 +5,9 @@ Google Sheets Connection Test Script
 Tests if GOOGLE_SERVICE_ACCOUNT_JSON is properly configured and can connect to sheets.
 """
 
+import json
 import os
 import sys
-import json
 
 # Add backend to path
 backend_dir = os.path.dirname(os.path.abspath(__file__))
@@ -20,7 +20,7 @@ print(f"📂 File exists: {os.path.exists(env_file)}")
 
 if os.path.exists(env_file):
     try:
-        with open(env_file, 'r', encoding='utf-8') as f:
+        with open(env_file, encoding='utf-8') as f:
             lines = f.readlines()
             print(f"📂 Read {len(lines)} lines from .env")
             
