@@ -338,4 +338,15 @@ async def migrate_paths(session: AsyncSession):
 
     await session.commit()
     logger.info(f"✅ Migration complete. Processed {processed_count} partners.")
-
+async def get_partner_full(session: AsyncSession, telegram_id: str) -> Optional[Partner]:
+    """
+    Fetches a partner with ALL necessary relationships eagerly loaded.
+    Why: Prevents 'MissingGreenlet' errors when preparing complex responses.
+    """
+    from sqlalchemy.orm import selectinload
+    stmt = select(Partner).where(Partner.telegram_id == telegram_id).options(
+        selectinload(Partner.completed_task_records),
+        selectinload(Partner.referrals)
+    )
+    result = await session.exec(stmt)
+    return result.first()

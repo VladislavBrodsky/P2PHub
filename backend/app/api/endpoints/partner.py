@@ -35,54 +35,19 @@ from sqlalchemy import text
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
+# #comment: DEPRECATED - Transformation logic moved to app.models.schemas.PartnerResponse
+# Manual looping and JSON parsing in endpoints is an anti-pattern. 
+# We now use Pydantic's from_attributes + field_validators to handle this automatically.
 def prepare_partner_response(partner: Partner, tg_id: str) -> dict:
     """
+    DEPRECATED: Use PartnerResponse.model_validate(partner, context={"tg_id": tg_id}) instead.
     Unified transformer to convert Partner model + Relations into PartnerResponse schema.
-    Handles JSON parsing for completed_tasks/stages and prepares active_tasks list.
     """
-    completed_task_ids = []
-    active_tasks = []
-    
-    # Process task records
-    for pt in partner.completed_task_records:
-        if pt.status == "COMPLETED" or not pt.status:
-            completed_task_ids.append(pt.task_id)
-        elif pt.status == "STARTED":
-            active_tasks.append({
-                "task_id": pt.task_id,
-                "status": pt.status,
-                "initial_metric_value": pt.initial_metric_value,
-                "started_at": pt.started_at.isoformat() if pt.started_at else None
-            })
-
-    # Base dump
-    partner_dict = partner.model_dump(mode="json")
-    
-    # Materialize Task Fields
-    partner_dict["completed_tasks"] = json.dumps(completed_task_ids)
-    partner_dict["active_tasks"] = active_tasks
-    
-    # Materialize Academy Fields
-    try:
-        raw_stages = json.loads(partner.completed_stages or "[]")
-        # Schema requires List[int], so specific legacy string tags like "m1" must be filtered out
-        partner_dict["completed_stages"] = [s for s in raw_stages if isinstance(s, int)]
-    except Exception:
-        partner_dict["completed_stages"] = []
-
-    # Map materialized totals
-    partner_dict["total_earned"] = partner.total_earned_usdt
-    partner_dict["total_network_size"] = partner.referral_count
-    
-    # Permission context
-    partner_dict["is_admin"] = tg_id in settings.ADMIN_USER_IDS
-    
-    # Social state
-    partner_dict["has_x_setup"] = bool(partner.x_api_key)
-    partner_dict["has_telegram_setup"] = bool(partner.telegram_channel_id)
-    partner_dict["has_linkedin_setup"] = bool(partner.linkedin_access_token)
-    
-    return partner_dict
+    from app.models.schemas import PartnerResponse
+    # is_admin is the only field requiring external context (tg_id)
+    response = PartnerResponse.from_orm(partner)
+    response.is_admin = tg_id in settings.ADMIN_USER_IDS
+    return response.model_dump()
 
 @router.get("/activity")
 async def get_network_activity(
@@ -357,11 +322,17 @@ async def get_my_profile(
     except Exception as e:
         logger.warning(f"Tree pre-warm failed: {e}")
 
-    # 5. Prepare Response - O(1) using materialized totals
-    partner_response = prepare_partner_response(partner, tg_id)
+    # 5. Prepare Response - O(1) using schema-level automation
+    # #comment: Final hydration check to prevent MissingGreenlet in Pydantic mapping
+    from app.services.partner_service import get_partner_full
+    partner = await get_partner_full(session, tg_id)
+    
+    from app.models.schemas import PartnerResponse
+    partner_response = PartnerResponse.from_orm(partner)
+    partner_response.is_admin = tg_id in settings.ADMIN_USER_IDS
 
     try:
-        await redis_service.set_json(cache_key, partner_response, expire=300)
+        await redis_service.set_json(cache_key, partner_response.model_dump(), expire=300)
     except Exception as e:
         logger.warning(f"Profile cache write failed: {e}")
 
@@ -908,18 +879,18 @@ async def claim_task_reward(
         sentry_sdk.capture_exception(e)
         logger.error(f"Failed to send task notification: {e}")
 
-    # Final commit and refresh with relationships for response
     # Final commit for all changes
     session.add(partner)
     await session.commit()
     
-    # Re-query with relations for preparation
-    stmt = select(Partner).where(Partner.id == partner.id).options(
-        selectinload(Partner.completed_task_records)
-    )
-    partner = (await session.exec(stmt)).one()
+    # #comment: Standard hydration using service layer to ensure consistent response preparation
+    from app.services.partner_service import get_partner_full
+    partner = await get_partner_full(session, tg_id)
 
-    return prepare_partner_response(partner, tg_id)
+    from app.models.schemas import PartnerResponse
+    partner_response = PartnerResponse.from_orm(partner)
+    partner_response.is_admin = tg_id in settings.ADMIN_USER_IDS
+    return partner_response.model_dump()
 
 @router.post("/academy/stages/{stage_id}/complete")
 async def complete_academy_stage(
@@ -939,9 +910,10 @@ async def complete_academy_stage(
         level="info"
     )
 
-    stmt = select(Partner).where(Partner.telegram_id == tg_id)
-    result = await session.exec(stmt)
-    partner = result.first()
+    # #comment: Use service-level 'get_partner_full' to eagerly load relationships
+    # This prevents 'MissingGreenlet' errors during complex schema mapping.
+    from app.services.partner_service import get_partner_full
+    partner = await get_partner_full(session, tg_id)
 
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
@@ -1015,13 +987,15 @@ async def complete_academy_stage(
         
         session.add(partner)
         await session.commit()
-        await session.refresh(partner)
         
-        # Invalidate cache
-        cache_key = f"partner:profile:{tg_id}"
-        await redis_service.client.delete(cache_key)
+        # #comment: Final hydration using service layer ensures all relations are available after commit
+        from app.services.partner_service import get_partner_full
+        partner = await get_partner_full(session, tg_id)
 
-    return prepare_partner_response(partner, tg_id)
+    from app.models.schemas import PartnerResponse
+    partner_response = PartnerResponse.from_orm(partner)
+    partner_response.is_admin = tg_id in settings.ADMIN_USER_IDS
+    return partner_response.model_dump()
 
 @router.get("/earnings", response_model=List[EarningSchema])
 async def get_my_earnings(
