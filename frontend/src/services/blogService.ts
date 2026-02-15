@@ -16,30 +16,30 @@ export interface BlogListResponse {
 export const blogService = {
     getPosts: async (options: { offset?: number; limit?: number; category?: string; q?: string } = {}): Promise<BlogListResponse> => {
         try {
-            const response = await apiClient.get('/blog', { params: options });
+            const response = await apiClient.get('/api/blog', { params: options });
             return response.data;
         } catch (error) {
-            console.error('Failed to fetch blog posts:', error);
+            console.error('Failed to fetch blog posts', error);
             throw error;
         }
     },
 
     getPostDetail: async (slug: string): Promise<BlogPost & BlogEngagement & { content: string }> => {
         try {
-            const response = await apiClient.get(`/blog/${slug}`);
+            const response = await apiClient.get(`/api/blog/${slug}`);
             return response.data;
         } catch (error) {
-            console.error('Failed to fetch blog post detail:', error);
+            console.error('Failed to fetch blog post detail', error);
             throw error;
         }
     },
 
     getEngagement: async (slug: string): Promise<BlogEngagement> => {
         try {
-            const response = await apiClient.get(`/blog/${slug}/engagement`);
+            const response = await apiClient.get(`/api/blog/${slug}/engagement`);
             return response.data;
         } catch (error) {
-            console.error('Failed to fetch blog engagement:', error);
+            console.error('Failed to fetch blog engagement', error);
             // Return dummy data if API fails (offline support/initial load)
             return { likes: Math.floor(Math.random() * (712 - 333) + 333), liked: false };
         }
@@ -47,10 +47,10 @@ export const blogService = {
 
     likePost: async (slug: string): Promise<{ status: string; likes: number }> => {
         try {
-            const response = await apiClient.post(`/blog/${slug}/like`);
+            const response = await apiClient.post(`/api/blog/${slug}/like`);
             return response.data;
         } catch (error) {
-            console.error('Failed to like blog post:', error);
+            console.error('Failed to like blog post', error);
             throw error;
         }
     }
