@@ -23,6 +23,7 @@ from app.models.schemas import (
     ActiveTaskResponse,
     EarningSchema,
     GrowthMetrics,
+    LanguageUpdate,
     NetworkStats,
     PartnerResponse,
     PartnerTopResponse,
@@ -171,7 +172,7 @@ async def get_my_profile(
         now = datetime.utcnow()
         if not partner.updated_at or partner.updated_at < (now - timedelta(hours=1)):
             has_changed = False
-            for field in ["username", "first_name", "last_name"]:
+            for field in ["username", "first_name", "last_name", "language_code"]:
                 if tg_user.get(field) != getattr(partner, field):
                     setattr(partner, field, tg_user.get(field))
                     has_changed = True
@@ -650,6 +651,29 @@ async def get_growth_chart(
         lambda: get_network_time_series(session, partner.id, timeframe),
         expire=300
     )
+
+@router.post("/language")
+async def update_language(
+    payload: LanguageUpdate,
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
+
+    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    result = await session.exec(statement)
+    partner = result.first()
+    
+    # Update language preference
+    if partner:
+        partner.language_code = payload.language_code
+        session.add(partner)
+        await session.commit()
+        await redis_service.client.delete(f"partner:profile:{tg_id}")
+
+    return {"status": "ok", "language_code": payload.language_code}
+
 
 @router.post("/tasks/{task_id}/start", response_model=ActiveTaskResponse)
 async def start_task(

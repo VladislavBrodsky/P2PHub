@@ -10,8 +10,10 @@ import {
     MessageCircle,
     Newspaper,
     Zap,
-    Shield
+    Shield,
+    Globe
 } from 'lucide-react';
+import { apiClient } from '../../api/client';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
 import { useUI } from '../../context/UIContext';
@@ -22,7 +24,7 @@ interface DrawerMenuProps {
 }
 
 export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { user } = useUser();
     const { setSupportOpen } = useUI();
     const [expandedItem, setExpandedItem] = React.useState<string | null>(null);
@@ -30,6 +32,16 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
     const toggleSection = (id: string) => {
         selection();
         setExpandedItem(expandedItem === id ? null : id);
+    };
+
+    const toggleLanguage = async () => {
+        const newLang = i18n.language.startsWith('ru') ? 'en' : 'ru';
+        await i18n.changeLanguage(newLang);
+        try {
+            await apiClient.post('/partner/language', { language_code: newLang });
+        } catch (e) {
+            console.error('Failed to sync language', e);
+        }
     };
 
     const renderSectionContent = (id: string) => {
@@ -46,6 +58,18 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                 <div className="absolute right-0.5 top-0.5 h-3 w-3 rounded-full bg-white shadow-sm" />
                             </div>
                         </div>
+                        <button
+                            onClick={toggleLanguage}
+                            className="w-full flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-900/50 active:scale-95 transition-transform"
+                        >
+                            <div className="flex items-center gap-2">
+                                <Globe className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
+                                <span className="text-xs font-bold text-slate-900 dark:text-white">{t('common.language')}</span>
+                            </div>
+                            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                                {i18n.language.startsWith('ru') ? 'Русский' : 'English'}
+                            </span>
+                        </button>
                     </div>
                 );
             case 'community':
