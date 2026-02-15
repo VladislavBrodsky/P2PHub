@@ -83,20 +83,25 @@ class SubscriptionService:
             f"⚠️ *PRO Subscription Notice*\n\n"
             f"Your PRO membership will expire in *{days_left} day{'s' if days_left > 1 else ''}*.\n\n"
             f"💰 *Price to Extend:* ${settings.PRO_PRICE_USD}\n\n"
-            f"Extend it now to keep all your premium benefits and affiliate bonuses!\n"
-            f"👉 Use /start and click 'Open App' to go to the Subscription section."
+            f"Extend it now to keep all your premium benefits and affiliate bonuses!"
         )
-        # In a real bot, we'd add an Inline Keyboard with an "Extend" button
-        # For now, we use the notification service which supports Markdown
-        await notification_service.enqueue_notification(int(partner.telegram_id), text)
+        buttons = [[
+            {"text": "💎 Extend Subscription", "web_app": {"url": settings.FRONTEND_URL}},
+            {"text": "🚀 Open App", "web_app": {"url": settings.FRONTEND_URL}}
+        ]]
+        await notification_service.enqueue_notification(int(partner.telegram_id), text, buttons=buttons)
 
     async def send_expired_notification(self, partner: Partner):
         text = (
             "❌ *Subscription Expired*\n\n"
             "Your PRO membership has expired. You have lost access to premium features.\n\n"
-            f"👉 Use /start and click 'Open App' to re-activate your PRO status for ${settings.PRO_PRICE_USD}."
+            f"Re-activate your PRO status now to continue earning."
         )
-        await notification_service.enqueue_notification(int(partner.telegram_id), text)
+        buttons = [[
+            {"text": "👑 Reactivate PRO", "web_app": {"url": settings.FRONTEND_URL}},
+            {"text": "🚀 Open App", "web_app": {"url": settings.FRONTEND_URL}}
+        ]]
+        await notification_service.enqueue_notification(int(partner.telegram_id), text, buttons=buttons)
 
     async def run_checker_task(self):
         """

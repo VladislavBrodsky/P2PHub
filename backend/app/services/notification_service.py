@@ -33,6 +33,9 @@ async def send_telegram_task(chat_id: str | int, text: str, parse_mode: str = "M
             for row in buttons:
                 keyboard_row = []
                 for btn in row:
+                    if "web_app" in btn and isinstance(btn["web_app"], dict):
+                        from aiogram.types import WebAppInfo
+                        btn["web_app"] = WebAppInfo(url=btn["web_app"]["url"])
                     keyboard_row.append(InlineKeyboardButton(**btn))
                 keyboard.append(keyboard_row)
             reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
@@ -68,6 +71,9 @@ class NotificationService:
                 for row in buttons:
                     keyboard_row = []
                     for btn in row:
+                        if "web_app" in btn and isinstance(btn["web_app"], dict):
+                            from aiogram.types import WebAppInfo
+                            btn["web_app"] = WebAppInfo(url=btn["web_app"]["url"])
                         keyboard_row.append(InlineKeyboardButton(**btn))
                     keyboard.append(keyboard_row)
                 reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)

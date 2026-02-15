@@ -65,7 +65,10 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
     // Handle deep linking via startapp param
     useEffect(() => {
         const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
-        if (startParam === 'network') {
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlStartParam = urlParams.get('start_param') || urlParams.get('startapp');
+
+        if (startParam === 'network' || urlStartParam === 'network') {
             setActiveTab('partner');
         }
     }, []);

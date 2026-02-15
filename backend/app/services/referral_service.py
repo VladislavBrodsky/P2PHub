@@ -102,13 +102,6 @@ async def process_referral_logic(partner_id: int):
 
             logger.info(f"🔄 Processing referral logic for partner {partner_id} (@{partner.username}).")
 
-            # #comment: Fetch bot info once to avoid repeated network calls inside the loop.
-            # This is a critical performance optimization to avoid rate-limiting.
-            from bot import bot
-            bot_info = await bot.get_me()
-            bot_username = bot_info.username.replace("@", "")
-            app_link = f"https://t.me/{bot_username}/app"
-
             new_partner_name = format_partner_name(partner)
             current_referrer_id = partner.referrer_id
             
@@ -200,8 +193,8 @@ async def process_referral_logic(partner_id: int):
                     # #comment: Add interactive "Premium" buttons to the notification.
                     # Direct links to the app increase engagement and user retention.
                     buttons = [[
-                        {"text": "📊 View Network", "url": f"{app_link}?startapp=network"},
-                        {"text": "🚀 Open App", "url": app_link}
+                        {"text": "📊 View Network", "web_app": {"url": f"{settings.FRONTEND_URL}?start_param=network"}},
+                        {"text": "🚀 Open App", "web_app": {"url": settings.FRONTEND_URL}}
                     ]]
 
                     if level == 1:
@@ -260,12 +253,6 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
         level="info"
     )
 
-    # #comment: Fetch bot info once to avoid repeated network calls inside the loop.
-    from bot import bot
-    bot_info = await bot.get_me()
-    bot_username = bot_info.username.replace("@", "")
-    app_link = f"https://t.me/{bot_username}/app"
-    
     current_referrer_id = partner.referrer_id
     for level in range(1, 10):
         if not current_referrer_id:
@@ -323,8 +310,8 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 # Direct links to financial summaries drive repetitive app usage and
                 # reinforce the reward value of being a partner.
                 buttons = [[
-                    {"text": "💰 Check Balance", "url": app_link},
-                    {"text": "🚀 Open App", "url": app_link}
+                    {"text": "💰 Check Balance", "web_app": {"url": settings.FRONTEND_URL}},
+                    {"text": "🚀 Open App", "web_app": {"url": settings.FRONTEND_URL}}
                 ]]
 
                 # Fixed: Use CORRECT key from i18n.py (commission_received)
