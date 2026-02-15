@@ -13,7 +13,7 @@ interface TaskGridProps {
     currentLevel: number;
     referrals: number;
     checkinStreak: number;
-    completedStages?: string[]; // New prop for Academy tracking
+    completedStages?: (string | number)[]; // New prop for Academy tracking
     isPro?: boolean;
     activeTasks?: ActiveTask[];
     onTaskClick: (task: Task) => void;

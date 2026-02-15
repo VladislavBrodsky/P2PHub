@@ -33,7 +33,7 @@ export default function ReferralPage() {
     // Local State for Instant Feedback
     // const [tasksList, setTasksList] = useState<Task[]>(EARN_TASKS); // Unused
     const [completedTaskIds, setCompletedTaskIds] = useState<string[]>([]);
-    const [completedStages, setCompletedStages] = useState<string[]>([]);
+    const [completedStages, setCompletedStages] = useState<(string | number)[]>([]);
     const [verifyingTasks, setVerifyingTasks] = useState<Record<string, number>>({});
     const [claimableTasks, setClaimableTasks] = useState<string[]>([]);
     const [levelUp, setLevelUp] = useState(false);
@@ -82,9 +82,8 @@ export default function ReferralPage() {
         }
 
         if (user?.completed_stages) {
-            try {
-                setCompletedStages(JSON.parse(user.completed_stages));
-            } catch (e) { }
+            // #comment: completed_stages is already an array from the API/Context, no need to parse.
+            setCompletedStages(user.completed_stages);
         }
 
         const storedClaimable = localStorage.getItem('p2p_claimable_tasks');
