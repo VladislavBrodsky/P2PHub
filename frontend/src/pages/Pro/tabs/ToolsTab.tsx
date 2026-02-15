@@ -12,9 +12,7 @@ interface ToolsTabProps {
     handleRunMarketingAudit: () => Promise<void>;
     handleFetchTrends: () => Promise<void>;
     setShowHeadlineModal: (show: boolean) => void;
-    setShowBioModal: (show: boolean) => void;
     selection: () => void;
-    impact: (style: 'light' | 'medium' | 'heavy') => void;
 }
 
 export const ToolsTab = ({
@@ -24,9 +22,7 @@ export const ToolsTab = ({
     handleRunMarketingAudit,
     handleFetchTrends,
     setShowHeadlineModal,
-    setShowBioModal,
-    selection,
-    impact
+    selection
 }: ToolsTabProps) => {
     const { t } = useTranslation();
 

@@ -1683,7 +1683,8 @@
             "trends": {
                 "title": "Trend Hunter 2026",
                 "desc": "Unlock top 3 viral narratives now. (3 Tokens)",
-                "btn": "Reveal Trends"
+                "btn": "Reveal Trends",
+                "btn_refresh": "Refresh Trends"
             },
             "audit": {
                 "title": "Global Marketing Audit",

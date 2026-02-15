@@ -101,9 +101,10 @@ export const StudioTab = ({
             try {
                 await navigator.share({
                     title: generatedResult.title,
-                    text: textToShare,
                 });
-            } catch (err) { }
+            } catch (err) {
+                console.error('Share failed', err);
+            }
         } else {
             handleCopyText();
         }

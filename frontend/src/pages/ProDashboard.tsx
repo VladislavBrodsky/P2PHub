@@ -350,10 +350,7 @@ export const ProDashboard = () => {
                                 handleRunMarketingAudit={handleRunMarketingAudit}
                                 handleFetchTrends={handleFetchTrends}
                                 setShowHeadlineModal={setShowAuditModal}
-                                setShowTrendsModal={setShowAuditModal}
-                                setShowBioModal={setShowAuditModal}
                                 selection={selection}
-                                impact={impact}
                             />
                         )}
 
