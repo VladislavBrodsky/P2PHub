@@ -132,15 +132,20 @@ class AdminService:
             # Actually, let's keep it clean as separate fields but return a combined total in USDT-equivalent if possible.
             # For now, let's just return both.
 
-            # 2. Commissions by Level (1-9)
+            # 2. Commissions by Level (1-9) in a single high-performance query
+            # #comment: MISSION-CRITICAL OPTIMIZATION. Replacing 9 sequential queries with 1 grouped query.
+            # This prevents DB lock contention during high-traffic growth spikes.
+            stmt_comm_all = select(Earning.level, func.sum(Earning.amount)).where(
+                Earning.type == "COMMISSION",
+                Earning.level.between(1, 9)
+            ).group_by(Earning.level)
+            comm_res = await session.exec(stmt_comm_all)
+            comm_map = {lvl: amt for lvl, amt in comm_res.all()}
+            
             commissions_by_level = []
             total_commissions = 0.0
             for level in range(1, 10):
-                stmt_comm = select(func.sum(Earning.amount)).where(
-                    Earning.type == "COMMISSION",
-                    Earning.level == level
-                )
-                level_amount = (await session.exec(stmt_comm)).one() or 0.0
+                level_amount = comm_map.get(level, 0.0)
                 commissions_by_level.append({
                     "level": level,
                     "amount": round(level_amount, 2)

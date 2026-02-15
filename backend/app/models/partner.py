@@ -114,8 +114,8 @@ class Earning(SQLModel, table=True):
     amount: float
     description: str
     type: str = Field(default="COMMISSION", index=True) # COMMISSION, TASK_XP, REFERRAL_XP
-    level: int | None = None # 1-9
-    currency: str = Field(default="USDT") # USDT, XP
+    level: int | None = Field(default=None, index=True) # 1-9
+    currency: str = Field(default="USDT", index=True) # USDT, XP
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
 
 class SystemSetting(SQLModel, table=True):

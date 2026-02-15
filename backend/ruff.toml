@@ -13,7 +13,8 @@ select = [
     "UP",   # pyupgrade
     "C90",  # mccabe complexity
     "SIM",  # flake8-simplify
-    "RUF"   # ruff-specific rules
+    "RUF",  # ruff-specific rules
+    "PERF"  # performance rules
 ]
 ignore = [
     "E402", # module level import not at top (needed for app structure)

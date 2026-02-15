@@ -42,6 +42,9 @@ export const TaskGrid = ({
     const sortedTasks = useMemo(() => {
         return [...visibleTasks].sort((a, b) => {
             const getTaskStatus = (task: Task) => {
+                const isCompleted = completedTaskIds.includes(task.id);
+                if (isCompleted) return -1; // Completed goes to bottom
+
                 const isLocked = Number(currentLevel) < Number(task.minLevel);
                 const isVerifying = !!verifyingTasks[task.id];
                 const isClaimableTimed = claimableTasks.includes(task.id);
@@ -51,8 +54,8 @@ export const TaskGrid = ({
                 if (isVerifying) return 3; // Verifying - high
                 if (isClaimableTimed) return 4; // Claimable - highest
 
-                if (task.type === 'referral' || task.type === 'action') {
-                    if (activeTask || task.id === 'academy_basics') { // Academy tasks are auto-tracked
+                if (task.type === 'referral' || task.type === 'action' || task.type === 'academy') {
+                    if (activeTask || task.type === 'academy') { // Academy tasks are auto-tracked
                         const val = task.type === 'referral' ? referrals :
                             task.type === 'action' ? checkinStreak :
                                 (completedStages?.length || 0);
@@ -70,7 +73,7 @@ export const TaskGrid = ({
             if (statusA !== statusB) return statusB - statusA;
             return a.minLevel - b.minLevel;
         });
-    }, [visibleTasks, currentLevel, verifyingTasks, claimableTasks, activeTasks, referrals, checkinStreak]);
+    }, [visibleTasks, currentLevel, verifyingTasks, claimableTasks, activeTasks, referrals, checkinStreak, completedTaskIds, completedStages]);
 
     return (
         <div className="space-y-4">

@@ -789,28 +789,23 @@ async def claim_task_reward(
         if not partner_task_record or partner_task_record.status != "STARTED":
              raise HTTPException(status_code=400, detail="Task must be started first")
 
-        # Refactored to Absolute Check (Milestone Logic)
-        # Instead of requiring X *new* referrals since start, we check if they *have* X referrals total.
-        # This prevents punishment for existing high-performing users.
-        
         current_value = 0
         if task_type == 'referral':
             current_value = partner.referral_count
         elif task_type == 'action':
             current_value = partner.checkin_streak
+        elif task_type == 'academy':
+            try:
+                completed_stages = json.loads(partner.completed_stages or "[]")
+                current_value = len(completed_stages) if isinstance(completed_stages, list) else 0
+            except:
+                current_value = 0
             
         if current_value < requirement:
-             raise HTTPException(status_code=400, detail=f"Requirement not met. Current: {current_value}/{requirement}")
-             
-    elif task_type == 'academy':
-        try:
-            # Check completed stages count
-            completed_stages = json.loads(partner.completed_stages or "[]")
-            if len(completed_stages) < requirement:
-                 raise HTTPException(status_code=400, detail=f"Requirement not met. Completed Stages: {len(completed_stages)}/{requirement}")
-        except json.JSONDecodeError:
-             # Should not happen given default, but safety first
-             pass
+             detail_msg = f"Requirement not met. Current: {current_value}/{requirement}"
+             if task_type == 'academy':
+                 detail_msg = f"Academy milestone not reached: {current_value}/{requirement} stages completed."
+             raise HTTPException(status_code=400, detail=detail_msg)
 
     # 3. Check if task already completed in the new table
     if partner_task_record and partner_task_record.status == "COMPLETED":

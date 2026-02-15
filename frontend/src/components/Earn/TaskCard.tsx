@@ -185,9 +185,10 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                             {isClaiming ? (t('common.loading') || "Loading...") : t('tasks.claim')}
                         </button>
                     ) : status === 'VERIFYING' ? (
-                        <div className="bg-blue-500/5 border border-blue-500/20 px-4 py-2 rounded-lg flex items-center gap-3">
-                            <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest animate-pulse">{t('tasks.verifying')}</span>
-                            <span className="font-mono text-[9px] font-black text-blue-500 bg-blue-500/10 px-1.5 py-0.5 rounded-md">{countdown}s</span>
+                        <div className="flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 pl-3 pr-2 py-1.5 rounded-xl backdrop-blur-md shadow-sm">
+                            <span className="text-[10px] font-black text-blue-500 uppercase tracking-tighter animate-pulse">{t('tasks.verifying')}</span>
+                            <div className="w-px h-3 bg-blue-500/20" />
+                            <span className="font-mono text-[10px] font-black text-blue-600 dark:text-blue-400 min-w-[2ch]">{countdown}s</span>
                         </div>
                     ) : (
                         <button

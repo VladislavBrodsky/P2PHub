@@ -1,7 +1,7 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { X, Zap, CheckCircle2, ArrowRight, Lock, Lightbulb, Wand2 } from 'lucide-react';
+import { X, Zap, CheckCircle2, ArrowRight, Lock, Lightbulb, Wand2, Share2, Target, BarChart3 } from 'lucide-react';
 import { AcademyStage } from '../../data/academyData';
 import { useTranslation, Trans } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
@@ -18,6 +18,9 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
     const { t } = useTranslation();
     const { user } = useUser();
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
+    const [missionAccomplished, setMissionAccomplished] = React.useState(false);
+    const [scrolledProgress, setScrolledProgress] = React.useState(0);
+    const contentRef = React.useRef<HTMLDivElement>(null);
 
     const getStageContent = (id: number) => {
         return {
@@ -53,6 +56,28 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
             }
         };
     }, [setHeaderVisible, setFooterVisible, setNotificationsVisible]);
+
+    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+        const element = e.currentTarget;
+        const scrollPercent = (element.scrollTop / (element.scrollHeight - element.clientHeight)) * 100;
+        setScrolledProgress(scrollPercent);
+    };
+
+    const handleShareSecret = () => {
+        const secret = t(`academy_content.stage_${stage.id}_lesson_secret`);
+        const text = `🔥 P2P Secret from Academy Stage ${stage.id}:\n\n"${secret}"\n\nJoin the elite floor with me: https://t.me/pintopay_bot?start=r_${user?.id}`;
+
+        if (navigator.share) {
+            navigator.share({
+                title: 'P2P Viral Secret',
+                text: text,
+            }).catch(() => { });
+        } else {
+            // Fallback to clipboard
+            navigator.clipboard.writeText(text);
+            alert(t('common.copied_to_clipboard', 'Copied to clipboard!'));
+        }
+    };
 
     return createPortal(
         <div className="fixed inset-0 z-100 flex items-center justify-center p-0 sm:p-4">
@@ -101,10 +126,24 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                             <span className="text-[6.5px] font-black text-green-500 uppercase tracking-widest">XP</span>
                         </div>
                     </div>
+
+                    {/* Scroll Progress Bar - Subtle at the bottom of header */}
+                    <div className="absolute bottom-0 left-0 h-[2px] bg-blue-500/20 w-full overflow-hidden">
+                        <motion.div
+                            className="h-full bg-blue-500"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${scrolledProgress}%` }}
+                            transition={{ duration: 0.1 }}
+                        />
+                    </div>
                 </div>
 
                 {/* Content Area (Scrollable) */}
-                <div className="flex-1 overflow-y-auto overscroll-contain custom-scrollbar scroll-smooth touch-pan-y pb-32">
+                <div
+                    ref={contentRef}
+                    onScroll={handleScroll}
+                    className="flex-1 overflow-y-auto overscroll-contain custom-scrollbar scroll-smooth touch-pan-y pb-32"
+                >
 
                     <div className="p-6 pt-10 space-y-8">
                         {isLocked ? (
@@ -176,9 +215,17 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
 
                                     <div className="p-6 rounded-[2rem] bg-blue-50 dark:bg-blue-500/5 border border-blue-100 dark:border-blue-500/20 space-y-3 relative overflow-hidden group">
                                         <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 blur-2xl -mr-8 -mt-8" />
-                                        <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-500 font-black text-[11px] uppercase tracking-widest relative z-10">
-                                            <Lightbulb className="w-4 h-4" />
-                                            {t(`academy_content.stage_${stage.id}_lesson_secret_title`, { defaultValue: t('academy.profit_secret') })}
+                                        <div className="flex items-center justify-between relative z-10">
+                                            <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-500 font-black text-[11px] uppercase tracking-widest">
+                                                <Lightbulb className="w-4 h-4" />
+                                                {t(`academy_content.stage_${stage.id}_lesson_secret_title`, { defaultValue: t('academy.profit_secret') })}
+                                            </div>
+                                            <button
+                                                onClick={handleShareSecret}
+                                                className="p-1.5 rounded-lg bg-white dark:bg-white/5 border border-blue-200 dark:border-white/10 text-blue-500 hover:scale-110 active:scale-95 transition-all shadow-sm"
+                                            >
+                                                <Share2 className="w-3.5 h-3.5" />
+                                            </button>
                                         </div>
                                         <p className="text-[14px] italic leading-relaxed text-slate-700 dark:text-slate-200 relative z-10 font-bold">
                                             "{t(`academy_content.stage_${stage.id}_lesson_secret`, { defaultValue: t('academy.profit_quote') })}"
@@ -224,6 +271,40 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                             {t(`academy_content.stage_${stage.id}_lesson_outro`, { defaultValue: t('academy.build_empire') })}
                                         </Trans>
                                     </p>
+
+                                    {/* Action Mission - High Impact Commitment */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        className="p-6 rounded-[2rem] bg-slate-900 dark:bg-white/5 border border-slate-800 dark:border-white/10 space-y-5"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                                                <Target className="w-4 h-4" />
+                                            </div>
+                                            <h4 className="text-[13px] font-black text-white uppercase tracking-wider">{t('academy.your_mission')}</h4>
+                                        </div>
+
+                                        <div
+                                            onClick={() => setMissionAccomplished(!missionAccomplished)}
+                                            className={`p-4 rounded-xl border-2 transition-all cursor-pointer flex items-center gap-4 ${missionAccomplished
+                                                    ? 'bg-blue-500/10 border-blue-500 text-blue-400'
+                                                    : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
+                                                }`}
+                                        >
+                                            <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${missionAccomplished ? 'bg-blue-500 border-blue-500' : 'border-white/20'
+                                                }`}>
+                                                {missionAccomplished && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                                            </div>
+                                            <span className="text-[13px] font-bold leading-tight">
+                                                {t(`academy_content.stage_${stage.id}_lesson_mission`, { defaultValue: t('academy.apply_knowledge') })}
+                                            </span>
+                                        </div>
+
+                                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.1em] text-center pt-2">
+                                            {missionAccomplished ? t('academy.mission_ready') : t('academy.mission_pending')}
+                                        </p>
+                                    </motion.div>
                                 </div>
                             </div>
                         )}
@@ -234,10 +315,21 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 <div className="absolute bottom-0 left-0 right-0 p-6 pb-[calc(var(--spacing-safe-bottom)+1.5rem)] bg-linear-to-t from-white via-white/95 to-transparent dark:from-[#030712] dark:via-[#030712]/95 z-20">
                     {!isLocked && (
                         <button
-                            onClick={() => onComplete(stage.id)}
-                            className="w-full py-5 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black text-sm uppercase tracking-[0.2em] shadow-[0_20px_40px_rgba(0,0,0,0.3)] active:scale-95 transition-all flex items-center justify-center gap-4 border border-white/5 active:brightness-90 touch-manipulation"
+                            onClick={() => missionAccomplished && onComplete(stage.id)}
+                            disabled={!missionAccomplished}
+                            className={`w-full py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-4 border touch-manipulation relative overflow-hidden ${missionAccomplished
+                                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-white/5 shadow-[0_20px_40px_rgba(0,0,0,0.3)] active:scale-95 brightness-110'
+                                    : 'bg-slate-100 dark:bg-white/5 text-slate-400 border-slate-200 dark:border-white/10 opacity-50 grayscale cursor-not-allowed shadow-none'
+                                }`}
                         >
-                            <CheckCircle2 className="w-5 h-5" />
+                            {missionAccomplished && (
+                                <motion.div
+                                    className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent"
+                                    animate={{ x: ['100%', '-100%'] }}
+                                    transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                                />
+                            )}
+                            <CheckCircle2 className={`w-5 h-5 transition-transform ${missionAccomplished ? 'scale-110' : 'scale-100'}`} />
                             {t('academy.complete_stage', { stage: stage.id })}
                         </button>
                     )}

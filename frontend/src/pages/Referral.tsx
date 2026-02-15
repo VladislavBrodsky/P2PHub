@@ -12,6 +12,7 @@ const LevelUpModal = lazy(() => import('../components/Earn/LevelUpModal').then(m
 
 import { EARN_TASKS, Task } from '../data/earnData';
 import { useUser } from '../context/UserContext';
+import { useNotificationStore } from '../store/useNotificationStore';
 import { Confetti } from '../components/ui/Confetti';
 import { X, Share2, Download, Copy, ExternalLink, Send, FileText, Sparkles } from 'lucide-react';
 import { BriefTermsModal } from '../components/Earn/BriefTermsModal';
@@ -28,6 +29,7 @@ export default function ReferralPage() {
     const { t } = useTranslation();
     const { notification, selection } = useHaptic();
     const { user, updateUser, refreshUser, isLoading } = useUser();
+    const { showNotification } = useNotificationStore();
 
 
     // Local State for Instant Feedback
@@ -163,8 +165,14 @@ export default function ReferralPage() {
             // Trust backend for the full user state sync
             updateUser?.(updatedData);
 
-        } catch (e) {
+        } catch (e: any) {
             console.error("Failed to claim task reward", e);
+            const errorMsg = e.response?.data?.detail || "Task requirement not met.";
+            showNotification({
+                title: t('common.error', 'Security Check'),
+                message: errorMsg,
+                type: 'warning'
+            });
         }
     };
 
@@ -188,6 +196,13 @@ export default function ReferralPage() {
             if (task.link === '/blog') {
                 window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'blog' }));
             } else if (task.link === '/dashboard/academy') {
+                // For academy, we ensure the task is started if it's not already
+                if (task.type === 'academy') {
+                    const isActive = user?.active_tasks?.some(at => at.task_id === task.id);
+                    if (!isActive && !completedTaskIds.includes(task.id)) {
+                        handleTaskStart(task);
+                    }
+                }
                 window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'partner' }));
             } else {
                 window.open(task.link, '_blank');
@@ -196,10 +211,10 @@ export default function ReferralPage() {
             if (!completedTaskIds.includes(task.id) && !verifyingTasks[task.id] && !claimableTasks.includes(task.id) && task.type !== 'academy') {
                 setVerifyingTasks(prev => ({ ...prev, [task.id]: 15 }));
             }
-        } else if (task.type === 'referral' || task.type === 'action') {
+        } else if (task.type === 'referral' || task.type === 'action' || task.type === 'academy') {
             selection();
 
-            // #comment: Check if task is started. If not, start it.
+            // #comment: Check if task is started (or already active)
             const isActive = user?.active_tasks?.some(at => at.task_id === task.id);
             if (!isActive && !completedTaskIds.includes(task.id)) {
                 await handleTaskStart(task);

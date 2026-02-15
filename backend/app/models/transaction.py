@@ -12,10 +12,10 @@ class PartnerTransaction(SQLModel, table=True):
     partner_id: int = Field(foreign_key="partner.id", index=True)
     amount: float
     amount_crypto: float | None = Field(default=None) # The exact crypto amount expected (fixed at session creation)
-    currency: str # TON, USDT, BTC, etc.
+    currency: str = Field(index=True) # TON, USDT, BTC, etc.
     network: str # TON, TRC20, ERC20, etc.
     tx_hash: str | None = Field(default=None, index=True)
-    status: str = Field(default="pending") # pending, completed, failed, manual_review
+    status: str = Field(default="pending", index=True) # pending, completed, failed, manual_review
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
     updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow})
 

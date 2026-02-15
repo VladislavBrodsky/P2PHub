@@ -19,7 +19,7 @@ interface User {
     referral_count: number;
     referrals: any[]; // Extended for Earn Hub
     completed_tasks: string;
-    completed_stages: number[]; // Added for Academy
+    completed_stages: (string | number)[]; // Added for Academy
     is_pro: boolean;
     is_admin: boolean;
     pro_expires_at: string | null;
@@ -43,7 +43,7 @@ interface UserContextType {
     isLoading: boolean;
     refreshUser: (force?: boolean) => Promise<void>;
     updateUser: (updates: Partial<User>) => void;
-    completeStage: (id: number) => Promise<void>;
+    completeStage: (id: number | string) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -72,7 +72,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     const { updateProgress } = useStartupProgress();
 
-    const completeStage = React.useCallback(async (id: number) => {
+    const completeStage = React.useCallback(async (id: number | string) => {
         try {
             const response = await apiClient.post(`/api/partner/academy/stages/${id}/complete`);
             updateUser?.(response.data);
@@ -174,7 +174,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         referral_count: 10,
                         referrals: [],
                         completed_tasks: "[]",
-                        completed_stages: [1, 2, 3], // Mock stages
+                        completed_stages: ["1", "2", "3"], // Mock stages
                         is_pro: true,
                         is_admin: true,
                         pro_expires_at: null,

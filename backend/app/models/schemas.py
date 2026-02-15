@@ -124,12 +124,20 @@ class PROSetupRequest(BaseModel):
     x_access_token_secret: str | None = None
     telegram_channel_id: str | None = None
     linkedin_access_token: str | None = None
+    
+    # #comment: Standardized for audit.
+    class Config:
+        from_attributes = True
 
 class ViralGenerateRequest(BaseModel):
     post_type: str
     target_audience: str
     language: str
     referral_link: str | None = None
+    
+    # #comment: Standardized for audit.
+    class Config:
+        from_attributes = True
 
 class ViralGenerateResponse(BaseModel):
     title: str
@@ -139,14 +147,26 @@ class ViralGenerateResponse(BaseModel):
     image_url: str | None = None
     tokens_remaining: int
     error_code: str | None = None
+    
+    # #comment: Standardized for audit.
+    class Config:
+        from_attributes = True
 
 class SocialPostRequest(BaseModel):
     platform: str # 'x', 'telegram', 'linkedin'
     content: str
     image_path: str | None = None
+    
+    # #comment: Standardized for audit.
+    class Config:
+        from_attributes = True
 
 class TaskClaimRequest(BaseModel):
     xp_reward: float = Field(gt=0, description="XP reward must be greater than zero")
+    
+    # #comment: Standardized for audit.
+    class Config:
+        from_attributes = True
 
 class NetworkStats(BaseModel):
     level_1: int = 0
@@ -199,3 +219,7 @@ class PartnerTopResponse(BaseModel):
 
 class LanguageUpdate(BaseModel):
     language_code: str
+    
+    # #comment: Standardized for audit.
+    class Config:
+        from_attributes = True
