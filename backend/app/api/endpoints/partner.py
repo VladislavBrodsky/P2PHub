@@ -210,11 +210,27 @@ async def get_my_profile(
                     setattr(partner, field, tg_user.get(field))
                     has_changed = True
 
+            # Sync photo specifically if missing or during this throttled window
+            try:
+                user_photos = await bot.get_user_profile_photos(tg_id, limit=1)
+                if user_photos.total_count > 0:
+                    new_file_id = user_photos.photos[0][0].file_id
+                    if partner.photo_file_id != new_file_id:
+                        partner.photo_file_id = new_file_id
+                        has_changed = True
+                        # Eagerly cache the new photo
+                        from app.services.partner_service import ensure_photo_cached
+                        background_tasks.add_task(ensure_photo_cached, new_file_id)
+            except Exception as e:
+                logger.warning(f"Failed to refresh photo during profile update for {tg_id}: {e}")
+
             if has_changed:
                 partner.updated_at = now
                 session.add(partner)
                 await session.commit()
                 await session.refresh(partner)
+                # Invalidate cache
+                await redis_service.client.delete(cache_key)
                 # Invalidate recent partners if this user might be in it
                 await redis_service.client.delete("partners:recent_v2")
 
