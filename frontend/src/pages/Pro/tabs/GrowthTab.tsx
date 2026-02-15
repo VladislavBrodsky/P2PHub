@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 import {
     Info, CheckCircle2, Bot, TrendingUp, ArrowRight, ShieldCheck,
-    Terminal, Share, Flame, Globe, Send, Twitter, Linkedin, ChevronRight
+    Terminal, Share, Flame, Globe, Send, Twitter, Linkedin, ChevronRight,
+    Loader2, Sparkles
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PROStatus } from '../../../services/proService';
