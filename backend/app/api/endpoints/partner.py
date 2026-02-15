@@ -777,6 +777,16 @@ async def claim_task_reward(
             
         if current_value < requirement:
              raise HTTPException(status_code=400, detail=f"Requirement not met. Current: {current_value}/{requirement}")
+             
+    elif task_type == 'academy':
+        try:
+            # Check completed stages count
+            completed_stages = json.loads(partner.completed_stages or "[]")
+            if len(completed_stages) < requirement:
+                 raise HTTPException(status_code=400, detail=f"Requirement not met. Completed Stages: {len(completed_stages)}/{requirement}")
+        except json.JSONDecodeError:
+             # Should not happen given default, but safety first
+             pass
 
     # 3. Check if task already completed in the new table
     if partner_task_record and partner_task_record.status == "COMPLETED":

@@ -33,6 +33,7 @@ export default function ReferralPage() {
     // Local State for Instant Feedback
     // const [tasksList, setTasksList] = useState<Task[]>(EARN_TASKS); // Unused
     const [completedTaskIds, setCompletedTaskIds] = useState<string[]>([]);
+    const [completedStages, setCompletedStages] = useState<string[]>([]);
     const [verifyingTasks, setVerifyingTasks] = useState<Record<string, number>>({});
     const [claimableTasks, setClaimableTasks] = useState<string[]>([]);
     const [levelUp, setLevelUp] = useState(false);
@@ -80,8 +81,14 @@ export default function ReferralPage() {
             if (stored) setCompletedTaskIds(JSON.parse(stored));
         }
 
+        if (user?.completed_stages) {
+            try {
+                setCompletedStages(JSON.parse(user.completed_stages));
+            } catch (e) { }
+        }
+
         const storedClaimable = localStorage.getItem('p2p_claimable_tasks');
-        if (storedClaimable) setClaimableTasks(JSON.parse(storedClaimable));
+        if (storedClaimable) setClaimableTasks(JSON.parse(storedClaimable) as string[]);
     }, [user?.completed_tasks]);
 
     // Timer Logic for Verification
@@ -177,8 +184,17 @@ export default function ReferralPage() {
     const handleTaskClick = async (task: Task) => {
         if (task.link) {
             selection();
-            window.open(task.link, '_blank');
-            if (!completedTaskIds.includes(task.id) && !verifyingTasks[task.id] && !claimableTasks.includes(task.id)) {
+
+            // Handle internal navigation via rigid tab system
+            if (task.link === '/blog') {
+                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'blog' }));
+            } else if (task.link === '/dashboard/academy') {
+                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'partner' }));
+            } else {
+                window.open(task.link, '_blank');
+            }
+
+            if (!completedTaskIds.includes(task.id) && !verifyingTasks[task.id] && !claimableTasks.includes(task.id) && task.type !== 'academy') {
                 setVerifyingTasks(prev => ({ ...prev, [task.id]: 15 }));
             }
         } else if (task.type === 'referral' || task.type === 'action') {
@@ -512,6 +528,7 @@ export default function ReferralPage() {
             <TaskGrid
                 tasks={localizedTasks}
                 completedTaskIds={completedTaskIds}
+                completedStages={completedStages}
                 verifyingTasks={verifyingTasks}
                 claimableTasks={claimableTasks}
                 currentLevel={currentLevel}

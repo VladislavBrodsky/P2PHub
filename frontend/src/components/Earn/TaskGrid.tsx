@@ -13,6 +13,7 @@ interface TaskGridProps {
     currentLevel: number;
     referrals: number;
     checkinStreak: number;
+    completedStages?: string[]; // New prop for Academy tracking
     isPro?: boolean;
     activeTasks?: ActiveTask[];
     onTaskClick: (task: Task) => void;
@@ -27,6 +28,7 @@ export const TaskGrid = ({
     currentLevel,
     referrals,
     checkinStreak,
+    completedStages = [], // Default to empty array
     isPro,
     activeTasks,
     onTaskClick,
@@ -50,8 +52,11 @@ export const TaskGrid = ({
                 if (isClaimableTimed) return 4; // Claimable - highest
 
                 if (task.type === 'referral' || task.type === 'action') {
-                    if (activeTask) {
-                        const val = task.type === 'referral' ? referrals : checkinStreak;
+                    if (activeTask || task.id === 'academy_basics') { // Academy tasks are auto-tracked
+                        const val = task.type === 'referral' ? referrals :
+                            task.type === 'action' ? checkinStreak :
+                                (completedStages?.length || 0);
+
                         if (val >= (task.requirement || 0)) return 4; // Claimable
                         return 2; // Started
                     }
@@ -114,6 +119,12 @@ export const TaskGrid = ({
                                 status = 'AVAILABLE';
                                 effectiveProgress = checkinStreak;
                             }
+                        }
+                        else if (task.type === 'academy') {
+                            const count = completedStages?.length || 0;
+                            effectiveProgress = count;
+                            if (count >= (task.requirement || 0)) status = 'CLAIMABLE';
+                            else status = 'STARTED';
                         }
 
                         return (

@@ -20,21 +20,9 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
 
     const getStageContent = (id: number) => {
-        if (id <= 10 || (id >= 21 && id <= 24)) {
-            return {
-                titleKey: `academy_content.stage_${id}_title`,
-                params: {}
-            };
-        }
-        if (id >= 11 && id <= 20) {
-            return {
-                titleKey: `academy_content.stage_foundation_title`,
-                params: { phase: id }
-            };
-        }
         return {
-            titleKey: `academy_content.stage_elite_title`,
-            params: { stage: id }
+            titleKey: `academy_content.stage_${id}_title`,
+            params: {}
         };
     };
 
@@ -126,9 +114,11 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                     <Lock className="w-10 h-10 text-amber-500" />
                                 </div>
                                 <div className="space-y-2">
-                                    <h2 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('academy.stage_locked')}</h2>
+                                    <h2 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">
+                                        {stage.id === 20 ? t('academy.locked.stage_20_lock_title') : t('academy.stage_locked')}
+                                    </h2>
                                     <p className="text-[14px] text-slate-500 dark:text-slate-400 font-medium max-w-[280px] leading-relaxed">
-                                        {t('academy.lock_desc')}
+                                        {stage.id === 20 ? t('academy.locked.stage_20_lock_desc') : t('academy.lock_desc')}
                                     </p>
                                 </div>
 
@@ -152,12 +142,14 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                         onClose();
                                         window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
                                     }}
-                                    className="w-full py-5 rounded-2xl bg-amber-500 text-white font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-amber-500/30 active:scale-95 transition-all"
+                                    className="w-full py-5 rounded-2xl bg-linear-to-r from-amber-500 to-orange-500 text-white font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-amber-500/30 active:scale-95 transition-all flex items-center justify-center gap-2 group"
                                 >
-                                    {t('academy.upgrade_btn')}
+                                    <span>{t('academy.upgrade_now')}</span>
+                                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                 </button>
                             </div>
                         ) : (
+
                             /* Lesson Content View */
                             <div className="space-y-10">
                                 <div className="flex flex-col gap-2">
@@ -201,18 +193,28 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                         </div>
 
                                         {/* AI Expert Section (Conditional but also translateable) */}
-                                        {(stage.category === 'ai' || (stage.id >= 5 && stage.id <= 10)) && (
+                                        {(stage.category === 'ai' || (stage.id >= 5 && stage.id <= 10) || t(`academy_content.stage_${stage.id}_lesson_ai_expert`, { defaultValue: '' })) && (
                                             <div className="p-6 rounded-[2rem] bg-linear-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 space-y-4">
                                                 <div className="flex items-center gap-2.5 text-purple-600 dark:text-purple-400 font-black text-[11px] uppercase tracking-widest">
                                                     <Wand2 className="w-4 h-4" />
                                                     {t('academy.ai_expert')}
                                                 </div>
-                                                <p className="text-[13px] leading-relaxed">
-                                                    {t(`academy_content.stage_${stage.id}_lesson_ai_tip`, { defaultValue: t('academy.ai_desc') })}
+                                                <p className="text-[13px] leading-relaxed font-medium">
+                                                    {t(`academy_content.stage_${stage.id}_lesson_ai_expert`, { defaultValue: t('academy.ai_desc') })}
                                                 </p>
-                                                <button className="text-[10px] font-black text-purple-500 uppercase tracking-[0.2em] flex items-center gap-2 group">
-                                                    {t('academy.learn_how')} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                                </button>
+                                            </div>
+                                        )}
+
+                                        {/* Viral Rule / Marketing Trick Section */}
+                                        {t(`academy_content.stage_${stage.id}_lesson_viral_rule`, { defaultValue: '' }) && (
+                                            <div className="p-6 rounded-[2rem] bg-linear-to-r from-pink-500/10 to-rose-500/10 border border-pink-500/20 space-y-4">
+                                                <div className="flex items-center gap-2.5 text-pink-600 dark:text-pink-400 font-black text-[11px] uppercase tracking-widest">
+                                                    <Zap className="w-4 h-4" />
+                                                    {t('academy.viral_psychology')}
+                                                </div>
+                                                <p className="text-[13px] leading-relaxed font-bold italic text-slate-800 dark:text-slate-200">
+                                                    "{t(`academy_content.stage_${stage.id}_lesson_viral_rule`)}"
+                                                </p>
                                             </div>
                                         )}
                                     </div>

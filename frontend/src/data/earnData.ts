@@ -20,7 +20,7 @@ export interface Task {
     platform?: 'telegram' | 'twitter' | 'youtube' | 'internal';
     icon: LucideIcon;
     reward: number;
-    type: 'social' | 'referral' | 'milestone' | 'action';
+    type: 'social' | 'referral' | 'milestone' | 'action' | 'academy';
     requirement?: number; // e.g., 3 referrals
     link?: string;
     minLevel: number;
@@ -72,6 +72,31 @@ export const EARN_TASKS: Task[] = [
         reward: 25, // PRO: 125
         type: 'social',
         link: 'https://t.me/pintopaygrowth',
+        minLevel: 1
+    },
+
+    // Level 1: Familiarization (New)
+    {
+        id: 'academy_basics',
+        title: 'Complete 3 Academy Stages',
+        description: 'Learn the basics and earn your first stripes.',
+        platform: 'internal',
+        icon: Rocket,
+        reward: 70,
+        type: 'academy',
+        link: '/dashboard/academy',
+        requirement: 3,
+        minLevel: 1
+    },
+    {
+        id: 'read_blog',
+        title: 'Read a Strategy Article',
+        description: 'Discover the secrets to viral success in our Blog.',
+        platform: 'internal',
+        icon: Target,
+        reward: 50,
+        type: 'social',
+        link: '/blog',
         minLevel: 1
     },
 

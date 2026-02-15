@@ -12,6 +12,10 @@ TASK_CONFIG = {
     # Action
     'daily_checkin_5': {'reward': 100, 'type': 'action', 'requirement': 5},
     
+    # New User Familiarization
+    'academy_basics': {'reward': 70, 'type': 'academy', 'requirement': 3},
+    'read_blog': {'reward': 50, 'type': 'social'},
+    
     # Referral Progression
     'invite_1_friend': {'reward': 100, 'type': 'referral', 'requirement': 1},
     'invite_3_friends': {'reward': 150, 'type': 'referral', 'requirement': 3},

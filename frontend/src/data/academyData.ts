@@ -38,7 +38,7 @@ export const ACADEMY_STAGES: AcademyStage[] = [
     { id: 17, title: "Anti-Spam Protocols", description: "Professional networking without annoying people.", icon: Ghost, category: 'viral', isPro: false, rewardXp: 900 },
     { id: 18, title: "Authority Without Face", description: "Building a brand using only system proof.", icon: Award, category: 'basics', isPro: false, rewardXp: 950 },
     { id: 19, title: "Self-Liquidating Funnels", description: "Marketing that pays for itself instantly.", icon: Megaphone, category: 'basics', isPro: false, rewardXp: 1000 },
-    { id: 20, title: "FOUNDATION FINAL", description: "Review and certification of level 1-20.", icon: Award, category: 'basics', isPro: false, rewardXp: 1100 },
+    { id: 20, title: "FOUNDATION FINAL", description: "Review and certification of level 1-20.", icon: Award, category: 'basics', isPro: true, rewardXp: 1100 },
 
     // --- PHASE 2: VIRAL MOMENTUM (21-40) ---
     { id: 21, title: "AI Auto-Pilot: Execution", description: "Advanced automation for PRO members.", icon: Zap, category: 'ai', isPro: true, rewardXp: 1200 },
