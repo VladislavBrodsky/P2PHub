@@ -13,11 +13,11 @@ from app.worker import broker
 
 logger = logging.getLogger(__name__)
 
-@broker.task(schedule=[{"cron": "*/30 * * * *"}])
+@broker.task(schedule=[{"cron": "*/15 * * * *"}])
 async def refresh_admin_stats():
     """
     Scheduled task to recalculate and cache admin dashboard KPIs.
-    Runs every 30 minutes to ensure metrics are fresh while protecting DB performance.
+    Runs every 15 minutes to ensure metrics are fresh while protecting DB performance.
     """
     from app.services.admin_service import admin_service
     logger.info("📡 Scheduled Task: Refreshing Admin Dashboard Stats...")

@@ -34,8 +34,12 @@ try:
 
     for p in possible_env_paths:
         try:
+            # #comment: Changed override=True to False.
+            # Rationale: System environment variables (e.g. from Railway/Docker) should always take precedence 
+            # over local .env files. This ensures 'Single Source of Truth' and prevents accidental 
+            # production overrides by stale local files.
             if p.exists():
-                load_dotenv(dotenv_path=p, override=True)
+                load_dotenv(dotenv_path=p, override=False)
                 logger.info(f"✅ Loaded environment from {p.absolute()}")
                 loaded_env = True
         except Exception as e:
