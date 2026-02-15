@@ -1563,6 +1563,12 @@
             }
         },
         "setup": {
+            "title": "Protocol Configuration",
+            "subtitle": "Global Network Nodes",
+            "save_success_title": "Configuration Synced",
+            "save_success_text": "Your API nodes are now online and verified.",
+            "save_error_title": "Sync Error",
+            "save_error_text": "Failed to verify nodes. Please check your credentials.",
             "instructions_title": "Setup Instructions",
             "protocol_title": "Setup Instructions",
             "instructions": [

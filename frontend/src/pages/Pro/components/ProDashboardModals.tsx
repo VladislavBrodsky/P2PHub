@@ -21,7 +21,7 @@ interface ProModalsProps {
     showAuditModal: boolean;
     setShowAuditModal: (show: boolean) => void;
     marketAudit: any;
-    setActiveTab: (tab: any) => void;
+    setActiveTab: (tab: 'studio' | 'tools' | 'growth') => void;
 
     // Article Modal
     selectedArticle: any;
@@ -30,7 +30,7 @@ interface ProModalsProps {
     // Asset Modal
     selectedAsset: any;
     setSelectedAsset: (asset: any) => void;
-    handleCopyAnyText: (text: string) => void;
+    copyText: (text: string) => void;
 
     // Manual Modal
     showManual: string | null;
@@ -39,14 +39,14 @@ interface ProModalsProps {
     // Misc
     status: PROStatus | null;
     selection: () => void;
-    impact: (style: 'light' | 'medium' | 'heavy') => void;
+    impact: (style: any) => void;
 }
 
 export const ProDashboardModals = ({
     showSetup, setShowSetup, apiData, setApiData, isLoading, handleSaveSetup, handleTestIntegration,
     showAuditModal, setShowAuditModal, marketAudit, setActiveTab,
     selectedArticle, setSelectedArticle,
-    selectedAsset, setSelectedAsset, handleCopyAnyText,
+    selectedAsset, setSelectedAsset, copyText,
     showManual, setShowManual,
     status, selection, impact
 }: ProModalsProps) => {
@@ -61,7 +61,7 @@ export const ProDashboardModals = ({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-3xl"
+                        className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-3xl"
                         onClick={() => setShowSetup(false)}
                     >
                         <motion.div
@@ -280,7 +280,7 @@ export const ProDashboardModals = ({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[102] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xl"
+                        className="fixed inset-0 z-102 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xl"
                         onClick={() => setSelectedAsset(null)}
                     >
                         <motion.div
@@ -339,7 +339,7 @@ export const ProDashboardModals = ({
 
                                 <div className="flex gap-3">
                                     <button
-                                        onClick={() => { handleCopyAnyText(selectedAsset.desc); selection(); }}
+                                        onClick={() => { copyText(selectedAsset.desc); selection(); }}
                                         className="flex-1 h-12 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl flex items-center justify-center gap-2 hover:bg-slate-200 dark:hover:bg-white/10 transition-all"
                                     >
                                         <Copy size={16} className="text-slate-500 dark:text-slate-400" />
@@ -369,7 +369,7 @@ export const ProDashboardModals = ({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-2xl"
+                        className="fixed inset-0 z-200 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-2xl"
                         onClick={() => setShowAuditModal(false)}
                     >
                         <motion.div
@@ -505,7 +505,7 @@ export const ProDashboardModals = ({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl"
+                        className="fixed inset-0 z-200 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl"
                         onClick={() => setSelectedArticle(null)}
                     >
                         <motion.div
@@ -555,7 +555,7 @@ export const ProDashboardModals = ({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-2xl"
+                        className="fixed inset-0 z-200 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-2xl"
                         onClick={() => setShowManual(null)}
                     >
                         <motion.div

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Zap, Sparkles, ChevronRight, Cpu, BookOpen, Settings, Info, Trophy, Users
+    Zap, Sparkles, Settings, Trophy, Cpu, Users
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
 import { useUser } from '../context/UserContext';
 import { useUI } from '../context/UIContext';
 import { proService, PROStatus } from '../services/proService';
+import { useNotificationStore } from '../store/useNotificationStore';
 
 // Extracted Sub-components
 import { StudioTab } from './Pro/tabs/StudioTab';
@@ -18,17 +19,17 @@ import { ProDashboardModals } from './Pro/components/ProDashboardModals';
 type Tab = 'studio' | 'tools' | 'growth';
 
 export const ProDashboard = () => {
-    const { t, i18n } = useTranslation();
-    const { selection, impact, notification } = useHaptic();
+    const { t } = useTranslation();
+    const { selection, impact, notification: hapticNotification } = useHaptic();
+    const { showNotification } = useNotificationStore();
     const { user } = useUser();
     const { setFooterVisible, setHeaderVisible } = useUI();
 
     const [status, setStatus] = useState<PROStatus | null>(null);
     const [activeTab, setActiveTab] = useState<Tab>('studio');
 
-    // Shared State (passed to multiple tabs/modals)
+    // Shared State
     const [isLoading, setIsLoading] = useState(true);
-    const [isGenerating, setIsGenerating] = useState(false);
     const [showSetup, setShowSetup] = useState(false);
     const [showManual, setShowManual] = useState<string | null>(null);
     const [apiData, setApiData] = useState({
@@ -41,16 +42,6 @@ export const ProDashboard = () => {
         linkedin_access_token: ''
     });
 
-    // Studio/Generation State
-    const [step, setStep] = useState(1);
-    const [generatedResult, setGeneratedResult] = useState<any>(null);
-    const [history, setHistory] = useState<any[]>([]);
-    const [historyIndex, setHistoryIndex] = useState(-1);
-    const [showPublishModal, setShowPublishModal] = useState(false);
-    const [isPublishing, setIsPublishing] = useState(false);
-    const [publishedPlatforms, setPublishedPlatforms] = useState<string[]>([]);
-
-    // Tools/Growth State
     const [trends, setTrends] = useState<any[]>([]);
     const [marketAudit, setMarketAudit] = useState<any>(null);
     const [isAuditing, setIsAuditing] = useState(false);
@@ -62,18 +53,14 @@ export const ProDashboard = () => {
     const [selectedAsset, setSelectedAsset] = useState<any>(null);
 
     useEffect(() => {
-        if (showSetup || showPublishModal || showManual || selectedArticle || selectedAsset || showAuditModal) {
-            setFooterVisible(false);
-            setHeaderVisible(false);
-        } else {
-            setFooterVisible(true);
-            setHeaderVisible(true);
-        }
+        const anyModalOpen = showSetup || showManual || selectedArticle || selectedAsset || showAuditModal;
+        setFooterVisible(!anyModalOpen);
+        setHeaderVisible(!anyModalOpen);
         return () => {
             setHeaderVisible(true);
             setFooterVisible(true);
         };
-    }, [showSetup, showPublishModal, showManual, selectedArticle, selectedAsset, showAuditModal, setFooterVisible, setHeaderVisible]);
+    }, [showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, setFooterVisible, setHeaderVisible]);
 
     useEffect(() => {
         loadStatus();
@@ -91,15 +78,15 @@ export const ProDashboard = () => {
         try {
             const data = await proService.getStatus();
             setStatus(data);
-            if (data?.api_config) {
+            if (data?.setup) {
                 setApiData({
-                    x_api_key: data.api_config.x_api_key || '',
-                    x_api_secret: data.api_config.x_api_secret || '',
-                    x_access_token: data.api_config.x_access_token || '',
-                    x_access_token_secret: data.api_config.x_access_token_secret || '',
-                    telegram_channel_id: data.api_config.telegram_channel_id || '',
-                    telegram_channels: data.api_config.telegram_channels || [],
-                    linkedin_access_token: data.api_config.linkedin_access_token || ''
+                    x_api_key: data.setup.x_api_key || '',
+                    x_api_secret: data.setup.x_api_secret || '',
+                    x_access_token: data.setup.x_access_token || '',
+                    x_access_token_secret: data.setup.x_access_token_secret || '',
+                    telegram_channel_id: data.setup.telegram_channel_id || '',
+                    telegram_channels: data.setup.telegram_channels || [],
+                    linkedin_access_token: data.setup.linkedin_access_token || ''
                 });
             }
             setAcademyScore(data?.academy_score || 0);
@@ -122,13 +109,23 @@ export const ProDashboard = () => {
         setIsLoading(true);
         impact('heavy');
         try {
-            await proService.saveSetup(apiData);
+            await proService.setupSocial(apiData);
             await loadStatus();
             setShowSetup(false);
-            notification({ title: t('pro_dashboard.setup.save_success_title'), text: t('pro_dashboard.setup.save_success_text'), type: 'success' });
+            showNotification({
+                title: t('pro_dashboard.setup.save_success_title'),
+                message: t('pro_dashboard.setup.save_success_text'),
+                type: 'success'
+            });
+            hapticNotification('success');
         } catch (error) {
             console.error('Failed to save setup', error);
-            notification({ title: t('pro_dashboard.setup.save_error_title'), text: t('pro_dashboard.setup.save_error_text'), type: 'error' });
+            showNotification({
+                title: t('pro_dashboard.setup.save_error_title'),
+                message: t('pro_dashboard.setup.save_error_text'),
+                type: 'warning'
+            });
+            hapticNotification('error');
         } finally {
             setIsLoading(false);
         }
@@ -137,11 +134,21 @@ export const ProDashboard = () => {
     const handleTestIntegration = async (platform: string) => {
         impact('medium');
         try {
-            await proService.testIntegration(platform);
-            notification({ title: 'Test Successful', text: `${platform.toUpperCase()} integration is active and verified.`, type: 'success' });
+            await proService.testIntegration(platform as any);
+            showNotification({
+                title: 'Test Successful',
+                message: `${platform.toUpperCase()} integration is active and verified.`,
+                type: 'success'
+            });
+            hapticNotification('success');
         } catch (error: any) {
             const msg = error.response?.data?.error || `Failed to verify ${platform} node. Check your keys.`;
-            notification({ title: 'Test Failed', text: msg, type: 'error' });
+            showNotification({
+                title: 'Test Failed',
+                message: msg,
+                type: 'warning'
+            });
+            hapticNotification('error');
         }
     };
 
@@ -153,9 +160,10 @@ export const ProDashboard = () => {
             const data = await proService.completeAcademyStage(stage_id);
             setAcademyScore(data.academy_score);
             setCompletedStages(prev => [...prev, stage_id]);
-            notification('success');
+            hapticNotification('success');
         } catch (error) {
             console.error('Failed to complete academy stage', error);
+            hapticNotification('error');
         } finally {
             setIsCompletingStage(null);
         }
@@ -166,13 +174,23 @@ export const ProDashboard = () => {
         setIsAuditing(true);
         impact('heavy');
         try {
-            const result = await proService.runMarketingAudit();
-            setMarketAudit(result);
+            const result = await proService.getMarketingAudit();
+            setMarketAudit(result.audit);
             setShowAuditModal(true);
-            notification({ title: 'Global Sync Complete', text: 'Market intelligence dossier updated.', type: 'success' });
+            showNotification({
+                title: 'Global Sync Complete',
+                message: 'Market intelligence dossier updated.',
+                type: 'success'
+            });
+            hapticNotification('success');
         } catch (error) {
             console.error(error);
-            notification({ title: 'Sync Error', text: 'Global intelligence node unreachable. Try again.', type: 'error' });
+            showNotification({
+                title: 'Sync Error',
+                message: 'Global intelligence node unreachable. Try again.',
+                type: 'warning'
+            });
+            hapticNotification('error');
         } finally {
             setIsAuditing(false);
         }
@@ -180,13 +198,30 @@ export const ProDashboard = () => {
 
     const handleCopyAnyText = (text: string) => {
         navigator.clipboard.writeText(text);
-        notification({ title: 'Copied', text: 'Intelligence data copied to clipboard.', type: 'success' });
+        showNotification({
+            title: 'Copied',
+            message: 'Intelligence data copied to clipboard.',
+            type: 'success'
+        });
         impact('light');
+    };
+
+    const notificationShim = (notif: any) => {
+        if (typeof notif === 'string') {
+            hapticNotification(notif as any);
+        } else {
+            showNotification({
+                title: notif.title,
+                message: notif.text || notif.message,
+                type: notif.type === 'error' ? 'warning' : notif.type
+            });
+            hapticNotification(notif.type === 'error' ? 'error' : notif.type);
+        }
     };
 
     return (
         <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-indigo-500/30 overflow-x-hidden">
-            <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,_rgba(30,58,138,0.15)_0%,_transparent_50%)] pointer-events-none" />
+            <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(30,58,138,0.15)_0%,transparent_50%)] pointer-events-none" />
             <div className="relative z-10 max-w-5xl mx-auto px-4 pt-10 pb-32">
                 {/* Header Section */}
                 <div className="flex flex-col gap-8 mb-12">
@@ -214,9 +249,8 @@ export const ProDashboard = () => {
                         </div>
 
                         <div className="flex items-center gap-3 p-1.5 bg-white/5 backdrop-blur-3xl rounded-[2rem] border border-white/10 shadow-3xl">
-                            <div className="flex items-center gap-3 px-5 py-3 rounded-[1.5rem] bg-indigo-500/10 border border-indigo-500/20 group hover:bg-indigo-500/20 transition-all cursor-default overflow-hidden relative">
-                                <div className="absolute top-0 right-0 w-8 h-8 bg-white/5 -mr-4 -mt-4 rotate-45" />
-                                <Trophy size={18} className="text-indigo-400 group-hover:scale-110 transition-transform" />
+                            <div className="flex items-center gap-3 px-5 py-3 rounded-[1.5rem] bg-indigo-500/10 border border-indigo-500/20 group hover:bg-indigo-500/20 transition-all cursor-default">
+                                <Trophy size={18} className="text-indigo-400" />
                                 <div className="flex flex-col">
                                     <span className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] leading-none mb-1">XP Points</span>
                                     <span className="text-xl font-black text-white tabular-nums leading-none tracking-tight">{academyScore}</span>
@@ -226,12 +260,11 @@ export const ProDashboard = () => {
                                 onClick={() => setShowSetup(true)}
                                 className="p-3.5 bg-white/5 hover:bg-white/10 rounded-[1.5rem] border border-white/5 hover:border-white/20 transition-all group active:scale-95"
                             >
-                                <Settings size={18} className="text-slate-400 group-hover:text-white transition-colors group-hover:rotate-45 transition-transform duration-500" />
+                                <Settings size={18} className="text-slate-400 group-hover:text-white group-hover:rotate-45 transition-all duration-500" />
                             </button>
                         </div>
                     </div>
 
-                    {/* Navigation Tabs */}
                     <div className="flex p-2 bg-slate-900/50 backdrop-blur-3xl rounded-[2.5rem] border border-white/10 shadow-inner relative group/nav">
                         {(['studio', 'tools', 'growth'] as const).map((tab) => (
                             <button
@@ -258,32 +291,16 @@ export const ProDashboard = () => {
                     </div>
                 </div>
 
-                {/* Tab Content Display */}
                 <div className="relative min-h-[500px]">
                     <AnimatePresence mode="wait">
                         {activeTab === 'studio' && (
                             <StudioTab
                                 key="studio"
                                 status={status}
-                                step={step}
-                                setStep={setStep}
-                                isGenerating={isGenerating}
-                                setIsGenerating={setIsGenerating}
-                                generatedResult={generatedResult}
-                                setGeneratedResult={setGeneratedResult}
-                                history={history}
-                                setHistory={setHistory}
-                                historyIndex={historyIndex}
-                                setHistoryIndex={setHistoryIndex}
-                                isPublishing={isPublishing}
-                                setIsPublishing={setIsPublishing}
-                                showPublishModal={showPublishModal}
-                                setShowPublishModal={setShowPublishModal}
-                                publishedPlatforms={publishedPlatforms}
-                                setPublishedPlatforms={setPublishedPlatforms}
+                                setStatus={setStatus}
                                 impact={impact}
                                 selection={selection}
-                                notification={notification}
+                                notification={notificationShim}
                             />
                         )}
 
@@ -293,7 +310,7 @@ export const ProDashboard = () => {
                                 trends={trends}
                                 isAuditing={isAuditing}
                                 handleRunMarketingAudit={handleRunMarketingAudit}
-                                setShowHeadlineModal={setShowAuditModal} // Using audit modal for now as placeholder or update logic
+                                setShowHeadlineModal={setShowAuditModal}
                                 setShowTrendsModal={setShowAuditModal}
                                 setShowBioModal={setShowAuditModal}
                                 selection={selection}
@@ -318,32 +335,31 @@ export const ProDashboard = () => {
                         )}
                     </AnimatePresence>
                 </div>
-
-                {/* Modals Layer */}
-                <ProDashboardModals
-                    showSetup={showSetup}
-                    setShowSetup={setShowSetup}
-                    apiData={apiData}
-                    setApiData={setApiData}
-                    isLoading={isLoading}
-                    handleSaveSetup={handleSaveSetup}
-                    handleTestIntegration={handleTestIntegration}
-                    showAuditModal={showAuditModal}
-                    setShowAuditModal={setShowAuditModal}
-                    marketAudit={marketAudit}
-                    setActiveTab={setActiveTab}
-                    selectedArticle={selectedArticle}
-                    setSelectedArticle={setSelectedArticle}
-                    selectedAsset={selectedAsset}
-                    setSelectedAsset={setSelectedAsset}
-                    handleCopyAnyText={handleCopyAnyText}
-                    showManual={showManual}
-                    setShowManual={setShowManual}
-                    status={status}
-                    selection={selection}
-                    impact={impact}
-                />
             </div>
+
+            <ProDashboardModals
+                status={status}
+                showSetup={showSetup}
+                setShowSetup={setShowSetup}
+                apiData={apiData}
+                setApiData={setApiData}
+                handleSaveSetup={handleSaveSetup}
+                handleTestIntegration={handleTestIntegration}
+                isLoading={isLoading}
+                showAuditModal={showAuditModal}
+                setShowAuditModal={setShowAuditModal}
+                marketAudit={marketAudit}
+                setActiveTab={setActiveTab}
+                selectedArticle={selectedArticle}
+                setSelectedArticle={setSelectedArticle}
+                selectedAsset={selectedAsset}
+                setSelectedAsset={setSelectedAsset}
+                showManual={showManual}
+                setShowManual={setShowManual}
+                selection={selection}
+                impact={impact}
+                copyText={handleCopyAnyText}
+            />
         </div>
     );
 };
