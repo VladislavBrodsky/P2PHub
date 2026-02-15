@@ -182,7 +182,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                             }}
                         >
                             {isClaiming ? <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
-                            {isClaiming ? t('common.loading') : t('tasks.claim')}
+                            {isClaiming ? (t('common.loading') || "Loading...") : t('tasks.claim')}
                         </button>
                     ) : status === 'VERIFYING' ? (
                         <div className="bg-blue-500/5 border border-blue-500/20 px-4 py-2 rounded-lg flex items-center gap-3">
