@@ -1,10 +1,9 @@
 
 import taskiq_fastapi
+from app.core.config import settings
 from taskiq import TaskiqScheduler
 from taskiq.schedule_sources import LabelScheduleSource
 from taskiq_redis import ListQueueBroker, RedisAsyncResultBackend
-
-from app.core.config import settings
 
 # 1. Init Broker (Redis)
 broker = ListQueueBroker(

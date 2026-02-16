@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Any, Optional
 
 from sqlalchemy import JSON, Column
 from sqlmodel import Field, SQLModel

@@ -1,11 +1,10 @@
 import asyncio
 import logging
 
-from sqlmodel import select
-
 from app.models.partner import Partner, get_session
 from app.services.leaderboard_service import leaderboard_service
 from app.services.redis_service import redis_service
+from sqlmodel import select
 
 logger = logging.getLogger(__name__)
 
@@ -66,8 +65,6 @@ async def warmup_redis():
             # #comment: Calling endpoint function requires BackgroundTasks which we don't have in warmup context.
             # Instead, we'll manually cache the recent partners query directly.
             logger.info("📡 Warming up Recent Partners cache...")
-            import json
-            from datetime import datetime, timedelta
             
             cache_key = "partners:recent_v2"
             

@@ -7,53 +7,29 @@ import {
 import { Trans, useTranslation } from 'react-i18next';
 
 interface ProModalsProps {
-    status: any;
-    showSetup: boolean;
-    setShowSetup: (show: boolean) => void;
-    apiData: any;
-    setApiData: (data: any) => void;
-    handleSaveSetup: () => void;
-    handleTestIntegration: (platform: string) => void;
-    isLoading: boolean;
     showAuditModal: boolean;
     setShowAuditModal: (show: boolean) => void;
     marketAudit: any;
     setActiveTab: (tab: any) => void;
     selectedArticle: any;
     setSelectedArticle: (article: any) => void;
-    selectedAsset: any;
-    setSelectedAsset: (asset: any) => void;
     showManual: string | null;
     setShowManual: (manual: string | null) => void;
     selection: () => void;
-    impact: (style: any) => void;
-    copyText: (text: string, label: string) => void;
     handleRefreshAudit: () => void;
     isAuditing: boolean;
 }
 
 export const ProDashboardModals = ({
-    status,
-    showSetup,
-    setShowSetup,
-    apiData,
-    setApiData,
-    handleSaveSetup,
-    handleTestIntegration,
-    isLoading,
     showAuditModal,
     setShowAuditModal,
     marketAudit,
     setActiveTab,
     selectedArticle,
     setSelectedArticle,
-    selectedAsset,
-    setSelectedAsset,
     showManual,
     setShowManual,
     selection,
-    impact,
-    copyText,
     handleRefreshAudit,
     isAuditing
 }: ProModalsProps) => {

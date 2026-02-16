@@ -2,18 +2,17 @@ import asyncio
 import json
 import logging
 import os
-from datetime import datetime, timedelta
-from typing import Any, ClassVar, Optional
+from datetime import datetime
+from typing import Any, ClassVar
 
 import gspread
-from google.oauth2.service_account import Credentials
-from openai import AsyncOpenAI
-
 from app.core.config import settings
 
 # #comment: Import redis service for caching KB responses
 from app.services.redis_service import redis_service
 from app.worker import broker
+from google.oauth2.service_account import Credentials
+from openai import AsyncOpenAI
 
 logger = logging.getLogger(__name__)
 
@@ -96,13 +95,13 @@ class SupportAgentService:
     COST_OUTPUT_1M = 0.60
 
     # #comment: Local Memory Cache for Knowledge Base (Scale bypass for Redis)
-    _kb_memory_cache: dict[str, Any] | None = None
-    _kb_index: dict[str, list[int]] = {} # Word-to-Record Index
-    _kb_last_refresh: datetime = datetime.min
+    _kb_memory_cache: ClassVar[dict[str, Any] | None] = None
+    _kb_index: ClassVar[dict[str, list[int]]] = {} # Word-to-Record Index
+    _kb_last_refresh: ClassVar[datetime] = datetime.min
     KB_MEMORY_TTL = 300  # 5 minutes in-memory TTL
     
     # #comment: Background tasks tracking to prevent garbage collection
-    _background_tasks = set()
+    _background_tasks: ClassVar[set[asyncio.Task]] = set()
 
     
     # #comment: Fallback Instruction Library (Ensures 5-star service if Sheet is offline)

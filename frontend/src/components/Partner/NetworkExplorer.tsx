@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
     Users, X, UserPlus, AlertCircle, TrendingUp, Award, Zap,
-    ChevronRight, Search, SlidersHorizontal, Share2, RefreshCw
+    Search, RefreshCw
 } from 'lucide-react';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';

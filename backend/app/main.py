@@ -190,9 +190,8 @@ async def lifespan(app: FastAPI):
     # which would cause cryptic errors later during request handling.
     try:
         import asyncpg
-        from sqlalchemy import text
-
         from app.models.partner import engine
+        from sqlalchemy import text
         logger.info("🌍 Checking Database Connection (Timeout 5s)...")
         async with asyncio.timeout(5.0):
             async with engine.begin() as conn:
@@ -329,9 +328,8 @@ async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = H
     return {"status": "ok"}
 
 # Import rate limiter
-from slowapi.errors import RateLimitExceeded
-
 from app.middleware.rate_limit import limiter, rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 # Add rate limiter state and exception handler
 app.state.limiter = limiter

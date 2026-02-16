@@ -6,7 +6,7 @@ import {
     ArrowUpRight, Heart, Share2, ChevronLeft, Zap,
     Globe, ChevronDown
 } from 'lucide-react';
-import { blogPosts, BlogPost } from '../data/blogPosts';
+import { BlogPost } from '../data/blogPosts';
 import { useHaptic } from '../hooks/useHaptic';
 import { blogService, BlogEngagement } from '../services/blogService';
 
@@ -62,7 +62,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
             fetchPosts(true);
         }, 500);
         return () => clearTimeout(timer);
-    }, [selectedCategory, searchQuery]);
+    }, [selectedCategory, searchQuery, fetchPosts]);
 
     // Sync header visibility with selectedPost
     useEffect(() => {
@@ -627,7 +627,7 @@ interface TopicDropdownProps {
     t: any;
 }
 
-const TopicDropdown = ({ selected, onSelect, categories, t }: TopicDropdownProps) => {
+const TopicDropdown = ({ selected, onSelect, categories }: TopicDropdownProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 

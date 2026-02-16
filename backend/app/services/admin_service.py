@@ -1,14 +1,13 @@
 import logging
 from datetime import datetime, timedelta
-from typing import Any, Dict, List
+from typing import Any
 
 logger = logging.getLogger(__name__)
-
-from sqlmodel import func, select, text
 
 from app.models.partner import Earning, Partner, PartnerTask, get_session
 from app.models.transaction import PartnerTransaction
 from app.services.notification_service import notification_service
+from sqlmodel import func, select, text
 
 
 class AdminService:
@@ -45,242 +44,159 @@ class AdminService:
             }
 
     async def get_dashboard_stats(self, force_refresh: bool = False) -> dict[str, Any]:
-        """
-        Calculates KPIs for the admin dashboard.
-        Uses SystemSetting as a materialized cache to prevent O(N) query sprawl.
-        #comment: This is critical for scaling. Real-time aggregation of 100K+ records 
-        # on every page refresh is a major performance bottleneck.
-        """
-        import json
-
-        from app.models.partner import SystemSetting
+        """Calculates KPIs for the admin dashboard with materialization."""
 
         async for session in get_session():
-            # 1. Try to return cached snapshot if not forcing refresh
             if not force_refresh:
-                cache_stmt = select(SystemSetting).where(SystemSetting.key == "cache:admin_stats")
-                cache_item = (await session.exec(cache_stmt)).first()
-                if cache_item:
-                    try:
-                        data = json.loads(cache_item.value)
-                        # Add a flag to show data freshness
-                        data["cached_at"] = cache_item.updated_at.isoformat()
-                        return data
-                    except Exception as e:
-                        logger.warning(f"Failed to parse admin_stats cache: {e}")
+                cached = await self._get_cached_stats(session)
+                if cached: return cached
 
-            # 2. Perform Heavy Computation (Fallback or Scheduled)
+            # Heavy Computation Start
             now = datetime.utcnow()
-
-            periods = {
-                "24h": timedelta(hours=24),
-                "7d": timedelta(days=7),
-                "30d": timedelta(days=30),
-                "90d": timedelta(days=90)
-            }
-
-            growth = {}
-            for label, delta in periods.items():
-                period_start = now - delta
-                prev_period_start = now - (delta * 2)
-
-                # Current period count
-                stmt = select(func.count(Partner.id)).where(Partner.created_at >= period_start)
-                current_count = (await session.exec(stmt)).one()
-
-                # Previous period count
-                stmt_prev = select(func.count(Partner.id)).where(
-                    Partner.created_at >= prev_period_start,
-                    Partner.created_at < period_start
-                )
-                prev_count = (await session.exec(stmt_prev)).one()
-
-                pct_change = 0
-                if prev_count > 0:
-                    pct_change = ((current_count - prev_count) / prev_count) * 100
-
-                growth[label] = {
-                    "count": current_count,
-                    "previous": prev_count,
-                    "percent_change": round(pct_change, 1)
-                }
-
-            # Key Events
-            # 1. Total Partners
-            total_partners = (await session.exec(select(func.count(Partner.id)))).one()
-
-            # 2. PRO Upgrades (Total is_pro=True)
-            total_pro = (await session.exec(select(func.count(Partner.id)).where(Partner.is_pro))).one()
-
-            # 3. Tasks Completed (Total unique tasks)
-            total_tasks = (await session.exec(select(func.count(PartnerTask.id)))).one()
-
-            # Financials
-            # 1. Total Revenue (Completed transactions) - Breaking down by currency
-            revenue_stmt_ton = select(func.sum(PartnerTransaction.amount)).where(
-                PartnerTransaction.status == "completed",
-                PartnerTransaction.currency == "TON"
-            )
-            revenue_stmt_usdt = select(func.sum(PartnerTransaction.amount)).where(
-                PartnerTransaction.status == "completed",
-                PartnerTransaction.currency == "USDT"
-            )
-            total_revenue_ton = (await session.exec(revenue_stmt_ton)).one() or 0.0
-            total_revenue_usdt = (await session.exec(revenue_stmt_usdt)).one() or 0.0
             
-            # Simple conversion for display (Mock rate or just total)
-            total_revenue = total_revenue_usdt + (total_revenue_ton * 5.0) # Mock conversion: 1 TON = 5 USDT if needed, or just keep separate
-            # Actually, let's keep it clean as separate fields but return a combined total in USDT-equivalent if possible.
-            # For now, let's just return both.
-
-            # 2. Commissions by Level (1-9) in a single high-performance query
-            # #comment: MISSION-CRITICAL OPTIMIZATION. Replacing 9 sequential queries with 1 grouped query.
-            # This prevents DB lock contention during high-traffic growth spikes.
-            stmt_comm_all = select(Earning.level, func.sum(Earning.amount)).where(
-                Earning.type == "COMMISSION",
-                Earning.level.between(1, 9)
-            ).group_by(Earning.level)
-            comm_res = await session.exec(stmt_comm_all)
-            comm_map = {lvl: amt for lvl, amt in comm_res.all()}
+            # 1. Growth Stats
+            growth = await self._calculate_growth_metrics(session, now)
             
-            commissions_by_level = []
-            total_commissions = 0.0
-            for level in range(1, 10):
-                level_amount = comm_map.get(level, 0.0)
-                commissions_by_level.append({
-                    "level": level,
-                    "amount": round(level_amount, 2)
-                })
-                total_commissions += level_amount
-
-            # 3. Net Profit (Clear Income)
-            net_profit = total_revenue - total_commissions
-
-            # 4. Daily Performance Charts (Last 14 days)
-            # #comment: MISSION-CRITICAL PERF. Replaced 28 loop-driven queries with 2 grouped queries.
-            # This is vital for maintaining UI responsiveness as the transaction ledger grows.
-            from sqlalchemy import Date, cast
+            # 2. General Totals
+            totals = await self._calculate_general_totals(session, now)
             
-            cutoff_date = now - timedelta(days=14)
+            # 3. Financials
+            financials = await self._calculate_financial_metrics(session)
             
-            # 4.1 Daily Growth
-            stmt_daily_growth = select(
-                cast(Partner.created_at, Date).label("day"),
-                func.count(Partner.id)
-            ).where(Partner.created_at >= cutoff_date).group_by("day")
-            growth_res = await session.exec(stmt_daily_growth)
-            growth_map = {row[0]: row[1] for row in growth_res.all() if row[0]}
-            
-            # 4.2 Daily Revenue
-            stmt_daily_rev = select(
-                cast(PartnerTransaction.created_at, Date).label("day"),
-                func.sum(PartnerTransaction.amount)
-            ).where(
-                PartnerTransaction.status == "completed",
-                PartnerTransaction.created_at >= cutoff_date
-            ).group_by("day")
-            rev_res = await session.exec(stmt_daily_rev)
-            rev_map = {row[0]: row[1] for row in rev_res.all() if row[0]}
-            
-            daily_growth = []
-            daily_revenue = []
-            for i in range(13, -1, -1):
-                day = (now - timedelta(days=i)).date()
-                day_str = day.strftime("%m-%d")
-                
-                daily_growth.append({
-                    "date": day_str,
-                    "count": growth_map.get(day, 0)
-                })
-                
-                daily_revenue.append({
-                    "date": day_str,
-                    "amount": round(rev_map.get(day, 0.0), 2)
-                })
+            # 4. Daily Performance Charts
+            daily_growth, daily_revenue = await self._calculate_daily_performance(session, now)
 
-            # 5. Recent Successful Transactions
-            stmt_recent = select(PartnerTransaction).where(
-                PartnerTransaction.status == "completed"
-            ).order_by(PartnerTransaction.created_at.desc()).limit(15)
-            recent_res = await session.exec(stmt_recent)
-            recent_txs = recent_res.all()
+            # 5. Recent Sales
+            recent_sales = await self._calculate_recent_sales(session)
 
-            recent_sales = []
-            for tx in recent_txs:
-                # Get partner username for display
-                p_stmt = select(Partner.username, Partner.telegram_id).where(Partner.id == tx.partner_id)
-                p_info = (await session.exec(p_stmt)).first()
-                recent_sales.append({
-                    "id": tx.id,
-                    "amount": tx.amount,
-                    "currency": tx.currency,
-                    "tx_hash": tx.tx_hash,
-                    "created_at": tx.created_at.isoformat(),
-                    "username": p_info[0] if p_info else None,
-                    "telegram_id": p_info[1] if p_info else "Unknown"
-                })
+            # 6. Task Breakdown
+            task_breakdown = await self._calculate_task_breakdown(session)
 
-            # KPIs
-            conversion_rate = (total_pro / total_partners * 100) if total_partners > 0 else 0
-            arpu = (total_revenue / total_partners) if total_partners > 0 else 0
-            
-            # 24h Active Users (Users who checked in or were created in last 24h)
-            active_24h_stmt = select(func.count(Partner.id)).where(
-                (Partner.last_checkin_at >= now - timedelta(hours=24)) |
-                (Partner.created_at >= now - timedelta(hours=24))
-            )
-            active_24h = (await session.exec(active_24h_stmt)).one()
-
-            # Task Completion Trends (Last 7 days)
-            task_stats_stmt = select(PartnerTask.task_id, func.count(PartnerTask.id)).group_by(PartnerTask.task_id)
-            task_counts_res = await session.exec(task_stats_stmt)
-            task_breakdown = {tid: count for tid, count in task_counts_res.all()}
-
-            # 6. Materialize the result into SystemSetting for lightning-fast reads
+            # 7. Final Assembly
             stats = {
                 "growth": growth,
                 "daily_growth": daily_growth,
                 "daily_revenue": daily_revenue,
                 "recent_sales": recent_sales,
-                "events": {
-                    "total_partners": total_partners,
-                    "total_pro": total_pro,
-                    "total_tasks": total_tasks,
-                    "active_24h": active_24h
-                },
-                "kpis": {
-                    "conversion_rate": round(conversion_rate, 2),
-                    "arpu": round(arpu, 2),
-                    "retention_estimate": 85.5 # Mock as requested for "important KPIs"
-                },
-                "financials": {
-                    "total_revenue": round(total_revenue, 2),
-                    "total_revenue_ton": round(total_revenue_ton, 2),
-                    "total_revenue_usdt": round(total_revenue_usdt, 2),
-                    "total_commissions": round(total_commissions, 2),
-                    "net_profit": round(net_profit, 2),
-                    "commissions_breakdown": commissions_by_level
-                },
+                "events": totals,
+                "kpis": self._calculate_kpis(totals, financials["total_revenue"]),
+                "financials": financials,
                 "tasks": task_breakdown,
                 "top_partners": await self.get_top_partners(limit=5),
                 "server_time": now.isoformat()
             }
 
-            try:
-                cache_val = json.dumps(stats)
-                # We need a fresh session because the previous one might have been yielded
-                cache_stmt = select(SystemSetting).where(SystemSetting.key == "cache:admin_stats")
-                item = (await session.exec(cache_stmt)).first()
-                if item:
-                    item.value = cache_val
-                else:
-                    session.add(SystemSetting(key="cache:admin_stats", value=cache_val))
-                await session.commit()
-                logger.info("✅ Admin Dash stats materialized correctly.")
-            except Exception as e:
-                logger.error(f"❌ Failed to materialize admin stats: {e}")
-
+            await self._materialize_stats(session, stats)
             return stats
+
+    async def _get_cached_stats(self, session) -> dict | None:
+        import json
+
+        from app.models.partner import SystemSetting
+        cache_item = (await session.exec(select(SystemSetting).where(SystemSetting.key == "cache:admin_stats"))).first()
+        if cache_item:
+            try:
+                data = json.loads(cache_item.value)
+                data["cached_at"] = cache_item.updated_at.isoformat()
+                return data
+            except Exception:
+                pass
+        return None
+
+    async def _calculate_growth_metrics(self, session, now: datetime) -> dict:
+        periods = {"24h": timedelta(hours=24), "7d": timedelta(days=7), "30d": timedelta(days=30), "90d": timedelta(days=90)}
+        growth = {}
+        for label, delta in periods.items():
+            start, prev_start = now - delta, now - (delta * 2)
+            curr = (await session.exec(select(func.count(Partner.id)).where(Partner.created_at >= start))).one()
+            prev = (await session.exec(select(func.count(Partner.id)).where(Partner.created_at >= prev_start, Partner.created_at < start))).one()
+            pct = ((curr - prev) / prev * 100) if prev > 0 else 0
+            growth[label] = {"count": curr, "previous": prev, "percent_change": round(pct, 1)}
+        return growth
+
+    async def _calculate_general_totals(self, session, now: datetime) -> dict:
+        total_partners = (await session.exec(select(func.count(Partner.id)))).one()
+        total_pro = (await session.exec(select(func.count(Partner.id)).where(Partner.is_pro))).one()
+        total_tasks = (await session.exec(select(func.count(PartnerTask.id)))).one()
+        active_24h = (await session.exec(select(func.count(Partner.id)).where(
+            (Partner.last_checkin_at >= now - timedelta(hours=24)) | (Partner.created_at >= now - timedelta(hours=24))
+        ))).one()
+        return {"total_partners": total_partners, "total_pro": total_pro, "total_tasks": total_tasks, "active_24h": active_24h}
+
+    async def _calculate_financial_metrics(self, session) -> dict:
+        rev_ton = (await session.exec(select(func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed", PartnerTransaction.currency == "TON"))).one() or 0.0
+        rev_usdt = (await session.exec(select(func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed", PartnerTransaction.currency == "USDT"))).one() or 0.0
+        total_revenue = rev_usdt + (rev_ton * 5.0)
+        
+        comm_res = await session.exec(select(Earning.level, func.sum(Earning.amount)).where(Earning.type == "COMMISSION", Earning.level.between(1, 9)).group_by(Earning.level))
+        comm_map = {lvl: amt for lvl, amt in comm_res.all()}
+        
+        breakdown, total_comm = [], 0.0
+        for lvl in range(1, 10):
+            amt = comm_map.get(lvl, 0.0)
+            breakdown.append({"level": lvl, "amount": round(amt, 2)})
+            total_comm += amt
+
+        return {
+            "total_revenue": round(total_revenue, 2), "total_revenue_ton": round(rev_ton, 2),
+            "total_revenue_usdt": round(rev_usdt, 2), "total_commissions": round(total_comm, 2),
+            "net_profit": round(total_revenue - total_comm, 2), "commissions_breakdown": breakdown
+        }
+
+    async def _calculate_daily_performance(self, session, now: datetime) -> tuple[list, list]:
+        from sqlalchemy import Date, cast
+        cutoff = now - timedelta(days=14)
+        
+        growth_res = await session.exec(select(cast(Partner.created_at, Date).label("day"), func.count(Partner.id)).where(Partner.created_at >= cutoff).group_by("day"))
+        growth_map = {row[0]: row[1] for row in growth_res.all() if row[0]}
+        
+        rev_res = await session.exec(select(cast(PartnerTransaction.created_at, Date).label("day"), func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed", PartnerTransaction.created_at >= cutoff).group_by("day"))
+        rev_map = {row[0]: row[1] for row in rev_res.all() if row[0]}
+        
+        daily_g, daily_r = [], []
+        for i in range(13, -1, -1):
+            day = (now - timedelta(days=i)).date()
+            d_str = day.strftime("%m-%d")
+            daily_g.append({"date": d_str, "count": growth_map.get(day, 0)})
+            daily_r.append({"date": d_str, "amount": round(rev_map.get(day, 0.0), 2)})
+        return daily_g, daily_r
+
+    async def _calculate_recent_sales(self, session) -> list:
+        txs = (await session.exec(select(PartnerTransaction).where(PartnerTransaction.status == "completed").order_by(PartnerTransaction.created_at.desc()).limit(15))).all()
+        recent = []
+        for tx in txs:
+            p_info = (await session.exec(select(Partner.username, Partner.telegram_id).where(Partner.id == tx.partner_id))).first()
+            recent.append({
+                "id": tx.id, "amount": tx.amount, "currency": tx.currency, "tx_hash": tx.tx_hash,
+                "created_at": tx.created_at.isoformat(), "username": p_info[0] if p_info else None,
+                "telegram_id": p_info[1] if p_info else "Unknown"
+            })
+        return recent
+
+    async def _calculate_task_breakdown(self, session) -> dict:
+        res = await session.exec(select(PartnerTask.task_id, func.count(PartnerTask.id)).group_by(PartnerTask.task_id))
+        return {tid: count for tid, count in res.all()}
+
+    def _calculate_kpis(self, totals: dict, total_revenue: float) -> dict:
+        tp, tpro = totals["total_partners"], totals["total_pro"]
+        return {
+            "conversion_rate": round((tpro / tp * 100) if tp > 0 else 0, 2),
+            "arpu": round((total_revenue / tp) if tp > 0 else 0, 2),
+            "retention_estimate": 85.5
+        }
+
+    async def _materialize_stats(self, session, stats: dict):
+        import json
+
+        from app.models.partner import SystemSetting
+        try:
+            val = json.dumps(stats)
+            item = (await session.exec(select(SystemSetting).where(SystemSetting.key == "cache:admin_stats"))).first()
+            if item: item.value = val
+            else: session.add(SystemSetting(key="cache:admin_stats", value=val))
+            await session.commit()
+        except Exception as e:
+            logger.error(f"Failed to materialize: {e}")
 
     async def get_top_partners(self, limit: int = 10) -> list[dict[str, Any]]:
         """
@@ -355,9 +271,8 @@ class AdminService:
             result = await session.exec(stmt)
             partners = result.all()
             
-            members = []
-            for p in partners:
-                members.append({
+            return [
+                {
                     "telegram_id": p.telegram_id,
                     "username": p.username,
                     "first_name": p.first_name,
@@ -368,8 +283,8 @@ class AdminService:
                     "created_at": p.created_at.isoformat() if p.created_at else None,
                     "level": p.level,
                     "is_pro": p.is_pro
-                })
-            return members
+                } for p in partners
+            ]
 
     async def recalculate_all_referral_counts(self) -> dict[str, Any]:
         """

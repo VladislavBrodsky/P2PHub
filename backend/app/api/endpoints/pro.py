@@ -1,14 +1,8 @@
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
-from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
-
 from app.core.security import get_current_user, get_tg_user
 from app.models.partner import Partner, get_session
 from app.models.schemas import (
-    PartnerResponse,
     PROSetupRequest,
     SocialPostRequest,
     ViralGenerateRequest,
@@ -16,6 +10,10 @@ from app.models.schemas import (
 )
 from app.services.viral_service import viral_studio
 from bot import bot
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
 

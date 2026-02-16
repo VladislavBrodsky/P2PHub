@@ -4,25 +4,21 @@ import logging
 import os
 import secrets
 from datetime import datetime
-from typing import Any, ClassVar, Optional
+from typing import Any, ClassVar
 
 import gspread
 from app.core.cmo_intelligence import (
     AudienceProfile,
     ContentCategory,
-    CopywritingTechnique,
     KnowledgeInsights,
     NativeLanguageOptimization,
-    ViralFormulas,
 )
 from app.core.config import settings
-from app.core.errors import ViralStudioErrorCode, get_error_msg
+from app.core.errors import ViralStudioErrorCode
 from app.models.partner import Partner
 from google import genai as google_genai
 from google.genai import types as genai_types
 from google.oauth2.service_account import Credentials
-from openai import AsyncOpenAI
-from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
@@ -300,160 +296,24 @@ Use FRESH, audience-specific language that feels authentic.
 
         ref_link = referral_link or f"https://t.me/pintopaybot?start={partner.referral_code}"
         
-        intel = self._build_audience_intel(target_audience, post_type, language)
+        intel = self._build_viral_audience_intel(target_audience, post_type, language)
         best_practices = await KnowledgeInsights.get_best_practices(session)
         
         system_prompt = self._build_viral_system_prompt(
-            target_audience, post_type, language, ref_link, intel, best_practices
+            language, target_audience, post_type, ref_link, intel, best_practices
         )
         user_prompt = self._build_viral_user_prompt(
             target_audience, post_type, language, ref_link, intel
         )
         base_image_prompt = self._build_viral_image_prompt(target_audience, post_type)
 
-        async def get_text_content():
-            try:
-                if not self.openai_client:
-                    return None, (ViralStudioErrorCode.OPENAI_AUTH_ERROR, "OpenAI client not initialized")
-
-                # Try OpenAI first with High Standard Model
-                response = await self.openai_client.chat.completions.create(
-                    model="gpt-4o-mini", # Optimized for speed and cost
-                    messages=[
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": user_prompt}
-                    ],
-                    response_format={"type": "json_object"}
-                )
-                tokens = response.usage.total_tokens if response.usage else 0
-                return json.loads(response.choices[0].message.content), tokens
-            except Exception as e:
-                err_msg = str(e)
-                logger.error(f"❌ ViralStudio [OpenAI Error]: {err_msg}")
-                
-                # Check for common OpenAI errors
-                error_code = ViralStudioErrorCode.OPENAI_AUTH_ERROR if "auth" in err_msg.lower() or "401" in err_msg else \
-                             ViralStudioErrorCode.OPENAI_RATE_LIMIT if "rate" in err_msg.lower() or "429" in err_msg else \
-                             ViralStudioErrorCode.OPENAI_QUOTA_EXCEEDED if "quota" in err_msg.lower() or "insufficient" in err_msg.lower() else \
-                             ViralStudioErrorCode.GENERIC_GENERATION_FAILED
-
-                # Fallback to Gemini if OpenAI fails
-                if self.genai_client:
-                    try:
-                        logger.info(f"🔄 Switching to Gemini 1.5 Flash for text generation (OpenAI failed with {error_code})...")
-                        gemini_response = self.genai_client.models.generate_content(
-                            model='gemini-1.5-flash',
-                            contents=f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}",
-                            config=genai_types.GenerateContentConfig(
-                                response_mime_type='application/json',
-                                temperature=0.7
-                            )
-                        )
-                        return json.loads(gemini_response.text), 0
-                    except Exception as gemini_e:
-                        logger.error(f"❌ ViralStudio [Gemini Fallback Failed]: {gemini_e}")
-                        return None, (ViralStudioErrorCode.GEMINI_TEXT_FAILED, f"OpenAI: {err_msg} | Gemini: {gemini_e}")
-                
-                return None, (error_code, err_msg)
-
-        async def get_image_content(prompt):
-            if not self.genai_client:
-                return None
-            
-            # Correct model names for AI Studio (including Nano Banana latest releases)
-            imagen_models = [
-                self._last_working_imagen_model,
-                'imagen-4.0-fast-generate-001', # Fast for previews - PRIORITY
-                'imagen-3.0-fast-generate-001', # Fast fallback
-                'imagen-4.0-generate-001',      # Standard HQ 
-                'imagen-4.0-ultra-generate-001', # Ultra Quality
-            ]
-            # Remove duplicates and None values
-            imagen_models = [m for i, m in enumerate(imagen_models) if m and m not in imagen_models[:i]]
-            
-            # Defensive check for models attribute and methods
-            models_obj = getattr(self.genai_client, 'models', None)
-            if not models_obj:
-                logger.error("❌ ViralMarketingStudio: genai_client.models is missing")
-                return None
-
-            method = getattr(models_obj, 'generate_images', 
-                           getattr(models_obj, 'generate_image', None))
-            
-            if not method:
-                logger.error("❌ ViralMarketingStudio: No image generation method found in SDK")
-                return None
-
-            loop = asyncio.get_event_loop()
-            for model_name in imagen_models:
-                try:
-                    img_response = await asyncio.wait_for(
-                        loop.run_in_executor(
-                            None, 
-                            lambda m=model_name: method(
-                                model=m,
-                                prompt=prompt,
-                                config={
-                                    'number_of_images': 1,
-                                    'output_mime_type': 'image/png',
-                                    'aspect_ratio': '16:9',
-                                    'safety_filter_level': 'block_low_and_above',
-                                    'person_generation': 'allow_adult',
-                                    # 'add_watermark': True # Removed: Not supported in Gemini API anymore
-                                } if 'imagen' in m else {
-                                    # Nano Banana specific configs (Gemini 3 Pro)
-                                    'number_of_images': 1,
-                                    'aspect_ratio': '16:9',
-                                    'output_mime_type': 'image/png',
-                                    'quality': '4k' if 'pro' in m else 'standard'
-                                }
-                            )
-                        ),
-                        timeout=15.0 # Reduced timeout for Fast models
-                    )
-                    
-                    if img_response and getattr(img_response, 'generated_images', None):
-                        image = img_response.generated_images[0]
-                        filename = f"viral_{partner.id}_{secrets.token_hex(4)}.png"
-                        
-                        # Production path: /app/generated_media (created with proper permissions in Dockerfile)
-                        backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-                        save_dir = os.path.join(backend_dir, "generated_media")
-                        save_path = os.path.join(save_dir, filename)
-                        
-                        # Save image to production directory
-                        try:
-                            from io import BytesIO
-                            
-                            # Get the actual PIL Image object (Gemini wraps it)
-                            pil_image = getattr(image.image, '_pil_image', image.image)
-                            
-                            # Save to BytesIO buffer then write to disk
-                            buffer = BytesIO()
-                            pil_image.save(buffer, format='PNG')
-                            
-                            with open(save_path, 'wb') as f:
-                                f.write(buffer.getvalue())
-                            
-                            logger.info(f"✅ Imagen: Saved {model_name} image to {save_path}")
-                        except Exception as save_err:
-                            logger.error(f"❌ Failed to save image: {save_err}")
-                            return None
-                        
-                        # Remember working model for optimization
-                        self._last_working_imagen_model = model_name
-                        
-                        # Return production URL served by FastAPI
-                        return f"/generated_media/{filename}"
-                except Exception as e:
-                    logger.warning(f"⚠️ Imagen {model_name} failed/timed out: {e}")
-                    continue
-            return None
+        generation_start = datetime.utcnow()
+        tokens_openai = 0
 
         try:
             # 🚀 PARALLEL EXECUTION: OpenAI and Imagen start at the SAME TIME
-            text_task = get_text_content()
-            image_task = get_image_content(base_image_prompt)
+            text_task = self._get_viral_text_content(system_prompt, user_prompt)
+            image_task = self._get_viral_image_content(partner.id, target_audience, post_type, base_image_prompt)
             
             (content_data, text_error_info), image_url = await asyncio.gather(text_task, image_task)
             
@@ -518,6 +378,223 @@ Use FRESH, audience-specific language that feels authentic.
         except Exception as e:
             logger.error(f"Error in viral generation: {e}")
             return {"error": str(e)}
+
+    def _build_viral_audience_intel(self, target_audience: str, post_type: str, language: str) -> dict[str, Any]:
+        return {
+            "audience": AudienceProfile.PROFILES.get(target_audience, {}),
+            "strategy": ContentCategory.STRATEGIES.get(post_type, {}),
+            "dna": NativeLanguageOptimization.LANGUAGE_DNA.get(language, {})
+        }
+
+    def _build_viral_system_prompt(self, language, target_audience, post_type, ref_link, intel, best_practices) -> str:
+        audience_intel = intel["audience"]
+        category_strategy = intel["strategy"]
+        language_dna = intel["dna"]
+        
+        psycho_context = self._build_audience_context(target_audience, audience_intel)
+        strategy_context = self._build_strategy_context(post_type, category_strategy)
+        lang_context = self._build_language_context(language, language_dna)
+        
+        return f"""{self.CMO_PERSONA}
+
+{psycho_context}
+
+{strategy_context}
+
+{lang_context}
+
+{self.FORMATTING_MASTERY}
+
+{self.TEXT_RULES}
+
+**UNIVERSAL BEST PRACTICES:**
+{chr(10).join(['- ' + rule for rule in best_practices['universal_rules'][:8]]) if best_practices and 'universal_rules' in best_practices else ""}
+
+**YOUR TASK:**
+Write in {language} for {target_audience} using the {post_type} strategy.
+Product: Pintopay Crypto Card + Partner Network
+Referral Link (MUST INCLUDE): {ref_link}
+
+**OUTPUT FORMAT (JSON ONLY):**
+{{
+  "title": "Viral headline <15 words",
+  "body": "Full post with **bold**, _italic_, and [hyperlink]({ref_link}) formatting",
+  "hashtags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
+  "image_description": "Detailed scene description for Nano Banana Pro (4K cinematic)"
+}}
+"""
+
+    def _build_viral_user_prompt(self, target_audience, post_type, language, ref_link, intel) -> str:
+        audience_intel = intel["audience"]
+        category_strategy = intel["strategy"]
+        hook_examples = audience_intel.get("hooks", []) if audience_intel else []
+        
+        return f"""
+EXECUTE CMO AGENT MODE.
+
+Target: {target_audience}
+Category: {post_type}
+Language: {language} (write as NATIVE speaker)
+Referral Link: {ref_link}
+
+**HOOK INSPIRATION (adapt, don't copy):**
+{chr(10).join(['- ' + hook for hook in hook_examples[:2]])}
+
+**CONTENT REQUIREMENTS:**
+1. First sentence MUST stop the scroll (<10 words, shocking or curious)
+2. Tell a micro-story or present a problem they FEEL
+3. Weave in Pintopay Card as the natural solution (not pushy)
+4. Include ONE specific number/stat for credibility
+5. Use psychological triggers: {', '.join(category_strategy.get('psychological_triggers', ['FOMO', 'Social Proof'])[:3])}
+6. Format with <b>bold</b> (4-6x), <i>italic</i> (2-3x), and <a href='{ref_link}'>descriptive link</a> in CTA
+7. End with compelling CTA using this link: {ref_link}
+8. Write 3-5 short paragraphs (1-3 sentences each)
+9. Add 3-5 trending hashtags for {target_audience}
+
+**IMAGE DESCRIPTION:**
+Describe a Nano Banana Pro-quality (4K) cinematic scene:
+- Real person from {target_audience} demographic
+- Emotional moment related to {post_type}
+- Setting: Ultra-modern 2026, luxury lifestyle or digital workspace
+- Mood: Success, transformation, financial freedom
+- Technical: Professional photography, natural lighting, sharp detail
+
+RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
+"""
+
+    def _build_viral_image_prompt(self, target_audience: str, post_type: str) -> str:
+        return (
+            f"PROFESSIONAL STUDIO PHOTOGRAPHY - NANO BANANA PRO QUALITY: A real person from {target_audience}, "
+            f"captured in an authentic, high-fidelity cinematic moment for '{post_type}'. "
+            f"The scene must be grounded in realism with complex lighting, shallow depth of field, and 4K detail. "
+            f"Subject: {target_audience} expressing peak success/transformation. "
+            f"Setting: Ultra-modern 2026 digital infrastructure or luxury lifestyle environment. "
+            f"Atmosphere: Sophisticated, authoritative, financial freedom. "
+            f"Technical specs: 35mm lens, sharp focus, natural skin textures, volumetric lighting. "
+            f"Creative Rule: Render 'Pintopay Partner Club' or '{post_type.replace('_', ' ').title()}' as high-quality text within the scene (e.g., on a screen, card, or ambient display). "
+            f"Text MUST relate to the viral hook or CTA. SPELLING MUST BE PERFECT. "
+            f"NEGATIVE PROMPT: cartoon, CGI, anime, illustration, stock photo smile, distorted faces, extra limbs, blurry, "
+            f"futuristic sci-fi, neon lights, flying cars, unrealistic proportions, oversaturated colors, generic poses, misspelled text, gibberish text"
+        )
+
+    async def _get_viral_text_content(self, system_prompt: str, user_prompt: str) -> tuple[dict[str, Any] | None, tuple[int, str] | int]:
+        try:
+            if not self.openai_client:
+                return None, (ViralStudioErrorCode.OPENAI_AUTH_ERROR, "OpenAI client not initialized")
+
+            # Try OpenAI first with High Standard Model
+            response = await self.openai_client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ],
+                response_format={"type": "json_object"}
+            )
+            tokens = response.usage.total_tokens if response.usage else 0
+            return json.loads(response.choices[0].message.content), tokens
+        except Exception as e:
+            err_msg = str(e)
+            logger.error(f"❌ ViralStudio [OpenAI Error]: {err_msg}")
+            
+            error_code = ViralStudioErrorCode.OPENAI_AUTH_ERROR if "auth" in err_msg.lower() or "401" in err_msg else \
+                         ViralStudioErrorCode.OPENAI_RATE_LIMIT if "rate" in err_msg.lower() or "429" in err_msg else \
+                         ViralStudioErrorCode.OPENAI_QUOTA_EXCEEDED if "quota" in err_msg.lower() or "insufficient" in err_msg.lower() else \
+                         ViralStudioErrorCode.GENERIC_GENERATION_FAILED
+
+            if self.genai_client:
+                try:
+                    logger.info("🔄 Switching to Gemini 1.5 Flash for text generation (OpenAI failed)...")
+                    gemini_response = self.genai_client.models.generate_content(
+                        model='gemini-1.5-flash',
+                        contents=f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}",
+                        config=genai_types.GenerateContentConfig(
+                            response_mime_type='application/json',
+                            temperature=0.7
+                        )
+                    )
+                    return json.loads(gemini_response.text), 0
+                except Exception as gemini_e:
+                    logger.error(f"❌ ViralStudio [Gemini Fallback Failed]: {gemini_e}")
+                    return None, (ViralStudioErrorCode.GEMINI_TEXT_FAILED, f"OpenAI: {err_msg} | Gemini: {gemini_e}")
+            
+            return None, (error_code, err_msg)
+
+    async def _get_viral_image_content(self, partner_id: int, target_audience: str, post_type: str, prompt: str) -> str | None:
+        if not self.genai_client:
+            return None
+        
+        imagen_models = [
+            self._last_working_imagen_model,
+            'imagen-4.0-fast-generate-001',
+            'imagen-3.0-fast-generate-001',
+            'imagen-4.0-generate-001',
+            'imagen-4.0-ultra-generate-001',
+        ]
+        # Remove duplicates
+        imagen_models = [m for i, m in enumerate(imagen_models) if m and m not in imagen_models[:i]]
+        
+        models_obj = getattr(self.genai_client, 'models', None)
+        if not models_obj: return None
+        method = getattr(models_obj, 'generate_images', getattr(models_obj, 'generate_image', None))
+        if not method: return None
+
+        loop = asyncio.get_event_loop()
+        for model_name in imagen_models:
+            success, result = await self._try_generate_single_image(method, model_name, prompt, partner_id, loop)
+            if success:
+                return result
+        return None
+
+    async def _try_generate_single_image(self, method, model_name, prompt, partner_id, loop) -> tuple[bool, str | None]:
+        try:
+            img_response = await asyncio.wait_for(
+                loop.run_in_executor(
+                    None, 
+                    lambda: method(
+                        model=model_name,
+                        prompt=prompt,
+                        config={
+                            'number_of_images': 1,
+                            'output_mime_type': 'image/png',
+                            'aspect_ratio': '16:9',
+                            'safety_filter_level': 'block_low_and_above',
+                            'person_generation': 'allow_adult',
+                        } if 'imagen' in model_name else {
+                            'number_of_images': 1,
+                            'aspect_ratio': '16:9',
+                            'output_mime_type': 'image/png',
+                            'quality': '4k' if 'pro' in model_name else 'standard'
+                        }
+                    )
+                ),
+                timeout=15.0
+            )
+            
+            if img_response and getattr(img_response, 'generated_images', None):
+                image = img_response.generated_images[0]
+                filename = f"viral_{partner_id}_{secrets.token_hex(4)}.png"
+                
+                backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                save_dir = os.path.join(backend_dir, "generated_media")
+                save_path = os.path.join(save_dir, filename)
+                
+                # Get the actual PIL Image object (Gemini wraps it)
+                pil_image = getattr(image.image, '_pil_image', image.image)
+                
+                from io import BytesIO
+                buffer = BytesIO()
+                pil_image.save(buffer, format='PNG')
+                
+                with open(save_path, 'wb') as f:
+                    f.write(buffer.getvalue())
+                
+                self._last_working_imagen_model = model_name
+                logger.info(f"✅ Imagen: Saved {model_name} image to {save_path}")
+                return True, f"/generated_media/{filename}"
+        except Exception as e:
+            logger.warning(f"⚠️ Imagen {model_name} failed: {e}")
+        return False, None
 
     def _build_audience_context(self, target_audience: str, audience_intel: dict) -> str:
         if not audience_intel:

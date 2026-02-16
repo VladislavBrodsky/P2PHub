@@ -1,15 +1,13 @@
 import logging
-from typing import List
-
-from fastapi import APIRouter, Depends, Request
-from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.security import get_current_user, get_tg_user
 from app.middleware.rate_limit import limiter
 from app.models.partner import Earning, Partner, get_session
 from app.models.schemas import EarningSchema
 from app.services.redis_service import redis_service
+from fastapi import APIRouter, Depends, Request
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
 

@@ -1,12 +1,10 @@
 import logging
 from datetime import datetime, timedelta
-from typing import List
-
-from sqlmodel import select, text
-from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
 from app.models.partner import Partner
+from sqlmodel import text
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
 
@@ -78,26 +76,18 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
                 "search_wildcard": f"{search_path}.%",
                 "target_depth": target_depth
             })
-            members = []
-            rows = result.all()
-            for row in rows:
-                members.append({
-                    "telegram_id": row[0],
-                    "username": row[1],
-                    "first_name": row[2],
-                    "last_name": row[3],
-                    "xp": row[4],
-                    "photo_url": row[5],
+            members = [
+                {
+                    "telegram_id": row[0], "username": row[1], "first_name": row[2],
+                    "last_name": row[3], "xp": row[4], "photo_url": row[5],
                     "created_at": row[6].isoformat() if row[6] else None,
-                    "balance": row[7],
-                    "level": row[8],
-                    "referral_code": row[9],
+                    "balance": row[7], "level": row[8], "referral_code": row[9],
                     "is_pro": bool(row[10]),
                     "updated_at": row[11].isoformat() if row[11] else None,
-                    "id": row[12],
-                    "photo_file_id": row[13]
-                })
-
+                    "id": row[12], "photo_file_id": row[13]
+                }
+                for row in rows
+            ]
             return members
         except Exception as e:
             logger.error(f"Error fetching tree members: {e}")
@@ -168,112 +158,80 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     if not partner: return []
 
     now = datetime.utcnow()
-    # Configuration Mapping
-    TF_CONFIG = {
+    now = datetime.utcnow()
+    tf_config = {
         '24H': ('hour', now - timedelta(hours=24), 24),
         '7D':  ('day',  now - timedelta(days=7),   7),
         '1M':  ('day',  now - timedelta(days=30),  30),
-        '3M':  ('day',  now - timedelta(days=90),  9), # Changed to 9 buckets for 90 days (10 days each)
+        '3M':  ('day',  now - timedelta(days=90),  9),
         '6M':  ('month',now - timedelta(days=180), 6),
         '1Y':  ('month',now - timedelta(days=365), 12)
     }
-    interval, start_time, points = TF_CONFIG.get(timeframe, TF_CONFIG['7D'])
+    interval, start_time, points = tf_config.get(timeframe, tf_config['7D'])
 
     search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
     base_depth = len(search_path.split('.'))
-    is_sqlite = "sqlite" in settings.DATABASE_URL
 
-    # Database-specific bucketing logic
-    if is_sqlite:
-        bucket_column = {
-            'hour': "strftime('%Y-%m-%d %H:00:00', created_at)",
-            'day':  "strftime('%Y-%m-%d 00:00:00', created_at)",
-            'month':"strftime('%Y-%m-01 00:00:00', created_at)"
-        }.get(interval)
-    else:
-        bucket_column = f"date_trunc('{interval}', created_at)"
+    # 1. Fetch buckatized counts for the timeframe
+    data_map = await _fetch_time_series_buckets(session, search_path, base_depth, interval, start_time)
 
-    # Query 1: Fetch buckatized counts for the timeframe
+    # 2. Fetch Base Totals (Cumulative count before timeframe)
+    running_totals = await _fetch_base_cumulative_totals(session, search_path, base_depth, start_time)
+
+    # 3. Assemble Output Data Points
+    return _assemble_time_series_response(start_time, points, interval, data_map, running_totals)
+
+async def _fetch_time_series_buckets(session, path: str, base_depth: int, interval: str, start: datetime) -> dict:
+    bucket_column = _get_bucket_expr(interval)
     query = text(f"""
-        SELECT 
-            {bucket_column} as bucket,
-            depth - :base_depth + 1 as level, 
-            COUNT(*) as count
-        FROM partner
-        WHERE (path = :search_path OR path LIKE :search_wildcard)
-        AND created_at >= :start
-        AND (depth - :base_depth + 1) BETWEEN 1 AND 9
-        GROUP BY 1, 2
-        ORDER BY 1 ASC;
+        SELECT {bucket_column} as bucket, depth - :base_depth + 1 as level, COUNT(*) as count
+        FROM partner WHERE (path = :path OR path LIKE :wildcard) AND created_at >= :start
+        AND (depth - :base_depth + 1) BETWEEN 1 AND 9 GROUP BY 1, 2 ORDER BY 1 ASC;
     """)
-
-    result = await session.execute(query, {
-        "search_path": search_path,
-        "search_wildcard": f"{search_path}.%",
-        "start": start_time,
-        "base_depth": base_depth
-    })
-
-    # Prepare data map {bucket_dt: {level: count}}
+    result = await session.execute(query, {"path": path, "wildcard": f"{path}.%", "start": start, "base_depth": base_depth})
+    
     data_map = {}
     for row in result.all():
-        bucket = row[0]
-        if isinstance(bucket, str):
-            bucket = datetime.strptime(bucket, '%Y-%m-%d %H:%M:%S')
-        bucket = bucket.replace(tzinfo=None)
-        level, count = int(row[1]), int(row[2])
-        if bucket not in data_map:
-            data_map[bucket] = {lvl: 0 for lvl in range(1, 10)}
-        data_map[bucket][level] = count
+        b = row[0]
+        if isinstance(b, str): b = datetime.strptime(b, '%Y-%m-%d %H:%M:%S')
+        b = b.replace(tzinfo=None)
+        if b not in data_map: data_map[b] = {lvl: 0 for lvl in range(1, 10)}
+        data_map[b][int(row[1])] = int(row[2])
+    return data_map
 
-    # Query 2: Fetch Base Totals (Cumulative count before timeframe)
-    stmt_base = text("""
+async def _fetch_base_cumulative_totals(session, path: str, base_depth: int, start: datetime) -> dict[int, int]:
+    stmt = text("""
         SELECT depth - :base_depth + 1 as level, COUNT(*)
-        FROM partner
-        WHERE (path = :search_path OR path LIKE :search_wildcard)
-        AND created_at < :start
-        AND (depth - :base_depth + 1) BETWEEN 1 AND 9
-        GROUP BY 1
+        FROM partner WHERE (path = :path OR path LIKE :wildcard) AND created_at < :start
+        AND (depth - :base_depth + 1) BETWEEN 1 AND 9 GROUP BY 1
     """)
-    res_base = await session.execute(stmt_base, {
-        "search_path": search_path,
-        "search_wildcard": f"{search_path}.%",
-        "start": start_time,
-        "base_depth": base_depth
-    })
-    
-    running_totals = {lvl: 0 for lvl in range(1, 10)}
-    for row in res_base.all():
-        running_totals[int(row[0])] = int(row[1])
+    res = await session.execute(stmt, {"path": path, "wildcard": f"{path}.%", "start": start, "base_depth": base_depth})
+    totals = {lvl: 0 for lvl in range(1, 10)}
+    for row in res.all():
+        totals[int(row[0])] = int(row[1])
+    return totals
 
-    # Assemble Output Data Points
+def _get_bucket_expr(interval: str) -> str:
+    if "sqlite" in settings.DATABASE_URL:
+        return {'hour': "strftime('%Y-%m-%d %H:00:00', created_at)", 'day': "strftime('%Y-%m-%d 00:00:00', created_at)", 'month': "strftime('%Y-%m-01 00:00:00', created_at)"}.get(interval)
+    return f"date_trunc('{interval}', created_at)"
+
+def _assemble_time_series_response(start: datetime, points: int, interval: str, data_map: dict, totals: dict) -> list[dict]:
     data = []
-    curr = start_time
-    
-    # Pre-calculate steps to avoid repeated timedelta addition logic
-    def get_next_bucket(c):
-        if interval == 'hour': return c + timedelta(hours=1), f"{c.hour:02d}:00", c.replace(minute=0, second=0, microsecond=0)
-        if interval == 'day': return c + timedelta(days=1), f"{c.day:02d}/{c.month:02d}", c.replace(hour=0, minute=0, second=0, microsecond=0)
-        # Month-aware step
-        next_month = c.month % 12 + 1
-        year_step = 1 if c.month == 12 else 0
-        nb = c.replace(year=c.year + year_step, month=next_month, day=1, hour=0, minute=0, second=0, microsecond=0)
-        return nb, c.strftime("%b"), c.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-
-    for _i in range(points + 1):
-        next_curr, label, bucket_key = get_next_bucket(curr)
-        bucket_data = data_map.get(bucket_key, {lvl: 0 for lvl in range(1, 10)})
-        
-        # Accumulate totals
-        for lvl in range(1, 10):
-            running_totals[lvl] += bucket_data[lvl]
-
-        data.append({
-            "date": label,
-            "total": sum(running_totals.values()),
-            "levels": [running_totals[lvl] for lvl in range(1, 10)],
-            "joined_per_level": [bucket_data[lvl] for lvl in range(1, 10)]
-        })
+    curr = start
+    for _ in range(points + 1):
+        next_curr, label, bucket_key = _get_next_time_step(curr, interval)
+        b_data = data_map.get(bucket_key, {lvl: 0 for lvl in range(1, 10)})
+        for lvl in range(1, 10): totals[lvl] += b_data[lvl]
+        data.append({"date": label, "total": sum(totals.values()), "levels": [totals[lvl] for lvl in range(1, 10)], "joined_per_level": [b_data[lvl] for lvl in range(1, 10)]})
         curr = next_curr
-
     return data
+
+def _get_next_time_step(c: datetime, interval: str) -> tuple[datetime, str, datetime]:
+    if interval == 'hour': 
+        return c + timedelta(hours=1), f"{c.hour:02d}:00", c.replace(minute=0, second=0, microsecond=0)
+    if interval == 'day': 
+        return c + timedelta(days=1), f"{c.day:02d}/{c.month:02d}", c.replace(hour=0, minute=0, second=0, microsecond=0)
+    next_month = c.month % 12 + 1
+    nb = c.replace(year=c.year + (1 if c.month == 12 else 0), month=next_month, day=1, hour=0, minute=0, second=0, microsecond=0)
+    return nb, c.strftime("%b"), c.replace(day=1, hour=0, minute=0, second=0, microsecond=0)

@@ -1,11 +1,10 @@
 import redis.asyncio as redis
+from app.core.config import settings
 from fastapi import Request, Response
 from fastapi.responses import JSONResponse
 from slowapi import Limiter
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
-
-from app.core.config import settings
 
 
 # Initialize Redis-backed limiter for production, in-memory for local

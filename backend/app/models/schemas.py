@@ -1,8 +1,8 @@
 import json
 from datetime import datetime
-from typing import Any, List, Optional
+from typing import Any
 
-from pydantic import BaseModel, Field, computed_field, field_validator, model_validator
+from pydantic import BaseModel, Field, computed_field, model_validator
 
 
 class PartnerBase(BaseModel):

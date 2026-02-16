@@ -120,8 +120,20 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             <div className="mesh-gradient-dark absolute inset-0 opacity-20 pointer-events-none" />
                             <div className="absolute inset-0 bg-linear-to-b from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
 
-                            {/* No Spacer - Content starts at absolute top */}
-
+                            {/* Drawer Navigation Bar */}
+                            <div className="pt-[calc(env(safe-area-inset-top)+var(--spacing-telegram-header))] px-4 pb-2 flex items-center justify-between z-20">
+                                <button
+                                    onClick={onClose}
+                                    className="p-2 rounded-full bg-(--card-bg) border border-(--card-border) text-(--color-text-primary) shadow-sm active:scale-90 transition-all"
+                                    aria-label="Close menu"
+                                >
+                                    <ArrowLeft className="h-5 w-5" />
+                                </button>
+                                <div className="text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary)">
+                                    {t('common.menu')}
+                                </div>
+                                <div className="w-9" /> {/* Spacer to center title */}
+                            </div>
 
                             {/* Scrollable Content */}
                             <div className="flex-1 overflow-y-auto px-5 pb-10 flex flex-col gap-4">

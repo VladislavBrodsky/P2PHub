@@ -1,9 +1,8 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlmodel import Field, Relationship, SQLModel
-
 from app.core.config import settings
+from sqlmodel import Field, Relationship, SQLModel
 
 
 class Partner(SQLModel, table=True):

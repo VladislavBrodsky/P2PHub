@@ -5,15 +5,8 @@ import secrets
 
 # Added datetime for tracking task start times
 from datetime import datetime, timedelta
-from typing import List
 
 import sentry_sdk
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
-from sqlalchemy import text
-from sqlalchemy.orm import selectinload
-from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
-
 from app.core.config import settings
 from app.core.i18n import get_msg
 from app.core.security import get_current_user, get_tg_user
@@ -33,6 +26,11 @@ from app.services.notification_service import notification_service
 from app.services.redis_service import redis_service
 from app.utils.ranking import get_level
 from bot import bot, types
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
+from sqlalchemy import text
+from sqlalchemy.orm import selectinload
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -1177,9 +1175,8 @@ async def get_partner_photo(request: Request, file_id: str):
     """
     import time
 
-    from fastapi.responses import Response
-
     from app.services.partner_service import ensure_photo_cached
+    from fastapi.responses import Response
 
     start_time = time.time()
     try:

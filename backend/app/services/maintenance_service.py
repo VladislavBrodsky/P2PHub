@@ -1,15 +1,13 @@
 
-import asyncio
 import logging
 from datetime import datetime
-from typing import Any, Dict, List
-
-from sqlalchemy.orm import sessionmaker
-from sqlmodel import select, text
-from sqlmodel.ext.asyncio.session import AsyncSession
+from typing import Any
 
 from app.models.partner import Partner, engine
 from app.worker import broker
+from sqlalchemy.orm import sessionmaker
+from sqlmodel import select, text
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
 
@@ -50,14 +48,38 @@ async def _do_reconcile(session: AsyncSession) -> dict[str, Any]:
     start_time = datetime.utcnow()
     
     # 1. Fetch minimum required data for all partners
-    result = await session.exec(select(Partner.id, Partner.referrer_id, Partner.path, Partner.depth, Partner.referral_count, Partner.username))
+    result = await session.exec(select(Partner.id, Partner.referrer_id, Partner.path, Partner.depth, Partner.referral_count))
     partners = result.all()
-    partner_map = {p.id: {"obj": p, "ref": p.referrer_id, "path": p.path, "depth": p.depth, "count": p.referral_count} for p in partners}
+    partner_map = {p.id: {"ref": p.referrer_id, "path": p.path, "depth": p.depth, "count": p.referral_count} for p in partners}
     
+    # 2. Reconcile Structures & Calculate Counts in memory
+    path_updates, count_map = _calculate_network_fixes(partner_map)
+    
+    # 3. Batch Commit Structural Changes
+    if path_updates:
+        await _commit_structural_fixes(session, path_updates)
+
+    # 4. Batch Commit Count Changes
+    diff_counts = _calculate_count_diffs(partner_map, count_map)
+    if diff_counts:
+        await _commit_count_fixes(session, diff_counts)
+
+    duration = (datetime.utcnow() - start_time).total_seconds()
+    result_data = {
+        "status": "success",
+        "duration_sec": round(duration, 2),
+        "total_partners": len(partners),
+        "structural_fixes": len(path_updates),
+        "count_fixes": len(diff_counts)
+    }
+    logger.info(f"✨ Reconciliation Complete: {result_data}")
+    return result_data
+
+def _calculate_network_fixes(partner_map: dict[int, dict]) -> tuple[list[dict], dict[int, int]]:
+    """Internal logic for path/depth reconciliation and count accumulation."""
     path_updates = []
-    count_map = {p.id: 0 for p in partners}
+    count_map = {p_id: 0 for p_id in partner_map}
     
-    # 2. Structural Reconciliation (Path & Depth)
     for p_id, data in partner_map.items():
         correct_path = []
         curr_id = data["ref"]
@@ -75,58 +97,46 @@ async def _do_reconcile(session: AsyncSession) -> dict[str, Any]:
         
         if data["path"] != final_path or data["depth"] != final_depth:
             path_updates.append({"id": p_id, "path": final_path, "depth": final_depth})
-            # Update local map for count calculation
             data["path"] = final_path
             data["depth"] = final_depth
 
-        # 3. Accumulate Referral Counts (Memory Optimized)
         if final_path:
             anc_ids = [int(x) for x in final_path.split('.') if x.isdigit()]
-            # Business Rule: only ancestors within 9 levels see this user in their count
             for anc_id in anc_ids[-9:]:
                 if anc_id in count_map:
                     count_map[anc_id] += 1
+                    
+    return path_updates, count_map
 
-    # 4. Batch Commit Structural Changes
-    if path_updates:
-        logger.info(f"💾 Committing {len(path_updates)} structural fixes...")
-        for i in range(0, len(path_updates), 100):
-            batch = path_updates[i:i+100]
-            for upd in batch:
-                await session.execute(
-                    text("UPDATE partner SET path = :p, depth = :d WHERE id = :i"),
-                    {"p": upd["path"], "d": upd["depth"], "i": upd["id"]}
-                )
-            await session.commit()
+def _calculate_count_diffs(partner_map: dict[int, dict], count_map: dict[int, int]) -> list[dict]:
+    """Identifies partners whose referral_count is out of sync."""
+    return [
+        {"id": p_id, "count": real_count}
+        for p_id, real_count in count_map.items()
+        if partner_map[p_id]["count"] != real_count
+    ]
 
-    # 5. Batch Commit Count Changes
-    diff_counts = []
-    for p_id, real_count in count_map.items():
-        if partner_map[p_id]["count"] != real_count:
-            diff_counts.append({"id": p_id, "count": real_count})
+async def _commit_structural_fixes(session: AsyncSession, path_updates: list[dict]):
+    logger.info(f"💾 Committing {len(path_updates)} structural fixes...")
+    for i in range(0, len(path_updates), 100):
+        batch = path_updates[i:i + 100]
+        for upd in batch:
+            await session.execute(
+                text("UPDATE partner SET path = :p, depth = :d WHERE id = :i"),
+                {"p": upd["path"], "d": upd["depth"], "i": upd["id"]}
+            )
+        await session.commit()
 
-    if diff_counts:
-        logger.info(f"💾 Committing {len(diff_counts)} count reconciliations...")
-        for i in range(0, len(diff_counts), 500):
-            batch = diff_counts[i:i+500]
-            for upd in batch:
-                await session.execute(
-                    text("UPDATE partner SET referral_count = :c WHERE id = :i"),
-                    {"c": upd["count"], "i": upd["id"]}
-                )
-            await session.commit()
-
-    duration = (datetime.utcnow() - start_time).total_seconds()
-    
-    result_data = {
-        "status": "success",
-        "duration_sec": round(duration, 2),
-        "total_partners": len(partners),
-        "structural_fixes": len(path_updates),
-        "count_fixes": len(diff_counts)
-    }
-    logger.info(f"✨ Reconciliation Complete: {result_data}")
-    return result_data
+async def _commit_count_fixes(session: AsyncSession, diff_counts: list[dict]):
+    logger.info(f"💾 Committing {len(diff_counts)} count reconciliations...")
+    for i in range(0, len(diff_counts), 500):
+        batch = diff_counts[i:i + 500]
+        for upd in batch:
+            await session.execute(
+                text("UPDATE partner SET referral_count = :c WHERE id = :i"),
+                {"c": upd["count"], "i": upd["id"]}
+            )
+        await session.commit()
 
 async def check_database_health() -> dict:
     """Rapid health check for database performance."""

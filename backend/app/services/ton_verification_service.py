@@ -1,7 +1,5 @@
 import logging
 
-import httpx
-
 from app.core.config import settings
 from app.core.http_client import http_client
 

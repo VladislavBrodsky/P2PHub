@@ -1,15 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Zap, Settings, Trophy, Cpu, Users, ChevronLeft, Shield
+    Zap, Settings, Cpu, Users, Shield
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
     mainButton,
     backButton,
     settingsButton,
-    viewport,
-    hapticFeedback
+    viewport
 } from '@telegram-apps/sdk-react';
 import { isTMA } from '../utils/tma';
 import { useHaptic } from '../hooks/useHaptic';
@@ -103,7 +102,7 @@ export const ProDashboard = () => {
         loadStatus();
     }, []);
 
-    const handleRunMarketingAudit = async (force: boolean = false) => {
+    const handleRunMarketingAudit = useCallback(async (force: boolean = false) => {
         if (isAuditing) return;
         setIsAuditing(true);
         impact('heavy');
@@ -138,11 +137,11 @@ export const ProDashboard = () => {
         } finally {
             setIsAuditing(false);
         }
-    };
+    }, [isAuditing, impact, i18n.language, status, showNotification, hapticNotification]);
 
     const handleRefreshAudit = () => handleRunMarketingAudit(true);
 
-    const handleCompleteAcademyStage = async (stage_id: string) => {
+    const handleCompleteAcademyStage = useCallback(async (stage_id: string) => {
         if (completedStages.includes(stage_id)) return;
         setIsCompletingStage(stage_id);
         impact('medium');
@@ -174,7 +173,7 @@ export const ProDashboard = () => {
         } finally {
             setIsCompletingStage(null);
         }
-    };
+    }, [completedStages, impact, status, hapticNotification, showNotification]);
 
     const handleFetchTrends = async () => {
         if (isFetchingTrends) return;
@@ -316,7 +315,7 @@ export const ProDashboard = () => {
         return () => {
             cleanup.then(c => typeof c === 'function' && c());
         };
-    }, [viewport, impact]);
+    }, [impact]);
 
     useEffect(() => {
         if (!isTMA() || !mainButton) return;
@@ -402,7 +401,7 @@ export const ProDashboard = () => {
                 if (mainButton && mainButton.setParams) mainButton.setParams({ isVisible: false });
             } catch { /* ignore */ }
         }
-    }, [activeTab, studioStep, studioReady, isAuditing, isCompletingStage, completedStages, showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, t, isLoading, handleRunMarketingAudit, handleCompleteAcademyStage, mainButton, impact]);
+    }, [activeTab, studioStep, studioReady, isAuditing, isCompletingStage, completedStages, showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, t, isLoading, handleRunMarketingAudit, handleCompleteAcademyStage, impact]);
 
     // Handle deep linking for Pro Tabs
     useEffect(() => {
@@ -510,7 +509,7 @@ export const ProDashboard = () => {
                                 {activeTab === tab && (
                                     <motion.div
                                         layoutId="activeTab"
-                                        className={`absolute inset-0 bg-linear-to-r ${tabConfig[tab].gradient} bg-[length:200%_auto] animate-gradient rounded-2xl ${tabConfig[tab].shadow}`}
+                                        className={`absolute inset-0 bg-linear-to-r ${tabConfig[tab].gradient} bg-size-[200%_auto] animate-gradient rounded-2xl ${tabConfig[tab].shadow}`}
                                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                                     >
                                         <div className="absolute inset-0 bg-white/10 backdrop-blur-[1px]" />
@@ -620,27 +619,15 @@ export const ProDashboard = () => {
             </div>
 
             <ProDashboardModals
-                status={status}
-                showSetup={showSetup}
-                setShowSetup={setShowSetup}
-                apiData={apiData}
-                setApiData={setApiData}
-                handleSaveSetup={handleSaveSetup}
-                handleTestIntegration={handleTestIntegration}
-                isLoading={isLoading}
                 showAuditModal={showAuditModal}
                 setShowAuditModal={setShowAuditModal}
                 marketAudit={marketAudit}
                 setActiveTab={setActiveTab}
                 selectedArticle={selectedArticle}
                 setSelectedArticle={setSelectedArticle}
-                selectedAsset={selectedAsset}
-                setSelectedAsset={setSelectedAsset}
                 showManual={showManual}
                 setShowManual={setShowManual}
                 selection={selection}
-                impact={impact}
-                copyText={handleCopyAnyText}
                 handleRefreshAudit={handleRefreshAudit}
                 isAuditing={isAuditing}
             />

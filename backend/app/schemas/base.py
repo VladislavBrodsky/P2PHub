@@ -1,7 +1,7 @@
 import logging
-from typing import Any, Dict, Type, TypeVar
+from typing import Any, TypeVar
 
-from pydantic import BaseModel, ValidationError, model_validator
+from pydantic import BaseModel, model_validator
 
 logger = logging.getLogger(__name__)
 

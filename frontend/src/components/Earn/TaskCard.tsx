@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Lock, CheckCircle2, ArrowRight } from 'lucide-react';
+import { CheckCircle2, ArrowRight } from 'lucide-react';
 import { Task } from '../../data/earnData';
 import { useTranslation } from 'react-i18next';
 import { Haptic } from '../../utils/tma';
@@ -28,7 +28,6 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
     const isLocked = status === 'LOCKED';
     const isCompleted = status === 'COMPLETED';
     const isClaimable = status === 'CLAIMABLE';
-    const isAvailable = status === 'AVAILABLE';
     // #comment: Added isStarted check for UI rendering
     const isStarted = status === 'STARTED';
 

@@ -1,11 +1,10 @@
 import asyncio
 import time
 
+from app.models.partner import get_session
 from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy import text
 from sqlmodel.ext.asyncio.session import AsyncSession
-
-from app.models.partner import get_session
 
 # #comment: health checkpoints for Kubernetes/Railway probes.
 # /health/ping is for liveness (fast), /health is for readiness (DB check).

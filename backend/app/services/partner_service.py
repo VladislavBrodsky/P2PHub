@@ -3,19 +3,17 @@ import io
 import logging
 import secrets
 from datetime import datetime, timedelta
-from typing import List, Optional, Tuple
 
 import httpx
-from PIL import Image
-from sqlmodel import select, text
-from sqlmodel.ext.asyncio.session import AsyncSession
-
 from app.core.config import settings
 from app.models.partner import Partner
 from app.services.leaderboard_service import leaderboard_service
 from app.services.redis_service import redis_service
 from app.worker import broker
 from bot import bot
+from PIL import Image
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
 
@@ -23,66 +21,57 @@ logger = logging.getLogger(__name__)
 # This significantly reduces latency and overhead compared to creating a client per request.
 http_client = httpx.AsyncClient(timeout=10.0, limits=httpx.Limits(max_keepalive_connections=50, max_connections=100))
 async def ensure_photo_cached(file_id: str) -> bytes | None:
-    """
-    Ensures the Telegram photo is cached in Redis (WebP optimized).
-    Returns the binary content if successful, None otherwise.
-    """
+    """Ensures the Telegram photo is cached in Redis (WebP optimized)."""
     cache_key_binary = f"tg_photo_bin_v1:{file_id}"
     cache_key_url = f"tg_photo_url:{file_id}"
 
-    # Try reading from Redis first (Fast Path)
-    try:
-        cached_binary = await redis_service.get_bytes(cache_key_binary)
-        if cached_binary: return cached_binary
-    except Exception as e:
-        logger.debug(f"Binary cache read failed: {e}")
+    # 1. Fast Path (Read from Cache)
+    cached_binary = await _get_cached_photo(cache_key_binary)
+    if cached_binary: return cached_binary
 
-    # Enter Redis-based distributed lock to prevent concurrent processing of the same file_id (Dog-pile Protection)
-    # timeout=60s is enough for image processing (usually <1s)
+    # 2. Slow Path (Process with Lock)
     lock_key = f"lock:photo:process:{file_id}"
     async with redis_service.client.lock(lock_key, timeout=60):
-        # Check again after acquiring lock (it might have been processed while we waited)
-        try:
-            cached_binary = await redis_service.get_bytes(cache_key_binary)
-            if cached_binary: return cached_binary
-        except Exception:
-            pass
+        # Double check
+        cached_binary = await _get_cached_photo(cache_key_binary)
+        if cached_binary: return cached_binary
 
         try:
-            # Check secondary cache for URL
-            photo_url = await redis_service.get(cache_key_url)
-            if not photo_url or photo_url == "EMPTY":
-                # This is a network call to Telegram
-                file = await bot.get_file(file_id)
-                photo_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
-                await redis_service.set(cache_key_url, photo_url, expire=7200) # Increased to 2h
+            photo_url = await _get_photo_url(file_id, cache_key_url)
+            if not photo_url: return None
 
-            # Fetch image content
             response = await http_client.get(photo_url)
             if response.status_code == 200:
-                # Heavy CPU blocking task: Resize and Convert
-                # We do this in a threadpool to avoid blocking the event loop
-                def process_image():
-                    img = Image.open(io.BytesIO(response.content))
-                    # Only resize if larger than target
-                    if img.width > 128 or img.height > 128:
-                        img.thumbnail((128, 128), Image.Resampling.LANCZOS)
-                    output = io.BytesIO()
-                    img.save(output, format="WEBP", quality=80)
-                    return output.getvalue()
-
-                optimized_binary = await asyncio.to_thread(process_image)
-                await redis_service.set_bytes(cache_key_binary, optimized_binary, expire=86400 * 7) # Increased to 7 days
-                return optimized_binary
-            
-            elif response.status_code == 404:
-                # If Telegram says it's gone, don't keep trying too often
-                await redis_service.set(cache_key_url, "EMPTY", expire=3600)
-                
+                optimized = await asyncio.to_thread(_process_image_binary, response.content)
+                await redis_service.set_bytes(cache_key_binary, optimized, expire=86400 * 7)
+                return optimized
         except Exception as e:
             logger.error(f"❌ Failed to optimize/cache photo {file_id}: {e}")
-        
+            
     return None
+
+async def _get_cached_photo(key: str) -> bytes | None:
+    try:
+        return await redis_service.get_bytes(key)
+    except Exception:
+        return None
+
+async def _get_photo_url(file_id: str, cache_key: str) -> str | None:
+    photo_url = await redis_service.get(cache_key)
+    if photo_url == "EMPTY": return None
+    if not photo_url:
+        file = await bot.get_file(file_id)
+        photo_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
+        await redis_service.set(cache_key, photo_url, expire=7200)
+    return photo_url
+
+def _process_image_binary(content: bytes) -> bytes:
+    img = Image.open(io.BytesIO(content))
+    if img.width > 128 or img.height > 128:
+        img.thumbnail((128, 128), Image.Resampling.LANCZOS)
+    output = io.BytesIO()
+    img.save(output, format="WEBP", quality=80)
+    return output.getvalue()
 
 @broker.task(task_name="warm_up_partner_photos")
 async def warm_up_partner_photos(file_ids: list[str]):
@@ -106,98 +95,84 @@ async def create_partner(
     referrer_code: str | None = None,
     photo_file_id: str | None = None
 ) -> tuple[Partner, bool]:
-    """
-    Creates a new partner or retrieves an existing one.
-    Handles potential race conditions during registration via database unique constraints.
-    """
-    # 1. Primary check
-    statement = select(Partner).where(Partner.telegram_id == telegram_id)
-    result = await session.exec(statement)
-    partner = result.first()
+    """Creates a new partner or retrieves an existing one."""
+    partner = await get_partner_by_telegram_id(session, telegram_id)
     
-    # If partner exists and already has a referrer, or no new referrer code provided, just return
-    if partner:
-        if partner.referrer_id or not referrer_code:
-            return partner, False
-        # If partner exists but has NO referrer, we proceed to try and attach one
-        logger.info(f"Existing partner {telegram_id} found without referrer. Attempting to attach via code: {referrer_code}")
+    if partner and (partner.referrer_id or not referrer_code):
+        return partner, False
 
-    # 2. Resolve Referrer
-    referrer_id = None
-    referrer = None
-    if referrer_code:
-        try:
-            ref_stmt = select(Partner).where(Partner.referral_code == referrer_code)
-            ref_res = await session.exec(ref_stmt)
-            referrer = ref_res.first()
-            if referrer: 
-                referrer_id = referrer.id
-                # Avoid self-referral
-                if partner and partner.id == referrer_id:
-                    referrer_id = None
-                    referrer = None
-        except Exception as e:
-            # Important to log if referral resolution fails
-            logger.error(f"Error resolving referring partner {referrer_code}: {e}")
-
-    # 2.5 Handle Existing Partner Case (Updating Referrer)
+    referrer = await _resolve_referrer(session, referrer_code, partner.id if partner else None)
+    
     if partner and referrer:
-        partner.referrer_id = referrer_id
-        parent_path = referrer.path or ""
-        partner.path = f"{parent_path}.{referrer.id}".lstrip(".")
-        partner.depth = referrer.depth + 1
-        session.add(partner)
-        await session.commit()
-        await session.refresh(partner)
-        return partner, True # Treat as new for the purpose of referral notifications
-
-    path = None
-    depth = 0
-    if referrer:
-        parent_path = referrer.path or ""
-        path = f"{parent_path}.{referrer.id}".lstrip(".")
-        depth = referrer.depth + 1
+        await _update_existing_partner_referrer(session, partner, referrer)
+        return partner, True
 
     # 3. Create Record
+    path, depth = (referrer.path or "").lstrip("."), referrer.depth + 1 if referrer else (None, 0)
+    if referrer:
+        path = f"{referrer.path or ''}.{referrer.id}".lstrip(".")
+        depth = referrer.depth + 1
+    else:
+        path, depth = None, 0
+
     partner = Partner(
-        telegram_id=telegram_id,
-        username=username,
-        first_name=first_name,
-        last_name=last_name,
-        language_code=language_code,
+        telegram_id=telegram_id, username=username, first_name=first_name,
+        last_name=last_name, language_code=language_code,
         referral_code=f"P2P-{secrets.token_hex(4).upper()}",
-        referrer_id=referrer_id,
-        photo_file_id=photo_file_id,
-        path=path,
-        depth=depth
+        referrer_id=referrer.id if referrer else None,
+        photo_file_id=photo_file_id, path=path, depth=depth
     )
     
     session.add(partner)
+    partner, is_new = await _commit_partner_creation(session, partner, telegram_id)
     
+    if is_new:
+        await _handle_partner_creation_side_effects(partner, referrer)
+
+    return partner, is_new
+
+async def _resolve_referrer(session: AsyncSession, code: str | None, current_id: int | None) -> Partner | None:
+    if not code: return None
+    try:
+        referrer = await get_partner_by_referral_code(session, code)
+        if referrer and referrer.id != current_id:
+            return referrer
+    except Exception as e:
+        logger.error(f"Error resolving referring partner {code}: {e}")
+    return None
+
+async def _update_existing_partner_referrer(session: AsyncSession, partner: Partner, referrer: Partner):
+    partner.referrer_id = referrer.id
+    partner.path = f"{referrer.path or ''}.{referrer.id}".lstrip(".")
+    partner.depth = referrer.depth + 1
+    session.add(partner)
+    await session.commit()
+    await session.refresh(partner)
+
+async def _commit_partner_creation(session: AsyncSession, partner: Partner, telegram_id: str) -> tuple[Partner, bool]:
     from sqlalchemy.exc import IntegrityError
     try:
         await session.commit()
         await session.refresh(partner)
-        is_new = True
+        return partner, True
     except IntegrityError:
-        # Race condition: Another worker inserted this TG_ID simultaneously
         await session.rollback()
-        stmt = select(Partner).where(Partner.telegram_id == telegram_id)
-        res = await session.exec(stmt)
-        partner = res.first()
-        is_new = False
-        if not partner:
-            # This should theoretically never happen if IntegrityError was caught
-            raise RuntimeError("Database integrity error on user creation followed by missing record.")
+        existing = await get_partner_by_telegram_id(session, telegram_id)
+        if not existing:
+            raise RuntimeError("Database integrity error on user creation followed by missing record.") from None
+        return existing, False
 
-    # Side Effects
+async def _handle_partner_creation_side_effects(partner: Partner, referrer: Partner | None):
+    # 1. Leaderboard
     try:
         await leaderboard_service.update_score(partner.id, partner.xp)
     except Exception as e:
-        logger.warning(f"Failed to sync new partner to leaderboard: {e}")
+        logger.warning(f"Failed to sync to leaderboard: {e}")
 
-    if is_new and referrer:
-        try:
+    # 2. Cache Invalidation
+    try:
+        await redis_service.client.delete("partners:recent_v2")
+        if referrer:
             async with redis_service.client.pipeline(transaction=True) as pipe:
                 anc_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
                 for anc_id in anc_ids[-9:]:
@@ -205,15 +180,8 @@ async def create_partner(
                     if anc_id == referrer.id:
                         pipe.delete(f"ref_tree_members_v2:{anc_id}:1")
                 await pipe.execute()
-        except Exception as e:
-            logger.error(f"Failed to invalidate referral stats cache: {e}")
-
-    try:
-        await redis_service.client.delete("partners:recent_v2")
     except Exception as e:
-        logger.warning(f"Failed to invalidate recent partners cache: {e}")
-
-    return partner, is_new
+        logger.error(f"Side effects failed: {e}")
 
 async def get_partner_by_telegram_id(session: AsyncSession, telegram_id: str) -> Partner | None:
     statement = select(Partner).where(Partner.telegram_id == telegram_id)
@@ -227,9 +195,8 @@ async def get_partner_by_referral_code(session: AsyncSession, code: str) -> Part
 
 @broker.task(task_name="sync_profile_photos_task", schedule=[{"cron": "0 0 * * *"}])
 async def sync_profile_photos_task():
-    from sqlalchemy.orm import sessionmaker
-
     from app.models.partner import engine
+    from sqlalchemy.orm import sessionmaker
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
         await sync_profile_photos(bot, session)
@@ -251,11 +218,7 @@ async def sync_profile_photos(bot, session: AsyncSession):
     chunk_size = 20
     for i in range(0, len(partners), chunk_size):
         chunk = partners[i : i + chunk_size]
-        tasks = []
-        for partner in chunk:
-            tasks.append(sync_single_photo(bot, session, partner))
-        
-        # Gather results to keep pushing
+        tasks = [sync_single_photo(bot, session, partner) for partner in chunk]
         results = await asyncio.gather(*tasks)
         updated += sum(1 for r in results if r)
         
@@ -287,9 +250,8 @@ async def sync_single_photo_background(telegram_id: str):
     Background worker for on-demand photo sync.
     Creates its own session to avoid sharing state with the main request.
     """
-    from sqlalchemy.orm import sessionmaker
-
     from app.models.partner import engine
+    from sqlalchemy.orm import sessionmaker
     
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:

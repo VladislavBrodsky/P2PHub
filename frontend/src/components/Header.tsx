@@ -37,7 +37,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
     }, [controls]);
 
     return (
-        <header className="sticky top-0 z-50 w-full max-w-lg mx-auto pt-[env(safe-area-inset-top)] transition-all duration-300 pointer-events-none">
+        <header className="sticky top-0 z-50 w-full max-w-lg mx-auto pt-[calc(env(safe-area-inset-top)+var(--spacing-telegram-header))] transition-all duration-300 pointer-events-none">
 
 
 
@@ -59,7 +59,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
                     <motion.button
                         animate={controls}
-                        className="flex items-center gap-3 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-glass) px-4 py-2 shadow-premium backdrop-blur-2xl transition-all shrink-0"
+                        className="flex items-center gap-3 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-glass) px-4 py-2 mr-1 shadow-premium backdrop-blur-2xl transition-all shrink-0"
                         aria-label="User stats"
                     >
                         <div className="flex items-center gap-1.5">

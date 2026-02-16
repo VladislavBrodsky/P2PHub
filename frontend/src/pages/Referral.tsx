@@ -14,13 +14,12 @@ import { EARN_TASKS, Task } from '../data/earnData';
 import { useUser } from '../context/UserContext';
 import { useNotificationStore } from '../store/useNotificationStore';
 import { Confetti } from '../components/ui/Confetti';
-import { X, Share2, Download, Copy, ExternalLink, Send, FileText, Sparkles } from 'lucide-react';
+import { X, Download, Copy, ExternalLink, Send, FileText, Sparkles } from 'lucide-react';
 import { BriefTermsModal } from '../components/Earn/BriefTermsModal';
 import { UpgradeButton } from '../components/ui/UpgradeButton';
 import { useTranslation, Trans } from 'react-i18next';
 // import { getSafeLaunchParams } from '../utils/tma'; // Unused
 import { apiClient } from '../api/client';
-import { getLevel } from '../utils/ranking';
 import { getApiUrl } from '../utils/api';
 import { PageSkeleton } from '../components/Skeletons/PageSkeleton';
 import { useUI } from '../context/UIContext';
@@ -55,7 +54,6 @@ export default function ReferralPage() {
 
     // Derived User State (with defaults)
     const currentLevel = user?.level || 1;
-    const currentXP = user?.xp || 0;
     const referrals = user?.total_network_size || 0;
     const referralCode = user?.referral_code || 'ref_dev';
     const referralLink = `https://t.me/pintopay_probot?start=${referralCode}`;
@@ -96,7 +94,7 @@ export default function ReferralPage() {
 
         const storedClaimable = localStorage.getItem('p2p_claimable_tasks');
         if (storedClaimable) setClaimableTasks(JSON.parse(storedClaimable) as string[]);
-    }, [user?.completed_tasks]);
+    }, [user?.completed_tasks, user?.completed_stages]);
 
     // Timer Logic for Verification
     useEffect(() => {

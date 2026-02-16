@@ -1,14 +1,12 @@
 import secrets
-from typing import List, Optional
-
-from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlmodel import func, or_, select
-from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.security import get_current_user, get_tg_user
 from app.models.blog import BlogPost, BlogPostEngagement, PartnerBlogLike
 from app.models.partner import Partner, get_session
 from app.schemas.blog import BlogListResponse, BlogPostDetail, BlogPostRead
+from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import func, or_, select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 router = APIRouter()
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Crown, CheckCircle2, Wallet, CreditCard, ChevronRight,
-    Loader2, Sparkles, Send, Zap, Rocket, Bot, ChevronDown, Trophy
+    Loader2, Sparkles, Zap, Rocket, Bot, ChevronDown, Trophy
 } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
