@@ -448,7 +448,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
 
                 # Try OpenAI first with High Standard Model
                 response = await self.openai_client.chat.completions.create(
-                    model="gpt-4o",
+                    model="gpt-4o-mini", # Optimized for speed and cost
                     messages=[
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": user_prompt}
@@ -493,10 +493,10 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             # Correct model names for AI Studio (including Nano Banana latest releases)
             imagen_models = [
                 self._last_working_imagen_model,
+                'imagen-4.0-fast-generate-001', # Fast for previews - PRIORITY
+                'imagen-3.0-fast-generate-001', # Fast fallback
                 'imagen-4.0-generate-001',      # Standard HQ 
-                'imagen-4.0-fast-generate-001', # Fast for previews
                 'imagen-4.0-ultra-generate-001', # Ultra Quality
-                'imagen-3.0-generate-001',      # Fallback
             ]
             # Remove duplicates and None values
             imagen_models = [m for i, m in enumerate(imagen_models) if m and m not in imagen_models[:i]]
@@ -539,7 +539,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                                 }
                             )
                         ),
-                        timeout=25.0 # Increased timeout for Imagen 4.0 Quality
+                        timeout=15.0 # Reduced timeout for Fast models
                     )
                     
                     if img_response and getattr(img_response, 'generated_images', None):
@@ -620,7 +620,9 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                 "image_url": image_url,
                 "status": "success",
                 "tokens_openai": tokens_openai,
-                "duration": duration
+                "duration": duration,
+                "model_text": "gpt-4o-mini",
+                "model_image": self._last_working_imagen_model
             }
 
             # Fire and forget logging
@@ -877,9 +879,28 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             import re
             clean_content = re.sub(r'<[^>]*>', '', content)
             
+            # Remove Markdown bold/italic
+            clean_content = clean_content.replace('**', '').replace('__', '').replace('*', '')
+
+            # Smart truncation for X (280 chars)
+            # If greater than 280, cut at last sentence and add link
+            if len(clean_content) > 280:
+                short_content = clean_content[:250] # Leave room for "..." and link
+                last_space = short_content.rfind(' ')
+                if last_space > 0:
+                    short_content = short_content[:last_space]
+                
+                # Check if there's a link in the original content to preserve
+                urls = re.findall(r'(https?://[^\s]+)', content)
+                link = urls[-1] if urls else ""
+                
+                final_text = f"{short_content}... {link}"
+            else:
+                final_text = clean_content
+
             response = await loop.run_in_executor(
                 None,
-                lambda: client.create_tweet(text=clean_content[:280], media_ids=media_ids if media_ids else None)
+                lambda: client.create_tweet(text=final_text[:280], media_ids=media_ids if media_ids else None)
             )
             
             tweet_id = response.data.get("id")
@@ -909,6 +930,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         try:
             import os
             import json
+            import re
             from bot import bot
 
             # Support multiple channels stored as JSON string
@@ -928,6 +950,14 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                 return {"error": "No valid Telegram channels found."}
 
             results = []
+            
+            # Format content for Telegram HTML
+            # Convert **bold** to <b>bold</b>
+            formatted_content = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', content)
+            # Convert _italic_ to <i>italic</i>
+            formatted_content = re.sub(r'_(.*?)_', r'<i>\1</i>', formatted_content)
+            # Convert [text](url) to <a href="url">text</a>
+            formatted_content = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2">\1</a>', formatted_content)
             
             if image_path:
                 # Resolve absolute path to image
@@ -950,7 +980,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                             await bot.send_photo(
                                 chat_id=channel_id,
                                 photo=photo,
-                                caption=content[:1024], # Telegram caption limit
+                                caption=formatted_content[:1024], # Telegram caption limit
                                 parse_mode="HTML"
                             )
                             results.append(f"✅ {channel_id}")
@@ -963,7 +993,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                         try:
                             await bot.send_message(
                                 chat_id=channel_id,
-                                text=content[:4096],
+                                text=formatted_content[:4096],
                                 parse_mode="HTML"
                             )
                             results.append(f"✅ {channel_id}")
@@ -975,7 +1005,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                     try:
                         await bot.send_message(
                             chat_id=channel_id,
-                            text=content[:4096],
+                            text=formatted_content[:4096],
                             parse_mode="HTML"
                         )
                         results.append(f"✅ {channel_id}")
