@@ -12,6 +12,8 @@ import { blogService, BlogEngagement } from '../services/blogService';
 
 import { backButton } from '@telegram-apps/sdk-react';
 import { useUI } from '../context/UIContext';
+import { PageSkeleton } from '../components/Skeletons/PageSkeleton';
+import { Skeleton } from '../components/Skeleton';
 
 interface BlogPageProps {
     setActiveTab?: (tab: string) => void;
@@ -64,21 +66,22 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
         return () => clearTimeout(timer);
     }, [selectedCategory, searchQuery, fetchPosts]);
 
-    // Sync header visibility with selectedPost
+    // Sync header visibility with selectedPost - delayed to allow transition
     useEffect(() => {
         if (currentTab === 'blog') {
+            // If selecting a post, hide header/footer
+            // If going back, show them
             const isVisible = !selectedPost;
-            setHeaderVisible(isVisible);
-            setFooterVisible(isVisible);
-            setNotificationsVisible(isVisible);
+
+            // Small delay to avoid immediate layout shift during exit animation
+            const timer = setTimeout(() => {
+                setHeaderVisible(isVisible);
+                setFooterVisible(isVisible);
+                setNotificationsVisible(isVisible);
+            }, isVisible ? 0 : 50); // Delay only when hiding to allow "exit" to start
+
+            return () => clearTimeout(timer);
         }
-        return () => {
-            if (currentTab === 'blog') {
-                setHeaderVisible(true);
-                setFooterVisible(true);
-                setNotificationsVisible(true);
-            }
-        };
     }, [selectedPost, currentTab, setHeaderVisible, setFooterVisible, setNotificationsVisible]);
 
     // Reset scroll when post changes
@@ -223,12 +226,22 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
             className="flex flex-col min-h-screen pb-32"
         >
             <AnimatePresence mode="wait">
-                {!selectedPost ? (
+                {isLoading && posts.length === 0 ? (
+                    <motion.div
+                        key="skeleton"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="w-full"
+                    >
+                        <PageSkeleton />
+                    </motion.div>
+                ) : !selectedPost ? (
                     <motion.div
                         key="list"
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 10 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0, x: -10 }}
                         className="flex flex-col"
                     >
                         {/* Header Area - Sticky with Glassmorphism */}
@@ -467,13 +480,13 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
     return (
         <motion.div
             key="detail"
-            initial={{ opacity: 0, x: 10 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -10 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 relative"
         >
-            {/* Header Area - Non-sticky to avoid overlapping */}
-            <div className="w-full pt-(--header-total-height) pb-3 px-4 bg-transparent transition-all">
+            {/* Header Area - Premium floating style */}
+            <div className="w-full pt-safe-top pb-3 px-4 bg-transparent transition-all">
                 <div className="flex items-center justify-between w-full">
                     <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-white dark:hover:bg-slate-900 active:scale-90 transition-all text-slate-900 dark:text-white">
                         <ArrowLeft className="w-6 h-6" />
@@ -535,7 +548,18 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
 
                 {/* Body Text (Simulated content structure) */}
                 <div className="space-y-6">
-                    {post.content ? (
+                    {isLoading ? (
+                        <div className="space-y-4">
+                            <Skeleton className="h-4 w-full rounded-full bg-slate-200 dark:bg-white/5" />
+                            <Skeleton className="h-4 w-[90%] rounded-full bg-slate-200 dark:bg-white/5" />
+                            <Skeleton className="h-4 w-[95%] rounded-full bg-slate-200 dark:bg-white/5" />
+                            <div className="py-6">
+                                <Skeleton className="h-32 w-full rounded-[2rem] bg-slate-200 dark:bg-white/5 shadow-inner" />
+                            </div>
+                            <Skeleton className="h-4 w-[85%] rounded-full bg-slate-200 dark:bg-white/5" />
+                            <Skeleton className="h-4 w-[92%] rounded-full bg-slate-200 dark:bg-white/5" />
+                        </div>
+                    ) : post.content ? (
                         <MarkdownRenderer content={post.content} />
                     ) : (
                         <>

@@ -109,6 +109,40 @@ class ViralCopywriter:
         except Exception as e:
             logger.error(f"❌ ViralCopywriter Error: {e}", exc_info=True)
             return {"error": str(e)}
+    async def improve_article(self, content: str, language: str = "en", target_length: int = 2500) -> dict[str, str]:
+        """
+        Takes existing content and improves its quality, length, and native flow.
+        """
+        if not self.client:
+            return {"error": "OpenAI API Key is missing."}
+
+        system_prompt = f"""
+You are an Elite Viral Copywriter. Your task is to AUDIT and IMPROVE an existing blog article.
+
+**CRITICAL STANDARDS:**
+1. **Professional Native Quality**: If the language is Russian, it must be indistinguishable from a top-tier native expert. Remove all robotic phrasing or literal translations.
+2. **Expansion**: Ensure the article is between 2500 and 3000 characters. Add depth, examples, and more 'viral' hooks if needed.
+3. **Structure**: Keep the markdown structure (H1 title, H3 subsections, short paragraphs).
+4. **Subtlety**: Maintain the 'Between the lines' sales technique for Pintopay.
+
+Return the output as JSON with keys: "title", "excerpt", "content", "cta_text".
+"""
+        user_prompt = f"Existing Content:\n{content}\n\nLanguage: {language}\nTarget Character Length: {target_length}\n\nImprove this article now."
+
+        try:
+            response = await self.client.chat.completions.create(
+                model="gpt-4-turbo-preview",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ],
+                temperature=0.6,
+                max_tokens=2000
+            )
+            return self._parse_response(response.choices[0].message.content)
+        except Exception as e:
+            logger.error(f"❌ Error improving article: {e}")
+            return {"error": str(e)}
 
     def _build_system_prompt(self, cat_config: dict[str, str]) -> str:
         """
@@ -147,7 +181,13 @@ Hook Style: {cat_config['hook_style']}
     - Add **Social Proof** (e.g., "Join 10,000+ smart earners").
     - Explicitly ask the user to share the article.
 
-4. **Formatting**:
+4. **Language Purity & Translation (CRITICAL)**:
+    - **Native-Speaker Quality ONLY**: If writing in Russian, the text must be indistinguishable from a top-tier native Russian copywriter (e.g., Maxim Ilyakhov style).
+    - **No Glitches**: Avoid robotic word order or literal translations of English idioms (e.g., don't translate "Building pipes" as "Строить трубы"). Use natural equivalents like "Развивать инфраструктуру".
+    - **Terminology**: Use precise terms like "Ликвидность", "Суверенитет", "Децентрализация".
+    - **Purity**: Zero grammatical errors, perfect case endings (падежи), and professional business-insider tone.
+
+5. **Formatting**:
     - Use Markdown.
     - Keep paragraphs short (1-3 sentences).
     - Use bolding for emphasis.

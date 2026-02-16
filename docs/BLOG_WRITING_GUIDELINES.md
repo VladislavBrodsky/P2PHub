@@ -44,9 +44,21 @@ Use these concepts to reinforce the brand identity:
 *   **Network Effects:** Your network is your net worth, scaling, leverage.
 *   **Global/Borderless:** No geography, world citizen, travel light.
 
-## 7. Language Specifics
-*   **English:** Use punchy, modern business/crypto slang (but explain if niche). Avoid academic or overly formal language.
-*   **Russian:** Maintain the "expert" tone. Use terms like "Суверенитет" (Sovereignty), "Масштабирование" (Scaling), "Ликвидность" (Liquidity). Avoid dry, bureaucratic russian.
+## 7. Language & Translation Standards
+
+### English (Source of Truth)
+*   **Tone:** Punchy, modern business/crypto slang. Avoid academic or overly formal language.
+*   **Structure:** First-letter formatting or bold hooks on every paragraph.
+
+### Russian (Professional Native Standard)
+All Russian content must be indistinguishable from a native professional's writing.
+*   **Terminology:** Use established industry terms: *Суверенитет* (Sovereignty), *Ликвидность* (Liquidity), *Масштабирование* (Scaling), *Децентрализация* (Decentralization).
+*   **Avoid "Translatorese":** Do not use literal translations of English idioms. Use natural Russian equivalents.
+    *   *Bad:* "Строить трубы" (Building pipes - literal).
+    *   *Good:* "Создавать цифровую инфраструктуру" or "Прокладывать финансовые магистрали".
+*   **Zero Glitches:** Ensure grammar, case endings (*падежи*), and punctuation are flawless. P2P should be treated as a technical term or translated as *от человека к человеку* depending on context.
+*   **Style:** Maintain an "Elite Expert" persona. Use active voice (*"Мы меняем мир"* vs *"Мир меняется нами"*).
+*   **Audit Check:** Every text must pass a "Native Ear" test—no robotic phrasing or unnatural word orders.
 
 ## 8. Quality Control Checklist
 Before publishing, ask:
