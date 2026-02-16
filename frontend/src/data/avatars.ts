@@ -3,15 +3,13 @@
  * Uses static paths to keep the main bundle light.
  */
 
-import { AE_F_1_B64, BR_F_1_B64, CA_M_1_B64, DE_M_1_B64 } from './generated_avatars';
-
 export const LOGO_DATA = "/logo.svg";
 
 export const AVATAR_DATA: Record<string, string> = {
-    "ae_f_1.webp": AE_F_1_B64,
-    "br_f_1.webp": BR_F_1_B64,
-    "ca_m_1.webp": CA_M_1_B64,
-    "de_m_1.webp": DE_M_1_B64,
+    "ae_f_1.webp": "/avatars/ae_f_1.webp",
+    "br_f_1.webp": "/avatars/br_f_1.webp",
+    "ca_m_1.webp": "/avatars/ca_m_1.webp",
+    "de_m_1.webp": "/avatars/de_m_1.webp",
     "es_m_1.webp": "/avatars/es_m_1.webp",
     "f1.webp": "/avatars/f1.webp",
     "f2.webp": "/avatars/f2.webp",
@@ -29,4 +27,3 @@ export const AVATAR_DATA: Record<string, string> = {
     "us_f_1.webp": "/avatars/us_f_1.webp",
     "us_m_1.webp": "/avatars/us_m_1.webp"
 };
-
