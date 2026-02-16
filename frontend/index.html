@@ -35,7 +35,32 @@
 
 <body class="bg-gray-50 text-gray-900">
   <div id="root"></div>
+  <script>
+    window.__APP_STARTUP__ = {
+      html_loaded: Date.now(),
+      script_started: false,
+      react_rendered: false,
+      errors: []
+    };
+    window.onerror = function (msg, url, lineNo, columnNo, error) {
+      window.__APP_STARTUP__.errors.push({ msg, url, lineNo, columnNo, error: error?.stack });
+      console.error('[CRITICAL] window.onerror:', msg, url, lineNo);
+      const root = document.getElementById('root');
+      if (root && root.innerHTML === '') {
+        root.innerHTML = '<div style="color:red; padding:20px;">Runtime Error: ' + msg + '</div>';
+      }
+      return false;
+    };
+  </script>
   <script type="module" src="/src/main.tsx"></script>
+  <script>
+    setTimeout(() => {
+      if (!window.__APP_STARTUP__.script_started) {
+        console.error('[FATAL] Main script failed to start within 5 seconds');
+        document.getElementById('root').innerHTML += '<div style="color:orange; padding:20px;">Main bundle failed to execute. Check console.</div>';
+      }
+    }, 5000);
+  </script>
 </body>
 
 </html>

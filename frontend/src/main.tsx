@@ -44,6 +44,10 @@ const queryClient = new QueryClient({
     },
 });
 
+if (typeof window !== 'undefined' && (window as any).__APP_STARTUP__) {
+    (window as any).__APP_STARTUP__.script_started = true;
+}
+
 console.log('[DEBUG] main.tsx: Startup execution beginning');
 
 try {
@@ -71,6 +75,11 @@ try {
             </QueryClientProvider>
         </ErrorBoundary>
     );
+
+    if (typeof window !== 'undefined' && (window as any).__APP_STARTUP__) {
+        (window as any).__APP_STARTUP__.react_rendered = true;
+    }
+
     console.log('[DEBUG] main.tsx: ReactDOM.render called successfully');
 } catch (e) {
     console.error('[FATAL] main.tsx: Failed to initialize application:', e);
