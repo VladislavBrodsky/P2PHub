@@ -93,8 +93,31 @@ export const StudioTab = ({
             setExternalStep(3);
             notification({ title: t('pro_dashboard.notifications.success'), text: t('pro_dashboard.notifications.viral_synthesized'), type: 'success' });
         } catch (error: any) {
-            console.error('Generation failed', error);
-            notification({ title: t('pro_dashboard.notifications.error'), text: t('pro_dashboard.notifications.gen_failed'), type: 'error' });
+            console.error('❌ Viral content generation failed:', error);
+
+            // Extract detailed error message
+            let errorTitle = t('pro_dashboard.notifications.error');
+            let errorMessage = t('pro_dashboard.notifications.gen_failed');
+
+            if (error.response?.data?.detail) {
+                // Backend provided detailed error
+                errorMessage = error.response.data.detail;
+                console.error('Backend error detail:', errorMessage);
+            } else if (error.response?.status === 402) {
+                errorTitle = 'Insufficient Tokens';
+                errorMessage = 'You need at least 2 tokens to generate content. Tokens reset monthly.';
+            } else if (error.response?.status === 403) {
+                errorTitle = 'PRO Required';
+                errorMessage = 'Upgrade to PRO to access the Viral Studio.';
+            } else if (error.message) {
+                errorMessage = `${errorMessage}: ${error.message}`;
+            }
+
+            notification({
+                title: errorTitle,
+                text: errorMessage,
+                type: 'error'
+            });
         } finally {
             setIsGenerating(false);
         }
@@ -362,86 +385,155 @@ export const StudioTab = ({
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="glass-panel-premium rounded-[2rem] p-6 sm:p-10 text-center space-y-6 sm:space-y-8 relative overflow-hidden border border-white/10 shadow-3xl"
+                    className="relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem]"
                 >
-                    <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+                    {/* Premium Gradient Border */}
+                    <div className="absolute inset-0 bg-linear-to-br from-indigo-500 via-purple-500 to-pink-500 opacity-20 dark:opacity-30 blur-xl" />
+                    <div className="absolute inset-px bg-white dark:bg-slate-900 rounded-[2rem] sm:rounded-[2.5rem]" />
 
-                    {isGenerating ? (
-                        <div className="py-6 sm:py-10 flex flex-col items-center justify-center space-y-6 sm:space-y-10 relative bg-white dark:bg-slate-900 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-3xl border border-black/3">
-                            <div className="relative">
-                                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white dark:bg-slate-800 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] flex items-center justify-center border border-black/3 dark:border-white/5 relative z-10">
-                                    <Bot className="w-7 h-7 sm:w-9 sm:h-9 text-indigo-500" />
-                                </div>
-                                <div className="absolute -inset-4 bg-indigo-500/5 blur-2xl rounded-full animate-pulse" />
-                            </div>
+                    <div className="relative p-6 sm:p-10 text-center space-y-6 sm:space-y-8">
+                        {isGenerating ? (
+                            <div className="py-8 sm:py-12 flex flex-col items-center justify-center space-y-6 sm:space-y-10">
+                                {/* Premium Icon Container */}
+                                <div className="relative">
+                                    {/* Animated Glow Rings */}
+                                    <motion.div
+                                        className="absolute inset-0 rounded-3xl bg-linear-to-br from-indigo-500 to-purple-600 opacity-20"
+                                        animate={{
+                                            scale: [1, 1.2, 1],
+                                            opacity: [0.2, 0.4, 0.2],
+                                        }}
+                                        transition={{
+                                            duration: 2,
+                                            repeat: Infinity,
+                                            ease: "easeInOut"
+                                        }}
+                                    />
+                                    <motion.div
+                                        className="absolute -inset-2 rounded-3xl bg-linear-to-br from-purple-500 to-pink-600 opacity-10"
+                                        animate={{
+                                            scale: [1, 1.3, 1],
+                                            opacity: [0.1, 0.3, 0.1],
+                                        }}
+                                        transition={{
+                                            duration: 2.5,
+                                            repeat: Infinity,
+                                            ease: "easeInOut",
+                                            delay: 0.5
+                                        }}
+                                    />
 
-                            <div className="space-y-4 sm:space-y-6 w-full max-w-[240px] sm:max-w-xs px-4 sm:px-6">
-                                <div className="space-y-1 text-center">
-                                    <div className="vibing-blue-animated py-2 px-4 sm:py-3 sm:px-6 rounded-xl shadow-lg border border-blue-400/30">
-                                        <h3 className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.25em] text-white">
-                                            {t('pro_dashboard.studio.cooking_title')}
-                                        </h3>
+                                    {/* Icon */}
+                                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-linear-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 rounded-3xl shadow-2xl flex items-center justify-center border border-slate-200/50 dark:border-white/10">
+                                        <Bot className="w-9 h-9 sm:w-11 sm:h-11 text-indigo-600 dark:text-indigo-400" />
                                     </div>
-                                    <p className="text-[7px] sm:text-[8px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] sm:tracking-[0.3em] mt-2 opacity-60">
-                                        DEEP LEARNING OPTIMIZATION ACTIVE
-                                    </p>
                                 </div>
 
-                                <div className="space-y-4">
-                                    <div className="flex flex-col items-center">
-                                        <div className="flex items-baseline gap-1.5 sm:gap-2">
-                                            <span className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white italic tracking-tighter">
-                                                {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)} <span className="text-[10px] sm:text-xs not-italic opacity-30 ml-1 font-bold">%</span>
-                                            </span>
-                                            <span className="text-[8px] sm:text-[9px] font-black text-indigo-500 uppercase tracking-widest border-b border-indigo-500/20 pb-0.5 sm:pb-1">
-                                                {t('pro_dashboard.studio.cooking_remaining', { count: countdown })}
-                                            </span>
+                                <div className="space-y-5 sm:space-y-6 w-full max-w-[280px] sm:max-w-sm">
+                                    {/* Status Badge */}
+                                    <div className="space-y-2 text-center">
+                                        <div className="inline-flex items-center gap-2 bg-linear-to-r from-indigo-500 to-purple-600 py-2.5 px-5 sm:py-3 sm:px-6 rounded-2xl shadow-xl border border-indigo-400/30">
+                                            <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                                            <h3 className="text-[9px] sm:text-[11px] font-black uppercase tracking-[0.25em] text-white">
+                                                AI ENGINE ACTIVE
+                                            </h3>
+                                        </div>
+                                        <p className="text-[8px] sm:text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.25em] opacity-70">
+                                            {t('pro_dashboard.studio.cooking_title')}
+                                        </p>
+                                    </div>
+
+                                    {/* Progress Info */}
+                                    <div className="bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-xl rounded-2xl p-5 sm:p-6 border border-slate-200/50 dark:border-white/10 shadow-lg">
+                                        <div className="space-y-4">
+                                            {/* Percentage Display */}
+                                            <div className="flex items-center justify-center gap-3">
+                                                <div className="flex items-baseline gap-2">
+                                                    <span className="text-4xl sm:text-5xl font-black bg-linear-to-br from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent italic tracking-tighter">
+                                                        {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}
+                                                    </span>
+                                                    <span className="text-sm sm:text-base font-bold text-slate-400 dark:text-slate-500">%</span>
+                                                </div>
+                                            </div>
+
+                                            {/* Time Remaining */}
+                                            <div className="flex items-center justify-center gap-2">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                                                <span className="text-[9px] sm:text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">
+                                                    ANALYZING TRENDS • {countdown}S REMAINING
+                                                </span>
+                                            </div>
+
+                                            {/* Progress Bar */}
+                                            <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden relative shadow-inner">
+                                                <motion.div
+                                                    className="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full shadow-lg"
+                                                    initial={{ width: "0%" }}
+                                                    animate={{ width: `${Math.min(((30 - countdown) / 30) * 100, 99)}%` }}
+                                                    transition={{ duration: 0.5 }}
+                                                />
+                                                <div className="absolute inset-0 bg-linear-to-r from-white/20 to-transparent" />
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="h-1 sm:h-1.5 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden relative">
-                                        <motion.div
-                                            className="h-full vibing-blue-animated rounded-full"
-                                            initial={{ width: "0%" }}
-                                            animate={{ width: `${Math.min(((30 - countdown) / 30) * 100, 99)}%` }}
-                                            transition={{ duration: 0.5 }}
-                                        />
-                                    </div>
+                                    {/* Status Message */}
+                                    <p className="text-[10px] sm:text-[11px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed px-2">
+                                        Our agent is prepared to craft viral stories tailored specifically for your audience.
+                                    </p>
                                 </div>
                             </div>
-                        </div>
-                    ) : (
-                        <>
-                            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-blue-500 via-indigo-500 to-purple-500 opacity-40" />
-                            <div className="w-20 h-20 mx-auto bg-indigo-500/10 rounded-2xl flex items-center justify-center relative group">
-                                <Bot className="w-8 h-8 text-indigo-500 group-hover:scale-110 transition-transform duration-500" />
-                                <div className="absolute -inset-1.5 border border-indigo-500/20 rounded-[1.5rem] animate-pulse" />
-                            </div>
-                            <div className="space-y-1">
-                                <h3 className="text-lg font-black uppercase tracking-tight text-white">{t('pro_dashboard.studio.ready_title')}</h3>
-                                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-indigo-400">{t('pro_dashboard.studio.ready_subtitle')}</p>
-                            </div>
-                            <div className="p-4 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10 shadow-inner">
-                                <p className="text-[10px] font-medium leading-relaxed text-slate-900 dark:text-white/70">
-                                    {t('pro_dashboard.studio.ready_p')}
-                                </p>
-                            </div>
-                            <div className="flex flex-col gap-3 pt-2">
-                                <button
-                                    onClick={handleGenerate}
-                                    className="w-full h-14 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3 group"
-                                >
-                                    {t('pro_dashboard.studio.go_viral_btn')} <Send size={14} className="group-active:translate-x-1 group-active:-translate-y-1 transition-transform" />
-                                </button>
-                                <button
-                                    onClick={() => { selection(); setExternalStep(1); }}
-                                    className="w-full h-10 rounded-xl font-black text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-white transition-all flex items-center justify-center gap-2"
-                                >
-                                    <ArrowLeft size={12} /> {t('pro_dashboard.studio.back_btn')}
-                                </button>
-                            </div>
-                        </>
-                    )}
+                        ) : (
+                            <>
+                                {/* Top Accent Line */}
+                                <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-transparent via-indigo-500 to-transparent" />
+
+                                {/* Icon */}
+                                <div className="relative inline-flex">
+                                    <div className="absolute -inset-3 bg-linear-to-br from-indigo-500/20 to-purple-500/20 rounded-3xl blur-xl" />
+                                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-linear-to-br from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/20 dark:to-purple-500/20 rounded-3xl flex items-center justify-center border border-indigo-500/20 dark:border-indigo-500/30 shadow-xl group cursor-pointer">
+                                        <Bot className="w-9 h-9 sm:w-11 sm:h-11 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform duration-500" />
+                                    </div>
+                                </div>
+
+                                {/* Title */}
+                                <div className="space-y-2">
+                                    <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight bg-linear-to-br from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
+                                        {t('pro_dashboard.studio.ready_title')}
+                                    </h3>
+                                    <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.25em] text-indigo-600 dark:text-indigo-400">
+                                        {t('pro_dashboard.studio.ready_subtitle')}
+                                    </p>
+                                </div>
+
+                                {/* Description */}
+                                <div className="max-w-sm mx-auto">
+                                    <p className="text-[11px] sm:text-[12px] font-medium leading-relaxed text-slate-700 dark:text-slate-300 bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-sm px-5 py-4 rounded-2xl border border-slate-200/50 dark:border-white/10 shadow-sm">
+                                        {t('pro_dashboard.studio.ready_p')}
+                                    </p>
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className="flex flex-col gap-3 pt-4 max-w-sm mx-auto">
+                                    <button
+                                        onClick={handleGenerate}
+                                        className="group relative w-full h-14 sm:h-16 bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 rounded-2xl font-black text-white text-[11px] sm:text-[12px] uppercase tracking-[0.2em] active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl shadow-indigo-500/30 dark:shadow-indigo-500/20 overflow-hidden"
+                                    >
+                                        <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                                        <Sparkles size={18} className="animate-pulse" />
+                                        GO VIRAL
+                                        <Send size={16} className="group-active:translate-x-1 group-active:-translate-y-1 transition-transform" />
+                                    </button>
+                                    <button
+                                        onClick={() => { selection(); setExternalStep(1); }}
+                                        className="w-full h-11 rounded-xl font-bold text-[10px] uppercase tracking-widest text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-slate-100/50 dark:bg-slate-800/50 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 transition-all flex items-center justify-center gap-2 border border-slate-200/50 dark:border-white/10"
+                                    >
+                                        <ArrowLeft size={14} /> BACK
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </motion.div>
             )}
 
