@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, lazy, Suspense, useCallback } from 'react';
 import { AnimatePresence, LazyMotion, domAnimation, motion } from 'framer-motion';
 import { Layout } from './components/Layout/Layout';
 // #comment: Reorganized imports and lazy declarations to satisfy Fast Refresh (react-refresh/only-export-components).
@@ -93,8 +93,34 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
         if (!visitedTabs.has(activeTab)) {
             setVisitedTabs(prev => new Set(prev).add(activeTab));
         }
-        // #comment: Added visitedTabs to the dependency array to ensure the effect has access to the latest state
     }, [activeTab, visitedTabs]);
+
+    // Sync activeTab with URL path handles direct links and back button
+    useEffect(() => {
+        const handlePathSync = () => {
+            const path = window.location.pathname.replace(/^\//, '');
+            const validTabs = ['pro', 'admin', 'cards', 'partner', 'earn', 'league', 'blog', 'subscription'];
+            if (validTabs.includes(path)) {
+                setActiveTab(path);
+            } else if (path === '' || path === 'home') {
+                setActiveTab('home');
+            }
+        };
+
+        handlePathSync();
+        window.addEventListener('popstate', handlePathSync);
+        return () => window.removeEventListener('popstate', handlePathSync);
+    }, []);
+
+    // Helper to change tabs with URL synchronization
+    const navigateTo = useCallback((tab: string) => {
+        setActiveTab(tab);
+        const newPath = tab === 'home' ? '/' : `/${tab}`;
+        if (window.location.pathname !== newPath) {
+            window.history.pushState({ tab }, '', newPath);
+        }
+    }, []);
+
 
     // Initialize TMA SDK once
     useEffect(() => {
@@ -177,7 +203,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
             } else if (activeTab !== 'blog') {
                 // Blog tab handles its own hierarchical back button
                 if (backButton.show.isAvailable()) backButton.show();
-                const handleBack = () => setActiveTab('home');
+                const handleBack = () => navigateTo('home');
                 cleanup = backButton.onClick(handleBack);
             }
         } catch (e) {
@@ -193,12 +219,12 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
     if (showOnboarding) return null;
 
     return (
-        <Layout activeTab={activeTab} setActiveTab={setActiveTab} prefetchPages={prefetchPages}>
+        <Layout activeTab={activeTab} setActiveTab={navigateTo} prefetchPages={prefetchPages}>
             <Suspense fallback={<RevealSkeleton />}>
                 <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
                     {visitedTabs.has('home') && (
                         <FeatureErrorBoundary featureName="Dashboard">
-                            <Dashboard setActiveTab={setActiveTab} />
+                            <Dashboard setActiveTab={navigateTo} />
                         </FeatureErrorBoundary>
                     )}
                 </div>

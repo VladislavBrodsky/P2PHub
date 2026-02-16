@@ -74,11 +74,13 @@ async def create_payment_session(
     """
     Creates a payment session (TON or Crypto).
     """
+    if user_data is None:
+        raise HTTPException(status_code=401, detail="Unauthorized: Telegram authentication required")
+
     try:
-        if "user" in user_data:
-            tg_id = str(json.loads(user_data["user"]).get("id"))
-        else:
-            tg_id = str(user_data.get("id"))
+        from app.core.security import get_tg_user
+        tg_user = get_tg_user(user_data)
+        tg_id = str(tg_user.get("id"))
     except Exception as e:
         logger.warning(f"Invalid user data in create_payment_session: {e}")
         raise HTTPException(status_code=400, detail="Invalid user data")
@@ -175,11 +177,13 @@ async def submit_manual_payment(
     Submits a manual payment claim for non-TON crypto.
     Requires admin review.
     """
+    if user_data is None:
+        raise HTTPException(status_code=401, detail="Unauthorized: Telegram authentication required")
+
     try:
-        if "user" in user_data:
-            tg_id = str(json.loads(user_data["user"]).get("id"))
-        else:
-            tg_id = str(user_data.get("id"))
+        from app.core.security import get_tg_user
+        tg_user = get_tg_user(user_data)
+        tg_id = str(tg_user.get("id"))
     except Exception as e:
         logger.warning(f"Invalid user data in submit_manual_payment: {e}")
         raise HTTPException(status_code=400, detail="Invalid user data")

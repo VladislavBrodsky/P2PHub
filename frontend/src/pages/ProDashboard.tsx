@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Zap, Settings, Trophy, Cpu, Users, ChevronLeft
+    Zap, Settings, Trophy, Cpu, Users, ChevronLeft, Shield
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -305,14 +305,15 @@ export const ProDashboard = () => {
                     mainButton.setParams({
                         text: String(t('pro_dashboard.studio.initiate_btn')).toUpperCase(),
                         isVisible: true,
-                        isEnabled: studioReady,
+                        isEnabled: !!studioReady,
                         backgroundColor: '#6366f1',
                         textColor: '#ffffff'
                     });
-                    return typeof mainButton.onClick === 'function' ? mainButton.onClick(() => {
+                    const handleStep1 = () => {
                         impact('medium');
                         setStudioStep(2);
-                    }) : undefined;
+                    };
+                    return typeof mainButton.onClick === 'function' ? mainButton.onClick(handleStep1) : undefined;
                 } else if (studioStep === 2) {
                     mainButton.setParams({
                         text: String(t('pro_dashboard.studio.go_viral_btn')).toUpperCase(),
@@ -344,12 +345,12 @@ export const ProDashboard = () => {
                 });
                 return typeof mainButton.onClick === 'function' ? mainButton.onClick(handleRunMarketingAudit) : undefined;
             } else if (activeTab === 'growth') {
-                const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
-                const modulesList = Array.isArray(modules) ? modules : [];
-                const nextModule = modulesList.find((m: any) => !completedStages.includes(m.id));
+                const modulesRaw = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
+                const modulesList = Array.isArray(modulesRaw) ? modulesRaw : [];
+                const nextModule = modulesList.find((m: any) => m && m.id && !completedStages.includes(m.id));
 
                 if (nextModule) {
-                    const setupTitle = String(t('pro_dashboard.academy.social_setup.title')).toUpperCase();
+                    const setupTitle = String(t('pro_dashboard.academy.social_setup.title') || 'Setup').toUpperCase();
                     const moduleTitle = String(nextModule.title || '').toUpperCase();
                     mainButton.setParams({
                         text: `${setupTitle}: ${moduleTitle}`,
@@ -358,7 +359,8 @@ export const ProDashboard = () => {
                         backgroundColor: '#4f46e5',
                         textColor: '#ffffff'
                     });
-                    return typeof mainButton.onClick === 'function' ? mainButton.onClick(() => handleCompleteAcademyStage(nextModule.id)) : undefined;
+                    const handleComplete = () => handleCompleteAcademyStage(nextModule.id);
+                    return typeof mainButton.onClick === 'function' ? mainButton.onClick(handleComplete) : undefined;
                 } else {
                     mainButton.setParams({ isVisible: false });
                 }
@@ -367,9 +369,11 @@ export const ProDashboard = () => {
             }
         } catch (e) {
             console.warn('[SDK] mainButton error:', e);
-            if (mainButton && mainButton.setParams) mainButton.setParams({ isVisible: false });
+            try {
+                if (mainButton && mainButton.setParams) mainButton.setParams({ isVisible: false });
+            } catch { /* ignore */ }
         }
-    }, [activeTab, studioStep, studioReady, isAuditing, isCompletingStage, completedStages, showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, t, isLoading, handleRunMarketingAudit, handleCompleteAcademyStage, mainButton]);
+    }, [activeTab, studioStep, studioReady, isAuditing, isCompletingStage, completedStages, showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, t, isLoading, handleRunMarketingAudit, handleCompleteAcademyStage, mainButton, impact]);
 
     // Handle deep linking for Pro Tabs
     useEffect(() => {
@@ -436,7 +440,7 @@ export const ProDashboard = () => {
                     </div>
                 </div>
 
-                <div className="flex p-1 bg-white dark:bg-slate-900/50 backdrop-blur-3xl rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm relative group/nav">
+                <div className="flex p-1 bg-white dark:bg-slate-900/50 backdrop-blur-3xl rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm relative group/nav mt-2">
                     {(['studio', 'tools', 'growth'] as const).map((tab) => (
                         <button
                             key={tab}
@@ -460,63 +464,97 @@ export const ProDashboard = () => {
                         </button>
                     ))}
                 </div>
-                <div className="relative min-h-[60vh]">
-                    <AnimatePresence mode="wait" initial={false}>
-                        <motion.div
-                            key={activeTab}
-                            initial={{ opacity: 0, x: 20, filter: 'blur(10px)' }}
-                            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-                            exit={{ opacity: 0, x: -20, filter: 'blur(10px)' }}
-                            transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-                        >
-                            {activeTab === 'studio' && (
-                                <StudioTab
-                                    status={status}
-                                    setStatus={setStatus}
-                                    impact={impact}
-                                    selection={selection}
-                                    notification={notificationShim}
-                                    externalStep={studioStep}
-                                    setExternalStep={setStudioStep}
-                                    setExternalReady={setStudioReady}
-                                    generatedResult={generatedResult}
-                                    setGeneratedResult={setGeneratedResult}
-                                    history={studioHistory}
-                                    setHistory={setStudioHistory}
-                                    historyIndex={studioHistoryIndex}
-                                    setHistoryIndex={setStudioHistoryIndex}
-                                />
-                            )}
 
-                            {activeTab === 'tools' && (
-                                <ToolsTab
-                                    trends={trends}
-                                    isAuditing={isAuditing}
-                                    isFetchingTrends={isFetchingTrends}
-                                    handleRunMarketingAudit={handleRunMarketingAudit}
-                                    handleFetchTrends={handleFetchTrends}
-                                    setShowHeadlineModal={setShowAuditModal}
-                                    selection={selection}
-                                />
-                            )}
+                <div className="relative min-h-[60vh] mt-4">
+                    {isLoading ? (
+                        <div className="flex flex-col items-center justify-center py-20 space-y-4">
+                            <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500 animate-pulse">Syncing with Global Nodes...</p>
+                        </div>
+                    ) : status && !status.is_pro ? (
+                        <div className="flex flex-col items-center justify-center py-10 px-6 text-center">
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="bg-white dark:bg-slate-900/50 backdrop-blur-3xl p-8 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-2xl max-w-sm w-full relative overflow-hidden"
+                            >
+                                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500" />
+                                <div className="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-500 mx-auto mb-6 shadow-xl shadow-indigo-500/20">
+                                    <Shield size={32} className="animate-pulse" />
+                                </div>
+                                <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-3 leading-tight">
+                                    {t('pro_dashboard.locked.title')}
+                                </h2>
+                                <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
+                                    {t('pro_dashboard.locked.desc')}
+                                </p>
+                                <button
+                                    onClick={() => window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }))}
+                                    className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-500/20"
+                                >
+                                    {t('pro_dashboard.locked.upgrade_btn')}
+                                </button>
+                            </motion.div>
+                        </div>
+                    ) : (
+                        <AnimatePresence mode="wait" initial={false}>
+                            <motion.div
+                                key={activeTab}
+                                initial={{ opacity: 0, x: 20, filter: 'blur(10px)' }}
+                                animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+                                exit={{ opacity: 0, x: -20, filter: 'blur(10px)' }}
+                                transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                            >
+                                {activeTab === 'studio' && status && (
+                                    <StudioTab
+                                        status={status}
+                                        setStatus={setStatus}
+                                        impact={impact}
+                                        selection={selection}
+                                        notification={notificationShim}
+                                        externalStep={studioStep}
+                                        setExternalStep={setStudioStep}
+                                        setExternalReady={setStudioReady}
+                                        generatedResult={generatedResult}
+                                        setGeneratedResult={setGeneratedResult}
+                                        history={studioHistory}
+                                        setHistory={setStudioHistory}
+                                        historyIndex={studioHistoryIndex}
+                                        setHistoryIndex={setStudioHistoryIndex}
+                                    />
+                                )}
 
-                            {activeTab === 'growth' && (
-                                <GrowthTab
-                                    status={status}
-                                    academyScore={academyScore}
-                                    completedStages={completedStages}
-                                    isCompletingStage={isCompletingStage}
-                                    handleCompleteAcademyStage={handleCompleteAcademyStage}
-                                    setSelectedArticle={setSelectedArticle}
-                                    setShowSetup={setShowSetup}
-                                    setShowManual={setShowManual}
-                                    selection={selection}
-                                    impact={impact}
-                                />
-                            )}
-                        </motion.div>
-                    </AnimatePresence>
+                                {activeTab === 'tools' && (
+                                    <ToolsTab
+                                        trends={trends}
+                                        isAuditing={isAuditing}
+                                        isFetchingTrends={isFetchingTrends}
+                                        handleRunMarketingAudit={handleRunMarketingAudit}
+                                        handleFetchTrends={handleFetchTrends}
+                                        setShowHeadlineModal={setShowAuditModal}
+                                        selection={selection}
+                                    />
+                                )}
+
+                                {activeTab === 'growth' && status && (
+                                    <GrowthTab
+                                        status={status}
+                                        academyScore={academyScore}
+                                        completedStages={completedStages}
+                                        isCompletingStage={isCompletingStage}
+                                        handleCompleteAcademyStage={handleCompleteAcademyStage}
+                                        setSelectedArticle={setSelectedArticle}
+                                        setShowSetup={setShowSetup}
+                                        setShowManual={setShowManual}
+                                        selection={selection}
+                                        impact={impact}
+                                    />
+                                )}
+                            </motion.div>
+                        </AnimatePresence>
+                    )}
                 </div>
+
             </div>
 
             <ProDashboardModals
@@ -542,6 +580,6 @@ export const ProDashboard = () => {
                 impact={impact}
                 copyText={handleCopyAnyText}
             />
-        </div >
+        </div>
     );
 };
