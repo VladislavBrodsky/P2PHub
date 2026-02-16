@@ -60,6 +60,7 @@ export const NotificationOverlay = () => {
                         <button
                             onClick={hideNotification}
                             className="p-1 hover:bg-slate-200/50 dark:hover:bg-white/10 rounded-full transition-colors"
+                            aria-label="Close notification"
                         >
                             <X size={14} className="text-slate-400 dark:text-slate-500" />
                         </button>

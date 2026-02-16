@@ -27,6 +27,7 @@ export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavBut
                 ? 'text-blue-500'
                 : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
+            aria-label={label}
         >
             <div
                 className={`transition-all duration-300 ${active ? '-translate-y-1 scale-110' : 'scale-100'}`}

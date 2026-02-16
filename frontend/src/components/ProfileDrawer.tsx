@@ -122,7 +122,11 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
 
                             {/* Header */}
                             <div className="flex h-14 items-center px-4 shrink-0 mt-[calc(var(--spacing-telegram-header)+8px)]">
-                                <button onClick={onClose} className="group -ml-1 rounded-2xl active:scale-95 transition-all">
+                                <button
+                                    onClick={onClose}
+                                    className="group -ml-1 rounded-2xl active:scale-95 transition-all"
+                                    aria-label="Go back"
+                                >
                                     <div className="flex items-center gap-2 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-3 py-1.5 shadow-premium">
                                         <ArrowLeft className="text-slate-900 dark:text-white h-5 w-5 transition-transform group-hover:-translate-x-1" />
                                         <span className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white pr-0.5">
@@ -138,9 +142,10 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                             window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'admin' }));
                                         }}
                                         className="ml-auto rounded-2xl bg-blue-500/10 border border-blue-500/20 px-4 py-1.5 flex items-center gap-2 active:scale-95 transition-all"
+                                        aria-label="Open Admin Panel"
                                     >
                                         <ShieldCheck className="h-4 w-4 text-blue-500" />
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">Admin</span>
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">{t('common.admin')}</span>
                                     </button>
                                 )}
                             </div>
@@ -174,6 +179,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                         className={`w-full rounded-full py-1.5 px-3 border transition-all ${wallet
                                             ? 'bg-emerald-500 text-white border-transparent'
                                             : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-md text-slate-900 dark:text-white border-slate-200 dark:border-white/10'}`}
+                                        aria-label={wallet ? "Wallet connected" : "Connect wallet"}
                                     >
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-2">
