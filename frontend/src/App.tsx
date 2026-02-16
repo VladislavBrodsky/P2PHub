@@ -56,7 +56,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
     useEffect(() => {
         if (!isUserLoading && config) {
             updateProgress(95, 'Finalizing UI...');
-            const timer = setTimeout(onReady, 150);
+            const timer = setTimeout(onReady, 50);
             return () => clearTimeout(timer);
         }
     }, [isUserLoading, config, onReady, updateProgress]);
@@ -319,17 +319,15 @@ function App() {
     });
 
     // #comment: Parallel Initialization Strategy
-    // Instead of sequential waiting, we trigger config/user fetches and prefetch the dashboard
-    // code immediately. This concurrently loads data and JS bundles while the StartupLoader 
-    // provides smooth visual feedback to the user.
+    // Trigger prefetching immediately to load JS chunks while config/user APIs are pending.
     useEffect(() => {
-        if (!isConfigLoading && !showOnboarding) {
-            updateProgress(50, 'Config Loaded');
-
+        if (!showOnboarding) {
             const prefetchCoreRoutes = async () => {
                 try {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    await prefetchPages.home();
+                    // Start prefetching immediately
+                    prefetchPages.home();
+
+                    // Delay heavy route prefetching slightly to prioritize TTI
                     setTimeout(() => {
                         Promise.all([
                             prefetchPages.earn(),
@@ -338,15 +336,24 @@ function App() {
                             prefetchPages.league(),
                             prefetchPages.subscription()
                         ]).catch(e => console.debug('Lazy prefetch error', e));
-                    }, 4000);
+                    }, 2000);
                 } catch (e) {
                     console.warn('Prefetch failed', e);
                 }
             };
-
             prefetchCoreRoutes();
+        } else {
+            // #comment: Eagerly load Onboarding if needed
+            import('./components/Onboarding/OnboardingStory');
         }
-    }, [isConfigLoading, showOnboarding, updateProgress]); // Removed t dependency
+    }, [showOnboarding]);
+
+    // Update progress when config loads
+    useEffect(() => {
+        if (!isConfigLoading) {
+            updateProgress(50, 'Config Loaded');
+        }
+    }, [isConfigLoading, updateProgress]);
 
     return (
         <UIProvider>

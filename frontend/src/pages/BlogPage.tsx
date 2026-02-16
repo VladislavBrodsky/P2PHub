@@ -694,6 +694,10 @@ const TopicDropdown = ({ selected, onSelect, categories }: TopicDropdownProps) =
 // Custom Markdown Renderer
 // Handles: H1 stripping, H2/H3 headers, Bold (**), Italic (* or _), Paragraphs
 // ------------------------------------------------------------------
+// ------------------------------------------------------------------
+// Custom Markdown Renderer
+// Handles: H1 stripping, H2/H3 headers, Bold (**), Italic (* or _), Paragraphs
+// ------------------------------------------------------------------
 function MarkdownRenderer({ content }: { content: string }) {
     // 1. Sanitize: Remove the first line if it's an H1 (# Title) since we display Title separately
     const lines = content.trim().split('\n');
@@ -701,17 +705,15 @@ function MarkdownRenderer({ content }: { content: string }) {
     // Check if first non-empty line starts with '# '
     const firstLineIndex = lines.findIndex(line => line.trim().length > 0);
     if (firstLineIndex !== -1 && lines[firstLineIndex].trim().startsWith('# ')) {
-        // Remove that line and rejoin
-        // Note: We use lines from the split, so if original content had specific newlines, we should use 'lines'
         cleanContent = lines.slice(firstLineIndex + 1).join('\n').trim();
     }
 
-    // 2. Split into blocks by double newlines (paragraphs)
-    const blocks = cleanContent.split(/\n\s*\n/);
+    // 2. Split into blocks by ANY newline sequence to handle single-spaced content better
+    const blocks = cleanContent.split(/\n+/);
 
     // 3. Render blocks
     return (
-        <div className="space-y-6">
+        <div className="space-y-3">
             {blocks.map((block, index) => {
                 const trimmed = block.trim();
                 if (!trimmed) return null;
@@ -721,7 +723,7 @@ function MarkdownRenderer({ content }: { content: string }) {
                     return (
                         <h3
                             key={`h3-${index}`}
-                            className="text-xl font-bold mt-6 mb-2 text-slate-900 dark:text-white"
+                            className="text-base font-bold mt-4 mb-2 text-slate-900 dark:text-white leading-tight"
                             dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^###\s+/, '')) }}
                         />
                     );
@@ -730,32 +732,26 @@ function MarkdownRenderer({ content }: { content: string }) {
                     return (
                         <h2
                             key={`h2-${index}`}
-                            className="text-2xl font-black mt-8 mb-4 text-slate-900 dark:text-white"
+                            className="text-lg font-black mt-5 mb-2 text-slate-900 dark:text-white leading-tight"
                             dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^##\s+/, '')) }}
                         />
                     );
                 }
                 if (trimmed.startsWith('# ')) {
-                    // Fallback for H1 inside body (should generally be avoided but render as H2 style)
                     return (
                         <h2
                             key={`h1-${index}`}
-                            className="text-2xl font-black mt-8 mb-4 text-slate-900 dark:text-white"
+                            className="text-lg font-black mt-5 mb-2 text-slate-900 dark:text-white leading-tight"
                             dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^#\s+/, '')) }}
                         />
                     );
                 }
 
-                // Standard Paragraph with Drop Cap logic for the very first paragraph
-                const isFirst = index === 0;
-
+                // Standard Paragraph (Clean, compact style without drop-caps)
                 return (
                     <p
                         key={`p-${index}`}
-                        className={isFirst
-                            ? "first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left first-letter:text-blue-500 first-letter:leading-none first-letter:pt-2 text-slate-700 dark:text-slate-300"
-                            : "text-base font-normal text-slate-700 dark:text-slate-300 leading-relaxed"
-                        }
+                        className="text-[13px] font-normal text-slate-600 dark:text-slate-400 leading-relaxed tracking-wide"
                         dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed) }}
                     />
                 );
@@ -764,17 +760,18 @@ function MarkdownRenderer({ content }: { content: string }) {
     );
 }
 
-// Simple tokenizer for **bold**, *italic*, __bold__, _italic_
 // Enhanced regex parser for markdown
 function processMarkdown(text: string): string {
     return text
+        // Fix for bold text that might cover entire lines:
+        // Identify **text** patterns
         .replace(/\*\*\*\*(.*?)\*\*\*\*/g, '<strong>$1</strong>')
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/__([^_]+)__/g, '<strong>$1</strong>')
         .replace(/_(.*?)_/g, '<em>$1</em>')
         .replace(/\*([^*]+)\*/g, '<em>$1</em>')
         // Special CTA button - Allow spaces
-        .replace(/\[CTA:\s*(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="inline-block mt-4 mb-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-blue-500/30 no-underline">$1</a>')
+        .replace(/\[CTA:\s*(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="inline-block my-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-black uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-blue-500/30 no-underline">$1</a>')
         // Standard links - Allow spaces
         .replace(/\[(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="text-blue-500 hover:text-blue-600 font-bold underline decoration-2 underline-offset-2 transition-colors">$1</a>');
 }

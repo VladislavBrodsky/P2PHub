@@ -99,7 +99,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                         exit={{ opacity: 0, y: -10, filter: 'blur(10px)' }}
                         transition={{ duration: 0.4, ease: 'easeOut' }}
-                        className="absolute inset-0 flex flex-col items-center justify-center p-8 pt-[calc(env(safe-area-inset-top)+6rem)] pb-[calc(env(safe-area-inset-bottom)+8rem)]"
+                        className="absolute inset-0 flex flex-col items-center justify-center p-8 pt-[calc(env(safe-area-inset-top)+6rem)] pb-[calc(env(safe-area-inset-bottom)+8rem)] will-change-[transform,filter,opacity]"
                     >
                         <div className="relative z-10 text-center space-y-8 max-w-sm w-full h-full flex flex-col justify-center">
                             <motion.div

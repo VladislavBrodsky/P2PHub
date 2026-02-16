@@ -37,7 +37,7 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             updateProgress(20, 'Loading Configuration...');
             try {
                 // Use a shorter timeout specifically for the public config to fail fast
-                const response = await apiClient.get('/api/config/public', { timeout: 5000 });
+                const response = await apiClient.get('/api/config/public', { timeout: 3000 });
                 setConfig(response.data);
                 updateProgress(40, 'Config Synced');
                 setIsLoading(false);

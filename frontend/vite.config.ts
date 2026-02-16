@@ -23,14 +23,27 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
   },
+  publicDir: 'public_safe',
   build: {
     outDir: 'dist',
     sourcemap: true,
     cssCodeSplit: true,
     rollupOptions: {
-      // Reverting to completely default rollup options
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-ui': ['framer-motion', 'lucide-react', 'clsx', 'tailwind-merge'],
+          'vendor-utils': ['axios', 'i18next', 'react-i18next'],
+          'sentry': ['@sentry/react'],
+          'recharts': ['recharts'],
+          'tonconnect': ['@tonconnect/ui-react'],
+          'telegram': ['@telegram-apps/sdk-react'],
+          'tanstack': ['@tanstack/react-query'],
+          'avatars': ['/src/data/avatars.ts'],
+        },
+      },
     },
-    chunkSizeWarningLimit: 3000,
+    chunkSizeWarningLimit: 1000,
     emptyOutDir: true,
   },
 })

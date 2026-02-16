@@ -180,15 +180,9 @@ async def get_my_profile(
             # CRITICAL OPTIMIZATION: Move Telegram API calls to background tasks 
             # to prevent blocking the /me response.
             if not partner.photo_file_id:
-                try:
-                    user_photos = await bot.get_user_profile_photos(tg_id, limit=1)
-                    if user_photos.total_count > 0:
-                        partner.photo_file_id = user_photos.photos[0][0].file_id
-                        has_changed = True
-                        from app.services.partner_service import ensure_photo_cached
-                        background_tasks.add_task(ensure_photo_cached, partner.photo_file_id)
-                except Exception as e:
-                    logger.warning(f"Failed to fetch initial photo for {tg_id}: {e}")
+                # Fire and forget photo sync for new/photo-less users
+                from app.services.partner_service import sync_single_photo_background
+                background_tasks.add_task(sync_single_photo_background, tg_id)
             else:
                 # Throttled background update for existing photos
                 from app.services.partner_service import sync_single_photo_background
