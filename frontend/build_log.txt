@@ -1,0 +1,629 @@
+
+> frontend@1.7.0 build
+> tsc && vite build
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+vite v5.4.21 building for production...
+transforming...
+✓ 2975 modules transformed.
+x Build failed in 4.81s
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/ae_f_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/ae_f_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/br_f_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/br_f_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/ca_m_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/ca_m_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/de_m_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/de_m_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/es_m_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/es_m_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/f1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/f1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/f2.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/f2.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/f3.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/f3.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/fr_f_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/fr_f_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/in_m_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/in_m_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/it_f_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/it_f_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/jp_f_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/jp_f_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/m1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/m1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/m2.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/m2.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/m3.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/m3.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/m4.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/m4.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/ng_m_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/ng_m_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_br_f_2.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_br_f_2.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_btc_maxi.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_btc_maxi.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_cyber_f_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_cyber_f_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_cyber_m_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_cyber_m_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_defi_queen.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_defi_queen.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_eth_boy.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_eth_boy.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_jp_f_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_jp_f_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_kr_f_2.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_kr_f_2.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_nomad_m_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_nomad_m_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_ru_m_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_ru_m_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_studio_f_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_studio_f_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_studio_m_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_studio_m_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_tr_m_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/portrait_tr_m_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/ru_m_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/ru_m_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/us_f_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/us_f_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/us_m_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/avatars/us_m_1.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/blog/strategy.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40 {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/blog/strategy.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/logo.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40
+    at async Promise.all (index 2)
+    at async PluginDriver.hookParallel (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22458:9)
+    at async Object.close (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:23471:13) {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/logo.webp'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/pwa-192x192.png'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40
+    at async Promise.all (index 2)
+    at async PluginDriver.hookParallel (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22458:9)
+    at async Object.close (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:23471:13) {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/pwa-192x192.png'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/pwa-512x512.png'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40
+    at async Promise.all (index 2)
+    at async PluginDriver.hookParallel (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22458:9)
+    at async Object.close (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:23471:13) {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/pwa-512x512.png'
+}
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/public/viral-invite.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:48:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:52:21
+    at Array.forEach (<anonymous>)
+    at readAllFiles (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:51:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-image-optimizer/dist/index.js:326:26)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40
+    at async Promise.all (index 2)
+    at async PluginDriver.hookParallel (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22458:9)
+    at async Object.close (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:23471:13) {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'lstat',
+  path: '/Users/grandmaestro/Documents/P2PHub/frontend/public/viral-invite.webp'
+}
+error during build:
+Error: EPERM: operation not permitted, lstat '/Users/grandmaestro/Documents/P2PHub/frontend/dist/avatars/ae_f_1.webp'
+    at Object.lstatSync (node:fs:1701:25)
+    at readAllFile (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-compression/dist/index.mjs:15:23)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-compression/dist/index.mjs:19:21
+    at Array.forEach (<anonymous>)
+    at readAllFile (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-compression/dist/index.mjs:18:15)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-compression/dist/index.mjs:19:21
+    at Array.forEach (<anonymous>)
+    at readAllFile (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-compression/dist/index.mjs:18:15)
+    at Object.closeBundle (file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/vite-plugin-compression/dist/index.mjs:79:19)
+    at file:///Users/grandmaestro/Documents/P2PHub/frontend/node_modules/rollup/dist/es/shared/node-entry.js:22548:40
