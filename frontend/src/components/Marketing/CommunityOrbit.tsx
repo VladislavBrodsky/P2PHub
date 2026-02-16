@@ -1,9 +1,7 @@
 import { motion } from 'framer-motion';
 import React, { memo, useState, useEffect } from 'react';
-import { ImageCacheService } from '../../services/ImageCacheService';
 import { AVATAR_DATA, LOGO_DATA } from '../../data/avatars';
 
-// Pool of "Real People" / High-Quality Avatars
 const ALL_AVATARS = Object.values(AVATAR_DATA);
 
 const CRYPTO_ICONS = [
@@ -49,46 +47,20 @@ const CryptoIcon = memo(({ name }: { name: string }) => {
     );
 });
 
-// Simple seeded random generator (Mulberry32)
-// This ensures that for a given seed (date), the sequence is always the same.
-function seededRandom(seed: number) {
-    return function () {
-        let t = seed += 0x6D2B79F5;
-        t = Math.imul(t ^ t >>> 15, t | 1);
-        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-        return ((t ^ t >>> 14) >>> 0) / 4294967296;
-    };
-}
+type OrbitItem =
+    | { type: 'avatar'; src: string }
+    | { type: 'crypto'; name: string; color: string; gradientStart?: string; gradientEnd?: string };
 
-// Get 4 unique avatars based on the current date (UTC)
-const getDailyAvatars = () => {
-    const now = new Date();
-    // Create a unique seed for the day: YYYYMMDD
-    const seedValue = now.getUTCFullYear() * 10000 + (now.getUTCMonth() + 1) * 100 + now.getUTCDate();
-    const rng = seededRandom(seedValue);
-
-    // Shuffle a copy of the array
-    const shuffled = [...ALL_AVATARS];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(rng() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-
-    return shuffled.slice(0, 4); // Take the first 4
-};
-
-const DAILY_AVATARS = getDailyAvatars();
-
-// Interleave avatars and crypto icons - EXACTLY 8 ITEMS
+// Interleave avatars and crypto icons
 const ORBIT_ITEMS: OrbitItem[] = [
-    { type: 'avatar' as const, src: DAILY_AVATARS[0] },
-    { type: 'crypto' as const, ...CRYPTO_ICONS[0] }, // BTC
-    { type: 'avatar' as const, src: DAILY_AVATARS[1] },
-    { type: 'crypto' as const, ...CRYPTO_ICONS[1] }, // ETH
-    { type: 'avatar' as const, src: DAILY_AVATARS[2] },
-    { type: 'crypto' as const, ...CRYPTO_ICONS[2] }, // USDT
-    { type: 'avatar' as const, src: DAILY_AVATARS[3] },
-    { type: 'crypto' as const, ...CRYPTO_ICONS[3] }, // TON
+    { type: 'avatar' as const, src: ALL_AVATARS[0] || '' },
+    { type: 'crypto' as const, ...CRYPTO_ICONS[0] },
+    { type: 'avatar' as const, src: ALL_AVATARS[1] || '' },
+    { type: 'crypto' as const, ...CRYPTO_ICONS[1] },
+    { type: 'avatar' as const, src: ALL_AVATARS[2] || '' },
+    { type: 'crypto' as const, ...CRYPTO_ICONS[2] },
+    { type: 'avatar' as const, src: ALL_AVATARS[3] || '' },
+    { type: 'crypto' as const, ...CRYPTO_ICONS[3] },
 ];
 
 export const CommunityOrbit = memo(() => {
@@ -117,10 +89,8 @@ export const CommunityOrbit = memo(() => {
                 />
             ))}
 
-
             {/* Central Logic */}
             <CentralLogo />
-
 
             {/* Orbiting Avatars & Crypto Icons */}
             {ORBIT_ITEMS.map((item, i) => (
@@ -130,7 +100,6 @@ export const CommunityOrbit = memo(() => {
     );
 });
 
-
 const CentralLogo = memo(() => (
     <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
@@ -139,15 +108,9 @@ const CentralLogo = memo(() => (
         className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.5)]"
         style={{ willChange: 'transform' }}
     >
-        {/* Fractal Profits Emergence */}
         <FractalProfits />
-
-        {/* Glow effect behind logo */}
         <div className="absolute inset-0 z-0 rounded-full bg-blue-500 blur-3xl opacity-40 animate-pulse" />
-
-        {/* Inner glow ring */}
         <div className="absolute inset-0 z-10 rounded-full border border-white/30" />
-
         <motion.img
             animate={{
                 scale: [1, 1.08, 1],
@@ -165,7 +128,6 @@ const CentralLogo = memo(() => (
             loading="eager"
             className="relative z-20 w-14 h-14 object-contain brightness-0 invert"
         />
-
     </motion.div>
 ));
 
@@ -173,7 +135,7 @@ const FractalProfits = memo(() => {
     return (
         <div className="absolute inset-0 pointer-events-none z-0">
             {[...Array(6)].map((_, i) => {
-                const direction = i % 2 === 0 ? 1 : -1; // 1 for down, -1 for up
+                const direction = i % 2 === 0 ? 1 : -1;
                 return (
                     <motion.div
                         key={i}
@@ -182,10 +144,10 @@ const FractalProfits = memo(() => {
                             scale: [0, 1.2, 1.5],
                             opacity: [0, 0.8, 0],
                             x: (i - 2.5) * 60,
-                            y: (100 + Math.random() * 60) * direction // Bidirectional: Top and Bottom
+                            y: (100 + Math.random() * 60) * direction
                         }}
                         transition={{
-                            duration: 7, // Slow and attractive
+                            duration: 7,
                             repeat: Infinity,
                             delay: i * 1.2,
                             ease: "easeOut"
@@ -205,12 +167,7 @@ const FractalProfits = memo(() => {
     );
 });
 
-type OrbitItem =
-    | { type: 'avatar'; src: string }
-    | { type: 'crypto'; name: string; color: string; gradientStart?: string; gradientEnd?: string };
-
 const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: number; total: number }) => {
-    // Responsive radius: 140px on large screens, scaled down on small screens
     const [radius, setRadius] = useState(140);
 
     useEffect(() => {
@@ -224,19 +181,6 @@ const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: num
 
     const duration = 50;
     const angle = (index / total) * 360;
-    const [cachedSrc, setCachedSrc] = useState<string | null>(null);
-
-    const itemSrc = item.type === 'avatar' ? item.src : undefined;
-
-    useEffect(() => {
-        if (item.type === 'avatar' && itemSrc) {
-            if (itemSrc.startsWith('data:')) {
-                setCachedSrc(itemSrc);
-            } else {
-                ImageCacheService.fetchAndCache(itemSrc).then(setCachedSrc);
-            }
-        }
-    }, [item.type, itemSrc]);
 
     return (
         <motion.div
@@ -247,7 +191,6 @@ const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: num
                 willChange: 'transform'
             }}
             animate={{
-                // Explicit orbital math for perfect centering
                 x: [
                     Math.cos((angle) * (Math.PI / 180)) * radius,
                     Math.cos((angle + 360) * (Math.PI / 180)) * radius
@@ -263,9 +206,6 @@ const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: num
                 ease: "linear"
             }}
         >
-
-
-            {/* Float & Breathing Animation Layer */}
             <motion.div
                 animate={{
                     y: [-4, 4, -4],
@@ -281,32 +221,23 @@ const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: num
             >
                 {item.type === 'avatar' ? (
                     <div className="group relative h-full w-full cursor-pointer">
-                        {/* Soft Outer Glow */}
                         <div className="absolute -inset-2 rounded-full bg-white/20 blur-xl opacity-0 transition-opacity group-hover:opacity-100 dark:bg-blue-400/20" />
-
-                        {/* Main Container */}
                         <div
                             className="relative h-full w-full overflow-hidden rounded-full border-2 border-white/80 bg-white/40 backdrop-blur-md shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:border-blue-400 dark:border-white/20 dark:bg-white/10"
                             style={{
                                 boxShadow: '0 10px 30px -10px rgba(0,0,0,0.3)'
                             }}
                         >
-                            {(cachedSrc || item.src) && (
-                                <img src={cachedSrc || item.src} alt="Member" width={60} height={60} loading="eager" className="h-full w-full object-cover" />
-                            )}
-                            {/* Reflection Overlay */}
+                            <img src={item.src} alt="Member" width={60} height={60} loading="eager" className="h-full w-full object-cover" />
                             <div className="absolute inset-0 bg-linear-to-tr from-white/20 to-transparent opacity-60" />
                         </div>
                     </div>
                 ) : (
                     <div className="group relative h-full w-full cursor-pointer">
-                        {/* Dynamic Colored Glow */}
                         <div
                             className="absolute -inset-4 rounded-full blur-2xl opacity-40 transition-opacity group-hover:opacity-80"
                             style={{ backgroundColor: item.color }}
                         />
-
-                        {/* Token Container */}
                         <div
                             className="relative flex h-full w-full items-center justify-center rounded-full border-2 border-white/80 shadow-2xl transition-all duration-500 group-hover:scale-110 dark:border-white/20"
                             style={{
@@ -314,12 +245,8 @@ const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: num
                                 boxShadow: `0 10px 30px -10px ${item.color}80`
                             }}
                         >
-                            {/* Glass Shine */}
                             <div className="absolute inset-0 rounded-full bg-linear-to-tr from-white/30 to-transparent opacity-50" />
-
-                            {/* Inner Ring */}
                             <div className="absolute inset-1 rounded-full border border-white/20" />
-
                             <div className="relative z-10 h-7 w-7 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
                                 <CryptoIcon name={item.name} />
                             </div>
