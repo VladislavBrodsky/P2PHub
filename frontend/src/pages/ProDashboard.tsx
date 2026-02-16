@@ -417,52 +417,62 @@ export const ProDashboard = () => {
                         >
                             <Zap size={20} className="relative z-10" />
                         </motion.div>
-                        <div className="space-y-0">
+                        <div className="space-y-1">
                             <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center gap-2">
-                                Viral Marketing <span className="text-indigo-600 dark:text-indigo-500">Studio</span>
+                                Viral Marketing <span className="vibing-blue-text">Studio</span>
                             </h1>
-                            <div className="flex items-center gap-1.5">
-                                <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-[8px] font-bold text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">{t('pro_dashboard.status_online')}</span>
+                            <div className="flex items-center gap-1.5 px-0.5">
+                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                                <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-500/80 uppercase tracking-widest leading-none">
+                                    {t('pro_dashboard.status_online')}
+                                </span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-2 p-1 bg-white/50 dark:bg-white/5 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100/50 dark:border-indigo-500/20">
-                            <Zap size={10} className="text-indigo-600 dark:text-indigo-400" />
-                            <span className="text-[8px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest leading-none">TOKENS:</span>
-                            <span className="text-xs font-black text-slate-900 dark:text-white tabular-nums leading-none">{status?.pro_tokens || 0}</span>
+                    <div className="flex items-center gap-1.5 p-1 bg-white/40 dark:bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/40 dark:border-white/10 shadow-premium-sm">
+                        <div className="flex items-center gap-2.5 px-4 py-1.5 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/20 dark:border-indigo-500/30 group/tokens relative overflow-hidden">
+                            <div className="absolute inset-0 bg-linear-to-r from-indigo-500/10 to-transparent opacity-0 group-hover/tokens:opacity-100 transition-opacity duration-500" />
+                            <Zap size={14} className="text-indigo-600 dark:text-indigo-400 relative z-10 animate-pulse" />
+                            <div className="flex flex-col relative z-10">
+                                <span className="text-[7px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-[0.2em] leading-none mb-0.5">{t('pro_dashboard.tokens_left').split(' ')[1]}</span>
+                                <span className="text-sm font-black text-slate-900 dark:text-white tabular-nums leading-none tracking-tight">
+                                    {status?.pro_tokens || 0}
+                                </span>
+                            </div>
                         </div>
                         <button
-                            onClick={() => setShowSetup(true)}
-                            className="p-2 bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 rounded-xl border border-slate-200 dark:border-white/5 transition-all group active:scale-90"
+                            onClick={() => { selection(); setShowSetup(true); }}
+                            className="w-10 h-10 bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 rounded-xl border border-white/60 dark:border-white/10 transition-all group active:scale-90 flex items-center justify-center shadow-xs"
                         >
-                            <Settings size={12} className="text-slate-500 dark:text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                            <Settings size={16} className="text-slate-500 dark:text-slate-400 group-hover:text-indigo-500 group-hover:rotate-45 transition-all duration-500" />
                         </button>
                     </div>
                 </div>
 
-                <div className="flex p-1 bg-white dark:bg-slate-900/50 backdrop-blur-3xl rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm relative group/nav mt-2">
+                <div className="flex p-1.5 bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl rounded-[1.5rem] border border-white/60 dark:border-white/10 shadow-premium relative group/nav mt-4 mx-auto max-w-md w-full">
                     {(['studio', 'tools', 'growth'] as const).map((tab) => (
                         <button
                             key={tab}
                             onClick={() => { selection(); setActiveTab(tab); impact('light'); }}
-                            className={`flex-1 relative py-2.5 rounded-[1.125rem] transition-colors duration-300 ${activeTab === tab ? 'text-white' : 'text-slate-400 dark:text-slate-500 hover:text-indigo-500'
-                                }`}
+                            className={`flex-1 relative py-3 rounded-2xl transition-all duration-500 ${activeTab === tab
+                                ? 'text-white shadow-lg shadow-indigo-500/20'
+                                : 'text-slate-400 dark:text-slate-500 hover:text-indigo-500'}`}
                         >
                             {activeTab === tab && (
                                 <motion.div
                                     layoutId="activeTab"
-                                    className="absolute inset-0 nav-active-bubble rounded-[1rem] shadow-xl shadow-indigo-500/20"
-                                    transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
-                                />
+                                    className="absolute inset-0 vibing-blue-animated rounded-2xl"
+                                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                >
+                                    <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-50" />
+                                </motion.div>
                             )}
-                            <span className="relative z-10 flex flex-row items-center justify-center gap-2">
-                                {tab === 'studio' && <Cpu size={14} className={activeTab === tab ? 'animate-pulse' : ''} />}
-                                {tab === 'tools' && <Settings size={14} />}
-                                {tab === 'growth' && <Users size={14} />}
-                                <span className="text-[9px] font-black uppercase tracking-widest">{t(`pro_dashboard.tab_${tab}`)}</span>
+                            <span className="relative z-10 flex items-center justify-center gap-2.5">
+                                {tab === 'studio' && <Cpu size={16} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : 'group-hover/nav:rotate-12'}`} />}
+                                {tab === 'tools' && <Settings size={16} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : 'group-hover/nav:rotate-12'}`} />}
+                                {tab === 'growth' && <Users size={16} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : 'group-hover/nav:rotate-12'}`} />}
+                                <span className="text-[10px] font-black uppercase tracking-[0.15em]">{t(`pro_dashboard.tab_${tab}`)}</span>
                             </span>
                         </button>
                     ))}

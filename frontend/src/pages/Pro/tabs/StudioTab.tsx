@@ -198,29 +198,45 @@ export const StudioTab = ({
             exit={{ opacity: 0, y: -10 }}
             className="space-y-6"
         >
-            {/* Stepper - Compact Premium */}
-            <div className="flex items-center justify-center gap-3 py-4">
-                {[1, 2, 3].map((s) => (
-                    <div key={s} className="flex items-center">
-                        <div className={`w-9 h-9 rounded-2xl flex items-center justify-center text-[10px] font-black transition-all ${externalStep === s
-                            ? 'vibing-blue-animated text-white scale-110'
-                            : externalStep > s
-                                ? 'bg-emerald-500 text-white'
-                                : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-white/10 opacity-40'
-                            }`}>
-                            {externalStep > s ? <CheckCircle2 size={14} /> : s}
-                        </div>
-                        {s < 3 && (
-                            <div className="w-8 h-[2px] mx-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
-                                <motion.div
-                                    className="h-full vibing-blue-gradient"
-                                    initial={{ width: "0%" }}
-                                    animate={{ width: externalStep > s ? "100%" : "0%" }}
-                                />
-                            </div>
-                        )}
+            {/* Stepper - Premium High-Fidelity */}
+            <div className="flex items-center justify-center pt-2 pb-6 px-4">
+                <div className="flex items-center w-full max-w-xs justify-between relative">
+                    {/* Background Progress Line */}
+                    <div className="absolute top-[18px] left-0 w-full h-[2px] bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
+                        <motion.div
+                            className="h-full vibing-blue-gradient shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                            initial={{ width: "0%" }}
+                            animate={{ width: externalStep === 1 ? "0%" : externalStep === 2 ? "50%" : "100%" }}
+                            transition={{ duration: 0.8, ease: "circOut" }}
+                        />
                     </div>
-                ))}
+
+                    {[1, 2, 3].map((s) => (
+                        <div key={s} className="flex flex-col items-center relative z-10">
+                            <motion.div
+                                initial={false}
+                                animate={{
+                                    scale: externalStep === s ? 1.15 : 1,
+                                    backgroundColor: externalStep === s ? 'rgb(255, 255, 255)' : externalStep > s ? 'rgb(16, 185, 129)' : 'rgb(241, 245, 249)'
+                                }}
+                                className={`w-9 h-9 rounded-2xl flex items-center justify-center text-[10px] font-black transition-all shadow-xl ${externalStep === s
+                                        ? 'vibing-blue-animated text-white ring-4 ring-indigo-500/10'
+                                        : externalStep > s
+                                            ? 'bg-emerald-500 text-white'
+                                            : 'bg-slate-50 dark:bg-slate-900 text-slate-400 dark:text-slate-600 border border-slate-200 dark:border-white/5'
+                                    }`}
+                            >
+                                {externalStep > s ? <CheckCircle2 size={16} /> : (
+                                    <span className={externalStep === s ? 'animate-pulse' : ''}>{s}</span>
+                                )}
+                            </motion.div>
+                            <span className={`text-[7px] font-black uppercase tracking-[0.2em] mt-2 transition-colors duration-500 ${externalStep === s ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 dark:text-slate-700'
+                                }`}>
+                                {s === 1 ? 'Frame' : s === 2 ? 'Synthes' : 'Deploy'}
+                            </span>
+                        </div>
+                    ))}
+                </div>
             </div>
 
             {externalStep === 1 && (
