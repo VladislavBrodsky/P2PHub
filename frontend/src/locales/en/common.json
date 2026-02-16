@@ -41,6 +41,10 @@
     "earn": "Earn",
     "pro": "PRO",
     "academy": "Academy",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "channel": "Channel",
+    "chat": "Chat",
     "community": "Community",
     "blog": "Blog",
     "support": "Support",
@@ -134,6 +138,65 @@
     "title": "Intelligence Base (FAQ)",
     "subtitle": "Knowledge is Power",
     "search_placeholder": "Search the knowledge base...",
+    "withdraw": "How to withdraw funds?",
+    "level": "How do levels work?",
+    "limits": "What are my card limits?",
+    "pro_promo": {
+      "badge": "PRO Upgrade",
+      "title": "Unlock Viral Marketing Studio",
+      "desc": "Scale your network 100x faster with AI-powered automation. Your team grows together while you sleep.",
+      "features": [
+        "500 Tokens/Month",
+        "3 Posts Daily (Auto)",
+        "24/7 AI Content",
+        "95% Time Saved",
+        "Multi-Platform Sync",
+        "Viral Topic Analysis"
+      ],
+      "cta": "Activate PRO Now"
+    },
+    "questions": [
+      {
+        "q": "What is Pintopay Partner Club?",
+        "a": "A global P2P network where you earn from your card usage and your team's activity across 5 levels. Build your financial empire with crypto cards and automated rewards."
+      },
+      {
+        "q": "How do I earn with my Pintopay card?",
+        "a": "Every transaction on your card generates cashback. Plus, you earn bonuses from your partner network (5 levels deep). The more you and your team use cards, the more passive income flows to you."
+      },
+      {
+        "q": "What are the card limits?",
+        "a": "Virtual cards: $10,000/month. Physical cards: $25,000/month. Platinum cards: $100,000/month. Limits increase with your partner level and PRO status."
+      },
+      {
+        "q": "How does the 5-level network work?",
+        "a": "You earn from partners you invite (Level 1), partners they invite (Level 2), and so on to Level 5. Each level has different reward percentages. Depth builds legacy income."
+      },
+      {
+        "q": "What is PRO subscription?",
+        "a": "PRO unlocks the Viral Marketing Studio with 500 AI tokens per month. Automate 3 daily posts, generate viral content 24/7, and scale your network 100x faster. Includes AI Content Factory that posts while you sleep across all platforms. Reduces marketing work by 95%."
+      },
+      {
+        "q": "How do levels and XP work?",
+        "a": "Complete tasks and hit milestones to earn XP. Each level unlocks new features, higher card limits, and exclusive bonuses. Level 100 is the ultimate achievement with maximum rewards."
+      },
+      {
+        "q": "Can I withdraw my earnings anytime?",
+        "a": "Yes! Earnings are instantly available. Withdraw to your Pintopay card, crypto wallet, or bank account with minimal fees. No holding periods."
+      },
+      {
+        "q": "What is the Academy?",
+        "a": "A 100-stage marketing mastery program teaching you to build a $1/minute income using AI automation, viral growth tactics, and P2P strategies. Free stages 1-20, PRO unlocks all 100."
+      },
+      {
+        "q": "How does AI Content Factory work?",
+        "a": "PRO members get an autonomous AI agent that creates and schedules posts 24/7. It researches viral topics, writes hooks, generates CTAs, and auto-posts to X, Telegram, Instagram & LinkedIn with 98% confidence scoring."
+      },
+      {
+        "q": "Is my data secure?",
+        "a": "Absolutely. We use bank-grade encryption, your funds are protected by blockchain protocols, and we never share your data. All transactions are monitored for fraud protection."
+      }
+    ],
     "categories": {
       "general": "General",
       "rewards": "Rewards & XP",

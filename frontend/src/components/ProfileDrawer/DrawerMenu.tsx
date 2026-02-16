@@ -87,11 +87,70 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                 );
             case 'faq':
                 return (
-                    <div className="space-y-2 pt-2">
-                        {[t('faq.withdraw'), t('faq.level'), t('faq.limits')].map((q, i) => (
-                            <div key={i} className="p-2 rounded-lg bg-slate-50 dark:bg-slate-900/50 text-xs font-medium text-slate-500 dark:text-slate-400 flex justify-between items-center group active:bg-blue-500/10 transition-colors">
-                                {q}
-                                <ChevronRight className="h-3 w-3 opacity-50 text-slate-900 dark:text-white" />
+                    <div className="space-y-3 pt-2 max-h-[400px] overflow-y-auto">
+                        {/* PRO Subscription Promo */}
+                        {!user?.is_pro && (
+                            <div className="relative group overflow-hidden rounded-xl p-3 border-2 border-blue-500/30 bg-linear-to-br from-blue-500/10 to-indigo-600/10 backdrop-blur-sm">
+                                <div className="absolute inset-0 bg-linear-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className="relative z-10 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <Zap className="h-4 w-4 text-orange-500 animate-pulse" />
+                                        <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">{t('faq.pro_promo.badge')}</span>
+                                    </div>
+                                    <h4 className="text-sm font-black text-slate-900 dark:text-white leading-tight">
+                                        {t('faq.pro_promo.title')}
+                                    </h4>
+                                    <p className="text-[10px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed">
+                                        {t('faq.pro_promo.desc')}
+                                    </p>
+                                    <div className="grid grid-cols-2 gap-1.5 pt-1">
+                                        {(t('faq.pro_promo.features', { returnObjects: true }) as string[]).map((feat, i) => (
+                                            <div key={i} className="flex items-center gap-1">
+                                                <div className="w-1 h-1 rounded-full bg-blue-500" />
+                                                <span className="text-[9px] font-bold text-slate-700 dark:text-slate-300">{feat}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            onClose();
+                                            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' }));
+                                        }}
+                                        className="w-full mt-2 py-2 rounded-lg bg-linear-to-r from-blue-500 to-indigo-600 text-white text-[10px] font-black uppercase tracking-wider shadow-lg shadow-blue-500/20 active:scale-95 transition-transform">
+                                        {t('faq.pro_promo.cta')}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* FAQ Items */}
+                        {(t('faq.questions', { returnObjects: true }) as Array<{ q: string; a: string }>).map((item, i) => (
+                            <div key={i} className="rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 overflow-hidden">
+                                <button
+                                    onClick={() => toggleSection(`faq-${i}`)}
+                                    className="w-full p-2.5 flex justify-between items-start gap-2 text-left active:bg-blue-500/5 transition-colors">
+                                    <span className="text-xs font-bold text-slate-900 dark:text-white flex-1">{item.q}</span>
+                                    <motion.div
+                                        animate={{ rotate: expandedItem === `faq-${i}` ? 90 : 0 }}
+                                        transition={{ duration: 0.2 }}
+                                    >
+                                        <ChevronRight className="h-3.5 w-3.5 text-blue-500 shrink-0" />
+                                    </motion.div>
+                                </button>
+                                <AnimatePresence>
+                                    {expandedItem === `faq-${i}` && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: 'auto', opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            transition={{ duration: 0.2 }}
+                                        >
+                                            <div className="px-2.5 pb-2.5 text-[10px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-200 dark:border-white/5 pt-2">
+                                                {item.a}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </div>
                         ))}
                     </div>
