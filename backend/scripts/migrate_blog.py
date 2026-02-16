@@ -16,28 +16,31 @@ from app.models.partner import get_session, async_session_maker, engine
 from data.blog_content_en import BLOG_CONTENT_EN
 from data.blog_content_ru import BLOG_CONTENT_RU
 
-# Hardcoded blog post slugs and basic info from frontend/src/data/blogPosts.ts
+# Hardcoded blog post slugs and basic info
 BLOG_POSTS_INFO = [
-    {"slug": "1", "category": "Wealth Strategy", "author": "Pinto Team"},
+    {"slug": str(i), "category": "Wealth Strategy", "author": "Pinto Team"}
+    for i in range(1, 40) # Support up to 39 articles
+]
+# Overwrite specific authors/categories if needed for original 19
+ORIGINAL_INFO = [
     {"slug": "2", "category": "Financial Shift", "author": "Alex Rivera"},
     {"slug": "3", "category": "Growth Mindset", "author": "Sarah Chen"},
-    {"slug": "4", "category": "Freedom", "author": "Pinto Team"},
     {"slug": "5", "category": "Financial Evolution", "author": "Alex Rivera"},
     {"slug": "6", "category": "Banking Reform", "author": "Sarah Chen"},
-    {"slug": "7", "category": "Tech Analysis", "author": "Pinto Team"},
     {"slug": "8", "category": "Web3", "author": "Alex Rivera"},
-    {"slug": "9", "category": "Elite Strategy", "author": "Pinto Team"},
     {"slug": "10", "category": "Global Impact", "author": "Sarah Chen"},
     {"slug": "11", "category": "Innovation", "author": "Alex Rivera"},
-    {"slug": "12", "category": "Adoption", "author": "Pinto Team"},
     {"slug": "13", "category": "Future", "author": "Sarah Chen"},
     {"slug": "14", "category": "Payments", "author": "Alex Rivera"},
-    {"slug": "15", "category": "Wealth", "author": "Pinto Team"},
     {"slug": "16", "category": "Partnership", "author": "Sarah Chen"},
     {"slug": "17", "category": "Income", "author": "Alex Rivera"},
-    {"slug": "18", "category": "PRO Benefits", "author": "Pinto Team"},
     {"slug": "19", "category": "Vision", "author": "Sarah Chen"},
 ]
+# Merge original info
+for item in ORIGINAL_INFO:
+    for base in BLOG_POSTS_INFO:
+        if base["slug"] == item["slug"]:
+            base.update(item)
 
 async def create_tables():
     async with engine.begin() as conn:

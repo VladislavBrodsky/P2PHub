@@ -720,16 +720,19 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                 {"topic": "Privacy Coins", "reason": "Regulatory crackdowns", "viral_angle": "They are banning your money"}
             ]
 
-    async def run_global_marketing_audit(self) -> dict:
+    async def run_global_marketing_audit(self, language: str = "English", force_refresh: bool = False) -> dict:
         """
         PRO Component: Global Marketing Audit
         Simulates CMO + Data Analytics flow fetching from RSS, Twitter, Telegram.
-        Updated every 60 minutes via Redis caching.
+        Updated every 3 hours via Redis caching or forced refresh.
         """
         from app.services.redis_service import redis_service
         
+        # Cache key per language
+        cache_key = f"global_marketing_audit_v2_{language.lower()}"
+        
         async def compute_audit():
-            prompt = """
+            prompt = f"""
             ACT AS ELITE CMO & DATA ANALYTIC AGENT.
             
             YOUR TASK:
@@ -740,23 +743,28 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             5. Write a CMO Executive Summary showing how the market is developing fast and why it's the "Golden Rush" era for Pintopay Partner Club.
             6. End with a massive CTA to start creating Viral Texts.
             
+            LANGUAGE REQUIREMENT:
+            - output MUST be in {language}.
+            - Maintain the "Elite" tone in the target language.
+            
             OUTPUT FORMAT (JSON ONLY):
-            {
+            {{
               "cmo_summary": "Intense, professional, high-energy summary of 2026 global shifts",
               "top_news": [
-                {
+                {{
                   "title": "News Title",
                   "source": "RSS/X/TG",
                   "relevance": "High/Critical",
                   "impact": "Description of why this helps Pintopay members",
                   "fomo_trigger": "Psychological trigger to act now"
-                }
+                }}
               ],
               "market_sentiment": "Bullish/Hyper-Growth",
               "global_trend_shift": "Description of the shift toward decentralized banking",
               "viral_motivation": "Triggers to inspire the user to lead and manage the rush",
-              "cta": "Massive call to action"
-            }
+              "cta": "Massive call to action",
+              "generated_at": "{datetime.utcnow().isoformat()}"
+            }}
             """
             
             try:
@@ -778,8 +786,14 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                 logger.error(f"Audit computation failed: {e}")
                 return {"error": "Elite Audit Node Temporarily Offline"}
 
-        # Cache for 1 hour (3600 seconds)
-        return await redis_service.get_or_compute("global_marketing_audit_v1", compute_audit, expire=3600)
+        # Cache for 3 hours (10800 seconds)
+        if force_refresh:
+             audit = await compute_audit()
+             # Manually set cache
+             await redis_service.set(cache_key, audit, expire=10800)
+             return audit
+        else:
+            return await redis_service.get_or_compute(cache_key, compute_audit, expire=10800)
 
     async def post_to_social(self, partner: Partner, platform: str, content: str, image_path: str | None = None) -> dict[str, Any]:
         """

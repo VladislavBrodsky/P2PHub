@@ -100,8 +100,11 @@ export const proService = {
         return response.data;
     },
 
-    getMarketingAudit: async (): Promise<{ audit: any, tokens_remaining: number }> => {
-        const response = await apiClient.post('/api/pro/tools/audit', {});
+    getMarketingAudit: async (language: string = 'English', force_refresh: boolean = false): Promise<{ audit: any, tokens_remaining: number }> => {
+        const response = await apiClient.post('/api/pro/tools/audit', {
+            language,
+            force_refresh
+        });
         return response.data;
     }
 };

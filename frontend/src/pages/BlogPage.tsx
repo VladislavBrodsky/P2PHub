@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
     ChevronRight, ArrowLeft, Search, BookOpen, Clock,
     ArrowUpRight, Heart, Share2, ChevronLeft, Zap,
-    Globe
+    Globe, ChevronDown
 } from 'lucide-react';
 import { blogPosts, BlogPost } from '../data/blogPosts';
 import { useHaptic } from '../hooks/useHaptic';
@@ -134,7 +134,21 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
         };
     }, [selectedPost, setActiveTab, currentTab, selection]);
 
-    const categories = useMemo(() => ['All', 'Wealth Strategy', 'Financial Shift', 'Growth Mindset', 'Freedom', 'Web3', 'Innovation', 'Payments'], []);
+    const categories = useMemo(() => [
+        'All',
+        'Tactical Blueprints',
+        'Geopolitical Shifts',
+        'Sovereign Mindset',
+        'Wealth Strategy',
+        'Global Trends',
+        'Financial Shift',
+        'Network Velocity',
+        'Web3 Intelligence',
+        'Innovation',
+        'Viral Marketing',
+        'Problem & Solution',
+        'Intelligence Culture'
+    ], []);
 
     const handleLike = async () => {
         if (!selectedPost || engagement.liked) return;
@@ -232,7 +246,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                             </div>
                         </div>
 
-                        {/* Search and Filters */}
+                        {/* Topic Intelligence Dropdown */}
                         <div className="px-4 py-4 space-y-4">
                             <div className="relative group">
                                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-slate-400 group-focus-within:text-blue-500 transition-colors" />
@@ -245,20 +259,12 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                 />
                             </div>
 
-                            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
-                                {categories.map((category) => (
-                                    <button
-                                        key={category}
-                                        onClick={() => { selection(); setSelectedCategory(category); }}
-                                        className={`px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${selectedCategory === category
-                                            ? 'bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/20'
-                                            : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-white/10 hover:border-blue-500/30'
-                                            }`}
-                                    >
-                                        {category}
-                                    </button>
-                                ))}
-                            </div>
+                            <TopicDropdown
+                                selected={selectedCategory}
+                                onSelect={(cat) => { selection(); setSelectedCategory(cat); }}
+                                categories={categories}
+                                t={t}
+                            />
                         </div>
 
                         {/* Content Area */}
@@ -608,5 +614,81 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                 </div>
             </div>
         </motion.div>
+    );
+};
+
+interface TopicDropdownProps {
+    selected: string;
+    onSelect: (category: string) => void;
+    categories: string[];
+    t: any;
+}
+
+const TopicDropdown = ({ selected, onSelect, categories, t }: TopicDropdownProps) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    return (
+        <div className="relative" ref={dropdownRef}>
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-full flex items-center justify-between px-5 h-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-[0.99] transition-all"
+            >
+                <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mr-2">Intelligence:</span>
+                    <span className="text-xs font-black text-slate-900 dark:text-white">{selected}</span>
+                </div>
+                <motion.div
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
+                    <ChevronDown className="w-4 h-4 text-slate-500" />
+                </motion.div>
+            </button>
+
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 5, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        className="absolute top-full left-0 right-0 z-50 overflow-hidden rounded-2xl bg-white/80 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-2xl"
+                    >
+                        <div className="max-h-60 overflow-y-auto no-scrollbar py-2">
+                            {categories.map((category) => (
+                                <button
+                                    key={category}
+                                    onClick={() => {
+                                        onSelect(category);
+                                        setIsOpen(false);
+                                    }}
+                                    className={`w-full flex items-center gap-3 px-5 py-3.5 text-left transition-colors hover:bg-blue-500/5 ${selected === category
+                                        ? 'text-blue-500 bg-blue-500/5'
+                                        : 'text-slate-600 dark:text-slate-400'
+                                        }`}
+                                >
+                                    <div className={`w-1.5 h-1.5 rounded-full transition-all ${selected === category ? 'bg-blue-500 scale-125' : 'bg-slate-300 dark:bg-slate-700'
+                                        }`} />
+                                    <span className={`text-xs font-bold ${selected === category ? 'font-black' : ''}`}>
+                                        {category}
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
     );
 };

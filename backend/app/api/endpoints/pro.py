@@ -282,6 +282,10 @@ class HeadlineRequest(BaseModel):
 class BioRequest(BaseModel):
     bio: str
 
+class MarketingAuditRequest(BaseModel):
+    force_refresh: bool = False
+    language: str = "English"
+
 @router.post("/tools/headline")
 async def fix_headline_api(
     payload: HeadlineRequest,
@@ -344,20 +348,27 @@ async def generate_bio_api(
 
 @router.post("/tools/audit")
 async def get_marketing_audit_api(
+    payload: MarketingAuditRequest,
     partner: Partner = Depends(get_current_partner),
     session: AsyncSession = Depends(get_session)
 ):
     if not partner.is_pro:
         raise HTTPException(status_code=403, detail="PRO membership required")
         
-    # Audit costs 3 tokens
-    has_tokens = await viral_studio.check_tokens_and_reset(partner, session, min_tokens=3)
-    if not has_tokens:
-        raise HTTPException(status_code=402, detail="Insufficient tokens (3 required)")
+    # Audit logic: Viewing cached is free. Force refresh costs 3 tokens.
+    audit_cost = 3 if payload.force_refresh else 0
     
-    partner.pro_tokens -= 3
-    session.add(partner)
-    await session.commit()
+    if audit_cost > 0:
+        has_tokens = await viral_studio.check_tokens_and_reset(partner, session, min_tokens=audit_cost)
+        if not has_tokens:
+            raise HTTPException(status_code=402, detail=f"Insufficient tokens ({audit_cost} required)")
     
-    audit = await viral_studio.run_global_marketing_audit()
+        partner.pro_tokens -= audit_cost
+        session.add(partner)
+        await session.commit()
+    
+    audit = await viral_studio.run_global_marketing_audit(
+        language=payload.language,
+        force_refresh=payload.force_refresh
+    )
     return {"audit": audit, "tokens_remaining": partner.pro_tokens}

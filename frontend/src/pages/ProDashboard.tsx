@@ -26,7 +26,7 @@ import { ProDashboardModals } from './Pro/components/ProDashboardModals';
 type Tab = 'studio' | 'tools' | 'growth';
 
 export const ProDashboard = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { selection, impact, notification: hapticNotification } = useHaptic();
     const { showNotification } = useNotificationStore();
     const { setFooterVisible, setHeaderVisible } = useUI();
@@ -103,25 +103,35 @@ export const ProDashboard = () => {
         loadStatus();
     }, []);
 
-    const handleRunMarketingAudit = async () => {
+    const handleRunMarketingAudit = async (force: boolean = false) => {
         if (isAuditing) return;
         setIsAuditing(true);
         impact('heavy');
+
+        const lang = i18n.language.startsWith('ru') ? 'Russian' : 'English';
+
         try {
-            const result = await proService.getMarketingAudit();
+            const result = await proService.getMarketingAudit(lang, force);
             setMarketAudit(result.audit);
+
+            // #comment: Update tokens if returned
+            if (result.tokens_remaining !== undefined && status) {
+                setStatus({ ...status, pro_tokens: result.tokens_remaining });
+            }
+
             setShowAuditModal(true);
             showNotification({
-                title: 'Global Sync Complete',
-                message: 'Market intelligence dossier updated.',
+                title: force ? 'Viral Research Complete' : 'Global Sync Complete',
+                message: force ? 'Fresh intelligence acquired (-3 Tokens).' : 'Market intelligence dossier updated.',
                 type: 'success'
             });
             hapticNotification('success');
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
+            const msg = error.response?.data?.detail || 'Global intelligence node unreachable.';
             showNotification({
                 title: 'Sync Error',
-                message: 'Global intelligence node unreachable. Try again.',
+                message: msg,
                 type: 'warning'
             });
             hapticNotification('error');
@@ -129,6 +139,8 @@ export const ProDashboard = () => {
             setIsAuditing(false);
         }
     };
+
+    const handleRefreshAudit = () => handleRunMarketingAudit(true);
 
     const handleCompleteAcademyStage = async (stage_id: string) => {
         if (completedStages.includes(stage_id)) return;
@@ -629,6 +641,8 @@ export const ProDashboard = () => {
                 selection={selection}
                 impact={impact}
                 copyText={handleCopyAnyText}
+                handleRefreshAudit={handleRefreshAudit}
+                isAuditing={isAuditing}
             />
         </div>
     );
