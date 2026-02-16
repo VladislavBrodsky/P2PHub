@@ -231,27 +231,58 @@ export default function SubscriptionPage() {
             {/* PRO Arsenal Section */}
             <div className="mb-12">
                 <div className="text-center mb-10">
-                    <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-2 tracking-tight flex items-center justify-center gap-3">
+                    <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-2 tracking-tighter flex items-center justify-center gap-3">
                         {t('subscription.arsenal.title')}
-                        <Zap size={24} className="text-amber-500 fill-amber-500/20" />
+                        <Zap size={28} className="text-amber-500 fill-amber-500/20" />
                     </h2>
-                    <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-8">
+                    <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em] mb-10">
                         {t('subscription.arsenal.subtitle')}
                     </p>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Marketing Pitch / Sale on Start */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="bg-linear-to-br from-indigo-600 to-purple-700 rounded-[2.5rem] p-8 text-white mb-10 text-left relative overflow-hidden shadow-2xl shadow-indigo-500/30"
+                    >
+                        <div className="absolute top-0 right-0 p-4 opacity-10">
+                            <Sparkles size={120} />
+                        </div>
+                        <h3 className="text-2xl font-black mb-4 leading-tight">
+                            {t('subscription.arsenal.pitch.title')}
+                        </h3>
+                        <p className="text-indigo-100 text-sm mb-6 font-medium leading-relaxed">
+                            <Trans i18nKey="subscription.arsenal.pitch.description">
+                                Unlock PRO and receive <span className="text-amber-400 font-black">500 Tokens</span> instantly. This is your engine for growth:
+                            </Trans>
+                        </p>
+                        <div className="space-y-4">
+                            {(t('subscription.arsenal.pitch.items', { returnObjects: true }) as string[]).map((p, i) => (
+                                <div key={i} className="flex gap-4 items-start bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
+                                    <div className="w-10 h-10 rounded-full bg-amber-400 text-slate-900 flex items-center justify-center font-black shrink-0 shadow-lg shadow-amber-400/20">
+                                        {i + 1}
+                                    </div>
+                                    <p className="text-xs font-bold leading-relaxed pt-1">
+                                        <Trans>{p}</Trans>
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
                         {(t('subscription.arsenal.items', { returnObjects: true }) as any[]).map((item, idx) => (
                             <motion.div
                                 key={item.id}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: idx * 0.1 }}
-                                className="group relative bg-[#0F172A] border border-white/5 rounded-[2.5rem] p-6 text-left overflow-hidden"
+                                className="group relative bg-[#0F172A] border border-white/5 rounded-[2.5rem] p-6 text-left overflow-hidden h-full flex flex-col"
                             >
                                 {/* Animated Gradient Overlay */}
-                                <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                                <div className="relative z-10">
+                                <div className="relative z-10 flex flex-col h-full">
                                     <div className="flex items-center justify-between mb-4">
                                         <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${item.id === 'studio' ? 'bg-pink-500/10 text-pink-500' : 'bg-emerald-500/10 text-emerald-500'}`}>
                                             {item.id === 'studio' ? <Rocket size={24} /> : <Bot size={24} />}
@@ -264,11 +295,13 @@ export default function SubscriptionPage() {
                                         {item.desc}
                                     </p>
 
-                                    <div className="space-y-3 mb-6">
+                                    <div className="space-y-3 mb-6 flex-grow">
                                         {item.stats.map((stat: string, sIdx: number) => (
                                             <div key={sIdx} className="flex items-center gap-2">
-                                                <CheckCircle2 size={14} className={item.id === 'studio' ? 'text-pink-500' : 'text-emerald-500'} />
-                                                <span className="text-[11px] font-medium text-slate-300">
+                                                <div className={`w-4 h-4 rounded-full flex items-center justify-center ${item.id === 'studio' ? 'bg-pink-500/20 text-pink-500' : 'bg-emerald-500/20 text-emerald-500'}`}>
+                                                    <CheckCircle2 size={10} />
+                                                </div>
+                                                <span className="text-[11px] font-bold text-slate-300">
                                                     <Trans>
                                                         {stat}
                                                     </Trans>
@@ -280,19 +313,39 @@ export default function SubscriptionPage() {
                                     {/* Console Preview */}
                                     <div className="bg-black/40 rounded-2xl p-4 mb-6 font-mono text-[10px] space-y-1 border border-white/5">
                                         {item.terminal.map((line: string, lIdx: number) => (
-                                            <div key={lIdx} className={lIdx === 0 ? 'text-slate-400' : (item.id === 'studio' ? 'text-pink-400' : 'text-emerald-400')}>
+                                            <div key={lIdx} className={lIdx === 0 ? 'text-slate-500' : (item.id === 'studio' ? 'text-pink-400' : 'text-emerald-400')}>
                                                 {line}
                                             </div>
                                         ))}
                                     </div>
 
-                                    <button className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-white transition-all active:scale-95 group-hover:border-white/20">
+                                    <button className={`w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-white transition-all active:scale-95 border ${item.id === 'studio' ? 'bg-pink-500/5 border-pink-500/20 hover:bg-pink-500/10' : 'bg-emerald-500/5 border-emerald-500/20 hover:bg-emerald-500/10'}`}>
                                         {item.btn}
                                     </button>
                                 </div>
                             </motion.div>
                         ))}
                     </div>
+
+                    {/* PRO+ Coming Soon Banner */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        className="p-6 bg-slate-900/50 border border-white/5 rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-4 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all cursor-not-allowed group"
+                    >
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-indigo-500/20 group-hover:text-indigo-400 transition-colors">
+                                <Crown size={24} />
+                            </div>
+                            <div className="text-left">
+                                <h4 className="text-sm font-black text-white">{t('subscription.arsenal.coming_soon.plan')}</h4>
+                                <p className="text-[10px] font-bold text-slate-500">Ultimate Viral Scaling & Matrix Protocol</p>
+                            </div>
+                        </div>
+                        <div className="px-4 py-2 bg-white/5 rounded-full border border-white/10">
+                            <span className="text-[9px] font-black tracking-widest text-slate-500">{t('subscription.arsenal.coming_soon.status')}</span>
+                        </div>
+                    </motion.div>
                 </div>
             </div>
 
