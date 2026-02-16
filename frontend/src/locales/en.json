@@ -179,7 +179,19 @@
         "invite_btn": "Invite New Partner",
         "share_link": "Copy Referral Link",
         "scanning": "Scanning Matrix...",
-        "no_partners": "No nodes detected in this sector."
+        "no_partners": "No nodes detected in this sector.",
+        "explorer": {
+            "title": "Network Explorer",
+            "deep_dive": "9-Level Deep Dive",
+            "share_link": "Share Growth Link",
+            "level": "Level {{level}}",
+            "active_partners": "{{count}} Active Partners",
+            "scanning": "Scanning Matrix...",
+            "stats_footer": "Total Network Strength",
+            "quiet_on_level": "Quiet on Level {{level}}",
+            "growth_desc": "Growth is just one invite away. Expand your network to unlock this leaf.",
+            "xp_focus": "XP Focus"
+        }
     },
     "stats": {
         "title": "Analytics Node",
@@ -595,50 +607,50 @@
             "tg_sync": "Telegram Sync",
             "professional_network": "Professional Network",
             "x_manual": {
-                "title": "X (Twitter) Domination Protocol",
-                "subtitle": "Direct Neural Publishing Node",
+                "title": "X (Twitter) Setup Guide",
+                "subtitle": "Step-by-Step Connection",
                 "steps": [
                     {
-                        "title": "Claim Your Developer Identity",
-                        "desc": "Visit developer.x.com. The elite use 'v2' infrastructure. Register for a Basic account to unlock high-velocity posting and bot automation."
+                        "title": "Step 1: Open X Developer Portal",
+                        "desc": "Go to developer.x.com and sign in. Click on 'Products' and choose 'Twitter API v2' (The Free or Basic version is perfect)."
                     },
                     {
-                        "title": "Architect Your App",
-                        "desc": "Create a new Project. This is your personal broadcasting bridge. Ensure your App is linked to your main profile."
+                        "title": "Step 2: Create Your App",
+                        "desc": "Click 'Create Project' and name it anything you like (e.g. 'Pintopay Studio'). Then, inside that project, create an 'App'."
                     },
                     {
-                        "title": "Breach the Read-Only Barrier",
-                        "desc": "CRITICAL: In 'User Authentication Settings', switch App Permissions to 'Read and Write'. Set Type to 'Web App/Bot'. For 'Callback' and 'Website' URLs, use: https://t.me/pintopay_probot (This is required to save permissions)."
+                        "title": "Step 3: Set Writing Power",
+                        "desc": "Go to App Settings > Set up User Authentication. Choose 'OAuth 1.0a'. Switch permissions from 'Read Only' to 'Read and Write'. For the Website/Callback URL fields, just paste: https://t.me/pintopay_probot"
                     },
                     {
-                        "title": "Extract the API Keys",
-                        "desc": "Go to 'Keys and Tokens'. Extract all 4 secret tokens. Treat these like your private keys — they are the fuel for your viral engine."
+                        "title": "Step 4: Get Your 4 Magic Keys",
+                        "desc": "Go to the 'Keys and Tokens' tab. Click 'Regenerate' for Consumer Keys and 'Generate' for Access Tokens. Copy all 4 codes: API Key, API Secret, Access Token, and Access Secret."
                     },
                     {
-                        "title": "Prime the System",
-                        "desc": "Paste the keys into the P2PHub dashboard. Press 'SAVE SETTINGS' to bridge your digital consciousness with the X algorithm."
+                        "title": "Step 5: Connect to P2PHub",
+                        "desc": "Paste those 4 codes into the API Setup box here and click 'SAVE SETTINGS'. You're now ready to post to X!"
                     }
                 ]
             },
             "tg_manual": {
-                "title": "Telegram Hyper-Growth Hub",
-                "subtitle": "Multi-Channel Synchronic Protocol",
+                "title": "Telegram Channel Guide",
+                "subtitle": "Step-by-Step Connection",
                 "steps": [
                     {
-                        "title": "Establish Your HQ",
-                        "desc": "Create a Public or Private Channel. This is your hive mind where your network will explode and learn."
+                        "title": "Step 1: Create a Channel",
+                        "desc": "Click 'New Channel' in your Telegram app. Give it a cool name and a profile picture."
                     },
                     {
-                        "title": "Deputize the Bot",
-                        "desc": "Add @{{bot_username}} as an Administrator. This bot is your elite 24/7 CMO. It never sleeps, it only scales."
+                        "title": "Step 2: Add Your Bot Helper",
+                        "desc": "Go to your channel settings > Administrators > Add Admin. Search for @{{bot_username}} and add it."
                     },
                     {
-                        "title": "Activate Posting Permission",
-                        "desc": "Ensure 'Post Messages' is ON. The bot needs the power to speak only when it has viral gold to share."
+                        "title": "Step 3: Give Permission",
+                        "desc": "When adding the bot, make sure 'Post Messages' is turned ON (green). This lets the bot send your viral posts for you."
                     },
                     {
-                        "title": "Link the Network Node",
-                        "desc": "Copy your @channelname. For private channels, use the ID. The system will now broadcast your success automatically."
+                        "title": "Step 4: Link to P2PHub",
+                        "desc": "Copy your channel's public link (like @mycoolchannel) and paste it into the API Setup box here. Click Save and you're done!"
                     }
                 ]
             },
@@ -1117,20 +1129,6 @@
         "coming_soon": {
             "title": "Coming Soon",
             "desc": "We're building something amazing for our partners. Stay tuned!"
-        }
-    },
-    "network": {
-        "explorer": {
-            "title": "Network Explorer",
-            "deep_dive": "9-Level Deep Dive",
-            "share_link": "Share Growth Link",
-            "level": "Level {{level}}",
-            "active_partners": "{{count}} Active Partners",
-            "scanning": "Scanning Matrix...",
-            "stats_footer": "Total Network Strength",
-            "quiet_on_level": "Quiet on Level {{level}}",
-            "growth_desc": "Growth is just one invite away. Expand your network to unlock this leaf.",
-            "xp_focus": "XP Focus"
         }
     }
 }
