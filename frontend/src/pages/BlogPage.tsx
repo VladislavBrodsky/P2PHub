@@ -536,13 +536,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                 {/* Body Text (Simulated content structure) */}
                 <div className="space-y-6 text-lg leading-relaxed text-slate-900/90 dark:text-white/90 font-medium whitespace-pre-wrap">
                     {post.content ? (
-                        <div className="space-y-6">
-                            {post.content.split('\n\n').map((p, i) => (
-                                <p key={i} className={i === 0 ? "first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left first-letter:text-blue-500 first-letter:leading-none first-letter:pt-2" : ""}>
-                                    {p}
-                                </p>
-                            ))}
-                        </div>
+                        <MarkdownRenderer content={post.content} />
                     ) : (
                         <>
                             <p className="first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left first-letter:text-blue-500 first-letter:leading-none first-letter:pt-2">
@@ -616,7 +610,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                     </button>
                 </div>
             </div>
-        </motion.div>
+        </motion.div >
     );
 };
 
@@ -693,5 +687,98 @@ const TopicDropdown = ({ selected, onSelect, categories }: TopicDropdownProps) =
                 )}
             </AnimatePresence>
         </div>
+    );
+};
+
+// ------------------------------------------------------------------
+// Custom Markdown Renderer
+// Handles: H1 stripping, H2/H3 headers, Bold (**), Italic (* or _), Paragraphs
+// ------------------------------------------------------------------
+const MarkdownRenderer = ({ content }: { content: string }) => {
+    // 1. Sanitize: Remove the first line if it's an H1 (# Title) since we display Title separately
+    const lines = content.trim().split('\n');
+    let cleanContent = content;
+    // Check if first non-empty line starts with '# '
+    const firstLineIndex = lines.findIndex(line => line.trim().length > 0);
+    if (firstLineIndex !== -1 && lines[firstLineIndex].trim().startsWith('# ')) {
+        // Remove that line and rejoin
+        // Note: We use lines from the split, so if original content had specific newlines, we should use 'lines'
+        cleanContent = lines.slice(firstLineIndex + 1).join('\n').trim();
+    }
+
+    // 2. Split into blocks by double newlines (paragraphs)
+    const blocks = cleanContent.split(/\n\s*\n/);
+
+    // 3. Render blocks
+    return (
+        <div className="space-y-6">
+            {blocks.map((block, index) => {
+                const trimmed = block.trim();
+                if (!trimmed) return null;
+
+                // Headers (H2 = ##, H3 = ###)
+                if (trimmed.startsWith('### ')) {
+                    return (
+                        <h3 key={`h3-${index}`} className="text-xl font-bold mt-6 mb-2 text-slate-900 dark:text-white">
+                            {parseInline(trimmed.replace(/^###\s+/, ''))}
+                        </h3>
+                    );
+                }
+                if (trimmed.startsWith('## ')) {
+                    return (
+                        <h2 key={`h2-${index}`} className="text-2xl font-black mt-8 mb-4 text-slate-900 dark:text-white">
+                            {parseInline(trimmed.replace(/^##\s+/, ''))}
+                        </h2>
+                    );
+                }
+                if (trimmed.startsWith('# ')) {
+                    // Fallback for H1 inside body (should generally be avoided but render as H2 style)
+                    return (
+                        <h2 key={`h1-${index}`} className="text-2xl font-black mt-8 mb-4 text-slate-900 dark:text-white">
+                            {parseInline(trimmed.replace(/^#\s+/, ''))}
+                        </h2>
+                    );
+                }
+
+                // Standard Paragraph with Drop Cap logic for the very first paragraph
+                const isFirst = index === 0;
+
+                return (
+                    <p
+                        key={`p-${index}`}
+                        className={isFirst
+                            ? "first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left first-letter:text-blue-500 first-letter:leading-none first-letter:pt-2"
+                            : ""
+                        }
+                    >
+                        {parseInline(trimmed)}
+                    </p>
+                );
+            })}
+        </div>
+    );
+};
+
+// Simple tokenizer for **bold**, *italic*, __bold__, _italic_
+const parseInline = (text: string): React.ReactNode => {
+    // Split by delimiters, keeping delimiters
+    // Matches: **...**, __...__, *...*, _..._
+    const parts = text.split(/(\*\*.*?\*\*|__[^_]+__|_[^_]+_|\*[^*]+\*)/g);
+
+    return (
+        <>
+            {parts.map((part, i) => {
+                // Bold
+                if ((part.startsWith('**') && part.endsWith('**')) || (part.startsWith('__') && part.endsWith('__'))) {
+                    return <strong key={i} className="font-extrabold text-slate-900 dark:text-white">{part.slice(2, -2)}</strong>;
+                }
+                // Italic
+                if ((part.startsWith('*') && part.endsWith('*')) || (part.startsWith('_') && part.endsWith('_'))) {
+                    return <em key={i} className="italic text-slate-600 dark:text-slate-300">{part.slice(1, -1)}</em>;
+                }
+                // Plain text
+                return part;
+            })}
+        </>
     );
 };
