@@ -3,10 +3,10 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { sentryVitePlugin } from "@sentry/vite-plugin"
 
-// #comment: Stability-focused configuration
-// Disabled experimental optimizations (compression, image optimizer, granular manualChunks) 
-// to resolve build errors (EPERM) and potential module loading issues causing the white screen.
-// A monolithic vendor chunk strategy is safer for ensuring total dependency availability during startup.
+// #comment: EMERGENCY FIX - Removal of manualChunks
+// Reverting to Vite's default bundling strategy to resolve module execution order issues.
+// The custom chunking was causing "undefined is not an object (evaluating 'yo.useState')" in production.
+// Definitively removing all manualChunks and optimization plugins to restore a monolithic-like stable bundle.
 
 export default defineConfig({
   plugins: [
@@ -28,15 +28,9 @@ export default defineConfig({
     sourcemap: true,
     cssCodeSplit: true,
     rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return 'vendor'; // Single vendor chunk for maximum reliability
-          }
-        },
-      }
+      // Reverting to completely default rollup options
     },
-    chunkSizeWarningLimit: 2000,
+    chunkSizeWarningLimit: 3000,
     emptyOutDir: true,
   },
 })
