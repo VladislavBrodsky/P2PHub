@@ -447,9 +447,9 @@ export const StudioTab = ({
                                     <div className="bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-xl rounded-2xl p-5 sm:p-6 border border-slate-200/50 dark:border-white/10 shadow-lg">
                                         <div className="space-y-4">
                                             {/* Percentage Display */}
-                                            <div className="flex items-center justify-center gap-3">
-                                                <div className="flex items-baseline gap-2">
-                                                    <span className="text-4xl sm:text-5xl font-black bg-linear-to-br from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent italic tracking-tighter">
+                                            <div className="flex items-center justify-center gap-3 overflow-visible">
+                                                <div className="flex items-baseline gap-2 px-2">
+                                                    <span className="text-4xl sm:text-5xl font-black bg-linear-to-br from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
                                                         {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}
                                                     </span>
                                                     <span className="text-sm sm:text-base font-bold text-slate-400 dark:text-slate-500">%</span>
