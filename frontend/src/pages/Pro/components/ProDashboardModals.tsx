@@ -4,7 +4,7 @@ import {
     TrendingUp, Quote, Zap, CheckCircle2, ArrowRight, ArrowLeft,
     Twitter, Download, Copy, BookOpen, Terminal, Share, Flame, Monitor, Globe
 } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { PROStatus } from '../../../services/proService';
 
 interface ProModalsProps {
@@ -104,8 +104,8 @@ export const ProDashboardModals = ({
                                                 <Twitter size={14} className="text-white" />
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white leading-none">X Broadcast</span>
-                                                <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Direct API protocol</span>
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white leading-none">{t('pro_dashboard.setup.x_broadcast')}</span>
+                                                <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{t('pro_dashboard.setup.direct_protocol')}</span>
                                             </div>
                                         </div>
                                         <div className="flex gap-1">
@@ -151,8 +151,8 @@ export const ProDashboardModals = ({
                                                 <Send size={14} className="text-white" />
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white leading-none">TG Sync</span>
-                                                <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Multi-Node broadcasting</span>
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white leading-none">{t('pro_dashboard.setup.tg_sync')}</span>
+                                                <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{t('pro_dashboard.setup.global_matrix')}</span>
                                             </div>
                                         </div>
                                         <div className="flex gap-1">
@@ -376,9 +376,9 @@ export const ProDashboardModals = ({
                                         <TrendingUp size={24} className="text-indigo-500 animate-pulse" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">Marketing Audit</h3>
+                                        <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">{t('pro_dashboard.tools.audit.modal_title')}</h3>
                                         <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-70">
-                                            Global Node: Active • 2026
+                                            {t('pro_dashboard.tools.audit.node_status')}
                                         </p>
                                     </div>
                                 </div>
@@ -394,7 +394,7 @@ export const ProDashboardModals = ({
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-2">
                                         <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
-                                        <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">CMO Executive Summary</h4>
+                                        <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">{t('pro_dashboard.tools.audit.summary_title')}</h4>
                                     </div>
                                     <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-100 dark:border-white/5 relative">
                                         <Quote className="absolute -top-3 -left-3 text-indigo-500/20" size={32} />
@@ -406,11 +406,11 @@ export const ProDashboardModals = ({
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="p-5 bg-indigo-500/5 dark:bg-indigo-500/5 rounded-2xl border border-indigo-500/10 space-y-2">
-                                        <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Market Sentiment</p>
+                                        <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{t('pro_dashboard.tools.audit.sentiment_label')}</p>
                                         <p className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">{marketAudit.market_sentiment}</p>
                                     </div>
                                     <div className="p-5 bg-purple-500/5 dark:bg-purple-500/5 rounded-2xl border border-purple-500/10 space-y-2">
-                                        <p className="text-[10px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-widest">Global Shift</p>
+                                        <p className="text-[10px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-widest">{t('pro_dashboard.tools.audit.shift_label')}</p>
                                         <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">{marketAudit.global_trend_shift}</p>
                                     </div>
                                 </div>
@@ -419,9 +419,9 @@ export const ProDashboardModals = ({
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2">
                                             <div className="w-1.5 h-4 bg-emerald-500 rounded-full" />
-                                            <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">Elite News Intelligence (Top 20)</h4>
+                                            <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">{t('pro_dashboard.tools.audit.news_title')}</h4>
                                         </div>
-                                        <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg">LIVE FEED</span>
+                                        <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg">{t('pro_dashboard.tools.audit.live_feed')}</span>
                                     </div>
                                     <div className="space-y-3">
                                         {marketAudit.top_news?.map((news: any, idx: number) => (
@@ -511,7 +511,7 @@ export const ProDashboardModals = ({
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-2">
                                             <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-[7px] font-black text-indigo-500 uppercase tracking-widest">{selectedArticle.category}</span>
-                                            <span className="text-[7px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">{selectedArticle.readTime} min read</span>
+                                            <span className="text-[7px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('pro_dashboard.academy.read_time', { time: selectedArticle.readTime })}</span>
                                         </div>
                                         <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">{selectedArticle.title}</h3>
                                     </div>
@@ -531,7 +531,7 @@ export const ProDashboardModals = ({
                                     onClick={() => setSelectedArticle(null)}
                                     className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-[11px] uppercase tracking-widest active:scale-95 transition-all shadow-lg"
                                 >
-                                    I Understand the Protocol
+                                    {t('pro_dashboard.academy.understand_btn')}
                                 </button>
                             </div>
                         </motion.div>
@@ -628,7 +628,7 @@ export const ProDashboardModals = ({
                                             </div>
                                             <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.headline.desc')}"</p>
                                             <div className="p-4 bg-white/50 dark:bg-black/20 rounded-2xl border border-white dark:border-white/5 text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed">
-                                                Our neural engine analyzes current high-performing hooks and adapts your headline to trigger curiosity loops.
+                                                {t('pro_dashboard.tools.headline.neural_desc')}
                                             </div>
                                         </div>
                                         <div className="p-5 bg-linear-to-br from-amber-500/5 to-transparent dark:bg-white/5 rounded-3xl border border-amber-500/10 dark:border-white/5 space-y-3 shadow-sm">
@@ -638,7 +638,7 @@ export const ProDashboardModals = ({
                                             </div>
                                             <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.bio.desc')}"</p>
                                             <div className="p-4 bg-white/50 dark:bg-black/20 rounded-2xl border border-white dark:border-white/5 text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed">
-                                                Optimizes your social identity for conversion. High-converters focus on the 'Benefit' first, not the 'Feature'.
+                                                {t('pro_dashboard.tools.bio.neural_desc')}
                                             </div>
                                         </div>
                                     </div>
@@ -649,13 +649,15 @@ export const ProDashboardModals = ({
                                                 <Sparkles className="text-white" size={24} />
                                             </div>
                                             <p className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-snug">
-                                                PRO Members grow their network <span className="text-indigo-600 dark:text-indigo-400">x5 faster</span> using these elite protocols.
+                                                <Trans i18nKey="pro_dashboard.academy.protocols.growth_promo">
+                                                    PRO Members grow their network <span className="text-indigo-600 dark:text-indigo-400">x5 faster</span> using these elite protocols.
+                                                </Trans>
                                             </p>
                                         </div>
                                         <div className="space-y-4">
-                                            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Quantum Methodology</h4>
+                                            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{t('pro_dashboard.academy.protocols.methodology_title')}</h4>
                                             <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-white/5 p-5 rounded-3xl border border-slate-100 dark:border-white/5">
-                                                Follow the elite protocols to maximize your reach. Every asset and lesson is designed for 2026 algorithmic dominance. We analyze multi-vector data points to ensure your content bypasses standard filters.
+                                                {t('pro_dashboard.academy.protocols.methodology_desc')}
                                             </p>
                                         </div>
                                     </div>

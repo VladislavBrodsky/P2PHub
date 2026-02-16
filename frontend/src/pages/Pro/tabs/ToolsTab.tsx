@@ -77,8 +77,8 @@ export const ToolsTab = ({
                             <Flame size={18} />
                         </div>
                         <div className="flex flex-col items-end">
-                            <span className="text-[8px] font-black text-orange-500 uppercase tracking-widest leading-none">Scanning</span>
-                            <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest opacity-40 mt-0.5">Global Node 1</span>
+                            <span className="text-[8px] font-black text-orange-500 uppercase tracking-widest leading-none">{t('pro_dashboard.tools.trends.scanning')}</span>
+                            <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest opacity-40 mt-0.5">{t('pro_dashboard.tools.trends.node_id')}</span>
                         </div>
                     </div>
                     <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2">{t('pro_dashboard.tools.trends.title')}</h3>

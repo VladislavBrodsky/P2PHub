@@ -102,10 +102,10 @@ export const StudioTab = ({
 
             setStatus(status ? { ...status, pro_tokens: result.tokens_remaining } : null);
             setExternalStep(3);
-            notification({ title: 'Success', text: 'Viral content synthesized.', type: 'success' });
+            notification({ title: t('pro_dashboard.notifications.success'), text: t('pro_dashboard.notifications.viral_synthesized'), type: 'success' });
         } catch (error: any) {
             console.error('Generation failed', error);
-            notification({ title: 'Error', text: 'Generation failed', type: 'error' });
+            notification({ title: t('pro_dashboard.notifications.error'), text: t('pro_dashboard.notifications.gen_failed'), type: 'error' });
         } finally {
             setIsGenerating(false);
         }
@@ -117,7 +117,7 @@ export const StudioTab = ({
         const text = `${generatedResult.title}\n\n${generatedResult.body}\n\n${hashtagsStr}`;
 
         navigator.clipboard.writeText(text);
-        notification({ title: 'Copied', text: 'Text copied to clipboard.', type: 'success' });
+        notification({ title: t('pro_dashboard.notifications.copied'), text: t('pro_dashboard.notifications.text_copied'), type: 'success' });
     };
 
     const handleSharePost = async () => {
@@ -220,10 +220,10 @@ export const StudioTab = ({
                                     backgroundColor: externalStep === s ? 'rgb(255, 255, 255)' : externalStep > s ? 'rgb(16, 185, 129)' : 'rgb(241, 245, 249)'
                                 }}
                                 className={`w-9 h-9 rounded-2xl flex items-center justify-center text-[10px] font-black transition-all shadow-xl ${externalStep === s
-                                        ? 'vibing-blue-animated text-white ring-4 ring-indigo-500/10'
-                                        : externalStep > s
-                                            ? 'bg-emerald-500 text-white'
-                                            : 'bg-slate-50 dark:bg-slate-900 text-slate-400 dark:text-slate-600 border border-slate-200 dark:border-white/5'
+                                    ? 'vibing-blue-animated text-white ring-4 ring-indigo-500/10'
+                                    : externalStep > s
+                                        ? 'bg-emerald-500 text-white'
+                                        : 'bg-slate-50 dark:bg-slate-900 text-slate-400 dark:text-slate-600 border border-slate-200 dark:border-white/5'
                                     }`}
                             >
                                 {externalStep > s ? <CheckCircle2 size={16} /> : (

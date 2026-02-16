@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, Users, Crown, ChevronDown, ChevronUp } from 'lucide-react';
+import { TrendingUp, Users, Crown, ChevronDown, ChevronUp, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
@@ -72,14 +72,18 @@ export const TopPartnersList = () => {
                         <div className="flex items-center gap-3">
                             <div className="relative">
                                 <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center overflow-hidden">
-                                    <img
-                                        src={partner.photo_file_id
-                                            ? `${getApiUrl()}/api/partner/photo/${partner.photo_file_id}`
-                                            : partner.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${partner.username}`
-                                        }
-                                        className="w-full h-full object-cover"
-                                        alt=""
-                                    />
+                                    {partner.photo_file_id || partner.photo_url ? (
+                                        <img
+                                            src={partner.photo_file_id
+                                                ? `${getApiUrl()}/api/partner/photo/${partner.photo_file_id}`
+                                                : partner.photo_url
+                                            }
+                                            className="w-full h-full object-cover"
+                                            alt=""
+                                        />
+                                    ) : (
+                                        <User className="w-5 h-5 text-slate-400" />
+                                    )}
                                 </div>
                                 {index < 3 && (
                                     <div className={`absolute -top-1.5 -right-1.5 p-0.5 rounded-full shadow-lg ${index === 0 ? 'bg-amber-400' :

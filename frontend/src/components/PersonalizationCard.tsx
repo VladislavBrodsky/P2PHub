@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Crown } from 'lucide-react';
+import { Crown, User } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { useTranslation } from 'react-i18next';
 import { getRank, getXPProgress } from '../utils/ranking';
@@ -62,9 +62,9 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                         >
                             {isUserLoading ? (
                                 <div className="h-full w-full bg-slate-900 animate-pulse" />
-                            ) : (
+                            ) : user?.photo_url ? (
                                 <img
-                                    src={user?.photo_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username || 'partner'}`}
+                                    src={user.photo_url}
                                     alt="Avatar"
                                     className="h-full w-full object-cover"
                                     loading="lazy"
@@ -72,6 +72,10 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     width={variant === 'compact' ? 56 : 64}
                                     height={variant === 'compact' ? 56 : 64}
                                 />
+                            ) : (
+                                <div className="h-full w-full flex items-center justify-center bg-slate-800 text-slate-400">
+                                    <User size={variant === 'compact' ? 24 : 32} />
+                                </div>
                             )}
                         </motion.div>
 

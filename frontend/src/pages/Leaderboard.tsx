@@ -9,7 +9,7 @@ import { apiClient } from '../api/client';
 import { getApiUrl } from '../utils/api';
 import { useState } from 'react';
 import { PartnerBriefingModal } from '../components/Partner/PartnerBriefingModal';
-import { Trophy, Shield, Star, Crown } from 'lucide-react';
+import { Trophy, Shield, Star, Crown, User } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
 
 interface LeaderboardUser {
@@ -146,11 +146,9 @@ export default function LeaderboardPage() {
                                                 className="h-full w-full object-cover"
                                             />
                                         ) : (
-                                            <img
-                                                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username || user.first_name}&backgroundColor=b6e3f4,c0aede,d1d4f9`}
-                                                alt={user.username || user.first_name}
-                                                className="h-full w-full object-cover"
-                                            />
+                                            <div className="h-full w-full flex items-center justify-center bg-slate-200 dark:bg-slate-700 text-slate-400">
+                                                <User size={20} />
+                                            </div>
                                         )}
                                     </div>
                                     <div className="text-left">
@@ -193,12 +191,12 @@ export default function LeaderboardPage() {
                         </button>
                     )}
                 </div>
-            </Section>
+            </Section >
 
             <PartnerBriefingModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
             />
-        </div>
+        </div >
     );
 }

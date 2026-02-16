@@ -58,8 +58,13 @@
     "setup": {
       "title": "Protocol Configuration",
       "subtitle": "Global Network Nodes",
+      "professional_network": "Professional Network",
       "save_success_title": "Settings Synced",
       "save_success_text": "Your API nodes are now online and verified.",
+      "x_broadcast": "X Broadcast",
+      "tg_sync": "TG Sync",
+      "direct_protocol": "Direct API protocol",
+      "global_matrix": "Multi-Node Broadcasting",
       "save_error_title": "Sync Error",
       "save_error_text": "Failed to verify nodes. Check your credentials.",
       "social_title": "Social Matrix",
@@ -165,30 +170,51 @@
         "title": "Headline Engineer",
         "desc": "Make a headline hyper-viral (1 Token)",
         "placeholder": "e.g., How to buy Bitcoin",
-        "btn": "Rewrite Headline"
+        "btn": "Rewrite Headline",
+        "neural_desc": "Our neural engine analyzes current high-performing hooks and adapts your headline to trigger curiosity loops."
       },
       "bio": {
         "title": "Viral Bio Generator",
         "desc": "Optimize your profile for maximum conversion. (2 Tokens)",
         "placeholder": "Enter your current bio or short description...",
-        "btn": "Synthesize Bio"
+        "btn": "Synthesize Bio",
+        "neural_desc": "Optimizes your social identity for conversion. High-converters focus on the 'Benefit' first, not the 'Feature'."
       },
       "trends": {
         "title": "2026 Trend Hunter",
         "desc": "Top 3 viral topics right now. (3 Tokens)",
         "btn": "Hunt Trends",
-        "btn_refresh": "Refresh Trends"
+        "btn_refresh": "Refresh Trends",
+        "scanning": "Scanning",
+        "node_id": "Global Node 1"
+      },
+      "notifications": {
+        "success": "Success",
+        "error": "Error",
+        "copied": "Copied",
+        "viral_synthesized": "Viral content synthesized.",
+        "gen_failed": "Generation failed",
+        "text_copied": "Text copied to clipboard."
       },
       "audit": {
         "title": "Global Marketing Audit",
         "desc": "Elite CMO analytics and intel. (3 Tokens)",
         "btn": "Request Audit",
+        "modal_title": "Marketing Audit",
+        "node_status": "Global Node: Active • 2026",
+        "summary_title": "CMO Executive Summary",
+        "sentiment_label": "Market Sentiment",
+        "shift_label": "Global Shift",
+        "news_title": "Elite News Intelligence (Top 20)",
+        "live_feed": "LIVE FEED",
         "capability": "Scans **500+ sources** (RSS, X, Telegram). Finds TOP 20 trends in Fintech & Web3. Updates every 60m."
       }
     },
     "academy": {
       "title": "Growth Intelligence Center",
       "desc": "Master the art of high-velocity branding and viral cycles. These protocols are designed to scale your network to 100k+ partners on autopilot.",
+      "understand_btn": "I Understand the Protocol",
+      "read_time": "{{time}} min read",
       "protocol_rank": "Protocol Efficiency: 98.4%",
       "rank_name": "ELITE VANGUARD GRANDMASTER",
       "hook_rule": {
@@ -503,7 +529,10 @@
             "task": "Find your top 3 referrals and send them a private message with a strategy.",
             "points": 500
           }
-        ]
+        ],
+        "growth_promo": "PRO Members grow their network <1>x5 faster</1> using these elite protocols.",
+        "methodology_title": "Quantum Methodology",
+        "methodology_desc": "Follow the elite protocols to maximize your reach. Every asset and lesson is designed for 2026 algorithmic dominance. We analyze multi-vector data points to ensure your content bypasses standard filters."
       }
     }
   },

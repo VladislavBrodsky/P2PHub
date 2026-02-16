@@ -51,7 +51,11 @@ export const GrowthTab = ({
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
                             <div className="px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full">
-                                <span className="text-[8px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Elite Alpha Node</span>
+                                <span className="text-[8px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">
+                                    {academyScore < 300 ? t('pro_dashboard.academy.protocols.difficulty_levels.easy') :
+                                        academyScore < 800 ? t('pro_dashboard.academy.protocols.difficulty_levels.medium') :
+                                            t('pro_dashboard.academy.protocols.difficulty_levels.hard')}
+                                </span>
                             </div>
                             <button
                                 onClick={() => { selection(); setShowManual('academy'); }}
@@ -76,27 +80,38 @@ export const GrowthTab = ({
                             >
                                 {academyScore}
                             </motion.span>
-                            <span className="text-indigo-500 text-base sm:text-lg opacity-50">.0</span>
+                            <span className="text-indigo-500 text-base sm:text-lg opacity-50">PTS</span>
                         </div>
                     </div>
                 </div>
 
                 <div className="space-y-4 relative z-10">
-                    <div className="flex justify-between items-end text-[8px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400/60">
-                        <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-4 bg-indigo-500 rounded-full shadow-lg shadow-indigo-500/40" />
-                            <span>Progression Protocol</span>
-                        </div>
-                        <span className="text-indigo-600 dark:text-indigo-400 font-black">{Math.floor((completedStages.length / 5) * 100)}%</span>
-                    </div>
-                    <div className="h-2 bg-slate-100 dark:bg-black/20 rounded-full overflow-hidden p-0.5 shadow-inner border border-slate-200 dark:border-white/5">
-                        <motion.div
-                            className="h-full vibing-blue-animated rounded-full shadow-lg shadow-indigo-500/20"
-                            initial={{ width: "0%" }}
-                            animate={{ width: `${(completedStages.length / 5) * 100}%` }}
-                            transition={{ duration: 2, ease: "circOut" }}
-                        />
-                    </div>
+                    {(() => {
+                        const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
+                        const moduleCount = Array.isArray(modules) ? modules.length : 5;
+                        const uniqueCompleted = [...new Set(completedStages)].filter(id => Array.isArray(modules) && modules.some((m: any) => m.id === id));
+                        const progress = Math.min(Math.round((uniqueCompleted.length / moduleCount) * 100), 100);
+
+                        return (
+                            <>
+                                <div className="flex justify-between items-end text-[8px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400/60">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-1.5 h-4 bg-indigo-500 rounded-full shadow-lg shadow-indigo-500/40" />
+                                        <span>{t('pro_dashboard.academy.protocols.progress_label')}</span>
+                                    </div>
+                                    <span className="text-indigo-600 dark:text-indigo-400 font-black">{progress}%</span>
+                                </div>
+                                <div className="h-2 bg-slate-100 dark:bg-black/20 rounded-full overflow-hidden p-0.5 shadow-inner border border-slate-200 dark:border-white/5">
+                                    <motion.div
+                                        className="h-full vibing-blue-animated rounded-full shadow-lg shadow-indigo-500/20"
+                                        initial={{ width: "0%" }}
+                                        animate={{ width: `${progress}%` }}
+                                        transition={{ duration: 2, ease: "circOut" }}
+                                    />
+                                </div>
+                            </>
+                        );
+                    })()}
                 </div>
             </div>
 

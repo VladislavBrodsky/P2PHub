@@ -233,14 +233,34 @@ export default function SubscriptionPage() {
                                     className="px-4 pb-4"
                                 >
                                     <p className="text-[10px] text-slate-400 mb-4 leading-relaxed">{item.desc}</p>
-                                    <div className="space-y-2">
+                                    <div className="space-y-2 mb-4">
                                         {item.stats.map((stat: string, si: number) => (
-                                            <div key={si} className="flex items-center gap-2 text-[10px] font-bold text-slate-300">
-                                                <div className="w-1 h-1 rounded-full bg-amber-500" />
-                                                <Trans>{stat}</Trans>
+                                            <div key={si} className="flex items-center gap-2 text-[10px] font-medium text-slate-300">
+                                                <div className={`w-1 h-1 rounded-full ${item.id === 'studio' ? 'bg-pink-500' : 'bg-emerald-500'}`} />
+                                                <span>
+                                                    {stat.split('**').map((part, i) =>
+                                                        i % 2 === 1 ? <span key={i} className="text-white font-black">{part}</span> : part
+                                                    )}
+                                                </span>
                                             </div>
                                         ))}
                                     </div>
+
+                                    {item.terminal && (
+                                        <div className={`mt-4 rounded-xl border border-white/5 overflow-hidden bg-[#0A0A0A] relative`}>
+                                            <div className={`absolute inset-0 bg-linear-to-br ${item.id === 'studio' ? 'from-pink-500/10 via-purple-500/5' : 'from-emerald-500/10 via-green-500/5'} to-transparent opacity-50`} />
+                                            <div className="relative p-3 space-y-1 font-mono text-[9px] leading-tight">
+                                                {item.terminal.map((line: string, ti: number) => (
+                                                    <div key={ti} className="flex items-start gap-2 opacity-90">
+                                                        <span className={`font-bold ${item.id === 'studio' ? 'text-pink-500' : 'text-emerald-500'}`}>&gt;</span>
+                                                        <span className={ti === 0 ? 'text-white' : (item.id === 'studio' ? 'text-pink-200' : 'text-emerald-200') + ' opacity-80'}>
+                                                            {line}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </motion.div>
                             )}
                         </AnimatePresence>
