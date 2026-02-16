@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import {
-    Zap, Flame, Search, ChevronRight, Compass, Loader2
+    Zap, Flame, Search, ChevronRight, Compass, Loader2, Info
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { renderMarkdown } from '../utils/renderMarkdown';
@@ -45,20 +45,29 @@ export const ToolsTab = ({
                     >
                         <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         <div className="flex items-center justify-between mb-5">
-                            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 flex items-center justify-center text-indigo-500 group-hover:scale-110 transition-all duration-500 shadow-sm">
+                            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 flex items-center justify-center text-indigo-500 group-hover:scale-110 transition-all duration-500 shadow-sm shrink-0">
                                 <Zap size={18} />
                             </div>
-                            <div className="px-2.5 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20">
-                                <span className="text-[8px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Active</span>
+                            <div className="flex items-center gap-2">
+                                <div className="group/info relative">
+                                    <Info size={14} className="text-slate-400 hover:text-indigo-500 transition-colors cursor-help" />
+                                    <div className="absolute right-0 bottom-full mb-2 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 whitespace-nowrap pointer-events-none shadow-xl z-50">
+                                        {t('pro_dashboard.tools.headline.info')}
+                                        <div className="absolute right-2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
+                                    </div>
+                                </div>
+                                <div className="px-2.5 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20 shrink-0">
+                                    <span className="text-[8px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Active</span>
+                                </div>
                             </div>
                         </div>
-                        <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2">{t('pro_dashboard.tools.headline.title')}</h3>
-                        <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80">
+                        <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">{t('pro_dashboard.tools.headline.title')}</h3>
+                        <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
                             {t('pro_dashboard.tools.headline.desc')}
                         </p>
                         <button
                             onClick={() => { selection(); setShowHeadlineModal(true); }}
-                            className="mt-auto w-full h-11 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-[9px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-indigo-500/20"
+                            className="mt-auto w-full h-11 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-[9px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-indigo-500/20 shrink-0"
                         >
                             {t('pro_dashboard.tools.headline.btn')}
                             <ChevronRight size={12} />
@@ -72,27 +81,36 @@ export const ToolsTab = ({
                     className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-7 border border-slate-200 dark:border-white/10 group relative h-full flex flex-col shadow-xl"
                 >
                     <div className="absolute inset-0 bg-linear-to-br from-orange-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="flex items-center justify-between mb-5">
-                        <div className="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-500/10 border border-orange-100 dark:border-orange-500/20 flex items-center justify-center text-orange-600 dark:text-orange-500 group-hover:scale-110 transition-all duration-500 shadow-sm">
+                    <div className="flex items-center justify-between mb-5 relative z-10">
+                        <div className="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-500/10 border border-orange-100 dark:border-orange-500/20 flex items-center justify-center text-orange-600 dark:text-orange-500 group-hover:scale-110 transition-all duration-500 shadow-sm shrink-0">
                             <Flame size={18} />
                         </div>
-                        <div className="flex flex-col items-end">
-                            <span className="text-[8px] font-black text-orange-500 uppercase tracking-widest leading-none">{t('pro_dashboard.tools.trends.scanning')}</span>
-                            <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest opacity-40 mt-0.5">{t('pro_dashboard.tools.trends.node_id')}</span>
+                        <div className="flex items-center gap-2">
+                            <div className="group/info relative">
+                                <Info size={14} className="text-slate-400 hover:text-orange-500 transition-colors cursor-help" />
+                                <div className="absolute right-0 bottom-full mb-2 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 whitespace-nowrap pointer-events-none shadow-xl z-50">
+                                    {t('pro_dashboard.tools.trends.info')}
+                                    <div className="absolute right-2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
+                                </div>
+                            </div>
+                            <div className="flex flex-col items-end shrink-0">
+                                <span className="text-[8px] font-black text-orange-500 uppercase tracking-widest leading-none">{t('pro_dashboard.tools.trends.scanning')}</span>
+                                <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest opacity-40 mt-0.5">{t('pro_dashboard.tools.trends.node_id')}</span>
+                            </div>
                         </div>
                     </div>
-                    <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2">{t('pro_dashboard.tools.trends.title')}</h3>
+                    <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">{t('pro_dashboard.tools.trends.title')}</h3>
 
                     {trends.length > 0 ? (
-                        <div className="space-y-1.5 mb-5">
+                        <div className="space-y-1.5 mb-5 min-h-[82px] relative z-10">
                             {trends.slice(0, 2).map((trend, i) => (
-                                <div key={i} className="p-2.5 bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5 rounded-lg text-[10px] font-semibold text-slate-500 italic">
+                                <div key={i} className="p-2 bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5 rounded-lg text-[9px] font-semibold text-slate-500 italic truncate">
                                     "{trend.topic}"
                                 </div>
                             ))}
                         </div>
                     ) : (
-                        <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80">
+                        <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
                             {t('pro_dashboard.tools.trends.desc')}
                         </p>
                     )}
@@ -100,7 +118,7 @@ export const ToolsTab = ({
                     <button
                         onClick={() => { selection(); handleFetchTrends(); }}
                         disabled={isFetchingTrends}
-                        className="mt-auto w-full h-11 vibing-blue-animated rounded-xl font-black text-[9px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/10 disabled:grayscale"
+                        className="mt-auto w-full h-11 vibing-blue-animated rounded-xl font-black text-[9px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/10 disabled:grayscale shrink-0 relative z-10"
                     >
                         {isFetchingTrends ? <Loader2 className="animate-spin w-3.5 h-3.5" /> : (
                             <>
@@ -111,40 +129,57 @@ export const ToolsTab = ({
                     </button>
                 </motion.div>
 
-                {/* Global Marketing Audit - Optimized spacing */}
+                {/* Global Marketing Audit - Compact & Attractive */}
                 <motion.div
-                    whileHover={{ scale: 1.005 }}
-                    className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2.5rem] p-6 sm:p-8 border border-slate-200 dark:border-indigo-500/20 group relative flex flex-col shadow-2xl col-span-1 sm:col-span-2"
+                    whileHover={{ y: -2 }}
+                    className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-6 border border-slate-200 dark:border-indigo-500/20 group relative flex flex-col shadow-xl col-span-1 sm:col-span-2"
                 >
-                    <div className="absolute right-0 top-0 w-64 h-64 bg-indigo-500/5 blur-[100px] rounded-full pointer-events-none" />
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 mb-6">
+                    <div className="absolute right-0 top-0 w-48 h-48 bg-indigo-500/5 blur-[80px] rounded-full pointer-events-none" />
+
+                    {/* Header Section */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 relative z-10">
                         <div className="flex items-center gap-3">
-                            <div className="w-14 h-14 rounded-xl vibing-blue-animated flex items-center justify-center text-white shadow-xl shadow-indigo-500/20 relative">
-                                <Search size={24} className="relative z-10" />
+                            <div className="w-12 h-12 rounded-xl vibing-blue-animated flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 shrink-0">
+                                <Search size={20} />
                             </div>
-                            <div>
-                                <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight mb-0.5">{t('pro_dashboard.tools.audit.title')}</h3>
+                            <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-1">
+                                    <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                                        {t('pro_dashboard.tools.audit.title')}
+                                    </h3>
+                                    <div className="group/info relative">
+                                        <Info size={14} className="text-slate-400 hover:text-indigo-500 transition-colors cursor-help" />
+                                        <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 whitespace-nowrap pointer-events-none shadow-xl z-50">
+                                            {t('pro_dashboard.tools.audit.info')}
+                                            <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="flex items-center gap-1.5">
                                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                    <span className="text-[8px] font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">Protocol 2.5 Active</span>
+                                    <span className="text-[8px] font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">
+                                        {t('pro_dashboard.tools.audit.status')}
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         <button
                             onClick={handleRunMarketingAudit}
                             disabled={isAuditing}
-                            className="w-full sm:w-auto px-6 h-12 vibing-blue-animated rounded-xl font-black text-[9px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 text-white"
+                            className="w-full sm:w-auto px-5 h-11 vibing-blue-animated rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 text-white shrink-0 disabled:grayscale"
                         >
-                            {isAuditing ? <Loader2 className="animate-spin w-4 h-4" /> : (
+                            {isAuditing ? <Loader2 className="animate-spin w-3.5 h-3.5" /> : (
                                 <>
                                     {t('pro_dashboard.tools.audit.btn')}
-                                    <ChevronRight size={14} />
+                                    <ChevronRight size={12} />
                                 </>
                             )}
                         </button>
                     </div>
-                    <div className="p-5 bg-slate-50 dark:bg-black/40 rounded-xl border border-slate-100 dark:border-white/5 backdrop-blur-3xl relative overflow-hidden shadow-inner">
-                        <p className="text-[12px] sm:text-[13px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed max-w-3xl relative z-10">
+
+                    {/* Capability Description */}
+                    <div className="p-4 bg-slate-50 dark:bg-black/30 rounded-xl border border-slate-100 dark:border-white/5 backdrop-blur-xl relative overflow-hidden shadow-inner">
+                        <p className="text-[11px] sm:text-[12px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed relative z-10">
                             {renderMarkdown(t('pro_dashboard.tools.audit.capability'), true)}
                         </p>
                     </div>

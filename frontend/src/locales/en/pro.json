@@ -171,7 +171,8 @@
         "desc": "Make a headline hyper-viral (1 Token)",
         "placeholder": "e.g., How to buy Bitcoin",
         "btn": "Rewrite Headline",
-        "neural_desc": "Our neural engine analyzes current high-performing hooks and adapts your headline to trigger curiosity loops."
+        "neural_desc": "Our neural engine analyzes current high-performing hooks and adapts your headline to trigger curiosity loops.",
+        "info": "Advanced linguistic patterns and curiosity loop engineering."
       },
       "bio": {
         "title": "Viral Bio Generator",
@@ -186,7 +187,8 @@
         "btn": "Hunt Trends",
         "btn_refresh": "Refresh Trends",
         "scanning": "Scanning",
-        "node_id": "Global Node 1"
+        "node_id": "Global Node 1",
+        "info": "Real-time volatility and memetic momentum tracking."
       },
       "notifications": {
         "success": "Success",
@@ -207,7 +209,9 @@
         "shift_label": "Global Shift",
         "news_title": "Elite News Intelligence (Top 20)",
         "live_feed": "LIVE FEED",
-        "capability": "Scans **500+ sources** (RSS, X, Telegram). Finds TOP 20 trends in Fintech & Web3. Updates every 60m."
+        "info": "Full scan of global news, social signals, and market sentiment.",
+        "status": "Protocol 2.5 Active",
+        "capability": "Scans **500+ sources** (RSS, X, Telegram). Finds TOP 20 trends in FinTech & Web3. Updates every 60m."
       }
     },
     "academy": {
