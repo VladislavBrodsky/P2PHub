@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Crown } from 'lucide-react';
 import { useUser } from '../context/UserContext';
+import { useTranslation } from 'react-i18next';
 import { getRank, getXPProgress } from '../utils/ranking';
 
 interface PersonalizationCardProps {
@@ -9,6 +10,7 @@ interface PersonalizationCardProps {
 }
 
 export function PersonalizationCard({ className, variant = 'default' }: PersonalizationCardProps) {
+    const { t } = useTranslation();
     const { user, isLoading: isUserLoading } = useUser();
 
     const stats = user || {
@@ -91,7 +93,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
 
                             return (
                                 <h2 className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-black tracking-tight text-slate-900 dark:text-white truncate`}>
-                                    Hi, {displayName}!
+                                    {t('common.hi')}, {displayName}!
                                 </h2>
                             );
                         })()}
@@ -112,11 +114,11 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 }}
                                 className="flex items-baseline gap-1"
                             >
-                                <span className="text-[8px] font-black text-blue-600 dark:text-blue-400 tracking-tight uppercase">Total:</span>
+                                <span className="text-[8px] font-black text-blue-600 dark:text-blue-400 tracking-tight uppercase">{t('common.total')}:</span>
                                 <span className="text-[9px] font-bold text-blue-500 dark:text-blue-300">{stats.xp} XP</span>
                             </motion.div>
                             <span className="text-[9px] font-black text-slate-900 dark:text-white">
-                                {xpProgress.current}<span className="text-slate-500 dark:text-slate-400 font-medium mx-0.5">/</span>{xpProgress.total} <span className="text-[7px] text-slate-500 dark:text-slate-400 uppercase ml-0.5 whitespace-nowrap">NEXT LVL</span>
+                                {xpProgress.current}<span className="text-slate-500 dark:text-slate-400 font-medium mx-0.5">/</span>{xpProgress.total} <span className="text-[7px] text-slate-500 dark:text-slate-400 uppercase ml-0.5 whitespace-nowrap">{t('common.next_lvl')}</span>
                             </span>
                         </div>
                         <div className="h-3 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-black/5 dark:border-white/5 shadow-inner relative">

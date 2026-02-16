@@ -28,7 +28,10 @@
     "loading": "Loading...",
     "save": "Save",
     "cancel": "Cancel",
-    "delete": "Delete"
+    "delete": "Delete",
+    "hi": "Hi",
+    "total": "Total",
+    "next_lvl": "NEXT LVL"
   },
   "menu": {
     "home": "Home",
@@ -69,7 +72,29 @@
     "disclaimer_desc": "We are a community of digital nomads and online entrepreneurs who search for global trends. We act as a <1>Third-Party Ambassador Agency</1> and do not have an official corporate connection to Pintopay.",
     "risk_warning": "RISK WARNING: High-velocity P2P settlements involve market risk. Past performance does not guarantee future dividends. Only participate with assets you are prepared to leverage.",
     "understand": "I UNDERSTAND",
-    "copyright": "© 2026 Ambassador Vanguard. All Rights Reserved."
+    "copyright": "© 2026 Ambassador Vanguard. All Rights Reserve.",
+    "terms": {
+      "1_title": "1. Acceptance of Terms",
+      "1_desc": "By accessing the P2PHub platform, you agree to be bound by these Terms of Service and all applicable laws and regulations.",
+      "2_title": "2. User Conduct",
+      "2_desc": "Users are responsible for maintaining the confidentiality of their account and for all activities that occur under their node.",
+      "3_title": "3. Risk Disclosure",
+      "3_desc": "Digital assets and P2P protocols involve significant risk. We do not provide financial advice.",
+      "4_title": "4. Intellectual Property",
+      "4_desc": "All content and technology on the platform are protected by intellectual property rights.",
+      "5_title": "5. Limitation of Liability",
+      "5_desc": "P2PHub shall not be liable for any indirect or consequential losses resulting from the use of the platform."
+    },
+    "privacy": {
+      "1_title": "1. Data Collection",
+      "1_desc": "We collect minimal data necessary for platform operation, primarily relating to node activity and preferences.",
+      "2_title": "2. Data Security",
+      "2_desc": "We implement industry-standard security measures to protect your information and transaction history.",
+      "3_title": "3. Third-Party Sharing",
+      "3_desc": "We do not sell your data to third parties. Information is only shared when required for protocol execution.",
+      "4_title": "4. Your Rights",
+      "4_desc": "You have the right to access, correct, or request the deletion of your personal data at any time."
+    }
   },
   "system": {
     "loading": {

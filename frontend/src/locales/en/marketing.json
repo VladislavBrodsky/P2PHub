@@ -195,8 +195,6 @@
     }
   },
   "referral_matrix": {
-    "title": "Network Hierarchy",
-    "total_depth": "Matrix Depth: 9 Levels",
     "nine_level": "9-Level Network Matrix",
     "partners_suffix": "Partners",
     "xp_info": "You earn XP from every active partner in your 9-level matrix.",

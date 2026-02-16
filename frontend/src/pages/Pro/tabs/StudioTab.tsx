@@ -16,6 +16,15 @@ interface StudioTabProps {
     selection: () => void;
     impact: (style: 'light' | 'medium' | 'heavy') => void;
     notification: (notif: any) => void;
+    externalStep: number;
+    setExternalStep: (step: number) => void;
+    setExternalReady: (ready: boolean) => void;
+    generatedResult: any;
+    setGeneratedResult: (res: any) => void;
+    history: any[];
+    setHistory: (history: any[]) => void;
+    historyIndex: number;
+    setHistoryIndex: (index: number) => void;
 }
 
 export const StudioTab = ({
@@ -23,27 +32,44 @@ export const StudioTab = ({
     setStatus,
     selection,
     impact,
-    notification
+    notification,
+    externalStep,
+    setExternalStep,
+    setExternalReady,
+    generatedResult,
+    setGeneratedResult,
+    history,
+    setHistory,
+    historyIndex,
+    setHistoryIndex
 }: StudioTabProps) => {
     const { t, i18n } = useTranslation();
-
-    // Studio Local State
-    const [step, setStep] = useState(1);
     const [postType, setPostType] = useState('');
     const [audience, setAudience] = useState('');
     const [language, setLanguage] = useState(i18n.language === 'ru' ? 'Russian' : 'English');
     const [isGenerating, setIsGenerating] = useState(false);
-    const [generatedResult, setGeneratedResult] = useState<any>(null);
     const [countdown, setCountdown] = useState(30);
-
-    // History and Cache
-    const [history, setHistory] = useState<any[]>([]);
-    const [historyIndex, setHistoryIndex] = useState(-1);
 
     // Publishing State
     const [showPublishModal, setShowPublishModal] = useState(false);
     const [isPublishing, setIsPublishing] = useState(false);
     const [publishedPlatforms, setPublishedPlatforms] = useState<string[]>([]);
+
+    useEffect(() => {
+        setExternalReady(!!postType && !!audience);
+    }, [postType, audience, setExternalReady]);
+
+    useEffect(() => {
+        const handleGen = () => handleGenerate();
+        const handlePublish = () => setShowPublishModal(true);
+
+        window.addEventListener('trigger-studio-gen', handleGen);
+        window.addEventListener('trigger-studio-publish', handlePublish);
+        return () => {
+            window.removeEventListener('trigger-studio-gen', handleGen);
+            window.removeEventListener('trigger-studio-publish', handlePublish);
+        };
+    }, [postType, audience, language, generatedResult, status]);
 
     useEffect(() => {
         let interval: any;
@@ -75,7 +101,7 @@ export const StudioTab = ({
             setGeneratedResult(result);
 
             setStatus(status ? { ...status, pro_tokens: result.tokens_remaining } : null);
-            setStep(3);
+            setExternalStep(3);
             notification({ title: 'Success', text: 'Viral content synthesized.', type: 'success' });
         } catch (error: any) {
             console.error('Generation failed', error);
@@ -142,6 +168,7 @@ export const StudioTab = ({
             setHistoryIndex(newIndex);
             setGeneratedResult(history[newIndex]);
             impact('medium');
+            setExternalStep(3); // Ensure we are on step 3
         }
     };
 
@@ -175,20 +202,20 @@ export const StudioTab = ({
             <div className="flex items-center justify-center gap-3 py-4">
                 {[1, 2, 3].map((s) => (
                     <div key={s} className="flex items-center">
-                        <div className={`w-9 h-9 rounded-2xl flex items-center justify-center text-[10px] font-black transition-all ${step === s
+                        <div className={`w-9 h-9 rounded-2xl flex items-center justify-center text-[10px] font-black transition-all ${externalStep === s
                             ? 'vibing-blue-animated text-white scale-110'
-                            : step > s
+                            : externalStep > s
                                 ? 'bg-emerald-500 text-white'
                                 : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-white/10 opacity-40'
                             }`}>
-                            {step > s ? <CheckCircle2 size={14} /> : s}
+                            {externalStep > s ? <CheckCircle2 size={14} /> : s}
                         </div>
                         {s < 3 && (
                             <div className="w-8 h-[2px] mx-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
                                 <motion.div
                                     className="h-full vibing-blue-gradient"
                                     initial={{ width: "0%" }}
-                                    animate={{ width: step > s ? "100%" : "0%" }}
+                                    animate={{ width: externalStep > s ? "100%" : "0%" }}
                                 />
                             </div>
                         )}
@@ -196,7 +223,7 @@ export const StudioTab = ({
                 ))}
             </div>
 
-            {step === 1 && (
+            {externalStep === 1 && (
                 <motion.div
                     key="step1"
                     initial={{ opacity: 0, scale: 0.98 }}
@@ -297,9 +324,9 @@ export const StudioTab = ({
                         {/* Action Area */}
                         <div className="pt-6 sm:pt-10 relative z-20">
                             <button
-                                onClick={() => { selection(); setStep(2); }}
+                                onClick={() => { selection(); setExternalStep(2); }}
                                 disabled={!postType || !audience}
-                                className="w-full h-14 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale"
+                                className="w-full h-14 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale sm:hidden"
                             >
                                 <Sparkles size={16} className="animate-pulse" />
                                 {t('pro_dashboard.studio.initiate_btn')}
@@ -313,7 +340,7 @@ export const StudioTab = ({
                 </motion.div>
             )}
 
-            {step === 2 && (
+            {externalStep === 2 && (
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -389,7 +416,7 @@ export const StudioTab = ({
                                     {t('pro_dashboard.studio.go_viral_btn')} <Send size={14} className="group-active:translate-x-1 group-active:-translate-y-1 transition-transform" />
                                 </button>
                                 <button
-                                    onClick={() => { selection(); setStep(1); }}
+                                    onClick={() => { selection(); setExternalStep(1); }}
                                     className="w-full h-10 rounded-xl font-black text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-white transition-all flex items-center justify-center gap-2"
                                 >
                                     <ArrowLeft size={12} /> {t('pro_dashboard.studio.back_btn')}
@@ -400,7 +427,7 @@ export const StudioTab = ({
                 </motion.div>
             )}
 
-            {step === 3 && generatedResult && (
+            {externalStep === 3 && generatedResult && (
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}

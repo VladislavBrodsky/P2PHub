@@ -68,7 +68,15 @@ export const GrowthTab = ({
                     <div className="flex flex-col items-end">
                         <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">{t('pro_dashboard.academy.protocols.stats_label')}</p>
                         <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tabular-nums leading-none flex items-baseline gap-0.5 vibing-blue-text drop-shadow-sm">
-                            {academyScore}<span className="text-indigo-500 text-base sm:text-lg opacity-50">.0</span>
+                            <motion.span
+                                key={academyScore}
+                                initial={{ opacity: 0, y: 10, filter: 'blur(5px)' }}
+                                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                            >
+                                {academyScore}
+                            </motion.span>
+                            <span className="text-indigo-500 text-base sm:text-lg opacity-50">.0</span>
                         </div>
                     </div>
                 </div>
