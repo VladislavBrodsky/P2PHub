@@ -98,7 +98,9 @@ class NotificationService:
         for row in buttons:
             keyboard_row = []
             for btn in row:
-                btn_dict = btn.model_dump(exclude_none=True)
+                # Handle both Pydantic models and raw dicts (for fallback system resilience)
+                btn_dict = btn.model_dump(exclude_none=True) if hasattr(btn, "model_dump") else btn.copy()
+                
                 if "web_app" in btn_dict and isinstance(btn_dict["web_app"], dict):
                     btn_dict["web_app"] = WebAppInfo(url=btn_dict["web_app"]["url"])
                 keyboard_row.append(InlineKeyboardButton(**btn_dict))

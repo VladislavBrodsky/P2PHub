@@ -15,9 +15,7 @@ class ShadowBaseModel(BaseModel):
     but allows the application to continue with partial/raw data if possible.
     """
 
-    class Config:
-        from_attributes = True
-        extra = "ignore" # Standardized: ignore extra fields to prevent contract-breakage on API expansion
+    model_config = {"from_attributes": True, "extra": "ignore"}
 
     @model_validator(mode="before")
     @classmethod

@@ -15,10 +15,7 @@ class PartnerBase(BaseModel):
     photo_file_id: str | None = None
     language_code: str | None = None
 
-    # #comment: CRITICAL for Pydantic v2. This allows ORM objects to be used 
-    # when validating this model, specifically for nested lists like 'referrals'.
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class ActiveTaskResponse(BaseModel):
     task_id: str
@@ -26,8 +23,7 @@ class ActiveTaskResponse(BaseModel):
     initial_metric_value: int
     started_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class PartnerResponse(PartnerBase):
     balance: float
@@ -52,8 +48,7 @@ class PartnerResponse(PartnerBase):
     completed_stages: list[int | str] = []
     is_admin: bool = False
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
     @model_validator(mode="before")
     @classmethod
