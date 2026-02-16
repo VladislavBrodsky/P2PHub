@@ -2,9 +2,17 @@ import axios from 'axios';
 import { getSafeLaunchParams } from '../utils/tma';
 import { getApiUrl } from '../utils/api';
 
+const getBaseUrl = () => {
+    const url = getApiUrl();
+    if (url.startsWith('http://') && !url.includes('localhost') && !url.includes('127.0.0.1')) {
+        return url.replace('http://', 'https://');
+    }
+    return url;
+};
+
 // Create a centralized Axios instance
 export const apiClient = axios.create({
-    baseURL: getApiUrl(),
+    baseURL: getBaseUrl(),
     timeout: 60000,
 });
 
