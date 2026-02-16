@@ -1,0 +1,205 @@
+{
+  "income": {
+    "badge": "Partner Advantage",
+    "title": "Earn $1 ",
+    "title_highlight": "Per Minute",
+    "desc": "Traditional finance is a <1>closed garden</1>. As a <3>Pintopay Partner</3>, you are the bridge. Every global transaction becomes your dividends.",
+    "modes": {
+      "profit": "Profit Potential",
+      "inaction": "Cost of Inaction"
+    },
+    "profit": {
+      "projector": "Income Projector",
+      "active_partners": "Active Partners",
+      "monthly_income": "Estimated Monthly Income",
+      "unlock_btn": "ACTIVATE $1 PROTOCOL"
+    },
+    "inaction": {
+      "projector": "Daily Missed Opportunities",
+      "status": "Current Status",
+      "hours": "Hours You Work / Day",
+      "value_per_min": "Your Value Per Minute",
+      "daily_loss": "Potential Daily Loss"
+    },
+    "levels": {
+      "student": "Student / Unemployed",
+      "entry": "Entry Level",
+      "pro": "Professional",
+      "manager": "Manager",
+      "exec": "Executive"
+    },
+    "network": {
+      "title": "Viral Network Effect",
+      "desc": "When you build a network, your income decouples from time.",
+      "close": "CLOSE",
+      "core": "Viral Network Core",
+      "received": "RECEIVED",
+      "yield": "Estimated Network Yield"
+    },
+    "stats": {
+      "global_target": "Global Target",
+      "scaling": "Scaling 2x faster than TradFi",
+      "revenue": "Revenue Stream",
+      "dividends": "Continuous Dividends"
+    },
+    "waiting": {
+      "title": "Cost of Waiting",
+      "desc": "While you trade hours for a fixed wage, the digital economy creates value 24/7. <1>Every minute you wait is a tax on your potential</1><2>Unlock the strategy to stop calculating losses and start capturing profits.</2>"
+    },
+    "cta": {
+      "join": "JOIN NOW",
+      "beta": "Limited slots available",
+      "lead": "LEAD THE MARKET",
+      "unlocked": "Strategy Unlocked • Access Granted"
+    }
+  },
+  "income_details": {
+    "market_title": "The Largest Wealth Transfer inside the <1>Digital Economy</1>",
+    "market_desc": "Crypto adoption is growing <1>2x faster</1> than the Internet did in the 90s.",
+    "adoption_curve": "Adoption Curve",
+    "you_are_here": "You are here (Early)",
+    "maximize_btn": "Maximize this opportunity",
+    "revenue_title": "Unlock <1>True Passive Income</1>",
+    "revenue_desc": "Earn lifetime commissions from every action in your network:",
+    "benefit_1_title": "Up to 30%",
+    "benefit_1_desc": "From Pintopay card sales",
+    "benefit_2_title": "Up to 0.3% (Lifetime)",
+    "benefit_2_desc": "From all network reloads",
+    "benefit_3_title": "30% Rewards",
+    "benefit_3_desc": "From the partner network",
+    "start_earning": "Start Receiving Dividends"
+  },
+  "blog": {
+    "title": "Intelligence Center",
+    "latest": "Latest Intel",
+    "view_all": "View All",
+    "by": "By",
+    "posts": {
+      "1": {
+        "title": "$1 Per Minute Strategy: How Top Partners Scale",
+        "excerpt": "Learn the exact mechanics of high-velocity P2P settlements and why speed is the primary currency of 2026.",
+        "category": "Wealth Strategy"
+      },
+      "2": {
+        "title": "Why Traditional Banks are Losing the War Against QR",
+        "excerpt": "Legacy systems are crumbling under their own weight. We explore the frictionless future of QR-based payments.",
+        "category": "Financial Shift"
+      },
+      "3": {
+        "title": "From Cash to Crypto: The Psychological Shift",
+        "excerpt": "Understanding the mindset change required to move from physical hoarding to digital liquidity and ownership.",
+        "category": "Growth Mindset"
+      },
+      "4": {
+        "title": "Building Limitless Wealth in a Closed Economy",
+        "excerpt": "How Pintopay bypasses geographic restrictions, providing equal access to global markets for everyone.",
+        "category": "Freedom"
+      },
+      "5": {
+        "title": "The Primal Age: The Death of Physical Cash",
+        "excerpt": "Why holding paper money is becoming a liability in a digital world and how to safely make the transition.",
+        "category": "Financial Evolution"
+      },
+      "6": {
+        "title": "The Friction Gap: Why Your Bank is Dragging You Down",
+        "excerpt": "An analysis of hidden fees and delays in traditional banking systems in 2026.",
+        "category": "Banking Reform"
+      },
+      "7": {
+        "title": "Digital Proxies: The Illusion of Modern Payments",
+        "excerpt": "Apple Pay and Google Pay are just masks for old systems. Learn about the true digital infrastructure.",
+        "category": "Tech Analysis"
+      },
+      "8": {
+        "title": "Financial Reset: Owning Your Digital Future",
+        "excerpt": "How Web3 and Crypto finally fulfill the promise of true financial sovereignty.",
+        "category": "Web3"
+      },
+      "9": {
+        "title": "Elite Speed: The $1 Per Minute QR Revolution",
+        "excerpt": "Mastering the Pintopay QR system to achieve maximum settlement speed and network growth.",
+        "category": "Elite Strategy"
+      },
+      "10": {
+        "title": "The Great Banking Divide: 4 Billion People Left Behind",
+        "excerpt": "Why half the world still lacks bank access and how Pintopay is building the bridge to the global financial system.",
+        "category": "Global Impact"
+      },
+      "11": {
+        "title": "The Shadow Economy: Why 2026 is the Year of Convergence",
+        "excerpt": "Learn how the barrier between crypto and fiat is finally crumbling, creating a new era of financial freedom.",
+        "category": "Innovation"
+      },
+      "12": {
+        "title": "From Telegram to Tokyo: A Global Bank in Your Pocket",
+        "excerpt": "Get a premium bank card that works in 180+ countries, managed entirely within Telegram.",
+        "category": "Adoption"
+      },
+      "13": {
+        "title": "Invisible Infrastructure: Why You Won't Go to a Bank Again",
+        "excerpt": "The era of physical branches is over. Your financial empire is now managed from your smartphone.",
+        "category": "Future"
+      },
+      "14": {
+        "title": "Two-Tap Revolution: Apple and Google Pay with Crypto",
+        "excerpt": "Connect your Pintopay card to your mobile wallet and spend your crypto assets like fiat anywhere in the world.",
+        "category": "Payments"
+      },
+      "15": {
+        "title": "Liquid Assets: Spending Bitcoin Like Fiat in Seconds",
+        "excerpt": "Instant settlements meet global liquidity. Spend your digital wealth without waiting or hassle.",
+        "category": "Wealth"
+      },
+      "16": {
+        "title": "Elite Scale: The $100 Billion Opportunity for Partners",
+        "excerpt": "Why Pintopay Partner status is your ticket to the largest wealth transfer in human history.",
+        "category": "Partnership"
+      },
+      "17": {
+        "title": "The Passive Engine: Lifetime Income from Innovation",
+        "excerpt": "How to stop trading time for money and start receiving a steady income by sharing the future of finance.",
+        "category": "Income"
+      },
+      "18": {
+        "title": "Viral Studios: The Unfair Advantage of PRO Subscription",
+        "excerpt": "Unlock automated 24/7 marketing tools that sell for you. This is how the elite network grows.",
+        "category": "PRO Benefits"
+      },
+      "19": {
+        "title": "Pintopay Sovereignty: Designing Your Global Empire",
+        "excerpt": "Take control of your destiny using the perfect bridge between traditional finance and the decentralized future.",
+        "category": "Vision"
+      }
+    },
+    "content": {
+      "p1": "In a world where borders are becoming increasingly tangible, digital freedom is not just a luxury, but a necessity. Traditional financial systems are stuck in the last century, offering slow settlements and endless bureaucracy.",
+      "p2": "We believe in a future without intermediaries. Our mission is to provide every partner with the tools to achieve true sovereignty. With Pintopay, you are not just a user, you are part of a global decentralized infrastructure.",
+      "p3": "Evolution is inevitable. Those who adapt today will lead tomorrow. Start building your empire now using the best fintech solutions on the market."
+    },
+    "navigation": {
+      "back": "Back",
+      "next": "Next",
+      "prev": "Previous",
+      "forward": "Next Article",
+      "search_placeholder": "Search insights...",
+      "no_results": "No results found",
+      "no_results_desc": "Try adjusting your search or filters.",
+      "featured": "Featured",
+      "support_article": "Tap to support article"
+    },
+    "marketing": {
+      "get_card": "Get Your Pintopay Card 💳",
+      "upgrade_pro": "Upgrade to PRO Status 🚀",
+      "spend_everywhere": "Spend crypto everywhere in 180+ countries.",
+      "unlock_tools": "Unlock viral marketing tools."
+    }
+  },
+  "referral_matrix": {
+    "title": "Network Hierarchy",
+    "total_depth": "Matrix Depth: 9 Levels",
+    "nine_level": "9-Level Network Matrix",
+    "partners_suffix": "Partners",
+    "xp_info": "You earn XP from every active partner in your 9-level matrix.",
+    "send_viral": "Send Premium Viral Card"
+  }
+}

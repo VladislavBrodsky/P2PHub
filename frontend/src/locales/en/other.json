@@ -1,0 +1,23 @@
+{
+  "community": {
+    "title": "Collective Intelligence",
+    "subtitle": "Join the Global Syndicate",
+    "join_btn": "Enter Discord",
+    "members": "Elite Members"
+  },
+  "leaderboard": {
+    "title": "Elite Leaderboard",
+    "subtitle": "Global Performance Ranking",
+    "rank_label": "Rank",
+    "user_label": "Operator",
+    "score_label": "Network Strength"
+  },
+  "earn_header": {
+    "title": "Reward Engine",
+    "subtitle": "Monetize Your Influence"
+  },
+  "level_100": {
+    "title": "Apex Sovereign",
+    "desc": "Total automation, total freedom."
+  }
+}

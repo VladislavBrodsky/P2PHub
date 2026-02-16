@@ -1,0 +1,127 @@
+{
+  "dashboard": {
+    "hero_badge": "Partner Network 2.0",
+    "hero_rotation": {
+      "0": {
+        "title_1": "Slow Money Is Dead",
+        "title_2": "Welcome to the Web3 Era"
+      },
+      "1": {
+        "title_1": "Together,",
+        "title_2": "We Build a Brand That Unites"
+      },
+      "2": {
+        "title_1": "Financial Freedom",
+        "title_2": "Through Velocity"
+      }
+    },
+    "hero_desc": "Traditional finance is slow, closed, and failing. <1>Pintopay</1> is the bridge to a borderless era where you earn from the flow of world money.",
+    "movement_active": "Movement active",
+    "cta_title": "Become a partner\nand lead the change",
+    "cta_desc": "Don't just watch the future unfold. Own a piece of the new global financial infrastructure.",
+    "stats": {
+      "global_partners": "Global partners",
+      "volume_shifted": "Volume shifted",
+      "countries_active": "countries active",
+      "recent_join": "<0>+{{count}} new partners</0> joined the movement in the last 60m"
+    },
+    "ticker": [
+      "EARN PINTOPAY TOKENS",
+      "GLOBAL PAYMENTS",
+      "INSTANT WITHDRAWALS",
+      "BECOME A PARTNER",
+      "$1+ PER MIN 24/7"
+    ]
+  },
+  "stats": {
+    "title": "Analytics Node",
+    "subtitle": "Deep Data Insights",
+    "charts": {
+      "growth": "Network Growth",
+      "rewards": "Reward Velocity",
+      "activity": "Activity Index"
+    }
+  },
+  "onboarding": {
+    "welcome": "Welcome to Pintopay Partner",
+    "early": "You're among the first!",
+    "join": "Join the revolution",
+    "start": "Initialize Your Path",
+    "stories": [
+      {
+        "title": "Era of Speed",
+        "desc": "Traditional finance is slow and restricted. We are building the bridge to limitless, instant P2P wealth."
+      },
+      {
+        "title": "$1 Strategy",
+        "desc": "Unlock the secret of high-velocity settlements. Every minute matters in the new digital economy."
+      },
+      {
+        "title": "Network Sovereignty",
+        "desc": "Build a multi-level matrix. Your network is your capitalization 5 levels deep of true sovereignty."
+      },
+      {
+        "title": "Ready for Launch",
+        "desc": "Your journey starts now. Expand your perimeter, earn XP, and reach Platinum level excellence."
+      }
+    ],
+    "terms": "By tapping 'Get Started', you confirm you have read and agree to our <1>Terms of Service</1>, <3>Cookie Policy</3> and consent to our <5>Marketing Activities</5>.",
+    "term_1": "Terms of Service",
+    "term_2": "Cookie Policy",
+    "term_3": "Marketing Activities",
+    "get_started": "GET STARTED",
+    "next": "NEXT"
+  },
+  "onboarding_finish": {
+    "title": "SYNC COMPLETE",
+    "desc": "Your node is now active. The market is waiting.",
+    "cta": "Enter Dashboard"
+  },
+  "evolution": {
+    "badge": "Live Evolution",
+    "title": "The Great\nFinancial Shift",
+    "desc": "The world is updating. Transition from physical limits to digital light speed.",
+    "steps": {
+      "0": {
+        "title": "Primal Era",
+        "subtitle": "Traditional Cash",
+        "desc": "Physical, slow, and border-locked. Prone to inflation and theft.",
+        "status": "OBSOLETE",
+        "back_title": "PHYSICAL CURRENCY LIMITS",
+        "back_desc": "Cash served humanity for centuries, but in a digital world, it faces inflation and geographic barriers. The global economy is shifting to more efficient, digital forms of value exchange."
+      },
+      "1": {
+        "title": "Resistance Zone",
+        "subtitle": "TradFi & Cards",
+        "desc": "Hidden fees and 3-5 day delays. You don't own your money.",
+        "status": "VULNERABLE",
+        "back_title": "LEGACY BANKING SYSTEM",
+        "back_desc": "Traditional banking systems built decades ago are often plagued by delays and intermediaries. Modern financial solutions aim to reduce friction, ensuring fast and transparent transactions."
+      },
+      "2": {
+        "title": "Digital Proxy",
+        "subtitle": "Mobile Wallets",
+        "desc": "Apple/Google Pay. Convenient, but still tied to dying banking rails.",
+        "status": "STABLE",
+        "back_title": "GROWTH OF DIGITAL WALLETS",
+        "back_desc": "Mobile payments popularized digital transactions, offering convenience. However, they usually rely on traditional banking rails. The next step is a truly decentralized financial layer."
+      },
+      "3": {
+        "title": "Financial Reset",
+        "subtitle": "Crypto & Web3",
+        "desc": "True ownership and global liquidity 24/7. The bridge to freedom.",
+        "status": "FREEDOM",
+        "back_title": "BLOCKCHAIN REVOLUTION",
+        "back_desc": "Blockchain technology unlocks true digital ownership and global 24/7 liquidity. It's a fundamental shift in how value is stored and transferred, independent of centralized intermediaries."
+      },
+      "4": {
+        "title": "ELITE VELOCITY",
+        "subtitle": "Pintopay QR",
+        "desc": "Instant, global P2P settlements at $1/min speed. The ultimate infrastructure.",
+        "status": "ELITE",
+        "back_title": "GLOBAL P2P NETWORK",
+        "back_desc": "Pintopay leverages the power of decentralized networks for instant, borderless settlements. By participating in the ecosystem, partners contribute to a faster and more inclusive global financial structure."
+      }
+    }
+  }
+}

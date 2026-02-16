@@ -1,0 +1,300 @@
+{
+  "referral": {
+    "title": "Growth & Levels",
+    "members": "Members",
+    "info": "REFERRAL.INFO",
+    "viral": {
+      "hook": "🛑 STOP FEEDING THE BANKS! 🛑",
+      "subtitle": "Earn like a bank. $1 Every Minute. 🚀",
+      "text": "🛑 STOP FEEDING THE BANKS! 🛑\n\nThe world of finance is changing forever. While others lose, the 1% get richer. 🦅\n\nJoin Pintopay Partner Hub and start receiving $1 per minute passive income.\n\n🔥 NO Bureaucracy\n🔥 NO Limits\n🔥 100% Financial Freedom\n\nBuild your empire now. 👇"
+    },
+    "modal": {
+      "invite_image_alt": "Passive Income Empire",
+      "limited_tier": "Limited Tier",
+      "recruit_title": "Assemble Your Inner Circle",
+      "share_telegram": "Share on Telegram",
+      "viral_btn": "Send Card",
+      "share_more": "Share...",
+      "copy_link": "Copy link",
+      "boost_desc": "Each referral boosts your XP and moves you closer to the **Physical Platinum Card**."
+    },
+    "qr": {
+      "title": "Claim Your \nFinancial Sovereignty",
+      "sovereignty": "Financial Sovereignty",
+      "desc": "Earn <1>$1/minute</1> for every active partner. <br />\nBuild your empire now.",
+      "copy": "Copy link",
+      "save": "Save QR"
+    },
+    "widget": {
+      "invite": "Grow Network",
+      "qr": "Show QR"
+    },
+    "levelup": {
+      "title": "NEW LEVEL!",
+      "rank": "Rank",
+      "reached": "Level {{level}} reached",
+      "awesome": "ACTIVATE"
+    },
+    "tree": {
+      "title": "Your partner matrix"
+    },
+    "rewards": {
+      "achievements": "Exclusive achievements",
+      "milestones": "Global goals",
+      "items": {
+        "onboard_1": "Day 1 Vanguard",
+        "streak_3": "3-Day Warrior",
+        "streak_7": "Weekly Elite",
+        "viral_blitz": "Blitz 10 (24h)",
+        "viral_tsunami": "Viral Tsunami",
+        "ref_node": "Active Node",
+        "free_virtual_card": "Free Virtual Card",
+        "ref_star": "Rising Star",
+        "ref_ambassador": "Global Ambassador",
+        "ref_monarch": "Network Monarch",
+        "founder_access": "Founder Access",
+        "silver_badge": "Silver Badge",
+        "fee_discount": "Card Fee -10%",
+        "black_card": "Black Card Readiness",
+        "empire_status": "Empire Status",
+        "platinum_physical": "Platinum Card",
+        "level_elite": "Level {{level}} Elite",
+        "network_pro": "Network Pro",
+        "executive_access": "Executive Access",
+        "director_node": "Director Node",
+        "president_status": "President Status",
+        "global_partner": "Global Partner",
+        "grandmaster": "Grandmaster Status",
+        "vip_status": "VIP Status",
+        "premium_access": "Premium Access",
+        "immortal_tier": "Immortal Tier",
+        "ambassador": "Ambassador Level"
+      },
+      "all_unlocked": "Full Achievement List",
+      "next_milestones": "Next Goals"
+    },
+    "brief": {
+      "btn": "Brief & Terms",
+      "title": "Operational Brief",
+      "guide": "Tactical guide",
+      "read": "Study brief",
+      "goal_title": "Strategic Goal",
+      "goal_desc": "Our mission is to build the largest decentralized ecosystem in the world. <1>Your task:</1> Expand the perimeter, earn XP and unlock <3>streaming liquidity of $1/minute.</3>",
+      "manual_title": "Growth Protocols",
+      "manual_step_1": "Share your unique referral link with potential partners.",
+      "manual_step_2": "Help them activate their account and complete tasks.",
+      "manual_step_3": "Earn XP from every active participant in your 9-level matrix.",
+      "rules_title": "System Code",
+      "rule_1_title": "Zero Tolerance Policy",
+      "rule_1_desc": "Do not spam or invite fake accounts. Our Anti-Bot detector works 24/7. Fake invites will lead to permanent ban.",
+      "rule_2_title": "Quality over quantity",
+      "rule_2_desc": "Focus on active leaders. Inactive accounts lower your network efficiency coefficient.",
+      "antibot_active": "Anomaly Detector (Anti-Bot) Active",
+      "motivation_title": "Why it matters",
+      "motivation_desc": "XP determines your status in the hierarchy. High ranks unlock elite privileges and the legendary Platinum Metal Card. Don't just participate — dominate.",
+      "cta": "RECEIVED. START EXPANSION"
+    }
+  },
+  "network": {
+    "title": "Network Explorer",
+    "subtitle": "Your Global Node Grid",
+    "total_partners": "Total Partners",
+    "active_partners": "Active Nodes",
+    "levels_title": "Matrix Depth",
+    "invite_btn": "Invite New Partner",
+    "share_link": "Copy Referral Link",
+    "scanning": "Scanning Matrix...",
+    "no_partners": "No nodes detected in this sector.",
+    "explorer": {
+      "title": "Network Explorer",
+      "deep_dive": "9-Level Deep Dive",
+      "share_link": "Share Growth Link",
+      "level": "Level {{level}}",
+      "active_partners": "{{count}} Active Partners",
+      "scanning": "Scanning Matrix...",
+      "stats_footer": "Total Network Strength",
+      "quiet_on_level": "Quiet on Level {{level}}",
+      "growth_desc": "Growth is just one invite away. Expand your network to unlock this leaf.",
+      "xp_focus": "XP Focus"
+    }
+  },
+  "tasks": {
+    "title": "Mission Hub",
+    "subtitle": "Earn XP & Rewards",
+    "active_missions": "Active Missions",
+    "available": "Available",
+    "all_clear_title": "All missions completed!",
+    "all_clear_desc": "New tasks will appear soon.",
+    "verifying": "Verifying...",
+    "in_progress": "In Progress",
+    "progress": "Progress",
+    "claim": "Claim XP",
+    "start": "Initiate Mission",
+    "status": "Status",
+    "level_short": "Lvl.",
+    "pro_multiplier": "Bonus x5 XP",
+    "telegram_bot": {
+      "title": "Open Pintopay Bot",
+      "desc": "Start your journey with the official bot."
+    },
+    "academy_basics": {
+      "title": "Complete 3 Academy Stages",
+      "desc": "Master the basics and earn your first badges."
+    },
+    "read_blog": {
+      "title": "Read Strategy Article",
+      "desc": "Unlock viral growth secrets in our blog."
+    },
+    "banking_app": {
+      "title": "Join Super App",
+      "desc": "Connect to the future of finance."
+    },
+    "community_chat": {
+      "title": "Tactical Chat",
+      "desc": "Sync with partners and exchange strategies."
+    },
+    "ambassador_hub": {
+      "title": "Command Center",
+      "desc": "Priority instructions and system updates."
+    },
+    "invite_1_friend": {
+      "title": "Invite 1 Friend",
+      "desc": "Your first step to building a network."
+    },
+    "invite_3_friends": {
+      "title": "Invite 3 Friends",
+      "desc": "Create your network for Level 2."
+    },
+    "invite_5_friends": {
+      "title": "Assemble a Five",
+      "desc": "Expand your circle to 5 partners."
+    },
+    "daily_checkin_5": {
+      "title": "5 Days Streak",
+      "desc": "Enter the app 5 days in a row."
+    },
+    "invite_10_friends": {
+      "title": "Network Builder",
+      "desc": "Expand your team to 10 partners."
+    },
+    "invite_25_friends": {
+      "title": "Community Leader",
+      "desc": "Lead a team of 25 partners."
+    },
+    "invite_50_friends": {
+      "title": "Influencer Status",
+      "desc": "Grow your network to 50 partners."
+    },
+    "invite_100_friends": {
+      "title": "Viral Master",
+      "desc": "Reach 100 direct referrals."
+    },
+    "invite_250_friends": {
+      "title": "Great Connector",
+      "desc": "Build a massive network of 250 partners."
+    },
+    "invite_500_friends": {
+      "title": "Network Legend",
+      "desc": "Reach the ultimate goal: 500 referrals."
+    }
+  },
+  "milestones": {
+    "title": "Path to Elite",
+    "subtitle": "Your Journey to Sovereignty",
+    "level": "Level",
+    "12": "Pioneer Badge",
+    "24": "Ambassador Status",
+    "35": "500 XP Boost",
+    "44": "10% Card Discount",
+    "56": "Black Physical Card",
+    "68": "VIP Support",
+    "80": "Elite Dashboard",
+    "92": "Founder Access",
+    "100": "Platinum Metal Card",
+    "part_label": "Part {{part}}",
+    "tier_1": "Tier 1: Foundation",
+    "tier_2": "Tier 2: Momentum",
+    "tier_3": "Tier 3: Elite",
+    "tier_4": "Tier 4: Legend",
+    "tier_5": "Tier 5: Immortality",
+    "progression_phase": "Progression Phase"
+  },
+  "ranks": {
+    "Beginner": "Beginner",
+    "Novice": "Novice",
+    "Apprentice": "Apprentice",
+    "Contributor": "Contributor",
+    "Pioneer": "Pioneer",
+    "Pathbreaker": "Pathbreaker",
+    "Adventurer": "Adventurer",
+    "Voyager": "Voyager",
+    "Ambassador": "Ambassador",
+    "Leader": "Leader",
+    "Senior Leader": "Senior Leader",
+    "Executive": "Executive",
+    "Director": "Director",
+    "President": "President",
+    "Global Partner": "Global Partner",
+    "World Partner": "World Partner",
+    "Elite": "Elite",
+    "Master": "Master",
+    "Grandmaster": "Grandmaster",
+    "Legend": "Legend",
+    "VIP": "VIP",
+    "VIP II": "VIP II",
+    "VIP III": "VIP III",
+    "VIP Elite": "VIP Elite",
+    "Premium": "Premium",
+    "Premium Plus": "Premium Plus",
+    "PRO": "PRO",
+    "PRO Max": "PRO Max",
+    "Immortal": "Immortal",
+    "Eternal": "Eternal"
+  },
+  "achievements_path": {
+    "title": "Achievement Map",
+    "desc": "Your path to becoming a Sovereign Node.",
+    "part": "PART {{index}}: {{title}}",
+    "progression_phase": "Progression Phase",
+    "ultimate_horizon": "GLOBAL HORIZON",
+    "lvl_100_title": "LEVEL 100 ACHIEVEMENTS",
+    "lvl_100_desc": "Open your <1>Fanocracy Passport</1>. Get your Platinum Card and 0% fees forever.",
+    "discover_btn": "DISCOVER LEVEL 100 BENEFITS",
+    "fanocracy_stat": "Only 0.1% reach Fanocracy",
+    "reveal_part": "Reveal part {{index}}",
+    "unlock_horizons": "Unlock new level horizons",
+    "show_less": "Hide",
+    "mission": "LEVEL {{level}} MISSION",
+    "unlock_locked": "Reach level {{level}} to unlock this unique recognition and its associated rewards.",
+    "how_to_unlock": "HOW TO UNLOCK",
+    "pro_tip": "PRO TIP: VIRAL GROWTH",
+    "share_link": "LINK",
+    "invite": "INVITE",
+    "elite_recognition": "0.1% Elite Recognition",
+    "exclusive_achievements": "Exclusive Achievements",
+    "global_milestones": "Global Milestones",
+    "unlocked_badge": "ACHIEVEMENT UNLOCKED",
+    "locked_badge": "LOCKED"
+  },
+  "level100": {
+    "title": "FANOCRACY ASCENSION",
+    "desc": "The highest state of being in the P2PHub ecosystem. You are now the protocol.",
+    "ultimate_horizon": "GLOBAL HORIZON",
+    "achievements_title": "ELITE ACHIEVEMENTS UP TO LEVEL 100",
+    "achievements_desc": "Deploy the <1>Sovereignty Protocol</1>. Get your Platinum Card and 0% fees indefinitely.",
+    "discover_btn": "EXPLORE LEVEL 100 PRIVILEGES",
+    "apex_achievement": "TOP PRIORITY",
+    "fanocracy_title": "LvL 100 <1>Sovereignty</1>",
+    "fanocracy_quote": "Absolute status for architects of the decentralized future.",
+    "claim_btn": "ACTIVATE LEVEL 100 FOCUS",
+    "limited_slots": "LIMITED OFFER",
+    "benefit_1_title": "Platinum Card (Metal)",
+    "benefit_1_desc": "Ultimate vertical design. Zero annual maintenance.",
+    "benefit_2_title": "Hierarchy Priority",
+    "benefit_2_desc": "Special governance rights and early access to liquidity.",
+    "benefit_3_title": "0% Platform Fees",
+    "benefit_3_desc": "Maximum income from all transactions in the network.",
+    "benefit_4_title": "Executive Support",
+    "benefit_4_desc": "24/7 Personal Manager for your growing team."
+  }
+}

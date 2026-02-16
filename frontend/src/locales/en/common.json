@@ -1,0 +1,116 @@
+{
+  "common": {
+    "dashboard": "Dashboard",
+    "academy": "Influence",
+    "wallet": "Wallet",
+    "connect_wallet": "Connect",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "back": "Back",
+    "copy": "Copy",
+    "copied": "Copied",
+    "show_more": "Show more",
+    "show_less": "Collapse",
+    "unlock_at": "Unlocks at level",
+    "pro_active": "PRO Active",
+    "menu": "Menu",
+    "lvl": "Lvl",
+    "tap_to_flip": "TAP TO FLIP",
+    "upgrade_pro": "Upgrade to PRO",
+    "unlock_rewards": "Unlock 2x Rewards & Bonuses",
+    "download_asset": "Download Prototype",
+    "retry": "Retry",
+    "view_all": "View All",
+    "error": "Error",
+    "success": "Success",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "menu": {
+    "home": "Home",
+    "cards": "Cards",
+    "partner": "Partner",
+    "league": "League",
+    "earn": "Earn",
+    "pro": "PRO",
+    "academy": "Academy",
+    "community": "Community",
+    "blog": "Blog",
+    "support": "Support",
+    "faq": "FAQ",
+    "legal": "Legal"
+  },
+  "nav": {
+    "home": "Home",
+    "cards": "Cards",
+    "partner": "Partner",
+    "league": "League",
+    "earn": "Earn"
+  },
+  "cta": {
+    "upgrade_pro": "UPGRADE TO PRO",
+    "get_started": "GET STARTED",
+    "learn_more": "LEARN MORE",
+    "join_now": "JOIN NOW"
+  },
+  "waiting": {
+    "title": "PENDING VALIDATION",
+    "desc": "Your request is being processed through the blockchain nodes."
+  },
+  "legal": {
+    "title": "Legal Protocols",
+    "tos": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "aml": "AML Compliance",
+    "footer": "© 2026 P2PHub Global Infrastructure"
+  },
+  "system": {
+    "loading": {
+      "finalizing": "Finalizing UI...",
+      "config_loaded": "Config Loaded",
+      "ready": "Interface Ready"
+    },
+    "coming_soon": {
+      "title": "Coming Soon",
+      "desc": "We're building something amazing for our partners. Stay tuned!"
+    }
+  },
+  "support": {
+    "title": "Support Center",
+    "subtitle": "24/7 Priority Assistance",
+    "description": "Our elite agents are standing by to assist you with any technical or protocol-related issues.",
+    "contact_us": "Contact Support",
+    "tg_support": "Telegram Support",
+    "email_support": "Email Support",
+    "working_hours": "Operational Hours: 24/7",
+    "priority_access": "PRO Priority Access Active",
+    "ticket_system": "Submit Ticket",
+    "feedback": {
+      "title": "Feedback & Ideas",
+      "desc": "Help us evolve the protocol. Your input directly influences our roadmap.",
+      "btn": "Submit Feedback"
+    },
+    "links": {
+      "official_channel": "Official Channel",
+      "community_chat": "Community Chat",
+      "twitter": "X (Twitter)",
+      "announcements": "Announcements"
+    }
+  },
+  "faq": {
+    "title": "Intelligence Base (FAQ)",
+    "subtitle": "Knowledge is Power",
+    "search_placeholder": "Search the knowledge base...",
+    "categories": {
+      "general": "General",
+      "rewards": "Rewards & XP",
+      "pro": "PRO Membership",
+      "cards": "P2P Cards",
+      "security": "Security"
+    }
+  }
+}

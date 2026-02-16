@@ -261,73 +261,67 @@ export const ProDashboard = () => {
             <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(30,58,138,0.15)_0%,transparent_50%)] pointer-events-none" />
             <div className="relative z-10 max-w-5xl mx-auto px-4 pt-6 pb-24">
                 {/* Header Section */}
-                <div className="flex flex-col gap-4 mb-6">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                                <motion.div
-                                    animate={{ rotate: [0, 10, -10, 0] }}
-                                    transition={{ duration: 4, repeat: Infinity }}
-                                    className="w-12 h-12 rounded-2xl vibing-blue-animated flex items-center justify-center text-white shadow-3xl shadow-indigo-500/40 relative group"
-                                >
-                                    <div className="absolute inset-0 bg-white/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                                    <Zap size={24} className="relative z-10" />
-                                </motion.div>
-                                <div className="space-y-0.5">
-                                    <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center gap-2">
-                                        PRO <span className="text-indigo-600 dark:text-indigo-500">Node</span>
-                                    </h1>
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">{t('pro_dashboard.status_online')}</span>
-                                    </div>
-                                </div>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                    <div className="flex items-center gap-3">
+                        <motion.div
+                            animate={{ rotate: [0, 10, -10, 0] }}
+                            transition={{ duration: 4, repeat: Infinity }}
+                            className="w-10 h-10 rounded-xl vibing-blue-animated flex items-center justify-center text-white shadow-2xl shadow-indigo-500/30 relative"
+                        >
+                            <Zap size={20} className="relative z-10" />
+                        </motion.div>
+                        <div className="space-y-0">
+                            <h1 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center gap-2">
+                                PRO <span className="text-indigo-600 dark:text-indigo-500">Node</span>
+                            </h1>
+                            <div className="flex items-center gap-1.5">
+                                <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                                <span className="text-[8px] font-bold text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">{t('pro_dashboard.status_online')}</span>
                             </div>
-                        </div>
-
-                        <div className="flex items-center gap-3 p-1.5 bg-white dark:bg-white/5 backdrop-blur-3xl rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-3xl">
-                            <div className="flex items-center gap-3 px-5 py-3 rounded-[1.5rem] bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 group hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-all cursor-default">
-                                <Trophy size={18} className="text-indigo-600 dark:text-indigo-400" />
-                                <div className="flex flex-col">
-                                    <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] leading-none mb-1">XP Points</span>
-                                    <span className="text-xl font-black text-slate-900 dark:text-white tabular-nums leading-none tracking-tight">{academyScore}</span>
-                                </div>
-                            </div>
-                            <button
-                                onClick={() => setShowSetup(true)}
-                                className="p-3.5 bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 rounded-[1.5rem] border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20 transition-all group active:scale-95"
-                            >
-                                <Settings size={18} className="text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white group-hover:rotate-45 transition-all duration-500" />
-                            </button>
                         </div>
                     </div>
 
-                    <div className="flex p-2 bg-slate-900/50 backdrop-blur-3xl rounded-[2.5rem] border border-white/10 shadow-inner relative group/nav">
-                        {(['studio', 'tools', 'growth'] as const).map((tab) => (
-                            <button
-                                key={tab}
-                                onClick={() => { selection(); setActiveTab(tab); impact('light'); }}
-                                className={`flex-1 relative py-4 sm:py-5 rounded-[2rem] text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500 ${activeTab === tab ? 'text-white' : 'text-slate-500 hover:text-slate-300'
-                                    }`}
-                            >
-                                {activeTab === tab && (
-                                    <motion.div
-                                        layoutId="activeTab"
-                                        className="absolute inset-0 vibing-blue-animated rounded-[2rem] shadow-2xl shadow-indigo-500/20"
-                                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                                    />
-                                )}
-                                <span className="relative z-10 flex items-center justify-center gap-2">
-                                    {tab === 'studio' && <Cpu size={14} className={activeTab === tab ? 'animate-pulse' : ''} />}
-                                    {tab === 'tools' && <Settings size={14} />}
-                                    {tab === 'growth' && <Users size={14} />}
-                                    <span className="hidden sm:inline">{t(`pro_dashboard.tab_${tab}`)}</span>
-                                </span>
-                            </button>
-                        ))}
+                    <div className="flex items-center gap-2 p-1 bg-white/50 dark:bg-white/5 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+                        <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100/50 dark:border-indigo-500/20">
+                            <Trophy size={14} className="text-indigo-600 dark:text-indigo-400" />
+                            <div className="flex flex-col">
+                                <span className="text-[8px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest leading-none mb-0.5">XP</span>
+                                <span className="text-base font-black text-slate-900 dark:text-white tabular-nums leading-none">{academyScore}</span>
+                            </div>
+                        </div>
+                        <button
+                            onClick={() => setShowSetup(true)}
+                            className="p-2.5 bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 rounded-xl border border-slate-200 dark:border-white/5 transition-all group active:scale-90"
+                        >
+                            <Settings size={14} className="text-slate-500 dark:text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                        </button>
                     </div>
                 </div>
 
+                <div className="flex p-1 bg-white dark:bg-slate-900/50 backdrop-blur-3xl rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm relative group/nav">
+                    {(['studio', 'tools', 'growth'] as const).map((tab) => (
+                        <button
+                            key={tab}
+                            onClick={() => { selection(); setActiveTab(tab); impact('light'); }}
+                            className={`flex-1 relative py-3 rounded-[1.25rem] transition-all duration-500 ${activeTab === tab ? 'text-white' : 'text-slate-400 dark:text-slate-500 hover:text-indigo-500'
+                                }`}
+                        >
+                            {activeTab === tab && (
+                                <motion.div
+                                    layoutId="activeTab"
+                                    className="absolute inset-0 vibing-blue-animated rounded-[1.125rem] shadow-xl shadow-indigo-500/20"
+                                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                />
+                            )}
+                            <span className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
+                                {tab === 'studio' && <Cpu size={activeTab === tab ? 14 : 12} className={activeTab === tab ? 'animate-pulse' : ''} />}
+                                {tab === 'tools' && <Settings size={activeTab === tab ? 14 : 12} />}
+                                {tab === 'growth' && <Users size={activeTab === tab ? 14 : 12} />}
+                                <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest">{t(`pro_dashboard.tab_${tab}`)}</span>
+                            </span>
+                        </button>
+                    ))}
+                </div>
                 <div className="relative min-h-[500px]">
                     <AnimatePresence mode="wait">
                         {activeTab === 'studio' && (
@@ -396,6 +390,6 @@ export const ProDashboard = () => {
                 impact={impact}
                 copyText={handleCopyAnyText}
             />
-        </div>
+        </div >
     );
 };

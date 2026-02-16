@@ -2,8 +2,45 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-import en from './locales/en.json';
-import ru from './locales/ru.json';
+import enCommon from './locales/en/common.json';
+import enDashboard from './locales/en/dashboard.json';
+import enMarketing from './locales/en/marketing.json';
+import enAcademy from './locales/en/academy.json';
+import enPro from './locales/en/pro.json';
+import enSocial from './locales/en/social.json';
+import enCards from './locales/en/cards.json';
+import enOther from './locales/en/other.json';
+
+import ruCommon from './locales/ru/common.json';
+import ruDashboard from './locales/ru/dashboard.json';
+import ruMarketing from './locales/ru/marketing.json';
+import ruAcademy from './locales/ru/academy.json';
+import ruPro from './locales/ru/pro.json';
+import ruSocial from './locales/ru/social.json';
+import ruCards from './locales/ru/cards.json';
+import ruOther from './locales/ru/other.json';
+
+const en = {
+    ...enCommon,
+    ...enDashboard,
+    ...enMarketing,
+    ...enAcademy,
+    ...enPro,
+    ...enSocial,
+    ...enCards,
+    ...enOther
+};
+
+const ru = {
+    ...ruCommon,
+    ...ruDashboard,
+    ...ruMarketing,
+    ...ruAcademy,
+    ...ruPro,
+    ...ruSocial,
+    ...ruCards,
+    ...ruOther
+};
 
 i18n
     // detect user language
