@@ -2,7 +2,12 @@ import { motion } from 'framer-motion';
 
 export const RevealSkeleton = () => {
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-(--color-bg-app) z-[60] backdrop-blur-sm">
+        <div
+            className="fixed inset-0 flex items-center justify-center bg-(--color-bg-app) z-[60] backdrop-blur-sm"
+            role="status"
+            aria-live="polite"
+            aria-busy="true"
+        >
             {/* Ambient Background Glow */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] max-w-[500px] max-h-[500px] bg-blue-500/10 rounded-full blur-[120px] animate-pulse" />
@@ -13,16 +18,14 @@ export const RevealSkeleton = () => {
                 <div className="relative w-20 h-20">
                     {/* Outer Vibing Ring */}
                     <motion.span
-                        className="absolute inset-0 rounded-full border-[3px] border-transparent border-t-blue-500 border-r-purple-500"
-                        style={{ filter: 'drop-shadow(0 0 10px rgba(59, 130, 246, 0.3))' }}
+                        className="absolute inset-0 rounded-full border-[3px] border-transparent border-t-blue-500 border-r-purple-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]"
                         animate={{ rotate: 360 }}
                         transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
                     />
 
                     {/* Middle Ring - Slower & Counter-rotating */}
                     <motion.span
-                        className="absolute inset-3 rounded-full border-[3px] border-transparent border-b-indigo-400 border-l-cyan-400"
-                        style={{ filter: 'drop-shadow(0 0 8px rgba(34, 211, 238, 0.3))' }}
+                        className="absolute inset-3 rounded-full border-[3px] border-transparent border-b-indigo-400 border-l-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]"
                         animate={{ rotate: -360 }}
                         transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
                     />
@@ -46,7 +49,7 @@ export const RevealSkeleton = () => {
                     className="mt-8 overflow-hidden"
                 >
                     <motion.div
-                        className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 via-indigo-400 to-purple-400 font-bold text-xs tracking-[0.3em] uppercase"
+                        className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 via-indigo-400 to-purple-400 font-bold text-xs tracking-[0.3em] uppercase bg-size-[200%_auto]"
                         animate={{
                             backgroundPosition: ['0% center', '200% center']
                         }}
@@ -55,7 +58,6 @@ export const RevealSkeleton = () => {
                             repeat: Infinity,
                             ease: "linear"
                         }}
-                        style={{ backgroundSize: '200% auto' }}
                     >
                         Loading Hub
                     </motion.div>
