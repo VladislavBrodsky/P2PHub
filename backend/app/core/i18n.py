@@ -73,69 +73,7 @@ MESSAGES = {
         "viral_share_caption": (
             "🛑 STOP FEEDING THE BANKS! \n"
             "Join FinTech Partner Network and earn like a bank. $1 Every Minute"
-        ),
-        "btn_open_app": "🚀 Open App",
-        "btn_share_link": "📲 Share Link (Immediate)",
-        "btn_send_card": "💎 Send Premium Card",
-        "btn_join_community": "📢 Join Community",
-        "btn_super_app": "💎 Pintopay Super App",
-        "inline_title_elite": "💎 Elite Invitation",
-        "inline_desc_elite": "Share your $1/minute strategy",
-        "inline_title_viral": "🚀 Viral Strategy",
-        "inline_btn_join": "🤝 Join Partner Club",
-        "support_welcome": (
-            "🌟 *PINTOPAY CUSTOMER CARE*\n\n"
-            "How can we improve your experience today?\n"
-            "Select a category below for instant instructions and 5-star support."
-        ),
-        "verification_step": (
-            "📝 *Verification Step*\n\n"
-            "Please paste the *Transaction Hash* (TX ID) of your payment below. "
-            "I will verify it on the TON blockchain immediately."
-        ),
-        "verifying": "⏳ *Verifying transaction...* Please wait a moment.",
-        "pro_success": (
-            "🎉 *WELCOME TO PRO!*\n\n"
-            "Your payment has been verified. You now have full access to all premium features!"
-        ),
-        "pro_failed": (
-            "❌ *Verification Failed*\n\n"
-            "I couldn't find a matching transaction for this hash, or your payment session has expired (10 min limit).\n\n"
-            "If you just paid, wait 30 seconds and try again. If the session expired, please start a new one."
-        ),
-        "pro_try_again": "🔄 Try Again",
-        "next_step": "What would you like to do next?",
-        "pro_upgrade_text": (
-            "👑 *UPGRADE TO PRO*\n\n"
-            "Unlock the full potential of Pintopay:\n"
-            "• 9-Level Affiliate System\n"
-            "• X5 XP Multiplier\n"
-            "• Priority Payouts\n"
-            "• VIP Support\n\n"
-            "💰 *Price:* {amount_ton} TON (~$39)\n"
-            "⏳ *Valid for:* 10 minutes\n\n"
-            "Please send the exact amount to the address below:"
-        ),
-        "network_stats": (
-            "🌳 *Your Referral Network*\n"
-            "Total Partners: *{total}*\n\n"
-            "{levels}"
-        ),
-        "network_empty": "\n_You haven't invited anyone yet. Share your link to start earning!_",
-        "btn_pay": "💎 Pay {amount} TON",
-        "btn_verify": "✅ Verify Payment",
-        "btn_cancel": "❌ Cancel",
-        "sup_cat_cards": "💳 Cards",
-        "sup_cat_setup": "🚀 Setup",
-        "sup_cat_topup": "💰 Top-up",
-        "sup_cat_mobile": "📲 Mobile",
-        "sup_cat_pro": "💎 PRO",
-        "sup_cat_partner": "🤝 Partner",
-        "sup_cat_safety": "🔒 Safety",
-        "sup_cat_trading": "⚡ Trading",
-        "sup_cat_vip": "☎️ VIP VIP",
-        "sup_instr_header": "Quick Instructions:",
-        "sup_need_help": "💡 *Need more help?* Just reply to this message and our Expert AI Support Team will assist you instantly!"
+        )
     },
     "ru": {
         "welcome": (
@@ -211,57 +149,7 @@ MESSAGES = {
         "viral_share_caption": (
             "🛑 STOP FEEDING THE BANKS! 🛑\n"
             "Зарабатывай как банк. $1 каждую минуту. 🚀"
-        ),
-        "btn_open_app": "🚀 Открыть приложение",
-        "btn_share_link": "📲 Поделиться ссылкой",
-        "btn_send_card": "💎 Отправить карту",
-        "btn_join_community": "📢 Сообщество",
-        "btn_super_app": "💎 Pintopay Super App",
-        "inline_title_elite": "💎 Элитное приглашение",
-        "inline_desc_elite": "Поделись стратегией $1/минута",
-        "inline_title_viral": "🚀 Виральная стратегия",
-        "inline_btn_join": "🤝 Стать партнером",
-        "support_welcome": (
-            "🌟 *ПОДДЕРЖКА PINTOPAY*\n\n"
-            "Как мы можем помочь вам сегодня?\n"
-            "Выберите категорию ниже для получения инструкций и поддержки."
-        ),
-        "verification_step": (
-            "📝 *Шаг верификации*\n\n"
-            "Пожалуйста, вставьте *Хеш транзакции* (TX ID) вашего платежа ниже. "
-            "Я немедленно проверю его в блокчейне TON."
-        ),
-        "verifying": "⏳ *Проверка транзакции...* Пожалуйста, подождите.",
-        "pro_success": (
-            "🎉 *ДОБРО ПОЖАЛОВАТЬ В PRO!*\n\n"
-            "Ваш платеж подтвержден. Теперь у вас есть полный доступ ко всем премиум-функциям!"
-        ),
-        "pro_failed": (
-            "❌ *Ошибка верификации*\n\n"
-            "Я не смог найти транзакцию с таким хешем или время сессии истекло (лимит 10 мин).\n\n"
-            "Если вы только что оплатили, подождите 30 секунд и попробуйте снова. Если сессия истекла, начните новую."
-        ),
-        "pro_try_again": "🔄 Попробовать снова",
-        "next_step": "Что бы вы хотели сделать дальше?",
-        "pro_upgrade_text": (
-            "👑 *ПЕРЕХОД НА PRO*\n\n"
-            "Откройте все возможности Pintopay:\n"
-            "• 9-уровневая партнерская система\n"
-            "• Множитель XP x5\n"
-            "• Приоритетные выплаты\n"
-            "• VIP-поддержка\n\n"
-            "💰 *Цена:* {amount_ton} TON (~$39)\n"
-            "⏳ *Действительно:* 10 минут\n\n"
-            "Пожалуйста, отправьте точную сумму на адрес ниже:"
-        ),
-        "network_stats": (
-            "🌳 *Ваша партнерская сеть*\n"
-            "Всего партнеров: *{total}*\n\n"
-            "{levels}"
-        ),
-        "network_empty": "\n_Вы еще никого не пригласили. Поделитесь ссылкой, чтобы начать зарабатывать!_",
-        "sup_instr_header": "Краткие инструкции:",
-        "sup_need_help": "💡 *Нужна помощь?* Просто ответьте на это сообщение, и наша AI-поддержка поможет вам мгновенно!"
+        )
     }
 }
 

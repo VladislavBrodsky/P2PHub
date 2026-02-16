@@ -37,16 +37,30 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
 
     // Fetch posts from backend
     const fetchPosts = useCallback(async (reset: boolean = false) => {
-        setIsLoading(true);
-        try {
-            const currentOffset = reset ? 0 : posts.length;
-            const data = await blogService.getPosts({
-                offset: currentOffset,
-                limit: 10,
-                category: selectedCategory,
-                q: searchQuery
-            });
+        const options = {
+            offset: reset ? 0 : posts.length,
+            limit: 10,
+            category: selectedCategory,
+            q: searchQuery
+        };
 
+        // If reset (initial load or search change), check cache first to avoid flicker
+        if (reset) {
+            const cached = blogService.getPostsSync(options);
+            if (cached) {
+                setPosts(cached.items);
+                setTotal(cached.total);
+                setIsLoading(false);
+                // We still fetch in background to refresh data, but don't set isLoading(true)
+            } else {
+                setIsLoading(true);
+            }
+        } else {
+            setIsLoading(true);
+        }
+
+        try {
+            const data = await blogService.getPosts(options);
             if (reset) {
                 setPosts(data.items);
             } else {
@@ -61,12 +75,16 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
     }, [selectedCategory, searchQuery, posts.length]);
 
     useEffect(() => {
+        // Debounce only when searching to avoid jitter, fetch immediately otherwise
+        const delay = searchQuery ? 500 : 0;
+
         const timer = setTimeout(() => {
             fetchPosts(true).then(() => {
                 // Background prefetch after initial load
                 if (posts.length > 0) blogService.prefetchNext(posts);
             });
-        }, 500);
+        }, delay);
+
         return () => clearTimeout(timer);
     }, [selectedCategory, searchQuery, fetchPosts]);
 
@@ -96,8 +114,18 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
 
     const handlePostClick = useCallback(async (post: BlogPost & BlogEngagement) => {
         selection();
-        setSelectedPost(post);
-        setIsLoadingEngagement(true);
+
+        // Instant navigation if in cache
+        const cached = blogService.getDetailSync(post.id);
+        if (cached) {
+            setSelectedPost(cached);
+            setEngagement({ likes: cached.likes, liked: cached.liked });
+            setIsLoadingEngagement(false);
+        } else {
+            setSelectedPost(post);
+            setIsLoadingEngagement(true);
+        }
+
         try {
             // Fetch full content and fresh engagement
             const detail = await blogService.getPostDetail(post.id);
@@ -748,7 +776,8 @@ const MarkdownRenderer = memo(({ content }: { content: string }) => {
             cleanContent = lines.slice(firstLineIndex + 1).join('\n').trim();
         }
 
-        const blocks = cleanContent.split(/\n+/);
+        // Split by newlines, but ALSO split by headers that might be joined to the end of a line (lookahead)
+        const blocks = cleanContent.split(/\n+|(?=###\s)|(?=##\s)/);
 
         return blocks.map((block, index) => {
             const trimmed = block.trim();
@@ -799,7 +828,18 @@ MarkdownRenderer.displayName = 'MarkdownRenderer';
 
 // Enhanced regex parser for markdown
 function processMarkdown(text: string): string {
+    if (!text) return '';
+
     return text
+        // Fix for missing spaces around headers if they were concatenated
+        .replace(/([^\n])(###\s)/g, '$1\n\n$2')
+        .replace(/([^\n])(##\s)/g, '$1\n\n$2')
+
+        // Fix for missing spaces around bold text
+        // Only add space if it's not already there and not at start/end of string
+        .replace(/(\S)\*\*/g, '$1 **')
+        .replace(/\*\*(\S)/g, '** $1')
+
         // Fix for bold text that might cover entire lines:
         // Identify **text** patterns
         .replace(/\*\*\*\*(.*?)\*\*\*\*/g, '<strong>$1</strong>')
@@ -807,8 +847,12 @@ function processMarkdown(text: string): string {
         .replace(/__([^_]+)__/g, '<strong>$1</strong>')
         .replace(/_(.*?)_/g, '<em>$1</em>')
         .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+
         // Special CTA button - Allow spaces
         .replace(/\[CTA:\s*(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="inline-block my-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-black uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-blue-500/30 no-underline">$1</a>')
         // Standard links - Allow spaces
-        .replace(/\[(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="text-blue-500 hover:text-blue-600 font-bold underline decoration-2 underline-offset-2 transition-colors">$1</a>');
+        .replace(/\[(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="text-blue-500 hover:text-blue-600 font-bold underline decoration-2 underline-offset-2 transition-colors">$1</a>')
+
+        // Clean up any double spaces introduced by the bold fix
+        .replace(/\s{2,}/g, ' ');
 }

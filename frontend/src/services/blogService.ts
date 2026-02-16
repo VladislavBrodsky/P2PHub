@@ -70,6 +70,16 @@ export const blogService = {
         }
     },
 
+    // Synchronous check for UI to avoid flickers
+    getPostsSync: (options: { offset?: number; limit?: number; category?: string; q?: string } = {}): BlogListResponse | null => {
+        const cacheKey = JSON.stringify(options);
+        const cached = cache.posts[cacheKey];
+        if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
+            return cached.data;
+        }
+        return null;
+    },
+
     getPostDetail: async (slug: string): Promise<BlogPost & BlogEngagement & { content: string }> => {
         const cached = cache.details[slug];
         if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
@@ -87,6 +97,14 @@ export const blogService = {
             console.error('Failed to fetch blog post detail', error);
             throw error;
         }
+    },
+
+    getDetailSync: (slug: string): (BlogPost & BlogEngagement & { content: string }) | null => {
+        const cached = cache.details[slug];
+        if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
+            return cached.data;
+        }
+        return null;
     },
 
     // Background prefetcher to make transitions feel instant

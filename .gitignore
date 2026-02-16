@@ -56,3 +56,10 @@ coverage/
 .turbo/
 .vercel/
 *.log
+frontend/public/favicon.webp
+frontend/src/assets/avatars/
+frontend/src/assets/logo.webp
+frontend/src/assets/.SHIT_avatars/
+frontend/public/.SHIT_favicon.webp
+frontend/public_EPERM_SHIT/
+frontend/build.log

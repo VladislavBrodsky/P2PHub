@@ -870,6 +870,12 @@ body {
   font-weight: 700;
 }
 
+.branding-liquid-gradient {
+  background: linear-gradient(135deg, #2563EB 0%, #3B82F6 25%, #60A5FA 50%, #3B82F6 75%, #1D4ED8 100%);
+  background-size: 300% 300%;
+  animation: vibing-gradient 4s ease-in-out infinite;
+}
+
 .vibing-crystal-text {
   background: linear-gradient(135deg, #0066FF 0%, #3B82F6 20%, #FFFFFF 40%, #60A5FA 60%, #FFFFFF 80%, #0052D9 100%);
   background-size: 300% auto;
