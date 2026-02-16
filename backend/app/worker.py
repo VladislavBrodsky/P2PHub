@@ -17,9 +17,9 @@ result_backend = RedisAsyncResultBackend(
 broker.with_result_backend(result_backend)
 
 # 3. Validation Middleware
-# Optimized Core: Validation ensures that all tasks are type-safe via Pydantic.
-from taskiq.middlewares.pydantic_middleware import PydanticMiddleware
-broker.add_middleware(PydanticMiddleware())
+# Note: TaskIQ 0.12+ handles Pydantic validation natively for type-hinted tasks.
+# The separate PydanticMiddleware is no longer required or available in this version.
+# broker.add_middlewares([]) 
 
 # 4. Scheduler (for Cron jobs like daily stats reset)
 scheduler = TaskiqScheduler(
