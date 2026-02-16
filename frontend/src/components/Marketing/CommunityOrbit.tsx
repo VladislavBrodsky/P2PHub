@@ -230,7 +230,11 @@ const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: num
 
     useEffect(() => {
         if (item.type === 'avatar' && itemSrc) {
-            ImageCacheService.fetchAndCache(itemSrc).then(setCachedSrc);
+            if (itemSrc.startsWith('data:')) {
+                setCachedSrc(itemSrc);
+            } else {
+                ImageCacheService.fetchAndCache(itemSrc).then(setCachedSrc);
+            }
         }
     }, [item.type, itemSrc]);
 
