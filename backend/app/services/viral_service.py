@@ -478,11 +478,33 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         )
 
     async def _get_viral_text_content(self, system_prompt: str, user_prompt: str) -> tuple[dict[str, Any] | None, tuple[int, str] | int]:
+        """
+        Generate viral text content. 
+        Strategy: Try Gemini first (free, 1500 req/day), fallback to OpenAI if needed.
+        """
+        # STRATEGY 1: Try Gemini 2.0 Flash first (FREE tier, excellent quality)
+        if self.genai_client:
+            try:
+                logger.info("🚀 Using Gemini 2.0 Flash for text generation (primary, free tier)...")
+                gemini_response = self.genai_client.models.generate_content(
+                    model='gemini-2.0-flash-exp',  # Updated to correct latest model
+                    contents=f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}",
+                    config=genai_types.GenerateContentConfig(
+                        response_mime_type='application/json',
+                        temperature=0.7
+                    )
+                )
+                logger.info("✅ Gemini 2.0 Flash succeeded!")
+                return json.loads(gemini_response.text), 0
+            except Exception as gemini_e:
+                logger.warning(f"⚠️ Gemini 2.0 Flash failed ({type(gemini_e).__name__}): {str(gemini_e)[:200]}")
+                logger.info("🔄 Falling back to OpenAI GPT-4o-mini...")
+        
+        # STRATEGY 2: Fallback to OpenAI (if Gemini failed or unavailable)
+        if not self.openai_client:
+            return None, (ViralStudioErrorCode.OPENAI_AUTH_ERROR, "Both Gemini and OpenAI unavailable")
+        
         try:
-            if not self.openai_client:
-                return None, (ViralStudioErrorCode.OPENAI_AUTH_ERROR, "OpenAI client not initialized")
-
-            # Try OpenAI first with High Standard Model
             response = await self.openai_client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
@@ -492,33 +514,21 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                 response_format={"type": "json_object"}
             )
             tokens = response.usage.total_tokens if response.usage else 0
+            logger.info(f"✅ OpenAI GPT-4o-mini succeeded! (tokens: {tokens})")
             return json.loads(response.choices[0].message.content), tokens
         except Exception as e:
             err_msg = str(e)
             logger.error(f"❌ ViralStudio [OpenAI Error]: {err_msg}")
             
+            # Determine specific error code
             error_code = ViralStudioErrorCode.OPENAI_AUTH_ERROR if "auth" in err_msg.lower() or "401" in err_msg else \
                          ViralStudioErrorCode.OPENAI_RATE_LIMIT if "rate" in err_msg.lower() or "429" in err_msg else \
                          ViralStudioErrorCode.OPENAI_QUOTA_EXCEEDED if "quota" in err_msg.lower() or "insufficient" in err_msg.lower() else \
                          ViralStudioErrorCode.GENERIC_GENERATION_FAILED
-
-            if self.genai_client:
-                try:
-                    logger.info("🔄 Switching to Gemini 1.5 Flash for text generation (OpenAI failed)...")
-                    gemini_response = self.genai_client.models.generate_content(
-                        model='gemini-1.5-flash',
-                        contents=f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}",
-                        config=genai_types.GenerateContentConfig(
-                            response_mime_type='application/json',
-                            temperature=0.7
-                        )
-                    )
-                    return json.loads(gemini_response.text), 0
-                except Exception as gemini_e:
-                    logger.error(f"❌ ViralStudio [Gemini Fallback Failed]: {gemini_e}")
-                    return None, (ViralStudioErrorCode.GEMINI_TEXT_FAILED, f"OpenAI: {err_msg} | Gemini: {gemini_e}")
             
-            return None, (error_code, err_msg)
+            # Both failed
+            gemini_status = "unavailable" if not self.genai_client else "failed (see logs above)"
+            return None, (ViralStudioErrorCode.GEMINI_TEXT_FAILED, f"Gemini: {gemini_status} | OpenAI: {err_msg}")
 
     async def _get_viral_image_content(self, partner_id: int, target_audience: str, post_type: str, prompt: str) -> str | None:
         if not self.genai_client:
