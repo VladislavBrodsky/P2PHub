@@ -1,7 +1,8 @@
-import sys
+import json
 import os
 import re
-import json
+import sys
+
 
 def aggressive_polish(text):
     """
@@ -80,7 +81,7 @@ def aggressive_polish(text):
 
 def process_file(filepath, dict_name):
     if not os.path.exists(filepath): return
-    with open(filepath, 'r') as f:
+    with open(filepath) as f:
         content = f.read()
     start_match = re.search(rf'{dict_name} = \{{', content)
     if not start_match: return

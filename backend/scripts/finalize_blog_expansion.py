@@ -2,6 +2,7 @@ import os
 import subprocess
 import sys
 
+
 def run_command(cmd, cwd=None):
     print(f"Running: {cmd}")
     result = subprocess.run(cmd, shell=True, cwd=cwd, capture_output=True, text=True)
@@ -12,7 +13,7 @@ def run_command(cmd, cwd=None):
     return result.returncode == 0
 
 def finalize_blog():
-    base_dir = os.getcwd()
+    os.getcwd()
     
     print("--- Stage 1: Polishing Content ---")
     run_command("python3 backend/scripts/sanitize_blog.py")

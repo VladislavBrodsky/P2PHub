@@ -4,18 +4,21 @@ import os
 import secrets
 import sys
 from datetime import datetime
-from sqlmodel import select, SQLModel
+
+from sqlmodel import SQLModel, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 # Add backend to path to import app and scripts/data
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from app.models.blog import BlogPost, BlogPostEngagement
-from app.models.partner import get_session, async_session_maker, engine
+import re
+
 from data.blog_content_en import BLOG_CONTENT_EN
 from data.blog_content_ru import BLOG_CONTENT_RU
-import re
+
+from app.models.blog import BlogPost, BlogPostEngagement
+from app.models.partner import async_session_maker, engine, get_session
 
 # Hardcoded blog post slugs and basic info
 BLOG_POSTS_INFO = [
@@ -54,9 +57,9 @@ async def migrate():
     # Load locales
     base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     try:
-        with open(os.path.join(base_path, "frontend/src/locales/en/marketing.json"), "r") as f:
+        with open(os.path.join(base_path, "frontend/src/locales/en/marketing.json")) as f:
             en = json.load(f)
-        with open(os.path.join(base_path, "frontend/src/locales/ru/marketing.json"), "r") as f:
+        with open(os.path.join(base_path, "frontend/src/locales/ru/marketing.json")) as f:
             ru = json.load(f)
     except FileNotFoundError:
         print("Locale files not found, using empty dicts for metadata")
@@ -67,7 +70,7 @@ async def migrate():
     ru_posts = ru.get("blog", {}).get("posts", {})
 
     # Sync any missing metadata from contents to locales first
-    for slug in BLOG_CONTENT_EN.keys():
+    for slug in BLOG_CONTENT_EN:
         if int(slug) < 20: continue
         if slug not in en_posts:
             # Try to extract title/excerpt
@@ -81,7 +84,7 @@ async def migrate():
                     "category": "Intelligence Hub" # Default, will be updated by loop
                 }
     
-    for slug in BLOG_CONTENT_RU.keys():
+    for slug in BLOG_CONTENT_RU:
         if int(slug) < 20: continue
         if slug not in ru_posts:
             text = BLOG_CONTENT_RU[slug]

@@ -189,7 +189,6 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
         return () => clearTimeout(tmaTimeout);
     }, [updateProgress]);
 
-    // Handle Back Button state based on active tab
     useEffect(() => {
         if (!isTMA()) return;
 
@@ -211,7 +210,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
         return () => {
             if (cleanup) cleanup();
         };
-    }, [activeTab]);
+    }, [activeTab, navigateTo]);
 
     // We no longer return null here to ensure the TMA SDK initialization and other effects
     // always run correctly. Instead, the UI is controlled by visibility.
@@ -288,8 +287,8 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                     {['coming_soon'].includes(activeTab) && (
                         <div className="flex flex-col items-center justify-center text-center px-10 h-full">
                             <div className="text-4xl mb-4">🚀</div>
-                            <h2 className="text-2xl font-black mb-2 uppercase">{t('system.coming_soon.title')}</h2>
-                            <p className="text-slate-500 dark:text-slate-400 font-medium">
+                            <h2 className="text-2xl font-black mb-2 uppercase text-(--color-text-primary)">{t('system.coming_soon.title')}</h2>
+                            <p className="text-(--color-text-secondary) font-medium">
                                 {t('system.coming_soon.desc')}
                             </p>
                         </div>
@@ -307,7 +306,6 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
 }
 
 function App() {
-    const { t } = useTranslation();
     const { isLoading: isConfigLoading } = useConfig();
     const { progress, status, isComplete, complete, updateProgress } = useStartupProgress();
 

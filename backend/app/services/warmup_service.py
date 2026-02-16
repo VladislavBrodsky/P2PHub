@@ -20,7 +20,7 @@ async def warmup_redis():
     is_locked = await redis_service.client.set(lock_key, "1", ex=600, nx=True)
     
     if not is_locked:
-        logger.info("ℹ️ Redis Warmup already in progress by another worker. Skipping...")
+        logger.info("[INFO] Redis Warmup already in progress by another worker. Skipping...")
         return
 
     logger.info("🔥 Starting Redis Warmup...")

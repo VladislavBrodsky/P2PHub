@@ -343,43 +343,16 @@ class SupportAgentService:
 
         try:
             session = await self.get_session(user_id)
-            
-            # #comment: Update session with latest user metadata (if provided)
             if user_metadata:
                 session["user_metadata"] = user_metadata
             
-            # 1. Search Knowledge Base (FAQ + Google Sheet)
             kb_context, detected_category = await self._search_knowledge_base(message)
-            
-            # #comment: Update session category if a specific one was found (and not just General)
             if detected_category and detected_category != "General":
                 session["category"] = detected_category
             
-            # 2. Build messages for LLM
-            # #comment: Inject Rich User Context into System Prompt
-            user_context_str = "Unknown User"
-            if user_metadata:
-                user_context_str = (
-                    f"User: {user_metadata.get('first_name', '')} {user_metadata.get('last_name', '')} "
-                    f"(@{user_metadata.get('username', 'N/A')})\n"
-                    f"Level: {user_metadata.get('level', 1)}\n"
-                    f"Balance: {user_metadata.get('balance', 0.0)} USDT"
-                )
-            
-            # #comment: Add Tactical Recommendation based on user stats
-            tactical_advice = ""
-            if user_metadata:
-                level = user_metadata.get("level", 1)
-                balance = user_metadata.get("balance", 0.0)
-                if level < 5:
-                    tactical_advice = f"\n💡 **TACTICAL RECOMMENDATION**: Current level is {level}. Advise the user to invite 5 more partners to unlock Level 5 benefits, which include 2x transaction rewards and priority support."
-                elif balance < 10:
-                    tactical_advice = f"\n💡 **TACTICAL RECOMMENDATION**: Liquidity is low ({balance} USDT). Suggest a TRC20 top-up to ensure their Virtual Card remains active for global transactions."
-
-            # #comment: Add Intelligence context for PRO members
-            pro_context = ""
-            if user_metadata and user_metadata.get("is_pro"):
-                pro_context = "--- ELITE USER STATUS ---\nYou are talking to a PRO MEMBER. Focus on high-level strategy, multi-tier growth, and maximize their perceived status. Be even more deferential and helpful."
+            user_context_str = self._build_user_context(user_metadata)
+            tactical_advice = self._build_tactical_advice(user_metadata)
+            pro_context = "--- ELITE USER STATUS ---\nYou are talking to a PRO MEMBER. Focus on high-level strategy..." if user_metadata and user_metadata.get("is_pro") else ""
 
             system_msg = (
                 f"{self.SYSTEM_PROMPT}\n\n"
@@ -389,17 +362,11 @@ class SupportAgentService:
             )
             
             messages = [{"role": "system", "content": system_msg}]
-            
-            # History window (last 10 messages)
-            relevant_history = session.get("history", [])[-10:]
-            for m in relevant_history:
-                # Filter out metadata from history messages for LLM
-                messages.append({"role": m["role"], "content": m["content"]})
-                
+            # #comment: Fixed PERF401 by using list comprehension
+            messages.extend([{"role": m["role"], "content": m["content"]} for m in session.get("history", [])[-10:]])
             messages.append({"role": "user", "content": message})
 
             response = await self.openai_client.chat.completions.create(
-                # #comment: Switched to gpt-4o-mini for hyper-speed and efficiency
                 model="gpt-4o-mini",
                 messages=messages,
                 temperature=0.6,
@@ -407,29 +374,10 @@ class SupportAgentService:
             )
             answer = response.choices[0].message.content
             
-            # #comment: Calculate cost for this turn
             usage = response.usage
-            cost = 0.0
-            if usage:
-                cost = (usage.prompt_tokens / 1_000_000 * self.COST_INPUT_1M) + \
-                       (usage.completion_tokens / 1_000_000 * self.COST_OUTPUT_1M)
+            cost = (usage.prompt_tokens / 1_000_000 * self.COST_INPUT_1M) + (usage.completion_tokens / 1_000_000 * self.COST_OUTPUT_1M) if usage else 0.0
 
-            # Update local history with cost tracking
-            session["history"].append({"role": "user", "content": message, "timestamp": datetime.utcnow().isoformat()})
-            session["history"].append({
-                "role": "assistant", 
-                "content": answer, 
-                "timestamp": datetime.utcnow().isoformat(),
-                "cost": cost
-            })
-            
-            # Accumulate total session cost
-            session["total_cost"] = session.get("total_cost", 0.0) + cost
-            
-            # Trim history to prevent memory bloat (keep last 50 messages = 25 turns)
-            if len(session["history"]) > 50:
-                session["history"] = session["history"][-50:]
-                
+            self._update_session_history(session, message, answer, cost)
             await self.update_session(user_id, session)
 
             sentry_sdk.add_breadcrumb(
@@ -495,28 +443,15 @@ class SupportAgentService:
                     if word in self._kb_index:
                         candidate_indices.update(self._kb_index[word])
                 
-                scored_matches = []
-                # Only score the candidate records (massive speedup for large KB)
-                for idx in candidate_indices:
-                    r = records[idx]
-                    q_text_set = set(str(r.get('Question', '')).lower().split())
-                    overlap = len(set(query_words).intersection(q_text_set))
-                    if overlap > 0:
-                        scored_matches.append((overlap, f"Q: {r.get('Question')}\nA: {r.get('Answer')}", r.get('Category', 'General')))
-                
-                # Sort and take top 3
+                scored_matches = self._score_kb_records(records, candidate_indices, query_words)
                 scored_matches.sort(key=lambda x: x[0], reverse=True)
                 top_matches = scored_matches[:3]
-                matches = [m[1] for m in top_matches]
                 
                 if top_matches:
+                    gs_info = "\n\n".join([m[1] for m in top_matches])
                     best_category = top_matches[0][2]
-
-                if matches:
-                    gs_info = "\n\n".join(matches)
                 else:
                     gs_info = "No specific match found in KB. Use general knowledge."
-                    best_category = "General"
 
         # 3. Inject Fallback Checklists (Enabling 5-Star Service reliability)
         fallback_data = self.FALLBACK_INSTRUCTIONS.get(best_category, [])
@@ -538,6 +473,54 @@ class SupportAgentService:
         )
 
         return final_context, best_category
+
+    def _build_user_context(self, user_metadata: dict[str, Any] | None) -> str:
+        """Constructs a descriptive string of the user's profile."""
+        if not user_metadata:
+            return "Unknown User"
+        return (
+            f"User: {user_metadata.get('first_name', '')} {user_metadata.get('last_name', '')} "
+            f"(@{user_metadata.get('username', 'N/A')})\n"
+            f"Level: {user_metadata.get('level', 1)}\n"
+            f"Balance: {user_metadata.get('balance', 0.0)} USDT"
+        )
+
+    def _build_tactical_advice(self, user_metadata: dict[str, Any] | None) -> str:
+        """Generates strategic suggestions based on user stats."""
+        if not user_metadata:
+            return ""
+        level = user_metadata.get("level", 1)
+        balance = user_metadata.get("balance", 0.0)
+        if level < 5:
+            return f"\n💡 **TACTICAL RECOMMENDATION**: Current level is {level}. Advise the user to invite 5 more partners to unlock Level 5 benefits."
+        if balance < 10:
+            return f"\n💡 **TACTICAL RECOMMENDATION**: Liquidity is low ({balance} USDT). Suggest a TRC20 top-up."
+        return ""
+
+    def _update_session_history(self, session: dict, message: str, answer: str, cost: float):
+        """Appends new messages and cost to session history, maintaining size limits."""
+        now = datetime.utcnow().isoformat()
+        session["history"].append({"role": "user", "content": message, "timestamp": now})
+        session["history"].append({
+            "role": "assistant", 
+            "content": answer, 
+            "timestamp": now,
+            "cost": cost
+        })
+        session["total_cost"] = session.get("total_cost", 0.0) + cost
+        if len(session["history"]) > 50:
+            session["history"] = session["history"][-50:]
+
+    def _score_kb_records(self, records: list, indices: set, query_words: list) -> list:
+        """Scores candidate KB records based on keyword overlap."""
+        matches = []
+        for idx in indices:
+            r = records[idx]
+            q_text_set = set(str(r.get('Question', '')).lower().split())
+            overlap = len(set(query_words).intersection(q_text_set))
+            if overlap > 0:
+                matches.append((overlap, f"Q: {r.get('Question')}\nA: {r.get('Answer')}", r.get('Category', 'General')))
+        return matches
         
 
 

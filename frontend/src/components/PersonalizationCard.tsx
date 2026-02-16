@@ -63,8 +63,8 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             className={`${variant === 'compact' ? 'h-14 w-14 rounded-xl' : 'h-16 w-16 rounded-2xl'} overflow-hidden border-2 border-(--color-border-glass) bg-(--color-bg-app) shadow-premium transition-all duration-300 relative will-change-transform z-10`}
                         >
                             {(isUserLoading || (user?.photo_url && !imageLoaded)) && (
-                                <div className="absolute inset-0 bg-slate-800 dark:bg-slate-900 animate-pulse flex items-center justify-center">
-                                    <User size={variant === 'compact' ? 24 : 32} className="text-slate-700 animate-pulse" />
+                                <div className="absolute inset-0 bg-(--btn-secondary-bg) animate-pulse flex items-center justify-center">
+                                    <User size={variant === 'compact' ? 24 : 32} className="text-(--color-text-secondary) animate-pulse" />
                                 </div>
                             )}
 
@@ -80,7 +80,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     height={variant === 'compact' ? 56 : 64}
                                 />
                             ) : !isUserLoading && ( // Added !isUserLoading condition
-                                <div className="h-full w-full flex items-center justify-center bg-slate-800 text-slate-400">
+                                <div className="h-full w-full flex items-center justify-center bg-(--btn-secondary-bg) text-(--color-text-secondary)">
                                     <User size={variant === 'compact' ? 24 : 32} />
                                 </div>
                             )}

@@ -1,4 +1,3 @@
-from typing import List
 
 import taskiq_fastapi
 from taskiq import TaskiqScheduler

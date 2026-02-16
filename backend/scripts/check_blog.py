@@ -1,7 +1,10 @@
 import asyncio
+
+from sqlmodel import func, select
+
 from app.models.blog import BlogPost
 from app.models.partner import async_session_maker
-from sqlmodel import select, func
+
 
 async def check():
     async with async_session_maker() as s:

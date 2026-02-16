@@ -100,7 +100,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                         exit={{ opacity: 0, pointerEvents: 'none' }}
                         transition={{ duration: 0.15 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/30 backdrop-blur-[2px] cursor-pointer pointer-events-auto"
+                        className="fixed inset-0 bg-(--overlay-bg) backdrop-blur-[2px] cursor-pointer pointer-events-auto"
                     />
 
                     {/* Drawer Content Wrapper */}
@@ -152,13 +152,13 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                         }}
                                         className={`w-full rounded-full py-1.5 px-3 border transition-all ${wallet
                                             ? 'bg-emerald-500 text-white border-transparent'
-                                            : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-md text-slate-900 dark:text-white border-slate-200 dark:border-white/10'}`}
+                                            : 'bg-(--btn-secondary-bg) backdrop-blur-md text-(--color-text-primary) border-(--card-border) hover:bg-(--btn-secondary-hover)'}`}
                                         aria-label={wallet ? "Wallet connected" : "Connect wallet"}
                                     >
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-2">
                                                 <div className={`p-1 rounded-lg ${wallet ? 'bg-white/20' : 'bg-blue-500/10 border border-blue-500/20'}`}>
-                                                    <Wallet className={`h-3 w-3 ${wallet ? 'text-white' : 'text-blue-500'}`} />
+                                                    <Wallet className={`h-3 w-3 ${wallet ? 'text-white' : 'text-(--color-brand-blue)'}`} />
                                                 </div>
                                                 <div className="text-left">
                                                     <div className="text-[7px] font-black uppercase tracking-widest opacity-70">

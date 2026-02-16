@@ -1,5 +1,6 @@
-import re
 import json
+import re
+
 
 def aggressive_polish(text):
     # 1. Try to extract from JSON if it looks like a parse error block

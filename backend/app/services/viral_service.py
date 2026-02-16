@@ -7,13 +7,6 @@ from datetime import datetime
 from typing import Any, ClassVar, Optional
 
 import gspread
-from google import genai as google_genai
-from google.genai import types as genai_types
-from google.oauth2.service_account import Credentials
-from openai import AsyncOpenAI
-from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
-
 from app.core.cmo_intelligence import (
     AudienceProfile,
     ContentCategory,
@@ -25,6 +18,12 @@ from app.core.cmo_intelligence import (
 from app.core.config import settings
 from app.core.errors import ViralStudioErrorCode, get_error_msg
 from app.models.partner import Partner
+from google import genai as google_genai
+from google.genai import types as genai_types
+from google.oauth2.service_account import Credentials
+from openai import AsyncOpenAI
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
 
@@ -301,147 +300,16 @@ Use FRESH, audience-specific language that feels authentic.
 
         ref_link = referral_link or f"https://t.me/pintopaybot?start={partner.referral_code}"
         
-        # === ELITE CMO INTELLIGENCE SYSTEM ===
-        # Load audience psychology and content strategy
-        audience_intel = AudienceProfile.PROFILES.get(target_audience, {})
-        category_strategy = ContentCategory.STRATEGIES.get(post_type, {})
-        language_dna = NativeLanguageOptimization.LANGUAGE_DNA.get(language, {})
+        intel = self._build_audience_intel(target_audience, post_type, language)
         best_practices = await KnowledgeInsights.get_best_practices(session)
         
-        # Build audience-specific psychological context
-        psycho_context = ""
-        if audience_intel:
-            psycho = audience_intel.get("psychographics", {})
-            tov = audience_intel.get("tov", {})
-            
-            psycho_context = f"""
-**AUDIENCE DEEP DIVE: {target_audience}**
-Pain Points: {', '.join(psycho.get('pain_points', [])[:3])}
-Desires: {', '.join(psycho.get('desires', [])[:3])}
-Values: {', '.join(psycho.get('values', []))}
-Language Style: {tov.get('style', 'Professional')}
-Formality: {tov.get('formality', 'Balanced')}
-Power Words: {', '.join(tov.get('power_words', [])[:5])}
-Emojis: {tov.get('emojis', '🚀')}
-Sentence Structure: {tov.get('sentence_length', 'Varied')}
-Key Triggers: {', '.join(psycho.get('triggers', [])[:3])}
-"""
-        
-        # Build category-specific strategy
-        strategy_context = ""
-        if category_strategy:
-            technique = category_strategy.get("technique", CopywritingTechnique.AIDA)
-            structure = category_strategy.get("structure", {})
-            triggers = category_strategy.get("psychological_triggers", [])
-            formatting = category_strategy.get("formatting_rules", {})
-            
-            strategy_context = f"""
-**CONTENT STRATEGY: {post_type}**
-Copywriting Framework: {technique}
-Structure: 
-  - Hook: {structure.get('hook', 'Attention-grabbing')}
-  - Body: {structure.get('body', 'Value-driven')}
-  - Close: {structure.get('close', 'Strong CTA')}
-Psychological Triggers to Activate: {', '.join(triggers[:4])}
-Bold Text For: {', '.join(formatting.get('bold', [])[:3]) if isinstance(formatting.get('bold'), list) else 'Key benefits, stats, CTAs'}
-Italic Text For: {', '.join(formatting.get('italic', [])[:2]) if isinstance(formatting.get('italic'), list) else 'Subtle emphasis'}
-]]Hyperlink Strategy: {', '.join(formatting.get('hyperlink', [])[:2]) if isinstance(formatting.get('hyperlink'), list) else 'Primary CTA in final paragraph'}
-"""
-        
-        # Build native language optimization
-        lang_context = f"""
-**NATIVE {language.upper()} MASTERY:**
-Rhythm: {language_dna.get('rhythm', 'Natural flow')}
-Cultural References: {language_dna.get('cultural_refs', 'Relevant to market')}
-Idioms to Consider: {', '.join(language_dna.get('idioms', [])[:3])}
-Formatting Style: {language_dna.get('formatting', 'Clean and professional')}
-Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
-"""
-        
-        # Build comprehensive system prompt
-        system_prompt = f"""{self.CMO_PERSONA}
-
-{psycho_context}
-
-{strategy_context}
-
-{lang_context}
-
-{self.FORMATTING_MASTERY}
-
-{self.TEXT_RULES}
-
-**UNIVERSAL BEST PRACTICES:**
-{chr(10).join(['- ' + rule for rule in best_practices['universal_rules'][:8]])}
-
-**YOUR TASK:**
-Write in {language} for {target_audience} using the {post_type} strategy.
-Product: Pintopay Crypto Card + Partner Network
-Referral Link (MUST INCLUDE): {ref_link}
-
-**OUTPUT FORMAT (JSON ONLY):**
-{{
-  "title": "Viral headline <15 words",
-  "body": "Full post with **bold**, _italic_, and [hyperlink]({ref_link}) formatting",
-  "hashtags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "image_description": "Detailed scene description for Nano Banana Pro (4K cinematic)"
-}}
-"""
-        
-        # Refined user prompt leveraging hooks from knowledge base
-        hook_examples = audience_intel.get("hooks", []) if audience_intel else []
-        
-        user_prompt = f"""
-EXECUTE CMO AGENT MODE.
-
-Target: {target_audience}
-Category: {post_type}
-Language: {language} (write as NATIVE speaker)
-Referral Link: {ref_link}
-
-**HOOK INSPIRATION (adapt, don't copy):**
-{chr(10).join(['- ' + hook for hook in hook_examples[:2]])}
-
-**CONTENT REQUIREMENTS:**
-1. First sentence MUST stop the scroll (<10 words, shocking or curious)
-2. Tell a micro-story or present a problem they FEEL
-3. Weave in Pintopay Card as the natural solution (not pushy)
-4. Include ONE specific number/stat for credibility
-5. Use psychological triggers: {', '.join(category_strategy.get('psychological_triggers', ['FOMO', 'Social Proof'])[:3])}
-6. Format with <b>bold</b> (4-6x), <i>italic</i> (2-3x), and <a href='{ref_link}'>descriptive link</a> in CTA
-7. End with compelling CTA using this link: {ref_link}
-8. Write 3-5 short paragraphs (1-3 sentences each)
-9. Add 3-5 trending hashtags for {target_audience}
-
-**IMAGE DESCRIPTION:**
-Describe a Nano Banana Pro-quality (4K) cinematic scene:
-- Real person from {target_audience} demographic
-- Emotional moment related to {post_type}
-- Setting: Ultra-modern 2026, luxury lifestyle or digital workspace
-- Mood: Success, transformation, financial freedom
-- Technical: Professional photography, natural lighting, sharp detail
-
-RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
-"""
-
-        generation_start = datetime.utcnow()
-        tokens_openai = 0
-
-        # Construction of the Image Prompt Template (to allow parallel start)
-        # Enhanced for Gemini 3 Pro (Nano Banana Pro) reasoning capabilities
-        base_image_prompt = (
-            f"PROFESSIONAL STUDIO PHOTOGRAPHY - NANO BANANA PRO QUALITY: A real person from {target_audience}, "
-            f"captured in an authentic, high-fidelity cinematic moment for '{post_type}'. "
-            f"The scene must be grounded in realism with complex lighting, shallow depth of field, and 4K detail. "
-            f"Subject: {target_audience} expressing peak success/transformation. "
-            f"Setting: Ultra-modern 2026 digital infrastructure or luxury lifestyle environment. "
-            f"Atmosphere: Sophisticated, authoritative, financial freedom. "
-            f"Technical specs: 35mm lens, sharp focus, natural skin textures, volumetric lighting. "
-            f"Creative Rule: Render 'Pintopay Partner Club' or '{post_type.replace('_', ' ').title()}' as high-quality text within the scene (e.g., on a screen, card, or ambient display). "
-            f"Text MUST relate to the viral hook or CTA. SPELLING MUST BE PERFECT. "
-            f"NEGATIVE PROMPT: cartoon, CGI, anime, illustration, stock photo smile, distorted faces, extra limbs, blurry, "
-            f"futuristic sci-fi, neon lights, flying cars, unrealistic proportions, oversaturated colors, generic poses, misspelled text, gibberish text"
+        system_prompt = self._build_viral_system_prompt(
+            target_audience, post_type, language, ref_link, intel, best_practices
         )
+        user_prompt = self._build_viral_user_prompt(
+            target_audience, post_type, language, ref_link, intel
+        )
+        base_image_prompt = self._build_viral_image_prompt(target_audience, post_type)
 
         async def get_text_content():
             try:
@@ -650,6 +518,134 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         except Exception as e:
             logger.error(f"Error in viral generation: {e}")
             return {"error": str(e)}
+
+    def _build_audience_context(self, target_audience: str, audience_intel: dict) -> str:
+        if not audience_intel:
+            return ""
+        psycho = audience_intel.get("psychographics", {})
+        tov = audience_intel.get("tov", {})
+        return f"""
+**AUDIENCE DEEP DIVE: {target_audience}**
+Pain Points: {', '.join(psycho.get('pain_points', [])[:3])}
+Desires: {', '.join(psycho.get('desires', [])[:3])}
+Values: {', '.join(psycho.get('values', []))}
+Language Style: {tov.get('style', 'Professional')}
+Formality: {tov.get('formality', 'Balanced')}
+Power Words: {', '.join(tov.get('power_words', [])[:5])}
+Emojis: {tov.get('emojis', '🚀')}
+Sentence Structure: {tov.get('sentence_length', 'Varied')}
+Key Triggers: {', '.join(psycho.get('triggers', [])[:3])}
+"""
+
+    def _build_strategy_context(self, post_type: str, category_strategy: dict) -> str:
+        if not category_strategy:
+            return ""
+        technique = category_strategy.get("technique") or "AIDA"
+        structure = category_strategy.get("structure", {})
+        triggers = category_strategy.get("psychological_triggers", [])
+        formatting = category_strategy.get("formatting_rules", {})
+        return f"""
+**CONTENT STRATEGY: {post_type}**
+Copywriting Framework: {technique}
+Structure: 
+  - Hook: {structure.get('hook', 'Attention-grabbing')}
+  - Body: {structure.get('body', 'Value-driven')}
+  - Close: {structure.get('close', 'Strong CTA')}
+Psychological Triggers to Activate: {', '.join(triggers[:4])}
+Bold Text For: {', '.join(formatting.get('bold', [])[:3]) if isinstance(formatting.get('bold'), list) else 'Key benefits, stats, CTAs'}
+Italic Text For: {', '.join(formatting.get('italic', [])[:2]) if isinstance(formatting.get('italic'), list) else 'Subtle emphasis'}
+Hyperlink Strategy: {', '.join(formatting.get('hyperlink', [])[:2]) if isinstance(formatting.get('hyperlink'), list) else 'Primary CTA in final paragraph'}
+"""
+
+    def _build_language_context(self, language: str, language_dna: dict) -> str:
+        return f"""
+**NATIVE {language.upper()} MASTERY:**
+Rhythm: {language_dna.get('rhythm', 'Natural flow')}
+Cultural References: {language_dna.get('cultural_refs', 'Relevant to market')}
+Idioms to Consider: {', '.join(language_dna.get('idioms', [])[:3])}
+Formatting Style: {language_dna.get('formatting', 'Clean and professional')}
+Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
+"""
+
+    def _build_system_prompt(self, language, target_audience, post_type, ref_link, psycho_context, strategy_context, lang_context, best_practices) -> str:
+        return f"""{self.CMO_PERSONA}
+
+{psycho_context}
+
+{strategy_context}
+
+{lang_context}
+
+{self.FORMATTING_MASTERY}
+
+{self.TEXT_RULES}
+
+**UNIVERSAL BEST PRACTICES:**
+{chr(10).join(['- ' + rule for rule in best_practices['universal_rules'][:8]]) if best_practices and 'universal_rules' in best_practices else ""}
+
+**YOUR TASK:**
+Write in {language} for {target_audience} using the {post_type} strategy.
+Product: Pintopay Crypto Card + Partner Network
+Referral Link (MUST INCLUDE): {ref_link}
+
+**OUTPUT FORMAT (JSON ONLY):**
+{{
+  "title": "Viral headline <15 words",
+  "body": "Full post with **bold**, _italic_, and [hyperlink]({ref_link}) formatting",
+  "hashtags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
+  "image_description": "Detailed scene description for Nano Banana Pro (4K cinematic)"
+}}
+"""
+
+    def _build_user_prompt(self, target_audience, post_type, language, ref_link, audience_intel, category_strategy) -> str:
+        hook_examples = audience_intel.get("hooks", []) if audience_intel else []
+        return f"""
+EXECUTE CMO AGENT MODE.
+
+Target: {target_audience}
+Category: {post_type}
+Language: {language} (write as NATIVE speaker)
+Referral Link: {ref_link}
+
+**HOOK INSPIRATION (adapt, don't copy):**
+{chr(10).join(['- ' + hook for hook in hook_examples[:2]])}
+
+**CONTENT REQUIREMENTS:**
+1. First sentence MUST stop the scroll (<10 words, shocking or curious)
+2. Tell a micro-story or present a problem they FEEL
+3. Weave in Pintopay Card as the natural solution (not pushy)
+4. Include ONE specific number/stat for credibility
+5. Use psychological triggers: {', '.join(category_strategy.get('psychological_triggers', ['FOMO', 'Social Proof'])[:3]) if category_strategy else "FOMO, Social Proof"}
+6. Format with <b>bold</b> (4-6x), <i>italic</i> (2-3x), and <a href='{ref_link}'>descriptive link</a> in CTA
+7. End with compelling CTA using this link: {ref_link}
+8. Write 3-5 short paragraphs (1-3 sentences each)
+9. Add 3-5 trending hashtags for {target_audience}
+
+**IMAGE DESCRIPTION:**
+Describe a Nano Banana Pro-quality (4K) cinematic scene:
+- Real person from {target_audience} demographic
+- Emotional moment related to {post_type}
+- Setting: Ultra-modern 2026, luxury lifestyle or digital workspace
+- Mood: Success, transformation, financial freedom
+- Technical: Professional photography, natural lighting, sharp detail
+
+RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
+"""
+
+    def _build_base_image_prompt(self, target_audience, post_type) -> str:
+        return (
+            f"PROFESSIONAL STUDIO PHOTOGRAPHY - NANO BANANA PRO QUALITY: A real person from {target_audience}, "
+            f"captured in an authentic, high-fidelity cinematic moment for '{post_type}'. "
+            f"The scene must be grounded in realism with complex lighting, shallow depth of field, and 4K detail. "
+            f"Subject: {target_audience} expressing peak success/transformation. "
+            f"Setting: Ultra-modern 2026 digital infrastructure or luxury lifestyle environment. "
+            f"Atmosphere: Sophisticated, authoritative, financial freedom. "
+            f"Technical specs: 35mm lens, sharp focus, natural skin textures, volumetric lighting. "
+            f"Creative Rule: Render 'Pintopay Partner Club' or '{post_type.replace('_', ' ').title()}' as high-quality text within the scene (e.g., on a screen, card, or ambient display). "
+            f"Text MUST relate to the viral hook or CTA. SPELLING MUST BE PERFECT. "
+            f"NEGATIVE PROMPT: cartoon, CGI, anime, illustration, stock photo smile, distorted faces, extra limbs, blurry, "
+            f"futuristic sci-fi, neon lights, flying cars, unrealistic proportions, oversaturated colors, generic poses, misspelled text, gibberish text"
+        )
 
     async def fix_headline(self, headline: str) -> str:
         """
@@ -931,102 +927,88 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         if not partner.telegram_channel_id:
             return {"error": "Telegram Channel ID missing. Please configure it in API Setup."}
         
+        channels = self._prepare_telegram_channels(partner.telegram_channel_id)
+        if not channels:
+            return {"error": "No valid Telegram channels found."}
+
+        formatted_content = self._format_telegram_content(content)
+        results = []
+        
+        full_image_path = self._resolve_image_path(image_path) if image_path else None
+        
+        if full_image_path and os.path.exists(full_image_path):
+            for channel_id in channels:
+                success = await self._send_telegram_photo(channel_id, full_image_path, formatted_content)
+                results.append(f"{'✅' if success else '❌'} {channel_id}")
+        else:
+            if full_image_path:
+                logger.warning(f"⚠️ Image not found at {full_image_path}, sending text only.")
+            for channel_id in channels:
+                success = await self._send_telegram_message(channel_id, formatted_content)
+                results.append(f"{'✅' if success else '❌'} {channel_id}")
+
+        return {
+            "status": "success",
+            "platform": "telegram",
+            "msg": f"Post attempt complete: {', '.join(results)}"
+        }
+
+    def _prepare_telegram_channels(self, channel_id_str: str) -> list[str]:
+        import json
+        channels = []
         try:
-            import json
-            import os
-            import re
-
-            from bot import bot
-
-            # Support multiple channels stored as JSON string
-            channels = []
-            try:
-                if partner.telegram_channel_id.strip().startswith("["):
-                    channels = json.loads(partner.telegram_channel_id)
-                else:
-                    channels = [partner.telegram_channel_id]
-            except:
-                channels = [partner.telegram_channel_id]
-            
-            # Filter empty strings and de-duplicate
-            channels = sorted(list(set([ch.strip() for ch in channels if ch and ch.strip()])))
-            
-            if not channels:
-                return {"error": "No valid Telegram channels found."}
-
-            results = []
-            
-            # Format content for Telegram HTML
-            # Convert **bold** to <b>bold</b>
-            formatted_content = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', content)
-            # Convert _italic_ to <i>italic</i>
-            formatted_content = re.sub(r'_(.*?)_', r'<i>\1</i>', formatted_content)
-            # Convert [text](url) to <a href="url">text</a>
-            formatted_content = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2">\1</a>', formatted_content)
-            
-            if image_path:
-                # Resolve absolute path to image
-                backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-                
-                # #comment: Support for both static assets and AI generated media.
-                if "generated_media" in image_path:
-                    filename = image_path.split("/")[-1]
-                    full_image_path = os.path.join(backend_dir, "generated_media", filename)
-                else:
-                    filename = image_path.lstrip('/').replace("images/", "")
-                    full_image_path = os.path.join(backend_dir, "app_images", filename)
-                
-                if os.path.exists(full_image_path):
-                    from aiogram.types import FSInputFile
-                    
-                    for channel_id in channels:
-                        try:
-                            photo = FSInputFile(full_image_path)
-                            await bot.send_photo(
-                                chat_id=channel_id,
-                                photo=photo,
-                                caption=formatted_content[:1024], # Telegram caption limit
-                                parse_mode="HTML"
-                            )
-                            results.append(f"✅ {channel_id}")
-                        except Exception as e:
-                            logger.error(f"Failed to post to {channel_id}: {e}")
-                            results.append(f"❌ {channel_id}")
-                else:
-                    logger.warning(f"⚠️ Image not found at {full_image_path}, sending text only.")
-                    for channel_id in channels:
-                        try:
-                            await bot.send_message(
-                                chat_id=channel_id,
-                                text=formatted_content[:4096],
-                                parse_mode="HTML"
-                            )
-                            results.append(f"✅ {channel_id}")
-                        except Exception as e:
-                            logger.error(f"Failed to post to {channel_id}: {e}")
-                            results.append(f"❌ {channel_id}")
+            if channel_id_str.strip().startswith("["):
+                channels = json.loads(channel_id_str)
             else:
-                for channel_id in channels:
-                    try:
-                        await bot.send_message(
-                            chat_id=channel_id,
-                            text=formatted_content[:4096],
-                            parse_mode="HTML"
-                        )
-                        results.append(f"✅ {channel_id}")
-                    except Exception as e:
-                        logger.error(f"Failed to post to {channel_id}: {e}")
-                        results.append(f"❌ {channel_id}")
-            
-            return {
-                "status": "success", 
-                "platform": "telegram", 
-                "msg": f"Broadcast complete: {', '.join(results)}",
-                "details": results
-            }
+                channels = [channel_id_str]
+        except Exception:
+            channels = [channel_id_str]
+        return sorted(list(set([ch.strip() for ch in channels if ch and ch.strip()])))
+
+    def _format_telegram_content(self, content: str) -> str:
+        import re
+        content = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', content)
+        content = re.sub(r'_(.*?)_', r'<i>\1</i>', content)
+        content = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2">\1</a>', content)
+        return content
+
+    def _resolve_image_path(self, image_path: str) -> str:
+        import os
+        backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        if "generated_media" in image_path:
+            filename = image_path.split("/")[-1]
+            return os.path.join(backend_dir, "generated_media", filename)
+        filename = image_path.lstrip('/').replace("images/", "")
+        return os.path.join(backend_dir, "app_images", filename)
+
+    async def _send_telegram_photo(self, channel_id: str, image_path: str, content: str) -> bool:
+        from aiogram.types import FSInputFile
+        from bot import bot
+        try:
+            photo = FSInputFile(image_path)
+            await bot.send_photo(
+                chat_id=channel_id,
+                photo=photo,
+                caption=content[:1024],
+                parse_mode="HTML"
+            )
+            return True
         except Exception as e:
-            logger.error(f"❌ Telegram posting failed: {e}")
-            return {"error": f"Telegram API Error: {e!s}"}
+            logger.error(f"Failed to post photo to {channel_id}: {e}")
+            return False
+
+    async def _send_telegram_message(self, channel_id: str, content: str) -> bool:
+        from bot import bot
+        try:
+            await bot.send_message(
+                chat_id=channel_id,
+                text=content[:4096],
+                parse_mode="HTML"
+            )
+            return True
+        except Exception as e:
+            logger.error(f"Failed to post message to {channel_id}: {e}")
+            return False
 
     async def _post_to_linkedin(self, partner: Partner, content: str, image_path: str | None) -> dict[str, Any]:
         if not partner.linkedin_access_token:

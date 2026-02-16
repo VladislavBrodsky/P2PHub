@@ -1,7 +1,8 @@
-import sys
-import os
 import json
+import os
 import re
+import sys
+
 
 def sync_all_locales():
     base_path = os.getcwd()
@@ -14,8 +15,8 @@ def sync_all_locales():
     }
 
     # Extract all titles and excerpts from data files
-    with open(en_file, 'r') as f: en_text = f.read()
-    with open(ru_file, 'r') as f: ru_text = f.read()
+    with open(en_file) as f: en_text = f.read()
+    with open(ru_file) as f: ru_text = f.read()
 
     def get_metadata(text):
         # Entry format: "slug": """# Title\n\nExcerpt\n\nContent"""
@@ -67,7 +68,7 @@ def sync_all_locales():
             print(f"Skipping {lang} - path not found: {path}")
             continue
             
-        with open(path, 'r') as f:
+        with open(path) as f:
             data = json.load(f)
             
         if "blog" not in data: data["blog"] = {}

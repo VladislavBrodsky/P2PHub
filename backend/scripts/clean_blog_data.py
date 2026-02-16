@@ -1,14 +1,15 @@
-import sys
+import json
 import os
 import re
-import json
+import sys
+
 
 def clean_file(filepath, dict_name):
     if not os.path.exists(filepath):
         print(f"File not found: {filepath}")
         return
 
-    with open(filepath, 'r') as f:
+    with open(filepath) as f:
         content = f.read()
 
     # Find the dictionary content

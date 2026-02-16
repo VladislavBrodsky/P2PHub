@@ -30,7 +30,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
         // #comment: Fixed visibility glitch where loader was hardcoded to dark styles only. 
         // Now uses semantic CSS variables (--color-bg-deep, --color-text-primary) to sync perfectly 
         // with both Light and Dark themes. Added transition-colors for a premium fading effect.
-        <div className="fixed inset-0 z-100 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 transition-colors duration-500 overflow-hidden">
+        <div className="fixed inset-0 z-100 flex flex-col items-center justify-center bg-(--color-bg-app) transition-colors duration-500 overflow-hidden">
             {/* #comment: Premium Background Mesh - Adds depth and a "premium" feel using brand-primary 
                 blurs that adapt based on the active theme. */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50">
@@ -69,7 +69,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                 {/* Progress Text - Compact & Refined */}
                 <div className="mt-8 flex flex-col items-center space-y-2">
                     <div className="flex items-baseline space-x-1">
-                        <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter tabular-nums">
+                        <span className="text-3xl font-black text-(--color-text-primary) tracking-tighter tabular-nums">
                             {displayProgress}
                         </span>
                         <span className="text-sm font-bold text-blue-500 opacity-80">%</span>
@@ -77,7 +77,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
 
                     <div className="flex flex-col items-center space-y-1">
                         <motion.p
-                            className="text-slate-900 dark:text-white font-bold tracking-[0.2em] uppercase text-[10px] opacity-90"
+                            className="text-(--color-text-primary) font-bold tracking-[0.2em] uppercase text-[10px] opacity-90"
                             animate={{ opacity: [0.6, 1, 0.6] }}
                             transition={{ duration: 3, repeat: Infinity }}
                         >
@@ -100,11 +100,11 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
             {/* Bottom Branding - Ultra Minimal */}
             <div className="absolute bottom-12 left-0 right-0 flex flex-col items-center">
                 <div className="flex items-center space-x-3 opacity-30 grayscale hover:grayscale-0 transition-all duration-500">
-                    <div className="h-[1px] w-8 bg-linear-to-r from-transparent to-slate-500" />
-                    <span className="text-[9px] font-bold tracking-[0.4em] uppercase text-slate-500 dark:text-slate-400">
+                    <div className="h-[1px] w-8 bg-linear-to-r from-transparent to-(--color-text-secondary)" />
+                    <span className="text-[9px] font-bold tracking-[0.4em] uppercase text-(--color-text-secondary)">
                         Advanced Ecosystem
                     </span>
-                    <div className="h-[1px] w-8 bg-linear-to-l from-transparent to-slate-500" />
+                    <div className="h-[1px] w-8 bg-linear-to-l from-transparent to-(--color-text-secondary)" />
                 </div>
             </div>
         </div>

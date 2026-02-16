@@ -39,25 +39,25 @@ export const UpgradeButton = ({ onClick, className = '', showPrice = true }: Upg
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleClick}
-            className={`relative w-full group overflow-hidden rounded-full p-[1px] ${className}`}
+            className={`relative w-full group overflow-hidden rounded-full p-px ${className}`}
         >
             {/* Animated Border Gradient */}
             <div className="absolute inset-0 bg-linear-to-r from-amber-400 via-white/80 to-orange-500 animate-[liquid_3s_linear_infinite]"
                 style={{ backgroundSize: '200% 100%' }} />
 
             {/* Inner Content */}
-            <div className="relative h-full bg-white dark:bg-slate-900 rounded-full flex items-center justify-between px-4 py-3 group-hover:bg-slate-900/5 dark:group-hover:bg-white/5 transition-colors">
+            <div className="relative h-full bg-(--card-bg) rounded-full flex items-center justify-between px-4 py-3 group-hover:bg-slate-900/5 dark:group-hover:bg-white/5 transition-colors">
                 <div className="flex items-center gap-3">
                     <div className="relative">
                         <div className="absolute inset-0 bg-amber-400 blur-md opacity-40 animate-pulse" />
                         <Crown className="w-5 h-5 text-amber-400 fill-amber-400/20 relative z-10" />
                     </div>
                     <div className="flex flex-col items-start gap-0.5">
-                        <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+                        <span className="text-xs font-black text-(--color-text-primary) uppercase tracking-wider flex items-center gap-1.5">
                             {t('common.upgrade_pro')}
                             <Sparkles className="w-3 h-3 text-yellow-200 animate-pulse" />
                         </span>
-                        <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400">{t('common.unlock_rewards')}</span>
+                        <span className="text-[9px] font-bold text-(--color-text-secondary)">{t('common.unlock_rewards')}</span>
                     </div>
                 </div>
 

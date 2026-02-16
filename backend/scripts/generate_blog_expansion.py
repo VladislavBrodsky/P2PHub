@@ -1,19 +1,20 @@
-import sys
-import os
 import asyncio
 import json
+import os
 import re
+import sys
 from typing import Dict
 
 # Add backend to path
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from dotenv import load_dotenv
+
 # Load .env from backend directory FIRST
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"))
 
-from app.services.copywriter import ViralCopywriter
 from app.core.config import settings
+from app.services.copywriter import ViralCopywriter
 
 # topics for expansion (Slugs 20-49) - 30 Articles
 TOPICS = [
@@ -57,7 +58,7 @@ async def generate_batch(batch_size: int = 5):
     ru_file = os.path.join(os.path.dirname(__file__), "data", "blog_content_ru.py")
     
     # Check existing slugs
-    with open(en_file, 'r') as f:
+    with open(en_file) as f:
         en_content = f.read()
     
     # Start from slug 20
@@ -89,14 +90,14 @@ async def generate_batch(batch_size: int = 5):
         cat = cat_map.get(item['category'], "brand_awareness")
         
         # EN
-        print(f"  Writing English version...")
+        print("  Writing English version...")
         en_res = await copywriter.generate_article(category=cat, topic=item['topic'], language="en")
         if "error" in en_res:
             print(f"  Error EN: {en_res['error']}")
             continue
             
         # RU
-        print(f"  Writing Russian version...")
+        print("  Writing Russian version...")
         ru_res = await copywriter.generate_article(category=cat, topic=item['topic'], language="ru")
         if "error" in ru_res:
              # Fallback: Translate EN to RU using the same agent logic if possible or just skip
@@ -112,7 +113,7 @@ async def generate_batch(batch_size: int = 5):
         
         print(f"  Successfully saved and synced article {slug}!")
 
-async def sync_locales(slug: str, en_res: Dict, ru_res: Dict, category: str):
+async def sync_locales(slug: str, en_res: dict, ru_res: dict, category: str):
     base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     locales = {
         "en": os.path.join(base_path, "frontend/src/locales/en/marketing.json"),
@@ -123,7 +124,7 @@ async def sync_locales(slug: str, en_res: Dict, ru_res: Dict, category: str):
         res = en_res if lang == "en" else ru_res
         if not os.path.exists(path): continue
         
-        with open(path, 'r') as f:
+        with open(path) as f:
             data = json.load(f)
             
         if "blog" not in data: data["blog"] = {}
@@ -193,7 +194,7 @@ def aggressive_polish(text):
     
     return text.strip()
 
-async def append_to_blog_data(filepath: str, slug: str, res: Dict, dict_name: str):
+async def append_to_blog_data(filepath: str, slug: str, res: dict, dict_name: str):
     # If the response was a parse error from the service, try to re-parse it here
     if res.get("title") == "Viral Article Generated (Parse Error)":
         content_str = res.get("content", "")
@@ -215,7 +216,7 @@ async def append_to_blog_data(filepath: str, slug: str, res: Dict, dict_name: st
     full_text = aggressive_polish(full_text)
     
     # Read the file
-    with open(filepath, 'r') as f:
+    with open(filepath) as f:
         lines = f.readlines()
     
     # Find the last closing brace

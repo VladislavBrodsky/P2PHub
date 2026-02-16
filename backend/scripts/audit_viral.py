@@ -9,6 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from app.core.config import settings
 from app.services.viral_service import viral_studio
 
+
 def audit_system():
     print("🚀 VIRAL STUDIO SYSTEM AUDIT 🚀")
     print("--------------------------------")
@@ -35,9 +36,9 @@ def audit_system():
     
     try:
         from app.services.redis_service import redis_service
-        print(f"   Redis Caching: ✅ CONNECTED")
+        print("   Redis Caching: ✅ CONNECTED")
     except:
-        print(f"   Redis Caching: ⚠️ UNKNOWN")
+        print("   Redis Caching: ⚠️ UNKNOWN")
 
     print("\n⚡ PERFORMANCE ESTIMATE:")
     print("   • Text Generation: ~1-2s (gpt-4o-mini)")
