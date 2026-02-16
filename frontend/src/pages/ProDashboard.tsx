@@ -559,6 +559,9 @@ export const ProDashboard = () => {
                 selection={selection}
                 handleRefreshAudit={handleRefreshAudit}
                 isAuditing={isAuditing}
+                showSetup={showSetup}
+                setShowSetup={setShowSetup}
+                status={status}
             />
         </div>
     );

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     X, TrendingUp, Zap, Loader2, Quote, CheckCircle2,
-    ArrowRight, Flame, BookOpen, Sparkles
+    ArrowRight, Flame, BookOpen, Sparkles, Sliders, Send, Network
 } from 'lucide-react';
+import { proService } from '../../../services/proService';
+import { useNotificationStore } from '../../../store/useNotificationStore';
 import { renderMarkdown } from '../utils/renderMarkdown';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -19,6 +21,9 @@ interface ProModalsProps {
     selection: () => void;
     handleRefreshAudit: () => void;
     isAuditing: boolean;
+    showSetup: boolean;
+    setShowSetup: (show: boolean) => void;
+    status: any;
 }
 
 export const ProDashboardModals = ({
@@ -32,15 +37,230 @@ export const ProDashboardModals = ({
     setShowManual,
     selection,
     handleRefreshAudit,
-    isAuditing
+    isAuditing,
+    showSetup,
+    setShowSetup,
+    status
 }: ProModalsProps) => {
     const { t } = useTranslation();
+    const { showNotification } = useNotificationStore();
+
+    // Setup Local State
+    const [setupTab, setSetupTab] = useState<'x' | 'tg'>('x');
+    const [isSaving, setIsSaving] = useState(false);
+
+    // Form Fields
+    const [xApiKey, setXApiKey] = useState('');
+    const [xApiSecret, setXApiSecret] = useState('');
+    const [xAccToken, setXAccToken] = useState('');
+    const [xAccSecret, setXAccSecret] = useState('');
+    const [tgChannel, setTgChannel] = useState('');
+
+    // Pre-fill effect
+    React.useEffect(() => {
+        if (status?.setup) {
+            setXApiKey(status.setup.x_api_key || '');
+            setXApiSecret(status.setup.x_api_secret || '');
+            setXAccToken(status.setup.x_access_token || '');
+            setXAccSecret(status.setup.x_access_token_secret || '');
+            setTgChannel(status.setup.telegram_channel_id || '');
+        }
+    }, [status]);
+
+    const handleSaveSetup = async () => {
+        setIsSaving(true);
+        selection();
+        try {
+            await proService.setupSocial({
+                x_api_key: xApiKey,
+                x_api_secret: xApiSecret,
+                x_access_token: xAccToken,
+                x_access_token_secret: xAccSecret,
+                telegram_channel_id: tgChannel
+            });
+            showNotification({
+                title: t('pro_dashboard.setup.save_success_title'),
+                message: t('pro_dashboard.setup.save_success_text'),
+                type: 'success'
+            });
+            setShowSetup(false);
+        } catch (error: any) {
+            console.error(error);
+            showNotification({
+                title: t('pro_dashboard.setup.save_error_title'),
+                message: error.response?.data?.message || t('pro_dashboard.setup.save_error_text'),
+                type: 'warning'
+            });
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     return (
         <>
             {/* SETUP MODAL */}
-            {/* Note: I'm keeping the structure simple but functional. 
-                If you have a complex setup UI, it should be here. */}
+            <AnimatePresence>
+                {showSetup && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-200 flex items-center justify-center p-4 bg-slate-950/40 dark:bg-slate-950/90 backdrop-blur-md"
+                        onClick={() => setShowSetup(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0, y: 30 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-full max-w-lg rounded-[2.5rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[85vh] relative"
+                        >
+                            {/* Header */}
+                            <div className="p-6 sm:p-8 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-indigo-500/5 to-transparent">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                                        <Sliders size={24} className="text-white" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">{t('pro_dashboard.setup.title')}</h3>
+                                        <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-70">
+                                            {t('pro_dashboard.setup.subtitle')}
+                                        </p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setShowSetup(false)}
+                                    className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
+                                >
+                                    <X size={20} className="text-slate-900 dark:text-white/60" />
+                                </button>
+                            </div>
+
+                            {/* Tabs */}
+                            <div className="flex p-1 mx-6 mt-6 bg-slate-100 dark:bg-white/5 rounded-xl">
+                                <button
+                                    onClick={() => setSetupTab('x')}
+                                    className={`flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${setupTab === 'x' ? 'bg-white dark:bg-white/10 text-indigo-600 dark:text-white shadow-sm' : 'text-slate-400'}`}
+                                >
+                                    {t('pro_dashboard.setup.x_broadcast')}
+                                </button>
+                                <button
+                                    onClick={() => setSetupTab('tg')}
+                                    className={`flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${setupTab === 'tg' ? 'bg-white dark:bg-white/10 text-indigo-600 dark:text-white shadow-sm' : 'text-slate-400'}`}
+                                >
+                                    {t('pro_dashboard.setup.tg_sync')}
+                                </button>
+                            </div>
+
+                            {/* Body */}
+                            <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-6">
+                                {setupTab === 'x' ? (
+                                    <div className="space-y-4">
+                                        <div className="p-4 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl border border-indigo-100 dark:border-indigo-500/20 flex items-start gap-3">
+                                            <Network className="w-5 h-5 text-indigo-500 mt-0.5" />
+                                            <div>
+                                                <h4 className="text-xs font-black text-indigo-900 dark:text-indigo-300 uppercase tracking-wide">Direct API Protocol</h4>
+                                                <p className="text-[10px] text-indigo-700 dark:text-indigo-400 leading-relaxed mt-1">
+                                                    Enter your X Developer keys to enable autonomous posting. Need help?
+                                                    <button onClick={() => setShowManual('setup_x')} className="ml-1 underline font-bold hover:text-indigo-500">View Guide</button>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-3">
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.api_key')}</label>
+                                                <input
+                                                    type="text"
+                                                    value={xApiKey}
+                                                    onChange={(e) => setXApiKey(e.target.value)}
+                                                    className="w-full h-12 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-mono focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+                                                    placeholder="Enter Consumer Key (API Key)"
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.api_secret')}</label>
+                                                <input
+                                                    type="password"
+                                                    value={xApiSecret}
+                                                    onChange={(e) => setXApiSecret(e.target.value)}
+                                                    className="w-full h-12 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-mono focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+                                                    placeholder="Enter Consumer Secret"
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.access_token')}</label>
+                                                <input
+                                                    type="text"
+                                                    value={xAccToken}
+                                                    onChange={(e) => setXAccToken(e.target.value)}
+                                                    className="w-full h-12 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-mono focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+                                                    placeholder="Enter Access Token"
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.access_token_secret')}</label>
+                                                <input
+                                                    type="password"
+                                                    value={xAccSecret}
+                                                    onChange={(e) => setXAccSecret(e.target.value)}
+                                                    className="w-full h-12 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-mono focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+                                                    placeholder="Enter Access Token Secret"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-4">
+                                        <div className="p-4 bg-sky-50 dark:bg-sky-500/10 rounded-2xl border border-sky-100 dark:border-sky-500/20 flex items-start gap-3">
+                                            <Send className="w-5 h-5 text-sky-500 mt-0.5" />
+                                            <div>
+                                                <h4 className="text-xs font-black text-sky-900 dark:text-sky-300 uppercase tracking-wide">Telegram Sync</h4>
+                                                <p className="text-[10px] text-sky-700 dark:text-sky-400 leading-relaxed mt-1">
+                                                    Connect your public channel. Add our bot as Admin first.
+                                                    <button onClick={() => setShowManual('setup_tg')} className="ml-1 underline font-bold hover:text-sky-500">View Guide</button>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.channel_id')}</label>
+                                            <input
+                                                type="text"
+                                                value={tgChannel}
+                                                onChange={(e) => setTgChannel(e.target.value)}
+                                                className="w-full h-12 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-mono focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+                                                placeholder="@your_channel_username"
+                                            />
+                                            <p className="text-[9px] text-slate-400 pl-1">Example: @pin2pay_updates (include the @)</p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Footer */}
+                            <div className="p-6 sm:p-8 bg-slate-50 dark:bg-black/40 border-t border-slate-100 dark:border-white/5">
+                                <button
+                                    onClick={handleSaveSetup}
+                                    disabled={isSaving}
+                                    className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale"
+                                >
+                                    {isSaving ? (
+                                        <>
+                                            <Loader2 className="animate-spin" size={18} />
+                                            {t('pro_dashboard.tools.trends.scanning')}...
+                                        </>
+                                    ) : (
+                                        <>
+                                            {t('pro_dashboard.setup.save_btn')} <CheckCircle2 size={18} />
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* MARKET AUDIT MODAL */}
             <AnimatePresence>

@@ -596,12 +596,20 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                 buffer = BytesIO()
                 pil_image.save(buffer, format='PNG')
                 
+                # Ensure directory exists
+                os.makedirs(save_dir, exist_ok=True)
+                
                 with open(save_path, 'wb') as f:
                     f.write(buffer.getvalue())
                 
-                self._last_working_imagen_model = model_name
-                logger.info(f"✅ Imagen: Saved {model_name} image to {save_path}")
-                return True, f"/generated_media/{filename}"
+                # Verify file was written
+                if os.path.exists(save_path):
+                    self._last_working_imagen_model = model_name
+                    logger.info(f"✅ Imagen: Saved {model_name} image to {save_path} (Size: {os.path.getsize(save_path)} bytes)")
+                    return True, f"/generated_media/{filename}"
+                else:
+                    logger.error(f"❌ Imagen: File write reported success but file not found at {save_path}")
+                    return False, None
         except Exception as e:
             logger.error(f"❌ Imagen {model_name} failed to save image: {e}")
             # Try to save to a temp path as fallback?
@@ -1083,11 +1091,11 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         
         # Determine if we need to fix paragraph spacing
         # If there are NO double newlines, but multiple single newlines, assume they meant paragraphs
+        # We use a regex to look for single newlines that are NOT surrounded by other newlines
         if '\n\n' not in content and '\n' in content:
-             # Basic heuristic: replace single newlines with double, but respect lists? 
-             # Safe approach: Just leave it to the prompt update.
-             # However, let's enforce double newline for clearly distinct blocks if possible.
-             pass
+            # Replace single newline with double newline, but protect existing doubles (though check says none exist)
+            # Using lookaround to only match isolated newlines
+            content = re.sub(r'(?<!\n)\n(?!\n)', '\n\n', content)
         
         return content
 
