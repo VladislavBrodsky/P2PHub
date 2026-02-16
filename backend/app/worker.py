@@ -17,8 +17,7 @@ result_backend = RedisAsyncResultBackend(
 broker.with_result_backend(result_backend)
 
 # 3. Validation Middleware
-# This ensures that tasks are validated against their type hints using Pydantic.
-# This fulfills the request for 'optimized' work and 'permanent' Pydantic integration.
+# Optimized Core: Validation ensures that all tasks are type-safe via Pydantic.
 from taskiq.middlewares.pydantic_middleware import PydanticMiddleware
 broker.add_middleware(PydanticMiddleware())
 
