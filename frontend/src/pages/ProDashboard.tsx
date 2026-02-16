@@ -235,7 +235,7 @@ export const ProDashboard = () => {
 
         if (anyModalOpen) {
             try {
-                if (backButton.show.isAvailable()) backButton.show();
+                if (backButton && backButton.show && backButton.show.isAvailable()) backButton.show();
                 const hideAllModals = () => {
                     setShowSetup(false);
                     setShowManual(null);
@@ -243,12 +243,14 @@ export const ProDashboard = () => {
                     setSelectedAsset(null);
                     setShowAuditModal(false);
                 };
-                const cleanup = backButton.onClick(hideAllModals);
-                return () => { if (cleanup) cleanup(); };
+                if (backButton && backButton.onClick) {
+                    const cleanup = backButton.onClick(hideAllModals);
+                    return () => { if (cleanup) cleanup(); };
+                }
             } catch (e) { console.warn(e); }
         } else {
             try {
-                if (backButton.hide.isAvailable()) backButton.hide();
+                if (backButton && backButton.hide && backButton.hide.isAvailable()) backButton.hide();
             } catch (e) { console.warn(e); }
         }
     }, [showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, setFooterVisible, setHeaderVisible]);
@@ -256,17 +258,19 @@ export const ProDashboard = () => {
     useEffect(() => {
         loadStatus();
         try {
-            if (viewport && viewport.expand.isAvailable() && !viewport.isExpanded) {
+            if (viewport && viewport.expand && viewport.expand.isAvailable() && !viewport.isExpanded) {
                 viewport.expand();
             }
-            if (settingsButton.show.isAvailable()) {
+            if (settingsButton && settingsButton.show && settingsButton.show.isAvailable()) {
                 settingsButton.show();
                 const openSetup = () => {
                     impact('light');
                     setShowSetup(true);
                 };
-                const cleanup = settingsButton.onClick(openSetup);
-                return () => { if (cleanup) cleanup(); };
+                if (settingsButton.onClick) {
+                    const cleanup = settingsButton.onClick(openSetup);
+                    return () => { if (cleanup) cleanup(); };
+                }
             }
         } catch (e) { console.warn(e); }
     }, [viewport]);

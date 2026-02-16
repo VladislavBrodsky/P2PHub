@@ -3,7 +3,7 @@ import { hapticFeedback } from '@telegram-apps/sdk-react';
 export const useHaptic = () => {
     const selection = () => {
         try {
-            if (hapticFeedback.selectionChanged.isAvailable()) {
+            if (hapticFeedback && hapticFeedback.selectionChanged && hapticFeedback.selectionChanged.isAvailable()) {
                 hapticFeedback.selectionChanged();
             }
         } catch (e) {
@@ -13,7 +13,7 @@ export const useHaptic = () => {
 
     const impact = (style: 'light' | 'medium' | 'heavy' | 'rigid' | 'soft') => {
         try {
-            if (hapticFeedback.impactOccurred.isAvailable()) {
+            if (hapticFeedback && hapticFeedback.impactOccurred && hapticFeedback.impactOccurred.isAvailable()) {
                 hapticFeedback.impactOccurred(style);
             }
         } catch (e) {
@@ -23,7 +23,7 @@ export const useHaptic = () => {
 
     const notification = (type: 'error' | 'success' | 'warning') => {
         try {
-            if (hapticFeedback.notificationOccurred.isAvailable()) {
+            if (hapticFeedback && hapticFeedback.notificationOccurred && hapticFeedback.notificationOccurred.isAvailable()) {
                 hapticFeedback.notificationOccurred(type);
             }
         } catch (e) {

@@ -592,19 +592,22 @@ export const ProDashboardModals = ({
                                             showManual === 'setup_x' ? 'pro_dashboard.setup.x_manual.steps' :
                                                 showManual === 'setup_tg' ? 'pro_dashboard.setup.tg_manual.steps' :
                                                     'pro_dashboard.setup.linkedin_manual.steps';
-                                        const steps = t(key, { returnObjects: true }) as any[];
-                                        return steps.map((step: any, i: number) => (
-                                            <div key={i} className="flex gap-6 items-start relative group">
-                                                {i < steps.length - 1 && <div className="absolute left-[23.5px] top-12 bottom-0 w-px bg-linear-to-b from-indigo-500/20 dark:from-indigo-500/30 to-transparent" />}
-                                                <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-lg font-black text-indigo-500 dark:text-indigo-400 shrink-0 shadow-lg group-hover:border-indigo-500/30 transition-colors">
-                                                    {i + 1}
+                                        const steps = t(key, { returnObjects: true });
+                                        if (Array.isArray(steps)) {
+                                            return steps.map((step: any, i: number) => (
+                                                <div key={i} className="flex gap-6 items-start relative group">
+                                                    {i < steps.length - 1 && <div className="absolute left-[23.5px] top-12 bottom-0 w-px bg-linear-to-b from-indigo-500/20 dark:from-indigo-500/30 to-transparent" />}
+                                                    <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-lg font-black text-indigo-500 dark:text-indigo-400 shrink-0 shadow-lg group-hover:border-indigo-500/30 transition-colors">
+                                                        {i + 1}
+                                                    </div>
+                                                    <div className="space-y-2 pt-1">
+                                                        <h4 className="text-[14px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{step.title}</h4>
+                                                        <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed opacity-80">{step.desc}</p>
+                                                    </div>
                                                 </div>
-                                                <div className="space-y-2 pt-1">
-                                                    <h4 className="text-[14px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{step.title}</h4>
-                                                    <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed opacity-80">{step.desc}</p>
-                                                </div>
-                                            </div>
-                                        ));
+                                            ));
+                                        }
+                                        return null;
                                     })()
                                 ) : showManual === 'tools' ? (
                                     <div className="space-y-8">
