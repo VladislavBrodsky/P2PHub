@@ -124,9 +124,26 @@ export const ProDashboardModals = ({
                                     </div>
                                     <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-100 dark:border-white/5 relative">
                                         <Quote className="absolute -top-3 -left-3 text-indigo-500/20" size={32} />
-                                        <p className="text-[13px] font-medium text-slate-900 dark:text-slate-400 leading-relaxed italic pr-4">
-                                            {marketAudit.cmo_summary}
-                                        </p>
+                                        {marketAudit.error ? (
+                                            <div className="space-y-3">
+                                                <p className="text-[14px] font-black text-rose-500 uppercase tracking-tight flex items-center gap-2">
+                                                    <X size={16} /> Error Detected
+                                                </p>
+                                                <p className="text-[13px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic">
+                                                    {marketAudit.error}
+                                                </p>
+                                                <button
+                                                    onClick={() => handleRefreshAudit()}
+                                                    className="px-4 py-2 bg-indigo-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest"
+                                                >
+                                                    Re-Sync Node
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <p className="text-[13px] font-medium text-slate-900 dark:text-slate-400 leading-relaxed italic pr-4">
+                                                {marketAudit.cmo_summary}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
 

@@ -15,11 +15,12 @@ from app.models.blog import BlogPost, BlogPostEngagement
 from app.models.partner import get_session, async_session_maker, engine
 from data.blog_content_en import BLOG_CONTENT_EN
 from data.blog_content_ru import BLOG_CONTENT_RU
+import re
 
 # Hardcoded blog post slugs and basic info
 BLOG_POSTS_INFO = [
     {"slug": str(i), "category": "Wealth Strategy", "author": "Pinto Team"}
-    for i in range(1, 40) # Support up to 39 articles
+    for i in range(1, 51) # Support up to 50 articles
 ]
 # Overwrite specific authors/categories if needed for original 19
 ORIGINAL_INFO = [
@@ -53,9 +54,9 @@ async def migrate():
     # Load locales
     base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     try:
-        with open(os.path.join(base_path, "frontend/src/locales/en.json"), "r") as f:
+        with open(os.path.join(base_path, "frontend/src/locales/en/marketing.json"), "r") as f:
             en = json.load(f)
-        with open(os.path.join(base_path, "frontend/src/locales/ru.json"), "r") as f:
+        with open(os.path.join(base_path, "frontend/src/locales/ru/marketing.json"), "r") as f:
             ru = json.load(f)
     except FileNotFoundError:
         print("Locale files not found, using empty dicts for metadata")
@@ -64,6 +65,34 @@ async def migrate():
 
     en_posts = en.get("blog", {}).get("posts", {})
     ru_posts = ru.get("blog", {}).get("posts", {})
+
+    # Sync any missing metadata from contents to locales first
+    for slug in BLOG_CONTENT_EN.keys():
+        if int(slug) < 20: continue
+        if slug not in en_posts:
+            # Try to extract title/excerpt
+            text = BLOG_CONTENT_EN[slug]
+            title_match = re.search(r'# (.*?)\n', text)
+            excerpt_match = re.search(r'\n\n(.*?)\n\n', text)
+            if title_match:
+                en_posts[slug] = {
+                    "title": title_match.group(1).strip(),
+                    "excerpt": excerpt_match.group(1).strip() if excerpt_match else "",
+                    "category": "Intelligence Hub" # Default, will be updated by loop
+                }
+    
+    for slug in BLOG_CONTENT_RU.keys():
+        if int(slug) < 20: continue
+        if slug not in ru_posts:
+            text = BLOG_CONTENT_RU[slug]
+            title_match = re.search(r'# (.*?)\n', text)
+            excerpt_match = re.search(r'\n\n(.*?)\n\n', text)
+            if title_match:
+                ru_posts[slug] = {
+                    "title": title_match.group(1).strip(),
+                    "excerpt": excerpt_match.group(1).strip() if excerpt_match else "",
+                    "category": "Intelligence Hub"
+                }
 
     async with async_session_maker() as session:
         for info in BLOG_POSTS_INFO:

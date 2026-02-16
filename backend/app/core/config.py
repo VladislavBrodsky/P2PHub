@@ -72,6 +72,8 @@ class Settings(BaseSettings):
     # We attempt to load this from multiple .env locations (see possible_env_paths above)
     # due to varying permissions in different deployment/dev environments.
     OPENAI_API_KEY: str | None = None
+    GOOGLE_API_KEY: str | None = None
+    GOOGLE_SERVICE_ACCOUNT_JSON: str | None = None
 
     # Monitoring & Error Tracking
     # #comment: Sentry DSN for production error tracking and monitoring.

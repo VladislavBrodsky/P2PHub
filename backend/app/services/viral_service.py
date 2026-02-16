@@ -167,17 +167,22 @@ Use FRESH, audience-specific language that feels authentic.
     """
 
     def __init__(self):
-        # 1. Initialize OpenAI with fallback to os.getenv
-        openai_key = settings.OPENAI_API_KEY or os.getenv("OPENAI_API_KEY")
+        # 1. Initialize OpenAI
+        openai_key = settings.OPENAI_API_KEY
         if openai_key:
-            self.openai_client = AsyncOpenAI(api_key=openai_key)
-            logger.info("✅ ViralMarketingStudio: OpenAI client initialized.")
+            try:
+                from openai import AsyncOpenAI
+                self.openai_client = AsyncOpenAI(api_key=openai_key)
+                logger.info("✅ ViralMarketingStudio: OpenAI client initialized.")
+            except Exception as e:
+                logger.error(f"❌ Failed to initialize OpenAI Client: {e}")
+                self.openai_client = None
         else:
             self.openai_client = None
             logger.warning("⚠️ ViralMarketingStudio: OpenAI API Key missing.")
         
-        # 2. Initialize Google GenAI with fallback to os.getenv
-        google_key = os.getenv("GOOGLE_API_KEY")
+        # 2. Initialize Google GenAI
+        google_key = settings.GOOGLE_API_KEY
         self.genai_client = None
         if google_key:
             try:
@@ -691,11 +696,15 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         
         try:
             if self.genai_client:
-                # Use Gemini
-                response = self.genai_client.models.generate_content(
-                    model='gemini-1.5-pro', 
-                    contents=prompt,
-                    config={'response_mime_type': 'application/json'}
+                # Use Gemini (Wrapped in executor as it's a sync call in this SDK version)
+                loop = asyncio.get_event_loop()
+                response = await loop.run_in_executor(
+                    None,
+                    lambda: self.genai_client.models.generate_content(
+                        model='gemini-1.5-pro', 
+                        contents=prompt,
+                        config={'response_mime_type': 'application/json'}
+                    )
                 )
                 return json.loads(response.text)
             elif self.openai_client:
@@ -711,7 +720,8 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                 content = json.loads(response.choices[0].message.content)
                 # Handle if it returns { "trends": [...] } or just [...]
                 if isinstance(content, list): return content
-                return content.get("trends", [])
+                if isinstance(content, dict) and "trends" in content: return content["trends"]
+                return [content] if isinstance(content, dict) else []
         except Exception as e:
             logger.error(f"Trend fetch failed: {e}")
             return [
@@ -736,43 +746,40 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             ACT AS ELITE CMO & DATA ANALYTIC AGENT.
             
             YOUR TASK:
-            1. Simulate a real-time scan of 500+ news sources (RSS, Twitter, Telegram) for 2026.
-            2. Focus on: FinTech, Web3, DeFi, Banking System access via Pintopay, Crypto Mass Adoption, Global Payments, Viral Growth.
-            3. Provide a list of TOP 20 the most important and valuable positive news.
-            4. Provide FOMO and Viral Motivation Triggers for each group of news.
-            5. Write a CMO Executive Summary showing how the market is developing fast and why it's the "Golden Rush" era for Pintopay Partner Club.
-            6. End with a massive CTA to start creating Viral Texts.
+            1. Simulation scan of 500+ news sources (RSS, X, Telegram) for 2026.
+            2. High-value narratives: FinTech, Web3, DeFi, Pintopay dominance.
+            3. Detailed Dossier: TOP 20 critical market shifts / positive news.
+            4. Triggers: Intense Scarcity, social proof, and viral FOMO for each.
+            5. Executive Summary: The "Golden Rush" context.
+            6. CTA: Initiate Viral Execution Protocols.
             
-            LANGUAGE REQUIREMENT:
-            - output MUST be in {language}.
-            - Maintain the "Elite" tone in the target language.
+            LANGUAGE: {language}. Output MUST be valid JSON in {language}.
             
             OUTPUT FORMAT (JSON ONLY):
             {{
-              "cmo_summary": "Intense, professional, high-energy summary of 2026 global shifts",
+              "cmo_summary": "Summary text",
               "top_news": [
-                {{
-                  "title": "News Title",
-                  "source": "RSS/X/TG",
-                  "relevance": "High/Critical",
-                  "impact": "Description of why this helps Pintopay members",
-                  "fomo_trigger": "Psychological trigger to act now"
-                }}
+                {{ "title": "...", "source": "...", "relevance": "...", "impact": "...", "fomo_trigger": "..." }}
               ],
-              "market_sentiment": "Bullish/Hyper-Growth",
-              "global_trend_shift": "Description of the shift toward decentralized banking",
-              "viral_motivation": "Triggers to inspire the user to lead and manage the rush",
-              "cta": "Massive call to action",
+              "market_sentiment": "...",
+              "global_trend_shift": "...",
+              "viral_motivation": "...",
+              "cta": "...",
               "generated_at": "{datetime.utcnow().isoformat()}"
             }}
             """
             
             try:
                 if self.genai_client:
-                    response = self.genai_client.models.generate_content(
-                        model='gemini-1.5-pro',
-                        contents=prompt,
-                        config={'response_mime_type': 'application/json'}
+                    # Wrapped in executor to avoid blocking the event loop
+                    loop = asyncio.get_event_loop()
+                    response = await loop.run_in_executor(
+                        None,
+                        lambda: self.genai_client.models.generate_content(
+                            model='gemini-1.5-pro',
+                            contents=prompt,
+                            config={'response_mime_type': 'application/json'}
+                        )
                     )
                     return json.loads(response.text)
                 elif self.openai_client:
@@ -782,6 +789,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                         response_format={"type": "json_object"}
                     )
                     return json.loads(response.choices[0].message.content)
+                return {"error": "AI Service Node Unavailable"}
             except Exception as e:
                 logger.error(f"Audit computation failed: {e}")
                 return {"error": "Elite Audit Node Temporarily Offline"}
@@ -789,11 +797,22 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         # Cache for 3 hours (10800 seconds)
         if force_refresh:
              audit = await compute_audit()
-             # Manually set cache
-             await redis_service.set(cache_key, audit, expire=10800)
+             # Only cache successful audits
+             if audit and "error" not in audit:
+                await redis_service.set_json(cache_key, audit, expire=10800)
              return audit
         else:
-            return await redis_service.get_or_compute(cache_key, compute_audit, expire=10800)
+            # get_or_compute already uses set_json and contains a "None" check
+            # but we wrapped it in compute_audit which returns error dict.
+            # We want to prevent get_or_compute from caching errors.
+            async def compute_and_check():
+                data = await compute_audit()
+                if data and "error" in data:
+                    return None # Returning None prevents caching in get_or_compute
+                return data
+            
+            result = await redis_service.get_or_compute(cache_key, compute_and_check, expire=10800)
+            return result or {"error": "Global Data Sync Failed. Refresh Node."}
 
     async def post_to_social(self, partner: Partner, platform: str, content: str, image_path: str | None = None) -> dict[str, Any]:
         """

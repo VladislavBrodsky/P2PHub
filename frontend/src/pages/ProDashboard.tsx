@@ -128,7 +128,7 @@ export const ProDashboard = () => {
             hapticNotification('success');
         } catch (error: any) {
             console.error(error);
-            const msg = error.response?.data?.detail || 'Global intelligence node unreachable.';
+            const msg = error.response?.data?.detail || error.response?.data?.message || 'Global intelligence node unreachable. Check your network.';
             showNotification({
                 title: 'Sync Error',
                 message: msg,
@@ -164,7 +164,7 @@ export const ProDashboard = () => {
             });
         } catch (error: any) {
             console.error('Failed to complete academy stage', error);
-            const msg = error.response?.data?.detail || 'Failed to complete stage.';
+            const msg = error.response?.data?.detail || error.response?.data?.message || 'Failed to complete stage. Sync error.';
             showNotification({
                 title: 'Error',
                 message: msg,
