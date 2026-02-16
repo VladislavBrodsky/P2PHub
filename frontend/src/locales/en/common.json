@@ -80,25 +80,26 @@
     }
   },
   "support": {
-    "title": "Support Center",
-    "subtitle": "24/7 Priority Assistance",
-    "description": "Our elite agents are standing by to assist you with any technical or protocol-related issues.",
-    "contact_us": "Contact Support",
-    "tg_support": "Telegram Support",
-    "email_support": "Email Support",
-    "working_hours": "Operational Hours: 24/7",
-    "priority_access": "PRO Priority Access Active",
-    "ticket_system": "Submit Ticket",
-    "feedback": {
-      "title": "Feedback & Ideas",
-      "desc": "Help us evolve the protocol. Your input directly influences our roadmap.",
-      "btn": "Submit Feedback"
-    },
-    "links": {
-      "official_channel": "Official Channel",
-      "community_chat": "Community Chat",
-      "twitter": "X (Twitter)",
-      "announcements": "Announcements"
+    "manager": "VIP Manager",
+    "online": "ONLINE",
+    "priority_badge": "ELITE SUPPORT",
+    "welcome": "Welcome back, **Partner**. I am your personal **VIP Manager**. My mission is to make your Pintopay journey **seamless** and **high-velocity**. How can I help you **dominate the market** today?",
+    "input_placeholder": "Enter your command...",
+    "user_context": "On Line: {{name}} • Lvl {{level}}",
+    "session_closed": "Protocol Terminated • History Saved",
+    "still_here": "Partner, our mission continues. Are you still with us? I am ready to eliminate any obstacle.",
+    "error_technical": "Network interference detected. Re-establishing link... In the meantime, consult the Intelligence Base (FAQ).",
+    "suggested_topics": "INTELLIGENCE DIRECTIVES",
+    "powered_by": "PINTOPAY TACTICAL COMPLEX • NEURAL INTEL v4.0",
+    "categories": {
+      "card_details": "Card Issuance",
+      "issue_setup": "Configuration",
+      "topup_limits": "Limits",
+      "apple_google": "Wallet & Pay",
+      "earnings": "Earnings",
+      "security": "Security",
+      "trading_hub": "P2P Hub",
+      "vip_line": "VIP Line"
     }
   },
   "faq": {

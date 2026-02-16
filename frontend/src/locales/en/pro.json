@@ -1,6 +1,9 @@
 {
   "pro_dashboard": {
     "status_online": "SYSTEM ONLINE",
+    "title_studio": "Viral Studio",
+    "title_tools": "Elite Tools",
+    "title_growth": "Growth Blueprint",
     "tab_studio": "STUDIO",
     "tab_tools": "TOOLS",
     "tab_growth": "GROWTH",
@@ -10,7 +13,9 @@
     "locked": {
       "title": "PRO MEMBERS ONLY",
       "desc": "Unlock the Viral Marketing Studio and Autocontent creation by upgrading to PRO.",
-      "upgrade_btn": "Upgrade Now"
+      "upgrade_btn": "Upgrade Now",
+      "stage_20_lock_title": "THE GREAT FILTER",
+      "stage_20_lock_desc": "You've reached the Free Tier limit. 99% stop here. Unlock the Elite Academy and AI Tools with PRO."
     },
     "setup": {
       "save_success_title": "Configuration Saved",

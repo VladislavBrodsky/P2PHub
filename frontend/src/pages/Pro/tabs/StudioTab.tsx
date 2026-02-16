@@ -204,22 +204,22 @@ export const StudioTab = ({
                     exit={{ opacity: 0, scale: 0.98 }}
                     className="space-y-6"
                 >
-                    <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay holographic-shine">
+                    <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-8 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
                         <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 pointer-events-none" />
                         <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[100px] rounded-full -mr-32 -mt-32 animate-pulse" />
 
-                        <div className="flex items-center justify-between mb-6 sm:mb-8 relative z-10">
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-2xl vibing-blue-animated flex items-center justify-center shrink-0 shadow-xl shadow-indigo-500/20">
-                                    <Terminal size={20} className="text-white" />
+                        <div className="flex items-center justify-between mb-5 sm:mb-7 relative z-10">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl vibing-blue-animated flex items-center justify-center shrink-0 shadow-xl shadow-indigo-500/20">
+                                    <Terminal size={18} className="text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="text-[12px] sm:text-[14px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white leading-none mb-1.5">
+                                    <h3 className="text-[11px] sm:text-[13px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white leading-none mb-1">
                                         {t('pro_dashboard.studio.matrix_title')}
                                     </h3>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-1.5">
                                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">
+                                        <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none">
                                             {t('pro_dashboard.studio.matrix_subtitle')}
                                         </span>
                                     </div>
@@ -317,7 +317,7 @@ export const StudioTab = ({
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="glass-panel-premium rounded-[2.5rem] p-10 text-center space-y-8 relative overflow-hidden border border-white/10 shadow-3xl"
+                    className="glass-panel-premium rounded-[2rem] p-6 sm:p-10 text-center space-y-6 sm:space-y-8 relative overflow-hidden border border-white/10 shadow-3xl"
                 >
                     <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
 
@@ -439,7 +439,7 @@ export const StudioTab = ({
                                 <span className="bg-indigo-500/90 backdrop-blur-md text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.2em] border border-indigo-400/30">{t('pro_dashboard.studio.ai_generated_badge')}</span>
                             </div>
                         </div>
-                        <div className="p-7 space-y-5 relative">
+                        <div className="p-5 sm:p-7 space-y-4 relative">
                             <div className="flex justify-between items-start gap-4">
                                 <div className="space-y-2">
                                     <h4 className="text-lg font-black leading-tight text-slate-900 dark:text-white uppercase tracking-tight">
