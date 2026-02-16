@@ -629,6 +629,10 @@
                     {
                         "title": "Step 5: Connect to P2PHub",
                         "desc": "Paste those 4 codes into the API Setup box here and click 'SAVE SETTINGS'. You're now ready to post to X!"
+                    },
+                    {
+                        "title": "Step 6: Unlock Infinite Context (Pro Tip)",
+                        "desc": "X limits 'Free' accounts to very short posts. To publish the massive, high-conversion AI deep-dives (300+ characters), we highly recommend upgrading to X Premium. This also unlocks the 'Basic' API tier, which ensures your viral engine runs at 100% velocity."
                     }
                 ]
             },
