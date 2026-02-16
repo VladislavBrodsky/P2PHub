@@ -87,7 +87,7 @@ export const ProDashboard = () => {
             if (data?.completed_stages) {
                 try {
                     const parsed = typeof data.completed_stages === 'string' ? JSON.parse(data.completed_stages) : data.completed_stages;
-                    setCompletedStages(parsed || []);
+                    setCompletedStages(Array.isArray(parsed) ? parsed : []);
                 } catch (e) {
                     setCompletedStages([]);
                 }
@@ -332,8 +332,11 @@ export const ProDashboard = () => {
                 return () => { if (cleanup) cleanup(); };
             } else if (activeTab === 'growth') {
                 // Determine if there's a pending academy stage
-                const nextModule = (t('pro_dashboard.academy.protocols.modules', { returnObjects: true }) as any[])
-                    .find(m => !completedStages.includes(m.id));
+                // Determine if there's a pending academy stage
+                const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
+                const modulesList = Array.isArray(modules) ? modules : [];
+
+                const nextModule = modulesList.find((m: any) => !completedStages.includes(m.id));
 
                 if (nextModule) {
                     mainButton.setParams({
