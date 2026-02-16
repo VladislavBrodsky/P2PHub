@@ -53,7 +53,7 @@ settings_init_start = time.time()
 class Settings(BaseSettings):
     # Required environment variables (with defaults for local development/migrations)
     BOT_TOKEN: str = ""
-    DATABASE_URL: str
+    DATABASE_URL: str | None = None
     WEBHOOK_SECRET: str = ""
 
     # Optional with sensible defaults
