@@ -16,7 +16,7 @@
 
   --header-height: 64px;
   --bottom-nav-height: 80px;
-  --spacing-telegram-header: 64px;
+  --spacing-telegram-header: 24px;
   /* Safe Areas + Telegram Header padding for bot buttons visibility */
   --header-total-height: calc(var(--header-height) + var(--spacing-safe-top) + var(--spacing-telegram-header));
 

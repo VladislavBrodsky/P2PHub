@@ -69,7 +69,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 id="main-scroll-root"
                 className={`flex-1 overflow-x-hidden relative z-10 
                     overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]
-                    ${!isHeaderVisible ? '' : (isStaging ? 'staging-offset' : 'content-main-padding')}`}
+                    ${!isHeaderVisible ? '' : (isStaging ? 'pt-8' : '')}`}
                 style={{ overscrollBehaviorY: 'none' }}
             >
                 {/* Header - Now inside the scroll layer for natural scrolling */}
