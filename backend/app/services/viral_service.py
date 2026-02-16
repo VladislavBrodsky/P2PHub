@@ -101,7 +101,7 @@ You are a PROFESSIONAL, not a hype artist. You're the trusted advisor who happen
 
 5. **EMOJIS:** Use 2-4 strategically based on audience (crypto: 💎🚀, nomads: 🌍✈️, etc.)
 
-6. **PARAGRAPHS:** Single line breaks between paragraphs for mobile readability
+6. **PARAGRAPHS:** Double line breaks (empty line) between paragraphs for readability.
 
 7. **HASHTAGS:** End with 3-5 relevant trending hashtags
 
@@ -603,6 +603,9 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                 logger.info(f"✅ Imagen: Saved {model_name} image to {save_path}")
                 return True, f"/generated_media/{filename}"
         except Exception as e:
+            logger.error(f"❌ Imagen {model_name} failed to save image: {e}")
+            # Try to save to a temp path as fallback?
+            # For now, just logging error is critical.
             logger.warning(f"⚠️ Imagen {model_name} failed: {e}")
         return False, None
 
@@ -1020,19 +1023,39 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
 
         formatted_content = self._format_telegram_content(content)
         results = []
+        success_count = 0
         
         full_image_path = self._resolve_image_path(image_path) if image_path else None
         
+        if full_image_path:
+            if not os.path.exists(full_image_path):
+                logger.error(f"❌ Image path resolved to {full_image_path} but file DOES NOT EXIST. Working dir: {os.getcwd()}")
+            else:
+                logger.info(f"✅ Image found at {full_image_path}")
+
         if full_image_path and os.path.exists(full_image_path):
             for channel_id in channels:
                 success = await self._send_telegram_photo(channel_id, full_image_path, formatted_content)
+                if not success:
+                    # Fallback to text only if photo fails
+                    logger.warning(f"⚠️ Photo upload failed for {channel_id}, falling back to text.")
+                    success = await self._send_telegram_message(channel_id, formatted_content)
+                
+                if success: success_count += 1
                 results.append(f"{'✅' if success else '❌'} {channel_id}")
         else:
             if full_image_path:
                 logger.warning(f"⚠️ Image not found at {full_image_path}, sending text only.")
             for channel_id in channels:
                 success = await self._send_telegram_message(channel_id, formatted_content)
+                if success: success_count += 1
                 results.append(f"{'✅' if success else '❌'} {channel_id}")
+
+        if success_count == 0:
+            return {
+                "error": f"Failed to publish to any Telegram channels. Ensure Bot is Admin in {', '.join(channels)}.",
+                "details": results
+            }
 
         return {
             "status": "success",
@@ -1057,6 +1080,15 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         content = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', content)
         content = re.sub(r'_(.*?)_', r'<i>\1</i>', content)
         content = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2">\1</a>', content)
+        
+        # Determine if we need to fix paragraph spacing
+        # If there are NO double newlines, but multiple single newlines, assume they meant paragraphs
+        if '\n\n' not in content and '\n' in content:
+             # Basic heuristic: replace single newlines with double, but respect lists? 
+             # Safe approach: Just leave it to the prompt update.
+             # However, let's enforce double newline for clearly distinct blocks if possible.
+             pass
+        
         return content
 
     def _resolve_image_path(self, image_path: str) -> str:
