@@ -59,67 +59,14 @@ export const ProDashboard = () => {
     const [selectedArticle, setSelectedArticle] = useState<any>(null);
     const [selectedAsset, setSelectedAsset] = useState<any>(null);
 
-    useEffect(() => {
-        const anyModalOpen = showSetup || showManual || selectedArticle || selectedAsset || showAuditModal;
-        setFooterVisible(!anyModalOpen);
-        setHeaderVisible(!anyModalOpen);
+    // Studio Sub-step (needed for MainButton orchestration)
+    const [studioStep, setStudioStep] = useState(1);
+    const [studioReady, setStudioReady] = useState(false); // If strategy/audience selected
+    const [generatedResult, setGeneratedResult] = useState<any>(null);
+    const [studioHistory, setStudioHistory] = useState<any[]>([]);
+    const [studioHistoryIndex, setStudioHistoryIndex] = useState(-1);
 
-        // Native Back Button integration
-        if (anyModalOpen) {
-            try {
-                if (backButton.show.isAvailable()) backButton.show();
-                const hideAllModals = () => {
-                    setShowSetup(false);
-                    setShowManual(null);
-                    setSelectedArticle(null);
-                    setSelectedAsset(null);
-                    setShowAuditModal(false);
-                };
-                const cleanup = backButton.onClick(hideAllModals);
-                return () => {
-                    if (cleanup) cleanup();
-                };
-            } catch (e) { console.warn(e); }
-        } else {
-            try {
-                if (backButton.hide.isAvailable()) backButton.hide();
-            } catch (e) { console.warn(e); }
-        }
-    }, [showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, setFooterVisible, setHeaderVisible]);
-
-    // Handle deep linking for Pro Tabs
-    useEffect(() => {
-        const handleNav = (e: CustomEvent) => {
-            const tab = e.detail;
-            if (['studio', 'tools', 'growth'].includes(tab)) {
-                setActiveTab(tab as Tab);
-            }
-        };
-        window.addEventListener('nav-pro-tab', handleNav as EventListener);
-        return () => window.removeEventListener('nav-pro-tab', handleNav as EventListener);
-    }, []);
-
-    useEffect(() => {
-        loadStatus();
-
-        try {
-            if (viewport && viewport.expand.isAvailable() && !viewport.isExpanded) {
-                viewport.expand();
-            }
-
-            if (settingsButton.show.isAvailable()) {
-                settingsButton.show();
-                const openSetup = () => {
-                    impact('light');
-                    setShowSetup(true);
-                };
-                const cleanup = settingsButton.onClick(openSetup);
-                return () => {
-                    if (cleanup) cleanup();
-                };
-            }
-        } catch (e) { console.warn(e); }
-    }, [viewport]);
+    // --- Action Handlers (Stable) ---
 
     const loadStatus = async () => {
         try {
@@ -150,6 +97,86 @@ export const ProDashboard = () => {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleRunMarketingAudit = async () => {
+        if (isAuditing) return;
+        setIsAuditing(true);
+        impact('heavy');
+        try {
+            const result = await proService.getMarketingAudit();
+            setMarketAudit(result.audit);
+            setShowAuditModal(true);
+            showNotification({
+                title: 'Global Sync Complete',
+                message: 'Market intelligence dossier updated.',
+                type: 'success'
+            });
+            hapticNotification('success');
+        } catch (error) {
+            console.error(error);
+            showNotification({
+                title: 'Sync Error',
+                message: 'Global intelligence node unreachable. Try again.',
+                type: 'warning'
+            });
+            hapticNotification('error');
+        } finally {
+            setIsAuditing(false);
+        }
+    };
+
+    const handleCompleteAcademyStage = async (stage_id: string) => {
+        if (completedStages.includes(stage_id)) return;
+        setIsCompletingStage(stage_id);
+        impact('medium');
+        try {
+            const data = await proService.completeAcademyStage(stage_id);
+            setAcademyScore(data.academy_score);
+            setCompletedStages((prev: string[]) => [...prev, stage_id]);
+            hapticNotification('success');
+        } catch (error) {
+            console.error('Failed to complete academy stage', error);
+            hapticNotification('error');
+        } finally {
+            setIsCompletingStage(null);
+        }
+    };
+
+    const handleFetchTrends = async () => {
+        if (isFetchingTrends) return;
+        setIsFetchingTrends(true);
+        impact('medium');
+        try {
+            const data = await proService.fetchTrends();
+            setTrends(data.trends);
+            showNotification({
+                title: 'Trends Synced',
+                message: 'Global viral patterns updated.',
+                type: 'success'
+            });
+            hapticNotification('success');
+        } catch (error) {
+            console.error(error);
+            showNotification({
+                title: 'Sync Failed',
+                message: 'Could not fetch global trends.',
+                type: 'warning'
+            });
+            hapticNotification('error');
+        } finally {
+            setIsFetchingTrends(false);
+        }
+    };
+
+    const handleCopyAnyText = (text: string) => {
+        navigator.clipboard.writeText(text);
+        showNotification({
+            title: 'Copied',
+            message: 'Intelligence data copied to clipboard.',
+            type: 'success'
+        });
+        impact('light');
     };
 
     const handleSaveSetup = async () => {
@@ -199,28 +226,101 @@ export const ProDashboard = () => {
         }
     };
 
-    const handleCompleteAcademyStage = async (stage_id: string) => {
-        if (completedStages.includes(stage_id)) return;
-        setIsCompletingStage(stage_id);
-        impact('medium');
-        try {
-            const data = await proService.completeAcademyStage(stage_id);
-            setAcademyScore(data.academy_score);
-            setCompletedStages((prev: string[]) => [...prev, stage_id]);
-            hapticNotification('success');
-        } catch (error) {
-            console.error('Failed to complete academy stage', error);
-            hapticNotification('error');
-        } finally {
-            setIsCompletingStage(null);
+    // --- Lifecycle Effects ---
+
+    useEffect(() => {
+        const anyModalOpen = showSetup || showManual || selectedArticle || selectedAsset || showAuditModal;
+        setFooterVisible(!anyModalOpen);
+        setHeaderVisible(!anyModalOpen);
+
+        if (anyModalOpen) {
+            try {
+                if (backButton.show.isAvailable()) backButton.show();
+                const hideAllModals = () => {
+                    setShowSetup(false);
+                    setShowManual(null);
+                    setSelectedArticle(null);
+                    setSelectedAsset(null);
+                    setShowAuditModal(false);
+                };
+                const cleanup = backButton.onClick(hideAllModals);
+                return () => { if (cleanup) cleanup(); };
+            } catch (e) { console.warn(e); }
+        } else {
+            try {
+                if (backButton.hide.isAvailable()) backButton.hide();
+            } catch (e) { console.warn(e); }
         }
-    };
+    }, [showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, setFooterVisible, setHeaderVisible]);
+
+    useEffect(() => {
+        loadStatus();
+        try {
+            if (viewport && viewport.expand.isAvailable() && !viewport.isExpanded) {
+                viewport.expand();
+            }
+            if (settingsButton.show.isAvailable()) {
+                settingsButton.show();
+                const openSetup = () => {
+                    impact('light');
+                    setShowSetup(true);
+                };
+                const cleanup = settingsButton.onClick(openSetup);
+                return () => { if (cleanup) cleanup(); };
+            }
+        } catch (e) { console.warn(e); }
+    }, [viewport]);
 
     useEffect(() => {
         if (!isTMA()) return;
 
         try {
-            if (activeTab === 'tools' && !showAuditModal && !showSetup && !showManual) {
+            const isModalOpen = !!(showSetup || showManual || selectedArticle || selectedAsset || showAuditModal);
+
+            if (isModalOpen) {
+                mainButton.setParams({ isVisible: false });
+                return;
+            }
+
+            if (activeTab === 'studio') {
+                if (studioStep === 1) {
+                    mainButton.setParams({
+                        text: t('pro_dashboard.studio.initiate_btn').toUpperCase(),
+                        isVisible: true,
+                        isEnabled: studioReady,
+                        backgroundColor: '#6366f1',
+                        textColor: '#ffffff'
+                    });
+                    const cleanup = mainButton.onClick(() => {
+                        impact('medium');
+                        setStudioStep(2);
+                    });
+                    return () => { if (cleanup) cleanup(); };
+                } else if (studioStep === 2) {
+                    mainButton.setParams({
+                        text: t('pro_dashboard.studio.go_viral_btn').toUpperCase(),
+                        isVisible: true,
+                        isEnabled: !isLoading,
+                        backgroundColor: '#6366f1',
+                        textColor: '#ffffff'
+                    });
+                    // This will be handled via a custom event or shared trigger
+                    const triggerGen = () => window.dispatchEvent(new CustomEvent('trigger-studio-gen'));
+                    const cleanup = mainButton.onClick(triggerGen);
+                    return () => { if (cleanup) cleanup(); };
+                } else if (studioStep === 3) {
+                    mainButton.setParams({
+                        text: t('pro_dashboard.studio.publish_btn').toUpperCase(),
+                        isVisible: true,
+                        isEnabled: true,
+                        backgroundColor: '#10b981',
+                        textColor: '#ffffff'
+                    });
+                    const triggerPublish = () => window.dispatchEvent(new CustomEvent('trigger-studio-publish'));
+                    const cleanup = mainButton.onClick(triggerPublish);
+                    return () => { if (cleanup) cleanup(); };
+                }
+            } else if (activeTab === 'tools') {
                 mainButton.setParams({
                     text: t('pro_dashboard.tools.audit.btn').toUpperCase(),
                     isVisible: true,
@@ -229,78 +329,45 @@ export const ProDashboard = () => {
                     textColor: '#ffffff'
                 });
                 const cleanup = mainButton.onClick(handleRunMarketingAudit);
-                return () => {
+                return () => { if (cleanup) cleanup(); };
+            } else if (activeTab === 'growth') {
+                // Determine if there's a pending academy stage
+                const nextModule = (t('pro_dashboard.academy.protocols.modules', { returnObjects: true }) as any[])
+                    .find(m => !completedStages.includes(m.id));
+
+                if (nextModule) {
+                    mainButton.setParams({
+                        text: `${t('pro_dashboard.academy.social_setup.title').toUpperCase()}: ${nextModule.title.toUpperCase()}`,
+                        isVisible: true,
+                        isEnabled: !isCompletingStage,
+                        backgroundColor: '#4f46e5',
+                        textColor: '#ffffff'
+                    });
+                    const cleanup = mainButton.onClick(() => handleCompleteAcademyStage(nextModule.id));
+                    return () => { if (cleanup) cleanup(); };
+                } else {
                     mainButton.setParams({ isVisible: false });
-                    if (cleanup) cleanup();
-                };
+                }
             } else {
                 mainButton.setParams({ isVisible: false });
             }
-        } catch (e) { console.warn(e); }
-    }, [activeTab, isAuditing, showAuditModal, showSetup, showManual, t]);
-
-    const handleRunMarketingAudit = async () => {
-        if (isAuditing) return;
-        setIsAuditing(true);
-        impact('heavy');
-        try {
-            const result = await proService.getMarketingAudit();
-            setMarketAudit(result.audit);
-            setShowAuditModal(true);
-            showNotification({
-                title: 'Global Sync Complete',
-                message: 'Market intelligence dossier updated.',
-                type: 'success'
-            });
-            hapticNotification('success');
-        } catch (error) {
-            console.error(error);
-            showNotification({
-                title: 'Sync Error',
-                message: 'Global intelligence node unreachable. Try again.',
-                type: 'warning'
-            });
-            hapticNotification('error');
-        } finally {
-            setIsAuditing(false);
+        } catch (e) {
+            console.warn('[SDK] mainButton error:', e);
+            mainButton.setParams({ isVisible: false });
         }
-    };
+    }, [activeTab, studioStep, studioReady, isAuditing, isCompletingStage, completedStages, showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, t, isLoading, handleRunMarketingAudit, handleCompleteAcademyStage]);
 
-    const handleFetchTrends = async () => {
-        if (isFetchingTrends) return;
-        setIsFetchingTrends(true);
-        impact('medium');
-        try {
-            const data = await proService.fetchTrends();
-            setTrends(data.trends);
-            showNotification({
-                title: 'Trends Synced',
-                message: 'Global viral patterns updated.',
-                type: 'success'
-            });
-            hapticNotification('success');
-        } catch (error) {
-            console.error(error);
-            showNotification({
-                title: 'Sync Failed',
-                message: 'Could not fetch global trends.',
-                type: 'warning'
-            });
-            hapticNotification('error');
-        } finally {
-            setIsFetchingTrends(false);
-        }
-    };
-
-    const handleCopyAnyText = (text: string) => {
-        navigator.clipboard.writeText(text);
-        showNotification({
-            title: 'Copied',
-            message: 'Intelligence data copied to clipboard.',
-            type: 'success'
-        });
-        impact('light');
-    };
+    // Handle deep linking for Pro Tabs
+    useEffect(() => {
+        const handleNav = (e: CustomEvent) => {
+            const tab = e.detail;
+            if (['studio', 'tools', 'growth'].includes(tab)) {
+                setActiveTab(tab as Tab);
+            }
+        };
+        window.addEventListener('nav-pro-tab', handleNav as EventListener);
+        return () => window.removeEventListener('nav-pro-tab', handleNav as EventListener);
+    }, []);
 
     const notificationShim = (notif: any) => {
         if (typeof notif === 'string') {
@@ -360,14 +427,14 @@ export const ProDashboard = () => {
                         <button
                             key={tab}
                             onClick={() => { selection(); setActiveTab(tab); impact('light'); }}
-                            className={`flex-1 relative py-2.5 rounded-[1.125rem] transition-all duration-500 ${activeTab === tab ? 'text-white' : 'text-slate-400 dark:text-slate-500 hover:text-indigo-500'
+                            className={`flex-1 relative py-2.5 rounded-[1.125rem] transition-colors duration-300 ${activeTab === tab ? 'text-white' : 'text-slate-400 dark:text-slate-500 hover:text-indigo-500'
                                 }`}
                         >
                             {activeTab === tab && (
                                 <motion.div
                                     layoutId="activeTab"
-                                    className="absolute inset-0 vibing-blue-animated rounded-[1rem] shadow-xl shadow-indigo-500/20"
-                                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                    className="absolute inset-0 nav-active-bubble rounded-[1rem] shadow-xl shadow-indigo-500/20"
+                                    transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
                                 />
                             )}
                             <span className="relative z-10 flex flex-row items-center justify-center gap-2">
@@ -395,6 +462,15 @@ export const ProDashboard = () => {
                                     impact={impact}
                                     selection={selection}
                                     notification={notificationShim}
+                                    externalStep={studioStep}
+                                    setExternalStep={setStudioStep}
+                                    setExternalReady={setStudioReady}
+                                    generatedResult={generatedResult}
+                                    setGeneratedResult={setGeneratedResult}
+                                    history={studioHistory}
+                                    setHistory={setStudioHistory}
+                                    historyIndex={studioHistoryIndex}
+                                    setHistoryIndex={setStudioHistoryIndex}
                                 />
                             )}
 
