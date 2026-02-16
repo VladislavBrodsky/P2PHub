@@ -56,6 +56,12 @@ export const Footer = () => {
                             We are a community of digital nomads and online entrepreneurs who search for global trends. We act as a <span className="text-slate-900 dark:text-white font-bold">Third-Party Ambassador Agency</span> and do not have an official corporate connection to Pintopay.
                         </Trans>
                     </p>
+                    <div className="p-3 bg-rose-500/5 border border-rose-500/10 rounded-xl flex gap-3 items-start relative overflow-hidden">
+                        <Shield className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5 relative z-10" />
+                        <p className="text-[10px] text-rose-600 dark:text-rose-300 leading-relaxed font-bold relative z-10">
+                            {t('legal.risk_warning')}
+                        </p>
+                    </div>
                 </div>
 
                 {/* Links */}

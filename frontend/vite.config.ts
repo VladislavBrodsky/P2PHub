@@ -23,7 +23,7 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
   },
-  publicDir: 'public',
+  publicDir: 'app_assets',
   build: {
     outDir: 'dist',
     sourcemap: true,
