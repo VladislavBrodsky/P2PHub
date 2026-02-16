@@ -131,24 +131,28 @@ export const GrowthTab = ({
                 </div>
 
                 <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
-                    {(t('pro_dashboard.academy.articles.items', { returnObjects: true }) as any[]).map((article: any, i: number) => (
-                        <motion.div
-                            key={article.id}
-                            whileHover={{ y: -3 }}
-                            onClick={() => { selection(); setSelectedArticle(article); impact('light'); }}
-                            className="min-w-[260px] sm:min-w-[320px] snap-center pro-card-extreme p-5 sm:p-6 rounded-[1.25rem] border border-slate-200 dark:border-white/10 relative overflow-hidden group cursor-pointer active:scale-95 transition-all bg-white dark:bg-slate-900/50 shadow-sm"
-                        >
-                            <div className="flex items-center gap-2 mb-3">
-                                <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-[7px] font-black text-indigo-500 uppercase tracking-widest border border-indigo-500/10">{article.category}</span>
-                                <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">{article.readTime} MIN READ</span>
-                            </div>
-                            <h5 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
-                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 mb-4 opacity-80 italic">"{article.desc}"</p>
-                            <div className="flex items-center gap-2 text-[8px] font-black text-indigo-500 uppercase tracking-widest group-hover:gap-3 transition-all">
-                                {t('pro_dashboard.academy.articles.btn_read')} <ArrowRight size={10} />
-                            </div>
-                        </motion.div>
-                    ))}
+                    {(() => {
+                        const articles = t('pro_dashboard.academy.articles.items', { returnObjects: true });
+                        const articlesList = Array.isArray(articles) ? articles : [];
+                        return articlesList.map((article: any, i: number) => (
+                            <motion.div
+                                key={article.id || i}
+                                whileHover={{ y: -3 }}
+                                onClick={() => { selection(); setSelectedArticle(article); impact('light'); }}
+                                className="min-w-[260px] sm:min-w-[320px] snap-center pro-card-extreme p-5 sm:p-6 rounded-[1.25rem] border border-slate-200 dark:border-white/10 relative overflow-hidden group cursor-pointer active:scale-95 transition-all bg-white dark:bg-slate-900/50 shadow-sm"
+                            >
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-[7px] font-black text-indigo-500 uppercase tracking-widest border border-indigo-500/10">{article.category}</span>
+                                    <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">{article.readTime} MIN READ</span>
+                                </div>
+                                <h5 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
+                                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 mb-4 opacity-80 italic">"{article.desc}"</p>
+                                <div className="flex items-center gap-2 text-[8px] font-black text-indigo-500 uppercase tracking-widest group-hover:gap-3 transition-all">
+                                    {t('pro_dashboard.academy.articles.btn_read')} <ArrowRight size={10} />
+                                </div>
+                            </motion.div>
+                        ));
+                    })()}
                 </div>
             </div>
 
@@ -165,89 +169,93 @@ export const GrowthTab = ({
                 </div>
 
                 <div className="grid grid-cols-1 gap-4">
-                    {(t('pro_dashboard.academy.protocols.modules', { returnObjects: true }) as any[]).map((module: any, i: number) => {
-                        const isCompleted = completedStages.includes(module.id);
-                        const isLoading = isCompletingStage === module.id;
+                    {(() => {
+                        const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
+                        const modulesList = Array.isArray(modules) ? modules : [];
+                        return modulesList.map((module: any, i: number) => {
+                            const isCompleted = completedStages.includes(module.id);
+                            const isLoading = isCompletingStage === module.id;
 
-                        return (
-                            <motion.div
-                                key={module.id}
-                                initial={{ opacity: 0, x: -10 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.1 }}
-                                className={`pro-card-extreme rounded-[1.5rem] border overflow-hidden relative transition-all group ${isCompleted
-                                    ? 'opacity-60 border-emerald-500/20 bg-emerald-500/5'
-                                    : 'bg-white dark:bg-slate-900/50 border-slate-200 dark:border-white/10 shadow-md hover:border-indigo-500/30'
-                                    }`}
-                            >
-                                <div className="p-5 sm:p-8 space-y-4">
-                                    <div className="flex justify-between items-start gap-4">
-                                        <div className="space-y-2">
-                                            <div className="flex items-center gap-2">
-                                                <span className={`px-2.5 py-1 rounded-full border text-[7px] font-black uppercase tracking-widest ${module.diff === 'hard' ? 'border-red-500/30 bg-red-500/10 text-red-500' :
-                                                    module.diff === 'medium' ? 'border-amber-500/30 bg-amber-500/10 text-amber-500' : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-500'
-                                                    }`}>
-                                                    {t(`pro_dashboard.academy.protocols.difficulty_levels.${module.diff}`)}
-                                                </span>
-                                                {isCompleted && (
-                                                    <div className="flex items-center gap-1 text-emerald-500 text-[7px] font-black uppercase tracking-widest bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
-                                                        <CheckCircle2 size={8} />
-                                                        SYNCED
-                                                    </div>
-                                                )}
+                            return (
+                                <motion.div
+                                    key={module.id || i}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.1 }}
+                                    className={`pro-card-extreme rounded-[1.5rem] border overflow-hidden relative transition-all group ${isCompleted
+                                        ? 'opacity-60 border-emerald-500/20 bg-emerald-500/5'
+                                        : 'bg-white dark:bg-slate-900/50 border-slate-200 dark:border-white/10 shadow-md hover:border-indigo-500/30'
+                                        }`}
+                                >
+                                    <div className="p-5 sm:p-8 space-y-4">
+                                        <div className="flex justify-between items-start gap-4">
+                                            <div className="space-y-2">
+                                                <div className="flex items-center gap-2">
+                                                    <span className={`px-2.5 py-1 rounded-full border text-[7px] font-black uppercase tracking-widest ${module.diff === 'hard' ? 'border-red-500/30 bg-red-500/10 text-red-500' :
+                                                        module.diff === 'medium' ? 'border-amber-500/30 bg-amber-500/10 text-amber-500' : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-500'
+                                                        }`}>
+                                                        {t(`pro_dashboard.academy.protocols.difficulty_levels.${module.diff}`)}
+                                                    </span>
+                                                    {isCompleted && (
+                                                        <div className="flex items-center gap-1 text-emerald-500 text-[7px] font-black uppercase tracking-widest bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+                                                            <CheckCircle2 size={8} />
+                                                            SYNCED
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <h4 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight leading-tight">{module.title}</h4>
+                                                <p className="text-[9px] font-black text-indigo-500/70 uppercase tracking-widest">{module.hook}</p>
                                             </div>
-                                            <h4 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight leading-tight">{module.title}</h4>
-                                            <p className="text-[9px] font-black text-indigo-500/70 uppercase tracking-widest">{module.hook}</p>
-                                        </div>
-                                        <div className="w-10 h-10 flex-none rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-black text-sm shadow-sm">
-                                            +{module.points}
-                                        </div>
-                                    </div>
-
-                                    <p className="text-[12px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl">
-                                        {renderMarkdown(module.content)}
-                                    </p>
-
-                                    <div className="p-4 bg-slate-50 dark:bg-black/40 rounded-[1.25rem] border border-slate-100 dark:border-white/5 space-y-3 shadow-inner group/task">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-7 h-7 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500">
-                                                <Terminal size={12} />
+                                            <div className="w-10 h-10 flex-none rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-black text-sm shadow-sm">
+                                                +{module.points}
                                             </div>
-                                            <span className="text-[8px] font-black uppercase tracking-widest text-indigo-500">Node Task</span>
                                         </div>
-                                        <p className="text-[12px] font-bold text-slate-900 dark:text-white leading-relaxed">
-                                            {module.task}
+
+                                        <p className="text-[12px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl">
+                                            {renderMarkdown(module.content)}
                                         </p>
-                                        {module.link && (
-                                            <a
-                                                href={module.link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 text-[9px] font-black uppercase tracking-widest hover:text-indigo-500 transition-colors"
+
+                                        <div className="p-4 bg-slate-50 dark:bg-black/40 rounded-[1.25rem] border border-slate-100 dark:border-white/5 space-y-3 shadow-inner group/task">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-7 h-7 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500">
+                                                    <Terminal size={12} />
+                                                </div>
+                                                <span className="text-[8px] font-black uppercase tracking-widest text-indigo-500">Node Task</span>
+                                            </div>
+                                            <p className="text-[12px] font-bold text-slate-900 dark:text-white leading-relaxed">
+                                                {module.task}
+                                            </p>
+                                            {module.link && (
+                                                <a
+                                                    href={module.link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 text-[9px] font-black uppercase tracking-widest hover:text-indigo-500 transition-colors"
+                                                >
+                                                    {module.cta || 'Initiate Sync'} <Share size={10} />
+                                                </a>
+                                            )}
+                                        </div>
+
+                                        {!isCompleted && (
+                                            <button
+                                                onClick={() => handleCompleteAcademyStage(module.id)}
+                                                disabled={isLoading}
+                                                className="w-full h-12 vibing-blue-animated rounded-[1rem] font-black text-[9px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/10 text-white"
                                             >
-                                                {module.cta || 'Initiate Sync'} <Share size={10} />
-                                            </a>
+                                                {isLoading ? <Loader2 size={16} className="animate-spin" /> : (
+                                                    <>
+                                                        Sync Protocol <Sparkles size={14} />
+                                                    </>
+                                                )}
+                                            </button>
                                         )}
                                     </div>
-
-                                    {!isCompleted && (
-                                        <button
-                                            onClick={() => handleCompleteAcademyStage(module.id)}
-                                            disabled={isLoading}
-                                            className="w-full h-12 vibing-blue-animated rounded-[1rem] font-black text-[9px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/10 text-white"
-                                        >
-                                            {isLoading ? <Loader2 size={16} className="animate-spin" /> : (
-                                                <>
-                                                    Sync Protocol <Sparkles size={14} />
-                                                </>
-                                            )}
-                                        </button>
-                                    )}
-                                </div>
-                            </motion.div>
-                        );
-                    })}
+                                </motion.div>
+                            );
+                        });
+                    })()}
                 </div>
             </div>
 
@@ -268,15 +276,19 @@ export const GrowthTab = ({
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {(t('pro_dashboard.academy.lifehacks.items', { returnObjects: true }) as any[]).map((hack: any, i: number) => (
-                        <div key={i} className="flex gap-3 p-3.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 hover:border-pink-500/20 transition-all group/hack cursor-default shadow-xs">
-                            <div className="w-7 h-7 rounded-lg bg-pink-500/10 flex items-center justify-center text-pink-500 font-black text-xs shrink-0 border border-pink-500/10 shadow-inner group-hover/hack:scale-110 transition-transform">{i + 1}</div>
-                            <div className="space-y-0.5">
-                                <h5 className="text-[10px] font-black uppercase text-slate-900 dark:text-white tracking-tight leading-tight">{hack.title}</h5>
-                                <p className="text-[9px] font-medium text-slate-500 dark:text-slate-400 leading-tight italic opacity-70 line-clamp-1">"{hack.desc}"</p>
+                    {(() => {
+                        const hacks = t('pro_dashboard.academy.lifehacks.items', { returnObjects: true });
+                        const hacksList = Array.isArray(hacks) ? hacks : [];
+                        return hacksList.map((hack: any, i: number) => (
+                            <div key={i} className="flex gap-3 p-3.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 hover:border-pink-500/20 transition-all group/hack cursor-default shadow-xs">
+                                <div className="w-7 h-7 rounded-lg bg-pink-500/10 flex items-center justify-center text-pink-500 font-black text-xs shrink-0 border border-pink-500/10 shadow-inner group-hover/hack:scale-110 transition-transform">{i + 1}</div>
+                                <div className="space-y-0.5">
+                                    <h5 className="text-[10px] font-black uppercase text-slate-900 dark:text-white tracking-tight leading-tight">{hack.title}</h5>
+                                    <p className="text-[9px] font-medium text-slate-500 dark:text-slate-400 leading-tight italic opacity-70 line-clamp-1">"{hack.desc}"</p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ));
+                    })()}
                 </div>
             </div>
 
@@ -293,26 +305,30 @@ export const GrowthTab = ({
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 relative z-10 mb-6">
-                    {(t('pro_dashboard.academy.social_setup.platforms', { returnObjects: true, bot_username: status?.bot_username || 'pintopay_probot' }) as any[]).map((platform: any, i: number) => (
-                        <div key={i} className="p-3 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors group/platform">
-                            <div className="flex items-center gap-2.5 mb-2">
-                                <div className="w-7 h-7 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20 group-hover/platform:scale-110 transition-transform">
-                                    {platform.name.includes('Telegram') && <Send size={12} className="text-indigo-500" />}
-                                    {platform.name.includes('X') && <Twitter size={12} className="text-indigo-500" />}
-                                    {platform.name.includes('LinkedIn') && <Linkedin size={12} className="text-indigo-500" />}
-                                </div>
-                                <span className="text-[9px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{platform.name}</span>
-                            </div>
-                            <div className="grid grid-cols-1 gap-1 opacity-60">
-                                {platform.steps.slice(0, 2).map((step: string, j: number) => (
-                                    <div key={j} className="flex items-center gap-2">
-                                        <div className="w-1 h-1 rounded-full bg-indigo-500/30" />
-                                        <span className="text-[7.5px] font-medium text-slate-500 dark:text-slate-400 truncate">{step}</span>
+                    {(() => {
+                        const platforms = t('pro_dashboard.academy.social_setup.platforms', { returnObjects: true, bot_username: status?.bot_username || 'pintopay_probot' });
+                        const platformsList = Array.isArray(platforms) ? platforms : [];
+                        return platformsList.map((platform: any, i: number) => (
+                            <div key={i} className="p-3 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors group/platform">
+                                <div className="flex items-center gap-2.5 mb-2">
+                                    <div className="w-7 h-7 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20 group-hover/platform:scale-110 transition-transform">
+                                        {platform.name && platform.name.includes('Telegram') && <Send size={12} className="text-indigo-500" />}
+                                        {platform.name && platform.name.includes('X') && <Twitter size={12} className="text-indigo-500" />}
+                                        {platform.name && platform.name.includes('LinkedIn') && <Linkedin size={12} className="text-indigo-500" />}
                                     </div>
-                                ))}
+                                    <span className="text-[9px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{platform.name}</span>
+                                </div>
+                                <div className="grid grid-cols-1 gap-1 opacity-60">
+                                    {Array.isArray(platform.steps) && platform.steps.slice(0, 2).map((step: string, j: number) => (
+                                        <div key={j} className="flex items-center gap-2">
+                                            <div className="w-1 h-1 rounded-full bg-indigo-500/30" />
+                                            <span className="text-[7.5px] font-medium text-slate-500 dark:text-slate-400 truncate">{step}</span>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ));
+                    })()}
                 </div>
 
                 <button

@@ -99,6 +99,10 @@ export const ProDashboard = () => {
         }
     };
 
+    useEffect(() => {
+        loadStatus();
+    }, []);
+
     const handleRunMarketingAudit = async () => {
         if (isAuditing) return;
         setIsAuditing(true);
@@ -256,27 +260,37 @@ export const ProDashboard = () => {
     }, [showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, setFooterVisible, setHeaderVisible]);
 
     useEffect(() => {
-        loadStatus();
-        try {
-            if (viewport && viewport.expand && viewport.expand.isAvailable() && !viewport.isExpanded) {
-                viewport.expand();
-            }
-            if (settingsButton && settingsButton.show && settingsButton.show.isAvailable()) {
-                settingsButton.show();
-                const openSetup = () => {
-                    impact('light');
-                    setShowSetup(true);
-                };
-                if (settingsButton.onClick) {
-                    const cleanup = settingsButton.onClick(openSetup);
-                    return () => { if (cleanup) cleanup(); };
+        const initSDK = async () => {
+            try {
+                if (viewport && viewport.expand && typeof viewport.expand.isAvailable === 'function' && viewport.expand.isAvailable()) {
+                    viewport.expand();
                 }
+
+                if (settingsButton && settingsButton.show && typeof settingsButton.show.isAvailable === 'function' && settingsButton.show.isAvailable()) {
+                    settingsButton.show();
+                    const openSetup = () => {
+                        impact('light');
+                        setShowSetup(true);
+                    };
+
+                    if (typeof settingsButton.onClick === 'function') {
+                        const cleanup = settingsButton.onClick(openSetup);
+                        return cleanup;
+                    }
+                }
+            } catch (e) {
+                console.warn('[PRO] SDK Init warning:', e);
             }
-        } catch (e) { console.warn(e); }
-    }, [viewport]);
+        };
+
+        const cleanup = initSDK();
+        return () => {
+            cleanup.then(c => typeof c === 'function' && c());
+        };
+    }, [viewport, impact]);
 
     useEffect(() => {
-        if (!isTMA()) return;
+        if (!isTMA() || !mainButton) return;
 
         try {
             const isModalOpen = !!(showSetup || showManual || selectedArticle || selectedAsset || showAuditModal);
@@ -289,69 +303,62 @@ export const ProDashboard = () => {
             if (activeTab === 'studio') {
                 if (studioStep === 1) {
                     mainButton.setParams({
-                        text: t('pro_dashboard.studio.initiate_btn').toUpperCase(),
+                        text: String(t('pro_dashboard.studio.initiate_btn')).toUpperCase(),
                         isVisible: true,
                         isEnabled: studioReady,
                         backgroundColor: '#6366f1',
                         textColor: '#ffffff'
                     });
-                    const cleanup = mainButton.onClick(() => {
+                    return typeof mainButton.onClick === 'function' ? mainButton.onClick(() => {
                         impact('medium');
                         setStudioStep(2);
-                    });
-                    return () => { if (cleanup) cleanup(); };
+                    }) : undefined;
                 } else if (studioStep === 2) {
                     mainButton.setParams({
-                        text: t('pro_dashboard.studio.go_viral_btn').toUpperCase(),
+                        text: String(t('pro_dashboard.studio.go_viral_btn')).toUpperCase(),
                         isVisible: true,
                         isEnabled: !isLoading,
                         backgroundColor: '#6366f1',
                         textColor: '#ffffff'
                     });
-                    // This will be handled via a custom event or shared trigger
                     const triggerGen = () => window.dispatchEvent(new CustomEvent('trigger-studio-gen'));
-                    const cleanup = mainButton.onClick(triggerGen);
-                    return () => { if (cleanup) cleanup(); };
+                    return typeof mainButton.onClick === 'function' ? mainButton.onClick(triggerGen) : undefined;
                 } else if (studioStep === 3) {
                     mainButton.setParams({
-                        text: t('pro_dashboard.studio.publish_btn').toUpperCase(),
+                        text: String(t('pro_dashboard.studio.publish_btn')).toUpperCase(),
                         isVisible: true,
                         isEnabled: true,
                         backgroundColor: '#10b981',
                         textColor: '#ffffff'
                     });
                     const triggerPublish = () => window.dispatchEvent(new CustomEvent('trigger-studio-publish'));
-                    const cleanup = mainButton.onClick(triggerPublish);
-                    return () => { if (cleanup) cleanup(); };
+                    return typeof mainButton.onClick === 'function' ? mainButton.onClick(triggerPublish) : undefined;
                 }
             } else if (activeTab === 'tools') {
                 mainButton.setParams({
-                    text: t('pro_dashboard.tools.audit.btn').toUpperCase(),
+                    text: String(t('pro_dashboard.tools.audit.btn')).toUpperCase(),
                     isVisible: true,
                     isEnabled: !isAuditing,
                     backgroundColor: '#6366f1',
                     textColor: '#ffffff'
                 });
-                const cleanup = mainButton.onClick(handleRunMarketingAudit);
-                return () => { if (cleanup) cleanup(); };
+                return typeof mainButton.onClick === 'function' ? mainButton.onClick(handleRunMarketingAudit) : undefined;
             } else if (activeTab === 'growth') {
-                // Determine if there's a pending academy stage
-                // Determine if there's a pending academy stage
                 const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
                 const modulesList = Array.isArray(modules) ? modules : [];
-
                 const nextModule = modulesList.find((m: any) => !completedStages.includes(m.id));
 
                 if (nextModule) {
+                    const setupTitle = String(t('pro_dashboard.academy.social_setup.title')).toUpperCase();
+                    const moduleTitle = String(nextModule.title || '').toUpperCase();
                     mainButton.setParams({
-                        text: `${t('pro_dashboard.academy.social_setup.title').toUpperCase()}: ${nextModule.title.toUpperCase()}`,
+                        text: `${setupTitle}: ${moduleTitle}`,
                         isVisible: true,
                         isEnabled: !isCompletingStage,
                         backgroundColor: '#4f46e5',
                         textColor: '#ffffff'
                     });
-                    const cleanup = mainButton.onClick(() => handleCompleteAcademyStage(nextModule.id));
-                    return () => { if (cleanup) cleanup(); };
+                    return typeof mainButton.onClick === 'function' ? mainButton.onClick(() => handleCompleteAcademyStage(nextModule.id)) : undefined;
                 } else {
                     mainButton.setParams({ isVisible: false });
                 }
@@ -360,9 +367,9 @@ export const ProDashboard = () => {
             }
         } catch (e) {
             console.warn('[SDK] mainButton error:', e);
-            mainButton.setParams({ isVisible: false });
+            if (mainButton && mainButton.setParams) mainButton.setParams({ isVisible: false });
         }
-    }, [activeTab, studioStep, studioReady, isAuditing, isCompletingStage, completedStages, showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, t, isLoading, handleRunMarketingAudit, handleCompleteAcademyStage]);
+    }, [activeTab, studioStep, studioReady, isAuditing, isCompletingStage, completedStages, showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, t, isLoading, handleRunMarketingAudit, handleCompleteAcademyStage, mainButton]);
 
     // Handle deep linking for Pro Tabs
     useEffect(() => {

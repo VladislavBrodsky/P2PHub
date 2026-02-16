@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Crown, CheckCircle2, Wallet, CreditCard, ChevronRight, Loader2, Sparkles, Send } from 'lucide-react';
+import { Crown, CheckCircle2, Wallet, CreditCard, ChevronRight, Loader2, Sparkles, Send, Zap, Rocket, Bot } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
 import { useUser } from '../context/UserContext';
@@ -214,46 +214,143 @@ export default function SubscriptionPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-center mb-8"
             >
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 mb-4">
-                    <Sparkles size={12} className="text-amber-500" />
-                    <span className="text-[9px] font-black uppercase tracking-widest text-amber-600">{t('subscription.upgrade.badge')}</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-linear-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 mb-6">
+                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-amber-600 dark:text-amber-500">{t('subscription.upgrade.badge')}</span>
                 </div>
-                <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">
+                <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter leading-none">
                     <Trans i18nKey="subscription.upgrade.title">
-                        Upgrade to <span className="text-linear-to-br from-amber-500 to-orange-600 bg-clip-text text-transparent">PRO</span>
+                        Upgrade to <span className="text-linear-to-br from-amber-400 via-orange-500 to-amber-600 bg-clip-text text-transparent">PRO</span>
                     </Trans>
                 </h1>
-                <p className="text-slate-500 dark:text-slate-400 font-medium text-xs leading-relaxed max-w-[260px] mx-auto">
+                <p className="text-slate-500 dark:text-slate-400 font-medium text-sm leading-relaxed max-w-[280px] mx-auto opacity-80">
                     {t('subscription.upgrade.desc')}
                 </p>
             </motion.div>
+
+            {/* PRO Arsenal Section */}
+            <div className="mb-12">
+                <div className="text-center mb-10">
+                    <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-2 tracking-tight flex items-center justify-center gap-3">
+                        {t('subscription.arsenal.title')}
+                        <Zap size={24} className="text-amber-500 fill-amber-500/20" />
+                    </h2>
+                    <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-8">
+                        {t('subscription.arsenal.subtitle')}
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {(t('subscription.arsenal.items', { returnObjects: true }) as any[]).map((item, idx) => (
+                            <motion.div
+                                key={item.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: idx * 0.1 }}
+                                className="group relative bg-[#0F172A] border border-white/5 rounded-[2.5rem] p-6 text-left overflow-hidden"
+                            >
+                                {/* Animated Gradient Overlay */}
+                                <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                                <div className="relative z-10">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${item.id === 'studio' ? 'bg-pink-500/10 text-pink-500' : 'bg-emerald-500/10 text-emerald-500'}`}>
+                                            {item.id === 'studio' ? <Rocket size={24} /> : <Bot size={24} />}
+                                        </div>
+                                        <div className={`w-2 h-2 rounded-full animate-pulse ${item.id === 'studio' ? 'bg-pink-500 shadow-[0_0_10px_#ec4899]' : 'bg-emerald-500 shadow-[0_0_10px_#10b981]'}`} />
+                                    </div>
+
+                                    <h3 className="text-xl font-black text-white mb-2">{item.title}</h3>
+                                    <p className="text-slate-400 text-xs leading-relaxed mb-6">
+                                        {item.desc}
+                                    </p>
+
+                                    <div className="space-y-3 mb-6">
+                                        {item.stats.map((stat: string, sIdx: number) => (
+                                            <div key={sIdx} className="flex items-center gap-2">
+                                                <CheckCircle2 size={14} className={item.id === 'studio' ? 'text-pink-500' : 'text-emerald-500'} />
+                                                <span className="text-[11px] font-medium text-slate-300">
+                                                    <Trans>
+                                                        {stat}
+                                                    </Trans>
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Console Preview */}
+                                    <div className="bg-black/40 rounded-2xl p-4 mb-6 font-mono text-[10px] space-y-1 border border-white/5">
+                                        {item.terminal.map((line: string, lIdx: number) => (
+                                            <div key={lIdx} className={lIdx === 0 ? 'text-slate-400' : (item.id === 'studio' ? 'text-pink-400' : 'text-emerald-400')}>
+                                                {line}
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <button className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-white transition-all active:scale-95 group-hover:border-white/20">
+                                        {item.btn}
+                                    </button>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </div>
 
             {/* Pricing Card */}
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="relative bg-slate-900 rounded-[2rem] p-5 md:p-6 text-white shadow-2xl shadow-indigo-500/10 mb-6 overflow-hidden"
+                className="relative bg-slate-900 rounded-[3rem] p-6 md:p-8 text-white shadow-2xl shadow-indigo-500/20 mb-12 overflow-hidden border border-white/5"
             >
-                <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-indigo-500 rounded-full blur-[100px] opacity-20" />
+                {/* Visual Background Accents */}
+                <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-amber-500 rounded-full blur-[100px] opacity-20" />
+                <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-indigo-500 rounded-full blur-[100px] opacity-20" />
 
                 <div className="relative z-10">
-                    <div className="flex justify-between items-center mb-6">
+                    <div className="flex justify-between items-end mb-8">
                         <div>
-                            <h2 className="text-lg font-bold opacity-80 mb-0.5">{t('subscription.upgrade.lifetime_pro')}</h2>
-                            <p className="text-[10px] font-medium opacity-50 uppercase tracking-widest">{t('subscription.upgrade.one_time')}</p>
+                            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 mb-3">
+                                <Crown size={10} className="text-amber-500" />
+                                <span className="text-[8px] font-black uppercase tracking-wider text-amber-500">{t('subscription.upgrade.one_time')}</span>
+                            </div>
+                            <h2 className="text-2xl font-black text-white">{t('subscription.upgrade.lifetime_pro')}</h2>
                         </div>
                         <div className="text-right">
-                            <span className="text-3xl font-black">${proPrice}</span>
+                            <span className="text-5xl font-black tracking-tighter">${proPrice}</span>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-x-2 gap-y-2 mb-6 border-y border-white/5 py-4">
+                    <div className="grid grid-cols-1 gap-4 mb-8">
                         {(t('subscription.upgrade.benefits', { returnObjects: true }) as string[]).map((benefit, i) => (
-                            <div key={i} className="flex items-center gap-1.5 min-w-0">
-                                <CheckCircle2 size={12} className="text-amber-400 shrink-0" />
-                                <span className="text-[10px] font-bold opacity-90 truncate">{benefit}</span>
+                            <div key={i} className="flex items-center gap-3 p-3 bg-white/5 rounded-2xl border border-white/5">
+                                <div className="w-8 h-8 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0">
+                                    <CheckCircle2 size={16} className="text-amber-500" />
+                                </div>
+                                <span className="text-xs font-bold text-slate-200">{benefit}</span>
                             </div>
                         ))}
+                    </div>
+
+                    {/* 9-Level Viral Network Visual */}
+                    <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-2xl p-5 mb-8">
+                        <div className="flex items-center justify-between mb-4">
+                            <h4 className="text-[10px] font-black uppercase tracking-widest text-indigo-400">9-Level Referral Network</h4>
+                            <span className="text-[10px] font-bold text-indigo-400">UNRESTRICTED</span>
+                        </div>
+                        <div className="flex items-end gap-1 h-12 mb-2">
+                            {[0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1].map((h, i) => (
+                                <motion.div
+                                    key={i}
+                                    initial={{ height: 0 }}
+                                    animate={{ height: `${h * 100}%` }}
+                                    transition={{ delay: 0.5 + i * 0.05 }}
+                                    className={`flex-1 rounded-t-sm ${i === 8 ? 'bg-amber-500' : 'bg-indigo-500/40'}`}
+                                />
+                            ))}
+                        </div>
+                        <p className="text-[8px] font-medium text-slate-400 text-center">
+                            Earn from thousands of partners across 9 deep tiers.
+                        </p>
                     </div>
 
                     {!paymentMethod ? (

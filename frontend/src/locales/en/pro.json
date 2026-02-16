@@ -551,6 +551,54 @@
     "alerts": {
       "expired": "Session expired. Please start the process again.",
       "failed": "Payment session expired or failed. Please try again."
+    },
+    "arsenal": {
+      "title": "The PRO Arsenal",
+      "subtitle": "Automated weapons for the modern digital warrior.",
+      "pitch": {
+        "title": "The PRO Starter Pack",
+        "description": "Unlock PRO and receive **500 Tokens** instantly. This is your engine for growth:",
+        "items": [
+          "**Scale your network 100x** by selling a global product in two clicks.",
+          "**Team Duplication:** Your team scales 100x as they copy your automated success."
+        ]
+      },
+      "items": [
+        {
+          "id": "studio",
+          "title": "Viral Studio",
+          "desc": "Generate 30 Days of Content in 30 Seconds. Get daily fresh viral topics and AI-generated hooks tailored to your audience.",
+          "stats": [
+            "**3 Posts / Day** on Autopilot",
+            "Reduce work time by **95%**",
+            "AI Keyword Research"
+          ],
+          "terminal": [
+            "> Generating viral thread...",
+            "> Analysis: 98% Confidence"
+          ],
+          "btn": "UNLOCK VIRAL STUDIO"
+        },
+        {
+          "id": "factory",
+          "title": "AI Content Factory",
+          "desc": "Autonomous Agent that posts for you while you sleep. Your own full-stack SMM manager. Fully automated autoposting across all platforms.",
+          "stats": [
+            "**24/7 AI-Powered** Publishing",
+            "10x Marketing Efficiency",
+            "Multi-platform Sync"
+          ],
+          "terminal": [
+            "> Scheduling 42 posts...",
+            "> Status: ACTIVE"
+          ],
+          "btn": "HIRE YOUR AI AGENT"
+        }
+      ],
+      "coming_soon": {
+        "plan": "PRO+ Subscription Plan",
+        "status": "COMING SOON"
+      }
     }
   }
 }
