@@ -5,12 +5,13 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
-    useHapticFeedback,
-    useMainButton,
-    useBackButton,
-    useSettingsButton,
-    useViewport
+    mainButton,
+    backButton,
+    settingsButton,
+    viewport,
+    hapticFeedback
 } from '@telegram-apps/sdk-react';
+import { isTMA } from '../utils/tma';
 import { useHaptic } from '../hooks/useHaptic';
 import { useUI } from '../context/UIContext';
 import { proService, PROStatus } from '../services/proService';
@@ -26,11 +27,7 @@ type Tab = 'studio' | 'tools' | 'growth';
 
 export const ProDashboard = () => {
     const { t } = useTranslation();
-    const haptic = useHapticFeedback();
-    const mainButton = useMainButton();
-    const backButton = useBackButton();
-    const settingsButton = useSettingsButton();
-    const viewport = useViewport();
+    const { selection, impact, notification: hapticNotification } = useHaptic();
     const { showNotification } = useNotificationStore();
     const { setFooterVisible, setHeaderVisible } = useUI();
 
@@ -69,20 +66,26 @@ export const ProDashboard = () => {
 
         // Native Back Button integration
         if (anyModalOpen) {
-            backButton.show();
-            const hideAllModals = () => {
-                setShowSetup(false);
-                setShowManual(null);
-                setSelectedArticle(null);
-                setSelectedAsset(null);
-                setShowAuditModal(false);
-            };
-            backButton.on('click', hideAllModals);
-            return () => backButton.off('click', hideAllModals);
+            try {
+                if (backButton.show.isAvailable()) backButton.show();
+                const hideAllModals = () => {
+                    setShowSetup(false);
+                    setShowManual(null);
+                    setSelectedArticle(null);
+                    setSelectedAsset(null);
+                    setShowAuditModal(false);
+                };
+                const cleanup = backButton.onClick(hideAllModals);
+                return () => {
+                    if (cleanup) cleanup();
+                };
+            } catch (e) { console.warn(e); }
         } else {
-            backButton.hide();
+            try {
+                if (backButton.hide.isAvailable()) backButton.hide();
+            } catch (e) { console.warn(e); }
         }
-    }, [showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, setFooterVisible, setHeaderVisible, backButton]);
+    }, [showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, setFooterVisible, setHeaderVisible]);
 
     // Handle deep linking for Pro Tabs
     useEffect(() => {
@@ -99,19 +102,24 @@ export const ProDashboard = () => {
     useEffect(() => {
         loadStatus();
 
-        if (viewport && !viewport.isExpanded) {
-            viewport.expand();
-        }
+        try {
+            if (viewport && viewport.expand.isAvailable() && !viewport.isExpanded) {
+                viewport.expand();
+            }
 
-        settingsButton.show();
-        const openSetup = () => {
-            haptic.impactOccurred('light');
-            setShowSetup(true);
-        };
-        settingsButton.on('click', openSetup);
-
-        return () => settingsButton.off('click', openSetup);
-    }, [viewport, settingsButton, haptic]);
+            if (settingsButton.show.isAvailable()) {
+                settingsButton.show();
+                const openSetup = () => {
+                    impact('light');
+                    setShowSetup(true);
+                };
+                const cleanup = settingsButton.onClick(openSetup);
+                return () => {
+                    if (cleanup) cleanup();
+                };
+            }
+        } catch (e) { console.warn(e); }
+    }, [viewport]);
 
     const loadStatus = async () => {
         try {
@@ -146,7 +154,7 @@ export const ProDashboard = () => {
 
     const handleSaveSetup = async () => {
         setIsLoading(true);
-        haptic.impactOccurred('heavy');
+        impact('heavy');
         try {
             await proService.setupSocial(apiData);
             await loadStatus();
@@ -156,7 +164,7 @@ export const ProDashboard = () => {
                 message: t('pro_dashboard.setup.save_success_text'),
                 type: 'success'
             });
-            haptic.notificationOccurred('success');
+            hapticNotification('success');
         } catch (error) {
             console.error('Failed to save setup', error);
             showNotification({
@@ -164,7 +172,7 @@ export const ProDashboard = () => {
                 message: t('pro_dashboard.setup.save_error_text'),
                 type: 'warning'
             });
-            haptic.notificationOccurred('error');
+            hapticNotification('error');
         } finally {
             setIsLoading(false);
         }
@@ -198,7 +206,7 @@ export const ProDashboard = () => {
         try {
             const data = await proService.completeAcademyStage(stage_id);
             setAcademyScore(data.academy_score);
-            setCompletedStages(prev => [...prev, stage_id]);
+            setCompletedStages((prev: string[]) => [...prev, stage_id]);
             hapticNotification('success');
         } catch (error) {
             console.error('Failed to complete academy stage', error);
@@ -207,6 +215,29 @@ export const ProDashboard = () => {
             setIsCompletingStage(null);
         }
     };
+
+    useEffect(() => {
+        if (!isTMA()) return;
+
+        try {
+            if (activeTab === 'tools' && !showAuditModal && !showSetup && !showManual) {
+                mainButton.setParams({
+                    text: t('pro_dashboard.tools.audit.btn').toUpperCase(),
+                    isVisible: true,
+                    isEnabled: !isAuditing,
+                    backgroundColor: '#6366f1',
+                    textColor: '#ffffff'
+                });
+                const cleanup = mainButton.onClick(handleRunMarketingAudit);
+                return () => {
+                    mainButton.setParams({ isVisible: false });
+                    if (cleanup) cleanup();
+                };
+            } else {
+                mainButton.setParams({ isVisible: false });
+            }
+        } catch (e) { console.warn(e); }
+    }, [activeTab, isAuditing, showAuditModal, showSetup, showManual, t]);
 
     const handleRunMarketingAudit = async () => {
         if (isAuditing) return;
@@ -348,47 +379,52 @@ export const ProDashboard = () => {
                         </button>
                     ))}
                 </div>
-                <div className="relative min-h-[500px]">
-                    <AnimatePresence mode="wait">
-                        {activeTab === 'studio' && (
-                            <StudioTab
-                                key="studio"
-                                status={status}
-                                setStatus={setStatus}
-                                impact={impact}
-                                selection={selection}
-                                notification={notificationShim}
-                            />
-                        )}
+                <div className="relative min-h-[60vh]">
+                    <AnimatePresence mode="wait" initial={false}>
+                        <motion.div
+                            key={activeTab}
+                            initial={{ opacity: 0, x: 20, filter: 'blur(10px)' }}
+                            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+                            exit={{ opacity: 0, x: -20, filter: 'blur(10px)' }}
+                            transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                        >
+                            {activeTab === 'studio' && (
+                                <StudioTab
+                                    status={status}
+                                    setStatus={setStatus}
+                                    impact={impact}
+                                    selection={selection}
+                                    notification={notificationShim}
+                                />
+                            )}
 
-                        {activeTab === 'tools' && (
-                            <ToolsTab
-                                key="tools"
-                                trends={trends}
-                                isAuditing={isAuditing}
-                                isFetchingTrends={isFetchingTrends}
-                                handleRunMarketingAudit={handleRunMarketingAudit}
-                                handleFetchTrends={handleFetchTrends}
-                                setShowHeadlineModal={setShowAuditModal}
-                                selection={selection}
-                            />
-                        )}
+                            {activeTab === 'tools' && (
+                                <ToolsTab
+                                    trends={trends}
+                                    isAuditing={isAuditing}
+                                    isFetchingTrends={isFetchingTrends}
+                                    handleRunMarketingAudit={handleRunMarketingAudit}
+                                    handleFetchTrends={handleFetchTrends}
+                                    setShowHeadlineModal={setShowAuditModal}
+                                    selection={selection}
+                                />
+                            )}
 
-                        {activeTab === 'growth' && (
-                            <GrowthTab
-                                key="growth"
-                                status={status}
-                                academyScore={academyScore}
-                                completedStages={completedStages}
-                                isCompletingStage={isCompletingStage}
-                                handleCompleteAcademyStage={handleCompleteAcademyStage}
-                                setSelectedArticle={setSelectedArticle}
-                                setShowSetup={setShowSetup}
-                                setShowManual={setShowManual}
-                                selection={selection}
-                                impact={impact}
-                            />
-                        )}
+                            {activeTab === 'growth' && (
+                                <GrowthTab
+                                    status={status}
+                                    academyScore={academyScore}
+                                    completedStages={completedStages}
+                                    isCompletingStage={isCompletingStage}
+                                    handleCompleteAcademyStage={handleCompleteAcademyStage}
+                                    setSelectedArticle={setSelectedArticle}
+                                    setShowSetup={setShowSetup}
+                                    setShowManual={setShowManual}
+                                    selection={selection}
+                                    impact={impact}
+                                />
+                            )}
+                        </motion.div>
                     </AnimatePresence>
                 </div>
             </div>
