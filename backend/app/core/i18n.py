@@ -71,8 +71,8 @@ MESSAGES = {
             "🌟 *The Power of Passivity:* Your network is working for you 24/7. This is just the beginning of your x10 profit journey! 📈"
         ),
         "viral_share_caption": (
-            "🛑 STOP FEEDING THE BANKS! 🛑\n"
-            "Earn like a bank. $1 Every Minute. 🚀"
+            "🛑 STOP FEEDING THE BANKS! \n"
+            "Join FinTech Partner Network and earn like a bank. $1 Every Minute"
         )
     },
     "ru": {
