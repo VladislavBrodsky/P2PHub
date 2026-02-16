@@ -95,7 +95,7 @@ export const proService = {
         return response.data;
     },
 
-    completeAcademyStage: async (stage_id: string): Promise<{ status: string, academy_score: number }> => {
+    completeAcademyStage: async (stage_id: string): Promise<{ status: string, academy_score: number, tokens_remaining?: number }> => {
         const response = await apiClient.post(`/api/pro/academy/complete?stage_id=${stage_id}`, {});
         return response.data;
     },

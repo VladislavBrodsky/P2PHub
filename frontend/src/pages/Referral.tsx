@@ -23,14 +23,14 @@ import { apiClient } from '../api/client';
 import { getLevel } from '../utils/ranking';
 import { getApiUrl } from '../utils/api';
 import { PageSkeleton } from '../components/Skeletons/PageSkeleton';
-
+import { useUI } from '../context/UIContext';
 
 export default function ReferralPage() {
     const { t } = useTranslation();
     const { notification, selection } = useHaptic();
     const { user, updateUser, refreshUser, isLoading } = useUser();
     const { showNotification } = useNotificationStore();
-
+    const { setFooterVisible } = useUI();
 
     // Local State for Instant Feedback
     // const [tasksList, setTasksList] = useState<Task[]>(EARN_TASKS); // Unused
@@ -44,6 +44,12 @@ export default function ReferralPage() {
     const [showQR, setShowQR] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
     const [showBriefModal, setShowBriefModal] = useState(false);
+
+    useEffect(() => {
+        setFooterVisible(!showShareModal);
+        return () => setFooterVisible(true);
+    }, [showShareModal, setFooterVisible]);
+
 
 
 

@@ -171,25 +171,45 @@ export const GrowthTab = ({
                 </div>
             </div>
 
-            {/* Masterclass Modules - Optimized for compactness */}
-            <div className="space-y-4">
-                <div className="flex items-center gap-2 px-1">
-                    <div className="w-8 h-8 bg-indigo-50 dark:bg-indigo-500/10 rounded-lg flex items-center justify-center text-indigo-500 border border-indigo-100 dark:border-indigo-500/20">
-                        <ShieldCheck size={16} />
+            {/* Masterclass Modules - Academy Path */}
+            <div className="space-y-6 relative">
+                {/* Timeline Line */}
+                <div className="absolute left-[19px] top-12 bottom-0 w-0.5 bg-slate-200 dark:bg-white/10 z-0" />
+
+                <div className="flex items-center gap-2 px-1 relative z-10">
+                    <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-500 border border-indigo-100 dark:border-indigo-500/20 shadow-lg shadow-indigo-500/10">
+                        <ShieldCheck size={20} />
                     </div>
                     <div>
-                        <h4 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Synchronization Tasks</h4>
-                        <p className="text-[8px] font-black text-indigo-500/60 uppercase tracking-widest mt-0.5">Unlock Node Capabilities</p>
+                        <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">Growth Protocol</h4>
+                        <p className="text-[9px] font-black text-indigo-500/60 uppercase tracking-[0.2em] mt-1">Unlock Node Capabilities</p>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-4">
+                <div className="space-y-6 relative z-10">
                     {(() => {
                         const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
                         const modulesList = Array.isArray(modules) ? modules : [];
+
+                        // Costs Config (Hardcoded to match backend)
+                        const ACADEMY_COSTS: Record<string, { tokens: number; xp: number }> = {
+                            "m1": { tokens: 1, xp: 100 },
+                            "m2": { tokens: 1, xp: 100 },
+                            "m3": { tokens: -1, xp: 200 },
+                            "m4": { tokens: -2, xp: 250 },
+                            "m5": { tokens: -3, xp: 500 },
+                        };
+
                         return modulesList.map((module: any, i: number) => {
                             const isCompleted = completedStages.includes(module.id);
                             const isLoading = isCompletingStage === module.id;
+                            const costInfo = ACADEMY_COSTS[module.id] || { tokens: 0, xp: 100 };
+                            const cost = costInfo.tokens;
+
+                            // Check if user has enough tokens (if cost is negative)
+                            const userTokens = status?.pro_tokens || 0;
+                            const canAfford = cost >= 0 || userTokens >= Math.abs(cost);
+                            const isLocked = !isCompleted && !canAfford;
 
                             return (
                                 <motion.div
@@ -198,74 +218,119 @@ export const GrowthTab = ({
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: i * 0.1 }}
-                                    className={`pro-card-extreme rounded-[1.5rem] border overflow-hidden relative transition-all group ${isCompleted
-                                        ? 'opacity-60 border-emerald-500/20 bg-emerald-500/5'
-                                        : 'bg-white dark:bg-slate-900/50 border-slate-200 dark:border-white/10 shadow-md hover:border-indigo-500/30'
-                                        }`}
+                                    className="pl-12 relative group"
                                 >
-                                    <div className="p-5 sm:p-8 space-y-4">
-                                        <div className="flex justify-between items-start gap-4">
-                                            <div className="space-y-2">
-                                                <div className="flex items-center gap-2">
-                                                    <span className={`px-2.5 py-1 rounded-full border text-[7px] font-black uppercase tracking-widest ${module.diff === 'hard' ? 'border-red-500/30 bg-red-500/10 text-red-500' :
-                                                        module.diff === 'medium' ? 'border-amber-500/30 bg-amber-500/10 text-amber-500' : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-500'
-                                                        }`}>
-                                                        {t(`pro_dashboard.academy.protocols.difficulty_levels.${module.diff}`)}
-                                                    </span>
-                                                    {isCompleted && (
-                                                        <div className="flex items-center gap-1 text-emerald-500 text-[7px] font-black uppercase tracking-widest bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
-                                                            <CheckCircle2 size={8} />
-                                                            SYNCED
-                                                        </div>
+                                    {/* Timeline Node */}
+                                    <div className={`absolute left-0 top-6 w-10 h-10 rounded-full border-4 border-slate-50 dark:border-slate-950 flex items-center justify-center transition-all duration-500 z-20 ${isCompleted
+                                            ? 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]'
+                                            : isLocked
+                                                ? 'bg-slate-200 dark:bg-slate-800 text-slate-400'
+                                                : 'bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)] animate-pulse'
+                                        }`}>
+                                        <span className="font-black text-xs">{i + 1}</span>
+                                    </div>
+
+                                    {/* Card */}
+                                    <div className={`pro-card-extreme rounded-[1.5rem] overflow-hidden relative transition-all duration-300 ${isCompleted
+                                            ? 'opacity-80 grayscale-[0.3] border-emerald-500/20 bg-emerald-500/5'
+                                            : isLocked
+                                                ? 'opacity-60 border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-white/5'
+                                                : 'bg-white dark:bg-slate-900/60 border-indigo-500/30 shadow-xl shadow-indigo-500/10 hover:scale-[1.01]'
+                                        }`}>
+
+                                        {/* Status Header */}
+                                        <div className="px-5 py-4 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-slate-50/50 dark:bg-white/5">
+                                            <span className={`px-2.5 py-1 rounded-full border text-[8px] font-black uppercase tracking-widest ${module.diff === 'hard' ? 'border-red-500/30 bg-red-500/10 text-red-500' :
+                                                    module.diff === 'medium' ? 'border-amber-500/30 bg-amber-500/10 text-amber-500' :
+                                                        'border-emerald-500/30 bg-emerald-500/10 text-emerald-500'
+                                                }`}>
+                                                {t(`pro_dashboard.academy.protocols.difficulty_levels.${module.diff}`)}
+                                            </span>
+
+                                            {isCompleted ? (
+                                                <div className="flex items-center gap-1.5 text-emerald-500">
+                                                    <CheckCircle2 size={14} />
+                                                    <span className="text-[9px] font-black uppercase tracking-widest">SYNCED</span>
+                                                </div>
+                                            ) : (
+                                                <div className={`flex items-center gap-1.5 px-3 py-1 rounded-lg border font-black text-[9px] uppercase tracking-widest ${cost > 0
+                                                        ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
+                                                        : 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20'
+                                                    }`}>
+                                                    {cost > 0 ? (
+                                                        <>+{cost} TOKEN REWARD</>
+                                                    ) : (
+                                                        <>{cost} TOKENS TO UNLOCK</>
                                                     )}
                                                 </div>
-                                                <h4 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight leading-tight">{module.title}</h4>
-                                                <p className="text-[9px] font-black text-indigo-500/70 uppercase tracking-widest">{module.hook}</p>
-                                            </div>
-                                            <div className="w-10 h-10 flex-none rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-black text-sm shadow-sm">
-                                                +{module.points}
-                                            </div>
-                                        </div>
-
-                                        <p className="text-[12px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl">
-                                            {renderMarkdown(module.content)}
-                                        </p>
-
-                                        <div className="p-4 bg-slate-50 dark:bg-black/40 rounded-[1.25rem] border border-slate-100 dark:border-white/5 space-y-3 shadow-inner group/task">
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-7 h-7 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500">
-                                                    <Terminal size={12} />
-                                                </div>
-                                                <span className="text-[8px] font-black uppercase tracking-widest text-indigo-500">Node Task</span>
-                                            </div>
-                                            <p className="text-[12px] font-bold text-slate-900 dark:text-white leading-relaxed">
-                                                {module.task}
-                                            </p>
-                                            {module.link && (
-                                                <a
-                                                    href={module.link}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 text-[9px] font-black uppercase tracking-widest hover:text-indigo-500 transition-colors"
-                                                >
-                                                    {module.cta || 'Initiate Sync'} <Share size={10} />
-                                                </a>
                                             )}
                                         </div>
 
-                                        {!isCompleted && (
-                                            <button
-                                                onClick={() => handleCompleteAcademyStage(module.id)}
-                                                disabled={isLoading}
-                                                className="w-full h-12 vibing-blue-animated rounded-[1rem] font-black text-[9px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/10 text-white"
-                                            >
-                                                {isLoading ? <Loader2 size={16} className="animate-spin" /> : (
-                                                    <>
-                                                        Sync Protocol <Sparkles size={14} />
-                                                    </>
-                                                )}
-                                            </button>
-                                        )}
+                                        <div className="p-5 sm:p-6 space-y-4">
+                                            <div className="space-y-1">
+                                                <h4 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{module.title}</h4>
+                                                <p className="text-[10px] font-bold text-indigo-500/80 uppercase tracking-widest">{module.hook}</p>
+                                            </div>
+
+                                            {/* Expandable Content (Always shown but structured) */}
+                                            <p className="text-[12px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-black/20 p-4 rounded-xl border border-slate-100 dark:border-white/5">
+                                                {renderMarkdown(module.content)}
+                                            </p>
+
+                                            {/* Action / Task */}
+                                            {!isCompleted && !isLocked && (
+                                                <div className="relative p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 space-y-3 overflow-hidden group/task">
+                                                    <div className="absolute inset-0 bg-linear-to-r from-indigo-500/5 to-purple-500/5 opacity-50" />
+                                                    <div className="relative z-10">
+                                                        <div className="flex items-center gap-2 mb-2">
+                                                            <Terminal size={12} className="text-indigo-500" />
+                                                            <span className="text-[9px] font-black uppercase tracking-[0.15em] text-indigo-500">Node Task</span>
+                                                        </div>
+                                                        <p className="text-[11px] font-bold text-slate-800 dark:text-slate-200 leading-relaxed mb-3">
+                                                            {module.task}
+                                                        </p>
+
+                                                        {module.link && (
+                                                            <a href={module.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-[9px] font-black uppercase tracking-widest hover:underline mb-3">
+                                                                {module.cta || 'Initiate Sync'} <Share size={10} />
+                                                            </a>
+                                                        )}
+
+                                                        <button
+                                                            onClick={() => handleCompleteAcademyStage(module.id)}
+                                                            disabled={isLoading}
+                                                            className="w-full h-11 bg-slate-900 dark:bg-white hover:scale-[1.02] active:scale-95 text-white dark:text-slate-900 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg relative overflow-hidden"
+                                                        >
+                                                            {isLoading ? <Loader2 size={14} className="animate-spin" /> : (
+                                                                <>
+                                                                    <span>
+                                                                        {cost > 0 ? "Complete & Claim Reward" : `Unlock & Sync (-${Math.abs(cost)} Tokens)`}
+                                                                    </span>
+                                                                    <div className="w-px h-3 bg-current opacity-20" />
+                                                                    <span className="opacity-70">+{costInfo.xp} XP</span>
+                                                                </>
+                                                            )}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {isLocked && !isCompleted && (
+                                                <div className="p-4 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 text-center">
+                                                    <div className="flex flex-col items-center gap-2 opacity-60">
+                                                        <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-white/10 flex items-center justify-center">
+                                                            <div className="w-3 h-3 rounded-full bg-slate-400 dark:bg-white/30" />
+                                                        </div>
+                                                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                                                            Insufficient Tokens
+                                                        </span>
+                                                        <span className="text-[8px] font-medium text-slate-400">
+                                                            Earn more tokens or upgrade to PRO+
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </motion.div>
                             );

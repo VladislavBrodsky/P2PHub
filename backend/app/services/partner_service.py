@@ -270,7 +270,8 @@ async def sync_single_photo(bot, session, partner: Partner) -> bool:
     try:
         user_photos = await bot.get_user_profile_photos(partner.telegram_id, limit=1)
         if user_photos.total_count > 0:
-            new_file_id = user_photos.photos[0][0].file_id
+            # #comment: Use the largest available photo (last in the list) for best quality
+            new_file_id = user_photos.photos[0][-1].file_id
             if partner.photo_file_id != new_file_id:
                 partner.photo_file_id = new_file_id
                 session.add(partner)

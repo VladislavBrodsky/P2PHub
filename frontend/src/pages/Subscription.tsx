@@ -200,9 +200,9 @@ export default function SubscriptionPage() {
             {/* Quick Benefits Grid */}
             <div className="grid grid-cols-2 gap-2 mb-8">
                 {(t('subscription.upgrade.benefits', { returnObjects: true }) as string[]).slice(0, 4).map((benefit, i) => (
-                    <div key={i} className="flex items-center gap-2 p-3 bg-white/5 border border-white/5 rounded-2xl">
+                    <div key={i} className="flex items-center gap-2 p-3 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl">
                         <CheckCircle2 size={14} className="text-amber-500 shrink-0" />
-                        <span className="text-[10px] font-bold text-slate-300 leading-tight">{benefit}</span>
+                        <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight">{benefit}</span>
                     </div>
                 ))}
             </div>
@@ -383,9 +383,9 @@ export default function SubscriptionPage() {
                         { q: t('subscription.faq.q2', 'How do tokens work?'), a: t('subscription.faq.a2', 'You get 500 tokens immediately. Tokens reset every month if you run out.') },
                         { q: t('subscription.faq.q3', 'Can I use multiple accounts?'), a: t('subscription.faq.a3', 'The license is tied to your Telegram ID. One purchase per account.') }
                     ].map((faq, i) => (
-                        <div key={i} className="bg-white/5 border border-white/5 rounded-2xl p-4">
-                            <h4 className="text-[11px] font-black text-white mb-2 uppercase tracking-tight">{faq.q}</h4>
-                            <p className="text-[10px] text-slate-500 font-medium leading-relaxed">{faq.a}</p>
+                        <div key={i} className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl p-4">
+                            <h4 className="text-[11px] font-black text-slate-900 dark:text-white mb-2 uppercase tracking-tight">{faq.q}</h4>
+                            <p className="text-[10px] text-slate-600 dark:text-slate-400 font-medium leading-relaxed">{faq.a}</p>
                         </div>
                     ))}
                 </div>

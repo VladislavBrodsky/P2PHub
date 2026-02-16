@@ -82,6 +82,15 @@ async def get_pro_status(
         "bot_username": (await bot.get_me()).username
     }
 
+# Academy Config: Cost (negative) or Reward (positive)
+ACADEMY_RULES = {
+    "m1": {"tokens": 1, "xp": 100},  # Reward 1 token
+    "m2": {"tokens": 1, "xp": 100},  # Reward 1 token
+    "m3": {"tokens": -1, "xp": 200}, # Cost 1 token
+    "m4": {"tokens": -2, "xp": 250}, # Cost 2 tokens
+    "m5": {"tokens": -3, "xp": 500}, # Cost 3 tokens
+}
+
 @router.post("/academy/complete")
 async def complete_academy_stage(
     stage_id: str,
@@ -90,15 +99,36 @@ async def complete_academy_stage(
 ):
     import json
     completed = json.loads(partner.completed_stages)
-    if stage_id not in completed:
-        completed.append(stage_id)
-        partner.completed_stages = json.dumps(completed)
-        # Award 100 academy points per stage
-        partner.academy_score += 100
-        session.add(partner)
-        await session.commit()
     
-    return {"status": "success", "academy_score": partner.academy_score}
+    if stage_id in completed:
+        return {"status": "already_completed", "academy_score": partner.academy_score}
+
+    rules = ACADEMY_RULES.get(stage_id, {"tokens": 0, "xp": 100})
+    token_change = rules["tokens"]
+    xp_reward = rules["xp"]
+
+    # Check if user has enough tokens (if cost is involved)
+    if token_change < 0 and partner.pro_tokens < abs(token_change):
+         raise HTTPException(
+            status_code=402, 
+            detail=f"Insufficient tokens. This module requires {abs(token_change)} tokens."
+        )
+
+    # Apply changes
+    completed.append(stage_id)
+    partner.completed_stages = json.dumps(completed)
+    partner.academy_score += xp_reward
+    partner.pro_tokens += token_change
+    
+    session.add(partner)
+    await session.commit()
+    
+    return {
+        "status": "success", 
+        "academy_score": partner.academy_score, 
+        "tokens_remaining": partner.pro_tokens,
+        "token_change": token_change
+    }
 
 @router.post("/setup")
 async def setup_social_api(
