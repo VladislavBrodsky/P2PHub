@@ -566,12 +566,13 @@
       "items": [
         {
           "id": "studio",
-          "title": "Viral Studio",
+          "title": "Viral Marketing Studio (24/7 AI Powered)",
           "desc": "Generate 30 Days of Content in 30 Seconds. Get daily fresh viral topics and AI-generated hooks tailored to your audience.",
           "stats": [
             "**3 Posts / Day** on Autopilot",
             "Reduce work time by **95%**",
-            "AI Keyword Research"
+            "AI Keyword Research",
+            "Instant FOMO & CTAs"
           ],
           "terminal": [
             "> Generating viral thread...",
@@ -581,11 +582,12 @@
         },
         {
           "id": "factory",
-          "title": "AI Content Factory",
+          "title": "AI Content Factory (24/7 fully automated)",
           "desc": "Autonomous Agent that posts for you while you sleep. Your own full-stack SMM manager. Fully automated autoposting across all platforms.",
           "stats": [
             "**24/7 AI-Powered** Publishing",
             "10x Marketing Efficiency",
+            "24/7 Autopilot Mode",
             "Multi-platform Sync"
           ],
           "terminal": [

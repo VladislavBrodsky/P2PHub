@@ -295,7 +295,7 @@ export default function SubscriptionPage() {
                                         {item.desc}
                                     </p>
 
-                                    <div className="space-y-3 mb-6 flex-grow">
+                                    <div className="space-y-3 mb-6 grow">
                                         {item.stats.map((stat: string, sIdx: number) => (
                                             <div key={sIdx} className="flex items-center gap-2">
                                                 <div className={`w-4 h-4 rounded-full flex items-center justify-center ${item.id === 'studio' ? 'bg-pink-500/20 text-pink-500' : 'bg-emerald-500/20 text-emerald-500'}`}>
