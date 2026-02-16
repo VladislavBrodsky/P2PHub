@@ -63,31 +63,41 @@ export const BentoGrid = () => {
     // #comment: Custom scroll listener to track the active card in the horizontal carousel.
     // While currently using manual scroll distance math, future iterations should move 
     // to IntersectionObserver for even better main-thread performance on high-density displays.
+    const rafRef = useRef<number | null>(null);
+
     const handleScroll = () => {
         if (!scrollRef.current) return;
-        const scrollLeft = scrollRef.current.scrollLeft;
-        const width = scrollRef.current.clientWidth;
 
-        // Find all children and their positions to determine the truly active one
-        const children = Array.from(scrollRef.current.children) as HTMLElement[];
-        if (children.length === 0) return;
+        if (rafRef.current) {
+            cancelAnimationFrame(rafRef.current);
+        }
 
-        let closestIndex = 0;
-        let minDistance = Infinity;
-        const centerPoint = scrollLeft + width / 2;
+        rafRef.current = requestAnimationFrame(() => {
+            if (!scrollRef.current) return;
+            const scrollLeft = scrollRef.current.scrollLeft;
+            const width = scrollRef.current.clientWidth;
 
-        children.forEach((child, i) => {
-            const childCenter = child.offsetLeft + child.offsetWidth / 2;
-            const distance = Math.abs(centerPoint - childCenter);
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestIndex = i;
+            // Find all children and their positions to determine the truly active one
+            const children = Array.from(scrollRef.current.children) as HTMLElement[];
+            if (children.length === 0) return;
+
+            let closestIndex = 0;
+            let minDistance = Infinity;
+            const centerPoint = scrollLeft + width / 2;
+
+            children.forEach((child, i) => {
+                const childCenter = child.offsetLeft + child.offsetWidth / 2;
+                const distance = Math.abs(centerPoint - childCenter);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestIndex = i;
+                }
+            });
+
+            if (closestIndex !== activeIndex) {
+                setActiveIndex(closestIndex);
             }
         });
-
-        if (closestIndex !== activeIndex) {
-            setActiveIndex(closestIndex);
-        }
     };
 
     const getBackIcon = (index: number) => {

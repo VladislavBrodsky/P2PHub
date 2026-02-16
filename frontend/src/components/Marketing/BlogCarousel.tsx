@@ -73,6 +73,7 @@ export const BlogCarousel = () => {
                                     src={post.image_url || post.image}
                                     className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-all duration-700 group-hover:scale-110"
                                     alt={post.title}
+                                    loading="lazy"
                                 />
                                 <div className="absolute inset-0 bg-linear-to-t from-slate-50 via-slate-50/80 dark:from-slate-950 dark:via-slate-950/80 to-transparent z-10" />
                             </>

@@ -58,7 +58,10 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
     }, [selectedCategory, searchQuery, posts.length]);
 
     useEffect(() => {
-        fetchPosts(true);
+        const timer = setTimeout(() => {
+            fetchPosts(true);
+        }, 500);
+        return () => clearTimeout(timer);
     }, [selectedCategory, searchQuery]);
 
     // Sync header visibility with selectedPost

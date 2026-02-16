@@ -4,11 +4,11 @@ import { ImageCacheService } from '../../services/ImageCacheService';
 import { getApiUrl } from '../../utils/api';
 
 const AVATARS = [
-    `${getApiUrl()}/images/avatars/avatar_1.webp`,
-    `${getApiUrl()}/images/avatars/avatar_2.webp`,
-    `${getApiUrl()}/images/avatars/avatar_3.webp`,
-    `${getApiUrl()}/images/avatars/avatar_4.webp`,
-    `${getApiUrl()}/images/avatars/avatar_5.webp`
+    "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
+    "https://img.freepik.com/free-psd/3d-illustration-person-with-punk-hair-glasses_23-2149436198.jpg",
+    "https://img.freepik.com/free-psd/3d-illustration-business-man-with-glasses_23-2149436194.jpg",
+    "https://img.freepik.com/free-psd/3d-illustration-person-with-rainbow-hair_23-2149436196.jpg",
+    "https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436190.jpg"
 ];
 
 const CRYPTO_ICONS = [
@@ -186,7 +186,18 @@ type OrbitItem =
     | { type: 'crypto'; name: string; color: string; gradientStart?: string; gradientEnd?: string };
 
 const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: number; total: number }) => {
-    const radius = 140; // Balanced radius
+    // Responsive radius: 140px on large screens, scaled down on small screens
+    const [radius, setRadius] = useState(140);
+
+    useEffect(() => {
+        const updateRadius = () => {
+            setRadius(window.innerWidth < 380 ? 110 : 140);
+        };
+        updateRadius();
+        window.addEventListener('resize', updateRadius);
+        return () => window.removeEventListener('resize', updateRadius);
+    }, []);
+
     const duration = 50;
     const angle = (index / total) * 360;
     const [cachedSrc, setCachedSrc] = useState<string | null>(null);
