@@ -424,7 +424,7 @@ export const ProDashboard = () => {
         >
             <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(30,58,138,0.15)_0%,transparent_50%)] pointer-events-none" />
             <div className="relative z-10 max-w-5xl mx-auto px-4 pt-6 pb-24 min-h-screen">
-                {/* Header Section */}
+                {/* Header Section - Mobile Optimized */}
                 <div className="flex flex-row items-center justify-between gap-2 mb-4">
                     <div className="flex items-center gap-2 sm:gap-3">
                         <motion.div
