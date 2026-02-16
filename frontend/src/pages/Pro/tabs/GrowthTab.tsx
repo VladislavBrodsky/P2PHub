@@ -161,7 +161,7 @@ export const GrowthTab = ({
                                     <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">{article.readTime} MIN READ</span>
                                 </div>
                                 <h5 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
-                                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 mb-4 opacity-80 italic">"{article.desc}"</p>
+                                <p className="text-[11px] font-normal text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 mb-4 opacity-80 italic">"{article.desc}"</p>
                                 <div className="flex items-center gap-2 text-[8px] font-black text-indigo-500 uppercase tracking-widest group-hover:gap-3 transition-all">
                                     {t('pro_dashboard.academy.articles.btn_read')} <ArrowRight size={10} />
                                 </div>

@@ -4,6 +4,7 @@ import {
     X, TrendingUp, Zap, Loader2, Quote, CheckCircle2,
     ArrowRight, Flame, BookOpen, Sparkles
 } from 'lucide-react';
+import { renderMarkdown } from '../utils/renderMarkdown';
 import { Trans, useTranslation } from 'react-i18next';
 
 interface ProModalsProps {
@@ -252,9 +253,9 @@ export const ProDashboardModals = ({
                                     </button>
                                 </div>
                                 <div className="prose prose-sm dark:prose-invert max-h-[60vh] overflow-y-auto no-scrollbar">
-                                    <p className="text-[14px] font-medium leading-relaxed text-slate-500 dark:text-slate-400">
-                                        {selectedArticle.content}
-                                    </p>
+                                    <div className="text-[13px] font-normal leading-relaxed text-slate-600 dark:text-slate-300 space-y-4">
+                                        {renderMarkdown(selectedArticle.content)}
+                                    </div>
                                 </div>
                                 <button
                                     onClick={() => setSelectedArticle(null)}
