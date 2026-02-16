@@ -365,7 +365,6 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
 
         try {
             // Contextual Auto-Intelligence
-            const lowerMsg = messageText.toLowerCase();
 
             // If it's a category click or exact question
             const categoryMatch = Object.keys(localKB).find(k =>
@@ -605,7 +604,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                                         onClick={() => handleCategoryClick(key)}
                                                         className="flex items-center gap-2.5 p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all active:scale-95 text-left"
                                                     >
-                                                        <div className="flex-shrink-0 p-1.5 rounded-lg bg-slate-50 dark:bg-white/5">
+                                                        <div className="shrink-0 p-1.5 rounded-lg bg-slate-50 dark:bg-white/5">
                                                             <Icon className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                                                         </div>
                                                         <span className="text-[10px] font-black uppercase tracking-tight text-slate-900 dark:text-white leading-tight truncate">

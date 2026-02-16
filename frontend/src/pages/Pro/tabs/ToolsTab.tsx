@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import {
-    Zap, Flame, Search, ChevronRight, Compass, Monitor, Loader2
+    Zap, Flame, Search, ChevronRight, Compass, Loader2
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { renderMarkdown } from '../utils/renderMarkdown';

@@ -37,15 +37,6 @@ export const ProDashboard = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [showSetup, setShowSetup] = useState(false);
     const [showManual, setShowManual] = useState<string | null>(null);
-    const [apiData, setApiData] = useState({
-        x_api_key: '',
-        x_api_secret: '',
-        x_access_token: '',
-        x_access_token_secret: '',
-        telegram_channel_id: '',
-        telegram_channels: [] as string[],
-        linkedin_access_token: ''
-    });
 
     const [trends, setTrends] = useState<any[]>([]);
     const [isFetchingTrends, setIsFetchingTrends] = useState(false);
@@ -72,15 +63,7 @@ export const ProDashboard = () => {
             const data = await proService.getStatus();
             setStatus(data);
             if (data?.setup) {
-                setApiData({
-                    x_api_key: data.setup.x_api_key || '',
-                    x_api_secret: data.setup.x_api_secret || '',
-                    x_access_token: data.setup.x_access_token || '',
-                    x_access_token_secret: data.setup.x_access_token_secret || '',
-                    telegram_channel_id: data.setup.telegram_channel_id || '',
-                    telegram_channels: data.setup.telegram_channels || [],
-                    linkedin_access_token: data.setup.linkedin_access_token || ''
-                });
+                // apiData removed
             }
             setAcademyScore(data?.academy_score || 0);
             if (data?.completed_stages) {
@@ -201,62 +184,8 @@ export const ProDashboard = () => {
         }
     };
 
-    const handleCopyAnyText = (text: string) => {
-        navigator.clipboard.writeText(text);
-        showNotification({
-            title: 'Copied',
-            message: 'Intelligence data copied to clipboard.',
-            type: 'success'
-        });
-        impact('light');
-    };
 
-    const handleSaveSetup = async () => {
-        setIsLoading(true);
-        impact('heavy');
-        try {
-            await proService.setupSocial(apiData);
-            await loadStatus();
-            setShowSetup(false);
-            showNotification({
-                title: t('pro_dashboard.setup.save_success_title'),
-                message: t('pro_dashboard.setup.save_success_text'),
-                type: 'success'
-            });
-            hapticNotification('success');
-        } catch (error) {
-            console.error('Failed to save setup', error);
-            showNotification({
-                title: t('pro_dashboard.setup.save_error_title'),
-                message: t('pro_dashboard.setup.save_error_text'),
-                type: 'warning'
-            });
-            hapticNotification('error');
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
-    const handleTestIntegration = async (platform: string) => {
-        impact('medium');
-        try {
-            await proService.testIntegration(platform as any);
-            showNotification({
-                title: 'Test Successful',
-                message: `${platform.toUpperCase()} integration is active and verified.`,
-                type: 'success'
-            });
-            hapticNotification('success');
-        } catch (error: any) {
-            const msg = error.response?.data?.error || `Failed to verify ${platform} node. Check your keys.`;
-            showNotification({
-                title: 'Test Failed',
-                message: msg,
-                type: 'warning'
-            });
-            hapticNotification('error');
-        }
-    };
 
     // --- Lifecycle Effects ---
 

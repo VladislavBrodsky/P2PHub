@@ -79,7 +79,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         } catch (error) {
             console.error('Failed to persist stage completion:', error);
         }
-    }, [user, updateUser]);
+    }, [updateUser]);
 
     const refreshUser = React.useCallback(async (force = false) => {
         const now = Date.now();
@@ -268,6 +268,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useUser = () => {
     const context = useContext(UserContext);
     if (context === undefined) {

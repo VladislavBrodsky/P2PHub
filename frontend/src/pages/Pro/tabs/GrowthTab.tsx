@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import {
     Info, CheckCircle2, Bot, TrendingUp, ArrowRight, ShieldCheck,
     Terminal, Share, Flame, Globe, Send, Twitter, Linkedin, ChevronRight,
-    Loader2, Sparkles, Brain, Lock, Search, Play
+    Loader2, Brain, Lock, Play
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PROStatus } from '../../../services/proService';

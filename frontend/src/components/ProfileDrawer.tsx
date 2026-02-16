@@ -2,15 +2,13 @@ import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ArrowLeft,
-    ShieldCheck,
     Wallet,
     Check,
     Copy,
-    ChevronRight
+    ChevronRight,
 } from 'lucide-react';
 
 import { useHaptic } from '../hooks/useHaptic';
-import { useUser } from '../context/UserContext';
 import { useTonConnectUI, useTonAddress, useTonWallet } from '@tonconnect/ui-react';
 import { backButton } from '@telegram-apps/sdk-react';
 import { PersonalizationCard } from './PersonalizationCard';
@@ -28,7 +26,6 @@ interface ProfileDrawerProps {
 
 export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDrawerProps) {
     const { selection } = useHaptic();
-    const { user } = useUser();
     const { t } = useTranslation();
 
     const [copied, setCopied] = React.useState(false);

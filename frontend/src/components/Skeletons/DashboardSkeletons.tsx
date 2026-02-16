@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+// Premium skeleton for Dashboard Stat Cards to prevent Layout Shift (CLS)
 
 /**
  * Premium skeleton for Dashboard Stat Cards to prevent Layout Shift (CLS)

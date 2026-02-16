@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Sparkles, Send, ChevronRight, Terminal, Bot, Image as ImageIcon,
@@ -59,17 +59,6 @@ export const StudioTab = ({
         setExternalReady(!!postType && !!audience);
     }, [postType, audience, setExternalReady]);
 
-    useEffect(() => {
-        const handleGen = () => handleGenerate();
-        const handlePublish = () => setShowPublishModal(true);
-
-        window.addEventListener('trigger-studio-gen', handleGen);
-        window.addEventListener('trigger-studio-publish', handlePublish);
-        return () => {
-            window.removeEventListener('trigger-studio-gen', handleGen);
-            window.removeEventListener('trigger-studio-publish', handlePublish);
-        };
-    }, [postType, audience, language, generatedResult, status]);
 
     useEffect(() => {
         let interval: any;
@@ -82,7 +71,7 @@ export const StudioTab = ({
         return () => clearInterval(interval);
     }, [isGenerating]);
 
-    const handleGenerate = async () => {
+    const handleGenerate = useCallback(async () => {
         if (!postType || !audience) {
             notification({ title: 'Error', text: 'Select strategy and target', type: 'error' });
             return;
@@ -109,7 +98,19 @@ export const StudioTab = ({
         } finally {
             setIsGenerating(false);
         }
-    };
+    }, [postType, audience, language, history, historyIndex, status, t, notification, impact, setHistory, setHistoryIndex, setGeneratedResult, setStatus, setExternalStep]);
+
+    useEffect(() => {
+        const handleGen = () => handleGenerate();
+        const handlePublish = () => setShowPublishModal(true);
+
+        window.addEventListener('trigger-studio-gen', handleGen);
+        window.addEventListener('trigger-studio-publish', handlePublish);
+        return () => {
+            window.removeEventListener('trigger-studio-gen', handleGen);
+            window.removeEventListener('trigger-studio-publish', handlePublish);
+        };
+    }, [handleGenerate]);
 
     const handleCopyText = () => {
         if (!generatedResult) return;
@@ -127,6 +128,7 @@ export const StudioTab = ({
             try {
                 await navigator.share({
                     title: generatedResult.title,
+                    text: textToShare
                 });
             } catch (err) {
                 console.error('Share failed', err);
@@ -527,7 +529,7 @@ export const StudioTab = ({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[2000] flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-xl overflow-y-auto"
+                        className="fixed inset-0 z-2000 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-xl overflow-y-auto"
                         onClick={() => setShowPublishModal(false)}
                     >
                         <motion.div
