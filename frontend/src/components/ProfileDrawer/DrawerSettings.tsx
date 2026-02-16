@@ -70,7 +70,7 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
             </div>
 
             <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 opacity-50">
-                P2PHub v1.4.0 (Stable)
+                P2PHub v1.7.0 (Stable)
             </p>
         </div>
     );
