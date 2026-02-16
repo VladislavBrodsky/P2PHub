@@ -1322,218 +1322,279 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
 *(Learn. Earn. Scale. Act now.)*""",
-    "41": """# Game Over: When Playing Becomes Profitable
+    "41": """# Game Over: Why Finance is Becoming the Ultimate Video Game
 
-Gamers used to spend years grinding for nothing. 
-In GameFi, your sword, your shield, and your level are **Money**.
+For decades, banking has been designed to be boring. Gray buildings, complicated forms, and slow processes were used to make you feel like finance was a "serious" matter that only experts could handle. But in 2026, the walls of the bank are being replaced by the **Financial Quest**.
 
-**Finance shouldn't be boring.**
+Welcome to the era of **GameFi Finance**.
 
-### The Financial Quest
+### The Psychology of the Quest
+Why do people spend 10 hours a day grinding for legendary swords in a video game? Because they feel a sense of **Progression and Reward**. 
+Pintopay applies this same psychology to your wealth.
+*   **XP for Learning**: Every time you complete a module in the Academy, you earn experience points.
+*   **Rank Upgrades**: Moving from Bronze to Legend feels like leveling up a character class. Each level unlocks new "Abilities" (lower fees, higher limits, better tools).
+*   **Lootboxes of Liquidity**: Our reward systems provide unexpected bonuses when your network reaches milestones.
 
-Pintopay integrates game mechanics into growth. 
-Complete quests. Earn achievements. Unlock lootboxes with real crypto. 
-Gamify your bank account.
+### Turning Your Bank Account into a Leaderboard
+In the traditional world, your success is hidden. In the Pintopay ecosystem, your performance as a partner is visible on the **Global Leaderboard**. This creates a healthy competitive environment where the most effective builders are recognized and rewarded. 
+Finance shouldn't be a chore; it should be an adventure.
 
-**Play the game. Win the money.**
+### From "Grinding" to "Winning"
+Many people "grind" at a job for 40 years without ever reaching the "End Boss" (Financial Freedom). 
+Pintopay provides a clear map. We show you the exact quests you need to complete to reach **Escape Velocity**. Use the Viral Studio as your "Special Move" to clear levels faster. Use the Intelligence Hub as your "Tutorial" to master the game mechanics.
 
-### Your Freedom in One Click
-
-Pintopay is the solution. The door is right here.
-
-👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
-*(High Demand. Act Fast.)""",
-    "42": """# Metaverse Banking: Assets in Two Worlds
-
-Soon, we'll spend more time in virtual reality than in physical reality. 
-You’ll need money there. You’ll need a bank there.
-
-**Pintopay is the Bank of the Metaverse.**
-
-### The Reality Bridge
-
-We build the rails between your avatar’s earnings and your physical dinner. 
-Earn in the game — buy a meal in Tokyo. Instantly. 
-The future has already loaded. Are you in?
-
-**One wallet. Unlimited worlds.**
+### Conclusion: Don't Just Play, Profit
+The world is being gamified. You can either be a "Non-Player Character" (NPC) who just follows the rules, or you can be the "Hero" of your own financial story. Pick up your Pintopay card and start the quest.
 
 ### Your Freedom in One Click
-
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
-*(High Demand. Act Fast.)""",
-    "43": """# AI + Crypto: The Symbiosis of the Century
+👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
+*(Start the game. Win the money. Act today.)*""",
+    "42": """# Metaverse Banking: Why Your Digital Assets Need Real-World Bridges
 
-AI is the brain. Crypto is the blood. 
-Together, they create an **Autonomous Economy**.
+Soon, we will spend more time in virtual environments than in physical ones. Whether it's VR workrooms, 3D social spaces, or immersive gaming worlds, the **Metaverse** is becoming our primary theater of interaction. But there is a problem: your avatar's wealth is often "trapped" inside the game.
 
-**Machine efficiency Meets Decentralized Trust.**
+Pintopay is the **Bank of the Metaverse Bridge.**
 
-### The Edge of Progress
+### Reality Bridging: Making Virtual Wealth Tangible
+Imagine earning a rare item in a virtual world, selling it for crypto, and using that exact same value to pay for your physical lunch 30 seconds later. 
+*   **The Link**: Pintopay connects your digital wallet directly to the Mastercard global network.
+*   **The Speed**: No "exchanges," no "withdrawals to bank," no 2-day waits.
+*   **The Power**: Your metaverse earnings are now universal currency.
 
-Pintopay uses AI for fraud protection and network optimization. 
-Crypto allows AI agents to transact. 
-Join the most advanced financial ecosystem on the planet.
+### One Wallet. Unlimited Worlds.
+The old bank account is "Single-World." It only works in the physical world and is limited by your local geography. A Pintopay account is **Multi-World**. It doesn't care if your profit came from an AI-trading bot, a virtual real estate flip, or a partner commission from someone in another country. It all liquidates at the point of sale.
 
-**The symbiosis is here. Don't get left behind.**
+### The Virtual Real Estate Factor
+Building a network in Pintopay is effectively building **Metaverse Real Estate**. You are owning the infrastructure (the nodes) through which digital value flows. As the Metaverse grows, the demand for "Liquidity Bridges" will skyrocket. By establishing your network today, you are owning the "Toll Booths" of the future economy.
+
+### Conclusion: The Future has Loaded. Are You In?
+The divide between "Digital Money" and "Real Money" is disappearing. In 2026, there is only "Money," and it flows through the rails that are the most efficient. Don't let your metaverse wealth stay trapped in a screen. Bridge it with Pintopay.
 
 ### Your Freedom in One Click
-
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
-*(High Demand. Act Fast.)""",
-    "44": """# Velocity of Wealth: Moving Faster Than Expectations
+👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
+*(Bridge the worlds. Claim your liquidity. Act now.)*""",
+    "43": """# AI + Crypto: The Symbiosis That Will Define the Next Decade
 
-Money loves speed. 
-If you wait a week to invest, you've already lost. 
-If your transfer takes 3 days, you’ve lost the opportunity.
+We are witnessing the merger of the two most powerful technologies in human history: **Artificial Intelligence** and **Cryptographic Finance**. AI is the "Brain" of the new economy—processing data and making decisions. Crypto is the "Blood"—the medium of exchange that allows machines to transact without human friction.
 
-**Speed of Thought = Speed of Transaction.**
+Together, they are creating an **Autonomous Economy.**
 
-### Frictionless Flow
+### Machine Efficiency Meets Decentralized Trust
+*   **AI Needs Crypto**: Traditional bank accounts are too slow and bureaucratic for AI agents. An AI needs a wallet that can settle transactions in milliseconds with zero paperwork.
+*   **Crypto Needs AI**: Humans cannot process the massive data flows of global markets in real-time. AI can.
+*   **The Result**: The Pintopay ecosystem uses AI-driven fraud protection and network optimization to ensure the rails are always fast and secure.
 
-Pintopay removes the brakes. 
-Scan. Pay. Done. 
-No "processing," no delays, no excuses. 
-Don't be the anchor on your own ship.
+### The Rise of the AI-Partner
+As a Pintopay Partner, your greatest ally is the **Viral Studio**. This is your personal AI marketing team. It allows you to produce content, analyze trends, and nurture leads with more efficiency than a 100-person agency. You aren't just "using an app"; you are commanding a digital military that is constantly learning how to grow your business.
 
-**Move fast. Break records.**
+### Why You Can't Afford to Be "Human-Only"
+In a world of automated high-speed capital, "manual labor" is a recipe for poverty. If you try to build your network the old way (one phone call at a time), you will be outperformed by partners who use the **AI Multiplier**. The symbiosis is here. Don't fight the machine—become its commander.
+
+### Conclusion: Step into the Command Center
+Pintopay is built for the AI era. Our rails are machine-friendly, and our tools are AI-powered. Join the most advanced financial ecosystem on the planet and let technology carry the heavy weight for you.
 
 ### Your Freedom in One Click
-
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
-*(High Demand. Act Fast.)""",
-    "45": """# Earning in Your Sleep: The Buffet Principle
+👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
+*(Embrace the symbiosis. Lead the machines. Act today.)*""",
+    "44": """# Velocity of Wealth: Why The Fast Always Eat the Slow
 
-Warren Buffett said: "If you don't find a way to make money while you sleep, you will work until you die."
+In the 20th century, the "Big ate the Small." If you were a giant corporation, you could crush anyone simply by having more cash. In 2026, the rules have changed. Now, **The Fast eat the Slow**. Your ability to move assets, close deals, and respond to markets determines your net worth.
 
-**Make your money work overtime.**
+Money loves speed. Pintopay is the engine of speed.
 
-### The Residual Lifestyle
+### The Friction Tax: What's Slowing You Down?
+In a traditional bank, you pay a "Time Tax." 
+*   **Wait for approval**: 24-48 hours.
+*   **Wait for settlement**: 3-5 days.
+*   **Wait for support**: "We will call you back."
 
-The Pintopay partner network is your personal wealth engine. 
-While you sleep in London, someone in Singapore is spending with their card. 
-And you get paid. 
-That is the definition of freedom.
+Every hour you wait is an hour where your capital is not working. It is "dead energy." Pintopay removes the brakes. Scan. Pay. Done. No processing, no delays, no excuses. 
 
-**Build your engine. Then rest.**
+### High-Velocity Income
+The same principle applies to your earnings. In a traditional job, you are paid once a month (Velocity = 1/30). In the Pintopay partner network, you are paid in **Real-Time** (Velocity = Instant). This allows you to re-invest, spend, or move your profit as soon as it is generated. This increased velocity creates a compounding effect that builds wealth 10x faster than traditional methods.
+
+### Don't Be the Anchor
+Your network will only grow as fast as your decision-making. If you wait a week to research every tiny detail, you lose the "Momentum Window." Use the **Intelligence Hub** to get the facts quickly, then execute. The world is moving toward **Instant Liquidity**. If you are still moving at "Bank Speed," you are the anchor on your own ship.
+
+### Conclusion: Move at the Speed of Light
+The digital grid doesn't sleep. Capital flows 24/7/365. Align yourself with the fastest rails in the market. Align yourself with Pintopay.
 
 ### Your Freedom in One Click
-
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
-*(High Demand. Act Fast.)""",
-    "46": """# Psychology of the 1%: Overcoming the $1k/Day Ceiling
+👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
+*(Increase your velocity. Claim your speed. Act now.)*""",
+    "45": """# Earning in Your Sleep: The Buffet Principle Applied to the Digital Age
 
-The biggest barrier to wealth isn't the market; it's your **Mindset**. 
-Most people have a "thermostat" set to survival.
+Warren Buffet famously said: "If you don't find a way to make money while you sleep, you will work until you die." Most people understand this concept, but they have no way to implement it. They don't have $10M to put into stocks, and they don't have an apartment building.
 
-**Turn up the heat.**
+Pintopay provides the **Low-Entry Passive Engine.**
+
+### The 24/7 Commerce Grid
+When you build a partner network on the Pintopay rails, you are plugging into a global commerce grid that never turns off. 
+*   **While you sleep in London**: Someone in Tokyo is using their Pintopay card to buy coffee. 
+*   **While you are at the gym**: Someone in New York is sending USDT to a business partner via our app.
+*   **The Result**: Small pieces of friction (fees) are constantly being redirected to your wallet.
+
+This is the definition of a **Residual Lifestyle.**
+
+### Building Your "Money Machine"
+Most businesses are "active"—if the owner stops working, the income stops. A Pintopay network is an **Automated Machine**. Once you have mentored your first layer of leaders and set up the **Viral Studio** to handle the marketing, the system begins to scale on its own. It grows based on the utility of the card, not based on your physical effort.
+
+### Wealth as an Operating System
+Think of Pintopay as a "Wealth OS" that runs in the background of your life. You wake up, check your dashboard, and see that while you were unconscious, your net worth increased. This isn't magic; it’s **Infrastructure**. It’s the result of building pipes that others use to transport their value.
+
+### Conclusion: Retire Your Active Labor
+The goal isn't just to "earn more"; the goal is to **Earn Easier**. Move your focus from one-time checks to lifetime residuals. Build your engine today so you can rest tomorrow.
+
+### Your Freedom in One Click
+Pintopay is the solution. The door is right here.
+
+👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
+*(Build your engine. Earn in your sleep. Act fast.)*""",
+    "46": """# Psychology of the 1%: Overcoming the $1,000/Day Ceiling
+
+The biggest barrier to wealth isn't the market; it's your **Internal Settings**. Most people have a "financial thermostat" set to a specific level. If they earn more than that, they subconsciously find a way to lose it or stop working. To reach the Legend rank in Pintopay, you must perform a **Psychological System Upgrade.**
 
 ### The Scale Paradox
+To earn $100/day, you work. To earn $1,000/day, you **Leverage**. 
+*   **Small Mindset**: "I need to find more customers myself."
+*   **Elite Mindset**: "I need to build systems that attract partners who build systems."
 
-To earn more, you don't work more. You leverage more. 
-Pintopay is the lever. 
-Stop thinking about "wages" and start thinking about "equity." 
-Own the network.
+The moment you stop thinking in terms of "Selling" and start thinking in terms of "Infrastructure," the $1,000/day ceiling will shatter. You are no longer performing a task; you are managing a network.
 
-**Your success is limited only by your vision.**
+### Detaching Income from Effort
+We are conditioned from childhood to believe that "hard work leads to money." This is a lie designed to keep you as a laborer. In the 1% world, **Thinking leads to money.** 
+Use the **Intelligence Hub** to sharpen your strategy. Use the **Viral Studio** to automate your presence. If you are doing something manually that could be automated, you are actively choosing to stay poor.
+
+### The Responsibility of Sovereignty
+As your Pintopay commissions grow, you will feel a sense of pressure. This is normal. Sovereignty is a responsibility. You are now the guardian of your own wealth. You don't have a "boss" to blame or a "HR department" to protect you. Accept this responsibility. Own your success. Stop asking for permission to be wealthy.
+
+### Conclusion: Reset Your Thermostat
+Turn up the heat. Don't settle for "enough." The Pintopay rails can handle infinite volume—the only limit is the size of the vision you have in your head. It’s time to think bigger.
 
 ### Your Freedom in One Click
-
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
-*(High Demand. Act Fast.)""",
-    "47": """# The 2026 Gold Rush: The Last Chance for Early Adopters
+👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
+*(Reset your mind. Claim your wealth. Act today.)*""",
+    "47": """# The 2026 Gold Rush: Why This is the Last Great Opportunity Window
 
-We are at the "Tipping Point" of crypto adoption. 
-By 2030, this will be normal. In 2026, it’s still a **Revolution**.
+Every few decades, a technological shift occurs that creates a massive wealth transfer. In the 90s, it was the Internet. In the 2010s, it was Mobile. In 2026, it is the **Sovereign Financial Stack**. We are at the "Tipping Point" where crypto moves from a speculative asset to a daily necessity.
 
-**The Window is Closing.**
+The window of opportunity for early adopters is closing fast.
 
 ### The Pioneer Premium
+In every revolution, the pioneers get the best "land." 
+*   **2020-2024**: The builders created the rails (TON, Bitcoin Lightning, stablecoins).
+*   **2025-2026**: The early adopters (You) are building the distribution networks (Pintopay).
+*   **2027+**: The masses arrive. They will buy the card, use the app, and pay the fees.
 
-Pioneers get the best land. The masses get the leftovers. 
-Position yourself today at the center of the new financial grid. 
-Don't be the one saying "I should have" in five years.
+If you build your network today, you are the one who collects those fees forever. If you wait until it's "safe" and "mainstream," you are just a customer.
 
-**Be the one they talk about.**
+### The Institutional Onslaught
+BlackRock, Visa, and JP Morgan are all moving on-chain. They aren't doing it to "help you"; they are doing it to capture the infrastructure. Pintopay is the **People’s Infrastructure**. We give you the chance to own a slice of the global payment grid before the giants take it all. 
 
-### Your Freedom in One Click
+### Timing is Everything
+In finance, being "early" is the same as being "right." You are seeing this message because you are part of the 1% who understands the shift. Don't let paralysis-by-analysis cost you a decade of freedom. The Pintopay card is the gold of this new rush. 
 
-Pintopay is the solution. The door is right here.
-
-👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
-*(High Demand. Act Fast.)""",
-    "48": """# Autonomous Scaling: The Self-Growing Network
-
-Can you build a business that grows without you? 
-Most people build a "job" for themselves.
-
-**Build a viral loop.**
-
-### The Geometric Advantage
-
-When your partners profit, they grow. When they grow, you grow. 
-It’s a cycle of mutual success. 
-Pintopay’s system is designed to reward the builders. 
-Start the loop.
-
-**Growth is a choice. Choose wisely.**
+### Conclusion: Plant Your Flag Today
+The world won't look like this in five years. The rules will be set, the market will be saturated, and the easy gains will be gone. Position yourself now at the center of the grid. Be the one they talk about in 2030 as the one who "saw it coming."
 
 ### Your Freedom in One Click
-
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
-*(High Demand. Act Fast.)""",
-    "49": """# Leading the Revolution: Be Your City's Crypto Node
+👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
+*(Join the rush. Plant your flag. Act now.)*""",
+    "48": """# Autonomous Scaling: How to Build a Business That Grows Without You
 
-Global success starts locally. 
-Every city needs a guide to the new economy.
+Can you build a business that is "anti-fragile"—one that grows faster when you step away? Most people build "Jobs" for themselves. If they stop working, the money stops. In the Pintopay ecosystem, our goal is **Autonomous Scaling** through viral loops and automated infrastructure.
 
-**Be the Authority.**
+### The Physics of the Loop
+A viral loop is a process where a user naturally brings in more users as a result of using the product. 
+*   **Step 1**: Your partner uses their card in a public setting. People ask questions.
+*   **Step 2**: The partner uses the **Viral Studio** to automate the answers and onboarding.
+*   **Step 3**: The new user gets a card and starts the process again.
 
-### Domain Expertise
+When you have built 3 or 4 layers of this duplication, the network begins to grow based on its own internal energy, not your effort.
 
-By mastering Pintopay and the Viral Studio, you become the local expert. 
-You are the one people go to for freedom. 
-Build your local cell, then connect it to the global grid.
+### Decentralized Management
+You don't need to "manage" a Pintopay network. The system manages itself. 
+*   The **Smart Contracts** handle the payments. 
+*   The **Pintopay Academy** handles the training. 
+*   The **Viral Studio** handles the marketing. 
 
-**Lead. Others will follow.**
+Your job as a Legend is to maintain the "Culture of Sovereignty" and mentor your top leaders. You move from being a "Manager" to being a "Statesman."
+
+### The Geometric Advantage of Time
+In the beginning, you work 10 hours for $0. Later, you work 10 hours for $100. Eventually, you work 0 hours for $1,000. This is only possible if you choose a system with **Autonomous Scaling**. Don't waste your time building linear businesses. Build a self-replicating financial grid.
+
+### Conclusion: Escape the "Founder's Trap"
+Stop being the bottleneck of your own success. Build a system that is bigger than you. Use the Pintopay tools to automate the growth of your empire. Start the loop. Watch it go.
 
 ### Your Freedom in One Click
-
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
-*(High Demand. Act Fast.)""",
-    "50": """# Social Capital: Your Shield Against the Great Reset
+👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
+*(Automate your scale. Escape the trap. Act today.)*""",
+    "49": """# Leading the Revolution: How to Become Your City's Sovereign Authority
 
-In a world where fiat systems are reset, your network is your **Equity**. 
-"Who you know" becomes "Who you trade with."
+Global success starts with local leadership. As the world moves toward the "Sovereign Shift," every city, every neighborhood, and every social circle needs a guide. They need someone who understands the new rails and can lead them out of the old system. 
 
-**Your Network is your Net Worth.**
+By mastering Pintopay today, you are becoming that **Authority Node.**
+
+### Domain Expertise as Social Currency
+In 2026, the most valuable social currency is **Practical Knowledge** of the crypto economy. 
+*   If you can show someone how to pay for gas with USDT... you are a leader. 
+*   If you can show a merchant how to avoid 3% bank fees... you are an authority. 
+*   If you can show a family how to protect their savings from inflation... you are a hero.
+
+Your mastery of the **Intelligence Hub** transforms you from a "marketer" into a "consultant of freedom."
+
+### Building Your Local "Cell"
+We encourage partners to build strong local communities. Meet in person. Share the success stories. Show the physical Pintopay card in action. When people see the technology working in their backyard, the trust becomes unbreakable. This local foundation then supports your global expansion.
+
+### The Responsibility of the Node
+Being an Authority Node means you are the first point of contact for the revolution. You are the one who helps users secure their wallets and navigate the transition. Use the **Pintopay AI tools** to handle the volume of questions, but maintain the "Human Connection" that builds true loyalty.
+
+### Conclusion: lead from the Front
+The world is looking for leaders who aren't afraid of the future. Position yourself as the sovereign expert in your circle. Lead others to the light of financial freedom. The revolution is happening—make sure you are the one holding the banner.
+
+### Your Freedom in One Click
+Pintopay is the solution. The door is right here.
+
+👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
+*(Lead the shift. Become the node. Act now.)*""",
+    "50": """# Social Capital Shield: Your Network is Your Only Protection Against the Great Reset
+
+In a world of "Great Resets," programmable CBDCs, and centralized surveillance, your physical assets can be taken in a moment. But there is one thing that cannot be seized, inflated away, or "canceled": **Your Social Capital.** Your network is your ultimate equity.
+
+The Pintopay partner network is your **Sovereign Shield.**
 
 ### The Survival of the Grid
+In a crisis, "Who you know" becomes "Who you can trade with." By building a global network on the Pintopay rails, you are creating a parallel economy that operates independently of the failing fiat system. 
+*   **Decentralized Liquidity**: If one country locks its banks, your network in 50 other countries continues to flow.
+*   **Verified Trust**: Your partners are people who share your values of freedom and sovereignty. This is the ultimate "In-Group" for the 21st century.
 
-By building a network on the Pintopay rails, you are securing your future. 
-You are building a community that shares values of freedom and sovereignty. 
-Join the 1%. Protect your legacy.
+### Protecting Your Legacy
+True legacy isn't a pile of cash in a bank; it's a **Functional Organization** that generates value. By establishing your Pintopay empire today, you are securing a place for your family in the "Digital 1%." You are giving them access to a global tribe of builders and sovereign thinkers.
 
-**United we scale. Divided we fall.**
+### The Strength of the 1%
+The 1% aren't just rich; they are **Connected**. Pintopay gives you the tools to build high-level connections with the most ambitious individuals on the planet. This web of relationships is your shield against whatever the old world tries to throw at you. 
+
+### Conclusion: United We Scale, Divided We Fall
+The era of the "lonely individual" is over. To thrive in the new economy, you need a grid. You need a team. You need a sovereign infrastructure. You have all three right here. 
+It’s time to stop watching the revolution and start leading it. Welcome to the Elite. Welcome to Pintopay.
 
 ### Your Freedom in One Click
-
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
-*(High Demand. Act Fast.)""",
+👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
+*(Activate your shield. Secure your legacy. Act now.)*""",
 }
