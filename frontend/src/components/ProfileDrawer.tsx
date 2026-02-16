@@ -120,41 +120,15 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             <div className="mesh-gradient-dark absolute inset-0 opacity-20 pointer-events-none" />
                             <div className="absolute inset-0 bg-linear-to-b from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
 
-                            {/* Header */}
-                            <div className="flex h-14 items-center px-4 shrink-0 mt-[calc(var(--spacing-telegram-header)+8px)]">
-                                <button
-                                    onClick={onClose}
-                                    className="group -ml-1 rounded-2xl active:scale-95 transition-all"
-                                    aria-label="Go back"
-                                >
-                                    <div className="flex items-center gap-2 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-glass) backdrop-blur-md px-3 py-1.5 shadow-premium">
-                                        <ArrowLeft className="text-(--color-text-primary) h-5 w-5 transition-transform group-hover:-translate-x-1" />
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-(--color-text-primary) pr-0.5">
-                                            {t('common.back')}
-                                        </span>
-                                    </div>
-                                </button>
-
-                                {user?.is_admin && (
-                                    <button
-                                        onClick={() => {
-                                            onClose();
-                                            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'admin' }));
-                                        }}
-                                        className="ml-auto rounded-2xl bg-blue-500/10 border border-blue-500/20 px-4 py-1.5 flex items-center gap-2 active:scale-95 transition-all"
-                                        aria-label="Open Admin Panel"
-                                    >
-                                        <ShieldCheck className="h-4 w-4 text-blue-500" />
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">{t('common.admin')}</span>
-                                    </button>
-                                )}
-                            </div>
+                            {/* Header - Minimal height to clear Telegram native header */}
+                            <div className="h-[calc(var(--spacing-telegram-header)-12px)] shrink-0" />
 
                             {/* Scrollable Content */}
                             <div className="flex-1 overflow-y-auto px-5 pb-10 flex flex-col gap-4">
-                                <div className="mt-4">
+                                <div className="mt-0">
                                     <PersonalizationCard variant="compact" />
                                 </div>
+
 
                                 <DrawerMenu onClose={onClose} selection={selection} />
 
