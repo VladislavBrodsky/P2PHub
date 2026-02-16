@@ -51,7 +51,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "2": """# Banks are Dead: Why QR Codes Just Destroyed Traditional Finance
 
 Have you ever wondered why sending money to a friend feels like sending a fax in the 90s? The banking system runs on infrastructure built before the internet existed. It's a dinosaur trying to survive an asteroid impact. And that asteroid is**
@@ -127,7 +127,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "3": """# The Psychology of Wealth: From Hoarding Cash to Mastering Digital Liquidity
 
 The hardest part of the crypto revolution isn't the technology. It's the**
@@ -193,7 +193,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "4": """# NO LIMITS: How to Build Borderless Wealth in a Globalized Economy
 
 We live in a paradoxical world. Information travels instantly. You can video call anyone, anywhere, for free. But try to send money to that same person, and suddenly borders appear. Walls go up. Fees emerge. Questions are asked.
@@ -261,7 +261,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "5": """# Physical Cash is a Liability: Why Staying 'Analog' is Making You Broke
 
 Walk into a modern coffee shop in Stockholm or Shanghai. Try to pay with a crumpled paper bill. Watch the confusion.
@@ -331,7 +331,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "6": """# STOP WAITING: The Hidden Reason Your Bank is Actually Holding You Back
 
 "Pending Review." "Processing." "3-5 Business Days."
@@ -401,7 +401,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "7": """# The Great Deception: Why Apple/Google Pay Aren't What They Seem
 
 You tap your phone. The payment goes through. "Wow," you think, "Apple Pay is so futuristic."
@@ -459,7 +459,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "8": """# Financial Sovereignty: How Web3 is Handing You the Keys to the Kingdom
 
 History is punctuated by "resets." Moments where the rules of the game change overnight.
@@ -549,7 +549,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "9": """# Elite Velocity: Mastering the $1/Minute QR Revolution
 
 Speed is the ultimate competitive advantage. In the digital age, whoever moves fastest wins.
@@ -625,7 +625,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "10": """# The Unbanked Opportunity: Bridging the Divide for 4 Billion People
 
 We live in a bubble. If you're reading this, you likely have a bank account, a credit card, and internet access. You are the "lucky few."**
@@ -691,7 +691,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "11": """# 2026: The Year the Shadow Economy Becomes the ONLY Economy
 
 Something strange is happening. The lines are blurring.
@@ -779,7 +779,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "12": """# Global Bank in Your Pocket: From Telegram to the World in 2 Taps
 
 Imagine landing in Tokyo. You don't speak Japanese. You don't have Yen. You don't have a local bank account.
@@ -883,7 +883,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "13": """# The Invisible Revolution: Why You'll NEVER Step Into a Bank Again
 
 The bank branch is the Blockbuster Video of finance. It's a relic of a time when "trust" meant "marble pillars" and "guys in suits."
@@ -977,7 +977,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "14": """# Crypto Meets Convenience: Apple & Google Pay Finally Evolved
 
 For years, crypto was "internet money." You could send it, but you couldn't really *spend* it.
@@ -1049,7 +1049,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "15": """# Instant Liquidity: Spending Bitcoin as Fiat in 3 Seconds Flat
 
 In the traditional world, assets are "illiquid."
@@ -1119,7 +1119,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "16": """# The $100BN Opportunity: Why Being a Partner is the Ultimate Wealth Cheat Code
 
 Let's talk numbers. The global payments industry is worth**$2 Trillion**.
@@ -1193,7 +1193,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "17": """# Passive Engine: How to Earn While You Sleep (Lifetime Income Protocol)
 
 "Passive Income" is a buzzword. Most of it is a lie.
@@ -1277,7 +1277,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "18": """# Viral Studios: The Unfair Advantage That Automates Your Content 24/7
 
 Marketing is war. The battle is for attention.
@@ -1367,7 +1367,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "19": """# Imperial Design: Building Your Sovereign Global Empire with Pintopay
 
 We've talked about money. We've talked about tech.
@@ -1459,7 +1459,7 @@ Pintopay is the solution. The door is right here.
 
 👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
 *(High Demand. Act Fast.)*
-**""",
+""",
     "20": """# The 2026 Financial Reset: How CBDCs Could Cage Your Cash
 
 Discover why Central Bank Digital Currencies (CBDCs) might be setting the stage for the ultimate financial surveillance—and how you can outsmart the system.
@@ -1514,7 +1514,7 @@ Join 10,000+ smart earners stepping into a future where financial freedom is pre
 
 Share this with 3 friends to lock in your spot and outsmart the 2026 financial reset.
 
-**""",
+""",
     "21": """# The End of SWIFT: Why the "Banking Telegraph" is Dying
 
 Have you ever wondered why, in an era of instant messaging, money still takes 3 days to move?
@@ -1541,8 +1541,8 @@ International business doesn't wait anymore. Why should you?
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "22": """# Privacy is the New Luxury (And How to Buy It)
 
 In a world where every click and purchase is tracked, privacy has become the most expensive asset.
@@ -1566,8 +1566,8 @@ You spend your assets. The system doesn't ask unnecessary questions.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "23": """# The $1/Minute Network: Scaling While You Sleep
 
 Most people think building a network means "selling" to friends.
@@ -1589,8 +1589,8 @@ In the Pintopay ecosystem, your income is detached from your time. You earn comm
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "24": """# Digital Nomad 2.0: Wealth Beyond Borders
 
 The first generation of nomads lived for cheap rent. 
@@ -1611,8 +1611,8 @@ The world is your office. Your wallet should be as mobile as you are.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "25": """# Escaping the 9-to-5: The Sovereign Strategy
 
 The average job is a "subscription to poverty." You trade your best hours for a fixed number that inflation eats every month.
@@ -1631,8 +1631,8 @@ Store your wealth in deflationary assets (BTC/ETH) and spend only what you need.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "26": """# Quantum-Safe Wealth: Securing the Next Century
 
 What happens to your money when computers can crack any password?
@@ -1652,8 +1652,8 @@ Secure your digital empire before the gates close.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "27": """# The Global Arbitrage: Spend USD, Live Like a King
 
 The secret of the world's most successful nomads is **Arbitrage**.
@@ -1673,8 +1673,8 @@ Turn a $5,000 income into a $15,000 lifestyle.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "28": """# AI + Crypto: The Secret Wealth Ingredient
 
 AI creates the value. Crypto captures it.
@@ -1694,8 +1694,8 @@ Let the machines do the hard part.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "29": """# The Pension Trap: Why Retirement is a Lie
 
 Relying on a 40-year pension plan is a bet that the system will survive.
@@ -1715,8 +1715,8 @@ Don't wait for 65. Retire when YOU decide.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "30": """# Financial Stealth: Moving Through the Economy Undetected
 
 Visibility is a vulnerability. 
@@ -1736,8 +1736,8 @@ Move your capital where you want, when you want.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "31": """# The 90-Day Challenge: Running the Ranks to $100k
 
 Success loves speed. 
@@ -1759,8 +1759,8 @@ Use our Viral Studio to explode your reach. The ranks are waiting. Are you?
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "32": """# The Credit Card Scam: Hidden Costs vs Pintopay
 
 Your "Rewards" card is actually a "Penalty" card. 
@@ -1782,8 +1782,8 @@ Switch from a card that takes to a card that gives you freedom.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "33": """# The Great Migration: Capital Moving to the Blockchain
 
 Look at the charts. real estate is stagnant. Bonds are failing. 
@@ -1804,8 +1804,8 @@ Use this time to "plant your flag" and build your network.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "34": """# Code is Law: Why Smart Contracts are Fairer than Humans
 
 Humans lie. Humans forget. Humans change their minds. 
@@ -1826,8 +1826,8 @@ It’s the foundation of a new economy based on math, not promises.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "35": """# NFT Ownership: It's Not About the Pictures
 
 Forget the JPEG hype. NFTs are **Digital Certificates of Ownership**.
@@ -1846,8 +1846,8 @@ In the Web3 economy? Yes.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "36": """# Web3 Social: Connections That Pay
 
 In Web2 (Facebook, Instagram), you are the product. Your data is sold. 
@@ -1867,8 +1867,8 @@ Stop working for free for Big Tech.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "37": """# Digital Identity: Your New Global Passport
 
 In the future, they won't ask "Where are you from?" 
@@ -1889,8 +1889,8 @@ Your wallet is your word.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "38": """# Transparency: The Light That Kills Corruption
 
 Why do politicians fear the blockchain? Because every cent is visible. 
@@ -1910,8 +1910,8 @@ Join the side of the light.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "39": """# Green Bitcoin: The Energy of Freedom
 
 They tell you crypto hurts the environment. It's a myth. 
@@ -1932,8 +1932,8 @@ It’s the greenest way to manage money.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "40": """# Learn to Earn: Education as an Asset
 
 In the old world, you paid for school. 
@@ -1953,8 +1953,8 @@ Your brain is your best mining rig. Turn it on.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "41": """# Game Over: When Playing Becomes Profitable
 
 Gamers used to spend years grinding for nothing. 
@@ -1974,8 +1974,8 @@ Gamify your bank account.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "42": """# Metaverse Banking: Assets in Two Worlds
 
 Soon, we'll spend more time in virtual reality than in physical reality. 
@@ -1995,8 +1995,8 @@ The future has already loaded. Are you in?
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "43": """# AI + Crypto: The Symbiosis of the Century
 
 AI is the brain. Crypto is the blood. 
@@ -2016,8 +2016,8 @@ Join the most advanced financial ecosystem on the planet.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "44": """# Velocity of Wealth: Moving Faster Than Expectations
 
 Money loves speed. 
@@ -2039,8 +2039,8 @@ Don't be the anchor on your own ship.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "45": """# Earning in Your Sleep: The Buffet Principle
 
 Warren Buffett said: "If you don't find a way to make money while you sleep, you will work until you die."
@@ -2060,8 +2060,8 @@ That is the definition of freedom.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "46": """# Psychology of the 1%: Overcoming the $1k/Day Ceiling
 
 The biggest barrier to wealth isn't the market; it's your **Mindset**. 
@@ -2082,8 +2082,8 @@ Own the network.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "47": """# The 2026 Gold Rush: The Last Chance for Early Adopters
 
 We are at the "Tipping Point" of crypto adoption. 
@@ -2103,8 +2103,8 @@ Don't be the one saying "I should have" in five years.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "48": """# Autonomous Scaling: The Self-Growing Network
 
 Can you build a business that grows without you? 
@@ -2125,8 +2125,8 @@ Start the loop.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "49": """# Leading the Revolution: Be Your City's Crypto Node
 
 Global success starts locally. 
@@ -2146,8 +2146,8 @@ Build your local cell, then connect it to the global grid.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
     "50": """# Social Capital: Your Shield Against the Great Reset
 
 In a world where fiat systems are reset, your network is your **Equity**. 
@@ -2167,6 +2167,6 @@ Join the 1%. Protect your legacy.
 
 Pintopay is the solution. The door is right here.
 
-👉 **[Claim Your Pintopay Card and Start Living]({cta_link})**
-*(High Demand. Act Fast.)***""",
+👉 **[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**
+*(High Demand. Act Fast.)""",
 }

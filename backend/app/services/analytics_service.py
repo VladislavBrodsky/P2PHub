@@ -76,6 +76,7 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
                 "search_wildcard": f"{search_path}.%",
                 "target_depth": target_depth
             })
+            rows = result.all()
             members = [
                 {
                     "telegram_id": row[0], "username": row[1], "first_name": row[2],
