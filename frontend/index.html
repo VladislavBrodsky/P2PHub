@@ -1,39 +1,37 @@
 <!doctype html>
 <html lang="en">
 
-<meta charset="UTF-8" />
-<link rel="icon" type="image/webp" href="https://p2phub-frontend-production.up.railway.app/logo.webp" />
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Pintopay Partner Hub</title>
 
-<meta name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-<title>Pintopay Partner Hub</title>
+  <!-- Premium High-Fidelity Fonts -->
+  <link rel="preconnect" href="https://telegram.org">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<!-- Premium High-Fidelity Fonts -->
-<!-- Speed Optimizations -->
-<link rel="preconnect" href="https://telegram.org">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Onest:wght@400;500;600;700;800;900&display=swap">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Onest:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" media="print" onload="this.media='all'">
 
-<!-- Premium High-Fidelity Fonts -->
-<link rel="preload" as="style"
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Onest:wght@400;500;600;700;800;900&display=swap">
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Onest:wght@400;500;600;700;800;900&display=swap"
-  rel="stylesheet" media="print" onload="this.media='all'">
-
-<script src="https://telegram.org/js/telegram-web-app.js" defer></script>
-<script>
-  (function () {
-    try {
-      const theme = localStorage.getItem('p2p_theme') || 'dark'; // Default to dark for elite feel
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    } catch (e) { }
-  })();
-</script>
+  <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+  <script>
+    (function () {
+      try {
+        const theme = localStorage.getItem('p2p_theme') || 'dark'; // Default to dark for elite feel
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) { }
+    })();
+  </script>
 </head>
 
 <body class="bg-gray-50 text-gray-900">
