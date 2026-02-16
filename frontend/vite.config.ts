@@ -43,7 +43,6 @@ export default defineConfig({
       disable: !process.env.SENTRY_API_KEY, // Only run if API key is present
     }),
   ],
-  publicDir: 'public_safe',
   server: {
     host: '0.0.0.0',
     port: 5173,
