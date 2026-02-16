@@ -37,7 +37,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
     }, [controls]);
 
     return (
-        <header className="sticky top-0 z-50 w-full max-w-lg mx-auto pt-[calc(env(safe-area-inset-top)+var(--spacing-telegram-header))] transition-all duration-300 pointer-events-none">
+        <header className="fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg pt-[calc(env(safe-area-inset-top)+var(--spacing-telegram-header))] transition-all duration-300 pointer-events-none">
 
 
 

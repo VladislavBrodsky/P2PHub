@@ -64,21 +64,21 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
 
 
 
+            {/* Header - Fixed above the scroll layer */}
+            {isHeaderVisible && (
+                <div className="relative z-100">
+                    <Header onOpenMenu={() => setIsMenuOpen(true)} />
+                </div>
+            )}
+
             {/* Main Content Area - THE SCROLL LAYER */}
             <main
                 id="main-scroll-root"
                 className={`flex-1 overflow-x-hidden relative z-10 
                     overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]
-                    ${!isHeaderVisible ? '' : (isStaging ? 'pt-8' : '')}`}
+                    ${!isHeaderVisible ? '' : (isStaging ? 'staging-offset' : 'content-main-padding')}`}
                 style={{ overscrollBehaviorY: 'none' }}
             >
-                {/* Header - Now inside the scroll layer for natural scrolling */}
-                {isHeaderVisible && (
-                    <div className="relative z-100">
-                        <Header onOpenMenu={() => setIsMenuOpen(true)} />
-                    </div>
-                )}
-
                 <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} safe-pb`}>
 
                     <div className="mx-auto w-full">
