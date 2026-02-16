@@ -93,8 +93,8 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                 </div>
 
                 {/* Right: Stats Vertical Stack */}
-                <div className="flex flex-col items-start gap-1 flex-1 overflow-hidden">
-                    <div className="flex items-center gap-2">
+                <div className="flex flex-col items-start gap-1 flex-1 min-w-0 overflow-hidden">
+                    <div className="flex items-center gap-2 w-full">
                         {(() => {
                             const firstName = user?.first_name || 'Partner';
                             const lastName = user?.last_name || '';
@@ -102,7 +102,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             const displayName = fullName.length > 20 ? firstName : fullName;
 
                             return (
-                                <h2 className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-black tracking-tight text-(--color-text-primary) truncate`}>
+                                <h2 className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-black tracking-tight text-(--color-text-primary) truncate w-full`}>
                                     {t('common.hi')}, {displayName}!
                                 </h2>
                             );
@@ -111,7 +111,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
 
                     {/* XP Progress Bar - Horizontal Fit */}
                     <div className="w-full space-y-1">
-                        <div className="flex justify-between items-baseline px-0.5">
+                        <div className="flex justify-between items-baseline px-0.5 gap-2">
                             <motion.div
                                 animate={{
                                     scale: [1, 1.05, 1],
@@ -122,13 +122,16 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     repeat: Infinity,
                                     ease: "easeInOut"
                                 }}
-                                className="flex items-baseline gap-1"
+                                className="flex items-baseline gap-1 whitespace-nowrap"
                             >
-                                <span className="text-[8px] font-black text-blue-600 dark:text-blue-400 tracking-tight uppercase">{t('common.total')}:</span>
+                                <span className="text-[8px] font-black text-blue-600 dark:text-blue-400 tracking-tight uppercase shrink-0">{t('common.total')}:</span>
                                 <span className="text-[9px] font-bold text-blue-500 dark:text-blue-300">{stats.xp} XP</span>
                             </motion.div>
-                            <span className="text-[9px] font-black text-(--color-text-primary)">
-                                {xpProgress.current}<span className="text-(--color-text-secondary) font-medium mx-0.5">/</span>{xpProgress.total} <span className="text-[7px] text-(--color-text-secondary) uppercase ml-0.5 whitespace-nowrap">{t('common.next_lvl')}</span>
+                            <span className="text-[9px] font-black text-(--color-text-primary) whitespace-nowrap flex items-baseline gap-1">
+                                <span>{xpProgress.current}</span>
+                                <span className="text-(--color-text-secondary) font-medium">/</span>
+                                <span>{xpProgress.total}</span>
+                                <span className="text-[7px] text-(--color-text-secondary) uppercase ml-0.5 shrink-0">{t('common.next_lvl')}</span>
                             </span>
                         </div>
                         <div className="h-3 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-black/5 dark:border-white/5 shadow-inner relative">
