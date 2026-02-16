@@ -24,8 +24,12 @@ async def list_posts(
     accept_language: Optional[str] = Header(None)
 ):
     """List blog posts with pagination, search and filtering with cache."""
-    tg_user = get_tg_user(user_data)
-    lang = accept_language.split('-')[0] if accept_language else tg_user.get("language_code", "en")
+    tg_user = None
+    if user_data:
+        tg_user = get_tg_user(user_data)
+        lang = accept_language.split('-')[0] if accept_language else tg_user.get("language_code", "en")
+    else:
+        lang = accept_language.split('-')[0] if accept_language else "en"
     
     # Cache key based on params
     cache_key = f"blog:list:{lang}:{category}:{q}:{offset}:{limit}"
@@ -59,9 +63,9 @@ async def list_posts(
         engagements = {e.post_slug: e for e in (await session.exec(e_stmt)).all()}
         
         # Get user likes
-        tg_id = str(tg_user.get("id"))
+        tg_id = str(tg_user.get("id")) if tg_user else None
         p_stmt = select(Partner).where(Partner.telegram_id == tg_id)
-        partner = (await session.exec(p_stmt)).first()
+        partner = (await session.exec(p_stmt)).first() if tg_id else None
         
         user_likes = set()
         if partner:
@@ -107,9 +111,15 @@ async def get_post_detail(
     accept_language: Optional[str] = Header(None)
 ):
     """Get full details for a specific blog post with caching."""
-    tg_user = get_tg_user(user_data)
-    lang = accept_language.split('-')[0] if accept_language else tg_user.get("language_code", "en")
-    tg_id = str(tg_user.get("id"))
+    # Handle guest mode
+    if user_data:
+        tg_user = get_tg_user(user_data)
+        lang = accept_language.split('-')[0] if accept_language else tg_user.get("language_code", "en")
+        tg_id = str(tg_user.get("id"))
+    else:
+        tg_user = None
+        lang = accept_language.split('-')[0] if accept_language else "en"
+        tg_id = None
     
     # We cache the raw post data, but liked status must be dynamic
     cache_key = f"blog:post:{slug}:{lang}"
@@ -153,8 +163,10 @@ async def get_post_detail(
         raise HTTPException(status_code=404, detail="Post not found")
         
     # Inject dynamic liked status
-    p_stmt = select(Partner).where(Partner.telegram_id == tg_id)
-    partner = (await session.exec(p_stmt)).first()
+    partner = None
+    if tg_id:
+        p_stmt = select(Partner).where(Partner.telegram_id == tg_id)
+        partner = (await session.exec(p_stmt)).first()
     
     liked = False
     if partner:
@@ -185,12 +197,17 @@ async def get_post_engagement(
     session: AsyncSession = Depends(get_session)
 ):
     """Get engagement stats for a specific post and check if current user liked it."""
-    tg_user = get_tg_user(user_data)
-    tg_id = str(tg_user.get("id"))
+    if user_data:
+        tg_user = get_tg_user(user_data)
+        tg_id = str(tg_user.get("id"))
+    else:
+        tg_id = None
 
     # Get partner
-    p_stmt = select(Partner).where(Partner.telegram_id == tg_id)
-    partner = (await session.exec(p_stmt)).first()
+    partner = None
+    if tg_id:
+        p_stmt = select(Partner).where(Partner.telegram_id == tg_id)
+        partner = (await session.exec(p_stmt)).first()
 
     # Get or create engagement
     e_stmt = select(BlogPostEngagement).where(BlogPostEngagement.post_slug == slug)

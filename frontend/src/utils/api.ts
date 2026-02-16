@@ -9,17 +9,21 @@ export const getApiUrl = () => {
 
     // Security check: Force HTTPS in production environments
     // This is crucial for Railway/Vercel where the app is served via HTTPS
-    if (url.includes('railway.app') && url.startsWith('http://')) {
+    if (url && url.includes('railway.app')) {
         url = url.replace('http://', 'https://');
     }
 
     // General safety for any HTTPS origin
     if (typeof window !== 'undefined' &&
         window.location.protocol === 'https:' &&
-        url.startsWith('http://') &&
+        url && url.startsWith('http://') &&
         !url.includes('localhost') &&
         !url.includes('127.0.0.1')) {
         url = url.replace('http://', 'https://');
+    }
+
+    if (typeof window !== 'undefined' && (window as any).DEBUG_API) {
+        console.log('[API] Final URL:', url);
     }
 
     return url;

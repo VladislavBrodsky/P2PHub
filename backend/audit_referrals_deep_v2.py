@@ -63,7 +63,7 @@ async def deep_audit():
             )
             downline_actual = (await session.exec(downline_actual_stmt)).one()
             
-            if p.referral_count != l1_actual:
+            if p.referral_count != downline_actual:
                 mismatches.append({
                     "id": p.id,
                     "username": p.username,
