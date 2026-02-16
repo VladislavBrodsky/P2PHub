@@ -165,6 +165,24 @@
       "create_another_btn": "CREATE ANOTHER POST",
       "footer": "Pintopay Global Sync • 2026"
     },
+    "notifications": {
+      "success": "Success",
+      "error": "Error",
+      "copied": "Copied",
+      "viral_synthesized": "Viral content synthesized.",
+      "gen_failed": "Generation failed",
+      "text_copied": "Text copied to clipboard.",
+      "tokens_required": "Insufficient Tokens",
+      "tokens_required_text": "You need at least 2 tokens to generate content. Tokens reset monthly.",
+      "pro_required": "PRO Required",
+      "pro_required_text": "Upgrade to PRO to access the Viral Studio.",
+      "image_saved": "Saved",
+      "image_saved_text": "Image saved to device.",
+      "published": "Published",
+      "published_text": "Synchronized with {{platform}}.",
+      "publish_error": "Publish Error",
+      "publish_failed": "Failed to publish."
+    },
     "tools": {
       "headline": {
         "title": "Headline Engineer",
@@ -189,14 +207,6 @@
         "scanning": "Scanning",
         "node_id": "Global Node 1",
         "info": "Real-time volatility and memetic momentum tracking."
-      },
-      "notifications": {
-        "success": "Success",
-        "error": "Error",
-        "copied": "Copied",
-        "viral_synthesized": "Viral content synthesized.",
-        "gen_failed": "Generation failed",
-        "text_copied": "Text copied to clipboard."
       },
       "audit": {
         "title": "Global Marketing Audit",

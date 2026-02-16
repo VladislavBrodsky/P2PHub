@@ -104,11 +104,11 @@ export const StudioTab = ({
                 errorMessage = error.response.data.detail;
                 console.error('Backend error detail:', errorMessage);
             } else if (error.response?.status === 402) {
-                errorTitle = 'Insufficient Tokens';
-                errorMessage = 'You need at least 2 tokens to generate content. Tokens reset monthly.';
+                errorTitle = t('pro_dashboard.notifications.tokens_required');
+                errorMessage = t('pro_dashboard.notifications.tokens_required_text');
             } else if (error.response?.status === 403) {
-                errorTitle = 'PRO Required';
-                errorMessage = 'Upgrade to PRO to access the Viral Studio.';
+                errorTitle = t('pro_dashboard.notifications.pro_required');
+                errorMessage = t('pro_dashboard.notifications.pro_required_text');
             } else if (error.message) {
                 errorMessage = `${errorMessage}: ${error.message}`;
             }
@@ -181,7 +181,7 @@ export const StudioTab = ({
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            notification({ title: 'Saved', text: 'Image saved to device.', type: 'success' });
+            notification({ title: t('pro_dashboard.notifications.image_saved'), text: t('pro_dashboard.notifications.image_saved_text'), type: 'success' });
         } catch (err) {
             window.open(finalUrl, '_blank');
         }
@@ -207,9 +207,9 @@ export const StudioTab = ({
 
             await proService.publishContent(platform, fullContent, generatedResult.image_url);
             setPublishedPlatforms([...publishedPlatforms, platform]);
-            notification({ title: 'Published', text: `Synchronized with ${platform.toUpperCase()}.`, type: 'success' });
+            notification({ title: t('pro_dashboard.notifications.published'), text: t('pro_dashboard.notifications.published_text', { platform: platform.toUpperCase() }), type: 'success' });
         } catch (error: any) {
-            notification({ title: 'Publish Error', text: error.response?.data?.detail || 'Failed to publish.', type: 'error' });
+            notification({ title: t('pro_dashboard.notifications.publish_error'), text: error.response?.data?.detail || t('pro_dashboard.notifications.publish_failed'), type: 'error' });
         } finally {
             setIsPublishing(false);
         }
