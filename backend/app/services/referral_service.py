@@ -73,40 +73,19 @@ async def process_referral_logic(partner_id: int):
                 logger.info(f"[INFO] Referral XP already awarded for partner {partner_id}. Skipping...")
                 return
 
-            # Bulk Fetch all ancestors (including direct referrer)
-            lineage_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-            if partner.referrer_id and partner.referrer_id not in lineage_ids:
-                lineage_ids.append(partner.referrer_id)
-            
-            lineage_ids = list(dict.fromkeys(lineage_ids))[-9:]
-            
-            statement = select(Partner).where(Partner.id.in_(lineage_ids))
-            result = await session.exec(statement)
-            ancestor_list = result.all()
-            ancestor_map = {p.id: p for p in ancestor_list}
-
-            sentry_sdk.set_context("referral_context", {
-                "partner_id": partner_id,
-                "referrer_id": partner.referrer_id,
-                "ancestors_count": len(ancestor_list)
-            })
-            sentry_sdk.add_breadcrumb(
-                category="referral",
-                message=f"Processing 9-level logic for partner {partner_id}",
-                level="info"
-            )
-
             logger.info(f"🔄 Processing referral logic for partner {partner_id} (@{partner.username}).")
 
-            # 1. Resolve Ancestors chain
+            # 1. Resolve Ancestors chain (Bulk fetch)
             ancestor_map = await _get_ancestor_map(session, partner)
             
             # 2. Process Awards (9 Levels)
             xp_txs, deferred_tasks = await _process_referral_awards(session, partner, ancestor_map)
             
-            # 3. Batch Commit
-            if xp_txs:
-                session.add_all(xp_txs)
+            # 3. Batch Commit & Finalize Notifications
+            # We always commit if there are ancestor updates or deferred notification tasks
+            if xp_txs or deferred_tasks:
+                if xp_txs:
+                    session.add_all(xp_txs)
                 await session.commit()
                 await _finalize_referral_logic(deferred_tasks)
 
