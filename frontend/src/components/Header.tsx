@@ -37,17 +37,19 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
     }, [controls]);
 
     return (
-        <header className="fixed left-1/2 z-50 w-full max-w-lg -translate-x-1/2 pt-[calc(env(safe-area-inset-top)+var(--spacing-telegram-header))] transition-all duration-300 top-0 pointer-events-none">
+        <header className="sticky top-0 z-50 w-full max-w-lg mx-auto pt-[calc(env(safe-area-inset-top)+var(--spacing-telegram-header))] transition-all duration-300 pointer-events-none">
+
+
             <div className="flex flex-col gap-4 px-4 pointer-events-auto">
                 {/* Navigation & Stats */}
                 <div className="flex items-center justify-between gap-4">
                     <button
                         onClick={onOpenMenu}
-                        className="group flex items-center gap-2 rounded-2xl border border-slate-200/50 bg-white/80 dark:bg-slate-900/50 px-4 py-2 shadow-premium backdrop-blur-md transition-all active:scale-95 shrink-0"
+                        className="group flex items-center gap-2 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-glass) px-4 py-2 shadow-premium backdrop-blur-md transition-all active:scale-95 shrink-0"
                         aria-label="Open menu"
                     >
-                        <Menu className="text-slate-900 h-5 w-5 dark:text-white transition-transform group-hover:scale-110" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white">
+                        <Menu className="text-(--color-text-primary) h-5 w-5 transition-transform group-hover:scale-110" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-primary)">
                             {t('common.menu')}
                         </span>
                     </button>
@@ -56,21 +58,21 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
                     <motion.button
                         animate={controls}
-                        className="flex items-center gap-3 rounded-2xl border border-white/20 bg-white/90 dark:bg-[#0f172a] px-4 py-2 shadow-premium backdrop-blur-2xl transition-all shrink-0"
+                        className="flex items-center gap-3 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-glass) px-4 py-2 shadow-premium backdrop-blur-2xl transition-all shrink-0"
                         aria-label="User stats"
                     >
                         <div className="flex items-center gap-1.5">
-                            <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-blue-400">{t('common.lvl')}</span>
-                            <span className="text-sm font-black text-slate-900 dark:text-white leading-none">
+                            <span className="text-[10px] font-black uppercase tracking-wider text-(--color-text-secondary) dark:text-blue-400">{t('common.lvl')}</span>
+                            <span className="text-sm font-black text-(--color-text-primary) leading-none">
                                 {user?.level ?? 2}
                             </span>
                             {user?.is_pro && (
                                 <Crown size={12} className="text-amber-500 fill-amber-500/20" />
                             )}
                         </div>
-                        <div className="h-3 w-px bg-slate-200 dark:bg-white/10" />
+                        <div className="h-3 w-px bg-(--color-border-glass)" />
                         <div className="flex items-center gap-1.5">
-                            <span className="text-[12px] font-black text-slate-900 dark:text-white leading-none">
+                            <span className="text-[12px] font-black text-(--color-text-primary) leading-none">
                                 {user?.xp ?? 200}
                             </span>
                             <span className="text-[10px] font-black uppercase tracking-wider text-emerald-500 dark:text-emerald-400">XP</span>

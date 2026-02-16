@@ -111,7 +111,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             animate={{ x: 0 }}
                             exit={{ x: '-100%', pointerEvents: 'none' }}
                             transition={{ type: 'tween', ease: 'easeOut', duration: 0.25 }}
-                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-white/10 pt-[env(safe-area-inset-top)] shadow-2xl ml-0 mr-auto"
+                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-(--color-bg-app) border-r border-(--color-border-glass) pt-[env(safe-area-inset-top)] shadow-2xl ml-0 mr-auto"
                             style={{
                                 marginLeft: 'max(0px, calc(50% - 32rem / 2))',
                                 left: 0
@@ -127,9 +127,9 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                     className="group -ml-1 rounded-2xl active:scale-95 transition-all"
                                     aria-label="Go back"
                                 >
-                                    <div className="flex items-center gap-2 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-3 py-1.5 shadow-premium">
-                                        <ArrowLeft className="text-slate-900 dark:text-white h-5 w-5 transition-transform group-hover:-translate-x-1" />
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white pr-0.5">
+                                    <div className="flex items-center gap-2 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-glass) backdrop-blur-md px-3 py-1.5 shadow-premium">
+                                        <ArrowLeft className="text-(--color-text-primary) h-5 w-5 transition-transform group-hover:-translate-x-1" />
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-(--color-text-primary) pr-0.5">
                                             {t('common.back')}
                                         </span>
                                     </div>

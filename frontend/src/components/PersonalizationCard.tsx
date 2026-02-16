@@ -30,7 +30,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
             <div className="absolute top-1/2 left-10 -translate-y-1/2 w-32 h-32 bg-brand-blue/10 blur-[60px] rounded-full -z-10" />
 
             {/* #comment: Unified padding (p-2.5 px-4) with other dashboard cards for vertical rhythm consistency */}
-            <div className={`flex items-center gap-5 p-4 rounded-[2rem] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md border border-white/10 shadow-premium ${variant === 'compact' ? 'p-2.5 px-4 gap-4' : ''}`}>
+            <div className={`flex items-center gap-5 p-4 rounded-[2rem] bg-(--color-bg-glass) backdrop-blur-md border border-(--color-border-glass) shadow-premium ${variant === 'compact' ? 'p-2.5 px-4 gap-4' : ''}`}>
                 {/* Left: Avatar & Rank Badge Column */}
                 <div className="flex flex-col items-center gap-2 shrink-0">
                     <div className="relative">
@@ -60,7 +60,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
 
                         <motion.div
                             whileHover={variant === 'compact' ? {} : { scale: 1.05, rotate: 2 }}
-                            className={`${variant === 'compact' ? 'h-14 w-14 rounded-xl' : 'h-16 w-16 rounded-2xl'} overflow-hidden border-2 border-white/10 bg-slate-900 shadow-premium transition-all duration-300 relative will-change-transform z-10`}
+                            className={`${variant === 'compact' ? 'h-14 w-14 rounded-xl' : 'h-16 w-16 rounded-2xl'} overflow-hidden border-2 border-(--color-border-glass) bg-(--color-bg-app) shadow-premium transition-all duration-300 relative will-change-transform z-10`}
                         >
                             {(isUserLoading || (user?.photo_url && !imageLoaded)) && (
                                 <div className="absolute inset-0 bg-slate-800 dark:bg-slate-900 animate-pulse flex items-center justify-center">
@@ -86,8 +86,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             )}
                         </motion.div>
 
-                        {/* Level Badge Integrated into Avatar */}
-                        <div className={`absolute -bottom-1 -right-1 flex ${variant === 'compact' ? 'h-5 w-5' : 'h-6 w-6'} items-center justify-center rounded-lg bg-blue-500 text-white shadow-premium ring-2 ring-slate-50 dark:ring-slate-950 z-20`}>
+                        <div className={`absolute -bottom-1 -right-1 flex ${variant === 'compact' ? 'h-5 w-5' : 'h-6 w-6'} items-center justify-center rounded-lg bg-blue-500 text-white shadow-premium ring-2 ring-(--color-bg-app) z-20`}>
                             <span className={`${variant === 'compact' ? 'text-[7px]' : 'text-[8px]'} font-black`}>{user?.level || 1}</span>
                         </div>
                     </div>
@@ -103,7 +102,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             const displayName = fullName.length > 20 ? firstName : fullName;
 
                             return (
-                                <h2 className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-black tracking-tight text-slate-900 dark:text-white truncate`}>
+                                <h2 className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-black tracking-tight text-(--color-text-primary) truncate`}>
                                     {t('common.hi')}, {displayName}!
                                 </h2>
                             );
@@ -128,8 +127,8 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 <span className="text-[8px] font-black text-blue-600 dark:text-blue-400 tracking-tight uppercase">{t('common.total')}:</span>
                                 <span className="text-[9px] font-bold text-blue-500 dark:text-blue-300">{stats.xp} XP</span>
                             </motion.div>
-                            <span className="text-[9px] font-black text-slate-900 dark:text-white">
-                                {xpProgress.current}<span className="text-slate-500 dark:text-slate-400 font-medium mx-0.5">/</span>{xpProgress.total} <span className="text-[7px] text-slate-500 dark:text-slate-400 uppercase ml-0.5 whitespace-nowrap">{t('common.next_lvl')}</span>
+                            <span className="text-[9px] font-black text-(--color-text-primary)">
+                                {xpProgress.current}<span className="text-(--color-text-secondary) font-medium mx-0.5">/</span>{xpProgress.total} <span className="text-[7px] text-(--color-text-secondary) uppercase ml-0.5 whitespace-nowrap">{t('common.next_lvl')}</span>
                             </span>
                         </div>
                         <div className="h-3 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-black/5 dark:border-white/5 shadow-inner relative">

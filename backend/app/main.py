@@ -114,7 +114,11 @@ async def lifespan(app: FastAPI):
                 logger.info(f"✅ User restoration complete: {restored_count} users restored")
             else:
                 logger.info("ℹ️ Another worker is handling user restoration. Skipping...")
+        except Exception as e:
+            logger.error(f"⚠️ User restoration failed: {e}")
+
     asyncio.create_task(restore_affected_users())
+
     
     # #comment: Blog Migration Task
     # Syncs blog post titles and content from locale files and content modules to the database.

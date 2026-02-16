@@ -45,7 +45,9 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
     const handleCloseMenu = useCallback(() => setIsMenuOpen(false), []);
 
     return (
-        <div className="selection:bg-blue-500/10 fixed inset-0 flex flex-col overflow-hidden bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white">
+        <div className="selection:bg-blue-500/10 fixed inset-0 flex flex-col overflow-hidden bg-(--color-bg-app) text-(--color-text-primary)">
+
+
             {/* Staging Ribbon */}
             {isStaging && (
                 <div className="fixed top-0 left-0 z-100 w-full bg-yellow-400 text-center text-xs font-bold text-slate-900 shadow-sm py-1">
@@ -60,12 +62,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
             {/* Grainy Texture */}
             <div className="pointer-events-none fixed inset-0 z-0 bg-[url('/noise.svg')] opacity-[0.03] mix-blend-overlay" />
 
-            {/* Header - Fixed at top, outside the scroll layer */}
-            {isHeaderVisible && (
-                <div className="relative z-100">
-                    <Header onOpenMenu={() => setIsMenuOpen(true)} />
-                </div>
-            )}
+
 
             {/* Main Content Area - THE SCROLL LAYER */}
             <main
@@ -75,7 +72,15 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                     ${!isHeaderVisible ? '' : (isStaging ? 'staging-offset' : 'content-main-padding')}`}
                 style={{ overscrollBehaviorY: 'none' }}
             >
+                {/* Header - Now inside the scroll layer for natural scrolling */}
+                {isHeaderVisible && (
+                    <div className="relative z-100">
+                        <Header onOpenMenu={() => setIsMenuOpen(true)} />
+                    </div>
+                )}
+
                 <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} safe-pb`}>
+
                     <div className="mx-auto w-full">
                         {children}
                     </div>

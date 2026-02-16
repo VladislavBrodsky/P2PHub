@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
-/* Enable Class-Based Dark Mode for v4 */
+/* Enable Class-Based Theme Support for v4 */
 @variant dark (&:where(.dark, .dark *));
+@variant light (&:where(.light, .light *));
 
 @theme {
   /* === PINTOPAY DESIGN SYSTEM 2026 - v1.7.0 (Stable) === */
@@ -197,32 +198,33 @@
   padding-top: calc(var(--header-total-height) + 32px) !important;
 }
 
-/* Base Variable Definitions & Light Mode (Default) */
-:root {
+/* Base Variable Definitions (Light Mode) */
+:root,
+.light {
   /* Core Colors */
   --color-surface: #FFFFFF;
-  --color-bg-app: #F8FAFC;
-  --color-bg-deep: #F8FAFC;
-  --color-text-primary: #1C1C1E;
-  --color-text-secondary: #8E8E93;
+  --color-bg-app: #F9FAFB;
+  --color-bg-deep: #F3F4F6;
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #64748B;
 
-  --color-brand-primary: #0066FF;
-  --color-brand-blue: #0066FF;
-  --color-brand-blue-deep: #0052D9;
-  --color-action-black: #1C1C1E;
+  --color-brand-primary: #2563EB;
+  --color-brand-blue: #3B82F6;
+  --color-brand-blue-deep: #1D4ED8;
+  --color-action-black: #0F172A;
   --color-success: #10B981;
   --color-warning: #F59E0B;
   --color-error: #EF4444;
 
   /* Semantic */
-  --color-brand-border: rgba(226, 232, 240, 0.8);
+  --color-brand-border: rgba(15, 23, 42, 0.08);
   --color-bg-surface: #FFFFFF;
-  --color-bg-glass: rgba(255, 255, 255, 0.85);
-  --color-border-glass: rgba(0, 0, 0, 0.05);
-  --color-glass-highlight: rgba(255, 255, 255, 0.5);
+  --color-bg-glass: rgba(255, 255, 255, 0.8);
+  --color-border-glass: rgba(15, 23, 42, 0.06);
+  --color-glass-highlight: rgba(255, 255, 255, 0.4);
 
-  --nav-active: #1C1C1E;
-  --nav-inactive: #8E8E93;
+  --nav-active: #0F172A;
+  --nav-inactive: #94A3B8;
   --bg-image: none;
 }
 
