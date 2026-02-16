@@ -18,6 +18,8 @@
       "stage_20_lock_desc": "You've reached the Free Tier limit. 99% stop here. Unlock the Elite Academy and AI Tools with PRO."
     },
     "setup": {
+      "title": "Protocol Configuration",
+      "subtitle": "Global Network Nodes",
       "save_success_title": "Configuration Saved",
       "save_success_text": "Social matrix updated successfully.",
       "save_error_title": "Save Failed",

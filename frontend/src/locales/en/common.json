@@ -63,10 +63,13 @@
   },
   "legal": {
     "title": "Legal Protocols",
-    "tos": "Terms of Service",
-    "privacy": "Privacy Policy",
-    "aml": "AML Compliance",
-    "footer": "© 2026 P2PHub Global Infrastructure"
+    "terms_title": "Terms of Service",
+    "privacy_title": "Privacy Policy",
+    "disclaimer_title": "LEGAL DISCLAIMER",
+    "disclaimer_desc": "We are a community of digital nomads and online entrepreneurs who search for global trends. We act as a <1>Third-Party Ambassador Agency</1> and do not have an official corporate connection to Pintopay.",
+    "risk_warning": "RISK WARNING: High-velocity P2P settlements involve market risk. Past performance does not guarantee future dividends. Only participate with assets you are prepared to leverage.",
+    "understand": "I UNDERSTAND",
+    "copyright": "© 2026 Ambassador Vanguard. All Rights Reserved."
   },
   "system": {
     "loading": {

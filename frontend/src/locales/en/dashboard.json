@@ -33,15 +33,6 @@
       "$1+ PER MIN 24/7"
     ]
   },
-  "stats": {
-    "title": "Analytics Node",
-    "subtitle": "Deep Data Insights",
-    "charts": {
-      "growth": "Network Growth",
-      "rewards": "Reward Velocity",
-      "activity": "Activity Index"
-    }
-  },
   "onboarding": {
     "welcome": "Welcome to Pintopay Partner",
     "early": "You're among the first!",
@@ -71,11 +62,6 @@
     "term_3": "Marketing Activities",
     "get_started": "GET STARTED",
     "next": "NEXT"
-  },
-  "onboarding_finish": {
-    "title": "SYNC COMPLETE",
-    "desc": "Your node is now active. The market is waiting.",
-    "cta": "Enter Dashboard"
   },
   "evolution": {
     "badge": "Live Evolution",
@@ -123,5 +109,19 @@
         "back_desc": "Pintopay leverages the power of decentralized networks for instant, borderless settlements. By participating in the ecosystem, partners contribute to a faster and more inclusive global financial structure."
       }
     }
+  },
+  "stats": {
+    "title": "Analytics Node",
+    "subtitle": "Deep Data Insights",
+    "charts": {
+      "growth": "Network Growth",
+      "rewards": "Reward Velocity",
+      "activity": "Activity Index"
+    }
+  },
+  "onboarding_finish": {
+    "title": "SYNC COMPLETE",
+    "desc": "Your node is now active. The market is waiting.",
+    "cta": "Enter Dashboard"
   }
 }

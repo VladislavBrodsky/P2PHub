@@ -3,18 +3,28 @@
     "title": "Collective Intelligence",
     "subtitle": "Join the Global Syndicate",
     "join_btn": "Enter Discord",
-    "members": "Elite Members"
+    "members": "Elite Members",
+    "tabs": {
+      "dashboard": "Dashboard",
+      "academy": "Academy"
+    }
   },
   "leaderboard": {
     "title": "Elite Leaderboard",
     "subtitle": "Global Performance Ranking",
     "rank_label": "Rank",
     "user_label": "Operator",
-    "score_label": "Network Strength"
+    "score_label": "Network Strength",
+    "top_partners": "Top Partners",
+    "xp": "XP"
   },
   "earn_header": {
     "title": "Reward Engine",
-    "subtitle": "Monetize Your Influence"
+    "subtitle": "Monetize Your Influence",
+    "level": "Level",
+    "xp_progress": "XP Progress",
+    "partners": "Partners",
+    "total_xp": "Total XP"
   },
   "level_100": {
     "title": "Apex Sovereign",

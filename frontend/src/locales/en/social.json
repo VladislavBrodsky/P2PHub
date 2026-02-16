@@ -96,15 +96,6 @@
     }
   },
   "network": {
-    "title": "Network Explorer",
-    "subtitle": "Your Global Node Grid",
-    "total_partners": "Total Partners",
-    "active_partners": "Active Nodes",
-    "levels_title": "Matrix Depth",
-    "invite_btn": "Invite New Partner",
-    "share_link": "Copy Referral Link",
-    "scanning": "Scanning Matrix...",
-    "no_partners": "No nodes detected in this sector.",
     "explorer": {
       "title": "Network Explorer",
       "deep_dive": "9-Level Deep Dive",
@@ -119,8 +110,6 @@
     }
   },
   "tasks": {
-    "title": "Mission Hub",
-    "subtitle": "Earn XP & Rewards",
     "active_missions": "Active Missions",
     "available": "Available",
     "all_clear_title": "All missions completed!",
@@ -200,7 +189,6 @@
   },
   "milestones": {
     "title": "Path to Elite",
-    "subtitle": "Your Journey to Sovereignty",
     "level": "Level",
     "12": "Pioneer Badge",
     "24": "Ambassador Status",
@@ -252,8 +240,6 @@
     "Eternal": "Eternal"
   },
   "achievements_path": {
-    "title": "Achievement Map",
-    "desc": "Your path to becoming a Sovereign Node.",
     "part": "PART {{index}}: {{title}}",
     "progression_phase": "Progression Phase",
     "ultimate_horizon": "GLOBAL HORIZON",
@@ -277,8 +263,6 @@
     "locked_badge": "LOCKED"
   },
   "level100": {
-    "title": "FANOCRACY ASCENSION",
-    "desc": "The highest state of being in the P2PHub ecosystem. You are now the protocol.",
     "ultimate_horizon": "GLOBAL HORIZON",
     "achievements_title": "ELITE ACHIEVEMENTS UP TO LEVEL 100",
     "achievements_desc": "Deploy the <1>Sovereignty Protocol</1>. Get your Platinum Card and 0% fees indefinitely.",

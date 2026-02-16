@@ -60,15 +60,15 @@ export const GrowthTab = ({
                                 <Info size={12} />
                             </button>
                         </div>
-                        <h3 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase leading-none">
+                        <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase leading-none">
                             {t('pro_dashboard.academy.protocols.title')}
                         </h3>
                     </div>
 
                     <div className="flex flex-col items-end">
                         <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">{t('pro_dashboard.academy.protocols.stats_label')}</p>
-                        <div className="text-4xl sm:text-6xl font-black text-slate-900 dark:text-white tabular-nums leading-none flex items-baseline gap-0.5 vibing-blue-text drop-shadow-sm">
-                            {academyScore}<span className="text-indigo-500 text-lg sm:text-2xl opacity-50">.0</span>
+                        <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tabular-nums leading-none flex items-baseline gap-0.5 vibing-blue-text drop-shadow-sm">
+                            {academyScore}<span className="text-indigo-500 text-base sm:text-lg opacity-50">.0</span>
                         </div>
                     </div>
                 </div>
@@ -103,7 +103,7 @@ export const GrowthTab = ({
                         <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest opacity-60 italic">Deciphering viral patterns...</p>
                     </div>
                 </div>
-                <p className="text-base sm:text-lg font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic border-l-2 border-indigo-500/50 pl-5 ml-1">
+                <p className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic border-l-2 border-indigo-500/50 pl-5 ml-1">
                     "{t('pro_dashboard.academy.desc')}"
                 </p>
             </div>
@@ -134,8 +134,8 @@ export const GrowthTab = ({
                                 <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-[7px] font-black text-indigo-500 uppercase tracking-widest border border-indigo-500/10">{article.category}</span>
                                 <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">{article.readTime} MIN READ</span>
                             </div>
-                            <h5 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
-                            <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 mb-5 opacity-80 italic">"{article.desc}"</p>
+                            <h5 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
+                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 mb-4 opacity-80 italic">"{article.desc}"</p>
                             <div className="flex items-center gap-2 text-[8px] font-black text-indigo-500 uppercase tracking-widest group-hover:gap-3 transition-all">
                                 {t('pro_dashboard.academy.articles.btn_read')} <ArrowRight size={10} />
                             </div>
@@ -189,7 +189,7 @@ export const GrowthTab = ({
                                                     </div>
                                                 )}
                                             </div>
-                                            <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-tight">{module.title}</h4>
+                                            <h4 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight leading-tight">{module.title}</h4>
                                             <p className="text-[9px] font-black text-indigo-500/70 uppercase tracking-widest">{module.hook}</p>
                                         </div>
                                         <div className="w-10 h-10 flex-none rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-black text-sm shadow-sm">
@@ -197,7 +197,7 @@ export const GrowthTab = ({
                                         </div>
                                     </div>
 
-                                    <p className="text-[13px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl">
+                                    <p className="text-[12px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl">
                                         {renderMarkdown(module.content)}
                                     </p>
 
@@ -208,7 +208,7 @@ export const GrowthTab = ({
                                             </div>
                                             <span className="text-[8px] font-black uppercase tracking-widest text-indigo-500">Node Task</span>
                                         </div>
-                                        <p className="text-[13px] font-bold text-slate-900 dark:text-white leading-relaxed">
+                                        <p className="text-[12px] font-bold text-slate-900 dark:text-white leading-relaxed">
                                             {module.task}
                                         </p>
                                         {module.link && (

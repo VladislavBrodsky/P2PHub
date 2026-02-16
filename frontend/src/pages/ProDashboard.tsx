@@ -1,9 +1,16 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Zap, Settings, Trophy, Cpu, Users
+    Zap, Settings, Trophy, Cpu, Users, ChevronLeft
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import {
+    useHapticFeedback,
+    useMainButton,
+    useBackButton,
+    useSettingsButton,
+    useViewport
+} from '@telegram-apps/sdk-react';
 import { useHaptic } from '../hooks/useHaptic';
 import { useUI } from '../context/UIContext';
 import { proService, PROStatus } from '../services/proService';
@@ -19,7 +26,11 @@ type Tab = 'studio' | 'tools' | 'growth';
 
 export const ProDashboard = () => {
     const { t } = useTranslation();
-    const { selection, impact, notification: hapticNotification } = useHaptic();
+    const haptic = useHapticFeedback();
+    const mainButton = useMainButton();
+    const backButton = useBackButton();
+    const settingsButton = useSettingsButton();
+    const viewport = useViewport();
     const { showNotification } = useNotificationStore();
     const { setFooterVisible, setHeaderVisible } = useUI();
 
@@ -55,11 +66,23 @@ export const ProDashboard = () => {
         const anyModalOpen = showSetup || showManual || selectedArticle || selectedAsset || showAuditModal;
         setFooterVisible(!anyModalOpen);
         setHeaderVisible(!anyModalOpen);
-        return () => {
-            setHeaderVisible(true);
-            setFooterVisible(true);
-        };
-    }, [showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, setFooterVisible, setHeaderVisible]);
+
+        // Native Back Button integration
+        if (anyModalOpen) {
+            backButton.show();
+            const hideAllModals = () => {
+                setShowSetup(false);
+                setShowManual(null);
+                setSelectedArticle(null);
+                setSelectedAsset(null);
+                setShowAuditModal(false);
+            };
+            backButton.on('click', hideAllModals);
+            return () => backButton.off('click', hideAllModals);
+        } else {
+            backButton.hide();
+        }
+    }, [showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, setFooterVisible, setHeaderVisible, backButton]);
 
     // Handle deep linking for Pro Tabs
     useEffect(() => {
@@ -75,15 +98,20 @@ export const ProDashboard = () => {
 
     useEffect(() => {
         loadStatus();
-        const tg = (window as any).Telegram?.WebApp;
-        if (tg) {
-            tg.expand();
-            tg.enableClosingConfirmation();
-            if (tg.isVerticalSwipesEnabled !== undefined) tg.isVerticalSwipesEnabled = false;
-            if (tg.setHeaderColor) tg.setHeaderColor('#0f172a');
-            if (tg.setBackgroundColor) tg.setBackgroundColor('#0f172a');
+
+        if (viewport && !viewport.isExpanded) {
+            viewport.expand();
         }
-    }, []);
+
+        settingsButton.show();
+        const openSetup = () => {
+            haptic.impactOccurred('light');
+            setShowSetup(true);
+        };
+        settingsButton.on('click', openSetup);
+
+        return () => settingsButton.off('click', openSetup);
+    }, [viewport, settingsButton, haptic]);
 
     const loadStatus = async () => {
         try {
@@ -118,7 +146,7 @@ export const ProDashboard = () => {
 
     const handleSaveSetup = async () => {
         setIsLoading(true);
-        impact('heavy');
+        haptic.impactOccurred('heavy');
         try {
             await proService.setupSocial(apiData);
             await loadStatus();
@@ -128,7 +156,7 @@ export const ProDashboard = () => {
                 message: t('pro_dashboard.setup.save_success_text'),
                 type: 'success'
             });
-            hapticNotification('success');
+            haptic.notificationOccurred('success');
         } catch (error) {
             console.error('Failed to save setup', error);
             showNotification({
@@ -136,7 +164,7 @@ export const ProDashboard = () => {
                 message: t('pro_dashboard.setup.save_error_text'),
                 type: 'warning'
             });
-            hapticNotification('error');
+            haptic.notificationOccurred('error');
         } finally {
             setIsLoading(false);
         }
@@ -271,8 +299,8 @@ export const ProDashboard = () => {
                             <Zap size={20} className="relative z-10" />
                         </motion.div>
                         <div className="space-y-0">
-                            <h1 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center gap-2">
-                                PRO <span className="text-indigo-600 dark:text-indigo-500">Node</span>
+                            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center gap-2">
+                                Viral Marketing <span className="text-indigo-600 dark:text-indigo-500">Studio</span>
                             </h1>
                             <div className="flex items-center gap-1.5">
                                 <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
@@ -282,18 +310,16 @@ export const ProDashboard = () => {
                     </div>
 
                     <div className="flex items-center gap-2 p-1 bg-white/50 dark:bg-white/5 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-                        <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100/50 dark:border-indigo-500/20">
-                            <Trophy size={14} className="text-indigo-600 dark:text-indigo-400" />
-                            <div className="flex flex-col">
-                                <span className="text-[8px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest leading-none mb-0.5">XP</span>
-                                <span className="text-base font-black text-slate-900 dark:text-white tabular-nums leading-none">{academyScore}</span>
-                            </div>
+                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100/50 dark:border-indigo-500/20">
+                            <Zap size={10} className="text-indigo-600 dark:text-indigo-400" />
+                            <span className="text-[8px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest leading-none">TOKENS:</span>
+                            <span className="text-xs font-black text-slate-900 dark:text-white tabular-nums leading-none">{status?.pro_tokens || 0}</span>
                         </div>
                         <button
                             onClick={() => setShowSetup(true)}
-                            className="p-2.5 bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 rounded-xl border border-slate-200 dark:border-white/5 transition-all group active:scale-90"
+                            className="p-2 bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 rounded-xl border border-slate-200 dark:border-white/5 transition-all group active:scale-90"
                         >
-                            <Settings size={14} className="text-slate-500 dark:text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                            <Settings size={12} className="text-slate-500 dark:text-slate-400 group-hover:text-indigo-500 transition-colors" />
                         </button>
                     </div>
                 </div>
@@ -303,21 +329,21 @@ export const ProDashboard = () => {
                         <button
                             key={tab}
                             onClick={() => { selection(); setActiveTab(tab); impact('light'); }}
-                            className={`flex-1 relative py-3 rounded-[1.25rem] transition-all duration-500 ${activeTab === tab ? 'text-white' : 'text-slate-400 dark:text-slate-500 hover:text-indigo-500'
+                            className={`flex-1 relative py-2.5 rounded-[1.125rem] transition-all duration-500 ${activeTab === tab ? 'text-white' : 'text-slate-400 dark:text-slate-500 hover:text-indigo-500'
                                 }`}
                         >
                             {activeTab === tab && (
                                 <motion.div
                                     layoutId="activeTab"
-                                    className="absolute inset-0 vibing-blue-animated rounded-[1.125rem] shadow-xl shadow-indigo-500/20"
+                                    className="absolute inset-0 vibing-blue-animated rounded-[1rem] shadow-xl shadow-indigo-500/20"
                                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                                 />
                             )}
-                            <span className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
-                                {tab === 'studio' && <Cpu size={activeTab === tab ? 14 : 12} className={activeTab === tab ? 'animate-pulse' : ''} />}
-                                {tab === 'tools' && <Settings size={activeTab === tab ? 14 : 12} />}
-                                {tab === 'growth' && <Users size={activeTab === tab ? 14 : 12} />}
-                                <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest">{t(`pro_dashboard.tab_${tab}`)}</span>
+                            <span className="relative z-10 flex flex-row items-center justify-center gap-2">
+                                {tab === 'studio' && <Cpu size={14} className={activeTab === tab ? 'animate-pulse' : ''} />}
+                                {tab === 'tools' && <Settings size={14} />}
+                                {tab === 'growth' && <Users size={14} />}
+                                <span className="text-[9px] font-black uppercase tracking-widest">{t(`pro_dashboard.tab_${tab}`)}</span>
                             </span>
                         </button>
                     ))}
