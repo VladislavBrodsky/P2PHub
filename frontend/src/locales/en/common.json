@@ -206,6 +206,29 @@
       "pro": "PRO Membership",
       "cards": "P2P Cards",
       "security": "Security"
+    },
+    "onboarding": {
+      "get_started": "GET STARTED",
+      "next": "NEXT",
+      "terms": "By tapping get started, you confirm that you have read and agree to our <0>Terms of Service</0>, <1>Cookie Policy</1> and consent to our <2>Marketing Activities</2>.",
+      "stories": [
+        {
+          "title": "Welcome, Partner",
+          "desc": "You are now part of the Pintopay elite. Start your journey to financial freedom through P2P automation."
+        },
+        {
+          "title": "Strategic Nodes",
+          "desc": "Build your own network of active cards. Every transaction in your team generates rewards for you."
+        },
+        {
+          "title": "Elite Security",
+          "desc": "Your assets are protected by bank-grade protocols and blockchain technology. Trade with 100% confidence."
+        },
+        {
+          "title": "AI Growth",
+          "desc": "Activate PRO to unlock the AI Content Factory. Scale your network 100x faster while you sleep."
+        }
+      ]
     }
   }
 }

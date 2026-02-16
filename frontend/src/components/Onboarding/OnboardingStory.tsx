@@ -18,8 +18,13 @@ const STORIES_LIST = [
 export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
     const { t } = useTranslation();
     const [index, setIndex] = useState(() => {
-        const saved = sessionStorage.getItem('p2p_onboarding_step');
-        return saved ? parseInt(saved, 10) : 0;
+        try {
+            const saved = sessionStorage.getItem('p2p_onboarding_step');
+            return saved ? parseInt(saved, 10) : 0;
+        } catch (e) {
+            console.warn('[Onboarding] SessionStorage access failed:', e);
+            return 0;
+        }
     });
     const { selection, notification } = useHaptic();
 
@@ -28,10 +33,18 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
         if (index < STORIES_LIST.length - 1) {
             const nextIndex = index + 1;
             setIndex(nextIndex);
-            sessionStorage.setItem('p2p_onboarding_step', nextIndex.toString());
+            try {
+                sessionStorage.setItem('p2p_onboarding_step', nextIndex.toString());
+            } catch (e) {
+                console.warn('[Onboarding] Failed to save progress:', e);
+            }
         } else {
             notification('success');
-            sessionStorage.removeItem('p2p_onboarding_step');
+            try {
+                sessionStorage.removeItem('p2p_onboarding_step');
+            } catch (e) {
+                // Ignore
+            }
             onComplete();
         }
     };

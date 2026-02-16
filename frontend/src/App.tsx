@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 // #comment: Removed unused apiClient, Skeleton and PageSkeleton imports to clean up the dependency list
 import { NotificationOverlay } from './components/ui/NotificationOverlay';
 import { useRealtimeAlerts } from './hooks/useRealtimeAlerts';
-// import { OnboardingStory } from './components/Onboarding/OnboardingStory';
+import { OnboardingStory } from './components/Onboarding/OnboardingStory';
 import { useConfig } from './context/ConfigContext';
 import { FeatureErrorBoundary } from './components/FeatureErrorBoundary';
 import { StartupLoader } from './components/ui/StartupLoader';
@@ -39,7 +39,7 @@ import { UIProvider } from './context/UIContext';
 // #comment: Removed hard import of SupportChat to enable the Lazy load strategy defined above.
 import { useUI } from './context/UIContext';
 
-const OnboardingStory = lazy(() => import('./components/Onboarding/OnboardingStory').then(m => ({ default: m.OnboardingStory })));
+// OnboardingStory is now a hard import for stability during startup
 
 function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnboarding: boolean }) {
     const { t } = useTranslation();
@@ -182,6 +182,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                 }
 
                 console.log('[DEBUG] initTMA: Complete');
+                // Ensure we signal readiness only once
                 updateProgress(98, t('system.loading.ready'));
             } catch (e) {
                 console.log('Not in TMA environment or SDK error:', e);
@@ -215,92 +216,95 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
         };
     }, [activeTab]);
 
-    // If strictly onboarding, don't render heavy layout/pages to save resources
-    if (showOnboarding) return null;
+    // We no longer return null here to ensure the TMA SDK initialization and other effects
+    // always run correctly. Instead, the UI is controlled by visibility.
+    // if (showOnboarding) return null;
 
     return (
         <Layout activeTab={activeTab} setActiveTab={navigateTo} prefetchPages={prefetchPages}>
-            <Suspense fallback={<RevealSkeleton />}>
-                <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('home') && (
-                        <FeatureErrorBoundary featureName="Dashboard">
-                            <Dashboard setActiveTab={navigateTo} />
-                        </FeatureErrorBoundary>
-                    )}
-                </div>
-                <div className={`h-full ${activeTab === 'cards' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('cards') && (
-                        <FeatureErrorBoundary featureName="Cards">
-                            <CardsPage setActiveTab={setActiveTab} />
-                        </FeatureErrorBoundary>
-                    )}
-                </div>
-                <div className={`h-full ${activeTab === 'partner' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('partner') && (
-                        <FeatureErrorBoundary featureName="Community Orbit">
-                            <CommunityPage />
-                        </FeatureErrorBoundary>
-                    )}
-                </div>
-                <div className={`h-full ${activeTab === 'earn' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('earn') && (
-                        <FeatureErrorBoundary featureName="Referral Program">
-                            <ReferralPage />
-                        </FeatureErrorBoundary>
-                    )}
-                </div>
-                <div className={`h-full ${activeTab === 'league' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('league') && (
-                        <FeatureErrorBoundary featureName="Leaderboard">
-                            <LeaderboardPage />
-                        </FeatureErrorBoundary>
-                    )}
-                </div>
-                <div className={`h-full ${activeTab === 'subscription' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('subscription') && (
-                        <FeatureErrorBoundary featureName="Subscription">
-                            <SubscriptionPage />
-                        </FeatureErrorBoundary>
-                    )}
-                </div>
-                <div className={`h-full ${activeTab === 'blog' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('blog') && (
-                        <FeatureErrorBoundary featureName="Blog">
-                            <BlogPage setActiveTab={setActiveTab} currentTab={activeTab} />
-                        </FeatureErrorBoundary>
-                    )}
-                </div>
-                <div className={`h-full ${activeTab === 'admin' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('admin') && (
-                        <FeatureErrorBoundary featureName="Admin Panel">
-                            <AdminPage />
-                        </FeatureErrorBoundary>
-                    )}
-                </div>
-                <div className={`h-full ${activeTab === 'pro' ? 'block' : 'hidden'}`}>
-                    {visitedTabs.has('pro') && (
-                        <FeatureErrorBoundary featureName="PRO Dashboard">
-                            <ProPage />
-                        </FeatureErrorBoundary>
-                    )}
-                </div>
-
-                {['coming_soon'].includes(activeTab) && (
-                    <div className="flex flex-col items-center justify-center text-center px-10 h-full">
-                        <div className="text-4xl mb-4">🚀</div>
-                        <h2 className="text-2xl font-black mb-2 uppercase">{t('system.coming_soon.title')}</h2>
-                        <p className="text-slate-500 dark:text-slate-400 font-medium">
-                            {t('system.coming_soon.desc')}
-                        </p>
+            <div className={showOnboarding ? 'hidden' : 'block h-full'}>
+                <Suspense fallback={<RevealSkeleton />}>
+                    <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
+                        {visitedTabs.has('home') && (
+                            <FeatureErrorBoundary featureName="Dashboard">
+                                <Dashboard setActiveTab={navigateTo} />
+                            </FeatureErrorBoundary>
+                        )}
                     </div>
-                )}
-            </Suspense>
-            {/* #comment: Render SupportChat within Suspense to handle lazy loading transition */}
-            <Suspense fallback={null}>
-                {isSupportOpen && (
-                    <SupportChat isOpen={isSupportOpen} onClose={() => setSupportOpen(false)} />
-                )}
-            </Suspense>
+                    <div className={`h-full ${activeTab === 'cards' ? 'block' : 'hidden'}`}>
+                        {visitedTabs.has('cards') && (
+                            <FeatureErrorBoundary featureName="Cards">
+                                <CardsPage setActiveTab={setActiveTab} />
+                            </FeatureErrorBoundary>
+                        )}
+                    </div>
+                    <div className={`h-full ${activeTab === 'partner' ? 'block' : 'hidden'}`}>
+                        {visitedTabs.has('partner') && (
+                            <FeatureErrorBoundary featureName="Community Orbit">
+                                <CommunityPage />
+                            </FeatureErrorBoundary>
+                        )}
+                    </div>
+                    <div className={`h-full ${activeTab === 'earn' ? 'block' : 'hidden'}`}>
+                        {visitedTabs.has('earn') && (
+                            <FeatureErrorBoundary featureName="Referral Program">
+                                <ReferralPage />
+                            </FeatureErrorBoundary>
+                        )}
+                    </div>
+                    <div className={`h-full ${activeTab === 'league' ? 'block' : 'hidden'}`}>
+                        {visitedTabs.has('league') && (
+                            <FeatureErrorBoundary featureName="Leaderboard">
+                                <LeaderboardPage />
+                            </FeatureErrorBoundary>
+                        )}
+                    </div>
+                    <div className={`h-full ${activeTab === 'subscription' ? 'block' : 'hidden'}`}>
+                        {visitedTabs.has('subscription') && (
+                            <FeatureErrorBoundary featureName="Subscription">
+                                <SubscriptionPage />
+                            </FeatureErrorBoundary>
+                        )}
+                    </div>
+                    <div className={`h-full ${activeTab === 'blog' ? 'block' : 'hidden'}`}>
+                        {visitedTabs.has('blog') && (
+                            <FeatureErrorBoundary featureName="Blog">
+                                <BlogPage setActiveTab={setActiveTab} currentTab={activeTab} />
+                            </FeatureErrorBoundary>
+                        )}
+                    </div>
+                    <div className={`h-full ${activeTab === 'admin' ? 'block' : 'hidden'}`}>
+                        {visitedTabs.has('admin') && (
+                            <FeatureErrorBoundary featureName="Admin Panel">
+                                <AdminPage />
+                            </FeatureErrorBoundary>
+                        )}
+                    </div>
+                    <div className={`h-full ${activeTab === 'pro' ? 'block' : 'hidden'}`}>
+                        {visitedTabs.has('pro') && (
+                            <FeatureErrorBoundary featureName="PRO Dashboard">
+                                <ProPage />
+                            </FeatureErrorBoundary>
+                        )}
+                    </div>
+
+                    {['coming_soon'].includes(activeTab) && (
+                        <div className="flex flex-col items-center justify-center text-center px-10 h-full">
+                            <div className="text-4xl mb-4">🚀</div>
+                            <h2 className="text-2xl font-black mb-2 uppercase">{t('system.coming_soon.title')}</h2>
+                            <p className="text-slate-500 dark:text-slate-400 font-medium">
+                                {t('system.coming_soon.desc')}
+                            </p>
+                        </div>
+                    )}
+                </Suspense>
+                {/* #comment: Render SupportChat within Suspense to handle lazy loading transition */}
+                <Suspense fallback={null}>
+                    {isSupportOpen && (
+                        <SupportChat isOpen={isSupportOpen} onClose={() => setSupportOpen(false)} />
+                    )}
+                </Suspense>
+            </div>
         </Layout>
     );
 }
