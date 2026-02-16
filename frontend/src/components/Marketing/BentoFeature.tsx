@@ -44,7 +44,7 @@ export const BentoFeature = ({
                     <h3 className={cn("font-bold tracking-tight text-slate-900 dark:text-white", featured ? "text-xl" : "text-base")}>
                         {title}
                     </h3>
-                    <p className="mt-1 text-xs font-medium leading-relaxed text-slate-500 dark:text-slate-400">
+                    <p className="mt-1 text-xs font-normal leading-relaxed text-slate-500 dark:text-slate-400">
                         {description}
                     </p>
                 </div>
