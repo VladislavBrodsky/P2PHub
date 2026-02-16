@@ -531,8 +531,77 @@
           }
         ],
         "growth_promo": "PRO Members grow their network <1>x5 faster</1> using these elite protocols.",
-        "methodology_title": "Quantum Methodology",
         "methodology_desc": "Follow the elite protocols to maximize your reach. Every asset and lesson is designed for 2026 algorithmic dominance. We analyze multi-vector data points to ensure your content bypasses standard filters."
+      },
+      "psych_strategies": {
+        "title": "Elite Psychological Warfare",
+        "subtitle": "TOP 9 VIRAL TRIGGERS",
+        "unlock_desc": "Architecture Setup Complete. Unlocking Advanced Memetic Weaponry...",
+        "items": [
+          {
+            "id": "psy1",
+            "trigger": "SCARCITY",
+            "title": "The Velvet Rope",
+            "desc": "Don't sell access. *Deny* access. People want what they can't have. Tell them the group is closing in 24h.",
+            "action": "Post a countdown timer."
+          },
+          {
+            "id": "psy2",
+            "trigger": "URGENCY",
+            "title": "The Vanishing Bonus",
+            "desc": "Offer a PDF or consultation only to the next 3 people who DM you. Real deadline: 2 hours.",
+            "action": "Create a 'Deleting Soon' story."
+          },
+          {
+            "id": "psy3",
+            "trigger": "SOCIAL PROOF",
+            "title": "The Bandwagon Effect",
+            "desc": "Share a screenshot of 50+ new join notifications. Caption: 'The wave is starting.'",
+            "action": "Post a 'Wall of Proof'."
+          },
+          {
+            "id": "psy4",
+            "trigger": "CURIOSITY",
+            "title": "The Information Gap",
+            "desc": "Post a blurred screenshot of high earnings. Caption: 'I can't believe this worked.'",
+            "action": "Hide the method, show the result."
+          },
+          {
+            "id": "psy5",
+            "trigger": "AUTHORITY",
+            "title": "The Expert Frame",
+            "desc": "Critique a popular crypto failure. Explain why P2P solves it. Be the judge, not the salesman.",
+            "action": "Write a 'Why They Failed' analysis."
+          },
+          {
+            "id": "psy6",
+            "trigger": "IDENTITY",
+            "title": "The Us vs. Them",
+            "desc": "Create a common enemy (Banks/Fees). 'They tax your sweat. We own our protocol.'",
+            "action": "Post a 'Declare Independence' manifesto."
+          },
+          {
+            "id": "psy7",
+            "trigger": "RECIPROCITY",
+            "title": "The Free Value",
+            "desc": "Give away a full guide for FREE. 'Comment GUIDE and I'll send it.' Then upsell in DMs.",
+            "action": "Distribute a Lead Magnet."
+          },
+          {
+            "id": "psy8",
+            "trigger": "COMMITMENT",
+            "title": "The Micro-Yes",
+            "desc": "Ask a small question first. 'Do you hate fees?'. Once they say yes, the sale is 50% done.",
+            "action": "Post a Poll."
+          },
+          {
+            "id": "psy9",
+            "trigger": "NOVELTY",
+            "title": "The Pattern Interrupt",
+            "desc": "Use a completely unrelated, high-contrast image (e.g., a neon skull) to stop the scroll. Then pitch.",
+            "action": "Create a 'Glitch' aesthetic post."
+          }
+        ]
       }
     }
   },

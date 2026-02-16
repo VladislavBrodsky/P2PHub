@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import {
     Info, CheckCircle2, Bot, TrendingUp, ArrowRight, ShieldCheck,
     Terminal, Share, Flame, Globe, Send, Twitter, Linkedin, ChevronRight,
-    Loader2, Sparkles
+    Loader2, Sparkles, Brain, Lock, Search, Play
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PROStatus } from '../../../services/proService';
@@ -218,31 +218,31 @@ export const GrowthTab = ({
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: i * 0.1 }}
-                                    className="pl-12 relative group"
+                                    className="pl-10 sm:pl-12 relative group"
                                 >
                                     {/* Timeline Node */}
-                                    <div className={`absolute left-0 top-6 w-10 h-10 rounded-full border-4 border-slate-50 dark:border-slate-950 flex items-center justify-center transition-all duration-500 z-20 ${isCompleted
-                                            ? 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]'
-                                            : isLocked
-                                                ? 'bg-slate-200 dark:bg-slate-800 text-slate-400'
-                                                : 'bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)] animate-pulse'
+                                    <div className={`absolute left-0 top-6 w-8 h-8 sm:w-10 sm:h-10 rounded-full border-4 border-slate-50 dark:border-slate-950 flex items-center justify-center transition-all duration-500 z-20 ${isCompleted
+                                        ? 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]'
+                                        : isLocked
+                                            ? 'bg-slate-200 dark:bg-slate-800 text-slate-400'
+                                            : 'bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)] animate-pulse'
                                         }`}>
-                                        <span className="font-black text-xs">{i + 1}</span>
+                                        <span className="font-black text-[10px] sm:text-xs">{i + 1}</span>
                                     </div>
 
                                     {/* Card */}
                                     <div className={`pro-card-extreme rounded-[1.5rem] overflow-hidden relative transition-all duration-300 ${isCompleted
-                                            ? 'opacity-80 grayscale-[0.3] border-emerald-500/20 bg-emerald-500/5'
-                                            : isLocked
-                                                ? 'opacity-60 border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-white/5'
-                                                : 'bg-white dark:bg-slate-900/60 border-indigo-500/30 shadow-xl shadow-indigo-500/10 hover:scale-[1.01]'
+                                        ? 'opacity-80 grayscale-[0.3] border-emerald-500/20 bg-emerald-500/5'
+                                        : isLocked
+                                            ? 'opacity-60 border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-white/5'
+                                            : 'bg-white dark:bg-slate-900/60 border-indigo-500/30 shadow-xl shadow-indigo-500/10 hover:scale-[1.01]'
                                         }`}>
 
                                         {/* Status Header */}
-                                        <div className="px-5 py-4 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-slate-50/50 dark:bg-white/5">
+                                        <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-slate-50/50 dark:bg-white/5">
                                             <span className={`px-2.5 py-1 rounded-full border text-[8px] font-black uppercase tracking-widest ${module.diff === 'hard' ? 'border-red-500/30 bg-red-500/10 text-red-500' :
-                                                    module.diff === 'medium' ? 'border-amber-500/30 bg-amber-500/10 text-amber-500' :
-                                                        'border-emerald-500/30 bg-emerald-500/10 text-emerald-500'
+                                                module.diff === 'medium' ? 'border-amber-500/30 bg-amber-500/10 text-amber-500' :
+                                                    'border-emerald-500/30 bg-emerald-500/10 text-emerald-500'
                                                 }`}>
                                                 {t(`pro_dashboard.academy.protocols.difficulty_levels.${module.diff}`)}
                                             </span>
@@ -254,8 +254,8 @@ export const GrowthTab = ({
                                                 </div>
                                             ) : (
                                                 <div className={`flex items-center gap-1.5 px-3 py-1 rounded-lg border font-black text-[9px] uppercase tracking-widest ${cost > 0
-                                                        ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
-                                                        : 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20'
+                                                    ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
+                                                    : 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20'
                                                     }`}>
                                                     {cost > 0 ? (
                                                         <>+{cost} TOKEN REWARD</>
@@ -266,7 +266,7 @@ export const GrowthTab = ({
                                             )}
                                         </div>
 
-                                        <div className="p-5 sm:p-6 space-y-4">
+                                        <div className="p-4 sm:p-6 space-y-4">
                                             <div className="space-y-1">
                                                 <h4 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{module.title}</h4>
                                                 <p className="text-[10px] font-bold text-indigo-500/80 uppercase tracking-widest">{module.hook}</p>
@@ -279,7 +279,7 @@ export const GrowthTab = ({
 
                                             {/* Action / Task */}
                                             {!isCompleted && !isLocked && (
-                                                <div className="relative p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 space-y-3 overflow-hidden group/task">
+                                                <div className="relative p-3 sm:p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 space-y-3 overflow-hidden group/task">
                                                     <div className="absolute inset-0 bg-linear-to-r from-indigo-500/5 to-purple-500/5 opacity-50" />
                                                     <div className="relative z-10">
                                                         <div className="flex items-center gap-2 mb-2">
@@ -299,15 +299,15 @@ export const GrowthTab = ({
                                                         <button
                                                             onClick={() => handleCompleteAcademyStage(module.id)}
                                                             disabled={isLoading}
-                                                            className="w-full h-11 bg-slate-900 dark:bg-white hover:scale-[1.02] active:scale-95 text-white dark:text-slate-900 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg relative overflow-hidden"
+                                                            className="w-full min-h-[44px] h-auto py-2 bg-slate-900 dark:bg-white hover:scale-[1.02] active:scale-95 text-white dark:text-slate-900 rounded-xl font-black text-[10px] uppercase tracking-wider sm:tracking-widest transition-all flex items-center justify-center gap-2 flex-wrap text-center shadow-lg relative overflow-hidden"
                                                         >
                                                             {isLoading ? <Loader2 size={14} className="animate-spin" /> : (
                                                                 <>
                                                                     <span>
                                                                         {cost > 0 ? "Complete & Claim Reward" : `Unlock & Sync (-${Math.abs(cost)} Tokens)`}
                                                                     </span>
-                                                                    <div className="w-px h-3 bg-current opacity-20" />
-                                                                    <span className="opacity-70">+{costInfo.xp} XP</span>
+                                                                    <div className="w-px h-3 bg-current opacity-20 hidden sm:block" />
+                                                                    <span className="opacity-70 whitespace-nowrap">+{costInfo.xp} XP</span>
                                                                 </>
                                                             )}
                                                         </button>
@@ -419,6 +419,99 @@ export const GrowthTab = ({
                     {t('pro_dashboard.tab_setup')} <ChevronRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
                 </button>
             </div>
+
+            {/* Elite Psychological Warfare (TOP 9) - Locked until Setup is done */}
+            {(() => {
+                const isSetupComplete = !!(status?.setup?.telegram_channel_id || status?.setup?.x_access_token);
+                // For demo purposes, we can uncomment this to test unlocked state if needed
+                // const isSetupComplete = true; 
+
+                return (
+                    <div className={`relative rounded-[1.5rem] sm:rounded-[2rem] border transition-all duration-500 overflow-hidden ${isSetupComplete
+                        ? 'bg-slate-900 text-white border-indigo-500/30 shadow-2xl shadow-indigo-500/10'
+                        : 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/5 opacity-80'
+                        }`}>
+
+                        {!isSetupComplete && (
+                            <div className="absolute inset-0 z-20 backdrop-blur-md bg-white/10 dark:bg-black/40 flex flex-col items-center justify-center text-center p-6">
+                                <div className="w-16 h-16 rounded-full bg-slate-200 dark:bg-white/10 flex items-center justify-center mb-4 shadow-xl">
+                                    <Lock size={24} className="text-slate-500 dark:text-slate-400" />
+                                </div>
+                                <h4 className="text-xl font-black uppercase text-slate-900 dark:text-white tracking-widest mb-2">
+                                    {t('pro_dashboard.academy.psych_strategies.title')}
+                                </h4>
+                                <p className="text-xs font-bold text-slate-500 dark:text-slate-400 max-w-[200px] uppercase tracking-wider mb-6">
+                                    {t('pro_dashboard.academy.psych_strategies.unlock_desc')}
+                                </p>
+                                <button
+                                    onClick={() => { selection(); setShowSetup(true); }}
+                                    className="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg active:scale-95 flex items-center gap-2"
+                                >
+                                    Complete Setup <ArrowRight size={12} />
+                                </button>
+                            </div>
+                        )}
+
+                        <div className={`p-6 sm:p-8 relative z-10 ${!isSetupComplete ? 'blur-sm select-none' : ''}`}>
+                            <div className="flex items-center justify-between mb-8">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shadow-lg ${isSetupComplete
+                                        ? 'bg-indigo-500 text-white border-indigo-400 shadow-indigo-500/20'
+                                        : 'bg-slate-200 dark:bg-white/10 text-slate-400 border-slate-300 dark:border-white/10'
+                                        }`}>
+                                        <Brain size={20} />
+                                    </div>
+                                    <div>
+                                        <h4 className={`text-sm font-black uppercase tracking-[0.25em] leading-none mb-1.5 ${isSetupComplete ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                                            {t('pro_dashboard.academy.psych_strategies.title')}
+                                        </h4>
+                                        <p className={`text-[8px] font-black uppercase tracking-[0.3em] ${isSetupComplete ? 'text-indigo-400' : 'text-slate-500'}`}>
+                                            {t('pro_dashboard.academy.psych_strategies.subtitle')}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {(() => {
+                                    const strats = t('pro_dashboard.academy.psych_strategies.items', { returnObjects: true });
+                                    const stratsList = Array.isArray(strats) ? strats : [];
+                                    return stratsList.map((item: any, i: number) => (
+                                        <div key={i} className={`p-5 rounded-2xl border relative overflow-hidden group/card ${isSetupComplete
+                                            ? 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-indigo-500/50'
+                                            : 'bg-white/50 dark:bg-black/20 border-slate-200 dark:border-white/5'
+                                            }`}>
+                                            <div className="absolute top-0 right-0 px-2 py-1 bg-indigo-500/20 rounded-bl-xl border-l border-b border-indigo-500/20">
+                                                <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">{item.trigger}</span>
+                                            </div>
+
+                                            <div className="flex items-start gap-3 mb-3 pt-2">
+                                                <div className="w-6 h-6 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-[10px] font-bold shrink-0 border border-indigo-500/20">
+                                                    {i + 1}
+                                                </div>
+                                                <h5 className={`text-xs font-black uppercase tracking-tight leading-snug mt-1 ${isSetupComplete ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                                                    {item.title}
+                                                </h5>
+                                            </div>
+
+                                            <p className="text-[10px] font-medium text-slate-400 leading-relaxed mb-4 min-h-[40px]">
+                                                {item.desc}
+                                            </p>
+
+                                            <div className="p-3 bg-black/20 rounded-lg border border-white/5 flex items-start gap-2">
+                                                <Play size={10} className="text-emerald-500 mt-0.5 shrink-0" />
+                                                <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wide leading-tight">
+                                                    {item.action}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ));
+                                })()}
+                            </div>
+                        </div>
+                    </div>
+                );
+            })()}
         </motion.div>
     );
 };
