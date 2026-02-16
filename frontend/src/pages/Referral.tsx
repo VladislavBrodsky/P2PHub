@@ -236,7 +236,7 @@ export default function ReferralPage() {
         selection();
         const botUsername = 'pintopay_probot';
         const shareLink = `https://t.me/${botUsername}?start=${referralCode}`;
-        const shareText = "🚀 STOP BLEEDING MONEY! Join Pintopay and unlock $1/minute strategy! 💎";
+        const shareText = `${VIRAL_HOOK}\n${VIRAL_SUBTITLE}`;
         const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(shareText)}`;
 
         // Use direct share link for "immediate" sending

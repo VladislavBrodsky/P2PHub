@@ -71,9 +71,8 @@ MESSAGES = {
             "🌟 *The Power of Passivity:* Your network is working for you 24/7. This is just the beginning of your x10 profit journey! 📈"
         ),
         "viral_share_caption": (
-            "⛔️STOP BLEEDING MONEY TO BANKS!\n\n"
-            "Join me on Pintopay and unlock $1 per minute strategy! 💎\n"
-            "Lead the revolution in FinTech & Web3 payments. 🌍"
+            "🛑 STOP FEEDING THE BANKS! 🛑\n"
+            "Earn like a bank. $1 Every Minute. 🚀"
         )
     },
     "ru": {
@@ -148,9 +147,8 @@ MESSAGES = {
             "🌟 *Сила Пассивности:* Ваша сеть работает на вас 24/7. Это только начало вашего пути к x10 прибыли! 📈"
         ),
         "viral_share_caption": (
-            "⛔️STOP BLEEDING MONEY TO BANKS!\n\n"
-            "Присоединяйся ко мне в Pintopay и открой заработок $1 в минуту! 💎\n"
-            "Возглавь революцию в FinTech и Web3 платежах. 🌍"
+            "🛑 STOP FEEDING THE BANKS! 🛑\n"
+            "Зарабатывай как банк. $1 каждую минуту. 🚀"
         )
     }
 }
