@@ -108,7 +108,7 @@ async def cmd_start(message: types.Message):
             await message.answer(
                 welcome_text,
                 parse_mode="Markdown",
-                reply_markup=get_main_menu_keyboard(WEB_APP_URL, share_url, referral_code=partner.referral_code)
+                reply_markup=get_main_menu_keyboard(WEB_APP_URL, share_url, referral_code=partner.referral_code, lang=partner.language_code or lang)
             )
 
             break # We only need one session
@@ -127,6 +127,9 @@ async def cmd_my_network(message: types.Message):
         get_partner_by_telegram_id,
         get_referral_tree_stats,
     )
+    lang = message.from_user.language_code or "en"
+    if lang not in ["en", "ru"]: lang = "en"
+
     try:
         async for session in get_session():
             partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
@@ -134,22 +137,22 @@ async def cmd_my_network(message: types.Message):
                 await message.answer("⚠️ You are not registered yet. Type /start to join!")
                 return
 
-            stats = await get_referral_tree_stats(session, partner.id)
+            if partner.language_code: lang = partner.language_code
 
+            stats = await get_referral_tree_stats(session, partner.id)
             total_network = sum(stats.values())
 
-            lines = ["🌳 *Your Referral Network*"]
-            lines.append(f"Total Partners: *{total_network}*")
-            lines.append("")
-
+            levels_text = ""
             for level, count in stats.items():
                 if count > 0:
-                    lines.append(f"Level {level}: {count} partners")
+                    levels_text += f"Level {level}: {count} partners\n"
 
             if total_network == 0:
-                lines.append("\n_You haven't invited anyone yet. Share your link to start earning!_")
+                levels_text = get_msg(lang, "network_empty")
 
-            await message.answer("\n".join(lines), parse_mode="Markdown")
+            response = get_msg(lang, "network_stats", total=total_network, levels=levels_text)
+
+            await message.answer(response, parse_mode="Markdown")
             break
     except Exception as e:
         logging.error(f"Error in cmd_my_network: {e}")
@@ -200,12 +203,12 @@ async def inline_handler(inline_query: types.InlineQuery):
                 id=f"card1_{query_code}_{rand_id}",
                 photo_url=photo1,
                 thumbnail_url=photo1,
-                title="💎 Elite Invitation",
-                description="Share your $1/minute strategy",
+                title=get_msg(lang, "inline_title_elite"),
+                description=get_msg(lang, "inline_desc_elite"),
                 caption=caption,
                 parse_mode="Markdown",
                 reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
-                    [types.InlineKeyboardButton(text="🤝 Join Partner Club", url=ref_link)]
+                    [types.InlineKeyboardButton(text=get_msg(lang, "inline_btn_join"), url=ref_link)]
                 ])
             ),
             # Card 2: Premium Visual Card v2
@@ -213,12 +216,12 @@ async def inline_handler(inline_query: types.InlineQuery):
                 id=f"card2_{query_code}_{rand_id}",
                 photo_url=photo2,
                 thumbnail_url=photo2,
-                title="🚀 Viral Strategy",
-                description="Share your $1/minute strategy",
+                title=get_msg(lang, "inline_title_viral"),
+                description=get_msg(lang, "inline_desc_elite"),
                 caption=caption,
                 parse_mode="Markdown",
                 reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
-                    [types.InlineKeyboardButton(text="🤝 Join Partner Club", url=ref_link)]
+                    [types.InlineKeyboardButton(text=get_msg(lang, "inline_btn_join"), url=ref_link)]
                 ])
             )
         ]
@@ -233,20 +236,38 @@ async def inline_handler(inline_query: types.InlineQuery):
 
 @dp.message(Command("support", "care", "help"))
 async def cmd_support(message: types.Message):
-    from app.core.keyboards import get_support_keyboard
-    text = (
-        "🌟 *PINTOPAY CUSTOMER CARE*\n\n"
-        "How can we improve your experience today?\n"
-        "Select a category below for instant instructions and 5-star support."
-    )
-    await message.answer(text, parse_mode="Markdown", reply_markup=get_support_keyboard())
+    lang = message.from_user.language_code or "en"
+    if lang not in ["en", "ru"]: lang = "en"
+    
+    await message.answer(get_msg(lang, "support_welcome"), parse_mode="Markdown", reply_markup=get_support_keyboard(lang=lang))
 
 @dp.callback_query(F.data.startswith("sup_"))
 async def callback_support_category(callback: types.CallbackQuery):
     from app.services.partner_service import get_partner_by_telegram_id
     from app.services.support_service import support_service
     
+    lang = callback.from_user.language_code or "en"
+    if lang not in ["en", "ru"]: lang = "en"
+
     cat_map = {
+        "sup_cards": get_msg(lang, "sup_cat_cards"),
+        "sup_setup": get_msg(lang, "sup_cat_setup"),
+        "sup_topup": get_msg(lang, "sup_cat_topup"),
+        "sup_mobile": get_msg(lang, "sup_cat_mobile"),
+        "sup_pro": get_msg(lang, "sup_cat_pro"),
+        "sup_partner": get_msg(lang, "sup_cat_partner"),
+        "sup_safety": get_msg(lang, "sup_cat_safety"),
+        "sup_trading": get_msg(lang, "sup_cat_trading"),
+        "sup_vip": get_msg(lang, "sup_cat_vip")
+    }
+    
+    category_name = cat_map.get(callback.data, "General")
+    user_id = str(callback.from_user.id)
+    
+    # Get initial instructions (checklists) from fallback library
+    # Note: Service keys are currently in English, so we might need a mapping or just use EN keys for lookup
+    # For now, let's keep lookup keys in English but display name localized
+    lookup_map = {
         "sup_cards": "💳 Virtual & Physical Cards",
         "sup_setup": "🚀 Card Setup & Activation",
         "sup_topup": "💰 Top-ups & Crypto Deposits",
@@ -257,18 +278,14 @@ async def callback_support_category(callback: types.CallbackQuery):
         "sup_trading": "⚡ Trading & Transactions",
         "sup_vip": "☎️ VIP Priority Support"
     }
-    
-    category_name = cat_map.get(callback.data, "General")
-    user_id = str(callback.from_user.id)
-    
-    # Get initial instructions (checklists) from fallback library
-    instructions = support_service.FALLBACK_INSTRUCTIONS.get(category_name, ["Please describe your issue."])
+    lookup_name = lookup_map.get(callback.data, "General")
+    instructions = support_service.FALLBACK_INSTRUCTIONS.get(lookup_name, ["Please describe your issue."])
     instr_text = "\n".join([f"• {i}" for i in instructions])
     
     await callback.message.edit_text(
         f"📍 *{category_name}*\n\n"
-        f"Quick Instructions:\n{instr_text}\n\n"
-        "💡 *Need more help?* Just reply to this message and our Expert AI Support Team will assist you instantly!",
+        f"{get_msg(lang, 'sup_instr_header')}\n{instr_text}\n\n"
+        f"{get_msg(lang, 'sup_need_help')}",
         parse_mode="Markdown"
     )
     
@@ -305,19 +322,16 @@ async def handle_buy_pro(message: types.Message):
                 await message.answer("✅ You are already a PRO member! Enjoy your benefits.")
                 return
 
+            lang = partner.language_code or message.from_user.language_code or "en"
+            if lang not in ["en", "ru"]: lang = "en"
+
             # Create payment session
             payment_data = await payment_service.create_payment_session(session, partner.id)
 
-            text = (
-                "👑 *UPGRADE TO PRO*\n\n"
-                "Unlock the full potential of Pintopay:\n"
-                "• 9-Level Affiliate System\n"
-                "• X5 XP Multiplier\n"
-                "• Priority Payouts\n"
-                "• VIP Support\n\n"
-                f"💰 *Price:* {payment_data['amount_ton']} TON (~$39)\n"
-                f"⏳ *Valid for:* 10 minutes\n\n"
-                "Please send the exact amount to the address below:"
+            text = get_msg(
+                lang, 
+                "pro_upgrade_text", 
+                amount_ton=payment_data['amount_ton']
             )
 
             # Send the address as a separate message for easy copying, or just include in code block
@@ -326,7 +340,7 @@ async def handle_buy_pro(message: types.Message):
             await message.answer(
                 text,
                 parse_mode="Markdown",
-                reply_markup=get_pro_payment_keyboard(payment_data['address'], payment_data['amount_ton'])
+                reply_markup=get_pro_payment_keyboard(payment_data['address'], payment_data['amount_ton'], lang=lang)
             )
             break
     except Exception as e:
@@ -337,11 +351,12 @@ async def handle_buy_pro(message: types.Message):
 @dp.callback_query(F.data == "verify_pro_payment")
 async def callback_verify_pro(callback: types.CallbackQuery):
 
+    lang = callback.from_user.language_code or "en"
+    if lang not in ["en", "ru"]: lang = "en"
+
     # Ask for TX hash
     await callback.message.answer(
-        "📝 *Verification Step*\n\n"
-        "Please paste the *Transaction Hash* (TX ID) of your payment below. "
-        "I will verify it on the TON blockchain immediately.",
+        get_msg(lang, "verification_step"),
         parse_mode="Markdown"
     )
     await callback.answer()
@@ -352,8 +367,11 @@ async def handle_tx_hash(message: types.Message):
     from app.services.partner_service import get_partner_by_telegram_id
     from app.services.payment_service import payment_service
 
+    lang = message.from_user.language_code or "en"
+    if lang not in ["en", "ru"]: lang = "en"
+
     tx_hash = message.text.strip()
-    wait_msg = await message.answer("⏳ *Verifying transaction...* Please wait a moment.")
+    wait_msg = await message.answer(get_msg(lang, "verifying"))
 
     try:
         async for session in get_session():
@@ -364,29 +382,26 @@ async def handle_tx_hash(message: types.Message):
 
             if success:
                 await wait_msg.edit_text(
-                    "🎉 *WELCOME TO PRO!*\n\n"
-                    "Your payment has been verified. You now have full access to all premium features!",
+                    get_msg(lang, "pro_success"),
                     parse_mode="Markdown"
                 )
                 # Show main menu again with new status
                 bot_info = await bot.get_me()
                 referral_link = f"https://t.me/{bot_info.username}?start={partner.referral_code}"
-                share_text = get_msg(partner.language_code or "en", "share_text")
+                share_text = get_msg(lang, "share_text")
                 share_url = f"https://t.me/share/url?url={urllib.parse.quote(referral_link)}&text={urllib.parse.quote(share_text)}"
 
                 await message.answer(
-                    "What would you like to do next?",
-                    reply_markup=get_main_menu_keyboard(WEB_APP_URL, share_url, referral_code=partner.referral_code)
+                    get_msg(lang, "next_step"),
+                    reply_markup=get_main_menu_keyboard(WEB_APP_URL, share_url, referral_code=partner.referral_code, lang=lang)
                 )
 
             else:
                 await wait_msg.edit_text(
-                    "❌ *Verification Failed*\n\n"
-                    "I couldn't find a matching transaction for this hash, or your payment session has expired (10 min limit).\n\n"
-                    "If you just paid, wait 30 seconds and try again. If the session expired, please start a new one.",
+                    get_msg(lang, "pro_failed"),
                     parse_mode="Markdown",
                     reply_markup=InlineKeyboardBuilder().row(
-                        types.InlineKeyboardButton(text="🔄 Try Again", callback_data="buy_pro")
+                        types.InlineKeyboardButton(text=get_msg(lang, "pro_try_again"), callback_data="buy_pro")
                     ).as_markup()
                 )
             break
