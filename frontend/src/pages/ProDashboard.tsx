@@ -401,9 +401,12 @@ export const ProDashboard = () => {
     };
 
     return (
-        <div className="h-dvh overflow-y-auto bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-sans selection:bg-indigo-500/30 overflow-x-hidden">
+        <div
+            id="pro-dashboard-container"
+            className="w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-sans selection:bg-indigo-500/30 overflow-x-hidden pt-2 pb-12"
+        >
             <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(30,58,138,0.15)_0%,transparent_50%)] pointer-events-none" />
-            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-6 pb-24">
+            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-6 pb-24 min-h-screen">
                 {/* Header Section */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                     <div className="flex items-center gap-3">
