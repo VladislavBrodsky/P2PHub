@@ -57,9 +57,9 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                         <div className="absolute inset-4 rounded-full bg-blue-500/30 blur-[20px]" />
 
                         <img
-                            src="/logo.webp"
+                            src="https://img.freepik.com/premium-vector/p-letter-tech-logo-design_7888-295.jpg"
                             alt="P2P Hub"
-                            className="relative w-16 h-16 object-contain z-10 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
+                            className="relative w-16 h-16 rounded-full object-cover z-10 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
                         />
                     </motion.div>
                 </div>

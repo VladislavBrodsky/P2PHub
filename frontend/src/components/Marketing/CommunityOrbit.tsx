@@ -134,12 +134,12 @@ const CentralLogo = memo(() => (
                 repeat: Infinity,
                 ease: "easeInOut"
             }}
-            src="/logo.webp"
+            src="https://img.freepik.com/premium-vector/p-letter-tech-logo-design_7888-295.jpg"
             alt="Pintopay Logo"
             width="56"
             height="56"
             loading="eager"
-            className="relative z-20 w-14 h-14 object-contain brightness-0 invert"
+            className="relative z-20 w-14 h-14 rounded-full object-cover brightness-0 invert"
         />
 
     </motion.div>

@@ -19,7 +19,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Discover the exact mechanics of high-velocity P2P settlements and why speed is the ultimate currency of 2026.",
         category: "Wealth Strategy",
         date: "Feb 7, 2026",
-        author: "Pinto Team"
+        author: "Pinto Team",
+        image_url: "https://images.unsplash.com/photo-1611974765270-ca12586343bb?q=80&w=2670"
     },
     {
         id: '2',
@@ -27,7 +28,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Old systems are collapsing under their own weight. We explore the frictionless future of QR-based payments.",
         category: "Financial Shift",
         date: "Feb 6, 2026",
-        author: "Alex Rivera"
+        author: "Alex Rivera",
+        image_url: "https://images.unsplash.com/photo-1621501103258-3e135c8c1a90?q=80&w=2669"
     },
     {
         id: '3',
@@ -35,7 +37,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Understanding the mindset shift required to move from physical hoarding to digital liquidity and ownership.",
         category: "Growth Mindset",
         date: "Feb 5, 2026",
-        author: "Sarah Chen"
+        author: "Sarah Chen",
+        image_url: "https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=2832"
     },
     {
         id: '4',
@@ -43,7 +46,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "How Pintopay is bypassing geographic restrictions to provide equal access to global markets for everyone.",
         category: "Freedom",
         date: "Feb 4, 2026",
-        author: "Pinto Team"
+        author: "Pinto Team",
+        image_url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670"
     },
     {
         id: '5',
@@ -51,7 +55,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Why carrying paper money is becoming a liability in a digital-first world and how to transition safely.",
         category: "Financial Evolution",
         date: "Feb 3, 2026",
-        author: "Alex Rivera"
+        author: "Alex Rivera",
+        image_url: "https://images.unsplash.com/photo-1605792657660-596af9009e82?q=80&w=2802"
     },
     {
         id: '6',
@@ -59,7 +64,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Analyzing the hidden costs and delays of traditional banking systems in 2026.",
         category: "Banking Reform",
         date: "Feb 2, 2026",
-        author: "Sarah Chen"
+        author: "Sarah Chen",
+        image_url: "https://images.unsplash.com/photo-1601597111158-2fceff292cdc?q=80&w=2670"
     },
     {
         id: '7',
@@ -67,7 +73,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Apple Pay and Google Pay are just masks for old systems. Discover the true digital native infrastructure.",
         category: "Tech Analysis",
         date: "Feb 1, 2026",
-        author: "Pinto Team"
+        author: "Pinto Team",
+        image_url: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=2670"
     },
     {
         id: '8',
@@ -75,7 +82,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "How Web3 and Crypto are finally delivering on the promise of true financial sovereignty.",
         category: "Web3",
         date: "Jan 31, 2026",
-        author: "Alex Rivera"
+        author: "Alex Rivera",
+        image_url: "https://images.unsplash.com/photo-1639322537228-ad7117a394eb?q=80&w=2832"
     },
     {
         id: '9',
@@ -83,7 +91,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Mastering the Pintopay QR system to achieve maximum settlement speed and network growth.",
         category: "Elite Strategy",
         date: "Jan 30, 2026",
-        author: "Pinto Team"
+        author: "Pinto Team",
+        image_url: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=2671"
     },
     {
         id: '10',
@@ -91,7 +100,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Why half the world is still unbanked and how Pintopay is building the bridge to the global financial system.",
         category: "Global Impact",
         date: "Jan 29, 2026",
-        author: "Sarah Chen"
+        author: "Sarah Chen",
+        image_url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426"
     },
     {
         id: '11',
@@ -99,7 +109,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Discover how the barrier between crypto and fiat is finally dissolving, creating a new era of financial freedom.",
         category: "Innovation",
         date: "Jan 28, 2026",
-        author: "Alex Rivera"
+        author: "Alex Rivera",
+        image_url: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2832"
     },
     {
         id: '12',
@@ -107,7 +118,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Access a premium banking card that works in 180+ countries, managed entirely within the world's most secure messenger.",
         category: "Adoption",
         date: "Jan 27, 2026",
-        author: "Pinto Team"
+        author: "Pinto Team",
+        image_url: "https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1470"
     },
     {
         id: '13',
@@ -115,7 +127,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "The era of physical branches is over. Your financial empire is now controlled from your smartphone.",
         category: "Future",
         date: "Jan 26, 2026",
-        author: "Sarah Chen"
+        author: "Sarah Chen",
+        image_url: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2672"
     },
     {
         id: '14',
@@ -123,7 +136,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Connect your Pintopay card to your mobile wallet and spend your crypto assets as fiat anywhere in the world.",
         category: "Payments",
         date: "Jan 25, 2026",
-        author: "Alex Rivera"
+        author: "Alex Rivera",
+        image_url: "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?q=80&w=2670"
     },
     {
         id: '15',
@@ -131,7 +145,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Real-time settlement meets global liquidity. Spend your digital wealth without the wait or the hassle.",
         category: "Wealth",
         date: "Jan 24, 2026",
-        author: "Pinto Team"
+        author: "Pinto Team",
+        image_url: "https://images.unsplash.com/photo-1516245834210-c4c14278733f?q=80&w=2669"
     },
     {
         id: '16',
@@ -139,7 +154,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Why being a Pintopay Partner is the ultimate ticket to the largest wealth redistribution in human history.",
         category: "Partnership",
         date: "Jan 23, 2026",
-        author: "Sarah Chen"
+        author: "Sarah Chen",
+        image_url: "https://images.unsplash.com/photo-1606857521015-7f9fcf423740?q=80&w=2670"
     },
     {
         id: '17',
@@ -147,7 +163,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "How to stop trading time for money and start earning continuous revenue by sharing the future of finance.",
         category: "Income",
         date: "Jan 22, 2026",
-        author: "Alex Rivera"
+        author: "Alex Rivera",
+        image_url: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2670"
     },
     {
         id: '18',
@@ -155,7 +172,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Unlock 24/7 automated marketing tools that do the selling for you. This is how the elites grow their network.",
         category: "PRO Benefits",
         date: "Jan 21, 2026",
-        author: "Pinto Team"
+        author: "Pinto Team",
+        image_url: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=2574"
     },
     {
         id: '19',
@@ -163,7 +181,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Take control of your destiny by leveraging the ultimate bridge between traditional finance and the decentralized future.",
         category: "Vision",
         date: "Jan 20, 2026",
-        author: "Sarah Chen"
+        author: "Sarah Chen",
+        image_url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2670"
     }
 ];
 
