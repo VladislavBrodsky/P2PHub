@@ -1,21 +1,29 @@
 export const postTypes = [
-    { id: 'video_script', icon: '🎬', en: 'Viral Video Script', ru: 'Сценарий вирального видео' },
-    { id: 'carousel', icon: '🎡', en: 'Engagement Carousel', ru: 'Карусель вовлечения' },
-    { id: 'short_post', icon: '⚡', en: 'Quick Value Post', ru: 'Быстрый пост пользы' },
-    { id: 'thread', icon: '🧵', en: 'Power Thread', ru: 'Сильный тред' },
-    { id: 'story_set', icon: '📸', en: 'Sales Story Set', ru: 'Набор сторис продаж' }
+    { id: 'launch', icon: '🚀', en: 'Product Launch', ru: 'Запуск продукта' },
+    { id: 'fomo', icon: '🔥', en: 'FOMO Generation', ru: 'Создание FOMO' },
+    { id: 'authority', icon: '💎', en: 'Expert Authority', ru: 'Авторитет Эксперта' },
+    { id: 'lifestyle', icon: '📸', en: 'Elite Lifestyle', ru: 'Элитный Лайфстайл' },
+    { id: 'income', icon: '💰', en: 'Income Results', ru: 'Результаты дохода' },
+    { id: 'network', icon: '👑', en: 'Team Growth', ru: 'Рост команды' },
+    { id: 'tutorial', icon: '📖', en: 'Web3 Education', ru: 'Обучение Web3' }
 ];
 
 export const audiences = [
-    { id: 'entrepreneurs', en: 'Entrepreneurs', ru: 'Предприниматели' },
-    { id: 'creators', en: 'Content Creators', ru: 'Криэйторы' },
-    { id: 'investors', en: 'Investors', ru: 'Инвесторы' },
-    { id: 'beginners', en: 'Beginners (Earners)', ru: 'Новички (заработок)' }
+    { id: 'traders', en: 'Crypto Traders', ru: 'Крипто-трейдеры' },
+    { id: 'nomads', en: 'Digital Nomads', ru: 'Цифровые кочевники' },
+    { id: 'affiliates', en: 'Affiliates', ru: 'Арбитражники' },
+    { id: 'builders', en: 'Network Leaders', ru: 'Сетевые Лидеры' },
+    { id: 'parents', en: 'Stay-at-home Parents', ru: 'Родители в декрете' },
+    { id: 'hustlers', en: 'Student Hustlers', ru: 'Студенты-хастлеры' },
+    { id: 'burnouts', en: 'Corporate Burnouts', ru: 'Выгоревшие офисные' }
 ];
 
 export const languages = [
     { id: 'English', icon: '🇺🇸', label: 'English' },
     { id: 'Russian', icon: '🇷🇺', label: 'Русский' },
     { id: 'Spanish', icon: '🇪🇸', label: 'Español' },
+    { id: 'French', icon: '🇫🇷', label: 'Français' },
     { id: 'German', icon: '🇩🇪', label: 'Deutsch' }
 ];
+
+

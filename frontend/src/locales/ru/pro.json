@@ -20,9 +20,9 @@
     "studio": {
       "matrix_title": "Студия Контента",
       "matrix_subtitle": "Создайте Свой Пост",
-      "strategy_label": "Стратегия",
-      "strategy_placeholder": "Выберите стратегию",
-      "target_label": "Цель",
+      "strategy_label": "Стратегия (Категория)",
+      "strategy_placeholder": "Выберите категорию",
+      "target_label": "Целевая Аудитория",
       "target_placeholder": "Выберите аудиторию",
       "language_label": "Язык",
       "initiate_btn": "ЗАПУСТИТЬ ИИ-АГЕНТА",

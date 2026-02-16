@@ -69,12 +69,14 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
 
             {/* Main Content Area - THE SCROLL LAYER */}
             <main
+                id="main-scroll-root"
                 className={`flex-1 overflow-x-hidden relative z-10 
                     overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]
                     ${!isHeaderVisible ? '' : (isStaging ? 'staging-offset' : 'content-main-padding')}`}
+                style={{ overscrollBehaviorY: 'none' }}
             >
-                <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'h-full max-w-none px-0' : 'max-w-lg px-4 safe-pb'}`}>
-                    <div className={`mx-auto w-full ${activeTab === 'pro' ? 'h-full' : ''}`}>
+                <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} safe-pb`}>
+                    <div className="mx-auto w-full">
                         {children}
                     </div>
                 </div>

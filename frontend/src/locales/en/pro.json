@@ -20,9 +20,9 @@
     "studio": {
       "matrix_title": "Content Studio",
       "matrix_subtitle": "Frame Your Post",
-      "strategy_label": "Strategy",
-      "strategy_placeholder": "Select strategy",
-      "target_label": "Target",
+      "strategy_label": "Strategy (Category)",
+      "strategy_placeholder": "Select category",
+      "target_label": "Target Audience",
       "target_placeholder": "Select audience",
       "language_label": "Language",
       "initiate_btn": "INITIATE AI AGENT",
