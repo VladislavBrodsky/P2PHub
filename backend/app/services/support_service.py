@@ -3,7 +3,7 @@ import json
 import logging
 import os
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any, ClassVar, Optional
 
 import gspread
 from google.oauth2.service_account import Credentials
@@ -75,7 +75,7 @@ class SupportAgentService:
         **Link**: https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3
     """
     
-    CATEGORIES = [
+    CATEGORIES: ClassVar[list[str]] = [
         "💳 Virtual & Physical Cards",
         "🚀 Card Setup & Activation",
         "💰 Top-ups & Crypto Deposits",
@@ -100,11 +100,13 @@ class SupportAgentService:
     _kb_index: dict[str, list[int]] = {} # Word-to-Record Index
     _kb_last_refresh: datetime = datetime.min
     KB_MEMORY_TTL = 300  # 5 minutes in-memory TTL
+    
+    # #comment: Background tasks tracking to prevent garbage collection
+    _background_tasks = set()
 
-    KB_MEMORY_TTL = 300  # 5 minutes in-memory TTL
     
     # #comment: Fallback Instruction Library (Ensures 5-star service if Sheet is offline)
-    FALLBACK_INSTRUCTIONS = {
+    FALLBACK_INSTRUCTIONS: ClassVar[dict[str, list[str]]] = {
         "General": [
              "Supervisor: For complex issues, contact Care+ Supervisor: https://t.me/pintopayhelp (or @pintopayhelp)",
              "Purchase: Buy Cards here: https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3"
@@ -615,7 +617,9 @@ class SupportAgentService:
         """Finalizes and removes session."""
         # #comment: Non-blocking Background Archiving.
         # User session closes instantly; Google Sheets work happens in parallel.
-        asyncio.create_task(self.save_conversation_to_sheets(user_id))
+        task = asyncio.create_task(self.save_conversation_to_sheets(user_id))
+        self._background_tasks.add(task)
+        task.add_done_callback(self._background_tasks.discard)
         
         session_key = f"support_session:{user_id}"
         await redis_service.delete(session_key)

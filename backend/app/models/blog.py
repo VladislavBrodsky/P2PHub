@@ -9,14 +9,14 @@ class BlogPost(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     slug: str = Field(index=True, unique=True)
     title_en: str
-    title_ru: Optional[str] = None
+    title_ru: str | None = None
     excerpt_en: str
-    excerpt_ru: Optional[str] = None
+    excerpt_ru: str | None = None
     content_en: str = Field(default="")
-    content_ru: Optional[str] = None
+    content_ru: str | None = None
     category: str = Field(index=True)
     author: str = Field(default="Pinto Team")
-    image_url: Optional[str] = None
+    image_url: str | None = None
     is_published: bool = Field(default=True)
     published_at: datetime = Field(default_factory=datetime.utcnow)
     created_at: datetime = Field(default_factory=datetime.utcnow)

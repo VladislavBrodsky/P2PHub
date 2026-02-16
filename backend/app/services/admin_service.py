@@ -51,8 +51,9 @@ class AdminService:
         #comment: This is critical for scaling. Real-time aggregation of 100K+ records 
         # on every page refresh is a major performance bottleneck.
         """
-        from app.models.partner import SystemSetting
         import json
+
+        from app.models.partner import SystemSetting
 
         async for session in get_session():
             # 1. Try to return cached snapshot if not forcing refresh

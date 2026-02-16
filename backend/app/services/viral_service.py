@@ -4,7 +4,7 @@ import logging
 import os
 import secrets
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, ClassVar, Optional
 
 import gspread
 from google import genai as google_genai
@@ -34,9 +34,9 @@ class ViralMarketingStudio:
     Acts as CMO of Pintopay to generate viral content and autopost across social media.
     """
 
-    POST_TYPES = settings.VIRAL_POST_TYPES
-    TARGET_AUDIENCES = settings.VIRAL_AUDIENCES
-    LANGUAGES = ["English", "Russian", "Spanish", "French", "German"]
+    POST_TYPES: ClassVar[list[str]] = settings.VIRAL_POST_TYPES
+    TARGET_AUDIENCES: ClassVar[list[str]] = settings.VIRAL_AUDIENCES
+    LANGUAGES: ClassVar[list[str]] = ["English", "Russian", "Spanish", "French", "German"]
 
     CMO_PERSONA = """
 You are the ELITE CMO of Pintopay — a world-class Marketing Strategist, Viral Growth Hacker, and Digital Nomad Influencer.
@@ -167,6 +167,7 @@ Use FRESH, audience-specific language that feels authentic.
     """
 
     def __init__(self):
+        self._background_tasks = set()
         # 1. Initialize OpenAI
         openai_key = settings.OPENAI_API_KEY
         if openai_key:
@@ -208,7 +209,7 @@ Use FRESH, audience-specific language that feels authentic.
         # Railway and other platforms may set empty env vars or have copy/paste formatting issues.
         # This validation ensures we fail gracefully instead of crashing all worker processes.
         if not creds_json:
-            logger.info("ℹ️ GOOGLE_SERVICE_ACCOUNT_JSON not set. Google Sheets logging disabled.")
+            logger.info("i GOOGLE_SERVICE_ACCOUNT_JSON not set. Google Sheets logging disabled.")
             return
         
         # Check if it's actually JSON-like (basic sanity check)
@@ -531,12 +532,12 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                                     'safety_filter_level': 'block_low_and_above',
                                     'person_generation': 'allow_adult',
                                     # 'add_watermark': True # Removed: Not supported in Gemini API anymore
-                                } if 'imagen' in model_name else {
+                                } if 'imagen' in m else {
                                     # Nano Banana specific configs (Gemini 3 Pro)
                                     'number_of_images': 1,
                                     'aspect_ratio': '16:9',
                                     'output_mime_type': 'image/png',
-                                    'quality': '4k' if 'pro' in model_name else 'standard'
+                                    'quality': '4k' if 'pro' in m else 'standard'
                                 }
                             )
                         ),
@@ -627,7 +628,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             }
 
             # Fire and forget logging
-            asyncio.create_task(self.log_generation_to_sheets(
+            task = asyncio.create_task(self.log_generation_to_sheets(
                 partner=partner,
                 topic=post_type,
                 audience=target_audience,
@@ -641,6 +642,8 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                 body=result["text"],
                 image_url=image_url
             ))
+            self._background_tasks.add(task)
+            task.add_done_callback(self._background_tasks.discard)
 
             return result
 
@@ -929,9 +932,10 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             return {"error": "Telegram Channel ID missing. Please configure it in API Setup."}
         
         try:
-            import os
             import json
+            import os
             import re
+
             from bot import bot
 
             # Support multiple channels stored as JSON string

@@ -2,13 +2,13 @@ import secrets
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlmodel import select, func, or_
+from sqlmodel import func, or_, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.security import get_current_user, get_tg_user
 from app.models.blog import BlogPost, BlogPostEngagement, PartnerBlogLike
 from app.models.partner import Partner, get_session
-from app.schemas.blog import BlogListResponse, BlogPostRead, BlogPostDetail
+from app.schemas.blog import BlogListResponse, BlogPostDetail, BlogPostRead
 
 router = APIRouter()
 
@@ -16,8 +16,8 @@ router = APIRouter()
 async def list_posts(
     offset: int = 0,
     limit: int = 10,
-    category: Optional[str] = None,
-    q: Optional[str] = None,
+    category: str | None = None,
+    q: str | None = None,
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
@@ -26,7 +26,7 @@ async def list_posts(
     lang = tg_user.get("language_code", "en")
     
     # Base query
-    statement = select(BlogPost).where(BlogPost.is_published == True)
+    statement = select(BlogPost).where(BlogPost.is_published)
     
     if category and category != 'All':
         statement = statement.where(BlogPost.category == category)
@@ -100,7 +100,7 @@ async def get_post_detail(
     tg_user = get_tg_user(user_data)
     lang = tg_user.get("language_code", "en")
     
-    statement = select(BlogPost).where(BlogPost.slug == slug, BlogPost.is_published == True)
+    statement = select(BlogPost).where(BlogPost.slug == slug, BlogPost.is_published)
     post = (await session.exec(statement)).first()
     
     if not post:

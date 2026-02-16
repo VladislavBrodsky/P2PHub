@@ -17,7 +17,9 @@
   --header-height: 64px;
   --bottom-nav-height: 80px;
   --spacing-telegram-header: 48px;
-  --header-total-height: calc(var(--header-height) + var(--spacing-safe-top) + var(--spacing-telegram-header));
+  /* Kept for legacy if needed, but removed from active layout */
+  --header-total-height: calc(var(--header-height) + var(--spacing-safe-top));
+
 
   /* Typography Scale */
   --font-sans: "Inter", "Onest", system-ui, -apple-system, sans-serif;

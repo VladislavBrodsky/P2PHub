@@ -111,7 +111,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             animate={{ x: 0 }}
                             exit={{ x: '-100%', pointerEvents: 'none' }}
                             transition={{ type: 'tween', ease: 'easeOut', duration: 0.25 }}
-                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-(--color-bg-app) border-r border-(--color-border-glass) pt-[env(safe-area-inset-top)] shadow-2xl ml-0 mr-auto"
+                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-(--color-bg-app) border-r border-(--color-border-glass) shadow-2xl ml-0 mr-auto"
                             style={{
                                 marginLeft: 'max(0px, calc(50% - 32rem / 2))',
                                 left: 0
@@ -120,8 +120,8 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             <div className="mesh-gradient-dark absolute inset-0 opacity-20 pointer-events-none" />
                             <div className="absolute inset-0 bg-linear-to-b from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
 
-                            {/* Header - Minimal height to clear Telegram native header */}
-                            <div className="h-[calc(var(--spacing-telegram-header)-12px)] shrink-0" />
+                            {/* No Spacer - Content starts at absolute top */}
+
 
                             {/* Scrollable Content */}
                             <div className="flex-1 overflow-y-auto px-5 pb-10 flex flex-col gap-4">

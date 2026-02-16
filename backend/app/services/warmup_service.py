@@ -105,8 +105,6 @@ async def warmup_redis():
 
         except Exception as e:
             logger.error(f"❌ Redis Warmup Failed: {e}")
-        finally:
-            # #comment: Always break after the first session to prevent re-running in loop
-            break
+        break
 
     logger.info("✨ Redis Warmup Complete.")

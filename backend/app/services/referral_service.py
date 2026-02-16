@@ -124,7 +124,6 @@ async def process_referral_logic(partner_id: int):
             # 1. Calculate all rewards in a single memory pass
             # #comment: We calculate everything first to minimize DB transaction time.
             # Long-running transactions during growth spikes lead to row locks and deadlocks.
-            updates_to_apply = []
             xp_txs_to_add = []
             
             for level in range(1, 10):

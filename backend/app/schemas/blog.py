@@ -1,6 +1,8 @@
 from datetime import datetime
-from typing import Optional, List
+from typing import List, Optional
+
 from pydantic import BaseModel
+
 
 class BlogPostBase(BaseModel):
     slug: str
@@ -8,7 +10,7 @@ class BlogPostBase(BaseModel):
     excerpt: str
     category: str
     author: str
-    image_url: Optional[str] = None
+    image_url: str | None = None
     published_at: datetime
 
 class BlogPostRead(BlogPostBase):
@@ -20,7 +22,7 @@ class BlogPostDetail(BlogPostRead):
     content: str
 
 class BlogListResponse(BaseModel):
-    items: List[BlogPostRead]
+    items: list[BlogPostRead]
     total: int
     offset: int
     limit: int

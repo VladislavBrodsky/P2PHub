@@ -37,7 +37,8 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
     }, [controls]);
 
     return (
-        <header className="sticky top-0 z-50 w-full max-w-lg mx-auto pt-[calc(env(safe-area-inset-top)+var(--spacing-telegram-header))] transition-all duration-300 pointer-events-none">
+        <header className="sticky top-0 z-50 w-full max-w-lg mx-auto pt-[env(safe-area-inset-top)] transition-all duration-300 pointer-events-none">
+
 
 
             <div className="flex flex-col gap-4 px-4 pointer-events-auto">

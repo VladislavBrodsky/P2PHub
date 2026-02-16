@@ -1,6 +1,6 @@
+import logging
 from typing import Any, Dict, Type, TypeVar
 
-import logging
 from pydantic import BaseModel, ValidationError, model_validator
 
 logger = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ class ShadowBaseModel(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def audit_validate_logic(cls: Type[T], data: Any) -> Any:
+    def audit_validate_logic(cls: type[T], data: Any) -> Any:
         # #comment: Shadow Validation Mode.
         # This helps catch backend-frontend desync early without breaking the UI for users.
         try:
