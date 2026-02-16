@@ -694,7 +694,7 @@ const TopicDropdown = ({ selected, onSelect, categories }: TopicDropdownProps) =
 // Custom Markdown Renderer
 // Handles: H1 stripping, H2/H3 headers, Bold (**), Italic (* or _), Paragraphs
 // ------------------------------------------------------------------
-const MarkdownRenderer = ({ content }: { content: string }) => {
+function MarkdownRenderer({ content }: { content: string }) {
     // 1. Sanitize: Remove the first line if it's an H1 (# Title) since we display Title separately
     const lines = content.trim().split('\n');
     let cleanContent = content;
@@ -757,10 +757,10 @@ const MarkdownRenderer = ({ content }: { content: string }) => {
             })}
         </div>
     );
-};
+}
 
 // Simple tokenizer for **bold**, *italic*, __bold__, _italic_
-const parseInline = (text: string): React.ReactNode => {
+function parseInline(text: string): React.ReactNode {
     // Split by delimiters, keeping delimiters
     // Matches: **...**, __...__, *...*, _..._
     const parts = text.split(/(\*\*.*?\*\*|__[^_]+__|_[^_]+_|\*[^*]+\*)/g);
@@ -781,4 +781,4 @@ const parseInline = (text: string): React.ReactNode => {
             })}
         </>
     );
-};
+}
