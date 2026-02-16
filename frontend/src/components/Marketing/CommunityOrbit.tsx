@@ -1,15 +1,10 @@
 import { motion } from 'framer-motion';
 import React, { memo, useState, useEffect } from 'react';
 import { ImageCacheService } from '../../services/ImageCacheService';
-import { getApiUrl } from '../../utils/api';
+import { AVATAR_DATA, LOGO_DATA } from '../../data/avatars';
 
-const AVATARS = [
-    "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
-    "https://img.freepik.com/free-psd/3d-illustration-person-with-punk-hair-glasses_23-2149436198.jpg",
-    "https://img.freepik.com/free-psd/3d-illustration-business-man-with-glasses_23-2149436194.jpg",
-    "https://img.freepik.com/free-psd/3d-illustration-person-with-rainbow-hair_23-2149436196.jpg",
-    "https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436190.jpg"
-];
+// Pool of "Real People" / High-Quality Avatars
+const ALL_AVATARS = Object.values(AVATAR_DATA);
 
 const CRYPTO_ICONS = [
     { name: 'BTC', color: '#F7931A', gradientStart: '#FF9900', gradientEnd: '#F7931A' },
@@ -17,7 +12,6 @@ const CRYPTO_ICONS = [
     { name: 'USDT', color: '#26A17B', gradientStart: '#53D3AC', gradientEnd: '#219672' },
     { name: 'TON', color: '#0098EA', gradientStart: '#0098EA', gradientEnd: '#00C2FF' }
 ];
-
 
 // Crypto SVG Icons
 const CryptoIcon = memo(({ name }: { name: string }) => {
@@ -55,15 +49,45 @@ const CryptoIcon = memo(({ name }: { name: string }) => {
     );
 });
 
+// Simple seeded random generator (Mulberry32)
+// This ensures that for a given seed (date), the sequence is always the same.
+function seededRandom(seed: number) {
+    return function () {
+        let t = seed += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+}
+
+// Get 4 unique avatars based on the current date (UTC)
+const getDailyAvatars = () => {
+    const now = new Date();
+    // Create a unique seed for the day: YYYYMMDD
+    const seedValue = now.getUTCFullYear() * 10000 + (now.getUTCMonth() + 1) * 100 + now.getUTCDate();
+    const rng = seededRandom(seedValue);
+
+    // Shuffle a copy of the array
+    const shuffled = [...ALL_AVATARS];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    return shuffled.slice(0, 4); // Take the first 4
+};
+
+const DAILY_AVATARS = getDailyAvatars();
+
 // Interleave avatars and crypto icons - EXACTLY 8 ITEMS
 const ORBIT_ITEMS: OrbitItem[] = [
-    { type: 'avatar' as const, src: AVATARS[0] },
+    { type: 'avatar' as const, src: DAILY_AVATARS[0] },
     { type: 'crypto' as const, ...CRYPTO_ICONS[0] }, // BTC
-    { type: 'avatar' as const, src: AVATARS[1] },
+    { type: 'avatar' as const, src: DAILY_AVATARS[1] },
     { type: 'crypto' as const, ...CRYPTO_ICONS[1] }, // ETH
-    { type: 'avatar' as const, src: AVATARS[2] },
+    { type: 'avatar' as const, src: DAILY_AVATARS[2] },
     { type: 'crypto' as const, ...CRYPTO_ICONS[2] }, // USDT
-    { type: 'avatar' as const, src: AVATARS[3] },
+    { type: 'avatar' as const, src: DAILY_AVATARS[3] },
     { type: 'crypto' as const, ...CRYPTO_ICONS[3] }, // TON
 ];
 
@@ -134,12 +158,12 @@ const CentralLogo = memo(() => (
                 repeat: Infinity,
                 ease: "easeInOut"
             }}
-            src="https://img.freepik.com/premium-vector/p-letter-tech-logo-design_7888-295.jpg"
+            src={LOGO_DATA}
             alt="Pintopay Logo"
             width="56"
             height="56"
             loading="eager"
-            className="relative z-20 w-14 h-14 rounded-full object-cover brightness-0 invert"
+            className="relative z-20 w-14 h-14 object-contain brightness-0 invert"
         />
 
     </motion.div>

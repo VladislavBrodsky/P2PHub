@@ -334,10 +334,10 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                         onClick={() => handlePostClick(post)}
                                         className="group p-5 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 transition-all active:scale-[0.98] flex gap-4 items-center"
                                     >
-                                        {(post.image_url || post.image) && (
+                                        {(post.image) && (
                                             <div className="shrink-0 w-20 h-20 rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10">
                                                 <img
-                                                    src={post.image_url || post.image}
+                                                    src={post.image}
                                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                                     alt=""
                                                     loading="lazy"

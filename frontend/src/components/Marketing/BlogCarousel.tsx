@@ -67,10 +67,10 @@ export const BlogCarousel = () => {
                         onClick={() => navigateToBlog(post.id)}
                         className="min-w-[280px] max-w-[280px] group flex flex-col gap-4 p-6 rounded-[2.5rem] border border-slate-200 dark:border-white/10 glass-panel-premium snap-start active:scale-95 transition-all cursor-pointer relative overflow-hidden"
                     >
-                        {(post.image_url || post.image) ? (
+                        {(post.image) ? (
                             <>
                                 <img
-                                    src={post.image_url || post.image}
+                                    src={post.image}
                                     className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-all duration-700 group-hover:scale-110"
                                     alt={post.title}
                                     loading="lazy"

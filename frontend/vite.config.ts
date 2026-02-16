@@ -1,8 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import viteCompression from 'vite-plugin-compression';
-import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 // #comment: Simplified build configuration to resolve deployment EPERM issues
@@ -45,6 +43,7 @@ export default defineConfig({
       disable: !process.env.SENTRY_API_KEY, // Only run if API key is present
     }),
   ],
+  publicDir: 'public_safe',
   server: {
     host: '0.0.0.0',
     port: 5173,
