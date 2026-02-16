@@ -8,19 +8,27 @@ def sync_lang(lang):
     content_path = os.path.join(base_dir, f'backend/scripts/data/blog_content_{lang}.py')
     json_path = os.path.join(base_dir, f'frontend/src/locales/{lang}/marketing.json')
     
+    if not os.path.exists(content_path):
+        print(f"Skipping {lang}, file not found")
+        return
+
     with open(content_path, 'r', encoding='utf-8') as f:
         py_content = f.read()
 
     articles = {}
+    # Pattern for dictionary entries: "1": """..."""
     pattern = r'"(\d+)":\s*"""(.*?)"""'
     matches = re.finditer(pattern, py_content, re.DOTALL)
 
     for match in matches:
         slug = match.group(1)
         text = match.group(2).strip()
+        
+        # Extract title from # Header
         title_match = re.search(r'^#\s+(.*)', text)
         title = title_match.group(1).strip() if title_match else f"Article {slug}"
         
+        # Extract excerpt (first paragraph after title)
         excerpt = ""
         lines = text.split('\n')
         found_title = False
@@ -38,6 +46,7 @@ def sync_lang(lang):
                     break
         
         if not excerpt:
+            # Fallback excerpt
             clean_text = re.sub(r'#+\s.*', '', text)
             clean_text = clean_text.strip()
             excerpt = clean_text.split('\n')[0].strip()[:150]
@@ -53,7 +62,11 @@ def sync_lang(lang):
             posts[slug]['title'] = info['title']
             posts[slug]['excerpt'] = info['excerpt']
         else:
-            posts[slug] = {"title": info['title'], "excerpt": info['excerpt'], "category": "Intelligence Hub"}
+            posts[slug] = {
+                "title": info['title'],
+                "excerpt": info['excerpt'],
+                "category": "Intelligence Hub"
+            }
 
     with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)

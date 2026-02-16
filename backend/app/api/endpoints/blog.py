@@ -11,6 +11,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 router = APIRouter()
 
+from app.services.redis_service import redis_service
+
 @router.get("/", response_model=BlogListResponse)
 async def list_posts(
     offset: int = 0,
@@ -21,76 +23,81 @@ async def list_posts(
     session: AsyncSession = Depends(get_session),
     accept_language: Optional[str] = Header(None)
 ):
-    """List blog posts with pagination, search and filtering."""
+    """List blog posts with pagination, search and filtering with cache."""
     tg_user = get_tg_user(user_data)
-    
-    # Priority: Header > Telegram User Data > Default 'en'
     lang = accept_language.split('-')[0] if accept_language else tg_user.get("language_code", "en")
     
-    # Base query
-    statement = select(BlogPost).where(BlogPost.is_published)
+    # Cache key based on params
+    cache_key = f"blog:list:{lang}:{category}:{q}:{offset}:{limit}"
     
-    if category and category != 'All':
-        statement = statement.where(BlogPost.category == category)
+    async def fetch_posts():
+        # Base query
+        statement = select(BlogPost).where(BlogPost.is_published)
         
-    if q:
-        search = f"%{q}%"
-        if lang == 'ru':
-            statement = statement.where(or_(BlogPost.title_ru.ilike(search), BlogPost.excerpt_ru.ilike(search)))
-        else:
-            statement = statement.where(or_(BlogPost.title_en.ilike(search), BlogPost.excerpt_en.ilike(search)))
+        if category and category != 'All':
+            statement = statement.where(BlogPost.category == category)
             
-    # Count total
-    count_statement = select(func.count()).select_from(statement.subquery())
-    total = await session.scalar(count_statement) or 0
-    
-    # Order and paginate
-    statement = statement.order_by(BlogPost.published_at.desc()).offset(offset).limit(limit)
-    results = await session.exec(statement)
-    posts = results.all()
-    
-    # Get engagement for all posts in one go
-    slugs = [p.slug for p in posts]
-    e_stmt = select(BlogPostEngagement).where(BlogPostEngagement.post_slug.in_(slugs))
-    engagements = {e.post_slug: e for e in (await session.exec(e_stmt)).all()}
-    
-    # Get user likes
-    tg_id = str(tg_user.get("id"))
-    p_stmt = select(Partner).where(Partner.telegram_id == tg_id)
-    partner = (await session.exec(p_stmt)).first()
-    
-    user_likes = set()
-    if partner:
-        l_stmt = select(PartnerBlogLike.post_slug).where(
-            PartnerBlogLike.partner_id == partner.id,
-            PartnerBlogLike.post_slug.in_(slugs)
-        )
-        user_likes = set((await session.exec(l_stmt)).all())
-    
-    items = []
-    for p in posts:
-        eng = engagements.get(p.slug)
-        likes = (eng.base_likes + eng.user_likes) if eng else 0
+        if q:
+            search = f"%{q}%"
+            if lang == 'ru':
+                statement = statement.where(or_(BlogPost.title_ru.ilike(search), BlogPost.excerpt_ru.ilike(search)))
+            else:
+                statement = statement.where(or_(BlogPost.title_en.ilike(search), BlogPost.excerpt_en.ilike(search)))
+                
+        # Count total
+        count_statement = select(func.count()).select_from(statement.subquery())
+        total = await session.scalar(count_statement) or 0
         
-        items.append(BlogPostRead(
-            id=p.id,
-            slug=p.slug,
-            title=p.title_ru if lang == 'ru' and p.title_ru else p.title_en,
-            excerpt=p.excerpt_ru if lang == 'ru' and p.excerpt_ru else p.excerpt_en,
-            category=p.category,
-            author=p.author,
-            image_url=p.image_url,
-            published_at=p.published_at,
-            likes=likes,
-            liked=p.slug in user_likes
-        ))
+        # Order and paginate
+        statement = statement.order_by(BlogPost.published_at.desc()).offset(offset).limit(limit)
+        results = await session.exec(statement)
+        posts = results.all()
         
-    return BlogListResponse(
-        items=items,
-        total=total,
-        offset=offset,
-        limit=limit
-    )
+        # Get engagement for all posts in one go
+        slugs = [p.slug for p in posts]
+        e_stmt = select(BlogPostEngagement).where(BlogPostEngagement.post_slug.in_(slugs))
+        engagements = {e.post_slug: e for e in (await session.exec(e_stmt)).all()}
+        
+        # Get user likes
+        tg_id = str(tg_user.get("id"))
+        p_stmt = select(Partner).where(Partner.telegram_id == tg_id)
+        partner = (await session.exec(p_stmt)).first()
+        
+        user_likes = set()
+        if partner:
+            l_stmt = select(PartnerBlogLike.post_slug).where(
+                PartnerBlogLike.partner_id == partner.id,
+                PartnerBlogLike.post_slug.in_(slugs)
+            )
+            user_likes = set((await session.exec(l_stmt)).all())
+        
+        items = []
+        for p in posts:
+            eng = engagements.get(p.slug)
+            likes = (eng.base_likes + eng.user_likes) if eng else 0
+            
+            items.append({
+                "id": p.id,
+                "slug": p.slug,
+                "title": p.title_ru if lang == 'ru' and p.title_ru else p.title_en,
+                "excerpt": p.excerpt_ru if lang == 'ru' and p.excerpt_ru else p.excerpt_en,
+                "category": p.category,
+                "author": p.author,
+                "image_url": p.image_url,
+                "published_at": p.published_at.isoformat() if p.published_at else None,
+                "likes": likes,
+                "liked": p.slug in user_likes
+            })
+            
+        return {
+            "items": items,
+            "total": total,
+            "offset": offset,
+            "limit": limit
+        }
+
+    # Use cache for list (short TTL 60s for list to keep it fresh)
+    return await redis_service.get_or_compute(cache_key, fetch_posts, expire=60)
 
 @router.get("/{slug}", response_model=BlogPostDetail)
 async def get_post_detail(
@@ -99,31 +106,53 @@ async def get_post_detail(
     session: AsyncSession = Depends(get_session),
     accept_language: Optional[str] = Header(None)
 ):
-    """Get full details for a specific blog post."""
+    """Get full details for a specific blog post with caching."""
     tg_user = get_tg_user(user_data)
     lang = accept_language.split('-')[0] if accept_language else tg_user.get("language_code", "en")
+    tg_id = str(tg_user.get("id"))
     
-    statement = select(BlogPost).where(BlogPost.slug == slug, BlogPost.is_published)
-    post = (await session.exec(statement)).first()
+    # We cache the raw post data, but liked status must be dynamic
+    cache_key = f"blog:post:{slug}:{lang}"
     
-    if not post:
+    async def fetch_post_detail():
+        statement = select(BlogPost).where(BlogPost.slug == slug, BlogPost.is_published)
+        post = (await session.exec(statement)).first()
+        
+        if not post:
+            return None
+            
+        # Get engagement
+        e_stmt = select(BlogPostEngagement).where(BlogPostEngagement.post_slug == slug)
+        engagement = (await session.exec(e_stmt)).first()
+        
+        likes = 0
+        if not engagement:
+            likes = 333 + secrets.randbelow(380)
+            engagement = BlogPostEngagement(post_slug=slug, base_likes=likes)
+            session.add(engagement)
+            await session.commit()
+        else:
+            likes = engagement.base_likes + engagement.user_likes
+            
+        return {
+            "id": post.id,
+            "slug": post.slug,
+            "title": post.title_ru if lang == 'ru' and post.title_ru else post.title_en,
+            "excerpt": post.excerpt_ru if lang == 'ru' and post.excerpt_ru else post.excerpt_en,
+            "content": post.content_ru if lang == 'ru' and post.content_ru else post.content_en,
+            "category": post.category,
+            "author": post.author,
+            "image_url": post.image_url,
+            "published_at": post.published_at.isoformat() if post.published_at else None,
+            "likes": likes
+        }
+
+    post_data = await redis_service.get_or_compute(cache_key, fetch_post_detail, expire=300)
+    
+    if not post_data:
         raise HTTPException(status_code=404, detail="Post not found")
         
-    # Get engagement
-    e_stmt = select(BlogPostEngagement).where(BlogPostEngagement.post_slug == slug)
-    engagement = (await session.exec(e_stmt)).first()
-    
-    likes = 0
-    if not engagement:
-        likes = 333 + secrets.randbelow(380)
-        engagement = BlogPostEngagement(post_slug=slug, base_likes=likes)
-        session.add(engagement)
-        await session.commit()
-    else:
-        likes = engagement.base_likes + engagement.user_likes
-        
-    # Check if user liked
-    tg_id = str(tg_user.get("id"))
+    # Inject dynamic liked status
     p_stmt = select(Partner).where(Partner.telegram_id == tg_id)
     partner = (await session.exec(p_stmt)).first()
     
@@ -135,19 +164,8 @@ async def get_post_detail(
         )
         liked = (await session.exec(l_stmt)).first() is not None
         
-    return BlogPostDetail(
-        id=post.id,
-        slug=post.slug,
-        title=post.title_ru if lang == 'ru' and post.title_ru else post.title_en,
-        excerpt=post.excerpt_ru if lang == 'ru' and post.excerpt_ru else post.excerpt_en,
-        content=post.content_ru if lang == 'ru' and post.content_ru else post.content_en,
-        category=post.category,
-        author=post.author,
-        image_url=post.image_url,
-        published_at=post.published_at,
-        likes=likes,
-        liked=liked
-    )
+    return {**post_data, "liked": liked}
+
 
 @router.get("/stats")
 async def get_blog_stats(
