@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 // #comment: Removed unused apiClient, Skeleton and PageSkeleton imports to clean up the dependency list
 import { NotificationOverlay } from './components/ui/NotificationOverlay';
 import { useRealtimeAlerts } from './hooks/useRealtimeAlerts';
-import { OnboardingStory } from './components/Onboarding/OnboardingStory';
+const OnboardingStory = lazy(() => import('./components/Onboarding/OnboardingStory').then(m => ({ default: m.OnboardingStory })));
 import { useConfig } from './context/ConfigContext';
 import { FeatureErrorBoundary } from './components/FeatureErrorBoundary';
 import { StartupLoader } from './components/ui/StartupLoader';
@@ -39,7 +39,7 @@ import { UIProvider } from './context/UIContext';
 // #comment: Removed hard import of SupportChat to enable the Lazy load strategy defined above.
 import { useUI } from './context/UIContext';
 
-// OnboardingStory is now a hard import for stability during startup
+// #comment: Strategic Lazy Loading for non-critical features.
 
 function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnboarding: boolean }) {
     const { t } = useTranslation();
@@ -174,20 +174,20 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                     window.Telegram.WebApp.ready();
                     if ((window.Telegram.WebApp as any).requestFullscreen) {
                         (window.Telegram.WebApp as any).requestFullscreen();
-                    } else {
-                        window.Telegram.WebApp.expand();
                     }
+                    console.log('[DEBUG] initTMA: SDK methods executing...');
                 }
 
                 console.log('[DEBUG] initTMA: Complete');
                 updateProgress(98, 'Interface Ready');
             } catch (e) {
-                console.log('Not in TMA environment or SDK error:', e);
+                console.error('[CRITICAL] initTMA: Initialization failure:', e);
             }
         };
 
-        initTMA();
-    }, [updateProgress]); // Removed t dependency to prevent initialization loop
+        const tmaTimeout = setTimeout(initTMA, 100);
+        return () => clearTimeout(tmaTimeout);
+    }, [updateProgress]);
 
     // Handle Back Button state based on active tab
     useEffect(() => {
