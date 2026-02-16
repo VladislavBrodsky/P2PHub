@@ -208,18 +208,18 @@ export const StudioTab = ({
                         <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 pointer-events-none" />
                         <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[100px] rounded-full -mr-32 -mt-32 animate-pulse" />
 
-                        <div className="flex items-center justify-between mb-8 sm:mb-12 relative z-10">
-                            <div className="flex items-center gap-4 sm:gap-6">
-                                <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-2xl sm:rounded-3xl vibing-blue-animated flex items-center justify-center shrink-0 shadow-2xl shadow-indigo-500/40 vibrating-glow-blue">
-                                    <Terminal size={24} className="sm:size-[32px] text-white" />
+                        <div className="flex items-center justify-between mb-6 sm:mb-8 relative z-10">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-2xl vibing-blue-animated flex items-center justify-center shrink-0 shadow-xl shadow-indigo-500/20">
+                                    <Terminal size={20} className="text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="text-sm sm:text-lg font-black uppercase tracking-[0.3em] vibing-blue-text leading-none mb-2 sm:mb-3">
+                                    <h3 className="text-[12px] sm:text-[14px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white leading-none mb-1.5">
                                         {t('pro_dashboard.studio.matrix_title')}
                                     </h3>
-                                    <div className="flex items-center gap-2 sm:gap-3">
-                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
-                                        <span className="text-[10px] sm:text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-none opacity-60">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">
                                             {t('pro_dashboard.studio.matrix_subtitle')}
                                         </span>
                                     </div>
@@ -227,98 +227,86 @@ export const StudioTab = ({
                             </div>
                         </div>
 
-                        <div className="space-y-4 sm:space-y-5 relative z-10">
+                        <div className="space-y-4 relative z-10">
                             {/* Strategy Selection */}
                             <div className="space-y-1.5">
                                 <div className="flex items-center justify-between px-1">
-                                    <label className="text-[8px] sm:text-[10px] font-black uppercase text-indigo-500 dark:text-indigo-400 tracking-[0.2em]">
+                                    <label className="text-[9px] font-black uppercase text-indigo-600 dark:text-indigo-400 tracking-widest">
                                         01. {t('pro_dashboard.studio.strategy_label')}
                                     </label>
-                                    <Sparkles size={10} className="text-indigo-500/30" />
                                 </div>
-                                <div className="relative group/sel">
+                                <div className="relative">
                                     <select
                                         value={postType}
                                         onChange={(e) => { selection(); setPostType(e.target.value); }}
-                                        className="w-full h-14 sm:h-16 bg-slate-100/50 dark:bg-white/5 backdrop-blur-3xl border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-2xl sm:rounded-3xl px-6 text-sm sm:text-base font-black text-slate-900 dark:text-white outline-hidden appearance-none transition-all cursor-pointer shadow-inner group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
+                                        className="w-full h-12 sm:h-14 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl sm:rounded-2xl px-5 text-[13px] font-bold text-slate-900 dark:text-white outline-hidden appearance-none transition-all cursor-pointer shadow-sm"
                                     >
                                         <option value="" disabled>{t('pro_dashboard.studio.strategy_placeholder')}</option>
                                         {defaultPostTypes.map(pt => <option key={pt.id} value={pt.id}>{i18n.language === 'ru' ? pt.ru : pt.en}</option>)}
                                     </select>
-                                    <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
-                                        <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
-                                            <ChevronRight className="rotate-90 w-5 h-5 text-indigo-500" />
-                                        </div>
+                                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-indigo-500">
+                                        <ChevronRight className="rotate-90 w-4 h-4" />
                                     </div>
                                 </div>
                             </div>
 
                             {/* Target Audience */}
-                            <div className="space-y-2">
+                            <div className="space-y-1.5">
                                 <div className="flex items-center justify-between px-1">
-                                    <label className="text-[10px] sm:text-xs font-black uppercase text-purple-600 dark:text-purple-400 tracking-[0.3em]">
+                                    <label className="text-[9px] font-black uppercase text-purple-600 dark:text-purple-400 tracking-widest">
                                         02. {t('pro_dashboard.studio.target_label')}
                                     </label>
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-ping" />
-                                        <Bot size={12} className="text-purple-500/50" />
-                                    </div>
                                 </div>
-                                <div className="relative group/sel">
+                                <div className="relative">
                                     <select
                                         value={audience}
                                         onChange={(e) => { selection(); setAudience(e.target.value); }}
-                                        className="w-full h-14 sm:h-16 bg-slate-100/50 dark:bg-white/5 backdrop-blur-3xl border border-slate-200 dark:border-white/10 focus:border-purple-500/50 rounded-2xl sm:rounded-3xl px-6 text-sm sm:text-base font-black text-slate-900 dark:text-white outline-hidden appearance-none transition-all cursor-pointer shadow-inner group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
+                                        className="w-full h-12 sm:h-14 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-purple-500/50 rounded-xl sm:rounded-2xl px-5 text-[13px] font-bold text-slate-900 dark:text-white outline-hidden appearance-none transition-all cursor-pointer shadow-sm"
                                     >
                                         <option value="" disabled>{t('pro_dashboard.studio.target_placeholder')}</option>
                                         {defaultAudiences.map(a => <option key={a.id} value={a.id}>{i18n.language === 'ru' ? a.ru : a.en}</option>)}
                                     </select>
-                                    <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
-                                        <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                                            <ChevronRight className="rotate-90 w-5 h-5 text-purple-500" />
-                                        </div>
+                                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-purple-500">
+                                        <ChevronRight className="rotate-90 w-4 h-4" />
                                     </div>
                                 </div>
                             </div>
 
                             {/* Output Language */}
-                            <div className="space-y-2">
+                            <div className="space-y-1.5">
                                 <div className="flex items-center justify-between px-1">
-                                    <label className="text-[10px] sm:text-xs font-black uppercase text-emerald-600 dark:text-emerald-400 tracking-[0.3em]">
+                                    <label className="text-[9px] font-black uppercase text-emerald-600 dark:text-emerald-400 tracking-widest">
                                         03. {t('pro_dashboard.studio.language_label')}
                                     </label>
-                                    <Send size={14} className="text-emerald-500/50" />
                                 </div>
-                                <div className="relative group/sel">
+                                <div className="relative">
                                     <select
                                         value={language}
                                         onChange={(e) => setLanguage(e.target.value)}
-                                        className="w-full h-14 sm:h-16 bg-slate-100/50 dark:bg-white/5 backdrop-blur-3xl border border-slate-200 dark:border-white/10 focus:border-emerald-500/50 rounded-2xl sm:rounded-3xl px-6 text-sm sm:text-base font-black text-slate-900 dark:text-white outline-hidden appearance-none transition-all cursor-pointer shadow-inner group-hover/sel:bg-slate-200/50 dark:group-hover/sel:bg-white/10"
+                                        className="w-full h-12 sm:h-14 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-emerald-500/50 rounded-xl sm:rounded-2xl px-5 text-[13px] font-bold text-slate-900 dark:text-white outline-hidden appearance-none transition-all cursor-pointer shadow-sm"
                                     >
                                         {defaultLanguages.map(l => <option key={l.id} value={l.id}>{l.label}</option>)}
                                     </select>
-                                    <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
-                                        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-                                            <Send size={18} className="text-emerald-500" />
-                                        </div>
+                                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-emerald-500">
+                                        <Send size={16} />
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Action Area */}
-                        <div className="pt-6 sm:pt-8 relative z-20">
+                        <div className="pt-6 sm:pt-10 relative z-20">
                             <button
                                 onClick={() => { selection(); setStep(2); }}
                                 disabled={!postType || !audience}
-                                className="w-full h-14 sm:h-16 vibing-blue-animated rounded-xl sm:rounded-2xl font-black text-white text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 sm:gap-4 disabled:opacity-30 disabled:grayscale disabled:shadow-none hover:shadow-indigo-500/40 border border-white/20"
+                                className="w-full h-14 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale"
                             >
                                 <Sparkles size={16} className="animate-pulse" />
                                 {t('pro_dashboard.studio.initiate_btn')}
-                                <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                                <ChevronRight size={16} />
                             </button>
-                            <p className="text-[8px] sm:text-[9px] font-black text-slate-500 dark:text-slate-400 text-center mt-3 sm:mt-4 uppercase tracking-[0.2em] opacity-40">
-                                Powered by Claude 3.5 Sonnet & Flux PRO
+                            <p className="text-[9px] font-black text-slate-400 text-center mt-4 uppercase tracking-widest opacity-40">
+                                Powered by Claude 3.5 & Flux PRO
                             </p>
                         </div>
                     </div>
