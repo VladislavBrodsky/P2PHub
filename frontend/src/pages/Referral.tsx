@@ -239,37 +239,21 @@ export default function ReferralPage() {
         const shareText = `${VIRAL_HOOK}\n${VIRAL_SUBTITLE}`;
         const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(shareText)}`;
 
-        // Use direct share link for "immediate" sending
-        // This opens a chat picker, user picks chat, and message is sent with one more tap
-        // Avoiding Inline Query here as primary because it requires clicking the result list item
-        window.open(shareUrl, '_blank');
+        if (window.Telegram?.WebApp?.initData) {
+            // #comment: Use inline mode to show 2 viral card options
+            window.Telegram.WebApp.switchInlineQuery(referralCode, ['users', 'groups', 'channels']);
+        } else {
+            // Fallback for external browser
+            window.open(shareUrl, '_blank');
+        }
         setShowShareModal(false);
     };
 
     const handleShareViralCard = async () => {
         selection();
-        try {
-            if (window.Telegram?.WebApp) {
-                // 1. Fetch prepared message ID from backend
-                const response = await apiClient.post('/api/partner/prepared-share');
-                const { id } = response.data;
-
-                // 2. Trigger native prepared message sharing (requires Telegram 7.8+)
-                // If the client is old, this method might not exist, so we check
-                const webApp = window.Telegram.WebApp as any;
-                if (webApp.sharePreparedInlineMessage) {
-                    webApp.sharePreparedInlineMessage(id);
-                } else {
-                    // Fallback to existing search method
-                    webApp.switchInlineQuery(referralCode, ['users', 'groups', 'channels']);
-                }
-            }
-        } catch (error) {
-            console.error("Failed to prepare sharing message:", error);
-            // Fallback to existing search method on any error
-            if (window.Telegram?.WebApp) {
-                window.Telegram.WebApp.switchInlineQuery(referralCode, ['users', 'groups', 'channels']);
-            }
+        if (window.Telegram?.WebApp) {
+            // #comment: Directly open inline mode to show marketing card options
+            window.Telegram.WebApp.switchInlineQuery(referralCode, ['users', 'groups', 'channels']);
         }
         setShowShareModal(false);
     };
