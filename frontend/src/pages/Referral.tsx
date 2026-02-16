@@ -262,9 +262,11 @@ export default function ReferralPage() {
         selection();
         if (navigator.share) {
             try {
+                // #comment: Explicitly append link to text body for apps like WhatsApp that treat text as the primary message
+                const shareBody = `${VIRAL_TEXT}\n\n${referralLink}`;
                 await navigator.share({
                     title: 'Pintopay Partner Hub',
-                    text: VIRAL_TEXT,
+                    text: shareBody,
                     url: referralLink,
                 });
                 setShowShareModal(false);
