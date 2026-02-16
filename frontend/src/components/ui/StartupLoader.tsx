@@ -30,7 +30,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
         // #comment: Fixed visibility glitch where loader was hardcoded to dark styles only. 
         // Now uses semantic CSS variables (--color-bg-deep, --color-text-primary) to sync perfectly 
         // with both Light and Dark themes. Added transition-colors for a premium fading effect.
-        <div className="fixed inset-0 z-100 flex flex-col items-center justify-center bg-(--color-bg-app) transition-colors duration-500 overflow-hidden">
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-(--color-bg-app) transition-colors duration-500 overflow-hidden">
             {/* #comment: Premium Background Mesh - Adds depth and a "premium" feel using brand-primary 
                 blurs that adapt based on the active theme. */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50">
