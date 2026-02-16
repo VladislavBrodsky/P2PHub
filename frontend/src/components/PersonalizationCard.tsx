@@ -74,12 +74,13 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     alt="Avatar"
                                     className={`h-full w-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                                     onLoad={() => setImageLoaded(true)}
-                                    loading="eager" // Changed from lazy to eager
+                                    loading="eager"
+                                    fetchPriority="high"
                                     decoding="async"
                                     width={variant === 'compact' ? 56 : 64}
                                     height={variant === 'compact' ? 56 : 64}
                                 />
-                            ) : !isUserLoading && ( // Added !isUserLoading condition
+                            ) : !isUserLoading && (
                                 <div className="h-full w-full flex items-center justify-center bg-(--btn-secondary-bg) text-(--color-text-secondary)">
                                     <User size={variant === 'compact' ? 24 : 32} />
                                 </div>

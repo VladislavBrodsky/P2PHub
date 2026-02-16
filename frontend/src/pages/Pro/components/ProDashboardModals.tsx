@@ -253,7 +253,7 @@ export const ProDashboardModals = ({
                                     </button>
                                 </div>
                                 <div className="prose prose-sm dark:prose-invert max-h-[60vh] overflow-y-auto no-scrollbar">
-                                    <div className="text-[13px] font-normal leading-relaxed text-slate-600 dark:text-slate-300 space-y-4">
+                                    <div>
                                         {renderMarkdown(selectedArticle.content)}
                                     </div>
                                 </div>

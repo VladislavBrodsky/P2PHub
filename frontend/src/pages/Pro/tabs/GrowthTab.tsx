@@ -273,9 +273,9 @@ export const GrowthTab = ({
                                             </div>
 
                                             {/* Expandable Content (Always shown but structured) */}
-                                            <p className="text-[12px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-black/20 p-4 rounded-xl border border-slate-100 dark:border-white/5">
+                                            <div className="bg-slate-50 dark:bg-black/20 p-4 rounded-xl border border-slate-100 dark:border-white/5">
                                                 {renderMarkdown(module.content)}
-                                            </p>
+                                            </div>
 
                                             {/* Action / Task */}
                                             {!isCompleted && !isLocked && (

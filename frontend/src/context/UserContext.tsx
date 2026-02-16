@@ -94,10 +94,20 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             const lp = getSafeLaunchParams();
             tgUser = lp.initData?.user;
 
+            // #comment: OPTIMISTIC UI FIX
+            // We apply the SDK data IMMEDIATELY so the user sees their photo/name during the API fetch.
+            if (tgUser && !user) {
+                setUser(prev => ({
+                    ...(prev || {} as any),
+                    first_name: tgUser.firstName,
+                    last_name: tgUser.lastName || null,
+                    photo_url: tgUser.photoUrl || null,
+                }));
+            }
+
             console.log('[DEBUG] refreshUser: Fetching profile...');
 
             const res = await apiClient.get('/api/partner/me');
-
             const userData = res.data;
 
             // Ensure completed_stages exists (backend might not send it yet)
