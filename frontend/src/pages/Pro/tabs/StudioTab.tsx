@@ -629,75 +629,75 @@ export const StudioTab = ({
                             animate={{ scale: 1, y: 0, opacity: 1 }}
                             exit={{ scale: 0.95, y: 20, opacity: 0 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-white dark:bg-slate-900 w-full max-w-sm rounded-[2rem] p-6 sm:p-8 space-y-6 relative border border-slate-200 dark:border-white/10 shadow-3xl"
+                            className="bg-white dark:bg-slate-900 w-full max-w-[340px] rounded-[1.5rem] p-4 space-y-4 relative border border-slate-200 dark:border-white/10 shadow-3xl mx-4"
                         >
                             <button
                                 onClick={() => setShowPublishModal(false)}
-                                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white transition-colors"
+                                className="absolute top-3 right-3 p-1.5 text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white transition-colors z-10"
                             >
-                                <X size={20} />
+                                <X size={18} />
                             </button>
 
-                            <div className="flex flex-col items-center text-center space-y-3">
-                                <div className="w-14 h-14 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-500 border border-indigo-500/20 shadow-xl">
-                                    <Send size={24} />
+                            <div className="flex flex-col items-center text-center space-y-2 pt-1">
+                                <div className="w-12 h-12 bg-linear-to-br from-indigo-500/10 to-purple-500/10 rounded-xl flex items-center justify-center text-indigo-500 border border-indigo-500/20 shadow-lg">
+                                    <Send size={20} />
                                 </div>
-                                <div className="space-y-1">
-                                    <h3 className="text-lg font-black uppercase tracking-tight text-slate-900 dark:text-white">
+                                <div className="space-y-0.5">
+                                    <h3 className="text-[15px] font-black uppercase tracking-tight text-slate-900 dark:text-white">
                                         {t('pro_dashboard.publish.title')}
                                     </h3>
-                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500">
+                                    <p className="text-[9px] font-black uppercase tracking-[0.15em] text-indigo-500">
                                         {t('pro_dashboard.publish.subtitle')}
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="space-y-3">
-                                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 text-center leading-relaxed px-2">
+                            <div className="space-y-2.5">
+                                <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 text-center leading-relaxed px-1">
                                     {t('pro_dashboard.publish.mgmt_p')}
                                 </p>
 
-                                <div className="grid gap-2.5">
+                                <div className="grid gap-2">
                                     {(['x', 'telegram', 'linkedin'] as const).map((platform) => (
                                         <button
                                             key={platform}
                                             onClick={() => handlePublishToPlatform(platform)}
                                             disabled={isPublishing || publishedPlatforms.includes(platform)}
-                                            className={`w-full h-14 rounded-xl border transition-all flex items-center justify-between px-4 group ${publishedPlatforms.includes(platform)
+                                            className={`w-full h-12 rounded-lg border transition-all flex items-center justify-between px-3 group ${publishedPlatforms.includes(platform)
                                                 ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500'
                                                 : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 active:scale-98'
                                                 }`}
                                         >
-                                            <div className="flex items-center gap-3">
-                                                <div className={`w-9 h-9 rounded-lg flex items-center justify-center shadow-sm ${publishedPlatforms.includes(platform) ? 'bg-emerald-500 text-white' : 'bg-white dark:bg-white/10 text-slate-600 dark:text-slate-300'
+                                            <div className="flex items-center gap-2.5">
+                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${publishedPlatforms.includes(platform) ? 'bg-emerald-500 text-white' : 'bg-white dark:bg-white/10 text-slate-600 dark:text-slate-300'
                                                     }`}>
-                                                    <Send size={16} />
+                                                    <Send size={14} />
                                                 </div>
-                                                <div className="text-left">
-                                                    <span className="block text-[11px] font-black uppercase tracking-widest leading-none mb-0.5">
-                                                        {platform === 'x' ? 'X (Tw)' : platform}
+                                                <div className="text-left min-w-0">
+                                                    <span className="block text-[10px] font-black uppercase tracking-wider leading-none mb-0.5 truncate">
+                                                        {platform === 'x' ? 'X (TW)' : platform}
                                                     </span>
-                                                    <span className="block text-[9px] font-bold opacity-60">
+                                                    <span className="block text-[8px] font-bold opacity-60 truncate">
                                                         {publishedPlatforms.includes(platform) ? t('pro_dashboard.publish.platform_success') : t('pro_dashboard.publish.platform_tap')}
                                                     </span>
                                                 </div>
                                             </div>
-                                            {publishedPlatforms.includes(platform) ? <CheckCircle2 size={16} /> : <ChevronRight size={16} className="text-slate-400 group-hover:translate-x-1 transition-transform" />}
+                                            {publishedPlatforms.includes(platform) ? <CheckCircle2 size={14} className="shrink-0" /> : <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-1 transition-transform shrink-0" />}
                                         </button>
                                     ))}
                                 </div>
                             </div>
 
                             {isPublishing && (
-                                <div className="flex items-center justify-center gap-3 pt-2">
-                                    <Loader2 className="animate-spin text-indigo-500" size={18} />
-                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-400">Processing...</span>
+                                <div className="flex items-center justify-center gap-2 pt-1">
+                                    <Loader2 className="animate-spin text-indigo-500" size={16} />
+                                    <span className="text-[8px] font-black uppercase tracking-[0.2em] text-indigo-400">Processing...</span>
                                 </div>
                             )}
 
                             <button
                                 onClick={() => setShowPublishModal(false)}
-                                className="w-full py-3 text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                                className="w-full py-2.5 text-[8px] font-black uppercase tracking-[0.25em] text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                             >
                                 {t('pro_dashboard.studio.back_btn')}
                             </button>

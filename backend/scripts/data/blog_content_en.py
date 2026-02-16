@@ -178,7 +178,7 @@ The question is no longer "where are you? " The question is "how much velocity d
 Pintopay is the solution. The door is right here.
 
 👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(The map is a lie. The network is the truth. Act fast.)*""",
-    "5": """# Instant Liquidity: The Science of Spending crypto Without Selling Out
+    "5": """# Instant Liquidity: The Science of Spending Crypto Without Selling Out
 
 For years, the "crypto elite" had a problem: they were rich on paper, but poor in the real world. To buy a house, a car, or even a dinner, they had to "cash out"—sending tokens to an exchange, waiting for a bank wire, and paying massive capital gains taxes in the process.**Pintopay has solved the Liquidity Paradox.**### The Liquidity Ladder
 
