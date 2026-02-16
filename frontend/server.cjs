@@ -51,30 +51,29 @@ const server = http.createServer((req, res) => {
         originalFilePath = filePath;
     }
 
+    // #comment: Content-Type & Compression Handling
+    // We strictly prefer Brotli (.br) then Gzip (.gz) for text-based assets.
     const extname = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[extname] || 'application/octet-stream';
-
-    // Compression Handling
     const acceptEncoding = req.headers['accept-encoding'] || '';
+
+    let finalPath = filePath;
     let contentEncoding = null;
 
     if (/\.(js|css|html|svg|json|map)$/.test(filePath)) {
         if (acceptEncoding.includes('br') && fs.existsSync(filePath + '.br')) {
-            filePath = filePath + '.br';
+            finalPath = filePath + '.br';
             contentEncoding = 'br';
         } else if (acceptEncoding.includes('gzip') && fs.existsSync(filePath + '.gz')) {
-            filePath = filePath + '.gz';
+            finalPath = filePath + '.gz';
             contentEncoding = 'gzip';
         }
     }
 
-    // Cache Control
-    const headers = { 'Content-Type': contentType };
-    if (contentEncoding) {
-        headers['Content-Encoding'] = contentEncoding;
-    }
-
     // #comment: Strategic Caching Policy
+    const headers = { 'Content-Type': contentType };
+    if (contentEncoding) headers['Content-Encoding'] = contentEncoding;
+
     // 1. Assets (hashed): Immutable forever (1 year)
     // 2. Images/Fonts: Long cache (24h)
     // 3. HTML/JSON: No cache to ensure instant updates on deployment
@@ -83,10 +82,10 @@ const server = http.createServer((req, res) => {
     } else if (/\.(png|jpg|jpeg|gif|webp|svg|woff|woff2)$/.test(req.url)) {
         headers['Cache-Control'] = 'public, max-age=86400';
     } else {
-        headers['Cache-Control'] = 'no-cache';
+        headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
     }
 
-    fs.readFile(filePath, (error, content) => {
+    fs.readFile(finalPath, (error, content) => {
         if (error) {
             if (error.code === 'ENOENT') {
                 res.writeHead(404);

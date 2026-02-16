@@ -179,8 +179,8 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
     const isAdmin = user?.username === 'uslincoln' || user?.username === 'uslincon' || user?.is_admin;
 
     const menuItems = [
-        ...(isAdmin ? [{ id: 'admin', icon: <Shield />, label: 'Admin Panel' }] : []),
-        ...(user?.is_pro ? [{ id: 'pro', icon: <Zap />, label: 'PRO Command Center' }] : []),
+        ...(isAdmin ? [{ id: 'admin', icon: <Shield />, label: t('menu.admin_panel') }] : []),
+        ...(user?.is_pro ? [{ id: 'pro', icon: <Zap />, label: t('menu.pro_panel') }] : []),
         { id: 'settings', icon: <Settings />, label: t('menu.settings') },
         { id: 'blog', icon: <Newspaper />, label: t('menu.blog') },
         { id: 'community', icon: <Users />, label: t('menu.community') },

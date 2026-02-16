@@ -31,7 +31,8 @@
     "delete": "Delete",
     "hi": "Hi",
     "total": "Total",
-    "next_lvl": "NEXT LVL"
+    "next_lvl": "NEXT LVL",
+    "admin": "ADMIN"
   },
   "menu": {
     "home": "Home",
@@ -49,7 +50,9 @@
     "blog": "Blog",
     "support": "Support",
     "faq": "FAQ",
-    "legal": "Legal"
+    "legal": "Legal",
+    "admin_panel": "Admin Panel",
+    "pro_panel": "PRO Command Center"
   },
   "nav": {
     "home": "Home",

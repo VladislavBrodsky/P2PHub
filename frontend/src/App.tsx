@@ -327,17 +327,18 @@ function App() {
         if (!isConfigLoading && !showOnboarding) {
             updateProgress(50, t('system.loading.config_loaded'));
 
-            // #comment: Aggressive Prefetch Strategy
-            // Immediately start loading all core route chunks to ensure instant navigation.
-            // This eliminates the RevealSkeleton flash when switching tabs.
+            // #comment: Strategic Prefetch Strategy
+            // Instead of immediate prefetching, we wait for the app to be fully stable.
             const prefetchCoreRoutes = async () => {
                 try {
-                    // Critical path only: Ensure the dashboard is ready
+                    // Small delay after hydration to prioritize initial paint
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+
+                    // Critical path: Dashboard code
                     await prefetchPages.home();
 
                     // #comment: Background non-critical prefetching. 
-                    // We wait 2 seconds after the app is potentially ready to start 
-                    // fetching secondary routes, avoiding bandwidth competition during startup.
+                    // Delayed further (4s) to ensure absolute CPU/IO silence for the user.
                     setTimeout(() => {
                         Promise.all([
                             prefetchPages.earn(),
@@ -346,7 +347,7 @@ function App() {
                             prefetchPages.league(),
                             prefetchPages.subscription()
                         ]).catch(e => console.debug('Lazy prefetch error', e));
-                    }, 2000);
+                    }, 4000);
 
                 } catch (e) {
                     console.warn('Prefetch failed', e);

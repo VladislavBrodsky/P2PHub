@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { motion } from 'framer-motion';
 import { Crown, User } from 'lucide-react';
 import { useUser } from '../context/UserContext';
@@ -12,6 +13,7 @@ interface PersonalizationCardProps {
 export function PersonalizationCard({ className, variant = 'default' }: PersonalizationCardProps) {
     const { t } = useTranslation();
     const { user, isLoading: isUserLoading } = useUser();
+    const [imageLoaded, setImageLoaded] = React.useState(false);
 
     const stats = user || {
         balance: 0,
@@ -60,19 +62,24 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             whileHover={variant === 'compact' ? {} : { scale: 1.05, rotate: 2 }}
                             className={`${variant === 'compact' ? 'h-14 w-14 rounded-xl' : 'h-16 w-16 rounded-2xl'} overflow-hidden border-2 border-white/10 bg-slate-900 shadow-premium transition-all duration-300 relative will-change-transform z-10`}
                         >
-                            {isUserLoading ? (
-                                <div className="h-full w-full bg-slate-900 animate-pulse" />
-                            ) : user?.photo_url ? (
+                            {(isUserLoading || (user?.photo_url && !imageLoaded)) && (
+                                <div className="absolute inset-0 bg-slate-800 dark:bg-slate-900 animate-pulse flex items-center justify-center">
+                                    <User size={variant === 'compact' ? 24 : 32} className="text-slate-700 animate-pulse" />
+                                </div>
+                            )}
+
+                            {user?.photo_url ? (
                                 <img
                                     src={user.photo_url}
                                     alt="Avatar"
-                                    className="h-full w-full object-cover"
-                                    loading="lazy"
+                                    className={`h-full w-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                                    onLoad={() => setImageLoaded(true)}
+                                    loading="eager" // Changed from lazy to eager
                                     decoding="async"
                                     width={variant === 'compact' ? 56 : 64}
                                     height={variant === 'compact' ? 56 : 64}
                                 />
-                            ) : (
+                            ) : !isUserLoading && ( // Added !isUserLoading condition
                                 <div className="h-full w-full flex items-center justify-center bg-slate-800 text-slate-400">
                                     <User size={variant === 'compact' ? 24 : 32} />
                                 </div>

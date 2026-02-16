@@ -6,14 +6,15 @@ import { motion } from 'framer-motion';
 
 
 import { CommunityOrbit } from '../components/Marketing/CommunityOrbit';
-import { BentoGrid } from '../components/Marketing/BentoGrid';
-import { BlogCarousel } from '../components/Marketing/BlogCarousel';
-import { IncomePotential } from '../components/Marketing/IncomePotential';
 import { PartnerStats } from '../components/Marketing/PartnerStats';
+import { lazy, Suspense } from 'react';
 
+const BentoGrid = lazy(() => import('../components/Marketing/BentoGrid').then(m => ({ default: m.BentoGrid })));
+const BlogCarousel = lazy(() => import('../components/Marketing/BlogCarousel').then(m => ({ default: m.BlogCarousel })));
+const IncomePotential = lazy(() => import('../components/Marketing/IncomePotential').then(m => ({ default: m.IncomePotential })));
+const Footer = lazy(() => import('../components/Layout/Footer').then(m => ({ default: m.Footer })));
 import { useTranslation, Trans } from 'react-i18next';
-// #comment: Fixed incorrect path for Footer import to ensure proper build resolution.
-import { Footer } from '../components/Layout/Footer';
+import { RevealSkeleton } from '../components/Skeletons/RevealSkeleton';
 // #comment: Standardized section headers for better SEO and semantic control.
 import { SectionHeader } from '../components/ui/SectionHeader';
 
@@ -129,18 +130,24 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                     title={t('evolution.title')}
                     description={t('evolution.desc')}
                 />
-                <BentoGrid />
+                <Suspense fallback={<RevealSkeleton />}>
+                    <BentoGrid />
+                </Suspense>
             </motion.div>
 
             {/* 4. The Opportunity - Income Potential */}
             <motion.div variants={item}>
-                <IncomePotential onNavigateToPartner={() => setActiveTab?.('partner')} />
+                <Suspense fallback={<RevealSkeleton />}>
+                    <IncomePotential onNavigateToPartner={() => setActiveTab?.('partner')} />
+                </Suspense>
             </motion.div>
 
             {/* #comment: Refactored sectioning to ensure clear structural separation between user value (Income) and educational content (Blog). */}
             {/* 5. Intelligence Hub - Blog Carousel */}
             <motion.div variants={item}>
-                <BlogCarousel />
+                <Suspense fallback={<RevealSkeleton />}>
+                    <BlogCarousel />
+                </Suspense>
             </motion.div>
 
             {/* 6. Final CTA */}
@@ -166,7 +173,9 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             </motion.div>
 
             {/* 7. Footer - Legal & Disclaimer */}
-            <Footer />
+            <Suspense fallback={null}>
+                <Footer />
+            </Suspense>
 
         </motion.div >
     );
