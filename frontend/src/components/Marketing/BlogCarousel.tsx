@@ -96,7 +96,7 @@ export const BlogCarousel = () => {
                                     {post.title}
                                 </h4>
 
-                                <p className="text-xs font-semibold leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-3 opacity-80">
+                                <p className="text-xs font-medium leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-3 opacity-80">
                                     {post.excerpt}
                                 </p>
                             </div>

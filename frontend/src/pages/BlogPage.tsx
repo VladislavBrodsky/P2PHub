@@ -534,7 +534,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                 </div>
 
                 {/* Body Text (Simulated content structure) */}
-                <div className="space-y-6 text-lg leading-relaxed text-slate-900/90 dark:text-white/90 font-medium whitespace-pre-wrap">
+                <div className="space-y-6">
                     {post.content ? (
                         <MarkdownRenderer content={post.content} />
                     ) : (
@@ -719,24 +719,30 @@ function MarkdownRenderer({ content }: { content: string }) {
                 // Headers (H2 = ##, H3 = ###)
                 if (trimmed.startsWith('### ')) {
                     return (
-                        <h3 key={`h3-${index}`} className="text-xl font-bold mt-6 mb-2 text-slate-900 dark:text-white">
-                            {parseInline(trimmed.replace(/^###\s+/, ''))}
-                        </h3>
+                        <h3
+                            key={`h3-${index}`}
+                            className="text-xl font-bold mt-6 mb-2 text-slate-900 dark:text-white"
+                            dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^###\s+/, '')) }}
+                        />
                     );
                 }
                 if (trimmed.startsWith('## ')) {
                     return (
-                        <h2 key={`h2-${index}`} className="text-2xl font-black mt-8 mb-4 text-slate-900 dark:text-white">
-                            {parseInline(trimmed.replace(/^##\s+/, ''))}
-                        </h2>
+                        <h2
+                            key={`h2-${index}`}
+                            className="text-2xl font-black mt-8 mb-4 text-slate-900 dark:text-white"
+                            dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^##\s+/, '')) }}
+                        />
                     );
                 }
                 if (trimmed.startsWith('# ')) {
                     // Fallback for H1 inside body (should generally be avoided but render as H2 style)
                     return (
-                        <h2 key={`h1-${index}`} className="text-2xl font-black mt-8 mb-4 text-slate-900 dark:text-white">
-                            {parseInline(trimmed.replace(/^#\s+/, ''))}
-                        </h2>
+                        <h2
+                            key={`h1-${index}`}
+                            className="text-2xl font-black mt-8 mb-4 text-slate-900 dark:text-white"
+                            dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^#\s+/, '')) }}
+                        />
                     );
                 }
 
@@ -747,12 +753,11 @@ function MarkdownRenderer({ content }: { content: string }) {
                     <p
                         key={`p-${index}`}
                         className={isFirst
-                            ? "first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left first-letter:text-blue-500 first-letter:leading-none first-letter:pt-2"
-                            : ""
+                            ? "first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left first-letter:text-blue-500 first-letter:leading-none first-letter:pt-2 text-slate-700 dark:text-slate-300"
+                            : "text-base font-normal text-slate-700 dark:text-slate-300 leading-relaxed"
                         }
-                    >
-                        {parseInline(trimmed)}
-                    </p>
+                        dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed) }}
+                    />
                 );
             })}
         </div>
@@ -760,25 +765,16 @@ function MarkdownRenderer({ content }: { content: string }) {
 }
 
 // Simple tokenizer for **bold**, *italic*, __bold__, _italic_
-function parseInline(text: string): React.ReactNode {
-    // Split by delimiters, keeping delimiters
-    // Matches: **...**, __...__, *...*, _..._
-    const parts = text.split(/(\*\*.*?\*\*|__[^_]+__|_[^_]+_|\*[^*]+\*)/g);
-
-    return (
-        <>
-            {parts.map((part, i) => {
-                // Bold
-                if ((part.startsWith('**') && part.endsWith('**')) || (part.startsWith('__') && part.endsWith('__'))) {
-                    return <strong key={i} className="font-extrabold text-slate-900 dark:text-white">{part.slice(2, -2)}</strong>;
-                }
-                // Italic
-                if ((part.startsWith('*') && part.endsWith('*')) || (part.startsWith('_') && part.endsWith('_'))) {
-                    return <em key={i} className="italic text-slate-600 dark:text-slate-300">{part.slice(1, -1)}</em>;
-                }
-                // Plain text
-                return part;
-            })}
-        </>
-    );
+// Enhanced regex parser for markdown
+function processMarkdown(text: string): string {
+    return text
+        .replace(/\*\*\*\*(.*?)\*\*\*\*/g, '<strong>$1</strong>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/__([^_]+)__/g, '<strong>$1</strong>')
+        .replace(/_(.*?)_/g, '<em>$1</em>')
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+        // Special CTA button - Allow spaces
+        .replace(/\[CTA:\s*(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="inline-block mt-4 mb-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-blue-500/30 no-underline">$1</a>')
+        // Standard links - Allow spaces
+        .replace(/\[(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="text-blue-500 hover:text-blue-600 font-bold underline decoration-2 underline-offset-2 transition-colors">$1</a>');
 }
