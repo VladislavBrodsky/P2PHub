@@ -436,9 +436,10 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             f"Setting: Ultra-modern 2026 digital infrastructure or luxury lifestyle environment. "
             f"Atmosphere: Sophisticated, authoritative, financial freedom. "
             f"Technical specs: 35mm lens, sharp focus, natural skin textures, volumetric lighting. "
-            f"Creative Rule: Follow the emotional narrative of the blog post and render text if applicable. "
+            f"Creative Rule: Render 'Pintopay Partner Club' or '{post_type.replace('_', ' ').title()}' as high-quality text within the scene (e.g., on a screen, card, or ambient display). "
+            f"Text MUST relate to the viral hook or CTA. SPELLING MUST BE PERFECT. "
             f"NEGATIVE PROMPT: cartoon, CGI, anime, illustration, stock photo smile, distorted faces, extra limbs, blurry, "
-            f"futuristic sci-fi, neon lights, flying cars, unrealistic proportions, oversaturated colors, generic poses"
+            f"futuristic sci-fi, neon lights, flying cars, unrealistic proportions, oversaturated colors, generic poses, misspelled text, gibberish text"
         )
 
         async def get_text_content():
