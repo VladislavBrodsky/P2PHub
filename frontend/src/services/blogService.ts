@@ -13,46 +13,92 @@ export interface BlogListResponse {
     limit: number;
 }
 
-// In-memory cache to prevent redundant API calls during the same session
-// This significantly improves UX when navigating back and forth
+// In-memory cache + Persistence for instantaneous UX
 const cache: {
-    posts: Record<string, BlogListResponse>;
-    details: Record<string, BlogPost & BlogEngagement & { content: string }>;
+    posts: Record<string, { data: BlogListResponse; timestamp: number }>;
+    details: Record<string, { data: BlogPost & BlogEngagement & { content: string }; timestamp: number }>;
 } = {
     posts: {},
     details: {}
 };
 
+const CACHE_TTL = 1000 * 60 * 15; // 15 minutes
+const PERSIST_KEY = 'p2phub_blog_cache';
+
+// Load initial cache from sessionStorage if available (faster than localStorage for session-bound data)
+try {
+    const saved = sessionStorage.getItem(PERSIST_KEY);
+    if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Date.now() - parsed.timestamp < CACHE_TTL * 4) { // Allow longer TTL for persisted data
+            Object.assign(cache, parsed.cache);
+        }
+    }
+} catch (e) {
+    console.warn('Blog cache restoration failed', e);
+}
+
+const persistCache = () => {
+    try {
+        sessionStorage.setItem(PERSIST_KEY, JSON.stringify({
+            cache,
+            timestamp: Date.now()
+        }));
+    } catch (e) { /* ignore */ }
+};
+
 export const blogService = {
     getPosts: async (options: { offset?: number; limit?: number; category?: string; q?: string } = {}): Promise<BlogListResponse> => {
         const cacheKey = JSON.stringify(options);
-        if (cache.posts[cacheKey]) {
-            return cache.posts[cacheKey];
+        const cached = cache.posts[cacheKey];
+
+        // Return cached immediately if valid
+        if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
+            return cached.data;
         }
 
         try {
             const response = await apiClient.get('/api/blog', { params: options });
-            cache.posts[cacheKey] = response.data;
+            cache.posts[cacheKey] = { data: response.data, timestamp: Date.now() };
+            persistCache();
             return response.data;
         } catch (error) {
+            // Fallback to stale cache if network fails
+            if (cached) return cached.data;
             console.error('Failed to fetch blog posts', error);
             throw error;
         }
     },
 
     getPostDetail: async (slug: string): Promise<BlogPost & BlogEngagement & { content: string }> => {
-        if (cache.details[slug]) {
-            return cache.details[slug];
+        const cached = cache.details[slug];
+        if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
+            return cached.data;
         }
 
         try {
             const response = await apiClient.get(`/api/blog/${slug}`);
-            cache.details[slug] = response.data;
-            return response.data;
+            const data = response.data;
+            cache.details[slug] = { data, timestamp: Date.now() };
+            persistCache();
+            return data;
         } catch (error) {
+            if (cached) return cached.data;
             console.error('Failed to fetch blog post detail', error);
             throw error;
         }
+    },
+
+    // Background prefetcher to make transitions feel instant
+    prefetchNext: (posts: BlogPost[]) => {
+        // Prefetch first 3 posts content in background
+        posts.slice(0, 3).forEach(post => {
+            if (!cache.details[post.id]) {
+                apiClient.get(`/api/blog/${post.id}`).then(res => {
+                    cache.details[post.id] = { data: res.data, timestamp: Date.now() };
+                }).catch(() => { /* silent fail for prefetch */ });
+            }
+        });
     },
 
     getEngagement: async (slug: string): Promise<BlogEngagement> => {
@@ -61,15 +107,15 @@ export const blogService = {
             return response.data;
         } catch (error) {
             console.error('Failed to fetch blog engagement', error);
-            return { likes: Math.floor(Math.random() * (712 - 333) + 333), liked: false };
+            return { likes: 333, liked: false };
         }
     },
 
     likePost: async (slug: string): Promise<{ status: string; likes: number }> => {
         try {
             const response = await apiClient.post(`/api/blog/${slug}/like`);
-            // Invalidate detail cache to show new like count
-            delete cache.details[slug];
+            delete cache.details[slug]; // Invalidate cache
+            persistCache();
             return response.data;
         } catch (error) {
             console.error('Failed to like blog post', error);
@@ -80,6 +126,7 @@ export const blogService = {
     clearCache: () => {
         cache.posts = {};
         cache.details = {};
+        sessionStorage.removeItem(PERSIST_KEY);
     }
 };
 

@@ -14,6 +14,7 @@ import { backButton } from '@telegram-apps/sdk-react';
 import { useUI } from '../context/UIContext';
 import { PageSkeleton } from '../components/Skeletons/PageSkeleton';
 import { Skeleton } from '../components/Skeleton';
+import React, { memo } from 'react';
 
 interface BlogPageProps {
     setActiveTab?: (tab: string) => void;
@@ -61,7 +62,10 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            fetchPosts(true);
+            fetchPosts(true).then(() => {
+                // Background prefetch after initial load
+                if (posts.length > 0) blogService.prefetchNext(posts);
+            });
         }, 500);
         return () => clearTimeout(timer);
     }, [selectedCategory, searchQuery, fetchPosts]);
@@ -339,45 +343,12 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                             {/* Grid */}
                             <div className="grid gap-4">
                                 {(selectedCategory === 'All' && searchQuery === '' ? currentOtherPosts : posts).map((post, index) => (
-                                    <motion.div
+                                    <PostCard
                                         key={post.id}
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: index * 0.05 }}
+                                        post={post}
+                                        index={index}
                                         onClick={() => handlePostClick(post)}
-                                        className="group p-5 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 transition-all active:scale-[0.98] flex gap-4 items-center"
-                                    >
-                                        {(post.image) && (
-                                            <div className="shrink-0 w-20 h-20 rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10">
-                                                <img
-                                                    src={post.image}
-                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                                    alt=""
-                                                    loading="lazy"
-                                                />
-                                            </div>
-                                        )}
-                                        <div className="flex-1 space-y-3">
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-[9px] font-black uppercase tracking-widest text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/10">
-                                                    {post.category}
-                                                </span>
-                                                <div className="flex items-center gap-1 text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
-                                                    <Clock className="w-3 h-3" />
-                                                    {new Date(post.published_at!).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                                                </div>
-                                            </div>
-                                            <h4 className="text-[15px] font-extrabold leading-tight group-hover:text-blue-500 transition-colors line-clamp-2">
-                                                {post.title}
-                                            </h4>
-                                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
-                                                {post.excerpt}
-                                            </p>
-                                        </div>
-                                        <div className="shrink-0 w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
-                                            <ChevronRight className="w-5 h-5" />
-                                        </div>
-                                    </motion.div>
+                                    />
                                 ))}
 
                                 {posts.length < total && (
@@ -420,6 +391,52 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
         </motion.div>
     );
 };
+
+// Memoized Post Card for high performance lists
+const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogEngagement; index: number; onClick: () => void }) => {
+    return (
+        <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: Math.min(index * 0.05, 0.3) }}
+            onClick={onClick}
+            className="group p-5 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 transition-all active:scale-[0.98] flex gap-4 items-center cursor-pointer"
+        >
+            {(post.image) && (
+                <div className="shrink-0 w-20 h-20 rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800">
+                    <img
+                        src={post.image}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        alt=""
+                        loading="lazy"
+                    />
+                </div>
+            )}
+            <div className="flex-1 space-y-3">
+                <div className="flex items-center justify-between">
+                    <span className="text-[9px] font-black uppercase tracking-widest text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/10">
+                        {post.category}
+                    </span>
+                    <div className="flex items-center gap-1 text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
+                        <Clock className="w-3 h-3" />
+                        {new Date(post.published_at!).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </div>
+                </div>
+                <h4 className="text-[15px] font-extrabold leading-tight group-hover:text-blue-500 transition-colors line-clamp-2">
+                    {post.title}
+                </h4>
+                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                    {post.excerpt}
+                </p>
+            </div>
+            <div className="shrink-0 w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                <ChevronRight className="w-5 h-5" />
+            </div>
+        </motion.div>
+    );
+});
+
+PostCard.displayName = 'PostCard';
 
 interface BlogDetailProps {
     post: BlogPost;
@@ -722,67 +739,63 @@ const TopicDropdown = ({ selected, onSelect, categories }: TopicDropdownProps) =
 // Custom Markdown Renderer
 // Handles: H1 stripping, H2/H3 headers, Bold (**), Italic (* or _), Paragraphs
 // ------------------------------------------------------------------
-function MarkdownRenderer({ content }: { content: string }) {
-    // 1. Sanitize: Remove the first line if it's an H1 (# Title) since we display Title separately
-    const lines = content.trim().split('\n');
-    let cleanContent = content;
-    // Check if first non-empty line starts with '# '
-    const firstLineIndex = lines.findIndex(line => line.trim().length > 0);
-    if (firstLineIndex !== -1 && lines[firstLineIndex].trim().startsWith('# ')) {
-        cleanContent = lines.slice(firstLineIndex + 1).join('\n').trim();
-    }
+const MarkdownRenderer = memo(({ content }: { content: string }) => {
+    const renderedBlocks = useMemo(() => {
+        const lines = content.trim().split('\n');
+        let cleanContent = content;
+        const firstLineIndex = lines.findIndex(line => line.trim().length > 0);
+        if (firstLineIndex !== -1 && lines[firstLineIndex].trim().startsWith('# ')) {
+            cleanContent = lines.slice(firstLineIndex + 1).join('\n').trim();
+        }
 
-    // 2. Split into blocks by ANY newline sequence to handle single-spaced content better
-    const blocks = cleanContent.split(/\n+/);
+        const blocks = cleanContent.split(/\n+/);
 
-    // 3. Render blocks
-    return (
-        <div className="space-y-3">
-            {blocks.map((block, index) => {
-                const trimmed = block.trim();
-                if (!trimmed) return null;
+        return blocks.map((block, index) => {
+            const trimmed = block.trim();
+            if (!trimmed) return null;
 
-                // Headers (H2 = ##, H3 = ###)
-                if (trimmed.startsWith('### ')) {
-                    return (
-                        <h3
-                            key={`h3-${index}`}
-                            className="text-base font-bold mt-4 mb-2 text-slate-900 dark:text-white leading-tight"
-                            dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^###\s+/, '')) }}
-                        />
-                    );
-                }
-                if (trimmed.startsWith('## ')) {
-                    return (
-                        <h2
-                            key={`h2-${index}`}
-                            className="text-lg font-black mt-5 mb-2 text-slate-900 dark:text-white leading-tight"
-                            dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^##\s+/, '')) }}
-                        />
-                    );
-                }
-                if (trimmed.startsWith('# ')) {
-                    return (
-                        <h2
-                            key={`h1-${index}`}
-                            className="text-lg font-black mt-5 mb-2 text-slate-900 dark:text-white leading-tight"
-                            dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^#\s+/, '')) }}
-                        />
-                    );
-                }
-
-                // Standard Paragraph (Clean, compact style without drop-caps)
+            if (trimmed.startsWith('### ')) {
                 return (
-                    <p
-                        key={`p-${index}`}
-                        className="text-[13px] font-normal text-slate-600 dark:text-slate-400 leading-relaxed tracking-wide"
-                        dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed) }}
+                    <h3
+                        key={`h3-${index}`}
+                        className="text-base font-bold mt-4 mb-2 text-slate-900 dark:text-white leading-tight"
+                        dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^###\s+/, '')) }}
                     />
                 );
-            })}
-        </div>
-    );
-}
+            }
+            if (trimmed.startsWith('## ')) {
+                return (
+                    <h2
+                        key={`h2-${index}`}
+                        className="text-lg font-black mt-5 mb-2 text-slate-900 dark:text-white leading-tight"
+                        dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^##\s+/, '')) }}
+                    />
+                );
+            }
+            if (trimmed.startsWith('# ')) {
+                return (
+                    <h2
+                        key={`h1-${index}`}
+                        className="text-lg font-black mt-5 mb-2 text-slate-900 dark:text-white leading-tight"
+                        dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^#\s+/, '')) }}
+                    />
+                );
+            }
+
+            return (
+                <p
+                    key={`p-${index}`}
+                    className="text-[13px] font-normal text-slate-600 dark:text-slate-400 leading-relaxed tracking-wide"
+                    dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed) }}
+                />
+            );
+        });
+    }, [content]);
+
+    return <div className="space-y-3">{renderedBlocks}</div>;
+});
+
+MarkdownRenderer.displayName = 'MarkdownRenderer';
 
 // Enhanced regex parser for markdown
 function processMarkdown(text: string): string {
