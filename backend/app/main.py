@@ -114,10 +114,27 @@ async def lifespan(app: FastAPI):
                 logger.info(f"✅ User restoration complete: {restored_count} users restored")
             else:
                 logger.info("ℹ️ Another worker is handling user restoration. Skipping...")
-        except Exception as e:
-            logger.error(f"⚠️ User restoration failed: {e}")
-    
     asyncio.create_task(restore_affected_users())
+    
+    # #comment: Blog Migration Task
+    # Syncs blog post titles and content from locale files and content modules to the database.
+    # Protected by Redis lock to ensure it only runs on one worker.
+    async def run_blog_migration():
+        try:
+            from app.services.redis_service import redis_service
+            lock_key = "lock:blog_migration_v2"
+            is_leader = await redis_service.client.set(lock_key, "1", ex=600, nx=True)
+            if is_leader:
+                logger.info("🔧 Leader Worker: Running blog content migration...")
+                from scripts.migrate_blog import migrate
+                await migrate()
+                logger.info("✅ Blog content migration complete!")
+            else:
+                logger.info("ℹ️ Another worker is handling blog migration. Skipping...")
+        except Exception as e:
+            logger.error(f"⚠️ Blog migration failed: {e}")
+
+    asyncio.create_task(run_blog_migration())
 
     # #comment: Migrated Subscription and Photo Sync tasks to TaskIQ Scheduler.
     # We no longer run infinite loops here to save worker memory and prevent redundant DB load.
