@@ -71,129 +71,129 @@ export const ProDashboardModals = ({
                             onClick={(e) => e.stopPropagation()}
                             className="w-full max-w-lg glass-panel-premium rounded-[3rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white dark:bg-slate-900 shadow-3xl flex flex-col max-h-[90vh] noise-overlay"
                         >
-                            <div className="p-8 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-br from-indigo-500/5 dark:from-indigo-500/10 to-transparent">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shadow-xl">
-                                        <ShieldCheck size={24} className="text-indigo-500" />
+                            <div className="p-6 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-br from-indigo-50/50 dark:from-indigo-500/10 to-transparent">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 flex items-center justify-center shadow-sm">
+                                        <ShieldCheck size={20} className="text-indigo-500" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">{t('pro_dashboard.setup.title')}</h3>
-                                        <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-70">
+                                        <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">{t('pro_dashboard.setup.title')}</h3>
+                                        <p className="text-[9px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-widest opacity-60">
                                             {t('pro_dashboard.setup.subtitle')}
                                         </p>
                                     </div>
                                 </div>
                                 <button
                                     onClick={() => setShowSetup(false)}
-                                    className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
+                                    className="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
                                 >
-                                    <X size={20} className="text-slate-900 dark:text-white/60" />
+                                    <X size={16} className="text-slate-500 dark:text-white/60" />
                                 </button>
                             </div>
 
                             <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-6">
                                 {/* X (Twitter) Integration Card */}
-                                <div className="p-5 bg-slate-50 dark:bg-slate-800/40 rounded-[2rem] border border-slate-200 dark:border-white/5 shadow-xs space-y-4">
+                                <div className="p-5 bg-white dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm space-y-4">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2.5">
-                                            <div className="w-8 h-8 rounded-xl bg-slate-950 flex items-center justify-center border border-white/10">
-                                                <X size={14} className="text-white" />
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-xl bg-slate-950 flex items-center justify-center">
+                                                <Twitter size={14} className="text-white" />
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="text-[11px] font-black uppercase tracking-widest text-slate-900 dark:text-white leading-none">X Integration</span>
-                                                <span className="text-[8px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-1">Direct Broadcast Alpha</span>
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white leading-none">X Broadcast</span>
+                                                <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Direct API protocol</span>
                                             </div>
                                         </div>
-                                        <div className="flex gap-2">
+                                        <div className="flex gap-1.5">
                                             <button
                                                 onClick={() => { selection(); handleTestIntegration('x'); }}
-                                                className="h-8 px-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-[9px] font-black uppercase tracking-widest text-indigo-500 hover:bg-indigo-500/20 transition-all active:scale-95 flex items-center gap-2"
+                                                className="h-7 px-3 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-[8px] font-black uppercase tracking-widest text-indigo-500 hover:bg-indigo-500/20 transition-all flex items-center gap-1.5"
                                             >
                                                 <Send size={10} /> Test
                                             </button>
                                             <button
                                                 onClick={() => { selection(); setShowManual('setup_x'); }}
-                                                className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-indigo-500 hover:bg-slate-200 dark:hover:bg-white/10 transition-all active:scale-90"
+                                                className="w-7 h-7 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-indigo-500/50 hover:text-indigo-500 transition-all"
                                             >
-                                                <Info size={14} />
+                                                <Info size={12} />
                                             </button>
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-3">
+                                    <div className="grid grid-cols-2 gap-2">
                                         <input
                                             type="text"
                                             value={apiData.x_api_key}
                                             onChange={(e) => setApiData({ ...apiData, x_api_key: e.target.value })}
                                             placeholder="API Key"
-                                            className="h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-slate-900 dark:text-white placeholder:opacity-20"
+                                            className="h-10 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/5 rounded-xl px-4 text-[11px] font-medium outline-hidden text-slate-900 dark:text-white placeholder:opacity-40"
                                         />
                                         <input
                                             type="password"
                                             value={apiData.x_api_secret}
                                             onChange={(e) => setApiData({ ...apiData, x_api_secret: e.target.value })}
                                             placeholder="API Secret"
-                                            className="h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-slate-900 dark:text-white placeholder:opacity-20"
+                                            className="h-10 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/5 rounded-xl px-4 text-[11px] font-medium outline-hidden text-slate-900 dark:text-white placeholder:opacity-40"
                                         />
                                         <input
                                             type="text"
                                             value={apiData.x_access_token}
                                             onChange={(e) => setApiData({ ...apiData, x_access_token: e.target.value })}
                                             placeholder="Access Token"
-                                            className="h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-slate-900 dark:text-white placeholder:opacity-20"
+                                            className="h-10 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/5 rounded-xl px-4 text-[11px] font-medium outline-hidden text-slate-900 dark:text-white placeholder:opacity-40"
                                         />
                                         <input
                                             type="password"
                                             value={apiData.x_access_token_secret}
                                             onChange={(e) => setApiData({ ...apiData, x_access_token_secret: e.target.value })}
                                             placeholder="Token Secret"
-                                            className="h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-slate-900 dark:text-white placeholder:opacity-20"
+                                            className="h-10 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/5 rounded-xl px-4 text-[11px] font-medium outline-hidden text-slate-900 dark:text-white placeholder:opacity-40"
                                         />
                                     </div>
                                 </div>
 
                                 {/* Telegram Integration Card */}
-                                <div className="p-5 bg-slate-50 dark:bg-slate-800/40 rounded-[2rem] border border-slate-200 dark:border-white/5 shadow-xs space-y-4">
+                                <div className="p-5 bg-white dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm space-y-4">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2.5">
+                                        <div className="flex items-center gap-3">
                                             <div className="w-8 h-8 rounded-xl bg-linear-to-br from-blue-400 to-blue-600 flex items-center justify-center">
                                                 <Send size={14} className="text-white" />
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="text-[11px] font-black uppercase tracking-widest text-slate-900 dark:text-white leading-none">Telegram Sync</span>
-                                                <span className="text-[8px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-1">Multi-Channel Broadcasting</span>
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white leading-none">TG Sync</span>
+                                                <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Multi-Node broadcasting</span>
                                             </div>
                                         </div>
-                                        <div className="flex gap-2">
+                                        <div className="flex gap-1.5">
                                             <button
                                                 onClick={() => { selection(); handleTestIntegration('telegram'); }}
-                                                className="h-8 px-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-[9px] font-black uppercase tracking-widest text-blue-500 hover:bg-blue-500/20 transition-all active:scale-95 flex items-center gap-2"
+                                                className="h-7 px-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-[8px] font-black uppercase tracking-widest text-blue-500 hover:bg-blue-500/20 transition-all flex items-center gap-1.5"
                                             >
                                                 <Send size={10} /> Test
                                             </button>
                                             <button
                                                 onClick={() => { selection(); setShowManual('setup_tg'); }}
-                                                className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-blue-500 hover:bg-slate-200 dark:hover:bg-white/10 transition-all active:scale-90"
+                                                className="w-7 h-7 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-blue-500/50 hover:text-blue-500 transition-all"
                                             >
-                                                <Info size={14} />
+                                                <Info size={12} />
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="grid gap-3">
+                                    <div className="grid gap-2">
                                         <div className="space-y-1">
-                                            <label className="text-[8px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 ml-1">Main Channel</label>
+                                            <label className="text-[8px] font-black uppercase tracking-widest text-slate-400 ml-1">Main Channel</label>
                                             <input
                                                 type="text"
                                                 value={apiData.telegram_channel_id}
                                                 onChange={(e) => setApiData({ ...apiData, telegram_channel_id: e.target.value })}
-                                                placeholder="@channelname (Main)"
-                                                className="w-full h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-slate-900 dark:text-white placeholder:opacity-20"
+                                                placeholder="@channelname"
+                                                className="w-full h-10 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/5 rounded-xl px-4 text-[11px] font-medium outline-hidden text-slate-900 dark:text-white placeholder:opacity-40"
                                             />
                                         </div>
 
                                         {apiData.telegram_channels.length > 0 && (
-                                            <div className="space-y-2.5">
-                                                <label className="text-[8px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 ml-1">Additional Channels</label>
+                                            <div className="space-y-2">
+                                                <label className="text-[8px] font-black uppercase tracking-widest text-slate-400 ml-1">Additional Nodes</label>
                                                 {apiData.telegram_channels.map((ch: string, idx: number) => (
                                                     <div key={idx} className="flex gap-2">
                                                         <input
@@ -204,15 +204,15 @@ export const ProDashboardModals = ({
                                                                 newChannels[idx] = e.target.value;
                                                                 setApiData({ ...apiData, telegram_channels: newChannels });
                                                             }}
-                                                            placeholder={`@channelname ${idx + 2}`}
-                                                            className="flex-1 h-11 bg-black/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-bold outline-hidden transition-all text-slate-900 dark:text-white"
+                                                            placeholder={`@node_${idx + 2}`}
+                                                            className="flex-1 h-10 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/5 rounded-xl px-4 text-[11px] font-medium outline-hidden text-slate-900 dark:text-white"
                                                         />
                                                         <button
                                                             onClick={() => {
                                                                 const newChannels = apiData.telegram_channels.filter((_: any, i: number) => i !== idx);
                                                                 setApiData({ ...apiData, telegram_channels: newChannels });
                                                             }}
-                                                            className="w-11 h-11 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center active:scale-90 transition-all border border-red-500/20"
+                                                            className="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center active:scale-90 transition-all border border-red-500/20"
                                                         >
                                                             <X size={14} />
                                                         </button>
@@ -224,34 +224,33 @@ export const ProDashboardModals = ({
                                         <button
                                             onClick={() => setApiData({ ...apiData, telegram_channels: [...apiData.telegram_channels, ''] })}
                                             disabled={apiData.telegram_channels.length >= 4}
-                                            className="w-full h-10 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-xl text-[9px] font-black uppercase text-slate-500 dark:text-slate-400 hover:text-indigo-500 hover:border-indigo-500/30 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
+                                            className="w-full h-10 border border-dashed border-slate-200 dark:border-white/10 rounded-xl text-[8px] font-black uppercase text-slate-400 hover:text-indigo-500 hover:border-indigo-500/30 transition-all flex items-center justify-center gap-2 disabled:opacity-30"
                                         >
-                                            <Sparkles size={10} /> {apiData.telegram_channels.length >= 4 ? 'Channel Limit Reached' : '+ Add Network Node'}
+                                            <Sparkles size={10} /> {apiData.telegram_channels.length >= 4 ? 'Node Limit Reached' : 'Connect Node'}
                                         </button>
                                     </div>
                                 </div>
 
                                 {/* LinkedIn Authority Card - Compact */}
-                                <div className="p-5 bg-slate-50 dark:bg-slate-800/40 rounded-[2rem] border border-slate-200 dark:border-white/5 shadow-xs flex items-center justify-between">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                                            <div className="p-2.5 bg-blue-600/10 rounded-xl">
-                                                <Linkedin size={22} className="text-blue-600 grayscale opacity-40" />
+                                <div className="p-4 bg-white dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-xl flex items-center justify-center">
+                                            <div className="p-2 bg-blue-600/10 rounded-lg">
+                                                <Linkedin size={18} className="text-blue-600 grayscale opacity-40" />
                                             </div>
                                         </div>
                                         <div className="flex flex-col">
                                             <div className="flex items-center gap-2">
-                                                <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{t('pro_dashboard.setup.professional_network')}</span>
-                                                <span className="px-2 py-0.5 bg-slate-100 dark:bg-white/5 rounded-md text-[7px] font-black text-slate-400 uppercase tracking-widest leading-none">SYNC LOCKED</span>
+                                                <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{t('pro_dashboard.setup.professional_network')}</span>
                                             </div>
-                                            <p className="text-[8px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-0.5">{t('pro_dashboard.setup.linkedin_hint')}</p>
+                                            <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Sync locked • Professional tier</p>
                                         </div>
                                     </div>
                                     <button
                                         onClick={() => { selection(); setShowManual('setup_linkedin'); }}
-                                        className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-blue-600 hover:bg-slate-200 dark:hover:bg-white/10 transition-all active:scale-90"
+                                        className="w-7 h-7 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-blue-600/50 hover:text-blue-600 transition-all"
                                     >
-                                        <Info size={14} />
+                                        <Info size={12} />
                                     </button>
                                 </div>
                             </div>
