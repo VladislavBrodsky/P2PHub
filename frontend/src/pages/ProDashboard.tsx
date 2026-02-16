@@ -376,7 +376,7 @@ export const ProDashboard = () => {
                         </motion.div>
                         <div className="space-y-1">
                             <h1 className="text-base sm:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center gap-2 whitespace-nowrap">
-                                Viral Marketing <span className="vibing-blue-text">Studio</span>
+                                Viral Marketing <span className="vibing-crystal-text">Studio</span>
                             </h1>
                             <div className="flex items-center gap-1.5 px-0.5">
                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
@@ -438,10 +438,10 @@ export const ProDashboard = () => {
                                 {activeTab === tab && (
                                     <motion.div
                                         layoutId="activeTab"
-                                        className={`absolute inset-0 bg-linear-to-r ${tabConfig[tab].gradient} bg-size-[200%_auto] animate-gradient rounded-2xl ${tabConfig[tab].shadow}`}
+                                        className={`absolute inset-0 bg-linear-to-r ${tabConfig[tab].gradient} bg-size-[200%_auto] animate-gradient-xy rounded-2xl ${tabConfig[tab].shadow}`}
                                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                                     >
-                                        <div className="absolute inset-0 bg-white/10 backdrop-blur-[1px]" />
+                                        <div className="absolute inset-0 bg-white/10 backdrop-blur-[1px] rounded-2xl" />
                                     </motion.div>
                                 )}
                                 <span className="relative z-10 flex items-center justify-center gap-2.5">

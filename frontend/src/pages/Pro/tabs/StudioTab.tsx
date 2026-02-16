@@ -206,7 +206,7 @@ export const StudioTab = ({
                     {/* Background Progress Line */}
                     <div className="absolute top-[18px] left-0 w-full h-[2px] bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
                         <motion.div
-                            className="h-full vibing-blue-gradient shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                            className="h-full vibing-blue-animated shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                             initial={{ width: "0%" }}
                             animate={{ width: externalStep === 1 ? "0%" : externalStep === 2 ? "50%" : "100%" }}
                             transition={{ duration: 0.8, ease: "circOut" }}
@@ -490,7 +490,7 @@ export const StudioTab = ({
                                     <h4 className="text-lg font-black leading-tight text-slate-900 dark:text-white uppercase tracking-tight">
                                         {renderMarkdown(generatedResult.title, true)}
                                     </h4>
-                                    <div className="h-1 w-12 vibing-blue-gradient rounded-full" />
+                                    <div className="h-1 w-12 vibing-blue-animated rounded-full" />
                                 </div>
                                 <div className="flex gap-2 shrink-0">
                                     <button onClick={() => { selection(); handleCopyText(); }} className="p-2.5 bg-white/60 dark:bg-slate-900/60 hover:bg-indigo-500/10 rounded-xl border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-indigo-500 transition-all active:scale-90">
