@@ -52,7 +52,17 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(() => {
         try {
             const saved = localStorage.getItem('p2p_user_cache');
-            return saved ? JSON.parse(saved) : null;
+            if (saved) {
+                const cachedUser = JSON.parse(saved);
+                // Eagerly preload cached profile photo for instant display
+                if (cachedUser?.photo_url) {
+                    const img = new Image();
+                    img.src = cachedUser.photo_url;
+                    img.loading = 'eager';
+                }
+                return cachedUser;
+            }
+            return null;
         } catch (e) {
             console.error('[DEBUG] Corrupted User Cache:', e);
             localStorage.removeItem('p2p_user_cache');
@@ -103,6 +113,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     last_name: tgUser.lastName || null,
                     photo_url: tgUser.photoUrl || null,
                 }));
+
+                // Eagerly preload profile photo from SDK data
+                if (tgUser.photoUrl) {
+                    const img = new Image();
+                    img.src = tgUser.photoUrl;
+                    img.loading = 'eager';
+                }
             }
 
             console.log('[DEBUG] refreshUser: Fetching profile...');
@@ -126,6 +143,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             setUser(userData);
             updateProgress(90, 'User Verified');
             localStorage.setItem('p2p_user_cache', JSON.stringify(userData));
+
+            // Eagerly preload profile photo for instant display
+            if (userData.photo_url) {
+                const img = new Image();
+                img.src = userData.photo_url;
+                img.loading = 'eager';
+                // No need to wait for load - browser will cache it
+            }
         } catch (error) {
             console.error('[DEBUG] refreshUser: Failed:', error);
             // Fallback: If backend fails, use Telegram SDK data for UI personalization (Optimistic UI)

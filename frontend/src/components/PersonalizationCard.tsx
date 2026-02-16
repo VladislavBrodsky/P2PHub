@@ -62,23 +62,33 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             whileHover={variant === 'compact' ? {} : { scale: 1.05, rotate: 2 }}
                             className={`${variant === 'compact' ? 'h-14 w-14 rounded-xl' : 'h-16 w-16 rounded-2xl'} overflow-hidden border-2 border-(--color-border-glass) bg-(--color-bg-app) shadow-premium transition-all duration-300 relative will-change-transform z-10`}
                         >
+                            {/* Skeleton/Placeholder while loading */}
                             {(isUserLoading || (user?.photo_url && !imageLoaded)) && (
-                                <div className="absolute inset-0 bg-(--btn-secondary-bg) animate-pulse flex items-center justify-center">
-                                    <User size={variant === 'compact' ? 24 : 32} className="text-(--color-text-secondary) animate-pulse" />
+                                <div className="absolute inset-0 bg-(--btn-secondary-bg) flex items-center justify-center">
+                                    <div className="absolute inset-0 bg-linear-to-tr from-blue-500/10 to-transparent animate-pulse"></div>
+                                    <User size={variant === 'compact' ? 24 : 32} className="text-(--color-text-secondary) opacity-40" />
                                 </div>
                             )}
 
                             {user?.photo_url ? (
                                 <img
                                     src={user.photo_url}
-                                    alt="Avatar"
-                                    className={`h-full w-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                                    alt={`${user.first_name || 'Partner'}'s avatar`}
+                                    className={`h-full w-full object-cover transition-opacity duration-200 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                                     onLoad={() => setImageLoaded(true)}
                                     loading="eager"
                                     fetchPriority="high"
                                     decoding="async"
                                     width={variant === 'compact' ? 56 : 64}
                                     height={variant === 'compact' ? 56 : 64}
+                                    onError={(e) => {
+                                        // Fallback on error
+                                        e.currentTarget.style.display = 'none';
+                                    }}
+                                    style={{
+                                        imageRendering: '-webkit-optimize-contrast',
+                                        transform: 'translateZ(0)', // Force GPU acceleration
+                                    }}
                                 />
                             ) : !isUserLoading && (
                                 <div className="h-full w-full flex items-center justify-center bg-(--btn-secondary-bg) text-(--color-text-secondary)">
