@@ -14,29 +14,29 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    // #comment: Re-enabled compression with safer settings to avoid EPERM
-    viteCompression({
-      algorithm: 'gzip',
-      ext: '.gz',
-      deleteOriginFile: false // Safety against EPERM
-    }),
-    viteCompression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
-      deleteOriginFile: false
-    }),
+    // #comment: Temporarily disabled compression and image optimization to resolve persistent EPERM errors during build
+    // viteCompression({
+    //   algorithm: 'gzip',
+    //   ext: '.gz',
+    //   deleteOriginFile: false // Safety against EPERM
+    // }),
+    // viteCompression({
+    //   algorithm: 'brotliCompress',
+    //   ext: '.br',
+    //   deleteOriginFile: false
+    // }),
     // #comment: Image optimization with extensive configuration for maximum savings
-    ViteImageOptimizer({
-      png: { quality: 80 },
-      jpeg: { quality: 80 },
-      jpg: { quality: 80 },
-      tiff: { quality: 80 },
-      gif: {},
-      webp: { quality: 75, lossless: false },
-      avif: { quality: 75, lossless: false },
-      cache: false, // Disable cache to prevent permission issues
-      // logStats: false, // Reduce noise
-    }),
+    // ViteImageOptimizer({
+    //   png: { quality: 80 },
+    //   jpeg: { quality: 80 },
+    //   jpg: { quality: 80 },
+    //   tiff: { quality: 80 },
+    //   gif: {},
+    //   webp: { quality: 75, lossless: false },
+    //   avif: { quality: 75, lossless: false },
+    //   cache: false, // Disable cache to prevent permission issues
+    //   // logStats: false, // Reduce noise
+    // }),
     // Sentry Vite plugin for source map uploads
     sentryVitePlugin({
       authToken: process.env.SENTRY_API_KEY,
