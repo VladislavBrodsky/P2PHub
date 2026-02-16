@@ -44,23 +44,47 @@ const queryClient = new QueryClient({
     },
 });
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-    <ErrorBoundary>
-        <QueryClientProvider client={queryClient}>
-            <StartupProgressProvider>
-                <ConfigProvider>
-                    <AppContextProviders>
-                        <ThemeProvider>
-                            <UserProvider>
-                                <App />
-                            </UserProvider>
-                        </ThemeProvider>
-                    </AppContextProviders>
-                </ConfigProvider>
-            </StartupProgressProvider>
-        </QueryClientProvider>
-    </ErrorBoundary>,
-)
+console.log('[DEBUG] main.tsx: Startup execution beginning');
+
+try {
+    const rootElement = document.getElementById('root');
+    if (!rootElement) {
+        throw new Error('Root element #root not found in document');
+    }
+
+    console.log('[DEBUG] main.tsx: Root element found, mounting React tree');
+
+    ReactDOM.createRoot(rootElement).render(
+        <ErrorBoundary>
+            <QueryClientProvider client={queryClient}>
+                <StartupProgressProvider>
+                    <ConfigProvider>
+                        <AppContextProviders>
+                            <ThemeProvider>
+                                <UserProvider>
+                                    <App />
+                                </UserProvider>
+                            </ThemeProvider>
+                        </AppContextProviders>
+                    </ConfigProvider>
+                </StartupProgressProvider>
+            </QueryClientProvider>
+        </ErrorBoundary>
+    );
+    console.log('[DEBUG] main.tsx: ReactDOM.render called successfully');
+} catch (e) {
+    console.error('[FATAL] main.tsx: Failed to initialize application:', e);
+    // Attempt fallback UI if React mount fails completely
+    const root = document.getElementById('root');
+    if (root) {
+        root.innerHTML = `<div style="padding: 20px; color: white; background: #0c0f1d; height: 100vh; font-family: sans-serif;">
+            <h2 style="color: #ef4444;">System Error</h2>
+            <p>P2P Hub failed to initialize. Please try reloading the app.</p>
+            <button onclick="window.location.reload()" style="padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 8px;">Reload</button>
+            <pre style="margin-top: 20px; font-size: 11px; opacity: 0.5;">${String(e)}</pre>
+        </div>`;
+    }
+}
 
 export function AppContextProviders({ children }: { children: React.ReactNode }) {
     const { config } = useConfig();
@@ -69,7 +93,6 @@ export function AppContextProviders({ children }: { children: React.ReactNode })
     React.useEffect(() => {
         const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN || config?.sentry_dsn;
         if (SENTRY_DSN) {
-            // Delay Sentry initialization by 3 seconds to ensure hydration and first paint are complete
             const timer = setTimeout(() => {
                 initSentry(SENTRY_DSN, !!config?.is_debug);
             }, 3000);

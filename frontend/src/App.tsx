@@ -55,13 +55,11 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
     // Signal completion when both user and config are ready
     useEffect(() => {
         if (!isUserLoading && config) {
-            updateProgress(95, t('system.loading.finalizing'));
-            // #comment: Reduced transition delay from 500ms to 150ms.
-            // This is enough for the exit animation to prepare without feeling sluggish.
+            updateProgress(95, 'Finalizing UI...');
             const timer = setTimeout(onReady, 150);
             return () => clearTimeout(timer);
         }
-    }, [isUserLoading, config, onReady, updateProgress, t]);
+    }, [isUserLoading, config, onReady, updateProgress]);
 
     // Handle deep linking via startapp param
     useEffect(() => {
@@ -182,15 +180,14 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                 }
 
                 console.log('[DEBUG] initTMA: Complete');
-                // Ensure we signal readiness only once
-                updateProgress(98, t('system.loading.ready'));
+                updateProgress(98, 'Interface Ready');
             } catch (e) {
                 console.log('Not in TMA environment or SDK error:', e);
             }
         };
 
         initTMA();
-    }, [updateProgress, t]);
+    }, [updateProgress]); // Removed t dependency to prevent initialization loop
 
     // Handle Back Button state based on active tab
     useEffect(() => {
@@ -329,20 +326,12 @@ function App() {
     // provides smooth visual feedback to the user.
     useEffect(() => {
         if (!isConfigLoading && !showOnboarding) {
-            updateProgress(50, t('system.loading.config_loaded'));
+            updateProgress(50, 'Config Loaded');
 
-            // #comment: Strategic Prefetch Strategy
-            // Instead of immediate prefetching, we wait for the app to be fully stable.
             const prefetchCoreRoutes = async () => {
                 try {
-                    // Small delay after hydration to prioritize initial paint
                     await new Promise(resolve => setTimeout(resolve, 1000));
-
-                    // Critical path: Dashboard code
                     await prefetchPages.home();
-
-                    // #comment: Background non-critical prefetching. 
-                    // Delayed further (4s) to ensure absolute CPU/IO silence for the user.
                     setTimeout(() => {
                         Promise.all([
                             prefetchPages.earn(),
@@ -352,7 +341,6 @@ function App() {
                             prefetchPages.subscription()
                         ]).catch(e => console.debug('Lazy prefetch error', e));
                     }, 4000);
-
                 } catch (e) {
                     console.warn('Prefetch failed', e);
                 }
@@ -360,7 +348,7 @@ function App() {
 
             prefetchCoreRoutes();
         }
-    }, [isConfigLoading, showOnboarding, updateProgress, t]);
+    }, [isConfigLoading, showOnboarding, updateProgress]); // Removed t dependency
 
     return (
         <UIProvider>
