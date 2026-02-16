@@ -12,6 +12,7 @@ import { useHaptic } from '../hooks/useHaptic';
 import { useConfig } from '../context/ConfigContext';
 
 export default function SubscriptionPage() {
+    // #comment: Trigger deployment update
     const { t } = useTranslation();
     const { user, refreshUser } = useUser();
     const { config: globalConfig } = useConfig();
