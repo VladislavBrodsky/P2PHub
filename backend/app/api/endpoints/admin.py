@@ -163,6 +163,42 @@ async def get_system_health(
     from app.services.maintenance_service import check_database_health
     return await check_database_health()
 
+@router.get("/partners/{partner_id}", response_model=dict[str, Any])
+async def get_partner_details(
+    partner_id: int,
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Get detailed partner information for administrative review.
+    """
+    details = await admin_service.get_partner_admin_details(partner_id)
+    if not details:
+        raise HTTPException(status_code=404, detail="Partner not found")
+    return details
+
+@router.post("/partners/{partner_id}/update")
+async def update_partner_admin(
+    partner_id: int,
+    payload: dict[str, Any],
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Update partner attributes (XP, PRO status) from admin panel.
+    """
+    success = await admin_service.update_partner_admin(partner_id, payload)
+    if not success:
+        raise HTTPException(status_code=404, detail="Partner not found or update failed")
+    return {"status": "success"}
+
+@router.post("/maintenance/clear-cache")
+async def clear_cache(
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Clears key system caches.
+    """
+    return await admin_service.clear_system_cache()
+
 @router.get("/search-partners", response_model=list[dict[str, Any]])
 async def search_partners(
     query: str,

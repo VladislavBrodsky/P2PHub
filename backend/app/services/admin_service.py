@@ -11,6 +11,7 @@ from app.models.partner import Earning, Partner, PartnerTask, get_session
 from app.models.transaction import PartnerTransaction
 from app.services.notification_service import notification_service
 from app.services.payment_service import payment_service
+from app.services.redis_service import redis_service
 
 
 class AdminService:
@@ -391,5 +392,94 @@ class AdminService:
         """
         from app.services.maintenance_service import reconcile_network_stats
         return await reconcile_network_stats()
+
+    async def get_partner_admin_details(self, partner_id: int) -> dict[str, Any]:
+        """
+        Fetches a partner with ALL necessary relationships eagerly loaded for admin review.
+        """
+        async for session in get_session():
+            stmt = select(Partner).where(Partner.id == partner_id).options(
+                selectinload(Partner.completed_task_records),
+                selectinload(Partner.transactions).options(selectinload(PartnerTransaction.partner))
+            )
+            result = await session.exec(stmt)
+            partner = result.first()
+            if not partner: return None
+            
+            return {
+                "id": partner.id,
+                "telegram_id": partner.telegram_id,
+                "username": partner.username,
+                "first_name": partner.first_name,
+                "last_name": partner.last_name,
+                "xp": partner.xp,
+                "level": partner.level,
+                "is_pro": partner.is_pro,
+                "pro_tokens": partner.pro_tokens,
+                "referral_count": partner.referral_count,
+                "balance": partner.balance,
+                "checkin_streak": partner.checkin_streak,
+                "created_at": partner.created_at.isoformat(),
+                "tasks": [t.task_id for t in partner.completed_task_records],
+                "transactions": [
+                    {
+                        "id": t.id,
+                        "amount": t.amount,
+                        "currency": t.currency,
+                        "status": t.status,
+                        "created_at": t.created_at.isoformat(),
+                        "tx_hash": t.tx_hash
+                    } for t in partner.transactions
+                ]
+            }
+
+    async def update_partner_admin(self, partner_id: int, updates: dict[str, Any]):
+        """
+        Applies administrative updates to a partner (Give XP, Set PRO).
+        """
+        async for session in get_session():
+            partner = await session.get(Partner, partner_id)
+            if not partner: return False
+            
+            if "xp" in updates:
+                increment = float(updates["xp"])
+                partner.xp += increment
+                from app.utils.ranking import get_level
+                partner.level = get_level(partner.xp)
+                # Log XP transaction
+                from app.models.partner import XPTransaction
+                new_xp_tx = XPTransaction(
+                    partner_id=partner.id,
+                    amount=increment,
+                    type="BONUS",
+                    description="Admin Adjustment"
+                )
+                session.add(new_xp_tx)
+                
+            if "is_pro" in updates:
+                partner.is_pro = bool(updates["is_pro"])
+                if partner.is_pro and not partner.pro_expires_at:
+                    partner.pro_expires_at = datetime.utcnow() + timedelta(days=30)
+            
+            session.add(partner)
+            await session.commit()
+            
+            await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
+            return True
+
+    async def clear_system_cache(self) -> dict[str, Any]:
+        """Flushes key system caches."""
+        # Clear admin stats cache in DB
+        async for session in get_session():
+            from app.models.partner import SystemSetting
+            await session.execute(text("DELETE FROM systemsetting WHERE key = 'cache:admin_stats'"))
+            await session.commit()
+            
+        # Clear high-level redis keys
+        keys_to_clear = ["ton_price_usd", "partners:recent_v2", "global:leaderboard:v1"]
+        for key in keys_to_clear:
+            await redis_service.client.delete(key)
+            
+        return {"status": "success", "message": "Caches cleared"}
 
 admin_service = AdminService()

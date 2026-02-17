@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     CheckCircle, Clock, AlertTriangle, ShieldCheck, RefreshCw,
     User, ExternalLink, TrendingUp, TrendingDown, Users,
-    Zap, PieChart, Wallet, Calendar, Search
+    Zap, PieChart, Wallet, Calendar, Search, X, Edit, Trash, Plus,
+    Activity, Database, Layers
 } from 'lucide-react';
 import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -88,7 +89,13 @@ export const AdminPage = () => {
     const [error, setError] = useState<string | null>(null);
     const [approvingIds, setApprovingIds] = useState<Set<number>>(new Set());
     const [health, setHealth] = useState<{ status: string; latency_ms: number; orphaned_count: number; timestamp: string } | null>(null);
-    const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'maintenance' | 'search'>('kpis');
+    const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'search' | 'network' | 'maintenance'>('kpis');
+    const [selectedPartnerId, setSelectedPartnerId] = useState<number | null>(null);
+    const [partnerDetails, setPartnerDetails] = useState<any | null>(null);
+    const [isDetailsLoading, setIsDetailsLoading] = useState(false);
+    const [networkStats, setNetworkStats] = useState<Record<string, number> | null>(null);
+    const [networkMembers, setNetworkMembers] = useState<any[]>([]);
+    const [selectedNetworkDepth, setSelectedNetworkDepth] = useState<number | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<any[]>([]);
     const [isSearching, setIsSearching] = useState(false);
@@ -114,6 +121,69 @@ export const AdminPage = () => {
             setIsRefreshing(false);
         }
     };
+
+    const fetchNetworkStats = async () => {
+        try {
+            const res = await apiClient.get('/api/admin/tree');
+            setNetworkStats(res.data);
+        } catch (err) {
+            console.error('Failed to fetch network tree:', err);
+        }
+    };
+
+    const fetchNetworkMembers = async (depth: number) => {
+        setSelectedNetworkDepth(depth);
+        setNetworkMembers([]);
+        try {
+            const res = await apiClient.get(`/api/admin/network/${depth}`);
+            setNetworkMembers(res.data);
+        } catch (err) {
+            console.error('Failed to fetch network members:', err);
+        }
+    };
+
+    const fetchPartnerDetails = async (id: number) => {
+        setSelectedPartnerId(id);
+        setIsDetailsLoading(true);
+        try {
+            const res = await apiClient.get(`/api/admin/partners/${id}`);
+            setPartnerDetails(res.data);
+        } catch (err) {
+            alert('Failed to load partner details');
+            setSelectedPartnerId(null);
+        } finally {
+            setIsDetailsLoading(false);
+        }
+    };
+
+    const updatePartner = async (updates: any) => {
+        if (!selectedPartnerId) return;
+        try {
+            await apiClient.post(`/api/admin/partners/${selectedPartnerId}/update`, updates);
+            await fetchPartnerDetails(selectedPartnerId);
+            alert('Partner updated successfully');
+        } catch (err: any) {
+            alert('Failed to update: ' + (err.response?.data?.detail || 'Unknown error'));
+        }
+    };
+
+    const handleClearCache = async () => {
+        if (!confirm('This will clear system caches and force data refresh. Proceed?')) return;
+        setIsRefreshing(true);
+        try {
+            await apiClient.post('/api/admin/maintenance/clear-cache');
+            alert('Caches cleared successfully!');
+            await fetchData(true, true);
+        } catch (err) {
+            alert('Failed to clear cache');
+        } finally {
+            setIsRefreshing(false);
+        }
+    };
+
+    useEffect(() => {
+        if (viewMode === 'network') fetchNetworkStats();
+    }, [viewMode]);
 
     const handleRecalculate = async () => {
         if (!confirm('This will recalculate all referral counts and lineage. Continue?')) return;
@@ -224,7 +294,7 @@ export const AdminPage = () => {
 
             {/* Navigation Tabs */}
             <div className="flex gap-1 p-1 bg-slate-100 dark:bg-white/5 rounded-2xl overflow-x-auto scrollbar-none">
-                {(['kpis', 'financials', 'payments', 'search', 'maintenance'] as const).map((mode) => (
+                {(['kpis', 'financials', 'payments', 'network', 'search', 'maintenance'] as const).map((mode) => (
                     <button
                         key={mode}
                         onClick={() => setViewMode(mode)}
@@ -233,6 +303,9 @@ export const AdminPage = () => {
                             : 'text-slate-500'
                             }`}
                     >
+                        {mode === 'kpis' ? <Activity size={12} className="inline mr-1" /> : null}
+                        {mode === 'financials' ? <Wallet size={12} className="inline mr-1" /> : null}
+                        {mode === 'network' ? <Layers size={12} className="inline mr-1" /> : null}
                         {mode}
                         {mode === 'payments' && transactions.length > 0 && (
                             <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-[8px]">
@@ -698,6 +771,98 @@ export const AdminPage = () => {
                         </AnimatePresence>
                     </motion.div>
                 )}
+                {viewMode === 'network' && (
+                    <motion.div
+                        key="network"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="space-y-6"
+                    >
+                        {/* Tree Distribution Grid */}
+                        <div className="space-y-3">
+                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 px-1 flex items-center gap-2">
+                                <Layers size={14} /> Network Generation Tree
+                            </h2>
+                            <div className="grid grid-cols-3 gap-2">
+                                {Array.from({ length: 9 }).map((_, i) => {
+                                    const depth = i + 1;
+                                    const count = networkStats?.[depth.toString()] || 0;
+                                    const isSelected = selectedNetworkDepth === depth;
+                                    return (
+                                        <button
+                                            key={depth}
+                                            onClick={() => fetchNetworkMembers(depth)}
+                                            className={`p-4 rounded-3xl border transition-all text-left space-y-1 ${isSelected
+                                                ? 'bg-blue-500 border-blue-400 text-white shadow-lg shadow-blue-500/20'
+                                                : 'glass-panel-premium border-white/5 text-slate-500 hover:border-blue-500/30'
+                                                }`}
+                                        >
+                                            <div className={`text-[10px] font-black uppercase ${isSelected ? 'opacity-80' : 'text-slate-400'}`}>Gen {depth}</div>
+                                            <div className={`text-xl font-black ${isSelected ? 'text-white' : 'text-slate-900 dark:text-slate-100'}`}>{count}</div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Network Members List */}
+                        {selectedNetworkDepth && (
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between px-1">
+                                    <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                                        Gen {selectedNetworkDepth} Partners
+                                    </h2>
+                                    <span className="text-[10px] text-slate-500 font-bold uppercase">Showing Top 100</span>
+                                </div>
+                                <div className="space-y-2">
+                                    {networkMembers.length === 0 ? (
+                                        <div className="p-8 text-center glass-panel-premium rounded-3xl text-slate-500 text-xs font-bold animate-pulse">
+                                            Loading partners...
+                                        </div>
+                                    ) : (
+                                        networkMembers.map(p => (
+                                            <button
+                                                key={p.telegram_id}
+                                                onClick={() => fetchPartnerDetails(p.id || p.telegram_id)}
+                                                className="w-full p-4 rounded-2xl glass-panel-premium border border-white/5 flex items-center justify-between text-left group hover:border-blue-500/30 transition-all"
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <div className="relative">
+                                                        <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center overflow-hidden border border-black/5 dark:border-white/5">
+                                                            {p.photo_url ? (
+                                                                <img src={p.photo_url} alt="" className="w-full h-full object-cover" />
+                                                            ) : (
+                                                                <User size={20} className="text-slate-400" />
+                                                            )}
+                                                        </div>
+                                                        {p.is_pro && (
+                                                            <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 border-2 border-white dark:border-slate-900 flex items-center justify-center">
+                                                                <Zap size={8} className="text-white fill-white" />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <div className="text-sm font-black text-slate-900 dark:text-slate-100 group-hover:text-blue-500 transition-colors">
+                                                            {p.username ? `@${p.username}` : `${p.first_name || 'Partner'}`}
+                                                        </div>
+                                                        <div className="text-[9px] font-bold text-slate-500 uppercase">
+                                                            ID: {p.telegram_id} · {p.level} Lvl
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <div className="text-xs font-black text-blue-500">{p.xp} XP</div>
+                                                </div>
+                                            </button>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </motion.div>
+                )}
+
                 {viewMode === 'maintenance' && (
                     <motion.div
                         key="maintenance"
@@ -708,7 +873,7 @@ export const AdminPage = () => {
                     >
                         <div className="p-6 rounded-[2.5rem] bg-slate-900 border border-white/10 space-y-6 relative overflow-hidden">
                             <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-                                <RefreshCw size={120} />
+                                <Database size={120} />
                             </div>
                             <div className="space-y-2 relative z-10">
                                 <h3 className="text-xl font-black text-white">System Maintenance</h3>
@@ -749,6 +914,24 @@ export const AdminPage = () => {
                                         {isRefreshing ? 'Processing...' : 'Recalculate Network Stats'}
                                     </button>
                                 </div>
+
+                                <div className="p-4 rounded-2xl bg-white/5 space-y-3">
+                                    <div className="flex items-center gap-2 text-blue-500 font-bold text-[10px] uppercase tracking-widest">
+                                        <RefreshCw size={14} />
+                                        System Cache Flush
+                                    </div>
+                                    <p className="text-[10px] text-slate-500 font-medium">
+                                        Flushes Redis cache for TON prices, leaderboards and dashboard KPIs.
+                                        Use this after manual DB changes.
+                                    </p>
+                                    <button
+                                        onClick={handleClearCache}
+                                        disabled={isRefreshing}
+                                        className="w-full py-3 rounded-xl bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20"
+                                    >
+                                        {isRefreshing ? 'Clearing...' : 'Flush System Cache'}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </motion.div>
@@ -781,10 +964,14 @@ export const AdminPage = () => {
                                 <div className="p-12 text-center text-slate-500 text-xs font-bold animate-pulse">Searching users...</div>
                             ) : searchResults.length > 0 ? (
                                 searchResults.map(p => (
-                                    <div key={p.id} className="p-4 rounded-2xl glass-panel-premium border border-white/5 space-y-2">
+                                    <button
+                                        key={p.id}
+                                        onClick={() => fetchPartnerDetails(p.id)}
+                                        className="w-full text-left p-4 rounded-2xl glass-panel-premium border border-white/5 space-y-2 hover:border-blue-500/30 transition-all group"
+                                    >
                                         <div className="flex items-center justify-between">
                                             <div>
-                                                <div className="text-sm font-black text-slate-900 dark:text-slate-100">@{p.username || p.telegram_id}</div>
+                                                <div className="text-sm font-black text-slate-900 dark:text-slate-100 group-hover:text-blue-500 transition-colors">@{p.username || p.telegram_id}</div>
                                                 <div className="text-[10px] text-slate-500 font-bold uppercase">ID: {p.telegram_id}</div>
                                             </div>
                                             <div className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase ${p.is_pro ? 'bg-amber-500/20 text-amber-500' : 'bg-slate-500/20 text-slate-500'}`}>
@@ -805,7 +992,7 @@ export const AdminPage = () => {
                                                 <div className="text-xs font-black text-blue-500">{p.xp}</div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </button>
                                 ))
                             ) : searchQuery && !isSearching ? (
                                 <div className="p-12 text-center text-slate-500 text-xs font-bold">No results found</div>
@@ -814,6 +1001,124 @@ export const AdminPage = () => {
                             )}
                         </div>
                     </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Partner Detail Modal Overlay */}
+            <AnimatePresence>
+                {selectedPartnerId && (
+                    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 backdrop-blur-sm p-4">
+                        <motion.button
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setSelectedPartnerId(null)}
+                            className="absolute inset-0 cursor-default"
+                        />
+                        <motion.div
+                            initial={{ y: "100%" }}
+                            animate={{ y: 0 }}
+                            exit={{ y: "100%" }}
+                            className="w-full max-w-lg bg-slate-100 dark:bg-slate-900 rounded-t-[3rem] p-6 pb-12 space-y-6 relative z-10 max-h-[90vh] overflow-y-auto"
+                        >
+                            {!partnerDetails || isDetailsLoading ? (
+                                <div className="p-20 flex flex-col items-center gap-4">
+                                    <RefreshCw className="animate-spin text-blue-500" />
+                                    <p className="text-xs font-bold text-slate-500 uppercase">Fetching Dossier...</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-16 h-16 rounded-3xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 flex items-center justify-center text-slate-400">
+                                                <User size={32} />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-xl font-black text-slate-900 dark:text-slate-100 italic">
+                                                    @{partnerDetails.username || 'Partner'}
+                                                </h3>
+                                                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                                    ID: {partnerDetails.telegram_id}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <button
+                                            onClick={() => setSelectedPartnerId(null)}
+                                            className="p-3 rounded-2xl bg-slate-200 dark:bg-white/10 text-slate-500"
+                                        >
+                                            <X size={20} />
+                                        </button>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="p-4 rounded-[2rem] bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
+                                            <div className="text-[10px] font-black text-slate-500 uppercase">Account Rank</div>
+                                            <div className="text-xl font-black text-blue-500">Level {partnerDetails.level}</div>
+                                            <div className="text-[9px] font-bold text-slate-400 uppercase">{partnerDetails.xp} Total XP</div>
+                                        </div>
+                                        <div className="p-4 rounded-[2rem] bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
+                                            <div className="text-[10px] font-black text-slate-500 uppercase">PRO Status</div>
+                                            <div className={`text-xl font-black ${partnerDetails.is_pro ? 'text-amber-500' : 'text-slate-400'}`}>
+                                                {partnerDetails.is_pro ? 'ACTIVE' : 'INACTIVE'}
+                                            </div>
+                                            <div className="text-[9px] font-bold text-slate-400 uppercase">{partnerDetails.pro_tokens} Tokens</div>
+                                        </div>
+                                    </div>
+
+                                    {/* Admin Actions */}
+                                    <div className="space-y-3">
+                                        <h4 className="text-[10px] font-black uppercase text-slate-500 tracking-widest px-1">Administrative Actions</h4>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <button
+                                                onClick={() => updatePartner({ is_pro: !partnerDetails.is_pro })}
+                                                className={`py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${partnerDetails.is_pro
+                                                    ? 'bg-red-500/10 text-red-500 border border-red-500/20'
+                                                    : 'bg-amber-500 text-white shadow-lg shadow-amber-500/20'
+                                                    }`}
+                                            >
+                                                {partnerDetails.is_pro ? <Trash size={14} /> : <Zap size={14} />}
+                                                {partnerDetails.is_pro ? 'Revoke PRO' : 'Grant PRO'}
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    const xp = prompt('Enter XP amount to add (can be negative):', '500');
+                                                    if (xp) updatePartner({ xp: parseFloat(xp) });
+                                                }}
+                                                className="py-4 rounded-2xl bg-blue-500 text-white font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20"
+                                            >
+                                                <Plus size={14} /> Adjust XP
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Stats List */}
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5">
+                                            <div className="flex items-center gap-3">
+                                                <Users size={18} className="text-slate-400" />
+                                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Direct Referrals</span>
+                                            </div>
+                                            <span className="text-sm font-black">{partnerDetails.referral_count}</span>
+                                        </div>
+                                        <div className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5">
+                                            <div className="flex items-center gap-3">
+                                                <CheckCircle size={18} className="text-slate-400" />
+                                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Tasks Completed</span>
+                                            </div>
+                                            <span className="text-sm font-black">{partnerDetails.tasks?.length || 0}</span>
+                                        </div>
+                                        <div className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5">
+                                            <div className="flex items-center gap-3">
+                                                <Wallet size={18} className="text-slate-400" />
+                                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Current Balance</span>
+                                            </div>
+                                            <span className="text-sm font-black text-emerald-500">${partnerDetails.balance}</span>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </motion.div>
+                    </div>
                 )}
             </AnimatePresence>
         </div>
