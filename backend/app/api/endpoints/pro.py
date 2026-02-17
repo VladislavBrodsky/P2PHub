@@ -82,11 +82,12 @@ async def get_pro_status(
 
 # Academy Config: Cost (negative) or Reward (positive)
 ACADEMY_RULES = {
-    "m1": {"tokens": 1, "xp": 100},  # Reward 1 token
-    "m2": {"tokens": 1, "xp": 100},  # Reward 1 token
-    "m3": {"tokens": -1, "xp": 200}, # Cost 1 token
-    "m4": {"tokens": -2, "xp": 250}, # Cost 2 tokens
-    "m5": {"tokens": -3, "xp": 500}, # Cost 3 tokens
+    "m1": {"tokens": 1, "xp_reward": 500},
+    "m2": {"tokens": 1, "xp_reward": 500},
+    "m3": {"tokens": -1, "xp_cost": 20, "xp_reward": 2000},
+    "m4": {"tokens": -2, "xp_cost": 500, "xp_reward": 5000},
+    "m5": {"tokens": -3, "xp_cost": 2000, "xp_reward": 10000},
+    "m6": {"tokens": -5, "xp_cost": 10000, "xp_reward": 50000},
 }
 
 @router.post("/academy/complete")
@@ -101,9 +102,10 @@ async def complete_academy_stage(
     if stage_id in completed:
         return {"status": "already_completed", "academy_score": partner.academy_score}
 
-    rules = ACADEMY_RULES.get(stage_id, {"tokens": 0, "xp": 100})
+    rules = ACADEMY_RULES.get(stage_id, {"tokens": 0, "xp_reward": 100})
     token_change = rules["tokens"]
-    xp_reward = rules["xp"]
+    xp_cost = rules.get("xp_cost", 0)
+    xp_reward = rules.get("xp_reward", 100)
 
     # Check if user has enough tokens (if cost is involved)
     if token_change < 0 and partner.pro_tokens < abs(token_change):
@@ -111,10 +113,20 @@ async def complete_academy_stage(
             status_code=402, 
             detail=f"Insufficient tokens. This module requires {abs(token_change)} tokens."
         )
+    
+    # Check if user has enough XP (if cost is involved)
+    if xp_cost > 0 and partner.academy_score < xp_cost:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Insufficient Academy Score. This module requires {xp_cost} XP to unlock."
+        )
 
     # Apply changes
     completed.append(stage_id)
     partner.completed_stages = json.dumps(completed)
+    
+    # Deduct XP cost before adding reward
+    partner.academy_score -= xp_cost
     partner.academy_score += xp_reward
     partner.pro_tokens += token_change
     
@@ -125,7 +137,9 @@ async def complete_academy_stage(
         "status": "success", 
         "academy_score": partner.academy_score, 
         "tokens_remaining": partner.pro_tokens,
-        "token_change": token_change
+        "token_change": token_change,
+        "xp_reward": xp_reward,
+        "xp_cost": xp_cost
     }
 
 @router.post("/setup")

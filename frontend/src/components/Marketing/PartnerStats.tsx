@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Zap, Globe2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 // #comment: Removed useEffect as we now use the optimized useVisibilityPolling hook.
@@ -46,20 +46,27 @@ const CountUp = ({ value, duration = 2 }: { value: string; duration?: number }) 
 
     useEffect(() => {
         let start = 0;
-        const totalFrames = duration * 60;
-        const increment = target / totalFrames;
+        const startTime = performance.now();
+        const durationMs = duration * 1000;
 
-        const timer = setInterval(() => {
-            start += increment;
-            if (start >= target) {
-                setDisplayValue(target);
-                clearInterval(timer);
+        const update = (now: number) => {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / durationMs, 1);
+
+            // Ease out cubic
+            const easeProgress = 1 - Math.pow(1 - progress, 3);
+            const current = easeProgress * target;
+
+            setDisplayValue(current);
+
+            if (progress < 1) {
+                requestAnimationFrame(update);
             } else {
-                setDisplayValue(start);
+                setDisplayValue(target);
             }
-        }, 1000 / 60);
+        };
 
-        return () => clearInterval(timer);
+        requestAnimationFrame(update);
     }, [target, duration]);
 
     return <span>{displayValue % 1 === 0 ? displayValue : displayValue.toFixed(1)}{suffix}</span>;
@@ -69,6 +76,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
     const { t } = useTranslation();
     const [recentPartners, setRecentPartners] = useState<any[]>([]);
     const [stats, setStats] = useState({ total: '12.4k', volume: '$84.2M', countries: '142', lastHourCount: 342 });
+    const [isLoading, setIsLoading] = useState(true);
 
     useVisibilityPolling(async () => {
         try {
@@ -77,9 +85,11 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 const { partners, last_hour_count } = response.data;
                 setRecentPartners(partners || []);
                 setStats(prev => ({ ...prev, lastHourCount: last_hour_count || prev.lastHourCount }));
+                setIsLoading(false);
             }
         } catch (error) {
             console.error("Failed to fetch recent partners", error);
+            setIsLoading(false);
         }
     }, 5 * 60 * 1000);
 
@@ -87,9 +97,9 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
         <section className="px-4 py-8 relative overflow-hidden">
             <div className="grid grid-cols-3 gap-3">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
                     className="flex flex-col items-center justify-center p-5 rounded-[2.5rem] bg-linear-to-b from-blue-500/10 to-transparent border border-blue-500/15 shadow-premium text-center space-y-2 relative overflow-hidden group"
                 >
                     <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -103,10 +113,10 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 </motion.div>
 
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
+                    transition={{ delay: 0.05 }}
                     className="flex flex-col items-center justify-center p-5 rounded-[2.5rem] bg-linear-to-b from-emerald-500/10 to-transparent border border-emerald-500/15 shadow-premium text-center space-y-2 relative overflow-hidden group"
                 >
                     <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -120,10 +130,10 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 </motion.div>
 
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
+                    transition={{ delay: 0.1 }}
                     className="flex flex-col items-center justify-center p-5 rounded-[2.5rem] bg-linear-to-b from-purple-500/10 to-transparent border border-purple-500/15 shadow-premium text-center space-y-2 relative overflow-hidden group"
                 >
                     <div className="absolute inset-0 bg-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -138,39 +148,49 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
             </div>
 
             <motion.div
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
                 onClick={onNavigateToEarn}
                 className="mt-6 p-4 rounded-3xl bg-white/40 dark:bg-slate-900/40 backdrop-blur-md border border-slate-200/50 dark:border-white/5 flex items-center justify-center gap-4 shadow-premium-lg cursor-pointer hover:bg-white/60 dark:hover:bg-slate-900/60 transition-all active:scale-[0.97] relative group overflow-hidden"
             >
                 {/* Live Shimmer Indicator */}
-                <div className="absolute top-0 left-0 w-1 h-full bg-blue-500 animate-pulse" />
+                <div className="absolute top-0 left-0 w-1 h-full bg-blue-500 animate-[pulse-glow_2s_infinite]" />
                 <motion.div
                     className="absolute inset-0 bg-linear-to-r from-transparent via-blue-500/5 to-transparent -translate-x-full"
                     animate={{ x: ['-100%', '200%'] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 />
 
-                <div className="flex -space-x-2 relative z-10">
-                    {recentPartners.length > 0 ? (
-                        recentPartners.slice(0, 4).map((partner, i) => (
-                            <div key={partner.id || i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 bg-slate-800 flex items-center justify-center overflow-hidden shadow-premium-sm transition-transform hover:scale-110 hover:z-20">
-                                <PartnerAvatar partner={partner} index={i} />
-                            </div>
-                        ))
-                    ) : (
-                        [1, 2, 3, 4].map((i) => (
-                            <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 bg-slate-100/10 dark:bg-white/5 animate-pulse" />
-                        ))
-                    )}
-                    <div className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 bg-blue-600 text-white flex items-center justify-center shadow-premium-sm relative z-0">
-                        <Zap size={10} className="animate-pulse" />
+                <div className="flex -space-x-1 relative z-10">
+                    <AnimatePresence mode="popLayout">
+                        {recentPartners.length > 0 ? (
+                            recentPartners.slice(0, 4).map((partner, i) => (
+                                <motion.div
+                                    key={partner.id || i}
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: i * 0.05 }}
+                                    className="w-[26px] h-[26px] rounded-full border-2 border-white dark:border-slate-800 bg-slate-800 flex items-center justify-center overflow-hidden shadow-premium-sm transition-transform hover:scale-110 hover:z-20"
+                                >
+                                    <PartnerAvatar partner={partner} index={i} />
+                                </motion.div>
+                            ))
+                        ) : (
+                            [1, 2, 3, 4].map((i) => (
+                                <div key={i} className="w-[26px] h-[26px] rounded-full border border-white/20 dark:border-slate-800 bg-slate-200/20 dark:bg-white/5 animate-pulse" />
+                            ))
+                        )}
+                    </AnimatePresence>
+                    <div className="w-[26px] h-[26px] rounded-full border-2 border-white dark:border-slate-800 bg-blue-600 text-white flex items-center justify-center shadow-premium-sm relative z-0">
+                        <Zap size={7} className="animate-[pulse-glow_1.5s_infinite]" />
                     </div>
                 </div>
                 <p className="text-[11px] font-bold text-slate-600 dark:text-slate-400 relative z-10 leading-tight">
                     <Trans i18nKey="dashboard.stats.recent_join" values={{ count: stats.lastHourCount }}>
-                        <span className="text-slate-900 dark:text-white font-black">+{stats.lastHourCount} partners</span> joined the network in the last 60m
+                        <span className="text-slate-900 dark:text-white font-black">
+                            +<CountUp value={stats.lastHourCount.toString()} duration={1.5} /> new partners
+                        </span> joined the movement in the last 60m
                     </Trans>
                 </p>
             </motion.div>

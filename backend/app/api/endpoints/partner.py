@@ -548,14 +548,19 @@ async def get_recent_partners(
             refresh_count = True
 
     if refresh_partners:
-        # 3. Fetch Fresh from Partner Table with photo_file_id
+        # 3. Fetch Fresh from Partner Table
+        # #comment: Prioritize partners with photos and recency to ensure the social proof 
+        # badge looks "populated" with real faces as requested.
         statement = select(
             Partner.id,
             Partner.first_name,
             Partner.username,
             Partner.photo_file_id,
             Partner.created_at
-        ).order_by(Partner.created_at.desc()).limit(limit)
+        ).order_by(
+            Partner.photo_file_id.isnot(None).desc(), # Photos first
+            Partner.created_at.desc()
+        ).limit(limit)
 
         result = await session.exec(statement)
         partners = result.all()
@@ -567,7 +572,7 @@ async def get_recent_partners(
                 "first_name": p_first_name,
                 "username": p_username,
                 "photo_file_id": p_photo_file_id,
-                "photo_url": None,  # Deprecated, keeping for backwards compat
+                "photo_url": None,
                 "created_at": p_created_at.isoformat() if p_created_at else None
             }
             partners_list.append(p_dict)
@@ -581,7 +586,11 @@ async def get_recent_partners(
         session.add(snapshot_setting)
 
     if refresh_count:
-        last_hour_count = 632 + secrets.randbelow(211) # Range [632, 842]
+        # #comment: Deterministic but dynamic range based on current hour to simulate traffic waves
+        hour_seed = now.hour
+        base_count = 680 + (hour_seed * 7 % 100) # Base shifts by hour [680, 780]
+        last_hour_count = base_count + secrets.randbelow(50) # Random noise [0, 50]
+        
         if not count_setting:
             count_setting = SystemSetting(key=count_settings_key, value=str(last_hour_count))
         else:
@@ -592,7 +601,6 @@ async def get_recent_partners(
     if refresh_partners or refresh_count:
         await session.commit()
 
-    # No need to process photo URLs - we're storing file_ids
     partners_data = {
         "partners": partners_list[:limit],
         "last_hour_count": last_hour_count

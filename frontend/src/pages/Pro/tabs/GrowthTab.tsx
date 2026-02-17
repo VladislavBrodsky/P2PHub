@@ -191,24 +191,27 @@ export const GrowthTab = ({
                         const modulesList = Array.isArray(modules) ? modules : [];
 
                         // Costs Config (Hardcoded to match backend)
-                        const ACADEMY_COSTS: Record<string, { tokens: number; xp: number }> = {
-                            "m1": { tokens: 1, xp: 100 },
-                            "m2": { tokens: 1, xp: 100 },
-                            "m3": { tokens: -1, xp: 200 },
-                            "m4": { tokens: -2, xp: 250 },
-                            "m5": { tokens: -3, xp: 500 },
+                        const ACADEMY_COSTS: Record<string, { tokens: number; xp_cost: number; xp_reward: number }> = {
+                            "m1": { tokens: 1, xp_cost: 0, xp_reward: 500 },
+                            "m2": { tokens: 1, xp_cost: 0, xp_reward: 500 },
+                            "m3": { tokens: -1, xp_cost: 20, xp_reward: 2000 },
+                            "m4": { tokens: -2, xp_cost: 500, xp_reward: 5000 },
+                            "m5": { tokens: -3, xp_cost: 2000, xp_reward: 10000 },
+                            "m6": { tokens: -5, xp_cost: 10000, xp_reward: 50000 },
                         };
 
                         return modulesList.map((module: any, i: number) => {
                             const isCompleted = completedStages.includes(module.id);
                             const isLoading = isCompletingStage === module.id;
-                            const costInfo = ACADEMY_COSTS[module.id] || { tokens: 0, xp: 100 };
+                            const costInfo = ACADEMY_COSTS[module.id] || { tokens: 0, xp_cost: 0, xp_reward: 100 };
                             const cost = costInfo.tokens;
+                            const xpCost = costInfo.xp_cost;
 
                             // Check if user has enough tokens (if cost is negative)
                             const userTokens = status?.pro_tokens || 0;
-                            const canAfford = cost >= 0 || userTokens >= Math.abs(cost);
-                            const isLocked = !isCompleted && !canAfford;
+                            const canAffordTokens = cost >= 0 || userTokens >= Math.abs(cost);
+                            const canAffordXP = academyScore >= xpCost;
+                            const isLocked = !isCompleted && (!canAffordTokens || !canAffordXP);
 
                             return (
                                 <motion.div
@@ -305,8 +308,14 @@ export const GrowthTab = ({
                                                                     <span>
                                                                         {cost > 0 ? "Complete & Claim Reward" : `Unlock & Sync (-${Math.abs(cost)} Tokens)`}
                                                                     </span>
+                                                                    {xpCost > 0 && (
+                                                                        <>
+                                                                            <div className="w-px h-3 bg-current opacity-20 hidden sm:block" />
+                                                                            <span className="opacity-80 whitespace-nowrap text-red-400">-{xpCost} XP UNLOCK</span>
+                                                                        </>
+                                                                    )}
                                                                     <div className="w-px h-3 bg-current opacity-20 hidden sm:block" />
-                                                                    <span className="opacity-70 whitespace-nowrap">+{costInfo.xp} XP</span>
+                                                                    <span className="opacity-70 whitespace-nowrap">+{costInfo.xp_reward} XP REWARD</span>
                                                                 </>
                                                             )}
                                                         </button>
@@ -321,7 +330,7 @@ export const GrowthTab = ({
                                                             <div className="w-3 h-3 rounded-full bg-slate-400 dark:bg-white/30" />
                                                         </div>
                                                         <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
-                                                            Insufficient Tokens
+                                                            {!canAffordTokens ? "Insufficient Tokens" : "Insufficient XP Score"}
                                                         </span>
                                                         <span className="text-[8px] font-medium text-slate-400">
                                                             Earn more tokens or upgrade to PRO+
