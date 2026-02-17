@@ -144,36 +144,51 @@ export const CommunityOrbit = memo(() => {
     );
 });
 
-const CentralLogo = memo(() => (
-    <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.5)]"
-        style={{ willChange: 'transform' }}
-    >
-        <FractalProfits />
-        <div className="absolute inset-0 z-0 rounded-full bg-blue-500 blur-3xl opacity-40 animate-pulse" />
-        <div className="absolute inset-0 z-10 rounded-full border border-white/30" />
-        <motion.img
-            animate={{
-                scale: [1, 1.08, 1],
-                filter: ["brightness(1) blur(0px)", "brightness(1.2) blur(0.5px)", "brightness(1) blur(0px)"]
-            }}
-            transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-            }}
-            src={LOGO_DATA}
-            alt="Pintopay Logo"
-            width="56"
-            height="56"
-            loading="eager"
-            className="relative z-20 w-14 h-14 object-contain brightness-0 invert"
-        />
-    </motion.div>
-));
+const CentralLogo = memo(() => {
+    const logoSrc = LOGO_DATA.startsWith('http') ? LOGO_DATA : `${getApiUrl().replace(/\/$/, '')}${LOGO_DATA}`;
+
+    return (
+        <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.5)]"
+            style={{ willChange: 'transform' }}
+        >
+            <FractalProfits />
+            <div className="absolute inset-0 z-0 rounded-full bg-blue-500 blur-3xl opacity-40 animate-pulse" />
+            <div className="absolute inset-0 z-10 rounded-full border border-white/30" />
+            <motion.img
+                animate={{
+                    scale: [1, 1.08, 1],
+                    filter: [
+                        "brightness(0) invert(1) blur(0px)",
+                        "brightness(0) invert(1) blur(0.5px)",
+                        "brightness(0) invert(1) blur(0px)"
+                    ]
+                }}
+                transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                src={logoSrc}
+                alt="Pintopay Logo"
+                width="56"
+                height="56"
+                loading="eager"
+                className="relative z-20 w-14 h-14 object-contain"
+                onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (!target.src.includes('raw.githubusercontent.com')) {
+                        // High-reliability fallback to remote asset
+                        target.src = 'https://raw.githubusercontent.com/VladislavBrodsky/P2PHub/main/frontend/public/logo.svg';
+                    }
+                }}
+            />
+        </motion.div>
+    );
+});
 
 const FractalProfits = memo(() => {
     return (

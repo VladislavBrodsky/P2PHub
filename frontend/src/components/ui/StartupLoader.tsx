@@ -66,9 +66,15 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                         <div className="absolute inset-4 rounded-full bg-blue-500/30 blur-[20px]" />
 
                         <img
-                            src={LOGO_DATA}
+                            src={LOGO_DATA.startsWith('http') ? LOGO_DATA : `${(window as any).VITE_API_URL || 'https://p2phub-production.up.railway.app'}${LOGO_DATA}`}
                             alt="P2P Hub"
-                            className="relative w-16 h-16 object-contain z-10 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
+                            className="relative w-16 h-16 object-contain z-10 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)] brightness-0 invert"
+                            onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                if (!target.src.includes('raw.githubusercontent.com')) {
+                                    target.src = 'https://raw.githubusercontent.com/VladislavBrodsky/P2PHub/main/frontend/public/logo.svg';
+                                }
+                            }}
                         />
 
                     </motion.div>

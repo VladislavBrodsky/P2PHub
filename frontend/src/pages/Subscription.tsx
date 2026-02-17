@@ -192,7 +192,7 @@ export default function SubscriptionPage() {
                 <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-2 tracking-tighter">
                     $39 <span className="text-lg opacity-40 font-bold uppercase tracking-widest">{t('subscription.upgrade.one_time')}</span>
                 </h1>
-                <p className="text-slate-500 dark:text-slate-400 text-xs font-medium opacity-80">
+                <p className="text-slate-600 dark:text-slate-400 text-xs font-medium">
                     {t('subscription.upgrade.desc')}
                 </p>
             </motion.div>
@@ -214,16 +214,16 @@ export default function SubscriptionPage() {
                     <Zap size={14} className="text-amber-500" />
                 </div>
                 {(t('subscription.arsenal.items', { returnObjects: true }) as any[]).map((item) => (
-                    <div key={item.id} className="bg-slate-900/50 border border-white/5 rounded-2xl overflow-hidden transition-all">
+                    <div key={item.id} className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-white/5 rounded-2xl overflow-hidden transition-all shadow-xs">
                         <button
                             onClick={() => { selection(); setExpandedItem(expandedItem === item.id ? null : item.id); }}
-                            className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
+                            className="w-full p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
                         >
                             <div className="flex items-center gap-3">
                                 {item.id === 'studio' ? <Rocket size={18} className="text-pink-500" /> : <Bot size={18} className="text-emerald-500" />}
-                                <span className="text-[11px] font-black uppercase tracking-tight text-white">{item.title}</span>
+                                <span className="text-[11px] font-black uppercase tracking-tight text-slate-900 dark:text-white">{item.title}</span>
                             </div>
-                            <ChevronDown size={14} className={`text-slate-500 transition-transform ${expandedItem === item.id ? 'rotate-180' : ''}`} />
+                            <ChevronDown size={14} className={`text-slate-400 dark:text-slate-500 transition-transform ${expandedItem === item.id ? 'rotate-180' : ''}`} />
                         </button>
                         <AnimatePresence>
                             {expandedItem === item.id && (
@@ -233,14 +233,14 @@ export default function SubscriptionPage() {
                                     exit={{ height: 0, opacity: 0 }}
                                     className="px-4 pb-4"
                                 >
-                                    <p className="text-[10px] text-slate-400 mb-4 leading-relaxed">{item.desc}</p>
+                                    <p className="text-[10px] text-slate-600 dark:text-slate-400 mb-4 leading-relaxed font-medium">{item.desc}</p>
                                     <div className="space-y-2 mb-4">
                                         {item.stats.map((stat: string, si: number) => (
-                                            <div key={si} className="flex items-center gap-2 text-[10px] font-medium text-slate-300">
+                                            <div key={si} className="flex items-center gap-2 text-[10px] font-bold text-slate-700 dark:text-slate-300">
                                                 <div className={`w-1 h-1 rounded-full ${item.id === 'studio' ? 'bg-pink-500' : 'bg-emerald-500'}`} />
                                                 <span>
                                                     {stat.split('**').map((part, i) =>
-                                                        i % 2 === 1 ? <span key={i} className="text-white font-black">{part}</span> : part
+                                                        i % 2 === 1 ? <span key={i} className="text-slate-900 dark:text-white font-black">{part}</span> : part
                                                     )}
                                                 </span>
                                             </div>
@@ -248,13 +248,13 @@ export default function SubscriptionPage() {
                                     </div>
 
                                     {item.terminal && (
-                                        <div className={`mt-4 rounded-xl border border-white/5 overflow-hidden bg-[#0A0A0A] relative`}>
-                                            <div className={`absolute inset-0 bg-linear-to-br ${item.id === 'studio' ? 'from-pink-500/10 via-purple-500/5' : 'from-emerald-500/10 via-green-500/5'} to-transparent opacity-50`} />
+                                        <div className={`mt-4 rounded-xl border border-black/5 dark:border-white/5 overflow-hidden bg-slate-950 relative`}>
+                                            <div className="absolute inset-0 bg-linear-to-br from-white/3 to-transparent pointer-events-none" />
                                             <div className="relative p-3 space-y-1 font-mono text-[9px] leading-tight">
                                                 {item.terminal.map((line: string, ti: number) => (
-                                                    <div key={ti} className="flex items-start gap-2 opacity-90">
+                                                    <div key={ti} className="flex items-start gap-2">
                                                         <span className={`font-bold ${item.id === 'studio' ? 'text-pink-500' : 'text-emerald-500'}`}>&gt;</span>
-                                                        <span className={ti === 0 ? 'text-white' : (item.id === 'studio' ? 'text-pink-200' : 'text-emerald-200') + ' opacity-80'}>
+                                                        <span className={ti === 0 ? 'text-white' : (item.id === 'studio' ? 'text-pink-400' : 'text-emerald-400')}>
                                                             {line}
                                                         </span>
                                                     </div>
@@ -385,7 +385,7 @@ export default function SubscriptionPage() {
                     ].map((faq, i) => (
                         <div key={i} className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl p-4">
                             <h4 className="text-[11px] font-black text-slate-900 dark:text-white mb-2 uppercase tracking-tight">{faq.q}</h4>
-                            <p className="text-[10px] text-slate-600 dark:text-slate-400 font-medium leading-relaxed">{faq.a}</p>
+                            <p className="text-[10px] text-slate-700 dark:text-slate-400 font-medium leading-relaxed">{faq.a}</p>
                         </div>
                     ))}
                 </div>
