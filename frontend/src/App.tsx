@@ -33,6 +33,7 @@ import { useConfig } from './context/ConfigContext';
 import { FeatureErrorBoundary } from './components/FeatureErrorBoundary';
 import { StartupLoader } from './components/ui/StartupLoader';
 import { useStartupProgress } from './context/StartupProgressContext';
+import { LOGO_DATA } from './data/avatars';
 
 import { RevealSkeleton } from './components/Skeletons/RevealSkeleton';
 import { UIProvider } from './context/UIContext';
@@ -327,7 +328,11 @@ function App() {
         if (!showOnboarding) {
             const prefetchCoreRoutes = async () => {
                 try {
-                    // Start prefetching immediately
+                    // Start prefetching logo immediately
+                    const img = new Image();
+                    img.src = LOGO_DATA;
+
+                    // Start prefetching routes
                     prefetchPages.home();
 
                     // Delay heavy route prefetching slightly to prioritize TTI

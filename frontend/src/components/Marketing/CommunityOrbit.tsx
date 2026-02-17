@@ -156,7 +156,7 @@ export const CommunityOrbit = memo(() => {
 });
 
 const CentralLogo = memo(() => {
-    const logoSrc = LOGO_DATA.startsWith('http') ? LOGO_DATA : `${getApiUrl().replace(/\/$/, '')}${LOGO_DATA}`;
+    const logoSrc = LOGO_DATA;
 
     return (
         <motion.div

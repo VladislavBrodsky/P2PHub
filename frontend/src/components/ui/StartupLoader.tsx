@@ -10,8 +10,9 @@ interface StartupLoaderProps {
 
 export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusText = 'Initializing P2P Hub' }) => {
     const [isImageLoaded, setIsImageLoaded] = useState(false);
+    // Use the relative path directly to ensure it loads from the same origin (fastest)
+    const logoSrc = LOGO_DATA;
     const [displayProgress, setDisplayProgress] = useState(0);
-    const logoSrc = LOGO_DATA.startsWith('http') ? LOGO_DATA : `${(window as any).VITE_API_URL || 'https://p2phub-production.up.railway.app'}${LOGO_DATA}`;
 
     // #comment: Accelerated progress interpolation. 
     // Increased step size and frequency to ensure the loader feels snappy 
@@ -84,10 +85,10 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                             alt="Pintopay"
                             loading="eager"
                             onLoad={() => setIsImageLoaded(true)}
-                            initial={{ opacity: 0, scale: 0.8 }}
+                            initial={{ opacity: 0, scale: 0.9 }}
                             animate={{
-                                scale: isImageLoaded ? [1, 1.15, 1] : 0.8,
-                                opacity: isImageLoaded ? [0.9, 1, 0.9] : 0,
+                                scale: [1, 1.15, 1],
+                                opacity: 1, // Show immediately, don't wait for state
                             }}
                             transition={{
                                 duration: 2,
@@ -95,12 +96,6 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                                 ease: "easeInOut"
                             }}
                             className="relative w-12 h-12 object-contain z-10 drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)]"
-                            onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                if (!target.src.includes('raw.githubusercontent.com')) {
-                                    target.src = 'https://raw.githubusercontent.com/VladislavBrodsky/P2PHub/main/frontend/public/logo.svg';
-                                }
-                            }}
                         />
                     </motion.div>
                 </div>
