@@ -229,13 +229,13 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                 }
                             }}
                             className={`w-full flex items-center justify-between p-3 transition-colors relative z-10 ${isProItem
-                                ? 'bg-transparent text-white active:bg-white/10'
+                                ? 'bg-transparent text-black dark:text-white active:bg-white/10'
                                 : 'bg-transparent active:bg-(--color-brand-blue)/5'
                                 }`}
                         >
                             <div className="flex items-center gap-3">
                                 <div className={`p-2 rounded-xl transition-all duration-300 ${isProItem
-                                    ? 'bg-white/30 border border-white/40 text-white group-hover:scale-110 group-hover:rotate-12 shadow-lg shadow-white/10'
+                                    ? 'bg-black/10 dark:bg-white/30 border border-black/10 dark:border-white/40 text-black dark:text-white group-hover:scale-110 group-hover:rotate-12 shadow-lg shadow-white/10'
                                     : 'bg-(--card-bg) border border-(--card-border) text-(--color-text-secondary) group-hover:text-(--color-text-primary)'
                                     }`}>
                                     {React.cloneElement(item.icon as React.ReactElement, {
@@ -243,12 +243,12 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                     })}
                                 </div>
                                 <div className="flex flex-col items-start">
-                                    <span className={`text-sm font-bold group-hover:translate-x-0.5 transition-transform ${isProItem ? 'text-white' : 'text-(--color-text-primary)'
+                                    <span className={`text-sm font-bold group-hover:translate-x-0.5 transition-transform ${isProItem ? 'text-black dark:text-white' : 'text-(--color-text-primary)'
                                         }`}>
                                         {item.label}
                                     </span>
                                     {isProItem && (
-                                        <span className="text-[9px] font-black uppercase tracking-widest text-amber-100/90 -mt-0.5">
+                                        <span className="text-[9px] font-black uppercase tracking-widest text-black/60 dark:text-amber-100/90 -mt-0.5">
                                             {t('common.pro_active')}
                                         </span>
                                     )}
@@ -258,7 +258,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                 animate={{ rotate: expandedItem === item.id ? 90 : 0 }}
                                 transition={{ duration: 0.2 }}
                             >
-                                <ChevronRight className={`h-4 w-4 ${isProItem ? 'text-white/70' : 'text-(--color-text-secondary)'}`} />
+                                <ChevronRight className={`h-4 w-4 ${isProItem ? 'text-black/70 dark:text-white/70' : 'text-(--color-text-secondary)'}`} />
                             </motion.div>
                         </button>
 
