@@ -25,6 +25,10 @@ interface ProModalsProps {
     showSetup: boolean;
     setShowSetup: (show: boolean) => void;
     status: any;
+    showHeadlineModal?: boolean;
+    setShowHeadlineModal?: (show: boolean) => void;
+    handleFixHeadline?: (headline: string) => Promise<string | undefined>;
+    isFixingHeadline?: boolean;
 }
 
 export const ProDashboardModals = ({
@@ -41,7 +45,11 @@ export const ProDashboardModals = ({
     isAuditing,
     showSetup,
     setShowSetup,
-    status
+    status,
+    showHeadlineModal,
+    setShowHeadlineModal,
+    handleFixHeadline,
+    isFixingHeadline
 }: ProModalsProps) => {
     const { t } = useTranslation();
     const { showNotification } = useNotificationStore();
@@ -49,6 +57,10 @@ export const ProDashboardModals = ({
     // Setup Local State
     const [setupTab, setSetupTab] = useState<'x' | 'tg'>('x');
     const [isSaving, setIsSaving] = useState(false);
+
+    // Headline Local State
+    const [headlineInput, setHeadlineInput] = useState('');
+    const [headlineResult, setHeadlineResult] = useState('');
 
     // Form Fields
     const [xApiKey, setXApiKey] = useState('');
@@ -94,6 +106,16 @@ export const ProDashboardModals = ({
             });
         } finally {
             setIsSaving(false);
+        }
+    };
+
+    const onFixHeadline = async () => {
+        if (!handleFixHeadline || !headlineInput) return;
+        try {
+            const result = await handleFixHeadline(headlineInput);
+            if (result) setHeadlineResult(result);
+        } catch (e) {
+            // Error handled in parent
         }
     };
 
@@ -622,6 +644,112 @@ export const ProDashboardModals = ({
                                 >
                                     {t('pro_dashboard.academy.understand_btn') || 'I Understand the Protocol'}
                                     <ArrowRight size={16} />
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* HEADLINE FIXER MODAL */}
+            <AnimatePresence>
+                {showHeadlineModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-200 flex items-center justify-center p-4 bg-slate-950/40 dark:bg-slate-950/90 backdrop-blur-md"
+                        onClick={() => setShowHeadlineModal?.(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0, y: 30 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-full max-w-lg rounded-[2.5rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[85vh] relative"
+                        >
+                            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-50" />
+
+                            <div className="p-6 sm:p-8 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-indigo-500/5 to-transparent">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                                        <Zap size={24} className="text-white" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">{t('pro_dashboard.tools.headline.title')}</h3>
+                                        <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-70">
+                                            Curiosity Loop Engineering
+                                        </p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setShowHeadlineModal?.(false)}
+                                    className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
+                                >
+                                    <X size={20} className="text-slate-900 dark:text-white/60" />
+                                </button>
+                            </div>
+
+                            <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-6">
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.tools.headline.placeholder')}</label>
+                                    <textarea
+                                        value={headlineInput}
+                                        onChange={(e) => setHeadlineInput(e.target.value)}
+                                        className="w-full h-24 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-xs font-medium focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400 resize-none"
+                                        placeholder={t('pro_dashboard.tools.headline.placeholder')}
+                                    />
+                                </div>
+
+                                {headlineResult && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="p-5 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-2xl border border-emerald-500/20 space-y-3 relative overflow-hidden group"
+                                    >
+                                        <div className="absolute top-0 right-0 p-3">
+                                            <CheckCircle2 size={16} className="text-emerald-500" />
+                                        </div>
+                                        <h4 className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Synthesized Headline</h4>
+                                        <p className="text-[14px] font-bold text-slate-900 dark:text-white leading-tight">
+                                            {headlineResult}
+                                        </p>
+                                        <button
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(headlineResult);
+                                                showNotification({ title: 'Copied', message: 'Headline copied to clipboard.', type: 'success' });
+                                            }}
+                                            className="text-[10px] font-black text-indigo-500 uppercase tracking-widest hover:text-indigo-600 transition-colors"
+                                        >
+                                            Copy to Clipboard
+                                        </button>
+                                    </motion.div>
+                                )}
+
+                                <div className="p-4 bg-indigo-50 dark:bg-indigo-500/5 rounded-2xl border border-indigo-100 dark:border-indigo-500/10 flex items-start gap-3">
+                                    <Sparkles className="w-5 h-5 text-indigo-500 mt-0.5" />
+                                    <p className="text-[10px] text-indigo-700 dark:text-indigo-400 leading-relaxed italic">
+                                        {t('pro_dashboard.tools.headline.neural_desc')}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="p-6 sm:p-8 bg-slate-50 dark:bg-black/40 border-t border-slate-100 dark:border-white/5">
+                                <button
+                                    onClick={onFixHeadline}
+                                    disabled={isFixingHeadline || !headlineInput}
+                                    className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale"
+                                >
+                                    {isFixingHeadline ? (
+                                        <>
+                                            <Loader2 className="animate-spin" size={18} />
+                                            Synthesizing...
+                                        </>
+                                    ) : (
+                                        <>
+                                            REWRITE HEADLINE <Sparkles size={18} />
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         </motion.div>

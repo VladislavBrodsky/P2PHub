@@ -48,6 +48,8 @@ export const ProDashboard = () => {
     const [isCompletingStage, setIsCompletingStage] = useState<string | null>(null);
     const [selectedArticle, setSelectedArticle] = useState<any>(null);
     const [selectedAsset, setSelectedAsset] = useState<any>(null);
+    const [showHeadlineModal, setShowHeadlineModal] = useState(false);
+    const [isFixingHeadline, setIsFixingHeadline] = useState(false);
 
     // Studio Sub-step (needed for MainButton orchestration)
     const [studioStep, setStudioStep] = useState(1);
@@ -183,6 +185,31 @@ export const ProDashboard = () => {
             setIsFetchingTrends(false);
         }
     };
+    const handleFixHeadline = async (headline: string) => {
+        if (!headline || isFixingHeadline) return;
+        setIsFixingHeadline(true);
+        impact('medium');
+        try {
+            const data = await proService.fixHeadline(headline);
+            if (data.tokens_remaining !== undefined && status) {
+                setStatus({ ...status, pro_tokens: data.tokens_remaining });
+            }
+            hapticNotification('success');
+            return data.result;
+        } catch (error: any) {
+            console.error('Failed to fix headline', error);
+            const msg = error.response?.data?.detail || error.response?.data?.message || 'Failed to synthesize headline.';
+            showNotification({
+                title: 'Sync Error',
+                message: msg,
+                type: 'warning'
+            });
+            hapticNotification('error');
+            throw error;
+        } finally {
+            setIsFixingHeadline(false);
+        }
+    };
 
 
 
@@ -203,6 +230,7 @@ export const ProDashboard = () => {
                     setSelectedArticle(null);
                     setSelectedAsset(null);
                     setShowAuditModal(false);
+                    setShowHeadlineModal(false);
                 };
                 if (backButton && backButton.onClick) {
                     const cleanup = backButton.onClick(hideAllModals);
@@ -250,7 +278,7 @@ export const ProDashboard = () => {
         if (!isTMA() || !mainButton) return;
 
         try {
-            const isModalOpen = !!(showSetup || showManual || selectedArticle || selectedAsset || showAuditModal);
+            const isModalOpen = !!(showSetup || showManual || selectedArticle || selectedAsset || showAuditModal || showHeadlineModal);
 
             if (isModalOpen) {
                 mainButton.setParams({ isVisible: false });
@@ -521,7 +549,9 @@ export const ProDashboard = () => {
                                         isFetchingTrends={isFetchingTrends}
                                         handleRunMarketingAudit={handleRunMarketingAudit}
                                         handleFetchTrends={handleFetchTrends}
-                                        setShowHeadlineModal={setShowAuditModal}
+                                        setShowHeadlineModal={setShowHeadlineModal}
+                                        setShowAuditModal={setShowAuditModal}
+                                        marketAudit={marketAudit}
                                         selection={selection}
                                     />
                                 )}
@@ -562,6 +592,10 @@ export const ProDashboard = () => {
                 showSetup={showSetup}
                 setShowSetup={setShowSetup}
                 status={status}
+                showHeadlineModal={showHeadlineModal}
+                setShowHeadlineModal={setShowHeadlineModal}
+                handleFixHeadline={handleFixHeadline}
+                isFixingHeadline={isFixingHeadline}
             />
         </div>
     );

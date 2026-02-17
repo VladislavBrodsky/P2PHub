@@ -4,6 +4,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { renderMarkdown } from '../utils/renderMarkdown';
+import { useNotificationStore } from '../../../store/useNotificationStore';
 
 interface ToolsTabProps {
     trends: any[];
@@ -12,6 +13,8 @@ interface ToolsTabProps {
     handleRunMarketingAudit: () => Promise<void>;
     handleFetchTrends: () => Promise<void>;
     setShowHeadlineModal: (show: boolean) => void;
+    setShowAuditModal: (show: boolean) => void;
+    marketAudit: any;
     selection: () => void;
 }
 
@@ -22,6 +25,8 @@ export const ToolsTab = ({
     handleRunMarketingAudit,
     handleFetchTrends,
     setShowHeadlineModal,
+    setShowAuditModal,
+    marketAudit,
     selection
 }: ToolsTabProps) => {
     const { t } = useTranslation();
@@ -49,11 +54,18 @@ export const ToolsTab = ({
                                 <Zap size={18} />
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="group/info relative">
+                                <div
+                                    className="group/info relative"
+                                    onClick={() => useNotificationStore.getState().showNotification({
+                                        title: t('pro_dashboard.tools.headline.title'),
+                                        message: t('pro_dashboard.tools.headline.info'),
+                                        type: 'info'
+                                    })}
+                                >
                                     <Info size={14} className="text-slate-400 hover:text-indigo-500 transition-colors cursor-help" />
-                                    <div className="absolute right-0 bottom-full mb-2 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 whitespace-nowrap pointer-events-none shadow-xl z-50">
+                                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-50">
                                         {t('pro_dashboard.tools.headline.info')}
-                                        <div className="absolute right-2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
+                                        <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                     </div>
                                 </div>
                                 <div className="px-2.5 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20 shrink-0">
@@ -86,11 +98,18 @@ export const ToolsTab = ({
                             <Flame size={18} />
                         </div>
                         <div className="flex items-center gap-2">
-                            <div className="group/info relative">
+                            <div
+                                className="group/info relative"
+                                onClick={() => useNotificationStore.getState().showNotification({
+                                    title: t('pro_dashboard.tools.trends.title'),
+                                    message: t('pro_dashboard.tools.trends.info'),
+                                    type: 'info'
+                                })}
+                            >
                                 <Info size={14} className="text-slate-400 hover:text-orange-500 transition-colors cursor-help" />
-                                <div className="absolute right-0 bottom-full mb-2 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 whitespace-nowrap pointer-events-none shadow-xl z-50">
+                                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-50">
                                     {t('pro_dashboard.tools.trends.info')}
-                                    <div className="absolute right-2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
+                                    <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                 </div>
                             </div>
                             <div className="flex flex-col items-end shrink-0">
@@ -132,7 +151,13 @@ export const ToolsTab = ({
                 {/* Global Marketing Audit - Compact & Attractive */}
                 <motion.div
                     whileHover={{ y: -2 }}
-                    className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-6 border border-slate-200 dark:border-indigo-500/20 group relative flex flex-col shadow-xl col-span-1 sm:col-span-2"
+                    onClick={() => {
+                        if (marketAudit && !isAuditing) {
+                            selection();
+                            setShowAuditModal(true);
+                        }
+                    }}
+                    className={`pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-6 border border-slate-200 dark:border-indigo-500/20 group relative flex flex-col shadow-xl col-span-1 sm:col-span-2 ${marketAudit ? 'cursor-pointer' : ''}`}
                 >
                     <div className="absolute right-0 top-0 w-48 h-48 bg-indigo-500/5 blur-[80px] rounded-full pointer-events-none" />
 
@@ -147,11 +172,18 @@ export const ToolsTab = ({
                                     <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">
                                         {t('pro_dashboard.tools.audit.title')}
                                     </h3>
-                                    <div className="group/info relative">
+                                    <div
+                                        className="group/info relative"
+                                        onClick={() => useNotificationStore.getState().showNotification({
+                                            title: t('pro_dashboard.tools.audit.title'),
+                                            message: t('pro_dashboard.tools.audit.info'),
+                                            type: 'info'
+                                        })}
+                                    >
                                         <Info size={14} className="text-slate-400 hover:text-indigo-500 transition-colors cursor-help" />
-                                        <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 whitespace-nowrap pointer-events-none shadow-xl z-50">
+                                        <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-50">
                                             {t('pro_dashboard.tools.audit.info')}
-                                            <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
+                                            <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                         </div>
                                     </div>
                                 </div>
@@ -164,7 +196,10 @@ export const ToolsTab = ({
                             </div>
                         </div>
                         <button
-                            onClick={handleRunMarketingAudit}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleRunMarketingAudit();
+                            }}
                             disabled={isAuditing}
                             className="w-full sm:w-auto px-5 h-11 vibing-blue-animated rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 text-white shrink-0 disabled:grayscale"
                         >
