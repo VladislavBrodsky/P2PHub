@@ -18,12 +18,13 @@ router = APIRouter()
 
 @router.get("/stats", response_model=dict[str, Any])
 async def get_admin_stats(
+    force_refresh: bool = False,
     admin: dict = Depends(get_current_admin)
 ):
     """
     Returns high-level KPIs and financial data for the admin dashboard.
     """
-    return await admin_service.get_dashboard_stats()
+    return await admin_service.get_dashboard_stats(force_refresh=force_refresh)
 
 @router.get("/pending-payments", response_model=list[PartnerTransaction])
 async def list_pending_payments(

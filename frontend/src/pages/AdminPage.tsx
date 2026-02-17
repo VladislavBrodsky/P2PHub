@@ -92,12 +92,13 @@ export const AdminPage = () => {
     const [searchResults, setSearchResults] = useState<any[]>([]);
     const [isSearching, setIsSearching] = useState(false);
 
-    const fetchData = async (silent = false) => {
+    const fetchData = async (silent = false, forceRefresh = false) => {
         if (!silent) setIsLoading(true);
         setError(null);
         try {
+            const statsUrl = forceRefresh ? '/api/admin/stats?force_refresh=true' : '/api/admin/stats';
             const [statsRes, pendingRes, healthRes] = await Promise.all([
-                apiClient.get('/api/admin/stats'),
+                apiClient.get(statsUrl),
                 apiClient.get('/api/admin/pending-payments'),
                 apiClient.get('/api/admin/health')
             ]);
@@ -119,7 +120,7 @@ export const AdminPage = () => {
         try {
             await apiClient.post('/api/admin/recalculate-stats');
             alert('Recalculation complete!');
-            await fetchData(true);
+            await fetchData(true, true); // Force refresh dashboard after structural recalculation
         } catch (err: any) {
             alert('Failed: ' + (err.response?.data?.detail || 'Unknown error'));
         } finally {
@@ -206,7 +207,7 @@ export const AdminPage = () => {
                     </div>
                 </div>
                 <button
-                    onClick={() => { setIsRefreshing(true); fetchData(true); }}
+                    onClick={() => { setIsRefreshing(true); fetchData(true, true); }}
                     className={`p-2 rounded-xl bg-slate-100 dark:bg-white/5 transition-all ${isRefreshing ? 'animate-spin' : ''}`}
                 >
                     <RefreshCw size={20} className="text-slate-600 dark:text-slate-400" />
