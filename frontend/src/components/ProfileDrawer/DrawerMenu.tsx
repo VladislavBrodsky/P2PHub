@@ -229,7 +229,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                 }
                             }}
                             className={`w-full flex items-center justify-between p-3 transition-colors relative z-10 ${isProItem
-                                ? 'bg-transparent text-black dark:text-white active:bg-white/10'
+                                ? 'bg-transparent text-black dark:text-black active:bg-white/10'
                                 : 'bg-transparent active:bg-(--color-brand-blue)/5'
                                 }`}
                         >
@@ -243,12 +243,12 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                     })}
                                 </div>
                                 <div className="flex flex-col items-start">
-                                    <span className={`text-sm font-bold group-hover:translate-x-0.5 transition-transform ${isProItem ? 'text-black dark:text-white' : 'text-(--color-text-primary)'
+                                    <span className={`text-sm font-bold group-hover:translate-x-0.5 transition-transform ${isProItem ? 'text-black dark:text-black' : 'text-(--color-text-primary)'
                                         }`}>
                                         {item.label}
                                     </span>
                                     {isProItem && (
-                                        <span className="text-[9px] font-black uppercase tracking-widest text-black/60 dark:text-amber-100/90 -mt-0.5">
+                                        <span className="text-[9px] font-black uppercase tracking-widest text-black/60 dark:text-black/60 -mt-0.5">
                                             {t('common.pro_active')}
                                         </span>
                                     )}
@@ -258,7 +258,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                 animate={{ rotate: expandedItem === item.id ? 90 : 0 }}
                                 transition={{ duration: 0.2 }}
                             >
-                                <ChevronRight className={`h-4 w-4 ${isProItem ? 'text-black/70 dark:text-white/70' : 'text-(--color-text-secondary)'}`} />
+                                <ChevronRight className={`h-4 w-4 ${isProItem ? 'text-black/70 dark:text-black/70' : 'text-(--color-text-secondary)'}`} />
                             </motion.div>
                         </button>
 
