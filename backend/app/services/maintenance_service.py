@@ -1,6 +1,6 @@
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from typing import Any
 
 from sqlalchemy.orm import sessionmaker
@@ -84,7 +84,7 @@ async def reconcile_network_stats(session_override: AsyncSession = None) -> dict
 
 async def _do_reconcile(session: AsyncSession) -> dict[str, Any]:
     logger.info("🔧 Starting High-Performance Network Reconciliation...")
-    start_time = datetime.utcnow()
+    start_time = datetime.now(UTC).replace(tzinfo=None)
     
     # 1. Fetch minimum required data for all partners
     result = await session.exec(select(Partner.id, Partner.referrer_id, Partner.path, Partner.depth, Partner.referral_count))
@@ -103,7 +103,7 @@ async def _do_reconcile(session: AsyncSession) -> dict[str, Any]:
     if diff_counts:
         await _commit_count_fixes(session, diff_counts)
 
-    duration = (datetime.utcnow() - start_time).total_seconds()
+    duration = (datetime.now(UTC).replace(tzinfo=None) - start_time).total_seconds()
     result_data = {
         "status": "success",
         "duration_sec": round(duration, 2),
@@ -185,7 +185,7 @@ async def cleanup_stale_transactions():
     logger.info("🧹 Starting stale transactions cleanup...")
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
-    cutoff = datetime.utcnow() - timedelta(hours=48)
+    cutoff = datetime.now(UTC).replace(tzinfo=None) - timedelta(hours=48)
     
     async with async_session() as session:
         from app.models.transaction import PartnerTransaction
@@ -209,9 +209,9 @@ async def check_database_health() -> dict:
     """Rapid health check for database performance."""
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
-        start = datetime.utcnow()
+        start = datetime.now(UTC).replace(tzinfo=None)
         await session.execute(text("SELECT 1"))
-        latency_ms = (datetime.utcnow() - start).total_seconds() * 1000
+        latency_ms = (datetime.now(UTC).replace(tzinfo=None) - start).total_seconds() * 1000
         
         res_orphaned = await session.execute(text("SELECT count(*) FROM partner WHERE referrer_id IS NOT NULL AND path IS NULL"))
         orphaned_count = res_orphaned.scalar() or 0
@@ -220,7 +220,7 @@ async def check_database_health() -> dict:
             "status": "healthy" if orphaned_count == 0 else "degraded",
             "latency_ms": round(latency_ms, 2),
             "orphaned_count": orphaned_count,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(UTC).replace(tzinfo=None).isoformat()
         }
 
 async def check_tree_integrity(session: AsyncSession) -> dict[str, Any]:
@@ -263,7 +263,7 @@ async def cleanup_old_audit_logs():
     logger.info("🧹 Starting audit log cleanup...")
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
-    cutoff = datetime.utcnow() - timedelta(days=90)
+    cutoff = datetime.now(UTC).replace(tzinfo=None) - timedelta(days=90)
     
     async with async_session() as session:
         from app.models.audit_log import AuditLog

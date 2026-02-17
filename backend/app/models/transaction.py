@@ -1,13 +1,17 @@
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import TYPE_CHECKING
 
+from sqlalchemy import Index
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
     from app.models.partner import Partner
 
 class PartnerTransaction(SQLModel, table=True):
-    __table_args__ = {"extend_existing": True}
+    __table_args__ = (
+        Index("idx_tx_partner_status_created", "partner_id", "status", "created_at"),
+        {"extend_existing": True}
+    )
     id: int | None = Field(default=None, primary_key=True)
     partner_id: int = Field(foreign_key="partner.id", index=True)
     amount: float
@@ -16,8 +20,8 @@ class PartnerTransaction(SQLModel, table=True):
     network: str # TON, TRC20, ERC20, etc.
     tx_hash: str | None = Field(default=None, index=True)
     status: str = Field(default="pending", index=True) # pending, completed, failed, manual_review
-    created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
-    updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow})
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC), index=True)
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC), sa_column_kwargs={"onupdate": lambda: datetime.now(UTC)})
 
     # Optional relationship back to Partner
     partner: "Partner" = Relationship(

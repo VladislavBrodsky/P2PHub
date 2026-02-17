@@ -2,7 +2,7 @@ import asyncio
 import io
 import logging
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 
 import httpx
 from PIL import Image
@@ -182,6 +182,12 @@ async def _resolve_referrer(session: AsyncSession, code: str | None, current_id:
     try:
         referrer = await get_partner_by_referral_code(session, code)
         if referrer and referrer.id != current_id:
+            # #comment: Fraud Check - Prevent 'XP Farming' via abnormal referral velocity.
+            # If a referrer hits the limit, we still allow the new user to join,
+            # but they won't be credited to the suspicious referrer.
+            from app.services.fraud_service import fraud_service
+            if not await fraud_service.is_referral_velocity_ok(referrer.id):
+                 return None
             return referrer
     except Exception as e:
         logger.error(f"Error resolving referring partner {code}: {e}")
@@ -234,7 +240,7 @@ async def sync_profile_photos(bot, session: AsyncSession):
     Fixed: Separates Telegram API I/O (parallel) from DB session updates (sequential).
     """
     logger.info("📅 Starting Profile Photo Sync (Selective)...")
-    seven_days_ago = datetime.utcnow() - timedelta(days=7)
+    seven_days_ago = datetime.now(UTC).replace(tzinfo=None) - timedelta(days=7)
     
     # Query only active users to save API calls and DB load
     stmt = select(Partner).where(Partner.updated_at >= seven_days_ago)

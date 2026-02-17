@@ -186,9 +186,28 @@
   --animate-premium-pulse: premium-pulse 3s infinite ease-in-out;
   --animate-scan: scan 2s linear infinite;
 
-  /* Z-Index Scale */
-  --z-index-9999: 9999;
-  --z-index-200: 200;
+  @keyframes pro-liquid-glow {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  --animate-pro-glow: pro-liquid-glow 15s ease infinite;
+}
+
+@utility bg-glow-pro-animated {
+  background: linear-gradient(-45deg, #020617, #030712, #052e16, #030712);
+  background-size: 400% 400%;
+  animation: pro-liquid-glow 15s ease infinite;
+  position: relative;
 }
 
 @utility mesh-gradient-dark {

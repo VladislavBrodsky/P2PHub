@@ -40,7 +40,7 @@ import { UIProvider } from './context/UIContext';
 // #comment: Removed hard import of SupportChat to enable the Lazy load strategy defined above.
 import { useUI } from './context/UIContext';
 
-// #comment: Strategic Lazy Loading for non-critical features.
+const DashboardSkeleton = lazy(() => import('./components/Skeletons/DashboardSkeleton').then(m => ({ default: m.DashboardSkeleton })));
 
 function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnboarding: boolean }) {
     const { t } = useTranslation();
@@ -224,7 +224,9 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                     <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
                         {visitedTabs.has('home') && (
                             <FeatureErrorBoundary featureName="Dashboard">
-                                <Dashboard setActiveTab={navigateTo} />
+                                <Suspense fallback={<DashboardSkeleton />}>
+                                    <Dashboard setActiveTab={navigateTo} />
+                                </Suspense>
                             </FeatureErrorBoundary>
                         )}
                     </div>

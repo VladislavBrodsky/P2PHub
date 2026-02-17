@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 
 from sqlmodel import text
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -102,7 +102,7 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
     partner = await session.get(Partner, partner_id)
     if not partner: return {"growth_pct": 0, "previous_count": 0, "current_count": 0}
 
-    now = datetime.utcnow()
+    now = datetime.now(UTC).replace(tzinfo=None)
     if timeframe == '24H': delta = timedelta(hours=24)
     elif timeframe == '7D': delta = timedelta(days=7)
     elif timeframe == '1M': delta = timedelta(days=30)
@@ -159,8 +159,8 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
     partner = await session.get(Partner, partner_id)
     if not partner: return []
 
-    now = datetime.utcnow()
-    now = datetime.utcnow()
+    now = datetime.now(UTC).replace(tzinfo=None)
+
     tf_config = {
         '24H': ('hour', now - timedelta(hours=24), 24),
         '7D':  ('day',  now - timedelta(days=7),   7),

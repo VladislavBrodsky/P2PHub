@@ -4,7 +4,7 @@ import logging
 import secrets
 
 # Added datetime for tracking task start times
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 
 import sentry_sdk
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
@@ -169,7 +169,7 @@ async def get_my_profile(
     else:
         # Update profile if changed (Throttled)
         # Update profile if changed (Throttled)
-        now = datetime.utcnow()
+        now = datetime.now(UTC).replace(tzinfo=None)
         if not partner.updated_at or partner.updated_at < (now - timedelta(hours=1)):
             has_changed = False
             for field in ["username", "first_name", "last_name", "language_code"]:
@@ -234,7 +234,7 @@ async def get_my_profile(
         await session.refresh(partner)
 
     # 4. Daily Check-in Logic
-    now_dt = datetime.utcnow()
+    now_dt = datetime.now(UTC).replace(tzinfo=None)
     today_date = now_dt.date()
     
     if partner.last_checkin_at:
@@ -528,7 +528,7 @@ async def get_recent_partners(
     snapshot_setting = await session.get(SystemSetting, db_settings_key)
     count_setting = await session.get(SystemSetting, count_settings_key)
 
-    now = datetime.utcnow()
+    now = datetime.now(UTC).replace(tzinfo=None)
     partners_list = []
     last_hour_count = 0
 
@@ -830,7 +830,7 @@ async def start_task(
             task_id=existing_task.task_id,
             status=existing_task.status,
             initial_metric_value=existing_task.initial_metric_value,
-            started_at=existing_task.started_at or datetime.utcnow()
+            started_at=existing_task.started_at or datetime.now(UTC).replace(tzinfo=None)
         )
 
     # Snapshot current metric
@@ -845,7 +845,7 @@ async def start_task(
         partner_id=partner.id,
         task_id=task_id,
         status="STARTED",
-        started_at=datetime.utcnow(),
+        started_at=datetime.now(UTC).replace(tzinfo=None),
         initial_metric_value=initial_metric,
         completed_at=None
     )
@@ -950,7 +950,7 @@ async def claim_task_reward(
             task_id=task_id,
             status="COMPLETED",
             reward_xp=xp_reward,
-            completed_at=datetime.utcnow()
+            completed_at=datetime.now(UTC).replace(tzinfo=None)
         )
         session.add(partner_task_record)
         # Ensure it's in the collection for response serialization
@@ -961,7 +961,7 @@ async def claim_task_reward(
         # Update existing STARTED record
         partner_task_record.status = "COMPLETED"
         partner_task_record.reward_xp = xp_reward
-        partner_task_record.completed_at = datetime.utcnow()
+        partner_task_record.completed_at = datetime.now(UTC).replace(tzinfo=None)
         session.add(partner_task_record)
 
     # 1.1 Calculate effective XP (PRO members get 5x XP bonus)

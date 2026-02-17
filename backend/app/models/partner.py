@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta, UTC
 from typing import Optional
 
-from sqlalchemy import UniqueConstraint
+from sqlalchemy import Index, UniqueConstraint
 from sqlmodel import Field, Relationship, SQLModel
 
 from app.core.config import settings
@@ -23,8 +23,8 @@ class Partner(SQLModel, table=True):
     referrer_id: int | None = Field(default=None, foreign_key="partner.id", index=True) # Optimized for joins
     path: str | None = Field(default=None, index=True) # Materialized path (e.g. "1.5.23")
     depth: int = Field(default=0, index=True) # Cached depth level for faster hierarchy queries
-    created_at: datetime = Field(default_factory=datetime.utcnow, index=True) # Optimized for sorting
-    updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}, index=True)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC), index=True) # Optimized for sorting
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC), sa_column_kwargs={"onupdate": lambda: datetime.now(UTC)}, index=True)
     completed_tasks: str = Field(default="[]") # Store task IDs as JSON string
     completed_stages: str = Field(default="[]") # Store Academy stage IDs as JSON string
     academy_score: float = Field(default=0.0) # Track Academy points
@@ -39,7 +39,7 @@ class Partner(SQLModel, table=True):
     
     # PRO Content Generation Tokens
     pro_tokens: int = Field(default=500)
-    pro_tokens_last_reset: datetime = Field(default_factory=datetime.utcnow)
+    pro_tokens_last_reset: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     # Viral Marketing API Setup
     x_api_key: str | None = Field(default=None)
@@ -94,7 +94,7 @@ class XPTransaction(SQLModel, table=True):
     type: str = Field(index=True) # TASK, REFERRAL_L1, REFERRAL_DEEP, LEVEL_UP, BONUS
     description: str | None = None
     reference_id: str | None = Field(default=None, index=True)
-    created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC), index=True)
 
     partner: Partner = Relationship(back_populates="xp_history")
 
@@ -108,14 +108,17 @@ class PartnerTask(SQLModel, table=True):
     task_id: str = Field(index=True)
     status: str = Field(default="COMPLETED") # STARTED, COMPLETED
     started_at: datetime | None = Field(default=None)
-    completed_at: datetime | None = Field(default_factory=datetime.utcnow, index=True)
+    completed_at: datetime | None = Field(default_factory=lambda: datetime.now(UTC), index=True)
     initial_metric_value: int = Field(default=0) # Snapshot of metric at start
     reward_xp: float = Field(default=0.0)
 
     partner: Partner = Relationship(back_populates="completed_task_records")
 
 class Earning(SQLModel, table=True):
-    __table_args__ = {"extend_existing": True}
+    __table_args__ = (
+        Index("idx_earning_partner_type_created", "partner_id", "type", "created_at"),
+        {"extend_existing": True}
+    )
     id: int | None = Field(default=None, primary_key=True)
     partner_id: int = Field(foreign_key="partner.id", index=True) # Optimized for user history
     amount: float
@@ -123,13 +126,13 @@ class Earning(SQLModel, table=True):
     type: str = Field(default="COMMISSION", index=True) # COMMISSION, TASK_XP, REFERRAL_XP
     level: int | None = Field(default=None, index=True) # 1-9
     currency: str = Field(default="USDT", index=True) # USDT, XP
-    created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC), index=True)
 
 class SystemSetting(SQLModel, table=True):
     __table_args__ = {"extend_existing": True}
     key: str = Field(primary_key=True)
     value: str # JSON encoded string
-    updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}, index=True)
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC), sa_column_kwargs={"onupdate": lambda: datetime.now(UTC)}, index=True)
 
 import sys
 
