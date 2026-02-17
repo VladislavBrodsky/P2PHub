@@ -172,8 +172,6 @@ const CentralLogo = memo(() => {
             <motion.img
                 animate={{
                     scale: [1, 1.08, 1],
-                    // #comment: Removed blur(0.5px) as it was causing the "white square" glitch in some browsers.
-                    filter: "brightness(0) invert(1)"
                 }}
                 transition={{
                     duration: 4,
