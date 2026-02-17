@@ -226,6 +226,15 @@ async def get_my_profile(
         partner.depth = len(partner.path.split('.'))
         migration_needed = True
 
+    # #comment: CRITICAL FIX for Task System Reliability
+    # Ensures referral_count is at least the number of direct referrals.
+    # referral_count is the O(1) field used for "Invite X friends" tasks.
+    actual_direct_count = len(partner.referrals or [])
+    if partner.referral_count < actual_direct_count:
+        logger.info(f"🔄 Self-healing stats for partner {partner.id}: referral_count {partner.referral_count} -> {actual_direct_count}")
+        partner.referral_count = actual_direct_count
+        migration_needed = True
+
     correct_level = get_level(partner.xp)
     if partner.level != correct_level:
         partner.level = correct_level
@@ -1108,11 +1117,11 @@ async def complete_academy_stage(
         effective_xp = xp_reward * 5 if partner.is_pro else xp_reward
         xp_before = partner.xp
         
-        # Atomic XP Increment
-        await session.execute(
-            text("UPDATE partner SET xp = xp + :inc WHERE id = :p_id"),
-            {"inc": effective_xp, "p_id": partner.id}
-        )
+        # #comment: Explicit Atomic XP Increment using SQLAlchemy update() 
+        # This is more robust than raw text SQL and handles table mapping automatically.
+        from sqlalchemy import update
+        stmt = update(Partner).where(Partner.id == partner.id).values(xp=Partner.xp + effective_xp)
+        await session.execute(stmt)
         await session.flush()
         await session.refresh(partner)
         

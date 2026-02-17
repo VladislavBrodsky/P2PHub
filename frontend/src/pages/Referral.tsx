@@ -206,6 +206,8 @@ export default function ReferralPage() {
                     if (!isActive && !completedTaskIds.includes(task.id)) {
                         handleTaskStart(task);
                     }
+                    // #comment: Direct sub-tab navigation
+                    window.dispatchEvent(new Event('nav-academy'));
                 }
                 window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'partner' }));
             } else {

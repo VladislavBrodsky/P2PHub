@@ -23,6 +23,13 @@ export default function CommunityPage() {
         if (main) main.scrollTop = 0;
     }, [activeTab]);
 
+    // Handle external navigation to Academy
+    useEffect(() => {
+        const handleNavAcademy = () => setActiveTab('academy');
+        window.addEventListener('nav-academy', handleNavAcademy);
+        return () => window.removeEventListener('nav-academy', handleNavAcademy);
+    }, []);
+
     return (
         <div className="flex flex-col min-h-screen px-4 pb-32 relative bg-slate-50 dark:bg-[#020617] transition-colors duration-300">
             {/* Mesh Background Overlay - Dark Mode Only */}

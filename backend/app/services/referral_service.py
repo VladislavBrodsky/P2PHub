@@ -161,6 +161,16 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
                 description=f"Referral XP Reward (L{level})", reference_id=str(partner.id)
             ))
 
+            # 1.3 Unified Transaction: Log Referral XP as an Earning
+            from app.models.partner import Earning
+            session.add(Earning(
+                partner_id=referrer.id,
+                amount=xp_gain,
+                description=f"Referral Reward: {new_partner_name} (L{level})",
+                type="REFERRAL_XP",
+                currency="XP"
+            ))
+
             # Log Audit
             await audit_service.log_xp_award(
                 session=session, partner_id=referrer.id, new_user_id=partner.id,
