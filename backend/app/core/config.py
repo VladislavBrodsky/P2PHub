@@ -141,4 +141,10 @@ class Settings(BaseSettings):
         extra = "ignore"
 
 settings = Settings()
+if not settings.BOT_TOKEN:
+    logger.error("🛑 CRITICAL: BOT_TOKEN is missing! Notifications and Bot features will FAIL.")
+else:
+    token_mask = f"{settings.BOT_TOKEN[:8]}...{settings.BOT_TOKEN[-4:]}"
+    logger.info(f"✅ BOT_TOKEN loaded: {token_mask}")
+
 logger.info(f"⚙️ Settings initialized in {time.time() - settings_init_start:.4f}s")

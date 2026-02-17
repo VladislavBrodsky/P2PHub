@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 # 2. Permanent audit logging of all outgoing messages.
 # 3. Robust retry logic for transient Telegram API failures.
 
-@broker.task(max_retries=3, retry_on_error=True)
+@broker.task(retry=3)
 async def send_telegram_task(payload_dict: dict):
     """
     Optimized background worker task to send Telegram messages.
@@ -131,22 +131,71 @@ class NotificationService:
             logger.info(f"📤 [CORE-NOTIF] Enqueued for {chat_id}")
         except Exception as e:
             logger.error(f"❌ Core Notification Enqueue Failed for {chat_id}: {e}")
+            # #comment: CRITICAL - If broker fails, we MUST record it in AuditLog before falling back.
+            # This helps distinguish between 'Worker Down' and 'Telegram Rejected'.
+            from sqlalchemy.orm import sessionmaker
+            from app.models.partner import engine
+            from app.services.audit_service import audit_service
+            async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+            async with async_session() as session:
+                await audit_service.log_event(
+                    session=session,
+                    entity_type="notification",
+                    entity_id=str(chat_id),
+                    action="enqueue_failed",
+                    details={"error": str(e), "text_preview": text[:50]}
+                )
+                await session.commit()
+            
             await self._fallback_send(chat_id, text, parse_mode, buttons)
 
     async def _fallback_send(self, chat_id, text, parse_mode, buttons):
         """Direct fallback (fire-and-forget) if broker is down."""
         try:
             from bot import bot
+            from app.services.audit_service import audit_service
+            from sqlalchemy.orm import sessionmaker
+            from app.models.partner import engine
+            
             reply_markup = self._build_keyboard(buttons)
             task = asyncio.create_task(
                 bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode, reply_markup=reply_markup)
             )
             self._background_tasks.add(task)
             task.add_done_callback(self._background_tasks.discard)
+            
             logger.info(f"⚡ [FALLBACK-NOTIF] Dispatched directly for {chat_id}")
+            
+            # #comment: Log fallback success to audit trail
+            async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+            async with async_session() as session:
+                await audit_service.log_event(
+                    session=session,
+                    entity_type="notification",
+                    entity_id=str(chat_id),
+                    action="fallback_sent",
+                    details={"text_preview": text[:50]}
+                )
+                await session.commit()
+                
         except Exception as fe:
             sentry_sdk.capture_exception(fe)
             logger.error(f"💥 Total notification failure for {chat_id}: {fe}")
+            # Final failure log
+            from sqlalchemy.orm import sessionmaker
+            from app.models.partner import engine
+            from app.services.audit_service import audit_service
+            async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+            with contextlib.suppress(Exception):
+                async with async_session() as session:
+                    await audit_service.log_event(
+                        session=session,
+                        entity_type="notification",
+                        entity_id=str(chat_id),
+                        action="total_failure",
+                        details={"error": str(fe)}
+                    )
+                    await session.commit()
 
 
 
