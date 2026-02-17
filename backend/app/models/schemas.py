@@ -227,7 +227,14 @@ class PartnerTopResponse(BaseModel):
     referrals_count: int
     rank: str
 
-    # #comment: Required for leaderboard service mappings from ORM.
+class OrbitMemberResponse(BaseModel):
+    id: int
+    first_name: str | None = None
+    photo_file_id: str | None = None
+    picture_url: str | None = None
+    xp: float
+    rank: str
+
     class Config:
         from_attributes = True
 

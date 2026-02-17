@@ -67,9 +67,7 @@ export const CommunityOrbit = memo(() => {
                 for (let i = 0; i < 4; i++) {
                     if (topPartners[i]) {
                         const p = topPartners[i];
-                        const src = p.photo_file_id
-                            ? `${getApiUrl()}/api/partner/photo/${p.photo_file_id}`
-                            : (p.photo_url || ALL_AVATARS[i % ALL_AVATARS.length]);
+                        const src = p.picture_url || ALL_AVATARS[i % ALL_AVATARS.length];
 
                         mappedItems.push({
                             type: 'avatar',
