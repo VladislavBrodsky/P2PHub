@@ -125,7 +125,7 @@ class PaymentService:
         """
         sentry_sdk.add_breadcrumb(
             category="payment",
-            message=f"Verifying TON transaction for partner {partner.telegram_id}: {tx_hash}",
+            message=f"Starting verification for {partner.id} | Hash: {tx_hash}",
             level="info"
         )
         # 1. Check if TX already processed (Global Uniqueness per hash)
@@ -137,6 +137,11 @@ class PaymentService:
             return True
 
         # 2. Find the most recent pending TON transaction for this partner
+        sentry_sdk.add_breadcrumb(
+            category="payment",
+            message="Searching for active session within 10-minute window...",
+            level="debug"
+        )
         # A "session" is valid if created within last 10 minutes
         ten_mins_ago = datetime.utcnow() - timedelta(minutes=10)
         stmt_session = select(PartnerTransaction).where(

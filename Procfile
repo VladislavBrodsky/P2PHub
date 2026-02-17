@@ -1,2 +1,3 @@
 web: uvicorn app.main:app --host 0.0.0.0 --port $PORT
 worker: bash scripts/start_worker.sh
+scheduler: bash scripts/start_scheduler.sh

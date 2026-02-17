@@ -71,12 +71,13 @@ class RedisService:
         await self.client.delete(key)
 
     async def delete_pattern(self, pattern: str):
-        """Removes all keys matching a specific pattern (e.g. 'users:*')."""
-        # Note: In production with millions of keys, SCAN would be safer.
-        # But for this scale, keys() is fine.
-        keys = await self.client.keys(pattern)
-        if keys:
-            await self.client.delete(*keys)
+        """Removes all keys matching a specific pattern (e.g. 'users:*') using SCAN."""
+        count = 0
+        async for key in self.client.scan_iter(match=pattern):
+            await self.client.delete(key)
+            count += 1
+        if count > 0:
+            logger.info(f"🗑 Redis: Deleted {count} keys matching pattern '{pattern}'")
 
     async def flushdb(self):
         """Wipes the entire Redis database."""

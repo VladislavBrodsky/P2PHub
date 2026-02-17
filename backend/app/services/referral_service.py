@@ -143,7 +143,8 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
         try:
             # XP Calculation & Level Up
             xp_gain = _calculate_referral_xp(level, referrer.is_pro)
-            xp_before = referrer.xp
+            xp_before = float(referrer.xp)
+            xp_after = xp_before + xp_gain
             
             # #comment: Atomic Increment for high-concurrency safety
             referrer.xp = Partner.xp + xp_gain
@@ -155,17 +156,14 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
                 description=f"Referral XP Reward (L{level})", reference_id=str(partner.id)
             ))
 
-            # Flush to apply increments and refresh to get new values for audit/level-up
-            await session.flush()
-            await session.refresh(referrer)
-            
+            # Log Audit (No flush/refresh needed inside loop now)
             await audit_service.log_xp_award(
                 session=session, partner_id=referrer.id, new_user_id=partner.id,
                 xp_amount=xp_gain, level=level, is_pro=referrer.is_pro,
-                xp_before=xp_before, xp_after=referrer.xp
+                xp_before=xp_before, xp_after=xp_after
             )
 
-            await _check_level_up(referrer, deferred_tasks)
+            await _check_level_up(referrer, deferred_tasks, xp_after)
             await _stage_redis_invalidation(referrer, level)
             
             msg_task = _prepare_referral_notification(referrer, level, xp_gain, new_partner_name, chain_list)
@@ -183,8 +181,8 @@ def _calculate_referral_xp(level: int, is_pro: bool) -> int:
     xp = settings.REFERRAL_XP_MAP.get(level, 0)
     return xp * settings.PRO_XP_MULTIPLIER if is_pro else xp
 
-async def _check_level_up(referrer: Partner, deferred_tasks: list):
-    new_level = get_level(referrer.xp)
+async def _check_level_up(referrer: Partner, deferred_tasks: list, current_xp: float):
+    new_level = get_level(current_xp)
     if new_level > referrer.level:
         deferred_tasks.append(notification_service.send_level_up_notification(
             chat_id=int(referrer.telegram_id), old_level=referrer.level,
@@ -229,8 +227,11 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     if not partner or not partner.referrer_id:
         return
 
-    # Path already includes ancestors, just deduplicate and fetch
-    lineage_ids = list(dict.fromkeys([int(x) for x in partner.path.split('.')] if partner.path else []))[-9:]
+    # #comment: CRITICAL FIX - partner.path contains ancestors UP TO but NOT including the direct referrer.
+    # We must explicitly add partner.referrer_id to ensure the L1 referrer (30% commission) is included.
+    path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+    lineage_ids = path_ids + [partner.referrer_id] if partner.referrer_id else path_ids
+    lineage_ids = list(dict.fromkeys(lineage_ids))[-9:]
 
     statement = select(Partner).where(Partner.id.in_(lineage_ids))
     result = await session.exec(statement)
@@ -276,13 +277,11 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
 
         if commission > 0:
             # 1. Update Object State (Atomic Increment)
-            balance_before = referrer.balance
+            balance_before = float(referrer.balance)
+            balance_after = balance_before + commission
+            
             referrer.balance = Partner.balance + commission
             referrer.total_earned_usdt = Partner.total_earned_usdt + commission
-
-            # Flush to apply increments and refresh for audit logging accuracy
-            await session.flush()
-            await session.refresh(referrer)
 
             # 2. Record Earning
             earning = Earning(
@@ -295,7 +294,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             )
             earnings_to_add.append(earning)
 
-            # 3. Log Audit (No flush)
+            # 3. Log Audit (No flush/refresh needed inside loop now)
             await audit_service.log_commission(
                 session=session,
                 partner_id=referrer.id,
@@ -303,7 +302,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 amount=commission,
                 level=level,
                 balance_before=balance_before,
-                balance_after=referrer.balance,
+                balance_after=balance_after,
             )
 
             # 4. Stage Redis Invalidation

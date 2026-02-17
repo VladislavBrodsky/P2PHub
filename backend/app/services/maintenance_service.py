@@ -1,6 +1,6 @@
 
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 
 from sqlalchemy.orm import sessionmaker
@@ -176,6 +176,34 @@ async def _commit_count_fixes(session: AsyncSession, diff_counts: list[dict]):
                 {"c": upd["count"], "i": upd["id"]}
             )
         await session.commit()
+
+@broker.task(task_name="cleanup_stale_transactions", schedule=[{"cron": "0 2 * * *"}]) # 2 AM daily
+async def cleanup_stale_transactions():
+    """
+    Deletes 'pending' transactions older than 48 hours to prevent DB bloat.
+    """
+    logger.info("🧹 Starting stale transactions cleanup...")
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    
+    cutoff = datetime.utcnow() - timedelta(hours=48)
+    
+    async with async_session() as session:
+        from app.models.transaction import PartnerTransaction
+        
+        # Count first for logging
+        count_stmt = select(func.count(PartnerTransaction.id)).where(
+            PartnerTransaction.status == "pending",
+            PartnerTransaction.created_at < cutoff
+        )
+        to_delete = (await session.exec(count_stmt)).one() or 0
+        
+        if to_delete > 0:
+            del_stmt = text("DELETE FROM partnertransaction WHERE status = 'pending' AND created_at < :cutoff")
+            await session.execute(del_stmt, {"cutoff": cutoff})
+            await session.commit()
+            logger.info(f"✅ Cleaned up {to_delete} stale transactions.")
+        else:
+            logger.info("✅ No stale transactions found.")
 
 async def check_database_health() -> dict:
     """Rapid health check for database performance."""

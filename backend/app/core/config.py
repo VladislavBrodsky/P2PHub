@@ -12,9 +12,11 @@ try:
     # Try common .env locations with error handling
     possible_env_paths = [
         Path(".env"),
+        Path(".env.backend"),
         Path("../.env"),
+        Path("../.env.backend"),
         Path("backend/.env"),
-        Path("../../backend/.env"),
+        Path("backend/.env.backend"),
         Path("/app/.env"),
         Path("/app/backend/.env")
     ]
@@ -143,7 +145,10 @@ class Settings(BaseSettings):
 
 settings = Settings()
 if not settings.BOT_TOKEN:
-    logger.error("🛑 CRITICAL: BOT_TOKEN is missing! Notifications and Bot features will FAIL.")
+    if settings.DEBUG:
+        logger.warning("🔸 [DEV] BOT_TOKEN is missing. Notification features will be mocked or fail.")
+    else:
+        logger.error("🛑 CRITICAL: BOT_TOKEN is missing! Notifications and Bot features will FAIL.")
 else:
     token_mask = f"{settings.BOT_TOKEN[:8]}...{settings.BOT_TOKEN[-4:]}"
     logger.info(f"✅ BOT_TOKEN loaded: {token_mask}")

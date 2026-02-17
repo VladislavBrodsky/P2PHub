@@ -230,7 +230,8 @@ async def sync_profile_photos_task():
 
 async def sync_profile_photos(bot, session: AsyncSession):
     """
-    Optimized: Only sync users who have been active in the last 7 days and use chunks.
+    Optimized: Only sync users who have been active in the last 7 days.
+    Fixed: Separates Telegram API I/O (parallel) from DB session updates (sequential).
     """
     logger.info("📅 Starting Profile Photo Sync (Selective)...")
     seven_days_ago = datetime.utcnow() - timedelta(days=7)
@@ -241,16 +242,41 @@ async def sync_profile_photos(bot, session: AsyncSession):
     partners = result.all()
     
     updated = 0
-    # Process in batches with high concurrency but respecting rate limits
+    # Process in batches 
     chunk_size = 20
     for i in range(0, len(partners), chunk_size):
         chunk = partners[i : i + chunk_size]
-        tasks = [sync_single_photo(bot, session, partner) for partner in chunk]
-        results = await asyncio.gather(*tasks)
-        updated += sum(1 for r in results if r)
+        
+        # 1. Gather photo info from Telegram in parallel (No session usage here)
+        async def get_info(p):
+            try:
+                user_photos = await bot.get_user_profile_photos(p.telegram_id, limit=1)
+                if user_photos.total_count > 0:
+                    return p.id, user_photos.photos[0][-1].file_id
+            except Exception as e:
+                if "bot was blocked" not in str(e).lower():
+                    logger.debug(f"Photo info fetch failed for {p.telegram_id}: {e}")
+            return p.id, None
+
+        results = await asyncio.gather(*[get_info(p) for p in chunk])
+        
+        # 2. Apply updates to session (Sequential/Safe)
+        for p_id, new_file_id in results:
+            if not new_file_id:
+                continue
+            # Correct partner instance from chunk
+            partner = next(p for p in chunk if p.id == p_id)
+            if partner.photo_file_id != new_file_id:
+                partner.photo_file_id = new_file_id
+                session.add(partner)
+                updated += 1
+        
+        # Periodically flush to keep memory usage low
+        if updated > 0 and updated % 50 == 0:
+            await session.flush()
         
         # Small sleep between batches to avoid TG flood limits
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(0.3)
 
     await session.commit()
     logger.info(f"✅ Selective Sync complete. Updated {updated} photos.")

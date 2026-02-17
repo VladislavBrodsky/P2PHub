@@ -489,6 +489,12 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             # We try Gemini 1.5 Pro first for elite reasoning, then fallback to Flash models
             for model_name in ['gemini-1.5-pro-latest', 'gemini-2.0-flash', 'gemini-1.5-flash']:
                 try:
+                    import sentry_sdk
+                    sentry_sdk.add_breadcrumb(
+                        category="viral_studio",
+                        message=f"Attempting text generation with {model_name}",
+                        level="debug"
+                    )
                     logger.info(f"🚀 Using {model_name} for text generation...")
                     gemini_response = await self.genai_client.aio.models.generate_content(
                         model=model_name,
@@ -504,6 +510,11 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                     logger.warning(f"⚠️ {model_name} failed ({type(gemini_e).__name__}): {str(gemini_e)[:200]}")
             
             logger.info("🔄 All Gemini models failed. Falling back to OpenAI GPT-4o-mini...")
+            sentry_sdk.add_breadcrumb(
+                category="viral_studio",
+                message="Gemini failover to OpenAI",
+                level="warning"
+            )
         
         # STRATEGY 2: Fallback to OpenAI (if Gemini failed or unavailable)
         if not self.openai_client:
