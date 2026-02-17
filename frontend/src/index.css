@@ -185,6 +185,10 @@
   --animate-shimmer-slide: shimmer-slide 2.5s infinite linear;
   --animate-premium-pulse: premium-pulse 3s infinite ease-in-out;
   --animate-scan: scan 2s linear infinite;
+
+  /* Z-Index Scale */
+  --z-index-9999: 9999;
+  --z-index-200: 200;
 }
 
 @utility mesh-gradient-dark {

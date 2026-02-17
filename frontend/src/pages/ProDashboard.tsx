@@ -271,7 +271,7 @@ export const ProDashboard = () => {
                 if (backButton && backButton.hide && backButton.hide.isAvailable()) backButton.hide();
             } catch (e) { console.warn(e); }
         }
-    }, [showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, setFooterVisible, setHeaderVisible]);
+    }, [showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, showHeadlineModal, showBioModal, setFooterVisible, setHeaderVisible]);
 
     useEffect(() => {
         const initSDK = async () => {
@@ -387,7 +387,7 @@ export const ProDashboard = () => {
                 if (mainButton && mainButton.setParams) mainButton.setParams({ isVisible: false });
             } catch { /* ignore */ }
         }
-    }, [activeTab, studioStep, studioReady, isAuditing, isCompletingStage, completedStages, showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, t, isLoading, handleRunMarketingAudit, handleCompleteAcademyStage, impact]);
+    }, [activeTab, studioStep, studioReady, isAuditing, isCompletingStage, completedStages, showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, showHeadlineModal, showBioModal, t, isLoading, handleRunMarketingAudit, handleCompleteAcademyStage, impact]);
 
     // Handle deep linking for Pro Tabs
     useEffect(() => {
