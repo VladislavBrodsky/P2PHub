@@ -49,19 +49,31 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
 
             <div className="relative flex flex-col items-center justify-center">
                 {/* Main Animated Hub */}
-                <div className="relative w-44 h-44 flex items-center justify-center">
+                <div className="relative w-48 h-48 flex items-center justify-center">
+                    {/* Rotating Conic Border - The "Apple" loading feel */}
+                    <motion.div
+                        className="absolute inset-4 rounded-full border-2 border-transparent"
+                        style={{
+                            background: 'conic-gradient(from 0deg, transparent 0%, var(--color-brand-blue) 50%, transparent 100%) border-box',
+                            mask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
+                            maskComposite: 'destination-out',
+                            WebkitMaskComposite: 'destination-out',
+                        }}
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                    />
 
                     {/* Central Logo Container - Reverted to centered premium size */}
                     <motion.div
-                        className="relative w-28 h-28 flex items-center justify-center overflow-visible rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_60px_rgba(59,130,246,0.6)]"
+                        className="relative w-32 h-32 flex items-center justify-center overflow-visible rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_80px_rgba(59,130,246,0.4)]"
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
                     >
                         {/* Recursive Blue Glow Layers */}
                         <motion.div
-                            className="absolute inset-0 rounded-full bg-blue-500/20 blur-[30px]"
-                            animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.7, 0.4] }}
+                            className="absolute inset-0 rounded-full bg-blue-500/20 blur-3xl"
+                            animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
                             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                         />
                         <div className="absolute inset-4 rounded-full bg-blue-500/30 blur-[20px]" />
@@ -70,19 +82,19 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                             src={logoSrc}
                             alt="P2P Hub"
                             animate={{
-                                scale: [1, 1.08, 1],
+                                scale: [1, 1.05, 1],
                                 filter: [
                                     "brightness(0) invert(1) blur(0px)",
-                                    "brightness(0) invert(1) blur(0.5px)",
+                                    "brightness(0) invert(1) blur(0.3px)",
                                     "brightness(0) invert(1) blur(0px)"
                                 ]
                             }}
                             transition={{
-                                duration: 4,
+                                duration: 3,
                                 repeat: Infinity,
                                 ease: "easeInOut"
                             }}
-                            className="relative w-16 h-16 object-contain z-10 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
+                            className="relative w-16 h-16 object-contain z-10 drop-shadow-[0_0_30px_rgba(59,130,246,0.6)]"
                             onError={(e) => {
                                 const target = e.target as HTMLImageElement;
                                 if (!target.src.includes('raw.githubusercontent.com')) {
@@ -95,30 +107,41 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                 </div>
 
                 {/* Progress Text - Reverted to baseline spacing */}
-                <div className="mt-8 flex flex-col items-center space-y-2">
-                    <div className="flex items-baseline space-x-1">
-                        <span className="text-3xl font-black text-(--color-text-primary) tracking-tighter tabular-nums">
-                            {displayProgress}
-                        </span>
-                        <span className="text-sm font-bold text-blue-500 opacity-80">%</span>
+                <div className="mt-4 flex flex-col items-center space-y-3">
+                    <div className="relative group">
+                        <div className="absolute -inset-4 bg-blue-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="flex items-baseline space-x-1 relative">
+                            <span className="text-4xl font-black text-(--color-text-primary) tracking-tighter tabular-nums drop-shadow-sm">
+                                {displayProgress}
+                            </span>
+                            <span className="text-sm font-bold text-blue-500 opacity-80">%</span>
+                        </div>
                     </div>
 
-                    <div className="flex flex-col items-center space-y-1">
-                        <motion.p
-                            className="text-(--color-text-primary) font-bold tracking-[0.2em] uppercase text-[10px] opacity-90"
-                            animate={{ opacity: [0.6, 1, 0.6] }}
-                            transition={{ duration: 3, repeat: Infinity }}
-                        >
-                            {statusText}
-                        </motion.p>
-
-                        {/* Status Indicator Bar */}
-                        <div className="w-12 h-0.5 rounded-full bg-slate-500/20 overflow-hidden mt-2">
+                    <div className="flex flex-col items-center space-y-4">
+                        <div className="relative overflow-hidden px-4 py-1">
+                            <motion.p
+                                className="text-(--color-text-primary) font-black tracking-[0.3em] uppercase text-[10px] opacity-90 relative z-10"
+                                animate={{ opacity: [0.7, 1, 0.7] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                            >
+                                {statusText}
+                            </motion.p>
+                            {/* Scanning Light Beam */}
                             <motion.div
-                                className="h-full bg-blue-500"
+                                className="absolute inset-0 bg-linear-to-r from-transparent via-blue-400/30 to-transparent z-0"
+                                animate={{ x: ['-100%', '200%'] }}
+                                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                            />
+                        </div>
+
+                        {/* Status Indicator Bar - High Fidelity */}
+                        <div className="w-24 h-1 rounded-full bg-slate-500/10 overflow-hidden relative shadow-inner">
+                            <motion.div
+                                className="h-full bg-linear-to-r from-blue-600 to-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                                 initial={{ width: 0 }}
                                 animate={{ width: `${displayProgress}%` }}
-                                transition={{ duration: 0.5 }}
+                                transition={{ duration: 0.5, ease: "easeOut" }}
                             />
                         </div>
                     </div>
@@ -126,14 +149,19 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
             </div>
 
             {/* Bottom Branding - Ultra Minimal */}
-            <div className="absolute bottom-12 left-0 right-0 flex flex-col items-center">
-                <div className="flex items-center space-x-3 opacity-30 grayscale hover:grayscale-0 transition-all duration-500">
-                    <div className="h-px w-8 bg-linear-to-r from-transparent to-(--color-text-secondary)" />
-                    <span className="text-[9px] font-bold tracking-[0.4em] uppercase text-(--color-text-secondary)">
+            <div className="absolute bottom-16 left-0 right-0 flex flex-col items-center">
+                <motion.div
+                    className="flex items-center space-x-4 opacity-40"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 0.4, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                >
+                    <div className="h-px w-10 bg-linear-to-r from-transparent to-(--color-text-secondary)" />
+                    <span className="text-[10px] font-black tracking-[0.5em] uppercase text-(--color-text-secondary) whitespace-nowrap">
                         Advanced Ecosystem
                     </span>
-                    <div className="h-px w-8 bg-linear-to-l from-transparent to-(--color-text-secondary)" />
-                </div>
+                    <div className="h-px w-10 bg-linear-to-l from-transparent to-(--color-text-secondary)" />
+                </motion.div>
             </div>
         </div>
     );

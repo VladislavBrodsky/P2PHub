@@ -124,19 +124,22 @@ export const BentoGrid = () => {
                     className="flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory no-scrollbar px-4 -mx-4 md:mx-0 md:px-0 scroll-smooth"
                 >
                     {shiftSteps.map((step, index) => (
-                        <div
+                        <motion.div
                             key={index}
                             className={`relative group shrink-0 w-[85vw] md:w-[400px] h-[300px] snap-center perspective-1000 cursor-pointer`}
                             onClick={() => toggleFlip(index)}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                         >
                             <motion.div
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
+                                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                                whileInView={{ opacity: 1, scale: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-10%" }}
                                 transition={{
                                     type: "spring",
-                                    stiffness: 260,
-                                    damping: 20
+                                    stiffness: 200,
+                                    damping: 25,
+                                    delay: index * 0.1
                                 }}
                                 animate={{ rotateY: flippedCards[index] ? 180 : 0 }}
                                 style={{ transformStyle: "preserve-3d" }}
@@ -225,7 +228,7 @@ export const BentoGrid = () => {
                                     </motion.div>
                                 </div>
                             </motion.div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
 

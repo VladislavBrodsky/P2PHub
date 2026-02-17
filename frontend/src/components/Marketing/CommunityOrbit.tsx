@@ -55,37 +55,33 @@ type OrbitItem =
 
 export const CommunityOrbit = memo(() => {
     const [items, setItems] = useState<OrbitItem[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchItems = async () => {
+            setIsLoading(true);
             try {
                 const res = await apiClient.get('/api/partner/orbit-members');
                 const topPartners = res.data;
 
                 const mappedItems: OrbitItem[] = [];
-                // Interleave up to 4 partners and 4 crypto icons
                 for (let i = 0; i < 4; i++) {
                     if (topPartners[i]) {
                         const p = topPartners[i];
                         let src = p.picture_url || ALL_AVATARS[i % ALL_AVATARS.length];
-
-                        // Security: Resolve relative paths to absolute API paths
                         if (src && src.startsWith('/')) {
                             const apiUrl = getApiUrl();
                             const cleanApiUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
                             src = `${cleanApiUrl}${src}`;
                         }
-
                         mappedItems.push({
                             type: 'avatar',
-                            src: src || `https://i.pravatar.cc/150?u=${p.id}` // Absolute fallback
+                            src: src || `https://i.pravatar.cc/150?u=${p.id}`
                         });
                     } else {
-                        // Fallback to static avatars or reliable remote fallbacks if not enough partners
-                        const fallbackSrc = ALL_AVATARS[i % ALL_AVATARS.length];
                         mappedItems.push({
                             type: 'avatar',
-                            src: fallbackSrc.startsWith('/') ? `https://i.pravatar.cc/150?img=${i + 10}` : fallbackSrc
+                            src: ALL_AVATARS[i % ALL_AVATARS.length]
                         });
                     }
 
@@ -96,39 +92,48 @@ export const CommunityOrbit = memo(() => {
                 setItems(mappedItems);
             } catch (e) {
                 console.error('Failed to fetch orbit items', e);
-                // Hard fallback
                 const fallback: OrbitItem[] = [];
                 for (let i = 0; i < 4; i++) {
                     fallback.push({ type: 'avatar', src: ALL_AVATARS[i % ALL_AVATARS.length] });
                     fallback.push({ type: 'crypto', ...CRYPTO_ICONS[i] });
                 }
                 setItems(fallback);
+            } finally {
+                setIsLoading(false);
             }
         };
         fetchItems();
     }, []);
 
+    // Placeholder items for the skeleton state
+    const placeholderItems = [...Array(8)].map((_, i) => ({
+        type: i % 2 === 0 ? 'avatar' : 'crypto',
+        isPlaceholder: true
+    }));
+
+    const displayItems = isLoading ? placeholderItems : items;
+
     return (
         <div className="relative flex h-[420px] w-full items-center justify-center overflow-visible">
             {/* Background Particles/Stars */}
-            {[...Array(6)].map((_, i) => (
+            {[...Array(8)].map((_, i) => (
                 <motion.div
                     key={`star-${i}`}
-                    className="absolute h-1 w-1 rounded-full bg-blue-400/30"
+                    className="absolute h-px w-px rounded-full bg-blue-400"
                     style={{
                         top: `${Math.random() * 100}%`,
                         left: `${Math.random() * 100}%`,
                         willChange: 'transform, opacity'
                     }}
                     animate={{
-                        opacity: [0.2, 0.8, 0.2],
-                        scale: [1, 1.5, 1],
+                        opacity: [0, 0.6, 0],
+                        scale: [0, 1.5, 0],
                     }}
                     transition={{
-                        duration: 3 + Math.random() * 2,
+                        duration: 4 + Math.random() * 4,
                         repeat: Infinity,
-                        ease: "linear",
-                        delay: Math.random() * 2,
+                        ease: "easeInOut",
+                        delay: Math.random() * 4,
                     }}
                 />
             ))}
@@ -137,8 +142,14 @@ export const CommunityOrbit = memo(() => {
             <CentralLogo />
 
             {/* Orbiting Avatars & Crypto Icons */}
-            {items.map((item, i) => (
-                <OrbitingItem key={`${i}-${item.type}`} item={item} index={i} total={items.length} />
+            {displayItems.map((item, i) => (
+                <OrbitingItem
+                    key={`${i}-${(item as any).type}`}
+                    item={item as any}
+                    index={i}
+                    total={displayItems.length}
+                    isLoading={isLoading}
+                />
             ))}
         </div>
     );
@@ -193,31 +204,32 @@ const CentralLogo = memo(() => {
 const FractalProfits = memo(() => {
     return (
         <div className="absolute inset-0 pointer-events-none z-0">
-            {[...Array(6)].map((_, i) => {
+            {[...Array(8)].map((_, i) => {
                 const direction = i % 2 === 0 ? 1 : -1;
                 return (
                     <motion.div
                         key={i}
                         initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
                         animate={{
-                            scale: [0, 1.2, 1.5],
-                            opacity: [0, 0.8, 0],
-                            x: (i - 2.5) * 60,
-                            y: (100 + Math.random() * 60) * direction
+                            scale: [0, 1.4, 0.8],
+                            opacity: [0, 1, 0],
+                            x: (i - 3.5) * 50,
+                            y: (120 + Math.random() * 80) * direction,
+                            filter: ["blur(0px)", "blur(0.5px)", "blur(2px)"]
                         }}
                         transition={{
-                            duration: 7,
+                            duration: 6 + Math.random() * 2,
                             repeat: Infinity,
-                            delay: i * 1.2,
-                            ease: "easeOut"
+                            delay: i * 0.8,
+                            ease: [0.22, 1, 0.36, 1]
                         }}
                         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 whitespace-nowrap"
                     >
-                        <div className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                        <div className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.6)] border border-white/30">
                             <CryptoIcon name="USDT" />
                         </div>
-                        <span className="text-[12px] font-black text-emerald-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                            +${Math.floor(Math.random() * 33) + 1}.00
+                        <span className="text-[13px] font-black text-emerald-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.4)] tracking-tighter">
+                            +${Math.floor(Math.random() * 55) + 5}.00
                         </span>
                     </motion.div>
                 );
@@ -226,7 +238,7 @@ const FractalProfits = memo(() => {
     );
 });
 
-const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: number; total: number }) => {
+const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem & { isPlaceholder?: boolean }; index: number; total: number; isLoading?: boolean }) => {
     const [radius, setRadius] = useState(140);
 
     useEffect(() => {
@@ -238,7 +250,7 @@ const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: num
         return () => window.removeEventListener('resize', updateRadius);
     }, []);
 
-    const duration = 50;
+    const duration = 50 + (index * 2); // Variation in speeds for a more organic feel
     const angle = (index / total) * 360;
 
     return (
@@ -267,24 +279,28 @@ const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: num
         >
             <motion.div
                 animate={{
-                    y: [-4, 4, -4],
-                    scale: [1, 1.05, 1]
+                    y: [-6, 6, -6],
+                    x: [-3, 3, -3],
+                    scale: isLoading ? [0.8, 0.9, 0.8] : [1, 1.05, 1],
+                    opacity: isLoading ? [0.2, 0.4, 0.2] : 1
                 }}
                 transition={{
-                    duration: 4 + Math.random() * 2,
+                    duration: 4 + Math.random() * 3,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: index * 0.5
+                    delay: index * 0.3
                 }}
                 className="h-full w-full"
             >
-                {item.type === 'avatar' ? (
+                {isLoading ? (
+                    <div className="h-full w-full rounded-full bg-slate-200/20 dark:bg-white/5 animate-pulse border border-white/10" />
+                ) : item.type === 'avatar' ? (
                     <div className="group relative h-full w-full">
-                        <div className="absolute -inset-2 rounded-full bg-white/20 blur-xl opacity-0 transition-opacity group-hover:opacity-100 dark:bg-blue-400/20" />
+                        <div className="absolute -inset-2 rounded-full bg-blue-500/20 blur-xl opacity-0 transition-opacity group-hover:opacity-100" />
                         <div
-                            className="relative h-full w-full overflow-hidden rounded-full border-2 border-white/80 bg-white/40 backdrop-blur-md shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:border-blue-400 dark:border-white/20 dark:bg-white/10"
+                            className="relative h-full w-full overflow-hidden rounded-full border-2 border-white bg-white/40 backdrop-blur-md shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:border-blue-400 dark:border-white/20 dark:bg-white/10"
                             style={{
-                                boxShadow: '0 10px 30px -10px rgba(0,0,0,0.3)'
+                                boxShadow: '0 8px 32px -8px rgba(0,0,0,0.3)'
                             }}
                         >
                             <img
@@ -295,7 +311,6 @@ const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: num
                                 loading="eager"
                                 className="h-full w-full object-cover"
                                 onError={(e) => {
-                                    // Robust fallback to Unsplash if the specific image fails (e.g. 404 from proxy)
                                     const target = e.target as HTMLImageElement;
                                     if (!target.src.includes('unsplash.com')) {
                                         target.src = ALL_AVATARS[index % ALL_AVATARS.length];
@@ -308,7 +323,7 @@ const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: num
                 ) : (
                     <div className="group relative h-full w-full">
                         <div
-                            className="absolute -inset-4 rounded-full blur-2xl opacity-40 transition-opacity group-hover:opacity-80"
+                            className="absolute -inset-4 rounded-full blur-2xl opacity-40 transition-opacity group-hover:opacity-100"
                             style={{ backgroundColor: item.color }}
                         />
                         <div
