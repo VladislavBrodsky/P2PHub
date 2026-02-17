@@ -108,7 +108,6 @@ async def create_partner(
         return partner, True
 
     # 3. Create Record
-    path, depth = (referrer.path or "").lstrip("."), referrer.depth + 1 if referrer else (None, 0)
     if referrer:
         path = f"{referrer.path or ''}.{referrer.id}".lstrip(".")
         depth = referrer.depth + 1
