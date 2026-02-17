@@ -149,11 +149,11 @@ export default function SubscriptionPage() {
                 </motion.div>
 
                 <h1 className="text-3xl font-black mb-4 tracking-tighter text-slate-900 dark:text-white uppercase leading-none">
-                    {isPlus ? 'PRO+ EMPIRE ACTIVE' : t('subscription.pro_active.title')}
+                    {isPlus ? t('subscription.pro_active.title_plus') : t('subscription.pro_active.title')}
                 </h1>
 
                 <p className="text-slate-500 dark:text-slate-400 font-medium text-xs leading-relaxed max-w-[280px] mb-10">
-                    {isPlus ? 'Your AI engine is running at full capacity with 500 monthly tokens and 20-level network insights.' : t('subscription.pro_active.desc')}
+                    {isPlus ? t('subscription.pro_active.desc_plus') : t('subscription.pro_active.desc')}
                 </p>
 
                 <div className="w-full space-y-3 max-w-xs">
@@ -161,7 +161,7 @@ export default function SubscriptionPage() {
                         <div className="flex items-center gap-3">
                             <Sparkles size={18} className={isPlus ? 'text-indigo-500' : 'text-amber-500'} />
                             <div className="text-left">
-                                <p className="text-[10px] font-bold opacity-50 uppercase">{isPlus ? 'PLAN: PRO+ EMPIRE' : 'PLAN: PRO CLASSIC'}</p>
+                                <p className="text-[10px] font-bold opacity-50 uppercase">{isPlus ? t('subscription.pro_active.plan_pro_plus') : t('subscription.pro_active.plan_pro')}</p>
                                 <p className="text-sm font-black">{user.pro_expires_at ? new Date(user.pro_expires_at).toLocaleDateString() : t('subscription.pro_active.lifetime')}</p>
                             </div>
                         </div>
@@ -192,11 +192,30 @@ export default function SubscriptionPage() {
                     <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500">{t('subscription.upgrade.badge')}</span>
                 </div>
                 <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-3 tracking-tighter uppercase leading-tight">
-                    <Trans i18nKey="subscription.upgrade.title" />
+                    <Trans i18nKey="subscription.upgrade.title" components={{ 1: <span className="text-indigo-600 dark:text-indigo-400" /> }} />
                 </h1>
                 <p className="text-slate-600 dark:text-slate-400 text-xs font-medium max-w-[280px] mx-auto leading-relaxed opacity-70">
                     {t('subscription.upgrade.desc')}
                 </p>
+
+                {/* Limited Offer Counter */}
+                <div className="mt-6 inline-flex flex-col items-center p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20">
+                    <span className="text-[10px] font-black uppercase text-amber-600 dark:text-amber-400 tracking-widest mb-1">
+                        {t('subscription.upgrade.limited_offer')}
+                    </span>
+                    <div className="flex items-center gap-2">
+                        <div className="h-1.5 w-32 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
+                            <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: '49%' }}
+                                className="h-full bg-amber-500"
+                            />
+                        </div>
+                        <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">
+                            {t('subscription.upgrade.limited_count')}
+                        </span>
+                    </div>
+                </div>
             </motion.div>
 
             {/* Plan Toggle */}
@@ -219,28 +238,51 @@ export default function SubscriptionPage() {
             </div>
 
             {/* Features Row */}
-            <div className="flex flex-col gap-2 mb-8">
+            <div className="flex flex-col gap-3 mb-10">
                 <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl transition-all duration-500">
-                    <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center shrink-0">
                         <Zap size={20} className="text-indigo-500" />
                     </div>
-                    <div>
+                    <div className="flex-1">
                         <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('subscription.upgrade.one_time')}</p>
                         <p className="text-sm font-black text-slate-900 dark:text-white uppercase">
-                            {t('subscription.upgrade.tokens_info', { count: selectedPlan === 'PRO_PLUS' ? 500 : 250 })}
+                            {selectedPlan === 'PRO' ? t('subscription.upgrade.tokens_info_pro') : t('subscription.upgrade.tokens_info_pro_plus')}
                         </p>
                     </div>
                 </div>
                 <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl transition-all duration-500">
-                    <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
                         <Users size={20} className="text-orange-500" />
                     </div>
-                    <div>
+                    <div className="flex-1">
                         <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('subscription.upgrade.lifetime_pro')}</p>
                         <p className="text-sm font-black text-slate-900 dark:text-white uppercase">
                             {t('subscription.upgrade.levels_info')}
                         </p>
                     </div>
+                </div>
+
+                {/* Detailed Benefits List */}
+                <div className="mt-4 px-2 space-y-3">
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
+                        {t('subscription.upgrade.benefits_title', 'Key Benefits')}
+                    </h4>
+                    {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true }) as string[]).map((benefit, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: i * 0.1 }}
+                            className="flex items-center gap-3"
+                        >
+                            <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+                                <CheckCircle2 size={12} className="text-emerald-500" />
+                            </div>
+                            <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300">
+                                {benefit}
+                            </span>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
 
