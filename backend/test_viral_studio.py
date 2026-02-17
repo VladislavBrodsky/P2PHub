@@ -25,7 +25,10 @@ async def diagnostic_test():
     print("-" * 80)
     
     from dotenv import load_dotenv
-    load_dotenv()
+    env_path = backend_dir / '.env'
+    print(f"DEBUG: Looking for .env at: {env_path}")
+    print(f"DEBUG: File exists: {env_path.exists()}")
+    load_dotenv(dotenv_path=env_path)
     
     openai_key = os.getenv('OPENAI_API_KEY', '')
     google_key = os.getenv('GOOGLE_API_KEY', '')
