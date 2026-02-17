@@ -45,9 +45,9 @@ export default function ReferralPage() {
     const [showBriefModal, setShowBriefModal] = useState(false);
 
     useEffect(() => {
-        setFooterVisible(!showShareModal);
+        setFooterVisible(!(showShareModal || showBriefModal));
         return () => setFooterVisible(true);
-    }, [showShareModal, setFooterVisible]);
+    }, [showShareModal, showBriefModal, setFooterVisible]);
 
 
 
