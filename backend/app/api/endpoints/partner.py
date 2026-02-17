@@ -916,14 +916,16 @@ async def claim_task_reward(
     # Check if task is started
     partner_task_record = next((pt for pt in partner.completed_task_records if pt.task_id == task_id), None)
     
-    if task_type in ['referral', 'action']:
+    if task_type in ['referral', 'action', 'academy']:
         # Milestones (Absolute Checks) can be claimed without an explicit STARTED record
         # if the user already met the requirements (e.g. they have 50 referrals).
-        pass
-
+        
         current_value = 0
         if task_type == 'referral':
-            current_value = partner.referral_count
+            # #comment: Resilient Referral Count Check
+            # We use the materialized 'referral_count' field but fallback to the actual relationship count 
+            # if the field is lagging or out of sync, ensuring users can ALWAYS claim their hard-earned XP.
+            current_value = max(partner.referral_count, len(partner.referrals or []))
         elif task_type == 'action':
             current_value = partner.checkin_streak
         elif task_type == 'academy':
@@ -989,7 +991,6 @@ async def claim_task_reward(
     session.add(new_xp_tx)
 
     # 1.2 Unified Transaction: Log Task XP as an Earning
-    # 1.2 Unified Transaction: Log Task XP as an Earning
     task_earning = Earning(
         partner_id=partner.id,
         amount=effective_xp,
@@ -1002,11 +1003,11 @@ async def claim_task_reward(
     # 2. Update partner stats
     xp_before = partner.xp
     
-    # Atomic XP Increment
-    await session.execute(
-        text("UPDATE partner SET xp = xp + :inc WHERE id = :p_id"),
-        {"inc": effective_xp, "p_id": partner.id}
-    )
+    # #comment: Explicit Atomic XP Increment using SQLAlchemy update() 
+    # This is more robust than raw SQL and handles table name variations/mappings automatically.
+    from sqlalchemy import update
+    stmt = update(Partner).where(Partner.id == partner.id).values(xp=Partner.xp + effective_xp)
+    await session.execute(stmt)
     await session.flush()
     await session.refresh(partner)
     

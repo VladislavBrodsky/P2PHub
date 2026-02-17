@@ -102,6 +102,7 @@ async def create_partner(
     if partner and (partner.referrer_id or not referrer_code):
         return partner, False
 
+    # 2. Resolve Referrer
     referrer = await _resolve_referrer(session, referrer_code, partner.id if partner else None)
     
     if partner and referrer:
@@ -112,6 +113,13 @@ async def create_partner(
     if referrer:
         path = f"{referrer.path or ''}.{referrer.id}".lstrip(".")
         depth = referrer.depth + 1
+        
+        # #comment: CRITICAL FIX for Task System Reliability
+        # We increment the direct (L1) referrer's referral_count SYNCHRONOUSLY here.
+        # This ensures that "Invite 1 friend" tasks and UI stats are updated immediately
+        # even if background workers are busy or delayed.
+        referrer.referral_count = Partner.referral_count + 1
+        session.add(referrer)
     else:
         path, depth = None, 0
 
@@ -127,7 +135,7 @@ async def create_partner(
     partner, is_new = await _commit_partner_creation(session, partner, telegram_id)
     
     if is_new:
-        # #comment: Move side effects to background task to keep user creation snappy (<100ms)
+        # #comment: Move side effects (Level 2-9 awards, notifications) to background task
         await handle_partner_creation_task.kiq(partner.id, referrer.id if referrer else None)
 
     return partner, is_new

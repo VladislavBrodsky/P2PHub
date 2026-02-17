@@ -122,22 +122,28 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
         referrer = ancestor_map.get(current_referrer_id)
         if not referrer: break
 
-        # #comment: ELITE COMPRESSION LOGIC
+        # #comment: Network Growth Tracking (Milestone logic)
+        # We increment referral_count for ALL levels to ensure "Network Size" stats 
+        # are accurate and tasks can be completed.
+        # However, L1 is now incremented synchronously in partner_service.create_partner
+        # to ensure immediate feedback for "Invite 1 friend" tasks.
+        if level > 1:
+            referrer.referral_count = Partner.referral_count + 1
+            session.add(referrer)
+
+        # #comment: ELITE COMPRESSION LOGIC (Rewards)
         # Free users ONLY get L1 rewards. L2-L9 require PRO status.
-        # Rationale: This creates the core value proposition for the PRO subscription.
         if level > 1 and not referrer.is_pro:
             # Send FOMO notification for the first few levels of deep growth (Throttled)
             if level in [2, 3, 5]:
                 lang = referrer.language_code or "en"
                 fomo_msg = get_msg(lang, "pro_fomo_missed", level=level)
                 buttons = [[{"text": "👑 Upgrade to PRO", "web_app": {"url": settings.FRONTEND_URL}}]]
-                # Use background queue to avoid blocking
                 await notification_service.enqueue_notification(
                     chat_id=int(referrer.telegram_id), text=fomo_msg, buttons=buttons
                 )
             
             current_referrer_id = referrer.referrer_id
-            session.add(referrer)
             continue
 
         try:
@@ -148,7 +154,6 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
             
             # #comment: Atomic Increment for high-concurrency safety
             referrer.xp = Partner.xp + xp_gain
-            referrer.referral_count = Partner.referral_count + 1
             
             xp_txs.append(XPTransaction(
                 partner_id=referrer.id, amount=xp_gain,
@@ -156,7 +161,7 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
                 description=f"Referral XP Reward (L{level})", reference_id=str(partner.id)
             ))
 
-            # Log Audit (No flush/refresh needed inside loop now)
+            # Log Audit
             await audit_service.log_xp_award(
                 session=session, partner_id=referrer.id, new_user_id=partner.id,
                 xp_amount=xp_gain, level=level, is_pro=referrer.is_pro,
