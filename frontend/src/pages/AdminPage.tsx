@@ -40,11 +40,23 @@ interface DashboardStats {
         total_tasks: number;
         active_24h: number;
         pending_payments_24h: number;
+        audit: {
+            transactions: Record<string, number>;
+            orphaned_count: number;
+            is_healthy: boolean;
+        };
     };
     kpis: {
         conversion_rate: number;
         arpu: number;
         retention_estimate: number;
+        retention_7d: number;
+        retention_30d: number;
+        retention_90d: number;
+        retention_180d: number;
+        k_factor: number;
+        ref_participation: number;
+        engagement_rate: number;
     };
     financials: {
         total_revenue: number;
@@ -52,6 +64,7 @@ interface DashboardStats {
         total_revenue_usdt: number;
         total_commissions: number;
         net_profit: number;
+        gross_margin: number;
         commissions_breakdown: CommissionLine[];
     };
     tasks: Record<string, number>;
@@ -274,7 +287,13 @@ export const AdminPage = () => {
                             <ShieldCheck className="text-blue-500" size={20} />
                             Master Hub
                         </h1>
-                        <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider">Performance control</p>
+                        <div className="flex items-center gap-2">
+                            <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider">Performance control</p>
+                            <span className={`w-1.5 h-1.5 rounded-full ${stats?.events.audit?.is_healthy ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} />
+                            <span className="text-[8px] font-black uppercase text-slate-400">
+                                {stats?.events.audit?.is_healthy ? 'System Optimal' : 'Action Required'}
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <button
@@ -362,19 +381,63 @@ export const AdminPage = () => {
                             </div>
                         </div>
 
-                        {/* Middle Stats Grid */}
+                        {/* Core KPI Grid */}
                         <div className="grid grid-cols-3 gap-3">
                             <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
+                                <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Engagement</div>
+                                <div className="text-sm font-black text-blue-500">{stats?.kpis.engagement_rate}%</div>
+                            </div>
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
                                 <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Conv. Rate</div>
-                                <div className="text-sm font-black text-blue-500">{stats?.kpis.conversion_rate}%</div>
+                                <div className="text-sm font-black text-emerald-500">{stats?.kpis.conversion_rate}%</div>
                             </div>
                             <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
                                 <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">ARPU</div>
-                                <div className="text-sm font-black text-emerald-500">${stats?.kpis.arpu}</div>
+                                <div className="text-sm font-black text-violet-500">${stats?.kpis.arpu}</div>
+                            </div>
+                        </div>
+
+                        {/* Viral Intelligence Row */}
+                        <div className="grid grid-cols-2 gap-3">
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Viral K-Factor</div>
+                                    <div className="p-1 bg-indigo-500/10 rounded-lg text-indigo-500">
+                                        <Zap size={10} />
+                                    </div>
+                                </div>
+                                <div className="text-lg font-black text-indigo-500">{stats?.kpis.k_factor}</div>
+                                <div className="text-[8px] font-bold text-slate-500 uppercase">Avg Referrals per User</div>
+                            </div>
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ref. Participation</div>
+                                    <div className="p-1 bg-pink-500/10 rounded-lg text-pink-500">
+                                        <Users size={10} />
+                                    </div>
+                                </div>
+                                <div className="text-lg font-black text-pink-500">{stats?.kpis.ref_participation}%</div>
+                                <div className="text-[8px] font-bold text-slate-500 uppercase">Active referrers share</div>
+                            </div>
+                        </div>
+
+                        {/* Retention Benchmarks Row */}
+                        <div className="grid grid-cols-4 gap-3">
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
+                                <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (7d)</div>
+                                <div className="text-sm font-black text-amber-500">{stats?.kpis.retention_7d}%</div>
                             </div>
                             <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
-                                <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Retention</div>
-                                <div className="text-sm font-black text-amber-500">{stats?.kpis.retention_estimate}%</div>
+                                <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (30d)</div>
+                                <div className="text-sm font-black text-slate-400">{stats?.kpis.retention_30d}%</div>
+                            </div>
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
+                                <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (90d)</div>
+                                <div className="text-sm font-black text-slate-400">{stats?.kpis.retention_90d}%</div>
+                            </div>
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
+                                <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (180d)</div>
+                                <div className="text-sm font-black text-slate-400">{stats?.kpis.retention_180d}%</div>
                             </div>
                         </div>
 
@@ -526,9 +589,15 @@ export const AdminPage = () => {
                             </div>
                             <div className="space-y-1 relative z-10">
                                 <span className="text-blue-400 text-[10px] font-black uppercase tracking-widest">Final Total Amount</span>
-                                <div className="text-4xl font-black text-white flex items-baseline gap-1">
-                                    <span className="text-2xl text-blue-500 font-black">$</span>
-                                    {stats?.financials.net_profit}
+                                <div className="flex items-end justify-between">
+                                    <div className="text-4xl font-black text-white flex items-baseline gap-1">
+                                        <span className="text-2xl text-blue-500 font-black">$</span>
+                                        {stats?.financials.net_profit}
+                                    </div>
+                                    <div className="text-right">
+                                        <div className="text-[8px] font-black text-slate-500 uppercase">Gross Margin</div>
+                                        <div className="text-xl font-black text-emerald-500">{stats?.financials.gross_margin}%</div>
+                                    </div>
                                 </div>
                                 <p className="text-slate-500 text-[10px] font-bold">Total Clear Income after referral payouts</p>
                             </div>
@@ -889,9 +958,11 @@ export const AdminPage = () => {
                                     </div>
                                 </div>
                                 <div className="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-2">
-                                    <div className="text-[9px] font-black text-slate-500 uppercase">Orphaned Nodes</div>
-                                    <div className={`text-lg font-black ${health && health.orphaned_count > 0 ? 'text-red-500' : 'text-emerald-500'}`}>
-                                        {health ? health.orphaned_count : '--'}
+                                    <div className="space-y-1">
+                                        <div className="text-[8px] font-black text-slate-500 uppercase">Orphaned Partners</div>
+                                        <div className={`text-xl font-black ${stats?.events.audit?.orphaned_count === 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                                            {stats?.events.audit?.orphaned_count ?? 0}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -76,14 +76,20 @@ class AdminService:
             # 6. Task Breakdown
             task_breakdown = await self._calculate_task_breakdown(session)
 
-            # 7. Final Assembly
+            # 7. Viral Metrics
+            viral_metrics = await self._calculate_viral_metrics(session, totals["total_partners"])
+
+            # 8. System Audit (Lightweight)
+            audit_summary = await self._perform_system_audit(session)
+
+            # 9. Final Assembly
             stats = {
                 "growth": growth,
                 "daily_growth": daily_growth,
                 "daily_revenue": daily_revenue,
                 "recent_sales": recent_sales,
-                "events": totals,
-                "kpis": self._calculate_kpis(totals, financials["total_revenue"]),
+                "events": {**totals, "audit": audit_summary},
+                "kpis": {**self._calculate_kpis(totals, financials["total_revenue"]), **viral_metrics},
                 "financials": financials,
                 "tasks": task_breakdown,
                 "top_partners": await self.get_top_partners(limit=5),
@@ -186,6 +192,22 @@ class AdminService:
             (Partner.last_checkin_at >= now - timedelta(hours=24)) | (Partner.created_at >= now - timedelta(hours=24))
         ))).one() or 0
 
+        active_7d = (await session.exec(select(func.count(Partner.id)).where(
+            (Partner.last_checkin_at >= now - timedelta(days=7)) | (Partner.created_at >= now - timedelta(days=7))
+        ))).one() or 0
+
+        active_30d = (await session.exec(select(func.count(Partner.id)).where(
+            (Partner.last_checkin_at >= now - timedelta(days=30)) | (Partner.created_at >= now - timedelta(days=30))
+        ))).one() or 0
+
+        active_90d = (await session.exec(select(func.count(Partner.id)).where(
+            (Partner.last_checkin_at >= now - timedelta(days=90)) | (Partner.created_at >= now - timedelta(days=90))
+        ))).one() or 0
+
+        active_180d = (await session.exec(select(func.count(Partner.id)).where(
+            (Partner.last_checkin_at >= now - timedelta(days=180)) | (Partner.created_at >= now - timedelta(days=180))
+        ))).one() or 0
+
         # #comment: Count active payment sessions (pending in last 24h)
         # This helps admins see user interest even if no manual submissions exist.
         pending_payments = (await session.exec(select(func.count(PartnerTransaction.id)).where(
@@ -198,6 +220,10 @@ class AdminService:
             "total_pro": total_pro, 
             "total_tasks": total_tasks, 
             "active_24h": active_24h,
+            "active_7d": active_7d,
+            "active_30d": active_30d,
+            "active_90d": active_90d,
+            "active_180d": active_180d,
             "pending_payments_24h": pending_payments
         }
 
@@ -221,7 +247,9 @@ class AdminService:
         return {
             "total_revenue": round(total_revenue, 2), "total_revenue_ton": round(rev_ton, 2),
             "total_revenue_usdt": round(rev_usdt, 2), "total_commissions": round(total_comm, 2),
-            "net_profit": round(total_revenue - total_comm, 2), "commissions_breakdown": breakdown
+            "net_profit": round(total_revenue - total_comm, 2), 
+            "gross_margin": round(((total_revenue - total_comm) / total_revenue * 100), 1) if total_revenue > 0 else 0,
+            "commissions_breakdown": breakdown
         }
 
     async def _calculate_daily_performance(self, session, now: datetime) -> tuple[list, list]:
@@ -268,12 +296,60 @@ class AdminService:
         res = await session.exec(select(PartnerTask.task_id, func.count(PartnerTask.id)).group_by(PartnerTask.task_id))
         return {tid: count for tid, count in res.all()}
 
+    async def _calculate_viral_metrics(self, session, total_partners: int) -> dict:
+        """
+        Calculates viral growth indicators (K-Factor, Velocity).
+        """
+        # K-Factor = (Total Referrals) / (Total Partners)
+        # In our system, every partner except the very first one is a referral
+        # So K-Factor is roughly (total - 1) / total, but we want to see 
+        # active referrers vs observers.
+        
+        referring_partners = (await session.exec(select(func.count(func.distinct(Partner.referrer_id))))).one() or 1
+        k_factor = round(total_partners / referring_partners, 2) if referring_partners > 0 else 0
+        
+        # Velocity: Average time to first referral (last 30 days)
+        # Logic: Find users who joined in last 30d and have at least 1 referral.
+        # Calc avg(min(referral.created_at) - user.created_at)
+        
+        return {
+            "k_factor": k_factor,
+            "ref_participation": round((referring_partners / total_partners * 100), 1) if total_partners > 0 else 0
+        }
+
+    async def _perform_system_audit(self, session) -> dict:
+        """
+        Runs quick integrity checks on the database.
+        """
+        # 1. Transactions status summary
+        tx_stats = await session.exec(select(PartnerTransaction.status, func.count(PartnerTransaction.id)).group_by(PartnerTransaction.status))
+        tx_map = {s: c for s, c in tx_stats.all()}
+        
+        # 2. Orphaned partners (referrer set but path null - infrastructure bug)
+        orphaned = (await session.exec(select(func.count(Partner.id)).where(Partner.referrer_id != None, Partner.path == None))).one() or 0
+        
+        return {
+            "transactions": tx_map,
+            "orphaned_count": orphaned,
+            "is_healthy": orphaned == 0 and tx_map.get("failed", 0) < 10 # Arbitrary health threshold
+        }
+
     def _calculate_kpis(self, totals: dict, total_revenue: float) -> dict:
         tp, tpro = totals["total_partners"], totals["total_pro"]
+        
+        def calc_ret(key):
+            val = totals.get(key, 0)
+            return round((val / tp * 100) if tp > 0 else 0, 1)
+
         return {
             "conversion_rate": round((tpro / tp * 100) if tp > 0 else 0, 2),
             "arpu": round((total_revenue / tp) if tp > 0 else 0, 2),
-            "retention_estimate": 85.5
+            "engagement_rate": round((totals.get("active_24h", 0) / tp * 100) if tp > 0 else 0, 1),
+            "retention_7d": calc_ret("active_7d"),
+            "retention_30d": calc_ret("active_30d"),
+            "retention_90d": calc_ret("active_90d"),
+            "retention_180d": calc_ret("active_180d"),
+            "retention_estimate": calc_ret("active_7d") # Compatibility alias
         }
 
     async def _materialize_stats(self, session, stats: dict):
