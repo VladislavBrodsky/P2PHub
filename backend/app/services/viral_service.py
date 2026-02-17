@@ -194,7 +194,7 @@ Use FRESH, audience-specific language that feels authentic.
         self.gs_client = None
         self._gs_sheet_cache = {} 
         self._init_google_sheets_client()
-        self._last_working_imagen_model = 'imagen-4.0-generate-001' # Memory for optimization
+        self._last_working_imagen_model = 'imagen-3.0-generate-001' # Memory for optimization
 
     def _init_google_sheets_client(self):
         """Initializes Google Sheets client for audit logging."""
@@ -482,23 +482,26 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         Generate viral text content. 
         Strategy: Try Gemini first (free, 1500 req/day), fallback to OpenAI if needed.
         """
-        # STRATEGY 1: Try Gemini 2.0 Flash first (FREE tier, excellent quality)
+        # STRATEGY 1: Try Gemini models (FREE tier, excellent quality)
         if self.genai_client:
-            try:
-                logger.info("🚀 Using Gemini 2.0 Flash for text generation (primary, free tier)...")
-                gemini_response = self.genai_client.models.generate_content(
-                    model='gemini-2.0-flash-exp',  # Updated to correct latest model
-                    contents=f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}",
-                    config=genai_types.GenerateContentConfig(
-                        response_mime_type='application/json',
-                        temperature=0.7
+            # We try 2.0 Flash first, then 1.5 Flash as fallback
+            for model_name in ['gemini-2.0-flash', 'gemini-1.5-flash']:
+                try:
+                    logger.info(f"🚀 Using {model_name} for text generation...")
+                    gemini_response = self.genai_client.models.generate_content(
+                        model=model_name,
+                        contents=f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}",
+                        config=genai_types.GenerateContentConfig(
+                            response_mime_type='application/json',
+                            temperature=0.7
+                        )
                     )
-                )
-                logger.info("✅ Gemini 2.0 Flash succeeded!")
-                return json.loads(gemini_response.text), 0
-            except Exception as gemini_e:
-                logger.warning(f"⚠️ Gemini 2.0 Flash failed ({type(gemini_e).__name__}): {str(gemini_e)[:200]}")
-                logger.info("🔄 Falling back to OpenAI GPT-4o-mini...")
+                    logger.info(f"✅ {model_name} succeeded!")
+                    return json.loads(gemini_response.text), 0
+                except Exception as gemini_e:
+                    logger.warning(f"⚠️ {model_name} failed ({type(gemini_e).__name__}): {str(gemini_e)[:200]}")
+            
+            logger.info("🔄 All Gemini models failed. Falling back to OpenAI GPT-4o-mini...")
         
         # STRATEGY 2: Fallback to OpenAI (if Gemini failed or unavailable)
         if not self.openai_client:
@@ -536,10 +539,8 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         
         imagen_models = [
             self._last_working_imagen_model,
-            'imagen-4.0-fast-generate-001',
+            'imagen-3.0-generate-001',
             'imagen-3.0-fast-generate-001',
-            'imagen-4.0-generate-001',
-            'imagen-4.0-ultra-generate-001',
         ]
         # Remove duplicates
         imagen_models = [m for i, m in enumerate(imagen_models) if m and m not in imagen_models[:i]]
@@ -794,20 +795,23 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         """
         prompt = "Identify 3 top trending, controversial, or high-growth narratives in the Crypto/Fintech world for 2026. Format as JSON list of objects with 'topic', 'reason', and 'viral_angle'."
         
-        try:
-            if self.genai_client:
-                # Use Gemini (Wrapped in executor as it's a sync call in this SDK version)
-                loop = asyncio.get_event_loop()
-                response = await loop.run_in_executor(
-                    None,
-                    lambda: self.genai_client.models.generate_content(
-                        model='gemini-1.5-pro', 
-                        contents=prompt,
-                        config={'response_mime_type': 'application/json'}
+        if self.genai_client:
+            for model_name in ['gemini-2.0-flash', 'gemini-1.5-flash']:
+                try:
+                    logger.info(f"🚀 Trending Data: Using {model_name}...")
+                    response = await loop.run_in_executor(
+                        None,
+                        lambda m=model_name: self.genai_client.models.generate_content(
+                            model=m, 
+                            contents=prompt,
+                            config={'response_mime_type': 'application/json'}
+                        )
                     )
-                )
-                return json.loads(response.text)
-            elif self.openai_client:
+                    return json.loads(response.text)
+                except Exception as e:
+                    logger.warning(f"⚠️ {model_name} failed legacy trend fetch: {e}")
+            
+        if self.openai_client:
                 # Fallback OpenAI
                 response = await self.openai_client.chat.completions.create(
                     model="gpt-4o",
@@ -869,20 +873,25 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             }}
             """
             
-            try:
-                if self.genai_client:
-                    # Wrapped in executor to avoid blocking the event loop
-                    loop = asyncio.get_event_loop()
-                    response = await loop.run_in_executor(
-                        None,
-                        lambda: self.genai_client.models.generate_content(
-                            model='gemini-1.5-pro',
-                            contents=prompt,
-                            config={'response_mime_type': 'application/json'}
+            if self.genai_client:
+                # Optimized multi-tier fallback for Audit Intelligence
+                for model_name in ['gemini-2.0-flash', 'gemini-1.5-flash']:
+                    try:
+                        logger.info(f"🚀 CMO Audit: Using {model_name}...")
+                        loop = asyncio.get_event_loop()
+                        response = await loop.run_in_executor(
+                            None,
+                            lambda m=model_name: self.genai_client.models.generate_content(
+                                model=m,
+                                contents=prompt,
+                                config={'response_mime_type': 'application/json'}
+                            )
                         )
-                    )
-                    return json.loads(response.text)
-                elif self.openai_client:
+                        return json.loads(response.text)
+                    except Exception as e:
+                        logger.warning(f"⚠️ CMO Audit: {model_name} failed: {e}")
+
+            if self.openai_client:
                     response = await self.openai_client.chat.completions.create(
                         model="gpt-4o",
                         messages=[{"role": "user", "content": prompt}],
