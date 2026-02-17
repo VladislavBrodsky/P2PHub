@@ -289,8 +289,8 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 is_ref_pro_plus = (referrer.subscription_plan == "PRO_PLUS_MONTHLY")
                 is_ref_pro = referrer.is_pro or (referrer.subscription_plan == "PRO_MONTHLY")
                 
-                if dist <= 3:
-                    qualified = True
+                if dist == 1:
+                    qualified = True # Always pay direct referrer to encourage viral growth
                 elif dist <= 9:
                     qualified = (is_ref_pro or is_ref_pro_plus)
                     if not qualified: miss_reason = "PRO Upgrade Required"
@@ -306,7 +306,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             balance_after = balance_before + commission
             
             recipient.balance = balance_after
-            recipient.total_earned_usdt = float(recipient.total_earned_usdt) + commission
+            recipient.total_earned_usdt = float(recipient.total_earned_usdt) + (commission if qualified else 0)
             session.add(recipient)
             
             description = f"{'PRO+' if is_pro_plus else 'PRO'} Commission (L{dist})"
@@ -346,10 +346,9 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 except Exception as e:
                     logger.error(f"Notification error for {referrer.id}: {e}")
 
-    # Finalize Transaction
+    # Finalize Transaction (NO internal commit to maintain atomicity with caller)
     if earnings_to_add:
         session.add_all(earnings_to_add)
-        await session.commit()
         await redis_pipe.execute()
         if deferred_notifications:
             await asyncio.gather(*deferred_notifications, return_exceptions=True)

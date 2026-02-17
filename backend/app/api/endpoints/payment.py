@@ -22,7 +22,8 @@ async def get_payment_config():
     Returns payment configuration: prices and admin addresses.
     """
     return {
-        "pro_price_usd": payment_service.PRO_PRICE_USD,
+        "pro_price_usd": settings.PRO_PRICE_USD,
+        "pro_plus_price_usd": settings.PRO_PLUS_PRICE_USD,
         "admin_ton_address": settings.ADMIN_TON_ADDRESS,
         "admin_usdt_address": settings.ADMIN_USDT_ADDRESS
     }
