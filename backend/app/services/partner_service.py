@@ -139,8 +139,9 @@ async def handle_partner_creation_task(partner_id: int, referrer_id: int | None 
     Handles leaderboard sync and multi-level cache invalidation.
     """
     from sqlalchemy.orm import sessionmaker
-
     from app.models.partner import engine
+    from app.services.referral_service import process_referral_logic
+    
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
     async with async_session() as session:
@@ -166,6 +167,13 @@ async def handle_partner_creation_task(partner_id: int, referrer_id: int | None 
             
             if referrer_id:
                 await redis_service.client.delete(f"ref_tree_members_v2:{referrer_id}:1")
+
+            # 3. Trigger Referral Logic (XP, Notifications, Network Counting)
+            # This was previously triggered in the endpoint but is more robust here.
+            if partner.referrer_id:
+                logger.info(f"🚀 Triggering referral logic for new partner {partner.id}")
+                await process_referral_logic(partner.id)
+
         except Exception as e:
             logger.error(f"Side effects failed: {e}")
 

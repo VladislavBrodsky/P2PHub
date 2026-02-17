@@ -165,7 +165,7 @@ async def get_my_profile(
         partner = (await session.exec(stmt_refresh)).one()
 
     if is_new:
-        await process_referral_notifications(bot, session, partner, is_new)
+        pass # Referral logic handled in handle_partner_creation_task background worker
     else:
         # Update profile if changed (Throttled)
         # Update profile if changed (Throttled)
@@ -212,6 +212,12 @@ async def get_my_profile(
             partner.path = f"{referrer.path or ''}.{referrer.id}".lstrip(".")
             partner.depth = referrer.depth + 1
             migration_needed = True
+            
+            # #comment: Self-healing Trigger (Reliability)
+            # If path was broken, referral awards likely failed too. 
+            # Re-triggering ensures data consistency.
+            from app.services.referral_service import process_referral_notifications
+            background_tasks.add_task(process_referral_notifications, bot, session, partner, True)
 
     if partner.depth == 0 and partner.path:
         partner.depth = len(partner.path.split('.'))

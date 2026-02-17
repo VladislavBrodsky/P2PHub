@@ -126,8 +126,10 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
             # XP Calculation & Level Up
             xp_gain = _calculate_referral_xp(level, referrer.is_pro)
             xp_before = referrer.xp
-            referrer.xp += xp_gain
-            referrer.referral_count += 1
+            
+            # #comment: Atomic Increment for high-concurrency safety
+            referrer.xp = Partner.xp + xp_gain
+            referrer.referral_count = Partner.referral_count + 1
             
             xp_txs.append(XPTransaction(
                 partner_id=referrer.id, amount=xp_gain,
@@ -135,6 +137,10 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
                 description=f"Referral XP Reward (L{level})", reference_id=str(partner.id)
             ))
 
+            # Flush to apply increments and refresh to get new values for audit/level-up
+            await session.flush()
+            await session.refresh(referrer)
+            
             await audit_service.log_xp_award(
                 session=session, partner_id=referrer.id, new_user_id=partner.id,
                 xp_amount=xp_gain, level=level, is_pro=referrer.is_pro,
@@ -235,10 +241,14 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
         commission = total_amount * pct
 
         if commission > 0:
-            # 1. Update Object State (In-Memory)
+            # 1. Update Object State (Atomic Increment)
             balance_before = referrer.balance
-            referrer.balance += commission
-            referrer.total_earned_usdt += commission
+            referrer.balance = Partner.balance + commission
+            referrer.total_earned_usdt = Partner.total_earned_usdt + commission
+
+            # Flush to apply increments and refresh for audit logging accuracy
+            await session.flush()
+            await session.refresh(referrer)
 
             # 2. Record Earning
             earning = Earning(
