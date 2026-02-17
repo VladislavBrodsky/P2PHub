@@ -67,15 +67,26 @@ export const CommunityOrbit = memo(() => {
                 for (let i = 0; i < 4; i++) {
                     if (topPartners[i]) {
                         const p = topPartners[i];
-                        const src = p.picture_url || ALL_AVATARS[i % ALL_AVATARS.length];
+                        let src = p.picture_url || ALL_AVATARS[i % ALL_AVATARS.length];
+
+                        // Security: Resolve relative paths to absolute API paths
+                        if (src && src.startsWith('/')) {
+                            const apiUrl = getApiUrl();
+                            const cleanApiUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
+                            src = `${cleanApiUrl}${src}`;
+                        }
 
                         mappedItems.push({
                             type: 'avatar',
-                            src
+                            src: src || `https://i.pravatar.cc/150?u=${p.id}` // Absolute fallback
                         });
                     } else {
-                        // Fallback to static avatars if not enough top partners
-                        mappedItems.push({ type: 'avatar', src: ALL_AVATARS[i % ALL_AVATARS.length] });
+                        // Fallback to static avatars or reliable remote fallbacks if not enough partners
+                        const fallbackSrc = ALL_AVATARS[i % ALL_AVATARS.length];
+                        mappedItems.push({
+                            type: 'avatar',
+                            src: fallbackSrc.startsWith('/') ? `https://i.pravatar.cc/150?img=${i + 10}` : fallbackSrc
+                        });
                     }
 
                     if (CRYPTO_ICONS[i]) {
