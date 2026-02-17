@@ -6,13 +6,14 @@ from datetime import datetime
 from typing import Any, ClassVar
 
 import gspread
+from google.oauth2.service_account import Credentials
+from openai import AsyncOpenAI
+
 from app.core.config import settings
 
 # #comment: Import redis service for caching KB responses
 from app.services.redis_service import redis_service
 from app.worker import broker
-from google.oauth2.service_account import Credentials
-from openai import AsyncOpenAI
 
 logger = logging.getLogger(__name__)
 
@@ -651,3 +652,9 @@ class SupportAgentService:
 
 # Singleton Instance
 support_service = SupportAgentService()
+
+@broker.task(task_name="warm_up_kb_task")
+async def warm_up_kb_task():
+    """Background task to pre-warm the knowledge base cache."""
+    logger.info("🔥 Warming up Knowledge Base cache...")
+    await support_service._get_cached_kb()

@@ -1,8 +1,9 @@
 import logging
 
+from sqlmodel import select
+
 from app.models.partner import Partner
 from app.services.redis_service import redis_service
-from sqlmodel import select
 
 logger = logging.getLogger(__name__)
 

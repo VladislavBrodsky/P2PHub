@@ -1,13 +1,15 @@
 import asyncio
+import json
 import os
 import sys
-import json
+
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 sys.path.append(os.getcwd())
 
 from app.models.partner import Partner, async_session_maker
+
 
 async def check_audit_logs():
     async with async_session_maker() as session:

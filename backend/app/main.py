@@ -75,70 +75,16 @@ async def lifespan(app: FastAPI):
     # #comment: Always ensure DB tables exist. safe to run from multiple workers.
     await create_db_and_tables()
 
-    # #comment: Warmup already has an internal Redis lock, so it's safe to call from all 4 workers.
-    # Only one will succeed, the others will skip.
-    asyncio.create_task(warmup_redis())
-
-    # #comment: Warmup AI services in the background during boot.
-    # This ensures Google Sheets / KB caches are ready before the first user request.
-    from app.services.support_service import support_service
-    asyncio.create_task(support_service._get_cached_kb())
+    # #comment: Distributed Startup Tasks (Offloaded to Workers)
+    # Using TaskIQ ensures these heavy operations don't block web worker startup
+    # and are only executed by the worker cluster (with internal locking).
+    from app.services.maintenance_service import migrate_blog_task, restore_names_task
+    from app.services.support_service import warm_up_kb_task
     
-    # #comment: One-time restoration task for users affected by globalization script
-    # This will run once on startup, protected by leader election
-    async def restore_affected_users():
-        try:
-            from app.services.redis_service import redis_service
-            lock_key = "lock:restore_users_from_telegram"
-            # Check if already done
-            done_key = "restore:users_completed_v2"
-            if await redis_service.client.get(done_key):
-                logger.info("ℹ️ User restoration already completed. Skipping...")
-                return
-            
-            is_leader = await redis_service.client.set(lock_key, "1", ex=300, nx=True)
-            if is_leader:
-                logger.info("🔧 Leader Worker: Running user restoration from Telegram...")
-                from scripts.archive.restore_names_from_telegram import (
-                    restore_names_from_telegram,
-                )
-                restored_count = await restore_names_from_telegram()
-                
-                # Clear all caches to force refresh
-                logger.info("🔧 Clearing all caches...")
-                from scripts.clear_all_caches import clear_all_caches
-                await clear_all_caches()
-                
-                # Mark as done so it doesn't run again
-                await redis_service.client.set(done_key, "1", ex=86400 * 7)  # 7 days
-                logger.info(f"✅ User restoration complete: {restored_count} users restored")
-            else:
-                logger.info("ℹ️ Another worker is handling user restoration. Skipping...")
-        except Exception as e:
-            logger.error(f"⚠️ User restoration failed: {e}")
-
-    asyncio.create_task(restore_affected_users())
-
-    
-    # #comment: Blog Migration Task
-    # Syncs blog post titles and content from locale files and content modules to the database.
-    # Protected by Redis lock to ensure it only runs on one worker.
-    async def run_blog_migration():
-        try:
-            from app.services.redis_service import redis_service
-            lock_key = "lock:blog_migration_v2"
-            is_leader = await redis_service.client.set(lock_key, "1", ex=600, nx=True)
-            if is_leader:
-                logger.info("🔧 Leader Worker: Running blog content migration...")
-                from scripts.migrate_blog import migrate
-                await migrate()
-                logger.info("✅ Blog content migration complete!")
-            else:
-                logger.info("ℹ️ Another worker is handling blog migration. Skipping...")
-        except Exception as e:
-            logger.error(f"⚠️ Blog migration failed: {e}")
-
-    asyncio.create_task(run_blog_migration())
+    await warmup_redis.kiq()
+    await warm_up_kb_task.kiq()
+    await restore_names_task.kiq()
+    await migrate_blog_task.kiq()
 
     # #comment: Migrated Subscription and Photo Sync tasks to TaskIQ Scheduler.
     # We no longer run infinite loops here to save worker memory and prevent redundant DB load.
@@ -190,8 +136,9 @@ async def lifespan(app: FastAPI):
     # which would cause cryptic errors later during request handling.
     try:
         import asyncpg
-        from app.models.partner import engine
         from sqlalchemy import text
+
+        from app.models.partner import engine
         logger.info("🌍 Checking Database Connection (Timeout 5s)...")
         async with asyncio.timeout(5.0):
             async with engine.begin() as conn:
@@ -328,8 +275,9 @@ async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = H
     return {"status": "ok"}
 
 # Import rate limiter
-from app.middleware.rate_limit import limiter, rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
+
+from app.middleware.rate_limit import limiter, rate_limit_exceeded_handler
 
 # Add rate limiter state and exception handler
 app.state.limiter = limiter

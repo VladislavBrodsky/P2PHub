@@ -1,13 +1,15 @@
 import asyncio
 import os
 import sys
+
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 sys.path.append(os.getcwd())
 
-from app.models.partner import Partner, Earning, XPTransaction, async_session_maker
+from app.models.partner import Earning, Partner, XPTransaction, async_session_maker
 from app.models.transaction import PartnerTransaction
+
 
 async def debug_transactions():
     async with async_session_maker() as session:

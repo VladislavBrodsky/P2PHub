@@ -1,10 +1,11 @@
 import logging
 from datetime import datetime, timedelta
 
-from app.core.config import settings
-from app.models.partner import Partner
 from sqlmodel import text
 from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.core.config import settings
+from app.models.partner import Partner
 
 logger = logging.getLogger(__name__)
 

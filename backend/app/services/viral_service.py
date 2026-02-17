@@ -7,6 +7,11 @@ from datetime import datetime
 from typing import Any, ClassVar
 
 import gspread
+from google import genai as google_genai
+from google.genai import types as genai_types
+from google.oauth2.service_account import Credentials
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.core.cmo_intelligence import (
     AudienceProfile,
     ContentCategory,
@@ -16,10 +21,7 @@ from app.core.cmo_intelligence import (
 from app.core.config import settings
 from app.core.errors import ViralStudioErrorCode
 from app.models.partner import Partner
-from google import genai as google_genai
-from google.genai import types as genai_types
-from google.oauth2.service_account import Credentials
-from sqlmodel.ext.asyncio.session import AsyncSession
+from app.worker import broker
 
 logger = logging.getLogger(__name__)
 
@@ -162,7 +164,6 @@ Use FRESH, audience-specific language that feels authentic.
     """
 
     def __init__(self):
-        self._background_tasks = set()
         # 1. Initialize OpenAI
         openai_key = settings.OPENAI_API_KEY
         if openai_key:
@@ -356,9 +357,9 @@ Use FRESH, audience-specific language that feels authentic.
                 "model_image": self._last_working_imagen_model
             }
 
-            # Fire and forget logging
-            task = asyncio.create_task(self.log_generation_to_sheets(
-                partner=partner,
+            # #comment: Move logging to persistent TaskIQ queue (Reliability Boost)
+            await log_viral_generation_task.kiq(
+                partner_id=partner.id,
                 topic=post_type,
                 audience=target_audience,
                 language=language,
@@ -370,9 +371,7 @@ Use FRESH, audience-specific language that feels authentic.
                 title=result["title"],
                 body=result["text"],
                 image_url=image_url
-            ))
-            self._background_tasks.add(task)
-            task.add_done_callback(self._background_tasks.discard)
+            )
 
             return result
 
@@ -893,10 +892,11 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             "https://www.theblock.co/rss.xml"
         ]
         
+        import email.utils
+        from datetime import datetime, timedelta
+
         import httpx
         from bs4 import BeautifulSoup
-        from datetime import datetime, timedelta
-        import email.utils
         
         news_items = []
         now = datetime.now(tz=None) # Using naive UTC for comparison if needed
@@ -1007,11 +1007,9 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             # 1. Fetch Real RSS News
             real_news = await self._fetch_rss_global_news()
             
-            # Fire and forget logging
+            # Fire and forget logging (Persistent)
             if real_news:
-                task = asyncio.create_task(self.log_rss_to_sheets(real_news))
-                self._background_tasks.add(task)
-                task.add_done_callback(self._background_tasks.discard)
+                await log_rss_to_sheets_task.kiq(real_news)
 
             # 2. Preparation for AI processing
             news_context = "\n".join([f"- [{n['source']}] {n['title']}" for n in real_news])
@@ -1293,6 +1291,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
 
     async def _send_telegram_photo(self, channel_id: str, image_path: str, content: str) -> bool:
         from aiogram.types import FSInputFile
+
         from bot import bot
         try:
             photo = FSInputFile(image_path)
@@ -1438,3 +1437,49 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
 
 # Singleton
 viral_studio = ViralMarketingStudio()
+
+@broker.task(task_name="log_viral_generation_task")
+async def log_viral_generation_task(
+    partner_id: int,
+    topic: str,
+    audience: str,
+    language: str,
+    openai_prompt: str,
+    gemini_prompt: str,
+    duration: float,
+    tokens_openai: int,
+    tokens_gemini: int,
+    title: str,
+    body: str,
+    image_url: str | None
+):
+    """Background task to log viral content generation to Google Sheets."""
+    from sqlalchemy.orm import sessionmaker
+    from sqlmodel.ext.asyncio.session import AsyncSession
+    from app.models.partner import engine, Partner
+    
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    async with async_session() as session:
+        partner = await session.get(Partner, partner_id)
+        if not partner:
+            return
+            
+        await viral_studio.log_generation_to_sheets(
+            partner=partner,
+            topic=topic,
+            audience=audience,
+            language=language,
+            openai_prompt=openai_prompt,
+            gemini_prompt=gemini_prompt,
+            duration=duration,
+            tokens_openai=tokens_openai,
+            tokens_gemini=tokens_gemini,
+            title=title,
+            body=body,
+            image_url=image_url
+        )
+
+@broker.task(task_name="log_rss_to_sheets_task")
+async def log_rss_to_sheets_task(news_items: list[dict]):
+    """Background task to log RSS news items to Google Sheets."""
+    await viral_studio.log_rss_to_sheets(news_items)

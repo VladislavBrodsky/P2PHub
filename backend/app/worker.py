@@ -1,9 +1,10 @@
 
 import taskiq_fastapi
-from app.core.config import settings
 from taskiq import TaskiqScheduler
 from taskiq.schedule_sources import LabelScheduleSource
 from taskiq_redis import ListQueueBroker, RedisAsyncResultBackend
+
+from app.core.config import settings
 
 # 1. Init Broker (Redis)
 broker = ListQueueBroker(
@@ -44,4 +45,5 @@ TASKS_TO_IMPORT: list[str] = [
     "app.services.analytics_service",
     "app.services.support_service",
     "app.services.maintenance_service",
+    "app.services.viral_service",
 ]

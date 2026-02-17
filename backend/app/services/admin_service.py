@@ -4,10 +4,11 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
+from sqlmodel import func, select, text
+
 from app.models.partner import Earning, Partner, PartnerTask, get_session
 from app.models.transaction import PartnerTransaction
 from app.services.notification_service import notification_service
-from sqlmodel import func, select, text
 
 
 class AdminService:
@@ -89,6 +90,32 @@ class AdminService:
             await self._materialize_stats(session, stats)
             return stats
 
+    async def get_public_kpis(self) -> dict[str, Any]:
+        """Returns non-sensitive KPIs for the public landing page."""
+        async for session in get_session():
+            # Try to get from materialized admin stats first to save resources
+            cached = await self._get_cached_stats(session)
+            if cached:
+                return {
+                    "total_partners": cached["events"]["total_partners"],
+                    "volume_usdt": cached["financials"]["total_revenue"],
+                    "countries": 142, # Still hardcoded for now as it's not in DB yet
+                    "updated_at": cached.get("cached_at")
+                }
+            
+            # Fallback if no cache
+            total_partners = (await session.exec(select(func.count(Partner.id)))).one()
+            rev_ton = (await session.exec(select(func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed", PartnerTransaction.currency == "TON"))).one() or 0.0
+            rev_usdt = (await session.exec(select(func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed", PartnerTransaction.currency == "USDT"))).one() or 0.0
+            total_revenue = rev_usdt + (rev_ton * 5.0)
+
+            return {
+                "total_partners": total_partners,
+                "volume_usdt": round(total_revenue, 1),
+                "countries": 142,
+                "updated_at": datetime.utcnow().isoformat()
+            }
+
     async def _get_cached_stats(self, session) -> dict | None:
         import json
 
@@ -104,15 +131,38 @@ class AdminService:
         return None
 
     async def _calculate_growth_metrics(self, session, now: datetime) -> dict:
-        periods = {"24h": timedelta(hours=24), "7d": timedelta(days=7), "30d": timedelta(days=30), "90d": timedelta(days=90)}
-        growth = {}
-        for label, delta in periods.items():
-            start, prev_start = now - delta, now - (delta * 2)
-            curr = (await session.exec(select(func.count(Partner.id)).where(Partner.created_at >= start))).one()
-            prev = (await session.exec(select(func.count(Partner.id)).where(Partner.created_at >= prev_start, Partner.created_at < start))).one()
-            pct = ((curr - prev) / prev * 100) if prev > 0 else 0
-            growth[label] = {"count": curr, "previous": prev, "percent_change": round(pct, 1)}
-        return growth
+        """Single-query optimization for all growth periods."""
+        # Find the earliest needed date (90d * 2 = 180d)
+        max_delta = timedelta(days=90 * 2)
+        earliest = now - max_delta
+        
+        # Build one giant query with conditional counts
+        # This reduces 8 queries down to 1.
+        stmt = select(
+            func.count(text("CASE WHEN created_at >= :h24 THEN 1 END")).params(h24=now-timedelta(hours=24)),
+            func.count(text("CASE WHEN created_at >= :h48 AND created_at < :h24 THEN 1 END")).params(h48=now-timedelta(hours=48), h24=now-timedelta(hours=24)),
+            func.count(text("CASE WHEN created_at >= :d7 THEN 1 END")).params(d7=now-timedelta(days=7)),
+            func.count(text("CASE WHEN created_at >= :d14 AND created_at < :d7 THEN 1 END")).params(d14=now-timedelta(days=14), d7=now-timedelta(days=7)),
+            func.count(text("CASE WHEN created_at >= :d30 THEN 1 END")).params(d30=now-timedelta(days=30)),
+            func.count(text("CASE WHEN created_at >= :d60 AND created_at < :d30 THEN 1 END")).params(d60=now-timedelta(days=60), d30=now-timedelta(days=30)),
+            func.count(text("CASE WHEN created_at >= :d90 THEN 1 END")).params(d90=now-timedelta(days=90)),
+            func.count(text("CASE WHEN created_at >= :d180 AND created_at < :d90 THEN 1 END")).params(d180=now-timedelta(days=180), d90=now-timedelta(days=90)),
+        )
+        
+        counts = (await session.exec(stmt)).first()
+        if not counts: return {}
+
+        c24, p24, c7, p7, c30, p30, c90, p90 = counts
+        
+        def calc_pct(c, p):
+            return round(((c - p) / p * 100), 1) if p > 0 else 0.0
+
+        return {
+            "24h": {"count": c24, "previous": p24, "percent_change": calc_pct(c24, p24)},
+            "7d": {"count": c7, "previous": p7, "percent_change": calc_pct(c7, p7)},
+            "30d": {"count": c30, "previous": p30, "percent_change": calc_pct(c30, p30)},
+            "90d": {"count": c90, "previous": p90, "percent_change": calc_pct(c90, p90)}
+        }
 
     async def _calculate_general_totals(self, session, now: datetime) -> dict:
         total_partners = (await session.exec(select(func.count(Partner.id)))).one()
@@ -162,14 +212,24 @@ class AdminService:
         return daily_g, daily_r
 
     async def _calculate_recent_sales(self, session) -> list:
-        txs = (await session.exec(select(PartnerTransaction).where(PartnerTransaction.status == "completed").order_by(PartnerTransaction.created_at.desc()).limit(15))).all()
+        # Optimized: Use selectinload to avoid N+1 queries when fetching partner details for transactions
+        stmt = (
+            select(PartnerTransaction)
+            .where(PartnerTransaction.status == "completed")
+            .options(selectinload(PartnerTransaction.partner)) 
+            .order_by(PartnerTransaction.created_at.desc())
+            .limit(15)
+        )
+        result = await session.exec(stmt)
+        txs = result.all()
+        
         recent = []
         for tx in txs:
-            p_info = (await session.exec(select(Partner.username, Partner.telegram_id).where(Partner.id == tx.partner_id))).first()
             recent.append({
                 "id": tx.id, "amount": tx.amount, "currency": tx.currency, "tx_hash": tx.tx_hash,
-                "created_at": tx.created_at.isoformat(), "username": p_info[0] if p_info else None,
-                "telegram_id": p_info[1] if p_info else "Unknown"
+                "created_at": tx.created_at.isoformat(), 
+                "username": tx.partner.username if tx.partner else None,
+                "telegram_id": tx.partner.telegram_id if tx.partner else "Unknown"
             })
         return recent
 

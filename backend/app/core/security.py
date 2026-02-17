@@ -3,8 +3,9 @@ import hmac
 import json
 from urllib.parse import parse_qsl
 
-from app.core.config import settings
 from fastapi import Depends, Header, HTTPException
+
+from app.core.config import settings
 
 
 def validate_telegram_data(init_data: str) -> dict:

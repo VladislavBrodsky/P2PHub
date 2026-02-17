@@ -1,13 +1,17 @@
 import asyncio
 import logging
 
+from sqlmodel import select
+
 from app.models.partner import Partner, get_session
 from app.services.leaderboard_service import leaderboard_service
 from app.services.redis_service import redis_service
-from sqlmodel import select
 
 logger = logging.getLogger(__name__)
 
+from app.worker import broker
+
+@broker.task(task_name="warmup_redis_task")
 async def warmup_redis():
     """
     Seeds Redis with critical production data from PostgreSQL.

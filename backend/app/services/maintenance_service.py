@@ -3,11 +3,12 @@ import logging
 from datetime import datetime
 from typing import Any
 
-from app.models.partner import Partner, engine
-from app.worker import broker
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.partner import Partner, engine
+from app.worker import broker
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,44 @@ async def refresh_admin_stats():
     logger.info("📡 Scheduled Task: Refreshing Admin Dashboard Stats...")
     await admin_service.get_dashboard_stats(force_refresh=True)
     logger.info("✅ Admin stats successfully refreshed by scheduler.")
+
+@broker.task(task_name="restore_names_task")
+async def restore_names_task():
+    """Distributed task for user name restoration from Telegram archives."""
+    from app.services.redis_service import redis_service
+    lock_key = "lock:restore_users_from_telegram"
+    done_key = "restore:users_completed_v2"
+    
+    if await redis_service.client.get(done_key):
+        return
+
+    async with redis_service.client.lock(lock_key, timeout=600):
+        # Double check done_key after acquiring lock
+        if await redis_service.client.get(done_key):
+            return
+            
+        logger.info("🔧 Running user restoration internal task...")
+        from scripts.archive.restore_names_from_telegram import restore_names_from_telegram
+        restored_count = await restore_names_from_telegram()
+        
+        # Clear caches
+        from scripts.clear_all_caches import clear_all_caches
+        await clear_all_caches()
+        
+        await redis_service.client.set(done_key, "1", ex=86400 * 7)
+        logger.info(f"✅ User restoration internal task complete: {restored_count}")
+
+@broker.task(task_name="migrate_blog_task")
+async def migrate_blog_task():
+    """Distributed task for blog content synchronization."""
+    from app.services.redis_service import redis_service
+    lock_key = "lock:blog_migration_v2"
+    
+    async with redis_service.client.lock(lock_key, timeout=600):
+        logger.info("🔧 Running blog migration internal task...")
+        from scripts.migrate_blog import migrate
+        await migrate()
+        logger.info("✅ Blog migration internal task complete!")
 
 async def reconcile_network_stats(session_override: AsyncSession = None) -> dict[str, Any]:
     """

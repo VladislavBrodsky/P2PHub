@@ -8,14 +8,16 @@ DB_URL = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchb
 # Add the current directory to sys.path
 sys.path.append(os.getcwd())
 
-from sqlmodel import select, func
-from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.orm import sessionmaker
+from sqlmodel import func, select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.models.partner import Partner
 
+
 async def check_prod_stats():
-    print(f"🔗 Connecting to Production Database...")
+    print("🔗 Connecting to Production Database...")
     engine = create_async_engine(DB_URL)
     session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     

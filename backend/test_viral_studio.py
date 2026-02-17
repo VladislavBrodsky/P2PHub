@@ -89,7 +89,7 @@ async def diagnostic_test():
     except Exception as e:
         print(f"❌ OpenAI API call failed: {e}")
         print(f"   Error type: {type(e).__name__}")
-        print(f"   Full error: {str(e)}")
+        print(f"   Full error: {e!s}")
         return False
     
     # Step 5: Test Gemini API call
@@ -115,7 +115,7 @@ async def diagnostic_test():
     except Exception as e:
         print(f"❌ Gemini API call failed: {e}")
         print(f"   Error type: {type(e).__name__}")
-        print(f"   Full error: {str(e)}")
+        print(f"   Full error: {e!s}")
         return False
     
     # Step 6: Test Viral Service
@@ -127,7 +127,7 @@ async def diagnostic_test():
         from app.services.viral_service import viral_studio
         
         capabilities = viral_studio.get_capabilities()
-        print(f"✅ Viral Studio initialized")
+        print("✅ Viral Studio initialized")
         print(f"   Text Generation: {'✅' if capabilities.get('text_generation') else '❌'}")
         print(f"   Image Generation: {'✅' if capabilities.get('image_generation') else '❌'}")
         print(f"   Sheets Logging: {'✅' if capabilities.get('sheets_logging') else '❌'}")
@@ -160,7 +160,7 @@ async def diagnostic_test():
         )
         
         if result.get("status") == "failed":
-            print(f"❌ Content generation failed!")
+            print("❌ Content generation failed!")
             print(f"   Error code: {result.get('error_code')}")
             print(f"   Error message: {result.get('error')}")
             return False

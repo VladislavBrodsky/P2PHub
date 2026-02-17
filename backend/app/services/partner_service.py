@@ -5,15 +5,16 @@ import secrets
 from datetime import datetime, timedelta
 
 import httpx
+from PIL import Image
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.core.config import settings
 from app.models.partner import Partner
 from app.services.leaderboard_service import leaderboard_service
 from app.services.redis_service import redis_service
 from app.worker import broker
 from bot import bot
-from PIL import Image
-from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
 
@@ -126,9 +127,47 @@ async def create_partner(
     partner, is_new = await _commit_partner_creation(session, partner, telegram_id)
     
     if is_new:
-        await _handle_partner_creation_side_effects(partner, referrer)
+        # #comment: Move side effects to background task to keep user creation snappy (<100ms)
+        await handle_partner_creation_task.kiq(partner.id, referrer.id if referrer else None)
 
     return partner, is_new
+
+@broker.task(task_name="handle_partner_creation_task")
+async def handle_partner_creation_task(partner_id: int, referrer_id: int | None = None):
+    """
+    Decoupled side-effects for partner creation.
+    Handles leaderboard sync and multi-level cache invalidation.
+    """
+    from sqlalchemy.orm import sessionmaker
+
+    from app.models.partner import engine
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    
+    async with async_session() as session:
+        partner = await session.get(Partner, partner_id)
+        if not partner: return
+
+        # 1. Sync Leaderboard
+        try:
+            await leaderboard_service.update_score(partner.id, partner.xp)
+        except Exception as e:
+            logger.warning(f"Failed to sync to leaderboard: {e}")
+
+        # 2. Cache Invalidation
+        try:
+            await redis_service.client.delete("partners:recent_v2")
+            if partner.path:
+                async with redis_service.client.pipeline(transaction=True) as pipe:
+                    anc_ids = [int(x) for x in partner.path.split('.')]
+                    # Invalidate up to 9 levels of the tree
+                    for anc_id in anc_ids[-9:]:
+                        pipe.delete(f"ref_tree_stats_v2:{anc_id}")
+                    await pipe.execute()
+            
+            if referrer_id:
+                await redis_service.client.delete(f"ref_tree_members_v2:{referrer_id}:1")
+        except Exception as e:
+            logger.error(f"Side effects failed: {e}")
 
 async def _resolve_referrer(session: AsyncSession, code: str | None, current_id: int | None) -> Partner | None:
     if not code: return None
@@ -161,26 +200,6 @@ async def _commit_partner_creation(session: AsyncSession, partner: Partner, tele
             raise RuntimeError("Database integrity error on user creation followed by missing record.") from None
         return existing, False
 
-async def _handle_partner_creation_side_effects(partner: Partner, referrer: Partner | None):
-    # 1. Leaderboard
-    try:
-        await leaderboard_service.update_score(partner.id, partner.xp)
-    except Exception as e:
-        logger.warning(f"Failed to sync to leaderboard: {e}")
-
-    # 2. Cache Invalidation
-    try:
-        await redis_service.client.delete("partners:recent_v2")
-        if referrer:
-            async with redis_service.client.pipeline(transaction=True) as pipe:
-                anc_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-                for anc_id in anc_ids[-9:]:
-                    pipe.delete(f"ref_tree_stats_v2:{anc_id}")
-                    if anc_id == referrer.id:
-                        pipe.delete(f"ref_tree_members_v2:{anc_id}:1")
-                await pipe.execute()
-    except Exception as e:
-        logger.error(f"Side effects failed: {e}")
 
 async def get_partner_by_telegram_id(session: AsyncSession, telegram_id: str) -> Partner | None:
     statement = select(Partner).where(Partner.telegram_id == telegram_id)
@@ -194,8 +213,9 @@ async def get_partner_by_referral_code(session: AsyncSession, code: str) -> Part
 
 @broker.task(task_name="sync_profile_photos_task", schedule=[{"cron": "0 0 * * *"}])
 async def sync_profile_photos_task():
-    from app.models.partner import engine
     from sqlalchemy.orm import sessionmaker
+
+    from app.models.partner import engine
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
         await sync_profile_photos(bot, session)
@@ -249,8 +269,9 @@ async def sync_single_photo_background(telegram_id: str):
     Background worker for on-demand photo sync.
     Creates its own session to avoid sharing state with the main request.
     """
-    from app.models.partner import engine
     from sqlalchemy.orm import sessionmaker
+
+    from app.models.partner import engine
     
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:

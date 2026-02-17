@@ -3,6 +3,7 @@ import os
 import re
 import sys
 
+
 def professional_polish(text, lang="en"):
     """
     Elite Polishing for Pintopay Blog (v8).
@@ -85,7 +86,7 @@ def process_file(filepath, dict_name, lang):
         return
     print(f"Polishing {filepath} ({lang})...")
     
-    with open(filepath, 'r', encoding='utf-8') as f:
+    with open(filepath, encoding='utf-8') as f:
         content = f.read()
         
     # Match multiline strings carefully: "1": """content"""

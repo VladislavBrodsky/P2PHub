@@ -1,6 +1,6 @@
-import os
 import asyncio
 import logging
+import os
 import sys
 
 # EXPLICIT CONFIG FOR AUDIT
@@ -9,11 +9,12 @@ DB_URL = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchb
 # Add the current directory to sys.path
 sys.path.append(os.getcwd())
 
-from app.models.partner import Partner
-from sqlmodel import select, func
-from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.orm import sessionmaker
+from sqlmodel import func, select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.partner import Partner
 
 # Force logging to stdout
 logging.basicConfig(

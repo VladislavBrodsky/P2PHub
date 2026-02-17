@@ -4,14 +4,15 @@ import logging
 from datetime import datetime, timedelta
 
 import sentry_sdk
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.core.config import settings
 from app.core.http_client import http_client
 from app.models.partner import Partner
 from app.models.transaction import PartnerTransaction
 from app.services.redis_service import redis_service
 from app.services.ton_verification_service import ton_verification_service
-from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
 

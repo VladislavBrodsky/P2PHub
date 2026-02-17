@@ -116,7 +116,7 @@ class ViralCopywriter:
         if not self.client:
             return {"error": "OpenAI API Key is missing."}
 
-        system_prompt = f"""
+        system_prompt = """
 You are an Elite Viral Copywriter. Your task is to AUDIT and IMPROVE an existing blog article.
 
 **CRITICAL STANDARDS:**

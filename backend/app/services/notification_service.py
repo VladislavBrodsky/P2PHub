@@ -4,6 +4,7 @@ import logging
 from typing import List
 
 import sentry_sdk
+
 from app.schemas.notification import InlineButton, NotificationPayload
 from app.worker import broker
 
@@ -21,11 +22,12 @@ async def send_telegram_task(payload_dict: dict):
     Optimized background worker task to send Telegram messages.
     Uses Pydantic for validation and structured data.
     """
-    from bot import bot
-    from app.models.partner import engine
-    from app.services.audit_service import audit_service
     from sqlalchemy.orm import sessionmaker
     from sqlmodel.ext.asyncio.session import AsyncSession
+
+    from app.models.partner import engine
+    from app.services.audit_service import audit_service
+    from bot import bot
 
     # 1. Validate Payload
     try:
@@ -89,7 +91,7 @@ class NotificationService:
     def __init__(self):
         self._background_tasks: set[asyncio.Task] = set()
 
-    def _build_keyboard(self, buttons: List[List[InlineButton]] | None):
+    def _build_keyboard(self, buttons: list[list[InlineButton]] | None):
         """Helper to build AIogram InlineKeyboardMarkup from Pydantic models."""
         if not buttons:
             return None

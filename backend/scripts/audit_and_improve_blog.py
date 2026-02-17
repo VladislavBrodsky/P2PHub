@@ -8,12 +8,14 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from dotenv import load_dotenv
+
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"))
 
 from app.core.config import settings
 from app.services.copywriter import ViralCopywriter
 from scripts.data.blog_content_en import BLOG_CONTENT_EN
 from scripts.data.blog_content_ru import BLOG_CONTENT_RU
+
 
 async def audit_and_improve(batch_start: int = 1, batch_size: int = 5):
     copywriter = ViralCopywriter(api_key=settings.OPENAI_API_KEY)
@@ -61,7 +63,7 @@ async def update_blog_file(filepath: str, slug: str, res: dict, dict_name: str):
     # Format properly
     full_text = f"\n# {title}\n\n{excerpt}\n\n{content}"
     
-    with open(filepath, 'r') as f:
+    with open(filepath) as f:
         file_content = f.read()
     
     # Regex to replace the multiline string for the slug

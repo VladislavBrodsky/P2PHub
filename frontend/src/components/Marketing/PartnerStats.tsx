@@ -75,20 +75,50 @@ const CountUp = ({ value, duration = 2 }: { value: string; duration?: number }) 
 export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
     const { t } = useTranslation();
     const [recentPartners, setRecentPartners] = useState<any[]>([]);
-    const [stats, setStats] = useState({ total: '12.4k', volume: '$84.2M', countries: '142', lastHourCount: 342 });
+    const [stats, setStats] = useState({ total: '0', volume: '$0', countries: '142', lastHourCount: 0 });
     const [isLoading, setIsLoading] = useState(true);
 
+    // Initial load and polling for stats
     useVisibilityPolling(async () => {
         try {
-            const response = await apiClient.get('/api/partner/recent');
-            if (response.status === 200 && response.data) {
-                const { partners, last_hour_count } = response.data;
+            // Parallel fetch for recent partners and global stats
+            const [recentRes, statsRes] = await Promise.all([
+                apiClient.get('/api/partner/recent'),
+                apiClient.get('/api/partner/stats/public')
+            ]);
+
+            if (recentRes.status === 200 && recentRes.data) {
+                const { partners, last_hour_count } = recentRes.data;
                 setRecentPartners(partners || []);
                 setStats(prev => ({ ...prev, lastHourCount: last_hour_count || prev.lastHourCount }));
-                setIsLoading(false);
             }
+
+            if (statsRes.status === 200 && statsRes.data) {
+                const { total_partners, volume_usdt, countries } = statsRes.data;
+
+                // Format values for display (e.g., 12400 -> 12.4k)
+                const formatCount = (val: number) => {
+                    if (val >= 1000000) return `${(val / 1000000).toFixed(1)}M`;
+                    if (val >= 1000) return `${(val / 1000).toFixed(1)}k`;
+                    return val.toString();
+                };
+
+                const formatVolume = (val: number) => {
+                    if (val >= 1000000) return `$${(val / 1000000).toFixed(1)}M`;
+                    if (val >= 1000) return `$${(val / 1000).toFixed(1)}k`;
+                    return `$${val}`;
+                };
+
+                setStats(prev => ({
+                    ...prev,
+                    total: formatCount(total_partners),
+                    volume: formatVolume(volume_usdt),
+                    countries: countries.toString()
+                }));
+            }
+            setIsLoading(false);
         } catch (error) {
-            console.error("Failed to fetch recent partners", error);
+            console.error("Failed to fetch dashboard stats", error);
             setIsLoading(false);
         }
     }, 5 * 60 * 1000);

@@ -1,13 +1,14 @@
 import contextlib
 import logging
 
+from fastapi import APIRouter, Depends, HTTPException, Request
+from pydantic import BaseModel
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.core.security import get_current_user, get_tg_user
 from app.middleware.rate_limit import limiter
 from app.models.partner import Partner, get_session
 from app.services.support_service import support_service
-from fastapi import APIRouter, Depends, HTTPException, Request
-from pydantic import BaseModel
-from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
 

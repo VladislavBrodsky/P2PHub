@@ -7,6 +7,12 @@ import secrets
 from datetime import datetime, timedelta
 
 import sentry_sdk
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
+from sqlalchemy import text
+from sqlalchemy.orm import selectinload
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.core.config import settings
 from app.core.i18n import get_msg
 from app.core.security import get_current_user, get_tg_user
@@ -27,11 +33,6 @@ from app.services.notification_service import notification_service
 from app.services.redis_service import redis_service
 from app.utils.ranking import get_level
 from bot import bot, types
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
-from sqlalchemy import text
-from sqlalchemy.orm import selectinload
-from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -66,8 +67,7 @@ async def get_network_activity(
     except Exception as e:
         logger.warning(f"Cache read failed (activity): {e}")
 
-    # Fetch latest XP transactions with partner details
-    # Fetch latest XP transactions with partner details
+    # Optimized: Batch fetch with partner details to avoid N+1
     stmt = (
         select(XPTransaction, Partner.first_name, Partner.username, Partner.photo_file_id)
         .join(Partner, XPTransaction.partner_id == Partner.id)
@@ -411,8 +411,8 @@ async def get_orbit_members(
 
     from sqlalchemy import func
 
-    from app.utils.ranking import get_rank
     from app.utils.api import get_api_url
+    from app.utils.ranking import get_rank
 
     # Demo avatars to ensure the orbit looks "peopled" even if no photos in DB
     DEMO_AVATARS = [
@@ -626,6 +626,14 @@ async def get_recent_partners(
         await redis_service.set_json(cache_key, partners_data, expire=300) # 5 mins
     except Exception as e:
         logger.warning(f"Recent partners cache write failed: {e}")
+
+    return partners_data
+
+@router.get("/stats/public")
+async def get_public_stats():
+    """Returns non-sensitive KPIs for the landing page."""
+    from app.services.admin_service import admin_service
+    return await admin_service.get_public_kpis()
 
 
 @router.get("/tree", response_model=NetworkStats)
@@ -1280,8 +1288,9 @@ async def get_partner_photo(request: Request, file_id: str):
     """
     import time
 
-    from app.services.partner_service import ensure_photo_cached
     from fastapi.responses import Response
+
+    from app.services.partner_service import ensure_photo_cached
 
     start_time = time.time()
     try:

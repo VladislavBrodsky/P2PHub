@@ -1,6 +1,7 @@
 import asyncio
 import os
 import sys
+
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -8,6 +9,7 @@ sys.path.append(os.getcwd())
 
 from app.models.partner import async_session_maker
 from app.models.transaction import PartnerTransaction
+
 
 async def check_p6_txs():
     async with async_session_maker() as session:

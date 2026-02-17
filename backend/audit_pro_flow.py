@@ -3,15 +3,25 @@ import logging
 import os
 import sys
 from datetime import datetime, timedelta
+
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 # Add the current directory to sys.path for module imports
 sys.path.append(os.getcwd())
 
-from app.models.partner import Partner, Earning, XPTransaction, engine, async_session_maker
+from app.models.partner import (
+    Earning,
+    Partner,
+    XPTransaction,
+    async_session_maker,
+    engine,
+)
 from app.models.transaction import PartnerTransaction
-from app.services.audit_service import AuditLog # Assuming this exists or checking audit_log table
+from app.services.audit_service import (
+    AuditLog,  # Assuming this exists or checking audit_log table
+)
+
 
 async def audit_pro_flow():
     print("🚀 Starting PRO Flow Audit...")
@@ -46,7 +56,7 @@ async def audit_pro_flow():
             
             print("  Recent Commissions (approximate matching by time):")
             # This is a bit loose, but let's see.
-            comm_res = await session.exec(select(Earning).where(Earning.description.like(f"%PRO Commission%"), Earning.created_at >= p.pro_purchased_at - timedelta(seconds=10), Earning.created_at <= p.pro_purchased_at + timedelta(seconds=10)))
+            comm_res = await session.exec(select(Earning).where(Earning.description.like("%PRO Commission%"), Earning.created_at >= p.pro_purchased_at - timedelta(seconds=10), Earning.created_at <= p.pro_purchased_at + timedelta(seconds=10)))
             comms = comm_res.all()
             print(f"    Found {len(comms)} commissions linked to this timeframe.")
             for c in comms:
@@ -58,7 +68,7 @@ async def audit_pro_flow():
             audit_stmt = text("SELECT action, actor_id, details FROM audit_log WHERE (actor_id = :tg_id OR details->>'buyer_id' = :p_id) AND created_at >= :since")
             audit_res = await session.execute(audit_stmt, {"tg_id": str(p.telegram_id), "p_id": str(p.id), "since": p.pro_purchased_at - timedelta(minutes=5)})
             logs = audit_res.all()
-            print(f"  Audit Logs:")
+            print("  Audit Logs:")
             for action, actor_id, details in logs:
                 print(f"    Action: {action}, Actor: {actor_id}, Details: {details}")
 

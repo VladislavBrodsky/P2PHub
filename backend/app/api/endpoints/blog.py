@@ -1,17 +1,19 @@
 import secrets
+from typing import List, Optional
+
+from fastapi import APIRouter, Depends, Header, HTTPException, Query
+from sqlmodel import func, or_, select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.security import get_current_user, get_tg_user
 from app.models.blog import BlogPost, BlogPostEngagement, PartnerBlogLike
 from app.models.partner import Partner, get_session
 from app.schemas.blog import BlogListResponse, BlogPostDetail, BlogPostRead
-from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, Query, Header
-from sqlmodel import func, or_, select
-from sqlmodel.ext.asyncio.session import AsyncSession
 
 router = APIRouter()
 
 from app.services.redis_service import redis_service
+
 
 @router.get("/", response_model=BlogListResponse)
 async def list_posts(
@@ -21,7 +23,7 @@ async def list_posts(
     q: str | None = None,
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
-    accept_language: Optional[str] = Header(None)
+    accept_language: str | None = Header(None)
 ):
     """List blog posts with pagination, search and filtering with cache."""
     tg_user = None
@@ -108,7 +110,7 @@ async def get_post_detail(
     slug: str,
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
-    accept_language: Optional[str] = Header(None)
+    accept_language: str | None = Header(None)
 ):
     """Get full details for a specific blog post with caching."""
     # Handle guest mode

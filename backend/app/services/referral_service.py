@@ -2,6 +2,10 @@ import asyncio
 import logging
 
 import sentry_sdk
+from sqlalchemy.orm import sessionmaker
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.core.config import settings
 from app.core.i18n import get_msg
 from app.models.partner import Earning, Partner, XPTransaction, engine
@@ -12,9 +16,6 @@ from app.services.redis_service import redis_service
 from app.utils.ranking import get_level
 from app.utils.text import escape_markdown_v1
 from app.worker import broker
-from sqlalchemy.orm import sessionmaker
-from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
 

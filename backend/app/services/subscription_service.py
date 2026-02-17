@@ -2,12 +2,13 @@ import asyncio
 import logging
 from datetime import datetime, timedelta
 
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.core.config import settings
 from app.models.partner import Partner
 from app.services.notification_service import notification_service
 from app.worker import broker
-from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
 

@@ -1,18 +1,20 @@
 # Leaderboard endpoint with high-performance caching
 import logging
 
-from app.core.security import get_current_user, get_tg_user
-from app.models.partner import Partner, get_session
-from app.schemas.leaderboard import LeaderboardPartner
-from app.services.leaderboard_service import leaderboard_service
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from app.core.security import get_current_user, get_tg_user
+from app.models.partner import Partner, get_session
+from app.schemas.leaderboard import LeaderboardPartner
+from app.services.leaderboard_service import leaderboard_service
+
 router = APIRouter()
 
-from app.middleware.rate_limit import limiter
 from fastapi import Request
+
+from app.middleware.rate_limit import limiter
 
 logger = logging.getLogger(__name__)
 

@@ -1,12 +1,14 @@
 import asyncio
 import os
 import sys
+
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 sys.path.append(os.getcwd())
 
 from app.models.partner import Partner, XPTransaction, async_session_maker
+
 
 async def check_pro_rewards():
     async with async_session_maker() as session:

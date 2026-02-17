@@ -101,7 +101,10 @@
       "3_desc": "We do not sell your data to third parties. Information is only shared when required for protocol execution.",
       "4_title": "4. Your Rights",
       "4_desc": "You have the right to access, correct, or request the deletion of your personal data at any time."
-    }
+    },
+    "tos": "Visit our website for full Terms of Service.",
+    "aml": "We comply with global AML/KYC standards for all high-velocity P2P settlements.",
+    "footer": "Decentralized Empowerment • © 2026 Ambassador Vanguard"
   },
   "system": {
     "loading": {

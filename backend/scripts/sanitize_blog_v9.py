@@ -3,6 +3,7 @@ import os
 import re
 import sys
 
+
 def repair_markdown_bold(text, lang="en"):
     """
     Repair Markdown Bold formatting (v9).
@@ -41,7 +42,7 @@ def process_file(filepath, dict_name, lang):
         return
     print(f"Repairing {filepath} ({lang})...")
     
-    with open(filepath, 'r', encoding='utf-8') as f:
+    with open(filepath, encoding='utf-8') as f:
         content = f.read()
         
     pattern = r'    "(\d+)": """(.*?)""",'

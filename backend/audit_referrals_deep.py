@@ -1,8 +1,9 @@
-from dotenv import load_dotenv
-import os
 import asyncio
 import logging
+import os
 import sys
+
+from dotenv import load_dotenv
 
 # DATABASE_URL literal for audit since .env is restricted
 DB_URL = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
@@ -10,10 +11,11 @@ DB_URL = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchb
 # Add the current directory to sys.path
 sys.path.append(os.getcwd())
 
-from app.models.partner import Partner, engine
-from sqlmodel import select, func
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import func, select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.partner import Partner, engine
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

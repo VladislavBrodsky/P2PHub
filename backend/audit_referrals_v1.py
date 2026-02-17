@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 
 # Diagnostics
@@ -19,10 +20,11 @@ import sys
 # Add the current directory to sys.path to import app
 sys.path.append(cwd)
 
-from app.models.partner import Partner, engine
-from sqlmodel import select, func, text
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import func, select, text
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.partner import Partner, engine
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

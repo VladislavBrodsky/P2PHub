@@ -1,5 +1,6 @@
 from app.core.config import settings
 
+
 def get_api_url() -> str:
     """Returns the base API URL for absolute link generation."""
     # Priority 1: Explicitly set WEBHOOK_URL
