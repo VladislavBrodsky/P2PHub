@@ -501,15 +501,17 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 
+from async_lru import alru_cache
+
 class KnowledgeInsights:
     """Self-learning system for continuous improvement."""
     
-    _CACHE = {}
-    
     @staticmethod
+    @alru_cache(maxsize=1, ttl=3600) # Cache for 1 hour
     async def get_best_practices(session: AsyncSession = None):
         """
         Retrieves best practices from DB if available, falling back to static rules.
+        Optimized with alru_cache to prevent excessive DB calls.
         """
         if session:
             try:

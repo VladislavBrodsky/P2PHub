@@ -29,6 +29,10 @@ interface ProModalsProps {
     setShowHeadlineModal?: (show: boolean) => void;
     handleFixHeadline?: (headline: string) => Promise<string | undefined>;
     isFixingHeadline?: boolean;
+    showBioModal?: boolean;
+    setShowBioModal?: (show: boolean) => void;
+    handleGenerateBio?: (bio: string) => Promise<string | undefined>;
+    isGeneratingBio?: boolean;
 }
 
 export const ProDashboardModals = ({
@@ -49,7 +53,11 @@ export const ProDashboardModals = ({
     showHeadlineModal,
     setShowHeadlineModal,
     handleFixHeadline,
-    isFixingHeadline
+    isFixingHeadline,
+    showBioModal,
+    setShowBioModal,
+    handleGenerateBio,
+    isGeneratingBio
 }: ProModalsProps) => {
     const { t } = useTranslation();
     const { showNotification } = useNotificationStore();
@@ -61,6 +69,10 @@ export const ProDashboardModals = ({
     // Headline Local State
     const [headlineInput, setHeadlineInput] = useState('');
     const [headlineResult, setHeadlineResult] = useState('');
+
+    // Bio Local State
+    const [bioInput, setBioInput] = useState('');
+    const [bioResult, setBioResult] = useState('');
 
     // Form Fields
     const [xApiKey, setXApiKey] = useState('');
@@ -114,6 +126,16 @@ export const ProDashboardModals = ({
         try {
             const result = await handleFixHeadline(headlineInput);
             if (result) setHeadlineResult(result);
+        } catch (e) {
+            // Error handled in parent
+        }
+    };
+
+    const onGenerateBio = async () => {
+        if (!handleGenerateBio || !bioInput) return;
+        try {
+            const result = await handleGenerateBio(bioInput);
+            if (result) setBioResult(result);
         } catch (e) {
             // Error handled in parent
         }
@@ -285,46 +307,60 @@ export const ProDashboardModals = ({
                 )}
             </AnimatePresence>
 
-            {/* MARKET AUDIT MODAL */}
+            {/* MARKET AUDIT MODAL - PRO BENTO EDITION */}
             <AnimatePresence>
                 {showAuditModal && marketAudit && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-200 flex items-center justify-center p-4 bg-slate-950/40 dark:bg-slate-950/90 backdrop-blur-md"
+                        className="fixed inset-0 z-200 flex items-center justify-center p-4 bg-slate-950/60 dark:bg-slate-950/95 backdrop-blur-xl"
                         onClick={() => setShowAuditModal(false)}
                     >
                         <motion.div
-                            initial={{ scale: 0.9, opacity: 0, y: 30 }}
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full max-w-lg rounded-[3rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[90vh] relative"
+                            className="w-full max-w-2xl rounded-[2.5rem] border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/98 backdrop-blur-3xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] flex flex-col max-h-[92vh] relative overflow-hidden"
                         >
-                            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-50" />
+                            {/* Animated Top Border */}
+                            <div className="absolute top-0 left-0 w-full h-1.5 overflow-hidden">
+                                <div className="absolute inset-0 bg-linear-to-r from-indigo-500 via-purple-500 to-indigo-500 animate-gradient-x" />
+                            </div>
 
-                            {/* Header */}
-                            <div className="p-8 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-br from-indigo-500/5 dark:from-indigo-500/10 to-transparent">
+                            {/* Header Section */}
+                            <div className="px-6 py-5 sm:px-8 sm:py-6 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-b from-indigo-500/5 to-transparent sticky top-0 z-20">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shadow-lg">
-                                        <TrendingUp size={24} className="text-indigo-500 animate-pulse" />
+                                    <div className="w-12 h-12 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                                        <TrendingUp size={24} className="text-white" />
                                     </div>
-                                    <div>
-                                        <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">{t('pro_dashboard.tools.audit.modal_title')}</h3>
-                                        <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-70">
-                                            {t('pro_dashboard.tools.audit.node_status')}
-                                        </p>
+                                    <div className="min-w-0">
+                                        <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1 truncate">
+                                            CMO Marketing Audit
+                                        </h3>
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-1.5">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-sm" />
+                                                <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">
+                                                    Global Sync Enabled
+                                                </span>
+                                            </div>
+                                            <span className="text-slate-300 dark:text-slate-700">|</span>
+                                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest tabular-nums">
+                                                {marketAudit.generated_at ? new Date(marketAudit.generated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Online'}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="flex gap-2">
+                                <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => { selection(); handleRefreshAudit(); }}
                                         disabled={isAuditing}
-                                        className="h-10 px-4 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-500 border border-indigo-500/20 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all disabled:opacity-50"
+                                        className="hidden sm:flex h-10 px-4 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 text-[9px] font-black uppercase tracking-widest items-center gap-2 transition-all disabled:opacity-50"
                                     >
-                                        {isAuditing ? <Loader2 className="animate-spin w-3 h-3" /> : <Zap size={14} />}
-                                        {isAuditing ? 'Scanning...' : 'Refresh (-3)'}
+                                        {isAuditing ? <Loader2 className="animate-spin w-3 h-3" /> : <Zap size={14} className="text-indigo-500" />}
+                                        {isAuditing ? 'Scanning...' : 'Update (-3)'}
                                     </button>
                                     <button
                                         onClick={() => setShowAuditModal(false)}
@@ -335,127 +371,159 @@ export const ProDashboardModals = ({
                                 </div>
                             </div>
 
-                            {/* Body content */}
-                            <div className="flex-1 overflow-y-auto no-scrollbar p-8 space-y-8">
-                                <div className="space-y-4">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
-                                        <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">{t('pro_dashboard.tools.audit.summary_title')}</h4>
+                            {/* Main Content Area */}
+                            <div className="flex-1 overflow-y-auto no-scrollbar p-5 sm:p-8 space-y-6">
+
+                                {marketAudit.error ? (
+                                    <div className="flex flex-col items-center justify-center py-12 px-6 text-center space-y-4">
+                                        <div className="w-16 h-16 bg-rose-500/10 rounded-full flex items-center justify-center text-rose-500 mb-2">
+                                            <X size={32} />
+                                        </div>
+                                        <h4 className="text-lg font-black text-slate-900 dark:text-white uppercase">Intelligence Error</h4>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs">{marketAudit.error}</p>
+                                        <button
+                                            onClick={() => handleRefreshAudit()}
+                                            className="px-6 py-3 bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-indigo-500/20"
+                                        >
+                                            Force Re-Sync (-3 Tokens)
+                                        </button>
                                     </div>
-                                    <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-100 dark:border-white/5 relative">
-                                        <Quote className="absolute -top-3 -left-3 text-indigo-500/20" size={32} />
-                                        {marketAudit.error ? (
-                                            <div className="space-y-3">
-                                                <p className="text-[14px] font-black text-rose-500 uppercase tracking-tight flex items-center gap-2">
-                                                    <X size={16} /> Error Detected
+                                ) : (
+                                    <>
+                                        {/* Premium Bento Grid Sections */}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            {/* Executive Summary Card */}
+                                            <div className="col-span-1 sm:col-span-2 p-6 bg-linear-to-br from-indigo-500/10 to-purple-500/5 dark:bg-white/2 rounded-[2rem] border border-indigo-500/10 dark:border-white/5 relative overflow-hidden group shadow-sm">
+                                                <Quote className="absolute -top-4 -right-4 text-indigo-500/10 rotate-12" size={80} />
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
+                                                    <h4 className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">Strategy Intelligence</h4>
+                                                </div>
+                                                <p className="text-[13px] sm:text-[14px] font-medium text-slate-800 dark:text-slate-300 leading-relaxed italic relative z-10">
+                                                    {marketAudit.cmo_summary}
                                                 </p>
-                                                <p className="text-[13px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic">
-                                                    {marketAudit.error}
-                                                </p>
-                                                <button
-                                                    onClick={() => handleRefreshAudit()}
-                                                    className="px-4 py-2 bg-indigo-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest"
-                                                >
-                                                    Re-Sync Node
-                                                </button>
                                             </div>
-                                        ) : (
-                                            <p className="text-[13px] font-medium text-slate-900 dark:text-slate-400 leading-relaxed italic pr-4">
-                                                {marketAudit.cmo_summary}
-                                            </p>
-                                        )}
-                                    </div>
-                                </div>
 
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="p-5 bg-indigo-500/5 dark:bg-indigo-500/5 rounded-2xl border border-indigo-500/10 space-y-2">
-                                        <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{t('pro_dashboard.tools.audit.sentiment_label')}</p>
-                                        <p className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">{marketAudit.market_sentiment}</p>
-                                    </div>
-                                    <div className="p-5 bg-purple-500/5 dark:bg-purple-500/5 rounded-2xl border border-purple-500/10 space-y-2">
-                                        <p className="text-[10px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-widest">{t('pro_dashboard.tools.audit.shift_label')}</p>
-                                        <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">{marketAudit.global_trend_shift}</p>
-                                    </div>
-                                </div>
+                                            {/* Market Sentiment Stats */}
+                                            <div className="p-5 bg-emerald-500/5 dark:bg-emerald-500/5 rounded-2xl border border-emerald-500/10 flex flex-col justify-center space-y-1">
+                                                <p className="text-[9px] font-black text-emerald-600/70 dark:text-emerald-500/70 uppercase tracking-widest">{t('pro_dashboard.tools.audit.sentiment_label')}</p>
+                                                <div className="flex items-end gap-2">
+                                                    <p className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{marketAudit.market_sentiment}</p>
+                                                    <TrendingUp size={16} className="text-emerald-500 mb-0.5" />
+                                                </div>
+                                            </div>
 
-                                <div className="space-y-4">
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-1.5 h-4 bg-emerald-500 rounded-full" />
-                                            <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">{t('pro_dashboard.tools.audit.news_title')}</h4>
+                                            {/* Global Trend Shift */}
+                                            <div className="p-5 bg-amber-500/5 dark:bg-amber-500/5 rounded-2xl border border-amber-500/10 flex flex-col justify-center space-y-1">
+                                                <p className="text-[9px] font-black text-amber-600/70 dark:text-amber-500/70 uppercase tracking-widest">{t('pro_dashboard.tools.audit.shift_label')}</p>
+                                                <p className="text-[11px] font-bold text-slate-900 dark:text-slate-300 leading-tight uppercase line-clamp-2">{marketAudit.global_trend_shift}</p>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                            {marketAudit.generated_at && (
-                                                <span className="text-[9px] font-medium text-slate-400">
-                                                    Updated: {new Date(marketAudit.generated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                </span>
-                                            )}
-                                            <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg animate-pulse">
-                                                {t('pro_dashboard.tools.audit.live_feed')}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="space-y-3">
-                                        {marketAudit.top_news?.map((news: any, idx: number) => (
-                                            <motion.div
-                                                key={idx}
-                                                initial={{ opacity: 0, x: -10 }}
-                                                whileInView={{ opacity: 1, x: 0 }}
-                                                viewport={{ once: true }}
-                                                transition={{ delay: idx * 0.05 }}
-                                                className="p-5 bg-slate-50 dark:bg-white/2 border border-slate-100 dark:border-white/5 rounded-3xl hover:bg-slate-100 dark:hover:bg-white/5 transition-all group shadow-sm"
-                                            >
-                                                <div className="flex justify-between items-start mb-3">
-                                                    <div className="space-y-1">
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="px-2 py-0.5 bg-indigo-500/10 rounded-md text-[7px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">{news.source}</span>
-                                                            <span className="text-[7px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">{news.relevance} Relevance</span>
+
+                                        {/* Viral News Feed Sections - Bento Grid Layout */}
+                                        <div className="space-y-4 pt-4">
+                                            <div className="flex items-center justify-between px-1">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-1.5 h-4 bg-purple-500 rounded-full" />
+                                                    <h4 className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-widest">Global Live Tracker</h4>
+                                                </div>
+                                                <div className="px-2 py-0.5 bg-rose-500/10 rounded-md text-[7px] font-black text-rose-500 uppercase tracking-[0.2em] animate-pulse">
+                                                    Last 180 Minutes
+                                                </div>
+                                            </div>
+
+                                            <div className="grid grid-cols-1 gap-3">
+                                                {marketAudit.top_news?.slice(0, 20).map((news: any, idx: number) => (
+                                                    <motion.div
+                                                        key={idx}
+                                                        initial={{ opacity: 0, y: 10 }}
+                                                        whileInView={{ opacity: 1, y: 0 }}
+                                                        viewport={{ once: true, margin: "-20px" }}
+                                                        className={`p-4 sm:p-5 rounded-2xl border transition-all duration-300 group shadow-sm flex flex-col sm:flex-row gap-4 relative overflow-hidden ${idx === 0
+                                                            ? 'bg-linear-to-br from-indigo-500/5 via-white to-white dark:from-indigo-500/10 dark:via-slate-900 dark:to-slate-900 border-indigo-500/20'
+                                                            : 'bg-white dark:bg-white/2 border-slate-100 dark:border-white/5 hover:border-indigo-500/20'
+                                                            }`}
+                                                    >
+                                                        {/* Number Badge */}
+                                                        <div className="hidden sm:flex w-10 h-10 rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-100 dark:border-white/5 items-center justify-center text-xs font-black text-indigo-500 shrink-0 group-hover:scale-110 transition-transform">
+                                                            {(idx + 1).toString().padStart(2, '0')}
                                                         </div>
-                                                        <h5 className="text-[14px] font-black text-slate-900 dark:text-white leading-tight uppercase group-hover:text-indigo-500 transition-colors">{news.title}</h5>
-                                                    </div>
-                                                    <div className="w-8 h-8 rounded-xl bg-indigo-500/10 dark:bg-white/5 flex items-center justify-center text-xs font-black text-indigo-600 dark:text-indigo-500 border border-indigo-500/20 dark:border-white/5">
-                                                        {idx + 1}
-                                                    </div>
-                                                </div>
-                                                <div className="p-3 bg-white dark:bg-black/40 rounded-2xl border border-slate-200 dark:border-white/5 space-y-2 shadow-inner">
-                                                    <p className="text-[11px] font-medium text-slate-900 dark:text-slate-400 leading-relaxed">
-                                                        {news.impact}
-                                                    </p>
-                                                    <div className="flex items-center gap-2 pt-1">
-                                                        <Zap size={12} className="text-amber-500" />
-                                                        <p className="text-[10px] font-black text-amber-600 dark:text-amber-500 uppercase tracking-widest">{news.fomo_trigger}</p>
-                                                    </div>
-                                                </div>
-                                            </motion.div>
-                                        ))}
-                                    </div>
-                                </div>
 
-                                <div className="p-6 bg-linear-to-r from-indigo-600/20 to-purple-600/20 rounded-[2.5rem] border border-white/10 space-y-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center">
-                                            <Flame size={20} className="text-orange-500 animate-bounce" />
+                                                        <div className="flex-1 space-y-2.5">
+                                                            <div className="flex flex-wrap items-center gap-2">
+                                                                <span className="px-2 py-0.5 bg-indigo-500/10 rounded-md text-[7px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">{news.source}</span>
+                                                                <span className={`px-2 py-0.5 rounded-md text-[7px] font-black uppercase tracking-[0.2em] ${news.impact === 'Massive'
+                                                                    ? 'bg-rose-500/10 text-rose-500'
+                                                                    : 'bg-emerald-500/10 text-emerald-500'
+                                                                    }`}>{news.relevance || 'High'} Relevance</span>
+                                                                {idx === 0 && <span className="px-2 py-0.5 bg-amber-500/10 rounded-md text-[7px] font-black text-amber-500 uppercase tracking-[0.2em] animate-bounce">Hot Now</span>}
+                                                            </div>
+
+                                                            <h5 className="text-[15px] font-black text-slate-900 dark:text-white leading-tight uppercase group-hover:text-indigo-500 transition-colors">
+                                                                {news.title}
+                                                            </h5>
+
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                                                                <div className="p-2.5 bg-slate-50 dark:bg-black/20 rounded-xl border border-slate-100 dark:border-white/5">
+                                                                    <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 leading-snug">
+                                                                        {news.impact || news.motivation || 'Analyzing market entry points...'}
+                                                                    </p>
+                                                                </div>
+                                                                <div className="p-2.5 bg-indigo-500/5 dark:bg-indigo-500/5 rounded-xl border border-indigo-500/10 flex items-center gap-2">
+                                                                    <Zap size={10} className="text-amber-500 shrink-0" />
+                                                                    <p className="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest line-clamp-1">
+                                                                        {news.fomo_trigger || 'Action Protocol Required'}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="sm:hidden absolute top-4 right-4 text-[10px] font-black text-slate-200 dark:text-white/5">
+                                                            #{(idx + 1)}
+                                                        </div>
+                                                    </motion.div>
+                                                ))}
+                                            </div>
                                         </div>
-                                        <h4 className="text-[13px] font-black text-white uppercase tracking-widest">Viral Growth Protocol</h4>
-                                    </div>
-                                    <p className="text-[12px] font-medium text-indigo-100 leading-relaxed italic px-2">
-                                        "{marketAudit.viral_motivation}"
-                                    </p>
-                                </div>
+
+                                        {/* Viral Motivation Summary */}
+                                        <div className="p-6 bg-linear-to-r from-indigo-600 via-purple-600 to-indigo-600 rounded-[2rem] border border-white/20 space-y-4 relative overflow-hidden group shadow-xl">
+                                            <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl" />
+                                            <div className="flex items-center gap-3 relative z-10">
+                                                <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-white">
+                                                    <Flame size={20} className="animate-bounce" />
+                                                </div>
+                                                <h4 className="text-[13px] font-black text-white uppercase tracking-widest">Growth Imperative</h4>
+                                            </div>
+                                            <p className="text-[12px] sm:text-[13px] font-bold text-indigo-50 leading-relaxed italic relative z-10 px-1">
+                                                "{marketAudit.viral_motivation}"
+                                            </p>
+                                        </div>
+                                    </>
+                                )}
                             </div>
 
-                            {/* Footer */}
-                            <div className="p-8 bg-slate-50 dark:bg-black/40 border-t border-slate-100 dark:border-white/5 space-y-4">
-                                <div className="flex items-center gap-3 text-emerald-400 text-center justify-center mb-2">
-                                    <CheckCircle2 size={16} />
-                                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Audit verified for 60m dominance</span>
-                                </div>
+                            {/* Sticky Footer */}
+                            <div className="p-6 sm:p-8 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-white/5 space-y-4 sticky bottom-0 z-20">
                                 <button
                                     onClick={() => { selection(); setShowAuditModal(false); setActiveTab('studio'); }}
-                                    className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3"
+                                    className="w-full h-15 vibing-blue-animated rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.25em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 hover:gap-5 group"
                                 >
-                                    Execute Viral Strategy Now <ArrowRight size={18} />
+                                    Initiate Viral Protocol <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                                 </button>
+                                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-1">
+                                    <div className="flex items-center gap-2 text-emerald-500 font-black text-[8px] uppercase tracking-[0.2em]">
+                                        <CheckCircle2 size={12} />
+                                        Audit Verified for 60m Dominance
+                                    </div>
+                                    <button
+                                        onClick={() => { selection(); handleRefreshAudit(); }}
+                                        disabled={isAuditing}
+                                        className="text-[8px] font-black text-indigo-500 uppercase tracking-widest hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-1.5"
+                                    >
+                                        {isAuditing ? 'Syncing...' : 'Sync Global Node (-3 Tokens)'}
+                                    </button>
+                                </div>
                             </div>
                         </motion.div>
                     </motion.div>
@@ -747,7 +815,113 @@ export const ProDashboardModals = ({
                                         </>
                                     ) : (
                                         <>
-                                            REWRITE HEADLINE <Sparkles size={18} />
+                                            {t('pro_dashboard.tools.headline.btn').toUpperCase()} <Sparkles size={18} />
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* BIO GENERATOR MODAL */}
+            <AnimatePresence>
+                {showBioModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-200 flex items-center justify-center p-4 bg-slate-950/40 dark:bg-slate-950/90 backdrop-blur-md"
+                        onClick={() => setShowBioModal?.(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0, y: 30 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-full max-w-lg rounded-[2.5rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[85vh] relative"
+                        >
+                            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-amber-500 via-orange-500 to-amber-500 opacity-50" />
+
+                            <div className="p-6 sm:p-8 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-amber-500/5 to-transparent">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-2xl bg-amber-500 flex items-center justify-center shadow-lg shadow-amber-500/20">
+                                        <Sparkles size={24} className="text-white" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">{t('pro_dashboard.tools.bio.title')}</h3>
+                                        <p className="text-[10px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-[0.2em] opacity-70">
+                                            High-Conversion Persona Sync
+                                        </p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setShowBioModal?.(false)}
+                                    className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
+                                >
+                                    <X size={20} className="text-slate-900 dark:text-white/60" />
+                                </button>
+                            </div>
+
+                            <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-6">
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.tools.bio.desc')}</label>
+                                    <textarea
+                                        value={bioInput}
+                                        onChange={(e) => setBioInput(e.target.value)}
+                                        className="w-full h-24 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-xs font-medium focus:border-amber-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400 resize-none"
+                                        placeholder={t('pro_dashboard.tools.bio.placeholder')}
+                                    />
+                                </div>
+
+                                {bioResult && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="p-5 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-2xl border border-emerald-500/20 space-y-3 relative overflow-hidden group"
+                                    >
+                                        <div className="absolute top-0 right-0 p-3">
+                                            <CheckCircle2 size={16} className="text-emerald-500" />
+                                        </div>
+                                        <h4 className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Synthesized Bio</h4>
+                                        <p className="text-[14px] font-bold text-slate-900 dark:text-white leading-tight">
+                                            {bioResult}
+                                        </p>
+                                        <button
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(bioResult);
+                                                showNotification({ title: 'Copied', message: 'Bio copied to clipboard.', type: 'success' });
+                                            }}
+                                            className="text-[10px] font-black text-amber-500 uppercase tracking-widest hover:text-amber-600 transition-colors"
+                                        >
+                                            Copy to Clipboard
+                                        </button>
+                                    </motion.div>
+                                )}
+
+                                <div className="p-4 bg-amber-50 dark:bg-amber-500/5 rounded-2xl border border-amber-100 dark:border-amber-500/10 flex items-start gap-3">
+                                    <Sparkles className="w-5 h-5 text-amber-500 mt-0.5" />
+                                    <p className="text-[10px] text-amber-700 dark:text-amber-400 leading-relaxed italic">
+                                        {t('pro_dashboard.tools.bio.neural_desc')}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="p-6 sm:p-8 bg-slate-50 dark:bg-black/40 border-t border-slate-100 dark:border-white/5">
+                                <button
+                                    onClick={onGenerateBio}
+                                    disabled={isGeneratingBio || !bioInput}
+                                    className="w-full h-14 bg-amber-600 hover:bg-amber-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-amber-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale"
+                                >
+                                    {isGeneratingBio ? (
+                                        <>
+                                            <Loader2 className="animate-spin" size={18} />
+                                            Synthesizing...
+                                        </>
+                                    ) : (
+                                        <>
+                                            {t('pro_dashboard.tools.bio.btn').toUpperCase()} <Sparkles size={18} />
                                         </>
                                     )}
                                 </button>

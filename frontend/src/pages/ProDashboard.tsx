@@ -50,6 +50,8 @@ export const ProDashboard = () => {
     const [selectedAsset, setSelectedAsset] = useState<any>(null);
     const [showHeadlineModal, setShowHeadlineModal] = useState(false);
     const [isFixingHeadline, setIsFixingHeadline] = useState(false);
+    const [showBioModal, setShowBioModal] = useState(false);
+    const [isGeneratingBio, setIsGeneratingBio] = useState(false);
 
     // Studio Sub-step (needed for MainButton orchestration)
     const [studioStep, setStudioStep] = useState(1);
@@ -211,13 +213,39 @@ export const ProDashboard = () => {
         }
     };
 
+    const handleGenerateBio = async (bio: string) => {
+        if (!bio || isGeneratingBio) return;
+        setIsGeneratingBio(true);
+        impact('medium');
+        try {
+            const data = await proService.generateBio(bio);
+            if (data.tokens_remaining !== undefined && status) {
+                setStatus({ ...status, pro_tokens: data.tokens_remaining });
+            }
+            hapticNotification('success');
+            return data.bio;
+        } catch (error: any) {
+            console.error('Failed to generate bio', error);
+            const msg = error.response?.data?.detail || error.response?.data?.message || 'Failed to synthesize bio.';
+            showNotification({
+                title: 'Sync Error',
+                message: msg,
+                type: 'warning'
+            });
+            hapticNotification('error');
+            throw error;
+        } finally {
+            setIsGeneratingBio(false);
+        }
+    };
+
 
 
 
     // --- Lifecycle Effects ---
 
     useEffect(() => {
-        const anyModalOpen = showSetup || showManual || selectedArticle || selectedAsset || showAuditModal;
+        const anyModalOpen = showSetup || showManual || selectedArticle || selectedAsset || showAuditModal || showHeadlineModal || showBioModal;
         setFooterVisible(!anyModalOpen);
         setHeaderVisible(!anyModalOpen);
 
@@ -231,6 +259,7 @@ export const ProDashboard = () => {
                     setSelectedAsset(null);
                     setShowAuditModal(false);
                     setShowHeadlineModal(false);
+                    setShowBioModal(false);
                 };
                 if (backButton && backButton.onClick) {
                     const cleanup = backButton.onClick(hideAllModals);
@@ -278,7 +307,7 @@ export const ProDashboard = () => {
         if (!isTMA() || !mainButton) return;
 
         try {
-            const isModalOpen = !!(showSetup || showManual || selectedArticle || selectedAsset || showAuditModal || showHeadlineModal);
+            const isModalOpen = !!(showSetup || showManual || selectedArticle || selectedAsset || showAuditModal || showHeadlineModal || showBioModal);
 
             if (isModalOpen) {
                 mainButton.setParams({ isVisible: false });
@@ -550,6 +579,7 @@ export const ProDashboard = () => {
                                         handleRunMarketingAudit={handleRunMarketingAudit}
                                         handleFetchTrends={handleFetchTrends}
                                         setShowHeadlineModal={setShowHeadlineModal}
+                                        setShowBioModal={setShowBioModal}
                                         setShowAuditModal={setShowAuditModal}
                                         marketAudit={marketAudit}
                                         selection={selection}
@@ -596,6 +626,10 @@ export const ProDashboard = () => {
                 setShowHeadlineModal={setShowHeadlineModal}
                 handleFixHeadline={handleFixHeadline}
                 isFixingHeadline={isFixingHeadline}
+                showBioModal={showBioModal}
+                setShowBioModal={setShowBioModal}
+                handleGenerateBio={handleGenerateBio}
+                isGeneratingBio={isGeneratingBio}
             />
         </div>
     );

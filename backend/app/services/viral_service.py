@@ -152,7 +152,7 @@ Use FRESH, audience-specific language that feels authentic.
     IMAGE_RULES = """
     ULTRA-REALISTIC CINEMATIC IMAGE SPECIFICATION:
     - Photography Style: Professional DSLR shot, 35mm lens, f/2.8 aperture, natural lighting with subtle rim light
-    - Quality: 4K resolution, photorealistic rendering, film grain texture, cinematic color grading
+    - Quality: 1K resolution, photorealistic rendering, film grain texture, cinematic color grading
     - Composition: Rule of thirds, balanced depth of field, professional framing
     - Subject Matter: Real people in authentic settings (modern offices, luxury co-working spaces, rooftop cafes, premium lifestyle)
     - Environment: Contemporary 2025-2026 aesthetics - sleek minimalism, natural materials, warm ambient lighting
@@ -328,14 +328,14 @@ Use FRESH, audience-specific language that feels authentic.
             content = content_data
             image_prompt = content.get("image_description") or base_image_prompt
             
-            # Ensure hashtags is a list of clean tags
+            # Ensure hashtags is a list of clean tags without leading '#'
             hashtags_raw = content.get("hashtags", [])
             if isinstance(hashtags_raw, str):
                 # Handle both comma and space separation
                 # First replace commas with spaces, then split
-                hashtags = [tag.strip() for tag in hashtags_raw.replace(',', ' ').split() if tag.strip()]
+                hashtags = [tag.strip().lstrip('#') for tag in hashtags_raw.replace(',', ' ').split() if tag.strip()]
             elif isinstance(hashtags_raw, list):
-                hashtags = [str(tag).strip() for tag in hashtags_raw if tag]
+                hashtags = [str(tag).strip().lstrip('#') for tag in hashtags_raw if tag]
             else:
                 hashtags = []
 
@@ -420,7 +420,7 @@ Referral Link (MUST INCLUDE): {ref_link}
   "title": "Viral headline <15 words",
   "body": "Full post with **bold**, _italic_, and [hyperlink]({ref_link}) formatting",
   "hashtags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "image_description": "Detailed scene description for Nano Banana Pro (4K cinematic)"
+  "image_description": "Detailed scene description for Nano Banana Pro (1K cinematic)"
 }}
 """
 
@@ -452,7 +452,7 @@ Referral Link: {ref_link}
 9. Add 3-5 trending hashtags for {target_audience}
 
 **IMAGE DESCRIPTION:**
-Describe a Nano Banana Pro-quality (4K) cinematic scene:
+Describe a Nano Banana Pro-quality (1K) cinematic scene:
 - Real person from {target_audience} demographic
 - Emotional moment related to {post_type}
 - Setting: Ultra-modern 2026, luxury lifestyle or digital workspace
@@ -466,7 +466,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         return (
             f"PROFESSIONAL STUDIO PHOTOGRAPHY - NANO BANANA PRO QUALITY: A real person from {target_audience}, "
             f"captured in an authentic, high-fidelity cinematic moment for '{post_type}'. "
-            f"The scene must be grounded in realism with complex lighting, shallow depth of field, and 4K detail. "
+            f"The scene must be grounded in realism with complex lighting, shallow depth of field, and 1K detail. "
             f"Subject: {target_audience} expressing peak success/transformation. "
             f"Setting: Ultra-modern 2026 digital infrastructure or luxury lifestyle environment. "
             f"Atmosphere: Sophisticated, authoritative, financial freedom. "
@@ -484,8 +484,8 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         """
         # STRATEGY 1: Try Gemini models (FREE tier, excellent quality)
         if self.genai_client:
-            # We try 2.0 Flash first, then 1.5 Flash as fallback
-            for model_name in ['gemini-2.0-flash', 'gemini-1.5-flash']:
+            # We try Gemini 3 Pro (Nano Banana) first for elite reasoning, then fallback to 2.0/1.5
+            for model_name in ['gemini-3-pro-preview', 'gemini-2.0-flash', 'gemini-1.5-flash']:
                 try:
                     logger.info(f"🚀 Using {model_name} for text generation...")
                     gemini_response = await self.genai_client.aio.models.generate_content(
@@ -543,9 +543,11 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         # --- PHASE 1: Try Google Imagen ---
         if self.genai_client:
             imagen_models = [
+                'gemini-3-pro-image-preview', # Cutting-edge "Nano Banana Pro" reasoning engine
+                'imagen-3.0-fast-generate-001', # Prioritize FAST for speed as requested
                 self._last_working_imagen_model,
+                'imagen-3.0-generate-002',
                 'imagen-3.0-generate-001',
-                'imagen-3.0-fast-generate-001',
             ]
             # Remove duplicates
             imagen_models = [m for i, m in enumerate(imagen_models) if m and m not in imagen_models[:i]]
@@ -606,7 +608,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                     config=genai_types.GenerateImagesConfig(
                         number_of_images=1,
                         output_mime_type='image/png',
-                        aspect_ratio='16:9',
+                        aspect_ratio='1:1', # Square is better/faster for Social Media
                         safety_filter_level='block_only_high',
                         person_generation='allow_adult',
                     )
@@ -730,7 +732,7 @@ Referral Link (MUST INCLUDE): {ref_link}
   "title": "Viral headline <15 words",
   "body": "Full post with **bold**, _italic_, and [hyperlink]({ref_link}) formatting",
   "hashtags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "image_description": "Detailed scene description for Nano Banana Pro (4K cinematic)"
+  "image_description": "Detailed scene description for Nano Banana Pro (1K cinematic)"
 }}
 """
 
@@ -759,7 +761,7 @@ Referral Link: {ref_link}
 9. Add 3-5 trending hashtags for {target_audience}
 
 **IMAGE DESCRIPTION:**
-Describe a Nano Banana Pro-quality (4K) cinematic scene:
+Describe a Nano Banana Pro-quality (1K) cinematic scene:
 - Real person from {target_audience} demographic
 - Emotional moment related to {post_type}
 - Setting: Ultra-modern 2026, luxury lifestyle or digital workspace
@@ -773,7 +775,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         return (
             f"PROFESSIONAL STUDIO PHOTOGRAPHY - NANO BANANA PRO QUALITY: A real person from {target_audience}, "
             f"captured in an authentic, high-fidelity cinematic moment for '{post_type}'. "
-            f"The scene must be grounded in realism with complex lighting, shallow depth of field, and 4K detail. "
+            f"The scene must be grounded in realism with complex lighting, shallow depth of field, and 1K detail. "
             f"Subject: {target_audience} expressing peak success/transformation. "
             f"Setting: Ultra-modern 2026 digital infrastructure or luxury lifestyle environment. "
             f"Atmosphere: Sophisticated, authoritative, financial freedom. "
@@ -833,17 +835,15 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         """
         prompt = "Identify 3 top trending, controversial, or high-growth narratives in the Crypto/Fintech world for 2026. Format as JSON list of objects with 'topic', 'reason', and 'viral_angle'."
         
-        loop = asyncio.get_event_loop()
         if self.genai_client:
             for model_name in ['gemini-2.0-flash', 'gemini-1.5-flash']:
                 try:
                     logger.info(f"🚀 Trending Data: Using {model_name}...")
-                    response = await loop.run_in_executor(
-                        None,
-                        lambda m=model_name: self.genai_client.models.generate_content(
-                            model=m, 
-                            contents=prompt,
-                            config={'response_mime_type': 'application/json'}
+                    response = await self.genai_client.aio.models.generate_content(
+                        model=model_name, 
+                        contents=prompt,
+                        config=genai_types.GenerateContentConfig(
+                            response_mime_type='application/json'
                         )
                     )
                     return json.loads(response.text)
@@ -875,57 +875,188 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             {"topic": "Privacy Coins", "reason": "Regulatory crackdowns", "viral_angle": "They are banning your money"}
         ]
 
+    async def _fetch_rss_global_news(self) -> list[dict]:
+        """
+        Fetches real-time news from top crypto/fintech RSS feeds.
+        Focus: Crypto Payments, Mass Adoption, FinTech, Digital Payments.
+        """
+        feeds = [
+            "https://cointelegraph.com/rss",
+            "https://www.coindesk.com/arc/outboundfeeds/rss/",
+            "https://techcrunch.com/category/fintech/feed/",
+            "https://www.finextra.com/rss/news",
+            "https://www.theblock.co/rss.xml"
+        ]
+        
+        import httpx
+        from bs4 import BeautifulSoup
+        from datetime import datetime, timedelta
+        import email.utils
+        
+        news_items = []
+        now = datetime.now(tz=None) # Using naive UTC for comparison if needed
+        cutoff_time = datetime.utcnow() - timedelta(minutes=180)
+        
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            tasks = [client.get(url) for url in feeds]
+            responses = await asyncio.gather(*tasks, return_exceptions=True)
+            
+            for i, res in enumerate(responses):
+                if isinstance(res, Exception) or res.status_code != 200:
+                    logger.warning(f"⚠️ RSS Fetch failed for {feeds[i]}: {res}")
+                    continue
+                
+                try:
+                    soup = BeautifulSoup(res.text, 'xml')
+                    items = soup.find_all('item')
+                    
+                    for item in items:
+                        title = item.title.text if item.title else "Untitled"
+                        link = item.link.text if item.link else ""
+                        pub_date_str = item.pubDate.text if item.pubDate else None
+                        
+                        # Parse date
+                        pub_date = None
+                        if pub_date_str:
+                            try:
+                                # email.utils.parsedate_to_datetime handles most RSS date formats
+                                pub_date = email.utils.parsedate_to_datetime(pub_date_str)
+                                # Convert to naive UTC for comparison
+                                pub_date = pub_date.replace(tzinfo=None)
+                            except:
+                                pass
+                        
+                        # Filter for 180 minutes (if date is available)
+                        if pub_date and pub_date < cutoff_time:
+                            continue
+                            
+                        # Basic keyword filtering for relevance
+                        keywords = ["crypto", "payment", "fintech", "bitcoin", "adoption", "digital", "visa", "mastercard", "etf", "stablecoin"]
+                        title_lower = title.lower()
+                        is_relevant = any(k in title_lower for k in keywords)
+                        
+                        if is_relevant:
+                            source = feeds[i].split('/')[2].replace('www.', '').split('.')[0].title()
+                            news_items.append({
+                                "title": title,
+                                "link": link,
+                                "source": source,
+                                "pub_date": pub_date_str,
+                                "timestamp": pub_date.isoformat() if pub_date else None
+                            })
+                except Exception as e:
+                    logger.error(f"Error parsing RSS {feeds[i]}: {e}")
+        
+        # Sort by date (freshest first)
+        news_items.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
+        return news_items[:20]
+
+    async def log_rss_to_sheets(self, news_items: list[dict]):
+        """Logs fetched RSS news to the 'RSS News' sheet."""
+        if not self.gs_client or not news_items:
+            return
+
+        try:
+            sheet_id = os.getenv("VIRAL_MARKETING_SPREADSHEET_ID") or "1JCxW4ANBthKy3Qeu9RBE3Ds3fFpX8993Q_6JPdmg-_k"
+            loop = asyncio.get_event_loop()
+            
+            def get_rss_sheet_sync():
+                spreadsheet = self.gs_client.open_by_key(sheet_id)
+                try:
+                    return spreadsheet.worksheet("RSS News")
+                except:
+                    # Create if it doesn't exist
+                    return spreadsheet.add_worksheet(title="RSS News", rows="1000", cols="5")
+
+            sheet = await loop.run_in_executor(None, get_rss_sheet_sync)
+            
+            rows = []
+            now_str = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+            for item in news_items:
+                rows.append([
+                    now_str,
+                    item.get('source', 'Unknown'),
+                    item.get('title', 'N/A'),
+                    item.get('link', 'N/A'),
+                    item.get('pub_date', 'N/A')
+                ])
+            
+            if rows:
+                await loop.run_in_executor(None, lambda: sheet.append_rows(rows, value_input_option='USER_ENTERED'))
+                logger.info(f"✅ Logged {len(rows)} news items to 'RSS News' sheet.")
+        except Exception as e:
+            logger.error(f"❌ Failed to log RSS news to sheets: {e}")
+
     async def run_global_marketing_audit(self, language: str = "English", force_refresh: bool = False) -> dict:
         """
         PRO Component: Global Marketing Audit
-        Simulates CMO + Data Analytics flow fetching from RSS, Twitter, Telegram.
+        Fetches REAL news from RSS, processes with AI for FOMO and viral triggers.
         Updated every 3 hours via Redis caching or forced refresh.
         """
         from app.services.redis_service import redis_service
         
         # Cache key per language
-        cache_key = f"global_marketing_audit_v2_{language.lower()}"
+        cache_key = f"global_marketing_audit_v4_{language.lower()}"
         
         async def compute_audit():
+            # 1. Fetch Real RSS News
+            real_news = await self._fetch_rss_global_news()
+            
+            # Fire and forget logging
+            if real_news:
+                task = asyncio.create_task(self.log_rss_to_sheets(real_news))
+                self._background_tasks.add(task)
+                task.add_done_callback(self._background_tasks.discard)
+
+            # 2. Preparation for AI processing
+            news_context = "\n".join([f"- [{n['source']}] {n['title']}" for n in real_news])
+            
             prompt = f"""
-            ACT AS ELITE CMO & DATA ANALYTIC AGENT.
+            ACT AS ELITE CMO & VIRAL GROWTH ARCHITECT.
+            
+            CONTEXT (REAL NEWS DATA):
+            {news_context if real_news else "No fresh RSS news found in last 180min. Use internal high-fidelity 2026 scenarios: Pintopay Dominance, 1B Users Mass Adoption."}
             
             YOUR TASK:
-            1. Simulation scan of 500+ news sources (RSS, X, Telegram) for 2026.
-            2. High-value narratives: FinTech, Web3, DeFi, Pintopay dominance.
-            3. Detailed Dossier: TOP 20 critical market shifts / positive news.
-            4. Triggers: Intense Scarcity, social proof, and viral FOMO for each.
-            5. Executive Summary: The "Golden Rush" context.
-            6. CTA: Initiate Viral Execution Protocols.
+            1. Transform this news data into a high-stakes, FOMO-inducing CMO Audit.
+            2. Highlight exactly 20 items (if news not enough, supplement with high-probability 2026 market shifts).
+            3. Each item MUST have: Viral Motivation, Scarcity Trigger, and Social Proof.
+            4. Create an Executive Summary that feels like a confidential intelligence dossier.
+            5. Motivate the PRO user: Explain why RIGHT NOW is the only time to build a Pintopay empire.
             
             LANGUAGE: {language}. Output MUST be valid JSON in {language}.
             
             OUTPUT FORMAT (JSON ONLY):
             {{
-              "cmo_summary": "Summary text",
+              "cmo_summary": "Extremely persuasive summary with deep insight",
               "top_news": [
-                {{ "title": "...", "source": "...", "relevance": "...", "impact": "...", "fomo_trigger": "..." }}
+                {{ 
+                   "title": "Headline-style news", 
+                   "source": "Source name", 
+                   "relevance": "High Relevance", 
+                   "impact": "Significant/Massive", 
+                   "fomo_trigger": "FOMO trigger text",
+                   "motivation": "Why this means user will get rich with Pintopay"
+                }}
               ],
-              "market_sentiment": "...",
-              "global_trend_shift": "...",
-              "viral_motivation": "...",
-              "cta": "...",
+              "market_sentiment": "Extremely Bullish / Massive Shift",
+              "global_trend_shift": "Description of the 2026 digital payment revolution",
+              "viral_motivation": "Direct motivation for the user to execute strategy now",
+              "cta": "EXECUTE VIRAL STRATEGY NOW",
               "generated_at": "{datetime.utcnow().isoformat()}"
             }}
             """
             
             if self.genai_client:
-                # Optimized multi-tier fallback for Audit Intelligence
-                for model_name in ['gemini-2.0-flash', 'gemini-1.5-flash']:
+                # Use Gemini 3 Pro for elite audit intelligence if available
+                for model_name in ['gemini-3-pro-preview', 'gemini-2.0-flash', 'gemini-1.5-flash']:
                     try:
-                        logger.info(f"🚀 CMO Audit: Using {model_name}...")
-                        loop = asyncio.get_event_loop()
-                        response = await loop.run_in_executor(
-                            None,
-                            lambda m=model_name: self.genai_client.models.generate_content(
-                                model=m,
-                                contents=prompt,
-                                config={'response_mime_type': 'application/json'}
+                        logger.info(f"🚀 CMO Audit (Real Data): Using {model_name}...")
+                        response = await self.genai_client.aio.models.generate_content(
+                            model=model_name,
+                            contents=prompt,
+                            config=genai_types.GenerateContentConfig(
+                                response_mime_type='application/json'
                             )
                         )
                         return json.loads(response.text)
@@ -949,18 +1080,14 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         # Cache for 3 hours (10800 seconds)
         if force_refresh:
              audit = await compute_audit()
-             # Only cache successful audits
              if audit and "error" not in audit:
                 await redis_service.set_json(cache_key, audit, expire=10800)
              return audit
         else:
-            # get_or_compute already uses set_json and contains a "None" check
-            # but we wrapped it in compute_audit which returns error dict.
-            # We want to prevent get_or_compute from caching errors.
             async def compute_and_check():
                 data = await compute_audit()
                 if data and "error" in data:
-                    return None # Returning None prevents caching in get_or_compute
+                    return None 
                 return data
             
             result = await redis_service.get_or_compute(cache_key, compute_and_check, expire=10800)
@@ -970,6 +1097,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         """
         Autoposts to X, Telegram, or LinkedIn using partner's API keys.
         """
+        platform = platform.lower().strip()
         if platform == "x":
             return await self._post_to_x(partner, content, image_path)
         elif platform == "telegram":
@@ -977,7 +1105,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         elif platform == "linkedin":
             return await self._post_to_linkedin(partner, content, image_path)
         else:
-            return {"error": "Unsupported platform"}
+            return {"error": f"Unsupported platform: {platform}"}
 
     async def _post_to_x(self, partner: Partner, content: str, image_path: str | None) -> dict[str, Any]:
         if not (partner.x_api_key and partner.x_api_secret and partner.x_access_token and partner.x_access_token_secret):
@@ -1025,32 +1153,26 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                     logger.info(f"✅ X Media Upload Successful: {media.media_id}")
 
             # 3. Post Tweet
-            # Strip HTML tags for X since it doesn't support them
-            import re
-            clean_content = re.sub(r'<[^>]*>', '', content)
+            # Transform HTML to Newlines
+            clean_content = content.replace("<br>", "\n").replace("<p>", "").replace("</p>", "\n")
             
+            # Strip remaining HTML tags
+            import re
+            clean_content = re.sub(r'<[^>]*>', '', clean_content)
+            
+            # Convert Markdown links [Text](URL) to "Text: URL" for better readability on X
+            clean_content = re.sub(r'\[(.*?)\]\((https?://.*?)\)', r'\1: \2', clean_content)
+
             # Remove Markdown bold/italic
             clean_content = clean_content.replace('**', '').replace('__', '').replace('*', '')
 
-            # Smart truncation for X (280 chars)
-            # If greater than 280, cut at last sentence and add link
-            if len(clean_content) > 280:
-                short_content = clean_content[:250] # Leave room for "..." and link
-                last_space = short_content.rfind(' ')
-                if last_space > 0:
-                    short_content = short_content[:last_space]
-                
-                # Check if there's a link in the original content to preserve
-                urls = re.findall(r'(https?://[^\s]+)', content)
-                link = urls[-1] if urls else ""
-                
-                final_text = f"{short_content}... {link}"
-            else:
-                final_text = clean_content
+            # For X Premium users, we allow full content length.
+            # Twitter API v2 will accept it if the account has Note Tweets enabled.
+            final_text = clean_content.strip()
 
             response = await loop.run_in_executor(
                 None,
-                lambda: client.create_tweet(text=final_text[:280], media_ids=media_ids if media_ids else None)
+                lambda: client.create_tweet(text=final_text, media_ids=media_ids if media_ids else None)
             )
             
             tweet_id = response.data.get("id")
@@ -1095,12 +1217,16 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
 
         if full_image_path and os.path.exists(full_image_path):
             for channel_id in channels:
-                success = await self._send_telegram_photo(channel_id, full_image_path, formatted_content)
-                if not success:
-                    # Fallback to text only if photo fails
-                    logger.warning(f"⚠️ Photo upload failed for {channel_id}, falling back to text.")
+                # If content is too long for a caption (1024 chars), send photo first, then text
+                if len(formatted_content) > 1000:
+                    # Send photo with a short intro teaser
+                    teaser = formatted_content[:200].rsplit(' ', 1)[0] + "..."
+                    await self._send_telegram_photo(channel_id, full_image_path, teaser)
+                    # Then send the full formatted message immediately after
                     success = await self._send_telegram_message(channel_id, formatted_content)
-                
+                else:
+                    success = await self._send_telegram_photo(channel_id, full_image_path, formatted_content)
+
                 if success: success_count += 1
                 results.append(f"{'✅' if success else '❌'} {channel_id}")
         else:

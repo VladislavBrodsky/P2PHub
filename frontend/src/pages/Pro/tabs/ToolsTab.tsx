@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import {
-    Zap, Flame, Search, ChevronRight, Compass, Loader2, Info
+    Zap, Flame, Search, ChevronRight, Compass, Loader2, Info, Sparkles
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { renderMarkdown } from '../utils/renderMarkdown';
@@ -13,6 +13,7 @@ interface ToolsTabProps {
     handleRunMarketingAudit: () => Promise<void>;
     handleFetchTrends: () => Promise<void>;
     setShowHeadlineModal: (show: boolean) => void;
+    setShowBioModal: (show: boolean) => void;
     setShowAuditModal: (show: boolean) => void;
     marketAudit: any;
     selection: () => void;
@@ -25,6 +26,7 @@ export const ToolsTab = ({
     handleRunMarketingAudit,
     handleFetchTrends,
     setShowHeadlineModal,
+    setShowBioModal,
     setShowAuditModal,
     marketAudit,
     selection
@@ -82,6 +84,49 @@ export const ToolsTab = ({
                             className="mt-auto w-full h-11 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-[9px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-indigo-500/20 shrink-0"
                         >
                             {t('pro_dashboard.tools.headline.btn')}
+                            <ChevronRight size={12} />
+                        </button>
+                    </motion.div>
+
+                    {/* Bio Generator */}
+                    <motion.div
+                        whileHover={{ y: -3 }}
+                        className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-7 border border-slate-200 dark:border-white/10 group relative flex flex-col shadow-xl h-full"
+                    >
+                        <div className="absolute inset-0 bg-linear-to-br from-amber-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="flex items-center justify-between mb-5">
+                            <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20 flex items-center justify-center text-amber-500 group-hover:scale-110 transition-all duration-500 shadow-sm shrink-0">
+                                <Sparkles size={18} />
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div
+                                    className="group/info relative"
+                                    onClick={() => useNotificationStore.getState().showNotification({
+                                        title: t('pro_dashboard.tools.bio.title'),
+                                        message: t('pro_dashboard.tools.bio.neural_desc'),
+                                        type: 'info'
+                                    })}
+                                >
+                                    <Info size={14} className="text-slate-400 hover:text-amber-500 transition-colors cursor-help" />
+                                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-50">
+                                        {t('pro_dashboard.tools.bio.neural_desc')}
+                                        <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
+                                    </div>
+                                </div>
+                                <div className="px-2.5 py-1 bg-amber-500/10 rounded-full border border-amber-500/20 shrink-0">
+                                    <span className="text-[8px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest">Active</span>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">{t('pro_dashboard.tools.bio.title')}</h3>
+                        <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
+                            {t('pro_dashboard.tools.bio.desc')}
+                        </p>
+                        <button
+                            onClick={() => { selection(); setShowBioModal(true); }}
+                            className="mt-auto w-full h-11 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-[9px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-amber-500/20 shrink-0"
+                        >
+                            {t('pro_dashboard.tools.bio.btn')}
                             <ChevronRight size={12} />
                         </button>
                     </motion.div>

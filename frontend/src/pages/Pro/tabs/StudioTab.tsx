@@ -138,7 +138,7 @@ export const StudioTab = ({
 
     const handleCopyText = () => {
         if (!generatedResult) return;
-        const hashtagsStr = generatedResult.hashtags?.map((t: string) => `#${t}`).join(' ') || '';
+        const hashtagsStr = generatedResult.hashtags?.map((t: string) => t.startsWith('#') ? t : `#${t}`).join(' ') || '';
         const text = `${generatedResult.title}\n\n${generatedResult.body}\n\n${hashtagsStr}`;
 
         navigator.clipboard.writeText(text);
@@ -599,7 +599,7 @@ export const StudioTab = ({
                             </div>
                             <div className="flex flex-wrap gap-2 pt-2">
                                 {generatedResult.hashtags?.map((t: string) => (
-                                    <span key={t} className="text-[9px] font-black text-indigo-500 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/10">#{t}</span>
+                                    <span key={t} className="text-[9px] font-black text-indigo-500 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/10">{t.startsWith('#') ? t : `#${t}`}</span>
                                 ))}
                             </div>
                         </div>
