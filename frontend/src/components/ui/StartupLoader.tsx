@@ -49,10 +49,10 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
 
             <div className="relative flex flex-col items-center justify-center">
                 {/* Main Animated Hub */}
-                <div className="relative w-56 h-56 flex items-center justify-center">
+                <div className="relative w-44 h-44 flex items-center justify-center">
                     {/* Rotating Conic Border - The "Apple" loading feel */}
                     <motion.div
-                        className="absolute inset-2 rounded-full border-2 border-transparent"
+                        className="absolute inset-2 rounded-full border border-transparent blur-px"
                         style={{
                             background: 'conic-gradient(from 0deg, transparent 0%, var(--color-brand-blue) 50%, transparent 100%) border-box',
                             mask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
@@ -63,67 +63,57 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                         transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
                     />
 
-                    {/* Central Logo Container - Reverted to centered premium size */}
+                    {/* Central Logo Container - Subtly blurred edges for premium feel */}
                     <motion.div
-                        className="relative w-36 h-36 flex items-center justify-center overflow-visible rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_80px_rgba(59,130,246,0.5)]"
+                        className="relative w-28 h-28 flex items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_60px_rgba(59,130,246,0.4)] blur-px"
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
                     >
-                        {/* Recursive Blue Glow Layers */}
-                        <motion.div
-                            className="absolute inset-0 rounded-full bg-blue-500/20 blur-3xl"
-                            animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
-                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                        />
-                        <div className="absolute inset-4 rounded-full bg-blue-500/30 blur-[20px]" />
+                        {/* Inner Soft Glow */}
+                        <div className="absolute inset-0 rounded-full bg-blue-400/20 blur-xl animate-pulse" />
 
-                        <motion.img
-                            src={logoSrc}
-                            alt="Pintopay"
+                        {/* Logo rendering via mask to avoid browser "white square" glitch on filter animation */}
+                        <motion.div
                             animate={{
                                 scale: [1, 1.05, 1],
-                                // #comment: Removed blur(0.3px) as it was causing the "white square" glitch in some browsers.
-                                // Increased brightness/contrast for a crisp white logo without aliasing artifacts.
-                                filter: [
-                                    "brightness(0) invert(1)",
-                                    "brightness(0) invert(1)",
-                                    "brightness(0) invert(1)"
-                                ]
                             }}
                             transition={{
                                 duration: 3,
                                 repeat: Infinity,
                                 ease: "easeInOut"
                             }}
-                            className="relative w-20 h-20 object-contain z-10 drop-shadow-[0_10px_20px_rgba(0,0,0,0.2)]"
-                            onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                if (!target.src.includes('raw.githubusercontent.com')) {
-                                    target.src = 'https://raw.githubusercontent.com/VladislavBrodsky/P2PHub/main/frontend/public/logo.svg';
-                                }
+                            style={{
+                                maskImage: `url(${logoSrc})`,
+                                WebkitMaskImage: `url(${logoSrc})`,
+                                maskSize: 'contain',
+                                WebkitMaskSize: 'contain',
+                                maskRepeat: 'no-repeat',
+                                WebkitMaskRepeat: 'no-repeat',
+                                maskPosition: 'center',
+                                WebkitMaskPosition: 'center',
                             }}
+                            className="relative w-14 h-14 bg-white z-10 drop-shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
                         />
-
                     </motion.div>
                 </div>
 
-                {/* Progress Text - Reverted to baseline spacing */}
-                <div className="mt-8 flex flex-col items-center space-y-6">
+                {/* Progress Text - Compacted */}
+                <div className="mt-6 flex flex-col items-center space-y-4">
                     <div className="relative group">
                         <div className="flex items-baseline space-x-1 relative">
-                            <span className="text-5xl font-black text-(--color-text-primary) tracking-tighter tabular-nums drop-shadow-sm">
+                            <span className="text-4xl font-black text-(--color-text-primary) tracking-tighter tabular-nums drop-shadow-sm">
                                 {displayProgress}
                             </span>
-                            <span className="text-xl font-bold text-blue-500">%</span>
+                            <span className="text-lg font-bold text-blue-500">%</span>
                         </div>
                     </div>
 
                     <div className="flex flex-col items-center space-y-4">
                         {/* Status Badge - Matching user screenshot exactly */}
-                        <div className="relative bg-blue-500/10 backdrop-blur-sm border border-blue-500/20 rounded-lg px-6 py-2 overflow-hidden">
+                        <div className="relative bg-blue-500/10 backdrop-blur-sm border border-blue-500/20 rounded-lg px-5 py-1.5 overflow-hidden">
                             <motion.p
-                                className="text-(--color-text-primary) font-black tracking-[0.2em] uppercase text-[12px] relative z-10"
+                                className="text-(--color-text-primary) font-black tracking-[0.2em] uppercase text-[11px] relative z-10"
                                 animate={{ opacity: [0.8, 1, 0.8] }}
                                 transition={{ duration: 2, repeat: Infinity }}
                             >
@@ -138,9 +128,9 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                         </div>
 
                         {/* Status Indicator Bar - High Fidelity */}
-                        <div className="w-32 h-1.5 rounded-full bg-slate-500/10 overflow-hidden relative shadow-inner">
+                        <div className="w-24 h-1 rounded-full bg-slate-500/10 overflow-hidden relative shadow-inner">
                             <motion.div
-                                className="h-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)]"
+                                className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.6)]"
                                 initial={{ width: 0 }}
                                 animate={{ width: `${displayProgress}%` }}
                                 transition={{ duration: 0.5, ease: "easeOut" }}
