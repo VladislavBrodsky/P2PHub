@@ -197,7 +197,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                     <div
                         key={item.id}
                         className={`rounded-2xl overflow-hidden shadow-sm group relative transition-all duration-300 ${isProItem
-                            ? 'bg-linear-to-r from-indigo-600 via-purple-600 to-blue-600 border-none animate-[vibing-gradient_10s_infinite_linear] bg-size-[300%_300%]'
+                            ? 'bg-linear-to-r from-amber-500 via-yellow-500 to-orange-600 border-none animate-[vibing-gradient_10s_infinite_linear] bg-size-[300%_300%]'
                             : 'bg-(--card-bg) backdrop-blur-sm border border-(--card-border)'
                             }`}
                     >
@@ -205,10 +205,10 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                         {isProItem && (
                             <>
                                 <div className="absolute inset-0 opacity-40">
-                                    <div className="absolute -inset-full animate-[liquid_20s_infinite_linear] bg-linear-to-r from-transparent via-emerald-400/30 to-transparent rotate-12" />
+                                    <div className="absolute -inset-full animate-[liquid_20s_infinite_linear] bg-linear-to-r from-transparent via-white/40 to-transparent rotate-12" />
                                 </div>
                                 <div className="absolute inset-0 opacity-30">
-                                    <div className="absolute -inset-full animate-[liquid_15s_infinite_linear_reverse] bg-linear-to-tr from-transparent via-blue-400/20 to-transparent -rotate-12" />
+                                    <div className="absolute -inset-full animate-[liquid_15s_infinite_linear_reverse] bg-linear-to-tr from-transparent via-amber-200/40 to-transparent -rotate-12" />
                                 </div>
                             </>
                         )}
@@ -235,7 +235,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                         >
                             <div className="flex items-center gap-3">
                                 <div className={`p-2 rounded-xl transition-all duration-300 ${isProItem
-                                    ? 'bg-white/20 border border-white/30 text-white group-hover:scale-110 group-hover:rotate-12 shadow-lg shadow-white/10'
+                                    ? 'bg-white/30 border border-white/40 text-white group-hover:scale-110 group-hover:rotate-12 shadow-lg shadow-white/10'
                                     : 'bg-(--card-bg) border border-(--card-border) text-(--color-text-secondary) group-hover:text-(--color-text-primary)'
                                     }`}>
                                     {React.cloneElement(item.icon as React.ReactElement, {
@@ -248,7 +248,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                         {item.label}
                                     </span>
                                     {isProItem && (
-                                        <span className="text-[9px] font-black uppercase tracking-widest text-emerald-300/80 -mt-0.5">
+                                        <span className="text-[9px] font-black uppercase tracking-widest text-amber-100/90 -mt-0.5">
                                             Vanguard Active
                                         </span>
                                     )}
@@ -265,7 +265,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                         {/* Pro badge/glow */}
                         {isProItem && (
                             <div className="absolute right-10 top-1/2 -translate-y-1/2">
-                                <div className="h-1 w-1 rounded-full bg-emerald-400 shadow-[0_0_10px_#10b981] animate-pulse" />
+                                <div className="h-1 w-1 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)] animate-pulse" />
                             </div>
                         )}
 
