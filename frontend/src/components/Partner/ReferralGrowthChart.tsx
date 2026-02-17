@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, Users, ChevronDown } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useHaptic } from '../../hooks/useHaptic';
+import { useTranslation } from 'react-i18next';
 
 import { apiClient } from '../../api/client';
 
@@ -37,6 +38,7 @@ interface ReferralGrowthChartProps {
 
 export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe, setTimeframe }: ReferralGrowthChartProps) => {
     const { selection } = useHaptic();
+    const { t } = useTranslation();
     const gradientId = useId();
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
@@ -169,9 +171,11 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                 <div>
                     <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2 whitespace-nowrap">
                         <TrendingUp className="w-4 h-4 text-blue-500" />
-                        Network Growth
+                        {t('common.metrics.network_growth')}
                     </h3>
-                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400">Partners Joined ({timeframe}): <span className="text-blue-500">{metrics.current_count}</span></p>
+                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400">
+                        {t('common.metrics.partners_joined', { timeframe })} <span className="text-blue-500">{metrics.current_count}</span>
+                    </p>
                 </div>
 
                 {/* Timeframe Selector - Dropdown */}
@@ -224,16 +228,16 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                 {/* Left Y-Axis Labels */}
                 <div className="flex flex-col justify-between py-2 pr-1 h-32 text-[8px] font-bold text-slate-400 dark:text-slate-500 text-right min-w-[20px]">
                     <span>{maxValue.toLocaleString()}</span>
-                    <span>{Math.round(maxValue * 0.75).toLocaleString()}</span>
+                    <span className="opacity-50">{Math.round(maxValue * 0.75).toLocaleString()}</span>
                     <span>{Math.round(maxValue * 0.50).toLocaleString()}</span>
-                    <span>{Math.round(maxValue * 0.25).toLocaleString()}</span>
+                    <span className="opacity-50">{Math.round(maxValue * 0.25).toLocaleString()}</span>
                     <span>0</span>
                 </div>
 
                 {/* Main Chart Area */}
                 <div className="h-32 w-full relative">
                     {/* Y-Axis Grid Lines */}
-                    <div className="absolute inset-0 flex flex-col justify-between py-2 pointer-events-none opacity-10">
+                    <div className="absolute inset-0 flex flex-col justify-between py-2 pointer-events-none opacity-[0.03] dark:opacity-[0.05]">
                         {[1, 0.75, 0.5, 0.25, 0].map((tick) => (
                             <div key={tick} className="w-full h-px bg-slate-500" />
                         ))}
@@ -243,10 +247,14 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                         <defs>
                             {LEVEL_COLORS.map((color, i) => (
                                 <linearGradient key={i} id={`${gradientId}-${i}`} x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor={color} stopOpacity="0.6" />
-                                    <stop offset="100%" stopColor={color} stopOpacity="0.1" />
+                                    <stop offset="0%" stopColor={color} stopOpacity="0.5" />
+                                    <stop offset="100%" stopColor={color} stopOpacity="0.05" />
                                 </linearGradient>
                             ))}
+                            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="1.5" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
                         </defs>
 
                         {/* Stacked Areas */}
@@ -262,16 +270,17 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                             />
                         ))}
 
-                        {/* Stroke line for the Total (Top Level) */}
+                        {/* Stroke line for the Total (Top Level) with glow */}
                         <motion.path
                             d={topLinePath}
                             fill="none"
-                            stroke="white"
-                            strokeWidth="1"
-                            strokeOpacity="0.3"
+                            stroke="#3b82f6"
+                            strokeWidth="1.5"
+                            strokeOpacity="0.8"
                             vectorEffect="non-scaling-stroke"
                             strokeLinecap="round"
                             strokeLinejoin="round"
+                            filter="url(#glow)"
                             initial={{ pathLength: 0, opacity: 0 }}
                             animate={{ pathLength: 1, opacity: 1, d: topLinePath }}
                             transition={{ duration: 1, ease: "easeOut" }}
@@ -318,7 +327,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                                     {/* The Dot */}
                                     <div
                                         className={cn(
-                                            "absolute w-3 h-3 rounded-full bg-blue-500 border-2 border-white shadow-sm transition-all duration-200 pointer-events-none",
+                                            "absolute w-3 h-3 rounded-full bg-blue-500 border-2 border-white shadow-[0_0_10px_rgba(59,130,246,0.5)] transition-all duration-200 pointer-events-none",
                                             hoveredIndex === index ? "scale-125 opacity-100 ring-4 ring-blue-500/20" : "scale-0 opacity-0"
                                         )}
                                         style={{
@@ -364,7 +373,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
 
                                 {chartData[hoveredIndex].joined_per_level && (
                                     <div className="mt-1 pt-1 border-t border-white/10 flex items-center justify-between text-[8px]">
-                                        <span className="font-bold text-emerald-400 tracking-tighter uppercase italic">Flow Power:</span>
+                                        <span className="font-bold text-emerald-400 tracking-tighter uppercase italic">{t('common.metrics.flow_power')}</span>
                                         <span className="font-black text-emerald-400">+{chartData[hoveredIndex].joined_per_level.reduce((a, b) => a + b, 0)}</span>
                                     </div>
                                 )}
@@ -376,7 +385,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
 
             {/* X-Axis Labels */}
             <div className="flex justify-between mt-1 px-1">
-                {chartData.filter((_, i) => i % (timeframe === '24H' ? 4 : timeframe === '7D' ? 1 : 3) === 0).map((point, i) => (
+                {chartData.filter((_, i) => i % (timeframe === '24H' ? 4 : timeframe === '7D' ? 1 : Math.max(1, Math.floor(chartData.length / 4))) === 0).map((point, i) => (
                     <span key={i} className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{point.date}</span>
                 ))}
             </div>
@@ -388,7 +397,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                         <TrendingUp className="w-3 h-3" />
                     </div>
                     <div>
-                        <div className="text-[9px] text-slate-500 dark:text-slate-400 font-bold leading-tight">Growth Rate</div>
+                        <div className="text-[9px] text-slate-500 dark:text-slate-400 font-bold leading-tight">{t('common.metrics.growth_rate')}</div>
                         <div className="text-xs font-black text-emerald-500">
                             {metrics.growth_pct >= 0 ? '+' : ''}{metrics.growth_pct}%
                         </div>
@@ -398,7 +407,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                     onClick={onReportClick}
                     className="text-[8px] font-bold text-blue-500 hover:text-blue-400 transition-colors uppercase tracking-wider flex items-center gap-1"
                 >
-                    Report <ChevronDown className="w-3 h-3 -rotate-90" />
+                    {t('common.metrics.report')} <ChevronDown className="w-3 h-3 -rotate-90" />
                 </button>
             </div>
         </div>

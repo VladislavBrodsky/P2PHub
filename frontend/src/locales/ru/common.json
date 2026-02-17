@@ -32,7 +32,14 @@
     "next_lvl": "СЛЕД. УРОВЕНЬ",
     "admin": "АДМИН",
     "retry": "Повторить",
-    "view_all": "Показать все"
+    "view_all": "Показать все",
+    "metrics": {
+      "network_growth": "Рост Сети",
+      "partners_joined": "Вступили в сеть ({{timeframe}}):",
+      "growth_rate": "Темп Роста",
+      "report": "Отчет",
+      "flow_power": "Энергия Потока:"
+    }
   },
   "menu": {
     "home": "Главная",

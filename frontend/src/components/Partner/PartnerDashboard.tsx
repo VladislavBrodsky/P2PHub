@@ -100,7 +100,7 @@ export const PartnerDashboard = () => {
                 {/* Quick Stats Row */}
                 <div className="grid grid-cols-2 gap-2">
                     <div className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm">
-                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Total Earned</div>
+                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">{t('partner_dashboard.total_earned')}</div>
                         <div className="text-2xl font-black text-slate-900 dark:text-white">${(user?.total_earned || 0).toFixed(2)}</div>
                     </div>
                     <div
@@ -109,7 +109,7 @@ export const PartnerDashboard = () => {
                     >
                         <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-colors" />
                         <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1 flex items-center justify-between">
-                            <span>Network Size</span>
+                            <span>{t('partner_dashboard.network_size')}</span>
                             <ExternalLink className="w-3 h-3 opacity-50" />
                         </div>
                         <div className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
@@ -175,8 +175,8 @@ export const PartnerDashboard = () => {
                                 <Users className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="font-black text-slate-900 dark:text-white text-xs uppercase tracking-tight">Explore Connectivity</h3>
-                                <p className="text-[10px] font-bold text-slate-500 opacity-60 uppercase tracking-widest leading-none mt-1">View your 9-level matrix</p>
+                                <h3 className="font-black text-slate-900 dark:text-white text-xs uppercase tracking-tight">{t('partner_dashboard.explore_connectivity')}</h3>
+                                <p className="text-[10px] font-bold text-slate-500 opacity-60 uppercase tracking-widest leading-none mt-1">{t('partner_dashboard.explore_desc')}</p>
                             </div>
                         </div>
                         <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -191,7 +191,7 @@ export const PartnerDashboard = () => {
                 {/* 2. Invitation Method */}
                 <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-slate-900 dark:text-white text-base font-bold">Ambassador Tools</h2>
+                        <h2 className="text-slate-900 dark:text-white text-base font-bold">{t('partner_dashboard.ambassador_tools')}</h2>
                     </div>
 
                     <div className="space-y-2">
@@ -207,8 +207,8 @@ export const PartnerDashboard = () => {
                                     <QrCode className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                                 </div>
                                 <div className="flex flex-col gap-0.5">
-                                    <span className="font-black text-slate-900 dark:text-white text-sm tracking-tight">Personal QR Portfolio</span>
-                                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-80">High-converting assets</span>
+                                    <span className="font-black text-slate-900 dark:text-white text-sm tracking-tight">{t('partner_dashboard.qr_title')}</span>
+                                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-80">{t('partner_dashboard.qr_desc')}</span>
                                 </div>
                             </div>
                             <div className='w-8 h-8 flex items-center justify-center bg-slate-100 dark:bg-white/5 rounded-full text-slate-400 group-hover:text-blue-500 group-hover:bg-blue-500/10 transition-all'>
@@ -225,7 +225,7 @@ export const PartnerDashboard = () => {
                                     <div className="w-5 h-5 flex items-center justify-center text-base">🔗</div>
                                 </div>
                                 <div className="flex flex-col gap-0.5 overflow-hidden">
-                                    <span className="font-black text-slate-900 dark:text-white text-sm tracking-tight">Referral Network Link</span>
+                                    <span className="font-black text-slate-900 dark:text-white text-sm tracking-tight">{t('partner_dashboard.link_title')}</span>
                                     <span className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[180px] font-mono font-medium opacity-60 leading-none py-0.5">{referralLink}</span>
                                 </div>
                             </div>
@@ -248,8 +248,8 @@ export const PartnerDashboard = () => {
                 {/* 3. Rewards List */}
                 <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-lg font-bold text-slate-900 dark:text-white">Recent Earnings</h2>
-                        <button className="text-slate-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors">View All</button>
+                        <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('partner_dashboard.recent_earnings')}</h2>
+                        <button className="text-slate-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors">{t('common.view_all')}</button>
                     </div>
 
                     <EarningsList />
@@ -270,10 +270,10 @@ export const PartnerDashboard = () => {
                         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-linear-to-r from-blue-500/5 via-purple-500/5 to-blue-500/5 transition-opacity duration-500" />
 
                         <div className="flex items-center gap-3 relative z-10 pt-1">
-                            <span className="tracking-widest">EXPAND YOUR NETWORK</span>
+                            <span className="tracking-widest">{t('partner_dashboard.expand_btn')}</span>
                             <div className="w-1.5 h-1.5 rounded-full bg-blue-500 relative z-10 animate-pulse" />
                         </div>
-                        <span className="text-[9px] font-bold opacity-50 tracking-tight relative z-10 pb-1 italic">Reach $1/minute velocity</span>
+                        <span className="text-[9px] font-bold opacity-50 tracking-tight relative z-10 pb-1 italic">{t('partner_dashboard.expand_sub')}</span>
                     </Button>
                 </div>
             </div>
@@ -310,8 +310,8 @@ export const PartnerDashboard = () => {
                 <div className="fixed inset-0 z-1000 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setIsQrOpen(false)}>
                     <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 w-full max-w-xs space-y-4 shadow-2xl scale-100 animate-in zoom-in-95 duration-200 border border-slate-200 dark:border-white/10" onClick={e => e.stopPropagation()}>
                         <div className="text-center space-y-1">
-                            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Your Personal QR</h3>
-                            <p className="text-sm text-slate-500 dark:text-slate-400">Scan to join your network instantly</p>
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white">{t('partner_dashboard.qr_modal_title')}</h3>
+                            <p className="text-sm text-slate-500 dark:text-slate-400">{t('partner_dashboard.qr_modal_desc')}</p>
                         </div>
 
                         <div className="aspect-square bg-white rounded-2xl p-4 flex items-center justify-center border border-slate-100 dark:border-white/5 shadow-inner">
@@ -331,7 +331,7 @@ export const PartnerDashboard = () => {
                             className="w-full"
                             onClick={() => setIsQrOpen(false)}
                         >
-                            Close
+                            {t('common.close')}
                         </Button>
                     </div>
                 </div>

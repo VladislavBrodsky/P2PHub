@@ -280,5 +280,21 @@
     "benefit_3_desc": "Maximum income from all transactions in the network.",
     "benefit_4_title": "Executive Support",
     "benefit_4_desc": "24/7 Personal Manager for your growing team."
+  },
+  "partner_dashboard": {
+    "total_earned": "Total Earned",
+    "network_size": "Network Size",
+    "explore_connectivity": "Explore Connectivity",
+    "explore_desc": "View your 9-level matrix",
+    "ambassador_tools": "Ambassador Tools",
+    "qr_title": "Personal QR Portfolio",
+    "qr_desc": "High-converting assets",
+    "link_title": "Referral Network Link",
+    "recent_earnings": "Recent Earnings",
+    "expand_btn": "EXPAND YOUR NETWORK",
+    "expand_sub": "Reach $1/minute velocity",
+    "qr_modal_title": "Your Personal QR",
+    "qr_modal_desc": "Scan to join your network instantly",
+    "no_earnings": "No earnings yet"
   }
 }

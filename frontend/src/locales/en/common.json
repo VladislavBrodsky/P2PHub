@@ -10,6 +10,7 @@
     "dark": "Dark",
     "back": "Back",
     "copy": "Copy",
+    "close": "Close",
     "copied": "Copied",
     "show_more": "Show more",
     "show_less": "Collapse",
@@ -32,13 +33,13 @@
     "hi": "Hi",
     "total": "Total",
     "next_lvl": "NEXT LVL",
-    "admin": "АДМИН",
+    "admin": "ADMIN",
     "metrics": {
-      "network_growth": "Рост Сети",
-      "partners_joined": "Вступили в сеть ({{timeframe}}):",
-      "growth_rate": "Темп Роста",
-      "report": "Отчет",
-      "flow_power": "Энергия Потока:"
+      "network_growth": "Network Growth",
+      "partners_joined": "Partners Joined ({{timeframe}}):",
+      "growth_rate": "Growth Rate",
+      "report": "Report",
+      "flow_power": "Flow Power:"
     }
   },
   "menu": {
