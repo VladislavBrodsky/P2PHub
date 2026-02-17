@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import React, { memo, useState, useEffect } from 'react';
 import { AVATAR_DATA, LOGO_DATA } from '../../data/avatars';
+import { apiClient } from '../../api/client';
+import { getApiUrl } from '../../utils/api';
 
 const ALL_AVATARS = Object.values(AVATAR_DATA);
 
@@ -48,22 +50,56 @@ const CryptoIcon = memo(({ name }: { name: string }) => {
 });
 
 type OrbitItem =
-    | { type: 'avatar'; src: string }
+    | { type: 'avatar'; src: string; profile_url?: string }
     | { type: 'crypto'; name: string; color: string; gradientStart?: string; gradientEnd?: string };
 
-// Interleave avatars and crypto icons
-const ORBIT_ITEMS: OrbitItem[] = [
-    { type: 'avatar' as const, src: ALL_AVATARS[0] || '' },
-    { type: 'crypto' as const, ...CRYPTO_ICONS[0] },
-    { type: 'avatar' as const, src: ALL_AVATARS[1] || '' },
-    { type: 'crypto' as const, ...CRYPTO_ICONS[1] },
-    { type: 'avatar' as const, src: ALL_AVATARS[2] || '' },
-    { type: 'crypto' as const, ...CRYPTO_ICONS[2] },
-    { type: 'avatar' as const, src: ALL_AVATARS[3] || '' },
-    { type: 'crypto' as const, ...CRYPTO_ICONS[3] },
-];
-
 export const CommunityOrbit = memo(() => {
+    const [items, setItems] = useState<OrbitItem[]>([]);
+
+    useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                const res = await apiClient.get('/api/partner/top');
+                const topPartners = res.data;
+
+                const mappedItems: OrbitItem[] = [];
+                // Interleave up to 4 partners and 4 crypto icons
+                for (let i = 0; i < 4; i++) {
+                    if (topPartners[i]) {
+                        const p = topPartners[i];
+                        const src = p.photo_file_id
+                            ? `${getApiUrl()}/api/partner/photo/${p.photo_file_id}`
+                            : (p.photo_url || ALL_AVATARS[i % ALL_AVATARS.length]);
+
+                        mappedItems.push({
+                            type: 'avatar',
+                            src,
+                            profile_url: p.profile_url || (p.username ? `https://t.me/${p.username}` : undefined)
+                        });
+                    } else {
+                        // Fallback to static avatars if not enough top partners
+                        mappedItems.push({ type: 'avatar', src: ALL_AVATARS[i % ALL_AVATARS.length] });
+                    }
+
+                    if (CRYPTO_ICONS[i]) {
+                        mappedItems.push({ type: 'crypto', ...CRYPTO_ICONS[i] });
+                    }
+                }
+                setItems(mappedItems);
+            } catch (e) {
+                console.error('Failed to fetch orbit items', e);
+                // Hard fallback
+                const fallback: OrbitItem[] = [];
+                for (let i = 0; i < 4; i++) {
+                    fallback.push({ type: 'avatar', src: ALL_AVATARS[i % ALL_AVATARS.length] });
+                    fallback.push({ type: 'crypto', ...CRYPTO_ICONS[i] });
+                }
+                setItems(fallback);
+            }
+        };
+        fetchItems();
+    }, []);
+
     return (
         <div className="relative flex h-[420px] w-full items-center justify-center overflow-visible">
             {/* Background Particles/Stars */}
@@ -93,8 +129,8 @@ export const CommunityOrbit = memo(() => {
             <CentralLogo />
 
             {/* Orbiting Avatars & Crypto Icons */}
-            {ORBIT_ITEMS.map((item, i) => (
-                <OrbitingItem key={i} item={item} index={i} total={ORBIT_ITEMS.length} />
+            {items.map((item, i) => (
+                <OrbitingItem key={`${i}-${item.type}`} item={item} index={i} total={items.length} />
             ))}
         </div>
     );
@@ -220,7 +256,14 @@ const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: num
                 className="h-full w-full"
             >
                 {item.type === 'avatar' ? (
-                    <div className="group relative h-full w-full cursor-pointer">
+                    <div
+                        className="group relative h-full w-full cursor-pointer"
+                        onClick={() => {
+                            if (item.profile_url) {
+                                window.open(item.profile_url, '_blank');
+                            }
+                        }}
+                    >
                         <div className="absolute -inset-2 rounded-full bg-white/20 blur-xl opacity-0 transition-opacity group-hover:opacity-100 dark:bg-blue-400/20" />
                         <div
                             className="relative h-full w-full overflow-hidden rounded-full border-2 border-white/80 bg-white/40 backdrop-blur-md shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:border-blue-400 dark:border-white/20 dark:bg-white/10"

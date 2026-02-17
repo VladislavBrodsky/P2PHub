@@ -223,6 +223,7 @@ class PartnerTopResponse(BaseModel):
     username: str | None = None
     photo_url: str | None = None
     photo_file_id: str | None = None
+    profile_url: str | None = None
     xp: float
     referrals_count: int
     rank: str
