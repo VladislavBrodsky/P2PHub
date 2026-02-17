@@ -211,24 +211,23 @@ const FractalProfits = memo(() => {
                         key={i}
                         initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
                         animate={{
-                            scale: [0, 1.4, 0.8],
-                            opacity: [0, 1, 0],
-                            x: (i - 3.5) * 50,
-                            y: (120 + Math.random() * 80) * direction,
-                            filter: ["blur(0px)", "blur(0.5px)", "blur(2px)"]
+                            scale: [0, 1.2, 0.9],
+                            opacity: [0, 0.8, 0],
+                            x: (i - 3.5) * 40,
+                            y: (140 + Math.random() * 100) * direction,
                         }}
                         transition={{
-                            duration: 6 + Math.random() * 2,
+                            duration: 15 + Math.random() * 5, // Slower duration for a calmer atmosphere
                             repeat: Infinity,
-                            delay: i * 0.8,
+                            delay: i * 2,
                             ease: [0.22, 1, 0.36, 1]
                         }}
                         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 whitespace-nowrap"
                     >
-                        <div className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.6)] border border-white/30">
+                        <div className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.3)] border border-white/20">
                             <CryptoIcon name="USDT" />
                         </div>
-                        <span className="text-[13px] font-black text-emerald-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.4)] tracking-tighter">
+                        <span className="text-[11px] font-black text-emerald-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] tracking-tighter">
                             +${Math.floor(Math.random() * 55) + 5}.00
                         </span>
                     </motion.div>
@@ -298,9 +297,10 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
                     <div className="group relative h-full w-full">
                         <div className="absolute -inset-2 rounded-full bg-blue-500/20 blur-xl opacity-0 transition-opacity group-hover:opacity-100" />
                         <div
-                            className="relative h-full w-full overflow-hidden rounded-full border-2 border-white bg-white/40 backdrop-blur-md shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:border-blue-400 dark:border-white/20 dark:bg-white/10"
+                            className="relative h-full w-full overflow-hidden rounded-full border-2 border-white bg-white shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:border-blue-400 dark:border-white/20 dark:bg-slate-900"
                             style={{
-                                boxShadow: '0 8px 32px -8px rgba(0,0,0,0.3)'
+                                boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4)',
+                                filter: 'brightness(1.1) contrast(1.05)' // Keep photos bright and crisp
                             }}
                         >
                             <img
@@ -334,8 +334,8 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
                             }}
                         >
                             <div className="absolute inset-0 rounded-full bg-linear-to-tr from-white/30 to-transparent opacity-50" />
-                            <div className="absolute inset-1 rounded-full border border-white/20" />
-                            <div className="relative z-10 h-7 w-7 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
+                            <div className="absolute inset-0.5 rounded-full border border-white/30" />
+                            <div className="relative z-10 h-7 w-7 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] brightness-110">
                                 <CryptoIcon name={item.name} />
                             </div>
                         </div>
