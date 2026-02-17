@@ -148,6 +148,7 @@ class ViralGenerateRequest(BaseModel):
     post_type: str
     target_audience: str
     language: str
+    tone_of_voice: str | None = "authoritative"
     referral_link: str | None = None
     
     # #comment: Standardized for audit.

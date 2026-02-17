@@ -26,4 +26,13 @@ export const languages = [
     { id: 'German', icon: '🇩🇪', label: 'Deutsch' }
 ];
 
+export const tones = [
+    { id: 'provocative', en: 'Provocative (Hype)', ru: 'Провокационный (Хайп)' },
+    { id: 'authoritative', en: 'Authoritative (Expert)', ru: 'Авторитетный (Эксперт)' },
+    { id: 'empathetic', en: 'Empathetic (Story)', ru: 'Эмпатичный (Сторителлинг)' },
+    { id: 'cynical', en: 'Sarcastic (Filter)', ru: 'Саркастичный (Фильтр)' },
+    { id: 'minimalist', en: 'Minimalist (Elite)', ru: 'Минималистичный (Элита)' },
+    { id: 'aggressive', en: 'Aggressive (Sales)', ru: 'Агрессивный (Продажи)' }
+];
+
 

@@ -243,9 +243,9 @@ export default function ReferralPage() {
         const shareText = `${VIRAL_HOOK}\n${VIRAL_SUBTITLE}`;
         const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(shareText)}`;
 
-        if (window.Telegram?.WebApp?.initData) {
-            // #comment: Use inline mode to show 2 viral card options
-            window.Telegram.WebApp.switchInlineQuery(referralCode, ['users', 'groups', 'channels']);
+        if (window.Telegram?.WebApp) {
+            // #comment: Use direct share link to let user choose a contact immediately
+            window.Telegram.WebApp.openTelegramLink(shareUrl);
         } else {
             // Fallback for external browser
             window.open(shareUrl, '_blank');
@@ -357,17 +357,18 @@ export default function ReferralPage() {
                                     <div className="grid grid-cols-1 gap-3">
                                         <button
                                             onClick={handleShareTelegram}
-                                            className="w-full h-14 rounded-xl flex items-center justify-center gap-3 bg-[#2AABEE] hover:bg-[#229ED9] text-white font-bold text-base shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all"
+                                            className="w-full h-12 rounded-2xl flex items-center justify-center gap-3 bg-linear-to-r from-[#2AABEE] to-[#229ED9] text-white font-black text-base shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all relative overflow-hidden group"
                                         >
+                                            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                                             <Send className="w-5 h-5 -rotate-45 mb-0.5" />
                                             <span>{t('referral.modal.share_telegram')}</span>
                                         </button>
 
-                                        <div className="grid grid-cols-2 gap-3">
+                                        <div className="grid grid-cols-2 gap-2.5">
                                             {window.Telegram?.WebApp && (
                                                 <button
                                                     onClick={handleShareViralCard}
-                                                    className="h-12 rounded-xl flex items-center justify-center gap-2 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-bold text-sm border border-indigo-100 dark:border-indigo-500/20 active:scale-[0.98] transition-all"
+                                                    className="h-11 rounded-2xl flex items-center justify-center gap-2 bg-indigo-50 dark:bg-slate-800/80 backdrop-blur-md text-indigo-600 dark:text-indigo-400 font-black text-[13px] border border-indigo-100 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm"
                                                 >
                                                     <Sparkles className="w-4 h-4" />
                                                     <span>{t('referral.modal.viral_btn')}</span>
@@ -375,7 +376,7 @@ export default function ReferralPage() {
                                             )}
                                             <button
                                                 onClick={handleNativeShare}
-                                                className={`h-12 rounded-xl flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-sm border border-slate-200 dark:border-slate-700 active:scale-[0.98] transition-all ${!window.Telegram?.WebApp ? 'col-span-2' : ''}`}
+                                                className={`h-11 rounded-2xl flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/80 backdrop-blur-md text-slate-700 dark:text-slate-300 font-black text-[13px] border border-slate-200/50 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm ${!window.Telegram?.WebApp ? 'col-span-2' : ''}`}
                                             >
                                                 <ExternalLink className="w-4 h-4" />
                                                 <span>{t('referral.modal.share_more')}</span>
@@ -384,7 +385,7 @@ export default function ReferralPage() {
 
                                         <button
                                             onClick={handleCopyLink}
-                                            className="h-10 rounded-xl flex items-center justify-center gap-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-semibold text-xs active:scale-95 transition-all"
+                                            className="h-9 rounded-xl flex items-center justify-center gap-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-semibold text-xs active:scale-95 transition-all"
                                         >
                                             <Copy className="w-3.5 h-3.5" />
                                             <span>{t('referral.modal.copy_link')}</span>

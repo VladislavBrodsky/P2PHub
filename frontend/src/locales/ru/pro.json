@@ -24,6 +24,7 @@
       "strategy_placeholder": "Выберите категорию",
       "target_label": "Целевая Аудитория",
       "target_placeholder": "Выберите аудиторию",
+      "tone_label": "Тон Голоса",
       "language_label": "Язык",
       "initiate_btn": "ЗАПУСТИТЬ ИИ-АГЕНТА",
       "cooking_title": "Создание вирального поста...",

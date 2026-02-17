@@ -53,11 +53,12 @@ export const proService = {
         return response.data;
     },
 
-    generateContent: async (post_type: string, target_audience: string, language: string, referral_link?: string): Promise<ViralGenerateResponse> => {
+    generateContent: async (post_type: string, target_audience: string, language: string, tone?: string, referral_link?: string): Promise<ViralGenerateResponse> => {
         const response = await apiClient.post('/api/pro/generate', {
             post_type,
             target_audience,
             language,
+            tone_of_voice: tone,
             referral_link
         });
         return response.data;

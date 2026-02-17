@@ -281,6 +281,7 @@ Use FRESH, audience-specific language that feels authentic.
         post_type: str, 
         target_audience: str, 
         language: str,
+        tone_of_voice: str | None = "authoritative",
         referral_link: str | None = None,
         session: AsyncSession | None = None
     ) -> dict[str, Any]:
@@ -300,10 +301,10 @@ Use FRESH, audience-specific language that feels authentic.
         best_practices = await KnowledgeInsights.get_best_practices(session)
         
         system_prompt = self._build_viral_system_prompt(
-            language, target_audience, post_type, ref_link, intel, best_practices
+            language, target_audience, post_type, tone_of_voice, ref_link, intel, best_practices
         )
         user_prompt = self._build_viral_user_prompt(
-            target_audience, post_type, language, ref_link, intel
+            target_audience, post_type, language, tone_of_voice, ref_link, intel
         )
         base_image_prompt = self._build_viral_image_prompt(target_audience, post_type)
 
@@ -386,7 +387,7 @@ Use FRESH, audience-specific language that feels authentic.
             "dna": NativeLanguageOptimization.LANGUAGE_DNA.get(language, {})
         }
 
-    def _build_viral_system_prompt(self, language, target_audience, post_type, ref_link, intel, best_practices) -> str:
+    def _build_viral_system_prompt(self, language, target_audience, post_type, tone, ref_link, intel, best_practices) -> str:
         audience_intel = intel["audience"]
         category_strategy = intel["strategy"]
         language_dna = intel["dna"]
@@ -412,6 +413,7 @@ Use FRESH, audience-specific language that feels authentic.
 
 **YOUR TASK:**
 Write in {language} for {target_audience} using the {post_type} strategy.
+Persona Tone: {tone.upper()}
 Product: Pintopay Crypto Card + Partner Network
 Referral Link (MUST INCLUDE): {ref_link}
 
@@ -424,7 +426,7 @@ Referral Link (MUST INCLUDE): {ref_link}
 }}
 """
 
-    def _build_viral_user_prompt(self, target_audience, post_type, language, ref_link, intel) -> str:
+    def _build_viral_user_prompt(self, target_audience, post_type, language, tone, ref_link, intel) -> str:
         audience_intel = intel["audience"]
         category_strategy = intel["strategy"]
         hook_examples = audience_intel.get("hooks", []) if audience_intel else []
@@ -434,6 +436,7 @@ EXECUTE CMO AGENT MODE.
 
 Target: {target_audience}
 Category: {post_type}
+Style/Tone: {tone.upper()}
 Language: {language} (write as NATIVE speaker)
 Referral Link: {ref_link}
 
@@ -706,7 +709,7 @@ Formatting Style: {language_dna.get('formatting', 'Clean and professional')}
 Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
 """
 
-    def _build_system_prompt(self, language, target_audience, post_type, ref_link, psycho_context, strategy_context, lang_context, best_practices) -> str:
+    def _build_system_prompt(self, language, target_audience, post_type, tone, ref_link, psycho_context, strategy_context, lang_context, best_practices) -> str:
         return f"""{self.CMO_PERSONA}
 
 {psycho_context}
@@ -724,6 +727,7 @@ Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
 
 **YOUR TASK:**
 Write in {language} for {target_audience} using the {post_type} strategy.
+Persona Tone: {tone.upper()}
 Product: Pintopay Crypto Card + Partner Network
 Referral Link (MUST INCLUDE): {ref_link}
 
@@ -736,13 +740,14 @@ Referral Link (MUST INCLUDE): {ref_link}
 }}
 """
 
-    def _build_user_prompt(self, target_audience, post_type, language, ref_link, audience_intel, category_strategy) -> str:
+    def _build_user_prompt(self, target_audience, post_type, language, tone, ref_link, audience_intel, category_strategy) -> str:
         hook_examples = audience_intel.get("hooks", []) if audience_intel else []
         return f"""
 EXECUTE CMO AGENT MODE.
 
 Target: {target_audience}
 Category: {post_type}
+Style/Tone: {tone.upper()}
 Language: {language} (write as NATIVE speaker)
 Referral Link: {ref_link}
 

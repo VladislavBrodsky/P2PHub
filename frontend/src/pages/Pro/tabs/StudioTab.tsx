@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { proService, PROStatus } from '../../../services/proService';
 import { getApiUrl } from '../../../utils/api';
 import { renderMarkdown } from '../utils/renderMarkdown';
-import { postTypes as defaultPostTypes, audiences as defaultAudiences, languages as defaultLanguages } from '../utils/constants';
+import { postTypes as defaultPostTypes, audiences as defaultAudiences, languages as defaultLanguages, tones as defaultTones } from '../utils/constants';
 
 interface StudioTabProps {
     status: PROStatus | null;
@@ -48,6 +48,7 @@ export const StudioTab = ({
     const [postType, setPostType] = useState('');
     const [audience, setAudience] = useState('');
     const [language, setLanguage] = useState(i18n.language === 'ru' ? 'Russian' : 'English');
+    const [tone, setTone] = useState('authoritative');
     const [isGenerating, setIsGenerating] = useState(false);
     const [countdown, setCountdown] = useState(30);
 
@@ -82,7 +83,7 @@ export const StudioTab = ({
         impact('heavy');
 
         try {
-            const result = await proService.generateContent(postType, audience, language);
+            const result = await proService.generateContent(postType, audience, language, tone);
 
             // Manage History
             const newHistory = [...history.slice(0, historyIndex + 1), result];
@@ -122,7 +123,7 @@ export const StudioTab = ({
         } finally {
             setIsGenerating(false);
         }
-    }, [postType, audience, language, history, historyIndex, status, t, notification, impact, setHistory, setHistoryIndex, setGeneratedResult, setStatus, setExternalStep]);
+    }, [postType, audience, language, tone, history, historyIndex, status, t, notification, impact, setHistory, setHistoryIndex, setGeneratedResult, setStatus, setExternalStep]);
 
     useEffect(() => {
         const handleGen = () => handleGenerate();
@@ -341,11 +342,32 @@ export const StudioTab = ({
                                 </div>
                             </div>
 
+                            {/* Tone of Voice */}
+                            <div className="space-y-1.5">
+                                <div className="flex items-center justify-between px-1">
+                                    <label className="text-[9px] font-black uppercase text-amber-600 dark:text-amber-400 tracking-widest">
+                                        03. {t('pro_dashboard.studio.tone_label', 'Tone of Voice')}
+                                    </label>
+                                </div>
+                                <div className="relative">
+                                    <select
+                                        value={tone}
+                                        onChange={(e) => { selection(); setTone(e.target.value); }}
+                                        className="w-full h-12 sm:h-14 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-amber-500/50 rounded-xl sm:rounded-2xl px-5 text-[13px] font-bold text-slate-900 dark:text-white outline-hidden appearance-none transition-all cursor-pointer shadow-sm"
+                                    >
+                                        {defaultTones.map(t => <option key={t.id} value={t.id}>{i18n.language === 'ru' ? t.ru : t.en}</option>)}
+                                    </select>
+                                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-amber-500">
+                                        <Sparkles size={16} />
+                                    </div>
+                                </div>
+                            </div>
+
                             {/* Output Language */}
                             <div className="space-y-1.5">
                                 <div className="flex items-center justify-between px-1">
                                     <label className="text-[9px] font-black uppercase text-emerald-600 dark:text-emerald-400 tracking-widest">
-                                        03. {t('pro_dashboard.studio.language_label')}
+                                        04. {t('pro_dashboard.studio.language_label')}
                                     </label>
                                 </div>
                                 <div className="relative">
