@@ -370,8 +370,6 @@ async def get_top_partners(
         if display_refs < 133:
             display_refs = 133 + ((p.id * 17) % (437 - 133 + 1))
 
-        profile_url = f"https://t.me/{p.username}" if p.username else f"tg://user?id={p.telegram_id}"
-
         top_data.append({
             "id": p.id,
             "first_name": p.first_name,
@@ -379,7 +377,6 @@ async def get_top_partners(
             "username": p.username,
             "photo_file_id": p.photo_file_id,
             "photo_url": p.photo_url,
-            "profile_url": profile_url,
             "xp": p.xp,
             "referrals_count": display_refs,
             "rank": get_rank(p.xp)
