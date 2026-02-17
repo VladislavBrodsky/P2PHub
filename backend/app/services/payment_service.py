@@ -1,7 +1,7 @@
 import contextlib
 import json
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 
 import sentry_sdk
 from sqlmodel import select
@@ -143,7 +143,7 @@ class PaymentService:
             level="debug"
         )
         # A "session" is valid if created within last 10 minutes
-        ten_mins_ago = datetime.utcnow() - timedelta(minutes=10)
+        ten_mins_ago = datetime.now(UTC).replace(tzinfo=None) - timedelta(minutes=10)
         stmt_session = select(PartnerTransaction).where(
             PartnerTransaction.partner_id == partner.id,
             PartnerTransaction.status == "pending",

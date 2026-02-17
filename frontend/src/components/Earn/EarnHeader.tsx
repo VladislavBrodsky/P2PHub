@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 // #comment: Removed unused Star and CheckCircle2 icons from lucide-react
 // #comment: Removed unused Crown icon from lucide-react to clean up the import list
 import { Trophy, Zap, Users } from 'lucide-react';
-import { getRank, getXPProgress } from '../../utils/ranking';
+import { getRank, getXPProgress, getRankGradient } from '../../utils/ranking';
 import { useUser } from '../../context/UserContext';
 // #comment: Removed unused Trans import from react-i18next
 import { useTranslation } from 'react-i18next';
@@ -57,9 +57,7 @@ export const EarnHeader = () => {
                         </div>
 
                         {/* Rank Badge - Compact */}
-                        <div className={`mt-2 px-3 py-1 rounded-full border border-white/20 shadow-lg backdrop-blur-xl z-20 
-                            ${level >= 50 ? 'bg-amber-400 text-yellow-950' : 'bg-slate-300 text-slate-900'}
-                        `}>
+                        <div className={`mt-2 px-3 py-1 rounded-full border border-white/20 shadow-lg backdrop-blur-xl z-20 bg-linear-to-r text-white ${getRankGradient(level)}`}>
                             <div className="flex items-center gap-1">
                                 <Trophy className="w-2.5 h-2.5" />
                                 <span className="text-[8px] font-black uppercase tracking-widest">
@@ -82,7 +80,7 @@ export const EarnHeader = () => {
                                     initial={{ width: 0 }}
                                     animate={{ width: `${progress.percent}%` }}
                                     transition={{ duration: 1.5, ease: "backOut" }}
-                                    className="h-full rounded-full bg-linear-to-r from-blue-500 to-blue-400"
+                                    className={`h-full rounded-full bg-linear-to-r ${getRankGradient(level)} shadow-[0_0_10px_rgba(59,130,246,0.3)]`}
                                 />
                             </div>
                         </div>

@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+import random
 import secrets
 
 # Added datetime for tracking task start times
@@ -90,7 +91,9 @@ async def get_network_activity(
         })
 
     try:
-        await redis_service.set_json(cache_key, activity, expire=30) # 30s cache
+        # Jittered: 30s +/- 3s
+        expire_time = 30 + random.randint(-3, 3)
+        await redis_service.set_json(cache_key, activity, expire=expire_time)
     except Exception as e:
         logger.warning(f"Cache write failed (activity): {e}")
 
@@ -338,7 +341,9 @@ async def get_my_profile(
     # #comment: CRITICAL - Use mode='json' to ensure datetime objects are serialized (isoformat)
     # before writing to Redis. Without this, json.dumps fails with a TypeError.
     try:
-        await redis_service.set_json(cache_key, partner_response.model_dump(mode='json'), expire=300)
+        # Jittered: 300s +/- 30s
+        expire_time = 300 + random.randint(-30, 30)
+        await redis_service.set_json(cache_key, partner_response.model_dump(mode='json'), expire=expire_time)
     except Exception as e:
         logger.warning(f"Profile cache write failed: {e}")
 
@@ -398,7 +403,9 @@ async def get_top_partners(
         logger.warning(f"Top partners photo warming failed: {e}")
 
     try:
-        await redis_service.set_json(cache_key, top_data, expire=600)
+        # Jittered: 600s +/- 60s
+        expire_time = 600 + random.randint(-60, 60)
+        await redis_service.set_json(cache_key, top_data, expire=expire_time)
     except Exception as e:
         logger.warning(f"Top partners cache write failed: {e}")
 
@@ -490,7 +497,9 @@ async def get_orbit_members(
             logger.warning(f"Orbit photo warming failed: {e}")
 
     try:
-        await redis_service.set_json(cache_key, orbit_data, expire=6 * 3600)
+        # Jittered: 6h +/- 30m
+        expire_time = 21600 + random.randint(-1800, 1800)
+        await redis_service.set_json(cache_key, orbit_data, expire=expire_time)
     except Exception as e:
         logger.warning(f"Orbit members cache write failed: {e}")
 
@@ -629,7 +638,9 @@ async def get_recent_partners(
 
     # 5. Populate Redis
     try:
-        await redis_service.set_json(cache_key, partners_data, expire=300) # 5 mins
+        # Jittered: 300s +/- 30s
+        expire_time = 300 + random.randint(-30, 30)
+        await redis_service.set_json(cache_key, partners_data, expire=expire_time) # 5 mins
     except Exception as e:
         logger.warning(f"Recent partners cache write failed: {e}")
 

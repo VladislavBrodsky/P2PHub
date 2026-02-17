@@ -72,3 +72,18 @@ export function getXPProgress(level: number, totalXP: number) {
         percent: progress
     };
 }
+
+/**
+ * Returns a CSS gradient string based on the user's level.
+ * Used for dynamic UI elements like progress bars and badges.
+ */
+export function getRankGradient(level: number): string {
+    if (level < 12) return 'from-slate-400 to-slate-500';       // Steel/Slate
+    if (level < 24) return 'from-blue-400 to-blue-600';         // Blue/Pioneer
+    if (level < 36) return 'from-emerald-400 to-emerald-600';   // Emerald/Ambassador
+    if (level < 52) return 'from-amber-400 to-amber-600';       // Gold/Director
+    if (level < 68) return 'from-purple-400 to-purple-600';     // Purple/Elite
+    if (level < 84) return 'from-rose-400 to-rose-600';         // Rose/VIP
+    if (level < 100) return 'from-blue-600 to-indigo-700';      // PRO Deep Blue
+    return 'from-slate-900 via-blue-900 to-slate-900';          // Immortal Cosmic
+}
