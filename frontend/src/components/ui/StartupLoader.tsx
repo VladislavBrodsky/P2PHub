@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'; // Refined 12:25 PM
 import { LOGO_DATA } from '../../data/avatars';
 // #comment: Removed unused AnimatePresence from framer-motion to simplify imports
 import { motion } from 'framer-motion';
