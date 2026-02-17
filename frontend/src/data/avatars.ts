@@ -6,24 +6,12 @@
 export const LOGO_DATA = "/logo.svg";
 
 export const AVATAR_DATA: Record<string, string> = {
-    "ae_f_1.webp": "/avatars/ae_f_1.webp",
-    "br_f_1.webp": "/avatars/br_f_1.webp",
-    "ca_m_1.webp": "/avatars/ca_m_1.webp",
-    "de_m_1.webp": "/avatars/de_m_1.webp",
-    "es_m_1.webp": "/avatars/es_m_1.webp",
-    "f1.webp": "/avatars/f1.webp",
-    "f2.webp": "/avatars/f2.webp",
-    "f3.webp": "/avatars/f3.webp",
-    "fr_f_1.webp": "/avatars/fr_f_1.webp",
-    "in_m_1.webp": "/avatars/in_m_1.webp",
-    "it_f_1.webp": "/avatars/it_f_1.webp",
-    "jp_f_1.webp": "/avatars/jp_f_1.webp",
-    "m1.webp": "/avatars/m1.webp",
-    "m2.webp": "/avatars/m2.webp",
-    "m3.webp": "/avatars/m3.webp",
-    "m4.webp": "/avatars/m4.webp",
-    "ng_m_1.webp": "/avatars/ng_m_1.webp",
-    "ru_m_1.webp": "/avatars/ru_m_1.webp",
-    "us_f_1.webp": "/avatars/us_f_1.webp",
-    "us_m_1.webp": "/avatars/us_m_1.webp"
+    "avatar_1": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=128&h=128&fit=crop",
+    "avatar_2": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=128&h=128&fit=crop",
+    "avatar_3": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=128&h=128&fit=crop",
+    "avatar_4": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=128&h=128&fit=crop",
+    "avatar_5": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=128&h=128&fit=crop",
+    "avatar_6": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=128&h=128&fit=crop",
+    "avatar_7": "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=128&h=128&fit=crop",
+    "avatar_8": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=128&h=128&fit=crop"
 };
