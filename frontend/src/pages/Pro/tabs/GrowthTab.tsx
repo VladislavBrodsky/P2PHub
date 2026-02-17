@@ -7,6 +7,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { PROStatus } from '../../../services/proService';
 import { renderMarkdown } from '../utils/renderMarkdown';
+import { LiquidCounter } from '../utils/LiquidCounter';
 
 interface GrowthTabProps {
     status: PROStatus | null;
@@ -72,14 +73,10 @@ export const GrowthTab = ({
                     <div className="flex flex-col items-end">
                         <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">{t('pro_dashboard.academy.protocols.stats_label')}</p>
                         <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tabular-nums leading-none flex items-baseline gap-0.5 vibing-crystal-text drop-shadow-sm">
-                            <motion.span
-                                key={academyScore}
-                                initial={{ opacity: 0, y: 10, filter: 'blur(5px)' }}
-                                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                            >
-                                {academyScore}
-                            </motion.span>
+                            <LiquidCounter
+                                value={academyScore}
+                                className="vibing-crystal-text drop-shadow-sm"
+                            />
                             <span className="text-indigo-500 text-base sm:text-lg opacity-50">PTS</span>
                         </div>
                     </div>
@@ -101,13 +98,15 @@ export const GrowthTab = ({
                                     </div>
                                     <span className="text-indigo-600 dark:text-indigo-400 font-black">{progress}%</span>
                                 </div>
-                                <div className="h-2 bg-slate-100 dark:bg-black/20 rounded-full overflow-hidden p-0.5 shadow-inner border border-slate-200 dark:border-white/5">
+                                <div className="h-3 bg-slate-100 dark:bg-black/40 rounded-full overflow-hidden p-0.5 shadow-inner border border-slate-200 dark:border-white/5 relative">
                                     <motion.div
-                                        className="h-full vibing-blue-animated rounded-full shadow-lg shadow-indigo-500/20"
+                                        className="h-full vibing-blue-animated rounded-full shadow-lg shadow-indigo-500/20 relative overflow-hidden"
                                         initial={{ width: "0%" }}
                                         animate={{ width: `${progress}%` }}
                                         transition={{ duration: 2, ease: "circOut" }}
-                                    />
+                                    >
+                                        <div className="absolute inset-0 bg-linear-to-r from-white/20 via-transparent to-transparent animate-shimmer-slide" />
+                                    </motion.div>
                                 </div>
                             </>
                         );

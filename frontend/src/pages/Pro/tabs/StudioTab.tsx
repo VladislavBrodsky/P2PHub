@@ -445,35 +445,39 @@ export const StudioTab = ({
                                     </div>
 
                                     {/* Progress Info */}
-                                    <div className="bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-xl rounded-2xl p-5 sm:p-6 border border-slate-200/50 dark:border-white/10 shadow-lg">
-                                        <div className="space-y-4">
+                                    <div className="bg-slate-50/80 dark:bg-black/40 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-white/20 dark:border-white/5 shadow-2xl relative overflow-hidden group">
+                                        <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-purple-500/5 opacity-50" />
+                                        <div className="space-y-6 relative z-10">
                                             {/* Percentage Display */}
-                                            <div className="flex items-center justify-center gap-3 overflow-visible">
-                                                <div className="flex items-baseline gap-2 px-2">
-                                                    <span className="text-4xl sm:text-5xl font-black bg-linear-to-br from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+                                            <div className="flex items-center justify-center gap-4">
+                                                <div className="flex items-baseline gap-2">
+                                                    <span className="text-5xl sm:text-6xl font-black bg-linear-to-br from-indigo-600 via-purple-600 to-pink-600 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent drop-shadow-2xl">
                                                         {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}
                                                     </span>
-                                                    <span className="text-sm sm:text-base font-bold text-slate-400 dark:text-slate-500">%</span>
+                                                    <span className="text-lg sm:text-xl font-black text-slate-400/50">%</span>
                                                 </div>
                                             </div>
 
-                                            {/* Time Remaining */}
-                                            <div className="flex items-center justify-center gap-2">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                                                <span className="text-[9px] sm:text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">
-                                                    ANALYZING TRENDS • {countdown}S REMAINING
-                                                </span>
-                                            </div>
+                                            {/* Progress Bar Container */}
+                                            <div className="space-y-3">
+                                                <div className="h-3 w-full bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden relative shadow-inner border border-white/10">
+                                                    <motion.div
+                                                        className="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full shadow-[0_0_20px_rgba(99,102,241,0.5)]"
+                                                        initial={{ width: "0%" }}
+                                                        animate={{ width: `${Math.min(((30 - countdown) / 30) * 100, 99)}%` }}
+                                                        transition={{ duration: 0.5 }}
+                                                    >
+                                                        <div className="absolute inset-0 bg-linear-to-r from-white/30 via-transparent to-transparent animate-shimmer-slide" />
+                                                    </motion.div>
+                                                </div>
 
-                                            {/* Progress Bar */}
-                                            <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden relative shadow-inner">
-                                                <motion.div
-                                                    className="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full shadow-lg"
-                                                    initial={{ width: "0%" }}
-                                                    animate={{ width: `${Math.min(((30 - countdown) / 30) * 100, 99)}%` }}
-                                                    transition={{ duration: 0.5 }}
-                                                />
-                                                <div className="absolute inset-0 bg-linear-to-r from-white/20 to-transparent" />
+                                                <div className="flex justify-between items-center px-1">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                                                        <span className="text-[8px] font-black text-indigo-500 uppercase tracking-widest">Neural Link Active</span>
+                                                    </div>
+                                                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{countdown}S REMAINING</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -623,7 +627,7 @@ export const StudioTab = ({
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-xl overflow-y-auto"
+                            className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-xl overflow-y-auto"
                             onClick={() => setShowPublishModal(false)}
                         >
                             <motion.div
