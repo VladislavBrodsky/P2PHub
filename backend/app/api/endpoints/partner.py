@@ -340,11 +340,9 @@ async def get_my_profile(
 
 @router.get("/top", response_model=list[PartnerTopResponse])
 async def get_top_partners(
+    background_tasks: BackgroundTasks,
     session: AsyncSession = Depends(get_session)
 ):
-    """
-    Fetches the top 5 partners by XP for social proof.
-    """
     """
     Fetches the top 5 partners by XP for social proof.
     """
@@ -381,6 +379,16 @@ async def get_top_partners(
             "referrals_count": display_refs,
             "rank": get_rank(p.xp)
         })
+
+    # Background Cache Warming for photos
+    try:
+        from app.services.partner_service import ensure_photo_cached
+        photo_ids = [p["photo_file_id"] for p in top_data if p.get("photo_file_id")]
+        if photo_ids:
+            for fid in photo_ids:
+                background_tasks.add_task(ensure_photo_cached, fid)
+    except Exception as e:
+        logger.warning(f"Top partners photo warming failed: {e}")
 
     try:
         await redis_service.set_json(cache_key, top_data, expire=600)
@@ -497,16 +505,18 @@ async def get_recent_partners(
         "last_hour_count": last_hour_count
     }
 
-    # 4.5. EAGER Photo Cache Warming (Synchronous for first 4 images)
-    # This ensures photos are ready BEFORE the frontend requests them
+    # 4.5. EAGER Photo Cache Warming (Background for first 4 images)
+    # This ensures photos are ready BEFORE the frontend requests them without blocking the response
     if refresh_partners and partners_list:
         try:
             from app.services.partner_service import ensure_photo_cached
             # Warm first 4 photos eagerly (these show in the UI immediately)
             priority_photos = [p["photo_file_id"] for p in partners_list[:4] if p.get("photo_file_id")]
             if priority_photos:
-                logger.info(f"🔥 Eagerly warming {len(priority_photos)} priority photos...")
-                await asyncio.gather(*[ensure_photo_cached(fid) for fid in priority_photos], return_exceptions=True)
+                logger.info(f"🔥 Eagerly warming {len(priority_photos)} priority photos in background...")
+                # We use a wrapper or multiple tasks to avoid blocking
+                for fid in priority_photos:
+                    background_tasks.add_task(ensure_photo_cached, fid)
         except Exception as e:
             logger.warning(f"⚠️ Photo warming failed (non-critical): {e}")
 

@@ -6,6 +6,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { apiClient } from '../../api/client';
 import { LazyImage } from '../ui/LazyImage';
 import { useVisibilityPolling } from '../../hooks/useVisibilityPolling';
+import { getApiUrl } from '../../utils/api';
 
 interface PartnerStatsProps {
     onNavigateToEarn?: () => void;
@@ -16,30 +17,19 @@ const PartnerAvatar = ({ partner, index }: { partner: any; index: number }) => {
 
     // Handle both new (photo_file_id) and old (photo_url) for backwards compatibility
     if ((partner.photo_file_id || partner.photo_url) && !imgError) {
-        let photoUrl = '';
+        const photoUrl = partner.photo_file_id
+            ? `${getApiUrl()}/api/partner/photo/${partner.photo_file_id}`
+            : partner.photo_url;
 
-        if (partner.photo_file_id) {
-            // Use the backend proxy endpoint for file_id
-            photoUrl = `${apiClient.defaults.baseURL}/api/partner/photo/${partner.photo_file_id}`;
-        } else if (partner.photo_url) {
-            // Use the photo_url directly (legacy support)
-            photoUrl = partner.photo_url;
-            if (photoUrl.startsWith('/')) {
-                const baseUrl = apiClient.defaults.baseURL?.replace('/api', '') || '';
-                photoUrl = `${baseUrl}${photoUrl}`;
-            }
-        }
-
-        if (photoUrl) {
-            return (
-                <LazyImage
-                    src={photoUrl}
-                    alt={partner.first_name}
-                    className="w-full h-full object-cover"
-                    onError={() => setImgError(true)}
-                />
-            );
-        }
+        return (
+            <img
+                src={photoUrl}
+                alt={partner.first_name || ''}
+                className="w-full h-full object-cover"
+                loading="lazy"
+                onError={() => setImgError(true)}
+            />
+        );
     }
 
     return (
