@@ -122,6 +122,24 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
         referrer = ancestor_map.get(current_referrer_id)
         if not referrer: break
 
+        # #comment: ELITE COMPRESSION LOGIC
+        # Free users ONLY get L1 rewards. L2-L9 require PRO status.
+        # Rationale: This creates the core value proposition for the PRO subscription.
+        if level > 1 and not referrer.is_pro:
+            # Send FOMO notification for the first few levels of deep growth (Throttled)
+            if level in [2, 3, 5]:
+                lang = referrer.language_code or "en"
+                fomo_msg = get_msg(lang, "pro_fomo_missed", level=level)
+                buttons = [[{"text": "👑 Upgrade to PRO", "web_app": {"url": settings.FRONTEND_URL}}]]
+                # Use background queue to avoid blocking
+                await notification_service.enqueue_notification(
+                    chat_id=int(referrer.telegram_id), text=fomo_msg, buttons=buttons
+                )
+            
+            current_referrer_id = referrer.referrer_id
+            session.add(referrer)
+            continue
+
         try:
             # XP Calculation & Level Up
             xp_gain = _calculate_referral_xp(level, referrer.is_pro)
@@ -236,6 +254,22 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
         referrer = ancestor_map.get(current_referrer_id)
         if not referrer:
             break
+
+        # #comment: ELITE COMPRESSION LOGIC
+        # USDT commissions for network growth (Level 2-9) require PRO status.
+        # Free users only receive direct (L1) commissions. 
+        if level > 1 and not referrer.is_pro:
+            # Send FOMO for Level 2/3 commissions explicitly (High value conversion)
+            if level in [2, 3]:
+                lang = referrer.language_code or "en"
+                fomo_msg = get_msg(lang, "pro_fomo_missed", level=level)
+                buttons = [[{"text": "👑 Unlock Commissions", "web_app": {"url": settings.FRONTEND_URL}}]]
+                await notification_service.enqueue_notification(
+                    chat_id=int(referrer.telegram_id), text=fomo_msg, buttons=buttons
+                )
+
+            current_referrer_id = referrer.referrer_id
+            continue
 
         pct = settings.COMMISSION_MAP.get(level, 0)
         commission = total_amount * pct

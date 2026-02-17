@@ -73,6 +73,15 @@ MESSAGES = {
         "viral_share_caption": (
             "🛑 STOP FEEDING THE BANKS! \n"
             "Join FinTech Partner Network and earn like a bank. $1 Every Minute"
+        ),
+        "pro_fomo_missed": (
+            "🚀 *Growth Detected!* (Level {level})\n\n"
+            "Someone just joined your deep network, but your rewards are currently **LOCKED** 🔒.\n\n"
+            "👑 *Upgrade to PRO to:* \n"
+            "• Unlock **9 Levels** of passive rewards\n"
+            "• Earn USDT from every PRO upgrade in your team\n"
+            "• Get **x5 Fast XP** boost\n\n"
+            "Don't leave money on the table. Build your empire today! 🏰"
         )
     },
     "ru": {
@@ -149,6 +158,15 @@ MESSAGES = {
         "viral_share_caption": (
             "🛑 STOP FEEDING THE BANKS! 🛑\n"
             "Зарабатывай как банк. $1 каждую минуту. 🚀"
+        ),
+        "pro_fomo_missed": (
+            "🚀 *Обнаружен рост!* (Уровень {level})\n\n"
+            "Кто-то присоединился к вашей сети в глубине, но ваши награды сейчас **ЗАБЛОКИРОВАНЫ** 🔒.\n\n"
+            "👑 *Перейдите на PRO, чтобы:* \n"
+            "• Открыть **9 уровней** пассивных наград\n"
+            "• Получать USDT с каждого PRO-апгрейда в команде\n"
+            "• Получить ускорение **x5 Fast XP**\n\n"
+            "Не оставляйте деньги на столе. Стройте свою империю сегодня! 🏰"
         )
     }
 }
