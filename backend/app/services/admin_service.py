@@ -5,6 +5,7 @@ from typing import Any
 logger = logging.getLogger(__name__)
 
 from sqlmodel import func, select, text
+from sqlalchemy.orm import selectinload
 
 from app.models.partner import Earning, Partner, PartnerTask, get_session
 from app.models.transaction import PartnerTransaction
@@ -139,15 +140,25 @@ class AdminService:
         
         # Build one giant query with conditional counts
         # This reduces 8 queries down to 1.
+        # We use func.count(text(...)) with select_from(Partner) to ensure table context.
         stmt = select(
-            func.count(text("CASE WHEN created_at >= :h24 THEN 1 END")).params(h24=now-timedelta(hours=24)),
-            func.count(text("CASE WHEN created_at >= :h48 AND created_at < :h24 THEN 1 END")).params(h48=now-timedelta(hours=48), h24=now-timedelta(hours=24)),
-            func.count(text("CASE WHEN created_at >= :d7 THEN 1 END")).params(d7=now-timedelta(days=7)),
-            func.count(text("CASE WHEN created_at >= :d14 AND created_at < :d7 THEN 1 END")).params(d14=now-timedelta(days=14), d7=now-timedelta(days=7)),
-            func.count(text("CASE WHEN created_at >= :d30 THEN 1 END")).params(d30=now-timedelta(days=30)),
-            func.count(text("CASE WHEN created_at >= :d60 AND created_at < :d30 THEN 1 END")).params(d60=now-timedelta(days=60), d30=now-timedelta(days=30)),
-            func.count(text("CASE WHEN created_at >= :d90 THEN 1 END")).params(d90=now-timedelta(days=90)),
-            func.count(text("CASE WHEN created_at >= :d180 AND created_at < :d90 THEN 1 END")).params(d180=now-timedelta(days=180), d90=now-timedelta(days=90)),
+            func.count(text("CASE WHEN partner.created_at >= :h24 THEN 1 END")),
+            func.count(text("CASE WHEN partner.created_at >= :h48 AND partner.created_at < :h24 THEN 1 END")),
+            func.count(text("CASE WHEN partner.created_at >= :d7 THEN 1 END")),
+            func.count(text("CASE WHEN partner.created_at >= :d14 AND partner.created_at < :d7 THEN 1 END")),
+            func.count(text("CASE WHEN partner.created_at >= :d30 THEN 1 END")),
+            func.count(text("CASE WHEN partner.created_at >= :d60 AND partner.created_at < :d30 THEN 1 END")),
+            func.count(text("CASE WHEN partner.created_at >= :d90 THEN 1 END")),
+            func.count(text("CASE WHEN partner.created_at >= :d180 AND partner.created_at < :d90 THEN 1 END")),
+        ).select_from(Partner).params(
+            h24=now-timedelta(hours=24),
+            h48=now-timedelta(hours=48),
+            d7=now-timedelta(days=7),
+            d14=now-timedelta(days=14),
+            d30=now-timedelta(days=30),
+            d60=now-timedelta(days=60),
+            d90=now-timedelta(days=90),
+            d180=now-timedelta(days=180)
         )
         
         counts = (await session.exec(stmt)).first()
@@ -166,20 +177,20 @@ class AdminService:
         }
 
     async def _calculate_general_totals(self, session, now: datetime) -> dict:
-        total_partners = (await session.exec(select(func.count(Partner.id)))).one()
-        total_pro = (await session.exec(select(func.count(Partner.id)).where(Partner.is_pro))).one()
-        total_tasks = (await session.exec(select(func.count(PartnerTask.id)))).one()
+        total_partners = (await session.exec(select(func.count(Partner.id)))).one() or 0
+        total_pro = (await session.exec(select(func.count(Partner.id)).where(Partner.is_pro))).one() or 0
+        total_tasks = (await session.exec(select(func.count(PartnerTask.id)))).one() or 0
         
         active_24h = (await session.exec(select(func.count(Partner.id)).where(
             (Partner.last_checkin_at >= now - timedelta(hours=24)) | (Partner.created_at >= now - timedelta(hours=24))
-        ))).one()
+        ))).one() or 0
 
         # #comment: Count active payment sessions (pending in last 24h)
         # This helps admins see user interest even if no manual submissions exist.
         pending_payments = (await session.exec(select(func.count(PartnerTransaction.id)).where(
             PartnerTransaction.status == "pending",
             PartnerTransaction.created_at >= now - timedelta(hours=24)
-        ))).one()
+        ))).one() or 0
 
         return {
             "total_partners": total_partners, 

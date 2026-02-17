@@ -12,6 +12,7 @@ try:
     # Try common .env locations with error handling
     possible_env_paths = [
         Path(".env"),
+        Path("../.env"),
         Path("backend/.env"),
         Path("../../backend/.env"),
         Path("/app/.env"),
