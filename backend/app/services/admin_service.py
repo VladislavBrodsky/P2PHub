@@ -9,6 +9,7 @@ from sqlmodel import func, select, text
 from app.models.partner import Earning, Partner, PartnerTask, get_session
 from app.models.transaction import PartnerTransaction
 from app.services.notification_service import notification_service
+from app.services.payment_service import payment_service
 
 
 class AdminService:
@@ -168,15 +169,33 @@ class AdminService:
         total_partners = (await session.exec(select(func.count(Partner.id)))).one()
         total_pro = (await session.exec(select(func.count(Partner.id)).where(Partner.is_pro))).one()
         total_tasks = (await session.exec(select(func.count(PartnerTask.id)))).one()
+        
         active_24h = (await session.exec(select(func.count(Partner.id)).where(
             (Partner.last_checkin_at >= now - timedelta(hours=24)) | (Partner.created_at >= now - timedelta(hours=24))
         ))).one()
-        return {"total_partners": total_partners, "total_pro": total_pro, "total_tasks": total_tasks, "active_24h": active_24h}
+
+        # #comment: Count active payment sessions (pending in last 24h)
+        # This helps admins see user interest even if no manual submissions exist.
+        pending_payments = (await session.exec(select(func.count(PartnerTransaction.id)).where(
+            PartnerTransaction.status == "pending",
+            PartnerTransaction.created_at >= now - timedelta(hours=24)
+        ))).one()
+
+        return {
+            "total_partners": total_partners, 
+            "total_pro": total_pro, 
+            "total_tasks": total_tasks, 
+            "active_24h": active_24h,
+            "pending_payments_24h": pending_payments
+        }
 
     async def _calculate_financial_metrics(self, session) -> dict:
-        rev_ton = (await session.exec(select(func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed", PartnerTransaction.currency == "TON"))).one() or 0.0
+        rev_ton = (await session.exec(select(func.sum(PartnerTransaction.amount_crypto)).where(PartnerTransaction.status == "completed", PartnerTransaction.currency == "TON"))).one() or 0.0
         rev_usdt = (await session.exec(select(func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed", PartnerTransaction.currency == "USDT"))).one() or 0.0
-        total_revenue = rev_usdt + (rev_ton * 5.0)
+        
+        # #comment: Get dynamic conversion rate for TON financials
+        ton_price = await payment_service.get_ton_price()
+        total_revenue = rev_usdt + (rev_ton * ton_price)
         
         comm_res = await session.exec(select(Earning.level, func.sum(Earning.amount)).where(Earning.type == "COMMISSION", Earning.level.between(1, 9)).group_by(Earning.level))
         comm_map = {lvl: amt for lvl, amt in comm_res.all()}
@@ -312,15 +331,19 @@ class AdminService:
     async def get_global_network_stats(self) -> dict[str, int]:
         """
         Returns count of partners at each level 1-9 globally.
-        Note: For global view, we use the 'level' field of the Partner model.
+        CORRECTION: Now correctly uses 'depth' (referral generation) instead of XP level.
         """
         async for session in get_session():
-            stmt = select(Partner.level, func.count(Partner.id)).group_by(Partner.level)
+            # Depth 1 = Level 1 Referrals, Depth 2 = Level 2, etc.
+            # We filter depth 1-9 to show the 9-level tree distribution.
+            stmt = select(Partner.depth, func.count(Partner.id)).where(
+                Partner.depth.between(1, 9)
+            ).group_by(Partner.depth)
+            
             result = await session.exec(stmt)
             stats = {str(i): 0 for i in range(1, 10)}
-            for lvl, count in result.all():
-                if 1 <= lvl <= 9:
-                    stats[str(lvl)] = count
+            for depth, count in result.all():
+                stats[str(depth)] = count
             return stats
 
     async def get_global_network_members(self, level: int) -> list[dict[str, Any]]:

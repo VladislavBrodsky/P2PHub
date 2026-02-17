@@ -38,6 +38,7 @@ interface DashboardStats {
         total_pro: number;
         total_tasks: number;
         active_24h: number;
+        pending_payments_24h: number;
     };
     kpis: {
         conversion_rate: number;
@@ -266,7 +267,7 @@ export const AdminPage = () => {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-white/10">
+                            <div className="grid grid-cols-3 gap-4 relative z-10 pt-4 border-t border-white/10">
                                 <div>
                                     <div className="text-[9px] font-black uppercase opacity-60 flex items-center gap-1">
                                         <Zap size={10} /> PRO Members
@@ -278,6 +279,12 @@ export const AdminPage = () => {
                                         <Users size={10} /> 24h Active
                                     </div>
                                     <div className="text-lg font-black">{stats?.events.active_24h}</div>
+                                </div>
+                                <div>
+                                    <div className="text-[9px] font-black uppercase opacity-60 flex items-center gap-1">
+                                        <Clock size={10} /> Interested (24h)
+                                    </div>
+                                    <div className="text-lg font-black">{stats?.events.pending_payments_24h || 0}</div>
                                 </div>
                             </div>
                         </div>
