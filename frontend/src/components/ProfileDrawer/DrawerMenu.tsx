@@ -190,54 +190,102 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
 
     return (
         <div className="flex flex-1 flex-col gap-2">
-            {menuItems.map((item) => (
-                <div key={item.id} className="rounded-2xl bg-(--card-bg) backdrop-blur-sm border border-(--card-border) overflow-hidden shadow-sm group">
-                    <button
-                        onClick={() => {
-                            if (item.id === 'blog') {
-                                onClose();
-                                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'blog' }));
-                            } else if (item.id === 'pro') {
-                                onClose();
-                                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' }));
-                            } else if (item.id === 'admin') {
-                                onClose();
-                                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'admin' }));
-                            } else {
-                                toggleSection(item.id);
-                            }
-                        }}
-                        className="w-full flex items-center justify-between p-3 bg-transparent active:bg-(--color-brand-blue)/5 transition-colors"
+            {menuItems.map((item) => {
+                const isProItem = item.id === 'pro';
+
+                return (
+                    <div
+                        key={item.id}
+                        className={`rounded-2xl overflow-hidden shadow-sm group relative transition-all duration-300 ${isProItem
+                            ? 'bg-linear-to-r from-indigo-600 via-purple-600 to-blue-600 border-none animate-[vibing-gradient_10s_infinite_linear] bg-size-[300%_300%]'
+                            : 'bg-(--card-bg) backdrop-blur-sm border border-(--card-border)'
+                            }`}
                     >
-                        <div className="flex items-center gap-3">
-                            <div className={`p-2 rounded-xl bg-(--card-bg) border border-(--card-border) text-(--color-text-secondary) group-hover:text-(--color-text-primary) transition-colors`}>
-                                {React.cloneElement(item.icon as React.ReactElement, { className: "h-4 w-4" })}
-                            </div>
-                            <span className="text-sm font-bold text-(--color-text-primary) group-hover:translate-x-0.5 transition-transform">{item.label}</span>
-                        </div>
-                        <motion.div
-                            animate={{ rotate: expandedItem === item.id ? 90 : 0 }}
-                            transition={{ duration: 0.2 }}
+                        {/* Premium Liquid/Glow Overlay for Pro */}
+                        {isProItem && (
+                            <>
+                                <div className="absolute inset-0 opacity-40">
+                                    <div className="absolute -inset-full animate-[liquid_20s_infinite_linear] bg-linear-to-r from-transparent via-emerald-400/30 to-transparent rotate-12" />
+                                </div>
+                                <div className="absolute inset-0 opacity-30">
+                                    <div className="absolute -inset-full animate-[liquid_15s_infinite_linear_reverse] bg-linear-to-tr from-transparent via-blue-400/20 to-transparent -rotate-12" />
+                                </div>
+                            </>
+                        )}
+
+                        <button
+                            onClick={() => {
+                                if (item.id === 'blog') {
+                                    onClose();
+                                    window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'blog' }));
+                                } else if (item.id === 'pro') {
+                                    onClose();
+                                    window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' }));
+                                } else if (item.id === 'admin') {
+                                    onClose();
+                                    window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'admin' }));
+                                } else {
+                                    toggleSection(item.id);
+                                }
+                            }}
+                            className={`w-full flex items-center justify-between p-3 transition-colors relative z-10 ${isProItem
+                                ? 'bg-transparent text-white active:bg-white/10'
+                                : 'bg-transparent active:bg-(--color-brand-blue)/5'
+                                }`}
                         >
-                            <ChevronRight className="h-4 w-4 text-(--color-text-secondary)" />
-                        </motion.div>
-                    </button>
-                    <AnimatePresence>
-                        {expandedItem === item.id && (
+                            <div className="flex items-center gap-3">
+                                <div className={`p-2 rounded-xl transition-all duration-300 ${isProItem
+                                    ? 'bg-white/20 border border-white/30 text-white group-hover:scale-110 group-hover:rotate-12 shadow-lg shadow-white/10'
+                                    : 'bg-(--card-bg) border border-(--card-border) text-(--color-text-secondary) group-hover:text-(--color-text-primary)'
+                                    }`}>
+                                    {React.cloneElement(item.icon as React.ReactElement, {
+                                        className: `h-4 w-4 ${isProItem ? 'animate-pulse' : ''}`
+                                    })}
+                                </div>
+                                <div className="flex flex-col items-start">
+                                    <span className={`text-sm font-bold group-hover:translate-x-0.5 transition-transform ${isProItem ? 'text-white' : 'text-(--color-text-primary)'
+                                        }`}>
+                                        {item.label}
+                                    </span>
+                                    {isProItem && (
+                                        <span className="text-[9px] font-black uppercase tracking-widest text-emerald-300/80 -mt-0.5">
+                                            Vanguard Active
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
                             <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
+                                animate={{ rotate: expandedItem === item.id ? 90 : 0 }}
                                 transition={{ duration: 0.2 }}
                             >
-                                <div className="px-4 pb-4 border-t border-(--card-border)">
-                                    {renderSectionContent(item.id)}
-                                </div>
+                                <ChevronRight className={`h-4 w-4 ${isProItem ? 'text-white/70' : 'text-(--color-text-secondary)'}`} />
                             </motion.div>
+                        </button>
+
+                        {/* Pro badge/glow */}
+                        {isProItem && (
+                            <div className="absolute right-10 top-1/2 -translate-y-1/2">
+                                <div className="h-1 w-1 rounded-full bg-emerald-400 shadow-[0_0_10px_#10b981] animate-pulse" />
+                            </div>
                         )}
-                    </AnimatePresence>
-                </div>
-            ))}
+
+                        <AnimatePresence>
+                            {expandedItem === item.id && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: 'auto', opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <div className={`px-4 pb-4 border-t ${isProItem ? 'border-white/10' : 'border-(--card-border)'}`}>
+                                        {renderSectionContent(item.id)}
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+                );
+            })}
         </div>
     );
 }

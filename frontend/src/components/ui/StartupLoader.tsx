@@ -47,9 +47,9 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                 <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-linear-to-tl from-blue-500/10 to-transparent blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
             </div>
 
-            <div className="relative flex flex-col items-center justify-center">
+            <div className="relative flex flex-col items-center justify-center scale-90">
                 {/* Main Animated Hub */}
-                <div className="relative w-44 h-44 flex items-center justify-center">
+                <div className="relative w-40 h-40 flex items-center justify-center">
                     {/* Rotating Conic Border - The "Apple" loading feel */}
                     <motion.div
                         className="absolute inset-2 rounded-full border border-transparent blur-px"
@@ -60,40 +60,43 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                             WebkitMaskComposite: 'destination-out',
                         }}
                         animate={{ rotate: 360 }}
-                        transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+                        transition={{ duration: 2.2, repeat: Infinity, ease: "linear" }}
                     />
 
-                    {/* Central Logo Container - Subtly blurred edges for premium feel */}
+                    {/* Central Logo Disk - "Vibing" scale effect */}
                     <motion.div
-                        className="relative w-28 h-28 flex items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_60px_rgba(59,130,246,0.4)] blur-px"
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                        className="relative w-24 h-24 flex items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.4)] blur-px"
+                        animate={{
+                            scale: [1, 1.06, 1],
+                        }}
+                        transition={{
+                            duration: 4,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
                     >
-                        {/* Inner Soft Glow */}
                         <div className="absolute inset-0 rounded-full bg-blue-400/20 blur-xl animate-pulse" />
 
-                        {/* Logo rendering via mask to avoid browser "white square" glitch on filter animation */}
-                        <motion.div
+                        {/* Logo - Pulsing with "vibe" */}
+                        <motion.img
+                            src={logoSrc}
+                            alt="Pintopay"
                             animate={{
-                                scale: [1, 1.05, 1],
+                                scale: [1, 1.15, 1],
+                                opacity: [0.9, 1, 0.9],
                             }}
                             transition={{
-                                duration: 3,
+                                duration: 2,
                                 repeat: Infinity,
                                 ease: "easeInOut"
                             }}
-                            style={{
-                                maskImage: `url(${logoSrc})`,
-                                WebkitMaskImage: `url(${logoSrc})`,
-                                maskSize: 'contain',
-                                WebkitMaskSize: 'contain',
-                                maskRepeat: 'no-repeat',
-                                WebkitMaskRepeat: 'no-repeat',
-                                maskPosition: 'center',
-                                WebkitMaskPosition: 'center',
+                            className="relative w-12 h-12 object-contain z-10 brightness-0 invert drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)]"
+                            onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                if (!target.src.includes('raw.githubusercontent.com')) {
+                                    target.src = 'https://raw.githubusercontent.com/VladislavBrodsky/P2PHub/main/frontend/public/logo.svg';
+                                }
                             }}
-                            className="relative w-14 h-14 bg-white z-10 drop-shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
                         />
                     </motion.div>
                 </div>
@@ -111,26 +114,26 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
 
                     <div className="flex flex-col items-center space-y-4">
                         {/* Status Badge - Matching user screenshot exactly */}
-                        <div className="relative bg-blue-500/10 backdrop-blur-sm border border-blue-500/20 rounded-lg px-5 py-1.5 overflow-hidden">
+                        <div className="relative bg-blue-500/10 backdrop-blur-sm border border-blue-500/10 rounded-lg px-5 py-1.5 overflow-hidden">
                             <motion.p
-                                className="text-(--color-text-primary) font-black tracking-[0.2em] uppercase text-[11px] relative z-10"
-                                animate={{ opacity: [0.8, 1, 0.8] }}
+                                className="text-(--color-text-primary) font-black tracking-[0.2em] uppercase text-[10px] relative z-10 opacity-80"
+                                animate={{ opacity: [0.6, 0.9, 0.6] }}
                                 transition={{ duration: 2, repeat: Infinity }}
                             >
                                 {statusText.toUpperCase() === 'INITIALIZING P2P HUB' ? 'USER VERIFIED' : statusText}
                             </motion.p>
                             {/* Scanning Light Beam */}
                             <motion.div
-                                className="absolute inset-0 bg-linear-to-r from-transparent via-blue-400/20 to-transparent z-0"
+                                className="absolute inset-0 bg-linear-to-r from-transparent via-blue-400/10 to-transparent z-0"
                                 animate={{ x: ['-100%', '200%'] }}
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             />
                         </div>
 
-                        {/* Status Indicator Bar - High Fidelity */}
-                        <div className="w-24 h-1 rounded-full bg-slate-500/10 overflow-hidden relative shadow-inner">
+                        {/* Status Indicator Bar */}
+                        <div className="w-20 h-1 rounded-full bg-slate-500/10 overflow-hidden relative shadow-inner">
                             <motion.div
-                                className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.6)]"
+                                className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                                 initial={{ width: 0 }}
                                 animate={{ width: `${displayProgress}%` }}
                                 transition={{ duration: 0.5, ease: "easeOut" }}
