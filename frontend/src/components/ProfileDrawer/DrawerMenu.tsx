@@ -249,7 +249,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                     </span>
                                     {isProItem && (
                                         <span className="text-[9px] font-black uppercase tracking-widest text-amber-100/90 -mt-0.5">
-                                            Vanguard Active
+                                            {t('common.pro_active')}
                                         </span>
                                     )}
                                 </div>

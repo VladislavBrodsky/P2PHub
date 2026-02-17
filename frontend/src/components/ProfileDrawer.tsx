@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { DrawerMenu } from './ProfileDrawer/DrawerMenu';
 import { DrawerSettings } from './ProfileDrawer/DrawerSettings';
+import { useUser } from '../context/UserContext';
 
 interface ProfileDrawerProps {
     isOpen: boolean;
@@ -27,6 +28,7 @@ interface ProfileDrawerProps {
 export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDrawerProps) {
     const { selection } = useHaptic();
     const { t } = useTranslation();
+    const { user } = useUser();
 
     const [copied, setCopied] = React.useState(false);
 
@@ -141,15 +143,17 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
 
                                 <DrawerMenu onClose={onClose} selection={selection} />
 
-                                <div className="px-1">
-                                    <UpgradeButton
-                                        onClick={() => {
-                                            onClose();
-                                            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
-                                        }}
-                                        className="shadow-xl shadow-amber-500/10"
-                                    />
-                                </div>
+                                {!user?.is_pro && (
+                                    <div className="px-1">
+                                        <UpgradeButton
+                                            onClick={() => {
+                                                onClose();
+                                                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                                            }}
+                                            className="shadow-xl shadow-amber-500/10"
+                                        />
+                                    </div>
+                                )}
 
                                 <div className="px-1">
                                     <motion.button
