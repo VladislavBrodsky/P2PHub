@@ -5,7 +5,7 @@ import random
 import secrets
 
 # Added datetime for tracking task start times
-from datetime import datetime, timedelta, UTC
+from datetime import UTC, datetime, timedelta
 
 import sentry_sdk
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request

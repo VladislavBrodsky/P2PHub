@@ -48,7 +48,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
     return (
         <motion.div
-            className={`flex w-full flex-col pb-safe-bottom px-0 min-h-dvh transition-colors duration-500 relative ${user?.is_pro ? 'bg-glow-pro-animated' : ''}`}
+            className="flex w-full flex-col pb-safe-bottom px-0 min-h-dvh transition-colors duration-500 relative bg-(--color-bg-app)"
             variants={container}
             initial="hidden"
             animate="show"
@@ -56,8 +56,8 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             {/* Ambient Background Glow for PRO */}
             {user?.is_pro && (
                 <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-                    <div className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-emerald-500/5 blur-[120px] rounded-full animate-pulse" />
-                    <div className="absolute bottom-1/4 right-0 w-1/3 h-1/3 bg-blue-500/5 blur-[100px] rounded-full animate-pulse" />
+                    <div className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-blue-500/5 blur-[120px] rounded-full animate-pulse" />
+                    <div className="absolute bottom-1/4 right-0 w-1/3 h-1/3 bg-indigo-500/5 blur-[100px] rounded-full animate-pulse" />
                 </div>
             )}
             {/* 1. Hero Section - Spacious & Centered Layout */}

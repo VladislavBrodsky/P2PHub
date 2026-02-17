@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timedelta, UTC
+from datetime import UTC, datetime, timedelta
 
 from sqlmodel import text
 from sqlmodel.ext.asyncio.session import AsyncSession

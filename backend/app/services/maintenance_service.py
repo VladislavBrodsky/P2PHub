@@ -1,6 +1,6 @@
 
 import logging
-from datetime import datetime, timedelta, UTC
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from sqlalchemy.orm import sessionmaker
@@ -39,7 +39,9 @@ async def restore_names_task():
             return
             
         logger.info("🔧 Running user restoration internal task...")
-        from scripts.archive.restore_names_from_telegram import restore_names_from_telegram
+        from scripts.archive.restore_names_from_telegram import (
+            restore_names_from_telegram,
+        )
         restored_count = await restore_names_from_telegram()
         
         # Clear caches

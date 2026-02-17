@@ -204,7 +204,7 @@
 }
 
 @utility bg-glow-pro-animated {
-  background: linear-gradient(-45deg, #020617, #030712, #052e16, #030712);
+  background: linear-gradient(-45deg, var(--color-bg-app), var(--color-bg-deep), #061e4a, var(--color-bg-app));
   background-size: 400% 400%;
   animation: pro-liquid-glow 15s ease infinite;
   position: relative;
@@ -688,16 +688,6 @@ body {
     transform-style: preserve-3d;
   }
 
-  /* Loading Shimmer */
-  @keyframes shimmer-loading {
-    0% {
-      background-position: -1000px 0;
-    }
-
-    100% {
-      background-position: 1000px 0;
-    }
-  }
 
   .animate-shimmer {
     /* Manual override to prevent opaque background glitches in dark mode.
@@ -801,26 +791,6 @@ body {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* QR Scan Animation */
-@keyframes scan {
-  0% {
-    transform: translateY(0%);
-    opacity: 0;
-  }
-
-  10% {
-    opacity: 1;
-  }
-
-  90% {
-    opacity: 1;
-  }
-
-  100% {
-    transform: translateY(200px);
-    opacity: 0;
-  }
-}
 
 .animate-scan {
   animation: scan 2s linear infinite;

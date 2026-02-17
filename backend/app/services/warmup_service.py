@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 from app.worker import broker
 
+
 @broker.task(task_name="warmup_redis_task")
 async def warmup_redis():
     """

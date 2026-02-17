@@ -2,7 +2,7 @@ import asyncio
 import io
 import logging
 import secrets
-from datetime import datetime, timedelta, UTC
+from datetime import UTC, datetime, timedelta
 
 import httpx
 from PIL import Image
@@ -139,6 +139,7 @@ async def handle_partner_creation_task(partner_id: int, referrer_id: int | None 
     Handles leaderboard sync and multi-level cache invalidation.
     """
     from sqlalchemy.orm import sessionmaker
+
     from app.models.partner import engine
     from app.services.referral_service import process_referral_logic
     

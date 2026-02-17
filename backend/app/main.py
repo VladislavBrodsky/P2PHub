@@ -209,7 +209,7 @@ async def health_check():
     Verify Redis connectivity and general availability.
     """
     try:
-        from datetime import datetime, UTC
+        from datetime import UTC, datetime
 
         from app.services.redis_service import redis_service
         is_redis_ok = await redis_service.client.ping()

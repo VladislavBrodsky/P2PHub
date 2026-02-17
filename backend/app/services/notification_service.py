@@ -134,6 +134,7 @@ class NotificationService:
             # #comment: CRITICAL - If broker fails, we MUST record it in AuditLog before falling back.
             # This helps distinguish between 'Worker Down' and 'Telegram Rejected'.
             from sqlalchemy.orm import sessionmaker
+
             from app.models.partner import engine
             from app.services.audit_service import audit_service
             async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -152,10 +153,11 @@ class NotificationService:
     async def _fallback_send(self, chat_id, text, parse_mode, buttons):
         """Direct fallback (fire-and-forget) if broker is down."""
         try:
-            from bot import bot
-            from app.services.audit_service import audit_service
             from sqlalchemy.orm import sessionmaker
+
             from app.models.partner import engine
+            from app.services.audit_service import audit_service
+            from bot import bot
             
             reply_markup = self._build_keyboard(buttons)
             task = asyncio.create_task(
@@ -183,6 +185,7 @@ class NotificationService:
             logger.error(f"💥 Total notification failure for {chat_id}: {fe}")
             # Final failure log
             from sqlalchemy.orm import sessionmaker
+
             from app.models.partner import engine
             from app.services.audit_service import audit_service
             async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)

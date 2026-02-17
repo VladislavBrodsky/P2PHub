@@ -57,7 +57,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
 
             {/* Subtle Depth Effects - Background remain fixed */}
             <div className="pointer-events-none fixed right-[-10%] top-[-20%] z-0 aspect-square w-[80%] rounded-full bg-slate-100/50 blur-[120px] dark:bg-slate-900/20" />
-            <div className="pointer-events-none fixed bottom-[-10%] left-[-20%] z-0 aspect-square w-[60%] rounded-full bg-emerald-500/5 blur-[100px] dark:bg-emerald-500/10" />
+            <div className="pointer-events-none fixed bottom-[-10%] left-[-20%] z-0 aspect-square w-[60%] rounded-full bg-blue-500/5 blur-[100px] dark:bg-blue-500/5" />
 
             {/* Grainy Texture */}
             <div className="pointer-events-none fixed inset-0 z-0 bg-[url('/noise.svg')] opacity-[0.03] mix-blend-overlay" />

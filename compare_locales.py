@@ -5,6 +5,7 @@ def compare_locales(base_path, en_dir, ru_dir):
     en_files = [f for f in os.listdir(os.path.join(base_path, en_dir)) if f.endswith('.json')]
     
     for filename in en_files:
+        print(f"Checking {filename}...")
         en_file_path = os.path.join(base_path, en_dir, filename)
         ru_file_path = os.path.join(base_path, ru_dir, filename)
         

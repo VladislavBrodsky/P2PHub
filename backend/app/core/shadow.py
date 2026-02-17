@@ -1,13 +1,14 @@
-import logging
 import functools
+import logging
 from typing import Any, Type, TypeVar, Union
+
 from pydantic import BaseModel, ValidationError
 
 logger = logging.getLogger(__name__)
 
 T = TypeVar("T", bound=BaseModel)
 
-def shadow_validate(schema: Type[T], data: Any, default: Any = None) -> Union[T, Any]:
+def shadow_validate(schema: type[T], data: Any, default: Any = None) -> T | Any:
     """
     Validates data against a schema. 
     If validation fails, logs the error and returns the default value (or original data) 
@@ -22,7 +23,7 @@ def shadow_validate(schema: Type[T], data: Any, default: Any = None) -> Union[T,
         # sentry_sdk.capture_exception(e)
         return default if default is not None else data
 
-def shadow_mode(schema: Type[T]):
+def shadow_mode(schema: type[T]):
     """
     Decorator to wrap a function that returns data intended for a schema.
     If the function's return value fails validation, it returns the raw data 
