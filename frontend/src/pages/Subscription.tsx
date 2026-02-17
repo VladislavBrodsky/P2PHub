@@ -263,26 +263,150 @@ export default function SubscriptionPage() {
                 </div>
 
                 {/* Detailed Benefits List */}
-                <div className="mt-4 px-2 space-y-3">
+                <div className="mt-4 px-2 space-y-6">
                     <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
                         {t('subscription.upgrade.benefits_title', 'Key Benefits')}
                     </h4>
-                    {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true }) as string[]).map((benefit, i) => (
-                        <motion.div
-                            key={i}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: i * 0.1 }}
-                            className="flex items-center gap-3"
-                        >
-                            <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
-                                <CheckCircle2 size={12} className="text-emerald-500" />
-                            </div>
-                            <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300">
-                                {benefit}
-                            </span>
-                        </motion.div>
-                    ))}
+
+                    {selectedPlan === 'PRO_PLUS' ? (
+                        <div className="space-y-4">
+                            {/* Viral Studio Vibing Banner */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="relative p-6 rounded-[2.5rem] overflow-hidden group shadow-2xl"
+                            >
+                                {/* Animated Liquid Gradient Background */}
+                                <motion.div
+                                    animate={{
+                                        scale: [1, 1.2, 1],
+                                        rotate: [0, 90, 180, 270, 360],
+                                        x: [-20, 20, -20],
+                                        y: [-20, 20, -20]
+                                    }}
+                                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                                    className="absolute inset-0 bg-linear-to-tr from-purple-600 via-fuchsia-500 to-indigo-600 opacity-80 blur-3xl scale-150"
+                                />
+                                <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" />
+
+                                <div className="relative z-10">
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center">
+                                                <Rocket size={20} className="text-white" />
+                                            </div>
+                                            <h3 className="text-xl font-black text-white tracking-tight">Viral Studio</h3>
+                                        </div>
+                                        <div className="w-2 h-2 rounded-full bg-fuchsia-400 animate-pulse" />
+                                    </div>
+
+                                    <p className="text-white/80 text-[11px] leading-relaxed mb-4 font-medium">
+                                        Generate 30 Days of Content in 30 Seconds. Get daily fresh viral topics and AI-generated hooks tailored to your audience.
+                                    </p>
+
+                                    <ul className="space-y-2 mb-6">
+                                        {[
+                                            "Reduce work time by 95%",
+                                            "AI Keyword Research",
+                                            "Instant FOMO & CTAs"
+                                        ].map((item, idx) => (
+                                            <li key={idx} className="flex items-center gap-2 text-white/90 text-[10px] font-bold">
+                                                <CheckCircle2 size={12} className="text-emerald-400" />
+                                                {item}
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    {/* Terminal Block */}
+                                    <div className="bg-slate-900/80 backdrop-blur-md rounded-xl p-4 font-mono text-[10px] border border-white/10 mb-6">
+                                        <div className="text-fuchsia-400 opacity-80 mb-1">{'>'} Generating viral thread...</div>
+                                        <div className="text-white/60 text-[9px]">{'>'} Analysis: 98% Confidence</div>
+                                    </div>
+
+                                    <button className="w-full h-11 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-black transition-colors">
+                                        Unlock Viral Studio
+                                    </button>
+                                </div>
+                            </motion.div>
+
+                            {/* Content Factory Vibing Banner */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.2 }}
+                                className="relative p-6 rounded-[2.5rem] overflow-hidden group shadow-2xl border border-white/5"
+                            >
+                                {/* Animated Liquid Gradient Background (Greenish) */}
+                                <motion.div
+                                    animate={{
+                                        scale: [1.2, 1, 1.2],
+                                        rotate: [360, 270, 180, 90, 0],
+                                        x: [20, -20, 20],
+                                        y: [20, -20, 20]
+                                    }}
+                                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                                    className="absolute inset-0 bg-linear-to-bl from-emerald-600 via-teal-500 to-slate-900 opacity-60 blur-3xl scale-150"
+                                />
+                                <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm" />
+
+                                <div className="relative z-10">
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center">
+                                                <Bot size={20} className="text-emerald-400" />
+                                            </div>
+                                            <h3 className="text-xl font-black text-white tracking-tight">Content Factory</h3>
+                                        </div>
+                                        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                                    </div>
+
+                                    <p className="text-white/70 text-[11px] leading-relaxed mb-4 font-medium">
+                                        Autonomous Agent that posts for you while you sleep. Your own full-stack SMM manager. Fully automated autoposting across all platforms.
+                                    </p>
+
+                                    <ul className="space-y-2 mb-6">
+                                        {[
+                                            "10x Marketing Efficiency",
+                                            "24/7 Autopilot Mode",
+                                            "Multi-platform Sync"
+                                        ].map((item, idx) => (
+                                            <li key={idx} className="flex items-center gap-2 text-white/90 text-[10px] font-bold">
+                                                <CheckCircle2 size={12} className="text-emerald-400" />
+                                                {item}
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    {/* Terminal Block */}
+                                    <div className="bg-black/60 backdrop-blur-md rounded-xl p-4 font-mono text-[10px] border border-white/5 mb-6">
+                                        <div className="text-emerald-400 opacity-80 mb-1">{'>'} Scheduling 42 posts...</div>
+                                        <div className="text-white/40 text-[9px]">{'>'} Status: ACTIVE</div>
+                                    </div>
+
+                                    <button className="w-full h-11 bg-transparent border border-white/20 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-slate-900 transition-colors">
+                                        Hire Your AI Agent
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </div>
+                    ) : (
+                        (t('subscription.upgrade.benefits_pro', { returnObjects: true }) as string[]).map((benefit, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: i * 0.1 }}
+                                className="flex items-center gap-3"
+                            >
+                                <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+                                    <CheckCircle2 size={12} className="text-emerald-500" />
+                                </div>
+                                <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300">
+                                    {benefit}
+                                </span>
+                            </motion.div>
+                        ))
+                    )}
                 </div>
             </div>
 
