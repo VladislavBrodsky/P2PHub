@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
+from sqlalchemy import UniqueConstraint
 from sqlmodel import Field, Relationship, SQLModel
 
 from app.core.config import settings
@@ -83,7 +84,10 @@ class Partner(SQLModel, table=True):
     )
 
 class XPTransaction(SQLModel, table=True):
-    __table_args__ = {"extend_existing": True}
+    __table_args__ = (
+        UniqueConstraint("partner_id", "type", "reference_id", name="uq_partner_xp_ref"),
+        {"extend_existing": True}
+    )
     id: int | None = Field(default=None, primary_key=True)
     partner_id: int = Field(foreign_key="partner.id", index=True)
     amount: float
@@ -95,7 +99,10 @@ class XPTransaction(SQLModel, table=True):
     partner: Partner = Relationship(back_populates="xp_history")
 
 class PartnerTask(SQLModel, table=True):
-    __table_args__ = {"extend_existing": True}
+    __table_args__ = (
+        UniqueConstraint("partner_id", "task_id", name="uq_partner_task"),
+        {"extend_existing": True}
+    )
     id: int | None = Field(default=None, primary_key=True)
     partner_id: int = Field(foreign_key="partner.id", index=True)
     task_id: str = Field(index=True)

@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 venv/
 .env*
+backend/env_prod.txt
+backend/check_prod.sh
 
 # Node
 node_modules/

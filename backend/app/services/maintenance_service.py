@@ -254,3 +254,31 @@ async def check_tree_integrity(session: AsyncSession) -> dict[str, Any]:
         "anomaly_count": len(anomalies),
         "anomalies": anomalies[:100] # Limit output
     }
+
+@broker.task(task_name="cleanup_old_audit_logs", schedule=[{"cron": "0 3 * * *"}]) # 3 AM daily
+async def cleanup_old_audit_logs():
+    """
+    Deletes audit logs older than 90 days to maintain dashboard performance.
+    """
+    logger.info("🧹 Starting audit log cleanup...")
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    
+    cutoff = datetime.utcnow() - timedelta(days=90)
+    
+    async with async_session() as session:
+        from app.models.audit_log import AuditLog
+        
+        # Count first for logging
+        count_stmt = select(func.count(AuditLog.id)).where(
+            AuditLog.created_at < cutoff
+        )
+        to_delete = (await session.exec(count_stmt)).one() or 0
+        
+        if to_delete > 0:
+            del_stmt = text("DELETE FROM audit_log WHERE created_at < :cutoff")
+            await session.execute(del_stmt, {"cutoff": cutoff})
+            await session.commit()
+            logger.info(f"✅ Cleaned up {to_delete} old audit logs.")
+        else:
+            logger.info("✅ No old audit logs found.")
+

@@ -3,8 +3,8 @@ import asyncio
 import logging
 import os
 import sys
-from datetime import datetime, timedelta
-from sqlalchemy import text
+from datetime import datetime, timedelta, UTC
+from sqlalchemy import text, String
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import select, func
@@ -16,31 +16,61 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 # Add current directory to path for imports
 sys.path.append(os.getcwd())
 
-# Force load .env.backend if present in current or parent dir
-from dotenv import load_dotenv, find_dotenv
-env_file = find_dotenv(".env.backend") or find_dotenv(".env")
-if env_file:
-    load_dotenv(env_file)
-    print(f"📖 Explicitly loaded env from: {env_file}")
+# Force load .env.backend using robust relative paths
+from dotenv import load_dotenv
+import os
+
+# Possible paths relative to current execution context
+env_targets = [
+    "backend/env_prod.txt",
+    "env_prod.txt",
+    "backend/.env.backend",
+    ".env.backend",
+    "../.env.backend",
+    "backend/.env",
+    ".env"
+]
+
+env_loaded = False
+for env_path in env_targets:
+    if os.path.exists(env_path):
+        try:
+            load_dotenv(env_path, override=True)
+            print(f"📖 Environment loaded from: {env_path}")
+            env_loaded = True
+            break
+        except PermissionError:
+            print(f"🚫 PERMISSION BLOCKED: Cannot read {env_path}. Check macOS 'Full Disk Access'.")
+            continue
+        except Exception:
+            continue
+
+if not env_loaded:
+    print("⚠️ WARNING: No environment file found or access denied.")
+    # Attempt to use what's already in the shell environment
+    if os.getenv("DATABASE_URL"):
+        print("✅ Using DATABASE_URL found in active shell.")
+        env_loaded = True
 
 from app.core.config import settings
+
+# Manual synchronization for diagnostic accuracy
+if os.getenv("DATABASE_URL") and not settings.DATABASE_URL:
+    settings.DATABASE_URL = os.getenv("DATABASE_URL")
+if os.getenv("BOT_TOKEN") and not settings.BOT_TOKEN:
+    settings.BOT_TOKEN = os.getenv("BOT_TOKEN")
+
 DB_URL = settings.async_database_url
+url = DB_URL or os.getenv("DATABASE_URL")
 
 async def check_systems():
     print(f"🔍 Starting Production System Health Audit...")
     
-    if not DB_URL:
-        # Fallback to direct read if settings failed
-        print("⚠️ settings.DATABASE_URL is None, trying direct env check...")
-        direct_url = os.getenv("DATABASE_URL")
-        if not direct_url:
-            print("❌ ERROR: DATABASE_URL not found. Audit aborted.")
-            return
-        url = direct_url
-    else:
-        url = DB_URL
+    if not url:
+        print("❌ ERROR: DATABASE_URL not found. Audit aborted.")
+        return
     
-    engine = create_async_engine(DB_URL)
+    engine = create_async_engine(url)
     async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
     # We need to import models here to ensure they are registered
@@ -54,7 +84,8 @@ async def check_systems():
         return
 
     async with async_session_maker() as session:
-        now = datetime.utcnow()
+        # Use timezone-aware UTC now for version 3.13 compatibility
+        now = datetime.now(UTC).replace(tzinfo=None) # Keep naive for DB compatibility if needed, though SQLModel usually handles it
         last_24h = now - timedelta(hours=24)
 
         print("\n--- 👥 User Stats ---")
@@ -71,8 +102,7 @@ async def check_systems():
         print("\n--- 💰 PRO & Commissions ---")
         pro_purchases_24h = (await session.exec(select(func.count(PartnerTransaction.id)).where(
             PartnerTransaction.status == "completed",
-            PartnerTransaction.created_at >= last_24h,
-            PartnerTransaction.description.like("%PRO%")
+            PartnerTransaction.created_at >= last_24h
         ))).one()
         
         commissions_24h = (await session.exec(select(func.count(Earning.id)).where(
@@ -124,17 +154,37 @@ async def check_systems():
         ))).one()
         
         errors_24h = (await session.exec(select(func.count(AuditLog.id)).where(
-            AuditLog.details.like("%error%"),
+            AuditLog.details.cast(String).like("%error%"),
             AuditLog.created_at >= last_24h
         ))).one()
         
         print(f"Notification Events (24h): {notifications_24h}")
         print(f"Audit Log Errors (24h): {errors_24h}")
 
+        print("\n--- 🕸️ Network & Structural Health ---")
+        orphaned_partners = (await session.exec(select(func.count(Partner.id)).where(
+            Partner.referrer_id != None,
+            Partner.path == None
+        ))).one()
+        
+        broken_depth = (await session.exec(select(func.count(Partner.id)).where(
+            Partner.depth == 0,
+            Partner.referrer_id != None
+        ))).one()
+
+        print(f"Orphaned Partners (no path): {orphaned_partners}")
+        print(f"Broken Depth (depth=0 with ref): {broken_depth}")
+        
+        if orphaned_partners > 0 or broken_depth > 0:
+            print("⚠️ ACTION REQUIRED: Run Admin -> Recalculate Network Stats to fix structural anomalies.")
+
+
+
+
         if errors_24h > 0:
             print("\n🚨 Recent Errors from Audit Log:")
             recent_errors = (await session.exec(select(AuditLog).where(
-                AuditLog.details.like("%error%"),
+                AuditLog.details.cast(String).like("%error%"),
                 AuditLog.created_at >= last_24h
             ).limit(5))).all()
             for err in recent_errors:
