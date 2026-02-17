@@ -18,6 +18,7 @@ from app.models.schemas import (
     GrowthMetrics,
     LanguageUpdate,
     NetworkStats,
+    OrbitMemberResponse,
     PartnerResponse,
     PartnerTopResponse,
     TaskClaimRequest,
