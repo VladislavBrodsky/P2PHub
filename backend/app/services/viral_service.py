@@ -488,7 +488,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             for model_name in ['gemini-2.0-flash', 'gemini-1.5-flash']:
                 try:
                     logger.info(f"🚀 Using {model_name} for text generation...")
-                    gemini_response = self.genai_client.models.generate_content(
+                    gemini_response = await self.genai_client.aio.models.generate_content(
                         model=model_name,
                         contents=f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}",
                         config=genai_types.GenerateContentConfig(
@@ -534,88 +534,126 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             return None, (ViralStudioErrorCode.GEMINI_TEXT_FAILED, f"Gemini: {gemini_status} | OpenAI: {err_msg}")
 
     async def _get_viral_image_content(self, partner_id: int, target_audience: str, post_type: str, prompt: str) -> str | None:
-        if not self.genai_client:
-            return None
-        
-        imagen_models = [
-            self._last_working_imagen_model,
-            'imagen-3.0-generate-001',
-            'imagen-3.0-fast-generate-001',
-        ]
-        # Remove duplicates
-        imagen_models = [m for i, m in enumerate(imagen_models) if m and m not in imagen_models[:i]]
-        
-        models_obj = getattr(self.genai_client, 'models', None)
-        if not models_obj: return None
-        method = getattr(models_obj, 'generate_images', getattr(models_obj, 'generate_image', None))
-        if not method: return None
+        """
+        Generate viral image. 
+        Hierarchy: 
+        1. Google Imagen 3 (High fidelity, free/cheap)
+        2. OpenAI DALL-E 3 (Reliable fallback, paid)
+        """
+        # --- PHASE 1: Try Google Imagen ---
+        if self.genai_client:
+            imagen_models = [
+                self._last_working_imagen_model,
+                'imagen-3.0-generate-001',
+                'imagen-3.0-fast-generate-001',
+            ]
+            # Remove duplicates
+            imagen_models = [m for i, m in enumerate(imagen_models) if m and m not in imagen_models[:i]]
+            
+            for model_name in imagen_models:
+                success, result = await self._try_generate_single_image(model_name, prompt, partner_id)
+                if success:
+                    return result
 
-        loop = asyncio.get_event_loop()
-        for model_name in imagen_models:
-            success, result = await self._try_generate_single_image(method, model_name, prompt, partner_id, loop)
-            if success:
-                return result
+        # --- PHASE 2: Fallback to OpenAI DALL-E 3 ---
+        if self.openai_client:
+            try:
+                logger.info(f"🔄 Imagen failed. Falling back to DALL-E 3 for prompt: {prompt[:50]}...")
+                response = await self.openai_client.images.generate(
+                    model="dall-e-3",
+                    prompt=prompt,
+                    size="1024x1024",
+                    quality="standard",
+                    n=1,
+                )
+                
+                if response.data and response.data[0].url:
+                    dalle_url = response.data[0].url
+                    logger.info("✅ DALL-E 3 succeeded! Downloading and caching image...")
+                    
+                    # Download and save locally to ensure persistence (DALL-E URLs expire in 1hr)
+                    filename = f"viral_dalle_{partner_id}_{secrets.token_hex(4)}.png"
+                    backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                    save_dir = os.path.join(backend_dir, "generated_media")
+                    os.makedirs(save_dir, exist_ok=True)
+                    save_path = os.path.join(save_dir, filename)
+                    
+                    import httpx
+                    async with httpx.AsyncClient() as client:
+                        img_res = await client.get(dalle_url)
+                        if img_res.status_code == 200:
+                            with open(save_path, 'wb') as f:
+                                f.write(img_res.content)
+                            logger.info(f"✅ DALL-E image saved to {save_path}")
+                            return f"/generated_media/{filename}"
+                    
+                    # If download fails, return the original DALL-E URL as last resort
+                    return dalle_url
+            except Exception as e:
+                logger.error(f"❌ DALL-E 3 generation failed: {e}")
+
         return None
 
-    async def _try_generate_single_image(self, method, model_name, prompt, partner_id, loop) -> tuple[bool, str | None]:
+    async def _try_generate_single_image(self, model_name, prompt, partner_id) -> tuple[bool, str | None]:
         try:
+            logger.info(f"🎨 Attempting Imagen generation with model: {model_name}")
+            
+            # Using async SDK call
             img_response = await asyncio.wait_for(
-                loop.run_in_executor(
-                    None, 
-                    lambda: method(
-                        model=model_name,
-                        prompt=prompt,
-                        config={
-                            'number_of_images': 1,
-                            'output_mime_type': 'image/png',
-                            'aspect_ratio': '16:9',
-                            'safety_filter_level': 'block_low_and_above',
-                            'person_generation': 'allow_adult',
-                        } if 'imagen' in model_name else {
-                            'number_of_images': 1,
-                            'aspect_ratio': '16:9',
-                            'output_mime_type': 'image/png',
-                            'quality': '4k' if 'pro' in model_name else 'standard'
-                        }
+                self.genai_client.aio.models.generate_images(
+                    model=model_name,
+                    prompt=prompt,
+                    config=genai_types.GenerateImagesConfig(
+                        number_of_images=1,
+                        output_mime_type='image/png',
+                        aspect_ratio='16:9',
+                        safety_filter_level='block_only_high',
+                        person_generation='allow_adult',
                     )
                 ),
-                timeout=15.0
+                timeout=25.0
             )
             
-            if img_response and getattr(img_response, 'generated_images', None):
-                image = img_response.generated_images[0]
+            if img_response and img_response.generated_images:
+                image_data = img_response.generated_images[0]
                 filename = f"viral_{partner_id}_{secrets.token_hex(4)}.png"
                 
                 backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
                 save_dir = os.path.join(backend_dir, "generated_media")
+                os.makedirs(save_dir, exist_ok=True)
                 save_path = os.path.join(save_dir, filename)
                 
-                # Get the actual PIL Image object (Gemini wraps it)
-                pil_image = getattr(image.image, '_pil_image', image.image)
+                try:
+                    # New SDK (v1.x) typically has a .image attribute with .save() or .image_bytes
+                    image_obj = image_data.image
+                    
+                    # Preferred way: check for image_bytes or save method
+                    if hasattr(image_obj, 'save'):
+                        image_obj.save(save_path)
+                    elif hasattr(image_obj, 'image_bytes'):
+                        with open(save_path, 'wb') as f:
+                            f.write(image_obj.image_bytes)
+                    else:
+                        # Fallback for PIL or other structures
+                        pil_image = getattr(image_obj, '_pil_image', image_obj)
+                        from PIL import Image as PILImage
+                        if isinstance(pil_image, PILImage.Image):
+                            pil_image.save(save_path, format='PNG')
+                        else:
+                            logger.error("❌ Imagen: Unknown image object structure")
+                            return False, None
+
+                    if os.path.exists(save_path):
+                        self._last_working_imagen_model = model_name
+                        logger.info(f"✅ Imagen: Saved {model_name} image to {save_path} ({os.path.getsize(save_path)} bytes)")
+                        return True, f"/generated_media/{filename}"
+                except Exception as save_err:
+                    logger.error(f"❌ Imagen: Failed to process/save image data: {save_err}")
+            else:
+                logger.warning(f"⚠️ Imagen {model_name} returned NO images. (Filtered by safety?)")
                 
-                from io import BytesIO
-                buffer = BytesIO()
-                pil_image.save(buffer, format='PNG')
-                
-                # Ensure directory exists
-                os.makedirs(save_dir, exist_ok=True)
-                
-                with open(save_path, 'wb') as f:
-                    f.write(buffer.getvalue())
-                
-                # Verify file was written
-                if os.path.exists(save_path):
-                    self._last_working_imagen_model = model_name
-                    logger.info(f"✅ Imagen: Saved {model_name} image to {save_path} (Size: {os.path.getsize(save_path)} bytes)")
-                    return True, f"/generated_media/{filename}"
-                else:
-                    logger.error(f"❌ Imagen: File write reported success but file not found at {save_path}")
-                    return False, None
         except Exception as e:
-            logger.error(f"❌ Imagen {model_name} failed to save image: {e}")
-            # Try to save to a temp path as fallback?
-            # For now, just logging error is critical.
-            logger.warning(f"⚠️ Imagen {model_name} failed: {e}")
+            logger.error(f"❌ Imagen {model_name} failed: {type(e).__name__}: {e}")
         return False, None
 
     def _build_audience_context(self, target_audience: str, audience_intel: dict) -> str:
