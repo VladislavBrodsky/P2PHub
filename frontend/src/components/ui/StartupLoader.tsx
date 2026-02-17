@@ -47,13 +47,13 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                 <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-linear-to-tl from-blue-500/10 to-transparent blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
             </div>
 
-            <div className="relative flex flex-col items-center justify-start pt-[calc(var(--header-total-height)+16px)]">
-                {/* Main Animated Hub - Sync with Dashboard Orbit Container */}
-                <div className="relative w-screen h-[400px] flex items-center justify-center">
+            <div className="relative flex flex-col items-center justify-center">
+                {/* Main Animated Hub */}
+                <div className="relative w-44 h-44 flex items-center justify-center">
 
-                    {/* Central Logo Container - Sync size with CommunityOrbit (w-24 h-24) */}
+                    {/* Central Logo Container - Reverted to centered premium size */}
                     <motion.div
-                        className="relative w-24 h-24 flex items-center justify-center overflow-visible rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.5)]"
+                        className="relative w-28 h-28 flex items-center justify-center overflow-visible rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_60px_rgba(59,130,246,0.6)]"
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -82,7 +82,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                                 repeat: Infinity,
                                 ease: "easeInOut"
                             }}
-                            className="relative w-14 h-14 object-contain z-10 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
+                            className="relative w-16 h-16 object-contain z-10 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
                             onError={(e) => {
                                 const target = e.target as HTMLImageElement;
                                 if (!target.src.includes('raw.githubusercontent.com')) {
@@ -94,8 +94,8 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                     </motion.div>
                 </div>
 
-                {/* Progress Text - Adjusted for new logo position */}
-                <div className="flex flex-col items-center space-y-2 -mt-12">
+                {/* Progress Text - Reverted to baseline spacing */}
+                <div className="mt-8 flex flex-col items-center space-y-2">
                     <div className="flex items-baseline space-x-1">
                         <span className="text-3xl font-black text-(--color-text-primary) tracking-tighter tabular-nums">
                             {displayProgress}
