@@ -413,9 +413,21 @@ async def get_orbit_members(
     from app.utils.ranking import get_rank
     from app.utils.api import get_api_url
 
+    # Demo avatars to ensure the orbit looks "peopled" even if no photos in DB
+    DEMO_AVATARS = [
+        "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=128&h=128&fit=crop",
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=128&h=128&fit=crop",
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=128&h=128&fit=crop",
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=128&h=128&fit=crop",
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=128&h=128&fit=crop",
+        "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=128&h=128&fit=crop",
+        "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=128&h=128&fit=crop",
+        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=128&h=128&fit=crop"
+    ]
+
     # Calculate 6-hour window identifier
     window = int(time.time() / (6 * 3600))
-    cache_key = f"partners:orbit:{window}"
+    cache_key = f"partners:orbit:v3:{window}"
 
     try:
         cached = await redis_service.get_json(cache_key)
@@ -424,40 +436,33 @@ async def get_orbit_members(
     except Exception as e:
         logger.warning(f"Orbit members cache read failed: {e}")
 
-    # Fetch 8 random partners who have a photo
+    # Fetch 12 candidates to find 8 with photos if possible
     statement = (
         select(Partner)
-        .where(Partner.photo_file_id.is_not(None))
         .order_by(func.random())
-        .limit(8)
+        .limit(12)
     )
     result = await session.exec(statement)
     partners = result.all()
 
-    # Fallback to any partners if needed
-    if len(partners) < 8:
-        existing_ids = [p.id for p in partners]
-        statement_fill = (
-            select(Partner)
-            .where(Partner.id.not_in(existing_ids))
-            .order_by(func.random())
-            .limit(8 - len(partners))
-        )
-        result_fill = await session.exec(statement_fill)
-        partners.extend(result_fill.all())
-
     orbit_data = []
     base_url = get_api_url()
     
-    for p in partners:
-        # Construct the optimized picture_url explicitly for the orbit
-        picture_url = p.photo_url
+    for i, p in enumerate(partners[:8]):
+        # Construct the optimized picture_url
+        picture_url = None
         if p.photo_file_id:
             picture_url = f"{base_url}/api/partner/photo/{p.photo_file_id}"
+        elif p.photo_url:
+            picture_url = p.photo_url
+        else:
+            # Inject demo avatar if this specific partner has no photo
+            # Use deterministic choice based on partner ID
+            picture_url = DEMO_AVATARS[p.id % len(DEMO_AVATARS)]
         
         orbit_data.append({
             "id": p.id,
-            "first_name": p.first_name,
+            "first_name": p.first_name or "Partner",
             "photo_file_id": p.photo_file_id,
             "picture_url": picture_url,
             "xp": p.xp,
