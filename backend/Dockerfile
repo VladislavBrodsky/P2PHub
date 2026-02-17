@@ -13,9 +13,13 @@ RUN apt-get update && apt-get install -y \
 # Install uv for fast dependency management
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
+# Set environment variables for uv to use the virtual environment
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
 # Copy requirements and install to a virtualenv
 COPY requirements.txt .
-RUN uv venv /opt/venv && \
+RUN uv venv $VIRTUAL_ENV && \
     uv pip install --no-cache -r requirements.txt
 
 # --- Stage 2: Runtime ---
