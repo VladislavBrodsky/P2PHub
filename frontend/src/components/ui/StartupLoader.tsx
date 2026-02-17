@@ -32,7 +32,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
         // Now uses semantic CSS variables (--color-bg-deep, --color-text-primary) to sync perfectly 
         // with both Light and Dark themes. Added transition-colors for a premium fading effect.
         <div
-            className="fixed inset-0 z-100 flex flex-col items-center justify-center bg-(--color-bg-app) transition-colors duration-500 overflow-hidden"
+            className="fixed inset-0 z-100 flex flex-col items-center justify-start bg-(--color-bg-app) pt-[calc(var(--header-total-height)+144px)] transition-colors duration-500 overflow-hidden"
             role="status"
             aria-live="polite"
             aria-busy="true"
@@ -47,7 +47,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                 <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-linear-to-tl from-blue-500/10 to-transparent blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
             </div>
 
-            <div className="relative flex flex-col items-center justify-center scale-90">
+            <div className="relative flex flex-col items-center justify-start scale-90">
                 {/* Main Animated Hub */}
                 <div className="relative w-40 h-40 flex items-center justify-center">
                     {/* Rotating Conic Border - The "Apple" loading feel */}
