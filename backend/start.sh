@@ -32,9 +32,17 @@ echo "🛠 Running Database Migrations (with timeout)..."
 timeout 60s alembic upgrade head || echo "⚠️ Migrations failed or timed out, continuing startup..."
 echo "✅ Migration step finished."
 
-# Optimization: Using Gunicorn as a process manager with 4 workers to handle concurrent traffic.
-# The UvicornWorker class allows gunicorn to serve ASGI (FastAPI) applications.
-# #comment: 4 workers are ideal for a 2-core machine. For memory-constrained environments, 
-# monitor RAM usage as each worker loads the full app.
-echo "🌍 Starting Server with Gunicorn (4 workers)..."
-exec gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:"${PORT:-8080}" --timeout 120
+# Optimized Worker Calculation:
+# We use a safer approach for memory efficiency.
+# Default to 2 workers for stability, especially on 1-2GB RAM servers.
+echo "🌍 Starting Server with Gunicorn..."
+WORKERS=${GUNICORN_WORKERS:-2}
+echo "Running with $WORKERS workers (Tip: set GUNICORN_WORKERS env if you have $>4GB RAM)"
+
+exec gunicorn app.main:app \
+    -w "$WORKERS" \
+    -k uvicorn.workers.UvicornWorker \
+    --bind 0.0.0.0:"${PORT:-8080}" \
+    --timeout 120 \
+    --access-logfile - \
+    --error-logfile -

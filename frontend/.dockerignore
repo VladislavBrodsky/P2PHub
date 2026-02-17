@@ -1,0 +1,17 @@
+node_modules
+dist
+dist_backup_*
+*.log
+.git
+.vscode
+.env
+public_deprecated
+public_corrupted
+public_EPERM_SHIT
+tmp
+avatars_tmp
+build.log
+build_log.txt
+lint_results.txt
+local_npm_cache
+test_git_tracking.txt

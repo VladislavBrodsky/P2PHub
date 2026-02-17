@@ -1,41 +1,57 @@
-# Backend Dockerfile
-FROM python:3.12-slim
+# --- Stage 1: Builder ---
+FROM python:3.12-slim AS builder
 
 WORKDIR /app
 
-# Install system dependencies and uv in one layer to maximize cache and minimize image size
+# Install system dependencies needed for building Python packages
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install uv from the official image
+# Install uv for fast dependency management
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
-# Hardened safety shim for Railway CLI
-RUN echo '#!/bin/sh\nwhile [ "$#" -gt 0 ]; do case "$1" in run|-*|p2phub-*) shift ;; *) if command -v "$1" >/dev/null 2>&1; then break; else shift; fi ;; esac; done\nif [ "$#" -eq 0 ]; then exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}; fi\nexec "$@"' > /usr/local/bin/railway && chmod +x /usr/local/bin/railway
-
-# Install dependencies first for better caching
+# Copy requirements and install to a virtualenv
 COPY requirements.txt .
-RUN uv pip install --system --no-cache -r requirements.txt
+RUN uv venv /opt/venv && \
+    uv pip install --no-cache -r requirements.txt
 
-# Create non-root user and set permissions
+# --- Stage 2: Runtime ---
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install only binary runtime dependencies (like libpq for postgres)
+RUN apt-get update && apt-get install -y \
+    libpq5 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy the virtual environment from the builder
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Create a non-root user
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 
-# Create generated_media directory with proper ownership for production image generation
-# This prevents "Permission denied" errors when Viral Studio generates images
+# Create media directory for Viral Studio
 RUN mkdir -p /app/generated_media && chown -R appuser:appuser /app/generated_media
 
+# Copy source code (filtered by .dockerignore)
 COPY --chown=appuser:appuser . .
 
+# Environment variables
 ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8000
-COPY start.sh /start.sh
-RUN chmod +x /start.sh && sed -i 's/\r$//' /start.sh
+COPY --chown=appuser:appuser start.sh /start.sh
+RUN chmod +x /start.sh
 
 USER appuser
 
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-8000}/health/ping || exit 1
+
 CMD ["/start.sh"]
-HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=5 CMD curl -f http://localhost:${PORT:-8000}/health/ping || exit 1

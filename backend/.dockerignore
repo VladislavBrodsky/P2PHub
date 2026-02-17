@@ -1,11 +1,32 @@
-# Backend .dockerignore
+# Backend .dockerignore - Prevent unneeded files from bloating the build context
 venv
+.venv
 __pycache__
 *.pyc
 *.pyo
 *.pyd
 .DS_Store
+.git
+.vscode
+.pytest_cache
+.ruff_cache
+
+# Database and Logs
 *.db
+*.log
 scripts/*.log
+
+# Audit and Temp Scripts (Run these locally, not in Prod)
+audit_*.py
+check_*.py
+test_*.py
+sync_partner_totals.py
+debug_*.txt
+*.png
+generated_media/*
+media_test/*
+app_images/*
+
+# Environment files
 .env*
-!.env.example
+! .env.example
