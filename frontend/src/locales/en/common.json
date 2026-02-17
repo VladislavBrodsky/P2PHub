@@ -40,6 +40,14 @@
       "growth_rate": "Growth Rate",
       "report": "Report",
       "flow_power": "Flow Power:"
+    },
+    "timeframes": {
+      "24H": "24H",
+      "7D": "7D",
+      "1M": "1M",
+      "3M": "3M",
+      "6M": "6M",
+      "1Y": "1Y"
     }
   },
   "menu": {

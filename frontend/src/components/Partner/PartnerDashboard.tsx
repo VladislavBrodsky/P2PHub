@@ -397,7 +397,7 @@ const EarningsList = () => {
         return (
             <div className="py-8 text-center bg-white/40 dark:bg-white/5 rounded-2xl border border-dashed border-slate-300 dark:border-white/10">
                 <Gift className="w-8 h-8 mx-auto text-slate-300 dark:text-white/20 mb-2" />
-                <p className="text-xs font-bold text-slate-500 dark:text-slate-400">No earnings yet</p>
+                <p className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('partner_dashboard.no_earnings')}</p>
             </div>
         );
     }
@@ -460,7 +460,7 @@ const EarningsList = () => {
                                 <div className="relative group">
                                     <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-md blur-[2px] group-hover:blur-[3px] transition-all" />
                                     <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-1 py-0.5 rounded-md border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[28px] shadow-sm backdrop-blur-sm">
-                                        <span className="text-[5.5px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">L</span>
+                                        <span className="text-[5.5px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">{t('common.lvl')}</span>
                                         <span className="text-[11px] font-black bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{earning.level}</span>
                                     </div>
                                 </div>

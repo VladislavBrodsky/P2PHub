@@ -109,7 +109,7 @@ export const TopPartnersList = () => {
                                         {partner.first_name} {partner.last_name}
                                     </span>
                                     <span className="text-[10px] font-bold text-blue-500 bg-blue-500/10 px-1.5 rounded-sm uppercase tracking-tighter">
-                                        {partner.rank}
+                                        {t(`ranks.${partner.rank}`, partner.rank) as string}
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-3">
@@ -122,7 +122,7 @@ export const TopPartnersList = () => {
                                     <div className="flex items-center gap-1">
                                         <Users className="w-3 h-3 text-blue-400" />
                                         <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
-                                            {partner.referrals_count} members
+                                            {partner.referrals_count} {t('referral.members')}
                                         </span>
                                     </div>
                                 </div>
@@ -130,7 +130,7 @@ export const TopPartnersList = () => {
                         </div>
 
                         <div className="flex flex-col items-end">
-                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">RANK</div>
+                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('referral.levelup.rank')}</div>
                             <div className={`text-lg font-black ${index === 0 ? 'text-amber-500' :
                                 index === 1 ? 'text-slate-400' :
                                     index === 2 ? 'text-orange-400' :
@@ -149,11 +149,11 @@ export const TopPartnersList = () => {
                     >
                         {isExpanded ? (
                             <>
-                                Show Less <ChevronUp className="w-3 h-3" />
+                                {t('common.show_less')} <ChevronUp className="w-3 h-3" />
                             </>
                         ) : (
                             <>
-                                Show More <ChevronDown className="w-3 h-3" />
+                                {t('common.show_more')} <ChevronDown className="w-3 h-3" />
                             </>
                         )}
                     </button>

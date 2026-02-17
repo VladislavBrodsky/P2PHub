@@ -174,7 +174,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                         {t('common.metrics.network_growth')}
                     </h3>
                     <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400">
-                        {t('common.metrics.partners_joined', { timeframe })} <span className="text-blue-500">{metrics.current_count}</span>
+                        {t('common.metrics.partners_joined', { timeframe: t(`common.timeframes.${timeframe}`, timeframe) })} <span className="text-blue-500">{metrics.current_count}</span>
                     </p>
                 </div>
 
@@ -184,7 +184,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                         onClick={() => { selection(); setIsDropdownOpen(!isDropdownOpen); }}
                         className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 text-[10px] font-black text-slate-900 dark:text-white transition-all active:scale-95"
                     >
-                        {timeframe}
+                        {t(`common.timeframes.${timeframe}`, timeframe)}
                         <ChevronDown className={cn("w-3 h-3 transition-transform", isDropdownOpen ? "rotate-180" : "")} />
                     </button>
 
@@ -213,7 +213,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                                                     : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5"
                                             )}
                                         >
-                                            {tf}
+                                            {t(`common.timeframes.${tf}`, tf)}
                                             {timeframe === tf && <motion.div layoutId="active-tf" className="w-1 h-1 rounded-full bg-blue-500" />}
                                         </button>
                                     ))}
@@ -364,7 +364,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                                         return (
                                             <div key={i} className="flex items-center gap-1 opacity-90">
                                                 <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
-                                                <span className="font-bold text-slate-400">L{i + 1}:</span>
+                                                <span className="font-bold text-slate-400">{t('common.lvl')}{i + 1}:</span>
                                                 <span className="font-black">{count.toLocaleString()}</span>
                                             </div>
                                         );

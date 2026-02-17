@@ -95,7 +95,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                     {/* Title & Reward */}
                     <div className="flex flex-col min-w-0">
                         <h4 className="text-sm font-black text-slate-900 dark:text-white tracking-tight truncate">
-                            {task.title}
+                            {t(`tasks.${task.id}.title`, task.title)}
                         </h4>
                         {!isCompleted && (
                             <div className="flex items-center gap-1.5">
@@ -108,7 +108,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                             </div>
                         )}
                         {isCompleted && (
-                            <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-wide">Done</span>
+                            <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-wide">{t('tasks.done', 'Done')}</span>
                         )}
                     </div>
                 </div>
@@ -137,7 +137,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                     {/* Description */}
                     <div className="pt-3">
                         <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
-                            {task.description}
+                            {t(`tasks.${task.id}.desc`, task.description)}
                         </p>
                     </div>
 
@@ -145,7 +145,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                     {(task.type === 'referral' || task.type === 'action') && !isCompleted && (
                         <div className="space-y-1.5">
                             <div className="flex justify-between items-baseline text-[9px] font-black uppercase tracking-widest px-0.5">
-                                <span className="text-slate-400">Progress</span>
+                                <span className="text-slate-400">{t('tasks.progress', 'Progress')}</span>
                                 <span className="text-slate-900 dark:text-white tracking-tighter opacity-80">
                                     {Math.min(currentProgress, task.requirement || 0)} / {task.requirement}
                                 </span>

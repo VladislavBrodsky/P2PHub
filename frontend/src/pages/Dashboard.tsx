@@ -99,12 +99,11 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
                     {/* Main Titles */}
                     <div className="space-y-4">
-                        <h1 className="text-[38px] font-extrabold tracking-tighter text-slate-900 dark:text-white leading-[0.9] flex flex-col items-center">
-                            <span>{heroTitle1.split(' ')[0]} {heroTitle1.split(' ')[1]}</span>
-                            <span>{heroTitle1.split(' ').slice(2).join(' ')}</span>
+                        <h1 className="text-[38px] font-extrabold tracking-tighter text-slate-900 dark:text-white leading-[0.9] text-center max-w-[280px]">
+                            {heroTitle1}
                         </h1>
                         <motion.div
-                            className="text-[36px] font-extrabold tracking-tighter leading-[0.9] flex flex-col items-center vibing-crystal-text"
+                            className="text-[36px] font-extrabold tracking-tighter leading-[0.9] text-center max-w-[300px] vibing-crystal-text"
                             animate={{
                                 scale: [1, 1.03, 1],
                                 rotate: [-0.3, 0.3, -0.3],
@@ -115,8 +114,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 ease: "easeInOut"
                             }}
                         >
-                            <span>{heroTitle2.split(' ').slice(0, 2).join(' ')}</span>
-                            <span>{heroTitle2.split(' ').slice(2).join(' ')}</span>
+                            {heroTitle2}
                         </motion.div>
                     </div>
                 </div>

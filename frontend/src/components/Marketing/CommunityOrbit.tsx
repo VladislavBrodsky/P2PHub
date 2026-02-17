@@ -115,25 +115,30 @@ export const CommunityOrbit = memo(() => {
 
     return (
         <div className="relative flex h-[420px] w-full items-center justify-center overflow-visible">
+            {/* Ambient Background Glow */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-blue-500/5 blur-[100px] rounded-full animate-pulse" />
+            </div>
+
             {/* Background Particles/Stars */}
-            {[...Array(8)].map((_, i) => (
+            {[...Array(12)].map((_, i) => (
                 <motion.div
                     key={`star-${i}`}
-                    className="absolute h-px w-px rounded-full bg-blue-400"
+                    className="absolute h-px w-px rounded-full bg-blue-400/60"
                     style={{
                         top: `${Math.random() * 100}%`,
                         left: `${Math.random() * 100}%`,
                         willChange: 'transform, opacity'
                     }}
                     animate={{
-                        opacity: [0, 0.6, 0],
-                        scale: [0, 1.5, 0],
+                        opacity: [0, 1, 0],
+                        scale: [0, 2, 0],
                     }}
                     transition={{
-                        duration: 4 + Math.random() * 4,
+                        duration: 3 + Math.random() * 5,
                         repeat: Infinity,
                         ease: "easeInOut",
-                        delay: Math.random() * 4,
+                        delay: Math.random() * 5,
                     }}
                 />
             ))}
@@ -212,9 +217,9 @@ const FractalProfits = memo(() => {
                             y: (160 + Math.random() * 120) * direction,
                         }}
                         transition={{
-                            duration: 25 + Math.random() * 10, // Ultra slow for zero distraction
+                            duration: 35 + Math.random() * 15, // Even slower for zero distraction
                             repeat: Infinity,
-                            delay: i * 3,
+                            delay: i * 4,
                             ease: "linear"
                         }}
                         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 whitespace-nowrap z-0"

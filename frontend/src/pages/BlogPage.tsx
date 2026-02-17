@@ -3,118 +3,89 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
     ChevronRight, ArrowLeft, Search, BookOpen, Clock,
-    ArrowUpRight, Heart, Share2, ChevronLeft, Zap,
-    Globe, ChevronDown
+    Share2, Heart, ArrowUpRight, ChevronLeft, Globe, Zap
 } from 'lucide-react';
-import { BlogPost } from '../data/blogPosts';
 import { useHaptic } from '../hooks/useHaptic';
-import { blogService, BlogEngagement } from '../services/blogService';
-
 import { backButton } from '@telegram-apps/sdk-react';
+import { blogService, BlogEngagement } from '../services/blogService';
+import { BlogPost } from '../data/blogPosts';
 import { useUI } from '../context/UIContext';
 import { PageSkeleton } from '../components/Skeletons/PageSkeleton';
 import { Skeleton } from '../components/Skeleton';
-import React, { memo } from 'react';
+import React from 'react';
+
+// New Extracted Components
+import { PostCard } from '../components/Blog/PostCard';
+import { TopicDropdown } from '../components/Blog/TopicDropdown';
+import { MarkdownRenderer } from '../components/Blog/MarkdownRenderer';
 
 interface BlogPageProps {
     setActiveTab?: (tab: string) => void;
     currentTab?: string;
 }
 
-export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
+export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
     const { t } = useTranslation();
-    const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
     const { selection, impact, notification } = useHaptic();
-    const initialCached = useMemo(() => blogService.getPostsSync({ offset: 0, limit: 10, category: 'All', q: '' }), []);
-    const [selectedCategory, setSelectedCategory] = useState<string>('All');
-    const [posts, setPosts] = useState<(BlogPost & BlogEngagement)[]>(initialCached?.items || []);
-    const [total, setTotal] = useState(initialCached?.total || 0);
-    const [isLoading, setIsLoading] = useState(!initialCached);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [selectedPost, setSelectedPost] = useState<(BlogPost & { content?: string }) | null>(null);
-    const [engagement, setEngagement] = useState<BlogEngagement>({ likes: 0, liked: false });
+    const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
+
+    const [posts, setPosts] = useState<(BlogPost & BlogEngagement)[]>([]);
+    const [selectedPost, setSelectedPost] = useState<(BlogPost & BlogEngagement & { content?: string }) | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
     const [isLoadingEngagement, setIsLoadingEngagement] = useState(false);
-    const [isRefreshing, setIsRefreshing] = useState(false); // New state for background refresh
+    const [engagement, setEngagement] = useState<BlogEngagement>({ likes: 0, liked: false });
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('All');
+    const [total, setTotal] = useState(0);
+    const [isRefreshing, setIsRefreshing] = useState(false);
     const sentinelRef = useRef<HTMLDivElement>(null);
 
-    // Fetch posts from backend
-    const fetchPosts = useCallback(async (reset: boolean = false) => {
-        const options = {
-            offset: reset ? 0 : posts.length,
-            limit: 10,
-            category: selectedCategory,
-            q: searchQuery
-        };
-
-        // If reset (initial load or search change), check cache first to avoid flicker
-        if (reset) {
-            const cached = blogService.getPostsSync(options);
-            if (cached) {
-                setPosts(cached.items);
-                setTotal(cached.total);
-                setIsLoading(false);
-                setIsRefreshing(true);
-            } else {
-                setIsLoading(true);
-            }
-        } else {
-            // Loading more - don't trigger main isLoading to avoid flickering the whole page
-            setIsRefreshing(true);
-        }
+    const fetchPosts = useCallback(async (isInitial = false) => {
+        if (isInitial) setIsLoading(true);
+        else setIsRefreshing(true);
 
         try {
-            const data = await blogService.getPosts(options);
-            if (reset) {
-                setPosts(data.items);
+            const result = await blogService.getPosts({
+                offset: isInitial ? 0 : posts.length,
+                limit: 10,
+                category: selectedCategory === 'All' ? undefined : selectedCategory,
+                q: searchQuery || undefined
+            });
+
+            if (isInitial) {
+                setPosts(result.items);
             } else {
                 setPosts(prev => {
-                    // Filter out duplicates just in case
                     const existingIds = new Set(prev.map(p => p.id));
-                    const newItems = data.items.filter(p => !existingIds.has(p.id));
+                    const newItems = result.items.filter(p => !existingIds.has(p.id));
                     return [...prev, ...newItems];
                 });
             }
-            setTotal(data.total);
+            setTotal(result.total);
         } catch (error) {
             console.error('Failed to fetch posts', error);
         } finally {
             setIsLoading(false);
             setIsRefreshing(false);
         }
-    }, [selectedCategory, searchQuery, posts.length]);
+    }, [posts.length, selectedCategory, searchQuery]);
 
     useEffect(() => {
-        // Debounce only when searching to avoid jitter, fetch immediately otherwise
-        // Use a 50ms delay for category changes to allow the UI to feel responsive
-        const delay = searchQuery ? 500 : (selectedCategory !== 'All' ? 50 : 0);
+        fetchPosts(true);
+    }, [selectedCategory, searchQuery]);
 
-        const timer = setTimeout(() => {
-            fetchPosts(true);
-        }, delay);
-
-        return () => clearTimeout(timer);
-    }, [selectedCategory, searchQuery, fetchPosts]);
-
-    // Independent effect for prefetching next posts
+    // UI Cleanup on Post Select
     useEffect(() => {
-        if (posts.length > 0) {
-            blogService.prefetchNext(posts);
-        }
-    }, [posts]);
-
-    // Sync header visibility with selectedPost - delayed to allow transition
-    useEffect(() => {
-        if (currentTab === 'blog') {
-            // If selecting a post, hide header/footer
-            // If going back, show them
-            const isVisible = !selectedPost;
-
-            // Small delay to avoid immediate layout shift during exit animation
+        if (selectedPost && currentTab === 'blog') {
+            setHeaderVisible(false);
+            setFooterVisible(false);
+            setNotificationsVisible(false);
+        } else if (currentTab === 'blog') {
             const timer = setTimeout(() => {
-                setHeaderVisible(isVisible);
-                setFooterVisible(isVisible);
-                setNotificationsVisible(isVisible);
-            }, isVisible ? 0 : 50); // Delay only when hiding to allow "exit" to start
+                setHeaderVisible(true);
+                setFooterVisible(true);
+                setNotificationsVisible(true);
+            }, 100);
 
             return () => clearTimeout(timer);
         }
@@ -141,7 +112,6 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
         }
 
         try {
-            // Fetch full content and fresh engagement
             const detail = await blogService.getPostDetail(post.id);
             setSelectedPost(detail);
             setEngagement({ likes: detail.likes, liked: detail.liked });
@@ -167,7 +137,6 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
         return () => window.removeEventListener('nav-blog-post', handleDeepLink);
     }, [handlePostClick]);
 
-    // Telegram Native Back Button Integration
     useEffect(() => {
         if (!backButton.isMounted() || currentTab !== 'blog') return;
 
@@ -220,7 +189,6 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
     const handleShare = () => {
         selection();
         if (selectedPost) {
-            // Use the slug for the deep link, fallback to ID
             const blogId = selectedPost.slug || selectedPost.id;
             const shareUrl = `https://t.me/ViralStudioBot/app?startapp=blog_${blogId}`;
 
@@ -247,7 +215,6 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
         }
     };
 
-    // Infinite Scroll Observer
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting && posts.length < total && !isLoading && !isRefreshing && !selectedPost) {
@@ -290,7 +257,6 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                         exit={{ opacity: 0, x: -10 }}
                         className="flex flex-col"
                     >
-                        {/* Header Area - Sticky with Glassmorphism */}
                         <div className="px-4 pt-2 pb-2 flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <button
@@ -308,7 +274,6 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                             </div>
                         </div>
 
-                        {/* Topic Intelligence Dropdown */}
                         <div className="px-4 py-4 space-y-4">
                             <div className="relative group">
                                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-slate-400 group-focus-within:text-blue-500 transition-colors" />
@@ -317,7 +282,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                     placeholder={t('blog.navigation.search_placeholder')}
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full h-14 pl-12 pr-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 outline-hidden font-medium text-sm transition-all"
+                                    className="w-full h-14 pl-12 pr-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 outline-hidden font-medium text-sm transition-all shadow-sm"
                                 />
                             </div>
 
@@ -329,9 +294,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                             />
                         </div>
 
-                        {/* Content Area */}
                         <div className="px-4 space-y-6">
-                            {/* Featured Post */}
                             {currentFeaturedPost && selectedCategory === 'All' && searchQuery === '' && (
                                 <motion.div
                                     key="featured"
@@ -382,7 +345,6 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                 </motion.div>
                             )}
 
-                            {/* Grid */}
                             <div className="grid gap-4">
                                 {isRefreshing && posts.length > 0 && (
                                     <motion.div
@@ -443,56 +405,10 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
             </AnimatePresence>
         </motion.div>
     );
-};
-
-// Memoized Post Card for high performance lists
-const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogEngagement; index: number; onClick: () => void }) => {
-    return (
-        <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: Math.min(index * 0.05, 0.3) }}
-            onClick={onClick}
-            className="group p-5 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 transition-all active:scale-[0.98] flex gap-4 items-center cursor-pointer"
-        >
-            {(post.image) && (
-                <div className="shrink-0 w-20 h-20 rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800">
-                    <img
-                        src={post.image}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        alt=""
-                        loading="lazy"
-                    />
-                </div>
-            )}
-            <div className="flex-1 space-y-3">
-                <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-black uppercase tracking-widest text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/10">
-                        {post.category}
-                    </span>
-                    <div className="flex items-center gap-1 text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
-                        <Clock className="w-3 h-3" />
-                        {new Date(post.published_at!).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                    </div>
-                </div>
-                <h4 className="text-[15px] font-extrabold leading-tight group-hover:text-blue-500 transition-colors line-clamp-2">
-                    {post.title}
-                </h4>
-                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
-                    {post.excerpt}
-                </p>
-            </div>
-            <div className="shrink-0 w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
-                <ChevronRight className="w-5 h-5" />
-            </div>
-        </motion.div>
-    );
-});
-
-PostCard.displayName = 'PostCard';
+}
 
 interface BlogDetailProps {
-    post: BlogPost;
+    post: BlogPost & { content?: string };
     engagement: BlogEngagement;
     isLoading: boolean;
     onBack: () => void;
@@ -507,7 +423,6 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
     const { t } = useTranslation();
     const { selection } = useHaptic();
 
-    // Marketing "Between the lines" snippets
     const MarketingBox = ({ type }: { type: 'card' | 'pro' }) => {
         const isCard = type === 'card';
         return (
@@ -555,7 +470,6 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             exit={{ opacity: 0 }}
             className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 relative"
         >
-            {/* Header Area - Premium floating style */}
             <div className="w-full pt-safe-top pb-3 px-4 bg-transparent transition-all">
                 <div className="flex items-center justify-between w-full">
                     <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-white dark:hover:bg-slate-900 active:scale-90 transition-all text-slate-900 dark:text-white">
@@ -578,9 +492,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                 </div>
             </div>
 
-            {/* Content Container - Compact spacing */}
             <div className="px-4 pt-5 pb-24 space-y-6 max-w-lg mx-auto">
-                {/* Meta */}
                 <div className="space-y-4">
                     {post.image && (
                         <div className="relative w-full aspect-video rounded-3xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-2xl">
@@ -607,7 +519,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                     </h1>
                     <div className="flex items-center gap-3 py-1.5 border-y border-slate-200 dark:border-white/10">
                         <div className="w-10 h-10 rounded-full bg-linear-to-br from-slate-400 to-slate-600 dark:from-slate-700 dark:to-slate-900 flex items-center justify-center font-black text-sm text-white shadow-inner">
-                            {post.author[0]}
+                            {post.author?.[0] || 'A'}
                         </div>
                         <div>
                             <p className="text-xs font-black">{post.author}</p>
@@ -616,7 +528,6 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                     </div>
                 </div>
 
-                {/* Body Text (Simulated content structure) */}
                 <div className="space-y-6">
                     {isLoading ? (
                         <div className="space-y-4">
@@ -636,33 +547,18 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                             <p className="first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left first-letter:text-blue-500 first-letter:leading-none first-letter:pt-2">
                                 {post.excerpt}
                             </p>
-
-                            <p>
-                                {t('blog.content.p1')}
-                            </p>
-
                             <MarketingBox type="card" />
-
-                            <p>
-                                {t('blog.content.p2')}
-                            </p>
-
                             <MarketingBox type="pro" />
-
-                            <p>
-                                {t('blog.content.p3')}
-                            </p>
                         </>
                     )}
                 </div>
 
-                {/* Engagement Footer */}
                 <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col items-center gap-4 pb-12">
                     <motion.button
                         whileTap={{ scale: 0.9 }}
                         onClick={onLike}
                         className={`group px-7 py-3.5 rounded-full flex items-center gap-3 transition-all ${engagement.liked
-                            ? 'liquid-red-premium scale-105 shadow-red-500/40'
+                            ? 'bg-red-500 text-white scale-105 shadow-red-500/40'
                             : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-red-500/30 text-slate-500 dark:text-slate-400'
                             }`}
                     >
@@ -676,7 +572,6 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                     </p>
                 </div>
 
-                {/* Navigation Buttons */}
                 <div className="pt-8 grid grid-cols-2 gap-3">
                     <button
                         onClick={() => { selection(); onPrev(); }}
@@ -704,213 +599,6 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                     </button>
                 </div>
             </div>
-        </motion.div >
+        </motion.div>
     );
 };
-
-interface TopicDropdownProps {
-    selected: string;
-    onSelect: (category: string) => void;
-    categories: string[];
-    t: any;
-}
-
-const TopicDropdown = ({ selected, onSelect, categories }: TopicDropdownProps) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setIsOpen(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
-    return (
-        <div className="relative" ref={dropdownRef}>
-            <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between px-5 h-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-[0.99] transition-all"
-            >
-                <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mr-2">Intelligence:</span>
-                    <span className="text-xs font-black text-slate-900 dark:text-white">{selected}</span>
-                </div>
-                <motion.div
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                >
-                    <ChevronDown className="w-4 h-4 text-slate-500" />
-                </motion.div>
-            </button>
-
-            <AnimatePresence>
-                {isOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 5, scale: 1 }}
-                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        className="absolute top-full left-0 right-0 z-50 overflow-hidden rounded-2xl bg-white/80 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-2xl"
-                    >
-                        <div className="max-h-60 overflow-y-auto no-scrollbar py-2">
-                            {categories.map((category) => (
-                                <button
-                                    key={category}
-                                    onClick={() => {
-                                        onSelect(category);
-                                        setIsOpen(false);
-                                    }}
-                                    className={`w-full flex items-center gap-3 px-5 py-3.5 text-left transition-colors hover:bg-blue-500/5 ${selected === category
-                                        ? 'text-blue-500 bg-blue-500/5'
-                                        : 'text-slate-600 dark:text-slate-400'
-                                        }`}
-                                >
-                                    <div className={`w-1.5 h-1.5 rounded-full transition-all ${selected === category ? 'bg-blue-500 scale-125' : 'bg-slate-300 dark:bg-slate-700'
-                                        }`} />
-                                    <span className={`text-xs font-bold ${selected === category ? 'font-black' : ''}`}>
-                                        {category}
-                                    </span>
-                                </button>
-                            ))}
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
-    );
-};
-
-// ------------------------------------------------------------------
-// Custom Markdown Renderer
-// Handles: H1 stripping, H2/H3 headers, Bold (**), Italic (* or _), Paragraphs
-// ------------------------------------------------------------------
-// ------------------------------------------------------------------
-// Custom Markdown Renderer
-// Handles: H1 stripping, H2/H3 headers, Bold (**), Italic (* or _), Paragraphs
-// ------------------------------------------------------------------
-const MarkdownRenderer = memo(({ content }: { content: string }) => {
-    const renderedBlocks = useMemo(() => {
-        const lines = content.trim().split('\n');
-        let cleanContent = content;
-        const firstLineIndex = lines.findIndex(line => line.trim().length > 0);
-        if (firstLineIndex !== -1 && lines[firstLineIndex].trim().startsWith('# ')) {
-            cleanContent = lines.slice(firstLineIndex + 1).join('\n').trim();
-        }
-
-        // Split by newlines, but ALSO split by headers that might be joined to the end of a line (lookahead)
-        const blocks = cleanContent.split(/\n+|(?=###\s)|(?=##\s)/);
-
-        return blocks.map((block, index) => {
-            const trimmed = block.trim();
-            if (!trimmed) return null;
-
-            if (trimmed.startsWith('### ')) {
-                return (
-                    <h3
-                        key={`h3-${index}`}
-                        className="text-[17px] font-black mt-6 mb-2.5 text-slate-900 dark:text-white leading-tight tracking-tight flex items-center gap-2"
-                    >
-                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-lg shadow-blue-500/40" />
-                        <span dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^###\s+/, '')) }} />
-                    </h3>
-                );
-            }
-            if (trimmed.startsWith('## ')) {
-                return (
-                    <h2
-                        key={`h2-${index}`}
-                        className="text-xl font-black mt-8 mb-4 text-slate-900 dark:text-white leading-tight tracking-tight border-l-4 border-blue-500 pl-4 py-1.5 bg-blue-500/5 rounded-r-xl"
-                        dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^##\s+/, '')) }}
-                    />
-                );
-            }
-            if (trimmed.startsWith('# ')) {
-                return (
-                    <h1
-                        key={`h1-${index}`}
-                        className="text-2xl font-black mt-8 mb-4 text-slate-900 dark:text-white leading-tight tracking-tight"
-                        dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^#\s+/, '')) }}
-                    />
-                );
-            }
-
-            // List item support
-            if (trimmed.startsWith('* ') || trimmed.startsWith('- ')) {
-                return (
-                    <div
-                        key={`li-${index}`}
-                        className="flex gap-3 items-start my-2.5 px-1 group"
-                    >
-                        <div className="mt-1.5 w-1.5 h-1.5 shrink-0 rounded-full bg-slate-300 dark:bg-slate-700 group-hover:bg-blue-500 transition-colors" />
-                        <p
-                            className="text-[14px] font-medium text-slate-600 dark:text-slate-300 leading-relaxed"
-                            dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^[*|-]\s+/, '')) }}
-                        />
-                    </div>
-                );
-            }
-
-            // Blockquote support
-            if (trimmed.startsWith('> ')) {
-                return (
-                    <blockquote
-                        key={`quote-${index}`}
-                        className="my-6 p-5 rounded-2xl bg-slate-100 dark:bg-white/5 border-l-4 border-slate-300 dark:border-white/10 italic text-[14px] text-slate-600 dark:text-slate-400 leading-relaxed shadow-inner"
-                        dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^>\s+/, '')) }}
-                    />
-                );
-            }
-
-            // Horizontal rule
-            if (trimmed === '---' || trimmed === '***') {
-                return <hr key={`hr-${index}`} className="my-8 border-slate-200 dark:border-white/5" />;
-            }
-
-            return (
-                <p
-                    key={`p-${index}`}
-                    className="text-[14px] font-medium text-slate-600 dark:text-slate-300 leading-[1.7] tracking-normal mb-1"
-                    dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed) }}
-                />
-            );
-        });
-    }, [content]);
-
-    return <div className="space-y-3">{renderedBlocks}</div>;
-});
-
-MarkdownRenderer.displayName = 'MarkdownRenderer';
-
-// Enhanced regex parser for markdown
-function processMarkdown(text: string): string {
-    if (!text) return '';
-
-    return text
-        // Fix for missing spaces around headers if they were concatenated
-        .replace(/([^\n])(###\s)/g, '$1\n\n$2')
-        .replace(/([^\n])(##\s)/g, '$1\n\n$2')
-
-        // Fix for bold text that might cover entire lines or has internal spaces
-        // Convert ** text ** to **text**
-        .replace(/\*\*\s+(.*?)\s+\*\*/g, '**$1**')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/__([^_]+)__/g, '<strong>$1</strong>')
-        .replace(/_(.*?)_/g, '<em>$1</em>')
-        .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-
-        // Fix for missing spaces around bold results (External Spacing)
-        .replace(/(\S)<strong>/g, '$1 <strong>')
-        .replace(/<\/strong>(\S)/g, '</strong> $1')
-
-        // Special CTA button - Allow spaces
-        .replace(/\[CTA:\s*(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="inline-block my-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 no-underline active:scale-95">$1</a>')
-        // Standard links - Allow spaces
-        .replace(/\[(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="text-blue-500 hover:text-blue-600 font-extrabold underline decoration-2 underline-offset-4 transition-all">$1</a>')
-
-        // Clean up any double spaces introduced by the spacing fixes
-        .replace(/\s{2,}/g, ' ');
-}
