@@ -50,7 +50,7 @@ const CryptoIcon = memo(({ name }: { name: string }) => {
 });
 
 type OrbitItem =
-    | { type: 'avatar'; src: string }
+    | { type: 'avatar'; src: string; profile_url?: string }
     | { type: 'crypto'; name: string; color: string; gradientStart?: string; gradientEnd?: string };
 
 export const CommunityOrbit = memo(() => {
@@ -59,7 +59,7 @@ export const CommunityOrbit = memo(() => {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const res = await apiClient.get('/api/partner/top');
+                const res = await apiClient.get('/api/partner/orbit-members');
                 const topPartners = res.data;
 
                 const mappedItems: OrbitItem[] = [];
@@ -73,7 +73,8 @@ export const CommunityOrbit = memo(() => {
 
                         mappedItems.push({
                             type: 'avatar',
-                            src
+                            src,
+                            profile_url: p.profile_url
                         });
                     } else {
                         // Fallback to static avatars if not enough top partners
@@ -255,7 +256,14 @@ const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: num
                 className="h-full w-full"
             >
                 {item.type === 'avatar' ? (
-                    <div className="group relative h-full w-full">
+                    <div
+                        className="group relative h-full w-full cursor-pointer"
+                        onClick={() => {
+                            if (item.profile_url) {
+                                window.open(item.profile_url, '_blank');
+                            }
+                        }}
+                    >
                         <div className="absolute -inset-2 rounded-full bg-white/20 blur-xl opacity-0 transition-opacity group-hover:opacity-100 dark:bg-blue-400/20" />
                         <div
                             className="relative h-full w-full overflow-hidden rounded-full border-2 border-white/80 bg-white/40 backdrop-blur-md shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:border-blue-400 dark:border-white/20 dark:bg-white/10"

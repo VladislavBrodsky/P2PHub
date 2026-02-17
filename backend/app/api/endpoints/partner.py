@@ -397,6 +397,88 @@ async def get_top_partners(
 
     return top_data
 
+@router.get("/orbit-members", response_model=list[PartnerTopResponse])
+async def get_orbit_members(
+    background_tasks: BackgroundTasks,
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Fetches a randomized set of 8 partners for the Community Orbit, 
+    rotating every 6 hours to keep the UI fresh.
+    """
+    import time
+    from sqlalchemy import func
+    from app.utils.ranking import get_rank
+
+    # Calculate 6-hour window identifier
+    window = int(time.time() / (6 * 3600))
+    cache_key = f"partners:orbit:{window}"
+
+    try:
+        cached = await redis_service.get_json(cache_key)
+        if cached:
+            return cached
+    except Exception as e:
+        logger.warning(f"Orbit members cache read failed: {e}")
+
+    # Fetch 8 random partners who have a photo
+    # We prioritize those with photo_file_id for better visual quality
+    statement = (
+        select(Partner)
+        .where(Partner.photo_file_id.is_not(None))
+        .order_by(func.random())
+        .limit(8)
+    )
+    result = await session.exec(statement)
+    partners = result.all()
+
+    # If not enough partners with photos, fill with anyone
+    if len(partners) < 8:
+        existing_ids = [p.id for p in partners]
+        statement_fill = (
+            select(Partner)
+            .where(Partner.id.not_in(existing_ids))
+            .order_by(func.random())
+            .limit(8 - len(partners))
+        )
+        result_fill = await session.exec(statement_fill)
+        partners.extend(result_fill.all())
+
+    orbit_data = []
+    for p in partners:
+        profile_url = f"https://t.me/{p.username}" if p.username else f"tg://user?id={p.telegram_id}"
+        
+        orbit_data.append({
+            "id": p.id,
+            "first_name": p.first_name,
+            "last_name": p.last_name,
+            "username": p.username,
+            "photo_file_id": p.photo_file_id,
+            "photo_url": p.photo_url,
+            "profile_url": profile_url,
+            "xp": p.xp,
+            "referrals_count": p.referral_count,
+            "rank": get_rank(p.xp)
+        })
+
+    # Background Cache Warming for photos
+    if orbit_data:
+        try:
+            from app.services.partner_service import ensure_photo_cached
+            for item in orbit_data:
+                if item.get("photo_file_id"):
+                    background_tasks.add_task(ensure_photo_cached, item["photo_file_id"])
+        except Exception as e:
+            logger.warning(f"Orbit photo warming failed: {e}")
+
+    try:
+        # Cache for 6 hours
+        await redis_service.set_json(cache_key, orbit_data, expire=6 * 3600)
+    except Exception as e:
+        logger.warning(f"Orbit members cache write failed: {e}")
+
+    return orbit_data
+
 from app.models.partner import SystemSetting
 
 
