@@ -446,8 +446,6 @@ async def get_orbit_members(
 
     orbit_data = []
     for p in partners:
-        profile_url = f"https://t.me/{p.username}" if p.username else f"tg://user?id={p.telegram_id}"
-        
         orbit_data.append({
             "id": p.id,
             "first_name": p.first_name,
@@ -455,7 +453,6 @@ async def get_orbit_members(
             "username": p.username,
             "photo_file_id": p.photo_file_id,
             "photo_url": p.photo_url,
-            "profile_url": profile_url,
             "xp": p.xp,
             "referrals_count": p.referral_count,
             "rank": get_rank(p.xp)
