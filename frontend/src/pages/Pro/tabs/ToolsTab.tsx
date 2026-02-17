@@ -65,7 +65,7 @@ export const ToolsTab = ({
                                     })}
                                 >
                                     <Info size={14} className="text-slate-400 hover:text-indigo-500 transition-colors cursor-help" />
-                                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-50">
+                                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
                                         {t('pro_dashboard.tools.headline.info')}
                                         <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                     </div>
@@ -108,7 +108,7 @@ export const ToolsTab = ({
                                     })}
                                 >
                                     <Info size={14} className="text-slate-400 hover:text-amber-500 transition-colors cursor-help" />
-                                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-50">
+                                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
                                         {t('pro_dashboard.tools.bio.neural_desc')}
                                         <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                     </div>
@@ -152,7 +152,7 @@ export const ToolsTab = ({
                                 })}
                             >
                                 <Info size={14} className="text-slate-400 hover:text-orange-500 transition-colors cursor-help" />
-                                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-50">
+                                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
                                     {t('pro_dashboard.tools.trends.info')}
                                     <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                 </div>
@@ -226,7 +226,7 @@ export const ToolsTab = ({
                                         })}
                                     >
                                         <Info size={14} className="text-slate-400 hover:text-indigo-500 transition-colors cursor-help" />
-                                        <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-50">
+                                        <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
                                             {t('pro_dashboard.tools.audit.info')}
                                             <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                         </div>

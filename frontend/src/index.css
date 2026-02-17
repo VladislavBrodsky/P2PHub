@@ -909,12 +909,12 @@ body {
 
 /* === PRO LEVEL ENHANCEMENTS === */
 .pro-card-extreme {
-  @apply relative overflow-hidden bg-white/5 dark:bg-black/20 backdrop-blur-3xl border border-white/10 dark:border-white/5 shadow-2xl transition-all duration-500;
+  @apply relative bg-white/5 dark:bg-black/20 backdrop-blur-3xl border border-white/10 dark:border-white/5 shadow-2xl transition-all duration-500;
 }
 
 .pro-card-extreme::before {
   content: "";
-  @apply absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700;
+  @apply absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-[inherit];
 }
 
 .holographic-shine {
