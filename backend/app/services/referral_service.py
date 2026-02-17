@@ -236,123 +236,120 @@ async def _finalize_referral_logic(deferred_tasks: list):
 
 async def distribute_pro_commissions(session: AsyncSession, partner_id: int, total_amount: float):
     """
-    Distributes commissions for PRO subscription purchase across 9 levels.
+    Distributes commissions for PRO ($39) or PRO+ ($69) subscription purchase.
+    Implements DYNAMIC COMPRESSION: If an intermediary is not PRO, the commission 
+    jumps to the next qualified upline leader.
     """
     partner = await session.get(Partner, partner_id)
     if not partner or not partner.referrer_id:
         return
 
-    # #comment: CRITICAL FIX - partner.path contains ancestors UP TO but NOT including the direct referrer.
-    # We must explicitly add partner.referrer_id to ensure the L1 referrer (30% commission) is included.
+    # Determine Model: PRO ($39) or PRO+ ($69)
+    # Default to PRO if amount doesn't match PRO+ exactly
+    is_pro_plus = total_amount >= (settings.PRO_PLUS_PRICE_USD - 0.1)
+    comm_map = settings.COMMISSION_MAP_EMPIRE
+    max_recipients = 20
+
+    # Resolve ALL Ancestors for compression logic
+    # partner.path contains ancestors from root down to direct referrer.
     path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
     lineage_ids = path_ids + [partner.referrer_id] if partner.referrer_id else path_ids
-    lineage_ids = list(dict.fromkeys(lineage_ids))[-9:]
-
+    lineage_ids = list(dict.fromkeys(lineage_ids))
+    
+    # Fetch all ancestors in bulk
     statement = select(Partner).where(Partner.id.in_(lineage_ids))
     result = await session.exec(statement)
     ancestor_map = {p.id: p for p in result.all()}
 
-    sentry_sdk.add_breadcrumb(
-        category="commission",
-        message=f"Distributing PRO commissions for partner {partner_id} (Amount: {total_amount})",
-        level="info"
-    )
+    # --- ABSOLUTE SLOT-DISTANCE MODEL WITH LEAKAGE CAPTURE ---
+    stmt_admin = select(Partner).where(Partner.telegram_id == "537873096")
+    res_admin = await session.exec(stmt_admin)
+    company_account = res_admin.first()
 
-    current_referrer_id = partner.referrer_id
+    ancestors_at_dist = list(reversed(lineage_ids))
     earnings_to_add = []
-    redis_pipe = redis_service.client.pipeline(transaction=True)
     deferred_notifications = []
-
-    for level in range(1, 10):
-        if not current_referrer_id:
-            break
-
-        referrer = ancestor_map.get(current_referrer_id)
-        if not referrer:
-            break
-
-        # #comment: ELITE COMPRESSION LOGIC
-        # USDT commissions for network growth (Level 2-9) require PRO status.
-        # Free users only receive direct (L1) commissions. 
-        if level > 1 and not referrer.is_pro:
-            # Send FOMO for Level 2/3 commissions explicitly (High value conversion)
-            if level in [2, 3]:
-                lang = referrer.language_code or "en"
-                fomo_msg = get_msg(lang, "pro_fomo_missed", level=level)
-                buttons = [[{"text": "👑 Unlock Commissions", "web_app": {"url": settings.FRONTEND_URL}}]]
-                await notification_service.enqueue_notification(
-                    chat_id=int(referrer.telegram_id), text=fomo_msg, buttons=buttons
-                )
-
-            current_referrer_id = referrer.referrer_id
-            continue
-
-        pct = settings.COMMISSION_MAP.get(level, 0)
-        commission = total_amount * pct
-
-        if commission > 0:
-            # 1. Update Object State (Atomic Increment)
-            balance_before = float(referrer.balance)
+    
+    # We use a non-transactional pipe for cache purging
+    async with redis_service.client.pipeline(transaction=False) as redis_pipe:
+        for dist in range(1, 21):
+            pct = comm_map.get(dist, 0)
+            if pct <= 0: continue
+            
+            commission = total_amount * pct
+            
+            # Identify person at this exact distance
+            referrer_id = ancestors_at_dist[dist-1] if (dist-1) < len(ancestors_at_dist) else None
+            referrer = ancestor_map.get(referrer_id) if referrer_id else None
+            
+            qualified = False
+            miss_reason = "Empty Slot"
+            
+            if referrer:
+                is_ref_pro_plus = (referrer.subscription_plan == "PRO_PLUS_MONTHLY")
+                is_ref_pro = referrer.is_pro or (referrer.subscription_plan == "PRO_MONTHLY")
+                
+                if dist <= 3:
+                    qualified = True
+                elif dist <= 9:
+                    qualified = (is_ref_pro or is_ref_pro_plus)
+                    if not qualified: miss_reason = "PRO Upgrade Required"
+                else:
+                    qualified = is_ref_pro_plus
+                    if not qualified: miss_reason = "PRO+ Upgrade Required"
+            
+            # Recipient is either the Partner (if qualified) or Management (@uslincoln)
+            recipient = referrer if qualified else company_account
+            if not recipient: continue 
+                
+            balance_before = float(recipient.balance)
             balance_after = balance_before + commission
             
-            referrer.balance = Partner.balance + commission
-            referrer.total_earned_usdt = Partner.total_earned_usdt + commission
-
-            # 2. Record Earning
-            earning = Earning(
-                partner_id=referrer.id,
-                amount=commission,
-                description=f"PRO Commission (L{level})",
-                type="COMMISSION",
-                level=level,
-                currency="USDT"
-            )
-            earnings_to_add.append(earning)
-
-            # 3. Log Audit (No flush/refresh needed inside loop now)
-            await audit_service.log_commission(
-                session=session,
-                partner_id=referrer.id,
-                buyer_id=partner.id,
-                amount=commission,
-                level=level,
-                balance_before=balance_before,
-                balance_after=balance_after,
-            )
-
-            # 4. Stage Redis Invalidation
-            redis_pipe.delete(f"partner:profile:{referrer.telegram_id}")
-            redis_pipe.delete(f"partner:earnings:{referrer.telegram_id}")
-
-            # 5. Prepare Notification
-            try:
-                lang = referrer.language_code or "en"
-                buttons = [[
-                    {"text": "💰 Check Balance", "web_app": {"url": settings.FRONTEND_URL}},
-                    {"text": "🚀 Open App", "web_app": {"url": settings.FRONTEND_URL}}
-                ]]
-                buyer_name = format_partner_name(partner)
-                msg = get_msg(lang, "commission_received", amount=round(commission, 2), level=level, from_user=buyer_name)
+            recipient.balance = balance_after
+            recipient.total_earned_usdt = float(recipient.total_earned_usdt) + commission
+            session.add(recipient)
+            
+            description = f"{'PRO+' if is_pro_plus else 'PRO'} Commission (L{dist})"
+            if not qualified:
+                description = f"Missed Tree Commission: {miss_reason} (L{dist} via User {partner.telegram_id})"
                 
-                # Push to list for final parallel dispatch
-                deferred_notifications.append(notification_service.enqueue_notification(
-                    chat_id=int(referrer.telegram_id), 
-                    text=msg,
-                    buttons=buttons
-                ))
-            except Exception as e:
-                logger.error(f"Failed to prepare notification for {referrer.id}: {e}")
+            earnings_to_add.append(Earning(
+                partner_id=recipient.id,
+                amount=commission,
+                description=description,
+                type="COMMISSION",
+                level=dist,
+                currency="USDT"
+            ))
 
-            session.add(referrer) # Stage for bulk commit
+            # Log Audit
+            await audit_service.log_commission(
+                session=session, partner_id=recipient.id, buyer_id=partner.id,
+                amount=commission, level=dist,
+                balance_before=balance_before, balance_after=balance_after,
+            )
 
-        current_referrer_id = referrer.referrer_id
-    
-    # 6. Finalize Batch Changes
+            # Purge Caches
+            redis_pipe.delete(f"partner:profile:{recipient.telegram_id}")
+            redis_pipe.delete(f"partner:earnings:{recipient.telegram_id}")
+
+            # Notify Partners (Skip Company/Leakage notifications here)
+            if qualified and referrer:
+                try:
+                    lang = referrer.language_code or "en"
+                    buyer_name = format_partner_name(partner)
+                    msg = get_msg(lang, "commission_received", amount=round(commission, 2), level=dist, from_user=buyer_name)
+                    deferred_notifications.append(notification_service.enqueue_notification(
+                        chat_id=int(referrer.telegram_id), text=msg,
+                        buttons=[[{"text": "💰 Check Balance", "web_app": {"url": settings.FRONTEND_URL}}]]
+                    ))
+                except Exception as e:
+                    logger.error(f"Notification error for {referrer.id}: {e}")
+
+    # Finalize Transaction
     if earnings_to_add:
         session.add_all(earnings_to_add)
         await session.commit()
         await redis_pipe.execute()
-        
-        # 7. Dispatch Notifications in parallel
         if deferred_notifications:
             await asyncio.gather(*deferred_notifications, return_exceptions=True)

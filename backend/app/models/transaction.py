@@ -20,8 +20,8 @@ class PartnerTransaction(SQLModel, table=True):
     network: str # TON, TRC20, ERC20, etc.
     tx_hash: str | None = Field(default=None, index=True)
     status: str = Field(default="pending", index=True) # pending, completed, failed, manual_review
-    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC), index=True)
-    updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC), sa_column_kwargs={"onupdate": lambda: datetime.now(UTC)})
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None), index=True)
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None), sa_column_kwargs={"onupdate": lambda: datetime.now(UTC).replace(tzinfo=None)})
 
     # Optional relationship back to Partner
     partner: "Partner" = Relationship(

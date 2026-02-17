@@ -94,6 +94,11 @@ class Settings(BaseSettings):
     TON_MANIFEST_URL: str = "https://p2phub-frontend.up.railway.app/tonconnect-manifest.json"
     PAYMENT_SERVICE_MODE: str = "ton_api" # Enum: auto_approve, ton_api, manual
     PRO_PRICE_USD: float = 39.0
+    PRO_PLUS_PRICE_USD: float = 69.0
+
+    # Token Quotas per Plan
+    PRO_TOKENS_MONTHLY: int = 250
+    PRO_PLUS_TOKENS_MONTHLY: int = 500
 
     # Admin settings
     ADMIN_USER_IDS: list[str] = ["12345678", "537873096", "716720099"] # uslincoln added here
@@ -108,11 +113,13 @@ class Settings(BaseSettings):
     DAILY_CHECKIN_XP: int = 10
     STREAK_7DAY_XP_BONUS: int = 150
 
-    # Commission Distribution for PRO Upgrades
-    # Total: ~44% (30% L1, 5% L2, 3% L3, 1% L4-9)
-    COMMISSION_MAP: dict[int, float] = {
-        1: 0.30, 2: 0.05, 3: 0.03, 4: 0.01, 5: 0.01, 
-        6: 0.01, 7: 0.01, 8: 0.01, 9: 0.01
+    # --- Commission Distribution: 60/40 Unified Empire Model ---
+    # Total Payout: 60% | Platform Net: 40%
+    # This map is used for both $39 and $69 to eliminate leaks.
+    COMMISSION_MAP_EMPIRE: dict[int, float] = {
+        1: 0.30, 2: 0.10, 3: 0.03, 4: 0.01, 5: 0.01, 6: 0.01, 7: 0.01, 8: 0.01, 9: 0.01, 10: 0.01,
+        11: 0.006, 12: 0.006, 13: 0.006, 14: 0.006, 15: 0.006, 
+        16: 0.006, 17: 0.006, 18: 0.006, 19: 0.006, 20: 0.006
     }
 
     # Viral Marketing Categories (Synced with Frontend ProDashboard.tsx)

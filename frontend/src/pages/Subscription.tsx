@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Crown, CheckCircle2, Wallet, CreditCard, ChevronRight,
-    Loader2, Sparkles, Zap, Rocket, Bot, ChevronDown, Trophy
+    Loader2, Sparkles, Zap, Rocket, Bot, ChevronDown, Trophy, Users
 } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
@@ -57,7 +57,8 @@ export default function SubscriptionPage() {
         return `${minutes}:${seconds.toString().padStart(2, '0')}`;
     }, [timeLeft]);
 
-    const proPrice = 39;
+    const [selectedPlan, setSelectedPlan] = useState<'PRO' | 'PRO_PLUS'>('PRO_PLUS');
+    const planPrice = selectedPlan === 'PRO_PLUS' ? 69 : 39;
     const adminUsdt = globalConfig?.admin_usdt_address || "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM";
 
     const handleTonPayment = async () => {
@@ -71,17 +72,17 @@ export default function SubscriptionPage() {
 
         try {
             const sessionRes = await apiClient.post('/api/payment/session', {
-                amount: proPrice, currency: 'TON', network: 'TON'
+                amount: planPrice, currency: 'TON', network: 'TON'
             });
 
-            const { amount_ton, address } = sessionRes.data;
+            const { amount, address } = sessionRes.data;
 
             const tx = {
                 validUntil: Math.floor(Date.now() / 1000) + 600,
                 messages: [
                     {
                         address: address,
-                        amount: Math.ceil(amount_ton * 10 ** 9).toString(),
+                        amount: Math.ceil(amount * 10 ** 9).toString(),
                     }
                 ]
             };
@@ -120,7 +121,7 @@ export default function SubscriptionPage() {
                 tx_hash: manualHash?.trim() || null,
                 currency: 'USDT',
                 network: 'TRC20',
-                amount: proPrice
+                amount: planPrice
             });
             setStatus('manual_review');
             notification('success');
@@ -133,6 +134,7 @@ export default function SubscriptionPage() {
     };
 
     if (user?.is_pro) {
+        const isPlus = (user.subscription_plan === 'PRO_PLUS_MONTHLY');
         return (
             <div className="flex flex-col items-center justify-center min-h-[80vh] px-6 text-center overflow-hidden">
                 <motion.div
@@ -140,26 +142,26 @@ export default function SubscriptionPage() {
                     animate={{ scale: 1, rotate: 0 }}
                     className="relative mb-8"
                 >
-                    <div className="absolute inset-0 bg-amber-400 blur-3xl opacity-30 animate-pulse" />
-                    <div className="w-24 h-24 rounded-full bg-linear-to-br from-amber-300 via-orange-500 to-amber-600 flex items-center justify-center shadow-xl relative z-10">
+                    <div className={`absolute inset-0 blur-3xl opacity-30 animate-pulse ${isPlus ? 'bg-indigo-500' : 'bg-amber-400'}`} />
+                    <div className={`w-24 h-24 rounded-full flex items-center justify-center shadow-xl relative z-10 bg-linear-to-br ${isPlus ? 'from-indigo-400 via-blue-600 to-indigo-700' : 'from-amber-300 via-orange-500 to-amber-600'}`}>
                         <Crown size={48} className="text-white fill-white/20" />
                     </div>
                 </motion.div>
 
-                <h1 className="text-3xl font-black mb-4 tracking-tighter text-slate-900 dark:text-white uppercase">
-                    <Trans i18nKey="subscription.pro_active.title" />
+                <h1 className="text-3xl font-black mb-4 tracking-tighter text-slate-900 dark:text-white uppercase leading-none">
+                    {isPlus ? 'PRO+ EMPIRE ACTIVE' : t('subscription.pro_active.title')}
                 </h1>
 
                 <p className="text-slate-500 dark:text-slate-400 font-medium text-xs leading-relaxed max-w-[280px] mb-10">
-                    {t('subscription.pro_active.desc')}
+                    {isPlus ? 'Your AI engine is running at full capacity with 500 monthly tokens and 20-level network insights.' : t('subscription.pro_active.desc')}
                 </p>
 
                 <div className="w-full space-y-3 max-w-xs">
                     <div className="p-4 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <Sparkles size={18} className="text-amber-500" />
+                            <Sparkles size={18} className={isPlus ? 'text-indigo-500' : 'text-amber-500'} />
                             <div className="text-left">
-                                <p className="text-[10px] font-bold opacity-50 uppercase">{t('subscription.pro_active.active_until')}</p>
+                                <p className="text-[10px] font-bold opacity-50 uppercase">{isPlus ? 'PLAN: PRO+ EMPIRE' : 'PLAN: PRO CLASSIC'}</p>
                                 <p className="text-sm font-black">{user.pro_expires_at ? new Date(user.pro_expires_at).toLocaleDateString() : t('subscription.pro_active.lifetime')}</p>
                             </div>
                         </div>
@@ -168,7 +170,7 @@ export default function SubscriptionPage() {
 
                     <button
                         onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' })); }}
-                        className="w-full h-14 bg-indigo-600 rounded-xl font-black text-white text-[10px] uppercase tracking-widest shadow-lg active:scale-95 transition-all"
+                        className={`w-full h-14 rounded-xl font-black text-white text-[10px] uppercase tracking-widest shadow-lg active:scale-95 transition-all ${isPlus ? 'bg-indigo-600 shadow-indigo-500/20' : 'bg-amber-600 shadow-amber-500/20'}`}
                     >
                         {t('subscription.pro_active.command_center')}
                     </button>
@@ -183,115 +185,91 @@ export default function SubscriptionPage() {
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-center mb-6"
+                className="text-center mb-10"
             >
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/5 border border-amber-500/10 mb-4">
-                    <Crown size={12} className="text-amber-500" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-amber-500">{t('subscription.upgrade.lifetime_pro')}</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/5 border border-indigo-500/10 mb-6 mt-4">
+                    <Crown size={12} className="text-indigo-500 animate-pulse" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500">{t('subscription.upgrade.badge')}</span>
                 </div>
-                <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-2 tracking-tighter">
-                    $39 <span className="text-lg opacity-40 font-bold uppercase tracking-widest">{t('subscription.upgrade.one_time')}</span>
+                <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-3 tracking-tighter uppercase leading-tight">
+                    <Trans i18nKey="subscription.upgrade.title" />
                 </h1>
-                <p className="text-slate-600 dark:text-slate-400 text-xs font-medium">
+                <p className="text-slate-600 dark:text-slate-400 text-xs font-medium max-w-[280px] mx-auto leading-relaxed opacity-70">
                     {t('subscription.upgrade.desc')}
                 </p>
             </motion.div>
 
-            {/* Quick Benefits Grid */}
-            <div className="grid grid-cols-2 gap-2 mb-8">
-                {(t('subscription.upgrade.benefits', { returnObjects: true }) as string[]).slice(0, 4).map((benefit, i) => (
-                    <div key={i} className="flex items-center gap-2 p-3 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl">
-                        <CheckCircle2 size={14} className="text-amber-500 shrink-0" />
-                        <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight">{benefit}</span>
-                    </div>
-                ))}
+            {/* Plan Toggle */}
+            <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 dark:bg-white/5 rounded-2xl mb-8 relative">
+                <button
+                    onClick={() => { selection(); setSelectedPlan('PRO'); }}
+                    className={`relative z-10 py-4 rounded-xl flex flex-col items-center justify-center transition-all duration-300 ${selectedPlan === 'PRO' ? 'bg-white dark:bg-slate-800 shadow-md' : 'opacity-50'}`}
+                >
+                    <span className="text-[10px] font-black uppercase tracking-wider">{t('subscription.upgrade.pro_title')}</span>
+                    <span className="text-lg font-black">$39</span>
+                </button>
+                <button
+                    onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }}
+                    className={`relative z-10 py-4 rounded-xl flex flex-col items-center justify-center transition-all duration-300 ${selectedPlan === 'PRO_PLUS' ? 'bg-white dark:bg-slate-800 shadow-md ring-2 ring-indigo-500/30' : 'opacity-50'}`}
+                >
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-600 text-[8px] font-black text-white px-2 py-0.5 rounded-full uppercase tracking-tighter">RECOMMENDED</div>
+                    <span className="text-[10px] font-black uppercase tracking-wider">{t('subscription.upgrade.pro_plus_title')}</span>
+                    <span className="text-lg font-black">$69</span>
+                </button>
             </div>
 
-            {/* Compact Arsenal Accordion */}
-            <div className="space-y-2 mb-8">
-                <div className="px-2 mb-2 flex items-center justify-between">
-                    <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('subscription.arsenal.title')}</h3>
-                    <Zap size={14} className="text-amber-500" />
-                </div>
-                {(t('subscription.arsenal.items', { returnObjects: true }) as any[]).map((item) => (
-                    <div key={item.id} className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-white/5 rounded-2xl overflow-hidden transition-all shadow-xs">
-                        <button
-                            onClick={() => { selection(); setExpandedItem(expandedItem === item.id ? null : item.id); }}
-                            className="w-full p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
-                        >
-                            <div className="flex items-center gap-3">
-                                {item.id === 'studio' ? <Rocket size={18} className="text-pink-500" /> : <Bot size={18} className="text-emerald-500" />}
-                                <span className="text-[11px] font-black uppercase tracking-tight text-slate-900 dark:text-white">{item.title}</span>
-                            </div>
-                            <ChevronDown size={14} className={`text-slate-400 dark:text-slate-500 transition-transform ${expandedItem === item.id ? 'rotate-180' : ''}`} />
-                        </button>
-                        <AnimatePresence>
-                            {expandedItem === item.id && (
-                                <motion.div
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: 'auto', opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    className="px-4 pb-4"
-                                >
-                                    <p className="text-[10px] text-slate-600 dark:text-slate-400 mb-4 leading-relaxed font-medium">{item.desc}</p>
-                                    <div className="space-y-2 mb-4">
-                                        {item.stats.map((stat: string, si: number) => (
-                                            <div key={si} className="flex items-center gap-2 text-[10px] font-bold text-slate-700 dark:text-slate-300">
-                                                <div className={`w-1 h-1 rounded-full ${item.id === 'studio' ? 'bg-pink-500' : 'bg-emerald-500'}`} />
-                                                <span>
-                                                    {stat.split('**').map((part, i) =>
-                                                        i % 2 === 1 ? <span key={i} className="text-slate-900 dark:text-white font-black">{part}</span> : part
-                                                    )}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    {item.terminal && (
-                                        <div className={`mt-4 rounded-xl border border-black/5 dark:border-white/5 overflow-hidden bg-slate-950 relative`}>
-                                            <div className="absolute inset-0 bg-linear-to-br from-white/3 to-transparent pointer-events-none" />
-                                            <div className="relative p-3 space-y-1 font-mono text-[9px] leading-tight">
-                                                {item.terminal.map((line: string, ti: number) => (
-                                                    <div key={ti} className="flex items-start gap-2">
-                                                        <span className={`font-bold ${item.id === 'studio' ? 'text-pink-500' : 'text-emerald-500'}`}>&gt;</span>
-                                                        <span className={ti === 0 ? 'text-white' : (item.id === 'studio' ? 'text-pink-400' : 'text-emerald-400')}>
-                                                            {line}
-                                                        </span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+            {/* Features Row */}
+            <div className="flex flex-col gap-2 mb-8">
+                <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl transition-all duration-500">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+                        <Zap size={20} className="text-indigo-500" />
                     </div>
-                ))}
+                    <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('subscription.upgrade.one_time')}</p>
+                        <p className="text-sm font-black text-slate-900 dark:text-white uppercase">
+                            {t('subscription.upgrade.tokens_info', { count: selectedPlan === 'PRO_PLUS' ? 500 : 250 })}
+                        </p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl transition-all duration-500">
+                    <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center">
+                        <Users size={20} className="text-orange-500" />
+                    </div>
+                    <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('subscription.upgrade.lifetime_pro')}</p>
+                        <p className="text-sm font-black text-slate-900 dark:text-white uppercase">
+                            {t('subscription.upgrade.levels_info')}
+                        </p>
+                    </div>
+                </div>
             </div>
 
             {/* Payment Section */}
-            <div className="bg-indigo-600 rounded-[2rem] p-6 shadow-2xl relative overflow-hidden">
+            <div className={`rounded-[2rem] p-6 shadow-2xl relative overflow-hidden transition-colors duration-500 ${selectedPlan === 'PRO_PLUS' ? 'bg-indigo-600' : 'bg-slate-900'}`}>
                 <div className="absolute top-0 right-0 p-4 opacity-10">
-                    <Sparkles size={100} />
+                    <Crown size={120} />
                 </div>
 
                 {!paymentMethod ? (
                     <div className="space-y-4 relative z-10">
-                        <h3 className="text-white font-black text-center text-sm uppercase tracking-widest">{t('subscription.upgrade.complete_payment')}</h3>
+                        <div className="text-center mb-2">
+                            <h3 className="text-white font-black text-sm uppercase tracking-widest">{t('subscription.upgrade.complete_payment')}</h3>
+                            <p className="text-white/60 text-xs font-bold mt-1">Total: ${planPrice}</p>
+                        </div>
                         <div className="grid grid-cols-2 gap-3">
                             <button
                                 onClick={() => { selection(); setPaymentMethod('TON'); }}
                                 className="h-14 bg-white text-slate-900 rounded-xl font-black text-xs flex flex-col items-center justify-center gap-1 active:scale-95 transition-all shadow-xl"
                             >
                                 <Wallet size={18} />
-                                TON
+                                TON Wallet
                             </button>
                             <button
                                 onClick={() => { selection(); setPaymentMethod('CRYPTO'); }}
                                 className="h-14 bg-white/10 text-white rounded-xl font-black text-xs flex flex-col items-center justify-center gap-1 active:scale-95 border border-white/20 transition-all"
                             >
                                 <CreditCard size={18} />
-                                USDT
+                                USDT(TRC20)
                             </button>
                         </div>
                     </div>

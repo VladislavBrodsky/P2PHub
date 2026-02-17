@@ -258,17 +258,18 @@ Use FRESH, audience-specific language that feels authentic.
     async def check_tokens_and_reset(self, partner: Partner, session: AsyncSession, min_tokens: int = 1) -> bool:
         """
         Ensures partner has tokens and handles monthly reset.
-        Each PRO member gets 500 tokens per month.
+        Uses tiered quotas: 250 for PRO, 500 for PRO+.
         """
         if not partner.is_pro:
             return False
 
-        now = datetime.now(UTC)
+        now = datetime.now(UTC).replace(tzinfo=None)
         last_reset = partner.pro_tokens_last_reset or partner.created_at
         
         # Check if a month has passed since last reset
-        if (now - last_reset).days >= 30:
-            partner.pro_tokens = 500
+        if (now - last_reset.replace(tzinfo=None) if last_reset.tzinfo else (now - last_reset)).days >= 30:
+            is_plus = (partner.subscription_plan == "PRO_PLUS_MONTHLY")
+            partner.pro_tokens = settings.PRO_PLUS_TOKENS_MONTHLY if is_plus else settings.PRO_TOKENS_MONTHLY
             partner.pro_tokens_last_reset = now
             session.add(partner)
             await session.commit()

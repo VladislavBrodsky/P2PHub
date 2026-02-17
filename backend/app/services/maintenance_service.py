@@ -284,3 +284,32 @@ async def cleanup_old_audit_logs():
         else:
             logger.info("✅ No old audit logs found.")
 
+@broker.task(task_name="reset_monthly_pro_tokens", schedule=[{"cron": "0 0 1 * *"}]) # Midnight on 1st of month
+async def reset_monthly_pro_tokens():
+    """
+    Recalculates and resets PRO/PRO+ tokens on the 1st of every month.
+    Deletes unused tokens and sets specifically:
+    - PRO_MONTHLY: 250 tokens
+    - PRO_PLUS_MONTHLY: 500 tokens
+    """
+    logger.info("📅 Starting Monthly PRO Token Reset...")
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    now = datetime.now(UTC).replace(tzinfo=None)
+    
+    async with async_session() as session:
+        # 1. Reset PRO+ (500 tokens)
+        stmt_plus = text(
+            "UPDATE partner SET pro_tokens = :t, pro_tokens_last_reset = :now "
+            "WHERE subscription_plan = 'PRO_PLUS_MONTHLY' AND is_pro = true"
+        )
+        await session.execute(stmt_plus, {"t": settings.PRO_PLUS_TOKENS_MONTHLY, "now": now})
+        
+        # 2. Reset PRO (250 tokens)
+        stmt_pro = text(
+            "UPDATE partner SET pro_tokens = :t, pro_tokens_last_reset = :now "
+            "WHERE (subscription_plan = 'PRO_MONTHLY' OR subscription_plan IS NULL) AND is_pro = true"
+        )
+        await session.execute(stmt_pro, {"t": settings.PRO_TOKENS_MONTHLY, "now": now})
+        
+        await session.commit()
+        logger.info("✅ Monthly token reset complete for all active PRO users.")

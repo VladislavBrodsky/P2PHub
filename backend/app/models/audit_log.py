@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlalchemy import JSON, Column
 from sqlmodel import Field, SQLModel
@@ -14,7 +14,7 @@ class AuditLog(SQLModel, table=True):
     actor_id: str | None = Field(default="system", index=True) # Who performed the action (user_id or "system")
     details: dict | None = Field(default=None, sa_column=Column(JSON)) # Flexible JSON payload
     ip_address: str | None = Field(default=None)
-    created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None), index=True)
 
     class Config:
         arbitrary_types_allowed = True

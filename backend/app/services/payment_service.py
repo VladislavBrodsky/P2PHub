@@ -222,27 +222,19 @@ class PaymentService:
         transaction_id: int | None = None
     ):
         try:
+            now = datetime.now(UTC).replace(tzinfo=None)
             sentry_sdk.add_breadcrumb(
                 category="payment",
-                message=f"Executing PRO upgrade for partner {partner.telegram_id}",
+                message=f"Executing PRO upgrade for partner {partner.telegram_id} at {now}",
                 level="info"
             )
-            # 1. Update Partner
-            now = datetime.now(UTC)
-            if partner.is_pro and partner.pro_expires_at and partner.pro_expires_at > now:
-                # Extension: Add 30 days to existing expiry
-                partner.pro_expires_at += timedelta(days=30)
-            else:
-                # New or re-activation
-                partner.pro_expires_at = now + timedelta(days=30)
-                
+            # Determine Plan Details
+            is_plus = amount >= (settings.PRO_PLUS_PRICE_USD - 0.1)
+            partner.subscription_plan = "PRO_PLUS_MONTHLY" if is_plus else "PRO_MONTHLY"
+            partner.pro_tokens = settings.PRO_PLUS_TOKENS_MONTHLY if is_plus else settings.PRO_TOKENS_MONTHLY
+            partner.pro_tokens_last_reset = now
+            
             partner.is_pro = True
-            if not partner.pro_started_at:
-                partner.pro_started_at = now
-            if not partner.pro_purchased_at:
-                partner.pro_purchased_at = now
-
-            partner.subscription_plan = "PRO_MONTHLY"
             session.add(partner)
 
             # 2. Update or Create Transaction
