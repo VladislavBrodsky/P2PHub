@@ -795,6 +795,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         """
         prompt = "Identify 3 top trending, controversial, or high-growth narratives in the Crypto/Fintech world for 2026. Format as JSON list of objects with 'topic', 'reason', and 'viral_angle'."
         
+        loop = asyncio.get_event_loop()
         if self.genai_client:
             for model_name in ['gemini-2.0-flash', 'gemini-1.5-flash']:
                 try:
@@ -812,6 +813,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                     logger.warning(f"⚠️ {model_name} failed legacy trend fetch: {e}")
             
         if self.openai_client:
+            try:
                 # Fallback OpenAI
                 response = await self.openai_client.chat.completions.create(
                     model="gpt-4o",
@@ -826,13 +828,14 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                 if isinstance(content, list): return content
                 if isinstance(content, dict) and "trends" in content: return content["trends"]
                 return [content] if isinstance(content, dict) else []
-        except Exception as e:
-            logger.error(f"Trend fetch failed: {e}")
-            return [
-                {"topic": "DeFi 3.0", "reason": "AI Agents managing portfolios", "viral_angle": "Is your wallet smarter than you?"},
-                {"topic": "RWA Tokenization", "reason": "Real estate on-chain", "viral_angle": "Own a skyscraper for $10"},
-                {"topic": "Privacy Coins", "reason": "Regulatory crackdowns", "viral_angle": "They are banning your money"}
-            ]
+            except Exception as e:
+                logger.error(f"Trend fetch failed: {e}")
+        
+        return [
+            {"topic": "DeFi 3.0", "reason": "AI Agents managing portfolios", "viral_angle": "Is your wallet smarter than you?"},
+            {"topic": "RWA Tokenization", "reason": "Real estate on-chain", "viral_angle": "Own a skyscraper for $10"},
+            {"topic": "Privacy Coins", "reason": "Regulatory crackdowns", "viral_angle": "They are banning your money"}
+        ]
 
     async def run_global_marketing_audit(self, language: str = "English", force_refresh: bool = False) -> dict:
         """
@@ -892,16 +895,18 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
                         logger.warning(f"⚠️ CMO Audit: {model_name} failed: {e}")
 
             if self.openai_client:
+                try:
                     response = await self.openai_client.chat.completions.create(
                         model="gpt-4o",
                         messages=[{"role": "user", "content": prompt}],
                         response_format={"type": "json_object"}
                     )
                     return json.loads(response.choices[0].message.content)
-                return {"error": "AI Service Node Unavailable"}
-            except Exception as e:
-                logger.error(f"Audit computation failed: {e}")
-                return {"error": "Elite Audit Node Temporarily Offline"}
+                except Exception as e:
+                    logger.error(f"Audit computation failed: {e}")
+                    return {"error": "Elite Audit Node Temporarily Offline"}
+            
+            return {"error": "AI Service Node Unavailable"}
 
         # Cache for 3 hours (10800 seconds)
         if force_refresh:

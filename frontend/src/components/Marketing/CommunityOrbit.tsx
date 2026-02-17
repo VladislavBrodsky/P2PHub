@@ -272,7 +272,21 @@ const OrbitingItem = memo(({ item, index, total }: { item: OrbitItem; index: num
                                 boxShadow: '0 10px 30px -10px rgba(0,0,0,0.3)'
                             }}
                         >
-                            <img src={item.src} alt="Member" width={60} height={60} loading="eager" className="h-full w-full object-cover" />
+                            <img
+                                src={item.src}
+                                alt="Member"
+                                width={60}
+                                height={60}
+                                loading="eager"
+                                className="h-full w-full object-cover"
+                                onError={(e) => {
+                                    // Robust fallback to Unsplash if the specific image fails (e.g. 404 from proxy)
+                                    const target = e.target as HTMLImageElement;
+                                    if (!target.src.includes('unsplash.com')) {
+                                        target.src = ALL_AVATARS[index % ALL_AVATARS.length];
+                                    }
+                                }}
+                            />
                             <div className="absolute inset-0 bg-linear-to-tr from-white/20 to-transparent opacity-60" />
                         </div>
                     </div>

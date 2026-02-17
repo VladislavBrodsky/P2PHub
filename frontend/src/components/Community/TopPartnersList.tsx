@@ -80,6 +80,14 @@ export const TopPartnersList = () => {
                                             }
                                             className="w-full h-full object-cover"
                                             alt=""
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement;
+                                                target.style.display = 'none';
+                                                // The parent will show the fallback Icon if display: none works, 
+                                                // but since we check for src in the parent, we should probably 
+                                                // just replace with a known good fallback or set a flag.
+                                                target.parentElement?.insertAdjacentHTML('afterbegin', '<div class="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-white/5"><svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>');
+                                            }}
                                         />
                                     ) : (
                                         <User className="w-5 h-5 text-slate-400" />

@@ -437,10 +437,13 @@ async def get_orbit_members(
     except Exception as e:
         logger.warning(f"Orbit members cache read failed: {e}")
 
-    # Fetch 12 candidates to find 8 with photos if possible
+    # Fetch candidates, prioritizing those with photos to ensure the orbit looks "real"
     statement = (
         select(Partner)
-        .order_by(func.random())
+        .order_by(
+            Partner.photo_file_id.isnot(None).desc(),
+            func.random()
+        )
         .limit(12)
     )
     result = await session.exec(statement)
@@ -453,12 +456,12 @@ async def get_orbit_members(
         # Construct the optimized picture_url
         picture_url = None
         if p.photo_file_id:
-            picture_url = f"{base_url}/api/partner/photo/{p.photo_file_id}"
+            # Use relative paths to let the frontend handle the base URL reliably
+            picture_url = f"/api/partner/photo/{p.photo_file_id}"
         elif p.photo_url:
             picture_url = p.photo_url
         else:
             # Inject demo avatar if this specific partner has no photo
-            # Use deterministic choice based on partner ID
             picture_url = DEMO_AVATARS[p.id % len(DEMO_AVATARS)]
         
         orbit_data.append({
