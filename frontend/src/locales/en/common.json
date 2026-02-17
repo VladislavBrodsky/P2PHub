@@ -32,7 +32,14 @@
     "hi": "Hi",
     "total": "Total",
     "next_lvl": "NEXT LVL",
-    "admin": "ADMIN"
+    "admin": "АДМИН",
+    "metrics": {
+      "network_growth": "Рост Сети",
+      "partners_joined": "Вступили в сеть ({{timeframe}}):",
+      "growth_rate": "Темп Роста",
+      "report": "Отчет",
+      "flow_power": "Энергия Потока:"
+    }
   },
   "menu": {
     "home": "Home",

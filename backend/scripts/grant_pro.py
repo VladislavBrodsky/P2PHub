@@ -2,7 +2,7 @@
 import asyncio
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
 # Try imports
 try:
@@ -57,7 +57,7 @@ async def grant_pro(username: str, months: int):
         print(f"Current status: is_pro={is_pro}, expires_at={pro_expires_at}")
 
         # Calculate new expiration
-        now = datetime.utcnow()
+        now = datetime.now(UTC)
         if is_pro and pro_expires_at and pro_expires_at > now:
             new_expires_at = pro_expires_at + timedelta(days=30 * months)
         else:

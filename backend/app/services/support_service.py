@@ -2,7 +2,7 @@ import asyncio
 import json
 import logging
 import os
-from datetime import datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any, ClassVar
 
 import gspread
@@ -98,7 +98,7 @@ class SupportAgentService:
     # #comment: Local Memory Cache for Knowledge Base (Scale bypass for Redis)
     _kb_memory_cache: ClassVar[dict[str, Any] | None] = None
     _kb_index: ClassVar[dict[str, list[int]]] = {} # Word-to-Record Index
-    _kb_last_refresh: ClassVar[datetime] = datetime.min
+    _kb_last_refresh: ClassVar[datetime] = datetime.min.replace(tzinfo=UTC)
     KB_MEMORY_TTL = 300  # 5 minutes in-memory TTL
     
     # #comment: Background tasks tracking to prevent garbage collection
@@ -203,7 +203,7 @@ class SupportAgentService:
         Optimized for high-concurrency 10M+ user environments.
         """
         # 1. Level 1 Cache: Local Memory (Sub-millisecond)
-        now = datetime.utcnow()
+        now = datetime.now(UTC)
         if self._kb_memory_cache and (now - self._kb_last_refresh).total_seconds() < self.KB_MEMORY_TTL:
             return self._kb_memory_cache
 
@@ -280,7 +280,7 @@ class SupportAgentService:
                     index[word].append(i)
         self._kb_index = index
         self._kb_memory_cache = kb_data
-        self._kb_last_refresh = datetime.utcnow()
+        self._kb_last_refresh = datetime.now(UTC)
 
 
     async def get_session(self, user_id: str) -> dict[str, Any]:
@@ -293,9 +293,9 @@ class SupportAgentService:
                 session = {
                     "user_id": user_id,
                     "history": [],
-                    "created_at": datetime.utcnow().isoformat(),
-                    "last_activity": datetime.utcnow().isoformat(),
-                    "last_ping": datetime.utcnow().isoformat(),
+                    "created_at": datetime.now(UTC).isoformat(),
+                    "last_activity": datetime.now(UTC).isoformat(),
+                    "last_ping": datetime.now(UTC).isoformat(),
                     "status": "active",
                     "category": None,
                     "ping_count": 0
@@ -308,9 +308,9 @@ class SupportAgentService:
             return {
                 "user_id": user_id,
                 "history": [],
-                "created_at": datetime.utcnow().isoformat(),
-                "last_activity": datetime.utcnow().isoformat(),
-                "last_ping": datetime.utcnow().isoformat(),
+                "created_at": datetime.now(UTC).isoformat(),
+                "last_activity": datetime.now(UTC).isoformat(),
+                "last_ping": datetime.now(UTC).isoformat(),
                 "status": "active",
                 "category": None,
                 "ping_count": 0
@@ -320,7 +320,7 @@ class SupportAgentService:
         """Updates the session in Redis and refreshes activity timestamp."""
         try:
             session_key = f"support_session:{user_id}"
-            session["last_activity"] = datetime.utcnow().isoformat()
+            session["last_activity"] = datetime.now(UTC).isoformat()
             session["ping_count"] = 0 # Reset pings on activity
             await redis_service.set_json(session_key, session, expire=3600)
         except Exception as e:
@@ -499,7 +499,7 @@ class SupportAgentService:
 
     def _update_session_history(self, session: dict, message: str, answer: str, cost: float):
         """Appends new messages and cost to session history, maintaining size limits."""
-        now = datetime.utcnow().isoformat()
+        now = datetime.now(UTC).isoformat()
         session["history"].append({"role": "user", "content": message, "timestamp": now})
         session["history"].append({
             "role": "assistant", 
@@ -530,7 +530,7 @@ class SupportAgentService:
         if not session.get("history"):
             return
 
-        chat_session_id = f"SID-{user_id}-{int(datetime.utcnow().timestamp())}"
+        chat_session_id = f"SID-{user_id}-{int(datetime.now(UTC).timestamp())}"
         
         # #comment: Fetching client lazily
         gs_client = await self._get_gs_client()
@@ -551,7 +551,7 @@ class SupportAgentService:
                         
                         # #comment: Calculate Metrics
                         start_time = datetime.fromisoformat(session["created_at"])
-                        end_time = datetime.utcnow()
+                        end_time = datetime.now(UTC)
                         duration_sec = int((end_time - start_time).total_seconds())
                         total_cost = session.get("total_cost", 0.0)
                         msg_count = len(session["history"])
@@ -579,7 +579,7 @@ class SupportAgentService:
                             cost_str = f"${entry.get('cost', 0):.5f}" if entry.get("cost") else ""
                             rows.append([
                                 "", # Indent
-                                entry.get("timestamp", datetime.utcnow().isoformat()),
+                                entry.get("timestamp", datetime.now(UTC).isoformat()),
                                 entry["role"].upper(),
                                 entry["content"],
                                 "",
@@ -621,7 +621,7 @@ class SupportAgentService:
             if not keys:
                 return
 
-            now = datetime.utcnow()
+            now = datetime.now(UTC)
             closed_count = 0
             
             for key in keys:

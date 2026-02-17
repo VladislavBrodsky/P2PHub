@@ -1,7 +1,7 @@
 import asyncio
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from typing import List
 
 # Add parent directory to sys.path to import app
@@ -27,7 +27,7 @@ async def monitor_gtm():
         count = total_partners.scalar()
         
         # 2. Recent Growth (Last 1 hour)
-        one_hour_ago = datetime.utcnow() - timedelta(hours=1)
+        one_hour_ago = datetime.now(UTC) - timedelta(hours=1)
         recent_partners = await session.execute(
             select(func.count(Partner.id)).where(Partner.created_at >= one_hour_ago)
         )

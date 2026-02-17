@@ -25,14 +25,16 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
     const { t } = useTranslation();
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
     const { selection, impact, notification } = useHaptic();
+    const initialCached = useMemo(() => blogService.getPostsSync({ offset: 0, limit: 10, category: 'All', q: '' }), []);
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
-    const [posts, setPosts] = useState<(BlogPost & BlogEngagement)[]>([]);
-    const [total, setTotal] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
+    const [posts, setPosts] = useState<(BlogPost & BlogEngagement)[]>(initialCached?.items || []);
+    const [total, setTotal] = useState(initialCached?.total || 0);
+    const [isLoading, setIsLoading] = useState(!initialCached);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedPost, setSelectedPost] = useState<(BlogPost & { content?: string }) | null>(null);
     const [engagement, setEngagement] = useState<BlogEngagement>({ likes: 0, liked: false });
     const [isLoadingEngagement, setIsLoadingEngagement] = useState(false);
+    const [isRefreshing, setIsRefreshing] = useState(false); // New state for background refresh
     const sentinelRef = useRef<HTMLDivElement>(null);
 
     // Fetch posts from backend
@@ -51,12 +53,13 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                 setPosts(cached.items);
                 setTotal(cached.total);
                 setIsLoading(false);
-                // We still fetch in background to refresh data, but don't set isLoading(true)
+                setIsRefreshing(true);
             } else {
                 setIsLoading(true);
             }
         } else {
-            setIsLoading(true);
+            // Loading more - don't trigger main isLoading to avoid flickering the whole page
+            setIsRefreshing(true);
         }
 
         try {
@@ -64,29 +67,40 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
             if (reset) {
                 setPosts(data.items);
             } else {
-                setPosts(prev => [...prev, ...data.items]);
+                setPosts(prev => {
+                    // Filter out duplicates just in case
+                    const existingIds = new Set(prev.map(p => p.id));
+                    const newItems = data.items.filter(p => !existingIds.has(p.id));
+                    return [...prev, ...newItems];
+                });
             }
             setTotal(data.total);
         } catch (error) {
             console.error('Failed to fetch posts', error);
         } finally {
             setIsLoading(false);
+            setIsRefreshing(false);
         }
     }, [selectedCategory, searchQuery, posts.length]);
 
     useEffect(() => {
         // Debounce only when searching to avoid jitter, fetch immediately otherwise
-        const delay = searchQuery ? 500 : 0;
+        // Use a 50ms delay for category changes to allow the UI to feel responsive
+        const delay = searchQuery ? 500 : (selectedCategory !== 'All' ? 50 : 0);
 
         const timer = setTimeout(() => {
-            fetchPosts(true).then(() => {
-                // Background prefetch after initial load
-                if (posts.length > 0) blogService.prefetchNext(posts);
-            });
+            fetchPosts(true);
         }, delay);
 
         return () => clearTimeout(timer);
     }, [selectedCategory, searchQuery, fetchPosts]);
+
+    // Independent effect for prefetching next posts
+    useEffect(() => {
+        if (posts.length > 0) {
+            blogService.prefetchNext(posts);
+        }
+    }, [posts]);
 
     // Sync header visibility with selectedPost - delayed to allow transition
     useEffect(() => {
@@ -236,10 +250,10 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
     // Infinite Scroll Observer
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting && posts.length < total && !isLoading && !selectedPost) {
+            if (entries[0].isIntersecting && posts.length < total && !isLoading && !isRefreshing && !selectedPost) {
                 fetchPosts();
             }
-        }, { threshold: 0.1, rootMargin: '100px' });
+        }, { threshold: 0.1, rootMargin: '200px' });
 
         if (sentinelRef.current) {
             observer.observe(sentinelRef.current);
@@ -257,7 +271,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
             animate={{ opacity: 1 }}
             className="flex flex-col min-h-screen pb-32"
         >
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="popLayout">
                 {isLoading && posts.length === 0 ? (
                     <motion.div
                         key="skeleton"
@@ -332,7 +346,7 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
                                                 src={currentFeaturedPost.image}
                                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                                 alt={currentFeaturedPost.title}
-                                                loading="lazy"
+                                                loading="eager"
                                             />
                                             <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
                                         </div>
@@ -370,9 +384,20 @@ export const BlogPage = ({ setActiveTab, currentTab }: BlogPageProps) => {
 
                             {/* Grid */}
                             <div className="grid gap-4">
+                                {isRefreshing && posts.length > 0 && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-blue-600/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest shadow-xl flex items-center gap-2"
+                                    >
+                                        <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                                        Updating Intelligence...
+                                    </motion.div>
+                                )}
                                 {(selectedCategory === 'All' && searchQuery === '' ? currentOtherPosts : posts).map((post, index) => (
                                     <PostCard
-                                        key={post.id}
+                                        key={`${post.id}-${index}`}
                                         post={post}
                                         index={index}
                                         onClick={() => handlePostClick(post)}

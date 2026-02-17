@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -56,7 +56,7 @@ class AdminService:
                 if cached: return cached
 
             # Heavy Computation Start
-            now = datetime.utcnow()
+            now = datetime.now(UTC)
             
             # 1. Growth Stats
             growth = await self._calculate_growth_metrics(session, now)
@@ -122,7 +122,7 @@ class AdminService:
                 "total_partners": total_partners,
                 "volume_usdt": round(total_revenue, 1),
                 "countries": 142,
-                "updated_at": datetime.utcnow().isoformat()
+                "updated_at": datetime.now(UTC).isoformat()
             }
 
     async def _get_cached_stats(self, session) -> dict | None:
@@ -535,7 +535,7 @@ class AdminService:
             if "is_pro" in updates:
                 partner.is_pro = bool(updates["is_pro"])
                 if partner.is_pro and not partner.pro_expires_at:
-                    partner.pro_expires_at = datetime.utcnow() + timedelta(days=30)
+                    partner.pro_expires_at = datetime.now(UTC) + timedelta(days=30)
             
             session.add(partner)
             await session.commit()

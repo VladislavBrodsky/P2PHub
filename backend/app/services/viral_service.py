@@ -3,7 +3,7 @@ import json
 import logging
 import os
 import secrets
-from datetime import datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any, ClassVar
 
 import gspread
@@ -263,7 +263,7 @@ Use FRESH, audience-specific language that feels authentic.
         if not partner.is_pro:
             return False
 
-        now = datetime.utcnow()
+        now = datetime.now(UTC)
         last_reset = partner.pro_tokens_last_reset or partner.created_at
         
         # Check if a month has passed since last reset
@@ -309,7 +309,7 @@ Use FRESH, audience-specific language that feels authentic.
         )
         base_image_prompt = self._build_viral_image_prompt(target_audience, post_type)
 
-        generation_start = datetime.utcnow()
+        generation_start = datetime.now(UTC)
         tokens_openai = 0
 
         try:
@@ -341,7 +341,7 @@ Use FRESH, audience-specific language that feels authentic.
             else:
                 hashtags = []
 
-            generation_end = datetime.utcnow()
+            generation_end = datetime.now(UTC)
             duration = (generation_end - generation_start).total_seconds()
             
             result = {
@@ -828,7 +828,7 @@ Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
         
         news_items = []
         now = datetime.now(tz=None) # Using naive UTC for comparison if needed
-        cutoff_time = datetime.utcnow() - timedelta(minutes=180)
+        cutoff_time = datetime.now(UTC) - timedelta(minutes=180)
         
         async with httpx.AsyncClient(timeout=10.0) as client:
             tasks = [client.get(url) for url in feeds]
@@ -904,7 +904,7 @@ Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
             sheet = await loop.run_in_executor(None, get_rss_sheet_sync)
             
             rows = []
-            now_str = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+            now_str = datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S")
             for item in news_items:
                 rows.append([
                     now_str,
@@ -974,7 +974,7 @@ Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
               "global_trend_shift": "Description of the 2026 digital payment revolution",
               "viral_motivation": "Direct motivation for the user to execute strategy now",
               "cta": "EXECUTE VIRAL STRATEGY NOW",
-              "generated_at": "{datetime.utcnow().isoformat()}"
+              "generated_at": "{datetime.now(UTC).isoformat()}"
             }}
             """
             
@@ -1314,7 +1314,7 @@ Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
                 image_time = duration * 0.50  # ~50% of time
                 
                 # Current timestamp
-                timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+                timestamp = datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S UTC")
                 
                 # Enhanced row format with time and cost tracking
                 row = [

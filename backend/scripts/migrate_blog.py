@@ -3,7 +3,7 @@ import json
 import os
 import secrets
 import sys
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlmodel import SQLModel, select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -137,7 +137,7 @@ async def migrate():
                     category=en_p.get("category", info["category"]),
                     author=info["author"],
                     is_published=True,
-                    published_at=datetime.utcnow()
+                    published_at=datetime.now(UTC)
                 )
                 session.add(post)
             

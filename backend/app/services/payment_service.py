@@ -228,7 +228,7 @@ class PaymentService:
                 level="info"
             )
             # 1. Update Partner
-            now = datetime.utcnow()
+            now = datetime.now(UTC)
             if partner.is_pro and partner.pro_expires_at and partner.pro_expires_at > now:
                 # Extension: Add 30 days to existing expiry
                 partner.pro_expires_at += timedelta(days=30)

@@ -2,7 +2,7 @@ import asyncio
 import logging
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -28,7 +28,7 @@ async def audit_pro_flow():
     
     async with async_session_maker() as session:
         # 1. Find PRO sessions in the last 24 hours
-        stmt = select(Partner).where(Partner.is_pro == True, Partner.pro_purchased_at >= datetime.utcnow() - timedelta(hours=24))
+        stmt = select(Partner).where(Partner.is_pro == True, Partner.pro_purchased_at >= datetime.now(UTC) - timedelta(hours=24))
         result = await session.exec(stmt)
         pro_partners = result.all()
         

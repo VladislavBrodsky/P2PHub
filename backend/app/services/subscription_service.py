@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -28,7 +28,7 @@ class SubscriptionService:
         """
         Finds users whose subscription expires in exactly 3 days or 1 day.
         """
-        now = datetime.utcnow()
+        now = datetime.now(UTC)
 
         # 1. Check for 3-day warning
         three_days_start = now + timedelta(days=3)
