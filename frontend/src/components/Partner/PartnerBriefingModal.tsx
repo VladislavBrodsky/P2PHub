@@ -3,6 +3,8 @@ import { X, Shield, Target, BookOpen, Sparkles, CheckCircle2 } from 'lucide-reac
 import { useTranslation, Trans } from 'react-i18next';
 import { Button } from '../ui/Button';
 import { createPortal } from 'react-dom';
+import { useUI } from '../../context/UIContext';
+import { useEffect } from 'react';
 
 interface PartnerBriefingModalProps {
     isOpen: boolean;
@@ -11,6 +13,20 @@ interface PartnerBriefingModalProps {
 
 export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalProps) => {
     const { t } = useTranslation();
+    const { setFooterVisible, setHeaderVisible } = useUI();
+
+    // Hide navigation when briefing is open for a "perfect fit" experience
+    useEffect(() => {
+        if (isOpen) {
+            setFooterVisible(false);
+            setHeaderVisible(false);
+            // Lock body scroll if needed? The Layout main-scroll-root might need it too
+        }
+        return () => {
+            setFooterVisible(true);
+            setHeaderVisible(true);
+        };
+    }, [isOpen, setFooterVisible, setHeaderVisible]);
 
     if (!isOpen) return null;
 
@@ -72,7 +88,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
     ];
 
     return createPortal(
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 pt-[calc(var(--spacing-safe-top)+10px)] pb-[calc(var(--spacing-safe-bottom)+10px)]">
+        <div className="fixed inset-0 z-[1001] flex items-center justify-center p-0 sm:p-4 pt-[calc(var(--spacing-safe-top)+0px)] pb-[calc(var(--spacing-safe-bottom)+0px)]">
             {/* Backdrop with enhanced blur */}
             <motion.div
                 initial={{ opacity: 0 }}
@@ -84,11 +100,11 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
 
             {/* Modal Container */}
             <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 40 }}
+                initial={{ opacity: 0, scale: 0.95, y: 40 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 40 }}
-                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                className="relative w-full max-w-lg bg-white/95 dark:bg-slate-900/95 rounded-[2.5rem] border border-white/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col max-h-[82vh] backdrop-blur-2xl"
+                exit={{ opacity: 0, scale: 0.95, y: 40 }}
+                transition={{ type: 'spring', damping: 30, stiffness: 350 }}
+                className="relative w-full max-w-lg bg-white/95 dark:bg-slate-900/95 sm:rounded-[2.5rem] border-x border-t border-white/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col h-full sm:h-auto sm:max-h-[85vh] backdrop-blur-2xl"
             >
                 {/* Background Decoration Glows */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] pointer-events-none" />
