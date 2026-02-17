@@ -827,6 +827,8 @@ body {
 /* Emerald Liquid Theme */
 .emerald-liquid-gradient {
   background: linear-gradient(135deg, #10b981 0%, #059669 50%, #10b981 100%);
+  background-size: 200% 200%;
+  animation: liquid 4s ease infinite;
   color: #ffffff;
 }
 
@@ -909,12 +911,18 @@ body {
 
 /* === PRO LEVEL ENHANCEMENTS === */
 .pro-card-extreme {
-  @apply relative bg-white/5 dark:bg-black/20 backdrop-blur-3xl border border-white/10 dark:border-white/5 shadow-2xl transition-all duration-500;
+  @apply relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-2xl transition-all duration-500 rounded-[2rem];
+  background-clip: padding-box;
 }
 
 .pro-card-extreme::before {
   content: "";
-  @apply absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-[inherit];
+  @apply absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-[inherit] pointer-events-none;
+}
+
+.pro-card-extreme::after {
+  content: "";
+  @apply absolute inset-0 bg-white/40 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[inherit] pointer-events-none;
 }
 
 .holographic-shine {

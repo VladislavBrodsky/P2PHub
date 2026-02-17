@@ -203,7 +203,7 @@ const CentralLogo = memo(() => {
 
 const FractalProfits = memo(() => {
     return (
-        <div className="absolute inset-0 pointer-events-none z-0">
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-visible">
             {[...Array(8)].map((_, i) => {
                 const direction = i % 2 === 0 ? 1 : -1;
                 return (
@@ -211,23 +211,23 @@ const FractalProfits = memo(() => {
                         key={i}
                         initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
                         animate={{
-                            scale: [0, 1.2, 0.9],
-                            opacity: [0, 0.8, 0],
-                            x: (i - 3.5) * 40,
-                            y: (140 + Math.random() * 100) * direction,
+                            scale: [0, 1.1, 0.9],
+                            opacity: [0, 0.6, 0],
+                            x: (i - 3.5) * 30,
+                            y: (160 + Math.random() * 120) * direction,
                         }}
                         transition={{
-                            duration: 15 + Math.random() * 5, // Slower duration for a calmer atmosphere
+                            duration: 25 + Math.random() * 10, // Ultra slow for zero distraction
                             repeat: Infinity,
-                            delay: i * 2,
-                            ease: [0.22, 1, 0.36, 1]
+                            delay: i * 3,
+                            ease: "linear"
                         }}
-                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 whitespace-nowrap"
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 whitespace-nowrap z-0"
                     >
-                        <div className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.3)] border border-white/20">
+                        <div className="flex items-center justify-center w-4 h-4 rounded-full bg-emerald-500/80 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
                             <CryptoIcon name="USDT" />
                         </div>
-                        <span className="text-[11px] font-black text-emerald-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] tracking-tighter">
+                        <span className="text-[10px] font-black text-emerald-500/80 tracking-tighter">
                             +${Math.floor(Math.random() * 55) + 5}.00
                         </span>
                     </motion.div>
@@ -254,7 +254,7 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
 
     return (
         <motion.div
-            className="absolute"
+            className="absolute z-30" // Force high z-index to avoid color bleeding from central glow
             style={{
                 width: 60,
                 height: 60,
@@ -281,7 +281,6 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
                     y: [-6, 6, -6],
                     x: [-3, 3, -3],
                     scale: isLoading ? [0.8, 0.9, 0.8] : [1, 1.05, 1],
-                    opacity: isLoading ? [0.2, 0.4, 0.2] : 1
                 }}
                 transition={{
                     duration: 4 + Math.random() * 3,
@@ -297,10 +296,9 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
                     <div className="group relative h-full w-full">
                         <div className="absolute -inset-2 rounded-full bg-blue-500/20 blur-xl opacity-0 transition-opacity group-hover:opacity-100" />
                         <div
-                            className="relative h-full w-full overflow-hidden rounded-full border-2 border-white bg-white shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:border-blue-400 dark:border-white/20 dark:bg-slate-900"
+                            className="relative h-full w-full overflow-hidden rounded-full border-2 border-white bg-slate-100 dark:bg-slate-900 shadow-2xl transition-transform duration-300 group-hover:scale-110"
                             style={{
-                                boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4)',
-                                filter: 'brightness(1.1) contrast(1.05)' // Keep photos bright and crisp
+                                boxShadow: '0 8px 32px -8px rgba(0,0,0,0.5)',
                             }}
                         >
                             <img
@@ -317,7 +315,6 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
                                     }
                                 }}
                             />
-                            <div className="absolute inset-0 bg-linear-to-tr from-white/20 to-transparent opacity-60" />
                         </div>
                     </div>
                 ) : (
@@ -327,15 +324,14 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
                             style={{ backgroundColor: item.color }}
                         />
                         <div
-                            className="relative flex h-full w-full items-center justify-center rounded-full border-2 border-white/80 shadow-2xl transition-all duration-500 group-hover:scale-110 dark:border-white/20"
+                            className="relative flex h-full w-full items-center justify-center rounded-full border-2 border-white shadow-2xl transition-transform duration-300 group-hover:scale-110"
                             style={{
                                 background: `linear-gradient(135deg, ${item.gradientStart || item.color}, ${item.gradientEnd || item.color})`,
-                                boxShadow: `0 10px 30px -10px ${item.color}80`
+                                boxShadow: `0 10px 30px -10px ${item.color}`
                             }}
                         >
-                            <div className="absolute inset-0 rounded-full bg-linear-to-tr from-white/30 to-transparent opacity-50" />
-                            <div className="absolute inset-0.5 rounded-full border border-white/30" />
-                            <div className="relative z-10 h-7 w-7 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] brightness-110">
+                            <div className="absolute inset-0.5 rounded-full border border-white/40" />
+                            <div className="relative z-10 h-7 w-7 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
                                 <CryptoIcon name={item.name} />
                             </div>
                         </div>
