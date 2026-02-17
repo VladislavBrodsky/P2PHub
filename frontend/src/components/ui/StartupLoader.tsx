@@ -9,6 +9,7 @@ interface StartupLoaderProps {
 }
 
 export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusText = 'Initializing P2P Hub' }) => {
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [displayProgress, setDisplayProgress] = useState(0);
     const logoSrc = LOGO_DATA.startsWith('http') ? LOGO_DATA : `${(window as any).VITE_API_URL || 'https://p2phub-production.up.railway.app'}${LOGO_DATA}`;
 
@@ -81,9 +82,12 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                         <motion.img
                             src={logoSrc}
                             alt="Pintopay"
+                            loading="eager"
+                            onLoad={() => setIsImageLoaded(true)}
+                            initial={{ opacity: 0, scale: 0.8 }}
                             animate={{
-                                scale: [1, 1.15, 1],
-                                opacity: [0.9, 1, 0.9],
+                                scale: isImageLoaded ? [1, 1.15, 1] : 0.8,
+                                opacity: isImageLoaded ? [0.9, 1, 0.9] : 0,
                             }}
                             transition={{
                                 duration: 2,
@@ -114,14 +118,17 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
 
                     <div className="flex flex-col items-center space-y-4">
                         {/* Status Badge - Matching user screenshot exactly */}
-                        <div className="relative bg-blue-500/10 backdrop-blur-sm border border-blue-500/10 rounded-lg px-5 py-1.5 overflow-hidden">
-                            <motion.p
-                                className="text-(--color-text-primary) font-black tracking-[0.2em] uppercase text-[10px] relative z-10 opacity-80"
-                                animate={{ opacity: [0.6, 0.9, 0.6] }}
-                                transition={{ duration: 2, repeat: Infinity }}
-                            >
-                                {statusText.toUpperCase() === 'INITIALIZING P2P HUB' ? 'USER VERIFIED' : statusText}
-                            </motion.p>
+                        <div className="relative bg-blue-500/10 backdrop-blur-sm border border-blue-500/10 rounded-lg px-5 py-1.5 overflow-hidden min-w-[140px] flex justify-center">
+                            <div className="relative z-10">
+                                <motion.p
+                                    key={statusText}
+                                    initial={{ opacity: 0, y: 5 }}
+                                    animate={{ opacity: 0.8, y: 0 }}
+                                    className="text-(--color-text-primary) font-black tracking-[0.2em] uppercase text-[10px]"
+                                >
+                                    {statusText.toUpperCase() === 'INITIALIZING P2P HUB' ? 'USER VERIFIED' : statusText.toUpperCase()}
+                                </motion.p>
+                            </div>
                             {/* Scanning Light Beam */}
                             <motion.div
                                 className="absolute inset-0 bg-linear-to-r from-transparent via-blue-400/10 to-transparent z-0"
