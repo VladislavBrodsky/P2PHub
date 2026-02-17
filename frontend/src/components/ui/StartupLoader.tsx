@@ -90,7 +90,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                                 repeat: Infinity,
                                 ease: "easeInOut"
                             }}
-                            className="relative w-12 h-12 object-contain z-10 brightness-0 invert drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)]"
+                            className="relative w-12 h-12 object-contain z-10 drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)]"
                             onError={(e) => {
                                 const target = e.target as HTMLImageElement;
                                 if (!target.src.includes('raw.githubusercontent.com')) {
