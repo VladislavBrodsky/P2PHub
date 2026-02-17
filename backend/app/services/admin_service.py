@@ -357,12 +357,14 @@ class AdminService:
                 stats[str(depth)] = count
             return stats
 
-    async def get_global_network_members(self, level: int) -> list[dict[str, Any]]:
+    async def get_global_network_members(self, depth: int) -> list[dict[str, Any]]:
         """
-        Returns top 100 partners for a specific level globally.
+        Returns top 100 partners for a specific generational depth globally.
+        This allows admins to audit specific levels of the global referral tree.
         """
         async for session in get_session():
-            stmt = select(Partner).where(Partner.level == level).order_by(Partner.xp.desc()).limit(100)
+            # Corrected to use 'depth' to match the generational stats logic
+            stmt = select(Partner).where(Partner.depth == depth).order_by(Partner.id.desc()).limit(100)
             result = await session.exec(stmt)
             partners = result.all()
             
@@ -377,6 +379,7 @@ class AdminService:
                     "photo_file_id": p.photo_file_id,
                     "created_at": p.created_at.isoformat() if p.created_at else None,
                     "level": p.level,
+                    "depth": p.depth,
                     "is_pro": p.is_pro
                 } for p in partners
             ]

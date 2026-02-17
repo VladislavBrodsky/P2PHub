@@ -289,6 +289,10 @@ class PaymentService:
             # Commit everything atomically
             await session.commit()
 
+            # 4. Invalidate Cache (Immediate UI Feedback)
+            # This ensures the user sees 'PRO UNLOCKED' immediately without waiting for cache expiry.
+            await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
+
 
             # 4. Send Visionary & Viral Messages
             from app.core.i18n import get_msg

@@ -482,12 +482,12 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
     async def _get_viral_text_content(self, system_prompt: str, user_prompt: str) -> tuple[dict[str, Any] | None, tuple[int, str] | int]:
         """
         Generate viral text content. 
-        Strategy: Try Gemini first (free, 1500 req/day), fallback to OpenAI if needed.
+        Strategy: Try Gemini first (free, high performance), fallback to OpenAI if needed.
         """
         # STRATEGY 1: Try Gemini models (FREE tier, excellent quality)
         if self.genai_client:
-            # We try Gemini 3 Pro (Nano Banana) first for elite reasoning, then fallback to 2.0/1.5
-            for model_name in ['gemini-3-pro-preview', 'gemini-2.0-flash', 'gemini-1.5-flash']:
+            # We try Gemini 1.5 Pro first for elite reasoning, then fallback to Flash models
+            for model_name in ['gemini-1.5-pro-latest', 'gemini-2.0-flash', 'gemini-1.5-flash']:
                 try:
                     logger.info(f"🚀 Using {model_name} for text generation...")
                     gemini_response = await self.genai_client.aio.models.generate_content(
@@ -545,8 +545,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         # --- PHASE 1: Try Google Imagen ---
         if self.genai_client:
             imagen_models = [
-                'gemini-3-pro-image-preview', # Cutting-edge "Nano Banana Pro" reasoning engine
-                'imagen-3.0-fast-generate-001', # Prioritize FAST for speed as requested
+                'imagen-3.0-fast-generate-001', # Prioritize FAST for speed
                 self._last_working_imagen_model,
                 'imagen-3.0-generate-002',
                 'imagen-3.0-generate-001',
@@ -707,88 +706,6 @@ Idioms to Consider: {', '.join(language_dna.get('idioms', [])[:3])}
 Formatting Style: {language_dna.get('formatting', 'Clean and professional')}
 Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
 """
-
-    def _build_system_prompt(self, language, target_audience, post_type, tone, ref_link, psycho_context, strategy_context, lang_context, best_practices) -> str:
-        return f"""{self.CMO_PERSONA}
-
-{psycho_context}
-
-{strategy_context}
-
-{lang_context}
-
-{self.FORMATTING_MASTERY}
-
-{self.TEXT_RULES}
-
-**UNIVERSAL BEST PRACTICES:**
-{chr(10).join(['- ' + rule for rule in best_practices['universal_rules'][:8]]) if best_practices and 'universal_rules' in best_practices else ""}
-
-**YOUR TASK:**
-Write in {language} for {target_audience} using the {post_type} strategy.
-Persona Tone: {tone.upper()}
-Product: Pintopay Crypto Card + Partner Network
-Referral Link (MUST INCLUDE): {ref_link}
-
-**OUTPUT FORMAT (JSON ONLY):**
-{{
-  "title": "Viral headline <15 words",
-  "body": "Full post with **bold**, _italic_, and [hyperlink]({ref_link}) formatting",
-  "hashtags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "image_description": "Detailed scene description for Nano Banana Pro (1K cinematic)"
-}}
-"""
-
-    def _build_user_prompt(self, target_audience, post_type, language, tone, ref_link, audience_intel, category_strategy) -> str:
-        hook_examples = audience_intel.get("hooks", []) if audience_intel else []
-        return f"""
-EXECUTE CMO AGENT MODE.
-
-Target: {target_audience}
-Category: {post_type}
-Style/Tone: {tone.upper()}
-Language: {language} (write as NATIVE speaker)
-Referral Link: {ref_link}
-
-**HOOK INSPIRATION (adapt, don't copy):**
-{chr(10).join(['- ' + hook for hook in hook_examples[:2]])}
-
-**CONTENT REQUIREMENTS:**
-1. First sentence MUST stop the scroll (<10 words, shocking or curious)
-2. Tell a micro-story or present a problem they FEEL
-3. Weave in Pintopay Card as the natural solution (not pushy)
-4. Include ONE specific number/stat for credibility
-5. Use psychological triggers: {', '.join(category_strategy.get('psychological_triggers', ['FOMO', 'Social Proof'])[:3]) if category_strategy else "FOMO, Social Proof"}
-6. Format with <b>bold</b> (4-6x), <i>italic</i> (2-3x), and <a href='{ref_link}'>descriptive link</a> in CTA
-7. End with compelling CTA using this link: {ref_link}
-8. Write 3-5 short paragraphs (1-3 sentences each)
-9. Add 3-5 trending hashtags for {target_audience}
-
-**IMAGE DESCRIPTION:**
-Describe a Nano Banana Pro-quality (1K) cinematic scene:
-- Real person from {target_audience} demographic
-- Emotional moment related to {post_type}
-- Setting: Ultra-modern 2026, luxury lifestyle or digital workspace
-- Mood: Success, transformation, financial freedom
-- Technical: Professional photography, natural lighting, sharp detail
-
-RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
-"""
-
-    def _build_base_image_prompt(self, target_audience, post_type) -> str:
-        return (
-            f"PROFESSIONAL STUDIO PHOTOGRAPHY - NANO BANANA PRO QUALITY: A real person from {target_audience}, "
-            f"captured in an authentic, high-fidelity cinematic moment for '{post_type}'. "
-            f"The scene must be grounded in realism with complex lighting, shallow depth of field, and 1K detail. "
-            f"Subject: {target_audience} expressing peak success/transformation. "
-            f"Setting: Ultra-modern 2026 digital infrastructure or luxury lifestyle environment. "
-            f"Atmosphere: Sophisticated, authoritative, financial freedom. "
-            f"Technical specs: 35mm lens, sharp focus, natural skin textures, volumetric lighting. "
-            f"Creative Rule: Render 'Pintopay Partner Club' or '{post_type.replace('_', ' ').title()}' as high-quality text within the scene (e.g., on a screen, card, or ambient display). "
-            f"Text MUST relate to the viral hook or CTA. SPELLING MUST BE PERFECT. "
-            f"NEGATIVE PROMPT: cartoon, CGI, anime, illustration, stock photo smile, distorted faces, extra limbs, blurry, "
-            f"futuristic sci-fi, neon lights, flying cars, unrealistic proportions, oversaturated colors, generic poses, misspelled text, gibberish text"
-        )
 
     async def fix_headline(self, headline: str) -> str:
         """
@@ -1051,8 +968,8 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             """
             
             if self.genai_client:
-                # Use Gemini 3 Pro for elite audit intelligence if available
-                for model_name in ['gemini-3-pro-preview', 'gemini-2.0-flash', 'gemini-1.5-flash']:
+                # Use Gemini 1.5 Pro for elite audit intelligence if available
+                for model_name in ['gemini-1.5-pro-latest', 'gemini-2.0-flash', 'gemini-1.5-flash']:
                     try:
                         logger.info(f"🚀 CMO Audit (Real Data): Using {model_name}...")
                         response = await self.genai_client.aio.models.generate_content(
