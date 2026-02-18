@@ -122,7 +122,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 }
             }
 
-            console.log('[DEBUG] refreshUser: Fetching profile...');
 
             const res = await apiClient.get('/api/partner/me');
             const userData = res.data;
@@ -139,7 +138,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 if (!userData.last_name && tgUser.lastName) userData.last_name = tgUser.lastName;
             }
 
-            console.log('[DEBUG] refreshUser: Success:', userData.first_name);
             setUser(userData);
             updateProgress(90, 'User Verified');
             localStorage.setItem('p2p_user_cache', JSON.stringify(userData));
@@ -194,7 +192,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             try {
                 // Fast path for local development
                 if (import.meta.env.DEV && !window.Telegram?.WebApp?.initData) {
-                    console.log('[DEBUG] Dev mode detected, mocking user immediately');
+                    if (import.meta.env.DEV) {
+                        console.log('[DEBUG] Dev mode detected, mocking user immediately');
+                    }
                     const devUser = {
                         id: 999,
                         telegram_id: '123456789',
@@ -228,7 +228,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 // Instead of a hard 2s wait, we check if we're even in a Telegram environment.
                 // If not, we skip the polling and start the refresh immediately.
                 if (!window.Telegram?.WebApp && !isTMA()) {
-                    console.log('[DEBUG] Not in TMA, skipping SDK wait');
+                    if (import.meta.env.DEV) {
+                        console.log('[DEBUG] Not in TMA, skipping SDK wait');
+                    }
                     await refreshUser();
                     return;
                 }
@@ -238,13 +240,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 const checkData = async () => {
                     try {
                         if (window.Telegram?.WebApp?.initData) {
-                            console.log('[DEBUG] Telegram SDK detected, refreshing user...');
                             await refreshUser();
                         } else if (attempts < 5) { // Reduced to 250ms maximum wait (5 * 50ms)
                             attempts++;
                             setTimeout(checkData, 50);
                         } else {
-                            console.log('[DEBUG] Telegram SDK timeout/unavailable, proceeding with refresh');
                             await refreshUser();
                         }
                     } catch (e) {
@@ -262,7 +262,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
         // Throttled focus listener
         const handleFocus = () => {
-            console.log('[DEBUG] Window focused, checking user state');
             refreshUser();
         };
 

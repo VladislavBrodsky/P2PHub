@@ -280,6 +280,21 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     earnings_to_add = []
     deferred_notifications = []
     
+    # #comment: CRITICAL FIX — MissingGreenlet Prevention
+    # We cache balances locally BEFORE entering the loop to avoid any ORM lazy-load
+    # inside the async loop. After a flush/add, SQLAlchemy marks objects as expired,
+    # and accessing .balance triggers a synchronous DB call → MissingGreenlet crash.
+    # Solution: read all balances upfront into a plain dict, update it manually.
+    balance_cache: dict[int, float] = {}
+    all_recipients_for_cache = list(ancestor_map.values())
+    if company_account:
+        all_recipients_for_cache.append(company_account)
+    for p in all_recipients_for_cache:
+        try:
+            balance_cache[p.id] = float(p.balance)
+        except Exception:
+            balance_cache[p.id] = 0.0
+
     # We use a non-transactional pipe for cache purging
     async with redis_service.client.pipeline(transaction=False) as redis_pipe:
         for dist in range(1, 21):
@@ -303,7 +318,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 is_ref_pro = referrer.is_pro or (referrer.subscription_plan == "PRO_MONTHLY")
                 
                 if dist <= 3:
-                    qualified = True # Free users now get commissions up to Level 3
+                    qualified = True # Free users get commissions up to Level 3
                 elif dist <= 9:
                     qualified = (is_ref_pro or is_ref_pro_plus)
                     if not qualified: miss_reason = "PRO Upgrade Required"
@@ -315,24 +330,20 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             recipient = referrer if qualified else company_account
             if not recipient: continue 
             
-            # #comment: CRITICAL FIX for MissingGreenlet / Stale Objects
-            # Accessing `recipient.balance` repeatedly in a loop where objects might be
-            # updated/flushed can trigger lazy loads on expired attributes.
-            # We ensure robustness by refreshing if necessary.
-            try:
-                balance_before = float(recipient.balance)
-            except Exception:
-                # If object is expired or detached, re-fetch it fresh
-                recipient = await session.get(Partner, recipient.id)
-                balance_before = float(recipient.balance)
+            # #comment: Read balance from local cache — NO ORM attribute access in loop.
+            # This is the definitive fix for MissingGreenlet errors. After session.add()
+            # or flush(), SQLAlchemy expires all attributes. Reading .balance would trigger
+            # a synchronous lazy-load which crashes in async context. We avoid this entirely.
+            balance_before = balance_cache.get(recipient.id, 0.0)
+            balance_after = round(balance_before + commission, 4)
+            # Update cache so subsequent hits on same recipient (e.g. admin) are correct
+            balance_cache[recipient.id] = balance_after
             
             # #comment: Atomic Increment for high-concurrency safety (USDT)
             # This prevents race conditions where multiple commissions hit the same user (e.g. Admin) 
             # at once, ensuring no funds are lost.
             recipient.balance = Partner.balance + commission
             recipient.total_earned_usdt = Partner.total_earned_usdt + commission
-            
-            balance_after = round(balance_before + commission, 4)
             session.add(recipient)
             
             description = f"{'PRO+' if is_pro_plus else 'PRO'} Commission (L{dist})"

@@ -73,10 +73,25 @@ export default function LeaderboardPage() {
     if (isLoading) return <div className="p-4"><ListSkeleton /></div>;
 
     return (
-        <div className="flex flex-col min-h-[85vh] px-4 pt-4 pb-32">
-            <h1 className="text-2xl font-black text-slate-900 dark:text-white mb-6 tracking-tight uppercase text-center">
-                {t('leaderboard.title')}
-            </h1>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col min-h-[85vh] px-4 pt-4 pb-32"
+        >
+            <motion.div
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                className="flex flex-col items-center mb-6 gap-2"
+            >
+                <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
+                    <span className="text-[9px] font-black uppercase tracking-[0.25em] text-emerald-500">Live Rankings</span>
+                </div>
+                <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase text-center">
+                    {t('leaderboard.title')}
+                </h1>
+            </motion.div>
 
             {userStats && (
                 <div className="mb-8">
@@ -193,29 +208,28 @@ export default function LeaderboardPage() {
                                     {t('leaderboard.xp')}
                                 </span>
                             </div>
-                        </button>
-                    </motion.button>
+                        </motion.button>
                     ))}
 
-                {/* #comment Show All toggle button implementation */}
-                {leaderboard.length > 10 && (
-                    <button
-                        onClick={() => {
-                            selection();
-                            setShowAll(!showAll);
-                        }}
-                        className="w-full mt-2 py-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-tighter hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"
-                    >
-                        {showAll ? t('common.show_less') : `${t('common.show_more')} (TOP 50)`}
-                    </button>
-                )}
-        </div>
-            </Section >
+                    {/* Show All toggle button */}
+                    {leaderboard.length > 10 && (
+                        <button
+                            onClick={() => {
+                                selection();
+                                setShowAll(!showAll);
+                            }}
+                            className="w-full mt-2 py-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-tighter hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"
+                        >
+                            {showAll ? t('common.show_less') : `${t('common.show_more')} (TOP 50)`}
+                        </button>
+                    )}
+                </div>
+            </Section>
 
-        <PartnerBriefingModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-        />
-        </div >
+            <PartnerBriefingModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
+        </motion.div>
     );
 }
