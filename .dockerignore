@@ -6,8 +6,13 @@ venv
 node_modules
 dist
 build
-# frontend
-# backend
+# Junk / Corrupted Folders
+frontend/public_EPERM_SHIT
+frontend/public_corrupted
+frontend/public_deprecated
+frontend/dist_backup_*
+frontend/local_npm_cache
+
 **/__pycache__
 **/*.pyc
 **/*.pyo
