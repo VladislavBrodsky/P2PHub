@@ -505,8 +505,15 @@ const BlogDetail = ({
                 />
             </div>
 
-            <div className="w-full pt-safe-top pb-3 px-4 bg-transparent transition-all">
-                <div className="flex items-center justify-end w-full">
+            <div className="w-full pt-safe-top pb-3 px-4 bg-transparent transition-all z-20">
+                <div className="flex items-center justify-between w-full">
+                    <button
+                        onClick={onBack}
+                        className="p-2 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-sm active:scale-90 transition-all text-slate-500 dark:text-slate-400"
+                    >
+                        <ArrowLeft className="w-5 h-5" />
+                    </button>
+
                     <div className="flex items-center gap-3">
                         {/* Compact Actions in Header */}
                         <div className="flex items-center gap-1.5 p-1 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-sm">
