@@ -52,23 +52,23 @@ MESSAGES = {
             "👑 *WELCOME TO THE ELITE!* 👑\n\n"
             "You have just unlocked the *Full Power* of the Pintopay Partner Network!\n\n"
             "🚀 *Why this is a game-changer for you:*\n"
-            "• *9-Level Network:* You now earn from every single person in your structure down to Level 9. The math is insane! 📈\n"
-            "• *X5 Fast XP:* Your progression is now hyper-accelerated. Reach top tiers 5x faster than anyone else.\n"
-            "• *Partner Vision:* We are building a massive financial ecosystem. Your PRO status guarantees you a seat at the table for all upcoming high-profit features.\n\n"
+            "• *20-Level Network:* You now earn from every single person in your structure down to Level 20. The build-up is insane! 📈\n"
+            "• *X3 Fast XP:* Your progression is now hyper-accelerated. Reach top tiers faster than anyone else.\n"
+            "• *Empower Your Network:* You are now a leader. Help your team grow and watch your passive income skyrocket.\n\n"
             "✨ *Your Marketing efforts just got x10 stronger.* Go build your empire! 🏰"
         ),
         "pro_viral_announcement": (
             "🔥 *MEGA ANNOUNCEMENT!* 🔥\n\n"
             "I just went *PRO* on Pintopay Partner Network! 💎\n\n"
-            "I've unlocked *9 levels of affiliate commissions* and *X5 XP speed*. This is the absolute peak of decentralized networking.\n\n"
+            "I've unlocked *20 levels of affiliate commissions* and powerful network boosts. This is the absolute peak of decentralized networking.\n\n"
             "Don't stay on the sidelines while we build the future of payments. 🚀\n\n"
             "🔗 *Join my structure now:* {referral_link}"
         ),
         "commission_received": (
             "💰 *COMMISSION ALERT!* (Level {level})\n\n"
             "You just received `${amount} USDT`! 💸\n"
-            "Partner **{from_user}** in your deep network (Level {level}) just upgraded to PRO.\n\n"
-            "🌟 *The Power of Passivity:* Your network is working for you 24/7. This is just the beginning of your x10 profit journey! 📈"
+            "Partner **{from_user}** in your network (Level {level}) just upgraded to PRO.\n\n"
+            "🌟 *The Power of Passivity:* Your network is working for you 24/7. This is just the beginning of your profit journey! 📈"
         ),
         "viral_share_caption": (
             "🛑 STOP FEEDING THE BANKS! \n"
@@ -78,9 +78,9 @@ MESSAGES = {
             "🚀 *Growth Detected!* (Level {level})\n\n"
             "Someone just joined your deep network, but your rewards are currently **LOCKED** 🔒.\n\n"
             "👑 *Upgrade to PRO to:* \n"
-            "• Unlock **9 Levels** of passive rewards\n"
+            "• Unlock **Deep Levels** of passive rewards\n"
             "• Earn USDT from every PRO upgrade in your team\n"
-            "• Get **x5 Fast XP** boost\n\n"
+            "• Get **Fast XP** boost\n\n"
             "Don't leave money on the table. Build your empire today! 🏰"
         )
     },
@@ -137,15 +137,15 @@ MESSAGES = {
             "👑 *ДОБРО ПОЖАЛОВАТЬ В ЭЛИТУ!* 👑\n\n"
             "Вы только что открыли *Полную Мощь* партнерской сети Pintopay!\n\n"
             "🚀 *Почему это меняет правила игры для вас:*\n"
-            "• *9-уровневая сеть:* Теперь вы зарабатываете с каждого человека в вашей структуре до 9-го уровня. Математика просто сумасшедшая! 📈\n"
-            "• *X5 Быстрый XP:* Ваша прогрессия теперь гипер-ускорена. Достигайте топовых рангов в 5 раз быстрее всех остальных.\n"
-            "• *Видение Партнера:* Мы строим масштабную финансовую экосистему. Ваш статус PRO гарантирует вам место за столом во всех будущих высокодоходных функциях.\n\n"
+            "• *Сеть до 20 уровней:* Теперь вы зарабатываете с каждого человека в вашей структуре до 20-го уровня. Масштаб просто сумасшедший! 📈\n"
+            "• *X3 Быстрый XP:* Ваша прогрессия ускорена. Достигайте топовых рангов быстрее всех остальных.\n"
+            "• *Лидерство:* Вы теперь лидер. Помогайте своей команде расти и наблюдайте, как ваш пассивный доход взлетает.\n\n"
             "✨ *Ваши маркетинговые усилия стали в 10 раз сильнее.* Идите и стройте свою империю! 🏰"
         ),
         "pro_viral_announcement": (
             "🔥 *МЕГА АНОНС!* 🔥\n\n"
             "Я только что стал *PRO* в партнерской сети Pintopay! 💎\n\n"
-            "Я открыл *9 уровней партнерских комиссий* и *X5 скорость XP*. Это абсолютный пик децентрализованного нетворкинга.\n\n"
+            "Я открыл *20 уровней партнерских комиссий* и мощные бонусы для сети. Это абсолютный пик децентрализованного нетворкинга.\n\n"
             "Не оставайся в стороне, пока мы строим будущее платежей. 🚀\n\n"
             "🔗 *Присоединяйся к моей структуре:* {referral_link}"
         ),

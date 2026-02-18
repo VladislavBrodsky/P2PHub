@@ -324,6 +324,9 @@ class PaymentService:
                 session.add(transaction)
                 await session.flush() # Get the ID
             else:
+                if transaction.status == "completed":
+                    logger.info(f"Transaction {transaction.id} already completed. Skipping upgrade.")
+                    return
                 transaction.status = "completed"
                 # Update hash if provided and missing
                 if tx_hash and not transaction.tx_hash:
@@ -342,8 +345,10 @@ class PaymentService:
             await session.commit()
 
             # 4. Invalidate Cache (Immediate UI Feedback)
-            # This ensures the user sees 'PRO UNLOCKED' immediately without waiting for cache expiry.
-            await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
+            try:
+                await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
+            except Exception as e:
+                logger.warning(f"Cache invalidation failed for {partner.telegram_id}: {e}")
 
 
             # 4. Send Visionary & Viral Messages

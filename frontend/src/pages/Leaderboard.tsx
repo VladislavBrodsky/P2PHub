@@ -152,7 +152,22 @@ export default function LeaderboardPage() {
                                         )}
                                     </div>
                                     <div className="text-left">
-                                        <p className="text-xs font-black text-slate-900 dark:text-white line-clamp-1 leading-tight">{user.first_name || user.username}</p>
+                                        <div className="flex items-center gap-1.5">
+                                            <p className="text-xs font-black text-slate-900 dark:text-white line-clamp-1 leading-tight">{user.first_name || user.username}</p>
+                                            {user.username && (
+                                                <a
+                                                    href={`https://t.me/${user.username}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                    }}
+                                                    className="text-[10px] font-black text-blue-500 hover:text-blue-600 transition-colors"
+                                                >
+                                                    @{user.username}
+                                                </a>
+                                            )}
+                                        </div>
                                         <div className="flex items-center gap-1.5 flex-wrap">
                                             <div className="flex items-center gap-1 text-[9px] font-bold text-slate-500 dark:text-slate-400">
                                                 <span>LVL {user.level}</span>

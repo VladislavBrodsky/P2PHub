@@ -130,6 +130,7 @@ class Earning(SQLModel, table=True):
     type: str = Field(default="COMMISSION", index=True) # COMMISSION, TASK_XP, REFERRAL_XP
     level: int | None = Field(default=None, index=True) # 1-9
     currency: str = Field(default="USDT", index=True) # USDT, XP
+    reference_id: str | None = Field(default=None, index=True) # buyer_id:level or task_id
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None), index=True)
 
 class SystemSetting(SQLModel, table=True):

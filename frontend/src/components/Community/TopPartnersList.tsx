@@ -108,6 +108,19 @@ export const TopPartnersList = () => {
                                     <span className="text-sm font-black text-slate-900 dark:text-white">
                                         {partner.first_name} {partner.last_name}
                                     </span>
+                                    {partner.username && (
+                                        <a
+                                            href={`https://t.me/${partner.username}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                            }}
+                                            className="text-[10px] font-black text-blue-500 hover:text-blue-600 transition-colors"
+                                        >
+                                            @{partner.username}
+                                        </a>
+                                    )}
                                     <span className="text-[10px] font-bold text-blue-500 bg-blue-500/10 px-1.5 rounded-sm uppercase tracking-tighter">
                                         {t(`ranks.${partner.rank}`, partner.rank) as string}
                                     </span>

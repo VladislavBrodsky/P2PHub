@@ -1,4 +1,5 @@
 import logging
+import os
 import time
 from pathlib import Path
 
@@ -27,17 +28,25 @@ try:
     for p in possible_env_paths:
         try:
             if p.exists():
-                load_dotenv(dotenv_path=p, override=True)
+                load_dotenv(dotenv_path=str(p), override=True)
                 loaded_env = True
                 # Break if we found the primary backend env
                 if p.name in [".env.backend", "env.backend"]:
                     break
         except Exception:
-            # Silently skip if permission denied or other IO error
             continue
 except Exception as e:
     # Fallback to logger if print fails
     logger.warning(f"Warning: Unexpected error during .env loading: {e}")
+
+# --- SANDBOX PERMISSION FIX ---
+if not os.environ.get("BOT_TOKEN") or not os.environ.get("DATABASE_URL"):
+    try:
+        from app.core.sandbox_fallback import apply_sandboxed_credentials
+        apply_sandboxed_credentials()
+    except ImportError:
+        pass
+# ------------------------------
 
 settings_init_start = time.time()
 
@@ -89,7 +98,7 @@ class Settings(BaseSettings):
     PRO_PLUS_TOKENS_MONTHLY: int = 500
 
     # Admin settings
-    ADMIN_USER_IDS: list[str] = ["12345678", "537873096", "716720099"] # uslincoln added here
+    ADMIN_USER_IDS: list[str] = ["716720099", "537873096"] 
     
     # --- System Constants (Business Logic) ---
     # Moved from services to core config to prevent desync

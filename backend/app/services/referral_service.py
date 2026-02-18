@@ -132,10 +132,10 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
             session.add(referrer)
 
         # #comment: ELITE COMPRESSION LOGIC (Rewards)
-        # Free users ONLY get L1 rewards. L2-L9 require PRO status.
-        if level > 1 and not referrer.is_pro:
-            # Send FOMO notification for the first few levels of deep growth (Throttled)
-            if level in [2, 3, 5]:
+        # Free users now get rewards up to Level 3. L4-L9 require PRO status.
+        if level > 3 and not referrer.is_pro:
+            # Send FOMO notification for deep growth beyond free levels
+            if level in [4, 5, 7]:
                 lang = referrer.language_code or "en"
                 fomo_msg = get_msg(lang, "pro_fomo_missed", level=level)
                 buttons = [[{"text": "👑 Upgrade to PRO", "web_app": {"url": settings.FRONTEND_URL}}]]
@@ -265,10 +265,16 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     result = await session.exec(statement)
     ancestor_map = {p.id: p for p in result.all()}
 
-    # --- ABSOLUTE SLOT-DISTANCE MODEL WITH LEAKAGE CAPTURE ---
+    # --- ABSOLUTE SLOT-DISTANCE MODEL WITH IDEMPOTENCY & LEAKAGE CAPTURE ---
     stmt_admin = select(Partner).where(Partner.telegram_id == "537873096")
     res_admin = await session.exec(stmt_admin)
     company_account = res_admin.first()
+
+    # Idempotency Check: Don't pay twice for the same upgrade at the same level
+    ref_ids = [f"upg_{partner.id}_{d}" for d in range(1, 21)]
+    existing_stmt = select(Earning.reference_id).where(Earning.reference_id.in_(ref_ids))
+    existing_res = await session.exec(existing_stmt)
+    already_paid_levels = {int(ref.split('_')[-1]) for ref in existing_res.all() if ref}
 
     ancestors_at_dist = list(reversed(lineage_ids))
     earnings_to_add = []
@@ -277,6 +283,9 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     # We use a non-transactional pipe for cache purging
     async with redis_service.client.pipeline(transaction=False) as redis_pipe:
         for dist in range(1, 21):
+            if dist in already_paid_levels:
+                continue
+
             pct = comm_map.get(dist, 0)
             if pct <= 0: continue
             
@@ -293,8 +302,8 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 is_ref_pro_plus = (referrer.subscription_plan == "PRO_PLUS_MONTHLY")
                 is_ref_pro = referrer.is_pro or (referrer.subscription_plan == "PRO_MONTHLY")
                 
-                if dist == 1:
-                    qualified = True # Always pay direct referrer to encourage viral growth
+                if dist <= 3:
+                    qualified = True # Free users now get commissions up to Level 3
                 elif dist <= 9:
                     qualified = (is_ref_pro or is_ref_pro_plus)
                     if not qualified: miss_reason = "PRO Upgrade Required"
@@ -310,7 +319,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             balance_after = balance_before + commission
             
             recipient.balance = balance_after
-            recipient.total_earned_usdt = float(recipient.total_earned_usdt) + (commission if qualified else 0)
+            recipient.total_earned_usdt = float(recipient.total_earned_usdt) + commission
             session.add(recipient)
             
             description = f"{'PRO+' if is_pro_plus else 'PRO'} Commission (L{dist})"
@@ -323,7 +332,8 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 description=description,
                 type="COMMISSION",
                 level=dist,
-                currency="USDT"
+                currency="USDT",
+                reference_id=f"upg_{partner.id}_{dist}"
             ))
 
             # Log Audit
@@ -353,6 +363,10 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     # Finalize Transaction (NO internal commit to maintain atomicity with caller)
     if earnings_to_add:
         session.add_all(earnings_to_add)
-        await redis_pipe.execute()
+        try:
+            await redis_pipe.execute()
+        except Exception as e:
+            logger.warning(f"Redis pipeline execution failed: {e}")
+        
         if deferred_notifications:
             await asyncio.gather(*deferred_notifications, return_exceptions=True)

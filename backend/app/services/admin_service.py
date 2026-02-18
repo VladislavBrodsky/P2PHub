@@ -280,11 +280,11 @@ class AdminService:
         ton_price = await payment_service.get_ton_price()
         total_revenue = rev_usdt + (rev_ton * ton_price)
         
-        comm_res = await session.exec(select(Earning.level, func.sum(Earning.amount)).where(Earning.type == "COMMISSION", Earning.level.between(1, 9)).group_by(Earning.level))
+        comm_res = await session.exec(select(Earning.level, func.sum(Earning.amount)).where(Earning.type == "COMMISSION", Earning.level.between(1, 20)).group_by(Earning.level))
         comm_map = {lvl: amt for lvl, amt in comm_res.all()}
         
         breakdown, total_comm = [], 0.0
-        for lvl in range(1, 10):
+        for lvl in range(1, 21):
             amt = comm_map.get(lvl, 0.0)
             breakdown.append({"level": lvl, "amount": round(amt, 2)})
             total_comm += amt
@@ -373,10 +373,16 @@ class AdminService:
         # 2. Orphaned partners (referrer set but path null - infrastructure bug)
         orphaned = (await session.exec(select(func.count(Partner.id)).where(Partner.referrer_id != None, Partner.path == None))).one() or 0
         
+        # 3. Economy Integrity: Negative Balances or XP/Level Mismatch
+        neg_balance = (await session.exec(select(func.count(Partner.id)).where(Partner.balance < 0))).one() or 0
+        
+        # Optional: verify if someone has more XP than their level suggests (usually okay, but good to flag)
+        
         return {
             "transactions": tx_map,
             "orphaned_count": orphaned,
-            "is_healthy": orphaned == 0 and tx_map.get("failed", 0) < 10 # Arbitrary health threshold
+            "negative_balances": neg_balance,
+            "is_healthy": orphaned == 0 and neg_balance == 0 and tx_map.get("failed", 0) < 10
         }
 
     def _calculate_kpis(self, totals: dict, total_revenue: float) -> dict:

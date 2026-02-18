@@ -424,8 +424,22 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                             {member.xp > 5000 && <Zap className="w-3 h-3 text-blue-500" />}
                                         </div>
                                         <div className="flex items-center gap-2">
+                                            {member.username && (
+                                                <a
+                                                    href={`https://t.me/${member.username}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        selection();
+                                                    }}
+                                                    className="text-[10px] font-black text-blue-500 hover:text-blue-600 transition-colors flex items-center gap-0.5 shrink-0"
+                                                >
+                                                    @{member.username}
+                                                </a>
+                                            )}
                                             <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">
-                                                Joined {new Date(member.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                                                • Joined {new Date(member.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                                             </span>
                                         </div>
                                     </div>
