@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { Clock, ChevronRight } from 'lucide-react';
+import { Clock, ChevronRight, Heart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 interface BlogPost {
@@ -48,9 +48,17 @@ export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogE
                     <span className="text-[9px] font-black uppercase tracking-widest text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/10">
                         {t(getCategoryKey(post.category))}
                     </span>
-                    <div className="flex items-center gap-1 text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
-                        <Clock className="w-3 h-3" />
-                        {post.published_at ? new Date(post.published_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1 text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
+                            <Clock className="w-3 h-3" />
+                            {post.published_at ? new Date(post.published_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
+                        </div>
+                        {post.likes > 0 && (
+                            <div className="flex items-center gap-1 text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
+                                <Heart className={`w-3 h-3 ${post.liked ? 'fill-red-500 text-red-500' : ''}`} />
+                                {post.likes}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <h4 className="text-[15px] font-extrabold leading-tight group-hover:text-blue-500 transition-colors line-clamp-2">

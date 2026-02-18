@@ -392,6 +392,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                 ) : (
                     <BlogDetail
                         post={selectedPost}
+                        allPosts={posts}
                         engagement={engagement}
                         isLoading={isLoadingEngagement}
                         onBack={() => { selection(); setSelectedPost(null); }}
@@ -400,6 +401,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                         onNext={() => navigatePost('next')}
                         onPrev={() => navigatePost('prev')}
                         setActiveTab={setActiveTab}
+                        onPostClick={handlePostClick}
                     />
                 )}
             </AnimatePresence>
@@ -409,6 +411,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
 
 interface BlogDetailProps {
     post: BlogPost & { content?: string };
+    allPosts: (BlogPost & BlogEngagement)[];
     engagement: BlogEngagement;
     isLoading: boolean;
     onBack: () => void;
@@ -417,11 +420,29 @@ interface BlogDetailProps {
     onNext: () => void;
     onPrev: () => void;
     setActiveTab?: (tab: string) => void;
+    onPostClick: (post: BlogPost & BlogEngagement) => void;
 }
 
-const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNext, onPrev, setActiveTab }: BlogDetailProps) => {
+const BlogDetail = ({
+    post, allPosts, engagement, isLoading, onBack, onLike, onShare,
+    onNext, onPrev, setActiveTab, onPostClick
+}: BlogDetailProps) => {
     const { t } = useTranslation();
     const { selection } = useHaptic();
+    const [scrollProgress, setScrollProgress] = useState(0);
+
+    useEffect(() => {
+        const main = document.querySelector('main');
+        const handleScroll = () => {
+            if (!main) return;
+            const scrolled = main.scrollTop;
+            const height = main.scrollHeight - main.clientHeight;
+            const progress = (scrolled / height) * 100;
+            setScrollProgress(progress);
+        };
+        main?.addEventListener('scroll', handleScroll);
+        return () => main?.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const MarketingBox = ({ type }: { type: 'card' | 'pro' }) => {
         const isCard = type === 'card';
@@ -475,24 +496,34 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
             exit={{ opacity: 0 }}
             className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 relative"
         >
+            <div className="fixed top-0 left-0 w-full h-1 z-100 bg-slate-100 dark:bg-white/5">
+                <motion.div
+                    className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${scrollProgress}%` }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                />
+            </div>
+
             <div className="w-full pt-safe-top pb-3 px-4 bg-transparent transition-all">
-                <div className="flex items-center justify-between w-full">
-                    <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-white dark:hover:bg-slate-900 active:scale-90 transition-all text-slate-900 dark:text-white">
-                        <ArrowLeft className="w-6 h-6" />
-                    </button>
+                <div className="flex items-center justify-end w-full">
                     <div className="flex items-center gap-3">
-                        <button onClick={onShare} className="p-2.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-90 transition-all hover:border-blue-500/30">
-                            <Share2 className="w-5 h-5 text-slate-500 dark:text-slate-400" />
-                        </button>
-                        <button
-                            onClick={onLike}
-                            className={`p-2.5 rounded-full border transition-all active:scale-95 flex items-center justify-center ${engagement.liked
-                                ? 'bg-red-500/15 border-red-500/30 text-red-500 shadow-lg shadow-red-500/10'
-                                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:border-red-500/20'
-                                }`}
-                        >
-                            <Heart className={`w-5 h-5 ${engagement.liked ? 'fill-current' : ''}`} />
-                        </button>
+                        {/* Compact Actions in Header */}
+                        <div className="flex items-center gap-1.5 p-1 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-sm">
+                            <button
+                                onClick={onLike}
+                                className={`p-2 rounded-full transition-all active:scale-90 ${engagement.liked ? 'text-red-500' : 'text-slate-500 dark:text-slate-400'}`}
+                            >
+                                <Heart className={`w-4.5 h-4.5 ${engagement.liked ? 'fill-current' : ''}`} />
+                            </button>
+                            <div className="w-px h-4 bg-slate-200 dark:bg-white/10" />
+                            <button
+                                onClick={onShare}
+                                className="p-2 rounded-full text-slate-500 dark:text-slate-400 active:scale-90"
+                            >
+                                <Share2 className="w-4.5 h-4.5" />
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -510,28 +541,29 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/60 to-transparent" />
                         </div>
                     )}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                         <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-widest border border-blue-500/20">
                             {t(getCategoryKey(post.category))}
                         </span>
-                        <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
-                            <Clock className="w-3 h-3" />
-                            {post.date}
-                        </div>
-                    </div>
-                    <h1 className="text-2xl sm:text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-white">
-                        {post.title}
-                    </h1>
-                    <div className="flex items-center gap-3 py-1.5 border-y border-slate-200 dark:border-white/10">
-                        <div className="w-10 h-10 rounded-full bg-linear-to-br from-slate-400 to-slate-600 dark:from-slate-700 dark:to-slate-900 flex items-center justify-center font-black text-sm text-white shadow-inner">
-                            {post.author?.[0] || 'A'}
-                        </div>
-                        <div>
-                            <p className="text-xs font-black">{post.author}</p>
-                            <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-60">Pintopay Intelligence Hub</p>
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
+                            <Clock className="w-3.5 h-3.5" />
+                            <span>5 min read</span>
                         </div>
                     </div>
                 </div>
+                <h1 className="text-2xl sm:text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-white">
+                    {post.title}
+                </h1>
+                <div className="flex items-center gap-3 py-1.5 border-y border-slate-200 dark:border-white/10">
+                    <div className="w-10 h-10 rounded-full bg-linear-to-br from-slate-400 to-slate-600 dark:from-slate-700 dark:to-slate-900 flex items-center justify-center font-black text-sm text-white shadow-inner">
+                        {post.author?.[0] || 'A'}
+                    </div>
+                    <div>
+                        <p className="text-xs font-black">{post.author}</p>
+                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-60">Pintopay Intelligence Hub</p>
+                    </div>
+                </div>
+
 
                 <div className="space-y-6">
                     {isLoading ? (
@@ -575,6 +607,39 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                     <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60">
                         {t('blog.navigation.support_article')}
                     </p>
+                </div>
+
+                {/* Related Intelligence */}
+                <div className="pt-8 space-y-5">
+                    <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-black uppercase tracking-widest text-slate-400">Related Intelligence</h4>
+                        <div className="h-px flex-1 bg-slate-200 dark:bg-white/10 ml-4" />
+                    </div>
+                    <div className="grid grid-cols-1 gap-4">
+                        {allPosts
+                            .filter(p => p.id !== post.id && (p.category === post.category || true))
+                            .slice(0, 3)
+                            .map((relatedPost) => (
+                                <button
+                                    key={relatedPost.id}
+                                    onClick={() => onPostClick(relatedPost)}
+                                    className="flex items-center gap-4 p-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-[0.98] transition-all text-left group"
+                                >
+                                    {relatedPost.image && (
+                                        <div className="w-16 h-16 rounded-2xl overflow-hidden shrink-0">
+                                            <img src={relatedPost.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" />
+                                        </div>
+                                    )}
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-blue-500 mb-1">{t(getCategoryKey(relatedPost.category))}</p>
+                                        <h5 className="text-xs font-black leading-tight line-clamp-2 dark:text-white group-hover:text-blue-500 transition-colors">
+                                            {relatedPost.title}
+                                        </h5>
+                                    </div>
+                                    <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
+                                </button>
+                            ))}
+                    </div>
                 </div>
 
                 <div className="pt-8 grid grid-cols-2 gap-3">
