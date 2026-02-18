@@ -207,22 +207,22 @@ export default function SubscriptionPage() {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-center mb-12 relative"
+                className="text-center mb-8 relative"
             >
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-12 w-64 h-64 bg-indigo-500/10 blur-[100px] -z-10" />
 
                 <motion.div
                     animate={{
-                        y: [0, -10, 0],
+                        y: [0, -8, 0],
                         rotate: [0, 5, -5, 0]
                     }}
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                    className="inline-block mb-6 pt-6"
+                    className="inline-block mb-4 pt-4"
                 >
                     <div className="relative">
                         <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 animate-pulse" />
-                        <div className="w-20 h-20 rounded-3xl bg-linear-to-br from-indigo-500 to-fuchsia-600 flex items-center justify-center shadow-2xl relative border border-white/20">
-                            <Crown size={40} className="text-white fill-white/10" />
+                        <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-indigo-500 to-fuchsia-600 flex items-center justify-center shadow-2xl relative border border-white/20">
+                            <Crown size={32} className="text-white fill-white/10" />
                         </div>
                     </div>
                 </motion.div>
@@ -235,54 +235,54 @@ export default function SubscriptionPage() {
                     </div>
                 </div>
 
-                <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter uppercase leading-[0.9] italic">
+                <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-3 tracking-tighter uppercase leading-[0.9] italic">
                     <Trans i18nKey="subscription.upgrade.title" components={{ 1: <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-500 to-fuchsia-500" /> }} />
                 </h1>
 
-                <p className="text-slate-600 dark:text-slate-400 text-[13px] font-medium max-w-[300px] mx-auto leading-relaxed opacity-80 mb-8">
+                <p className="text-slate-600 dark:text-slate-400 text-xs font-medium max-w-[280px] mx-auto leading-relaxed opacity-80 mb-6">
                     {t('subscription.upgrade.desc')}
                 </p>
 
                 {/* Viral Flux Ticker */}
-                <div className="flex items-center justify-center gap-4 mb-4">
+                <div className="flex items-center justify-center gap-3 mb-2">
                     <div className="h-px flex-1 bg-linear-to-r from-transparent to-slate-200 dark:to-white/10" />
-                    <div className="flex items-center gap-2 px-3 py-1 bg-indigo-500/5 rounded-lg border border-indigo-500/10">
-                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-ping" />
-                        <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">{fluxCount} PRO NODES ONLINE</span>
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-indigo-500/5 rounded-lg border border-indigo-500/10">
+                        <div className="w-1 h-1 rounded-full bg-indigo-500 animate-ping" />
+                        <span className="text-[9px] font-black text-indigo-500 uppercase tracking-widest">{fluxCount} NODES ACTIVE</span>
                     </div>
                     <div className="h-px flex-1 bg-linear-to-l from-transparent to-slate-200 dark:to-white/10" />
                 </div>
             </motion.div>
 
-            <div className="p-1.5 bg-slate-100 dark:bg-white/5 rounded-[2rem] mb-12 relative flex">
+            <div className="p-1 bg-slate-100 dark:bg-white/5 rounded-3xl mb-8 relative flex shadow-inner">
                 <motion.div
-                    className="absolute inset-y-1.5 rounded-[1.6rem] bg-white dark:bg-white/10 shadow-2xl z-0"
+                    className="absolute inset-y-1 rounded-2xl bg-white dark:bg-white/10 shadow-lg z-0"
                     initial={false}
                     animate={{
                         x: selectedPlan === 'PRO' ? 0 : '100%',
                         width: '50%'
                     }}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 35 }}
                 />
                 <button
                     onClick={() => { selection(); setSelectedPlan('PRO'); setExpandedFeature(null); }}
-                    className={`flex-1 relative z-10 py-5 rounded-2xl flex flex-col items-center justify-center transition-colors duration-300 ${selectedPlan === 'PRO' ? 'text-slate-900 dark:text-white' : 'text-slate-500'}`}
+                    className={`flex-1 relative z-10 py-4 rounded-2xl flex flex-col items-center justify-center transition-colors duration-300 ${selectedPlan === 'PRO' ? 'text-slate-900 dark:text-white' : 'text-slate-500'}`}
                 >
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] mb-1">{t('subscription.upgrade.pro_title')}</span>
+                    <span className="text-[9px] font-black uppercase tracking-widest mb-0.5">{t('subscription.upgrade.pro_title')}</span>
                     <div className="flex items-baseline gap-1">
-                        <span className="text-3xl font-black">$39</span>
-                        <span className="text-[10px] font-bold opacity-40 italic">LIFE</span>
+                        <span className="text-2xl font-black">$39</span>
+                        <span className="text-[9px] font-bold opacity-30 italic">LIFE</span>
                     </div>
                 </button>
                 <button
                     onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); setExpandedFeature(null); }}
-                    className={`flex-1 relative z-10 py-5 rounded-2xl flex flex-col items-center justify-center transition-colors duration-300 ${selectedPlan === 'PRO_PLUS' ? 'text-slate-900 dark:text-white' : 'text-slate-500'}`}
+                    className={`flex-1 relative z-10 py-4 rounded-2xl flex flex-col items-center justify-center transition-colors duration-300 ${selectedPlan === 'PRO_PLUS' ? 'text-slate-900 dark:text-white' : 'text-slate-500'}`}
                 >
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-[8px] font-black text-white px-3 py-1 rounded-full uppercase tracking-widest shadow-xl animate-bounce">BEST VALUE</div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] mb-1">{t('subscription.upgrade.pro_plus_title')}</span>
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-[8px] font-black text-white px-2.5 py-1 rounded-full uppercase tracking-wider shadow-lg animate-bounce">BEST VALUE</div>
+                    <span className="text-[9px] font-black uppercase tracking-widest mb-0.5">{t('subscription.upgrade.pro_plus_title')}</span>
                     <div className="flex items-baseline gap-1">
-                        <span className="text-3xl font-black">$69</span>
-                        <span className="text-[10px] font-bold opacity-40 italic">LIFE</span>
+                        <span className="text-2xl font-black">$69</span>
+                        <span className="text-[9px] font-bold opacity-30 italic">LIFE</span>
                     </div>
                 </button>
             </div>
@@ -290,18 +290,18 @@ export default function SubscriptionPage() {
             {/* Features Row - Dynamic Vibing Drops */}
             <div className="flex flex-col gap-3 mb-8">
                 {/* TOKENS FEATURE (Marketer 24/7) */}
-                <div className="relative">
+                <motion.div layout className="relative">
                     {expandedFeature === 'TOKENS' && (
                         <motion.div
                             layoutId="neon-glow-tokens"
-                            className="absolute -inset-0.5 bg-linear-to-r from-indigo-500 to-fuchsia-500 rounded-[2rem] blur opacity-50 -z-10"
+                            className="absolute -inset-0.5 bg-linear-to-r from-indigo-500 to-fuchsia-500 rounded-3xl blur opacity-50 -z-10"
                             animate={{ opacity: [0.3, 0.6, 0.3] }}
                             transition={{ duration: 3, repeat: Infinity }}
                         />
                     )}
                     <button
                         onClick={() => { selection(); setExpandedFeature(expandedFeature === 'TOKENS' ? null : 'TOKENS'); }}
-                        className={`w-full text-left transition-all duration-700 relative overflow-hidden active:scale-[0.98] rounded-[2rem] border ${expandedFeature === 'TOKENS' ? 'border-indigo-500/50 bg-slate-900 shadow-2xl' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 hover:border-indigo-500/20 shadow-sm'}`}
+                        className={`w-full text-left transition-all duration-500 relative overflow-hidden rounded-3xl border ${expandedFeature === 'TOKENS' ? 'border-indigo-500/50 bg-slate-900 shadow-2xl' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 hover:border-indigo-500/20 shadow-sm'}`}
                     >
                         {expandedFeature === 'TOKENS' && (
                             <motion.div
@@ -310,79 +310,82 @@ export default function SubscriptionPage() {
                                 className="absolute inset-0 bg-linear-to-br from-indigo-600/20 to-fuchsia-600/20 z-0"
                             />
                         )}
-                        <div className="p-6 flex items-center justify-between relative z-10">
-                            <div className="flex items-center gap-5">
-                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-lg ${expandedFeature === 'TOKENS' ? 'bg-indigo-500 shadow-indigo-500/40 text-white' : 'bg-indigo-500/10 text-indigo-500'}`}>
-                                    <Zap size={26} fill={expandedFeature === 'TOKENS' ? 'currentColor' : 'none'} />
+                        <div className="p-5 flex items-center justify-between relative z-10">
+                            <div className="flex items-center gap-4">
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-lg ${expandedFeature === 'TOKENS' ? 'bg-indigo-500 shadow-indigo-500/40 text-white' : 'bg-indigo-500/10 text-indigo-500'}`}>
+                                    <Zap size={22} fill={expandedFeature === 'TOKENS' ? 'currentColor' : 'none'} />
                                 </div>
                                 <div>
-                                    <p className={`text-[10px] font-black uppercase tracking-[0.3em] mb-1 ${expandedFeature === 'TOKENS' ? 'text-indigo-400' : 'text-slate-400'}`}>
+                                    <p className={`text-[9px] font-black uppercase tracking-widest mb-0.5 ${expandedFeature === 'TOKENS' ? 'text-indigo-400' : 'text-slate-400'}`}>
                                         {selectedPlan === 'PRO' ? '250 TOKENS' : '500 TOKENS'}
                                     </p>
-                                    <h3 className={`text-lg font-black uppercase tracking-tight ${expandedFeature === 'TOKENS' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                                    <h3 className={`text-base font-black uppercase tracking-tight ${expandedFeature === 'TOKENS' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
                                         Viral Studio
                                     </h3>
                                 </div>
                             </div>
                             <motion.div animate={{ rotate: expandedFeature === 'TOKENS' ? 180 : 0 }} className={expandedFeature === 'TOKENS' ? 'text-white' : 'text-slate-300'}>
-                                <ChevronDown size={24} />
+                                <ChevronDown size={20} />
                             </motion.div>
                         </div>
 
-                        <AnimatePresence>
+                        <AnimatePresence mode="wait">
                             {expandedFeature === 'TOKENS' && (
                                 <motion.div
                                     initial={{ height: 0, opacity: 0 }}
                                     animate={{ height: 'auto', opacity: 1 }}
                                     exit={{ height: 0, opacity: 0 }}
-                                    className="px-6 pb-8 relative z-10"
+                                    transition={{ type: "spring", duration: 0.4, bounce: 0 }}
+                                    className="overflow-hidden"
                                 >
-                                    <div className="h-px bg-white/10 mb-6" />
-                                    <p className="text-xs font-medium text-white/70 leading-relaxed mb-8 italic">
-                                        "A self-evolving neural studio that generates high-retention content while you sleep."
-                                    </p>
+                                    <div className="px-5 pb-6 relative z-10">
+                                        <div className="h-px bg-white/10 mb-5" />
+                                        <p className="text-[11px] font-medium text-white/70 leading-relaxed mb-6 italic">
+                                            "Self-evolving neural studio for high-retention content synthesis."
+                                        </p>
 
-                                    <div className="grid grid-cols-1 gap-3 mb-8">
-                                        {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro_short' : 'subscription.upgrade.benefits_pro_plus_short', { returnObjects: true }) as string[]).map((item, idx) => (
-                                            <motion.div
-                                                initial={{ x: -20, opacity: 0 }}
-                                                animate={{ x: 0, opacity: 1 }}
-                                                transition={{ delay: 0.1 * idx }}
-                                                key={idx}
-                                                className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5 backdrop-blur-md"
-                                            >
-                                                <CheckCircle2 size={16} className="text-indigo-400 shrink-0" />
-                                                <span className="text-[11px] font-black text-white uppercase tracking-wide">{item}</span>
-                                            </motion.div>
-                                        ))}
+                                        <div className="grid grid-cols-1 gap-2.5 mb-6">
+                                            {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro_short' : 'subscription.upgrade.benefits_pro_plus_short', { returnObjects: true }) as string[]).map((item, idx) => (
+                                                <motion.div
+                                                    initial={{ x: -10, opacity: 0 }}
+                                                    animate={{ x: 0, opacity: 1 }}
+                                                    transition={{ delay: 0.05 * idx }}
+                                                    key={idx}
+                                                    className="flex items-center gap-3 bg-white/5 p-3.5 rounded-2xl border border-white/5 backdrop-blur-md"
+                                                >
+                                                    <CheckCircle2 size={14} className="text-indigo-400 shrink-0" />
+                                                    <span className="text-[10px] font-black text-white uppercase tracking-wide">{item}</span>
+                                                </motion.div>
+                                            ))}
+                                        </div>
+
+                                        <button
+                                            onClick={scrollToPayment}
+                                            className="w-full h-14 bg-white text-indigo-600 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all relative overflow-hidden group/btn"
+                                        >
+                                            <span className="relative z-10">INITIALIZE STUDIO</span>
+                                            <div className="absolute inset-0 bg-indigo-500 -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-500 opacity-10" />
+                                        </button>
                                     </div>
-
-                                    <button
-                                        onClick={scrollToPayment}
-                                        className="w-full h-16 bg-white text-indigo-600 rounded-3xl font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl active:scale-95 transition-all relative overflow-hidden group/btn"
-                                    >
-                                        <span className="relative z-10">INITIALIZE STUDIO</span>
-                                        <div className="absolute inset-0 bg-indigo-500 -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-500 opacity-10" />
-                                    </button>
                                 </motion.div>
                             )}
                         </AnimatePresence>
                     </button>
-                </div>
+                </motion.div>
 
                 {/* LEVELS FEATURE (Autonomous Factory) */}
-                <div className="relative">
+                <motion.div layout className="relative">
                     {expandedFeature === 'LEVELS' && (
                         <motion.div
                             layoutId="neon-glow-levels"
-                            className="absolute -inset-0.5 bg-linear-to-r from-emerald-500 to-teal-500 rounded-[2rem] blur opacity-50 -z-10"
+                            className="absolute -inset-0.5 bg-linear-to-r from-emerald-500 to-teal-500 rounded-3xl blur opacity-50 -z-10"
                             animate={{ opacity: [0.3, 0.6, 0.3] }}
                             transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
                         />
                     )}
                     <button
                         onClick={() => { selection(); setExpandedFeature(expandedFeature === 'LEVELS' ? null : 'LEVELS'); }}
-                        className={`w-full text-left transition-all duration-700 relative overflow-hidden active:scale-[0.98] rounded-[2rem] border ${expandedFeature === 'LEVELS' ? 'border-emerald-500/50 bg-slate-900 shadow-2xl' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 hover:border-emerald-500/20 shadow-sm'}`}
+                        className={`w-full text-left transition-all duration-500 relative overflow-hidden rounded-3xl border ${expandedFeature === 'LEVELS' ? 'border-emerald-500/50 bg-slate-900 shadow-2xl' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 hover:border-emerald-500/20 shadow-sm'}`}
                     >
                         {expandedFeature === 'LEVELS' && (
                             <motion.div
@@ -391,65 +394,68 @@ export default function SubscriptionPage() {
                                 className="absolute inset-0 bg-linear-to-br from-emerald-600/20 to-teal-600/20 z-0"
                             />
                         )}
-                        <div className="p-6 flex items-center justify-between relative z-10">
-                            <div className="flex items-center gap-5">
-                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-lg ${expandedFeature === 'LEVELS' ? 'bg-emerald-500 shadow-emerald-500/40 text-white' : 'bg-emerald-500/10 text-emerald-500'}`}>
-                                    <Users size={26} fill={expandedFeature === 'LEVELS' ? 'currentColor' : 'none'} />
+                        <div className="p-5 flex items-center justify-between relative z-10">
+                            <div className="flex items-center gap-4">
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-lg ${expandedFeature === 'LEVELS' ? 'bg-emerald-500 shadow-emerald-500/40 text-white' : 'bg-emerald-500/10 text-emerald-500'}`}>
+                                    <Users size={22} fill={expandedFeature === 'LEVELS' ? 'currentColor' : 'none'} />
                                 </div>
                                 <div>
-                                    <p className={`text-[10px] font-black uppercase tracking-[0.3em] mb-1 ${expandedFeature === 'LEVELS' ? 'text-emerald-400' : 'text-slate-400'}`}>
+                                    <p className={`text-[9px] font-black uppercase tracking-widest mb-0.5 ${expandedFeature === 'LEVELS' ? 'text-emerald-400' : 'text-slate-400'}`}>
                                         {selectedPlan === 'PRO' ? '9 LEVELS' : '20 LEVELS'}
                                     </p>
-                                    <h3 className={`text-lg font-black uppercase tracking-tight ${expandedFeature === 'LEVELS' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                                    <h3 className={`text-base font-black uppercase tracking-tight ${expandedFeature === 'LEVELS' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
                                         Content Factory
                                     </h3>
                                 </div>
                             </div>
                             <motion.div animate={{ rotate: expandedFeature === 'LEVELS' ? 180 : 0 }} className={expandedFeature === 'LEVELS' ? 'text-white' : 'text-slate-300'}>
-                                <ChevronDown size={24} />
+                                <ChevronDown size={20} />
                             </motion.div>
                         </div>
 
-                        <AnimatePresence>
+                        <AnimatePresence mode="wait">
                             {expandedFeature === 'LEVELS' && (
                                 <motion.div
                                     initial={{ height: 0, opacity: 0 }}
                                     animate={{ height: 'auto', opacity: 1 }}
                                     exit={{ height: 0, opacity: 0 }}
-                                    className="px-6 pb-8 relative z-10"
+                                    transition={{ type: "spring", duration: 0.4, bounce: 0 }}
+                                    className="overflow-hidden"
                                 >
-                                    <div className="h-px bg-white/10 mb-6" />
-                                    <p className="text-xs font-medium text-white/70 leading-relaxed mb-8 italic">
-                                        "Automated network expansion protocols. Deploy AI agents to recruit and monetize 24/7."
-                                    </p>
+                                    <div className="px-5 pb-6 relative z-10">
+                                        <div className="h-px bg-white/10 mb-5" />
+                                        <p className="text-[11px] font-medium text-white/70 leading-relaxed mb-6 italic">
+                                            "Automated network expansion through AI agent deployment."
+                                        </p>
 
-                                    <div className="grid grid-cols-1 gap-3 mb-8">
-                                        {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro_short_levels' : 'subscription.upgrade.benefits_pro_plus_short_levels', { returnObjects: true }) as string[]).map((item, idx) => (
-                                            <motion.div
-                                                initial={{ x: -20, opacity: 0 }}
-                                                animate={{ x: 0, opacity: 1 }}
-                                                transition={{ delay: 0.1 * idx }}
-                                                key={idx}
-                                                className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5 backdrop-blur-md"
-                                            >
-                                                <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
-                                                <span className="text-[11px] font-black text-white uppercase tracking-wide">{item}</span>
-                                            </motion.div>
-                                        ))}
+                                        <div className="grid grid-cols-1 gap-2.5 mb-6">
+                                            {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro_short_levels' : 'subscription.upgrade.benefits_pro_plus_short_levels', { returnObjects: true }) as string[]).map((item, idx) => (
+                                                <motion.div
+                                                    initial={{ x: -10, opacity: 0 }}
+                                                    animate={{ x: 0, opacity: 1 }}
+                                                    transition={{ delay: 0.05 * idx }}
+                                                    key={idx}
+                                                    className="flex items-center gap-3 bg-white/5 p-3.5 rounded-2xl border border-white/5 backdrop-blur-md"
+                                                >
+                                                    <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                                                    <span className="text-[10px] font-black text-white uppercase tracking-wide">{item}</span>
+                                                </motion.div>
+                                            ))}
+                                        </div>
+
+                                        <button
+                                            onClick={scrollToPayment}
+                                            className="w-full h-14 bg-white text-emerald-600 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all relative overflow-hidden group/btn"
+                                        >
+                                            <span className="relative z-10">DEPLOY FACTORY</span>
+                                            <div className="absolute inset-0 bg-emerald-500 -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-500 opacity-10" />
+                                        </button>
                                     </div>
-
-                                    <button
-                                        onClick={scrollToPayment}
-                                        className="w-full h-16 bg-white text-emerald-600 rounded-3xl font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl active:scale-95 transition-all relative overflow-hidden group/btn"
-                                    >
-                                        <span className="relative z-10">DEPLOY FACTORY</span>
-                                        <div className="absolute inset-0 bg-emerald-500 -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-500 opacity-10" />
-                                    </button>
                                 </motion.div>
                             )}
                         </AnimatePresence>
                     </button>
-                </div>
+                </motion.div>
             </div>
 
             {/* Price Cards - Key Benefits List (Modernized) */}
@@ -460,22 +466,22 @@ export default function SubscriptionPage() {
                         {selectedPlan === 'PRO' ? 'PRO PLAN' : 'PRO+ EMPIRE'}
                     </div>
                 </div>
-                <div className="grid grid-cols-1 gap-3.5">
+                <div className="grid grid-cols-1 gap-3">
                     {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true }) as string[]).map((benefit, idx) => {
                         const isXP = benefit.includes('XP');
                         const isPlus = selectedPlan === 'PRO_PLUS';
                         return (
                             <motion.div
                                 key={idx}
-                                initial={{ opacity: 0, x: -15 }}
+                                initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: idx * 0.08 }}
-                                className={`p-4.5 rounded-3xl border flex items-center gap-4 transition-all duration-500 ${isPlus ? 'bg-indigo-500/5 dark:bg-indigo-500/10 border-indigo-500/10 shadow-sm' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/5 shadow-sm'}`}
+                                transition={{ delay: idx * 0.05 }}
+                                className={`p-4 rounded-2xl border flex items-center gap-3.5 transition-all duration-500 ${isPlus ? 'bg-indigo-500/5 dark:bg-indigo-500/10 border-indigo-500/10 shadow-sm' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/5 shadow-sm'}`}
                             >
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border-2 ${isXP ? (isPlus ? 'bg-indigo-500 border-indigo-400 text-white shadow-xl shadow-indigo-500/30' : 'bg-emerald-500 border-emerald-400 text-white shadow-xl shadow-emerald-500/30') : (isPlus ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-500' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-emerald-500')}`}>
-                                    <CheckCircle2 size={18} className={isXP ? 'animate-pulse' : ''} />
+                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border-2 ${isXP ? (isPlus ? 'bg-indigo-500 border-indigo-400 text-white shadow-xl shadow-indigo-500/30' : 'bg-emerald-500 border-emerald-400 text-white shadow-xl shadow-emerald-500/30') : (isPlus ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-500' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-emerald-500')}`}>
+                                    <CheckCircle2 size={16} className={isXP ? 'animate-pulse' : ''} />
                                 </div>
-                                <span className={`text-xs leading-tight ${isXP ? 'font-black text-slate-900 dark:text-white uppercase tracking-tight' : 'font-bold text-slate-600 dark:text-slate-400'}`}>
+                                <span className={`text-[11px] leading-tight ${isXP ? 'font-black text-slate-900 dark:text-white uppercase tracking-tight' : 'font-bold text-slate-600 dark:text-slate-400'}`}>
                                     {benefit}
                                 </span>
                             </motion.div>
