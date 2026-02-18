@@ -233,7 +233,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                 <Suspense fallback={<RevealSkeleton />}>
                     <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
                         {(visitedTabs.has('home') || activeTab === 'home') && (
-                            <FeatureErrorBoundary featureName="Dashboard">
+                            <FeatureErrorBoundary featureName={t('system.features.dashboard')}>
                                 <Suspense fallback={<DashboardSkeleton />}>
                                     <Dashboard setActiveTab={navigateTo} />
                                 </Suspense>
@@ -242,63 +242,63 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                     </div>
                     <div className={`h-full ${activeTab === 'cards' ? 'block' : 'hidden'}`}>
                         {(visitedTabs.has('cards') || activeTab === 'cards') && (
-                            <FeatureErrorBoundary featureName="Cards">
+                            <FeatureErrorBoundary featureName={t('system.features.cards')}>
                                 <CardsPage setActiveTab={setActiveTab} />
                             </FeatureErrorBoundary>
                         )}
                     </div>
                     <div className={`h-full ${activeTab === 'partner' ? 'block' : 'hidden'}`}>
                         {(visitedTabs.has('partner') || activeTab === 'partner') && (
-                            <FeatureErrorBoundary featureName="Community Orbit">
+                            <FeatureErrorBoundary featureName={t('system.features.community')}>
                                 <CommunityPage />
                             </FeatureErrorBoundary>
                         )}
                     </div>
                     <div className={`h-full ${activeTab === 'earn' ? 'block' : 'hidden'}`}>
                         {(visitedTabs.has('earn') || activeTab === 'earn') && (
-                            <FeatureErrorBoundary featureName="Referral Program">
+                            <FeatureErrorBoundary featureName={t('system.features.referral')}>
                                 <ReferralPage />
                             </FeatureErrorBoundary>
                         )}
                     </div>
                     <div className={`h-full ${activeTab === 'league' ? 'block' : 'hidden'}`}>
                         {(visitedTabs.has('league') || activeTab === 'league') && (
-                            <FeatureErrorBoundary featureName="Leaderboard">
+                            <FeatureErrorBoundary featureName={t('system.features.leaderboard')}>
                                 <LeaderboardPage />
                             </FeatureErrorBoundary>
                         )}
                     </div>
                     <div className={`h-full ${activeTab === 'subscription' ? 'block' : 'hidden'}`}>
                         {(visitedTabs.has('subscription') || activeTab === 'subscription') && (
-                            <FeatureErrorBoundary featureName="Subscription">
+                            <FeatureErrorBoundary featureName={t('system.features.subscription')}>
                                 <SubscriptionPage />
                             </FeatureErrorBoundary>
                         )}
                     </div>
                     <div className={`h-full ${activeTab === 'blog' ? 'block' : 'hidden'}`}>
                         {(visitedTabs.has('blog') || activeTab === 'blog') && (
-                            <FeatureErrorBoundary featureName="Blog">
+                            <FeatureErrorBoundary featureName={t('system.features.blog')}>
                                 <BlogPage setActiveTab={setActiveTab} currentTab={activeTab} />
                             </FeatureErrorBoundary>
                         )}
                     </div>
                     <div className={`h-full ${activeTab === 'admin' ? 'block' : 'hidden'}`}>
                         {(visitedTabs.has('admin') || activeTab === 'admin') && (
-                            <FeatureErrorBoundary featureName="Admin Panel">
+                            <FeatureErrorBoundary featureName={t('system.features.admin')}>
                                 <AdminPage />
                             </FeatureErrorBoundary>
                         )}
                     </div>
                     <div className={`h-full ${activeTab === 'pro' ? 'block' : 'hidden'}`}>
                         {(visitedTabs.has('pro') || activeTab === 'pro') && (
-                            <FeatureErrorBoundary featureName="PRO Dashboard">
+                            <FeatureErrorBoundary featureName={t('system.features.pro_dashboard')}>
                                 <ProPage />
                             </FeatureErrorBoundary>
                         )}
                     </div>
                     <div className={`h-full ${activeTab === 'faq' ? 'block' : 'hidden'}`}>
                         {(visitedTabs.has('faq') || activeTab === 'faq') && (
-                            <FeatureErrorBoundary featureName="FAQ Center">
+                            <FeatureErrorBoundary featureName={t('system.features.faq')}>
                                 <FAQPage />
                             </FeatureErrorBoundary>
                         )}

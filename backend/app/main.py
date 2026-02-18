@@ -309,14 +309,14 @@ async def global_exception_handler(request: Request, exc: Exception):
 @app.middleware("http")
 async def add_request_id_middleware(request: Request, call_next):
     import uuid
-
-    import sentry_sdk
     
     request_id = str(uuid.uuid4())
     request.state.request_id = request_id
     
-    # #comment: Synchronize request_id with Sentry for perfect searchability
-    sentry_sdk.set_tag("request_id", request_id)
+    # #comment: Synchronize request_id with Sentry for perfect searchability (only when active)
+    if settings.SENTRY_DSN:
+        import sentry_sdk
+        sentry_sdk.set_tag("request_id", request_id)
     
     # Add to response headers so clients can include it in bug reports
     response = await call_next(request)

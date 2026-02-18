@@ -276,11 +276,11 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                         <h1 className="text-2xl font-black tracking-tight leading-none text-slate-900 dark:text-white">{t('blog.title')}</h1>
                                         <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20">
                                             <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse" />
-                                            <span className="text-[7px] font-black uppercase text-blue-500 tracking-tighter">Live</span>
+                                            <span className="text-[7px] font-black uppercase text-blue-500 tracking-tighter">{t('blog.navigation.live')}</span>
                                         </div>
                                     </div>
                                     <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60 mt-1">
-                                        {total} {t('blog.latest')} Intelligence Reports
+                                        {total} {t('blog.latest')} {t('blog.navigation.intelligence_reports')}
                                     </p>
                                 </div>
                             </div>
@@ -297,7 +297,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                     className="w-full h-15 pl-13 pr-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 focus:border-blue-500/50 focus:ring-8 focus:ring-blue-500/5 outline-hidden font-bold text-sm transition-all shadow-sm hover:shadow-md dark:shadow-blue-500/5"
                                 />
                                 <div className="absolute right-4 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-[10px] font-black uppercase tracking-widest text-slate-400 border border-slate-200 dark:border-white/5 pointer-events-none">
-                                    Search
+                                    {t('blog.navigation.search_label')}
                                 </div>
                             </div>
 
@@ -342,8 +342,8 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                     <div className="p-8 sm:p-10 space-y-4 relative bg-linear-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950">
                                         <div className="flex items-center gap-2">
                                             <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                                            <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60">
-                                                {currentFeaturedPost.date} • Intelligence Hub
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest opacity-60 mt-1">
+                                                {currentFeaturedPost.date} • {t('blog.navigation.intelligence_hub')}
                                             </span>
                                         </div>
                                         <h3 className="text-2xl sm:text-3xl font-black leading-tight text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors line-clamp-3">
@@ -358,7 +358,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                                     <BookOpen className="w-4 h-4 text-blue-500" />
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Analyst</span>
+                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">{t('blog.navigation.analyst')}</span>
                                                     <span className="text-xs font-black text-slate-900 dark:text-white">{currentFeaturedPost.author}</span>
                                                 </div>
                                             </div>
@@ -379,7 +379,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                         className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-blue-600/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest shadow-xl flex items-center gap-2"
                                     >
                                         <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                                        Updating Intelligence...
+                                        {t('blog.navigation.updating')}
                                     </motion.div>
                                 )}
                                 {(selectedCategory === 'All' && searchQuery === '' ? currentOtherPosts : posts).map((post, index) => (
@@ -395,7 +395,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                     <div ref={sentinelRef} className="py-10 flex flex-col items-center justify-center gap-3">
                                         <div className="w-6 h-6 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
                                         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 animate-pulse">
-                                            Scanning Intelligence...
+                                            {t('blog.navigation.scanning')}
                                         </p>
                                     </div>
                                 )}
@@ -537,12 +537,12 @@ const BlogDetail = ({
                         className="p-2 px-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium active:scale-95 transition-all text-slate-900 dark:text-white flex items-center gap-2 group"
                     >
                         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Back to Blog</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t('blog.navigation.back_to_blog')}</span>
                     </button>
 
                     <div className="flex items-center gap-3">
                         <div className="flex flex-col items-center mr-2">
-                            <div className="text-[8px] font-black uppercase tracking-widest text-slate-400 leading-none mb-0.5">Reading Intelligence</div>
+                            <div className="text-[8px] font-black uppercase tracking-widest text-slate-400 leading-none mb-0.5">{t('blog.navigation.reading_progress')}</div>
                             <div className="text-[10px] font-black text-blue-500 leading-none">{Math.round(scrollProgress)}%</div>
                         </div>
                         <div className="flex items-center gap-1.5 p-1 px-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium">
@@ -577,7 +577,7 @@ const BlogDetail = ({
                             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/80 to-transparent" />
                             <div className="absolute bottom-6 left-6 flex items-center gap-2">
                                 <div className="px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
-                                    <p className="text-[9px] font-black text-white uppercase tracking-widest">Intel Archive</p>
+                                    <p className="text-[9px] font-black text-white uppercase tracking-widest">{t('blog.navigation.intel_archive')}</p>
                                 </div>
                             </div>
                         </div>
@@ -588,7 +588,7 @@ const BlogDetail = ({
                         </span>
                         <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
                             <Clock className="w-4 h-4 text-blue-500" />
-                            <span>5 MIN ANALYSIS</span>
+                            <span>5 {t('blog.navigation.min_analysis')}</span>
                         </div>
                     </div>
                 </div>
@@ -605,7 +605,7 @@ const BlogDetail = ({
                     </div>
                     <div>
                         <p className="text-sm font-black text-slate-900 dark:text-white leading-none mb-1">{post.author}</p>
-                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Senior Intelligence Analyst</p>
+                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('blog.navigation.senior_analyst')}</p>
                     </div>
                     <div className="ml-auto">
                         <div className="flex -space-x-2.5">
@@ -663,7 +663,7 @@ const BlogDetail = ({
                         >
                             <Heart className={`w-6 h-6 transition-transform duration-500 ${engagement.liked ? 'fill-current scale-110' : 'group-hover:text-red-500 group-hover:scale-110'}`} />
                             <div className="flex flex-col items-start leading-none">
-                                <span className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Impact</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">{t('blog.navigation.impact')}</span>
                                 <span className="font-black text-xl italic!">
                                     {isLoading ? '...' : engagement.likes.toLocaleString()}
                                 </span>
@@ -679,14 +679,14 @@ const BlogDetail = ({
                     </div>
 
                     <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] animate-pulse">
-                        Intelligence Unit Feedback Loop Active
+                        {t('blog.navigation.feedback_loop')}
                     </p>
                 </div>
 
                 {/* Related Intelligence */}
                 <div className="pt-8 space-y-6">
                     <div className="flex items-center gap-4">
-                        <h4 className="text-xs font-black uppercase tracking-[0.3em] text-blue-500 shrink-0">Next Reports</h4>
+                        <h4 className="text-xs font-black uppercase tracking-[0.3em] text-blue-500 shrink-0">{t('blog.navigation.next_reports')}</h4>
                         <div className="h-px flex-1 bg-linear-to-r from-blue-500/20 to-transparent" />
                     </div>
                     <div className="grid grid-cols-1 gap-5">
@@ -732,8 +732,8 @@ const BlogDetail = ({
                             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
                         </div>
                         <div className="flex flex-col min-w-0">
-                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Previous</span>
-                            <span className="text-xs font-black truncate text-slate-900 dark:text-white">Back in Flow</span>
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">{t('blog.navigation.previous_label')}</span>
+                            <span className="text-xs font-black truncate text-slate-900 dark:text-white">{t('blog.navigation.back_in_flow')}</span>
                         </div>
                     </button>
                     <button
@@ -741,8 +741,8 @@ const BlogDetail = ({
                         className="p-5 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center justify-end gap-4 group text-right shadow-sm hover:shadow-xl dark:shadow-blue-500/5"
                     >
                         <div className="flex flex-col min-w-0 items-end">
-                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Next Intel</span>
-                            <span className="text-xs font-black truncate text-slate-900 dark:text-white">Forward</span>
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">{t('blog.navigation.next_intel')}</span>
+                            <span className="text-xs font-black truncate text-slate-900 dark:text-white">{t('blog.navigation.forward_label')}</span>
                         </div>
                         <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shrink-0">
                             <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />

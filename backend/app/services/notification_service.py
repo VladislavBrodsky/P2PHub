@@ -271,5 +271,59 @@ class NotificationService:
             
             await session.commit()
 
+@broker.task(task_name="notify_admin_payment_task")
+async def notify_admin_payment_task(
+    partner_id: int, 
+    amount: float, 
+    currency: str, 
+    network: str, 
+    tx_hash: str | None, 
+    transaction_id: int
+):
+    """
+    Hardened task for notifying admins about manual payment claims.
+    Ensures that even if the web instance restarts, the admin alert survives.
+    """
+    from datetime import datetime
+
+    from sqlalchemy.orm import sessionmaker
+    from sqlmodel import select
+    from sqlmodel.ext.asyncio.session import AsyncSession
+
+    from app.core.config import settings
+    from app.models.partner import Partner, engine
+    
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    async with async_session() as session:
+        partner = await session.get(Partner, partner_id)
+        if not partner:
+            return
+            
+        safe_username = f"@{partner.username}" if partner.username else "No Username"
+        admin_msg = (
+            "🚨 *NEW MANUAL PAYMENT PENDING REVIEW* 🚨\n\n"
+            f"👤 *User:* {safe_username} (`{partner.telegram_id}`)\n"
+            f"💰 *Amount:* ${amount} {currency}\n"
+            f"🌐 *Network:* {network}\n"
+            f"📝 *TX Hash:* `{tx_hash or 'Not Provided'}`\n\n"
+            f"🆔 *Trans ID:* `{transaction_id}`\n\n"
+            "👉 *Action Required:* Please verify this transaction in the Admin Panel or use /admin commands."
+        )
+        
+        # Notify uslincoln & configured admins
+        admin_targets = ["537873096"] # Priority 1
+        for a_id in settings.ADMIN_USER_IDS:
+            if str(a_id) not in admin_targets:
+                admin_targets.append(str(a_id))
+                
+        for chat_id in admin_targets:
+            try:
+                await notification_service.enqueue_notification(
+                    chat_id=int(chat_id),
+                    text=admin_msg
+                )
+            except Exception as e:
+                logger.error(f"Failed to enqueue admin notify in task: {e}")
+
 notification_service = NotificationService()
 

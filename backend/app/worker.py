@@ -20,7 +20,7 @@ broker.with_result_backend(result_backend)
 # 3. Validation Middleware
 # Note: TaskIQ 0.12+ handles Pydantic validation natively for type-hinted tasks.
 # The separate PydanticMiddleware is no longer required or available in this version.
-# broker.add_middlewares([]) 
+# broker.add_middlewares([])
 
 # 4. Scheduler (for Cron jobs like daily stats reset)
 scheduler = TaskiqScheduler(
@@ -35,15 +35,15 @@ taskiq_fastapi.init(
     "app.main:app",
 )
 
-# 6. Define Tasks to be imported
-# (This ensures the worker knows about them on startup)
-TASKS_TO_IMPORT: list[str] = [
-    "app.services.partner_service",
-    "app.services.notification_service",
-    "app.services.subscription_service",
-    "app.services.referral_service",
-    "app.services.analytics_service",
-    "app.services.support_service",
-    "app.services.maintenance_service",
-    "app.services.viral_service",
-]
+# 6. CRITICAL: Actually import all task modules so @broker.task decorators register.
+# Previously TASKS_TO_IMPORT was a dead list — the worker started without knowing
+# about any tasks, so ALL cron jobs and background tasks silently never ran.
+# These imports MUST happen at module level so the worker process registers them.
+import app.services.partner_service       # warm_up_partner_photos, handle_partner_creation_task, sync_profile_photos_task  # noqa: E402, F401
+import app.services.notification_service  # send_telegram_task  # noqa: E402, F401
+import app.services.subscription_service  # check_expiring_subscriptions_task  # noqa: E402, F401
+import app.services.referral_service      # process_referral_logic  # noqa: E402, F401
+import app.services.support_service       # cleanup_stale_support_sessions, warm_up_kb_task  # noqa: E402, F401
+import app.services.maintenance_service   # refresh_admin_stats, process_notification_retries, reconcile_network_stats_task, cleanup_stale_transactions, cleanup_old_audit_logs, reset_monthly_pro_tokens, economy_integrity_audit_task  # noqa: E402, F401
+import app.services.viral_service         # log_viral_generation_task, log_rss_to_sheets_task  # noqa: E402, F401
+import app.services.warmup_service        # warmup_redis  # noqa: E402, F401

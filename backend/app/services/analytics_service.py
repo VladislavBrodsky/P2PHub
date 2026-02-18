@@ -6,6 +6,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
 from app.models.partner import Partner
+from app.worker import broker
 
 logger = logging.getLogger(__name__)
 
@@ -237,3 +238,27 @@ def _get_next_time_step(c: datetime, interval: str) -> tuple[datetime, str, date
     next_month = c.month % 12 + 1
     nb = c.replace(year=c.year + (1 if c.month == 12 else 0), month=next_month, day=1, hour=0, minute=0, second=0, microsecond=0)
     return nb, c.strftime("%b"), c.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
+@broker.task(task_name="pre_warm_tree_cache_task")
+async def pre_warm_tree_cache_task(partner_id: int):
+    """
+    Background worker that pre-calculates and caches referral tree stats.
+    Why: Prevents 'Closed Session' errors when using BackgroundTasks with request sessions.
+    """
+    from sqlalchemy.orm import sessionmaker
+
+    from app.models.partner import engine
+    from app.services.redis_service import redis_service
+    
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    async with async_session() as session:
+        cache_key = f"ref_tree_stats_v2:{partner_id}"
+        logger.info(f"🔥 Pre-warming tree cache for partner {partner_id}")
+        
+        # We use get_or_compute logic but within the fresh task session
+        await redis_service.get_or_compute(
+            cache_key,
+            lambda: get_referral_tree_stats(session, partner_id),
+            expire=600
+        )
+

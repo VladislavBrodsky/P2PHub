@@ -219,8 +219,9 @@ async def get_my_profile(
             # #comment: Self-healing Trigger (Reliability)
             # If path was broken, referral awards likely failed too. 
             # Re-triggering ensures data consistency.
-            from app.services.referral_service import process_referral_notifications
-            background_tasks.add_task(process_referral_notifications, bot, session, partner, True)
+            # Fix: Don't pass session/partner to background task, call kiq directly.
+            from app.services.referral_service import process_referral_logic
+            await process_referral_logic.kiq(partner.id)
 
     if partner.depth == 0 and partner.path:
         partner.depth = len(partner.path.split('.'))
@@ -329,20 +330,15 @@ async def get_my_profile(
         await session.refresh(partner)
         await redis_service.client.delete(cache_key)
         
-    # 4.5. Pre-warm Referral Tree Stats (Background)
+    # 4.5. Pre-warm Referral Tree Stats (Persistent Background)
     # Why: User likely navigates to Partner tab next. Pre-calculating this 
     # saves 100-300ms of wait time on the first tab switch.
+    # Fix: Move from BackgroundTasks (flaky with sessions) to TaskIQ worker.
     try:
-        from app.services.analytics_service import get_referral_tree_stats
-        bg_cache_key = f"ref_tree_stats_v2:{partner.id}"
-        background_tasks.add_task(
-            redis_service.get_or_compute,
-            bg_cache_key,
-            lambda: get_referral_tree_stats(session, partner.id),
-            expire=600
-        )
+        from app.services.analytics_service import pre_warm_tree_cache_task
+        await pre_warm_tree_cache_task.kiq(partner.id)
     except Exception as e:
-        logger.warning(f"Tree pre-warm failed: {e}")
+        logger.warning(f"Tree pre-warm enqueue failed: {e}")
 
     # 5. Prepare Response - O(1) using schema-level automation
     # Redundant refetch removed - 'partner' already contains all relations from step 2

@@ -222,49 +222,20 @@ async def submit_manual_payment(
         )
         await session.commit()
 
-        # #comment: Background task to notify admins.
-        # Specific requirement: Notify @uslincoln (ID: 537873096) with detailed user info.
-        async def notify_admins():
-            # Construct a detailed message with all necessary verification info
-            # We include the ID and Username so the admin knows exactly who to look up.
-            safe_username = f"@{partner.username}" if partner.username else "No Username"
-            
-            admin_msg = (
-                "🚨 *NEW MANUAL PAYMENT PENDING REVIEW* 🚨\n\n"
-                f"👤 *User:* {safe_username} (`{partner.telegram_id}`)\n"
-                f"💰 *Amount:* ${amount} {currency}\n"
-                f"🌐 *Network:* {network}\n"
-                f"📝 *TX Hash:* `{tx_hash or 'Not Provided'}`\n\n"
-                f"🆔 *Trans ID:* `{transaction.id}`\n\n"
-                "👉 *Action Required:* Please verify this transaction in the Admin Panel or use /admin commands."
+        # #comment: Enqueue specialized admin notification task.
+        # This replaces the flaky asyncio.create_task with a durable broker task.
+        try:
+            from app.services.notification_service import notify_admin_payment_task
+            await notify_admin_payment_task.kiq(
+                partner_id=partner.id,
+                amount=amount,
+                currency=currency,
+                network=network,
+                tx_hash=tx_hash,
+                transaction_id=transaction.id
             )
-            
-            # #comment: Primary Admin Notification (uslincoln)
-            # We explicitly target the main admin first to ensure they get the alert.
-            main_admin_id = "537873096" 
-            try:
-                await notification_service.enqueue_notification(
-                    chat_id=int(main_admin_id),
-                    text=admin_msg
-                )
-            except Exception as e:
-                logger.error(f"Failed to notify main admin {main_admin_id}: {e}")
-
-            # #comment: Notify other configured admins as backup
-            # We skip the main admin if they are in the list to avoid duplicate notifications (though enqueue might handle it, better safe).
-            for admin_id in settings.ADMIN_USER_IDS:
-                if str(admin_id) == main_admin_id:
-                    continue
-                    
-                try:
-                    await notification_service.enqueue_notification(
-                        chat_id=int(admin_id),
-                        text=admin_msg
-                    )
-                except Exception as e:
-                    logger.error(f"Failed to notify admin {admin_id} about manual payment: {e}")
-        
-        asyncio.create_task(notify_admins())
+        except Exception as e:
+            logger.error(f"Failed to enqueue admin payment notification: {e}")
 
         return {"status": "submitted", "message": "Payment submitted for manual review. Admins have been notified."}
 
