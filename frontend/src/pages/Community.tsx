@@ -67,7 +67,7 @@ export default function CommunityPage() {
                         onClick={() => handleTabChange('dashboard')}
                         className={cn(
                             "relative z-10 px-4 py-3.5 text-[10px] font-black uppercase tracking-widest transition-all w-28 text-center",
-                            activeTab === 'dashboard' ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300"
+                            activeTab === 'dashboard' ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                         )}
                     >
                         {t('community.tabs.dashboard')}
@@ -77,7 +77,7 @@ export default function CommunityPage() {
                         onClick={() => handleTabChange('academy')}
                         className={cn(
                             "relative z-10 px-4 py-3.5 text-[10px] font-black uppercase tracking-widest transition-all w-28 text-center",
-                            activeTab === 'academy' ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300"
+                            activeTab === 'academy' ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                         )}
                     >
                         {t('community.tabs.academy')}

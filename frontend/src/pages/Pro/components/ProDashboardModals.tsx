@@ -301,10 +301,10 @@ export const ProDashboardModals = ({
                                         <div className="p-4 bg-sky-50 dark:bg-sky-500/10 rounded-2xl border border-sky-100 dark:border-sky-500/20 flex items-start gap-3">
                                             <Send className="w-5 h-5 text-sky-500 mt-0.5" />
                                             <div>
-                                                <h4 className="text-xs font-black text-sky-900 dark:text-sky-300 uppercase tracking-wide">Telegram Multi-Sync</h4>
+                                                <h4 className="text-xs font-black text-sky-900 dark:text-sky-300 uppercase tracking-wide">{t('pro_dashboard.setup.tg_sync_multi.title')}</h4>
                                                 <p className="text-[10px] text-sky-700 dark:text-sky-400 leading-relaxed mt-1">
-                                                    {status?.is_pro_plus ? "PRO+ allows up to 5 channels." : "Upgrade to PRO+ to sync up to 5 channels."}
-                                                    <button onClick={() => setShowManual('setup_tg')} className="ml-1 underline font-bold hover:text-sky-500">View Guide</button>
+                                                    {status?.is_pro_plus ? t('pro_dashboard.setup.tg_sync_multi.desc_plus') : t('pro_dashboard.setup.tg_sync_multi.desc_pro')}
+                                                    <button onClick={() => setShowManual('setup_tg')} className="ml-1 underline font-bold hover:text-sky-500">{t('pro_dashboard.setup.tg_manual.title')}</button>
                                                 </p>
                                             </div>
                                         </div>
@@ -318,7 +318,7 @@ export const ProDashboardModals = ({
                                                     className="text-[9px] font-black text-sky-600 dark:text-sky-400 uppercase tracking-widest hover:underline flex items-center gap-1.5 disabled:opacity-50"
                                                 >
                                                     {isTesting ? <Loader2 size={10} className="animate-spin" /> : <Zap size={10} />}
-                                                    Verify All Status
+                                                    {t('pro_dashboard.setup.tg_sync_multi.verify_btn')}
                                                 </button>
                                             </div>
 
@@ -340,7 +340,7 @@ export const ProDashboardModals = ({
                                                         {tgTestResults[ch.trim()] && (
                                                             <div className={`absolute left-3 -top-2 px-1.5 py-0.5 rounded text-[7px] font-black uppercase tracking-widest flex items-center gap-1 ${tgTestResults[ch.trim()] === 'active' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}`}>
                                                                 {tgTestResults[ch.trim()] === 'active' ? <CheckCircle2 size={8} /> : <AlertCircle size={8} />}
-                                                                {tgTestResults[ch.trim()]}
+                                                                {tgTestResults[ch.trim()] === 'active' ? t('pro_dashboard.setup.tg_sync_multi.active') : t('pro_dashboard.setup.tg_sync_multi.error')}
                                                             </div>
                                                         )}
 
@@ -366,7 +366,9 @@ export const ProDashboardModals = ({
                                                         className="w-full h-10 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-xl flex items-center justify-center gap-2 text-slate-400 hover:border-indigo-500/50 hover:text-indigo-500 transition-all"
                                                     >
                                                         <Plus size={14} />
-                                                        <span className="text-[10px] font-black uppercase tracking-widest">Add Channel ({tgChannels.length}/{(status?.is_pro_plus ? 5 : 1)})</span>
+                                                        <span className="text-[10px] font-black uppercase tracking-widest">
+                                                            {t('pro_dashboard.setup.tg_sync_multi.add_channel', { count: tgChannels.length, total: (status?.is_pro_plus ? 5 : 1) })}
+                                                        </span>
                                                     </button>
                                                 )}
                                             </div>
@@ -375,8 +377,8 @@ export const ProDashboardModals = ({
                                                 <Info size={14} className="text-amber-500 shrink-0 mt-0.5" />
                                                 <p className="text-[9px] text-amber-700 dark:text-amber-400 leading-relaxed font-medium">
                                                     {status?.is_pro_plus
-                                                        ? "You are on PRO+ Plan. Max 5 channels active."
-                                                        : "Standard PRO is limited to 1 channel. Upgrade to PRO+ for multi-sync (up to 5)."}
+                                                        ? t('pro_dashboard.setup.tg_sync_multi.plan_plus')
+                                                        : t('pro_dashboard.setup.tg_sync_multi.plan_pro')}
                                                 </p>
                                             </div>
                                         </div>
