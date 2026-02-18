@@ -221,6 +221,7 @@ class PaymentService:
         tx_hash: str | None = None,
         transaction_id: int | None = None
     ):
+        from sqlmodel import select
         try:
             now = datetime.now(UTC).replace(tzinfo=None)
             sentry_sdk.add_breadcrumb(
