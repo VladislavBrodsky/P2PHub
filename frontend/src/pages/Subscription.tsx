@@ -376,9 +376,9 @@ export default function SubscriptionPage() {
                                     initial={{ height: 0, opacity: 0 }}
                                     animate={{ height: 'auto', opacity: 1 }}
                                     exit={{ height: 0, opacity: 0 }}
-                                    className="overflow-hidden bg-black/40 backdrop-blur-md"
+                                    className="overflow-hidden bg-slate-950/80 backdrop-blur-2xl"
                                 >
-                                    <div className="px-6 pb-8 pt-2">
+                                    <div className="px-6 pb-8 pt-4">
                                         <div className="h-px bg-white/10 mb-6" />
 
                                         <div className="space-y-4 mb-8">
@@ -392,12 +392,12 @@ export default function SubscriptionPage() {
                                                             animate={{ x: 0, opacity: 1 }}
                                                             transition={{ delay: 0.1 * idx }}
                                                             key={idx}
-                                                            className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5 group-hover:border-white/10 transition-colors"
+                                                            className="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/10 shadow-sm"
                                                         >
-                                                            <div className="w-6 h-6 rounded-lg bg-indigo-500/20 flex items-center justify-center shrink-0">
-                                                                <CheckCircle2 size={12} className="text-indigo-400" />
+                                                            <div className="w-6 h-6 rounded-lg bg-indigo-500/30 flex items-center justify-center shrink-0">
+                                                                <CheckCircle2 size={12} className="text-white" />
                                                             </div>
-                                                            <span className="text-[10px] font-black text-white uppercase tracking-tight leading-tight">{item}</span>
+                                                            <span className="text-[11px] font-black text-white uppercase tracking-tight leading-tight">{item}</span>
                                                         </motion.div>
                                                     ))}
                                             </div>
@@ -456,9 +456,9 @@ export default function SubscriptionPage() {
                                     initial={{ height: 0, opacity: 0 }}
                                     animate={{ height: 'auto', opacity: 1 }}
                                     exit={{ height: 0, opacity: 0 }}
-                                    className="overflow-hidden bg-black/40 backdrop-blur-md"
+                                    className="overflow-hidden bg-slate-950/80 backdrop-blur-2xl"
                                 >
-                                    <div className="px-6 pb-8 pt-2">
+                                    <div className="px-6 pb-8 pt-4">
                                         <div className="h-px bg-white/10 mb-6" />
 
                                         <div className="space-y-4 mb-8">
@@ -472,12 +472,12 @@ export default function SubscriptionPage() {
                                                             animate={{ x: 0, opacity: 1 }}
                                                             transition={{ delay: 0.1 * idx }}
                                                             key={idx}
-                                                            className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5 group-hover:border-white/10 transition-colors"
+                                                            className="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/10 shadow-sm"
                                                         >
-                                                            <div className="w-6 h-6 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0">
-                                                                <CheckCircle2 size={12} className="text-emerald-400" />
+                                                            <div className="w-6 h-6 rounded-lg bg-emerald-500/30 flex items-center justify-center shrink-0">
+                                                                <CheckCircle2 size={12} className="text-white" />
                                                             </div>
-                                                            <span className="text-[10px] font-black text-white uppercase tracking-tight leading-tight">{item}</span>
+                                                            <span className="text-[11px] font-black text-white uppercase tracking-tight leading-tight">{item}</span>
                                                         </motion.div>
                                                     ))}
                                             </div>
