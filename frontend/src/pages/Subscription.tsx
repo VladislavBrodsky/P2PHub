@@ -254,11 +254,12 @@ export default function SubscriptionPage() {
                     </div>
                 </div>
 
-                <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-3 tracking-tighter uppercase leading-[0.9] italic">
-                    <Trans i18nKey="subscription.upgrade.title" components={{ 1: <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-500 to-fuchsia-500" /> }} />
+                <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-2 tracking-tighter uppercase leading-[0.85] italic flex flex-col items-center">
+                    <span className="opacity-50 text-xl tracking-normal not-italic">{t('subscription.upgrade.upgrade_to')}</span>
+                    <span className="vibing-crystal-text text-5xl">PRO STATUS</span>
                 </h1>
 
-                <p className="text-slate-600 dark:text-slate-400 text-xs font-medium max-w-[280px] mx-auto leading-relaxed opacity-80 mb-6">
+                <p className="text-slate-500 dark:text-slate-400 text-[10px] font-black max-w-[280px] mx-auto leading-relaxed uppercase tracking-widest mb-8">
                     {t('subscription.upgrade.desc')}
                 </p>
 
@@ -334,83 +335,88 @@ export default function SubscriptionPage() {
             </div>
 
             {/* Features Row - Dynamic Vibing Drops */}
-            <div className="flex flex-col gap-3 mb-8">
+            <div className="flex flex-col gap-4 mb-12">
                 {/* TOKENS FEATURE (Marketer 24/7) */}
-                <motion.div layout className="relative">
-                    {expandedFeature === 'TOKENS' && (
-                        <motion.div
-                            layoutId="neon-glow-tokens"
-                            className="absolute -inset-0.5 bg-linear-to-r from-indigo-500 to-fuchsia-500 rounded-3xl blur opacity-50 -z-10"
-                            animate={{ opacity: [0.3, 0.6, 0.3] }}
-                            transition={{ duration: 3, repeat: Infinity }}
-                        />
-                    )}
+                <motion.div layout className="relative group">
                     <button
                         onClick={() => { selection(); setExpandedFeature(expandedFeature === 'TOKENS' ? null : 'TOKENS'); }}
-                        className={`w-full text-left transition-all duration-300 relative overflow-hidden rounded-3xl border ${expandedFeature === 'TOKENS' ? 'border-indigo-500/50 bg-white/10 shadow-2xl backdrop-blur-xl' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 hover:border-indigo-500/20 shadow-sm'}`}
+                        className={`w-full text-left transition-all duration-500 relative overflow-hidden rounded-[2rem] border-2 h-auto ${expandedFeature === 'TOKENS'
+                            ? 'border-indigo-500 bg-slate-900 shadow-[0_0_50px_rgba(79,70,229,0.3)]'
+                            : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 hover:border-indigo-500/30 shadow-md'}`}
                     >
-                        {expandedFeature === 'TOKENS' && (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="absolute inset-0 bg-linear-to-br from-indigo-600/20 to-fuchsia-600/20 z-0"
-                            />
-                        )}
-                        <div className="p-5 flex items-center justify-between relative z-10">
-                            <div className="flex items-center gap-4">
-                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-lg ${expandedFeature === 'TOKENS' ? 'bg-indigo-500 shadow-indigo-500/40 text-white' : 'bg-indigo-500/10 text-indigo-500'}`}>
-                                    <Zap size={22} fill={expandedFeature === 'TOKENS' ? 'currentColor' : 'none'} />
+                        {/* Animated background when expanded */}
+                        <AnimatePresence>
+                            {expandedFeature === 'TOKENS' && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="absolute inset-0 bg-glow-pro-animated opacity-20 z-0"
+                                />
+                            )}
+                        </AnimatePresence>
+
+                        <div className="p-6 flex items-center justify-between relative z-10">
+                            <div className="flex items-center gap-5">
+                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-2xl transition-all duration-500 ${expandedFeature === 'TOKENS' ? 'bg-indigo-500 scale-110 rotate-3 text-white' : 'bg-linear-to-br from-indigo-500/10 to-indigo-600/5 text-indigo-500 border border-indigo-500/10'}`}>
+                                    <Zap size={28} fill={expandedFeature === 'TOKENS' ? 'currentColor' : 'none'} className={expandedFeature === 'TOKENS' ? 'animate-pulse' : ''} />
                                 </div>
                                 <div>
-                                    <p className={`text-[9px] font-black uppercase tracking-widest mb-0.5 ${expandedFeature === 'TOKENS' ? 'text-indigo-400' : 'text-slate-400'}`}>
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${expandedFeature === 'TOKENS' ? 'text-indigo-400' : 'text-slate-400'}`}>
+                                            VIRAL STUDIO
+                                        </span>
+                                        {selectedPlan === 'PRO_PLUS' && <Sparkles size={10} className="text-amber-500 animate-pulse" />}
+                                    </div>
+                                    <h3 className={`text-xl font-black uppercase tracking-tighter leading-none ${expandedFeature === 'TOKENS' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
                                         {selectedPlan === 'PRO' ? '250 TOKENS' : '500 TOKENS'}
-                                    </p>
-                                    <h3 className={`text-base font-black uppercase tracking-tight ${expandedFeature === 'TOKENS' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
-                                        Viral Studio
                                     </h3>
                                 </div>
                             </div>
                             <motion.div animate={{ rotate: expandedFeature === 'TOKENS' ? 180 : 0 }} className={expandedFeature === 'TOKENS' ? 'text-white' : 'text-slate-300'}>
-                                <ChevronDown size={20} />
+                                <ChevronDown size={24} strokeWidth={3} />
                             </motion.div>
                         </div>
 
-                        <AnimatePresence mode="wait">
+                        <AnimatePresence>
                             {expandedFeature === 'TOKENS' && (
                                 <motion.div
                                     initial={{ height: 0, opacity: 0 }}
                                     animate={{ height: 'auto', opacity: 1 }}
                                     exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.3, ease: 'easeInOut' }}
-                                    className="overflow-hidden"
+                                    className="overflow-hidden bg-black/40 backdrop-blur-md"
                                 >
-                                    <div className="px-5 pb-6 relative z-10">
-                                        <div className="h-px bg-white/10 mb-5" />
-                                        <p className="text-[11px] font-medium text-white/70 leading-relaxed mb-6 italic">
-                                            "Self-evolving neural studio for high-retention content synthesis."
-                                        </p>
+                                    <div className="px-6 pb-8 pt-2">
+                                        <div className="h-px bg-white/10 mb-6" />
 
-                                        <div className="grid grid-cols-1 gap-2.5 mb-6">
-                                            {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro_short' : 'subscription.upgrade.benefits_pro_plus_short', { returnObjects: true }) as string[]).map((item, idx) => (
-                                                <motion.div
-                                                    initial={{ x: -10, opacity: 0 }}
-                                                    animate={{ x: 0, opacity: 1 }}
-                                                    transition={{ delay: 0.05 * idx }}
-                                                    key={idx}
-                                                    className="flex items-center gap-3 bg-white/5 p-3.5 rounded-2xl border border-white/5 backdrop-blur-md"
-                                                >
-                                                    <CheckCircle2 size={14} className="text-indigo-400 shrink-0" />
-                                                    <span className="text-[10px] font-black text-white uppercase tracking-wide">{item}</span>
-                                                </motion.div>
-                                            ))}
+                                        <div className="space-y-4 mb-8">
+                                            <p className="text-[11px] font-black text-indigo-400 uppercase tracking-widest mb-4">INCLUDED BENEFITS:</p>
+                                            <div className="grid grid-cols-1 gap-2">
+                                                {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true }) as string[])
+                                                    .filter(b => b.toLowerCase().includes('token') || b.toLowerCase().includes('xp') || b.toLowerCase().includes('viral') || b.toLowerCase().includes('audit'))
+                                                    .map((item, idx) => (
+                                                        <motion.div
+                                                            initial={{ x: -20, opacity: 0 }}
+                                                            animate={{ x: 0, opacity: 1 }}
+                                                            transition={{ delay: 0.1 * idx }}
+                                                            key={idx}
+                                                            className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5 group-hover:border-white/10 transition-colors"
+                                                        >
+                                                            <div className="w-6 h-6 rounded-lg bg-indigo-500/20 flex items-center justify-center shrink-0">
+                                                                <CheckCircle2 size={12} className="text-indigo-400" />
+                                                            </div>
+                                                            <span className="text-[10px] font-black text-white uppercase tracking-tight leading-tight">{item}</span>
+                                                        </motion.div>
+                                                    ))}
+                                            </div>
                                         </div>
 
                                         <button
                                             onClick={scrollToPayment}
-                                            className="w-full h-14 bg-white text-indigo-600 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all relative overflow-hidden group/btn"
+                                            className="w-full h-16 bg-white text-indigo-600 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(255,255,255,0.2)] active:scale-95 transition-all relative overflow-hidden group/btn"
                                         >
                                             <span className="relative z-10">INITIALIZE STUDIO</span>
-                                            <div className="absolute inset-0 bg-indigo-500 -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-500 opacity-10" />
+                                            <div className="absolute inset-0 bg-indigo-500 -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-700 opacity-10" />
                                         </button>
                                     </div>
                                 </motion.div>
@@ -419,82 +425,86 @@ export default function SubscriptionPage() {
                     </button>
                 </motion.div>
 
-                {/* LEVELS FEATURE (Autonomous Factory) */}
-                <motion.div layout className="relative">
-                    {expandedFeature === 'LEVELS' && (
-                        <motion.div
-                            layoutId="neon-glow-levels"
-                            className="absolute -inset-0.5 bg-linear-to-r from-emerald-500 to-teal-500 rounded-3xl blur opacity-50 -z-10"
-                            animate={{ opacity: [0.3, 0.6, 0.3] }}
-                            transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
-                        />
-                    )}
+                {/* LEVELS FEATURE (Network Factory) */}
+                <motion.div layout className="relative group">
                     <button
                         onClick={() => { selection(); setExpandedFeature(expandedFeature === 'LEVELS' ? null : 'LEVELS'); }}
-                        className={`w-full text-left transition-all duration-300 relative overflow-hidden rounded-3xl border ${expandedFeature === 'LEVELS' ? 'border-emerald-500/50 bg-white/10 shadow-2xl backdrop-blur-xl' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 hover:border-emerald-500/20 shadow-sm'}`}
+                        className={`w-full text-left transition-all duration-500 relative overflow-hidden rounded-[2rem] border-2 h-auto ${expandedFeature === 'LEVELS'
+                            ? 'border-emerald-500 bg-slate-900 shadow-[0_0_50px_rgba(16,185,129,0.3)]'
+                            : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 hover:border-emerald-500/30 shadow-md'}`}
                     >
-                        {expandedFeature === 'LEVELS' && (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="absolute inset-0 bg-linear-to-br from-emerald-600/20 to-teal-600/20 z-0"
-                            />
-                        )}
-                        <div className="p-5 flex items-center justify-between relative z-10">
-                            <div className="flex items-center gap-4">
-                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-lg ${expandedFeature === 'LEVELS' ? 'bg-emerald-500 shadow-emerald-500/40 text-white' : 'bg-emerald-500/10 text-emerald-500'}`}>
-                                    <Users size={22} fill={expandedFeature === 'LEVELS' ? 'currentColor' : 'none'} />
+                        <AnimatePresence>
+                            {expandedFeature === 'LEVELS' && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="absolute inset-0 bg-linear-to-br from-emerald-600/20 via-teal-600/10 to-transparent opacity-40 z-0"
+                                />
+                            )}
+                        </AnimatePresence>
+
+                        <div className="p-6 flex items-center justify-between relative z-10">
+                            <div className="flex items-center gap-5">
+                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-2xl transition-all duration-500 ${expandedFeature === 'LEVELS' ? 'bg-emerald-500 scale-110 -rotate-3 text-white' : 'bg-linear-to-br from-emerald-500/10 to-teal-600/5 text-emerald-500 border border-emerald-500/10'}`}>
+                                    <Users size={28} fill={expandedFeature === 'LEVELS' ? 'currentColor' : 'none'} className={expandedFeature === 'LEVELS' ? 'animate-bounce' : ''} />
                                 </div>
                                 <div>
-                                    <p className={`text-[9px] font-black uppercase tracking-widest mb-0.5 ${expandedFeature === 'LEVELS' ? 'text-emerald-400' : 'text-slate-400'}`}>
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${expandedFeature === 'LEVELS' ? 'text-emerald-400' : 'text-slate-400'}`}>
+                                            CONTENT FACTORY
+                                        </span>
+                                        <div className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[7px] font-black text-emerald-500 uppercase tracking-widest">AUTO-PILOT</div>
+                                    </div>
+                                    <h3 className={`text-xl font-black uppercase tracking-tighter leading-none ${expandedFeature === 'LEVELS' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
                                         {selectedPlan === 'PRO' ? '9 LEVELS' : '20 LEVELS'}
-                                    </p>
-                                    <h3 className={`text-base font-black uppercase tracking-tight ${expandedFeature === 'LEVELS' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
-                                        Content Factory
                                     </h3>
                                 </div>
                             </div>
                             <motion.div animate={{ rotate: expandedFeature === 'LEVELS' ? 180 : 0 }} className={expandedFeature === 'LEVELS' ? 'text-white' : 'text-slate-300'}>
-                                <ChevronDown size={20} />
+                                <ChevronDown size={24} strokeWidth={3} />
                             </motion.div>
                         </div>
 
-                        <AnimatePresence mode="wait">
+                        <AnimatePresence>
                             {expandedFeature === 'LEVELS' && (
                                 <motion.div
                                     initial={{ height: 0, opacity: 0 }}
                                     animate={{ height: 'auto', opacity: 1 }}
                                     exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.3, ease: 'easeInOut' }}
-                                    className="overflow-hidden"
+                                    className="overflow-hidden bg-black/40 backdrop-blur-md"
                                 >
-                                    <div className="px-5 pb-6 relative z-10">
-                                        <div className="h-px bg-white/10 mb-5" />
-                                        <p className="text-[11px] font-medium text-white/70 leading-relaxed mb-6 italic">
-                                            "Automated network expansion through AI agent deployment."
-                                        </p>
+                                    <div className="px-6 pb-8 pt-2">
+                                        <div className="h-px bg-white/10 mb-6" />
 
-                                        <div className="grid grid-cols-1 gap-2.5 mb-6">
-                                            {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro_short_levels' : 'subscription.upgrade.benefits_pro_plus_short_levels', { returnObjects: true }) as string[]).map((item, idx) => (
-                                                <motion.div
-                                                    initial={{ x: -10, opacity: 0 }}
-                                                    animate={{ x: 0, opacity: 1 }}
-                                                    transition={{ delay: 0.05 * idx }}
-                                                    key={idx}
-                                                    className="flex items-center gap-3 bg-white/5 p-3.5 rounded-2xl border border-white/5 backdrop-blur-md"
-                                                >
-                                                    <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
-                                                    <span className="text-[10px] font-black text-white uppercase tracking-wide">{item}</span>
-                                                </motion.div>
-                                            ))}
+                                        <div className="space-y-4 mb-8">
+                                            <p className="text-[11px] font-black text-emerald-400 uppercase tracking-widest mb-4">INCLUDED BENEFITS:</p>
+                                            <div className="grid grid-cols-1 gap-2">
+                                                {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true }) as string[])
+                                                    .filter(b => b.toLowerCase().includes('level') || b.toLowerCase().includes('commission') || b.toLowerCase().includes('referral') || b.toLowerCase().includes('network'))
+                                                    .map((item, idx) => (
+                                                        <motion.div
+                                                            initial={{ x: 20, opacity: 0 }}
+                                                            animate={{ x: 0, opacity: 1 }}
+                                                            transition={{ delay: 0.1 * idx }}
+                                                            key={idx}
+                                                            className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5 group-hover:border-white/10 transition-colors"
+                                                        >
+                                                            <div className="w-6 h-6 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0">
+                                                                <CheckCircle2 size={12} className="text-emerald-400" />
+                                                            </div>
+                                                            <span className="text-[10px] font-black text-white uppercase tracking-tight leading-tight">{item}</span>
+                                                        </motion.div>
+                                                    ))}
+                                            </div>
                                         </div>
 
                                         <button
                                             onClick={scrollToPayment}
-                                            className="w-full h-14 bg-white text-emerald-600 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all relative overflow-hidden group/btn"
+                                            className="w-full h-16 bg-white text-emerald-600 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(16,185,129,0.2)] active:scale-95 transition-all relative overflow-hidden group/btn"
                                         >
                                             <span className="relative z-10">DEPLOY FACTORY</span>
-                                            <div className="absolute inset-0 bg-emerald-500 -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-500 opacity-10" />
+                                            <div className="absolute inset-0 bg-emerald-500 -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-700 opacity-10" />
                                         </button>
                                     </div>
                                 </motion.div>
@@ -502,38 +512,6 @@ export default function SubscriptionPage() {
                         </AnimatePresence>
                     </button>
                 </motion.div>
-            </div>
-
-            {/* Price Cards - Key Benefits List (Modernized) */}
-            <div className="mb-14 space-y-5">
-                <div className="flex items-center justify-between px-2 mb-4">
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] opacity-50 dark:text-white">{t('subscription.upgrade.benefits_title')}</h3>
-                    <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${selectedPlan === 'PRO_PLUS' ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'}`}>
-                        {selectedPlan === 'PRO' ? 'PRO PLAN' : 'PRO+ EMPIRE'}
-                    </div>
-                </div>
-                <div className="grid grid-cols-1 gap-2">
-                    {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true }) as string[]).map((benefit, idx) => {
-                        const isXP = benefit.includes('XP');
-                        const isPlus = selectedPlan === 'PRO_PLUS';
-                        return (
-                            <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: idx * 0.05 }}
-                                className={`p-3 rounded-2xl border flex items-center gap-3.5 transition-all duration-500 ${isPlus ? 'bg-linear-to-r from-indigo-500/20 to-purple-500/20 border-indigo-500/30 shadow-lg shadow-indigo-500/5' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/5 shadow-sm'}`}
-                            >
-                                <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border-2 ${isXP ? (isPlus ? 'bg-indigo-500 border-indigo-400 text-white shadow-xl shadow-indigo-500/30' : 'bg-emerald-500 border-emerald-400 text-white shadow-xl shadow-emerald-500/30') : (isPlus ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-500' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-emerald-500')}`}>
-                                    <CheckCircle2 size={14} className={isXP ? 'animate-pulse' : ''} />
-                                </div>
-                                <span className={`text-[10px] leading-tight ${isXP ? 'font-black text-slate-900 dark:text-white uppercase tracking-tight' : 'font-bold text-slate-600 dark:text-slate-300'}`}>
-                                    {benefit}
-                                </span>
-                            </motion.div>
-                        );
-                    })}
-                </div>
             </div>
 
             {/* Payment Section */}

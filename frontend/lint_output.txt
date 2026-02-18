@@ -1,0 +1,45 @@
+
+> frontend@1.7.2 lint
+> eslint . --ext ts,tsx --report-unused-disable-directives
+
+
+/Users/grandmaestro/Documents/P2PHub/frontend/src/components/Marketing/PartnerStats.tsx
+   7:10  warning  'LazyImage' is defined but never used             @typescript-eslint/no-unused-vars
+  48:13  warning  'start' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  48:13  error    'start' is never reassigned. Use 'const' instead  prefer-const
+  79:12  warning  'isLoading' is assigned a value but never used    @typescript-eslint/no-unused-vars
+
+/Users/grandmaestro/Documents/P2PHub/frontend/src/components/Onboarding/SystemLink.tsx
+   2:18  warning  'AnimatePresence' is defined but never used                                                                       @typescript-eslint/no-unused-vars
+  29:8   warning  React Hook useEffect has a missing dependency: 'terminalLines'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/grandmaestro/Documents/P2PHub/frontend/src/components/Skeletons/BlogSkeleton.tsx
+  2:10  warning  'motion' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/grandmaestro/Documents/P2PHub/frontend/src/components/Skeletons/DashboardSkeleton.tsx
+  1:10  warning  'motion' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/grandmaestro/Documents/P2PHub/frontend/src/components/ui/StartupLoader.tsx
+  12:12  warning  'isImageLoaded' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/grandmaestro/Documents/P2PHub/frontend/src/context/UserContext.tsx
+  190:8  warning  React Hook React.useCallback has a missing dependency: 'user'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/grandmaestro/Documents/P2PHub/frontend/src/pages/AdminPage.tsx
+  6:49  warning  'Edit' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/grandmaestro/Documents/P2PHub/frontend/src/pages/BlogPage.tsx
+   75:8   warning  React Hook useEffect has a missing dependency: 'fetchPosts'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+  230:8   warning  React Hook useEffect has a missing dependency: 'isRefreshing'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  427:44  warning  'onBack' is defined but never used                                                                               @typescript-eslint/no-unused-vars
+
+/Users/grandmaestro/Documents/P2PHub/frontend/src/pages/Pro/utils/LiquidCounter.tsx
+  1:29  warning  'useTransform' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/grandmaestro/Documents/P2PHub/frontend/src/pages/Subscription.tsx
+  5:29  warning  'Rocket' is defined but never used  @typescript-eslint/no-unused-vars
+  5:37  warning  'Bot' is defined but never used     @typescript-eslint/no-unused-vars
+
+✖ 17 problems (1 error, 16 warnings)
+  1 error and 0 warnings potentially fixable with the `--fix` option.
+

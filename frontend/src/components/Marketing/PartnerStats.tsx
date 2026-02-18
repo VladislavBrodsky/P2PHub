@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 // #comment: Removed useEffect as we now use the optimized useVisibilityPolling hook.
 import { useTranslation, Trans } from 'react-i18next';
 import { apiClient } from '../../api/client';
-import { LazyImage } from '../ui/LazyImage';
 import { useVisibilityPolling } from '../../hooks/useVisibilityPolling';
 import { getApiUrl } from '../../utils/api';
 
@@ -45,7 +44,6 @@ const CountUp = ({ value, duration = 2 }: { value: string; duration?: number }) 
     const suffix = value.replace(/[0-9.]/g, '');
 
     useEffect(() => {
-        let start = 0;
         const startTime = performance.now();
         const durationMs = duration * 1000;
 
