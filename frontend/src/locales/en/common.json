@@ -159,7 +159,17 @@
   "faq": {
     "title": "Intelligence Base (FAQ)",
     "subtitle": "Knowledge is Power",
-    "search_placeholder": "Search the knowledge base...",
+    "knowledge_base": "KNOWLEDGE BASE",
+    "header_title": "HELP <0>CENTER</0>",
+    "header_desc": "Everything you need to know about scaling your P2P Empire.",
+    "search_placeholder": "Search for answers...",
+    "still_have_questions": "STILL HAVE <0>QUESTIONS?</0>",
+    "still_have_questions_desc": "Can't find what you're looking for? Join our community or contact 24/7 support.",
+    "support_btn": "Support",
+    "community_btn": "Community",
+    "helpful": "Was this helpful?",
+    "no_results": "NO RESULTS FOUND",
+    "no_results_desc": "Try searching with different keywords.",
     "withdraw": "How to withdraw funds?",
     "level": "How do levels work?",
     "limits": "What are my card limits?",
@@ -191,8 +201,8 @@
         "a": "Virtual cards: $10,000/month. Physical cards: $25,000/month. Platinum cards: $100,000/month. Limits increase with your partner level and PRO status."
       },
       {
-        "q": "How does the 5-level network work?",
-        "a": "You earn from partners you invite (Level 1), partners they invite (Level 2), and so on to Level 5. Each level has different reward percentages. Depth builds legacy income."
+        "q": "How does the referral network work?",
+        "a": "You earn from partners across different depths. Free tier: 5 levels. PRO: 9 levels. PRO+: 20 levels. Each level provides passive commissions from card usage and network growth."
       },
       {
         "q": "What is PRO subscription?",
@@ -222,9 +232,9 @@
     "categories": {
       "all": "All",
       "general": "General",
-      "rewards": "Rewards & XP",
-      "pro": "PRO Membership",
-      "cards": "P2P Cards",
+      "rewards": "Rewards",
+      "pro": "PRO",
+      "cards": "Cards",
       "security": "Security"
     }
   },
@@ -250,5 +260,92 @@
         "desc": "Activate PRO to unlock the AI Content Factory. Scale your network 100x faster while you sleep."
       }
     ]
+  },
+  "subscription": {
+    "pro_active": {
+      "title": "WELCOME TO THE <1>ELITE</1>",
+      "title_plus": "PRO+ EMPIRE ACTIVE",
+      "desc": "You have unlocked the full potential of Pintopay. Your journey to x10 profit has officially begun.",
+      "desc_plus": "Your AI engine is running at full capacity with 500 monthly tokens and 20-level network insights.",
+      "plan_pro": "PLAN: PRO CLASSIC",
+      "plan_pro_plus": "PLAN: PRO+ EMPIRE",
+      "active_until": "Active until",
+      "lifetime": "Lifetime Plan",
+      "command_center": "PRO Command Center",
+      "explore_empire": "Explore your empire"
+    },
+    "upgrade": {
+      "badge": "Premium Subscription",
+      "title": "Upgrade to <1>PRO STATUS</1>",
+      "desc": "Select the level of growth automation that suits your ambition. Both plans unlock lifetime commissions.",
+      "pro_title": "PRO Plan",
+      "pro_plus_title": "PRO+ Empire",
+      "lifetime_pro": "Lifetime Access",
+      "one_time": "One-time payment",
+      "tokens_info_pro": "250 AI TOKENS / MON",
+      "tokens_info_pro_plus": "500 AI TOKENS / MON",
+      "levels_info_pro": "9-LEVEL NETWORK UNLOCKED",
+      "levels_info_pro_plus": "20-LEVEL NETWORK UNLOCKED",
+      "limited_offer": "Lifetime PRO for first 300 partners",
+      "limited_count": "147/300 bought",
+      "benefits_title": "Key Benefits",
+      "benefits_pro": [
+        "9 levels of referral network",
+        "X5 XP Speed",
+        "Priority payouts",
+        "VIP Support",
+        "Personal ref-links"
+      ],
+      "benefits_pro_plus": [
+        "All PRO benefits included",
+        "20 levels of referral network",
+        "Priority access to new AI features",
+        "Dedicated Success Manager",
+        "Early access to elite merch"
+      ],
+      "change_method": "Change method",
+      "processing": "Processing...",
+      "complete_payment": "Complete payment",
+      "usdt_address": "USDT TRC20 Address",
+      "tx_hash_label": "Transaction Hash (optional)",
+      "tx_hash_placeholder": "Paste transaction hash",
+      "i_paid": "I have Paid",
+      "benefits_pro_short": [
+        "Viral Studio access",
+        "X5 XP Speed",
+        "Priority payouts",
+        "VIP Support"
+      ],
+      "benefits_pro_short_levels": [
+        "9 levels of commissions",
+        "Depth analytics",
+        "Instant withdrawals",
+        "Network security"
+      ],
+      "manual_review_p": "Reviewed by our team within 24 hours.<1/>Please complete the transfer within 30 minutes."
+    },
+    "status": {
+      "verifying": "Verifying...",
+      "verifying_p": "Checking on-chain data. This usually takes 30-60 seconds.",
+      "welcome_pro": "Welcome to PRO!",
+      "welcome_pro_p": "Your account has been successfully upgraded.",
+      "get_started": "Get Started",
+      "submitted": "Submitted",
+      "submitted_p": "Our team is verifying your payment. You will be notified once confirmed.",
+      "got_it": "Got it"
+    },
+    "alerts": {
+      "expired": "Session expired. Please start the process again.",
+      "failed": "Payment session expired or failed. Please try again."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": "Is it really lifetime?",
+      "a1": "Yes. Pay once, use forever. No monthly fees, no hidden costs.",
+      "q2": "How do tokens work?",
+      "a2": "You get 250 tokens (PRO) or 500 tokens (PRO+) monthly. Tokens reset on the 1st of every month.",
+      "q3": "Can I use multiple accounts?",
+      "a3": "The license is tied to your Telegram ID. One purchase per account."
+    }
   }
 }

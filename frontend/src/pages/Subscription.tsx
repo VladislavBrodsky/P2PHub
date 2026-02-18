@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Crown, CheckCircle2, Wallet, CreditCard, ChevronRight,
@@ -13,7 +13,6 @@ import { useHaptic } from '../hooks/useHaptic';
 import { useConfig } from '../context/ConfigContext';
 
 export default function SubscriptionPage() {
-    // #comment: Trigger deployment update
     const { t } = useTranslation();
     const { user, refreshUser } = useUser();
     const { config: globalConfig } = useConfig();
@@ -25,9 +24,9 @@ export default function SubscriptionPage() {
     const [manualHash, setManualHash] = useState('');
     const [sessionData, setSessionData] = useState<{ expires_at: string; transaction_id: number } | null>(null);
     const [timeLeft, setTimeLeft] = useState<number | null>(null);
-    const [expandedItem, setExpandedItem] = useState<string | null>(null);
+    const [selectedPlan, setSelectedPlan] = useState<'PRO' | 'PRO_PLUS'>('PRO_PLUS');
+    const [expandedFeature, setExpandedFeature] = useState<'TOKENS' | 'LEVELS' | null>(null);
 
-    // #comment: Timer logic to calculate and update remaining time for the payment session.
     useEffect(() => {
         if (!sessionData?.expires_at) {
             setTimeLeft(null);
@@ -58,7 +57,6 @@ export default function SubscriptionPage() {
         return `${minutes}:${seconds.toString().padStart(2, '0')}`;
     }, [timeLeft]);
 
-    const [selectedPlan, setSelectedPlan] = useState<'PRO' | 'PRO_PLUS'>('PRO_PLUS');
     const planPrice = selectedPlan === 'PRO_PLUS' ? 69 : 39;
     const adminUsdt = globalConfig?.admin_usdt_address || "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM";
 
@@ -134,11 +132,10 @@ export default function SubscriptionPage() {
         }
     };
 
-    const [showBenefits, setShowBenefits] = useState(false);
-    const [expandedSubscriptionFaq, setExpandedSubscriptionFaq] = useState<number | null>(null);
     const paymentRef = React.useRef<HTMLDivElement>(null);
 
-    const scrollToPayment = () => {
+    const scrollToPayment = (e?: React.MouseEvent) => {
+        if (e) e.stopPropagation();
         selection();
         paymentRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
@@ -190,7 +187,7 @@ export default function SubscriptionPage() {
     }
 
     return (
-        <div className="flex flex-col px-4 pb-32 pt-2 max-w-lg mx-auto">
+        <div className="flex flex-col px-4 pb-32 pt-2 max-w-lg mx-auto overflow-x-hidden">
             {/* Header */}
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -228,236 +225,262 @@ export default function SubscriptionPage() {
                 </div>
             </motion.div>
 
-            {/* Plan Toggle */}
-            <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 dark:bg-white/5 rounded-2xl mb-8 relative">
+            {/* Plan Toggle - Compact */}
+            <div className="grid grid-cols-2 gap-2 p-1.5 bg-slate-100 dark:bg-white/5 rounded-2xl mb-8 relative">
                 <button
-                    onClick={() => { selection(); setSelectedPlan('PRO'); }}
-                    className={`relative z-10 py-4 rounded-xl flex flex-col items-center justify-center transition-all duration-300 ${selectedPlan === 'PRO' ? 'bg-white dark:bg-slate-800 shadow-md' : 'opacity-50'}`}
+                    onClick={() => { selection(); setSelectedPlan('PRO'); setExpandedFeature(null); }}
+                    className={`relative z-10 py-3.5 rounded-xl flex flex-col items-center justify-center transition-all duration-300 ${selectedPlan === 'PRO' ? 'bg-white dark:bg-(--card-bg) shadow-lg' : 'opacity-50'}`}
                 >
-                    <span className="text-[10px] font-black uppercase tracking-wider">{t('subscription.upgrade.pro_title')}</span>
-                    <span className="text-lg font-black">$39</span>
+                    <span className="text-[9px] font-black uppercase tracking-wider opacity-60">{t('subscription.upgrade.pro_title')}</span>
+                    <span className="text-xl font-black">$39</span>
                 </button>
                 <button
-                    onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }}
-                    className={`relative z-10 py-4 rounded-xl flex flex-col items-center justify-center transition-all duration-300 ${selectedPlan === 'PRO_PLUS' ? 'bg-white dark:bg-slate-800 shadow-md ring-2 ring-indigo-500/30' : 'opacity-50'}`}
+                    onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); setExpandedFeature(null); }}
+                    className={`relative z-10 py-3.5 rounded-xl flex flex-col items-center justify-center transition-all duration-300 ${selectedPlan === 'PRO_PLUS' ? 'bg-white dark:bg-(--card-bg) shadow-lg ring-2 ring-indigo-500/60' : 'opacity-50'}`}
                 >
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-600 text-[8px] font-black text-white px-2 py-0.5 rounded-full uppercase tracking-tighter">RECOMMENDED</div>
-                    <span className="text-[10px] font-black uppercase tracking-wider">{t('subscription.upgrade.pro_plus_title')}</span>
-                    <span className="text-lg font-black">$69</span>
+                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-indigo-600 text-[7px] font-black text-white px-2 py-0.5 rounded-full uppercase tracking-tighter shadow-lg z-20">RECOMMENDED</div>
+                    <span className="text-[9px] font-black uppercase tracking-wider opacity-60">{t('subscription.upgrade.pro_plus_title')}</span>
+                    <span className="text-xl font-black">$69</span>
                 </button>
             </div>
 
-            {/* Features Row */}
-            <div className="flex flex-col gap-3 mb-6">
-                <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl transition-all duration-500">
-                    <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center shrink-0">
-                        <Zap size={20} className="text-indigo-500" />
-                    </div>
-                    <div className="flex-1">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('subscription.upgrade.one_time')}</p>
-                        <p className="text-sm font-black text-slate-900 dark:text-white uppercase">
-                            {selectedPlan === 'PRO' ? t('subscription.upgrade.tokens_info_pro') : t('subscription.upgrade.tokens_info_pro_plus')}
-                        </p>
-                    </div>
-                </div>
-                <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl transition-all duration-500">
-                    <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
-                        <Users size={20} className="text-orange-500" />
-                    </div>
-                    <div className="flex-1">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('subscription.upgrade.lifetime_pro')}</p>
-                        <p className="text-sm font-black text-slate-900 dark:text-white uppercase">
-                            {t('subscription.upgrade.levels_info')}
-                        </p>
-                    </div>
-                </div>
-
-                {/* Collapsible Benefits Dropdown */}
-                <div className="mt-2">
+            {/* Features Row - Dynamic Vibing Drops */}
+            <div className="flex flex-col gap-3 mb-8">
+                {/* TOKENS FEATURE */}
+                <div className="group">
                     <button
-                        onClick={() => { selection(); setShowBenefits(!showBenefits); }}
-                        className="w-full group flex items-center justify-between p-4 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 hover:bg-indigo-500/10 transition-all duration-300"
+                        onClick={() => { selection(); setExpandedFeature(expandedFeature === 'TOKENS' ? null : 'TOKENS'); }}
+                        className={`w-full text-left transition-all duration-300 relative overflow-hidden active:scale-[0.98] rounded-3xl border ${expandedFeature === 'TOKENS' ? 'border-indigo-500/50' : 'border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/5'}`}
                     >
-                        <div className="flex items-center gap-2">
-                            <Sparkles size={16} className="text-indigo-500" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-400">
-                                {showBenefits ? t('common.show_less') : t('subscription.upgrade.benefits_title')}
-                            </span>
-                        </div>
-                        <motion.div
-                            animate={{ rotate: showBenefits ? 180 : 0 }}
-                            className="text-indigo-500"
-                        >
-                            <ChevronDown size={18} />
-                        </motion.div>
-                    </button>
-
-                    <AnimatePresence>
-                        {showBenefits && (
+                        {selectedPlan === 'PRO_PLUS' && expandedFeature === 'TOKENS' && (
                             <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                className="overflow-hidden"
-                            >
-                                <div className="pt-6 pb-4 space-y-6">
-                                    {selectedPlan === 'PRO_PLUS' ? (
-                                        <div className="space-y-4">
-                                            {/* Viral Studio Vibing Banner */}
-                                            <motion.div
-                                                initial={{ scale: 0.95, opacity: 0 }}
-                                                animate={{ scale: 1, opacity: 1 }}
-                                                className="relative p-6 rounded-[2.5rem] overflow-hidden group shadow-2xl"
-                                            >
-                                                <motion.div
-                                                    animate={{
-                                                        scale: [1, 1.2, 1],
-                                                        rotate: [0, 90, 180, 270, 360],
-                                                        x: [-20, 20, -20],
-                                                        y: [-20, 20, -20]
-                                                    }}
-                                                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                                                    className="absolute inset-0 bg-linear-to-tr from-purple-600 via-fuchsia-500 to-indigo-600 opacity-80 blur-3xl scale-150"
-                                                />
-                                                <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" />
-                                                <div className="relative z-10">
-                                                    <div className="flex items-start justify-between mb-4">
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center">
-                                                                <Rocket size={20} className="text-white" />
-                                                            </div>
-                                                            <h3 className="text-xl font-black text-white tracking-tight">Viral Studio</h3>
-                                                        </div>
-                                                        <div className="w-2 h-2 rounded-full bg-fuchsia-400 animate-pulse" />
-                                                    </div>
-                                                    <p className="text-white/80 text-[11px] leading-relaxed mb-4 font-medium font-sans">
-                                                        Generate 30 Days of Content in 30 Seconds. Get daily fresh viral topics and AI-generated hooks tailored to your audience.
-                                                    </p>
-                                                    <ul className="space-y-2 mb-6">
-                                                        {["Reduce work time by 95%", "AI Keyword Research", "Instant FOMO & CTAs"].map((item, idx) => (
-                                                            <li key={idx} className="flex items-center gap-2 text-white/90 text-[10px] font-bold">
-                                                                <CheckCircle2 size={12} className="text-emerald-400" />
-                                                                {item}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                    <div className="bg-slate-900/80 backdrop-blur-md rounded-xl p-4 font-mono text-[10px] border border-white/10 mb-6">
-                                                        <div className="text-fuchsia-400 opacity-80 mb-1">{'>'} Generating viral thread...</div>
-                                                        <div className="text-white/60 text-[9px]">{'>'} Analysis: 98% Confidence</div>
-                                                    </div>
-                                                    <button
-                                                        onClick={scrollToPayment}
-                                                        className="w-full h-11 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-black transition-colors"
-                                                    >
-                                                        Unlock Viral Studio
-                                                    </button>
-                                                </div>
-                                            </motion.div>
+                                layoutId="tokens-bg"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="absolute inset-0 bg-linear-to-br from-purple-600/90 via-fuchsia-600/90 to-indigo-700/90 -z-10"
+                            />
+                        )}
+                        <div className="p-4 flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-lg ${expandedFeature === 'TOKENS' && selectedPlan === 'PRO_PLUS' ? 'bg-white/20' : 'bg-indigo-500/10'}`}>
+                                    <Zap size={22} className={expandedFeature === 'TOKENS' && selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-indigo-500'} />
+                                </div>
+                                <div className="flex-1">
+                                    <p className={`text-[10px] font-black uppercase tracking-widest ${expandedFeature === 'TOKENS' && selectedPlan === 'PRO_PLUS' ? 'text-white/60' : 'text-slate-500'}`}>
+                                        {t('subscription.upgrade.one_time')}
+                                    </p>
+                                    <p className={`text-base font-black uppercase leading-none mt-1 ${expandedFeature === 'TOKENS' && selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                                        {selectedPlan === 'PRO' ? t('subscription.upgrade.tokens_info_pro') : t('subscription.upgrade.tokens_info_pro_plus')}
+                                    </p>
+                                </div>
+                            </div>
+                            <motion.div animate={{ rotate: expandedFeature === 'TOKENS' ? 180 : 0 }} className={expandedFeature === 'TOKENS' && selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-400'}>
+                                <ChevronDown size={20} />
+                            </motion.div>
+                        </div>
 
-                                            {/* Content Factory Vibing Banner */}
-                                            <motion.div
-                                                initial={{ scale: 0.95, opacity: 0 }}
-                                                animate={{ scale: 1, opacity: 1 }}
-                                                transition={{ delay: 0.1 }}
-                                                className="relative p-6 rounded-[2.5rem] overflow-hidden group shadow-2xl border border-white/5"
-                                            >
-                                                <motion.div
-                                                    animate={{
-                                                        scale: [1.2, 1, 1.2],
-                                                        rotate: [360, 270, 180, 90, 0],
-                                                        x: [20, -20, 20],
-                                                        y: [20, -20, 20]
-                                                    }}
-                                                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                                                    className="absolute inset-0 bg-linear-to-bl from-emerald-600 via-teal-500 to-slate-900 opacity-60 blur-3xl scale-150"
-                                                />
-                                                <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm" />
-                                                <div className="relative z-10">
-                                                    <div className="flex items-start justify-between mb-4">
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center">
-                                                                <Bot size={20} className="text-emerald-400" />
-                                                            </div>
-                                                            <h3 className="text-xl font-black text-white tracking-tight">Content Factory</h3>
-                                                        </div>
-                                                        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                        <AnimatePresence>
+                            {expandedFeature === 'TOKENS' && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: 'auto', opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    className="overflow-hidden"
+                                >
+                                    {selectedPlan === 'PRO_PLUS' ? (
+                                        <div className="px-5 pb-6 pt-2 relative">
+                                            <div className="relative z-10">
+                                                <div className="flex items-center gap-3 mb-4">
+                                                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                                                        <Rocket size={16} className="text-white" />
                                                     </div>
-                                                    <p className="text-white/70 text-[11px] leading-relaxed mb-4 font-medium font-sans">
-                                                        Autonomous Agent that posts for you while you sleep. Your own full-stack SMM manager. Fully automated autoposting across all platforms.
-                                                    </p>
-                                                    <ul className="space-y-2 mb-6">
-                                                        {["10x Marketing Efficiency", "24/7 Autopilot Mode", "Multi-platform Sync"].map((item, idx) => (
-                                                            <li key={idx} className="flex items-center gap-2 text-white/90 text-[10px] font-bold">
-                                                                <CheckCircle2 size={12} className="text-emerald-400" />
-                                                                {item}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                    <div className="bg-black/60 backdrop-blur-md rounded-xl p-4 font-mono text-[10px] border border-white/5 mb-6">
-                                                        <div className="text-emerald-400 opacity-80 mb-1">{'>'} Scheduling 42 posts...</div>
-                                                        <div className="text-white/40 text-[9px]">{'>'} Status: ACTIVE</div>
-                                                    </div>
-                                                    <button
-                                                        onClick={scrollToPayment}
-                                                        className="w-full h-11 bg-transparent border border-white/20 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-slate-900 transition-colors"
-                                                    >
-                                                        Hire Your AI Agent
-                                                    </button>
+                                                    <h3 className="text-lg font-black text-white tracking-tight">Viral Studio</h3>
                                                 </div>
-                                            </motion.div>
+                                                <p className="text-white/80 text-[11px] leading-relaxed mb-5 font-medium">
+                                                    Generate 30 Days of Content in 30 Seconds. Get daily fresh viral topics and AI-generated hooks tailored to your audience.
+                                                </p>
+                                                <div className="space-y-2 mb-6">
+                                                    {[
+                                                        { label: "Reduce work time by 95%", t_key: "featured.reduction" },
+                                                        { label: "AI Keyword Research", t_key: "featured.keywords" },
+                                                        { label: "Instant FOMO & CTAs", t_key: "featured.fomo" }
+                                                    ].map((item, idx) => (
+                                                        <div key={idx} className="flex items-center gap-2 text-white text-[10px] font-bold">
+                                                            <div className="w-4 h-4 rounded-full bg-emerald-400/20 flex items-center justify-center">
+                                                                <CheckCircle2 size={10} className="text-emerald-400" />
+                                                            </div>
+                                                            {item.label}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                                <div className="bg-black/40 backdrop-blur-md rounded-xl p-4 font-mono text-[10px] border border-white/10 mb-6 group-hover:bg-black/60 transition-colors">
+                                                    <div className="text-fuchsia-400 opacity-80 mb-1 animate-pulse">{'>'} Generating viral thread...</div>
+                                                    <div className="text-white/60 text-[9px]">{'>'} Analysis: 98% Confidence</div>
+                                                </div>
+                                                <button
+                                                    onClick={scrollToPayment}
+                                                    className="w-full h-11 bg-white text-indigo-600 text-[10px] font-black uppercase tracking-widest rounded-xl shadow-xl active:scale-95 transition-all"
+                                                >
+                                                    Activate Viral Studio
+                                                </button>
+                                            </div>
+                                            <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 blur-3xl rounded-full" />
                                         </div>
                                     ) : (
-                                        <div className="px-2 space-y-4">
-                                            {(t('subscription.upgrade.benefits_pro', { returnObjects: true }) as string[]).map((benefit, i) => (
-                                                <motion.div
-                                                    key={i}
-                                                    initial={{ opacity: 0, x: -10 }}
-                                                    animate={{ opacity: 1, x: 0 }}
-                                                    transition={{ delay: i * 0.1 }}
-                                                    className="flex items-center gap-3"
-                                                >
-                                                    <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+                                        <div className="px-5 pb-6 pt-2 space-y-4">
+                                            <div className="p-4 bg-white dark:bg-black/20 rounded-2xl border border-slate-100 dark:border-white/5">
+                                                <p className="text-xs font-medium text-slate-600 dark:text-slate-400 leading-relaxed">
+                                                    Full access to all Studio tools with a monthly allowance of 250 AI tokens for unlimited creativity.
+                                                </p>
+                                            </div>
+                                            <div className="space-y-2">
+                                                {benefits_pro_short.map((b, i) => (
+                                                    <div key={i} className="flex items-center gap-2 text-[11px] font-bold text-slate-700 dark:text-slate-300">
                                                         <CheckCircle2 size={12} className="text-emerald-500" />
+                                                        {b}
                                                     </div>
-                                                    <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300">
-                                                        {benefit}
-                                                    </span>
-                                                </motion.div>
-                                            ))}
+                                                ))}
+                                            </div>
                                         </div>
                                     )}
-                                </div>
-                            </motion.div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </button>
+                </div>
+
+                {/* LEVELS FEATURE */}
+                <div className="group">
+                    <button
+                        onClick={() => { selection(); setExpandedFeature(expandedFeature === 'LEVELS' ? null : 'LEVELS'); }}
+                        className={`w-full text-left transition-all duration-300 relative overflow-hidden active:scale-[0.98] rounded-3xl border ${expandedFeature === 'LEVELS' ? 'border-emerald-500/50' : 'border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/5'}`}
+                    >
+                        {selectedPlan === 'PRO_PLUS' && expandedFeature === 'LEVELS' && (
+                            <motion.div
+                                layoutId="levels-bg"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="absolute inset-0 bg-linear-to-br from-emerald-600/90 via-teal-600/90 to-slate-900/90 -z-10"
+                            />
                         )}
-                    </AnimatePresence>
+                        <div className="p-4 flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-lg ${expandedFeature === 'LEVELS' && selectedPlan === 'PRO_PLUS' ? 'bg-white/20' : 'bg-orange-500/10'}`}>
+                                    <Users size={22} className={expandedFeature === 'LEVELS' && selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-orange-500'} />
+                                </div>
+                                <div className="flex-1">
+                                    <p className={`text-[10px] font-black uppercase tracking-widest ${expandedFeature === 'LEVELS' && selectedPlan === 'PRO_PLUS' ? 'text-white/60' : 'text-slate-500'}`}>
+                                        {t('subscription.upgrade.lifetime_pro')}
+                                    </p>
+                                    <p className={`text-base font-black uppercase leading-none mt-1 ${expandedFeature === 'LEVELS' && selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                                        {selectedPlan === 'PRO' ? t('subscription.upgrade.levels_info_pro') : t('subscription.upgrade.levels_info_pro_plus')}
+                                    </p>
+                                </div>
+                            </div>
+                            <motion.div animate={{ rotate: expandedFeature === 'LEVELS' ? 180 : 0 }} className={expandedFeature === 'LEVELS' && selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-400'}>
+                                <ChevronDown size={20} />
+                            </motion.div>
+                        </div>
+
+                        <AnimatePresence>
+                            {expandedFeature === 'LEVELS' && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: 'auto', opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    className="overflow-hidden"
+                                >
+                                    {selectedPlan === 'PRO_PLUS' ? (
+                                        <div className="px-5 pb-6 pt-2 relative">
+                                            <div className="relative z-10">
+                                                <div className="flex items-center gap-3 mb-4">
+                                                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                                                        <Bot size={16} className="text-emerald-400" />
+                                                    </div>
+                                                    <h3 className="text-lg font-black text-white tracking-tight">Content Factory</h3>
+                                                </div>
+                                                <p className="text-white/80 text-[11px] leading-relaxed mb-5 font-medium">
+                                                    Autonomous Agent that posts for you while you sleep. Your own full-stack SMM manager. Fully automated autoposting across all platforms.
+                                                </p>
+                                                <div className="space-y-2 mb-6">
+                                                    {[
+                                                        "10x Marketing Efficiency",
+                                                        "24/7 Autopilot Mode",
+                                                        "Multi-platform Sync"
+                                                    ].map((item, idx) => (
+                                                        <div key={idx} className="flex items-center gap-2 text-white text-[10px] font-bold">
+                                                            <div className="w-4 h-4 rounded-full bg-emerald-400/20 flex items-center justify-center">
+                                                                <CheckCircle2 size={10} className="text-emerald-400" />
+                                                            </div>
+                                                            {item}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                                <div className="bg-black/60 backdrop-blur-md rounded-xl p-4 font-mono text-[10px] border border-white/5 mb-6">
+                                                    <div className="text-emerald-400 opacity-80 mb-1">{'>'} Scheduling 42 posts...</div>
+                                                    <div className="text-white/40 text-[9px] font-bold">{'>'} Status: ACTIVE</div>
+                                                </div>
+                                                <button
+                                                    onClick={scrollToPayment}
+                                                    className="w-full h-11 bg-transparent border border-white/30 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-slate-900 transition-all active:scale-95 shadow-lg"
+                                                >
+                                                    Secure Your AI Agent
+                                                </button>
+                                            </div>
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-3xl rounded-full" />
+                                        </div>
+                                    ) : (
+                                        <div className="px-5 pb-6 pt-2 space-y-4">
+                                            <div className="p-4 bg-white dark:bg-black/20 rounded-2xl border border-slate-100 dark:border-white/5">
+                                                <p className="text-xs font-medium text-slate-600 dark:text-slate-400 leading-relaxed">
+                                                    Scale deep with 9 levels of passive commissions from every transaction in your network.
+                                                </p>
+                                            </div>
+                                            <div className="space-y-2">
+                                                {benefits_pro_short_levels.map((b, i) => (
+                                                    <div key={i} className="flex items-center gap-2 text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                                                        <CheckCircle2 size={12} className="text-emerald-500" />
+                                                        {b}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </button>
                 </div>
             </div>
 
             {/* Payment Section */}
-            <div ref={paymentRef} className={`rounded-[2rem] p-6 shadow-2xl relative overflow-hidden transition-colors duration-500 ${selectedPlan === 'PRO_PLUS' ? 'bg-indigo-600' : 'bg-slate-900'}`}>
-                <div className="absolute top-0 right-0 p-4 opacity-10">
-                    <Crown size={120} />
+            <div ref={paymentRef} className={`rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden transition-all duration-700 ${selectedPlan === 'PRO_PLUS' ? 'bg-indigo-600 scale-100' : 'bg-slate-900 scale-[0.98]'}`}>
+                <div className="absolute top-0 right-0 p-4 opacity-5">
+                    <Crown size={180} />
                 </div>
 
                 {!paymentMethod ? (
-                    <div className="space-y-4 relative z-10">
-                        <div className="text-center mb-2">
-                            <h3 className="text-white font-black text-sm uppercase tracking-widest">{t('subscription.upgrade.complete_payment')}</h3>
-                            <p className="text-white/60 text-xs font-bold mt-1">Total: ${planPrice}</p>
+                    <div className="space-y-6 relative z-10">
+                        <div className="text-center">
+                            <h3 className="text-white font-black text-xs uppercase tracking-[0.2em] mb-2">{t('subscription.upgrade.complete_payment')}</h3>
+                            <div className="flex items-baseline justify-center gap-1">
+                                <span className="text-white font-black text-4xl tracking-tighter">${planPrice}</span>
+                                <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">/ Lifetime</span>
+                            </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-2 gap-4">
                             <button
                                 onClick={() => { selection(); setPaymentMethod('TON'); }}
-                                className="h-14 bg-white text-slate-900 rounded-xl font-black text-xs flex flex-col items-center justify-center gap-1 active:scale-95 transition-all shadow-xl"
+                                className="h-16 bg-white text-slate-900 rounded-2xl font-black text-xs flex flex-col items-center justify-center gap-1 active:scale-95 transition-all shadow-xl hover:bg-slate-50"
                             >
-                                <Wallet size={18} />
-                                TON Wallet
+                                <Wallet size={20} className="text-indigo-600" />
+                                TON WALLET
                             </button>
                             <button
                                 onClick={() => { selection(); setPaymentMethod('CRYPTO'); }}
-                                className="h-14 bg-white/10 text-white rounded-xl font-black text-xs flex flex-col items-center justify-center gap-1 active:scale-95 border border-white/20 transition-all"
+                                className="h-16 bg-white/10 text-white rounded-2xl font-black text-xs flex flex-col items-center justify-center gap-1 active:scale-95 border border-white/20 transition-all hover:bg-white/15"
                             >
-                                <CreditCard size={18} />
+                                <CreditCard size={20} className="text-white" />
                                 USDT(TRC20)
                             </button>
                         </div>
@@ -473,7 +496,7 @@ export default function SubscriptionPage() {
 
                         {paymentMethod === 'TON' && (
                             <div className="space-y-4">
-                                <div className="flex justify-center bg-white/5 p-4 rounded-2xl border border-white/10">
+                                <div className="flex justify-center bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-md">
                                     <TonConnectButton />
                                 </div>
                                 <button
@@ -481,16 +504,16 @@ export default function SubscriptionPage() {
                                     onClick={handleTonPayment}
                                     className="w-full h-14 bg-white text-indigo-600 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all disabled:opacity-50"
                                 >
-                                    {isLoading ? <Loader2 size={20} className="animate-spin mx-auto" /> : t('subscription.upgrade.complete_payment')}
+                                    {isLoading ? <Loader2 size={24} className="animate-spin mx-auto" /> : t('subscription.upgrade.complete_payment')}
                                 </button>
                             </div>
                         )}
 
                         {paymentMethod === 'CRYPTO' && (
                             <div className="space-y-4">
-                                <div className="p-4 bg-white/10 rounded-2xl border border-white/10">
+                                <div className="p-4 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-md">
                                     <p className="text-[8px] font-black uppercase tracking-wider text-white/50 mb-2">USDT TRC20 ADDRESS</p>
-                                    <div className="flex items-center gap-2 bg-black/20 p-3 rounded-xl">
+                                    <div className="flex items-center gap-2 bg-black/20 p-3 rounded-xl border border-white/5">
                                         <code className="text-[10px] font-mono break-all text-white flex-1">{adminUsdt}</code>
                                     </div>
                                 </div>
@@ -499,7 +522,7 @@ export default function SubscriptionPage() {
                                         value={manualHash}
                                         onChange={(e) => setManualHash(e.target.value)}
                                         placeholder="Paste Tx Hash"
-                                        className="flex-1 bg-white/10 border border-white/20 rounded-xl px-4 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-white"
+                                        className="flex-1 h-12 bg-white/10 border border-white/20 rounded-xl px-4 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-white transition-colors"
                                     />
                                     <button
                                         onClick={handleManualSubmit}
@@ -509,6 +532,7 @@ export default function SubscriptionPage() {
                                         SCANNED
                                     </button>
                                 </div>
+                                <p className="text-[9px] text-white/50 text-center uppercase tracking-widest font-bold">Transfer exactly ${planPrice} USDT</p>
                             </div>
                         )}
                     </div>
@@ -520,32 +544,33 @@ export default function SubscriptionPage() {
                 {status !== 'idle' && (
                     <motion.div
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-md"
+                        className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-slate-950/95 backdrop-blur-xl"
                     >
                         <motion.div
                             initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }}
-                            className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 w-full max-w-sm text-center"
+                            className="bg-white dark:bg-slate-900 rounded-[3rem] p-10 w-full max-w-sm text-center shadow-2xl"
                         >
-                            {status === 'pending' && <Loader2 size={48} className="text-amber-500 animate-spin mx-auto mb-6" />}
-                            {status === 'success' && <Trophy size={48} className="text-emerald-500 mx-auto mb-6" />}
-                            {status === 'manual_review' && <CheckCircle2 size={48} className="text-blue-500 mx-auto mb-6" />}
+                            {status === 'pending' && <Loader2 size={64} className="text-amber-500 animate-spin mx-auto mb-6" />}
+                            {status === 'success' && <Trophy size={64} className="text-emerald-500 mx-auto mb-6" />}
+                            {status === 'manual_review' && <CheckCircle2 size={64} className="text-blue-500 mx-auto mb-6" />}
 
                             <h2 className="text-2xl font-black mb-2 text-slate-900 dark:text-white uppercase tracking-tighter">
                                 {status === 'pending' ? t('subscription.status.verifying') : status === 'success' ? t('subscription.status.welcome_pro') : t('subscription.status.submitted')}
                             </h2>
-                            <p className="text-sm text-slate-500 mb-8 leading-relaxed">
+                            <p className="text-sm text-slate-500 mb-8 leading-relaxed font-medium">
                                 {status === 'pending' ? t('subscription.status.verifying_p') : status === 'success' ? t('subscription.status.welcome_pro_p') : t('subscription.status.submitted_p')}
                             </p>
-                            <button onClick={() => setStatus('idle')} className="w-full h-14 bg-indigo-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest">{t('subscription.status.got_it')}</button>
+                            <button onClick={() => setStatus('idle')} className="w-full h-14 bg-indigo-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-indigo-600/20">{t('subscription.status.got_it')}</button>
                         </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
-            {/* Support/FAQ Section Teaser */}
+
+            {/* Knowledge Base Teaser */}
             <div className="mt-16 px-2 text-center">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-500/5 border border-slate-500/10 mb-6">
                     <HelpCircle size={10} className="text-slate-500" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('subscription.faq.title', 'Knowledge Base')}</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('faq.knowledge_base', 'Knowledge Base')}</span>
                 </div>
 
                 <h3 className="text-xl font-black text-slate-900 dark:text-white mb-8 uppercase tracking-tighter">
@@ -575,7 +600,7 @@ export default function SubscriptionPage() {
 
                 <button
                     onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'faq' })); }}
-                    className="w-full h-14 bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3"
+                    className="w-full h-14 bg-slate-900 dark:bg-white/5 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 border border-white/5"
                 >
                     <BookOpen size={16} />
                     View Full FAQ Center
@@ -584,3 +609,17 @@ export default function SubscriptionPage() {
         </div>
     );
 }
+
+const benefits_pro_short = [
+    "Viral Studio access",
+    "X5 XP Speed",
+    "Priority payouts",
+    "VIP Support"
+];
+
+const benefits_pro_short_levels = [
+    "9 levels of commissions",
+    "Depth analytics",
+    "Instant withdrawals",
+    "Network security"
+];

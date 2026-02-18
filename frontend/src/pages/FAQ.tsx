@@ -5,7 +5,7 @@ import {
     Shield, Zap, CreditCard, Users, Star, ArrowLeft,
     Newspaper, BookOpen, Clock, Sparkles
 } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
 
 interface FAQItem {
@@ -113,34 +113,42 @@ export default function FAQPage() {
     });
 
     return (
-        <div className="flex flex-col min-h-full pb-32 animate-in fade-in duration-500">
+        <div className="flex flex-col min-h-screen bg-(--background-primary) pb-32 animate-in fade-in duration-500 overflow-x-hidden">
             {/* Premium Header */}
-            <div className="relative pt-12 pb-20 px-6 overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full bg-linear-to-b from-indigo-500/10 via-transparent to-transparent -z-10" />
-                <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 blur-3xl rounded-full -z-10" />
+            <div className="relative pt-12 pb-20 px-6">
+                <div className="absolute top-0 left-0 w-full h-[500px] bg-linear-to-b from-indigo-600/15 via-indigo-600/5 to-transparent -z-10" />
+                <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/10 blur-[120px] rounded-full -z-10" />
+                <div className="absolute top-1/2 -left-24 w-64 h-64 bg-fuchsia-500/5 blur-[100px] rounded-full -z-10" />
 
                 <div className="flex items-center gap-3 mb-6">
                     <button
                         onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
-                        className="p-2 rounded-xl bg-white/5 border border-white/10 text-(--color-text-primary) active:scale-95 transition-all"
+                        className="p-2.5 rounded-xl bg-(--card-bg) border border-(--card-border) text-(--color-text-primary) active:scale-95 transition-all backdrop-blur-md shadow-xl"
                     >
                         <ArrowLeft size={18} />
                     </button>
-                    <span className="text-xs font-black uppercase tracking-[0.2em] text-indigo-500">Knowledge Base</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
+                        {t('faq.knowledge_base')}
+                    </span>
                 </div>
 
-                <h1 className="text-4xl font-black text-(--color-text-primary) tracking-tighter leading-none mb-4">
-                    HELP <span className="text-indigo-500">CENTER</span>
-                </h1>
-                <p className="text-(--color-text-secondary) font-medium text-sm max-w-[280px]">
-                    Everything you need to know about scaling your P2P Empire.
+                <motion.h1
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="text-4xl font-black text-(--color-text-primary) tracking-tighter leading-none mb-4 uppercase"
+                >
+                    <Trans i18nKey="faq.header_title" components={{ 0: <span className="text-indigo-500" /> }} />
+                </motion.h1>
+                <p className="text-(--color-text-secondary) font-medium text-xs max-w-[280px] leading-relaxed opacity-70">
+                    {t('faq.header_desc')}
                 </p>
             </div>
 
             {/* Search Bar */}
-            <div className="px-6 -mt-10 mb-8">
+            <div className="px-6 -mt-10 mb-8 relative z-20">
                 <div className="relative group">
-                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-indigo-500/50 group-focus-within:text-indigo-500 transition-colors">
+                    <div className="absolute inset-0 bg-indigo-500/20 blur-2xl group-focus-within:opacity-100 opacity-0 transition-opacity duration-500" />
+                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-indigo-500/50 group-focus-within:text-indigo-500 transition-colors z-10">
                         <Search size={18} />
                     </div>
                     <input
@@ -148,7 +156,7 @@ export default function FAQPage() {
                         placeholder={t('faq.search_placeholder', 'Search for answers...')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full h-16 pl-12 pr-4 bg-(--card-bg) border-2 border-transparent focus:border-indigo-500/30 rounded-2xl text-sm font-bold shadow-2xl backdrop-blur-xl transition-all placeholder:text-(--color-text-secondary)/40"
+                        className="w-full h-16 pl-12 pr-4 bg-(--card-bg) border-2 border-(--card-border) focus:border-indigo-500/30 rounded-2xl text-sm font-bold shadow-2xl backdrop-blur-xl transition-all placeholder:text-(--color-text-secondary)/40 relative z-0"
                     />
                 </div>
             </div>
@@ -185,7 +193,7 @@ export default function FAQPage() {
                             >
                                 <button
                                     onClick={() => { selection(); setSelectedFaq(selectedFaq === originalIndex ? null : originalIndex); }}
-                                    className={`w-full text-left p-5 rounded-2xl bg-(--card-bg) border border-(--card-border) transition-all duration-300 relative overflow-hidden active:scale-[0.98] ${selectedFaq === originalIndex ? 'ring-2 ring-indigo-500/30 border-indigo-500/20' : 'hover:border-indigo-500/30'
+                                    className={`w-full text-left p-5 rounded-2xl bg-(--card-bg) border border-(--card-border) transition-all duration-300 relative overflow-hidden active:scale-[0.98] ${selectedFaq === originalIndex ? 'ring-2 ring-indigo-500/30 border-indigo-500/20 shadow-xl' : 'hover:border-indigo-500/30'
                                         }`}
                                 >
                                     <div className="flex items-start gap-4 h-full">
@@ -195,7 +203,7 @@ export default function FAQPage() {
                                         <div className="flex-1 pt-1">
                                             <div className="flex items-center gap-2 mb-2 font-mono text-[8px] font-black uppercase tracking-widest text-indigo-500/60">
                                                 <Clock size={10} />
-                                                {faq.readTime} • {faq.category}
+                                                {faq.readTime} • {categories.find(c => c.id === faq.category)?.label || faq.category}
                                             </div>
                                             <h3 className="text-sm font-black text-(--color-text-primary) leading-snug group-hover:text-indigo-500 transition-colors">
                                                 {faq.q}
@@ -228,7 +236,7 @@ export default function FAQPage() {
                                                             onClick={(e) => { e.stopPropagation(); notification('success'); }}
                                                             className="text-[9px] font-black uppercase tracking-widest text-indigo-500 flex items-center gap-1 p-2 bg-indigo-500/5 rounded-lg border border-indigo-500/10 active:scale-95 transition-all"
                                                         >
-                                                            Was this helpful?
+                                                            {t('faq.helpful')}
                                                         </button>
                                                     </div>
                                                 </div>
@@ -244,8 +252,8 @@ export default function FAQPage() {
                         <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4 opacity-50">
                             <Search size={24} className="text-slate-400" />
                         </div>
-                        <h3 className="text-sm font-black text-(--color-text-primary) uppercase mb-1">No results found</h3>
-                        <p className="text-xs text-(--color-text-secondary)">Try searching with different keywords.</p>
+                        <h3 className="text-sm font-black text-(--color-text-primary) uppercase mb-1">{t('faq.no_results')}</h3>
+                        <p className="text-xs text-(--color-text-secondary)">{t('faq.no_results_desc')}</p>
                     </div>
                 )}
             </div>
@@ -254,22 +262,24 @@ export default function FAQPage() {
             <div className="mt-12 px-6">
                 <div className="p-8 rounded-3xl bg-linear-to-br from-indigo-600 to-indigo-800 text-white relative overflow-hidden shadow-2xl shadow-indigo-500/30">
                     <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 blur-3xl rounded-full" />
-                    <h2 className="text-2xl font-black mb-2 uppercase tracking-tighter italic">Still have <span className="text-white/60">questions?</span></h2>
+                    <h2 className="text-2xl font-black mb-2 uppercase tracking-tighter italic">
+                        <Trans i18nKey="faq.still_have_questions" components={{ 0: <span className="text-white/60" /> }} />
+                    </h2>
                     <p className="text-white/70 text-xs font-medium mb-6 leading-relaxed">
-                        Can't find what you're looking for? Join our community or contact 24/7 support.
+                        {t('faq.still_have_questions_desc')}
                     </p>
                     <div className="flex gap-3">
                         <button
                             onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
                             className="flex-1 h-12 bg-white text-indigo-600 rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all"
                         >
-                            Support
+                            {t('faq.support_btn')}
                         </button>
                         <button
                             onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'partner' })); }}
                             className="flex-1 h-12 bg-white/10 text-white border border-white/20 rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all backdrop-blur-sm"
                         >
-                            Community
+                            {t('faq.community_btn')}
                         </button>
                     </div>
                 </div>
