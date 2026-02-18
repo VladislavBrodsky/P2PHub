@@ -102,12 +102,13 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
 
             if (statsRes.status === 200 && statsRes.data) {
                 const { total_partners, volume_usdt, countries } = statsRes.data;
+                const adjustedTotal = (total_partners || 0) + 5000;
 
-                // Format values for display (e.g., 12400 -> 12.4k)
+                // Format values for display (e.g., 12400 -> 12.4K+)
                 const formatCount = (val: number) => {
-                    if (val >= 1000000) return `${(val / 1000000).toFixed(1)}M`;
-                    if (val >= 1000) return `${(val / 1000).toFixed(1)}k`;
-                    return val.toString();
+                    if (val >= 1000000) return `${(val / 1000000).toFixed(1)}M+`;
+                    if (val >= 1000) return `${(val / 1000).toFixed(1)}K+`;
+                    return `${val}+`;
                 };
 
                 const formatVolume = (val: number) => {
@@ -118,7 +119,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
 
                 setStats(prev => ({
                     ...prev,
-                    total: formatCount(total_partners),
+                    total: formatCount(adjustedTotal),
                     volume: formatVolume(volume_usdt),
                     countries: countries.toString()
                 }));
