@@ -6,6 +6,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
 import { useUI } from '../../context/UIContext';
 import { useHaptic } from '../../hooks/useHaptic';
+import { useTMALock } from '../../hooks/useTMALock';
 import { useEffect } from 'react';
 
 interface Level100AchievementModalProps {
@@ -18,6 +19,9 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
     const { user } = useUser();
     const { impact } = useHaptic();
     const { setHeaderVisible, setFooterVisible } = useUI();
+
+    // Prevent body scroll and TMA swipes when modal is open
+    useTMALock(isOpen);
 
     // #comment: Hide global navigation when modal is open to focus on Level 100 flow
     useEffect(() => {

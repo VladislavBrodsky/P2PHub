@@ -22,6 +22,7 @@ import i18n from 'i18next';
 import { useHaptic } from '../../hooks/useHaptic';
 import { apiClient } from '../../api/client';
 import { useUser } from '../../context/UserContext';
+import { useTMALock } from '../../hooks/useTMALock';
 
 interface Message {
     id: string;
@@ -45,6 +46,9 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
     const [showCategories, setShowCategories] = React.useState(true);
     const [sessionClosed, setSessionClosed] = React.useState(false);
     const [typingLabel, setTypingLabel] = React.useState('Analyzing inquiry...');
+
+    // Prevent body scroll and TMA swipes when support is open
+    useTMALock(isOpen);
 
     const scrollRef = React.useRef<HTMLDivElement>(null);
     const inactivityTimerRef = React.useRef<any>(null);

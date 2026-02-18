@@ -6,6 +6,7 @@ import { useHaptic } from '../hooks/useHaptic';
 import { useTranslation } from 'react-i18next';
 import { CardTabSwitcher } from '../components/Cards/CardTabSwitcher';
 import { PremiumModal } from '../components/Cards/PremiumModal';
+import { useTMALock } from '../hooks/useTMALock';
 
 interface CardsPageProps {
     setActiveTab?: (tab: string) => void;
@@ -17,6 +18,9 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
     const [isTermsOpen, setIsTermsOpen] = useState(false);
     const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
     const { selection, notification } = useHaptic();
+
+    // Prevent body scroll and TMA swipes when premium modal is open
+    useTMALock(isPremiumModalOpen);
 
     const handleGetCard = () => {
         selection();

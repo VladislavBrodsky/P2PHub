@@ -18,6 +18,7 @@ import { createPortal } from 'react-dom';
 import { DrawerMenu } from './ProfileDrawer/DrawerMenu';
 import { DrawerSettings } from './ProfileDrawer/DrawerSettings';
 import { useUser } from '../context/UserContext';
+import { useTMALock } from '../hooks/useTMALock';
 
 interface ProfileDrawerProps {
     isOpen: boolean;
@@ -32,16 +33,14 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
 
     const [copied, setCopied] = React.useState(false);
 
-    // Scroll Lock & Back Button handling
+    // Prevent body scroll and TMA swipes when drawer is open
+    useTMALock(isOpen);
+
+    // Back Button handling
     React.useEffect(() => {
         let cleanup: VoidFunction | undefined;
 
         if (isOpen) {
-            // Lock background scroll
-            const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-            document.body.style.overflow = 'hidden';
-            if (scrollBarWidth > 0) document.body.style.paddingRight = `${scrollBarWidth}px`;
-
             // Telegram Back Button interaction
             try {
                 if (backButton.show.isAvailable()) {
@@ -56,9 +55,6 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
         }
 
         return () => {
-            // Success/Safety Cleanup
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
 
             // If we're closing and on the home tab, ensure backButton is hidden
             if (isOpen && activeTab === 'home') {

@@ -7,6 +7,7 @@ import { Lock, ChevronDown, ChevronUp, Trophy, Sparkles, Zap, Star, Shield, X, I
 import { useUser } from '../../context/UserContext';
 import { useTranslation, Trans } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
+import { useTMALock } from '../../hooks/useTMALock';
 
 const Level100AchievementModal = lazy(() => import('./Level100AchievementModal').then(m => ({ default: m.Level100AchievementModal })));
 
@@ -28,16 +29,8 @@ export const MilestonePath = () => {
     const [selectedItem, setSelectedItem] = useState<Achievement | null>(null);
     const [isLevel100ModalOpen, setIsLevel100ModalOpen] = useState(false);
 
-    // Prevent body scroll when modal is open
-    useEffect(() => {
-        if (selectedItem) {
-            const originalOverflow = document.body.style.overflow;
-            document.body.style.overflow = 'hidden';
-            return () => {
-                document.body.style.overflow = originalOverflow;
-            };
-        }
-    }, [selectedItem]);
+    // Prevent body scroll and TMA swipes when modal is open
+    useTMALock(!!selectedItem);
 
     // Handle Escape key to close modal
     useEffect(() => {

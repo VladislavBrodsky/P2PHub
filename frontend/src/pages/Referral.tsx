@@ -23,6 +23,7 @@ import { apiClient } from '../api/client';
 import { getApiUrl } from '../utils/api';
 import { PageSkeleton } from '../components/Skeletons/PageSkeleton';
 import { useUI } from '../context/UIContext';
+import { useTMALock } from '../hooks/useTMALock';
 
 export default function ReferralPage() {
     const { t } = useTranslation();
@@ -43,6 +44,9 @@ export default function ReferralPage() {
     const [showQR, setShowQR] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
     const [showBriefModal, setShowBriefModal] = useState(false);
+
+    // Prevent body scroll and TMA swipes when any modal is open
+    useTMALock(showShareModal || showQR || showBriefModal || levelUp);
 
     useEffect(() => {
         setFooterVisible(!(showShareModal || showBriefModal));
