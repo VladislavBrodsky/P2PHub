@@ -4,7 +4,6 @@ import { AVATAR_DATA, LOGO_DATA } from '../../data/avatars';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
 import { useUser } from '../../context/UserContext';
-import { User } from 'lucide-react';
 
 const ALL_AVATARS = Object.values(AVATAR_DATA);
 

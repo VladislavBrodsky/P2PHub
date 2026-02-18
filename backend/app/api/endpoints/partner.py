@@ -9,7 +9,7 @@ from datetime import UTC, datetime, timedelta
 
 import sentry_sdk
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
-from sqlalchemy import text
+from sqlalchemy import func, text
 from sqlalchemy.orm import selectinload
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -431,8 +431,6 @@ async def get_orbit_members(
     """
     import time
 
-    from sqlalchemy import func
-
     from app.utils.api import get_api_url
     from app.utils.ranking import get_rank
 
@@ -614,7 +612,6 @@ async def get_recent_partners(
         # Previously hardcoded to 680-780, which broke logic if total partners < 700.
         # NOW: We fetch actual total count and make hourly join count a reasonable % of it.
         try:
-            from sqlalchemy import func
             total_partners = (await session.exec(select(func.count(Partner.id)))).one() or 1
             
             # Real joins in the last hour

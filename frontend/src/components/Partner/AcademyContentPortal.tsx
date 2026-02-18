@@ -38,7 +38,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
         const stateStr = `academy_stage_${stage.id}`;
         window.history.pushState({ academyModal: stateStr }, '', window.location.pathname);
 
-        const handlePopState = (event: PopStateEvent) => {
+        const handlePopState = () => {
             // If the user pressed back, close the modal
             // preventDefault isn't possible on popstate, but we can handle the logic
             onClose();

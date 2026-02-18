@@ -83,7 +83,6 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
     const { t } = useTranslation();
     const [recentPartners, setRecentPartners] = useState<any[]>([]);
     const [stats, setStats] = useState({ total: '0', volume: '$0', countries: '142', lastHourCount: 0 });
-    const [isLoading, setIsLoading] = useState(true);
 
     // Initial load and polling for stats
     useVisibilityPolling(async () => {
@@ -124,10 +123,8 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     countries: countries.toString()
                 }));
             }
-            setIsLoading(false);
         } catch (error) {
             console.error("Failed to fetch dashboard stats", error);
-            setIsLoading(false);
         }
     }, 5 * 60 * 1000);
 
