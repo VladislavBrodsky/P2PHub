@@ -221,7 +221,6 @@ class PaymentService:
         tx_hash: str | None = None,
         transaction_id: int | None = None
     ):
-        from sqlmodel import select
         try:
             now = datetime.now(UTC).replace(tzinfo=None)
             sentry_sdk.add_breadcrumb(
@@ -244,7 +243,6 @@ class PaymentService:
             else:
                 # Standard PRO Plan
                 # 1. Fetch current sold count
-                from sqlmodel import select
                 stmt_sold = select(SystemSetting).where(SystemSetting.key == "pro_slots_sold")
                 res_sold = await session.exec(stmt_sold)
                 setting_sold = res_sold.first()
@@ -265,6 +263,11 @@ class PaymentService:
                     if setting_sold:
                         setting_sold.value = str(sold_count + 1)
                         session.add(setting_sold)
+                    else:
+                        # Initialize counter if this is the first tracked sale
+                        # Note: We start at sold_count + 1 because sold_count defaults to 147/0
+                        new_sold = SystemSetting(key="pro_slots_sold", value=str(sold_count + 1))
+                        session.add(new_sold)
                 else:
                     partner.subscription_plan = "PRO_MONTHLY"
                     # Handle Extension: If they already have an expiry, add 30 days
