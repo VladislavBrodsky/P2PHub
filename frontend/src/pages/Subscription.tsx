@@ -18,6 +18,7 @@ export default function SubscriptionPage() {
     const { config: globalConfig } = useConfig();
     const { selection, notification, impact } = useHaptic();
     const [tonConnectUI] = useTonConnectUI();
+    useEffect(() => { console.log("Subscription Page v1.7.3-premium-fix"); }, []);
     const [isLoading, setIsLoading] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState<'TON' | 'CRYPTO' | null>(null);
     const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'manual_review'>('idle');
@@ -337,44 +338,35 @@ export default function SubscriptionPage() {
             {/* Features Row - Dynamic Vibing Drops */}
             <div className="flex flex-col gap-4 mb-12">
                 {/* TOKENS FEATURE (Marketer 24/7) */}
-                <motion.div layout className="relative group">
+                <motion.div layout className="relative">
+                    {expandedFeature === 'TOKENS' && (
+                        <motion.div
+                            layoutId="neon-glow-tokens"
+                            className="absolute -inset-0.5 bg-linear-to-r from-indigo-500/50 to-purple-500/50 rounded-[2rem] blur opacity-40 -z-10"
+                            animate={{ opacity: [0.3, 0.5, 0.3] }}
+                            transition={{ duration: 3, repeat: Infinity }}
+                        />
+                    )}
                     <button
                         onClick={() => { selection(); setExpandedFeature(expandedFeature === 'TOKENS' ? null : 'TOKENS'); }}
-                        className={`w-full text-left transition-all duration-500 relative overflow-hidden rounded-[2rem] border-2 h-auto ${expandedFeature === 'TOKENS'
-                            ? 'border-indigo-500 bg-slate-900 shadow-[0_0_50px_rgba(79,70,229,0.3)]'
-                            : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 hover:border-indigo-500/30 shadow-md'}`}
+                        className={`w-full text-left transition-all duration-500 relative overflow-hidden rounded-3xl border ${expandedFeature === 'TOKENS' ? 'border-white/20 bg-linear-to-br from-indigo-600 via-purple-600 to-indigo-800 shadow-2xl' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 hover:border-indigo-500/20 shadow-sm'}`}
                     >
-                        {/* Animated background when expanded */}
-                        <AnimatePresence>
-                            {expandedFeature === 'TOKENS' && (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    className="absolute inset-0 bg-glow-pro-animated opacity-20 z-0"
-                                />
-                            )}
-                        </AnimatePresence>
-
-                        <div className="p-6 flex items-center justify-between relative z-10">
-                            <div className="flex items-center gap-5">
-                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-2xl transition-all duration-500 ${expandedFeature === 'TOKENS' ? 'bg-indigo-500 scale-110 rotate-3 text-white' : 'bg-linear-to-br from-indigo-500/10 to-indigo-600/5 text-indigo-500 border border-indigo-500/10'}`}>
-                                    <Zap size={28} fill={expandedFeature === 'TOKENS' ? 'currentColor' : 'none'} className={expandedFeature === 'TOKENS' ? 'animate-pulse' : ''} />
+                        <div className="p-5 flex items-center justify-between relative z-10">
+                            <div className="flex items-center gap-4">
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-lg ${expandedFeature === 'TOKENS' ? 'bg-indigo-300/40 text-white' : 'bg-indigo-500/10 text-indigo-500'}`}>
+                                    <Zap size={22} fill={expandedFeature === 'TOKENS' ? 'currentColor' : 'none'} className={expandedFeature === 'TOKENS' ? 'drop-shadow-lg' : ''} />
                                 </div>
                                 <div>
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${expandedFeature === 'TOKENS' ? 'text-indigo-400' : 'text-slate-400'}`}>
-                                            VIRAL STUDIO
-                                        </span>
-                                        {selectedPlan === 'PRO_PLUS' && <Sparkles size={10} className="text-amber-500 animate-pulse" />}
-                                    </div>
-                                    <h3 className={`text-xl font-black uppercase tracking-tighter leading-none ${expandedFeature === 'TOKENS' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                                    <p className={`text-[9px] font-black uppercase tracking-widest mb-0.5 ${expandedFeature === 'TOKENS' ? 'text-indigo-200' : 'text-slate-400'}`}>
                                         {selectedPlan === 'PRO' ? '250 TOKENS' : '500 TOKENS'}
+                                    </p>
+                                    <h3 className={`text-base font-black uppercase tracking-tight ${expandedFeature === 'TOKENS' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                                        Viral Studio
                                     </h3>
                                 </div>
                             </div>
                             <motion.div animate={{ rotate: expandedFeature === 'TOKENS' ? 180 : 0 }} className={expandedFeature === 'TOKENS' ? 'text-white' : 'text-slate-300'}>
-                                <ChevronDown size={24} strokeWidth={3} />
+                                <ChevronDown size={20} />
                             </motion.div>
                         </div>
 
@@ -426,43 +418,35 @@ export default function SubscriptionPage() {
                 </motion.div>
 
                 {/* LEVELS FEATURE (Network Factory) */}
-                <motion.div layout className="relative group">
+                <motion.div layout className="relative">
+                    {expandedFeature === 'LEVELS' && (
+                        <motion.div
+                            layoutId="neon-glow-levels"
+                            className="absolute -inset-0.5 bg-linear-to-r from-emerald-500/50 to-teal-500/50 rounded-[2rem] blur opacity-40 -z-10"
+                            animate={{ opacity: [0.3, 0.5, 0.3] }}
+                            transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+                        />
+                    )}
                     <button
                         onClick={() => { selection(); setExpandedFeature(expandedFeature === 'LEVELS' ? null : 'LEVELS'); }}
-                        className={`w-full text-left transition-all duration-500 relative overflow-hidden rounded-[2rem] border-2 h-auto ${expandedFeature === 'LEVELS'
-                            ? 'border-emerald-500 bg-slate-900 shadow-[0_0_50px_rgba(16,185,129,0.3)]'
-                            : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 hover:border-emerald-500/30 shadow-md'}`}
+                        className={`w-full text-left transition-all duration-500 relative overflow-hidden rounded-3xl border ${expandedFeature === 'LEVELS' ? 'border-white/20 bg-linear-to-br from-emerald-600/90 via-teal-700/90 to-slate-900/90 shadow-2xl' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 hover:border-emerald-500/20 shadow-sm'}`}
                     >
-                        <AnimatePresence>
-                            {expandedFeature === 'LEVELS' && (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    className="absolute inset-0 bg-linear-to-br from-emerald-600/20 via-teal-600/10 to-transparent opacity-40 z-0"
-                                />
-                            )}
-                        </AnimatePresence>
-
-                        <div className="p-6 flex items-center justify-between relative z-10">
-                            <div className="flex items-center gap-5">
-                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-2xl transition-all duration-500 ${expandedFeature === 'LEVELS' ? 'bg-emerald-500 scale-110 -rotate-3 text-white' : 'bg-linear-to-br from-emerald-500/10 to-teal-600/5 text-emerald-500 border border-emerald-500/10'}`}>
-                                    <Users size={28} fill={expandedFeature === 'LEVELS' ? 'currentColor' : 'none'} className={expandedFeature === 'LEVELS' ? 'animate-bounce' : ''} />
+                        <div className="p-5 flex items-center justify-between relative z-10">
+                            <div className="flex items-center gap-4">
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-lg ${expandedFeature === 'LEVELS' ? 'bg-emerald-500 shadow-emerald-500/40 text-white' : 'bg-emerald-500/10 text-emerald-500'}`}>
+                                    <Users size={22} fill={expandedFeature === 'LEVELS' ? 'currentColor' : 'none'} className={expandedFeature === 'LEVELS' ? 'drop-shadow-lg' : ''} />
                                 </div>
                                 <div>
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${expandedFeature === 'LEVELS' ? 'text-emerald-400' : 'text-slate-400'}`}>
-                                            CONTENT FACTORY
-                                        </span>
-                                        <div className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[7px] font-black text-emerald-500 uppercase tracking-widest">AUTO-PILOT</div>
-                                    </div>
-                                    <h3 className={`text-xl font-black uppercase tracking-tighter leading-none ${expandedFeature === 'LEVELS' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                                    <p className={`text-[9px] font-black uppercase tracking-widest mb-0.5 ${expandedFeature === 'LEVELS' ? 'text-emerald-300' : 'text-slate-400'}`}>
                                         {selectedPlan === 'PRO' ? '9 LEVELS' : '20 LEVELS'}
+                                    </p>
+                                    <h3 className={`text-base font-black uppercase tracking-tight ${expandedFeature === 'LEVELS' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                                        Content Factory
                                     </h3>
                                 </div>
                             </div>
                             <motion.div animate={{ rotate: expandedFeature === 'LEVELS' ? 180 : 0 }} className={expandedFeature === 'LEVELS' ? 'text-white' : 'text-slate-300'}>
-                                <ChevronDown size={24} strokeWidth={3} />
+                                <ChevronDown size={20} />
                             </motion.div>
                         </div>
 
@@ -687,6 +671,10 @@ export default function SubscriptionPage() {
                 <h3 className="text-xl font-black text-slate-900 dark:text-white mb-6 uppercase tracking-tighter">
                     Got <span className="text-indigo-500 text-2xl italic">Questions?</span>
                 </h3>
+
+                <div className="mt-8 opacity-20 text-[8px] font-mono tracking-widest text-(--color-text-secondary)">
+                    BUILD_ID: 2026.02.18.01.40 | v1.7.3
+                </div>
 
                 <div className="space-y-3 mb-8">
                     {[
