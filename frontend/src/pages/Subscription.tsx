@@ -491,7 +491,7 @@ export default function SubscriptionPage() {
             </div>
 
             {/* Payment Section */}
-            <div ref={paymentRef} className="rounded-[3rem] p-8 shadow-2xl relative overflow-hidden transition-all duration-700 bg-slate-900 group">
+            <div ref={paymentRef} className="rounded-3xl p-6 shadow-2xl relative overflow-hidden transition-all duration-700 bg-slate-900 group">
                 {/* Liquid Background for Payment Section */}
                 <motion.div
                     className={`absolute inset-0 -z-10 ${selectedPlan === 'PRO_PLUS' ? 'bg-linear-to-br from-indigo-600 via-fuchsia-600 to-indigo-800' : 'bg-linear-to-br from-slate-800 via-slate-900 to-black'}`}
@@ -514,21 +514,21 @@ export default function SubscriptionPage() {
                                 <span className="text-white/30 text-[11px] font-black uppercase tracking-widest">/ Lifetime</span>
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-3">
                             <button
                                 onClick={() => { selection(); setPaymentMethod('TON'); }}
-                                className="h-20 bg-white text-slate-900 rounded-2xl font-black text-[10px] flex flex-col items-center justify-center gap-2 active:scale-95 transition-all shadow-2xl hover:shadow-indigo-500/20 relative overflow-hidden group/btn"
+                                className="h-18 bg-white text-slate-900 rounded-2xl font-black text-[9px] flex flex-col items-center justify-center gap-1 active:scale-95 transition-all shadow-2xl hover:shadow-indigo-500/20 relative overflow-hidden group/btn"
                             >
                                 <div className="absolute inset-0 bg-indigo-500/5 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-500" />
-                                <Wallet size={22} className="text-indigo-600 relative z-10" />
+                                <Wallet size={20} className="text-indigo-600 relative z-10" />
                                 <span className="relative z-10 tracking-widest">TON WALLET</span>
                             </button>
                             <button
                                 onClick={() => { selection(); setPaymentMethod('CRYPTO'); }}
-                                className="h-20 bg-white/10 text-white rounded-2xl font-black text-[10px] flex flex-col items-center justify-center gap-2 active:scale-95 border border-white/20 transition-all hover:bg-white/15 relative overflow-hidden group/btn"
+                                className="h-18 bg-white/10 text-white rounded-2xl font-black text-[9px] flex flex-col items-center justify-center gap-1 active:scale-95 border border-white/20 transition-all hover:bg-white/15 relative overflow-hidden group/btn"
                             >
                                 <div className="absolute inset-0 bg-white/5 -translate-y-full group-hover/btn:translate-y-full transition-transform duration-500" />
-                                <CreditCard size={22} className="text-white relative z-10" />
+                                <CreditCard size={20} className="text-white relative z-10" />
                                 <span className="relative z-10 tracking-widest">USDT (TRC20)</span>
                             </button>
                         </div>
@@ -615,13 +615,13 @@ export default function SubscriptionPage() {
             </AnimatePresence>
 
             {/* Knowledge Base Teaser */}
-            <div className="mt-16 px-2 text-center">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-500/5 border border-slate-500/10 mb-6">
+            <div className="mt-12 px-2 text-center">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-500/5 border border-slate-500/10 mb-4">
                     <HelpCircle size={10} className="text-slate-500" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('faq.knowledge_base', 'Knowledge Base')}</span>
                 </div>
 
-                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-8 uppercase tracking-tighter">
+                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-6 uppercase tracking-tighter">
                     Got <span className="text-indigo-500 text-2xl italic">Questions?</span>
                 </h3>
 
