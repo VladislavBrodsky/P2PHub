@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
 import { LeagueCard, LeagueTier } from '../components/League/LeagueCard';
 import { Section } from '../components/Section';
 import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
@@ -93,13 +94,15 @@ export default function LeaderboardPage() {
             >
                 <div className="space-y-2">
                     {visiblePartners.map((user, index) => (
-                        <button
+                        <motion.button
                             key={user.id}
+                            initial={{ opacity: 0, y: 16 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: Math.min(index * 0.04, 0.6), type: 'spring', stiffness: 400, damping: 30 }}
                             onClick={() => {
                                 selection();
                                 setIsModalOpen(true);
                             }}
-                            // #comment Reduced padding to p-2.5 and border-radius to rounded-2xl for a tighter, more data-dense look on mobile.
                             className="w-full flex items-center justify-between rounded-2xl border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 p-2.5 shadow-premium transition-all active:scale-[0.98] group relative overflow-hidden"
                         >
                             {/* Background Glow for Top 3 */}
@@ -191,27 +194,28 @@ export default function LeaderboardPage() {
                                 </span>
                             </div>
                         </button>
+                    </motion.button>
                     ))}
 
-                    {/* #comment Show All toggle button implementation */}
-                    {leaderboard.length > 10 && (
-                        <button
-                            onClick={() => {
-                                selection();
-                                setShowAll(!showAll);
-                            }}
-                            className="w-full mt-2 py-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-tighter hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"
-                        >
-                            {showAll ? t('common.show_less') : `${t('common.show_more')} (TOP 50)`}
-                        </button>
-                    )}
-                </div>
+                {/* #comment Show All toggle button implementation */}
+                {leaderboard.length > 10 && (
+                    <button
+                        onClick={() => {
+                            selection();
+                            setShowAll(!showAll);
+                        }}
+                        className="w-full mt-2 py-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-tighter hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"
+                    >
+                        {showAll ? t('common.show_less') : `${t('common.show_more')} (TOP 50)`}
+                    </button>
+                )}
+        </div>
             </Section >
 
-            <PartnerBriefingModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-            />
+        <PartnerBriefingModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+        />
         </div >
     );
 }
