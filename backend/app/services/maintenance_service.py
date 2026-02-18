@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from app.core.config import settings  # FIX H-1: was missing, caused NameError in reset_monthly_pro_tokens
 from app.models.partner import Earning, Partner, XPTransaction, engine
 from app.worker import broker
 
@@ -333,62 +334,66 @@ async def economy_integrity_audit_task():
     Background worker that verifies the economic integrity of all partners.
     Checks if current XP and Balance match the sum of transactions/earnings.
     Flags discrepancies in the audit log for manual review.
+    
+    #comment: FIX H-3 — Replaced N+1 pattern (1 query per partner × 2 = 2N queries) with
+    3 bulk aggregation queries total. For 5000 users this goes from ~10,000 DB round-trips
+    to 3, reducing audit time from minutes to seconds.
     """
     logger.info("🛡️ Starting Economy Integrity Audit...")
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
     async with async_session() as session:
-        # 1. Fetch all partners in batches to prevent memory pressure
-        result = await session.exec(select(Partner))
-        partners = result.all()
-        
-        flags = 0
         from app.services.audit_service import audit_service
-        
-        for partner in partners:
-            # Audit XP
-            xp_sum_stmt = select(func.sum(XPTransaction.amount)).where(XPTransaction.partner_id == partner.id)
-            xp_sum = (await session.exec(xp_sum_stmt)).one() or 0.0
-            
-            if abs(float(partner.xp) - float(xp_sum)) > 0.01:
-                logger.warning(f"⚠️ XP Discrepancy detected for user {partner.telegram_id}: DB={partner.xp}, Sum={xp_sum}")
+
+        # 1. Fetch only needed columns (not full ORM objects) — prevents memory pressure
+        result = await session.exec(
+            select(Partner.id, Partner.telegram_id, Partner.xp, Partner.balance)
+        )
+        partners = result.all()
+
+        # 2. Bulk aggregate XP sums per partner in ONE query
+        xp_sums_result = await session.exec(
+            select(XPTransaction.partner_id, func.sum(XPTransaction.amount).label("total"))
+            .group_by(XPTransaction.partner_id)
+        )
+        xp_sums = {row.partner_id: float(row.total or 0) for row in xp_sums_result.all()}
+
+        # 3. Bulk aggregate Balance sums per partner in ONE query
+        bal_sums_result = await session.exec(
+            select(Earning.partner_id, func.sum(Earning.amount).label("total"))
+            .where(Earning.currency == "USDT")
+            .group_by(Earning.partner_id)
+        )
+        bal_sums = {row.partner_id: float(row.total or 0) for row in bal_sums_result.all()}
+
+        # 4. Compare in memory — zero additional DB queries
+        flags = 0
+        for p_id, p_tg_id, p_xp, p_balance in partners:
+            xp_sum = xp_sums.get(p_id, 0.0)
+            bal_sum = bal_sums.get(p_id, 0.0)
+
+            if abs(float(p_xp) - xp_sum) > 0.01:
+                logger.warning(f"⚠️ XP Discrepancy for {p_tg_id}: DB={p_xp}, Sum={xp_sum}")
                 await audit_service.log_event(
                     session=session,
                     entity_type="system",
-                    entity_id=str(partner.telegram_id),
+                    entity_id=str(p_tg_id),
                     action="integrity_discrepancy",
-                    details={
-                        "type": "XP",
-                        "db_value": float(partner.xp),
-                        "sum_value": float(xp_sum),
-                        "diff": float(partner.xp) - float(xp_sum)
-                    }
+                    details={"type": "XP", "db_value": float(p_xp), "sum_value": xp_sum, "diff": float(p_xp) - xp_sum}
                 )
                 flags += 1
 
-            # Audit Balance
-            bal_sum_stmt = select(func.sum(Earning.amount)).where(
-                Earning.partner_id == partner.id,
-                Earning.currency == "USDT"
-            )
-            bal_sum = (await session.exec(bal_sum_stmt)).one() or 0.0
-            
-            if abs(float(partner.balance) - float(bal_sum)) > 0.01:
-                logger.warning(f"⚠️ Balance Discrepancy detected for user {partner.telegram_id}: DB={partner.balance}, Sum={bal_sum}")
+            if abs(float(p_balance) - bal_sum) > 0.01:
+                logger.warning(f"⚠️ Balance Discrepancy for {p_tg_id}: DB={p_balance}, Sum={bal_sum}")
                 await audit_service.log_event(
                     session=session,
                     entity_type="system",
-                    entity_id=str(partner.telegram_id),
+                    entity_id=str(p_tg_id),
                     action="integrity_discrepancy",
-                    details={
-                        "type": "BALANCE",
-                        "db_value": float(partner.balance),
-                        "sum_value": float(bal_sum),
-                        "diff": float(partner.balance) - float(bal_sum)
-                    }
+                    details={"type": "BALANCE", "db_value": float(p_balance), "sum_value": bal_sum, "diff": float(p_balance) - bal_sum}
                 )
                 flags += 1
-                
+
         if flags > 0:
             await session.commit()
             logger.info(f"✅ Economy audit complete. {flags} discrepancies found and logged.")

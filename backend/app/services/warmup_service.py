@@ -3,7 +3,7 @@ import logging
 
 from sqlmodel import select
 
-from app.models.partner import Partner, get_session
+from app.models.partner import Partner, async_session_maker
 from app.services.leaderboard_service import leaderboard_service
 from app.services.redis_service import redis_service
 
@@ -29,7 +29,11 @@ async def warmup_redis():
 
     logger.info("🔥 Starting Redis Warmup...")
 
-    async for session in get_session():
+    # #comment: FIX H-4 — Use async_session_maker() context manager instead of get_session() generator.
+    # get_session() is a FastAPI dependency generator. Using it with `async for` + `break` can
+    # leak the DB connection if the generator's finally block doesn't run properly.
+    # async_session_maker() always closes the connection via __aexit__.
+    async with async_session_maker() as session:
         try:
             # 1. Warmup Global Leaderboard - Optimized & Limited
             # Only load top 1000 users to prevent startup hang
@@ -44,9 +48,6 @@ async def warmup_redis():
             stream_result = await session.stream(statement)
 
             async for row in stream_result:
-                # row is a Result object where row[0] is id, row[1] is xp (since we selected specific columns)
-                # or it acts like a tuple depending on SQLModel version.
-                # Let's assume row is the tuple (id, xp)
                 p_id, p_xp = row
                 current_batch[str(p_id)] = float(p_xp)
                 count += 1
@@ -55,7 +56,7 @@ async def warmup_redis():
                     await redis_service.client.zadd(leaderboard_service.LEADERBOARD_KEY, current_batch)
                     current_batch = {}
                     # Yield control to allow health checks to pass during heavy processing
-                    await asyncio.sleep(0.1) # Reduced sleep for faster warmup while still yielding control
+                    await asyncio.sleep(0.1)
 
             # Flush remaining
             if current_batch:
@@ -67,13 +68,10 @@ async def warmup_redis():
                 logger.info(f"✅ Leaderboard warmed up with {count} partners (Streamed).")
 
             # 2. Warmup Recent Partners (Social Proof)
-            # #comment: Calling endpoint function requires BackgroundTasks which we don't have in warmup context.
-            # Instead, we'll manually cache the recent partners query directly.
             logger.info("📡 Warming up Recent Partners cache...")
             
             cache_key = "partners:recent_v2"
             
-            # Query recent partners directly
             statement = select(
                 Partner.id,
                 Partner.first_name,
@@ -107,6 +105,5 @@ async def warmup_redis():
 
         except Exception as e:
             logger.error(f"❌ Redis Warmup Failed: {e}")
-        break
 
     logger.info("✨ Redis Warmup Complete.")

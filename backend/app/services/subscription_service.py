@@ -13,17 +13,6 @@ from app.worker import broker
 logger = logging.getLogger(__name__)
 
 class SubscriptionService:
-    @broker.task(task_name="check_expiring_subscriptions_task", schedule=[{"cron": "0 * * * *"}])
-    async def check_expiring_subscriptions_task(self):
-        """
-        TaskIQ wrapper for the subscription checker. 
-        #comment: By moving this to TaskIQ, we ensure it only runs once per hour 
-        across the entire cluster, rather than once per Gunicorn worker.
-        """
-        from app.models.partner import engine
-        async with AsyncSession(engine) as session:
-            await self.check_expiring_subscriptions(session)
-
     async def check_expiring_subscriptions(self, session: AsyncSession):
         """
         Finds users whose subscription expires in exactly 3 days or 1 day.
@@ -111,8 +100,8 @@ class SubscriptionService:
         logger.info("🕒 DEPRECATED: Subscription Checker Local Loop")
         while True:
             try:
-                from app.models.partner import engine
-                async with AsyncSession(engine) as session:
+                from app.models.partner import async_session_maker
+                async with async_session_maker() as session:
                     await self.check_expiring_subscriptions(session)
             except Exception as e:
                 logger.error(f"Error in Subscription Checker: {e}")
@@ -120,3 +109,16 @@ class SubscriptionService:
             await asyncio.sleep(3600)
 
 subscription_service = SubscriptionService()
+
+# #comment: CRITICAL FIX — @broker.task MUST be a module-level function, NOT an instance method.
+# TaskIQ cannot serialize `self` when enqueueing. Moving to module-level fixes silent task failures.
+@broker.task(task_name="check_expiring_subscriptions_task", schedule=[{"cron": "0 * * * *"}])
+async def check_expiring_subscriptions_task():
+    """
+    Scheduled task: checks expiring/expired PRO subscriptions every hour.
+    Runs once per cluster (not per worker) via TaskIQ distributed locking.
+    """
+    from app.models.partner import async_session_maker
+    # async_session_maker uses expire_on_commit=False — prevents MissingGreenlet after commits
+    async with async_session_maker() as session:
+        await subscription_service.check_expiring_subscriptions(session)

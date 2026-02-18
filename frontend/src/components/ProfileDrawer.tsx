@@ -105,12 +105,13 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             initial={{ x: '-100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '-100%', pointerEvents: 'none' }}
-                            transition={{ type: 'tween', ease: 'easeOut', duration: 0.25 }}
+                            transition={{ type: 'spring', stiffness: 380, damping: 38, mass: 0.8 }}
                             className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-(--color-bg-app) border-r border-(--color-border-glass) shadow-2xl ml-0 mr-auto overscroll-none"
                             style={{
                                 marginLeft: 'max(0px, calc(50% - 32rem / 2))',
                                 left: 0,
-                                overscrollBehavior: 'none'
+                                overscrollBehavior: 'none',
+                                willChange: 'transform',
                             }}
                         >
                             <div className="mesh-gradient-dark absolute inset-0 opacity-20 pointer-events-none" />

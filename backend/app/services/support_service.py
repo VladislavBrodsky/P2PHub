@@ -609,10 +609,9 @@ class SupportAgentService:
         await redis_service.delete(session_key)
         logger.info(f"🏁 Support session for {user_id} salvaged to background tasks.")
 
-    @broker.task(task_name="cleanup_stale_support_sessions", schedule=[{"cron": "*/5 * * * *"}])
-    async def cleanup_stale_support_sessions(self):
+    async def _cleanup_stale_support_sessions_impl(self):
         """
-        Periodically checks for sessions with no activity for >5 minutes and closes them.
+        Internal implementation: checks for sessions with no activity for >5 minutes and closes them.
         This ensures logs are saved to Google Sheets even if the user just leaves.
         """
         logger.info("🧹 Starting cleanup of stale support sessions...")
@@ -653,6 +652,13 @@ class SupportAgentService:
 
 # Singleton Instance
 support_service = SupportAgentService()
+
+# #comment: CRITICAL FIX — @broker.task MUST be module-level, NOT an instance method.
+# TaskIQ cannot serialize `self`. Moved here after singleton creation so it can reference it.
+@broker.task(task_name="cleanup_stale_support_sessions", schedule=[{"cron": "*/5 * * * *"}])
+async def cleanup_stale_support_sessions():
+    """Scheduled task: closes stale support sessions every 5 minutes."""
+    await support_service._cleanup_stale_support_sessions_impl()
 
 @broker.task(task_name="warm_up_kb_task")
 async def warm_up_kb_task():

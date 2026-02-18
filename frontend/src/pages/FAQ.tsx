@@ -269,13 +269,22 @@ export default function FAQPage() {
                         );
                     })
                 ) : (
-                    <div className="text-center py-20">
-                        <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4 opacity-50">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                        className="text-center py-20"
+                    >
+                        <motion.div
+                            animate={{ y: [0, -6, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                            className="w-16 h-16 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center mx-auto mb-4"
+                        >
                             <Search size={24} className="text-slate-400" />
-                        </div>
+                        </motion.div>
                         <h3 className="text-sm font-black text-(--color-text-primary) uppercase mb-1">{t('faq.no_results')}</h3>
                         <p className="text-xs text-(--color-text-secondary)">{t('faq.no_results_desc')}</p>
-                    </div>
+                    </motion.div>
                 )}
             </div>
 

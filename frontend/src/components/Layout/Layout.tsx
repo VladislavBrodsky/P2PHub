@@ -1,4 +1,5 @@
 import { useState, useEffect, lazy, Suspense, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '../Header';
 const ProfileDrawer = lazy(() => import('../ProfileDrawer')); // Lazy load
 import BottomNav from '../BottomNav';
@@ -80,10 +81,18 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 style={{ overscrollBehaviorY: 'none' }}
             >
                 <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} safe-pb`}>
-
-                    <div className="mx-auto w-full">
-                        {children}
-                    </div>
+                    <AnimatePresence mode="wait" initial={false}>
+                        <motion.div
+                            key={activeTab}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -6 }}
+                            transition={{ duration: 0.18, ease: 'easeOut' }}
+                            className="mx-auto w-full"
+                        >
+                            {children}
+                        </motion.div>
+                    </AnimatePresence>
                 </div>
             </main>
 
