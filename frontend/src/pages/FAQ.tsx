@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
+import { useUI } from '../context/UIContext';
 
 interface FAQItem {
     q: string;
@@ -19,6 +20,7 @@ interface FAQItem {
 export default function FAQPage() {
     const { t } = useTranslation();
     const { selection, notification } = useHaptic();
+    const { setSupportOpen } = useUI();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [selectedFaq, setSelectedFaq] = useState<number | null>(null);
@@ -268,13 +270,13 @@ export default function FAQPage() {
                     </p>
                     <div className="flex gap-3">
                         <button
-                            onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
+                            onClick={() => { selection(); setSupportOpen(true); }}
                             className="flex-1 h-12 bg-white text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all"
                         >
                             {t('faq.support_btn')}
                         </button>
                         <button
-                            onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'partner' })); }}
+                            onClick={() => { selection(); window.open('https://t.me/+_T1pC14aVVYxYzJi', '_blank'); }}
                             className="flex-1 h-12 bg-white/10 text-white border border-white/20 rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all backdrop-blur-sm"
                         >
                             {t('faq.community_btn')}
