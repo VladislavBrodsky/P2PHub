@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { Clock, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface BlogPost {
     id: number | string;
@@ -16,7 +17,14 @@ interface BlogEngagement {
     liked: boolean;
 }
 
+const getCategoryKey = (cat: string) => {
+    const key = cat.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_');
+    return `blog.categories.${key}`;
+};
+
 export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogEngagement; index: number; onClick: () => void }) => {
+    const { t } = useTranslation();
+
     return (
         <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -38,7 +46,7 @@ export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogE
             <div className="flex-1 space-y-3">
                 <div className="flex items-center justify-between">
                     <span className="text-[9px] font-black uppercase tracking-widest text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/10">
-                        {post.category}
+                        {t(getCategoryKey(post.category))}
                     </span>
                     <div className="flex items-center gap-1 text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
                         <Clock className="w-3 h-3" />

@@ -10,7 +10,7 @@ import { backButton } from '@telegram-apps/sdk-react';
 import { blogService, BlogEngagement } from '../services/blogService';
 import { BlogPost } from '../data/blogPosts';
 import { useUI } from '../context/UIContext';
-import { PageSkeleton } from '../components/Skeletons/PageSkeleton';
+import { BlogSkeleton } from '../components/Skeletons/BlogSkeleton';
 import { Skeleton } from '../components/Skeleton';
 import React from 'react';
 
@@ -247,7 +247,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                         exit={{ opacity: 0 }}
                         className="w-full"
                     >
-                        <PageSkeleton />
+                        <BlogSkeleton />
                     </motion.div>
                 ) : !selectedPost ? (
                     <motion.div
@@ -462,6 +462,11 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
         );
     };
 
+    const getCategoryKey = (cat: string) => {
+        const key = cat.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_');
+        return `blog.categories.${key}`;
+    };
+
     return (
         <motion.div
             key="detail"
@@ -507,7 +512,7 @@ const BlogDetail = ({ post, engagement, isLoading, onBack, onLike, onShare, onNe
                     )}
                     <div className="flex items-center gap-2">
                         <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-widest border border-blue-500/20">
-                            {post.category}
+                            {t(getCategoryKey(post.category))}
                         </span>
                         <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
                             <Clock className="w-3 h-3" />
