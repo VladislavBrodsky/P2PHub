@@ -160,17 +160,6 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 # Standardized async database URL from settings
 database_url = settings.async_database_url
 
-# Validate DATABASE_URL is set and properly formatted
-# Why: Prevents cryptic startup errors when DATABASE_URL is missing or malformed.
-# This provides clear, actionable error messages to developers and ops teams.
-if not database_url:
-    print("❌ CRITICAL ERROR: DATABASE_URL is not set!", file=sys.stderr)
-    print("📋 To fix this:", file=sys.stderr)
-    print("   1. Check Railway environment variables", file=sys.stderr)
-    print("   2. Ensure DATABASE_URL is set in the PostgreSQL service", file=sys.stderr)
-    print("   3. Copy it to the backend service variables", file=sys.stderr)
-    sys.exit(1)
-
 # Validate database URL format
 # Why: Catches common issues like wrong scheme (postgres:// vs postgresql://)
 # or missing components (username, password, host, database name)

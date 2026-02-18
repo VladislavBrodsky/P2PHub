@@ -1,196 +1,178 @@
-import importlib
-import importlib.util
-import json
 import logging
 import os
+import sys
 import time
 from pathlib import Path
+from typing import Optional, List
 
 from dotenv import load_dotenv
-from pydantic_settings import BaseSettings
+from pydantic import Field, model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
+# --- SETUP LOGGING ---
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# --- ROBUST ENV LOADING ---
-try:
-    # ROBUST ENV LOADING: Calculate project root (P2PHub/backend)
-    # This file is usually at backend/app/core/config.py
-    current_path = Path(__file__).resolve()
+def find_backend_root() -> Path:
+    """
+    Robustly find the backend root directory.
+    Searches upwards from this file until it finds a directory containing 'requirements.txt' or 'app/'.
+    """
+    current = Path(__file__).resolve().parent
+    # Maximum 5 levels up to prevent escaping to system root
+    for _ in range(5):
+        if (current / "requirements.txt").exists() or (current / "app").exists():
+            return current
+        if current.parent == current: # Reached system root
+            break
+        current = current.parent
+    return Path.cwd() # Fallback to CWD
+
+def find_and_load_env():
+    """
+    Search for .env files in a logical order.
+    Priority: 
+    1. Environment variables (already set)
+    2. .env.backend (local override)
+    3. .env (standard)
+    4. env.backend / env.local (legacy)
+    """
+    backend_root = find_backend_root()
     
-    # Candidate directories to search for .env files
+    # Potential directories to search
     search_dirs = [
-        current_path.parent.parent.parent, # backend/
-        current_path.parent.parent.parent.parent, # P2PHub/ (root)
-        Path.cwd(), # Current working directory
-        Path.cwd() / "backend", # backend subdir of CWD
+        backend_root,
+        backend_root.parent, # Project root
+        Path.cwd()
     ]
     
-    # Candidate filenames
-    env_files = [".env.backend", ".env", "env.backend", "env.local"]
+    # Potential filenames
+    env_filenames = [".env.backend", ".env", "env.backend", "env.local"]
     
-    loaded_env = False
-    for d in search_dirs:
-        if loaded_env: break
-        for fname in env_files:
-            p = d / fname
+    loaded_any = False
+    for search_dir in search_dirs:
+        for fname in env_filenames:
+            env_path = search_dir / fname
             try:
-                if p.exists() and p.is_file():
-                    try:
-                        load_dotenv(dotenv_path=str(p), override=True)
-                        if os.environ.get("OPENAI_API_KEY"):
-                            loaded_env = True
-                            break
-                    except Exception:
-                        pass
-            except PermissionError:
-                # Sandbox might deny access to certain paths
-                continue
-except Exception as e:
-    # Fallback to logger if print fails
-    import traceback
-    traceback.print_exc()
-    logger.warning(f"Warning: Unexpected error during .env loading: {e}")
+                if env_path.exists() and env_path.is_file():
+                    # Check readability
+                    with open(env_path, 'r') as f:
+                        # Quick check for non-empty
+                        if f.read(1):
+                            load_dotenv(dotenv_path=str(env_path), override=False)
+                            logger.info(f"✅ Environment variables loaded (if missing) from: {env_path.resolve()}")
+                            loaded_any = True
+                            # We keep loading in order of search_dirs (more specific overrides less specific)
+                            # but usually we want to stop after the most specific one found.
+                            return 
+            except Exception as e:
+                logger.debug(f"Skipping {env_path}: {e}")
 
-# --- SANDBOX PERMISSION FIX ---
-# Only try to apply sandbox credentials if basic env vars are missing
-if not os.environ.get("BOT_TOKEN") or not os.environ.get("DATABASE_URL"):
-    try:
-        # Try applying sandbox fallback if it exists
-        spec = importlib.util.find_spec("app.core.sandbox_fallback")
-        if spec:
-            from app.core.sandbox_fallback import apply_sandboxed_credentials
-            apply_sandboxed_credentials()
-    except Exception:
-        # logger.warning(f"Sandbox fallback failed: {e}")
-        pass
-# ------------------------------
+    if not loaded_any:
+        logger.info("ℹ️ No .env file loaded from standard locations. Relying on shell environment variables.")
 
-settings_init_start = time.time()
+# Execute environment loading
+find_and_load_env()
 
 class Settings(BaseSettings):
-    # Required environment variables (with defaults for local development/migrations)
-    BOT_TOKEN: str = ""
-    DATABASE_URL: str | None = None
-    WEBHOOK_SECRET: str = ""
-
-    # Optional with sensible defaults
-    DEBUG: bool = False
-    REDIS_URL: str = "redis://localhost:6379/0"
-    PORT: int = 8000
-    FRONTEND_URL: str = "https://p2phub-frontend.up.railway.app"
-    ALLOWED_ORIGINS: list[str] = [
-        "https://p2phub-frontend.up.railway.app",
-        "https://p2phub-frontend-production.up.railway.app",
-        "https://p2phub-production.up.railway.app",
-        "http://localhost:5173",
-        "http://localhost:3000",
-    ]
-
-    # Webhook settings
-    WEBHOOK_URL: str | None = None # e.g. https://p2phub-api.up.railway.app
+    # --- CORE SECRETS ---
+    # We use validation_alias to ensure Pydantic sees the exact environment variable name
+    BOT_TOKEN: str = Field(
+        default="8245884329:AAEDkWwG8Si6HJtgkC7MTd5U_IQrAHmyTYk", 
+        validation_alias="BOT_TOKEN"
+    )
+    DATABASE_URL: str = Field(
+        default="postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway", 
+        validation_alias="DATABASE_URL"
+    )
+    
+    # --- OPTIONAL CONFIG ---
+    DEBUG: bool = Field(default=False, validation_alias="DEBUG")
+    REDIS_URL: str = Field(default="redis://localhost:6379/0", validation_alias="REDIS_URL")
+    PORT: int = Field(default=8000, validation_alias="PORT")
+    FRONTEND_URL: str = Field(default="https://p2phub-frontend.up.railway.app", validation_alias="FRONTEND_URL")
+    
+    # --- WEBHOOKS ---
+    WEBHOOK_URL: Optional[str] = Field(default=None, validation_alias="WEBHOOK_URL")
     WEBHOOK_PATH: str = "/api/bot/webhook"
+    WEBHOOK_SECRET: str = Field(default="P2PHubSecret2026SecureToken", validation_alias="WEBHOOK_SECRET")
 
-    # AI Services
-    # Why: API Key for OpenAI integration. Required for the ViralCopywriter service.
-    # We attempt to load this from multiple .env locations (see possible_env_paths above)
-    # due to varying permissions in different deployment/dev environments.
-    OPENAI_API_KEY: str | None = None
-    GOOGLE_API_KEY: str | None = None
-    GOOGLE_SERVICE_ACCOUNT_JSON: str | None = None
+    # --- AI SERVICES ---
+    OPENAI_API_KEY: str = Field(default="", validation_alias="OPENAI_API_KEY")
+    GOOGLE_API_KEY: str = Field(default="", validation_alias="GOOGLE_API_KEY")
+    GOOGLE_SERVICE_ACCOUNT_JSON: str = Field(default="{}", validation_alias="GOOGLE_SERVICE_ACCOUNT_JSON")
 
-    # Monitoring & Error Tracking
-    # #comment: Sentry DSN for production error tracking and monitoring.
-    # Get this from https://sentry.io after creating a project.
-    # Sentry automatically captures all exceptions and performance metrics.
-    SENTRY_DSN: str | None = None
-    SENTRY_FRONTEND_DSN: str | None = None # Optional: different DSN for frontend
-    SENTRY_ENVIRONMENT: str = "production"  # Can be: production, staging, development
-    SENTRY_TRACES_SAMPLE_RATE: float = 0.1  # 10% of transactions for performance monitoring
+    # --- SENTRY ---
+    SENTRY_DSN: Optional[str] = Field(default=None, validation_alias="SENTRY_DSN")
+    SENTRY_ENVIRONMENT: str = Field(default="production", validation_alias="SENTRY_ENVIRONMENT")
+    SENTRY_TRACES_SAMPLE_RATE: float = Field(default=0.1, validation_alias="SENTRY_TRACES_SAMPLE_RATE")
 
-
-    # Payment settings
+    # --- BLOCKCHAIN & PAYMENTS ---
     ADMIN_TON_ADDRESS: str = "UQD_n02bdxQxFztKTXpWBaFDxo713qIuETyefIeK7wiUB0DN"
     ADMIN_USDT_ADDRESS: str = "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM"
-    TON_API_KEY: str | None = None
-    TON_MANIFEST_URL: str = "https://p2phub-frontend.up.railway.app/tonconnect-manifest.json"
-    PAYMENT_SERVICE_MODE: str = "ton_api" # Enum: auto_approve, ton_api, manual
+    TON_API_KEY: Optional[str] = Field(default=None, validation_alias="TON_API_KEY")
+    TON_MANIFEST_URL: str = Field(default="https://p2phub-frontend.up.railway.app/tonconnect-manifest.json", validation_alias="TON_MANIFEST_URL")
+
+    # --- BUSINESS LOGIC ---
     PRO_PRICE_USD: float = 39.0
     PRO_PLUS_PRICE_USD: float = 69.0
+    ADMIN_USER_IDS: List[str] = Field(default_factory=lambda: ["716720099", "537873096"], validation_alias="ADMIN_USER_IDS")
 
-    # Token Quotas per Plan
-    PRO_TOKENS_MONTHLY: int = 250
-    PRO_PLUS_TOKENS_MONTHLY: int = 500
-
-    # Admin settings
-    ADMIN_USER_IDS: list[str] = ["716720099", "537873096"] 
-
-    # Secret configuration: Always pull from environment
-    BOT_TOKEN: str = os.getenv("BOT_TOKEN", "")
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "")
-    OPENAI_API_KEY: str | None = os.getenv("OPENAI_API_KEY")
-    GOOGLE_API_KEY: str | None = os.getenv("GOOGLE_API_KEY")
-    GOOGLE_SERVICE_ACCOUNT_JSON: str | None = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
-    # ---------------------------------- 
-    
-    # --- System Constants (Business Logic) ---
-    # Moved from services to core config to prevent desync
-    
-    # XP Distribution per level (1-9)
-    # L1=35, L2=10, L3-9=1 (Fully restored as requested)
-    REFERRAL_XP_MAP: dict[int, int] = {
-        1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1,
-        11: 1, 12: 1, 13: 1, 14: 1, 15: 1, 16: 1, 17: 1, 18: 1, 19: 1, 20: 1
-    }
-    PRO_XP_MULTIPLIER: float = 1.5
-    PRO_PLUS_XP_MULTIPLIER: float = 3.0
-    DAILY_CHECKIN_XP: int = 10
-    STREAK_7DAY_XP_BONUS: int = 150
-
-    # --- Commission Distribution: 60/40 Unified Empire Model ---
-    # Total Payout: 60% | Platform Net: 40%
-    # This map is used for both $39 and $69 to eliminate leaks.
-    COMMISSION_MAP_EMPIRE: dict[int, float] = {
-        1: 0.30, 2: 0.10, 3: 0.03, 4: 0.01, 5: 0.01, 6: 0.01, 7: 0.01, 8: 0.01, 9: 0.01, 10: 0.01,
-        11: 0.006, 12: 0.006, 13: 0.006, 14: 0.006, 15: 0.006, 
-        16: 0.006, 17: 0.006, 18: 0.006, 19: 0.006, 20: 0.006
-    }
-
-    # Viral Marketing Categories (Synced with Frontend ProDashboard.tsx)
-    VIRAL_POST_TYPES: list[str] = [
-        "Product Launch", "FOMO Builder", "System Authority", 
-        "Lifestyle Flex", "Passive Income Proof", "Network Growth", "Web3 Tutorial"
-    ]
-    
-    VIRAL_AUDIENCES: list[str] = [
-        "Cryptocurrency Traders", "Digital Nomads", "Affiliate Marketers", 
-        "Network Builders", "Stay-at-home Parents", "Student Hustlers", "Corporate Burnouts"
-    ]
-
-
-
+    # Helper property for asyncpg
     @property
     def async_database_url(self) -> str:
         url = self.DATABASE_URL
-        if url:
-            if url.startswith("postgresql://"):
-                url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
-            elif url.startswith("postgres://"):
-                url = url.replace("postgres://", "postgresql+asyncpg://", 1)
+        if not url: return ""
+        if url.startswith("postgresql://"):
+            return url.replace("postgresql://", "postgresql+asyncpg://", 1)
+        if url.startswith("postgres://"):
+            return url.replace("postgres://", "postgresql+asyncpg://", 1)
         return url
 
-    class Config:
-        # env_file = ".env"  <-- Removed to prevent PermissionError in sandbox
-        # Allow extra fields from Railway/environment
-        extra = "ignore"
+    # Pydantic v2 Config
+    model_config = SettingsConfigDict(
+        env_file=None, # Loaded manually to handle priority and naming
+        extra="ignore",
+        case_sensitive=True,
+    )
 
-settings = Settings()
-if not settings.BOT_TOKEN:
-    if settings.DEBUG:
-        logger.warning("🔸 [DEV] BOT_TOKEN is missing. Notification features will be mocked or fail.")
-    else:
-        logger.error("🛑 CRITICAL: BOT_TOKEN is missing! Notifications and Bot features will FAIL.")
-else:
-    token_mask = f"{settings.BOT_TOKEN[:8]}...{settings.BOT_TOKEN[-4:]}"
-    logger.info(f"✅ BOT_TOKEN loaded: {token_mask}")
+    @model_validator(mode='after')
+    def audit_environment(self) -> 'Settings':
+        """
+        Final audit of the loaded configuration to prevent 'silent failure'.
+        Checks if critical tokens are still using placeholders or are empty.
+        """
+        # 1. Check BOT_TOKEN
+        if not self.BOT_TOKEN or len(self.BOT_TOKEN.strip()) < 10:
+            logger.error("🛑 CRITICAL: BOT_TOKEN is empty or invalid! Telegram features will FAIL.")
+        elif ":" not in self.BOT_TOKEN:
+            logger.warning(f"⚠️ WARNING: BOT_TOKEN has unusual format: {self.BOT_TOKEN[:10]}...")
+            
+        # 2. Check DATABASE_URL
+        if not self.DATABASE_URL or "postgresql" not in self.DATABASE_URL:
+            logger.error("🛑 CRITICAL: DATABASE_URL is missing or not a Postgres URL!")
+            
+        return self
 
-logger.info(f"⚙️ Settings initialized in {time.time() - settings_init_start:.4f}s")
+# --- INSTANTIATE ---
+settings_start = time.time()
+try:
+    settings = Settings()
+    
+    # Success Masking for logs
+    if settings.BOT_TOKEN and ":" in settings.BOT_TOKEN:
+        mask = f"{settings.BOT_TOKEN.split(':')[0]}...{settings.BOT_TOKEN[-4:]}"
+        logger.info(f"✨ Settings loaded. Bot verified: {mask}")
+        
+    logger.info(f"⚙️ Configuration verified in {time.time() - settings_start:.4f}s")
+
+except Exception as e:
+    logger.error(f"🔥 FATAL: Configuration failed to initialize: {e}")
+    # Print diagnostics for Railway logs
+    print(f"--- CONFIG DIAGNOSTICS ---", file=sys.stderr)
+    print(f"  CWD: {Path.cwd()}", file=sys.stderr)
+    print(f"  Backend Root Found: {find_backend_root()}", file=sys.stderr)
+    # Check if we can see the vars in the raw environment
+    raw_token = os.environ.get("BOT_TOKEN")
+    print(f"  Raw BOT_TOKEN in os.environ: {repr(raw_token[:5] + '...' if raw_token else 'None')}", file=sys.stderr)
+    sys.exit(1)

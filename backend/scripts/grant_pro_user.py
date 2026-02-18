@@ -83,5 +83,11 @@ async def grant_pro(username: str, distribute_commissions: bool = True):
 
 
 if __name__ == "__main__":
-    username = sys.argv[1] if len(sys.argv) > 1 else "lownocoder_TMR"
-    asyncio.run(grant_pro(username, distribute_commissions=True))
+    if len(sys.argv) < 2:
+        print("Usage: python3 backend/scripts/grant_pro_user.py <username> [--free]")
+        sys.exit(1)
+    
+    username = sys.argv[1]
+    distribute = "--free" not in sys.argv
+    
+    asyncio.run(grant_pro(username, distribute_commissions=distribute))

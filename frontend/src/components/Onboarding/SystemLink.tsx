@@ -26,7 +26,7 @@ export const SystemLink = ({ onComplete }: { onComplete: () => void }) => {
             }
         }, 180);
         return () => clearInterval(interval);
-    }, [onComplete, terminalLines]);
+    }, [onComplete]);
 
     return (
         <motion.div
