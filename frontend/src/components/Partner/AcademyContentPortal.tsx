@@ -1,7 +1,7 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { X, Zap, CheckCircle2, ArrowRight, Lock, Lightbulb, Wand2, Share2, Target } from 'lucide-react';
+import { X, Zap, CheckCircle2, ArrowRight, Lock, Lightbulb, Wand2, Share2, Target, ArrowLeft } from 'lucide-react';
 import { AcademyStage } from '../../data/academyData';
 import { useTranslation, Trans } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
@@ -341,13 +341,20 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                     </div>
                 </div>
 
-                {/* Bottom Action Bar - Floating & Padded for TMA Safe Area */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 pb-[calc(var(--spacing-safe-bottom)+1.5rem)] bg-linear-to-t from-white via-white/95 to-transparent dark:from-[#030712] dark:via-[#030712]/95 z-20">
-                    {!isLocked && (
+                <div className="absolute bottom-0 left-0 right-0 p-6 pb-[calc(var(--spacing-safe-bottom)+1.5rem)] bg-linear-to-t from-white via-white/95 to-transparent dark:from-[#030712] dark:via-[#030712]/95 z-20 flex gap-3">
+                    <button
+                        onClick={onClose}
+                        className="w-14 h-auto rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 flex items-center justify-center active:scale-90 transition-all hover:bg-slate-200 dark:hover:bg-white/10"
+                        aria-label={t('common.close')}
+                    >
+                        <ArrowLeft className="w-6 h-6" />
+                    </button>
+
+                    {!isLocked ? (
                         <button
                             onClick={() => missionAccomplished && onComplete(stage.id)}
                             disabled={!missionAccomplished}
-                            className={`w-full py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-4 border touch-manipulation relative overflow-hidden ${missionAccomplished
+                            className={`flex-1 py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-4 border touch-manipulation relative overflow-hidden ${missionAccomplished
                                 ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-white/5 shadow-[0_20px_40px_rgba(0,0,0,0.3)] active:scale-95 brightness-110'
                                 : 'bg-slate-100 dark:bg-white/5 text-slate-400 border-slate-200 dark:border-white/10 opacity-50 grayscale cursor-not-allowed shadow-none'
                                 }`}
@@ -361,6 +368,17 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                             )}
                             <CheckCircle2 className={`w-5 h-5 transition-transform ${missionAccomplished ? 'scale-110' : 'scale-100'}`} />
                             {t('academy.complete_stage', { stage: stage.id })}
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => {
+                                onClose();
+                                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                            }}
+                            className="flex-1 py-5 rounded-2xl bg-linear-to-r from-amber-500 to-orange-500 text-white font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-amber-500/30 active:scale-95 transition-all flex items-center justify-center gap-2 group"
+                        >
+                            <span>{t('academy.upgrade_now')}</span>
+                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </button>
                     )}
                 </div>

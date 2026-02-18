@@ -35,13 +35,13 @@ The application is visually striking but suffers from **critical navigation issu
 ### Phase 1: Critical Stabilization (Day 1-2)
 *Goal: Stop the bleeding. Fix crashes, security blocks, and broken navigation.*
 
-- [ ] **Fix HTTP Mixed Content:**
+- [x] **Fix HTTP Mixed Content:**
     - Update `api/client.ts` to strictly enforce `https://` for all production requests.
     - Check usage of `VITE_API_URL` to ensure it's not falling back to HTTP.
-- [ ] **Fix Navigation & Routing:**
+- [x] **Fix Navigation & Routing:**
     - Debug `react-router` configuration to handle deep links (e.g., `/leagues`) correctly.
     - Implementing a "Reset Layout" on route change to prevent the "double view" overlap bug.
-- [ ] **Fix Burger Menu Lag (Performance):**
+- [x] **Fix Burger Menu Lag (Performance):**
     - **Action:** Remove `backdrop-blur-[2px]` from the backdrop or drawer itself during animation.
     - **Action:** Pause/Disable the expensive "Pro Vibe" CSS animations (`animate-[vibing-gradient]`) while the drawer is opening/closing.
     - **Action:** Mark the drawer with `will-change: transform`.
@@ -49,9 +49,9 @@ The application is visually striking but suffers from **critical navigation issu
 ### Phase 2: Visual Integrity & Core Features (Day 3-4)
 *Goal: Ensure the app looks premium and works as expected.*
 
-- [ ] **Fix CORS for Avatars:** Configure the backend/S3 bucket to allow `Access-Control-Allow-Origin: *` (or specific domain).
-- [ ] **Persistent Navigation:** Ensure the Bottom Navigation Bar remains visible or add a dedicated "Back" button to all sub-pages (Academy, etc.).
-- [ ] **Data Sync:** Refactor `UserContext` to ensure XP/Level data is consistent across all components (Header vs. Growth Tab).
+- [x] **Fix CORS for Avatars:** Configure the backend/S3 bucket to allow `Access-Control-Allow-Origin: *` (or specific domain).
+- [x] **Persistent Navigation:** Ensure the Bottom Navigation Bar remains visible or add a dedicated "Back" button to all sub-pages (Academy, etc.).
+- [x] **Data Sync:** Refactor `UserContext` to ensure XP/Level data is consistent across all components (Header vs. Growth Tab).
 
 ### Phase 3: Polish & "Wow" Factor (Day 5+)
 *Goal: Elevate the experience.*

@@ -3,6 +3,8 @@ import React, { memo, useState, useEffect } from 'react';
 import { AVATAR_DATA, LOGO_DATA } from '../../data/avatars';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
+import { useUser } from '../../context/UserContext';
+import { User } from 'lucide-react';
 
 const ALL_AVATARS = Object.values(AVATAR_DATA);
 
@@ -160,43 +162,68 @@ export const CommunityOrbit = memo(() => {
     );
 });
 
+
 const CentralLogo = memo(() => {
-    const logoSrc = LOGO_DATA;
+    const { user } = useUser();
+    const logoSrc = user?.photo_url || LOGO_DATA;
+    const isUserPhoto = !!user?.photo_url;
 
     return (
         <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.5)]"
+            className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.5)] overflow-hidden"
             style={{ willChange: 'transform' }}
         >
             <FractalProfits />
             <div className="absolute inset-0 z-0 rounded-full bg-blue-500 blur-3xl opacity-40 animate-pulse" />
             <div className="absolute inset-0 z-10 rounded-full border border-white/30" />
-            <motion.img
-                animate={{
-                    scale: [1, 1.08, 1],
-                }}
-                transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                }}
-                src={logoSrc}
-                alt="Pintopay Logo"
-                width="56"
-                height="56"
-                loading="eager"
-                className="relative z-20 w-14 h-14 object-contain"
-                onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    if (!target.src.includes('raw.githubusercontent.com')) {
-                        // High-reliability fallback to remote asset
-                        target.src = 'https://raw.githubusercontent.com/VladislavBrodsky/P2PHub/main/frontend/public/logo.svg';
-                    }
-                }}
-            />
+
+            {isUserPhoto ? (
+                <motion.img
+                    animate={{
+                        scale: [1, 1.05, 1],
+                    }}
+                    transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }}
+                    src={logoSrc}
+                    alt="User Profile"
+                    className="relative z-20 w-full h-full object-cover rounded-full"
+                    loading="eager"
+                    onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = LOGO_DATA;
+                    }}
+                />
+            ) : (
+                <motion.img
+                    animate={{
+                        scale: [1, 1.08, 1],
+                    }}
+                    transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }}
+                    src={logoSrc}
+                    alt="Pintopay Logo"
+                    width="56"
+                    height="56"
+                    loading="eager"
+                    className="relative z-20 w-14 h-14 object-contain"
+                    onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        if (!target.src.includes('raw.githubusercontent.com')) {
+                            // High-reliability fallback to remote asset
+                            target.src = 'https://raw.githubusercontent.com/VladislavBrodsky/P2PHub/main/frontend/public/logo.svg';
+                        }
+                    }}
+                />
+            )}
         </motion.div>
     );
 });
