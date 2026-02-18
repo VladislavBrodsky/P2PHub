@@ -20,27 +20,33 @@ import ruSocial from './locales/ru/social.json';
 import ruCards from './locales/ru/cards.json';
 import ruOther from './locales/ru/other.json';
 
-const en = {
-    ...enCommon,
-    ...enDashboard,
-    ...enMarketing,
-    ...enAcademy,
-    ...enPro,
-    ...enSocial,
-    ...enCards,
-    ...enOther
+
+
+const deepMerge = (target: any, source: any) => {
+    const output = { ...target };
+    if (source instanceof Object && target instanceof Object) {
+        Object.keys(source).forEach(key => {
+            if (source[key] instanceof Object) {
+                if (!(key in target)) {
+                    output[key] = source[key];
+                } else {
+                    output[key] = deepMerge(target[key], source[key]);
+                }
+            } else {
+                output[key] = source[key];
+            }
+        });
+    }
+    return output;
 };
 
-const ru = {
-    ...ruCommon,
-    ...ruDashboard,
-    ...ruMarketing,
-    ...ruAcademy,
-    ...ruPro,
-    ...ruSocial,
-    ...ruCards,
-    ...ruOther
-};
+const en = [
+    enCommon, enDashboard, enMarketing, enAcademy, enPro, enSocial, enCards, enOther
+].reduce((acc: any, curr: any) => deepMerge(acc, curr), {} as any);
+
+const ru = [
+    ruCommon, ruDashboard, ruMarketing, ruAcademy, ruPro, ruSocial, ruCards, ruOther
+].reduce((acc: any, curr: any) => deepMerge(acc, curr), {} as any);
 
 i18n
     // detect user language

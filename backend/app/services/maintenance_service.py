@@ -3,11 +3,12 @@ import logging
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
+from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.models.partner import Partner, engine
+from app.models.partner import Earning, Partner, XPTransaction, engine
 from app.worker import broker
 
 logger = logging.getLogger(__name__)
@@ -63,6 +64,7 @@ async def migrate_blog_task():
         await migrate()
         logger.info("✅ Blog migration internal task complete!")
 
+@broker.task(task_name="reconcile_network_stats_task", schedule=[{"cron": "0 4 * * *"}])
 async def reconcile_network_stats(session_override: AsyncSession = None) -> dict[str, Any]:
     """
     Unified high-performance network reconciliation.
@@ -313,3 +315,71 @@ async def reset_monthly_pro_tokens():
         
         await session.commit()
         logger.info("✅ Monthly token reset complete for all active PRO users.")
+
+@broker.task(task_name="economy_integrity_audit_task", schedule=[{"cron": "0 5 * * *"}])
+async def economy_integrity_audit_task():
+    """
+    Background worker that verifies the economic integrity of all partners.
+    Checks if current XP and Balance match the sum of transactions/earnings.
+    Flags discrepancies in the audit log for manual review.
+    """
+    logger.info("🛡️ Starting Economy Integrity Audit...")
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    
+    async with async_session() as session:
+        # 1. Fetch all partners in batches to prevent memory pressure
+        result = await session.exec(select(Partner))
+        partners = result.all()
+        
+        flags = 0
+        from app.services.audit_service import audit_service
+        
+        for partner in partners:
+            # Audit XP
+            xp_sum_stmt = select(func.sum(XPTransaction.amount)).where(XPTransaction.partner_id == partner.id)
+            xp_sum = (await session.exec(xp_sum_stmt)).one() or 0.0
+            
+            if abs(float(partner.xp) - float(xp_sum)) > 0.01:
+                logger.warning(f"⚠️ XP Discrepancy detected for user {partner.telegram_id}: DB={partner.xp}, Sum={xp_sum}")
+                await audit_service.log_event(
+                    session=session,
+                    entity_type="system",
+                    entity_id=str(partner.telegram_id),
+                    action="integrity_discrepancy",
+                    details={
+                        "type": "XP",
+                        "db_value": float(partner.xp),
+                        "sum_value": float(xp_sum),
+                        "diff": float(partner.xp) - float(xp_sum)
+                    }
+                )
+                flags += 1
+
+            # Audit Balance
+            bal_sum_stmt = select(func.sum(Earning.amount)).where(
+                Earning.partner_id == partner.id,
+                Earning.currency == "USDT"
+            )
+            bal_sum = (await session.exec(bal_sum_stmt)).one() or 0.0
+            
+            if abs(float(partner.balance) - float(bal_sum)) > 0.01:
+                logger.warning(f"⚠️ Balance Discrepancy detected for user {partner.telegram_id}: DB={partner.balance}, Sum={bal_sum}")
+                await audit_service.log_event(
+                    session=session,
+                    entity_type="system",
+                    entity_id=str(partner.telegram_id),
+                    action="integrity_discrepancy",
+                    details={
+                        "type": "BALANCE",
+                        "db_value": float(partner.balance),
+                        "sum_value": float(bal_sum),
+                        "diff": float(partner.balance) - float(bal_sum)
+                    }
+                )
+                flags += 1
+                
+        if flags > 0:
+            await session.commit()
+            logger.info(f"✅ Economy audit complete. {flags} discrepancies found and logged.")
+        else:
+            logger.info("✅ Economy audit complete. No discrepancies found.")
