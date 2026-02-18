@@ -185,6 +185,8 @@ class TaskClaimRequest(BaseModel):
         from_attributes = True
 
 class NetworkStats(BaseModel):
+    # Dynamic Mapping: allows level_1...level_20 without hardcoding every field
+    # but still provides defaults for the most common ones for API parity.
     level_1: int = 0
     level_2: int = 0
     level_3: int = 0
@@ -194,9 +196,21 @@ class NetworkStats(BaseModel):
     level_7: int = 0
     level_8: int = 0
     level_9: int = 0
+    level_10: int = 0
+    level_11: int = 0
+    level_12: int = 0
+    level_13: int = 0
+    level_14: int = 0
+    level_15: int = 0
+    level_16: int = 0
+    level_17: int = 0
+    level_18: int = 0
+    level_19: int = 0
+    level_20: int = 0
 
     class Config:
         from_attributes = True
+        extra = "allow" # Allow dynamic levels in the future
 
 class GrowthMetrics(BaseModel):
     growth_pct: float

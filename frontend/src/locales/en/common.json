@@ -301,11 +301,18 @@
       ],
       "benefits_pro_plus": [
         "20 levels of referral network",
-        "x3 XP Bonus (Maximum)",
-        "VIP Manager 24/7",
-        "Priority access to new AI features",
-        "Elite Merch & Events access"
+        "x3 XP Bonus (Maximum Power)",
+        "VIP Manager 24/7 (Personal)",
+        "Early access to AI-Agents",
+        "Exclusive Merch & Global Events",
+        "Personal Scaling Sessions",
+        "Luxury P2P Mastermind Access",
+        "Advanced Automation Suite"
       ],
+      "viral_studio_desc_pro": "Neural studio for high-retention content synthesis.",
+      "viral_studio_desc_pro_plus": "Ultimate AI Command Center with multi-platform sync.",
+      "content_factory_desc_pro": "Deep-level network analytics and automated tracking.",
+      "content_factory_desc_pro_plus": "Sovereign Empire Infrastructure with maximum depth.",
       "change_method": "Change method",
       "processing": "Processing...",
       "complete_payment": "Complete payment",

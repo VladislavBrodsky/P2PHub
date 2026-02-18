@@ -100,7 +100,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
     // Prefetch logic
     useEffect(() => {
         const neighbors = [];
-        if (level < 9) neighbors.push(level + 1);
+        if (level < 20) neighbors.push(level + 1);
         if (level > 1) neighbors.push(level - 1);
 
         neighbors.forEach(bgLevel => {
@@ -236,7 +236,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                 {/* Level Selector with Badges */}
                 <div className="relative mb-2">
                     <div className="flex items-center gap-2 overflow-x-auto pb-3 scrollbar-none px-0.5" ref={scrollContainerRef}>
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((l) => {
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((l) => {
                             const count = treeStats[`level_${l}`] || treeStats[l.toString()] || 0;
                             const isActive = level === l;
                             return (

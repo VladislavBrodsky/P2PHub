@@ -18,7 +18,7 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Discover the exact mechanics of high-velocity P2P settlements and why speed is the ultimate currency of 2026.",
         category: "Wealth Strategy",
         date: "Feb 7, 2026",
-        author: "Pinto Team"
+        author: "Intelligence Unit"
     },
     {
         id: '2',
@@ -42,7 +42,7 @@ export const blogPosts: BlogPost[] = [
         excerpt: "How Pintopay is bypassing geographic restrictions to provide equal access to global markets for everyone.",
         category: "Freedom",
         date: "Feb 4, 2026",
-        author: "Pinto Team"
+        author: "Intelligence Unit"
     },
     {
         id: '5',
@@ -66,7 +66,7 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Apple Pay and Google Pay are just masks for old systems. Discover the true digital native infrastructure.",
         category: "Tech Analysis",
         date: "Feb 1, 2026",
-        author: "Pinto Team"
+        author: "Intelligence Unit"
     },
     {
         id: '8',
@@ -82,7 +82,7 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Mastering the Pintopay QR system to achieve maximum settlement speed and network growth.",
         category: "Elite Strategy",
         date: "Jan 30, 2026",
-        author: "Pinto Team"
+        author: "Intelligence Unit"
     },
     {
         id: '10',
@@ -106,7 +106,7 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Access a premium banking card that works in 180+ countries, managed entirely within the world's most secure messenger.",
         category: "Adoption",
         date: "Jan 27, 2026",
-        author: "Pinto Team"
+        author: "Intelligence Unit"
     },
     {
         id: '13',
@@ -130,7 +130,7 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Real-time settlement meets global liquidity. Spend your digital wealth without the wait or the hassle.",
         category: "Wealth",
         date: "Jan 24, 2026",
-        author: "Pinto Team"
+        author: "Intelligence Unit"
     },
     {
         id: '16',
@@ -154,7 +154,7 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Unlock 24/7 automated marketing tools that do the selling for you. This is how the elites grow their network.",
         category: "PRO Benefits",
         date: "Jan 21, 2026",
-        author: "Pinto Team"
+        author: "Intelligence Unit"
     },
     {
         id: '19',

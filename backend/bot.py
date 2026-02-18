@@ -316,8 +316,8 @@ async def handle_buy_pro(message: types.Message):
             text = (
                 "👑 *UPGRADE TO PRO*\n\n"
                 "Unlock the full potential of Pintopay:\n"
-                "• 9-Level Affiliate System\n"
-                "• X5 XP Multiplier\n"
+                "• 20-Level Empire System\n"
+                "• Fast XP Boost (up to 3x)\n"
                 "• Priority Payouts\n"
                 "• VIP Support\n\n"
                 f"💰 *Price:* {amount} TON (~$39)\n"

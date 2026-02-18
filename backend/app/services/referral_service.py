@@ -105,7 +105,7 @@ async def _get_ancestor_map(session: AsyncSession, partner: Partner) -> dict[int
     lineage_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
     if partner.referrer_id and partner.referrer_id not in lineage_ids:
         lineage_ids.append(partner.referrer_id)
-    lineage_ids = list(dict.fromkeys(lineage_ids))[-9:]
+    lineage_ids = list(dict.fromkeys(lineage_ids))[-20:]
     
     result = await session.exec(select(Partner).where(Partner.id.in_(lineage_ids)))
     return {p.id: p for p in result.all()}
@@ -117,7 +117,7 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
     chain_list = ["You"]
     new_partner_name = format_partner_name(partner)
     
-    for level in range(1, 10):
+    for level in range(1, 21):
         if not current_referrer_id: break
         referrer = ancestor_map.get(current_referrer_id)
         if not referrer: break
@@ -289,7 +289,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             pct = comm_map.get(dist, 0)
             if pct <= 0: continue
             
-            commission = total_amount * pct
+            commission = round(total_amount * pct, 4)
             
             # Identify person at this exact distance
             referrer_id = ancestors_at_dist[dist-1] if (dist-1) < len(ancestors_at_dist) else None
@@ -316,10 +316,13 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             if not recipient: continue 
                 
             balance_before = float(recipient.balance)
-            balance_after = balance_before + commission
+            # #comment: Atomic Increment for high-concurrency safety (USDT)
+            # This prevents race conditions where multiple commissions hit the same user (e.g. Admin) 
+            # at once, ensuring no funds are lost.
+            recipient.balance = Partner.balance + commission
+            recipient.total_earned_usdt = Partner.total_earned_usdt + commission
             
-            recipient.balance = balance_after
-            recipient.total_earned_usdt = float(recipient.total_earned_usdt) + commission
+            balance_after = round(balance_before + commission, 4)
             session.add(recipient)
             
             description = f"{'PRO+' if is_pro_plus else 'PRO'} Commission (L{dist})"

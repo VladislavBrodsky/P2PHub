@@ -16,7 +16,7 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
     import sentry_sdk
     with sentry_sdk.start_span(op="db.query", description="get_referral_tree_stats"):
         partner = await session.get(Partner, partner_id)
-        if not partner: return {f"level_{i}": 0 for i in range(1, 10)}
+        if not partner: return {str(i): 0 for i in range(1, 21)}
 
         search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
         base_depth = len(search_path.split('.'))
@@ -25,7 +25,7 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
             SELECT depth - :base_depth + 1 as level, COUNT(*) as count
             FROM partner
             WHERE (path = :search_path OR path LIKE :search_wildcard)
-            AND depth BETWEEN :base_depth AND :base_depth + 8
+            AND depth BETWEEN :base_depth AND :base_depth + 19
             GROUP BY 1
             ORDER BY level;
         """)
@@ -36,11 +36,11 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
             "base_depth": base_depth
         })
 
-        stats = {str(i): 0 for i in range(1, 10)}
+        stats = {str(i): 0 for i in range(1, 21)}
         rows = result.all()
         for row in rows:
             lvl = int(row[0])
-            if 1 <= lvl <= 9:
+            if 1 <= lvl <= 20:
                 stats[str(lvl)] = row[1]
 
         return stats
@@ -51,7 +51,7 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
     """
     import sentry_sdk
     with sentry_sdk.start_span(op="db.query", description="get_referral_tree_members"):
-        if not (1 <= target_level <= 9):
+        if not (1 <= target_level <= 20):
             return []
 
         partner = await session.get(Partner, partner_id)
@@ -188,7 +188,7 @@ async def _fetch_time_series_buckets(session, path: str, base_depth: int, interv
     query = text(f"""
         SELECT {bucket_column} as bucket, depth - :base_depth + 1 as level, COUNT(*) as count
         FROM partner WHERE (path = :path OR path LIKE :wildcard) AND created_at >= :start
-        AND (depth - :base_depth + 1) BETWEEN 1 AND 9 GROUP BY 1, 2 ORDER BY 1 ASC;
+        AND (depth - :base_depth + 1) BETWEEN 1 AND 20 GROUP BY 1, 2 ORDER BY 1 ASC;
     """)
     result = await session.execute(query, {"path": path, "wildcard": f"{path}.%", "start": start, "base_depth": base_depth})
     
@@ -197,7 +197,7 @@ async def _fetch_time_series_buckets(session, path: str, base_depth: int, interv
         b = row[0]
         if isinstance(b, str): b = datetime.strptime(b, '%Y-%m-%d %H:%M:%S')
         b = b.replace(tzinfo=None)
-        if b not in data_map: data_map[b] = {lvl: 0 for lvl in range(1, 10)}
+        if b not in data_map: data_map[b] = {lvl: 0 for lvl in range(1, 21)}
         data_map[b][int(row[1])] = int(row[2])
     return data_map
 
@@ -205,10 +205,10 @@ async def _fetch_base_cumulative_totals(session, path: str, base_depth: int, sta
     stmt = text("""
         SELECT depth - :base_depth + 1 as level, COUNT(*)
         FROM partner WHERE (path = :path OR path LIKE :wildcard) AND created_at < :start
-        AND (depth - :base_depth + 1) BETWEEN 1 AND 9 GROUP BY 1
+        AND (depth - :base_depth + 1) BETWEEN 1 AND 20 GROUP BY 1
     """)
     res = await session.execute(stmt, {"path": path, "wildcard": f"{path}.%", "start": start, "base_depth": base_depth})
-    totals = {lvl: 0 for lvl in range(1, 10)}
+    totals = {lvl: 0 for lvl in range(1, 21)}
     for row in res.all():
         totals[int(row[0])] = int(row[1])
     return totals
@@ -223,9 +223,9 @@ def _assemble_time_series_response(start: datetime, points: int, interval: str, 
     curr = start
     for _ in range(points + 1):
         next_curr, label, bucket_key = _get_next_time_step(curr, interval)
-        b_data = data_map.get(bucket_key, {lvl: 0 for lvl in range(1, 10)})
-        for lvl in range(1, 10): totals[lvl] += b_data[lvl]
-        data.append({"date": label, "total": sum(totals.values()), "levels": [totals[lvl] for lvl in range(1, 10)], "joined_per_level": [b_data[lvl] for lvl in range(1, 10)]})
+        b_data = data_map.get(bucket_key, {lvl: 0 for lvl in range(1, 21)})
+        for lvl in range(1, 21): totals[lvl] += b_data[lvl]
+        data.append({"date": label, "total": sum(totals.values()), "levels": [totals[lvl] for lvl in range(1, 21)], "joined_per_level": [b_data[lvl] for lvl in range(1, 21)]})
         curr = next_curr
     return data
 

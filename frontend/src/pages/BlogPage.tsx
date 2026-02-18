@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
     ChevronRight, ArrowLeft, Search, BookOpen, Clock,
-    Share2, Heart, ArrowUpRight, ChevronLeft, Globe, Zap
+    Share2, Heart, ArrowUpRight, ChevronLeft, Globe, Zap, User
 } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
 import { backButton } from '@telegram-apps/sdk-react';
@@ -530,14 +530,14 @@ const BlogDetail = ({
                 />
             </div>
 
-            <div className="sticky top-0 w-full pt-safe-top pb-3 px-5 bg-white/50 dark:bg-slate-950/50 backdrop-blur-2xl transition-all z-50 border-b border-slate-200/50 dark:border-white/5">
+            <div className="sticky top-0 w-full pt-[calc(env(safe-area-inset-top)+var(--spacing-telegram-header))] pb-4 px-4 bg-white/50 dark:bg-slate-950/50 backdrop-blur-2xl transition-all z-50 border-b border-slate-200/50 dark:border-white/5">
                 <div className="flex items-center justify-between w-full max-w-lg mx-auto">
                     <button
                         onClick={onBack}
-                        className="p-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-sm active:scale-90 transition-all text-slate-500 dark:text-slate-400 flex items-center gap-2 group"
+                        className="p-2 px-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium active:scale-95 transition-all text-slate-900 dark:text-white flex items-center gap-2 group"
                     >
                         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-                        <span className="text-[10px] font-black uppercase tracking-widest sr-only sm:not-sr-only">Exit</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Back to Blog</span>
                     </button>
 
                     <div className="flex items-center gap-3">
@@ -545,14 +545,14 @@ const BlogDetail = ({
                             <div className="text-[8px] font-black uppercase tracking-widest text-slate-400 leading-none mb-0.5">Reading Intelligence</div>
                             <div className="text-[10px] font-black text-blue-500 leading-none">{Math.round(scrollProgress)}%</div>
                         </div>
-                        <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-sm">
+                        <div className="flex items-center gap-1.5 p-1 px-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium">
                             <button
                                 onClick={onLike}
-                                className={`p-2 rounded-xl transition-all active:scale-90 ${engagement.liked ? 'bg-red-500 text-white shadow-lg shadow-red-500/20' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                                className={`p-2 rounded-xl transition-all active:scale-90 flex items-center gap-1.5 ${engagement.liked ? 'bg-red-500 text-white shadow-lg shadow-red-500/20' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
                             >
                                 <Heart className={`w-4 h-4 ${engagement.liked ? 'fill-current' : ''}`} />
                             </button>
-                            <div className="w-px h-4 bg-slate-200 dark:bg-white/10" />
+                            <div className="w-px h-4 bg-slate-200 dark:bg-white/10 mx-0.5" />
                             <button
                                 onClick={onShare}
                                 className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-90"
@@ -605,16 +605,16 @@ const BlogDetail = ({
                     </div>
                     <div>
                         <p className="text-sm font-black text-slate-900 dark:text-white leading-none mb-1">{post.author}</p>
-                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Pintopay Senior Analyst</p>
+                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Senior Intelligence Analyst</p>
                     </div>
                     <div className="ml-auto">
-                        <div className="flex -space-x-2">
+                        <div className="flex -space-x-2.5">
                             {[1, 2, 3].map(i => (
-                                <div key={i} className={`w-7 h-7 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-[8px] font-black text-slate-400`}>
-                                    UA
+                                <div key={i} className={`w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-sm`}>
+                                    <User className="w-4 h-4 text-slate-400" />
                                 </div>
                             ))}
-                            <div className="w-7 h-7 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-blue-500/10 flex items-center justify-center text-[7px] font-black text-blue-500 backdrop-blur-sm">
+                            <div className="w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-blue-500/10 flex items-center justify-center text-[8px] font-black text-blue-600 dark:text-blue-400 backdrop-blur-md shadow-sm">
                                 +12k
                             </div>
                         </div>

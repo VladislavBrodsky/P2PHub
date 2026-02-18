@@ -105,7 +105,10 @@ class Settings(BaseSettings):
     
     # XP Distribution per level (1-9)
     # L1=35, L2=10, L3-9=1 (Fully restored as requested)
-    REFERRAL_XP_MAP: dict[int, int] = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
+    REFERRAL_XP_MAP: dict[int, int] = {
+        1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1,
+        11: 1, 12: 1, 13: 1, 14: 1, 15: 1, 16: 1, 17: 1, 18: 1, 19: 1, 20: 1
+    }
     PRO_XP_MULTIPLIER: float = 1.5
     PRO_PLUS_XP_MULTIPLIER: float = 3.0
     DAILY_CHECKIN_XP: int = 10

@@ -83,7 +83,7 @@
       "manual_title": "Growth Protocols",
       "manual_step_1": "Share your unique referral link with potential partners.",
       "manual_step_2": "Help them activate their account and complete tasks.",
-      "manual_step_3": "Earn XP from every active participant in your 9-level matrix.",
+      "manual_step_3": "Earn XP from every active participant in your 20-level matrix.",
       "rules_title": "System Code",
       "rule_1_title": "Zero Tolerance Policy",
       "rule_1_desc": "Do not spam or invite fake accounts. Our Anti-Bot detector works 24/7. Fake invites will lead to permanent ban.",
@@ -98,7 +98,7 @@
   "network": {
     "explorer": {
       "title": "Network Explorer",
-      "deep_dive": "9-Level Deep Dive",
+      "deep_dive": "20-Level Deep Dive",
       "share_link": "Share Growth Link",
       "level": "Level {{level}}",
       "active_partners": "{{count}} Active Partners",
@@ -286,7 +286,7 @@
     "total_earned": "Total Earned",
     "network_size": "Network Size",
     "explore_connectivity": "Explore Connectivity",
-    "explore_desc": "View your 9-level matrix",
+    "explore_desc": "View your 20-level matrix",
     "ambassador_tools": "Ambassador Tools",
     "qr_title": "Personal QR Portfolio",
     "qr_desc": "High-converting assets",

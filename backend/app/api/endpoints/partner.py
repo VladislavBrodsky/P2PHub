@@ -694,7 +694,7 @@ async def get_my_referral_tree(
     session: AsyncSession = Depends(get_session)
 ):
     """
-    Fetches the 9-level referral tree stats for the current user.
+    Fetches the 20-level referral tree stats for the current user.
     """
     if not user_data:
         raise HTTPException(status_code=401, detail="Authentication required")
@@ -708,7 +708,7 @@ async def get_my_referral_tree(
     partner = result.first()
 
     if not partner:
-        return {str(i): 0 for i in range(1, 10)}
+        return {str(i): 0 for i in range(1, 21)}
 
     from app.services.analytics_service import get_referral_tree_stats
 
@@ -727,7 +727,7 @@ async def get_network_level_members(
     session: AsyncSession = Depends(get_session)
 ):
     """
-    Fetches the list of members for a specific level in the 9-level matrix.
+    Fetches the list of members for a specific level in the 20-level matrix.
     """
     if not user_data:
         raise HTTPException(status_code=401, detail="Authentication required")
@@ -743,8 +743,8 @@ async def get_network_level_members(
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
 
-    if not (1 <= level <= 9):
-         raise HTTPException(status_code=400, detail="Level must be between 1 and 9")
+    if not (1 <= level <= 20):
+         raise HTTPException(status_code=400, detail="Level must be between 1 and 20")
 
     from app.services.analytics_service import get_referral_tree_members
 

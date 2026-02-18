@@ -381,9 +381,9 @@
     }
   },
   "referral_matrix": {
-    "nine_level": "9-Level Network Matrix",
+    "nine_level": "20-Level Network Matrix",
     "partners_suffix": "Partners",
-    "xp_info": "You earn XP from every active partner in your 9-level matrix.",
+    "xp_info": "You earn XP from every active partner in your 20-level matrix.",
     "send_viral": "Send Premium Viral Card"
   }
 }

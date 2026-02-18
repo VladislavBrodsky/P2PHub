@@ -474,13 +474,13 @@ class AdminService:
         """
         async for session in get_session():
             # Depth 1 = Level 1 Referrals, Depth 2 = Level 2, etc.
-            # We filter depth 1-9 to show the 9-level tree distribution.
+            # We filter depth 1-20 to show the 20-level tree distribution.
             stmt = select(Partner.depth, func.count(Partner.id)).where(
-                Partner.depth.between(1, 9)
+                Partner.depth.between(1, 20)
             ).group_by(Partner.depth)
             
             result = await session.exec(stmt)
-            stats = {str(i): 0 for i in range(1, 10)}
+            stats = {str(i): 0 for i in range(1, 21)}
             for depth, count in result.all():
                 stats[str(depth)] = count
             return stats
