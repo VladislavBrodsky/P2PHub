@@ -1,0 +1,279 @@
+import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+    HelpCircle, Search, ChevronRight, MessageCircle,
+    Shield, Zap, CreditCard, Users, Star, ArrowLeft,
+    Newspaper, BookOpen, Clock, Sparkles
+} from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useHaptic } from '../hooks/useHaptic';
+
+interface FAQItem {
+    q: string;
+    a: string;
+    category: string;
+    icon: React.ReactNode;
+    readTime: string;
+}
+
+export default function FAQPage() {
+    const { t } = useTranslation();
+    const { selection, notification } = useHaptic();
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState<string>('all');
+    const [selectedFaq, setSelectedFaq] = useState<number | null>(null);
+
+    const categories = [
+        { id: 'all', label: t('faq.categories.all', 'All'), icon: <Newspaper size={14} /> },
+        { id: 'general', label: t('faq.categories.general', 'General'), icon: <HelpCircle size={14} /> },
+        { id: 'rewards', label: t('faq.categories.rewards', 'Rewards'), icon: <Star size={14} /> },
+        { id: 'pro', label: t('faq.categories.pro', 'PRO'), icon: <Zap size={14} /> },
+        { id: 'cards', label: t('faq.categories.cards', 'Cards'), icon: <CreditCard size={14} /> },
+        { id: 'security', label: t('faq.categories.security', 'Security'), icon: <Shield size={14} /> }
+    ];
+
+    const faqItems: FAQItem[] = useMemo(() => [
+        {
+            q: t('faq.questions.0.q'),
+            a: t('faq.questions.0.a'),
+            category: 'general',
+            icon: <Users className="text-blue-500" />,
+            readTime: '2 min'
+        },
+        {
+            q: t('faq.questions.1.q'),
+            a: t('faq.questions.1.a'),
+            category: 'rewards',
+            icon: <Star className="text-amber-500" />,
+            readTime: '3 min'
+        },
+        {
+            q: t('faq.questions.2.q'),
+            a: t('faq.questions.2.a'),
+            category: 'cards',
+            icon: <CreditCard className="text-emerald-500" />,
+            readTime: '2 min'
+        },
+        {
+            q: t('faq.questions.3.q'),
+            a: t('faq.questions.3.a'),
+            category: 'rewards',
+            icon: <Users className="text-indigo-500" />,
+            readTime: '4 min'
+        },
+        {
+            q: t('faq.questions.4.q'),
+            a: t('faq.questions.4.a'),
+            category: 'pro',
+            icon: <Zap className="text-fuchsia-500" />,
+            readTime: '3 min'
+        },
+        {
+            q: t('faq.questions.5.q'),
+            a: t('faq.questions.5.a'),
+            category: 'rewards',
+            icon: <Star className="text-orange-500" />,
+            readTime: '2 min'
+        },
+        {
+            q: t('faq.questions.6.q'),
+            a: t('faq.questions.6.a'),
+            category: 'general',
+            icon: <MessageCircle className="text-teal-500" />,
+            readTime: '1 min'
+        },
+        {
+            q: t('faq.questions.7.q'),
+            a: t('faq.questions.7.a'),
+            category: 'general',
+            icon: <BookOpen className="text-blue-600" />,
+            readTime: '5 min'
+        },
+        {
+            q: t('faq.questions.8.q'),
+            a: t('faq.questions.8.a'),
+            category: 'pro',
+            icon: <Sparkles className="text-purple-500" />,
+            readTime: '4 min'
+        },
+        {
+            q: t('faq.questions.9.q'),
+            a: t('faq.questions.9.a'),
+            category: 'security',
+            icon: <Shield className="text-slate-500" />,
+            readTime: '2 min'
+        }
+    ], [t]);
+
+    const filteredFaqs = faqItems.filter(item => {
+        const matchesSearch = item.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.a.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+    });
+
+    return (
+        <div className="flex flex-col min-h-full pb-32 animate-in fade-in duration-500">
+            {/* Premium Header */}
+            <div className="relative pt-12 pb-20 px-6 overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-full bg-linear-to-b from-indigo-500/10 via-transparent to-transparent -z-10" />
+                <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 blur-3xl rounded-full -z-10" />
+
+                <div className="flex items-center gap-3 mb-6">
+                    <button
+                        onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
+                        className="p-2 rounded-xl bg-white/5 border border-white/10 text-(--color-text-primary) active:scale-95 transition-all"
+                    >
+                        <ArrowLeft size={18} />
+                    </button>
+                    <span className="text-xs font-black uppercase tracking-[0.2em] text-indigo-500">Knowledge Base</span>
+                </div>
+
+                <h1 className="text-4xl font-black text-(--color-text-primary) tracking-tighter leading-none mb-4">
+                    HELP <span className="text-indigo-500">CENTER</span>
+                </h1>
+                <p className="text-(--color-text-secondary) font-medium text-sm max-w-[280px]">
+                    Everything you need to know about scaling your P2P Empire.
+                </p>
+            </div>
+
+            {/* Search Bar */}
+            <div className="px-6 -mt-10 mb-8">
+                <div className="relative group">
+                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-indigo-500/50 group-focus-within:text-indigo-500 transition-colors">
+                        <Search size={18} />
+                    </div>
+                    <input
+                        type="text"
+                        placeholder={t('faq.search_placeholder', 'Search for answers...')}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full h-16 pl-12 pr-4 bg-(--card-bg) border-2 border-transparent focus:border-indigo-500/30 rounded-2xl text-sm font-bold shadow-2xl backdrop-blur-xl transition-all placeholder:text-(--color-text-secondary)/40"
+                    />
+                </div>
+            </div>
+
+            {/* Category Chips */}
+            <div className="flex gap-2 overflow-x-auto px-6 pb-2 no-scrollbar mb-8">
+                {categories.map((cat) => (
+                    <button
+                        key={cat.id}
+                        onClick={() => { selection(); setSelectedCategory(cat.id); }}
+                        className={`flex items-center gap-2 px-4 h-10 rounded-full whitespace-nowrap text-[10px] font-black uppercase tracking-widest transition-all ${selectedCategory === cat.id
+                            ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 px-6'
+                            : 'bg-(--card-bg) border border-(--card-border) text-(--color-text-secondary)'
+                            }`}
+                    >
+                        {cat.icon}
+                        {cat.label}
+                    </button>
+                ))}
+            </div>
+
+            {/* FAQ List as Cards (Articles) */}
+            <div className="px-6 space-y-4">
+                {filteredFaqs.length > 0 ? (
+                    filteredFaqs.map((faq, idx) => {
+                        const originalIndex = faqItems.indexOf(faq);
+                        return (
+                            <motion.div
+                                key={originalIndex}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: idx * 0.05 }}
+                                className="group"
+                            >
+                                <button
+                                    onClick={() => { selection(); setSelectedFaq(selectedFaq === originalIndex ? null : originalIndex); }}
+                                    className={`w-full text-left p-5 rounded-2xl bg-(--card-bg) border border-(--card-border) transition-all duration-300 relative overflow-hidden active:scale-[0.98] ${selectedFaq === originalIndex ? 'ring-2 ring-indigo-500/30 border-indigo-500/20' : 'hover:border-indigo-500/30'
+                                        }`}
+                                >
+                                    <div className="flex items-start gap-4 h-full">
+                                        <div className="w-12 h-12 rounded-xl bg-(--background-secondary) flex items-center justify-center shrink-0 shadow-inner">
+                                            {faq.icon}
+                                        </div>
+                                        <div className="flex-1 pt-1">
+                                            <div className="flex items-center gap-2 mb-2 font-mono text-[8px] font-black uppercase tracking-widest text-indigo-500/60">
+                                                <Clock size={10} />
+                                                {faq.readTime} • {faq.category}
+                                            </div>
+                                            <h3 className="text-sm font-black text-(--color-text-primary) leading-snug group-hover:text-indigo-500 transition-colors">
+                                                {faq.q}
+                                            </h3>
+                                        </div>
+                                        <div className="pt-4">
+                                            <motion.div
+                                                animate={{ rotate: selectedFaq === originalIndex ? 90 : 0 }}
+                                                className="text-(--color-text-secondary)"
+                                            >
+                                                <ChevronRight size={18} />
+                                            </motion.div>
+                                        </div>
+                                    </div>
+
+                                    <AnimatePresence>
+                                        {selectedFaq === originalIndex && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: 'auto', opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                className="overflow-hidden"
+                                            >
+                                                <div className="mt-5 pt-5 border-t border-(--card-border)">
+                                                    <p className="text-xs font-medium text-(--color-text-secondary) leading-relaxed">
+                                                        {faq.a}
+                                                    </p>
+                                                    <div className="mt-4 flex gap-2">
+                                                        <button
+                                                            onClick={(e) => { e.stopPropagation(); notification('success'); }}
+                                                            className="text-[9px] font-black uppercase tracking-widest text-indigo-500 flex items-center gap-1 p-2 bg-indigo-500/5 rounded-lg border border-indigo-500/10 active:scale-95 transition-all"
+                                                        >
+                                                            Was this helpful?
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </button>
+                            </motion.div>
+                        );
+                    })
+                ) : (
+                    <div className="text-center py-20">
+                        <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4 opacity-50">
+                            <Search size={24} className="text-slate-400" />
+                        </div>
+                        <h3 className="text-sm font-black text-(--color-text-primary) uppercase mb-1">No results found</h3>
+                        <p className="text-xs text-(--color-text-secondary)">Try searching with different keywords.</p>
+                    </div>
+                )}
+            </div>
+
+            {/* Need More Help Footer */}
+            <div className="mt-12 px-6">
+                <div className="p-8 rounded-3xl bg-linear-to-br from-indigo-600 to-indigo-800 text-white relative overflow-hidden shadow-2xl shadow-indigo-500/30">
+                    <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 blur-3xl rounded-full" />
+                    <h2 className="text-2xl font-black mb-2 uppercase tracking-tighter italic">Still have <span className="text-white/60">questions?</span></h2>
+                    <p className="text-white/70 text-xs font-medium mb-6 leading-relaxed">
+                        Can't find what you're looking for? Join our community or contact 24/7 support.
+                    </p>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
+                            className="flex-1 h-12 bg-white text-indigo-600 rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all"
+                        >
+                            Support
+                        </button>
+                        <button
+                            onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'partner' })); }}
+                            className="flex-1 h-12 bg-white/10 text-white border border-white/20 rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all backdrop-blur-sm"
+                        >
+                            Community
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}

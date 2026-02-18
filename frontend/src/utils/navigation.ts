@@ -8,4 +8,5 @@ export const prefetchPages = {
     blog: () => import('../pages/BlogPage'),
     admin: () => import('../pages/AdminPage').then(m => ({ default: m.AdminPage })),
     pro: () => import('../pages/ProDashboard').then(m => ({ default: m.ProDashboard })),
+    faq: () => import('../pages/FAQ'),
 };

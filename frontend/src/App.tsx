@@ -15,6 +15,7 @@ const SubscriptionPage = lazy(prefetchPages.subscription);
 const BlogPage = lazy(prefetchPages.blog);
 const AdminPage = lazy(prefetchPages.admin);
 const ProPage = lazy(prefetchPages.pro);
+const FAQPage = lazy(prefetchPages.faq);
 // #comment: Strategic Lazy Loading for non-critical features.
 // SupportChat is a heavy component (icons + framer-motion animations).
 // By lazy-loading it, we reduce the initial bundle size, speeding up TTI.
@@ -99,7 +100,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
     useEffect(() => {
         const handlePathSync = () => {
             const path = window.location.pathname.replace(/^\//, '');
-            const validTabs = ['pro', 'admin', 'cards', 'partner', 'earn', 'league', 'blog', 'subscription'];
+            const validTabs = ['pro', 'admin', 'cards', 'partner', 'earn', 'league', 'blog', 'subscription', 'faq'];
             if (validTabs.includes(path)) {
                 setActiveTab(path);
             } else if (path === '' || path === 'home') {
@@ -290,6 +291,13 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                         {(visitedTabs.has('pro') || activeTab === 'pro') && (
                             <FeatureErrorBoundary featureName="PRO Dashboard">
                                 <ProPage />
+                            </FeatureErrorBoundary>
+                        )}
+                    </div>
+                    <div className={`h-full ${activeTab === 'faq' ? 'block' : 'hidden'}`}>
+                        {(visitedTabs.has('faq') || activeTab === 'faq') && (
+                            <FeatureErrorBoundary featureName="FAQ Center">
+                                <FAQPage />
                             </FeatureErrorBoundary>
                         )}
                     </div>

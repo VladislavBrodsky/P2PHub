@@ -28,10 +28,15 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
     const { user } = useUser();
     const { setSupportOpen } = useUI();
     const [expandedItem, setExpandedItem] = React.useState<string | null>(null);
+    const [expandedNestedItem, setExpandedNestedItem] = React.useState<string | null>(null);
 
-    const toggleSection = (id: string) => {
+    const toggleSection = (id: string, isNested: boolean = false) => {
         selection();
-        setExpandedItem(expandedItem === id ? null : id);
+        if (isNested) {
+            setExpandedNestedItem(expandedNestedItem === id ? null : id);
+        } else {
+            setExpandedItem(expandedItem === id ? null : id);
+        }
     };
 
     const toggleLanguage = async () => {
@@ -127,18 +132,18 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                         {(t('faq.questions', { returnObjects: true }) as Array<{ q: string; a: string }>).map((item, i) => (
                             <div key={i} className="rounded-lg bg-(--card-bg) border border-(--card-border) overflow-hidden shadow-sm">
                                 <button
-                                    onClick={() => toggleSection(`faq-${i}`)}
+                                    onClick={() => toggleSection(`faq-${i}`, true)}
                                     className="w-full p-2.5 flex justify-between items-start gap-2 text-left active:bg-blue-500/5 transition-colors">
                                     <span className="text-xs font-bold text-(--color-text-primary) flex-1">{item.q}</span>
                                     <motion.div
-                                        animate={{ rotate: expandedItem === `faq-${i}` ? 90 : 0 }}
+                                        animate={{ rotate: expandedNestedItem === `faq-${i}` ? 90 : 0 }}
                                         transition={{ duration: 0.2 }}
                                     >
                                         <ChevronRight className="h-3.5 w-3.5 text-blue-500 shrink-0" />
                                     </motion.div>
                                 </button>
                                 <AnimatePresence>
-                                    {expandedItem === `faq-${i}` && (
+                                    {expandedNestedItem === `faq-${i}` && (
                                         <motion.div
                                             initial={{ height: 0, opacity: 0 }}
                                             animate={{ height: 'auto', opacity: 1 }}
@@ -224,6 +229,9 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                 } else if (item.id === 'admin') {
                                     onClose();
                                     window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'admin' }));
+                                } else if (item.id === 'faq') {
+                                    onClose();
+                                    window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'faq' }));
                                 } else {
                                     toggleSection(item.id);
                                 }

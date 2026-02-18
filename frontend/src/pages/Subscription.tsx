@@ -1,8 +1,9 @@
-import { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Crown, CheckCircle2, Wallet, CreditCard, ChevronRight,
-    Loader2, Sparkles, Zap, Rocket, Bot, ChevronDown, Trophy, Users
+    Loader2, Sparkles, Zap, Rocket, Bot, ChevronDown, Trophy, Users,
+    HelpCircle, Clock, BookOpen
 } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
@@ -133,6 +134,15 @@ export default function SubscriptionPage() {
         }
     };
 
+    const [showBenefits, setShowBenefits] = useState(false);
+    const [expandedSubscriptionFaq, setExpandedSubscriptionFaq] = useState<number | null>(null);
+    const paymentRef = React.useRef<HTMLDivElement>(null);
+
+    const scrollToPayment = () => {
+        selection();
+        paymentRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     if (user?.is_pro) {
         const isPlus = (user.subscription_plan === 'PRO_PLUS_MONTHLY');
         return (
@@ -238,7 +248,7 @@ export default function SubscriptionPage() {
             </div>
 
             {/* Features Row */}
-            <div className="flex flex-col gap-3 mb-10">
+            <div className="flex flex-col gap-3 mb-6">
                 <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl transition-all duration-500">
                     <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center shrink-0">
                         <Zap size={20} className="text-indigo-500" />
@@ -262,156 +272,169 @@ export default function SubscriptionPage() {
                     </div>
                 </div>
 
-                {/* Detailed Benefits List */}
-                <div className="mt-4 px-2 space-y-6">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
-                        {t('subscription.upgrade.benefits_title', 'Key Benefits')}
-                    </h4>
-
-                    {selectedPlan === 'PRO_PLUS' ? (
-                        <div className="space-y-4">
-                            {/* Viral Studio Vibing Banner */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="relative p-6 rounded-[2.5rem] overflow-hidden group shadow-2xl"
-                            >
-                                {/* Animated Liquid Gradient Background */}
-                                <motion.div
-                                    animate={{
-                                        scale: [1, 1.2, 1],
-                                        rotate: [0, 90, 180, 270, 360],
-                                        x: [-20, 20, -20],
-                                        y: [-20, 20, -20]
-                                    }}
-                                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                                    className="absolute inset-0 bg-linear-to-tr from-purple-600 via-fuchsia-500 to-indigo-600 opacity-80 blur-3xl scale-150"
-                                />
-                                <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" />
-
-                                <div className="relative z-10">
-                                    <div className="flex items-start justify-between mb-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center">
-                                                <Rocket size={20} className="text-white" />
-                                            </div>
-                                            <h3 className="text-xl font-black text-white tracking-tight">Viral Studio</h3>
-                                        </div>
-                                        <div className="w-2 h-2 rounded-full bg-fuchsia-400 animate-pulse" />
-                                    </div>
-
-                                    <p className="text-white/80 text-[11px] leading-relaxed mb-4 font-medium">
-                                        Generate 30 Days of Content in 30 Seconds. Get daily fresh viral topics and AI-generated hooks tailored to your audience.
-                                    </p>
-
-                                    <ul className="space-y-2 mb-6">
-                                        {[
-                                            "Reduce work time by 95%",
-                                            "AI Keyword Research",
-                                            "Instant FOMO & CTAs"
-                                        ].map((item, idx) => (
-                                            <li key={idx} className="flex items-center gap-2 text-white/90 text-[10px] font-bold">
-                                                <CheckCircle2 size={12} className="text-emerald-400" />
-                                                {item}
-                                            </li>
-                                        ))}
-                                    </ul>
-
-                                    {/* Terminal Block */}
-                                    <div className="bg-slate-900/80 backdrop-blur-md rounded-xl p-4 font-mono text-[10px] border border-white/10 mb-6">
-                                        <div className="text-fuchsia-400 opacity-80 mb-1">{'>'} Generating viral thread...</div>
-                                        <div className="text-white/60 text-[9px]">{'>'} Analysis: 98% Confidence</div>
-                                    </div>
-
-                                    <button className="w-full h-11 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-black transition-colors">
-                                        Unlock Viral Studio
-                                    </button>
-                                </div>
-                            </motion.div>
-
-                            {/* Content Factory Vibing Banner */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 }}
-                                className="relative p-6 rounded-[2.5rem] overflow-hidden group shadow-2xl border border-white/5"
-                            >
-                                {/* Animated Liquid Gradient Background (Greenish) */}
-                                <motion.div
-                                    animate={{
-                                        scale: [1.2, 1, 1.2],
-                                        rotate: [360, 270, 180, 90, 0],
-                                        x: [20, -20, 20],
-                                        y: [20, -20, 20]
-                                    }}
-                                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                                    className="absolute inset-0 bg-linear-to-bl from-emerald-600 via-teal-500 to-slate-900 opacity-60 blur-3xl scale-150"
-                                />
-                                <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm" />
-
-                                <div className="relative z-10">
-                                    <div className="flex items-start justify-between mb-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center">
-                                                <Bot size={20} className="text-emerald-400" />
-                                            </div>
-                                            <h3 className="text-xl font-black text-white tracking-tight">Content Factory</h3>
-                                        </div>
-                                        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                                    </div>
-
-                                    <p className="text-white/70 text-[11px] leading-relaxed mb-4 font-medium">
-                                        Autonomous Agent that posts for you while you sleep. Your own full-stack SMM manager. Fully automated autoposting across all platforms.
-                                    </p>
-
-                                    <ul className="space-y-2 mb-6">
-                                        {[
-                                            "10x Marketing Efficiency",
-                                            "24/7 Autopilot Mode",
-                                            "Multi-platform Sync"
-                                        ].map((item, idx) => (
-                                            <li key={idx} className="flex items-center gap-2 text-white/90 text-[10px] font-bold">
-                                                <CheckCircle2 size={12} className="text-emerald-400" />
-                                                {item}
-                                            </li>
-                                        ))}
-                                    </ul>
-
-                                    {/* Terminal Block */}
-                                    <div className="bg-black/60 backdrop-blur-md rounded-xl p-4 font-mono text-[10px] border border-white/5 mb-6">
-                                        <div className="text-emerald-400 opacity-80 mb-1">{'>'} Scheduling 42 posts...</div>
-                                        <div className="text-white/40 text-[9px]">{'>'} Status: ACTIVE</div>
-                                    </div>
-
-                                    <button className="w-full h-11 bg-transparent border border-white/20 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-slate-900 transition-colors">
-                                        Hire Your AI Agent
-                                    </button>
-                                </div>
-                            </motion.div>
+                {/* Collapsible Benefits Dropdown */}
+                <div className="mt-2">
+                    <button
+                        onClick={() => { selection(); setShowBenefits(!showBenefits); }}
+                        className="w-full group flex items-center justify-between p-4 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 hover:bg-indigo-500/10 transition-all duration-300"
+                    >
+                        <div className="flex items-center gap-2">
+                            <Sparkles size={16} className="text-indigo-500" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-400">
+                                {showBenefits ? t('common.show_less') : t('subscription.upgrade.benefits_title')}
+                            </span>
                         </div>
-                    ) : (
-                        (t('subscription.upgrade.benefits_pro', { returnObjects: true }) as string[]).map((benefit, i) => (
+                        <motion.div
+                            animate={{ rotate: showBenefits ? 180 : 0 }}
+                            className="text-indigo-500"
+                        >
+                            <ChevronDown size={18} />
+                        </motion.div>
+                    </button>
+
+                    <AnimatePresence>
+                        {showBenefits && (
                             <motion.div
-                                key={i}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: i * 0.1 }}
-                                className="flex items-center gap-3"
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="overflow-hidden"
                             >
-                                <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
-                                    <CheckCircle2 size={12} className="text-emerald-500" />
+                                <div className="pt-6 pb-4 space-y-6">
+                                    {selectedPlan === 'PRO_PLUS' ? (
+                                        <div className="space-y-4">
+                                            {/* Viral Studio Vibing Banner */}
+                                            <motion.div
+                                                initial={{ scale: 0.95, opacity: 0 }}
+                                                animate={{ scale: 1, opacity: 1 }}
+                                                className="relative p-6 rounded-[2.5rem] overflow-hidden group shadow-2xl"
+                                            >
+                                                <motion.div
+                                                    animate={{
+                                                        scale: [1, 1.2, 1],
+                                                        rotate: [0, 90, 180, 270, 360],
+                                                        x: [-20, 20, -20],
+                                                        y: [-20, 20, -20]
+                                                    }}
+                                                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                                                    className="absolute inset-0 bg-linear-to-tr from-purple-600 via-fuchsia-500 to-indigo-600 opacity-80 blur-3xl scale-150"
+                                                />
+                                                <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" />
+                                                <div className="relative z-10">
+                                                    <div className="flex items-start justify-between mb-4">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center">
+                                                                <Rocket size={20} className="text-white" />
+                                                            </div>
+                                                            <h3 className="text-xl font-black text-white tracking-tight">Viral Studio</h3>
+                                                        </div>
+                                                        <div className="w-2 h-2 rounded-full bg-fuchsia-400 animate-pulse" />
+                                                    </div>
+                                                    <p className="text-white/80 text-[11px] leading-relaxed mb-4 font-medium font-sans">
+                                                        Generate 30 Days of Content in 30 Seconds. Get daily fresh viral topics and AI-generated hooks tailored to your audience.
+                                                    </p>
+                                                    <ul className="space-y-2 mb-6">
+                                                        {["Reduce work time by 95%", "AI Keyword Research", "Instant FOMO & CTAs"].map((item, idx) => (
+                                                            <li key={idx} className="flex items-center gap-2 text-white/90 text-[10px] font-bold">
+                                                                <CheckCircle2 size={12} className="text-emerald-400" />
+                                                                {item}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                    <div className="bg-slate-900/80 backdrop-blur-md rounded-xl p-4 font-mono text-[10px] border border-white/10 mb-6">
+                                                        <div className="text-fuchsia-400 opacity-80 mb-1">{'>'} Generating viral thread...</div>
+                                                        <div className="text-white/60 text-[9px]">{'>'} Analysis: 98% Confidence</div>
+                                                    </div>
+                                                    <button
+                                                        onClick={scrollToPayment}
+                                                        className="w-full h-11 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-black transition-colors"
+                                                    >
+                                                        Unlock Viral Studio
+                                                    </button>
+                                                </div>
+                                            </motion.div>
+
+                                            {/* Content Factory Vibing Banner */}
+                                            <motion.div
+                                                initial={{ scale: 0.95, opacity: 0 }}
+                                                animate={{ scale: 1, opacity: 1 }}
+                                                transition={{ delay: 0.1 }}
+                                                className="relative p-6 rounded-[2.5rem] overflow-hidden group shadow-2xl border border-white/5"
+                                            >
+                                                <motion.div
+                                                    animate={{
+                                                        scale: [1.2, 1, 1.2],
+                                                        rotate: [360, 270, 180, 90, 0],
+                                                        x: [20, -20, 20],
+                                                        y: [20, -20, 20]
+                                                    }}
+                                                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                                                    className="absolute inset-0 bg-linear-to-bl from-emerald-600 via-teal-500 to-slate-900 opacity-60 blur-3xl scale-150"
+                                                />
+                                                <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm" />
+                                                <div className="relative z-10">
+                                                    <div className="flex items-start justify-between mb-4">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center">
+                                                                <Bot size={20} className="text-emerald-400" />
+                                                            </div>
+                                                            <h3 className="text-xl font-black text-white tracking-tight">Content Factory</h3>
+                                                        </div>
+                                                        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                                                    </div>
+                                                    <p className="text-white/70 text-[11px] leading-relaxed mb-4 font-medium font-sans">
+                                                        Autonomous Agent that posts for you while you sleep. Your own full-stack SMM manager. Fully automated autoposting across all platforms.
+                                                    </p>
+                                                    <ul className="space-y-2 mb-6">
+                                                        {["10x Marketing Efficiency", "24/7 Autopilot Mode", "Multi-platform Sync"].map((item, idx) => (
+                                                            <li key={idx} className="flex items-center gap-2 text-white/90 text-[10px] font-bold">
+                                                                <CheckCircle2 size={12} className="text-emerald-400" />
+                                                                {item}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                    <div className="bg-black/60 backdrop-blur-md rounded-xl p-4 font-mono text-[10px] border border-white/5 mb-6">
+                                                        <div className="text-emerald-400 opacity-80 mb-1">{'>'} Scheduling 42 posts...</div>
+                                                        <div className="text-white/40 text-[9px]">{'>'} Status: ACTIVE</div>
+                                                    </div>
+                                                    <button
+                                                        onClick={scrollToPayment}
+                                                        className="w-full h-11 bg-transparent border border-white/20 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-slate-900 transition-colors"
+                                                    >
+                                                        Hire Your AI Agent
+                                                    </button>
+                                                </div>
+                                            </motion.div>
+                                        </div>
+                                    ) : (
+                                        <div className="px-2 space-y-4">
+                                            {(t('subscription.upgrade.benefits_pro', { returnObjects: true }) as string[]).map((benefit, i) => (
+                                                <motion.div
+                                                    key={i}
+                                                    initial={{ opacity: 0, x: -10 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    transition={{ delay: i * 0.1 }}
+                                                    className="flex items-center gap-3"
+                                                >
+                                                    <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+                                                        <CheckCircle2 size={12} className="text-emerald-500" />
+                                                    </div>
+                                                    <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300">
+                                                        {benefit}
+                                                    </span>
+                                                </motion.div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
-                                <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300">
-                                    {benefit}
-                                </span>
                             </motion.div>
-                        ))
-                    )}
+                        )}
+                    </AnimatePresence>
                 </div>
             </div>
 
             {/* Payment Section */}
-            <div className={`rounded-[2rem] p-6 shadow-2xl relative overflow-hidden transition-colors duration-500 ${selectedPlan === 'PRO_PLUS' ? 'bg-indigo-600' : 'bg-slate-900'}`}>
+            <div ref={paymentRef} className={`rounded-[2rem] p-6 shadow-2xl relative overflow-hidden transition-colors duration-500 ${selectedPlan === 'PRO_PLUS' ? 'bg-indigo-600' : 'bg-slate-900'}`}>
                 <div className="absolute top-0 right-0 p-4 opacity-10">
                     <Crown size={120} />
                 </div>
@@ -518,21 +541,45 @@ export default function SubscriptionPage() {
                     </motion.div>
                 )}
             </AnimatePresence>
-            {/* Support/FAQ Section */}
-            <div className="mt-12 px-2">
-                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-6 text-center">{t('subscription.faq.title', 'Frequently Asked Questions')}</h3>
-                <div className="space-y-4">
+            {/* Support/FAQ Section Teaser */}
+            <div className="mt-16 px-2 text-center">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-500/5 border border-slate-500/10 mb-6">
+                    <HelpCircle size={10} className="text-slate-500" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('subscription.faq.title', 'Knowledge Base')}</span>
+                </div>
+
+                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-8 uppercase tracking-tighter">
+                    Got <span className="text-indigo-500 text-2xl italic">Questions?</span>
+                </h3>
+
+                <div className="space-y-3 mb-8">
                     {[
-                        { q: t('subscription.faq.q1', 'Is it really lifetime?'), a: t('subscription.faq.a1', 'Yes. Pay once, use forever. No monthly fees, no hidden costs.') },
-                        { q: t('subscription.faq.q2', 'How do tokens work?'), a: t('subscription.faq.a2', 'You get 500 tokens immediately. Tokens reset every month if you run out.') },
-                        { q: t('subscription.faq.q3', 'Can I use multiple accounts?'), a: t('subscription.faq.a3', 'The license is tied to your Telegram ID. One purchase per account.') }
+                        { q: t('subscription.faq.q1', 'Is it really lifetime?'), icon: <Clock size={14} className="text-amber-500" /> },
+                        { q: t('subscription.faq.q2', 'How do tokens work?'), icon: <Zap size={14} className="text-indigo-500" /> }
                     ].map((faq, i) => (
-                        <div key={i} className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl p-4">
-                            <h4 className="text-[11px] font-black text-slate-900 dark:text-white mb-2 uppercase tracking-tight">{faq.q}</h4>
-                            <p className="text-[10px] text-slate-700 dark:text-slate-400 font-medium leading-relaxed">{faq.a}</p>
-                        </div>
+                        <button
+                            key={i}
+                            onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'faq' })); }}
+                            className="w-full p-5 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl flex items-center justify-between group active:scale-[0.98] transition-all"
+                        >
+                            <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-white/5 flex items-center justify-center group-hover:bg-indigo-500/10 transition-colors">
+                                    {faq.icon}
+                                </div>
+                                <span className="text-xs font-bold text-slate-700 dark:text-slate-300 text-left">{faq.q}</span>
+                            </div>
+                            <ChevronRight size={16} className="text-slate-400 group-hover:text-indigo-500 group-hover:translate-x-1 transition-all" />
+                        </button>
                     ))}
                 </div>
+
+                <button
+                    onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'faq' })); }}
+                    className="w-full h-14 bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3"
+                >
+                    <BookOpen size={16} />
+                    View Full FAQ Center
+                </button>
             </div>
         </div>
     );
