@@ -24,6 +24,17 @@ async def refresh_admin_stats():
     await admin_service.get_dashboard_stats(force_refresh=True)
     logger.info("✅ Admin stats successfully refreshed by scheduler.")
 
+@broker.task(schedule=[{"cron": "* * * * *"}])
+async def process_notification_retries():
+    """
+    Scheduled task to process pending notification retries.
+    Runs every minute to ensure timely delivery of previously failed messages.
+    """
+    from app.services.notification_service import notification_service
+    logger.info("📡 Scheduled Task: Processing Notification Retries...")
+    await notification_service.process_retries()
+    logger.info("✅ Notification retries processing complete.")
+
 @broker.task(task_name="restore_names_task")
 async def restore_names_task():
     """Distributed task for user name restoration from Telegram archives."""

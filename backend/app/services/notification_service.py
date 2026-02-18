@@ -24,7 +24,6 @@ async def send_telegram_task(payload_dict: dict):
     """
     from sqlalchemy.orm import sessionmaker
     from sqlmodel.ext.asyncio.session import AsyncSession
-
     from app.models.partner import engine
     from app.services.audit_service import audit_service
     from bot import bot
@@ -49,7 +48,6 @@ async def send_telegram_task(payload_dict: dict):
         )
         
         # 3. Permanent Audit Log (Success)
-        # We create a fresh session for the worker to avoid state pollution
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
         async with async_session() as session:
             await audit_service.log_event(
@@ -69,23 +67,36 @@ async def send_telegram_task(payload_dict: dict):
 
     except Exception as e:
         logger.error(f"⚠️ Notification Dispatch Failed for {payload.chat_id}: {e}")
-        
-        # Log failure to Sentry and Audit
         sentry_sdk.capture_exception(e)
         
+        # #comment: Move to Persistence Layer on failure
+        # This ensures that even if Telegram is down or worker crashes, the message isn't lost.
+        from app.models.notification_retry import NotificationRetry
+        from sqlalchemy.orm import sessionmaker
+        from sqlmodel.ext.asyncio.session import AsyncSession
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
         async with async_session() as session:
+            # Check if already exists to avoid duplicates
+            retry_item = NotificationRetry(
+                chat_id=payload.chat_id,
+                text=payload.text,
+                parse_mode=payload.parse_mode,
+                buttons=payload.buttons,
+                last_error=str(e),
+                status="pending"
+            )
+            session.add(retry_item)
+            
             await audit_service.log_event(
                 session=session,
                 entity_type="notification",
                 entity_id=str(payload.chat_id),
-                action="send_failed",
+                action="send_failed_moved_to_retry",
                 details={"error": str(e)}
             )
             await session.commit()
             
-        # Raise to trigger TaskIQ retry if it's potentially transient
-        raise e
+        return False
 
 class NotificationService:
     def __init__(self):
@@ -112,14 +123,12 @@ class NotificationService:
     async def enqueue_notification(self, chat_id: str | int, text: str, parse_mode: str = "Markdown", buttons: list | None = None):
         """
         Enqueues a notification with optional inline buttons.
-        Uses Pydantic for validation BEFORE enqueuing to prevent zombie tasks.
         """
         if not chat_id:
             logger.warning("⚠️ Skipping notification: no chat_id provided")
             return
 
         try:
-            # High-speed validation before serialization
             payload = NotificationPayload(
                 chat_id=int(chat_id),
                 text=text,
@@ -131,79 +140,70 @@ class NotificationService:
             logger.info(f"📤 [CORE-NOTIF] Enqueued for {chat_id}")
         except Exception as e:
             logger.error(f"❌ Core Notification Enqueue Failed for {chat_id}: {e}")
-            # #comment: CRITICAL - If broker fails, we MUST record it in AuditLog before falling back.
-            # This helps distinguish between 'Worker Down' and 'Telegram Rejected'.
-            from sqlalchemy.orm import sessionmaker
-
+            
+            # #comment: CRITICAL - If broker fails, we MUST record it in Persistent DB Layer.
+            from app.models.notification_retry import NotificationRetry
             from app.models.partner import engine
             from app.services.audit_service import audit_service
+            from sqlalchemy.orm import sessionmaker
             from sqlmodel.ext.asyncio.session import AsyncSession
+            
             async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
             async with async_session() as session:
+                retry_item = NotificationRetry(
+                    chat_id=int(chat_id),
+                    text=text,
+                    parse_mode=parse_mode,
+                    buttons=buttons,
+                    last_error=f"Enqueue Error: {e}",
+                    status="pending"
+                )
+                session.add(retry_item)
+                
                 await audit_service.log_event(
                     session=session,
                     entity_type="notification",
                     entity_id=str(chat_id),
-                    action="enqueue_failed",
+                    action="enqueue_failed_saved_to_db",
                     details={"error": str(e), "text_preview": text[:50]}
                 )
                 await session.commit()
             
+            # Still try fallback if it's safe
             await self._fallback_send(chat_id, text, parse_mode, buttons)
 
     async def _fallback_send(self, chat_id, text, parse_mode, buttons):
         """Direct fallback (fire-and-forget) if broker is down."""
         try:
-            from sqlalchemy.orm import sessionmaker
-
+            from bot import bot
             from app.models.partner import engine
             from app.services.audit_service import audit_service
-            from bot import bot
+            from sqlalchemy.orm import sessionmaker
             from sqlmodel.ext.asyncio.session import AsyncSession
-            
+
             reply_markup = self._build_keyboard(buttons)
-            task = asyncio.create_task(
-                bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode, reply_markup=reply_markup)
-            )
+            
+            # Wrap telegram call to catch errors
+            async def wrap_send():
+                try:
+                    await bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode, reply_markup=reply_markup)
+                    # Log success
+                    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+                    async with async_session() as session:
+                        await audit_service.log_event(session=session, entity_type="notification", entity_id=str(chat_id), action="fallback_success", details={"text_preview": text[:50]})
+                        await session.commit()
+                except Exception as fe:
+                    logger.error(f"💥 Fallback failed for {chat_id}: {fe}")
+                    # Failure is already handled by being in NotificationRetry from the enqueue catch
+
+            task = asyncio.create_task(wrap_send())
             self._background_tasks.add(task)
             task.add_done_callback(self._background_tasks.discard)
             
             logger.info(f"⚡ [FALLBACK-NOTIF] Dispatched directly for {chat_id}")
-            
-            # #comment: Log fallback success to audit trail
-            async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-            async with async_session() as session:
-                await audit_service.log_event(
-                    session=session,
-                    entity_type="notification",
-                    entity_id=str(chat_id),
-                    action="fallback_sent",
-                    details={"text_preview": text[:50]}
-                )
-                await session.commit()
                 
         except Exception as fe:
-            sentry_sdk.capture_exception(fe)
             logger.error(f"💥 Total notification failure for {chat_id}: {fe}")
-            # Final failure log
-            from sqlalchemy.orm import sessionmaker
-
-            from app.models.partner import engine
-            from app.services.audit_service import audit_service
-            from sqlmodel.ext.asyncio.session import AsyncSession
-            async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-            with contextlib.suppress(Exception):
-                async with async_session() as session:
-                    await audit_service.log_event(
-                        session=session,
-                        entity_type="notification",
-                        entity_id=str(chat_id),
-                        action="total_failure",
-                        details={"error": str(fe)}
-                    )
-                    await session.commit()
-
-
 
     async def send_level_up_notification(self, chat_id: int, old_level: int, new_level: int, lang: str = "en"):
         """Sends notifications for each level gained."""
@@ -218,4 +218,58 @@ class NotificationService:
         text = f"📢 *{title}*\n\n{content}"
         await self.enqueue_notification(chat_id=chat_id, text=text)
 
+    async def process_retries(self):
+        """
+        Processes pending notifications from the NotificationRetry table.
+        This is called by the monthly_maintenance_service task every minute.
+        """
+        from datetime import datetime, UTC, timedelta
+        from app.models.notification_retry import NotificationRetry
+        from app.models.partner import engine
+        from sqlalchemy.orm import sessionmaker
+        from sqlmodel import select
+        from sqlmodel.ext.asyncio.session import AsyncSession
+        from bot import bot
+
+        async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+        async with async_session() as session:
+            stmt = select(NotificationRetry).where(
+                NotificationRetry.status == "pending",
+                NotificationRetry.attempts < 5,
+                NotificationRetry.next_retry_at <= datetime.now(UTC).replace(tzinfo=None)
+            ).limit(20)
+            
+            result = await session.exec(stmt)
+            retries = result.all()
+            
+            if not retries:
+                return
+            
+            logger.info(f"🔄 Retrying {len(retries)} failed notifications...")
+            
+            for item in retries:
+                try:
+                    reply_markup = self._build_keyboard(item.buttons) if item.buttons else None
+                    await bot.send_message(
+                        chat_id=item.chat_id,
+                        text=item.text,
+                        parse_mode=item.parse_mode,
+                        reply_markup=reply_markup
+                    )
+                    item.status = "sent"
+                    logger.info(f"✅ Successfully retried notification to {item.chat_id}")
+                except Exception as e:
+                    item.attempts += 1
+                    item.last_error = str(e)
+                    # Exponential backoff: 2^attempts * 60 seconds
+                    item.next_retry_at = datetime.now(UTC).replace(tzinfo=None) + timedelta(seconds=min(3600, (2 ** item.attempts) * 60))
+                    if item.attempts >= 5:
+                        item.status = "failed"
+                    logger.warning(f"⚠️ Retry {item.attempts} failed for {item.chat_id}: {e}")
+                
+                session.add(item)
+            
+            await session.commit()
+
 notification_service = NotificationService()
+
