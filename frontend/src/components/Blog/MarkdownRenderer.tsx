@@ -73,7 +73,7 @@ export const MarkdownRenderer = memo(({ content }: MarkdownRendererProps) => {
                 return (
                     <blockquote
                         key={`quote-${index}`}
-                        className="my-6 p-5 rounded-2xl bg-slate-100 dark:bg-white/5 border-l-4 border-slate-300 dark:border-white/10 italic text-[14px] text-slate-600 dark:text-slate-400 leading-relaxed shadow-inner"
+                        className="my-4 sm:my-6 p-4 sm:p-5 rounded-2xl bg-slate-100 dark:bg-white/5 border-l-4 border-slate-300 dark:border-white/10 italic text-[14px] text-slate-600 dark:text-slate-400 leading-relaxed shadow-inner"
                         dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^>\s+/, '')) }}
                     />
                 );
@@ -81,20 +81,20 @@ export const MarkdownRenderer = memo(({ content }: MarkdownRendererProps) => {
 
             // Horizontal rule
             if (trimmed === '---' || trimmed === '***') {
-                return <hr key={`hr-${index}`} className="my-8 border-slate-200 dark:border-white/5" />;
+                return <hr key={`hr-${index}`} className="my-6 sm:my-8 border-slate-200 dark:border-white/5" />;
             }
 
             return (
                 <p
                     key={`p-${index}`}
-                    className="text-[14px] font-medium text-slate-600 dark:text-slate-300 leading-[1.7] tracking-normal mb-1"
+                    className="text-[14px] sm:text-[15px] font-medium text-slate-600 dark:text-slate-300 leading-[1.6] sm:leading-[1.7] tracking-normal mb-1 opacity-90"
                     dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed) }}
                 />
             );
         });
     }, [content]);
 
-    return <div className="space-y-3">{renderedBlocks}</div>;
+    return <div className="space-y-2.5 sm:space-y-3">{renderedBlocks}</div>;
 });
 
 MarkdownRenderer.displayName = 'MarkdownRenderer';

@@ -40,8 +40,12 @@ const PartnerAvatar = ({ partner, index }: { partner: any; index: number }) => {
 
 const CountUp = ({ value, duration = 2 }: { value: string; duration?: number }) => {
     const [displayValue, setDisplayValue] = useState(0);
-    const target = parseFloat(value.replace(/[^0-9.]/g, ''));
-    const suffix = value.replace(/[0-9.]/g, '');
+
+    // Extract prefix (non-numeric at start), target number, and suffix (non-numeric at end)
+    const match = value.match(/^([^0-9.]*)([0-9.]+)(.*)$/);
+    const prefix = match ? match[1] : '';
+    const target = match ? parseFloat(match[2]) : 0;
+    const suffix = match ? match[3] : '';
 
     useEffect(() => {
         const startTime = performance.now();
@@ -67,7 +71,12 @@ const CountUp = ({ value, duration = 2 }: { value: string; duration?: number }) 
         requestAnimationFrame(update);
     }, [target, duration]);
 
-    return <span>{displayValue % 1 === 0 ? displayValue : displayValue.toFixed(1)}{suffix}</span>;
+    // Format display value: handle decimals if the target had them
+    const formattedNum = target % 1 === 0
+        ? Math.floor(displayValue).toString()
+        : displayValue.toFixed(1);
+
+    return <span>{prefix}{formattedNum}{suffix}</span>;
 };
 
 export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {

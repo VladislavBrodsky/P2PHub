@@ -614,10 +614,30 @@ async def get_recent_partners(
         session.add(snapshot_setting)
 
     if refresh_count:
-        # #comment: Deterministic but dynamic range based on current hour to simulate traffic waves
-        hour_seed = now.hour
-        base_count = 680 + (hour_seed * 7 % 100) # Base shifts by hour [680, 780]
-        last_hour_count = base_count + secrets.randbelow(50) # Random noise [0, 50]
+        # #comment: CRITICAL FIX for Logical Consistency
+        # Previously hardcoded to 680-780, which broke logic if total partners < 700.
+        # NOW: We fetch actual total count and make hourly join count a reasonable % of it.
+        try:
+            total_partners = (await session.exec(select(func.count(Partner.id)))).one() or 1
+            
+            # Real joins in the last hour
+            delta_1h = now - timedelta(hours=1)
+            real_joins_1h = (await session.exec(select(func.count(Partner.id)).where(Partner.created_at >= delta_1h))).one() or 0
+            
+            # Dynamic momentum: 3-7% of total network + real joins
+            # This simulates a "rolling window" of activity that scales with the project.
+            momentum_percent = 0.03 + (secrets.randbelow(4) / 100.0) # 3-7%
+            momentum_base = int(total_partners * momentum_percent)
+            
+            # Ensure at least some number is shown for social proof even in early stages
+            last_hour_count = max(real_joins_1h + momentum_base, (total_partners // 20) + 1)
+            
+            # If total is very small, cap it logically
+            if last_hour_count > total_partners:
+                last_hour_count = max(1, real_joins_1h)
+        except Exception as e:
+            logger.warning(f"Failed to calc dynamic hourly count: {e}")
+            last_hour_count = 12 # Safe fallback
         
         if not count_setting:
             count_setting = SystemSetting(key=count_settings_key, value=str(last_hour_count))

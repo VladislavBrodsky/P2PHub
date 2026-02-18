@@ -623,20 +623,22 @@ const BlogDetail = ({
                                 <button
                                     key={relatedPost.id}
                                     onClick={() => onPostClick(relatedPost)}
-                                    className="flex items-center gap-4 p-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-[0.98] transition-all text-left group"
+                                    className="flex items-center gap-3 sm:gap-4 p-3.5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-[0.98] transition-all text-left group shadow-sm hover:shadow-md"
                                 >
                                     {relatedPost.image && (
-                                        <div className="w-16 h-16 rounded-2xl overflow-hidden shrink-0">
+                                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden shrink-0 border border-slate-200 dark:border-white/10">
                                             <img src={relatedPost.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" />
                                         </div>
                                     )}
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-blue-500 mb-1">{t(getCategoryKey(relatedPost.category))}</p>
-                                        <h5 className="text-xs font-black leading-tight line-clamp-2 dark:text-white group-hover:text-blue-500 transition-colors">
+                                        <p className="text-[9px] font-black uppercase tracking-widest text-blue-500 mb-1 whitespace-nowrap overflow-hidden text-ellipsis">{t(getCategoryKey(relatedPost.category))}</p>
+                                        <h5 className="text-[13px] font-black leading-tight line-clamp-2 dark:text-white group-hover:text-blue-500 transition-colors">
                                             {relatedPost.title}
                                         </h5>
                                     </div>
-                                    <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
+                                    <div className="shrink-0 w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-950 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all">
+                                        <ChevronRight className="w-4 h-4" />
+                                    </div>
                                 </button>
                             ))}
                     </div>
