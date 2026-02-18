@@ -204,28 +204,32 @@ const CentralLogo = memo(() => {
 const FractalProfits = memo(() => {
     return (
         <div className="absolute inset-0 pointer-events-none z-0 overflow-visible">
-            {[...Array(8)].map((_, i) => {
-                const direction = i % 2 === 0 ? 1 : -1;
-                const isTon = i % 2 !== 0; // Alternate between USDT and TON
+            {[...Array(12)].map((_, i) => {
+                const isTon = i % 2 !== 0;
                 const amount = isTon
                     ? Math.floor(Math.random() * 33) + 1
                     : Math.floor(Math.random() * 55) + 5;
+
+                const angle = (Math.random() * 360) * (Math.PI / 180);
+                const distance = 140 + Math.random() * 160;
+                const targetX = Math.cos(angle) * distance;
+                const targetY = Math.sin(angle) * distance;
 
                 return (
                     <motion.div
                         key={i}
                         initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
                         animate={{
-                            scale: [0, 1.1, 0.9],
-                            opacity: [0, 0.6, 0],
-                            x: (i - 3.5) * 30,
-                            y: (160 + Math.random() * 120) * direction,
+                            scale: [0, 1.2, 0.8],
+                            opacity: [0, 0.8, 0],
+                            x: targetX,
+                            y: targetY,
                         }}
                         transition={{
-                            duration: 35 + Math.random() * 15,
+                            duration: 10 + Math.random() * 10,
                             repeat: Infinity,
-                            delay: i * 4,
-                            ease: "linear"
+                            delay: i * 2,
+                            ease: "easeOut"
                         }}
                         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 whitespace-nowrap z-0"
                     >
