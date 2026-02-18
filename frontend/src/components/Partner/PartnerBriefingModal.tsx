@@ -91,7 +91,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
     ];
 
     return createPortal(
-        <div className="fixed inset-0 z-[1001] flex items-center justify-center p-0 sm:p-4 pt-[calc(var(--spacing-safe-top)+0px)] pb-[calc(var(--spacing-safe-bottom)+0px)]">
+        <div className="fixed inset-0 z-1001 flex items-center justify-center p-0 sm:p-4 pt-[calc(var(--spacing-safe-top)+0px)] pb-[calc(var(--spacing-safe-bottom)+0px)]">
             {/* Backdrop with enhanced blur */}
             <motion.div
                 initial={{ opacity: 0 }}

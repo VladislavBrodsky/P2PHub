@@ -255,35 +255,50 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0, x: -10 }}
-                        className="flex flex-col"
+                        className="flex flex-col relative z-10"
                     >
-                        <div className="px-4 pt-2 pb-2 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
+                        {/* Decorative Background Blobs */}
+                        <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+                            <div className="absolute top-[10%] -left-[10%] w-[50%] h-[50%] bg-blue-500/5 blur-[120px] rounded-full animate-pulse" />
+                            <div className="absolute bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-indigo-500/5 blur-[120px] rounded-full animate-pulse [animation-delay:2s]" />
+                        </div>
+
+                        <div className="px-5 pt-4 pb-2 flex items-center justify-between sticky top-0 bg-white/50 dark:bg-slate-950/50 backdrop-blur-xl z-50">
+                            <div className="flex items-center gap-3.5">
                                 <button
                                     onClick={() => { selection(); setActiveTab?.('home'); }}
-                                    className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 active:scale-90 transition-transform"
+                                    className="p-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-90 transition-all shadow-sm hover:shadow-md hover:border-blue-500/20"
                                 >
                                     <ArrowLeft className="w-5 h-5" />
                                 </button>
                                 <div>
-                                    <h1 className="text-xl font-black tracking-tight leading-none">{t('blog.title')}</h1>
+                                    <div className="flex items-center gap-2">
+                                        <h1 className="text-2xl font-black tracking-tight leading-none text-slate-900 dark:text-white">{t('blog.title')}</h1>
+                                        <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20">
+                                            <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse" />
+                                            <span className="text-[7px] font-black uppercase text-blue-500 tracking-tighter">Live</span>
+                                        </div>
+                                    </div>
                                     <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60 mt-1">
-                                        {total} {t('blog.latest')}
+                                        {total} {t('blog.latest')} Intelligence Reports
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="px-4 py-4 space-y-4">
+                        <div className="px-5 py-6 space-y-5">
                             <div className="relative group">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+                                <Search className="absolute left-4.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-500 dark:text-slate-400 group-focus-within:text-blue-500 transition-all duration-300 group-focus-within:scale-110" />
                                 <input
                                     type="text"
                                     placeholder={t('blog.navigation.search_placeholder')}
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full h-14 pl-12 pr-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 outline-hidden font-medium text-sm transition-all shadow-sm"
+                                    className="w-full h-15 pl-13 pr-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 focus:border-blue-500/50 focus:ring-8 focus:ring-blue-500/5 outline-hidden font-bold text-sm transition-all shadow-sm hover:shadow-md dark:shadow-blue-500/5"
                                 />
+                                <div className="absolute right-4 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-[10px] font-black uppercase tracking-widest text-slate-400 border border-slate-200 dark:border-white/5 pointer-events-none">
+                                    Search
+                                </div>
                             </div>
 
                             <TopicDropdown
@@ -294,51 +309,61 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                             />
                         </div>
 
-                        <div className="px-4 space-y-6">
+                        <div className="px-5 space-y-8">
                             {currentFeaturedPost && selectedCategory === 'All' && searchQuery === '' && (
                                 <motion.div
                                     key="featured"
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
                                     onClick={() => handlePostClick(currentFeaturedPost)}
-                                    className="group overflow-hidden rounded-[2.5rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 flex flex-col shadow-sm"
+                                    className="group relative overflow-hidden rounded-[3rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 flex flex-col shadow-2xl shadow-blue-500/5 cursor-pointer active:scale-[0.99] transition-all duration-500"
                                 >
                                     {currentFeaturedPost.image && (
-                                        <div className="aspect-video w-full overflow-hidden relative">
+                                        <div className="aspect-4/3 sm:aspect-video w-full overflow-hidden relative">
                                             <img
                                                 src={currentFeaturedPost.image}
-                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                                 alt={currentFeaturedPost.title}
                                                 loading="eager"
                                             />
-                                            <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
+                                            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent z-10" />
+
+                                            <div className="absolute top-6 left-6 z-20">
+                                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-600/90 backdrop-blur-md border border-white/20 shadow-xl">
+                                                    <Zap className="w-3 h-3 text-white fill-current" />
+                                                    <span className="text-[9px] font-black uppercase tracking-widest text-white">
+                                                        {t('blog.navigation.featured')}
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                     )}
 
-                                    <div className="p-6 sm:p-8 space-y-3 sm:space-y-4">
+                                    <div className="p-8 sm:p-10 space-y-4 relative bg-linear-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950">
                                         <div className="flex items-center gap-2">
-                                            <span className="px-2.5 py-1 rounded-full bg-blue-500 text-[9px] font-black uppercase tracking-widest text-white">
-                                                {t('blog.navigation.featured')}
-                                            </span>
-                                            <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
-                                                {currentFeaturedPost.date}
+                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                                            <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60">
+                                                {currentFeaturedPost.date} • Intelligence Hub
                                             </span>
                                         </div>
-                                        <h3 className="text-xl sm:text-2xl font-black leading-tight text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors line-clamp-3">
+                                        <h3 className="text-2xl sm:text-3xl font-black leading-tight text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors line-clamp-3">
                                             {currentFeaturedPost.title}
                                         </h3>
-                                        <p className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 line-clamp-2">
+                                        <p className="text-sm sm:text-base font-medium text-slate-500 dark:text-slate-400 line-clamp-3 opacity-80 leading-relaxed">
                                             {currentFeaturedPost.excerpt}
                                         </p>
-                                        <div className="pt-2 sm:pt-4 flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-                                                    <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
+                                        <div className="pt-6 flex items-center justify-between border-t border-slate-200 dark:border-white/5">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shadow-inner">
+                                                    <BookOpen className="w-4 h-4 text-blue-500" />
                                                 </div>
-                                                <span className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">{currentFeaturedPost.author}</span>
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Analyst</span>
+                                                    <span className="text-xs font-black text-slate-900 dark:text-white">{currentFeaturedPost.author}</span>
+                                                </div>
                                             </div>
-                                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/5 flex items-center justify-center border border-blue-500/10 group-hover:bg-blue-500 group-hover:text-white group-hover:scale-110 transition-all duration-500">
-                                                <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                                            <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-all duration-500">
+                                                <ArrowUpRight className="w-6 h-6" />
                                             </div>
                                         </div>
                                     </div>
@@ -496,188 +521,243 @@ const BlogDetail = ({
             exit={{ opacity: 0 }}
             className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 relative"
         >
-            <div className="fixed top-0 left-0 w-full h-1 z-100 bg-slate-100 dark:bg-white/5">
+            <div className="fixed top-0 left-0 w-full h-1.5 z-100 bg-slate-100 dark:bg-white/5">
                 <motion.div
-                    className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                    className="h-full bg-linear-to-r from-blue-500 to-indigo-600 shadow-[0_0_15px_rgba(59,130,246,0.6)]"
                     initial={{ width: 0 }}
                     animate={{ width: `${scrollProgress}%` }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 />
             </div>
 
-            <div className="w-full pt-safe-top pb-3 px-4 bg-transparent transition-all z-20">
-                <div className="flex items-center justify-between w-full">
+            <div className="sticky top-0 w-full pt-safe-top pb-3 px-5 bg-white/50 dark:bg-slate-950/50 backdrop-blur-2xl transition-all z-50 border-b border-slate-200/50 dark:border-white/5">
+                <div className="flex items-center justify-between w-full max-w-lg mx-auto">
                     <button
                         onClick={onBack}
-                        className="p-2 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-sm active:scale-90 transition-all text-slate-500 dark:text-slate-400"
+                        className="p-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-sm active:scale-90 transition-all text-slate-500 dark:text-slate-400 flex items-center gap-2 group"
                     >
-                        <ArrowLeft className="w-5 h-5" />
+                        <ArrowLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+                        <span className="text-[10px] font-black uppercase tracking-widest sr-only sm:not-sr-only">Exit</span>
                     </button>
 
                     <div className="flex items-center gap-3">
-                        {/* Compact Actions in Header */}
-                        <div className="flex items-center gap-1.5 p-1 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-sm">
+                        <div className="flex flex-col items-center mr-2">
+                            <div className="text-[8px] font-black uppercase tracking-widest text-slate-400 leading-none mb-0.5">Reading Intelligence</div>
+                            <div className="text-[10px] font-black text-blue-500 leading-none">{Math.round(scrollProgress)}%</div>
+                        </div>
+                        <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-sm">
                             <button
                                 onClick={onLike}
-                                className={`p-2 rounded-full transition-all active:scale-90 ${engagement.liked ? 'text-red-500' : 'text-slate-500 dark:text-slate-400'}`}
+                                className={`p-2 rounded-xl transition-all active:scale-90 ${engagement.liked ? 'bg-red-500 text-white shadow-lg shadow-red-500/20' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
                             >
-                                <Heart className={`w-4.5 h-4.5 ${engagement.liked ? 'fill-current' : ''}`} />
+                                <Heart className={`w-4 h-4 ${engagement.liked ? 'fill-current' : ''}`} />
                             </button>
                             <div className="w-px h-4 bg-slate-200 dark:bg-white/10" />
                             <button
                                 onClick={onShare}
-                                className="p-2 rounded-full text-slate-500 dark:text-slate-400 active:scale-90"
+                                className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-90"
                             >
-                                <Share2 className="w-4.5 h-4.5" />
+                                <Share2 className="w-4 h-4" />
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="px-4 pt-5 pb-24 space-y-6 max-w-lg mx-auto">
-                <div className="space-y-4">
+            <div className="px-5 pt-8 pb-32 space-y-8 max-w-lg mx-auto relative z-10 text-justify!">
+                <div className="space-y-6">
                     {post.image && (
-                        <div className="relative w-full aspect-video rounded-3xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-2xl">
+                        <div className="relative w-full aspect-video rounded-[2.5rem] overflow-hidden border border-slate-200 dark:border-white/10 shadow-3xl group">
                             <img
                                 src={post.image}
-                                className="absolute inset-0 w-full h-full object-cover"
+                                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                                 alt={post.title}
                                 loading="eager"
                             />
-                            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/60 to-transparent" />
+                            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/80 to-transparent" />
+                            <div className="absolute bottom-6 left-6 flex items-center gap-2">
+                                <div className="px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+                                    <p className="text-[9px] font-black text-white uppercase tracking-widest">Intel Archive</p>
+                                </div>
+                            </div>
                         </div>
                     )}
-                    <div className="flex items-center gap-3">
-                        <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-widest border border-blue-500/20">
+                    <div className="flex items-center gap-4">
+                        <span className="px-4 py-1.5 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-blue-600/20">
                             {t(getCategoryKey(post.category))}
                         </span>
-                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
-                            <Clock className="w-3.5 h-3.5" />
-                            <span>5 min read</span>
+                        <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
+                            <Clock className="w-4 h-4 text-blue-500" />
+                            <span>5 MIN ANALYSIS</span>
                         </div>
                     </div>
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-white">
+
+                <h1 className="text-3xl sm:text-4xl font-black leading-[1.1] tracking-tight text-slate-900 dark:text-white drop-shadow-sm uppercase!">
                     {post.title}
                 </h1>
-                <div className="flex items-center gap-3 py-1.5 border-y border-slate-200 dark:border-white/10">
-                    <div className="w-10 h-10 rounded-full bg-linear-to-br from-slate-400 to-slate-600 dark:from-slate-700 dark:to-slate-900 flex items-center justify-center font-black text-sm text-white shadow-inner">
-                        {post.author?.[0] || 'A'}
+
+                <div className="flex items-center gap-4 py-5 border-y border-slate-200 dark:border-white/5">
+                    <div className="w-12 h-12 rounded-[1.25rem] bg-linear-to-br from-blue-500 to-indigo-600 p-0.5 shadow-lg shadow-blue-500/20">
+                        <div className="w-full h-full rounded-[1.15rem] bg-white dark:bg-slate-900 flex items-center justify-center font-black text-lg text-blue-600 dark:text-blue-400">
+                            {post.author?.[0] || 'A'}
+                        </div>
                     </div>
                     <div>
-                        <p className="text-xs font-black">{post.author}</p>
-                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-60">Pintopay Intelligence Hub</p>
+                        <p className="text-sm font-black text-slate-900 dark:text-white leading-none mb-1">{post.author}</p>
+                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Pintopay Senior Analyst</p>
+                    </div>
+                    <div className="ml-auto">
+                        <div className="flex -space-x-2">
+                            {[1, 2, 3].map(i => (
+                                <div key={i} className={`w-7 h-7 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-[8px] font-black text-slate-400`}>
+                                    UA
+                                </div>
+                            ))}
+                            <div className="w-7 h-7 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-blue-500/10 flex items-center justify-center text-[7px] font-black text-blue-500 backdrop-blur-sm">
+                                +12k
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <div className="space-y-8 relative">
+                    <div className="absolute top-0 left-0 w-px h-full bg-linear-to-b from-blue-500/20 via-transparent to-transparent -translate-x-6 hidden sm:block" />
 
-                <div className="space-y-6">
                     {isLoading ? (
-                        <div className="space-y-4">
+                        <div className="space-y-6">
                             <Skeleton className="h-4 w-full rounded-full bg-slate-200 dark:bg-white/5" />
                             <Skeleton className="h-4 w-[90%] rounded-full bg-slate-200 dark:bg-white/5" />
                             <Skeleton className="h-4 w-[95%] rounded-full bg-slate-200 dark:bg-white/5" />
-                            <div className="py-6">
-                                <Skeleton className="h-32 w-full rounded-[2rem] bg-slate-200 dark:bg-white/5 shadow-inner" />
+                            <div className="py-8">
+                                <Skeleton className="h-64 w-full rounded-[3rem] bg-slate-200 dark:bg-white/5 shadow-inner" />
                             </div>
                             <Skeleton className="h-4 w-[85%] rounded-full bg-slate-200 dark:bg-white/5" />
                             <Skeleton className="h-4 w-[92%] rounded-full bg-slate-200 dark:bg-white/5" />
                         </div>
                     ) : post.content ? (
-                        <MarkdownRenderer content={post.content} />
+                        <div className="prose prose-slate dark:prose-invert max-w-none">
+                            <MarkdownRenderer content={post.content} />
+                        </div>
                     ) : (
-                        <>
-                            <p className="first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left first-letter:text-blue-500 first-letter:leading-none first-letter:pt-2">
+                        <div className="space-y-6">
+                            <p className="text-lg font-medium leading-[1.8] text-slate-600 dark:text-slate-300 first-letter:text-6xl first-letter:font-black first-letter:mr-4 first-letter:float-left first-letter:text-blue-600 first-letter:leading-none first-letter:mt-2">
                                 {post.excerpt}
                             </p>
                             <MarketingBox type="card" />
                             <MarketingBox type="pro" />
-                        </>
+                        </div>
                     )}
                 </div>
 
-                <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col items-center gap-4 pb-12">
-                    <motion.button
-                        whileTap={{ scale: 0.9 }}
-                        onClick={onLike}
-                        className={`group px-7 py-3.5 rounded-full flex items-center gap-3 transition-all ${engagement.liked
-                            ? 'bg-red-500 text-white scale-105 shadow-red-500/40'
-                            : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-red-500/30 text-slate-500 dark:text-slate-400'
-                            }`}
-                    >
-                        <Heart className={`w-5 h-5 ${engagement.liked ? 'fill-current' : 'group-hover:text-red-500 transition-colors'}`} />
-                        <span className="font-black text-base">
-                            {isLoading ? '...' : engagement.likes}
-                        </span>
-                    </motion.button>
-                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60">
-                        {t('blog.navigation.support_article')}
+                {/* Interaction Footer */}
+                <div className="pt-12 border-t border-slate-200 dark:border-white/5 flex flex-col items-center gap-6 pb-16">
+                    <div className="flex items-center gap-4">
+                        <motion.button
+                            whileTap={{ scale: 0.9 }}
+                            onClick={onLike}
+                            className={`group h-16 px-10 rounded-[2rem] flex items-center gap-4 transition-all duration-500 ${engagement.liked
+                                ? 'bg-red-500 text-white scale-105 shadow-2xl shadow-red-500/40'
+                                : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-red-500/30 text-slate-900 dark:text-white hover:shadow-xl'
+                                }`}
+                        >
+                            <Heart className={`w-6 h-6 transition-transform duration-500 ${engagement.liked ? 'fill-current scale-110' : 'group-hover:text-red-500 group-hover:scale-110'}`} />
+                            <div className="flex flex-col items-start leading-none">
+                                <span className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Impact</span>
+                                <span className="font-black text-xl italic!">
+                                    {isLoading ? '...' : engagement.likes.toLocaleString()}
+                                </span>
+                            </div>
+                        </motion.button>
+
+                        <button
+                            onClick={onShare}
+                            className="w-16 h-16 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 transition-all shadow-sm hover:shadow-xl group"
+                        >
+                            <Share2 className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+                        </button>
+                    </div>
+
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] animate-pulse">
+                        Intelligence Unit Feedback Loop Active
                     </p>
                 </div>
 
                 {/* Related Intelligence */}
-                <div className="pt-8 space-y-5">
-                    <div className="flex items-center justify-between">
-                        <h4 className="text-sm font-black uppercase tracking-widest text-slate-400">Related Intelligence</h4>
-                        <div className="h-px flex-1 bg-slate-200 dark:bg-white/10 ml-4" />
+                <div className="pt-8 space-y-6">
+                    <div className="flex items-center gap-4">
+                        <h4 className="text-xs font-black uppercase tracking-[0.3em] text-blue-500 shrink-0">Next Reports</h4>
+                        <div className="h-px flex-1 bg-linear-to-r from-blue-500/20 to-transparent" />
                     </div>
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 gap-5">
                         {allPosts
-                            .filter(p => p.id !== post.id && (p.category === post.category || true))
+                            .filter(p => p.id !== post.id)
                             .slice(0, 3)
                             .map((relatedPost) => (
                                 <button
                                     key={relatedPost.id}
                                     onClick={() => onPostClick(relatedPost)}
-                                    className="flex items-center gap-3 sm:gap-4 p-3.5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-[0.98] transition-all text-left group shadow-sm hover:shadow-md"
+                                    className="flex items-center gap-4 p-4.5 rounded-[2rem] bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-white/5 active:scale-[0.98] transition-all text-left group hover:shadow-2xl hover:shadow-blue-500/5 hover:border-blue-500/30"
                                 >
                                     {relatedPost.image && (
-                                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden shrink-0 border border-slate-200 dark:border-white/10">
-                                            <img src={relatedPost.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" />
+                                        <div className="w-20 h-20 rounded-2xl overflow-hidden shrink-0 border border-slate-200 dark:border-white/10 relative">
+                                            <img src={relatedPost.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                                            <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/10 transition-colors" />
                                         </div>
                                     )}
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-[9px] font-black uppercase tracking-widest text-blue-500 mb-1 whitespace-nowrap overflow-hidden text-ellipsis">{t(getCategoryKey(relatedPost.category))}</p>
-                                        <h5 className="text-[13px] font-black leading-tight line-clamp-2 dark:text-white group-hover:text-blue-500 transition-colors">
+                                    <div className="flex-1 min-w-0 py-1">
+                                        <p className="text-[8px] font-black uppercase tracking-widest text-blue-500 mb-1.5 flex items-center gap-1.5">
+                                            <div className="w-1 h-1 rounded-full bg-blue-500" />
+                                            {t(getCategoryKey(relatedPost.category))}
+                                        </p>
+                                        <h5 className="text-[15px] font-black leading-tight line-clamp-2 text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors uppercase!">
                                             {relatedPost.title}
                                         </h5>
                                     </div>
-                                    <div className="shrink-0 w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-950 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all">
-                                        <ChevronRight className="w-4 h-4" />
+                                    <div className="shrink-0 w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-white/5 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner group-hover:shadow-lg group-hover:shadow-blue-500/30">
+                                        <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
                                     </div>
                                 </button>
                             ))}
                     </div>
                 </div>
 
-                <div className="pt-8 grid grid-cols-2 gap-3">
+                {/* Flow Navigation */}
+                <div className="pt-12 grid grid-cols-2 gap-4">
                     <button
                         onClick={() => { selection(); onPrev(); }}
-                        className="p-3.5 rounded-[1.25rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center gap-2.5 group text-left"
+                        className="p-5 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center gap-4 group text-left shadow-sm hover:shadow-xl dark:shadow-blue-500/5"
                     >
-                        <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all">
-                            <ChevronLeft className="w-4 h-4" />
+                        <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shrink-0">
+                            <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
                         </div>
-                        <div className="flex flex-col">
-                            <span className="text-[8px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('blog.navigation.back')}</span>
-                            <span className="text-[9px] font-black">{t('blog.navigation.prev')}</span>
+                        <div className="flex flex-col min-w-0">
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Previous</span>
+                            <span className="text-xs font-black truncate text-slate-900 dark:text-white">Back in Flow</span>
                         </div>
                     </button>
                     <button
                         onClick={() => { selection(); onNext(); }}
-                        className="p-3.5 rounded-[1.25rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center justify-end gap-2.5 group text-right"
+                        className="p-5 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center justify-end gap-4 group text-right shadow-sm hover:shadow-xl dark:shadow-blue-500/5"
                     >
-                        <div className="flex flex-col items-end">
-                            <span className="text-[8px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('blog.navigation.next')}</span>
-                            <span className="text-[9px] font-black">{t('blog.navigation.forward')}</span>
+                        <div className="flex flex-col min-w-0 items-end">
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Next Intel</span>
+                            <span className="text-xs font-black truncate text-slate-900 dark:text-white">Forward</span>
                         </div>
-                        <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all">
-                            <ChevronRight className="w-4 h-4" />
+                        <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shrink-0">
+                            <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
                         </div>
                     </button>
                 </div>
             </div>
+
+            {/* Immersive Scroll Feedback */}
+            <motion.div
+                className="fixed bottom-safe-bottom right-6 z-50 p-4 rounded-full bg-blue-600 text-white shadow-2xl shadow-blue-600/40 pointer-events-none origin-bottom"
+                style={{ scale: scrollProgress / 100, opacity: scrollProgress > 10 ? 1 : 0 }}
+            >
+                <ArrowUpRight className="w-6 h-6 -rotate-90" />
+            </motion.div>
         </motion.div>
     );
 };

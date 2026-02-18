@@ -43,11 +43,13 @@ export const NotificationOverlay = () => {
                 >
                     <div className={`
                         glass-panel-premium rounded-full px-4 py-3 shadow-2xl flex items-center gap-3 max-w-sm w-full pointer-events-auto 
-                        backdrop-blur-3xl bg-white/80 dark:bg-slate-900/80 border transition-colors duration-500 touch-pan-y
+                        backdrop-blur-3xl bg-white/80 dark:bg-slate-900/80 border transition-colors duration-500 touch-pan-y overscroll-none
                         ${notification.type === 'success' ? 'border-blue-500/20' :
                             notification.type === 'warning' ? 'border-emerald-500/20' :
                                 'border-amber-500/20'}
-                    `}>
+                    `}
+                        style={{ overscrollBehavior: 'none' }}
+                    >
                         {notification.icon && (
                             <div className="relative z-10 shrink-0">
                                 {notification.icon}

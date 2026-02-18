@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Copy, Check, Send, Sparkles } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
+import { useTMALock } from '../hooks/useTMALock';
 import { apiClient } from '../api/client';
 
 interface ShareSheetProps {
@@ -14,6 +15,8 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
     const { selection, notification } = useHaptic();
     const [copied, setCopied] = React.useState(false);
     const [isSharing, setIsSharing] = React.useState(false);
+
+    useTMALock(isOpen);
 
     // Dynamic referral link based on bot username (can be passed as prop or env)
     // For now assuming the standard bot link structure
@@ -98,9 +101,9 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
                         key="share-sheet-content"
                         initial={{ y: '100%' }}
                         animate={{ y: 0 }}
-                        exit={{ y: '100%' }}
                         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                        className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 rounded-t-3xl z-50 p-6 pb-12 shadow-2xl border-t border-white/10"
+                        className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 rounded-t-3xl z-50 p-6 pb-12 shadow-2xl border-t border-white/10 overscroll-none"
+                        style={{ overscrollBehavior: 'none' }}
                     >
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="text-lg font-black text-slate-900 dark:text-white">Invite Friends</h3>

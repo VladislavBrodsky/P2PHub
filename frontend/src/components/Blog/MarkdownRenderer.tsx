@@ -1,4 +1,5 @@
 import { memo, useMemo } from 'react';
+import { BookOpen } from 'lucide-react';
 
 interface MarkdownRendererProps {
     content: string;
@@ -37,7 +38,7 @@ export const MarkdownRenderer = memo(({ content }: MarkdownRendererProps) => {
                 return (
                     <h2
                         key={`h2-${index}`}
-                        className="text-xl font-black mt-8 mb-4 text-slate-900 dark:text-white leading-tight tracking-tight border-l-4 border-blue-500 pl-4 py-1.5 bg-blue-500/5 rounded-r-xl"
+                        className="text-xl sm:text-2xl font-black mt-10 mb-5 text-slate-900 dark:text-white leading-tight tracking-tight border-l-6 border-blue-500 pl-5 py-3 bg-linear-to-r from-blue-500/10 via-blue-500/5 to-transparent rounded-r-[2rem] shadow-sm uppercase!"
                         dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^##\s+/, '')) }}
                     />
                 );
@@ -46,7 +47,7 @@ export const MarkdownRenderer = memo(({ content }: MarkdownRendererProps) => {
                 return (
                     <h1
                         key={`h1-${index}`}
-                        className="text-2xl font-black mt-8 mb-4 text-slate-900 dark:text-white leading-tight tracking-tight"
+                        className="text-2xl sm:text-3xl font-black mt-10 mb-6 text-slate-900 dark:text-white leading-tight tracking-[0.02em] uppercase!"
                         dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^#\s+/, '')) }}
                     />
                 );
@@ -57,11 +58,11 @@ export const MarkdownRenderer = memo(({ content }: MarkdownRendererProps) => {
                 return (
                     <div
                         key={`li-${index}`}
-                        className="flex gap-3 items-start my-2.5 px-1 group"
+                        className="flex gap-4 items-start my-4 px-1 group"
                     >
-                        <div className="mt-1.5 w-1.5 h-1.5 shrink-0 rounded-full bg-slate-300 dark:bg-slate-700 group-hover:bg-blue-500 transition-colors" />
+                        <div className="mt-2 w-2 h-2 shrink-0 rounded-full bg-blue-500/30 group-hover:bg-blue-500 transition-all duration-300 shadow-sm" />
                         <p
-                            className="text-[14px] font-medium text-slate-600 dark:text-slate-300 leading-relaxed"
+                            className="text-[14px] sm:text-[15px] font-bold text-slate-600 dark:text-slate-400 group-hover:dark:text-slate-200 transition-colors leading-[1.6]"
                             dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^[*|-]\s+/, '')) }}
                         />
                     </div>
@@ -73,28 +74,32 @@ export const MarkdownRenderer = memo(({ content }: MarkdownRendererProps) => {
                 return (
                     <blockquote
                         key={`quote-${index}`}
-                        className="my-4 sm:my-6 p-4 sm:p-5 rounded-2xl bg-slate-100 dark:bg-white/5 border-l-4 border-slate-300 dark:border-white/10 italic text-[14px] text-slate-600 dark:text-slate-400 leading-relaxed shadow-inner"
-                        dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^>\s+/, '')) }}
-                    />
+                        className="my-8 p-6 sm:p-8 rounded-[2.5rem] bg-slate-50 dark:bg-white/5 border-l-8 border-blue-500/20 italic text-[15px] sm:text-[16px] text-slate-700 dark:text-slate-300 leading-relaxed shadow-inner font-medium relative overflow-hidden"
+                    >
+                        <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                            <BookOpen className="w-20 h-20 rotate-12" />
+                        </div>
+                        <div className="relative z-10" dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^>\s+/, '')) }} />
+                    </blockquote>
                 );
             }
 
             // Horizontal rule
             if (trimmed === '---' || trimmed === '***') {
-                return <hr key={`hr-${index}`} className="my-6 sm:my-8 border-slate-200 dark:border-white/5" />;
+                return <hr key={`hr-${index}`} className="my-10 border-slate-200 dark:border-white/10" />;
             }
 
             return (
                 <p
                     key={`p-${index}`}
-                    className="text-[14px] sm:text-[15px] font-medium text-slate-600 dark:text-slate-300 leading-[1.6] sm:leading-[1.7] tracking-normal mb-1 opacity-90"
+                    className="text-[14px] sm:text-[16px] font-bold text-slate-600 dark:text-slate-400 leading-[1.7] sm:leading-[1.8] tracking-tight mb-2 opacity-95"
                     dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed) }}
                 />
             );
         });
     }, [content]);
 
-    return <div className="space-y-2.5 sm:space-y-3">{renderedBlocks}</div>;
+    return <div className="space-y-4 sm:space-y-5">{renderedBlocks}</div>;
 });
 
 MarkdownRenderer.displayName = 'MarkdownRenderer';
@@ -110,20 +115,23 @@ function processMarkdown(text: string): string {
 
         // Fix for bold text that might cover entire lines or has internal spaces
         .replace(/\*\*\s+(.*?)\s+\*\*/g, '**$1**')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/__([^_]+)__/g, '<strong>$1</strong>')
-        .replace(/_(.*?)_/g, '<em>$1</em>')
-        .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong class="font-black text-slate-900 dark:text-blue-400/90">$1</strong>')
+        .replace(/__([^_]+)__/g, '<strong class="font-black text-slate-900 dark:text-blue-400/90">$1</strong>')
+        .replace(/_(.*?)_/g, '<em class="italic text-slate-800 dark:text-slate-200">$1</em>')
+        .replace(/\*([^*]+)\*/g, '<em class="italic text-slate-800 dark:text-slate-200">$1</em>')
 
         // Fix for missing spaces around bold results
-        .replace(/(\S)<strong>/g, '$1 <strong>')
+        .replace(/(\S)<strong/g, '$1 <strong')
         .replace(/<\/strong>(\S)/g, '</strong> $1')
 
-        // Special CTA button
-        .replace(/\[CTA:\s*(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="inline-block my-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 no-underline active:scale-95">$1</a>')
-        // Standard links
-        .replace(/\[(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="text-blue-500 hover:text-blue-600 font-extrabold underline decoration-2 underline-offset-4 transition-all">$1</a>')
+        // Small Highlight
+        .replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-white/10 text-blue-600 dark:text-blue-400 font-black text-[0.9em] mx-0.5">$1</code>')
 
-        // Clean up double spaces
-        .replace(/\s{2,}/g, ' ');
+        // Special CTA button
+        .replace(/\[CTA:\s*(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="inline-block my-4 px-8 py-4 bg-linear-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white text-[12px] font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 no-underline active:scale-95">$1</a>')
+        // Standard links
+        .replace(/\[(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="text-blue-600 dark:text-blue-400 hover:text-blue-500 font-black underline decoration-2 underline-offset-4 transition-all">$1</a>')
+
+        // Clean up excessive spacing but preserve line breaks if they were meant to be there
+        .replace(/[ \t]{2,}/g, ' ');
 }

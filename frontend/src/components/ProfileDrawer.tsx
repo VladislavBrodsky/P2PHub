@@ -106,10 +106,11 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             animate={{ x: 0 }}
                             exit={{ x: '-100%', pointerEvents: 'none' }}
                             transition={{ type: 'tween', ease: 'easeOut', duration: 0.25 }}
-                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-(--color-bg-app) border-r border-(--color-border-glass) shadow-2xl ml-0 mr-auto"
+                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-(--color-bg-app) border-r border-(--color-border-glass) shadow-2xl ml-0 mr-auto overscroll-none"
                             style={{
                                 marginLeft: 'max(0px, calc(50% - 32rem / 2))',
-                                left: 0
+                                left: 0,
+                                overscrollBehavior: 'none'
                             }}
                         >
                             <div className="mesh-gradient-dark absolute inset-0 opacity-20 pointer-events-none" />
@@ -131,7 +132,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             </div>
 
                             {/* Scrollable Content */}
-                            <div className="flex-1 overflow-y-auto px-5 pb-10 flex flex-col gap-4">
+                            <div className="flex-1 overflow-y-auto px-5 pb-10 flex flex-col gap-4 overscroll-none" style={{ overscrollBehavior: 'none' }}>
                                 <div className="mt-0">
                                     <PersonalizationCard variant="compact" />
                                 </div>
