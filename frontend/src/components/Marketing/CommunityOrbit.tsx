@@ -206,6 +206,11 @@ const FractalProfits = memo(() => {
         <div className="absolute inset-0 pointer-events-none z-0 overflow-visible">
             {[...Array(8)].map((_, i) => {
                 const direction = i % 2 === 0 ? 1 : -1;
+                const isTon = i % 2 !== 0; // Alternate between USDT and TON
+                const amount = isTon
+                    ? Math.floor(Math.random() * 33) + 1
+                    : Math.floor(Math.random() * 55) + 5;
+
                 return (
                     <motion.div
                         key={i}
@@ -217,18 +222,18 @@ const FractalProfits = memo(() => {
                             y: (160 + Math.random() * 120) * direction,
                         }}
                         transition={{
-                            duration: 35 + Math.random() * 15, // Even slower for zero distraction
+                            duration: 35 + Math.random() * 15,
                             repeat: Infinity,
                             delay: i * 4,
                             ease: "linear"
                         }}
                         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 whitespace-nowrap z-0"
                     >
-                        <div className="flex items-center justify-center w-4 h-4 rounded-full bg-emerald-500/80 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
-                            <CryptoIcon name="USDT" />
+                        <div className={`flex items-center justify-center w-4 h-4 rounded-full ${isTon ? 'bg-blue-500/80 shadow-[0_0_10px_rgba(59,130,246,0.2)]' : 'bg-emerald-500/80 shadow-[0_0_10px_rgba(16,185,129,0.2)]'}`}>
+                            <CryptoIcon name={isTon ? 'TON' : 'USDT'} />
                         </div>
-                        <span className="text-[10px] font-black text-emerald-500/80 tracking-tighter">
-                            +${Math.floor(Math.random() * 55) + 5}.00
+                        <span className={`text-[10px] font-black tracking-tighter ${isTon ? 'text-blue-500/80' : 'text-emerald-500/80'}`}>
+                            +{isTon ? `${amount} TON` : `$${amount}.00`}
                         </span>
                     </motion.div>
                 );
