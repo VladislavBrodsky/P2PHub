@@ -301,7 +301,7 @@ export const GrowthTab = ({
                                                 {isCompleted ? (
                                                     <div className="flex items-center gap-1.5 text-emerald-500">
                                                         <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                                                        <span className="text-[8px] font-black uppercase tracking-widest hidden sm:inline">SYNCED</span>
+                                                        <span className="text-[8px] font-black uppercase tracking-widest hidden sm:inline">{t('pro_dashboard.academy.synced')}</span>
                                                     </div>
                                                 ) : (
                                                     <div className={`text-[8px] font-black uppercase tracking-widest ${cost > 0 ? 'text-emerald-500' : 'text-indigo-500'}`}>

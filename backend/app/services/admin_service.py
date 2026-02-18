@@ -9,10 +9,10 @@ from sqlmodel import func, select, text
 
 from app.models.partner import Earning, Partner, PartnerTask, get_session
 from app.models.transaction import PartnerTransaction
+from app.services.audit_service import audit_service
 from app.services.notification_service import notification_service
 from app.services.payment_service import payment_service
 from app.services.redis_service import redis_service
-from app.services.audit_service import audit_service
 
 
 class AdminService:

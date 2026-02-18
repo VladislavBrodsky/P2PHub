@@ -4,10 +4,8 @@ from taskiq import TaskiqScheduler
 from taskiq.schedule_sources import LabelScheduleSource
 from taskiq_redis import ListQueueBroker, RedisAsyncResultBackend
 
-from app.core.config import settings
-
 from app.core.broker import broker
-
+from app.core.config import settings
 
 # 3. Validation Middleware
 # Note: TaskIQ 0.12+ handles Pydantic validation natively for type-hinted tasks.
@@ -31,11 +29,11 @@ taskiq_fastapi.init(
 # Previously TASKS_TO_IMPORT was a dead list — the worker started without knowing
 # about any tasks, so ALL cron jobs and background tasks silently never ran.
 # These imports MUST happen at module level so the worker process registers them.
-import app.services.maintenance_service  # noqa: F401
-import app.services.notification_service  # noqa: F401
-import app.services.partner_service       # noqa: F401
-import app.services.referral_service      # noqa: F401
-import app.services.subscription_service  # noqa: F401
-import app.services.support_service       # noqa: F401
-import app.services.viral_service         # noqa: F401
-import app.services.warmup_service        # noqa: F401
+import app.services.maintenance_service
+import app.services.notification_service
+import app.services.partner_service
+import app.services.referral_service
+import app.services.subscription_service
+import app.services.support_service
+import app.services.viral_service
+import app.services.warmup_service

@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from app.core.broker import broker
 from app.core.config import settings
 from app.core.i18n import get_msg
 from app.core.retry import async_retry
@@ -16,7 +17,6 @@ from app.services.notification_service import notification_service
 from app.services.redis_service import redis_service
 from app.utils.ranking import get_level
 from app.utils.text import escape_markdown_v1
-from app.core.broker import broker
 
 logger = logging.getLogger(__name__)
 

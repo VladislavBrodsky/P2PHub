@@ -1,7 +1,8 @@
 import asyncio
-import logging
 import functools
-from typing import TypeVar, Callable, Any, Awaitable
+import logging
+from collections.abc import Awaitable, Callable
+from typing import Any, TypeVar
 
 logger = logging.getLogger(__name__)
 

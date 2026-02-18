@@ -5,8 +5,8 @@ from typing import List
 
 import sentry_sdk
 
-from app.schemas.notification import InlineButton, NotificationPayload
 from app.core.broker import broker
+from app.schemas.notification import InlineButton, NotificationPayload
 
 logger = logging.getLogger(__name__)
 

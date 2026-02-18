@@ -330,13 +330,7 @@ async def add_request_id_middleware(request: Request, call_next):
 
 
 # Configure CORS
-allowed_origins = [
-    "https://p2phub-frontend.up.railway.app",
-    "https://p2phub-frontend-production.up.railway.app",
-    "https://p2phub-production.up.railway.app",
-    "http://localhost:5173",
-    "http://localhost:3000",
-]
+allowed_origins = list(settings.ALLOWED_ORIGINS)
 
 # Add specific frontend URL from settings if not already there
 if settings.FRONTEND_URL and settings.FRONTEND_URL not in allowed_origins:

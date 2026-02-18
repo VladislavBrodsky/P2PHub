@@ -162,7 +162,8 @@
         "active": "Active",
         "error": "Error",
         "plan_pro": "Standard PRO Plan",
-        "plan_plus": "PRO+ Plan Active"
+        "plan_plus": "PRO+ Plan Active",
+        "multi_node_capacity": "Multi-Node Capacity: {{count}}"
       }
     },
     "publish": {

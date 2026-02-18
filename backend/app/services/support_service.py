@@ -175,7 +175,7 @@ class SupportAgentService:
 
     def _init_google_sheets_client(self):
         """Lazy initialization to prevent blocking the event loop at startup."""
-        creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
+        creds_json = settings.GOOGLE_SERVICE_ACCOUNT_JSON
         if not creds_json:
              logger.warning("❌ SupportService: Google Credentials missing.")
 
@@ -184,7 +184,7 @@ class SupportAgentService:
         if self.gs_client:
             return self.gs_client
         
-        creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
+        creds_json = settings.GOOGLE_SERVICE_ACCOUNT_JSON
         if creds_json:
             try:
                 # #comment: Synchronous authorize is wrapped in a thread to keep the loop free
@@ -210,18 +210,20 @@ class SupportAgentService:
 
         try:
             # 2. Level 2 Cache: Redis (Network-speed)
-            cached_kb = await redis_service.get_json(self.KB_CACHE_KEY)
-            
-            if cached_kb:
-                # Update memory cache and rebuild index
-                self._build_kb_index(cached_kb)
-                return cached_kb
-            
-            # 2. Fetch from Google Sheets
-            # #comment: Fallback to Google Sheets API if cache is empty
+            try:
+                cached_kb = await redis_service.get_json(self.KB_CACHE_KEY)
+                if cached_kb:
+                    # Update memory cache and rebuild index
+                    self._build_kb_index(cached_kb)
+                    return cached_kb
+            except Exception as e:
+                logger.warning(f"⚠️ Redis KB Cache Read Error (skipping to Level 3): {e}")
+
+            # 3. Fetch from Google Sheets
+            # #comment: Fallback to Google Sheets API if cache is empty or Redis is down
             gs_client = await self._get_gs_client()
             if gs_client:
-                sheet_id = os.getenv("SUPPORT_SPREADSHEET_ID")
+                sheet_id = os.getenv("SUPPORT_SPREADSHEET_ID") or "1JCxW4ANBthKy3Qeu9RBE3Ds3fFpX8993Q_6JPdmg-_k"
                 if sheet_id:
                     logger.info("🔄 Refreshing Knowledge Base Cache from Google Sheets...")
                     spreadsheet = await asyncio.to_thread(gs_client.open_by_key, sheet_id)
@@ -229,7 +231,7 @@ class SupportAgentService:
                     # TOV
                     tov_info = ""
                     try:
-                        tov_gid = os.getenv("TOV_GID", "0")
+                        tov_gid = os.getenv("TOV_GID") or "280865614"
                         tov_sheet = await asyncio.to_thread(spreadsheet.get_worksheet_by_id, int(tov_gid))
                         if tov_sheet:
                             tov_records = await asyncio.to_thread(tov_sheet.get_all_records)
@@ -240,7 +242,7 @@ class SupportAgentService:
                     # KB
                     kb_records = []
                     try:
-                        kb_gid = os.getenv("KB_GID", "0")
+                        kb_gid = os.getenv("KB_GID") or "0"
                         kb_sheet = await asyncio.to_thread(spreadsheet.get_worksheet_by_id, int(kb_gid))
                         if kb_sheet:
                             kb_records = await asyncio.to_thread(kb_sheet.get_all_records)
@@ -254,7 +256,10 @@ class SupportAgentService:
                     }
                     
                     # Save to Cache
-                    await redis_service.set_json(self.KB_CACHE_KEY, kb_data, expire=self.KB_TTL)
+                    try:
+                        await redis_service.set_json(self.KB_CACHE_KEY, kb_data, expire=self.KB_TTL)
+                    except Exception as e:
+                        logger.warning(f"⚠️ Failed to write KB back to Redis: {e}")
                     
                     # #comment: Build In-memory Index for sub-millisecond lookups
                     self._build_kb_index(kb_data)
@@ -262,7 +267,7 @@ class SupportAgentService:
                     logger.info("✅ Knowledge Base Cached and Indexed Successfully.")
                     return kb_data
         except Exception as e:
-            logger.error(f"⚠️ Knowledge Base Cache/Fetch Error: {e}")
+            logger.error(f"⚠️ Knowledge Base Critical Error: {e}")
             
         return None
 

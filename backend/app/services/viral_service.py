@@ -12,6 +12,7 @@ from google.genai import types as genai_types
 from google.oauth2.service_account import Credentials
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from app.core.broker import broker
 from app.core.cmo_intelligence import (
     AudienceProfile,
     ContentCategory,
@@ -21,7 +22,6 @@ from app.core.cmo_intelligence import (
 from app.core.config import settings
 from app.core.errors import ViralStudioErrorCode
 from app.models.partner import Partner
-from app.core.broker import broker
 
 logger = logging.getLogger(__name__)
 

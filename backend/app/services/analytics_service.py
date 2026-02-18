@@ -4,9 +4,9 @@ from datetime import UTC, datetime, timedelta
 from sqlmodel import text
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from app.core.broker import broker
 from app.core.config import settings
 from app.models.partner import Partner
-from app.core.broker import broker
 
 logger = logging.getLogger(__name__)
 

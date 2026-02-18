@@ -1,4 +1,5 @@
 from taskiq_redis import ListQueueBroker, RedisAsyncResultBackend
+
 from app.core.config import settings
 
 # 1. Init Broker (Redis)
