@@ -255,12 +255,12 @@ export default function SubscriptionPage() {
                     </div>
                 </div>
 
-                <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-2 tracking-tighter uppercase leading-[0.85] italic flex flex-col items-center">
-                    <span className="opacity-50 text-xl tracking-normal not-italic">{t('subscription.upgrade.upgrade_to')}</span>
-                    <span className="vibing-crystal-text text-5xl">PRO STATUS</span>
+                <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-1 tracking-tighter uppercase leading-[0.85] italic flex flex-col items-center px-6">
+                    <span className="opacity-40 text-lg tracking-normal not-italic">{t('subscription.upgrade.upgrade_to')}</span>
+                    <span className="vibing-crystal-text text-5xl py-2 px-8 block w-full text-center">PRO STATUS</span>
                 </h1>
 
-                <p className="text-slate-500 dark:text-slate-400 text-[10px] font-black max-w-[280px] mx-auto leading-relaxed uppercase tracking-widest mb-8">
+                <p className="text-slate-500 dark:text-slate-400 text-[9px] font-black max-w-[280px] mx-auto leading-tight uppercase tracking-widest mb-6">
                     {t('subscription.upgrade.desc')}
                 </p>
 
@@ -382,22 +382,26 @@ export default function SubscriptionPage() {
                                         <div className="h-px bg-white/10 mb-6" />
 
                                         <div className="space-y-4 mb-8">
-                                            <p className="text-[11px] font-black text-indigo-400 uppercase tracking-widest mb-4">INCLUDED BENEFITS:</p>
-                                            <div className="grid grid-cols-1 gap-2">
+                                            <p className="text-[10px] font-medium text-white/70 italic leading-relaxed mb-4">
+                                                {selectedPlan === 'PRO'
+                                                    ? "Self-evolving neural studio for high-retention content synthesis and broadcast."
+                                                    : "Ultimate AI Command Center with maximum token velocity and multi-platform authority sync."}
+                                            </p>
+                                            <p className="text-[11px] font-black text-indigo-400 uppercase tracking-widest mb-4 italic">UNLOCKED ASSETS:</p>
+                                            <div className="grid grid-cols-1 gap-1.5">
                                                 {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true }) as string[])
-                                                    .filter(b => b.toLowerCase().includes('token') || b.toLowerCase().includes('xp') || b.toLowerCase().includes('viral') || b.toLowerCase().includes('audit'))
                                                     .map((item, idx) => (
                                                         <motion.div
                                                             initial={{ x: -20, opacity: 0 }}
                                                             animate={{ x: 0, opacity: 1 }}
-                                                            transition={{ delay: 0.1 * idx }}
+                                                            transition={{ delay: 0.05 * idx }}
                                                             key={idx}
-                                                            className="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/10 shadow-sm"
+                                                            className="flex items-center gap-3 bg-white/10 p-3 rounded-2xl border border-white/10 shadow-sm"
                                                         >
                                                             <div className="w-6 h-6 rounded-lg bg-indigo-500/30 flex items-center justify-center shrink-0">
                                                                 <CheckCircle2 size={12} className="text-white" />
                                                             </div>
-                                                            <span className="text-[11px] font-black text-white uppercase tracking-tight leading-tight">{item}</span>
+                                                            <span className="text-[10px] font-black text-white uppercase tracking-tight leading-tight">{item}</span>
                                                         </motion.div>
                                                     ))}
                                             </div>
@@ -462,22 +466,26 @@ export default function SubscriptionPage() {
                                         <div className="h-px bg-white/10 mb-6" />
 
                                         <div className="space-y-4 mb-8">
-                                            <p className="text-[11px] font-black text-emerald-400 uppercase tracking-widest mb-4">INCLUDED BENEFITS:</p>
-                                            <div className="grid grid-cols-1 gap-2">
+                                            <p className="text-[10px] font-medium text-white/70 italic leading-relaxed mb-4">
+                                                {selectedPlan === 'PRO'
+                                                    ? "Deep-level network analytics and automated commission tracking protocols."
+                                                    : "Sovereign Empire Infrastructure with maximum network depth and tactical oversight."}
+                                            </p>
+                                            <p className="text-[11px] font-black text-emerald-400 uppercase tracking-widest mb-4 italic">NETWORK PROTOCOLS:</p>
+                                            <div className="grid grid-cols-1 gap-1.5">
                                                 {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true }) as string[])
-                                                    .filter(b => b.toLowerCase().includes('level') || b.toLowerCase().includes('commission') || b.toLowerCase().includes('referral') || b.toLowerCase().includes('network'))
                                                     .map((item, idx) => (
                                                         <motion.div
                                                             initial={{ x: 20, opacity: 0 }}
                                                             animate={{ x: 0, opacity: 1 }}
-                                                            transition={{ delay: 0.1 * idx }}
+                                                            transition={{ delay: 0.05 * idx }}
                                                             key={idx}
-                                                            className="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/10 shadow-sm"
+                                                            className="flex items-center gap-3 bg-white/10 p-3 rounded-2xl border border-white/10 shadow-sm"
                                                         >
                                                             <div className="w-6 h-6 rounded-lg bg-emerald-500/30 flex items-center justify-center shrink-0">
                                                                 <CheckCircle2 size={12} className="text-white" />
                                                             </div>
-                                                            <span className="text-[11px] font-black text-white uppercase tracking-tight leading-tight">{item}</span>
+                                                            <span className="text-[10px] font-black text-white uppercase tracking-tight leading-tight">{item}</span>
                                                         </motion.div>
                                                     ))}
                                             </div>

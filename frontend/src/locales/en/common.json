@@ -276,6 +276,7 @@
     },
     "upgrade": {
       "badge": "Premium Subscription",
+      "upgrade_to": "Upgrade to",
       "title": "Upgrade to <1>PRO STATUS</1>",
       "desc": "Select the level of growth automation that suits your ambition. Both plans unlock lifetime commissions.",
       "pro_title": "PRO Plan",
