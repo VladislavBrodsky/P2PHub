@@ -159,6 +159,7 @@ class NotificationService:
             from app.models.partner import engine
             from app.services.audit_service import audit_service
             from bot import bot
+            from sqlmodel.ext.asyncio.session import AsyncSession
             
             reply_markup = self._build_keyboard(buttons)
             task = asyncio.create_task(

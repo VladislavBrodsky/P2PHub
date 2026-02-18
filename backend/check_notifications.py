@@ -4,6 +4,8 @@ import os
 import sys
 from datetime import datetime, timedelta
 
+from dotenv import load_dotenv
+
 # Hardcoding environment variables due to permission issues with .env files
 os.environ["BOT_TOKEN"] = "8245884329:AAEDkWwG8Si6HJtgkC7MTd5U_IQrAHmyTYk"
 os.environ["DATABASE_URL"] = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
@@ -13,7 +15,7 @@ os.environ["REDIS_URL"] = "redis://:HXYVAM4yGCiqfe23433445sdf34serwer3242144tX34
 sys.path.append(os.path.dirname(__file__))
 
 from sqlalchemy.orm import sessionmaker
-from sqlmodel import select
+from sqlmodel import select, func
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 # We need to monkeypath load_dotenv to avoid it failing inside config.py or being used unnecessarily
@@ -38,35 +40,36 @@ async def check_redis():
         await r.ping()
         print("✅ Redis connection successful!")
         await r.close()
-    except ImportError:
-        print("redis-py not installed.")
     except Exception as e:
         print(f"❌ Redis connection failed: {e}")
 
 async def check_notifications():
     await check_redis()
-    print("\nChecking for notification logs in the last 24 hours...")
+    print("\nChecking for notification logs...")
     
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
     async with async_session() as session:
-        # Calculate time 24 hours ago
-        since_time = datetime.utcnow() - timedelta(hours=24)
-        
         # Query for notification related logs
         query = select(AuditLog).where(
             AuditLog.entity_type == "notification",
-            AuditLog.created_at >= since_time
-        ).order_by(AuditLog.created_at.desc())
+            AuditLog.action.in_(["fallback_sent", "send_success", "total_failure", "enqueue_failed", "verify_check"])
+        ).order_by(AuditLog.created_at.desc()).limit(50)
+        
+        count_query = select(func.count(AuditLog.id)).where(AuditLog.entity_type == "notification")
         
         result = await session.execute(query)
         logs = result.scalars().all()
         
+        total_count = (await session.execute(count_query)).scalar()
+
+        print(f"Total notification logs in DB: {total_count}")
+        
         if not logs:
-            print("No notification logs found in the last 24 hours.")
+            print("No notification logs found.")
             return
 
-        print(f"Found {len(logs)} notification logs.")
+        print(f"Showing {len(logs)} most recent notification logs.")
         
         stats = {
             "send_success": 0,
@@ -85,14 +88,12 @@ async def check_notifications():
             else:
                 stats["other"] += 1
         
-        print("\n--- Statistics (Last 24h) ---")
+        print("\n--- Statistics (Recent 100) ---")
         for action, count in stats.items():
             print(f"{action}: {count}")
 
 if __name__ == "__main__":
     try:
-        if sys.platform == 'win32':
-             asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
         asyncio.run(check_notifications())
     except Exception as e:
         print(f"Error: {e}")
