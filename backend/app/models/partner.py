@@ -121,6 +121,7 @@ class PartnerTask(SQLModel, table=True):
 class Earning(SQLModel, table=True):
     __table_args__ = (
         Index("idx_earning_partner_type_created", "partner_id", "type", "created_at"),
+        UniqueConstraint("reference_id", name="uq_earning_reference_id"),
         {"extend_existing": True}
     )
     id: int | None = Field(default=None, primary_key=True)
