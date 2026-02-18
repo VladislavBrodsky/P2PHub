@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
+const terminalLines = [
+    "> INITIALIZING SECURE LINK...",
+    "> ESTABLISHING ENCRYPTED TUNNEL...",
+    "> SYNCING P2P PROTOCOLS...",
+    "> VERIFYING DIGITAL SIGNATURE...",
+    "> ACCESS GRANTED: HUB ID-4912",
+    "> LOADING DYNAMIC ASSETS...",
+    "> SYSTEM READY."
+];
+
 export const SystemLink = ({ onComplete }: { onComplete: () => void }) => {
     const [lines, setLines] = useState<string[]>([]);
-
-    const terminalLines = [
-        "> INITIALIZING SECURE LINK...",
-        "> ESTABLISHING ENCRYPTED TUNNEL...",
-        "> SYNCING P2P PROTOCOLS...",
-        "> VERIFYING DIGITAL SIGNATURE...",
-        "> ACCESS GRANTED: HUB ID-4912",
-        "> LOADING DYNAMIC ASSETS...",
-        "> SYSTEM READY."
-    ];
 
     useEffect(() => {
         let currentLine = 0;
@@ -26,7 +26,7 @@ export const SystemLink = ({ onComplete }: { onComplete: () => void }) => {
             }
         }, 180);
         return () => clearInterval(interval);
-    }, [onComplete]);
+    }, [onComplete, terminalLines]);
 
     return (
         <motion.div

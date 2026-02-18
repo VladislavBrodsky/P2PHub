@@ -162,7 +162,8 @@
         "active": "Активен",
         "error": "Ошибка",
         "plan_pro": "Тариф Standard PRO",
-        "plan_plus": "Тариф PRO+ Активен"
+        "plan_plus": "Тариф PRO+ Активен",
+        "multi_node_capacity": "Лимит узлов сети: {{val}}"
       }
     },
     "publish": {

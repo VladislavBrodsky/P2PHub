@@ -459,7 +459,7 @@ export const GrowthTab = ({
                         <span className={`text-[7px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${status?.is_pro_plus ? 'bg-indigo-500/10 text-indigo-500' : 'bg-slate-500/10 text-slate-400'}`}>
                             {status?.is_pro_plus ? t('pro_dashboard.setup.tg_sync_multi.plan_plus') : t('pro_dashboard.setup.tg_sync_multi.plan_pro')}
                         </span>
-                        <p className="text-[6px] font-black text-slate-400 uppercase tracking-widest mt-1">Multi-Node Capacity: {status?.is_pro_plus ? '5/5' : '1/1'}</p>
+                        <p className="text-[6px] font-black text-slate-400 uppercase tracking-widest mt-1">{t('pro_dashboard.setup.tg_sync_multi.multi_node_capacity', { val: status?.is_pro_plus ? '5/5' : '1/1' })}</p>
                     </div>
                 </div>
 

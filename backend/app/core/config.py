@@ -1,5 +1,6 @@
 import importlib
 import importlib.util
+import json
 import logging
 import os
 import time
@@ -123,13 +124,12 @@ class Settings(BaseSettings):
     # Admin settings
     ADMIN_USER_IDS: list[str] = ["716720099", "537873096"] 
 
-    # --- SANDBOX HARDCODED FALLBACKS ---
-    # Since sandbox permissions are blocking .env reads, we provide high-reliability defaults.
+    # Secret configuration: Always pull from environment
     BOT_TOKEN: str = os.getenv("BOT_TOKEN", "")
     DATABASE_URL: str = os.getenv("DATABASE_URL", "")
-    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
-    GOOGLE_API_KEY: str = os.getenv("GOOGLE_API_KEY", "")
-    GOOGLE_SERVICE_ACCOUNT_JSON: str = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "{}")
+    OPENAI_API_KEY: str | None = os.getenv("OPENAI_API_KEY")
+    GOOGLE_API_KEY: str | None = os.getenv("GOOGLE_API_KEY")
+    GOOGLE_SERVICE_ACCOUNT_JSON: str | None = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
     # ---------------------------------- 
     
     # --- System Constants (Business Logic) ---

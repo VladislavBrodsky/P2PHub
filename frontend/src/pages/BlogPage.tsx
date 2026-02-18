@@ -72,7 +72,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
 
     useEffect(() => {
         fetchPosts(true);
-    }, [selectedCategory, searchQuery]);
+    }, [fetchPosts, selectedCategory, searchQuery]);
 
     // UI Cleanup on Post Select
     useEffect(() => {
@@ -227,7 +227,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
         }
 
         return () => observer.disconnect();
-    }, [posts.length, total, isLoading, fetchPosts, selectedPost]);
+    }, [posts.length, total, isLoading, fetchPosts, selectedPost, isRefreshing]);
 
     const currentFeaturedPost = useMemo(() => posts[0], [posts]);
     const currentOtherPosts = useMemo(() => posts.slice(1), [posts]);

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { apiClient } from '../api/client';
 import * as Sentry from "@sentry/react";
 import { getSafeLaunchParams, isTMA } from '../utils/tma';
@@ -72,7 +72,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [isLoading, setIsLoading] = useState(!user);
     const lastRefresh = React.useRef(0);
 
-    const updateUser = React.useCallback((updates: Partial<User>) => {
+    const updateUser = useCallback((updates: Partial<User>) => {
         setUser(prev => {
             const next = prev ? { ...prev, ...updates } : null;
             if (next) localStorage.setItem('p2p_user_cache', JSON.stringify(next));
@@ -82,7 +82,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     const { updateProgress } = useStartupProgress();
 
-    const completeStage = React.useCallback(async (id: number | string) => {
+    const completeStage = useCallback(async (id: number | string) => {
         try {
             const response = await apiClient.post(`/api/partner/academy/stages/${id}/complete`);
             updateUser?.(response.data);
@@ -91,7 +91,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
     }, [updateUser]);
 
-    const refreshUser = React.useCallback(async (force = false) => {
+    const refreshUser = useCallback(async (force = false) => {
         const now = Date.now();
         // Throttle refreshes to once every 10 seconds unless forced
         if (!force && now - lastRefresh.current < 10000) return;
@@ -184,17 +184,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         } finally {
             setIsLoading(false);
         }
-        // #comment: Added updateProgress to dependencies to ensure refreshUser uses the latest progress tracking function
-    }, [updateProgress]); // user dependency removed
+    }, [updateProgress, user]);
 
     useEffect(() => {
         const init = async () => {
             try {
                 // Fast path for local development
                 if (import.meta.env.DEV && !window.Telegram?.WebApp?.initData) {
-                    if (import.meta.env.DEV) {
-                        console.log('[DEBUG] Dev mode detected, mocking user immediately');
-                    }
                     const devUser = {
                         id: 999,
                         telegram_id: '123456789',
@@ -224,13 +220,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     return;
                 }
 
-                // #comment: Strategic Delay Removal
-                // Instead of a hard 2s wait, we check if we're even in a Telegram environment.
-                // If not, we skip the polling and start the refresh immediately.
                 if (!window.Telegram?.WebApp && !isTMA()) {
-                    if (import.meta.env.DEV) {
-                        console.log('[DEBUG] Not in TMA, skipping SDK wait');
-                    }
                     await refreshUser();
                     return;
                 }
@@ -241,7 +231,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     try {
                         if (window.Telegram?.WebApp?.initData) {
                             await refreshUser();
-                        } else if (attempts < 5) { // Reduced to 250ms maximum wait (5 * 50ms)
+                        } else if (attempts < 5) {
                             attempts++;
                             setTimeout(checkData, 50);
                         } else {
@@ -260,7 +250,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
         init();
 
-        // Throttled focus listener
         const handleFocus = () => {
             refreshUser();
         };
@@ -269,19 +258,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         return () => window.removeEventListener('focus', handleFocus);
     }, [refreshUser]);
 
-    // #comment: Sentry User Context Sync
-    // This allows us to search Sentry issues by telegram_id or username.
     useEffect(() => {
         if (user) {
             Sentry.setUser({
                 id: user.telegram_id,
                 username: user.username || undefined,
-                email: undefined, // TWA users don't have email in initial payload
             });
             Sentry.setTag("is_pro", user.is_pro);
             Sentry.setTag("level", user.level);
-            Sentry.setTag("referral_code", user.referral_code);
-            Sentry.setTag("network_size", user.total_network_size);
         } else {
             Sentry.setUser(null);
         }
@@ -302,7 +286,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useUser = () => {
     const context = useContext(UserContext);
     if (context === undefined) {
