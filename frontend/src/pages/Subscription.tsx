@@ -265,12 +265,12 @@ export default function SubscriptionPage() {
 
                 <div className="flex flex-col items-center gap-2 mb-4 scale-90">
                     {proStats && (
-                        <div className="w-full max-w-[220px] px-3 py-2 bg-white/5 border border-white/10 rounded-xl backdrop-blur-md">
+                        <div className="w-full max-w-[220px] px-3 py-2 bg-slate-900/5 dark:bg-white/5 border border-slate-900/10 dark:border-white/10 rounded-xl backdrop-blur-md">
                             <div className="flex justify-between items-center mb-1.5">
-                                <span className="text-[8px] font-black uppercase tracking-widest text-amber-500 opacity-80">LIFETIME SLOTS</span>
-                                <span className="text-[9px] font-black text-white">{proStats.sold}/{proStats.total}</span>
+                                <span className="text-[8px] font-black uppercase tracking-widest text-amber-500 dark:text-amber-400 opacity-80">LIFETIME SLOTS</span>
+                                <span className="text-[9px] font-black text-slate-900 dark:text-white">{proStats.sold}/{proStats.total}</span>
                             </div>
-                            <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+                            <div className="h-1 w-full bg-slate-900/10 dark:bg-white/10 rounded-full overflow-hidden">
                                 <motion.div
                                     className="h-full bg-linear-to-r from-amber-400 to-orange-600"
                                     initial={{ width: 0 }}
@@ -324,7 +324,7 @@ export default function SubscriptionPage() {
                     )}
                     <button
                         onClick={() => { selection(); setExpandedFeature(expandedFeature === 'TOKENS' ? null : 'TOKENS'); }}
-                        className={`w-full text-left transition-all duration-200 overflow-hidden rounded-2xl border ${expandedFeature === 'TOKENS' ? 'border-white/20 bg-linear-to-br from-indigo-600 via-purple-600 to-indigo-800 shadow-xl' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 shadow-sm'}`}
+                        className={`w-full text-left transition-all duration-100 overflow-hidden rounded-2xl border ${expandedFeature === 'TOKENS' ? 'border-white/20 bg-linear-to-br from-indigo-600 via-purple-600 to-indigo-800 shadow-xl' : (selectedPlan === 'PRO_PLUS' ? 'border-indigo-500/20 bg-linear-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 dark:bg-indigo-900/10 shadow-sm' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 shadow-sm')}`}
                     >
                         <div className="p-4 flex items-center justify-between">
                             <div className="flex items-center gap-3">
@@ -349,13 +349,13 @@ export default function SubscriptionPage() {
                                     initial={{ height: 0, opacity: 0 }}
                                     animate={{ height: 'auto', opacity: 1 }}
                                     exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.2, ease: "circOut" }}
+                                    transition={{ duration: 0.1, ease: "linear" }}
                                     className="overflow-hidden bg-black/20"
                                 >
                                     <div className="px-5 pb-6 pt-2">
                                         <div className="h-px bg-white/10 mb-4" />
                                         <p className="text-[10px] text-white/70 italic leading-relaxed mb-4">
-                                            {selectedPlan === 'PRO' ? "Neural studio for high-retention content synthesis." : "Ultimate AI Command Center with multi-platform sync."}
+                                            {t(selectedPlan === 'PRO' ? 'subscription.upgrade.viral_studio_desc_pro' : 'subscription.upgrade.viral_studio_desc_pro_plus')}
                                         </p>
                                         <div className="grid grid-cols-1 gap-1 mb-6">
                                             {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true }) as string[]).map((benefit, idx) => (
@@ -382,7 +382,7 @@ export default function SubscriptionPage() {
                     )}
                     <button
                         onClick={() => { selection(); setExpandedFeature(expandedFeature === 'LEVELS' ? null : 'LEVELS'); }}
-                        className={`w-full text-left transition-all duration-200 overflow-hidden rounded-2xl border ${expandedFeature === 'LEVELS' ? 'border-white/20 bg-linear-to-br from-emerald-600/90 via-teal-700/90 to-slate-900/90 shadow-xl' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 shadow-sm'}`}
+                        className={`w-full text-left transition-all duration-100 overflow-hidden rounded-2xl border ${expandedFeature === 'LEVELS' ? 'border-white/20 bg-linear-to-br from-emerald-600/90 via-teal-700/90 to-slate-900/90 shadow-xl' : (selectedPlan === 'PRO_PLUS' ? 'border-emerald-500/20 bg-linear-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 dark:bg-emerald-900/10 shadow-sm' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 shadow-sm')}`}
                     >
                         <div className="p-4 flex items-center justify-between">
                             <div className="flex items-center gap-3">
@@ -407,13 +407,13 @@ export default function SubscriptionPage() {
                                     initial={{ height: 0, opacity: 0 }}
                                     animate={{ height: 'auto', opacity: 1 }}
                                     exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.2, ease: "circOut" }}
+                                    transition={{ duration: 0.1, ease: "linear" }}
                                     className="overflow-hidden bg-black/20"
                                 >
                                     <div className="px-5 pb-6 pt-2">
                                         <div className="h-px bg-white/10 mb-4" />
                                         <p className="text-[10px] text-white/70 italic leading-relaxed mb-4">
-                                            {selectedPlan === 'PRO' ? "Deep-level network analytics and automated tracking." : "Sovereign Empire Infrastructure with maximum depth."}
+                                            {t(selectedPlan === 'PRO' ? 'subscription.upgrade.content_factory_desc_pro' : 'subscription.upgrade.content_factory_desc_pro_plus')}
                                         </p>
                                         <div className="grid grid-cols-1 gap-1 mb-6">
                                             {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true }) as string[]).map((benefit, idx) => (
