@@ -62,6 +62,7 @@ async def get_pro_status(
 
     return {
         "is_pro": partner.is_pro,
+        "is_pro_plus": partner.is_pro_plus,
         "pro_tokens": partner.pro_tokens,
         "academy_score": partner.academy_score,
         "completed_stages": partner.completed_stages,
@@ -192,6 +193,13 @@ async def setup_social_api(
                 seen.add(ch.strip())
         
         if len(unique_channels) > 1:
+            # Enforce limits: PRO+ can have 5, PRO can have 1
+            max_channels = 5 if partner.is_pro_plus else 1
+            if len(unique_channels) > max_channels:
+                raise HTTPException(
+                    status_code=400, 
+                    detail=f"Plan limit exceeded. Your plan allows up to {max_channels} channels."
+                )
             partner.telegram_channel_id = json.dumps(unique_channels)
         elif len(unique_channels) == 1:
             partner.telegram_channel_id = unique_channels[0]
@@ -235,14 +243,14 @@ async def generate_content(
         session=session
     )
     
-    if result.get("status") == "failed":
+    if result.get("status") != "success":
         # Refund tokens on error
         partner.pro_tokens += 2
         session.add(partner)
         await session.commit()
         
-        error_code = result.get("error_code", "V999")
-        error_msg = result.get("error", "Unknown error")
+        error_code = result.get("error_code", ViralStudioErrorCode.GENERATION_FAILED)
+        error_msg = result.get("error", "Generation failed. Please try again.")
         raise HTTPException(
             status_code=500, 
             detail=f"[{error_code}] {error_msg}"
@@ -304,8 +312,12 @@ async def test_integration(
     if "error" in result:
         raise HTTPException(status_code=400, detail=result["error"])
     
-    # Return success but formatted for frontend notification
-    return {"status": "success", "msg": "Sync Verified! Viral Protocol Active."}
+    # Return success with detailed results
+    return {
+        "status": "success", 
+        "msg": result.get("msg", "Sync Verified! Viral Protocol Active."),
+        "details": result.get("details", [])
+    }
 
 class HeadlineRequest(BaseModel):
     headline: str

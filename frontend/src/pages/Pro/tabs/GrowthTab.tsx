@@ -1,8 +1,9 @@
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     Info, CheckCircle2, Bot, TrendingUp, ArrowRight, ShieldCheck,
     Terminal, Share, Flame, Globe, Send, Twitter, Linkedin, ChevronRight,
-    Loader2, Brain, Lock, Play
+    Loader2, Brain, Lock, Play, ChevronDown
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PROStatus } from '../../../services/proService';
@@ -35,6 +36,7 @@ export const GrowthTab = ({
     impact
 }: GrowthTabProps) => {
     const { t } = useTranslation();
+    const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
 
     return (
         <motion.div
@@ -45,44 +47,43 @@ export const GrowthTab = ({
             className="space-y-6 sm:space-y-10 pb-12"
         >
             {/* Master Score Card - Intelligence Hub - Re-engineered for compactness */}
-            <div className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-8 border border-slate-200 dark:border-white/10 shadow-2xl relative overflow-hidden group">
+            {/* Master Score Card - Intelligence Hub - Re-engineered for maximum compactness */}
+            <div className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-3xl p-4 sm:p-6 border border-slate-200 dark:border-white/10 shadow-xl relative overflow-hidden group">
                 <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
 
-                <div className="flex flex-row justify-between items-center gap-4 relative z-10 mb-6 sm:mb-8">
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                            <div className="px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full">
-                                <span className="text-[8px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">
-                                    {academyScore < 300 ? t('pro_dashboard.academy.protocols.difficulty_levels.easy') :
-                                        academyScore < 800 ? t('pro_dashboard.academy.protocols.difficulty_levels.medium') :
-                                            t('pro_dashboard.academy.protocols.difficulty_levels.hard')}
+                <div className="flex items-center justify-between gap-4 relative z-10 mb-4">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-500 shadow-inner">
+                            <ShieldCheck size={20} />
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none mb-1">
+                                {t('pro_dashboard.academy.protocols.title')}
+                                <span className="ml-2 px-1.5 py-0.5 bg-indigo-500/10 rounded-md text-[7px] font-black text-indigo-500 align-middle">
+                                    {academyScore < 300 ? t('pro_dashboard.academy.protocols.difficulty_levels.easy').split(' ')[0] :
+                                        academyScore < 800 ? t('pro_dashboard.academy.protocols.difficulty_levels.medium').split(' ')[0] :
+                                            t('pro_dashboard.academy.protocols.difficulty_levels.hard').split(' ')[0]}
                                 </span>
-                            </div>
+                            </h3>
                             <button
                                 onClick={() => { selection(); setShowManual('academy'); }}
-                                className="w-7 h-7 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-indigo-500/50 hover:text-indigo-500 transition-all active:scale-90"
+                                className="flex items-center gap-1 text-[8px] font-black text-slate-400 hover:text-indigo-500 transition-colors uppercase tracking-widest"
                             >
-                                <Info size={12} />
+                                <Info size={10} /> PROTOCOL INTEL
                             </button>
                         </div>
-                        <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase leading-none">
-                            {t('pro_dashboard.academy.protocols.title')}
-                        </h3>
                     </div>
 
                     <div className="flex flex-col items-end">
-                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">{t('pro_dashboard.academy.protocols.stats_label')}</p>
-                        <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tabular-nums leading-none flex items-baseline gap-0.5 vibing-crystal-text drop-shadow-sm">
-                            <LiquidCounter
-                                value={academyScore}
-                                className="vibing-crystal-text drop-shadow-sm"
-                            />
-                            <span className="text-indigo-500 text-base sm:text-lg opacity-50">PTS</span>
+                        <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.3em] mb-0.5">{t('pro_dashboard.academy.protocols.stats_label')}</p>
+                        <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tabular-nums leading-none flex items-baseline gap-0.5 vibing-crystal-text">
+                            <LiquidCounter value={academyScore} className="vibing-crystal-text" />
+                            <span className="text-indigo-500 text-xs opacity-50 font-black">PTS</span>
                         </div>
                     </div>
                 </div>
 
-                <div className="space-y-4 relative z-10">
+                <div className="space-y-2 relative z-10">
                     {(() => {
                         const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
                         const moduleCount = Array.isArray(modules) ? modules.length : 5;
@@ -90,17 +91,10 @@ export const GrowthTab = ({
                         const progress = Math.min(Math.round((uniqueCompleted.length / moduleCount) * 100), 100);
 
                         return (
-                            <>
-                                <div className="flex justify-between items-end text-[8px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400/60">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-1.5 h-4 bg-indigo-500 rounded-full shadow-lg shadow-indigo-500/40" />
-                                        <span>{t('pro_dashboard.academy.protocols.progress_label')}</span>
-                                    </div>
-                                    <span className="text-indigo-600 dark:text-indigo-400 font-black">{progress}%</span>
-                                </div>
-                                <div className="h-3 bg-slate-100 dark:bg-black/40 rounded-full overflow-hidden p-0.5 shadow-inner border border-slate-200 dark:border-white/5 relative">
+                            <div className="flex items-center gap-4">
+                                <div className="flex-1 h-1.5 bg-slate-100 dark:bg-black/40 rounded-full overflow-hidden shadow-inner border border-slate-200 dark:border-white/5 relative">
                                     <motion.div
-                                        className="h-full vibing-blue-animated rounded-full shadow-lg shadow-indigo-500/20 relative overflow-hidden"
+                                        className="h-full vibing-blue-animated rounded-full relative overflow-hidden"
                                         initial={{ width: "0%" }}
                                         animate={{ width: `${progress}%` }}
                                         transition={{ duration: 2, ease: "circOut" }}
@@ -108,26 +102,27 @@ export const GrowthTab = ({
                                         <div className="absolute inset-0 bg-linear-to-r from-white/20 via-transparent to-transparent animate-shimmer-slide" />
                                     </motion.div>
                                 </div>
-                            </>
+                                <span className="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tabular-nums">{progress}% SYNC</span>
+                            </div>
                         );
                     })()}
                 </div>
             </div>
 
-            {/* Expert Intelligence Transmission */}
-            <div className="px-5 py-6 bg-white dark:bg-indigo-500/5 rounded-3xl border border-slate-200 dark:border-indigo-500/10 relative overflow-hidden group shadow-sm">
-                <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 flex items-center justify-center text-indigo-500">
-                        <Bot size={24} />
-                    </div>
-                    <div>
-                        <h4 className="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest mb-0.5">MESSAGES FROM ELITE NODES</h4>
-                        <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest opacity-60 italic">Deciphering viral patterns...</p>
-                    </div>
+            {/* Expert Intelligence Transmission - Sleek Ticker Style */}
+            <div className="px-4 py-3 bg-indigo-500/5 dark:bg-white/5 rounded-2xl border border-indigo-500/10 dark:border-white/5 flex items-center gap-3 relative overflow-hidden shadow-sm">
+                <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-500 shrink-0">
+                    <Bot size={16} className="animate-pulse" />
                 </div>
-                <p className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic border-l-2 border-indigo-500/50 pl-5 ml-1">
-                    "{t('pro_dashboard.academy.desc')}"
-                </p>
+                <div className="flex-1 min-w-0">
+                    <p className="text-[10px] sm:text-[11px] font-bold text-slate-600 dark:text-slate-300 leading-tight italic truncate pr-4">
+                        "{t('pro_dashboard.academy.desc')}"
+                    </p>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">LIVE SIGNAL</span>
+                </div>
             </div>
 
             {/* Viral Content Hub - More Compact Snap-slider */}
@@ -172,8 +167,8 @@ export const GrowthTab = ({
 
             {/* Masterclass Modules - Academy Path */}
             <div className="space-y-6 relative">
-                {/* Timeline Line */}
-                <div className="absolute left-[19px] top-12 bottom-0 w-0.5 bg-slate-200 dark:bg-white/10 z-0" />
+                {/* Timeline Line - Re-aligned for compact nodes */}
+                <div className="absolute left-[14px] sm:left-[16px] top-12 bottom-0 w-px bg-linear-to-b from-slate-200 via-slate-300 to-transparent dark:from-white/10 dark:via-white/20 dark:to-transparent z-0" />
 
                 <div className="flex items-center gap-2 px-1 relative z-10">
                     <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-500 border border-indigo-100 dark:border-indigo-500/20 shadow-lg shadow-indigo-500/10">
@@ -190,28 +185,30 @@ export const GrowthTab = ({
                         const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
                         const modulesList = Array.isArray(modules) ? modules : [];
 
-                        // Costs Config (Hardcoded to match backend)
-                        const ACADEMY_COSTS: Record<string, { tokens: number; xp_cost: number; xp_reward: number }> = {
-                            "m1": { tokens: 1, xp_cost: 0, xp_reward: 500 },
-                            "m2": { tokens: 1, xp_cost: 0, xp_reward: 500 },
-                            "m3": { tokens: -1, xp_cost: 20, xp_reward: 2000 },
-                            "m4": { tokens: -2, xp_cost: 500, xp_reward: 5000 },
-                            "m5": { tokens: -3, xp_cost: 2000, xp_reward: 10000 },
-                            "m6": { tokens: -5, xp_cost: 10000, xp_reward: 50000 },
-                        };
+                        // Auto-expand first uncompleted if none expanded
+                        if (expandedModuleId === null && modulesList.length > 0) {
+                            const firstUncompletedId = modulesList.find((m: any) => !completedStages.includes(m.id))?.id;
+                            if (firstUncompletedId) setExpandedModuleId(firstUncompletedId);
+                        }
 
                         return modulesList.map((module: any, i: number) => {
                             const isCompleted = completedStages.includes(module.id);
                             const isLoading = isCompletingStage === module.id;
-                            const costInfo = ACADEMY_COSTS[module.id] || { tokens: 0, xp_cost: 0, xp_reward: 100 };
-                            const cost = costInfo.tokens;
-                            const xpCost = costInfo.xp_cost;
+                            const isExpanded = expandedModuleId === module.id;
+                            const cost = module.tokens || 0;
+                            const xpCost = module.xp_cost || 0;
+                            const xpReward = module.points || 0;
 
-                            // Check if user has enough tokens (if cost is negative)
                             const userTokens = status?.pro_tokens || 0;
                             const canAffordTokens = cost >= 0 || userTokens >= Math.abs(cost);
                             const canAffordXP = academyScore >= xpCost;
                             const isLocked = !isCompleted && (!canAffordTokens || !canAffordXP);
+
+                            const toggleExpand = () => {
+                                selection();
+                                impact('light');
+                                setExpandedModuleId(isExpanded ? null : module.id);
+                            };
 
                             return (
                                 <motion.div
@@ -219,129 +216,145 @@ export const GrowthTab = ({
                                     initial={{ opacity: 0, x: -10 }}
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ delay: i * 0.1 }}
+                                    transition={{ delay: i * 0.05 }}
                                     className="pl-10 sm:pl-12 relative group"
                                 >
-                                    {/* Timeline Node */}
-                                    <div className={`absolute left-0 top-6 w-8 h-8 sm:w-10 sm:h-10 rounded-full border-4 border-slate-50 dark:border-slate-950 flex items-center justify-center transition-all duration-500 z-20 ${isCompleted
-                                        ? 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]'
+                                    {/* Timeline Node - More Compact */}
+                                    <div className={`absolute left-0 top-[18px] w-7 h-7 sm:w-8 sm:h-8 rounded-full border-[3px] border-slate-50 dark:border-slate-950 flex items-center justify-center transition-all duration-500 z-20 ${isCompleted
+                                        ? 'bg-emerald-500 text-white shadow-[0_0_10px_rgba(16,185,129,0.3)]'
                                         : isLocked
                                             ? 'bg-slate-200 dark:bg-slate-800 text-slate-400'
-                                            : 'bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)] animate-pulse'
+                                            : 'bg-indigo-500 text-white shadow-[0_0_10px_rgba(99,102,241,0.3)]'
                                         }`}>
-                                        <span className="font-black text-[10px] sm:text-xs">{i + 1}</span>
+                                        <span className="font-black text-[9px] sm:text-xs">{i + 1}</span>
                                     </div>
 
-                                    {/* Card */}
-                                    <div className={`pro-card-extreme rounded-[1.5rem] overflow-hidden relative transition-all duration-300 ${isCompleted
-                                        ? 'opacity-80 grayscale-[0.3] border-emerald-500/20 bg-emerald-500/5'
+                                    {/* Compact Card / Accordion */}
+                                    <div className={`pro-card-extreme rounded-2xl overflow-hidden relative transition-all duration-300 border ${isCompleted
+                                        ? 'opacity-90 border-emerald-500/10 bg-emerald-500/5'
                                         : isLocked
                                             ? 'opacity-60 border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-white/5'
-                                            : 'bg-white dark:bg-slate-900/60 border-indigo-500/30 shadow-xl shadow-indigo-500/10 hover:scale-[1.01]'
+                                            : isExpanded
+                                                ? 'bg-white dark:bg-slate-900 border-indigo-500/40 shadow-xl shadow-indigo-500/10 scale-[1.01]'
+                                                : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-white/10 hover:border-indigo-500/30'
                                         }`}>
 
-                                        {/* Status Header */}
-                                        <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-slate-50/50 dark:bg-white/5">
-                                            <span className={`px-2.5 py-1 rounded-full border text-[8px] font-black uppercase tracking-widest ${module.diff === 'hard' ? 'border-red-500/30 bg-red-500/10 text-red-500' :
-                                                module.diff === 'medium' ? 'border-amber-500/30 bg-amber-500/10 text-amber-500' :
-                                                    'border-emerald-500/30 bg-emerald-500/10 text-emerald-500'
-                                                }`}>
-                                                {t(`pro_dashboard.academy.protocols.difficulty_levels.${module.diff}`)}
-                                            </span>
+                                        {/* Header - Clickable Area */}
+                                        <div
+                                            onClick={toggleExpand}
+                                            className="px-4 py-3 sm:px-5 sm:py-3.5 flex items-center justify-between cursor-pointer group/header"
+                                        >
+                                            <div className="flex flex-col gap-0.5">
+                                                <div className="flex items-center gap-2">
+                                                    <span className={`px-1.5 py-0.5 rounded-md text-[7px] font-black uppercase tracking-widest ${module.diff === 'hard' ? 'bg-red-500/10 text-red-500' :
+                                                        module.diff === 'medium' ? 'bg-amber-500/10 text-amber-500' :
+                                                            'bg-emerald-500/10 text-emerald-500'
+                                                        }`}>
+                                                        {t(`pro_dashboard.academy.protocols.difficulty_levels.${module.diff}`).split(' ')[0]}
+                                                    </span>
+                                                    <h4 className={`text-xs sm:text-sm font-black uppercase tracking-tight leading-none transition-colors ${isExpanded ? 'text-indigo-500' : 'text-slate-900 dark:text-white'}`}>
+                                                        {module.title}
+                                                    </h4>
+                                                </div>
+                                            </div>
 
-                                            {isCompleted ? (
-                                                <div className="flex items-center gap-1.5 text-emerald-500">
-                                                    <CheckCircle2 size={14} />
-                                                    <span className="text-[9px] font-black uppercase tracking-widest">SYNCED</span>
-                                                </div>
-                                            ) : (
-                                                <div className={`flex items-center gap-1.5 px-3 py-1 rounded-lg border font-black text-[9px] uppercase tracking-widest ${cost > 0
-                                                    ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
-                                                    : 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20'
-                                                    }`}>
-                                                    {cost > 0 ? (
-                                                        <>+{cost} TOKEN REWARD</>
-                                                    ) : (
-                                                        <>{cost} TOKENS TO UNLOCK</>
-                                                    )}
-                                                </div>
-                                            )}
+                                            <div className="flex items-center gap-3">
+                                                {isCompleted ? (
+                                                    <div className="flex items-center gap-1 text-emerald-500">
+                                                        <CheckCircle2 size={12} />
+                                                        <span className="text-[8px] font-black uppercase tracking-widest hidden sm:inline">SYNCED</span>
+                                                    </div>
+                                                ) : (
+                                                    <div className={`text-[8px] font-black uppercase tracking-widest ${cost > 0 ? 'text-emerald-500' : 'text-indigo-500'}`}>
+                                                        {cost > 0 ? `+${cost} T` : `${cost} T`}
+                                                    </div>
+                                                )}
+                                                <motion.div
+                                                    animate={{ rotate: isExpanded ? 180 : 0 }}
+                                                    className="text-slate-400 group-hover/header:text-indigo-500 transition-colors"
+                                                >
+                                                    <ChevronDown size={14} />
+                                                </motion.div>
+                                            </div>
                                         </div>
 
-                                        <div className="p-4 sm:p-6 space-y-4">
-                                            <div className="space-y-1">
-                                                <h4 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{module.title}</h4>
-                                                <p className="text-[10px] font-bold text-indigo-500/80 uppercase tracking-widest">{module.hook}</p>
-                                            </div>
+                                        {/* Expandable Content */}
+                                        <AnimatePresence>
+                                            {isExpanded && (
+                                                <motion.div
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: "auto", opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                                                >
+                                                    <div className="px-4 pb-4 sm:px-5 sm:pb-5 space-y-4 border-t border-slate-100 dark:border-white/5 pt-4">
+                                                        <p className="text-[9px] font-bold text-indigo-500/80 uppercase tracking-widest">{module.hook}</p>
 
-                                            {/* Expandable Content (Always shown but structured) */}
-                                            <div className="bg-slate-50 dark:bg-black/20 p-4 rounded-xl border border-slate-100 dark:border-white/5">
-                                                {renderMarkdown(module.content)}
-                                            </div>
-
-                                            {/* Action / Task */}
-                                            {!isCompleted && !isLocked && (
-                                                <div className="relative p-3 sm:p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 space-y-3 overflow-hidden group/task">
-                                                    <div className="absolute inset-0 bg-linear-to-r from-indigo-500/5 to-purple-500/5 opacity-50" />
-                                                    <div className="relative z-10">
-                                                        <div className="flex items-center gap-2 mb-2">
-                                                            <Terminal size={12} className="text-indigo-500" />
-                                                            <span className="text-[9px] font-black uppercase tracking-[0.15em] text-indigo-500">Node Task</span>
+                                                        <div className="bg-slate-50 dark:bg-black/20 p-4 rounded-xl border border-slate-100 dark:border-white/5 text-[11px] sm:text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                                                            {renderMarkdown(module.content)}
                                                         </div>
-                                                        <p className="text-[11px] font-bold text-slate-800 dark:text-slate-200 leading-relaxed mb-3">
-                                                            {module.task}
-                                                        </p>
 
-                                                        {module.link && (
-                                                            <a href={module.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-[9px] font-black uppercase tracking-widest hover:underline mb-3">
-                                                                {module.cta || 'Initiate Sync'} <Share size={10} />
-                                                            </a>
+                                                        {/* Action / Task */}
+                                                        {!isCompleted && !isLocked && (
+                                                            <div className="relative p-3 sm:p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 space-y-3 overflow-hidden group/task">
+                                                                <div className="absolute inset-0 bg-linear-to-r from-indigo-500/5 to-purple-500/5 opacity-50" />
+                                                                <div className="relative z-10">
+                                                                    <div className="flex items-center gap-2 mb-2">
+                                                                        <Terminal size={12} className="text-indigo-500" />
+                                                                        <span className="text-[9px] font-black uppercase tracking-[0.15em] text-indigo-500">Node Task</span>
+                                                                    </div>
+                                                                    <p className="text-[11px] font-bold text-slate-800 dark:text-slate-200 leading-relaxed mb-3">
+                                                                        {module.task}
+                                                                    </p>
+
+                                                                    {module.link && (
+                                                                        <a href={module.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-[9px] font-black uppercase tracking-widest hover:underline mb-3">
+                                                                            {module.cta || 'Initiate Sync'} <Share size={10} />
+                                                                        </a>
+                                                                    )}
+
+                                                                    <button
+                                                                        onClick={() => handleCompleteAcademyStage(module.id)}
+                                                                        disabled={isLoading}
+                                                                        className="w-full min-h-[44px] h-auto py-2 bg-slate-900 dark:bg-white hover:scale-[1.02] active:scale-95 text-white dark:text-slate-900 rounded-xl font-black text-[10px] uppercase tracking-wider sm:tracking-widest transition-all flex items-center justify-center gap-2 flex-wrap text-center shadow-lg relative overflow-hidden"
+                                                                    >
+                                                                        {isLoading ? <Loader2 size={14} className="animate-spin" /> : (
+                                                                            <>
+                                                                                <span>
+                                                                                    {cost > 0 ? "Complete & Claim" : `Unlock (-${Math.abs(cost)})`}
+                                                                                </span>
+                                                                                {xpCost > 0 && (
+                                                                                    <span className="opacity-80 text-red-400">(-{xpCost} XP)</span>
+                                                                                )}
+                                                                                <div className="w-px h-3 bg-current opacity-20 hidden sm:block" />
+                                                                                <span className="opacity-70">+{xpReward} XP</span>
+                                                                            </>
+                                                                        )}
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                         )}
 
-                                                        <button
-                                                            onClick={() => handleCompleteAcademyStage(module.id)}
-                                                            disabled={isLoading}
-                                                            className="w-full min-h-[44px] h-auto py-2 bg-slate-900 dark:bg-white hover:scale-[1.02] active:scale-95 text-white dark:text-slate-900 rounded-xl font-black text-[10px] uppercase tracking-wider sm:tracking-widest transition-all flex items-center justify-center gap-2 flex-wrap text-center shadow-lg relative overflow-hidden"
-                                                        >
-                                                            {isLoading ? <Loader2 size={14} className="animate-spin" /> : (
-                                                                <>
-                                                                    <span>
-                                                                        {cost > 0 ? "Complete & Claim Reward" : `Unlock & Sync (-${Math.abs(cost)} Tokens)`}
+                                                        {isLocked && !isCompleted && (
+                                                            <div className="p-4 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 text-center">
+                                                                <div className="flex flex-col items-center gap-2 opacity-60">
+                                                                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                                                                        {!canAffordTokens ? "Insufficient Tokens" : "Insufficient XP Score"}
                                                                     </span>
-                                                                    {xpCost > 0 && (
-                                                                        <>
-                                                                            <div className="w-px h-3 bg-current opacity-20 hidden sm:block" />
-                                                                            <span className="opacity-80 whitespace-nowrap text-red-400">-{xpCost} XP UNLOCK</span>
-                                                                        </>
-                                                                    )}
-                                                                    <div className="w-px h-3 bg-current opacity-20 hidden sm:block" />
-                                                                    <span className="opacity-70 whitespace-nowrap">+{costInfo.xp_reward} XP REWARD</span>
-                                                                </>
-                                                            )}
-                                                        </button>
+                                                                    <span className="text-[8px] font-medium text-slate-400">
+                                                                        Earn more tokens or upgrade to PRO+
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                </div>
+                                                </motion.div>
                                             )}
-
-                                            {isLocked && !isCompleted && (
-                                                <div className="p-4 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 text-center">
-                                                    <div className="flex flex-col items-center gap-2 opacity-60">
-                                                        <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-white/10 flex items-center justify-center">
-                                                            <div className="w-3 h-3 rounded-full bg-slate-400 dark:bg-white/30" />
-                                                        </div>
-                                                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
-                                                            {!canAffordTokens ? "Insufficient Tokens" : "Insufficient XP Score"}
-                                                        </span>
-                                                        <span className="text-[8px] font-medium text-slate-400">
-                                                            Earn more tokens or upgrade to PRO+
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
+                                        </AnimatePresence>
                                     </div>
                                 </motion.div>
                             );
+
                         });
                     })()}
                 </div>

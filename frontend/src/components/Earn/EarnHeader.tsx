@@ -30,17 +30,10 @@ export const EarnHeader = () => {
                     <div className="relative flex flex-col items-center justify-center shrink-0">
                         <div className="relative w-24 h-24 flex items-center justify-center">
                             <svg className="absolute inset-0 w-full h-full -rotate-90 scale-95">
-                                <defs>
-                                    <linearGradient id="crystalGradientHeader" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" stopColor="#94A3B8" />
-                                        <stop offset="50%" stopColor="#F1F5F9" />
-                                        <stop offset="100%" stopColor="#94A3B8" />
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="48" cy="48" r="42" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="6" />
+                                <circle cx="48" cy="48" r="42" fill="none" stroke="currentColor" className="text-white/5" strokeWidth="6" />
                                 <motion.circle
                                     cx="48" cy="48" r="42" fill="none"
-                                    stroke="url(#crystalGradientHeader)"
+                                    stroke={rank.badgeColor}
                                     strokeWidth="6"
                                     strokeDasharray="264"
                                     strokeDashoffset={264 - (264 * progress.percent) / 100}
@@ -48,6 +41,7 @@ export const EarnHeader = () => {
                                     initial={{ strokeDashoffset: 264 }}
                                     animate={{ strokeDashoffset: 264 - (264 * progress.percent) / 100 }}
                                     transition={{ duration: 1.5, ease: "easeOut" }}
+                                    style={{ filter: `drop-shadow(0 0 8px ${rank.badgeColor}40)` }}
                                 />
                             </svg>
                             <div className="relative z-10 flex flex-col items-center justify-center">

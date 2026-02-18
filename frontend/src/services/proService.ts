@@ -2,6 +2,7 @@ import { apiClient } from '../api/client';
 
 export interface PROStatus {
     is_pro: boolean;
+    is_pro_plus: boolean;
     pro_tokens: number;
     has_x_setup: boolean;
     has_telegram_setup: boolean;

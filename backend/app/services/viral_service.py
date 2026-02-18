@@ -1201,7 +1201,8 @@ Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
         return {
             "status": "success",
             "platform": "telegram",
-            "msg": f"Post attempt complete: {', '.join(results)}"
+            "msg": f"Post attempt complete: {', '.join(results)}",
+            "details": results
         }
 
     def _prepare_telegram_channels(self, channel_id_str: str) -> list[str]:

@@ -307,6 +307,11 @@ async def handle_buy_pro(message: types.Message):
 
             # Create payment session
             payment_data = await payment_service.create_payment_session(session, partner.id)
+            amount = payment_data.get('amount')
+            address = payment_data.get('address')
+
+            if not amount or not address:
+                raise ValueError("Incomplete payment session data")
 
             text = (
                 "👑 *UPGRADE TO PRO*\n\n"
@@ -315,18 +320,18 @@ async def handle_buy_pro(message: types.Message):
                 "• X5 XP Multiplier\n"
                 "• Priority Payouts\n"
                 "• VIP Support\n\n"
-                f"💰 *Price:* {payment_data['amount_ton']} TON (~$39)\n"
+                f"💰 *Price:* {amount} TON (~$39)\n"
                 f"⏳ *Valid for:* 10 minutes\n\n"
                 "Please send the exact amount to the address below:"
             )
 
             # Send the address as a separate message for easy copying, or just include in code block
-            text += f"\n\n`{payment_data['address']}`"
+            text += f"\n\n`{address}`"
 
             await message.answer(
                 text,
                 parse_mode="Markdown",
-                reply_markup=get_pro_payment_keyboard(payment_data['address'], payment_data['amount_ton'])
+                reply_markup=get_pro_payment_keyboard(address, amount)
             )
             break
     except Exception as e:

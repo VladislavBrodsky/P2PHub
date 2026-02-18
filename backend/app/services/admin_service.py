@@ -116,7 +116,15 @@ class AdminService:
             total_partners = (await session.exec(select(func.count(Partner.id)))).one()
             rev_ton = (await session.exec(select(func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed", PartnerTransaction.currency == "TON"))).one() or 0.0
             rev_usdt = (await session.exec(select(func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed", PartnerTransaction.currency == "USDT"))).one() or 0.0
-            total_revenue = rev_usdt + (rev_ton * 5.0)
+            
+            # Use dynamic price if possible
+            ton_price = 5.0
+            try:
+                ton_price = await payment_service.get_ton_price()
+            except Exception:
+                 pass
+            
+            total_revenue = rev_usdt + (rev_ton * ton_price)
 
             return {
                 "total_partners": total_partners,

@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     X, TrendingUp, Zap, Loader2, Quote, CheckCircle2,
-    ArrowRight, Flame, BookOpen, Sparkles, Sliders, Send, Network
+    ArrowRight, Flame, BookOpen, Sparkles, Sliders, Send, Network,
+    Plus, Trash2, AlertCircle, Info
 } from 'lucide-react';
 import { proService } from '../../../services/proService';
 import { useNotificationStore } from '../../../store/useNotificationStore';
@@ -79,7 +80,9 @@ export const ProDashboardModals = ({
     const [xApiSecret, setXApiSecret] = useState('');
     const [xAccToken, setXAccToken] = useState('');
     const [xAccSecret, setXAccSecret] = useState('');
-    const [tgChannel, setTgChannel] = useState('');
+    const [tgChannels, setTgChannels] = useState<string[]>(['']);
+    const [tgTestResults, setTgTestResults] = useState<Record<string, string>>({});
+    const [isTesting, setIsTesting] = useState(false);
 
     // Pre-fill effect
     React.useEffect(() => {
@@ -88,7 +91,11 @@ export const ProDashboardModals = ({
             setXApiSecret(status.setup.x_api_secret || '');
             setXAccToken(status.setup.x_access_token || '');
             setXAccSecret(status.setup.x_access_token_secret || '');
-            setTgChannel(status.setup.telegram_channel_id || '');
+
+            const main = status.setup.telegram_channel_id;
+            const others = status.setup.telegram_channels || [];
+            const all = main ? [main, ...others] : (others.length > 0 ? others : ['']);
+            setTgChannels(all);
         }
     }, [status]);
 
@@ -101,7 +108,8 @@ export const ProDashboardModals = ({
                 x_api_secret: xApiSecret,
                 x_access_token: xAccToken,
                 x_access_token_secret: xAccSecret,
-                telegram_channel_id: tgChannel
+                telegram_channel_id: tgChannels[0],
+                telegram_channels: tgChannels.slice(1).filter(ch => ch.trim() !== '')
             });
             showNotification({
                 title: t('pro_dashboard.setup.save_success_title'),
@@ -118,6 +126,39 @@ export const ProDashboardModals = ({
             });
         } finally {
             setIsSaving(false);
+        }
+    };
+
+    const handleTestTG = async () => {
+        if (isTesting) return;
+        setIsTesting(true);
+        selection();
+        try {
+            const res = await proService.testIntegration('telegram');
+            if (res.details) {
+                const results: Record<string, string> = {};
+                res.details.forEach((d: string) => {
+                    // detail format: "✅ @channel" or "❌ @channel"
+                    const status = d.startsWith('✅') ? 'active' : 'error';
+                    const channel = d.substring(2).trim();
+                    results[channel] = status;
+                });
+                setTgTestResults(results);
+            }
+            showNotification({
+                title: t('pro_dashboard.notifications.success'),
+                message: res.msg || "Telegram sync verified.",
+                type: 'success'
+            });
+        } catch (error: any) {
+            console.error(error);
+            showNotification({
+                title: t('pro_dashboard.notifications.error'),
+                message: error.response?.data?.message || "Failed to verify Telegram status.",
+                type: 'warning'
+            });
+        } finally {
+            setIsTesting(false);
         }
     };
 
@@ -256,28 +297,88 @@ export const ProDashboardModals = ({
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="space-y-4">
+                                    <div className="space-y-6">
                                         <div className="p-4 bg-sky-50 dark:bg-sky-500/10 rounded-2xl border border-sky-100 dark:border-sky-500/20 flex items-start gap-3">
                                             <Send className="w-5 h-5 text-sky-500 mt-0.5" />
                                             <div>
-                                                <h4 className="text-xs font-black text-sky-900 dark:text-sky-300 uppercase tracking-wide">Telegram Sync</h4>
+                                                <h4 className="text-xs font-black text-sky-900 dark:text-sky-300 uppercase tracking-wide">Telegram Multi-Sync</h4>
                                                 <p className="text-[10px] text-sky-700 dark:text-sky-400 leading-relaxed mt-1">
-                                                    Connect your public channel. Add our bot as Admin first.
+                                                    {status?.is_pro_plus ? "PRO+ allows up to 5 channels." : "Upgrade to PRO+ to sync up to 5 channels."}
                                                     <button onClick={() => setShowManual('setup_tg')} className="ml-1 underline font-bold hover:text-sky-500">View Guide</button>
                                                 </p>
                                             </div>
                                         </div>
 
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.channel_id')}</label>
-                                            <input
-                                                type="text"
-                                                value={tgChannel}
-                                                onChange={(e) => setTgChannel(e.target.value)}
-                                                className="w-full h-12 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-mono focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
-                                                placeholder="@your_channel_username"
-                                            />
-                                            <p className="text-[9px] text-slate-400 pl-1">Example: @pin2pay_updates (include the @)</p>
+                                        <div className="space-y-4">
+                                            <div className="flex items-center justify-between px-1">
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.setup.channel_id')}</label>
+                                                <button
+                                                    onClick={handleTestTG}
+                                                    disabled={isTesting || tgChannels.every(c => !c)}
+                                                    className="text-[9px] font-black text-sky-600 dark:text-sky-400 uppercase tracking-widest hover:underline flex items-center gap-1.5 disabled:opacity-50"
+                                                >
+                                                    {isTesting ? <Loader2 size={10} className="animate-spin" /> : <Zap size={10} />}
+                                                    Verify All Status
+                                                </button>
+                                            </div>
+
+                                            <div className="space-y-3">
+                                                {tgChannels.map((ch, idx) => (
+                                                    <div key={idx} className="relative group">
+                                                        <input
+                                                            type="text"
+                                                            value={ch}
+                                                            onChange={(e) => {
+                                                                const newChannels = [...tgChannels];
+                                                                newChannels[idx] = e.target.value;
+                                                                setTgChannels(newChannels);
+                                                            }}
+                                                            className="w-full h-12 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 pr-12 text-xs font-mono focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+                                                            placeholder="@your_channel_username"
+                                                        />
+
+                                                        {tgTestResults[ch.trim()] && (
+                                                            <div className={`absolute left-3 -top-2 px-1.5 py-0.5 rounded text-[7px] font-black uppercase tracking-widest flex items-center gap-1 ${tgTestResults[ch.trim()] === 'active' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}`}>
+                                                                {tgTestResults[ch.trim()] === 'active' ? <CheckCircle2 size={8} /> : <AlertCircle size={8} />}
+                                                                {tgTestResults[ch.trim()]}
+                                                            </div>
+                                                        )}
+
+                                                        <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                                                            {tgChannels.length > 1 && (
+                                                                <button
+                                                                    onClick={() => {
+                                                                        const newChannels = tgChannels.filter((_, i) => i !== idx);
+                                                                        setTgChannels(newChannels);
+                                                                    }}
+                                                                    className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 transition-all opacity-0 group-hover:opacity-100"
+                                                                >
+                                                                    <Trash2 size={14} />
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                ))}
+
+                                                {tgChannels.length < (status?.is_pro_plus ? 5 : 1) && (
+                                                    <button
+                                                        onClick={() => setTgChannels([...tgChannels, ''])}
+                                                        className="w-full h-10 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-xl flex items-center justify-center gap-2 text-slate-400 hover:border-indigo-500/50 hover:text-indigo-500 transition-all"
+                                                    >
+                                                        <Plus size={14} />
+                                                        <span className="text-[10px] font-black uppercase tracking-widest">Add Channel ({tgChannels.length}/{(status?.is_pro_plus ? 5 : 1)})</span>
+                                                    </button>
+                                                )}
+                                            </div>
+
+                                            <div className="p-3 bg-amber-500/5 rounded-xl border border-amber-500/10 flex items-start gap-2.5">
+                                                <Info size={14} className="text-amber-500 shrink-0 mt-0.5" />
+                                                <p className="text-[9px] text-amber-700 dark:text-amber-400 leading-relaxed font-medium">
+                                                    {status?.is_pro_plus
+                                                        ? "You are on PRO+ Plan. Max 5 channels active."
+                                                        : "Standard PRO is limited to 1 channel. Upgrade to PRO+ for multi-sync (up to 5)."}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 )}

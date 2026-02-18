@@ -135,12 +135,13 @@ class SupportAgentService:
         "💎 PRO Membership & Benefits": [
             "Checklist: Pay PRO fee -> Instant Activation -> Enjoy 5x XP boost.",
             "Benefits: Reduced transaction fees, Priority support, and exclusive card designs.",
-            "Note: PRO is a lifetime status with no recurring monthly fees."
+            "Note: PRO status is granted for 30 days or Lifetime (for early adopters). Check your profile for expiry."
         ],
         "🤝 Partner Network & Earnings": [
             "Checklist: Share Referral Link -> Friends Join -> Earn Commissions up to 9 levels.",
             "Payouts: Commissions are credited instantly to your partner balance.",
-            "Multiplier: PRO members earn significantly more on multi-tier commissions."
+            "Multiplier: PRO members earn significantly more on multi-tier commissions.",
+            "Status: PRO+ members earn from 20 levels deep. Truly unlimited potential."
         ],
         "🔒 Account Security & Safety": [
             "Instruction: Enable 2FA in settings immediately after account creation.",
