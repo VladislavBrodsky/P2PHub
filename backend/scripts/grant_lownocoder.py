@@ -4,6 +4,21 @@ import sys
 from datetime import datetime, UTC
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
+from dotenv import load_dotenv
+
+# Force load .env from P2PHub root or backend
+import os
+root_env = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.env"))
+backend_env = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.env"))
+
+if os.path.exists(root_env):
+    print(f"Loading env from {root_env}")
+    load_dotenv(root_env, override=True)
+elif os.path.exists(backend_env):
+    print(f"Loading env from {backend_env}")
+    load_dotenv(backend_env, override=True)
+else:
+    print(f"❌ No .env found at {root_env} or {backend_env}")
 
 # Add the backend directory to sys.path so we can import app
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -75,7 +90,13 @@ async def grant_pro():
         # Audit new commissions
         stmt_audit_after = text("SELECT COUNT(*) FROM earning WHERE type = 'COMMISSION'")
         audit_res_after = (await session.exec(stmt_audit_after)).one()
-        new_commissions = audit_res_after - audit_res_before
+        # .one() returns a scalar if select is just one column, or a tuple/row if multiple?
+        # Text query usually returns tuples.
+        # Let's cast to int
+        count_before = audit_res_before if isinstance(audit_res_before, int) else audit_res_before[0]
+        count_after = audit_res_after if isinstance(audit_res_after, int) else audit_res_after[0]
+        
+        new_commissions = count_after - count_before
         print(f"✅ Commissions Generated: {new_commissions} (should match upline depth, max 20)")
         
         # List the recent commissions for this user's purchase

@@ -314,8 +314,18 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             # Recipient is either the Partner (if qualified) or Management (@uslincoln)
             recipient = referrer if qualified else company_account
             if not recipient: continue 
-                
-            balance_before = float(recipient.balance)
+            
+            # #comment: CRITICAL FIX for MissingGreenlet / Stale Objects
+            # Accessing `recipient.balance` repeatedly in a loop where objects might be
+            # updated/flushed can trigger lazy loads on expired attributes.
+            # We ensure robustness by refreshing if necessary.
+            try:
+                balance_before = float(recipient.balance)
+            except Exception:
+                # If object is expired or detached, re-fetch it fresh
+                recipient = await session.get(Partner, recipient.id)
+                balance_before = float(recipient.balance)
+            
             # #comment: Atomic Increment for high-concurrency safety (USDT)
             # This prevents race conditions where multiple commissions hit the same user (e.g. Admin) 
             # at once, ensuring no funds are lost.
