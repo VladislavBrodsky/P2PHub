@@ -113,10 +113,10 @@ export default function FAQPage() {
     });
 
     return (
-        <div className="flex flex-col min-h-screen bg-(--background-primary) pb-32 animate-in fade-in duration-500 overflow-x-hidden">
+        <div className="flex flex-col min-h-screen pb-32 animate-in fade-in duration-500 overflow-x-hidden">
             {/* Premium Header */}
-            <div className="relative pt-12 pb-20 px-6">
-                <div className="absolute top-0 left-0 w-full h-[500px] bg-linear-to-b from-indigo-600/15 via-indigo-600/5 to-transparent -z-10" />
+            <div className="relative pt-4 pb-16 px-6">
+                <div className="absolute top-0 left-0 w-full h-[600px] bg-linear-to-b from-indigo-600/10 via-indigo-600/5 to-transparent -z-10" />
                 <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/10 blur-[120px] rounded-full -z-10" />
                 <div className="absolute top-1/2 -left-24 w-64 h-64 bg-fuchsia-500/5 blur-[100px] rounded-full -z-10" />
 
@@ -127,7 +127,7 @@ export default function FAQPage() {
                     >
                         <ArrowLeft size={18} />
                     </button>
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500 bg-indigo-500/10 px-3 py-1.5 rounded-full border border-indigo-500/20 backdrop-blur-sm">
                         {t('faq.knowledge_base')}
                     </span>
                 </div>
