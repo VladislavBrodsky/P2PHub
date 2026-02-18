@@ -436,7 +436,7 @@ const EarningsList = () => {
     };
 
     return (
-        <div className="space-y-1">
+        <div className="space-y-1 animate-in fade-in duration-500">
             {earnings.map((earning, idx) => {
                 const styles = getTypeStyles(earning.type);
                 return (
