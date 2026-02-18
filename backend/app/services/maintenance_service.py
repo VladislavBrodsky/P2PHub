@@ -12,7 +12,7 @@ from app.core.config import (
     settings,  # FIX H-1: was missing, caused NameError in reset_monthly_pro_tokens
 )
 from app.models.partner import Earning, Partner, XPTransaction, engine
-from app.worker import broker
+from app.core.broker import broker
 
 logger = logging.getLogger(__name__)
 

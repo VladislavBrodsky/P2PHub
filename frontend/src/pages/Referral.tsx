@@ -79,13 +79,8 @@ export default function ReferralPage() {
     useEffect(() => {
         // Sync with server if user data is available
         if (user?.completed_tasks) {
-            try {
-                const serverCompleted = JSON.parse(user.completed_tasks);
-                setCompletedTaskIds(serverCompleted);
-                localStorage.setItem('p2p_completed_tasks', user.completed_tasks);
-            } catch (e) {
-                console.error("Failed to parse server completed tasks", e);
-            }
+            setCompletedTaskIds(user.completed_tasks);
+            localStorage.setItem('p2p_completed_tasks', JSON.stringify(user.completed_tasks));
         } else {
             const stored = localStorage.getItem('p2p_completed_tasks');
             if (stored) setCompletedTaskIds(JSON.parse(stored));

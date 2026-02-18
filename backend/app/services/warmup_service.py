@@ -9,7 +9,7 @@ from app.services.redis_service import redis_service
 
 logger = logging.getLogger(__name__)
 
-from app.worker import broker
+from app.core.broker import broker
 
 
 @broker.task(task_name="warmup_redis_task")

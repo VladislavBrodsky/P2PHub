@@ -6,16 +6,8 @@ from taskiq_redis import ListQueueBroker, RedisAsyncResultBackend
 
 from app.core.config import settings
 
-# 1. Init Broker (Redis)
-broker = ListQueueBroker(
-    url=settings.REDIS_URL,
-)
+from app.core.broker import broker
 
-# 2. Init Result Backend (for checking task status if needed)
-result_backend = RedisAsyncResultBackend(
-    redis_url=settings.REDIS_URL,
-)
-broker.with_result_backend(result_backend)
 
 # 3. Validation Middleware
 # Note: TaskIQ 0.12+ handles Pydantic validation natively for type-hinted tasks.

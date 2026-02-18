@@ -16,7 +16,7 @@ from app.services.notification_service import notification_service
 from app.services.redis_service import redis_service
 from app.utils.ranking import get_level
 from app.utils.text import escape_markdown_v1
-from app.worker import broker
+from app.core.broker import broker
 
 logger = logging.getLogger(__name__)
 

@@ -18,7 +18,7 @@ interface User {
     referral_code: string;
     referral_count: number;
     referrals: any[]; // Extended for Earn Hub
-    completed_tasks: string;
+    completed_tasks: string[];
     completed_stages: (string | number)[]; // Added for Academy
     is_pro: boolean;
     is_admin: boolean;
@@ -168,7 +168,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         referral_code: 'UNVERIFIED',
                         referral_count: 0,
                         referrals: [],
-                        completed_tasks: "[]",
+                        completed_tasks: [],
                         completed_stages: [],
                         is_pro: false,
                         is_admin: false,
@@ -208,7 +208,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         referral_code: 'DEV-TEST',
                         referral_count: 10,
                         referrals: [],
-                        completed_tasks: "[]",
+                        completed_tasks: [],
                         completed_stages: ["1", "2", "3"], // Mock stages
                         is_pro: true,
                         is_admin: true,

@@ -13,7 +13,7 @@ from app.core.config import settings
 from app.models.partner import Partner
 from app.services.leaderboard_service import leaderboard_service
 from app.services.redis_service import redis_service
-from app.worker import broker
+from app.core.broker import broker
 from bot import bot
 
 logger = logging.getLogger(__name__)

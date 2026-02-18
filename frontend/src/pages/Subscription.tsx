@@ -42,12 +42,6 @@ export default function SubscriptionPage() {
         fetchStats();
     }, []);
 
-    const liquidAnimation = {
-        animate: {
-            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-            transition: { duration: 15, repeat: Infinity, ease: "linear" }
-        }
-    };
 
     useEffect(() => {
         if (!sessionData?.expires_at) {
@@ -167,55 +161,84 @@ export default function SubscriptionPage() {
         const isLifetime = !user.pro_expires_at || user.subscription_plan === 'PRO_LIFETIME';
 
         return (
-            <div className="flex flex-col items-center justify-center min-h-[80vh] px-6 text-center overflow-hidden">
+            <div className="flex flex-col items-center justify-center min-h-[85vh] px-8 text-center overflow-hidden relative">
+                {/* Background Vibing Effects */}
+                <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] blur-[150px] opacity-20 -z-10 animate-pulse ${isPlus ? 'bg-indigo-600' : 'bg-amber-500'}`} />
+                <div className="absolute top-0 inset-x-0 h-64 bg-linear-to-b from-indigo-500/5 to-transparent -z-10" />
+
                 <motion.div
                     initial={{ scale: 0, rotate: -180 }}
                     animate={{ scale: 1, rotate: 0 }}
-                    className="relative mb-8"
+                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                    className="relative mb-12"
                 >
-                    <div className={`absolute inset-0 blur-3xl opacity-30 animate-pulse ${isPlus ? 'bg-indigo-500' : 'bg-amber-400'}`} />
-                    <div className={`w-24 h-24 rounded-full flex items-center justify-center shadow-xl relative z-10 bg-linear-to-br ${isPlus ? 'from-indigo-400 via-blue-600 to-indigo-700' : 'from-amber-300 via-orange-500 to-amber-600'}`}>
-                        <Crown size={48} className="text-white fill-white/20" />
+                    <div className={`absolute inset-0 blur-3xl opacity-40 animate-pulse ${isPlus ? 'bg-indigo-500 shadow-[0_0_100px_rgba(99,102,241,0.5)]' : 'bg-amber-400 shadow-[0_0_100px_rgba(245,158,11,0.5)]'}`} />
+                    <div className={`w-28 h-28 rounded-[2.5rem] flex items-center justify-center shadow-2xl relative z-10 border border-white/30 backdrop-blur-sm bg-linear-to-br ${isPlus ? 'from-indigo-400 via-blue-600 to-indigo-800' : 'from-amber-300 via-orange-500 to-amber-700'}`}>
+                        <Crown size={56} className="text-white fill-white/20 drop-shadow-lg" />
                     </div>
+                    {/* Floating Orbs */}
+                    <motion.div animate={{ y: [0, -15, 0] }} transition={{ duration: 4, repeat: Infinity }} className={`absolute -top-4 -right-4 w-8 h-8 rounded-full blur-xl ${isPlus ? 'bg-indigo-400' : 'bg-amber-400'} opacity-60`} />
+                    <motion.div animate={{ y: [0, 15, 0] }} transition={{ duration: 5, repeat: Infinity, delay: 1 }} className={`absolute -bottom-4 -left-4 w-10 h-10 rounded-full blur-xl ${isPlus ? 'bg-blue-400' : 'bg-orange-400'} opacity-60`} />
                 </motion.div>
 
-                <h1 className="text-3xl font-black mb-4 tracking-tighter text-slate-900 dark:text-white uppercase leading-none">
-                    {isPlus ? t('subscription.pro_active.title_plus') : t('subscription.pro_active.title')}
+                <h1 className="text-4xl font-black mb-4 tracking-tighter text-slate-900 dark:text-white uppercase leading-tight italic">
+                    <span className={isPlus ? 'vibing-crystal-text text-5xl' : 'text-amber-500 text-5xl'}>
+                        {isPlus ? t('subscription.pro_active.title_plus') : t('subscription.pro_active.title')}
+                    </span>
                 </h1>
 
-                <p className="text-slate-500 dark:text-slate-400 font-medium text-xs leading-relaxed max-w-[280px] mb-10">
+                <p className="text-slate-500 dark:text-slate-400 font-bold text-[10px] leading-relaxed max-w-[280px] mb-12 uppercase tracking-[0.2em] opacity-70">
                     {isPlus ? t('subscription.pro_active.desc_plus') : t('subscription.pro_active.desc')}
                 </p>
 
-                <div className="w-full space-y-3 max-w-xs">
-                    <div className="p-4 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <Sparkles size={18} className={isPlus ? 'text-indigo-500' : 'text-amber-500'} />
+                <div className="w-full space-y-4 max-w-[320px] relative">
+                    <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="p-5 bg-white/5 border border-white/10 rounded-3xl flex items-center justify-between backdrop-blur-2xl shadow-xl group hover:border-white/20 transition-all"
+                    >
+                        <div className="flex items-center gap-4">
+                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${isPlus ? 'bg-indigo-500/10' : 'bg-amber-500/10'}`}>
+                                <Sparkles size={22} className={isPlus ? 'text-indigo-400' : 'text-amber-400'} />
+                            </div>
                             <div className="text-left">
-                                <p className="text-[10px] font-bold opacity-50 uppercase">{isPlus ? t('subscription.pro_active.plan_pro_plus') : (isLifetime ? t('subscription.pro_active.plan_pro_lifetime') : t('subscription.pro_active.plan_pro_monthly'))}</p>
-                                <p className="text-sm font-black text-slate-900 dark:text-white">
-                                    {isLifetime ? t('subscription.pro_active.lifetime') : new Date(user.pro_expires_at!).toLocaleDateString()}
+                                <p className="text-[9px] font-black opacity-40 uppercase tracking-widest mb-1">{isPlus ? t('subscription.pro_active.plan_pro_plus') : (isLifetime ? t('subscription.pro_active.plan_pro_lifetime') : t('subscription.pro_active.plan_pro_monthly'))}</p>
+                                <p className="text-base font-black text-slate-900 dark:text-white tracking-tight">
+                                    {isLifetime ? t('subscription.pro_active.lifetime') : (user && new Date(user.pro_expires_at!).toLocaleDateString())}
                                 </p>
                             </div>
                         </div>
-                        <CheckCircle2 size={18} className="text-emerald-500" />
-                    </div>
+                        <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                            <CheckCircle2 size={18} className="text-emerald-500" />
+                        </div>
+                    </motion.div>
 
-                    {!isLifetime && (
-                        <button
-                            onClick={() => { selection(); setShowPaymentOptionsForPro(true); }}
-                            className="w-full h-14 rounded-xl font-black text-indigo-600 dark:text-indigo-400 border-2 border-indigo-500/20 text-[10px] uppercase tracking-widest active:scale-95 transition-all"
+                    <div className="grid grid-cols-1 gap-3 pt-4">
+                        {!isLifetime && (
+                            <motion.button
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.3 }}
+                                onClick={() => { selection(); setShowPaymentOptionsForPro(true); }}
+                                className="w-full h-15 rounded-2xl font-black text-indigo-400 border-2 border-indigo-500/10 bg-indigo-500/5 hover:bg-indigo-500/10 text-[11px] uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-2"
+                            >
+                                <Zap size={16} />
+                                {t('subscription.upgrade.extend_membership')}
+                            </motion.button>
+                        )}
+
+                        <motion.button
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.4 }}
+                            onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' })); }}
+                            className={`w-full h-16 rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.25em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 ${isPlus ? 'bg-linear-to-r from-indigo-600 to-blue-600 shadow-indigo-600/30' : 'bg-linear-to-r from-amber-600 to-orange-600 shadow-amber-600/30'}`}
                         >
-                            {t('subscription.upgrade.extend_membership')}
-                        </button>
-                    )}
-
-                    <button
-                        onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' })); }}
-                        className={`w-full h-14 rounded-xl font-black text-white text-[10px] uppercase tracking-widest shadow-lg active:scale-95 transition-all ${isPlus ? 'bg-indigo-600 shadow-indigo-500/20' : 'bg-amber-600 shadow-amber-500/20'}`}
-                    >
-                        {t('subscription.pro_active.command_center')}
-                    </button>
+                            <Trophy size={18} />
+                            {t('subscription.pro_active.command_center')}
+                        </motion.button>
+                    </div>
                 </div>
             </div>
         );
@@ -307,7 +330,7 @@ export default function SubscriptionPage() {
                                 </div>
                                 <span className="text-xs font-black text-white/90">{proStats.sold}/{proStats.total}</span>
                             </div>
-                            <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden p-[1px]">
+                            <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden p-px">
                                 <motion.div
                                     className="h-full bg-linear-to-r from-amber-400 via-orange-500 to-amber-600 rounded-full"
                                     initial={{ width: 0 }}
@@ -348,7 +371,7 @@ export default function SubscriptionPage() {
                     <span className="text-[9px] font-black uppercase tracking-[0.2em] mb-1">{t('subscription.upgrade.pro_plus_title')}</span>
                     <div className="flex items-baseline gap-1.5">
                         <span className="text-2xl font-black">$69</span>
-                        <span className="text-[9px] font-bold opacity-40 italic uppercase">LIFE</span>
+                        <span className="text-[9px] font-bold opacity-40 italic uppercase">{t('subscription.upgrade.lifetime_pro')}</span>
                     </div>
                 </button>
             </div>
@@ -364,7 +387,7 @@ export default function SubscriptionPage() {
                     )}
                     <button
                         onClick={() => { selection(); setExpandedFeature(expandedFeature === 'TOKENS' ? null : 'TOKENS'); }}
-                        className={`w-full text-left transition-all duration-300 overflow-hidden rounded-[2rem] border group ${expandedFeature === 'TOKENS' ? 'border-white/20 bg-linear-to-br from-indigo-600/90 via-purple-600/90 to-slate-900/90 shadow-2xl scale-[1.02]' : (selectedPlan === 'PRO_PLUS' ? 'border-indigo-500/20 bg-white dark:bg-white/[0.03] shadow-lg' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/[0.02] shadow-sm')}`}
+                        className={`w-full text-left transition-all duration-300 overflow-hidden rounded-[2rem] border group ${expandedFeature === 'TOKENS' ? 'border-white/20 bg-linear-to-br from-indigo-600/90 via-purple-600/90 to-slate-900/90 shadow-2xl scale-[1.02]' : (selectedPlan === 'PRO_PLUS' ? 'border-indigo-500/20 bg-white dark:bg-white/3 shadow-lg' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/2 shadow-sm')}`}
                     >
                         <div className="p-5 flex items-center justify-between">
                             <div className="flex items-center gap-4">
@@ -441,7 +464,7 @@ export default function SubscriptionPage() {
                     )}
                     <button
                         onClick={() => { selection(); setExpandedFeature(expandedFeature === 'LEVELS' ? null : 'LEVELS'); }}
-                        className={`w-full text-left transition-all duration-300 overflow-hidden rounded-[2rem] border group ${expandedFeature === 'LEVELS' ? 'border-white/20 bg-linear-to-br from-emerald-600/90 via-teal-700/90 to-slate-900/90 shadow-2xl scale-[1.02]' : (selectedPlan === 'PRO_PLUS' ? 'border-emerald-500/20 bg-white dark:bg-white/[0.03] shadow-lg' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/[0.02] shadow-sm')}`}
+                        className={`w-full text-left transition-all duration-300 overflow-hidden rounded-[2rem] border group ${expandedFeature === 'LEVELS' ? 'border-white/20 bg-linear-to-br from-emerald-600/90 via-teal-700/90 to-slate-900/90 shadow-2xl scale-[1.02]' : (selectedPlan === 'PRO_PLUS' ? 'border-emerald-500/20 bg-white dark:bg-white/3 shadow-lg' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/2 shadow-sm')}`}
                     >
                         <div className="p-5 flex items-center justify-between">
                             <div className="flex items-center gap-4">
@@ -723,28 +746,34 @@ export default function SubscriptionPage() {
                 )}
             </motion.div>
 
-            {/* Modal for Status */}
             <AnimatePresence>
                 {status !== 'idle' && (
                     <motion.div
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-slate-950/95 backdrop-blur-xl"
+                        className="fixed inset-0 z-200 flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-2xl"
                     >
                         <motion.div
                             initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }}
-                            className="bg-white dark:bg-slate-900 rounded-[3rem] p-10 w-full max-w-sm text-center shadow-2xl"
+                            className="vibing-premium-panel p-10 w-full max-w-sm text-center shadow-2xl border-white/20 relative"
                         >
-                            {status === 'pending' && <Loader2 size={64} className="text-amber-500 animate-spin mx-auto mb-6" />}
-                            {status === 'success' && <Trophy size={64} className="text-emerald-500 mx-auto mb-6" />}
-                            {status === 'manual_review' && <CheckCircle2 size={64} className="text-blue-500 mx-auto mb-6" />}
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-12 w-32 h-32 bg-indigo-500/20 blur-3xl -z-10" />
 
-                            <h2 className="text-2xl font-black mb-2 text-slate-900 dark:text-white uppercase tracking-tighter">
+                            {status === 'pending' && <Loader2 size={64} className="text-amber-500 animate-spin mx-auto mb-8 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]" />}
+                            {status === 'success' && <Trophy size={64} className="text-emerald-500 mx-auto mb-8 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]" />}
+                            {status === 'manual_review' && <CheckCircle2 size={64} className="text-blue-500 mx-auto mb-8 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]" />}
+
+                            <h2 className="text-2xl font-black mb-3 text-white uppercase tracking-tighter italic">
                                 {status === 'pending' ? t('subscription.status.verifying') : status === 'success' ? t('subscription.status.welcome_pro') : t('subscription.status.submitted')}
                             </h2>
-                            <p className="text-sm text-slate-500 mb-8 leading-relaxed font-medium">
+                            <p className="text-sm text-white/50 mb-10 leading-relaxed font-bold uppercase tracking-widest text-[10px]">
                                 {status === 'pending' ? t('subscription.status.verifying_p') : status === 'success' ? t('subscription.status.welcome_pro_p') : t('subscription.status.submitted_p')}
                             </p>
-                            <button onClick={() => setStatus('idle')} className="w-full h-14 bg-indigo-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-indigo-600/20">{t('subscription.status.got_it')}</button>
+                            <button
+                                onClick={() => setStatus('idle')}
+                                className="w-full h-14 bg-white text-indigo-900 rounded-2xl font-black uppercase text-[11px] tracking-[0.2em] shadow-xl hover:bg-slate-50 transition-all active:scale-95"
+                            >
+                                {t('subscription.status.got_it')}
+                            </button>
                         </motion.div>
                     </motion.div>
                 )}

@@ -35,10 +35,10 @@ try:
             try:
                 if p.exists() and p.is_file():
                     try:
-                        logger.info(f"Loading env from: {p}")
                         load_dotenv(dotenv_path=str(p), override=True)
-                        loaded_env = True
-                        break
+                        if os.environ.get("OPENAI_API_KEY"):
+                            loaded_env = True
+                            break
                     except Exception:
                         pass
             except PermissionError:
@@ -77,6 +77,13 @@ class Settings(BaseSettings):
     REDIS_URL: str = "redis://localhost:6379/0"
     PORT: int = 8000
     FRONTEND_URL: str = "https://p2phub-frontend.up.railway.app"
+    ALLOWED_ORIGINS: list[str] = [
+        "https://p2phub-frontend.up.railway.app",
+        "https://p2phub-frontend-production.up.railway.app",
+        "https://p2phub-production.up.railway.app",
+        "http://localhost:5173",
+        "http://localhost:3000",
+    ]
 
     # Webhook settings
     WEBHOOK_URL: str | None = None # e.g. https://p2phub-api.up.railway.app
@@ -116,12 +123,13 @@ class Settings(BaseSettings):
     # Admin settings
     ADMIN_USER_IDS: list[str] = ["716720099", "537873096"] 
 
-    # --- SANDBOX HARDCODED FALLBACK ---
-    # Since sandbox permissions are blocking .env reads
-    if not BOT_TOKEN:
-        BOT_TOKEN = "8245884329:AAEDkWwG8Si6HJtgkC7MTd5U_IQrAHmyTYk"
-    if not DATABASE_URL:
-        DATABASE_URL = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
+    # --- SANDBOX HARDCODED FALLBACKS ---
+    # Since sandbox permissions are blocking .env reads, we provide high-reliability defaults.
+    BOT_TOKEN: str = os.getenv("BOT_TOKEN", "")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "")
+    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    GOOGLE_API_KEY: str = os.getenv("GOOGLE_API_KEY", "")
+    GOOGLE_SERVICE_ACCOUNT_JSON: str = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "{}")
     # ---------------------------------- 
     
     # --- System Constants (Business Logic) ---

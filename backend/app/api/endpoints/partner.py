@@ -968,16 +968,6 @@ async def claim_task_reward(
                  detail_msg = f"Academy milestone not reached: {current_value}/{requirement} stages completed."
              raise HTTPException(status_code=400, detail=detail_msg)
              
-    # 2.5 VALIDATION: Legacy Sync Check
-    try:
-        legacy_completed = json.loads(partner.completed_tasks or "[]")
-        if task_id in legacy_completed:
-             raise HTTPException(status_code=400, detail="Task already completed")
-    except HTTPException:
-        raise
-    except:
-        pass
-
     # 3. Check if task already completed in the new table
     if partner_task_record and partner_task_record.status == "COMPLETED":
          raise HTTPException(status_code=400, detail="Task already completed")

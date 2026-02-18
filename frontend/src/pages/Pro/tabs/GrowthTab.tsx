@@ -69,7 +69,7 @@ export const GrowthTab = ({
                                 onClick={() => { selection(); setShowManual('academy'); }}
                                 className="flex items-center gap-1 text-[8px] font-black text-slate-400 hover:text-indigo-500 transition-colors uppercase tracking-widest"
                             >
-                                <Info size={10} /> PROTOCOL INTEL
+                                <Info size={10} /> {t('pro_dashboard.academy.intel_label')}
                             </button>
                         </div>
                     </div>
@@ -121,7 +121,7 @@ export const GrowthTab = ({
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">LIVE SIGNAL</span>
+                    <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.academy.live_signal')}</span>
                 </div>
             </div>
 
@@ -134,7 +134,7 @@ export const GrowthTab = ({
                         </div>
                         <div>
                             <h4 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.academy.articles.title')}</h4>
-                            <p className="text-[8px] font-black text-indigo-500/60 uppercase tracking-widest mt-0.5">Intelligence Dossier</p>
+                            <p className="text-[8px] font-black text-indigo-500/60 uppercase tracking-widest mt-0.5">{t('pro_dashboard.academy.dossier_label')}</p>
                         </div>
                     </div>
                 </div>
@@ -207,8 +207,8 @@ export const GrowthTab = ({
                         <ShieldCheck size={20} />
                     </div>
                     <div>
-                        <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">Growth Protocol</h4>
-                        <p className="text-[9px] font-black text-indigo-500/60 uppercase tracking-[0.2em] mt-1">Unlock Node Capabilities</p>
+                        <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('pro_dashboard.academy.growth_protocol')}</h4>
+                        <p className="text-[9px] font-black text-indigo-500/60 uppercase tracking-[0.2em] mt-1">{t('pro_dashboard.academy.node_capabilities')}</p>
                     </div>
                 </div>
 
@@ -532,7 +532,7 @@ export const GrowthTab = ({
 
                                 <div className="space-y-2 mb-8">
                                     <span className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.4em] animate-pulse">
-                                        Biometric Authorization Required
+                                        {t('pro_dashboard.academy.bio_auth')}
                                     </span>
                                     <h4 className="text-2xl font-black uppercase text-slate-900 dark:text-white tracking-widest leading-none">
                                         {t('pro_dashboard.academy.psych_strategies.title')}
@@ -548,7 +548,7 @@ export const GrowthTab = ({
                                     onClick={() => { selection(); setShowSetup(true); }}
                                     className="px-8 py-3.5 bg-indigo-500 hover:bg-indigo-400 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all shadow-[0_0_20px_rgba(99,102,241,0.4)] flex items-center gap-3 group/lock-btn"
                                 >
-                                    Initiate Social Sync <Terminal size={14} className="group-hover/lock-btn:rotate-12 transition-transform" />
+                                    {t('pro_dashboard.academy.social_sync')} <Terminal size={14} className="group-hover/lock-btn:rotate-12 transition-transform" />
                                 </motion.button>
                             </div>
                         )}

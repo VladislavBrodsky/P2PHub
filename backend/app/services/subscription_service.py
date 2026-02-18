@@ -8,7 +8,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.config import settings
 from app.models.partner import Partner
 from app.services.notification_service import notification_service
-from app.worker import broker
+from app.core.broker import broker
 
 logger = logging.getLogger(__name__)
 

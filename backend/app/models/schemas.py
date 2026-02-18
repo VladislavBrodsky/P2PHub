@@ -45,7 +45,7 @@ class PartnerResponse(PartnerBase):
     updated_at: datetime
     referrals: list[PartnerBase] | None = None
     active_tasks: list[ActiveTaskResponse] = []
-    completed_tasks: str = "[]"
+    completed_tasks: list[str] = []
     completed_stages: list[int | str] = []
     is_admin: bool = False
 
@@ -67,19 +67,10 @@ class PartnerResponse(PartnerBase):
                     result[field_name] = getattr(obj, field_name)
             
             # Prepare the list of completed IDs from relational records
-            record_completed_ids = [
+            all_completed = list(set([
                 tr.task_id for tr in obj.completed_task_records 
                 if tr.status == "COMPLETED" or not tr.status
-            ]
-            
-            # Prepare legacy IDs
-            try:
-                legacy_ids = json.loads(obj.completed_tasks or "[]")
-            except:
-                legacy_ids = []
-            
-            # Merge and unique
-            all_completed = list(set(legacy_ids + record_completed_ids))
+            ]))
             
             # Extract active tasks
             active_tasks = [
@@ -97,7 +88,7 @@ class PartnerResponse(PartnerBase):
             except:
                 stages = []
 
-            result['completed_tasks'] = json.dumps(all_completed)
+            result['completed_tasks'] = all_completed
             result['active_tasks'] = active_tasks
             result['completed_stages'] = stages
             
