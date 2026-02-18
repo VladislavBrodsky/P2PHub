@@ -9,7 +9,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
 from app.core.http_client import http_client
-from app.models.partner import Partner
+from app.models.partner import Partner, SystemSetting
 from app.models.transaction import PartnerTransaction
 from app.services.redis_service import redis_service
 from app.services.ton_verification_service import ton_verification_service
@@ -230,11 +230,68 @@ class PaymentService:
             )
             # Determine Plan Details
             is_plus = amount >= (settings.PRO_PLUS_PRICE_USD - 0.1)
-            partner.subscription_plan = "PRO_PLUS_MONTHLY" if is_plus else "PRO_MONTHLY"
-            partner.pro_tokens = settings.PRO_PLUS_TOKENS_MONTHLY if is_plus else settings.PRO_TOKENS_MONTHLY
-            partner.pro_tokens_last_reset = now
             
+            # Tiered PRO Logic: First 300 get Lifetime, others get 30 days.
+            # PRO+ is unaffected by the 300 limit (usually remains lifetime or handled separately)
+            # as per user instruction: "this not applied for PRO+".
+            
+            lifetime_granted = False
+            if is_plus:
+                partner.subscription_plan = "PRO_PLUS_MONTHLY" # We keep the key but logically it's lifetime for now
+                partner.pro_expires_at = None # Lifetime
+                partner.pro_tokens = settings.PRO_PLUS_TOKENS_MONTHLY
+            else:
+                # Standard PRO Plan
+                # 1. Fetch current sold count
+                from sqlmodel import select
+                stmt_sold = select(SystemSetting).where(SystemSetting.key == "pro_slots_sold")
+                res_sold = await session.exec(stmt_sold)
+                setting_sold = res_sold.first()
+                
+                stmt_total = select(SystemSetting).where(SystemSetting.key == "pro_slots_total")
+                res_total = await session.exec(stmt_total)
+                setting_total = res_total.first()
+                
+                sold_count = int(setting_sold.value) if setting_sold else 147
+                total_slots = int(setting_total.value) if setting_total else 300
+                
+                if sold_count < total_slots:
+                    partner.subscription_plan = "PRO_LIFETIME"
+                    partner.pro_expires_at = None # Lifetime
+                    lifetime_granted = True
+                    
+                    # Increment counter
+                    if setting_sold:
+                        setting_sold.value = str(sold_count + 1)
+                        session.add(setting_sold)
+                else:
+                    partner.subscription_plan = "PRO_MONTHLY"
+                    # Handle Extension: If they already have an expiry, add 30 days
+                    if partner.pro_expires_at and partner.pro_expires_at > now:
+                        partner.pro_expires_at += timedelta(days=30)
+                    else:
+                        partner.pro_expires_at = now + timedelta(days=30)
+                    
+                partner.pro_tokens = settings.PRO_TOKENS_MONTHLY
+
+            partner.pro_tokens_last_reset = now
             partner.is_pro = True
+            
+            # Record promotion details in payment_details
+            promo_details = {
+                "currency": currency,
+                "network": network,
+                "tx_hash": tx_hash or "MANUAL_CONFIRMATION",
+                "amount": amount,
+                "verified_at": now.isoformat(),
+                "lifetime_granted": lifetime_granted,
+                "plan_type": partner.subscription_plan
+            }
+            if not is_plus:
+                promo_details["slots_sold_at_purchase"] = sold_count
+                
+            partner.payment_details = json.dumps(promo_details)
+
             session.add(partner)
 
             # 2. Update or Create Transaction
@@ -242,9 +299,9 @@ class PaymentService:
             if transaction_id:
                 transaction = await session.get(PartnerTransaction, transaction_id)
             elif tx_hash:
-                stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
-                res = await session.exec(stmt)
-                transaction = res.first()
+                stmt_tx = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
+                res_tx = await session.exec(stmt_tx)
+                transaction = res_tx.first()
 
             if not transaction:
                 transaction = PartnerTransaction(
@@ -264,22 +321,11 @@ class PaymentService:
                     transaction.tx_hash = tx_hash
                 session.add(transaction)
 
-            # Update Partner with verification details
+            # Update Partner with transaction link
             partner.last_transaction_id = transaction.id
-            partner.payment_details = json.dumps({
-                "currency": currency,
-                "network": network,
-                "tx_hash": transaction.tx_hash or "MANUAL_CONFIRMATION",
-                "amount": amount,
-                "verified_at": now.isoformat()
-            })
-
             session.add(partner)
 
             # 3. Distribute Commissions to Ancestors (BEFORE commit for transaction atomicity)
-            # #comment: CRITICAL - Commission distribution must happen in the same transaction as the upgrade.
-            # If we commit first, then commissions fail, the user gets upgraded but referrers don't get paid.
-            # By doing this before commit, we ensure both succeed or both rollback on error.
             from app.services.referral_service import distribute_pro_commissions
             await distribute_pro_commissions(session, partner.id, amount)
             
@@ -324,7 +370,8 @@ class PaymentService:
                     f"👤 *User:* {username_display} (`{partner.telegram_id}`)\n"
                     f"💰 *Amount:* ${amount} {currency}\n"
                     f"🔗 *Hash:* `{tx_hash or 'MANUAL'}`\n"
-                    f"📊 *Status:* {partner.subscription_plan}\n\n"
+                    f"📊 *Plan:* {partner.subscription_plan}\n"
+                    f"⌛ *Expires:* {partner.pro_expires_at.strftime('%Y-%m-%d') if partner.pro_expires_at else 'LIFETIME'}\n\n"
                     "Verified and commissions distributed."
                 )
                 await notification_service.enqueue_notification(

@@ -9,46 +9,34 @@ logger = logging.getLogger(__name__)
 start_time = time.time()
 
 try:
-    # Try common .env locations with error handling
-    possible_env_paths = [
-        Path(".env"),
-        Path(".env.backend"),
-        Path("../.env"),
-        Path("../.env.backend"),
-        Path("backend/.env"),
-        Path("backend/.env.backend"),
-        Path("/app/.env"),
-        Path("/app/backend/.env")
-    ]
-
-    loaded_env = False
+    # ROBUST ENV LOADING: Calculate project root (P2PHub/backend)
+    # This file is at backend/app/core/config.py, so parent.parent.parent is backend/
+    ROOT_DIR = Path(__file__).resolve().parent.parent.parent
     
-    # Try find_dotenv first (very robust)
-    from dotenv import find_dotenv
-    try:
-        found_env = find_dotenv()
-        if found_env:
-            load_dotenv(found_env, override=True)
-            logger.info(f"✅ Loaded environment via find_dotenv: {found_env}")
-            loaded_env = True
-    except Exception as e:
-        logger.warning(f"find_dotenv failed: {e}")
+    possible_env_paths = [
+        ROOT_DIR / ".env.backend",
+        ROOT_DIR / ".env",
+        ROOT_DIR / "env.backend",
+        ROOT_DIR / "env.local",
+        Path.cwd() / ".env.backend",
+        Path.cwd() / ".env",
+        Path.cwd() / "env.backend",
+        Path.cwd() / "env_backend.env", # Match our test file
+    ]
 
     for p in possible_env_paths:
         try:
-            # #comment: Changed override=True to False.
-            # Rationale: System environment variables (e.g. from Railway/Docker) should always take precedence 
-            # over local .env files. This ensures 'Single Source of Truth' and prevents accidental 
-            # production overrides by stale local files.
             if p.exists():
-                load_dotenv(dotenv_path=p, override=False)
-                logger.info(f"✅ Loaded environment from {p.absolute()}")
+                load_dotenv(dotenv_path=p, override=True)
                 loaded_env = True
-        except Exception as e:
-            # #comment: Log debug info if an env file path fails to load, avoiding silent failure while continuing to try other paths.
-            logger.debug(f"Failed to load env from {p}: {e}")
+                # Break if we found the primary backend env
+                if p.name in [".env.backend", "env.backend"]:
+                    break
+        except Exception:
+            # Silently skip if permission denied or other IO error
             continue
 except Exception as e:
+    # Fallback to logger if print fails
     logger.warning(f"Warning: Unexpected error during .env loading: {e}")
 
 settings_init_start = time.time()

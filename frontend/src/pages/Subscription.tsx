@@ -26,13 +26,19 @@ export default function SubscriptionPage() {
     const [timeLeft, setTimeLeft] = useState<number | null>(null);
     const [selectedPlan, setSelectedPlan] = useState<'PRO' | 'PRO_PLUS'>('PRO_PLUS');
     const [expandedFeature, setExpandedFeature] = useState<'TOKENS' | 'LEVELS' | null>(null);
-    const [fluxCount, setFluxCount] = useState(124);
+    const [proStats, setProStats] = useState<{ sold: number; total: number } | null>(null);
+    const [showPaymentOptionsForPro, setShowPaymentOptionsForPro] = useState(false);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setFluxCount(prev => prev + (Math.random() > 0.5 ? 1 : 0));
-        }, 5000);
-        return () => clearInterval(interval);
+        const fetchStats = async () => {
+            try {
+                const res = await apiClient.get('/api/pro/stats');
+                setProStats(res.data);
+            } catch (e) {
+                console.error("Failed to fetch pro stats", e);
+            }
+        };
+        fetchStats();
     }, []);
 
     const liquidAnimation = {
@@ -155,8 +161,10 @@ export default function SubscriptionPage() {
         paymentRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    if (user?.is_pro) {
-        const isPlus = (user.subscription_plan === 'PRO_PLUS_MONTHLY');
+    if (user?.is_pro && !showPaymentOptionsForPro) {
+        const isPlus = (user.subscription_plan?.includes('PLUS'));
+        const isLifetime = !user.pro_expires_at || user.subscription_plan === 'PRO_LIFETIME';
+
         return (
             <div className="flex flex-col items-center justify-center min-h-[80vh] px-6 text-center overflow-hidden">
                 <motion.div
@@ -183,12 +191,23 @@ export default function SubscriptionPage() {
                         <div className="flex items-center gap-3">
                             <Sparkles size={18} className={isPlus ? 'text-indigo-500' : 'text-amber-500'} />
                             <div className="text-left">
-                                <p className="text-[10px] font-bold opacity-50 uppercase">{isPlus ? t('subscription.pro_active.plan_pro_plus') : t('subscription.pro_active.plan_pro')}</p>
-                                <p className="text-sm font-black">{user.pro_expires_at ? new Date(user.pro_expires_at).toLocaleDateString() : t('subscription.pro_active.lifetime')}</p>
+                                <p className="text-[10px] font-bold opacity-50 uppercase">{isPlus ? t('subscription.pro_active.plan_pro_plus') : (isLifetime ? 'PRO LIFETIME' : 'PRO MONTHLY')}</p>
+                                <p className="text-sm font-black text-slate-900 dark:text-white">
+                                    {isLifetime ? t('subscription.pro_active.lifetime') : new Date(user.pro_expires_at!).toLocaleDateString()}
+                                </p>
                             </div>
                         </div>
                         <CheckCircle2 size={18} className="text-emerald-500" />
                     </div>
+
+                    {!isLifetime && (
+                        <button
+                            onClick={() => { selection(); setShowPaymentOptionsForPro(true); }}
+                            className="w-full h-14 rounded-xl font-black text-indigo-600 dark:text-indigo-400 border-2 border-indigo-500/20 text-[10px] uppercase tracking-widest active:scale-95 transition-all"
+                        >
+                            Extend Membership
+                        </button>
+                    )}
 
                     <button
                         onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' })); }}
@@ -243,14 +262,39 @@ export default function SubscriptionPage() {
                     {t('subscription.upgrade.desc')}
                 </p>
 
-                {/* Viral Flux Ticker */}
-                <div className="flex items-center justify-center gap-3 mb-2">
-                    <div className="h-px flex-1 bg-linear-to-r from-transparent to-slate-200 dark:to-white/10" />
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-indigo-500/5 rounded-lg border border-indigo-500/10">
-                        <div className="w-1 h-1 rounded-full bg-indigo-500 animate-ping" />
-                        <span className="text-[9px] font-black text-indigo-500 uppercase tracking-widest">{fluxCount} NODES ACTIVE</span>
+                {/* Viral Flux Ticker & Limit Tracker */}
+                <div className="flex flex-col items-center gap-3 mb-6">
+                    {proStats && (
+                        <div className="w-full max-w-[240px] px-4 py-3 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-[9px] font-black uppercase tracking-widest text-amber-500">LIFETIME PRO SLOTS</span>
+                                <span className="text-[10px] font-black text-white">{proStats.sold}/{proStats.total}</span>
+                            </div>
+                            <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                                <motion.div
+                                    className="h-full bg-linear-to-r from-amber-400 to-orange-600"
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${(proStats.sold / proStats.total) * 100}%` }}
+                                    transition={{ duration: 1, ease: "easeOut" }}
+                                />
+                            </div>
+                            <p className="text-[8px] font-bold text-slate-500 mt-2 uppercase tracking-tighter">
+                                {proStats.sold < proStats.total
+                                    ? `ONLY ${proStats.total - proStats.sold} LIMITED LIFETIME SLOTS REMAINING`
+                                    : "LIFETIME OFFER EXPIRED - NOW MONTHLY RENEWAL"
+                                }
+                            </p>
+                        </div>
+                    )}
+
+                    <div className="flex items-center justify-center gap-3 w-full">
+                        <div className="h-px flex-1 bg-linear-to-r from-transparent to-slate-200 dark:to-white/10" />
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 bg-indigo-500/5 rounded-lg border border-indigo-500/10">
+                            <div className="w-1 h-1 rounded-full bg-indigo-500 animate-ping" />
+                            <span className="text-[9px] font-black text-indigo-500 uppercase tracking-widest">{proStats ? proStats.sold : '...'} NODES ACTIVE</span>
+                        </div>
+                        <div className="h-px flex-1 bg-linear-to-l from-transparent to-slate-200 dark:to-white/10" />
                     </div>
-                    <div className="h-px flex-1 bg-linear-to-l from-transparent to-slate-200 dark:to-white/10" />
                 </div>
             </motion.div>
 
@@ -271,7 +315,9 @@ export default function SubscriptionPage() {
                     <span className="text-[9px] font-black uppercase tracking-widest mb-0.5">{t('subscription.upgrade.pro_title')}</span>
                     <div className="flex items-baseline gap-1">
                         <span className="text-2xl font-black">$39</span>
-                        <span className="text-[9px] font-bold opacity-30 italic">LIFE</span>
+                        <span className="text-[9px] font-bold opacity-30 italic">
+                            {(proStats && proStats.sold >= proStats.total) ? '30 DAYS' : 'LIFE'}
+                        </span>
                     </div>
                 </button>
                 <button
@@ -511,7 +557,9 @@ export default function SubscriptionPage() {
                             <h3 className="text-white/60 font-black text-[10px] uppercase tracking-[0.3em] mb-3">{t('subscription.upgrade.complete_payment')}</h3>
                             <div className="flex items-baseline justify-center gap-2">
                                 <span className="text-white font-black text-5xl tracking-tighter">${planPrice}</span>
-                                <span className="text-white/30 text-[11px] font-black uppercase tracking-widest">/ Lifetime</span>
+                                <span className="text-white/30 text-[11px] font-black uppercase tracking-widest">
+                                    / {selectedPlan === 'PRO' ? ((proStats && proStats.sold >= proStats.total) ? 'Monthly' : 'Lifetime') : 'Lifetime'}
+                                </span>
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-3">
@@ -536,7 +584,7 @@ export default function SubscriptionPage() {
                 ) : (
                     <div className="space-y-4 relative z-10">
                         <div className="flex justify-between items-center text-white">
-                            <button onClick={() => setPaymentMethod(null)} className="text-[10px] font-black uppercase tracking-widest opacity-60 flex items-center gap-1">
+                            <button onClick={() => { setPaymentMethod(null); setShowPaymentOptionsForPro(false); }} className="text-[10px] font-black uppercase tracking-widest opacity-60 flex items-center gap-1">
                                 <ChevronRight size={14} className="rotate-180" /> {t('subscription.upgrade.change_method')}
                             </button>
                             {formattedTime && <span className="text-[10px] font-black font-mono bg-white/10 px-2 py-1 rounded-lg">{formattedTime}</span>}

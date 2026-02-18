@@ -6,7 +6,7 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.security import get_current_user, get_tg_user
-from app.models.partner import Partner, get_session
+from app.models.partner import Partner, SystemSetting, get_session
 from app.models.schemas import (
     PROSetupRequest,
     SocialPostRequest,
@@ -79,6 +79,23 @@ async def get_pro_status(
         },
         "capabilities": viral_studio.get_capabilities(),
         "bot_username": (await bot.get_me()).username
+    }
+
+@router.get("/stats")
+async def get_pro_stats(
+    session: AsyncSession = Depends(get_session)
+):
+    stmt_sold = select(SystemSetting).where(SystemSetting.key == "pro_slots_sold")
+    res_sold = await session.exec(stmt_sold)
+    setting_sold = res_sold.first()
+    
+    stmt_total = select(SystemSetting).where(SystemSetting.key == "pro_slots_total")
+    res_total = await session.exec(stmt_total)
+    setting_total = res_total.first()
+    
+    return {
+        "sold": int(setting_sold.value) if setting_sold else 147,
+        "total": int(setting_total.value) if setting_total else 300
     }
 
 # Academy Config: Cost (negative) or Reward (positive)

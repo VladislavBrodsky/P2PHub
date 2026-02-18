@@ -4,6 +4,10 @@ __pycache__/
 *$py.class
 venv/
 .env*
+env.backend
+env.local
+env.production
+env_backend.env
 backend/env_prod.txt
 backend/check_prod.sh
 
