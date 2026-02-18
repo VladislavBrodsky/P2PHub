@@ -143,24 +143,44 @@ export const GrowthTab = ({
                     {(() => {
                         const articles = t('pro_dashboard.academy.articles.items', { returnObjects: true });
                         const articlesList = Array.isArray(articles) ? articles : [];
-                        return articlesList.map((article: any, i: number) => (
-                            <motion.div
-                                key={article.id || i}
-                                whileHover={{ y: -3 }}
-                                onClick={() => { selection(); setSelectedArticle(article); impact('light'); }}
-                                className="min-w-[260px] sm:min-w-[320px] snap-center pro-card-extreme p-5 sm:p-6 rounded-[1.25rem] border border-slate-200 dark:border-white/10 relative overflow-hidden group cursor-pointer active:scale-95 transition-all bg-white dark:bg-slate-900/50 shadow-sm"
-                            >
-                                <div className="flex items-center gap-2 mb-3">
-                                    <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-[7px] font-black text-indigo-500 uppercase tracking-widest border border-indigo-500/10">{article.category}</span>
-                                    <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">{article.readTime} MIN READ</span>
-                                </div>
-                                <h5 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
-                                <p className="text-[11px] font-normal text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 mb-4 opacity-80 italic">"{article.desc}"</p>
-                                <div className="flex items-center gap-2 text-[8px] font-black text-indigo-500 uppercase tracking-widest group-hover:gap-3 transition-all">
-                                    {t('pro_dashboard.academy.articles.btn_read')} <ArrowRight size={10} />
-                                </div>
-                            </motion.div>
-                        ));
+                        return articlesList.map((article: any, i: number) => {
+                            // Simulated reading progress for visual flair
+                            const mockProgress = [35, 72, 100, 15, 60][i % 5];
+                            return (
+                                <motion.div
+                                    key={article.id || i}
+                                    whileHover={{ y: -3 }}
+                                    onClick={() => { selection(); setSelectedArticle(article); impact('light'); }}
+                                    className="min-w-[260px] sm:min-w-[320px] snap-center pro-card-extreme p-5 sm:p-6 rounded-[1.25rem] border border-slate-200 dark:border-white/10 relative overflow-hidden group cursor-pointer active:scale-95 transition-all bg-white dark:bg-slate-900/50 shadow-sm"
+                                >
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="flex items-center gap-2">
+                                            <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-[7px] font-black text-indigo-500 uppercase tracking-widest border border-indigo-500/10">{article.category}</span>
+                                            <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">{article.readTime} MIN READ</span>
+                                        </div>
+                                        {mockProgress === 100 && (
+                                            <div className="w-4 h-4 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                                                <CheckCircle2 size={10} />
+                                            </div>
+                                        )}
+                                    </div>
+                                    <h5 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
+                                    <p className="text-[11px] font-normal text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 mb-4 opacity-80 italic">"{article.desc}"</p>
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2 text-[8px] font-black text-indigo-500 uppercase tracking-widest group-hover:gap-3 transition-all">
+                                            {t('pro_dashboard.academy.articles.btn_read')} <ArrowRight size={10} />
+                                        </div>
+                                        {/* Micro progress indicator */}
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-12 h-1 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
+                                                <div className="h-full bg-indigo-500/40" style={{ width: `${mockProgress}%` }} />
+                                            </div>
+                                            <span className="text-[6px] font-black text-slate-400">{mockProgress}%</span>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            );
+                        });
                     })()}
                 </div>
             </div>
@@ -400,11 +420,21 @@ export const GrowthTab = ({
                         const hacks = t('pro_dashboard.academy.lifehacks.items', { returnObjects: true });
                         const hacksList = Array.isArray(hacks) ? hacks : [];
                         return hacksList.map((hack: any, i: number) => (
-                            <div key={i} className="flex gap-3 p-3.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 hover:border-pink-500/20 transition-all group/hack cursor-default shadow-xs">
+                            <div
+                                key={i}
+                                onClick={() => {
+                                    navigator.clipboard.writeText(hack.desc);
+                                    impact('medium');
+                                }}
+                                className="flex gap-3 p-3.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 hover:border-pink-500/20 transition-all group/hack cursor-pointer active:scale-95 shadow-xs relative"
+                            >
                                 <div className="w-7 h-7 rounded-lg bg-pink-500/10 flex items-center justify-center text-pink-500 font-black text-xs shrink-0 border border-pink-500/10 shadow-inner group-hover/hack:scale-110 transition-transform">{i + 1}</div>
-                                <div className="space-y-0.5">
+                                <div className="space-y-0.5 pr-6">
                                     <h5 className="text-[10px] font-black uppercase text-slate-900 dark:text-white tracking-tight leading-tight">{hack.title}</h5>
                                     <p className="text-[9px] font-medium text-slate-500 dark:text-slate-400 leading-tight italic opacity-70 line-clamp-1">"{hack.desc}"</p>
+                                </div>
+                                <div className="absolute top-3.5 right-3.5 opacity-0 group-hover/hack:opacity-100 transition-opacity text-pink-500">
+                                    <Share size={12} />
                                 </div>
                             </div>
                         ));
@@ -426,10 +456,10 @@ export const GrowthTab = ({
                     </div>
                     {/* Multi-Sync Status Display */}
                     <div className="flex flex-col items-end">
-                        <span className={`text-[7px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${status?.pro_plus ? 'bg-indigo-500/10 text-indigo-500' : 'bg-slate-500/10 text-slate-400'}`}>
-                            {status?.pro_plus ? t('pro_dashboard.setup.tg_sync_multi.plan_plus') : t('pro_dashboard.setup.tg_sync_multi.plan_pro')}
+                        <span className={`text-[7px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${status?.is_pro_plus ? 'bg-indigo-500/10 text-indigo-500' : 'bg-slate-500/10 text-slate-400'}`}>
+                            {status?.is_pro_plus ? t('pro_dashboard.setup.tg_sync_multi.plan_plus') : t('pro_dashboard.setup.tg_sync_multi.plan_pro')}
                         </span>
-                        <p className="text-[6px] font-black text-slate-400 uppercase tracking-widest mt-1">Multi-Node Capacity: {status?.pro_plus ? '5/5' : '1/1'}</p>
+                        <p className="text-[6px] font-black text-slate-400 uppercase tracking-widest mt-1">Multi-Node Capacity: {status?.is_pro_plus ? '5/5' : '1/1'}</p>
                     </div>
                 </div>
 
@@ -478,30 +508,52 @@ export const GrowthTab = ({
                 return (
                     <div className={`relative rounded-[1.5rem] sm:rounded-[2rem] border transition-all duration-500 overflow-hidden ${isSetupComplete
                         ? 'bg-slate-900 text-white border-indigo-500/30 shadow-2xl shadow-indigo-500/10'
-                        : 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/5 opacity-80'
+                        : 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/5'
                         }`}>
 
                         {!isSetupComplete && (
-                            <div className="absolute inset-0 z-20 backdrop-blur-md bg-white/10 dark:bg-black/40 flex flex-col items-center justify-center text-center p-6">
-                                <div className="w-16 h-16 rounded-full bg-slate-200 dark:bg-white/10 flex items-center justify-center mb-4 shadow-xl">
-                                    <Lock size={24} className="text-slate-500 dark:text-slate-400" />
-                                </div>
-                                <h4 className="text-xl font-black uppercase text-slate-900 dark:text-white tracking-widest mb-2">
-                                    {t('pro_dashboard.academy.psych_strategies.title')}
-                                </h4>
-                                <p className="text-xs font-bold text-slate-500 dark:text-slate-400 max-w-[200px] uppercase tracking-wider mb-6">
-                                    {t('pro_dashboard.academy.psych_strategies.unlock_desc')}
-                                </p>
-                                <button
-                                    onClick={() => { selection(); setShowSetup(true); }}
-                                    className="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg active:scale-95 flex items-center gap-2"
+                            <div className="absolute inset-0 z-20 backdrop-blur-xl bg-white/40 dark:bg-black/60 flex flex-col items-center justify-center text-center p-6 sm:p-10">
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="relative mb-6"
                                 >
-                                    Complete Setup <ArrowRight size={12} />
-                                </button>
+                                    <div className="w-20 h-20 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shadow-2xl relative overflow-hidden group">
+                                        <div className="absolute inset-0 bg-linear-to-t from-indigo-500/20 to-transparent animate-pulse" />
+                                        <Lock size={32} className="text-indigo-500 relative z-10" />
+                                        {/* Scanning line animation */}
+                                        <motion.div
+                                            className="absolute left-0 right-0 h-0.5 bg-indigo-400 shadow-[0_0_15px_rgba(129,140,248,0.8)] z-20"
+                                            animate={{ top: ["0%", "100%", "0%"] }}
+                                            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                        />
+                                    </div>
+                                </motion.div>
+
+                                <div className="space-y-2 mb-8">
+                                    <span className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.4em] animate-pulse">
+                                        Biometric Authorization Required
+                                    </span>
+                                    <h4 className="text-2xl font-black uppercase text-slate-900 dark:text-white tracking-widest leading-none">
+                                        {t('pro_dashboard.academy.psych_strategies.title')}
+                                    </h4>
+                                    <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 max-w-[280px] uppercase tracking-wider mx-auto">
+                                        {t('pro_dashboard.academy.psych_strategies.unlock_desc')}
+                                    </p>
+                                </div>
+
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => { selection(); setShowSetup(true); }}
+                                    className="px-8 py-3.5 bg-indigo-500 hover:bg-indigo-400 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all shadow-[0_0_20px_rgba(99,102,241,0.4)] flex items-center gap-3 group/lock-btn"
+                                >
+                                    Initiate Social Sync <Terminal size={14} className="group-hover/lock-btn:rotate-12 transition-transform" />
+                                </motion.button>
                             </div>
                         )}
 
-                        <div className={`p-6 sm:p-8 relative z-10 ${!isSetupComplete ? 'blur-sm select-none' : ''}`}>
+                        <div className={`p-6 sm:p-8 relative z-10 ${!isSetupComplete ? 'blur-md select-none' : ''}`}>
                             <div className="flex items-center justify-between mb-8">
                                 <div className="flex items-center gap-3">
                                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shadow-lg ${isSetupComplete
