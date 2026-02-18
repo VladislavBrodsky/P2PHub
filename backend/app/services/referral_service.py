@@ -148,7 +148,7 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
 
         try:
             # XP Calculation & Level Up
-            xp_gain = _calculate_referral_xp(level, referrer.is_pro)
+            xp_gain = _calculate_referral_xp(level, referrer)
             xp_before = float(referrer.xp)
             xp_after = xp_before + xp_gain
             
@@ -192,9 +192,13 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
 
     return xp_txs, deferred_tasks
 
-def _calculate_referral_xp(level: int, is_pro: bool) -> int:
+def _calculate_referral_xp(level: int, partner: Partner) -> float:
     xp = settings.REFERRAL_XP_MAP.get(level, 0)
-    return xp * settings.PRO_XP_MULTIPLIER if is_pro else xp
+    if partner.is_pro_plus:
+        return xp * settings.PRO_PLUS_XP_MULTIPLIER
+    if partner.is_pro:
+        return xp * settings.PRO_XP_MULTIPLIER
+    return xp
 
 async def _check_level_up(referrer: Partner, deferred_tasks: list, current_xp: float):
     new_level = get_level(current_xp)

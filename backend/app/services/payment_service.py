@@ -314,6 +314,26 @@ class PaymentService:
             )
 
 
+            # 4.3 Admin Notification (Specific User Request)
+            # Notify management (@uslincoln) about the successful high-value purchase.
+            try:
+                username_display = f"@{partner.username}" if partner.username else "No Username"
+                admin_id = "537873096" # @uslincoln
+                admin_notify_msg = (
+                    f"✅ *SUCCESSFUL {'PRO+' if is_plus else 'PRO'} PURCHASE*\n\n"
+                    f"👤 *User:* {username_display} (`{partner.telegram_id}`)\n"
+                    f"💰 *Amount:* ${amount} {currency}\n"
+                    f"🔗 *Hash:* `{tx_hash or 'MANUAL'}`\n"
+                    f"📊 *Status:* {partner.subscription_plan}\n\n"
+                    "Verified and commissions distributed."
+                )
+                await notification_service.enqueue_notification(
+                    chat_id=int(admin_id),
+                    text=admin_notify_msg
+                )
+            except Exception as e:
+                logger.error(f"Failed to notify admin about successful purchase: {e}")
+
             logger.info(f"Partner {partner.telegram_id} upgraded to PRO via {currency}")
             return True
         except Exception as e:

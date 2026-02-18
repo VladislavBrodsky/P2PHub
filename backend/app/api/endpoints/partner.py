@@ -266,7 +266,9 @@ async def get_my_profile(
             bonus_xp = settings.STREAK_7DAY_XP_BONUS if is_streak_milestone else 0
             
             total_reward = checkin_xp + bonus_xp
-            if partner.is_pro:
+            if partner.is_pro_plus:
+                total_reward *= settings.PRO_PLUS_XP_MULTIPLIER
+            elif partner.is_pro:
                 total_reward *= settings.PRO_XP_MULTIPLIER
                 
             await session.execute(
@@ -299,7 +301,9 @@ async def get_my_profile(
         
         # Award Daily XP
         checkin_xp = settings.DAILY_CHECKIN_XP
-        if partner.is_pro:
+        if partner.is_pro_plus:
+            checkin_xp *= settings.PRO_PLUS_XP_MULTIPLIER
+        elif partner.is_pro:
             checkin_xp *= settings.PRO_XP_MULTIPLIER
             
         await session.execute(
@@ -986,8 +990,13 @@ async def claim_task_reward(
         partner_task_record.completed_at = datetime.now(UTC).replace(tzinfo=None)
         session.add(partner_task_record)
 
-    # 1.1 Calculate effective XP (PRO members get 5x XP bonus)
-    effective_xp = xp_reward * 5 if partner.is_pro else xp_reward
+    # 1.1 Calculate effective XP (PRO members get 1.5x, PRO+ get 3x)
+    if partner.is_pro_plus:
+        effective_xp = xp_reward * settings.PRO_PLUS_XP_MULTIPLIER
+    elif partner.is_pro:
+        effective_xp = xp_reward * settings.PRO_XP_MULTIPLIER
+    else:
+        effective_xp = xp_reward
     
     # 1.2 Add XP Transaction record
     new_xp_tx = XPTransaction(

@@ -35,7 +35,11 @@ class Partner(SQLModel, table=True):
     pro_purchased_at: datetime | None = Field(default=None)
     pro_started_at: datetime | None = Field(default=None)
     pro_notification_seen: bool = Field(default=False)  # Track if user saw the "You are PRO" card
-    subscription_plan: str | None = Field(default=None) # e.g. "PRO_LIFETIME", "PRO_YEARLY"
+    subscription_plan: str | None = Field(default=None) # e.g. "PRO_LIFETIME", "PRO_YEARLY", "PRO_PLUS_MONTHLY"
+    
+    @property
+    def is_pro_plus(self) -> bool:
+        return self.subscription_plan == "PRO_PLUS_MONTHLY"
     
     # PRO Content Generation Tokens
     pro_tokens: int = Field(default=500)
