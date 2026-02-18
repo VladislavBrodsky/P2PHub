@@ -167,8 +167,20 @@ export const GrowthTab = ({
 
             {/* Masterclass Modules - Academy Path */}
             <div className="space-y-6 relative">
-                {/* Timeline Line - Re-aligned for compact nodes */}
-                <div className="absolute left-[14px] sm:left-[16px] top-12 bottom-0 w-px bg-linear-to-b from-slate-200 via-slate-300 to-transparent dark:from-white/10 dark:via-white/20 dark:to-transparent z-0" />
+                {/* Timeline Line - Re-aligned for compact nodes with Energy Pulse */}
+                <div className="absolute left-[14px] sm:left-[16px] top-12 bottom-0 w-px bg-slate-200 dark:bg-white/10 z-0 overflow-hidden">
+                    <motion.div
+                        className="absolute top-0 left-0 w-full bg-linear-to-b from-transparent via-indigo-500 to-transparent h-32"
+                        animate={{
+                            top: ["-10%", "110%"],
+                        }}
+                        transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            ease: "linear",
+                        }}
+                    />
+                </div>
 
                 <div className="flex items-center gap-2 px-1 relative z-10">
                     <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-500 border border-indigo-100 dark:border-indigo-500/20 shadow-lg shadow-indigo-500/10">
@@ -219,7 +231,7 @@ export const GrowthTab = ({
                                     transition={{ delay: i * 0.05 }}
                                     className="pl-10 sm:pl-12 relative group"
                                 >
-                                    {/* Timeline Node - More Compact */}
+                                    {/* Timeline Node - More Compact with Status Pulse */}
                                     <div className={`absolute left-0 top-[18px] w-7 h-7 sm:w-8 sm:h-8 rounded-full border-[3px] border-slate-50 dark:border-slate-950 flex items-center justify-center transition-all duration-500 z-20 ${isCompleted
                                         ? 'bg-emerald-500 text-white shadow-[0_0_10px_rgba(16,185,129,0.3)]'
                                         : isLocked
@@ -227,6 +239,13 @@ export const GrowthTab = ({
                                             : 'bg-indigo-500 text-white shadow-[0_0_10px_rgba(99,102,241,0.3)]'
                                         }`}>
                                         <span className="font-black text-[9px] sm:text-xs">{i + 1}</span>
+                                        {!isCompleted && !isLocked && (
+                                            <motion.div
+                                                className="absolute inset-0 rounded-full bg-indigo-500 -z-10"
+                                                animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
+                                                transition={{ duration: 2, repeat: Infinity }}
+                                            />
+                                        )}
                                     </div>
 
                                     {/* Compact Card / Accordion */}
@@ -260,8 +279,8 @@ export const GrowthTab = ({
 
                                             <div className="flex items-center gap-3">
                                                 {isCompleted ? (
-                                                    <div className="flex items-center gap-1 text-emerald-500">
-                                                        <CheckCircle2 size={12} />
+                                                    <div className="flex items-center gap-1.5 text-emerald-500">
+                                                        <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
                                                         <span className="text-[8px] font-black uppercase tracking-widest hidden sm:inline">SYNCED</span>
                                                     </div>
                                                 ) : (
@@ -342,7 +361,7 @@ export const GrowthTab = ({
                                                                         {!canAffordTokens ? "Insufficient Tokens" : "Insufficient XP Score"}
                                                                     </span>
                                                                     <span className="text-[8px] font-medium text-slate-400">
-                                                                        Earn more tokens or upgrade to PRO+
+                                                                        {xpCost > academyScore ? `Requires ${xpCost} XP (You have ${academyScore})` : "Earn more tokens or upgrade to PRO+"}
                                                                     </span>
                                                                 </div>
                                                             </div>
@@ -395,13 +414,22 @@ export const GrowthTab = ({
 
             <div className="glass-panel-premium p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200 dark:border-white/10 relative overflow-hidden group bg-white dark:bg-slate-950 shadow-2xl">
                 <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none" />
-                <div className="flex items-center gap-3 mb-6 relative z-10 font-sans">
-                    <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-lg group-hover:rotate-6 transition-transform">
-                        <Globe size={20} className="text-indigo-500" />
+                <div className="flex items-center justify-between mb-6 relative z-10 font-sans">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-lg group-hover:rotate-6 transition-transform">
+                            <Globe size={20} className="text-indigo-500" />
+                        </div>
+                        <div>
+                            <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white leading-none mb-1">{t('pro_dashboard.academy.social_setup.title')}</h4>
+                            <p className="text-[8px] font-black text-indigo-400 uppercase tracking-[0.2em]">{t('pro_dashboard.academy.social_setup.subtitle')}</p>
+                        </div>
                     </div>
-                    <div>
-                        <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white leading-none mb-1">{t('pro_dashboard.academy.social_setup.title')}</h4>
-                        <p className="text-[8px] font-black text-indigo-400 uppercase tracking-[0.2em]">{t('pro_dashboard.academy.social_setup.subtitle')}</p>
+                    {/* Multi-Sync Status Display */}
+                    <div className="flex flex-col items-end">
+                        <span className={`text-[7px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${status?.pro_plus ? 'bg-indigo-500/10 text-indigo-500' : 'bg-slate-500/10 text-slate-400'}`}>
+                            {status?.pro_plus ? t('pro_dashboard.setup.tg_sync_multi.plan_plus') : t('pro_dashboard.setup.tg_sync_multi.plan_pro')}
+                        </span>
+                        <p className="text-[6px] font-black text-slate-400 uppercase tracking-widest mt-1">Multi-Node Capacity: {status?.pro_plus ? '5/5' : '1/1'}</p>
                     </div>
                 </div>
 
