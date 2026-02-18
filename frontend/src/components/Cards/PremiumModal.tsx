@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Crown, ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useTMALock } from '../../hooks/useTMALock';
 
 interface PremiumModalProps {
     isOpen: boolean;
@@ -10,6 +11,7 @@ interface PremiumModalProps {
 
 export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) {
     const { t } = useTranslation();
+    useTMALock(isOpen);
 
     return (
         <AnimatePresence>
@@ -26,10 +28,9 @@ export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) 
 
                     {/* Modal Content */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative w-full max-w-sm rounded-[2.5rem] bg-white border border-slate-100 p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] overflow-hidden"
+                        transition={{ opacity: { duration: 0.2 } }}
+                        className="relative w-full max-w-sm rounded-[2.5rem] bg-white border border-slate-100 p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] overflow-hidden overscroll-none"
+                        style={{ overscrollBehavior: 'none' }}
                     >
                         {/* Decorative Background Elements */}
                         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-indigo-50 rounded-full blur-3xl opacity-60" />

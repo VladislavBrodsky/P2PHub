@@ -5,6 +5,7 @@ import { Button } from '../ui/Button';
 import { createPortal } from 'react-dom';
 import { useUI } from '../../context/UIContext';
 import { useEffect } from 'react';
+import { useTMALock } from '../../hooks/useTMALock';
 
 interface PartnerBriefingModalProps {
     isOpen: boolean;
@@ -14,6 +15,8 @@ interface PartnerBriefingModalProps {
 export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalProps) => {
     const { t } = useTranslation();
     const { setFooterVisible, setHeaderVisible } = useUI();
+
+    useTMALock(isOpen);
 
     // Hide navigation when briefing is open for a "perfect fit" experience
     useEffect(() => {
@@ -104,7 +107,8 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 40 }}
                 transition={{ type: 'spring', damping: 30, stiffness: 350 }}
-                className="relative w-full max-w-lg bg-white/95 dark:bg-slate-900/95 sm:rounded-[2.5rem] border-x border-t border-white/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col h-full sm:h-auto sm:max-h-[85vh] backdrop-blur-2xl"
+                className="relative w-full max-w-lg bg-white/95 dark:bg-slate-900/95 sm:rounded-[2.5rem] border-x border-t border-white/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col h-full sm:h-auto sm:max-h-[85vh] backdrop-blur-2xl overscroll-none"
+                style={{ overscrollBehavior: 'none' }}
             >
                 {/* Background Decoration Glows */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] pointer-events-none" />

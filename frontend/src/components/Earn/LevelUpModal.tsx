@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Star, Sparkles, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Confetti } from '../ui/Confetti';
+import { useTMALock } from '../../hooks/useTMALock';
 
 interface LevelUpModalProps {
     isOpen: boolean;
@@ -11,6 +12,7 @@ interface LevelUpModalProps {
 
 export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
     const { t } = useTranslation();
+    useTMALock(isOpen);
 
     return (
         <AnimatePresence>
@@ -33,7 +35,8 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
                         animate={{ scale: 1, opacity: 1, y: 0 }}
                         exit={{ scale: 0.8, opacity: 0, y: 100 }}
                         transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-                        className="relative w-full max-w-sm bg-white dark:bg-[#020617] rounded-[3rem] p-8 text-center shadow-[0_32px_128px_-16px_rgba(0,0,0,0.5)] border border-slate-200 dark:border-white/10"
+                        className="relative w-full max-w-sm bg-white dark:bg-[#020617] rounded-[3rem] p-8 text-center shadow-[0_32px_128px_-16px_rgba(0,0,0,0.5)] border border-slate-200 dark:border-white/10 overscroll-none"
+                        style={{ overscrollBehavior: 'none' }}
                     >
                         {/* Background Accents */}
                         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-yellow-400/20 blur-[60px] rounded-full pointer-events-none" />

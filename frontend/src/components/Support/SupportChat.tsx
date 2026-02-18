@@ -417,7 +417,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
     return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-10000 flex items-end sm:items-center justify-center p-0 sm:p-4 touch-none">
+                <div className="fixed inset-0 z-10000 flex items-end sm:items-center justify-center p-0 sm:p-4">
                     {/* Backdrop */}
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -433,10 +433,11 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: '100%', opacity: 0 }}
                         transition={{ type: 'spring', damping: 30, stiffness: 250 }}
-                        className="relative flex h-full sm:h-[85dvh] w-full max-w-[440px] flex-col overflow-hidden bg-white dark:bg-slate-950 sm:rounded-[32px] shadow-[0_32px_80px_-20px_rgba(0,0,0,0.5)] safe-pt border-x border-t sm:border border-slate-200 dark:border-white/5"
+                        className="relative flex h-full sm:h-[85dvh] w-full max-w-[440px] flex-col overflow-hidden bg-white dark:bg-slate-950 sm:rounded-[32px] shadow-[0_32px_80px_-20px_rgba(0,0,0,0.5)] safe-pt border-x border-t sm:border border-slate-200 dark:border-white/5 overscroll-none"
                         style={{
                             height: '100dvh',
-                            maxHeight: '100dvh'
+                            maxHeight: '100dvh',
+                            overscrollBehavior: 'none'
                         }}
                     >
                         {/* Premium Header */}
@@ -504,7 +505,8 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         {/* Messages Area */}
                         <div
                             ref={scrollRef}
-                            className="flex-1 overflow-y-auto px-4 py-4 space-y-6 custom-scrollbar hide-scrollbar overscroll-contain relative"
+                            className="flex-1 overflow-y-auto px-4 py-4 space-y-6 custom-scrollbar hide-scrollbar overscroll-none relative"
+                            style={{ overscrollBehavior: 'none' }}
                         >
                             {/* Subtle background element */}
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-40 bg-linear-to-b from-blue-500/5 to-transparent pointer-events-none" />

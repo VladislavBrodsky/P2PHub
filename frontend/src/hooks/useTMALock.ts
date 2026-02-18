@@ -9,16 +9,16 @@ export function useTMALock(isLocked: boolean) {
     useEffect(() => {
         if (!isLocked) return;
 
-        // 1. Lock body scroll
+        // 1. Lock background scroll and prevent bounce
         const originalOverflow = document.body.style.overflow;
-        const originalTouchAction = document.body.style.touchAction;
+        const originalOverscroll = document.body.style.overscrollBehavior;
 
         document.body.style.overflow = 'hidden';
-        // Prevent gestures on the body
-        document.body.style.touchAction = 'none';
+        document.body.style.overscrollBehavior = 'none';
 
-        // 2. Disable Telegram vertical swipes if available
+        // 2. Disable Telegram vertical swipes (Dual-Layer locking)
         const disableSwipes = async () => {
+            // A. SDK Method
             try {
                 if (swipeBehavior.mount.isAvailable() && !swipeBehavior.isMounted()) {
                     await swipeBehavior.mount();
@@ -26,25 +26,35 @@ export function useTMALock(isLocked: boolean) {
 
                 if (swipeBehavior.disableVertical.isAvailable()) {
                     swipeBehavior.disableVertical();
-                } else if ((swipeBehavior as any).disableVerticalSwipes?.isAvailable?.()) {
-                    (swipeBehavior as any).disableVerticalSwipes();
                 }
             } catch (e) {
-                console.warn('[useTMALock] Failed to disable swipes:', e);
+                console.warn('[useTMALock] SDK Swipe Lock Failed:', e);
+            }
+
+            // B. Direct WebApp Method (High Compatibility Fallback)
+            try {
+                if (window.Telegram?.WebApp) {
+                    if ((window.Telegram.WebApp as any).disableVerticalSwipes) {
+                        (window.Telegram.WebApp as any).disableVerticalSwipes();
+                    }
+                    // Ensure expanded mode to give window room to breathe
+                    window.Telegram.WebApp.expand?.();
+                }
+            } catch (e) {
+                // Ignore fallback errors
             }
         };
 
         disableSwipes();
 
         return () => {
+            // Restore original styles
             document.body.style.overflow = originalOverflow;
-            document.body.style.touchAction = originalTouchAction;
+            document.body.style.overscrollBehavior = originalOverscroll;
 
-            // We usually want to re-enable vertical swipes when the lock is released,
-            // UNLESS the app is supposed to be always locked (which App.tsx tries to do).
-            // But if it's already locked in App.tsx, calling enable here might break it.
-            // However, if the user *wants* it locked during modals, we should ensure it's locked.
-            // For now, let's just make sure it's disabled when locked.
+            // Note: We don't re-enable swipes here because App.tsx 
+            // manages the global swipe state. Re-enabling here could 
+            // break the global lock.
         };
     }, [isLocked]);
 }

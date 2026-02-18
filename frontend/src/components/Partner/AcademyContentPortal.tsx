@@ -6,6 +6,7 @@ import { AcademyStage } from '../../data/academyData';
 import { useTranslation, Trans } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
 import { useUI } from '../../context/UIContext';
+import { useTMALock } from '../../hooks/useTMALock';
 
 interface AcademyContentPortalProps {
     stage: AcademyStage;
@@ -19,6 +20,8 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
     const { user } = useUser();
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
     const [missionAccomplished, setMissionAccomplished] = React.useState(false);
+
+    useTMALock(true);
     const [scrolledProgress, setScrolledProgress] = React.useState(0);
     const contentRef = React.useRef<HTMLDivElement>(null);
 
@@ -96,7 +99,8 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 animate={{ y: 0 }}
                 exit={{ y: "100%" }}
                 transition={{ type: "spring", damping: 32, stiffness: 350 }}
-                className="relative w-full h-dvh sm:h-auto sm:max-w-lg bg-white dark:bg-[#030712] sm:rounded-[2rem] shadow-2xl border-t sm:border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col touch-auto"
+                className="relative w-full h-dvh sm:h-auto sm:max-w-lg bg-white dark:bg-[#030712] sm:rounded-[2rem] shadow-2xl border-t sm:border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col touch-auto overscroll-none"
+                style={{ overscrollBehavior: 'none' }}
             >
                 {/* Fixed Header Bar - Premium Glassmorphism with Safe Area support */}
                 <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pb-4 pt-[calc(var(--spacing-safe-top)+2.5rem)] bg-white/80 dark:bg-black/40 backdrop-blur-3xl border-b border-slate-200 dark:border-white/5 shrink-0">
@@ -142,7 +146,8 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 <div
                     ref={contentRef}
                     onScroll={handleScroll}
-                    className="flex-1 overflow-y-auto overscroll-contain custom-scrollbar scroll-smooth touch-pan-y pb-32"
+                    className="flex-1 overflow-y-auto overscroll-none custom-scrollbar scroll-smooth touch-pan-y pb-32"
+                    style={{ overscrollBehavior: 'none' }}
                 >
 
                     <div className="p-6 pt-10 space-y-8">

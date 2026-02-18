@@ -324,7 +324,7 @@ export default function ReferralPage() {
                             </div>
 
                             {/* Scrollable Content */}
-                            <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar pointer-events-auto">
+                            <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar pointer-events-auto overscroll-none" style={{ overscrollBehavior: 'none' }}>
                                 {/* Visual Header */}
                                 <div className="relative h-48 sm:h-52 shrink-0">
                                     <div className="absolute inset-0 bg-linear-to-b from-transparent to-white dark:to-slate-900 z-10" />

@@ -351,7 +351,8 @@ export const MilestonePath = () => {
                                     mass: 0.8
                                 }}
                                 onClick={(e) => e.stopPropagation()}
-                                className="relative w-full max-w-lg sm:max-w-md bg-white dark:bg-slate-900 rounded-t-[3rem] sm:rounded-[2.5rem] shadow-[0_-20px_80px_rgba(0,0,0,0.5)] border-t border-slate-100 dark:border-white/10 sm:border overflow-hidden max-h-[90vh] flex flex-col group/modal"
+                                className="relative w-full max-w-lg sm:max-w-md bg-white dark:bg-slate-900 rounded-t-[3rem] sm:rounded-[2.5rem] shadow-[0_-20px_80px_rgba(0,0,0,0.5)] border-t border-slate-100 dark:border-white/10 sm:border overflow-hidden max-h-[90vh] flex flex-col group/modal overscroll-none"
+                                style={{ overscrollBehavior: 'none' }}
                             >
                                 {/* Animated Decorative Background */}
                                 <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
@@ -362,7 +363,7 @@ export const MilestonePath = () => {
                                 {/* Pull Handle */}
                                 <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-slate-200 dark:bg-white/10 rounded-full sm:hidden z-20" />
 
-                                <div className="flex-1 overflow-y-auto overscroll-contain no-scrollbar p-6 pb-12 sm:p-8 pt-10 sm:pt-12">
+                                <div className="flex-1 overflow-y-auto overscroll-none no-scrollbar p-6 pb-12 sm:p-8 pt-10 sm:pt-12" style={{ overscrollBehavior: 'none' }}>
                                     <div className="relative z-10 flex flex-col items-center">
                                         {/* Dynamic Icon Hero */}
                                         <motion.div

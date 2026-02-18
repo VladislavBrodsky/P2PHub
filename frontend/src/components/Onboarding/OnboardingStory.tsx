@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronRight, Zap, Target, Shield, Rocket } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
+import { useTMALock } from '../../hooks/useTMALock';
 import { SystemLink } from './SystemLink';
 
 interface OnboardingStoryProps {
@@ -30,6 +31,8 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
 
     const [showSystemLink, setShowSystemLink] = useState(() => index === 0);
     const { selection, notification } = useHaptic();
+
+    useTMALock(true);
 
     const next = () => {
         selection();
@@ -65,7 +68,8 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)' }}
                     transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-                    className="fixed inset-0 z-200 overflow-hidden bg-slate-950"
+                    className="fixed inset-0 z-200 overflow-hidden bg-slate-950 overscroll-none"
+                    style={{ overscrollBehavior: 'none' }}
                 >
                     {/* Smooth Dynamic Background */}
                     <motion.div
