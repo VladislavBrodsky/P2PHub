@@ -237,8 +237,13 @@ class PaymentService:
             
             lifetime_granted = False
             if is_plus:
-                partner.subscription_plan = "PRO_PLUS_MONTHLY" # We keep the key but logically it's lifetime for now
-                partner.pro_expires_at = None # Lifetime
+                partner.subscription_plan = "PRO_PLUS_MONTHLY"
+                # Monthly Subscription with Extension Logic
+                if partner.pro_expires_at and partner.pro_expires_at > now:
+                    partner.pro_expires_at += timedelta(days=30)
+                else:
+                    partner.pro_expires_at = now + timedelta(days=30)
+                
                 partner.pro_tokens = settings.PRO_PLUS_TOKENS_MONTHLY
             else:
                 # Standard PRO Plan

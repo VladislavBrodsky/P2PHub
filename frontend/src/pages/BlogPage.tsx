@@ -156,19 +156,19 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
     }, [selectedPost, setActiveTab, currentTab, selection]);
 
     const categories = useMemo(() => [
-        'All',
-        'Tactical Blueprints',
-        'Geopolitical Shifts',
-        'Sovereign Mindset',
-        'Wealth Strategy',
-        'Global Trends',
-        'Financial Shift',
-        'Network Velocity',
-        'Web3 Intelligence',
-        'Innovation',
-        'Viral Marketing',
-        'Problem & Solution',
-        'Intelligence Culture'
+        { id: 'All', label: 'blog.categories.all' },
+        { id: 'Tactical Blueprints', label: 'blog.categories.tactical_blueprints' },
+        { id: 'Geopolitical Shifts', label: 'blog.categories.geopolitical_shifts' },
+        { id: 'Sovereign Mindset', label: 'blog.categories.sovereign_mindset' },
+        { id: 'Wealth Strategy', label: 'blog.categories.wealth_strategy' },
+        { id: 'Global Trends', label: 'blog.categories.global_trends' },
+        { id: 'Financial Shift', label: 'blog.categories.financial_shift' },
+        { id: 'Network Velocity', label: 'blog.categories.network_velocity' },
+        { id: 'Web3 Intelligence', label: 'blog.categories.web3_intelligence' },
+        { id: 'Innovation', label: 'blog.categories.innovation' },
+        { id: 'Viral Marketing', label: 'blog.categories.viral_marketing' },
+        { id: 'Problem & Solution', label: 'blog.categories.problem_solution' },
+        { id: 'Intelligence Culture', label: 'blog.categories.intelligence_culture' }
     ], []);
 
     const handleLike = async () => {

@@ -5,7 +5,7 @@ import { ChevronDown } from 'lucide-react';
 interface TopicDropdownProps {
     selected: string;
     onSelect: (category: string) => void;
-    categories: string[];
+    categories: { id: string; label: string }[];
     t: any;
 }
 
@@ -23,6 +23,8 @@ export const TopicDropdown = ({ selected, onSelect, categories, t }: TopicDropdo
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    const selectedLabel = categories.find(c => c.id === selected)?.label || selected;
+
     return (
         <div className="relative" ref={dropdownRef}>
             <button
@@ -32,7 +34,7 @@ export const TopicDropdown = ({ selected, onSelect, categories, t }: TopicDropdo
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mr-2">{t('blog.navigation.intelligence', { defaultValue: 'Intelligence:' })}</span>
-                    <span className="text-xs font-black text-slate-900 dark:text-white">{selected}</span>
+                    <span className="text-xs font-black text-slate-900 dark:text-white">{t(selectedLabel)}</span>
                 </div>
                 <motion.div
                     animate={{ rotate: isOpen ? 180 : 0 }}
@@ -53,20 +55,20 @@ export const TopicDropdown = ({ selected, onSelect, categories, t }: TopicDropdo
                         <div className="max-h-60 overflow-y-auto no-scrollbar py-2">
                             {categories.map((category) => (
                                 <button
-                                    key={category}
+                                    key={category.id}
                                     onClick={() => {
-                                        onSelect(category);
+                                        onSelect(category.id);
                                         setIsOpen(false);
                                     }}
-                                    className={`w-full flex items-center gap-3 px-5 py-3.5 text-left transition-colors hover:bg-blue-500/5 ${selected === category
+                                    className={`w-full flex items-center gap-3 px-5 py-3.5 text-left transition-colors hover:bg-blue-500/5 ${selected === category.id
                                         ? 'text-blue-500 bg-blue-500/5'
                                         : 'text-slate-600 dark:text-slate-400'
                                         }`}
                                 >
-                                    <div className={`w-1.5 h-1.5 rounded-full transition-all ${selected === category ? 'bg-blue-500 scale-125' : 'bg-slate-300 dark:bg-slate-700'
+                                    <div className={`w-1.5 h-1.5 rounded-full transition-all ${selected === category.id ? 'bg-blue-500 scale-125' : 'bg-slate-300 dark:bg-slate-700'
                                         }`} />
-                                    <span className={`text-xs font-bold ${selected === category ? 'font-black' : ''}`}>
-                                        {category}
+                                    <span className={`text-xs font-bold ${selected === category.id ? 'font-black' : ''}`}>
+                                        {t(category.label)}
                                     </span>
                                 </button>
                             ))}

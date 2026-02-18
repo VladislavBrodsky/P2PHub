@@ -137,6 +137,7 @@ class NotificationService:
 
             from app.models.partner import engine
             from app.services.audit_service import audit_service
+            from sqlmodel.ext.asyncio.session import AsyncSession
             async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
             async with async_session() as session:
                 await audit_service.log_event(
@@ -188,6 +189,7 @@ class NotificationService:
 
             from app.models.partner import engine
             from app.services.audit_service import audit_service
+            from sqlmodel.ext.asyncio.session import AsyncSession
             async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
             with contextlib.suppress(Exception):
                 async with async_session() as session:
