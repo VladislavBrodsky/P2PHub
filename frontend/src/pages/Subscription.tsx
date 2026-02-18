@@ -506,6 +506,38 @@ export default function SubscriptionPage() {
                 </motion.div>
             </div>
 
+            {/* Price Cards - Key Benefits List (Modernized) */}
+            <div className="mb-14 space-y-5">
+                <div className="flex items-center justify-between px-2 mb-4">
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] opacity-50 dark:text-white">{t('subscription.upgrade.benefits_title')}</h3>
+                    <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${selectedPlan === 'PRO_PLUS' ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'}`}>
+                        {selectedPlan === 'PRO' ? 'PRO PLAN' : 'PRO+ EMPIRE'}
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 gap-2">
+                    {(t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true }) as string[]).map((benefit, idx) => {
+                        const isXP = benefit.includes('XP');
+                        const isPlus = selectedPlan === 'PRO_PLUS';
+                        return (
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: idx * 0.05 }}
+                                className={`p-3 rounded-2xl border flex items-center gap-3.5 transition-all duration-500 ${isPlus ? 'bg-linear-to-r from-indigo-500/10 to-purple-500/10 border-indigo-500/20 shadow-lg shadow-indigo-500/5' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/5 shadow-sm'}`}
+                            >
+                                <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border-2 ${isXP ? (isPlus ? 'bg-indigo-500 border-indigo-400 text-white shadow-xl shadow-indigo-500/30' : 'bg-emerald-500 border-emerald-400 text-white shadow-xl shadow-emerald-500/30') : (isPlus ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-500' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-emerald-500')}`}>
+                                    <CheckCircle2 size={14} className={isXP ? 'animate-pulse' : ''} />
+                                </div>
+                                <span className={`text-[10px] leading-tight ${isXP ? 'font-black text-slate-900 dark:text-white uppercase tracking-tight' : 'font-bold text-slate-600 dark:text-slate-300'}`}>
+                                    {benefit}
+                                </span>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+            </div>
+
             {/* Payment Section */}
             <div ref={paymentRef} className="rounded-3xl p-6 shadow-2xl relative overflow-hidden transition-all duration-700 bg-slate-900 group">
                 {/* Liquid Background for Payment Section */}
