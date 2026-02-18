@@ -425,7 +425,7 @@ Referral Link (MUST INCLUDE): {ref_link}
   "title": "Viral headline <15 words",
   "body": "Full post with **bold**, _italic_, and [hyperlink]({ref_link}) formatting",
   "hashtags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "image_description": "Detailed scene description for Nano Banana Pro (1K cinematic)"
+  "image_description": "Detailed scene description for 4K Ultra-Realistic Cinematic quality"
 }}
 """
 
@@ -458,7 +458,7 @@ Referral Link: {ref_link}
 9. Add 3-5 trending hashtags for {target_audience}
 
 **IMAGE DESCRIPTION:**
-Describe a Nano Banana Pro-quality (1K) cinematic scene:
+Describe a 4K Ultra-Realistic Cinematic quality scene:
 - Real person from {target_audience} demographic
 - Emotional moment related to {post_type}
 - Setting: Ultra-modern 2026, luxury lifestyle or digital workspace
@@ -470,17 +470,16 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
 
     def _build_viral_image_prompt(self, target_audience: str, post_type: str) -> str:
         return (
-            f"PROFESSIONAL STUDIO PHOTOGRAPHY - NANO BANANA PRO QUALITY: A real person from {target_audience}, "
-            f"captured in an authentic, high-fidelity cinematic moment for '{post_type}'. "
-            f"The scene must be grounded in realism with complex lighting, shallow depth of field, and 1K detail. "
-            f"Subject: {target_audience} expressing peak success/transformation. "
-            f"Setting: Ultra-modern 2026 digital infrastructure or luxury lifestyle environment. "
-            f"Atmosphere: Sophisticated, authoritative, financial freedom. "
-            f"Technical specs: 35mm lens, sharp focus, natural skin textures, volumetric lighting. "
-            f"Creative Rule: Render 'Pintopay Partner Club' or '{post_type.replace('_', ' ').title()}' as high-quality text within the scene (e.g., on a screen, card, or ambient display). "
-            f"Text MUST relate to the viral hook or CTA. SPELLING MUST BE PERFECT. "
-            f"NEGATIVE PROMPT: cartoon, CGI, anime, illustration, stock photo smile, distorted faces, extra limbs, blurry, "
-            f"futuristic sci-fi, neon lights, flying cars, unrealistic proportions, oversaturated colors, generic poses, misspelled text, gibberish text"
+            f"PROFESSIONAL STUDIO PHOTOGRAPHY - 4K ULTRA-REALISTIC CINEMATIC QUALITY: A real person from {target_audience} demographic, "
+            f"captured in an authentic, high-fidelity cinematic moment illustrating '{post_type}'. "
+            f"The scene must be grounded in realism with complex lighting, shallow depth of field, and 4K detail. "
+            f"Subject: A confidence-inspiring individual from {target_audience} expressing peak success, financial freedom, and transformation. "
+            f"Setting: Ultra-modern 2026 digital infrastructure, luxury co-working space, or premium lifestyle environment. "
+            f"Atmosphere: Sophisticated, authoritative, aspirational, warm ambient lighting. "
+            f"Technical specs: 35mm lens, f/2.8 aperture, sharp focus on eyes/face, natural skin textures, film grain texture, cinematic color grading. "
+            f"Creative Rule: Subtly integrate 'Pintopay' branding elements or '{post_type.replace('_', ' ').title()}' concept on a digital screen, card, or background element in a photorealistic way. "
+            f"NEGATIVE PROMPT: cartoon, CGI, anime, illustration, drawing, painting, 3d render, stock photo smile, distorted faces, extra limbs, blurry, "
+            f"futuristic sci-fi, neon cyberpunk, flying cars, unrealistic proportions, oversaturated colors, generic poses, misspelled text, gibberish, watermark, low quality"
         )
 
     async def _get_viral_text_content(self, system_prompt: str, user_prompt: str) -> tuple[dict[str, Any] | None, tuple[int, str] | int]:
