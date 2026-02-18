@@ -9,7 +9,7 @@ export const getApiUrl = () => {
 
     // Security check: Force HTTPS in production environments
     // This is crucial for Railway/Vercel where the app is served via HTTPS
-    if (url && url.includes('railway.app')) {
+    if (url && (url.includes('railway.app') || url.includes('vercel.app') || window.location.protocol === 'https:')) {
         url = url.replace('http://', 'https://');
     }
 

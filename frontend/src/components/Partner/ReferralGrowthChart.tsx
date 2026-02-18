@@ -27,6 +27,17 @@ const LEVEL_COLORS = [
     '#f43f5e', // L7: Rose
     '#f97316', // L8: Orange
     '#eab308', // L9: Yellow
+    '#84cc16', // L10: Lime
+    '#22c55e', // L11: Green
+    '#10b981', // L12: Emerald
+    '#14b8a6', // L13: Teal
+    '#06b6d4', // L14: Cyan
+    '#0ea5e9', // L15: Sky
+    '#f59e0b', // L16: Amber
+    '#ef4444', // L17: Red
+    '#78350f', // L18: Brown
+    '#64748b', // L19: Slate
+    '#1e293b', // L20: Dark Slate
 ];
 
 interface ReferralGrowthChartProps {
@@ -83,7 +94,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                 let bottom = 0;
                 // Defensive check if levels property exists and is an array/object with index access
                 if (point.levels) {
-                    for (let j = 8; j > i; j--) {
+                    for (let j = LEVEL_COLORS.length - 1; j > i; j--) {
                         bottom += point.levels[j] || 0;
                     }
                 }

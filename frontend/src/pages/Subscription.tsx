@@ -631,11 +631,11 @@ export default function SubscriptionPage() {
             <div className="mt-10 px-2 text-center">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-500/5 border border-slate-500/10 mb-4">
                     <HelpCircle size={10} className="text-slate-500" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">FAQ</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('subscription.faq.teaser_badge')}</span>
                 </div>
 
                 <h3 className="text-xl font-black text-slate-900 dark:text-white mb-6 uppercase tracking-tighter">
-                    Got <span className="text-indigo-500 text-2xl italic">Questions?</span>
+                    {t('subscription.faq.header_pre')} <span className="text-indigo-500 text-2xl italic">{t('subscription.faq.header_highlight')}</span>
                 </h3>
 
                 <div className="space-y-2 mb-6">
@@ -662,7 +662,7 @@ export default function SubscriptionPage() {
                     className="w-full h-12 bg-slate-900 dark:bg-white/5 text-white rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 border border-white/5"
                 >
                     <BookOpen size={14} />
-                    View FAQ Center
+                    {t('subscription.faq.view_center')}
                 </button>
 
                 <div className="mt-8 opacity-10 text-[7px] font-mono tracking-widest text-slate-500">

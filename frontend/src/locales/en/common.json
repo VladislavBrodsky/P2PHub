@@ -227,6 +227,18 @@
       {
         "q": "Is my data secure?",
         "a": "Absolutely. We use bank-grade encryption, your funds are protected by blockchain protocols, and we never share your data. All transactions are monitored for fraud protection."
+      },
+      {
+        "q": "Why upgrade if I can use it for free?",
+        "a": "Free is for users. PRO is for owners. Owners earn from the network. Users just pay fees. Choose which side you want to be on."
+      },
+      {
+        "q": "Is the income guaranteed?",
+        "a": "No. The Protocol works if YOU work. The AI Studio amplifies your effort by 100x, but you must still push the button."
+      },
+      {
+        "q": "What happens if I stop paying PRO?",
+        "a": "You can't stop paying because you only pay ONCE. It's a lifetime license. You own your status forever."
       }
     ],
     "categories": {
@@ -362,6 +374,10 @@
     },
     "faq": {
       "title": "Frequently Asked Questions",
+      "teaser_badge": "FAQ",
+      "header_pre": "Got",
+      "header_highlight": "Questions?",
+      "view_center": "View FAQ Center",
       "q1": "Is it really lifetime?",
       "a1": "Yes. Pay once, use forever. No monthly fees, no hidden costs.",
       "q2": "How do tokens work?",

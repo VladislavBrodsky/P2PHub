@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     HelpCircle, Search, ChevronRight, MessageCircle,
     Shield, Zap, CreditCard, Users, Star, ArrowLeft,
-    Newspaper, BookOpen, Clock, Sparkles
+    Newspaper, BookOpen, Clock, Sparkles, Crown
 } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
@@ -104,6 +104,27 @@ export default function FAQPage() {
             category: 'security',
             icon: <Shield className="text-slate-500" />,
             readTime: '2 min'
+        },
+        {
+            q: t('faq.questions.10.q'),
+            a: t('faq.questions.10.a'),
+            category: 'pro',
+            icon: <Crown className="text-amber-500" />,
+            readTime: '2 min'
+        },
+        {
+            q: t('faq.questions.11.q'),
+            a: t('faq.questions.11.a'),
+            category: 'rewards',
+            icon: <Star className="text-yellow-500" />,
+            readTime: '3 min'
+        },
+        {
+            q: t('faq.questions.12.q'),
+            a: t('faq.questions.12.a'),
+            category: 'pro',
+            icon: <Sparkles className="text-purple-500" />,
+            readTime: '1 min'
         }
     ], [t]);
 

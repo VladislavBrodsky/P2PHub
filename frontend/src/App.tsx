@@ -133,7 +133,9 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
     useEffect(() => {
         const initTMA = async () => {
             if (!isTMA()) {
-                console.log('[DEBUG] initTMA: Not in TMA, skipping SDK initialization');
+                if (import.meta.env.DEV) {
+                    console.log('[DEBUG] initTMA: Not in TMA, skipping SDK initialization');
+                }
                 return;
             }
             try {

@@ -32,6 +32,30 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
         };
     };
 
+    // Handle Browser Back Button to close modal
+    React.useEffect(() => {
+        // Push a history state so the back button can close the modal
+        const stateStr = `academy_stage_${stage.id}`;
+        window.history.pushState({ academyModal: stateStr }, '', window.location.pathname);
+
+        const handlePopState = (event: PopStateEvent) => {
+            // If the user pressed back, close the modal
+            // preventDefault isn't possible on popstate, but we can handle the logic
+            onClose();
+        };
+
+        window.addEventListener('popstate', handlePopState);
+
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+            // If we are closing programmatically (not via back button), we might need to cleanup the history state
+            // prevent infinite loops by checking history state
+            if (window.history.state?.academyModal === stateStr) {
+                window.history.back();
+            }
+        };
+    }, [onClose, stage.id]);
+
     const { titleKey, params } = getStageContent(stage.id);
     const title = t(titleKey, { ...params, defaultValue: stage.title });
     const category = t(`academy_categories.${stage.category}`, stage.category);

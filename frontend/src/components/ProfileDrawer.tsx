@@ -95,7 +95,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                         exit={{ opacity: 0, pointerEvents: 'none' }}
                         transition={{ duration: 0.15 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-(--overlay-bg) backdrop-blur-[2px] cursor-pointer pointer-events-auto"
+                        className="fixed inset-0 bg-black/60 cursor-pointer pointer-events-auto"
                     />
 
                     {/* Drawer Content Wrapper */}
