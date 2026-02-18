@@ -334,7 +334,7 @@ export default function SubscriptionPage() {
                                                 </p>
                                             </div>
                                             <div className="space-y-2">
-                                                {benefits_pro_short.map((b, i) => (
+                                                {(t('subscription.upgrade.benefits_pro_short', { returnObjects: true }) as string[]).map((b, i) => (
                                                     <div key={i} className="flex items-center gap-2 text-[11px] font-bold text-slate-700 dark:text-slate-300">
                                                         <CheckCircle2 size={12} className="text-emerald-500" />
                                                         {b}
@@ -437,7 +437,7 @@ export default function SubscriptionPage() {
                                                 </p>
                                             </div>
                                             <div className="space-y-2">
-                                                {benefits_pro_short_levels.map((b, i) => (
+                                                {(t('subscription.upgrade.benefits_pro_short_levels', { returnObjects: true }) as string[]).map((b, i) => (
                                                     <div key={i} className="flex items-center gap-2 text-[11px] font-bold text-slate-700 dark:text-slate-300">
                                                         <CheckCircle2 size={12} className="text-emerald-500" />
                                                         {b}
@@ -609,17 +609,3 @@ export default function SubscriptionPage() {
         </div>
     );
 }
-
-const benefits_pro_short = [
-    "Viral Studio access",
-    "X5 XP Speed",
-    "Priority payouts",
-    "VIP Support"
-];
-
-const benefits_pro_short_levels = [
-    "9 levels of commissions",
-    "Depth analytics",
-    "Instant withdrawals",
-    "Network security"
-];
