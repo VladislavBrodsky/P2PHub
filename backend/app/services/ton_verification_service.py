@@ -41,11 +41,12 @@ class TonVerificationService:
         This provides a 'zero-latency' experience where users are upgraded 
         before they even click 'Verify' in the UI.
         """
+        from sqlalchemy.orm import sessionmaker
+        from sqlmodel.ext.asyncio.session import AsyncSession
+
         from app.models.partner import engine
         from app.models.transaction import PartnerTransaction
         from app.services.payment_service import payment_service
-        from sqlmodel.ext.asyncio.session import AsyncSession
-        from sqlalchemy.orm import sessionmaker
 
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
         async with async_session() as session:
@@ -74,7 +75,7 @@ class TonVerificationService:
                 for ptx in pending_txs:
                     # Search hash in blockchain response
                     for btx in blockchain_txs:
-                        btx_hash = self._normalize_hash(btx.get("hash", ""))
+                        _btx_hash = self._normalize_hash(btx.get("hash", ""))
                         # If user provided a hash in the UI session (usually they haven't yet for auto-observer)
                         # but we check anyway. Or we correlate by amount + destination if we don't have hash.
                         # For TonConnect/TonKeeper, the hash is the only unique identifier.

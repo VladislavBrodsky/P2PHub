@@ -8,7 +8,7 @@
 
 | Severity | Count | Status |
 |----------|-------|--------|
-| 🔴 CRITICAL | 3 | Fixed |
+| 🔴 CRITICAL | 6 | Fixed |
 | 🟠 HIGH | 4 | Fixed |
 | 🟡 MEDIUM | 3 | Fixed |
 | 🟢 LOW / INFO | 2 | Noted |
@@ -25,15 +25,30 @@ synchronous lazy-load → `MissingGreenlet` crash in async context.
 Loop only reads from the dict, never from ORM attributes.
 
 ### C-2 · `@broker.task` on instance method — `subscription_service.py:16` and `support_service.py:612`
-**Root cause:** `@broker.task` is applied to `self.check_expiring_subscriptions_task` and
-`self.cleanup_stale_support_sessions`. TaskIQ cannot serialize `self` — the task will fail
-with a Pydantic/serialization error when the broker tries to enqueue it.  
-**Fix:** Move these to module-level functions (not methods), then call the service instance inside.
+**Root cause:** TaskIQ cannot serialize `self`. Enqueuing an instance method task resulted in
+serialization errors or silent task loss.  
+**Fix:** Move these to module-level functions (not methods).
 
 ### C-3 · `AsyncSession(engine)` without `expire_on_commit=False` — `subscription_service.py:24,115`
-**Root cause:** `AsyncSession(engine)` uses default `expire_on_commit=True`. After any commit,
-ALL loaded ORM objects are expired. The next attribute access triggers a lazy-load → MissingGreenlet.  
-**Fix:** Use `async_session_maker` (which has `expire_on_commit=False`) or the explicit sessionmaker pattern.
+**Root cause:** Default `expire_on_commit=True` causing attribute refresh crashes after any commit.  
+**Fix:** Use `async_session_maker` configured with `expire_on_commit=False`.
+
+### C-4 · `TASKS_TO_IMPORT` was dead code — `worker.py:40`
+**Root cause:** `TASKS_TO_IMPORT` list was defined but never actually imported or used. The TaskIQ 
+worker started with 0 registered tasks. ALL cron jobs and background tasks were failing silently in production.
+**Fix:** Replaced dead list with actual `import app.services.*` statements at module level in `worker.py`.
+
+### C-5 · Session Leaks in BackgroundTasks — `partner.py:223, 341`
+**Root cause:** Passing a request-owned `session` to `background_tasks.add_task`. When the task 
+executes (after the response is sent), the session is already closed/disposed, causing `AsyncSession closed` errors.
+**Fix:** Refactored tree pre-warming to use a dedicated TaskIQ worker task (`pre_warm_tree_cache_task`) 
+that creates its own fresh session.
+
+### C-6 · Bare asyncio tasks with captured local ORM objects — `payment.py:267`
+**Root cause:** `asyncio.create_task(notify_admins())` captured the `partner` ORM object and request session. 
+Concurrent requests or request termination would lead to session disposal while the task was still 
+trying to access `partner.username`.
+**Fix:** Created `notify_admin_payment_task` in `notification_service.py` to handle admin alerts durably.
 
 ---
 
@@ -102,3 +117,10 @@ verified in the Railway deployment environment.
 3. `app/services/support_service.py` — Fixed `@broker.task` on instance method
 4. `app/services/warmup_service.py` — Fixed session management pattern
 5. `app/services/maintenance_service.py` — Fixed N+1 in economy audit
+6. `app/worker.py` — Fixed task registration (Critical Discovery Fix)
+7. `scripts/start_worker.sh` — Added `--tasks-pattern` for discovery
+8. `app/services/analytics_service.py` — Added `pre_warm_tree_cache_task`
+9. `app/api/endpoints/partner.py` — Fixed BackgroundTasks session leaks
+10. `app/services/notification_service.py` — Added `notify_admin_payment_task`
+11. `app/api/endpoints/payment.py` — Fixed fragile admin notification task
+12. `app/main.py` — Added Sentry DSN guards in middleware

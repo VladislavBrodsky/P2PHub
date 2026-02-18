@@ -2,10 +2,11 @@ import asyncio
 import json
 import logging
 import os
+import uuid
 from contextlib import asynccontextmanager
 
 from aiogram import types
-from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi import FastAPI, Header, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
@@ -188,6 +189,9 @@ async def lifespan(app: FastAPI):
 
     # Shutdown
     await bot.session.close()
+    
+    from app.core.http_client import http_client
+    await http_client.close_client()
 
     if not settings.WEBHOOK_URL and hasattr(app.state, "polling_task"):
         app.state.polling_task.cancel()
@@ -350,6 +354,23 @@ app.add_middleware(
 # This significantly reduces payload size for leaderboard, transaction history, etc.
 app.add_middleware(GZipMiddleware, minimum_size=500)
 
+@app.middleware("http")
+async def add_request_id(request: Request, call_next):
+    """
+    Middleware to add a unique request ID to every request.
+    This helps in tracing logs for a single request across workers.
+    """
+    request_id = str(uuid.uuid4())
+    # Add to request state for access in endpoints
+    request.state.request_id = request_id
+    
+    # Process request
+    response: Response = await call_next(request)
+    
+    # Return request-id in headers for client-side tracing/reporting
+    response.headers["X-Request-ID"] = request_id
+    return response
+
 app.include_router(partner.router, prefix="/api/partner", tags=["partner"])
 app.include_router(earnings.router, prefix="/api/earnings", tags=["earnings"])
 app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderboard"])
@@ -384,6 +405,7 @@ base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Serve generated media (Fix for viral studio permissions)
 generated_media_dir = os.path.join(base_dir, "generated_media")
 import tempfile
+
 tmp_media_dir = os.path.join(tempfile.gettempdir(), "p2phub_generated")
 os.makedirs(tmp_media_dir, exist_ok=True)
 

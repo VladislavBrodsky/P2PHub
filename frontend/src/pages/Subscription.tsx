@@ -2,10 +2,10 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Crown, CheckCircle2, Wallet, CreditCard, ChevronRight,
-    Loader2, Sparkles, Zap, Rocket, Bot, ChevronDown, Trophy, Users,
+    Loader2, Sparkles, Zap, ChevronDown, Trophy, Users,
     HelpCircle, Clock, BookOpen
 } from 'lucide-react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
 import { useUser } from '../context/UserContext';
 import { apiClient } from '../api/client';

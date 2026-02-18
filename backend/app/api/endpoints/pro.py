@@ -249,6 +249,7 @@ async def generate_content(
         session.add(partner)
         await session.commit()
         
+        from app.core.errors import ViralStudioErrorCode
         error_code = result.get("error_code", ViralStudioErrorCode.GENERATION_FAILED)
         error_msg = result.get("error", "Generation failed. Please try again.")
         raise HTTPException(

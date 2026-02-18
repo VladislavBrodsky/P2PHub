@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     CheckCircle, Clock, AlertTriangle, ShieldCheck, RefreshCw,
     User, ExternalLink, TrendingUp, TrendingDown, Users,
-    Zap, PieChart, Wallet, Calendar, Search, X, Edit, Trash, Plus,
+    Zap, PieChart, Wallet, Calendar, Search, X, Trash, Plus,
     Activity, Database, Layers
 } from 'lucide-react';
 import {

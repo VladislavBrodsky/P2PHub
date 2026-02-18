@@ -8,6 +8,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
 from app.core.i18n import get_msg
+from app.core.retry import async_retry
 from app.models.partner import Earning, Partner, XPTransaction, engine
 from app.services.audit_service import audit_service
 from app.services.leaderboard_service import leaderboard_service
@@ -238,6 +239,7 @@ async def _finalize_referral_logic(deferred_tasks: list):
     if deferred_tasks:
         await asyncio.gather(*deferred_tasks, return_exceptions=True)
 
+@async_retry(max_attempts=3, base_delay=1.0)
 async def distribute_pro_commissions(session: AsyncSession, partner_id: int, total_amount: float):
     """
     Distributes commissions for PRO ($39) or PRO+ ($69) subscription purchase.
@@ -252,7 +254,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     # Default to PRO if amount doesn't match PRO+ exactly
     is_pro_plus = total_amount >= (settings.PRO_PLUS_PRICE_USD - 0.1)
     comm_map = settings.COMMISSION_MAP_EMPIRE
-    max_recipients = 20
+    _max_recipients = 20
 
     # Resolve ALL Ancestors for compression logic
     # partner.path contains ancestors from root down to direct referrer.

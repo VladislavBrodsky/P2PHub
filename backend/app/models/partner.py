@@ -1,13 +1,23 @@
 from datetime import UTC, datetime, timedelta
 from typing import Optional
 
-from sqlalchemy import Index, UniqueConstraint
+from sqlalchemy import Index, UniqueConstraint, text
 from sqlmodel import Field, Relationship, SQLModel
 
 from app.core.config import settings
 
 
 class Partner(SQLModel, table=True):
+    __table_args__ = (
+        Index("idx_partner_referrer_created", "referrer_id", "created_at"),
+        Index(
+            "idx_partner_ispro_expires", 
+            "is_pro", 
+            "pro_expires_at", 
+            postgresql_where=text("is_pro = true")
+        ),
+        {"extend_existing": True}
+    )
     id: int | None = Field(default=None, primary_key=True)
     telegram_id: str = Field(index=True, unique=True)
     username: str | None = None
@@ -90,6 +100,7 @@ class Partner(SQLModel, table=True):
 class XPTransaction(SQLModel, table=True):
     __table_args__ = (
         UniqueConstraint("partner_id", "type", "reference_id", name="uq_partner_xp_ref"),
+        Index("idx_xp_partner_created", "partner_id", "created_at"),
         {"extend_existing": True}
     )
     id: int | None = Field(default=None, primary_key=True)
@@ -121,6 +132,7 @@ class PartnerTask(SQLModel, table=True):
 class Earning(SQLModel, table=True):
     __table_args__ = (
         Index("idx_earning_partner_type_created", "partner_id", "type", "created_at"),
+        Index("idx_earning_partner_created", "partner_id", "created_at"),
         UniqueConstraint("reference_id", name="uq_earning_reference_id"),
         {"extend_existing": True}
     )

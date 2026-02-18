@@ -24,6 +24,7 @@ async def send_telegram_task(payload_dict: dict):
     """
     from sqlalchemy.orm import sessionmaker
     from sqlmodel.ext.asyncio.session import AsyncSession
+
     from app.models.partner import engine
     from app.services.audit_service import audit_service
     from bot import bot
@@ -71,9 +72,10 @@ async def send_telegram_task(payload_dict: dict):
         
         # #comment: Move to Persistence Layer on failure
         # This ensures that even if Telegram is down or worker crashes, the message isn't lost.
-        from app.models.notification_retry import NotificationRetry
         from sqlalchemy.orm import sessionmaker
         from sqlmodel.ext.asyncio.session import AsyncSession
+
+        from app.models.notification_retry import NotificationRetry
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
         async with async_session() as session:
             # Check if already exists to avoid duplicates
@@ -142,11 +144,12 @@ class NotificationService:
             logger.error(f"❌ Core Notification Enqueue Failed for {chat_id}: {e}")
             
             # #comment: CRITICAL - If broker fails, we MUST record it in Persistent DB Layer.
+            from sqlalchemy.orm import sessionmaker
+            from sqlmodel.ext.asyncio.session import AsyncSession
+
             from app.models.notification_retry import NotificationRetry
             from app.models.partner import engine
             from app.services.audit_service import audit_service
-            from sqlalchemy.orm import sessionmaker
-            from sqlmodel.ext.asyncio.session import AsyncSession
             
             async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
             async with async_session() as session:
@@ -175,11 +178,12 @@ class NotificationService:
     async def _fallback_send(self, chat_id, text, parse_mode, buttons):
         """Direct fallback (fire-and-forget) if broker is down."""
         try:
-            from bot import bot
-            from app.models.partner import engine
-            from app.services.audit_service import audit_service
             from sqlalchemy.orm import sessionmaker
             from sqlmodel.ext.asyncio.session import AsyncSession
+
+            from app.models.partner import engine
+            from app.services.audit_service import audit_service
+            from bot import bot
 
             reply_markup = self._build_keyboard(buttons)
             
@@ -223,12 +227,14 @@ class NotificationService:
         Processes pending notifications from the NotificationRetry table.
         This is called by the monthly_maintenance_service task every minute.
         """
-        from datetime import datetime, UTC, timedelta
-        from app.models.notification_retry import NotificationRetry
-        from app.models.partner import engine
+        from datetime import UTC, datetime, timedelta
+
         from sqlalchemy.orm import sessionmaker
         from sqlmodel import select
         from sqlmodel.ext.asyncio.session import AsyncSession
+
+        from app.models.notification_retry import NotificationRetry
+        from app.models.partner import engine
         from bot import bot
 
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)

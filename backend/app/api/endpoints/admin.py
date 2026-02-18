@@ -10,6 +10,7 @@ from app.core.security import get_current_admin
 from app.models.partner import Partner, get_session
 from app.models.transaction import PartnerTransaction
 from app.services.admin_service import admin_service
+from app.services.audit_service import audit_service
 from app.services.notification_service import notification_service
 from app.services.payment_service import payment_service
 
@@ -111,6 +112,17 @@ async def reject_payment(
 
     transaction.status = "failed"
     session.add(transaction)
+    
+    # Audit Log
+    await audit_service.log_event(
+        session=session,
+        entity_type="transaction",
+        entity_id=str(transaction.id),
+        action="payment_rejected",
+        actor_id=str(admin.get("id") or "admin"),
+        details={"partner_id": transaction.partner_id, "amount": transaction.amount}
+    )
+    
     await session.commit()
 
     # Notify the User

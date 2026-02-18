@@ -472,7 +472,7 @@ async def get_orbit_members(
     partners = result.all()
 
     orbit_data = []
-    base_url = get_api_url()
+    _base_url = get_api_url()
     
     for i, p in enumerate(partners[:8]):
         # Construct the optimized picture_url
@@ -614,6 +614,7 @@ async def get_recent_partners(
         # Previously hardcoded to 680-780, which broke logic if total partners < 700.
         # NOW: We fetch actual total count and make hourly join count a reasonable % of it.
         try:
+            from sqlalchemy import func
             total_partners = (await session.exec(select(func.count(Partner.id)))).one() or 1
             
             # Real joins in the last hour

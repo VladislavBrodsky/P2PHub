@@ -9,7 +9,6 @@ interface StartupLoaderProps {
 }
 
 export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusText = 'Initializing P2P Hub' }) => {
-    const [isImageLoaded, setIsImageLoaded] = useState(false);
     // Use the relative path directly to ensure it loads from the same origin (fastest)
     const logoSrc = LOGO_DATA;
     const [displayProgress, setDisplayProgress] = useState(0);
@@ -84,7 +83,6 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                             src={logoSrc}
                             alt="Pintopay"
                             loading="eager"
-                            onLoad={() => setIsImageLoaded(true)}
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{
                                 scale: [1, 1.15, 1],

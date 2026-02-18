@@ -12,6 +12,7 @@ from app.models.transaction import PartnerTransaction
 from app.services.notification_service import notification_service
 from app.services.payment_service import payment_service
 from app.services.redis_service import redis_service
+from app.services.audit_service import audit_service
 
 
 class AdminService:
@@ -188,7 +189,7 @@ class AdminService:
         """Single-query optimization for all growth periods."""
         # Find the earliest needed date (90d * 2 = 180d)
         max_delta = timedelta(days=90 * 2)
-        earliest = now - max_delta
+        _earliest = now - max_delta
         
         # Build one giant query with conditional counts
         # This reduces 8 queries down to 1.
@@ -583,6 +584,16 @@ class AdminService:
                 )
                 session.add(new_xp_tx)
                 
+            # Log Audit Event
+            await audit_service.log_event(
+                session=session,
+                entity_type="partner",
+                entity_id=str(partner.id),
+                action="admin_update",
+                actor_id="admin_dashboard",
+                details=updates
+            )
+            
             if "is_pro" in updates:
                 partner.is_pro = bool(updates["is_pro"])
                 if partner.is_pro and not partner.pro_expires_at:

@@ -540,7 +540,7 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
             logger.error(f"❌ ViralStudio [OpenAI Error]: {err_msg}")
             
             # Determine specific error code
-            error_code = ViralStudioErrorCode.OPENAI_AUTH_ERROR if "auth" in err_msg.lower() or "401" in err_msg else \
+            _error_code = ViralStudioErrorCode.OPENAI_AUTH_ERROR if "auth" in err_msg.lower() or "401" in err_msg else \
                          ViralStudioErrorCode.OPENAI_RATE_LIMIT if "rate" in err_msg.lower() or "429" in err_msg else \
                          ViralStudioErrorCode.OPENAI_QUOTA_EXCEEDED if "quota" in err_msg.lower() or "insufficient" in err_msg.lower() else \
                          ViralStudioErrorCode.GENERIC_GENERATION_FAILED
@@ -844,13 +844,13 @@ Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
         ]
         
         import email.utils
-        from datetime import datetime, timedelta
+        from datetime import datetime
 
         import httpx
         from bs4 import BeautifulSoup
         
         news_items = []
-        now = datetime.now(tz=None) # Using naive UTC for comparison if needed
+        _now = datetime.now(tz=None) # Using naive UTC for comparison if needed
         cutoff_time = datetime.now(UTC) - timedelta(minutes=180)
         
         async with httpx.AsyncClient(timeout=10.0) as client:

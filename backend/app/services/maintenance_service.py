@@ -8,7 +8,9 @@ from sqlalchemy.orm import sessionmaker
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.core.config import settings  # FIX H-1: was missing, caused NameError in reset_monthly_pro_tokens
+from app.core.config import (
+    settings,  # FIX H-1: was missing, caused NameError in reset_monthly_pro_tokens
+)
 from app.models.partner import Earning, Partner, XPTransaction, engine
 from app.worker import broker
 

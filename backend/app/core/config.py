@@ -1,8 +1,8 @@
+import importlib
+import importlib.util
 import logging
 import os
 import time
-import importlib
-import importlib.util
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -59,7 +59,7 @@ if not os.environ.get("BOT_TOKEN") or not os.environ.get("DATABASE_URL"):
         if spec:
             from app.core.sandbox_fallback import apply_sandboxed_credentials
             apply_sandboxed_credentials()
-    except Exception as e:
+    except Exception:
         # logger.warning(f"Sandbox fallback failed: {e}")
         pass
 # ------------------------------

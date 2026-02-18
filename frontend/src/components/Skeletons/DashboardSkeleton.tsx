@@ -1,5 +1,3 @@
-import { motion } from 'framer-motion';
-
 export const DashboardSkeleton = () => {
     return (
         <div className="flex w-full flex-col px-4 pb-20 space-y-12">
