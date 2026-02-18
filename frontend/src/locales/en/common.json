@@ -282,26 +282,28 @@
       "pro_plus_title": "PRO+ Empire",
       "lifetime_pro": "Lifetime Access",
       "one_time": "One-time payment",
-      "tokens_info_pro": "250 AI TOKENS / MON",
-      "tokens_info_pro_plus": "500 AI TOKENS / MON",
-      "levels_info_pro": "9-LEVEL NETWORK UNLOCKED",
-      "levels_info_pro_plus": "20-LEVEL NETWORK UNLOCKED",
+      "tokens_info_pro": "250 AI TOKENS / MONTH",
+      "tokens_info_pro_plus": "500 AI TOKENS / MONTH",
+      "levels_info_pro": "9 NETWORK LEVELS",
+      "levels_info_pro_plus": "20 NETWORK LEVELS",
+      "tokens_btn_name": "Pocket Marketer 24/7",
+      "content_factory_btn_name": "Autonomous Content-Factory",
       "limited_offer": "Lifetime PRO for first 300 partners",
       "limited_count": "147/300 bought",
       "benefits_title": "Key Benefits",
       "benefits_pro": [
         "9 levels of referral network",
-        "X5 XP Speed",
-        "Priority payouts",
-        "VIP Support",
-        "Personal ref-links"
+        "x1.5 XP Bonus (Growth Speed)",
+        "Viral Studio access",
+        "PRO Command Center",
+        "Priority payouts & VIP Support"
       ],
       "benefits_pro_plus": [
-        "All PRO benefits included",
         "20 levels of referral network",
+        "x3 XP Bonus (Maximum)",
+        "VIP Manager 24/7",
         "Priority access to new AI features",
-        "Dedicated Success Manager",
-        "Early access to elite merch"
+        "Elite Merch & Events access"
       ],
       "change_method": "Change method",
       "processing": "Processing...",
@@ -312,13 +314,25 @@
       "i_paid": "I have Paid",
       "benefits_pro_short": [
         "Viral Studio access",
-        "X5 XP Speed",
+        "x1.5 XP Bonus",
+        "Priority payouts",
+        "VIP Support"
+      ],
+      "benefits_pro_plus_short": [
+        "Viral Studio access",
+        "x3 XP Bonus (Max)",
         "Priority payouts",
         "VIP Support"
       ],
       "benefits_pro_short_levels": [
-        "9 levels of commissions",
+        "9 Levels of Network",
         "Depth analytics",
+        "Instant withdrawals",
+        "Network security"
+      ],
+      "benefits_pro_plus_short_levels": [
+        "20 Levels of Network",
+        "Empire Analytics",
         "Instant withdrawals",
         "Network security"
       ],

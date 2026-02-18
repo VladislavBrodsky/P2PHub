@@ -113,11 +113,10 @@ export default function FAQPage() {
     });
 
     return (
-        <div className="flex flex-col min-h-screen pb-32 animate-in fade-in duration-500 overflow-x-hidden">
+        <div className="flex flex-col min-h-screen pb-32 bg-(--color-bg-app) animate-in fade-in duration-500 overflow-x-hidden">
             {/* Premium Header */}
             <div className="relative pt-4 pb-16 px-6">
-                <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/5 blur-[120px] rounded-full -z-10" />
-                <div className="absolute top-1/2 -left-24 w-64 h-64 bg-fuchsia-500/5 blur-[100px] rounded-full -z-10" />
+                <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-500/5 blur-[120px] rounded-full -z-10" />
 
                 <div className="flex items-center gap-3 mb-6">
                     <button
@@ -126,7 +125,7 @@ export default function FAQPage() {
                     >
                         <ArrowLeft size={18} />
                     </button>
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500 bg-indigo-500/10 px-3 py-1.5 rounded-full border border-indigo-500/20 backdrop-blur-sm">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 bg-blue-500/10 px-3 py-1.5 rounded-full border border-blue-500/20 backdrop-blur-sm">
                         {t('faq.knowledge_base')}
                     </span>
                 </div>
@@ -136,7 +135,7 @@ export default function FAQPage() {
                     animate={{ opacity: 1, x: 0 }}
                     className="text-4xl font-black text-(--color-text-primary) tracking-tighter leading-none mb-4 uppercase"
                 >
-                    <Trans i18nKey="faq.header_title" components={{ 0: <span className="text-indigo-500" /> }} />
+                    <Trans i18nKey="faq.header_title" components={{ 0: <span className="text-blue-500" /> }} />
                 </motion.h1>
                 <p className="text-(--color-text-secondary) font-medium text-xs max-w-[280px] leading-relaxed opacity-70">
                     {t('faq.header_desc')}
@@ -146,8 +145,8 @@ export default function FAQPage() {
             {/* Search Bar */}
             <div className="px-6 -mt-10 mb-8 relative z-20">
                 <div className="relative group">
-                    <div className="absolute inset-0 bg-indigo-500/20 blur-2xl group-focus-within:opacity-100 opacity-0 transition-opacity duration-500" />
-                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-indigo-500/50 group-focus-within:text-indigo-500 transition-colors z-10">
+                    <div className="absolute inset-0 bg-blue-500/20 blur-2xl group-focus-within:opacity-100 opacity-0 transition-opacity duration-500" />
+                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-blue-500/50 group-focus-within:text-blue-500 transition-colors z-10">
                         <Search size={18} />
                     </div>
                     <input
@@ -155,7 +154,7 @@ export default function FAQPage() {
                         placeholder={t('faq.search_placeholder', 'Search for answers...')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full h-16 pl-12 pr-4 bg-(--card-bg) border-2 border-(--card-border) focus:border-indigo-500/30 rounded-2xl text-sm font-bold shadow-2xl backdrop-blur-xl transition-all placeholder:text-(--color-text-secondary)/40 relative z-0"
+                        className="w-full h-16 pl-12 pr-4 bg-(--card-bg) border-2 border-(--card-border) focus:border-blue-500/30 rounded-2xl text-sm font-bold shadow-2xl backdrop-blur-xl transition-all placeholder:text-(--color-text-secondary)/40 relative z-0"
                     />
                 </div>
             </div>
@@ -167,7 +166,7 @@ export default function FAQPage() {
                         key={cat.id}
                         onClick={() => { selection(); setSelectedCategory(cat.id); }}
                         className={`flex items-center gap-2 px-4 h-10 rounded-full whitespace-nowrap text-[10px] font-black uppercase tracking-widest transition-all ${selectedCategory === cat.id
-                            ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 px-6'
+                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20 px-6'
                             : 'bg-(--card-bg) border border-(--card-border) text-(--color-text-secondary)'
                             }`}
                     >
@@ -192,7 +191,7 @@ export default function FAQPage() {
                             >
                                 <button
                                     onClick={() => { selection(); setSelectedFaq(selectedFaq === originalIndex ? null : originalIndex); }}
-                                    className={`w-full text-left p-5 rounded-2xl bg-(--card-bg) border border-(--card-border) transition-all duration-300 relative overflow-hidden active:scale-[0.98] ${selectedFaq === originalIndex ? 'ring-2 ring-indigo-500/30 border-indigo-500/20 shadow-xl' : 'hover:border-indigo-500/30'
+                                    className={`w-full text-left p-5 rounded-2xl bg-(--card-bg) border border-(--card-border) transition-all duration-300 relative overflow-hidden active:scale-[0.98] ${selectedFaq === originalIndex ? 'ring-2 ring-blue-500/30 border-blue-500/20 shadow-xl' : 'hover:border-blue-500/30'
                                         }`}
                                 >
                                     <div className="flex items-start gap-4 h-full">
@@ -200,11 +199,11 @@ export default function FAQPage() {
                                             {faq.icon}
                                         </div>
                                         <div className="flex-1 pt-1">
-                                            <div className="flex items-center gap-2 mb-2 font-mono text-[8px] font-black uppercase tracking-widest text-indigo-500/60">
+                                            <div className="flex items-center gap-2 mb-2 font-mono text-[8px] font-black uppercase tracking-widest text-blue-500/60">
                                                 <Clock size={10} />
                                                 {faq.readTime} • {categories.find(c => c.id === faq.category)?.label || faq.category}
                                             </div>
-                                            <h3 className="text-sm font-black text-(--color-text-primary) leading-snug group-hover:text-indigo-500 transition-colors">
+                                            <h3 className="text-sm font-black text-(--color-text-primary) leading-snug group-hover:text-blue-500 transition-colors">
                                                 {faq.q}
                                             </h3>
                                         </div>
@@ -233,7 +232,7 @@ export default function FAQPage() {
                                                     <div className="mt-4 flex gap-2">
                                                         <button
                                                             onClick={(e) => { e.stopPropagation(); notification('success'); }}
-                                                            className="text-[9px] font-black uppercase tracking-widest text-indigo-500 flex items-center gap-1 p-2 bg-indigo-500/5 rounded-lg border border-indigo-500/10 active:scale-95 transition-all"
+                                                            className="text-[9px] font-black uppercase tracking-widest text-blue-500 flex items-center gap-1 p-2 bg-blue-500/5 rounded-lg border border-blue-500/10 active:scale-95 transition-all"
                                                         >
                                                             {t('faq.helpful')}
                                                         </button>
@@ -259,7 +258,7 @@ export default function FAQPage() {
 
             {/* Need More Help Footer */}
             <div className="mt-12 px-6">
-                <div className="p-8 rounded-3xl bg-linear-to-br from-indigo-600 to-indigo-800 text-white relative overflow-hidden shadow-2xl shadow-indigo-500/30">
+                <div className="p-8 rounded-3xl bg-linear-to-br from-blue-600 to-blue-800 text-white relative overflow-hidden shadow-2xl shadow-blue-500/30">
                     <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 blur-3xl rounded-full" />
                     <h2 className="text-2xl font-black mb-2 uppercase tracking-tighter italic">
                         <Trans i18nKey="faq.still_have_questions" components={{ 0: <span className="text-white/60" /> }} />
@@ -270,7 +269,7 @@ export default function FAQPage() {
                     <div className="flex gap-3">
                         <button
                             onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
-                            className="flex-1 h-12 bg-white text-indigo-600 rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all"
+                            className="flex-1 h-12 bg-white text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all"
                         >
                             {t('faq.support_btn')}
                         </button>

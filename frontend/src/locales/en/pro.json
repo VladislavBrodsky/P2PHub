@@ -630,128 +630,13 @@
       }
     }
   },
-  "subscription": {
-    "pro_active": {
-      "title": "WELCOME TO THE <1>ELITE</1>",
-      "title_plus": "PRO+ EMPIRE ACTIVE",
-      "desc": "You have unlocked the full potential of Pintopay. Your journey to x10 profit has officially begun.",
-      "desc_plus": "Your AI engine is running at full capacity with 500 monthly tokens and 20-level network insights.",
-      "plan_pro": "PLAN: PRO CLASSIC",
-      "plan_pro_plus": "PLAN: PRO+ EMPIRE",
-      "active_until": "Active until",
-      "lifetime": "Lifetime Plan",
-      "command_center": "PRO Command Center",
-      "explore_empire": "Explore your empire"
-    },
-    "upgrade": {
-      "badge": "Premium Subscription",
-      "title": "Upgrade to <1>PRO STATUS</1>",
-      "desc": "Select the level of growth automation that suits your ambition. Both plans unlock 20 levels of commissions.",
-      "pro_title": "PRO Plan",
-      "pro_plus_title": "PRO+ Empire",
-      "lifetime_pro": "Lifetime Access",
-      "one_time": "One-time payment",
-      "tokens_info_pro": "250 AI Tokens / Month",
-      "tokens_info_pro_plus": "500 AI Tokens / Month",
-      "levels_info": "20-Level Network Unlocked",
-      "limited_offer": "Lifetime PRO for first 300 partners",
-      "limited_count": "147/300 bought",
-      "benefits_title": "Key Benefits",
-      "benefits_pro": [
-        "9 levels of referral network",
-        "X5 XP Speed",
-        "Priority payouts",
-        "VIP Support",
-        "Personal ref-links"
-      ],
-      "benefits_pro_plus": [
-        "All PRO benefits included",
-        "20 levels of referral network",
-        "Priority access to new AI features",
-        "Dedicated Success Manager",
-        "Early access to elite merch"
-      ],
-      "change_method": "Change method",
-      "processing": "Processing...",
-      "complete_payment": "Complete payment",
-      "usdt_address": "USDT TRC20 Address",
-      "tx_hash_label": "Transaction Hash (optional)",
-      "tx_hash_placeholder": "Paste transaction hash",
-      "i_paid": "I have Paid",
-      "manual_review_p": "Reviewed by our team within 24 hours.<1/>Please complete the transfer within 30 minutes."
-    },
-    "status": {
-      "verifying": "Verifying...",
-      "verifying_p": "Checking on-chain data. This usually takes 30-60 seconds.",
-      "welcome_pro": "Welcome to PRO!",
-      "welcome_pro_p": "Your account has been successfully upgraded.",
-      "get_started": "Get Started",
-      "submitted": "Submitted",
-      "submitted_p": "Our team is verifying your payment. You will be notified once confirmed.",
-      "got_it": "Got it"
-    },
-    "alerts": {
-      "expired": "Session expired. Please start the process again.",
-      "failed": "Payment session expired or failed. Please try again."
-    },
-    "arsenal": {
-      "title": "The PRO Arsenal",
-      "subtitle": "Automated weapons for the modern digital warrior.",
-      "pitch": {
-        "title": "The PRO Starter Pack",
-        "description": "Unlock PRO and receive **500 Tokens** instantly. This is your engine for growth:",
-        "items": [
-          "**Scale your network 100x** by selling a global product in two clicks.",
-          "**Team Duplication:** Your team scales 100x as they copy your automated success."
-        ]
-      },
-      "items": [
-        {
-          "id": "studio",
-          "title": "Viral Marketing Studio (24/7 AI Powered)",
-          "desc": "Generate 30 Days of Content in 30 Seconds. Get daily fresh viral topics and AI-generated hooks tailored to your audience.",
-          "stats": [
-            "**3 Posts / Day** on Autopilot",
-            "Reduce work time by **95%**",
-            "AI Keyword Research",
-            "Instant FOMO & CTAs"
-          ],
-          "terminal": [
-            "> Generating viral thread...",
-            "> Analysis: 98% Confidence"
-          ],
-          "btn": "UNLOCK VIRAL STUDIO"
-        },
-        {
-          "id": "factory",
-          "title": "AI Content Factory (24/7 fully automated)",
-          "desc": "Autonomous Agent that posts for you while you sleep. Your own full-stack SMM manager. Fully automated autoposting across all platforms.",
-          "stats": [
-            "**24/7 AI-Powered** Publishing",
-            "10x Marketing Efficiency",
-            "24/7 Autopilot Mode",
-            "Multi-platform Sync"
-          ],
-          "terminal": [
-            "> Scheduling 42 posts...",
-            "> Status: ACTIVE"
-          ],
-          "btn": "HIRE YOUR AI AGENT"
-        }
-      ],
-      "coming_soon": {
-        "plan": "PRO+ Subscription Plan",
-        "status": "COMING SOON"
-      }
-    },
-    "faq": {
-      "title": "Frequently Asked Questions",
-      "q1": "Is it really lifetime?",
-      "a1": "Yes. Pay once, use forever. No monthly fees, no hidden costs.",
-      "q2": "How do tokens work?",
-      "a2": "You get 250 tokens (PRO) or 500 tokens (PRO+) monthly. Tokens reset on the 1st of every month.",
-      "q3": "Can I use multiple accounts?",
-      "a3": "The license is tied to your Telegram ID. One purchase per account."
-    }
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "q1": "Is it really lifetime?",
+    "a1": "Yes. Pay once, use forever. No monthly fees, no hidden costs.",
+    "q2": "How do tokens work?",
+    "a2": "You get 250 tokens (PRO) or 500 tokens (PRO+) monthly. Tokens reset on the 1st of every month.",
+    "q3": "Can I use multiple accounts?",
+    "a3": "The license is tied to your Telegram ID. One purchase per account."
   }
 }
