@@ -3,10 +3,11 @@ import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { X, Zap, CheckCircle2, ArrowRight, Lock, Lightbulb, Wand2, Share2, Target, ArrowLeft } from 'lucide-react';
 import { AcademyStage } from '../../data/academyData';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
 import { useUI } from '../../context/UIContext';
 import { useTMALock } from '../../hooks/useTMALock';
+import { renderMarkdown } from '../../utils/renderMarkdown';
 
 interface AcademyContentPortalProps {
     stage: AcademyStage;
@@ -83,7 +84,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
     };
 
     return createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-0 sm:p-4">
+        <div className="fixed inset-0 z-9999 flex items-center justify-center p-0 sm:p-4">
             {/* Backdrop - Blocks background interaction */}
             <motion.div
                 initial={{ opacity: 0 }}
@@ -99,8 +100,12 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 animate={{ y: 0 }}
                 exit={{ y: "100%" }}
                 transition={{ type: "spring", damping: 32, stiffness: 350 }}
-                className="relative w-full h-dvh sm:h-auto sm:max-w-lg bg-white dark:bg-[#030712] sm:rounded-[2rem] shadow-2xl border-t sm:border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col touch-auto overscroll-none"
-                style={{ overscrollBehavior: 'none' }}
+                className="relative w-full sm:max-w-lg bg-white dark:bg-[#030712] sm:rounded-[2rem] shadow-2xl border-t sm:border border-slate-200 dark:border-white/10 flex flex-col"
+                style={{
+                    height: '100dvh',
+                    maxHeight: '100dvh',
+                    overscrollBehavior: 'none',
+                }}
             >
                 {/* Fixed Header Bar - Premium Glassmorphism with Safe Area support */}
                 <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pb-4 pt-[calc(var(--spacing-safe-top)+2.5rem)] bg-white/80 dark:bg-black/40 backdrop-blur-3xl border-b border-slate-200 dark:border-white/5 shrink-0">
@@ -142,15 +147,22 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                     </div>
                 </div>
 
-                {/* Content Area (Scrollable) */}
+                {/* Content Area (Scrollable) — uses flex-1 to fill remaining space */}
                 <div
                     ref={contentRef}
                     onScroll={handleScroll}
-                    className="flex-1 overflow-y-auto overscroll-none custom-scrollbar scroll-smooth touch-pan-y pb-32"
-                    style={{ overscrollBehavior: 'none' }}
+                    className="flex-1 min-h-0 custom-scrollbar"
+                    style={{
+                        overflowY: 'scroll',
+                        overflowX: 'hidden',
+                        WebkitOverflowScrolling: 'touch',
+                        overscrollBehavior: 'contain',
+                        // Extra bottom padding: safe-area + fixed bottom bar (~90px) + breathing room
+                        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 120px)',
+                    }}
                 >
 
-                    <div className="p-6 pt-10 space-y-8">
+                    <div className="p-5 pt-8 space-y-7">
                         {isLocked ? (
                             /* PRO Lock View */
                             <div className="flex flex-col items-center text-center space-y-8 py-12">
@@ -212,13 +224,11 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
 
                                 {/* Main Article Content */}
                                 <div className="space-y-7 text-slate-600 dark:text-slate-400 text-[15px] leading-relaxed font-medium">
-                                    <p className="text-lg text-slate-900 dark:text-white font-bold leading-snug">
-                                        <Trans i18nKey={`academy_content.stage_${stage.id}_lesson_intro`}>
-                                            {t(`academy_content.stage_${stage.id}_lesson_intro`, { defaultValue: t('academy.elite_training') })}
-                                        </Trans>
-                                    </p>
+                                    <div className="text-[15px] text-slate-900 dark:text-white font-bold leading-snug">
+                                        {renderMarkdown(t(`academy_content.stage_${stage.id}_lesson_intro`, { defaultValue: t('academy.elite_training') }))}
+                                    </div>
 
-                                    <div className="p-6 rounded-[2rem] bg-blue-50 dark:bg-blue-500/5 border border-blue-100 dark:border-blue-500/20 space-y-3 relative overflow-hidden group">
+                                    <div className="p-5 rounded-[1.5rem] bg-blue-50 dark:bg-blue-500/5 border border-blue-100 dark:border-blue-500/20 space-y-3 relative overflow-hidden group">
                                         <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 blur-2xl -mr-8 -mt-8" />
                                         <div className="flex items-center justify-between relative z-10">
                                             <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-500 font-black text-[11px] uppercase tracking-widest">
@@ -233,49 +243,46 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                             </button>
                                         </div>
                                         <p className="text-[14px] italic leading-relaxed text-slate-700 dark:text-slate-200 relative z-10 font-bold">
-                                            "{t(`academy_content.stage_${stage.id}_lesson_secret`, { defaultValue: t('academy.profit_quote') })}"
+                                            &ldquo;{renderMarkdown(t(`academy_content.stage_${stage.id}_lesson_secret`, { defaultValue: t('academy.profit_quote') }))}&rdquo;
                                         </p>
                                     </div>
 
                                     <div className="space-y-6">
-                                        <div className="prose dark:prose-invert max-w-none">
-                                            <Trans i18nKey={`academy_content.stage_${stage.id}_lesson_body`}>
-                                                {t(`academy_content.stage_${stage.id}_lesson_body`, { defaultValue: t('academy.growth_hacker') })}
-                                            </Trans>
+                                        {/* Main body with full markdown support */}
+                                        <div className="text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">
+                                            {renderMarkdown(t(`academy_content.stage_${stage.id}_lesson_body`, { defaultValue: t('academy.growth_hacker') }))}
                                         </div>
 
-                                        {/* AI Expert Section (Conditional but also translateable) */}
+                                        {/* AI Expert Section */}
                                         {(stage.category === 'ai' || (stage.id >= 5 && stage.id <= 10) || t(`academy_content.stage_${stage.id}_lesson_ai_expert`, { defaultValue: '' })) && (
-                                            <div className="p-6 rounded-[2rem] bg-linear-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 space-y-4">
+                                            <div className="p-5 rounded-[1.5rem] bg-linear-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 space-y-3">
                                                 <div className="flex items-center gap-2.5 text-purple-600 dark:text-purple-400 font-black text-[11px] uppercase tracking-widest">
                                                     <Wand2 className="w-4 h-4" />
                                                     {t('academy.ai_expert')}
                                                 </div>
-                                                <p className="text-[13px] leading-relaxed font-medium">
-                                                    {t(`academy_content.stage_${stage.id}_lesson_ai_expert`, { defaultValue: t('academy.ai_desc') })}
-                                                </p>
+                                                <div className="text-[13px] leading-relaxed font-medium">
+                                                    {renderMarkdown(t(`academy_content.stage_${stage.id}_lesson_ai_expert`, { defaultValue: t('academy.ai_desc') }))}
+                                                </div>
                                             </div>
                                         )}
 
                                         {/* Viral Rule / Marketing Trick Section */}
                                         {t(`academy_content.stage_${stage.id}_lesson_viral_rule`, { defaultValue: '' }) && (
-                                            <div className="p-6 rounded-[2rem] bg-linear-to-r from-pink-500/10 to-rose-500/10 border border-pink-500/20 space-y-4">
+                                            <div className="p-5 rounded-[1.5rem] bg-linear-to-r from-pink-500/10 to-rose-500/10 border border-pink-500/20 space-y-3">
                                                 <div className="flex items-center gap-2.5 text-pink-600 dark:text-pink-400 font-black text-[11px] uppercase tracking-widest">
                                                     <Zap className="w-4 h-4" />
                                                     {t('academy.viral_psychology')}
                                                 </div>
                                                 <p className="text-[13px] leading-relaxed font-bold italic text-slate-800 dark:text-slate-200">
-                                                    "{t(`academy_content.stage_${stage.id}_lesson_viral_rule`)}"
+                                                    &ldquo;{t(`academy_content.stage_${stage.id}_lesson_viral_rule`)}&rdquo;
                                                 </p>
                                             </div>
                                         )}
                                     </div>
 
-                                    <p className="opacity-90 pt-4 border-t border-slate-100 dark:border-white/5">
-                                        <Trans i18nKey={`academy_content.stage_${stage.id}_lesson_outro`}>
-                                            {t(`academy_content.stage_${stage.id}_lesson_outro`, { defaultValue: t('academy.build_empire') })}
-                                        </Trans>
-                                    </p>
+                                    <div className="opacity-90 pt-4 border-t border-slate-100 dark:border-white/5 text-[14px]">
+                                        {renderMarkdown(t(`academy_content.stage_${stage.id}_lesson_outro`, { defaultValue: t('academy.build_empire') }))}
+                                    </div>
 
                                     {/* Action Mission - High Impact Commitment */}
                                     <motion.div
@@ -317,7 +324,9 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                     </div>
                 </div>
 
-                <div className="absolute bottom-0 left-0 right-0 p-6 pb-[calc(var(--spacing-safe-bottom)+1.5rem)] bg-linear-to-t from-white via-white/95 to-transparent dark:from-[#030712] dark:via-[#030712]/95 z-20 flex gap-3">
+                <div className="absolute bottom-0 left-0 right-0 px-4 pt-4 bg-linear-to-t from-white via-white/98 to-transparent dark:from-[#030712] dark:via-[#030712]/98 z-20 flex gap-3"
+                    style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 16px)' }}
+                >
                     <button
                         onClick={onClose}
                         className="w-14 h-auto rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 flex items-center justify-center active:scale-90 transition-all hover:bg-slate-200 dark:hover:bg-white/10"
