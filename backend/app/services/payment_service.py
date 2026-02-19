@@ -235,9 +235,25 @@ class PaymentService:
             # PRO+ is unaffected by the 300 limit (usually remains lifetime or handled separately)
             # as per user instruction: "this not applied for PRO+".
             
-            lifetime_granted = False
             if is_plus:
                 partner.subscription_plan = "PRO_PLUS_MONTHLY"
+                # Updated Logic: PRO+ purchases ALSO consume a specialized "Lifetime Slot"
+                # This aligns with the "300 Limited Promo" campaign
+                
+                stmt_sold = select(SystemSetting).where(SystemSetting.key == "pro_slots_sold").with_for_update()
+                res_sold = await session.exec(stmt_sold)
+                setting_sold = res_sold.first()
+                
+                sold_count = int(setting_sold.value) if setting_sold else 147
+                
+                # Increment the global counter
+                if setting_sold:
+                    setting_sold.value = str(sold_count + 1)
+                    session.add(setting_sold)
+                else:
+                    new_sold = SystemSetting(key="pro_slots_sold", value=str(sold_count + 1))
+                    session.add(new_sold)
+
                 # Monthly Subscription with Extension Logic
                 if partner.pro_expires_at and partner.pro_expires_at > now:
                     partner.pro_expires_at += timedelta(days=30)
@@ -270,7 +286,6 @@ class PaymentService:
                         session.add(setting_sold)
                     else:
                         # Initialize counter if this is the first tracked sale
-                        # Note: We start at sold_count + 1 because sold_count defaults to 147/0
                         new_sold = SystemSetting(key="pro_slots_sold", value=str(sold_count + 1))
                         session.add(new_sold)
                 else:
