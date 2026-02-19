@@ -287,8 +287,8 @@ class TestCommissionDistribution:
         
         await session.refresh(referrer)
         
-        # #comment: L1 gets 20% of $39 = $7.80 (20% from config)
-        expected_commission = pro_amount * 0.20
+        # #comment: L1 gets 30% of $39 = $11.70 (from config)
+        expected_commission = pro_amount * 0.30
         assert abs(referrer.balance - (initial_balance + expected_commission)) < 0.01
     
     async def test_two_level_commission(self, session: AsyncSession, create_referral_chain):
@@ -312,11 +312,8 @@ class TestCommissionDistribution:
         for user in chain[:2]:
             await session.refresh(user)
         
-        # Verify commissions
-        # Verify commissions (L1: 20%, L2: 10%)
-        # chain[1] is L1 (relative to buyer chain[2])
-        # chain[0] is L2
-        assert abs(chain[1].balance - (pro_amount * 0.20)) < 0.01
+        # Verify commissions (L1: 30%, L2: 10%)
+        assert abs(chain[1].balance - (pro_amount * 0.30)) < 0.01
         assert abs(chain[0].balance - (pro_amount * 0.10)) < 0.01
     
     async def test_9_level_commission(self, session: AsyncSession, create_referral_chain):
@@ -343,22 +340,19 @@ class TestCommissionDistribution:
         for user in chain:
             await session.refresh(user)
         
-        # Expected commissions
         # Expected commissions (from config.py) by Index
         # Buyer is chain[8].
-        # L1 -> chain[7] (20%)
-        # L2 -> chain[6] (10%)
-        # ...
-        # L8 -> chain[0] (0.5%)
+        # L1 -> chain[7] (30%), L2 -> chain[6] (10%), L3 -> chain[5] (3%)
+        # L4-L8 -> chain[4..0] (1% each)
         expected_rates = {
-            7: 0.20,  # L1
+            7: 0.30,  # L1
             6: 0.10,  # L2
-            5: 0.05,  # L3
-            4: 0.03,  # L4
-            3: 0.02,  # L5
-            2: 0.015, # L6
+            5: 0.03,  # L3
+            4: 0.01,  # L4
+            3: 0.01,  # L5
+            2: 0.01,  # L6
             1: 0.01,  # L7
-            0: 0.005, # L8
+            0: 0.01,  # L8
         }
         
         for i, rate in expected_rates.items():
@@ -523,7 +517,7 @@ class TestRegressionPrevention:
         
         # Direct referrer MUST get 20%
         await session.refresh(chain[0])
-        expected = 39.0 * 0.20
+        expected = 39.0 * 0.30  # L1 = 30%
         assert abs(chain[0].balance - expected) < 0.01, \
             f"Direct referrer got ${chain[0].balance}, expected ${expected}"
 
@@ -610,5 +604,5 @@ class TestProPlusFeatures:
         
         # L11 Commission (0.4%)
         # L11 User is PRO+ -> Qualified.
-        expected_l11 = pro_plus_amount * 0.004
+        expected_l11 = pro_plus_amount * 0.006  # L11 = 0.6%
         assert abs(l11_user.balance - expected_l11) < 0.01, f"L11 PRO+ User expected ${expected_l11}, got ${l11_user.balance}"
