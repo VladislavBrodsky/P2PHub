@@ -88,7 +88,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                                         animate={{ width: i < index ? '100%' : i === index ? '100%' : '0%' }}
                                         transition={{ duration: i === index ? 5 : 0, ease: 'linear' }}
                                         onAnimationComplete={() => i === index && next()}
-                                        className="h-full progress-bar-liquid"
+                                        className="h-full progress-bar-liquid bg-linear-to-r from-emerald-400 to-emerald-500"
                                     />
                                 </div>
                             ))}

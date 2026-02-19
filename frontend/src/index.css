@@ -815,27 +815,27 @@ body {
 @keyframes liquid-crystal-shift {
   0% {
     background-position: 0% 50%;
-    filter: hue-rotate(0deg) brightness(1.1) saturate(1.4);
+    filter: brightness(1.1) saturate(1.4);
   }
 
   25% {
     background-position: 50% 0%;
-    filter: hue-rotate(60deg) brightness(1.2) saturate(1.6);
+    filter: brightness(1.2) saturate(1.6);
   }
 
   50% {
     background-position: 100% 50%;
-    filter: hue-rotate(130deg) brightness(1.15) saturate(1.5);
+    filter: brightness(1.15) saturate(1.5);
   }
 
   75% {
     background-position: 50% 100%;
-    filter: hue-rotate(200deg) brightness(1.2) saturate(1.6);
+    filter: brightness(1.2) saturate(1.6);
   }
 
   100% {
     background-position: 0% 50%;
-    filter: hue-rotate(360deg) brightness(1.1) saturate(1.4);
+    filter: brightness(1.1) saturate(1.4);
   }
 }
 
@@ -878,16 +878,7 @@ body {
 .progress-bar-liquid {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(90deg,
-      #06b6d4,
-      #6366f1,
-      #10b981,
-      #8b5cf6,
-      #22d3ee,
-      #a78bfa,
-      #34d399,
-      #06b6d4);
-  background-size: 400% 400%;
+  background-size: 200% 200%;
   animation:
     liquid-crystal-shift 4s ease infinite,
     liquid-crystal-glow 4s ease infinite;

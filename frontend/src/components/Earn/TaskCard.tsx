@@ -173,7 +173,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                             </div>
                             <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800/80 rounded-full overflow-hidden p-px border border-slate-200 dark:border-white/5">
                                 <motion.div
-                                    className="h-full rounded-full progress-bar-liquid"
+                                    className="h-full rounded-full progress-bar-liquid bg-linear-to-r from-emerald-400 to-emerald-500"
                                     initial={{ width: 0 }}
                                     animate={{
                                         width: `${Math.min((currentProgress / (task.requirement || 1)) * 100, 100)}%`

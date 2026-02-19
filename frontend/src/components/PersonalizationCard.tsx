@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Crown, User } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { useTranslation } from 'react-i18next';
-import { getRank, getXPProgress } from '../utils/ranking';
+import { getRank, getXPProgress, getRankGradient } from '../utils/ranking';
 
 interface PersonalizationCardProps {
     className?: string;
@@ -150,7 +150,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 initial={{ width: 0 }}
                                 animate={{ width: `${xpProgress.percent}%` }}
                                 transition={{ duration: 1.5, ease: 'circOut' }}
-                                className="h-full rounded-full progress-bar-liquid"
+                                className={`h-full rounded-full progress-bar-liquid bg-linear-to-r ${getRankGradient(stats.level || 1)}`}
                             />
                         </div>
                     </div>

@@ -74,7 +74,7 @@ export const EarnHeader = () => {
                                     initial={{ width: 0 }}
                                     animate={{ width: `${progress.percent}%` }}
                                     transition={{ duration: 1.5, ease: "backOut" }}
-                                    className="h-full rounded-full progress-bar-liquid"
+                                    className={`h-full rounded-full progress-bar-liquid bg-linear-to-r ${getRankGradient(level)}`}
                                 />
                             </div>
                         </div>
