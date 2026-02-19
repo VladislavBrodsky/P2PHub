@@ -3,7 +3,7 @@ import os
 import sys
 import time
 from pathlib import Path
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 from dotenv import load_dotenv
 from pydantic import Field, model_validator
@@ -145,6 +145,33 @@ class Settings(BaseSettings):
         ],
         validation_alias="ALLOWED_ORIGINS"
     )
+
+    # --- REFERRAL & REWARDS ---
+    REFERRAL_XP_MAP: Dict[int, float] = Field(
+        default_factory=lambda: {
+            1: 100.0, 2: 50.0, 3: 30.0, 4: 20.0, 5: 15.0, 
+            6: 10.0, 7: 8.0, 8: 6.0, 9: 5.0, 10: 4.0,
+            11: 3.0, 12: 2.5, 13: 2.0, 14: 1.5, 15: 1.0,
+            16: 0.8, 17: 0.6, 18: 0.4, 19: 0.2, 20: 0.1
+        },
+        validation_alias="REFERRAL_XP_MAP"
+    )
+    PRO_XP_MULTIPLIER: float = 2.0
+    PRO_PLUS_XP_MULTIPLIER: float = 3.0
+
+    COMMISSION_MAP_EMPIRE: Dict[int, float] = Field(
+        default_factory=lambda: {
+            1: 0.20, 2: 0.10, 3: 0.05, 4: 0.03, 5: 0.02,
+            6: 0.015, 7: 0.01, 8: 0.005, 9: 0.005, 10: 0.005,
+            11: 0.004, 12: 0.003, 13: 0.002, 14: 0.001, 15: 0.001,
+            16: 0.001, 17: 0.0005, 18: 0.0005, 19: 0.0005, 20: 0.0005
+        },
+        validation_alias="COMMISSION_MAP_EMPIRE"
+    )
+
+    # --- INFRASTRUCTURE ---
+    SENTRY_FRONTEND_DSN: Optional[str] = Field(default=None, validation_alias="SENTRY_FRONTEND_DSN")
+    PAYMENT_SERVICE_MODE: str = Field(default="live", validation_alias="PAYMENT_SERVICE_MODE")
 
     # Helper property for asyncpg
     @property
