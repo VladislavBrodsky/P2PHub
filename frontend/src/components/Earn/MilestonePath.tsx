@@ -398,7 +398,7 @@ export const MilestonePath = () => {
                                                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{t('achievements_path.how_to_unlock')}</span>
                                             </div>
                                             <p className="text-[14px] font-bold text-slate-700 dark:text-slate-300 leading-relaxed italic">
-                                                "{selectedItem.instruction || t('achievements_path.unlock_locked', { level: selectedItem.level })}"
+                                                "{selectedItem.instruction ? t(selectedItem.instruction) : t('achievements_path.unlock_locked', { level: selectedItem.level })}"
                                             </p>
                                         </div>
 

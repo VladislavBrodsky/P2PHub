@@ -113,6 +113,23 @@
         "ambassador": "Ambassador Level"
       },
       "all_unlocked": "Full Achievement List",
+      "instructions": {
+        "early_1": "Ignition! Start your journey by visiting the Growth hub.",
+        "ghost_share": "Viral Spark: Share your referral link to ignite the network.",
+        "early_3": "Precision: Open the app for 3 consecutive days.",
+        "viral_blitz": "Overdrive: Bring in 3 partners within 24 hours.",
+        "early_5": "Fortress: Reach Level 5 and solidify your position.",
+        "early_7": "Veteran: Maintain your streak and help your team grow.",
+        "early_10": "Silver Elite: Earn the mark of a true Network Builder.",
+        "growth_15": "Tsunami: Unlock team-wide multipliers at Level 15.",
+        "legacy_20": "Tech Pioneer: Claim your first mastercharge virtual card.",
+        "legacy_44": "Iron Will: Unlock the -10% Physical Card issuance discount.",
+        "milestone_60": "Grandmaster: Command the network from Level 60.",
+        "milestone_70": "VIP: Pure Diamond status achieved.",
+        "milestone_80": "Titan: Unbreakable network at Level 80.",
+        "milestone_90": "Immortal: Your legacy is permanent.",
+        "milestone_100": "Apex: The Physical Platinum Card is yours."
+      },
       "next_milestones": "Next Goals"
     },
     "brief": {

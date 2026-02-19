@@ -254,7 +254,7 @@ export const ACHIEVEMENTS: Achievement[] = [
         reward: 'referral.rewards.items.onboard_1',
         icon: Rocket,
         color: 'text-orange-400',
-        instruction: 'Ignition! Start your journey by visiting the Growth hub.',
+        instruction: 'referral.rewards.instructions.early_1',
         taskType: 'checkin'
     },
     {
@@ -263,7 +263,7 @@ export const ACHIEVEMENTS: Achievement[] = [
         reward: 'referral.rewards.items.viral_blitz',
         icon: Flame,
         color: 'text-red-400',
-        instruction: 'Viral Spark: Share your referral link to ignite the network.',
+        instruction: 'referral.rewards.instructions.ghost_share',
         taskType: 'share'
     },
     {
@@ -272,7 +272,7 @@ export const ACHIEVEMENTS: Achievement[] = [
         reward: 'referral.rewards.items.streak_3',
         icon: Target,
         color: 'text-emerald-400',
-        instruction: 'Precision: Open the app for 3 consecutive days.',
+        instruction: 'referral.rewards.instructions.early_3',
         taskType: 'checkin'
     },
     {
@@ -281,7 +281,7 @@ export const ACHIEVEMENTS: Achievement[] = [
         reward: 'referral.rewards.items.viral_blitz',
         icon: Zap,
         color: 'text-yellow-400',
-        instruction: 'Overdrive: Bring in 3 partners within 24 hours.',
+        instruction: 'referral.rewards.instructions.viral_blitz',
         taskType: 'viral'
     },
     {
@@ -290,7 +290,7 @@ export const ACHIEVEMENTS: Achievement[] = [
         reward: 'referral.rewards.items.ref_node',
         icon: Shield,
         color: 'text-blue-500',
-        instruction: 'Fortress: Reach Level 5 and solidify your position.',
+        instruction: 'referral.rewards.instructions.early_5',
         taskType: 'level'
     },
 
@@ -301,7 +301,7 @@ export const ACHIEVEMENTS: Achievement[] = [
         reward: 'referral.rewards.items.streak_7',
         icon: Medal,
         color: 'text-indigo-400',
-        instruction: 'Veteran: Maintain your streak and help your team grow.',
+        instruction: 'referral.rewards.instructions.early_7',
         taskType: 'invite'
     },
     {
@@ -310,7 +310,7 @@ export const ACHIEVEMENTS: Achievement[] = [
         reward: 'referral.rewards.items.silver_badge',
         icon: Award,
         color: 'text-slate-300',
-        instruction: 'Silver Elite: Earn the mark of a true Network Builder.',
+        instruction: 'referral.rewards.instructions.early_10',
         taskType: 'level'
     },
     {
@@ -319,7 +319,7 @@ export const ACHIEVEMENTS: Achievement[] = [
         reward: 'referral.rewards.items.viral_tsunami',
         icon: Gem,
         color: 'text-cyan-400',
-        instruction: 'Tsunami: Unlock team-wide multipliers at Level 15.',
+        instruction: 'referral.rewards.instructions.growth_15',
         taskType: 'level'
     },
 
@@ -330,7 +330,7 @@ export const ACHIEVEMENTS: Achievement[] = [
         reward: 'referral.rewards.items.free_virtual_card',
         icon: CreditCard,
         color: 'text-white',
-        instruction: 'Tech Pioneer: Claim your first mastercharge virtual card.',
+        instruction: 'referral.rewards.instructions.legacy_20',
         taskType: 'level'
     },
     { id: 'growth_25', level: 25, reward: 'referral.rewards.items.network_pro', icon: Rocket, color: 'text-blue-400' },
@@ -344,7 +344,7 @@ export const ACHIEVEMENTS: Achievement[] = [
         reward: 'referral.rewards.items.fee_discount',
         icon: Gem,
         color: 'text-emerald-500',
-        instruction: 'Iron Will: Unlock the -10% Physical Card issuance discount.',
+        instruction: 'referral.rewards.instructions.legacy_44',
         taskType: 'level'
     },
     { id: 'elite_45', level: 45, reward: 'referral.rewards.items.global_partner', icon: Star, color: 'text-blue-400' },
@@ -352,11 +352,11 @@ export const ACHIEVEMENTS: Achievement[] = [
 ];
 
 export const MILESTONES = [
-    { level: 60, reward: 'referral.rewards.items.grandmaster', icon: Crown, color: 'text-purple-500', instruction: 'Grandmaster: Command the network from Level 60.' },
-    { level: 70, reward: 'referral.rewards.items.vip_status', icon: Diamond, color: 'text-pink-500', instruction: 'VIP: Pure Diamond status achieved.' },
-    { level: 80, reward: 'referral.rewards.items.premium_access', icon: Shield, color: 'text-emerald-400', instruction: 'Titan: Unbreakable network at Level 80.' },
-    { level: 90, reward: 'referral.rewards.items.immortal_tier', icon: Flame, color: 'text-orange-600', instruction: 'Immortal: Your legacy is permanent.' },
-    { level: 100, reward: 'referral.rewards.items.platinum_physical', icon: Trophy, color: 'text-slate-100', instruction: 'Apex: The Physical Platinum Card is yours.' },
+    { level: 60, reward: 'referral.rewards.items.grandmaster', icon: Crown, color: 'text-purple-500', instruction: 'referral.rewards.instructions.milestone_60' },
+    { level: 70, reward: 'referral.rewards.items.vip_status', icon: Diamond, color: 'text-pink-500', instruction: 'referral.rewards.instructions.milestone_70' },
+    { level: 80, reward: 'referral.rewards.items.premium_access', icon: Shield, color: 'text-emerald-400', instruction: 'referral.rewards.instructions.milestone_80' },
+    { level: 90, reward: 'referral.rewards.items.immortal_tier', icon: Flame, color: 'text-orange-600', instruction: 'referral.rewards.instructions.milestone_90' },
+    { level: 100, reward: 'referral.rewards.items.platinum_physical', icon: Trophy, color: 'text-slate-100', instruction: 'referral.rewards.instructions.milestone_100' },
 ];
 
 // Helper to generate a massive list of progression-based placeholders to reach 100+
