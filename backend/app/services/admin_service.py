@@ -82,18 +82,50 @@ class AdminService:
 
             # 8. System Audit (Lightweight)
             audit_summary = await self._perform_system_audit(session)
-
-            # 9. Final Assembly
+            
+            # Additional Performance KPI: Avg Manual Approval Time
+            # Calculates average minutes from transaction creation to manual approval
+            stmt_approval = text(
+                "SELECT AVG(EXTRACT(EPOCH FROM (updated_at - created_at))) / 60 "
+                "FROM partnertransaction WHERE status = 'completed' AND tx_hash IS NULL"
+            )
+            avg_approval_min = (await session.execute(stmt_approval)).scalar() or 0.0
+            
+            # 9. Sync & Materialize
+            # Auto-align the slots_sold counter with reality if it drifts too far
+            pro_lifetime_count = (await session.exec(select(func.count(Partner.id)).where(Partner.subscription_plan == "PRO_LIFETIME"))).one() or 0
+            
+            from app.models.partner import SystemSetting
+            setting_sold = (await session.exec(select(SystemSetting).where(SystemSetting.key == "pro_slots_sold"))).first()
+            
+            # Historical Baseline: We start at 147 as requested by user to show momentum.
+            base_slots = 147
+            current_effective_sold = base_slots + pro_lifetime_count
+            
+            if not setting_sold:
+                session.add(SystemSetting(key="pro_slots_sold", value=str(current_effective_sold)))
+                await session.commit()
+            elif int(setting_sold.value) < current_effective_sold:
+                setting_sold.value = str(current_effective_sold)
+                session.add(setting_sold)
+                await session.commit()
+            
+            # Final Assembly
             stats = {
                 "growth": growth,
                 "daily_growth": daily_growth,
                 "daily_revenue": daily_revenue,
                 "recent_sales": recent_sales,
+                "performance": {
+                    "avg_manual_approval_min": round(float(avg_approval_min), 1),
+                    "pro_slots_actual": pro_lifetime_count,
+                    "pro_slots_display": int(setting_sold.value) if setting_sold else current_effective_sold
+                },
                 "events": {**totals, "audit": audit_summary},
                 "kpis": {**self._calculate_kpis(totals, financials["total_revenue"]), **viral_metrics},
                 "financials": financials,
                 "tasks": task_breakdown,
-                "top_partners": await self.get_top_partners(limit=5),
+                "top_partners": await self.get_top_partners(limit=10),
                 "server_time": now.isoformat()
             }
 
@@ -274,12 +306,22 @@ class AdminService:
         }
 
     async def _calculate_financial_metrics(self, session) -> dict:
-        rev_ton = (await session.exec(select(func.sum(PartnerTransaction.amount_crypto)).where(PartnerTransaction.status == "completed", PartnerTransaction.currency == "TON"))).one() or 0.0
+        """
+        Calculates all financial KPIs.
+        Optimization: Sums 'amount' directly from transactions for accurate USD volume,
+        regardless of crypto price fluctuations after purchase.
+        """
+        # Rev Ton/USDT breakdown for granular view
+        rev_ton_crypto = (await session.exec(select(func.sum(PartnerTransaction.amount_crypto)).where(PartnerTransaction.status == "completed", PartnerTransaction.currency == "TON"))).one() or 0.0
         rev_usdt = (await session.exec(select(func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed", PartnerTransaction.currency == "USDT"))).one() or 0.0
         
-        # #comment: Get dynamic conversion rate for TON financials
+        # Total Revenue in USD (Sum of all transaction amount_usd)
+        total_revenue = (await session.exec(select(func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed"))).one() or 0.0
+        
+        # Current effective TON revenue (if we sold it all now)
         ton_price = await payment_service.get_ton_price()
-        total_revenue = rev_usdt + (rev_ton * ton_price)
+        current_ton_value = rev_ton_crypto * ton_price
+        
         
         comm_res = await session.exec(select(Earning.level, func.sum(Earning.amount)).where(Earning.type == "COMMISSION", Earning.level.between(1, 20)).group_by(Earning.level))
         comm_map = {lvl: amt for lvl, amt in comm_res.all()}
@@ -291,8 +333,11 @@ class AdminService:
             total_comm += amt
 
         return {
-            "total_revenue": round(total_revenue, 2), "total_revenue_ton": round(rev_ton, 2),
-            "total_revenue_usdt": round(rev_usdt, 2), "total_commissions": round(total_comm, 2),
+            "total_revenue": round(total_revenue, 2), 
+            "total_revenue_ton": round(rev_ton_crypto, 2),
+            "current_ton_value": round(current_ton_value, 2),
+            "total_revenue_usdt": round(rev_usdt, 2), 
+            "total_commissions": round(total_comm, 2),
             "net_profit": round(total_revenue - total_comm, 2), 
             "gross_margin": round(((total_revenue - total_comm) / total_revenue * 100), 1) if total_revenue > 0 else 0,
             "commissions_breakdown": breakdown
