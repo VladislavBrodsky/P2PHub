@@ -21,14 +21,15 @@ logger = logging.getLogger(__name__)
 # #comment: Global HTTPX client to reuse connections across requests.
 # This significantly reduces latency and overhead compared to creating a client per request.
 http_client = httpx.AsyncClient(timeout=10.0, limits=httpx.Limits(max_keepalive_connections=50, max_connections=100))
-async def ensure_photo_cached(file_id: str) -> bytes | None:
+async def ensure_photo_cached(file_id: str, force_refresh: bool = False) -> bytes | None:
     """Ensures the Telegram photo is cached in Redis (WebP optimized)."""
     cache_key_binary = f"tg_photo_bin_v1:{file_id}"
     cache_key_url = f"tg_photo_url:{file_id}"
 
     # 1. Fast Path (Read from Cache)
-    cached_binary = await _get_cached_photo(cache_key_binary)
-    if cached_binary: return cached_binary
+    if not force_refresh:
+        cached_binary = await _get_cached_photo(cache_key_binary)
+        if cached_binary: return cached_binary
 
     # 2. Slow Path (Process with Lock)
     lock_key = f"lock:photo:process:{file_id}"

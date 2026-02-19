@@ -1349,10 +1349,11 @@ async def get_prepared_share_id(
 
 @router.get("/photo/{file_id}")
 @limiter.limit("100/minute")
-async def get_partner_photo(request: Request, file_id: str):
+async def get_partner_photo(request: Request, file_id: str, refresh: bool = False):
     """
     Returns the Telegram photo content for a given file_id.
     Optimizes (WebP + Resize) and caches the binary content in Redis.
+    To force refresh, pass ?refresh=true.
     """
     import time
 
@@ -1363,7 +1364,7 @@ async def get_partner_photo(request: Request, file_id: str):
     start_time = time.time()
     try:
         # Use shared service logic which handles caching, fetching, resizing
-        image_data = await ensure_photo_cached(file_id)
+        image_data = await ensure_photo_cached(file_id, force_refresh=refresh)
         elapsed = (time.time() - start_time) * 1000  # ms
         
         if image_data:

@@ -32,6 +32,7 @@ src={user.photo_file_id
 - Fetches from Telegram if not cached
 - Optimizes to WebP, resizes to 128x128
 - Caches in Redis for 24 hours
+- Supports `?refresh=true` to force re-fetch from Telegram
 - Returns optimized image
 
 ### 5. **Restoration Script** (restore_names_from_telegram.py)
