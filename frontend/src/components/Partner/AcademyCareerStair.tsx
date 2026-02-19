@@ -10,7 +10,7 @@ import { useNotificationStore } from '../../store/useNotificationStore';
 
 export const AcademyCareerStair = () => {
     const { t } = useTranslation();
-    const { user, completeStage } = useUser();
+    const { user, completeStage, refreshUser, updateUser } = useUser();
     const { showNotification } = useNotificationStore();
     const [visibleStages, setVisibleStages] = useState(10);
     const [selectedStage, setSelectedStage] = useState<AcademyStage | null>(null);
@@ -32,6 +32,16 @@ export const AcademyCareerStair = () => {
                 message: t('academy.stage_completed_desc', { stage: id }),
                 type: 'success'
             });
+            // Optimistic unlock: add the completed stage id immediately so
+            // the next card becomes available without waiting for a server round-trip.
+            updateUser({
+                completed_stages: [
+                    ...(user?.completed_stages ?? []),
+                    id
+                ]
+            });
+            // Also refresh from server so XP/level are up to date
+            await refreshUser(true);
         } catch (error) {
             console.error('Failed to complete stage:', error);
         }
@@ -45,8 +55,11 @@ export const AcademyCareerStair = () => {
         <div className="relative flex flex-col items-center w-full mx-auto">
             <div className="w-full flex flex-col items-center">
                 {stages.map((stage, index) => {
-                    const isCompleted = user?.completed_stages?.includes(stage.id);
-                    const isAvailable = stage.id === 1 || user?.completed_stages?.includes(stage.id - 1);
+                    // Normalize to number for comparison — backend may return ints,
+                    // localStorage cache may restore them as strings.
+                    const completedAsNumbers = (user?.completed_stages ?? []).map(Number);
+                    const isCompleted = completedAsNumbers.includes(stage.id);
+                    const isAvailable = stage.id === 1 || completedAsNumbers.includes(stage.id - 1);
                     const isCurrent = isAvailable && !isCompleted;
 
                     let status: 'locked' | 'available' | 'completed' | 'current' = 'locked';

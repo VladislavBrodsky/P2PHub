@@ -1161,6 +1161,12 @@ async def complete_academy_stage(
         session.add(partner)
         await session.commit()
         
+        # Invalidate Redis profile cache so next refreshUser() sees updated completed_stages
+        try:
+            await redis_service.client.delete(f"partner:profile:{tg_id}")
+        except Exception as e:
+            logger.warning(f"Cache invalidation failed (non-critical): {e}")
+
         # #comment: Final hydration using service layer ensures all relations are available after commit
         from app.services.partner_service import get_partner_full
         partner = await get_partner_full(session, tg_id)
