@@ -59,7 +59,7 @@ def format_partner_name(p: Partner) -> str:
 @broker.task(retry=3)
 async def process_referral_logic(partner_id: int):
     """
-    Optimized 9-level referral logic.
+    Optimized 20-level referral logic.
     Run as a TaskIQ background task.
     """
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -80,7 +80,7 @@ async def process_referral_logic(partner_id: int):
             # 1. Resolve Ancestors chain (Bulk fetch)
             ancestor_map = await _get_ancestor_map(session, partner)
             
-            # 2. Process Awards (9 Levels)
+            # 2. Process Awards (20 Levels)
             xp_txs, deferred_tasks = await _process_referral_awards(session, partner, ancestor_map)
             
             # 3. Batch Commit & Finalize Notifications
@@ -132,14 +132,24 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
             referrer.referral_count = Partner.referral_count + 1
             session.add(referrer)
 
-        # #comment: ELITE COMPRESSION LOGIC (Rewards)
-        # Free users now get rewards up to Level 3. L4-L9 require PRO status.
-        if level > 3 and not referrer.is_pro:
-            # Send FOMO notification for deep growth beyond free levels
-            if level in [4, 5, 7]:
+        # #comment: ELITE COMPRESSION LOGIC (XP Rewards)
+        # Free users get rewards up to Level 3. 
+        # L4-L9 require Standard PRO.
+        # L10-L20 require PRO+ exclusively.
+        qualified = False
+        if level <= 3:
+            qualified = True
+        elif level <= 9:
+            qualified = referrer.is_pro
+        else:
+            qualified = (referrer.subscription_plan == "PRO_PLUS_MONTHLY")
+
+        if not qualified:
+            # Send FOMO notification for rewards beyond current plan capability
+            if level in [4, 10]:
                 lang = referrer.language_code or "en"
                 fomo_msg = get_msg(lang, "pro_fomo_missed", level=level)
-                buttons = [[{"text": "👑 Upgrade to PRO", "web_app": {"url": settings.FRONTEND_URL}}]]
+                buttons = [[{"text": "👑 Upgrade Plan", "web_app": {"url": settings.FRONTEND_URL}}]]
                 await notification_service.enqueue_notification(
                     chat_id=int(referrer.telegram_id), text=fomo_msg, buttons=buttons
                 )
@@ -267,26 +277,16 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     result = await session.exec(statement)
     ancestor_map = {p.id: p for p in result.all()}
 
-    # --- ABSOLUTE SLOT-DISTANCE MODEL WITH IDEMPOTENCY & LEAKAGE CAPTURE ---
+    # --- ELITE DYNAMIC COMPRESSION MODEL ---
+    # Goal: Award each commission slice (L1-L20) to the NEXT qualified upline leader.
+    # If a partner is not qualified for their expected level, we skip them and 
+    # look for the next person in the lineage who is.
+    
     stmt_admin = select(Partner).where(Partner.telegram_id == "537873096")
     res_admin = await session.exec(stmt_admin)
     company_account = res_admin.first()
 
-    # Idempotency Check: Don't pay twice for the same upgrade at the same level
-    ref_ids = [f"upg_{partner.id}_{d}" for d in range(1, 21)]
-    existing_stmt = select(Earning.reference_id).where(Earning.reference_id.in_(ref_ids))
-    existing_res = await session.exec(existing_stmt)
-    already_paid_levels = {int(ref.split('_')[-1]) for ref in existing_res.all() if ref}
-
     ancestors_at_dist = list(reversed(lineage_ids))
-    earnings_to_add = []
-    deferred_notifications = []
-    
-    # #comment: CRITICAL FIX — MissingGreenlet Prevention
-    # We cache balances locally BEFORE entering the loop to avoid any ORM lazy-load
-    # inside the async loop. After a flush/add, SQLAlchemy marks objects as expired,
-    # and accessing .balance triggers a synchronous DB call → MissingGreenlet crash.
-    # Solution: read all balances upfront into a plain dict, update it manually.
     balance_cache: dict[int, float] = {}
     all_recipients_for_cache = list(ancestor_map.values())
     if company_account:
@@ -297,75 +297,81 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
         except Exception:
             balance_cache[p.id] = 0.0
 
-    # We use a non-transactional pipe for cache purging
-    async with redis_service.client.pipeline(transaction=False) as redis_pipe:
-        for dist in range(1, 21):
-            if dist in already_paid_levels:
-                continue
+    earnings_to_add = []
+    deferred_notifications = []
+    
+    # Pointer for the current ancestor being evaluated
+    curr_lineage_idx = 0
+    buyer_name = format_partner_name(partner)
 
-            pct = comm_map.get(dist, 0)
+    async with redis_service.client.pipeline(transaction=False) as redis_pipe:
+        # Loop through each commission level (slice of the pie)
+        for comm_level in range(1, 21):
+            pct = comm_map.get(comm_level, 0)
             if pct <= 0: continue
             
             commission = round(total_amount * pct, 4)
+            recipient = None
+            found_qualified_partner = False
             
-            # Identify person at this exact distance
-            referrer_id = ancestors_at_dist[dist-1] if (dist-1) < len(ancestors_at_dist) else None
-            referrer = ancestor_map.get(referrer_id) if referrer_id else None
-            
-            qualified = False
-            miss_reason = "Empty Slot"
-            
-            if referrer:
+            # Find the NEXT available partner in the chain who qualifies for this level
+            while curr_lineage_idx < len(ancestors_at_dist):
+                referrer_id = ancestors_at_dist[curr_lineage_idx]
+                referrer = ancestor_map.get(referrer_id)
+                curr_lineage_idx += 1
+                
+                if not referrer: continue
+                
+                # Qualification Check
                 is_ref_pro_plus = (referrer.subscription_plan == "PRO_PLUS_MONTHLY")
                 is_ref_pro = referrer.is_pro or (referrer.subscription_plan == "PRO_MONTHLY")
                 
-                if dist <= 3:
-                    qualified = True # Free users get commissions up to Level 3
-                elif dist <= 9:
-                    qualified = (is_ref_pro or is_ref_pro_plus)
-                    if not qualified: miss_reason = "PRO Upgrade Required"
+                qualified = False
+                if comm_level <= 3:
+                    qualified = True # Free users get up to Level 3
+                elif comm_level <= 9:
+                    qualified = (is_pro or is_ref_pro or is_ref_pro_plus)
                 else:
-                    qualified = is_ref_pro_plus
-                    if not qualified: miss_reason = "PRO+ Upgrade Required"
+                    qualified = is_ref_pro_plus # L10-L20 requires PRO+
+                
+                if qualified:
+                    recipient = referrer
+                    found_qualified_partner = True
+                    break
             
-            # Recipient is either the Partner (if qualified) or Management (@uslincoln)
-            recipient = referrer if qualified else company_account
-            if not recipient: continue 
-            
-            # #comment: Read balance from local cache — NO ORM attribute access in loop.
-            # This is the definitive fix for MissingGreenlet errors. After session.add()
-            # or flush(), SQLAlchemy expires all attributes. Reading .balance would trigger
-            # a synchronous lazy-load which crashes in async context. We avoid this entirely.
+            # If no more qualified partners in lineage, commission leaks to Company
+            if not recipient:
+                recipient = company_account
+                
+            if not recipient: continue # Should not happen if company_account is set
+
+            # Award commission
             balance_before = balance_cache.get(recipient.id, 0.0)
             balance_after = round(balance_before + commission, 4)
-            # Update cache so subsequent hits on same recipient (e.g. admin) are correct
             balance_cache[recipient.id] = balance_after
             
-            # #comment: Atomic Increment for high-concurrency safety (USDT)
-            # This prevents race conditions where multiple commissions hit the same user (e.g. Admin) 
-            # at once, ensuring no funds are lost.
             recipient.balance = Partner.balance + commission
             recipient.total_earned_usdt = Partner.total_earned_usdt + commission
             session.add(recipient)
             
-            description = f"{'PRO+' if is_pro_plus else 'PRO'} Commission (L{dist})"
-            if not qualified:
-                description = f"Missed Tree Commission: {miss_reason} (L{dist} via User {partner.telegram_id})"
+            description = f"{'PRO+' if is_pro_plus else 'PRO'} Commission (L{comm_level})"
+            if not found_qualified_partner:
+                description = f"Missed Tree Revenue: Compression Leakage (L{comm_level} via User {partner.telegram_id})"
                 
             earnings_to_add.append(Earning(
                 partner_id=recipient.id,
                 amount=commission,
                 description=description,
                 type="COMMISSION",
-                level=dist,
+                level=comm_level,
                 currency="USDT",
-                reference_id=f"upg_{partner.id}_{dist}"
+                reference_id=f"upg_{partner.id}_{comm_level}"
             ))
 
-            # Log Audit
+            # Audit & Notify
             await audit_service.log_commission(
                 session=session, partner_id=recipient.id, buyer_id=partner.id,
-                amount=commission, level=dist,
+                amount=commission, level=comm_level,
                 balance_before=balance_before, balance_after=balance_after,
             )
 
@@ -373,18 +379,16 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             redis_pipe.delete(f"partner:profile:{recipient.telegram_id}")
             redis_pipe.delete(f"partner:earnings:{recipient.telegram_id}")
 
-            # Notify Partners (Skip Company/Leakage notifications here)
-            if qualified and referrer:
+            if found_qualified_partner:
                 try:
-                    lang = referrer.language_code or "en"
-                    buyer_name = format_partner_name(partner)
-                    msg = get_msg(lang, "commission_received", amount=round(commission, 2), level=dist, from_user=buyer_name)
+                    lang = recipient.language_code or "en"
+                    msg = get_msg(lang, "commission_received", amount=round(commission, 2), level=comm_level, from_user=buyer_name)
                     deferred_notifications.append(notification_service.enqueue_notification(
-                        chat_id=int(referrer.telegram_id), text=msg,
+                        chat_id=int(recipient.telegram_id), text=msg,
                         buttons=[[{"text": "💰 Check Balance", "web_app": {"url": settings.FRONTEND_URL}}]]
                     ))
                 except Exception as e:
-                    logger.error(f"Notification error for {referrer.id}: {e}")
+                    logger.error(f"Notification error for {recipient.id}: {e}")
 
     # Finalize Transaction (NO internal commit to maintain atomicity with caller)
     if earnings_to_add:

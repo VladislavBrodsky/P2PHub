@@ -850,8 +850,8 @@ Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
         from bs4 import BeautifulSoup
         
         news_items = []
-        _now = datetime.now(tz=None) # Using naive UTC for comparison if needed
-        cutoff_time = datetime.now(UTC) - timedelta(minutes=180)
+        _now = datetime.now(UTC).replace(tzinfo=None)
+        cutoff_time = _now - timedelta(minutes=180)
         
         async with httpx.AsyncClient(timeout=10.0) as client:
             tasks = [client.get(url) for url in feeds]

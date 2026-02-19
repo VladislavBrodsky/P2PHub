@@ -46,9 +46,11 @@ class SubscriptionService:
             await self.send_expiration_warning(partner, 1)
 
         # 3. Handle actually expired
+        # Exclude LIFETIME plans as they never expire
         stmt_expired = select(Partner).where(
             Partner.is_pro,
-            Partner.pro_expires_at < now
+            Partner.pro_expires_at < now,
+            Partner.subscription_plan != "PRO_LIFETIME"
         )
         res_expired = await session.exec(stmt_expired)
         for partner in res_expired.all():

@@ -247,8 +247,8 @@ class PaymentService:
                 partner.pro_tokens = settings.PRO_PLUS_TOKENS_MONTHLY
             else:
                 # Standard PRO Plan
-                # 1. Fetch current sold count
-                stmt_sold = select(SystemSetting).where(SystemSetting.key == "pro_slots_sold")
+                # 1. Fetch current sold count with pessimistic lock to prevent race conditions
+                stmt_sold = select(SystemSetting).where(SystemSetting.key == "pro_slots_sold").with_for_update()
                 res_sold = await session.exec(stmt_sold)
                 setting_sold = res_sold.first()
                 

@@ -159,7 +159,8 @@ def _calculate_network_fixes(partner_map: dict[int, dict]) -> tuple[list[dict], 
 
         if final_path:
             anc_ids = [int(x) for x in final_path.split('.') if x.isdigit()]
-            for anc_id in anc_ids[-9:]:
+            # Increment referral_count for ALL ancestors in the lineage (up to 20+ levels)
+            for anc_id in anc_ids:
                 if anc_id in count_map:
                     count_map[anc_id] += 1
                     
@@ -320,10 +321,11 @@ async def reset_monthly_pro_tokens():
         )
         await session.execute(stmt_plus, {"t": settings.PRO_PLUS_TOKENS_MONTHLY, "now": now})
         
-        # 2. Reset PRO (250 tokens)
+        # 2. Reset Standard PRO (250 tokens)
+        # Includes PRO_MONTHLY, PRO_LIFETIME and edge cases (NULL)
         stmt_pro = text(
             "UPDATE partner SET pro_tokens = :t, pro_tokens_last_reset = :now "
-            "WHERE (subscription_plan = 'PRO_MONTHLY' OR subscription_plan IS NULL) AND is_pro = true"
+            "WHERE subscription_plan IN ('PRO_MONTHLY', 'PRO_LIFETIME') OR (subscription_plan IS NULL AND is_pro = true)"
         )
         await session.execute(stmt_pro, {"t": settings.PRO_TOKENS_MONTHLY, "now": now})
         
