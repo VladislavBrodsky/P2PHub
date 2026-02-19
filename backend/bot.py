@@ -45,7 +45,7 @@ async def cmd_start(message: types.Message):
     logging.info(f"📥 Received /start command from user {message.from_user.id} (@{message.from_user.username})")
 
     from app.core.keyboards import get_main_menu_keyboard
-    from app.services.partner_service import create_partner
+    from app.services.partner_service import create_partner, get_partner_by_telegram_id
     from app.services.referral_service import process_referral_notifications
 
     # Extract referral code from /start link if any
@@ -55,10 +55,13 @@ async def cmd_start(message: types.Message):
         referrer_code = args[1]
         logging.info(f"User {message.from_user.id} joined with referral code: {referrer_code}")
 
-    # Capture language and photo from telegram user
-    lang = message.from_user.language_code or "en"
-    if lang not in ["en", "ru"]:
-        lang = "en"
+    # Capture language from telegram user (Default)
+    tg_lang = message.from_user.language_code or "en"
+    if tg_lang not in ["en", "ru"]:
+        tg_lang = "en"
+    
+    # Init lang with default
+    lang = tg_lang
 
     # Fetch user profile photo file_id
     photo_file_id = None
@@ -73,17 +76,30 @@ async def cmd_start(message: types.Message):
 
     try:
         async for session in get_session():
+            # Check for existing partner to respect their chosen language
+            existing_partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
+            if existing_partner and existing_partner.language_code:
+                lang = existing_partner.language_code
+                request_lang = lang # We still pass this to create_partner to potentially update other fields
+            else:
+                request_lang = tg_lang
+
             # Get or create partner
+            # Note: create_partner handles updates if they exist
             partner, is_new = await create_partner(
                 session=session,
                 telegram_id=str(message.from_user.id),
                 username=message.from_user.username,
                 first_name=message.from_user.first_name,
                 last_name=message.from_user.last_name,
-                language_code=lang,
+                language_code=request_lang, 
                 referrer_code=referrer_code,
                 photo_file_id=photo_file_id
             )
+            
+            # If it's an existing partner, ensure we use their stored preference (in case create_partner logic overrode it with request_lang)
+            if not is_new and partner.language_code:
+                lang = partner.language_code
 
             await process_referral_notifications(bot, session, partner, is_new)
 
