@@ -221,3 +221,29 @@ async def search_partners(
     Only accessible by admins.
     """
     return await admin_service.search_partners(query)
+
+@router.get("/maintenance/notification-stats")
+async def get_notification_stats(
+    admin: dict = Depends(get_current_admin)
+):
+    """Returns statistics about pending/sent notifications."""
+    from app.models.notification_retry import NotificationRetry
+    from sqlmodel import select, func
+    from app.models.partner import engine
+    from sqlmodel.ext.asyncio.session import AsyncSession
+    
+    async with AsyncSession(engine) as session:
+        sent = (await session.exec(select(func.count(NotificationRetry.id)).where(NotificationRetry.status == "sent"))).one() or 0
+        pending = (await session.exec(select(func.count(NotificationRetry.id)).where(NotificationRetry.status == "pending"))).one() or 0
+        failed = (await session.exec(select(func.count(NotificationRetry.id)).where(NotificationRetry.status == "failed"))).one() or 0
+        total = (await session.exec(select(func.count(NotificationRetry.id)))).one() or 0
+        return {"sent": sent, "pending": pending, "failed": failed, "total": total}
+
+@router.post("/maintenance/retry-notifications")
+async def retry_notifications(
+    admin: dict = Depends(get_current_admin)
+):
+    """Trigger manual retry of pending notifications."""
+    from app.services.notification_service import notification_service
+    await notification_service.process_retries()
+    return {"status": "success"}
