@@ -147,6 +147,11 @@
       "locked_levels_desc_free": "Улучшите до PRO, чтобы открыть 9 уровней",
       "locked_levels_desc_pro": "Улучшите до PRO+, чтобы открыть 20 уровней",
       "upgrade_now": "Активировать"
+    },
+    "levels": {
+      "direct": "Прямые Партнёры",
+      "indirect": "Команда Уровня 2",
+      "generic": "Сеть Уровня {{l}}"
     }
   },
   "tasks": {
