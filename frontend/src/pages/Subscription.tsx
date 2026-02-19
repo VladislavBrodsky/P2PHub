@@ -191,17 +191,22 @@ export default function SubscriptionPage() {
 
     return (
         <div className="flex flex-col px-4 pb-32 pt-2 max-w-lg mx-auto overflow-x-hidden">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8 pt-4">
-                <div className="inline-block mb-3">
-                    <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-indigo-500 via-fuchsia-600 to-indigo-800 flex items-center justify-center shadow-xl relative border border-white/30">
-                        <Crown size={24} className="text-white fill-white/20" />
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10 pt-6">
+                <div className="flex flex-col items-center gap-4 mb-2">
+                    <div className="relative">
+                        <div className="w-16 h-16 rounded-full bg-linear-to-br from-indigo-500 via-fuchsia-600 to-indigo-800 flex items-center justify-center shadow-[0_0_30px_rgba(79,70,229,0.3)] border-2 border-white/30 relative z-10">
+                            <Crown size={32} className="text-white fill-white/20" />
+                        </div>
+                        <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 animate-pulse" />
+                    </div>
+
+                    <div className="px-4 py-1.5 rounded-full bg-indigo-950/40 border border-indigo-500/30 flex items-center gap-2.5 backdrop-blur-md shadow-inner">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse" />
+                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-100/90">{t('subscription.upgrade.protocol_initialized')}</span>
                     </div>
                 </div>
-                <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 inline-flex items-center gap-2 mb-2">
-                    <div className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-[8px] font-black uppercase tracking-widest text-white/70">{t('subscription.upgrade.protocol_initialized')}</span>
-                </div>
-                <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic vibing-crystal-text">PRO STATUS</h1>
+
+                <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic vibing-crystal-text mt-4">PRO STATUS</h1>
                 <p className="text-slate-500 dark:text-slate-400 text-[9px] font-bold max-w-[250px] mx-auto uppercase tracking-widest mt-2">{t('subscription.upgrade.desc')}</p>
 
                 {proStats && (
