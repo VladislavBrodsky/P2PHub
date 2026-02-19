@@ -389,13 +389,25 @@ async def get_top_partners(
         if display_refs < 133:
             display_refs = 133 + ((p.id * 17) % (437 - 133 + 1))
 
+        # #comment: Sanitize stale legacy photo_url values (e.g. /images/avatars/leader_X.webp)
+        # These were written by the old polish_top_leaders.py script to Railway's ephemeral FS.
+        # They do NOT persist across deploys and cause 404 spam on every leaderboard poll.
+        # If the partner has a photo_file_id, the frontend will use /api/partner/photo/<id>.
+        # If not, emit None so the frontend falls back to initials gracefully.
+        safe_photo_url = p.photo_url
+        if safe_photo_url and (
+            safe_photo_url.startswith("/images/avatars/") or
+            safe_photo_url.startswith("/images/")
+        ):
+            safe_photo_url = None
+
         top_data.append({
             "id": p.id,
             "first_name": p.first_name,
             "last_name": p.last_name,
             "username": p.username,
             "photo_file_id": p.photo_file_id,
-            "photo_url": p.photo_url,
+            "photo_url": safe_photo_url,
             "xp": p.xp,
             "referrals_count": display_refs,
             "rank": get_rank(p.xp)
