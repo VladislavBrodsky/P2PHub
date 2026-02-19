@@ -10,6 +10,7 @@ import { proService, PROStatus } from '../../../services/proService';
 import { getApiUrl } from '../../../utils/api';
 import { renderMarkdown } from '../utils/renderMarkdown';
 import { postTypes as defaultPostTypes, audiences as defaultAudiences, languages as defaultLanguages, tones as defaultTones } from '../utils/constants';
+import { PremiumSelect } from '../components/PremiumSelect';
 
 interface StudioTabProps {
     status: PROStatus | null;
@@ -56,6 +57,12 @@ export const StudioTab = ({
     const [showPublishModal, setShowPublishModal] = useState(false);
     const [isPublishing, setIsPublishing] = useState(false);
     const [publishedPlatforms, setPublishedPlatforms] = useState<string[]>([]);
+
+    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+    const handleToggle = (key: string) => {
+        setOpenDropdown(prev => prev === key ? null : key);
+    };
 
     useEffect(() => {
         setExternalReady(!!postType && !!audience);
@@ -297,92 +304,72 @@ export const StudioTab = ({
                             </div>
                         </div>
 
+
+
                         <div className="space-y-4 relative z-10">
                             {/* Strategy Selection */}
-                            <div className="space-y-1.5">
-                                <div className="flex items-center justify-between px-1">
-                                    <label className="text-[9px] font-black uppercase text-indigo-600 dark:text-indigo-400 tracking-widest">
-                                        01. {t('pro_dashboard.studio.strategy_label')}
-                                    </label>
-                                </div>
-                                <div className="relative">
-                                    <select
-                                        value={postType}
-                                        onChange={(e) => { selection(); setPostType(e.target.value); }}
-                                        className="w-full h-12 sm:h-14 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-indigo-500/50 rounded-xl sm:rounded-2xl px-5 text-[13px] font-bold text-slate-900 dark:text-white outline-hidden appearance-none transition-all cursor-pointer shadow-sm"
-                                    >
-                                        <option value="" disabled>{t('pro_dashboard.studio.strategy_placeholder')}</option>
-                                        {defaultPostTypes.map(pt => <option key={pt.id} value={pt.id}>{i18n.language === 'ru' ? pt.ru : pt.en}</option>)}
-                                    </select>
-                                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-indigo-500">
-                                        <ChevronRight className="rotate-90 w-4 h-4" />
-                                    </div>
-                                </div>
-                            </div>
+                            <PremiumSelect
+                                label={t('pro_dashboard.studio.strategy_label')}
+                                value={postType}
+                                onChange={(val) => { setPostType(val); setOpenDropdown(null); }}
+                                options={defaultPostTypes.map(pt => ({
+                                    id: pt.id,
+                                    label: i18n.language === 'ru' ? pt.ru : pt.en
+                                }))}
+                                placeholder={t('pro_dashboard.studio.strategy_placeholder')}
+                                color="indigo"
+                                isOpen={openDropdown === 'strategy'}
+                                onToggle={() => handleToggle('strategy')}
+                                indexStr="01"
+                            />
 
                             {/* Target Audience */}
-                            <div className="space-y-1.5">
-                                <div className="flex items-center justify-between px-1">
-                                    <label className="text-[9px] font-black uppercase text-purple-600 dark:text-purple-400 tracking-widest">
-                                        02. {t('pro_dashboard.studio.target_label')}
-                                    </label>
-                                </div>
-                                <div className="relative">
-                                    <select
-                                        value={audience}
-                                        onChange={(e) => { selection(); setAudience(e.target.value); }}
-                                        className="w-full h-12 sm:h-14 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-purple-500/50 rounded-xl sm:rounded-2xl px-5 text-[13px] font-bold text-slate-900 dark:text-white outline-hidden appearance-none transition-all cursor-pointer shadow-sm"
-                                    >
-                                        <option value="" disabled>{t('pro_dashboard.studio.target_placeholder')}</option>
-                                        {defaultAudiences.map(a => <option key={a.id} value={a.id}>{i18n.language === 'ru' ? a.ru : a.en}</option>)}
-                                    </select>
-                                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-purple-500">
-                                        <ChevronRight className="rotate-90 w-4 h-4" />
-                                    </div>
-                                </div>
-                            </div>
+                            <PremiumSelect
+                                label={t('pro_dashboard.studio.target_label')}
+                                value={audience}
+                                onChange={(val) => { setAudience(val); setOpenDropdown(null); }}
+                                options={defaultAudiences.map(a => ({
+                                    id: a.id,
+                                    label: i18n.language === 'ru' ? a.ru : a.en
+                                }))}
+                                placeholder={t('pro_dashboard.studio.target_placeholder')}
+                                color="purple"
+                                isOpen={openDropdown === 'audience'}
+                                onToggle={() => handleToggle('audience')}
+                                indexStr="02"
+                            />
 
                             {/* Tone of Voice */}
-                            <div className="space-y-1.5">
-                                <div className="flex items-center justify-between px-1">
-                                    <label className="text-[9px] font-black uppercase text-amber-600 dark:text-amber-400 tracking-widest">
-                                        03. {t('pro_dashboard.studio.tone_label', 'Tone of Voice')}
-                                    </label>
-                                </div>
-                                <div className="relative">
-                                    <select
-                                        value={tone}
-                                        onChange={(e) => { selection(); setTone(e.target.value); }}
-                                        className="w-full h-12 sm:h-14 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-amber-500/50 rounded-xl sm:rounded-2xl px-5 text-[13px] font-bold text-slate-900 dark:text-white outline-hidden appearance-none transition-all cursor-pointer shadow-sm"
-                                    >
-                                        {defaultTones.map(t => <option key={t.id} value={t.id}>{i18n.language === 'ru' ? t.ru : t.en}</option>)}
-                                    </select>
-                                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-amber-500">
-                                        <Sparkles size={16} />
-                                    </div>
-                                </div>
-                            </div>
+                            <PremiumSelect
+                                label={t('pro_dashboard.studio.tone_label', 'Tone of Voice')}
+                                value={tone}
+                                onChange={(val) => { setTone(val); setOpenDropdown(null); }}
+                                options={defaultTones.map(t => ({
+                                    id: t.id,
+                                    label: i18n.language === 'ru' ? t.ru : t.en
+                                }))}
+                                placeholder="Select Tone"
+                                color="amber"
+                                isOpen={openDropdown === 'tone'}
+                                onToggle={() => handleToggle('tone')}
+                                indexStr="03"
+                            />
 
                             {/* Output Language */}
-                            <div className="space-y-1.5">
-                                <div className="flex items-center justify-between px-1">
-                                    <label className="text-[9px] font-black uppercase text-emerald-600 dark:text-emerald-400 tracking-widest">
-                                        04. {t('pro_dashboard.studio.language_label')}
-                                    </label>
-                                </div>
-                                <div className="relative">
-                                    <select
-                                        value={language}
-                                        onChange={(e) => setLanguage(e.target.value)}
-                                        className="w-full h-12 sm:h-14 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-emerald-500/50 rounded-xl sm:rounded-2xl px-5 text-[13px] font-bold text-slate-900 dark:text-white outline-hidden appearance-none transition-all cursor-pointer shadow-sm"
-                                    >
-                                        {defaultLanguages.map(l => <option key={l.id} value={l.id}>{l.label}</option>)}
-                                    </select>
-                                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-emerald-500">
-                                        <Send size={16} />
-                                    </div>
-                                </div>
-                            </div>
+                            <PremiumSelect
+                                label={t('pro_dashboard.studio.language_label')}
+                                value={language}
+                                onChange={(val) => { setLanguage(val); setOpenDropdown(null); }}
+                                options={defaultLanguages.map(l => ({
+                                    id: l.id,
+                                    label: l.label
+                                }))}
+                                placeholder="Select Language"
+                                color="emerald"
+                                isOpen={openDropdown === 'language'}
+                                onToggle={() => handleToggle('language')}
+                                indexStr="04"
+                            />
                         </div>
 
                         {/* Action Area */}
