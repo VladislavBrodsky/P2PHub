@@ -91,7 +91,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
     ];
 
     return createPortal(
-        <div className="fixed inset-0 z-1001 flex items-center justify-center p-0 sm:p-4 pt-[calc(var(--spacing-safe-top)+0px)] pb-[calc(var(--spacing-safe-bottom)+0px)]">
+        <div className="fixed inset-0 z-1001 flex items-center justify-center p-4 pt-[calc(var(--spacing-safe-top)+var(--spacing-telegram-header,60px))] pb-[calc(var(--spacing-safe-bottom)+20px)]">
             {/* Backdrop with enhanced blur */}
             <motion.div
                 initial={{ opacity: 0 }}
@@ -107,7 +107,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 40 }}
                 transition={{ type: 'spring', damping: 30, stiffness: 350 }}
-                className="relative w-full max-w-lg bg-white/95 dark:bg-slate-900/95 sm:rounded-[2.5rem] border-x border-t border-white/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col h-full sm:h-auto sm:max-h-[85vh] backdrop-blur-2xl overscroll-none"
+                className="relative w-full max-w-lg bg-white/95 dark:bg-slate-900/95 rounded-[2.5rem] border border-white/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col max-h-full backdrop-blur-2xl overscroll-none"
                 style={{ overscrollBehavior: 'none' }}
             >
                 {/* Background Decoration Glows */}
@@ -123,10 +123,10 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                                 <BookOpen className="w-5 h-5" />
                             </div>
                             <div className="flex flex-col">
-                                <h2 className="text-lg font-black tracking-tight text-slate-900 dark:text-white uppercase leading-none">
+                                <h2 className="text-xl font-black tracking-tighter text-slate-900 dark:text-white uppercase leading-none">
                                     {t('referral.brief.title')}
                                 </h2>
-                                <p className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mt-1.5 opacity-70">
+                                <p className="text-[11px] font-black text-blue-500 dark:text-blue-400 uppercase tracking-[0.25em] mt-2 opacity-90">
                                     {t('referral.brief.guide')}
                                 </p>
                             </div>
