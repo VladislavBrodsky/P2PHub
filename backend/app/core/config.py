@@ -69,7 +69,7 @@ def find_and_load_env():
                 logger.debug(f"Skipping {env_path}: {e}")
 
     if not loaded_any:
-        logger.info("ℹ️ No .env file loaded from standard locations. Relying on shell environment variables.")
+        logger.debug("ℹ️ No .env file loaded from standard locations. Relying on shell environment variables.")
 
 # Execute environment loading
 find_and_load_env()

@@ -66,6 +66,8 @@ interface DashboardStats {
         total_commissions: number;
         net_profit: number;
         gross_margin: number;
+        actual_payout_ratio: number;
+        theoretical_payout_ratio: number;
         commissions_breakdown: CommissionLine[];
     };
     performance?: {
@@ -623,7 +625,7 @@ export const AdminPage = () => {
                                 <Wallet size={120} />
                             </div>
                             <div className="space-y-1 relative z-10">
-                                <span className="text-blue-400 text-[10px] font-black uppercase tracking-widest">Final Total Amount</span>
+                                <span className="text-blue-400 text-[10px] font-black uppercase tracking-widest">Company Net Profit</span>
                                 <div className="flex items-end justify-between">
                                     <div className="text-4xl font-black text-white flex items-baseline gap-1">
                                         <span className="text-2xl text-blue-500 font-black">$</span>
@@ -634,30 +636,35 @@ export const AdminPage = () => {
                                         <div className="text-xl font-black text-emerald-500">{stats?.financials.gross_margin}%</div>
                                     </div>
                                 </div>
-                                <p className="text-slate-500 text-[10px] font-bold">Total Clear Income after referral payouts</p>
+                                <p className="text-slate-500 text-[10px] font-bold">Total revenue retained by the company</p>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-white/5">
                                 <div>
-                                    <div className="text-slate-500 text-[9px] font-black uppercase">Revenue USDT</div>
-                                    <div className="text-lg font-black text-white">${stats?.financials.total_revenue_usdt}</div>
+                                    <div className="text-slate-500 text-[9px] font-black uppercase">Network Payout (Actual)</div>
+                                    <div className="text-lg font-black text-white">${stats?.financials.total_commissions}</div>
+                                    <div className="text-[10px] text-blue-400 font-bold">{stats?.financials.actual_payout_ratio}% of Revenue</div>
                                 </div>
                                 <div>
-                                    <div className="text-slate-500 text-[9px] font-black uppercase">Revenue TON</div>
-                                    <div className="text-lg font-black text-blue-400">
-                                        {stats?.financials.total_revenue_ton} TON
-                                        <span className="text-[10px] text-slate-500 block">(${stats?.financials.current_ton_value})</span>
-                                    </div>
+                                    <div className="text-slate-500 text-[9px] font-black uppercase">Payout Target (Theoretical)</div>
+                                    <div className="text-lg font-black text-slate-400">{stats?.financials.theoretical_payout_ratio}%</div>
+                                    <div className="text-[10px] text-slate-600 font-bold italic">Max possible distribution</div>
                                 </div>
                             </div>
+
                             <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-white/5">
                                 <div>
                                     <div className="text-slate-500 text-[9px] font-black uppercase">Gross Revenue (Total)</div>
                                     <div className="text-lg font-black text-white">${stats?.financials.total_revenue}</div>
                                 </div>
                                 <div>
-                                    <div className="text-slate-500 text-[9px] font-black uppercase">Total Comission</div>
-                                    <div className="text-lg font-black text-red-400">-${stats?.financials.total_commissions}</div>
+                                    <div className="text-slate-500 text-[9px] font-black uppercase">Revenue USDT / TON</div>
+                                    <div className="text-xs font-bold text-white">
+                                        USDT: ${stats?.financials.total_revenue_usdt}
+                                    </div>
+                                    <div className="text-xs font-bold text-blue-400">
+                                        TON: {stats?.financials.total_revenue_ton} (${stats?.financials.current_ton_value})
+                                    </div>
                                 </div>
                             </div>
                         </div>

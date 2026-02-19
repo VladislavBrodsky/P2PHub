@@ -322,7 +322,6 @@ class AdminService:
         ton_price = await payment_service.get_ton_price()
         current_ton_value = rev_ton_crypto * ton_price
         
-        
         comm_res = await session.exec(select(Earning.level, func.sum(Earning.amount)).where(Earning.type == "COMMISSION", Earning.level.between(1, 20)).group_by(Earning.level))
         comm_map = {lvl: amt for lvl, amt in comm_res.all()}
         
@@ -332,14 +331,21 @@ class AdminService:
             breakdown.append({"level": lvl, "amount": round(amt, 2)})
             total_comm += amt
 
+        net_profit = total_revenue - total_comm
+        
+        # Theoretical target sum based on config (should be 56%)
+        theoretical_payout = round(sum(settings.COMMISSION_MAP_EMPIRE.values()) * 100, 1)
+
         return {
             "total_revenue": round(total_revenue, 2), 
             "total_revenue_ton": round(rev_ton_crypto, 2),
             "current_ton_value": round(current_ton_value, 2),
             "total_revenue_usdt": round(rev_usdt, 2), 
             "total_commissions": round(total_comm, 2),
-            "net_profit": round(total_revenue - total_comm, 2), 
-            "gross_margin": round(((total_revenue - total_comm) / total_revenue * 100), 1) if total_revenue > 0 else 0,
+            "net_profit": round(net_profit, 2), 
+            "gross_margin": round((net_profit / total_revenue * 100), 1) if total_revenue > 0 else 0,
+            "actual_payout_ratio": round((total_comm / total_revenue * 100), 1) if total_revenue > 0 else 0,
+            "theoretical_payout_ratio": theoretical_payout,
             "commissions_breakdown": breakdown
         }
 
