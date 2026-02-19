@@ -33,24 +33,31 @@ export const EarnHeader = () => {
                                 <circle cx="48" cy="48" r="42" fill="none" stroke="currentColor" className="text-white/5" strokeWidth="6" />
 
                                 <defs>
-                                    <mask id="liquid-progress-mask">
-                                        <motion.circle
-                                            cx="48" cy="48" r="42" fill="none"
-                                            stroke="white"
-                                            strokeWidth="6"
-                                            strokeDasharray="264"
-                                            strokeDashoffset={264 - (264 * progress.percent) / 100}
-                                            strokeLinecap="round"
-                                            initial={{ strokeDashoffset: 264 }}
-                                            animate={{ strokeDashoffset: 264 - (264 * progress.percent) / 100 }}
-                                            transition={{ duration: 1.5, ease: "easeOut" }}
-                                        />
-                                    </mask>
+                                    <linearGradient id="liquid-progress-stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stopColor={rank.badgeColor}>
+                                            <animate attributeName="stop-color" values={`${rank.badgeColor};#ffffff;${rank.badgeColor}`} dur="3s" repeatCount="indefinite" />
+                                        </stop>
+                                        <stop offset="50%" stopColor={rank.badgeColor}>
+                                            <animate attributeName="stop-color" values={`#ffffff;${rank.badgeColor};#ffffff`} dur="3s" repeatCount="indefinite" />
+                                        </stop>
+                                        <stop offset="100%" stopColor={rank.badgeColor}>
+                                            <animate attributeName="stop-color" values={`${rank.badgeColor};#ffffff;${rank.badgeColor}`} dur="3s" repeatCount="indefinite" />
+                                        </stop>
+                                    </linearGradient>
                                 </defs>
 
-                                <foreignObject x="0" y="0" width="96" height="96" mask="url(#liquid-progress-mask)">
-                                    <div className={`w-full h-full progress-bar-liquid bg-linear-to-r ${getRankGradient(level)}`} style={{ filter: `drop-shadow(0 0 8px ${rank.badgeColor}40)` }} />
-                                </foreignObject>
+                                <motion.circle
+                                    cx="48" cy="48" r="42" fill="none"
+                                    stroke="url(#liquid-progress-stroke)"
+                                    strokeWidth="6"
+                                    strokeDasharray="264"
+                                    strokeDashoffset={264 - (264 * progress.percent) / 100}
+                                    strokeLinecap="round"
+                                    initial={{ strokeDashoffset: 264 }}
+                                    animate={{ strokeDashoffset: 264 - (264 * progress.percent) / 100 }}
+                                    transition={{ duration: 1.5, ease: "easeOut" }}
+                                    style={{ filter: `drop-shadow(0 0 8px ${rank.badgeColor}40)` }}
+                                />
                             </svg>
                             <div className="relative z-10 flex flex-col items-center justify-center">
                                 <span className="text-[8px] font-black text-text-secondary uppercase tracking-widest">{t('earn_header.level')}</span>
@@ -59,10 +66,10 @@ export const EarnHeader = () => {
                         </div>
 
                         {/* Rank Badge - Compact */}
-                        <div className={`mt-2 px-4 py-1.5 rounded-full overflow-hidden border border-white/20 shadow-lg backdrop-blur-xl z-20 bg-linear-to-r text-white ${getRankGradient(level)} inline-flex items-center justify-center w-max min-w-max whitespace-nowrap`}>
-                            <div className="flex items-center gap-1 shrink-0">
-                                <Trophy className="w-2.5 h-2.5 shrink-0" />
-                                <span className="text-[8px] font-black uppercase tracking-widest leading-none pt-px">
+                        <div className={`mt-2 px-3 py-1 rounded-full border border-white/20 shadow-lg backdrop-blur-xl z-20 bg-linear-to-r text-white ${getRankGradient(level)}`}>
+                            <div className="flex items-center gap-1">
+                                <Trophy className="w-2.5 h-2.5" />
+                                <span className="text-[8px] font-black uppercase tracking-widest">
                                     {t(`ranks.${rank.name}`)}
                                 </span>
                             </div>
