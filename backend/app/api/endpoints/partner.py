@@ -585,21 +585,23 @@ async def get_recent_partners(
         result = await session.exec(partners_stmt)
         partners = result.all()
 
-        # Fallback: If no partners joined in the last hour, fetch the latest overall
-        # to ensure the UI is never empty ("do not keep them empty").
-        if not partners:
-            partners_stmt = select(
+        # Supplement: Ensure we always have at least 4 partners for the UI
+        if len(partners) < 4:
+            already_ids = [p[0] for p in partners]
+            stmt_fill = select(
                 Partner.id,
                 Partner.first_name,
                 Partner.username,
                 Partner.photo_file_id,
                 Partner.created_at
+            ).where(
+                Partner.id.notin_(already_ids)
             ).order_by(
                 Partner.photo_file_id.isnot(None).desc(),
                 Partner.created_at.desc()
-            ).limit(limit)
-            result = await session.exec(partners_stmt)
-            partners = result.all()
+            ).limit(4 - len(partners))
+            fill_result = await session.exec(stmt_fill)
+            partners = list(partners) + list(fill_result.all())
 
         partners_list = []
         for p_id, p_first_name, p_username, p_photo_file_id, p_created_at in partners:
@@ -1047,10 +1049,10 @@ async def claim_task_reward(
         xp_after=partner.xp
     )
 
-    # 2.1 Sync to Redis Leaderboard
+    # 2.1 Sync to Redis Leaderboard (Incremental for Seasons)
     from app.services.leaderboard_service import leaderboard_service
     try:
-        await leaderboard_service.update_score(partner.id, partner.xp)
+        await leaderboard_service.increment_score(partner.id, effective_xp)
     except Exception as e:
         logger.error(f"Leaderboard Sync Failed: {e}", exc_info=True)
 
@@ -1176,6 +1178,13 @@ async def complete_academy_stage(
         
         session.add(partner)
         await session.commit()
+        
+        # Update Leaderboard (Incremental for Seasons)
+        from app.services.leaderboard_service import leaderboard_service
+        try:
+            await leaderboard_service.increment_score(partner.id, effective_xp)
+        except Exception as e:
+            logger.error(f"Leaderboard Sync Failed for Academy: {e}")
         
         # Invalidate Redis profile cache so next refreshUser() sees updated completed_stages
         try:
