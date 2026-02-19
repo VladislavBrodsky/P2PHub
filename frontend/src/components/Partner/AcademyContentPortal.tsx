@@ -107,7 +107,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
     };
 
     return createPortal(
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-0 sm:p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4">
             {/* Backdrop - Blocks background interaction */}
             <motion.div
                 initial={{ opacity: 0 }}
