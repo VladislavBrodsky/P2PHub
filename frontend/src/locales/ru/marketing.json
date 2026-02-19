@@ -390,7 +390,8 @@
       "back_in_flow": "Назад",
       "next_intel": "Следующая",
       "forward_label": "Вперёд",
-      "live": "LIVE"
+      "live": "LIVE",
+      "intelligence": "АНАЛИТИКА:"
     },
     "marketing": {
       "get_card": "Оформите карту Pintopay 💳",
