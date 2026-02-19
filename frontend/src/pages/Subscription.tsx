@@ -228,11 +228,11 @@ export default function SubscriptionPage() {
                     animate={{ x: selectedPlan === 'PRO' ? 0 : '100%', width: '50%' }}
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
-                <button onClick={() => { selection(); setSelectedPlan('PRO'); }} className={`flex-1 relative z-10 py-2.5 rounded-[1.6rem] flex flex-col items-center justify-center ${selectedPlan === 'PRO' ? 'text-white' : 'text-slate-400 dark:text-white/30'}`}>
+                <button onClick={() => { selection(); setSelectedPlan('PRO'); }} className={`flex-1 relative z-10 py-2.5 rounded-[1.6rem] flex flex-col items-center justify-center ${selectedPlan === 'PRO' ? 'text-white' : 'text-slate-500 dark:text-white/30'}`}>
                     <span className="text-[7px] font-black uppercase tracking-widest mb-0.5">STANDARD PRO</span>
                     <span className="text-lg font-black">$39</span>
                 </button>
-                <button onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }} className={`flex-1 relative z-10 py-2.5 rounded-[1.6rem] flex flex-col items-center justify-center ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-400 dark:text-white/30'}`}>
+                <button onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }} className={`flex-1 relative z-10 py-2.5 rounded-[1.6rem] flex flex-col items-center justify-center ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-500 dark:text-white/30'}`}>
                     <span className="text-[7px] font-black uppercase tracking-widest mb-0.5">ELITE PRO+</span>
                     <span className="text-lg font-black">$69</span>
                 </button>
@@ -251,16 +251,16 @@ export default function SubscriptionPage() {
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
                                         <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${active ? 'bg-white/20' : 'bg-indigo-500/10'}`}>
-                                            {isTokens ? <Zap size={20} className={active ? 'text-white' : 'text-indigo-400'} /> : <Users size={20} className={active ? 'text-white' : 'text-emerald-400'} />}
+                                            {isTokens ? <Zap size={20} className={active ? 'text-white' : 'text-indigo-600 dark:text-indigo-400'} /> : <Users size={20} className={active ? 'text-white' : 'text-emerald-600 dark:text-emerald-400'} />}
                                         </div>
                                         <div className="text-left">
-                                            <p className={`text-[8px] font-black uppercase tracking-widest ${active ? 'text-indigo-100' : 'text-slate-400 dark:text-white/30'}`}>
+                                            <p className={`text-[8px] font-black uppercase tracking-widest ${active ? 'text-indigo-100' : 'text-slate-500 dark:text-white/30'}`}>
                                                 {isTokens ? (selectedPlan === 'PRO' ? '250 TOKENS' : '500 TOKENS') : (selectedPlan === 'PRO' ? '9 LEVELS' : '20 LEVELS')}
                                             </p>
                                             <h3 className={`text-sm font-black uppercase ${active ? 'text-white' : 'text-slate-900 dark:text-white'}`}>{isTokens ? t('subscription.upgrade.viral_studio_label') : t('subscription.upgrade.content_factory_label')}</h3>
                                         </div>
                                     </div>
-                                    <ChevronDown size={14} className={`transition-transform duration-300 ${active ? 'rotate-180 text-white' : 'text-slate-300 dark:text-white/20'}`} />
+                                    <ChevronDown size={14} className={`transition-transform duration-300 ${active ? 'rotate-180 text-white' : 'text-slate-400 dark:text-white/20'}`} />
                                 </div>
                                 <AnimatePresence>
                                     {active && (
@@ -286,10 +286,10 @@ export default function SubscriptionPage() {
                                 const benefits = t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true });
                                 return Array.isArray(benefits) ? benefits.map((b, i) => (
                                     <div key={i} className="flex items-center gap-2">
-                                        <div className={`w-3 h-3 rounded-full flex items-center justify-center shrink-0 ${selectedPlan === 'PRO' ? 'bg-indigo-500/20 text-indigo-500 dark:text-indigo-400' : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'}`}>
+                                        <div className={`w-3 h-3 rounded-full flex items-center justify-center shrink-0 ${selectedPlan === 'PRO' ? 'bg-indigo-500/20 text-indigo-600 dark:text-indigo-400' : 'bg-amber-500/20 text-amber-700 dark:text-amber-400'}`}>
                                             <Check size={8} strokeWidth={4} />
                                         </div>
-                                        <span className="text-[8px] font-black text-slate-500 dark:text-white/50 uppercase tracking-tight line-clamp-1">{b}</span>
+                                        <span className="text-[8px] font-black text-slate-600 dark:text-white/50 uppercase tracking-tight line-clamp-1">{b}</span>
                                     </div>
                                 )) : null;
                             })()}

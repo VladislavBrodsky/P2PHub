@@ -874,16 +874,21 @@ body {
 }
 
 .vibing-crystal-text {
-  background: linear-gradient(135deg, #0066FF 0%, #3B82F6 20%, #FFFFFF 40%, #60A5FA 60%, #FFFFFF 80%, #0052D9 100%);
-  background-size: 300% auto;
+  background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 30%, #6366f1 50%, #3b82f6 70%, #1d4ed8 100%);
+  background-size: 200% auto;
   animation: liquid 6s ease-in-out infinite;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 900;
-  filter: drop-shadow(0 2px 10px rgba(0, 102, 255, 0.2));
+  filter: drop-shadow(0 2px 10px rgba(99, 102, 241, 0.2));
   will-change: transform, filter, background-position;
   backface-visibility: hidden;
+}
+
+.dark .vibing-crystal-text {
+  background: linear-gradient(135deg, #0066FF 0%, #3B82F6 20%, #FFFFFF 40%, #60A5FA 60%, #FFFFFF 80%, #0052D9 100%);
+  background-size: 300% auto;
 }
 
 .liquid-red-premium {
@@ -991,6 +996,7 @@ body {
 .shadow-premium-xl {
   box-shadow: var(--shadow-premium-xl);
 }
+
 /* === NEW VIBING PREMIUM UI === */
 .vibing-premium-panel {
   @apply relative overflow-hidden rounded-[2.5rem] border border-white/10 dark:border-white/20 backdrop-blur-3xl;
@@ -1012,21 +1018,24 @@ body {
 .holographic-card::after {
   content: "";
   @apply absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.1) 45%,
-    rgba(255, 255, 255, 0.2) 50%,
-    rgba(255, 255, 255, 0.1) 55%,
-    transparent 60%
-  );
+  background: linear-gradient(105deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.1) 45%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0.1) 55%,
+      transparent 60%);
   background-size: 200% 100%;
   animation: shine 3s infinite;
 }
 
 @keyframes shine {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 .vibing-text-glow {
