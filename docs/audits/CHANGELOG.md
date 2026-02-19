@@ -1,6 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.8.0] - 2026-02-19 "Stable"
+### Added
+- **Subscription Page**: Comprehensive overhaul with new benefits section, detailed FAQ, and theme synchronization.
+- **Growth System**: Implemented "Add to Home Screen", "Network Catalyst", and "Sprint Master" tasks.
+- **Visuals**: "Liquid crystal" gradient animation for progress bars.
+- **Partner Stats**: Improved logic to display recent partners (133-637 range) and handle empty states.
+
+### Changed
+- **Notifications**: Refactored `NotificationService` for prioritized and deduplicated delivery (Critical/Standard/Low).
+- **Pro Dashboard UX**: Updated benefits descriptions and fixed layout glitches.
+
+### Fixed
+- **Assets**: Resolved 404 errors for partner avatars and ensured correct fallback images.
+- **Localization**: Fixed blog text glitches and missing translation keys.
+- **Stability**: Resolved white screen deadlock issues and log level misconfigurations.
+
 ## [1.7.0] - 2026-02-14 "Go-to-Market"
 ### Added
 - **UI Experience**: Complete overhaul of Loading Animation for a premium, logo-free entrance.
