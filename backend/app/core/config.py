@@ -161,6 +161,9 @@ class Settings(BaseSettings):
     PRO_XP_MULTIPLIER: float = 1.5
     PRO_PLUS_XP_MULTIPLIER: float = 3.0
     FREE_REFERRAL_XP: float = 35.0  # Flat XP for Free users per qualified referral (L1-L3)
+    
+    PRO_UPGRADE_SELF_XP: float = 750.0   # XP for upgrading to PRO
+    PRO_PLUS_UPGRADE_SELF_XP: float = 1250.0  # XP for upgrading to PRO+
 
     COMMISSION_MAP_EMPIRE: Dict[int, float] = Field(
         default_factory=lambda: {

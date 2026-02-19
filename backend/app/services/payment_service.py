@@ -301,6 +301,12 @@ class PaymentService:
             partner.pro_tokens_last_reset = now
             partner.is_pro = True
             
+            # --- AWARD XP TO BUYER ---
+            upgrade_xp = settings.PRO_PLUS_UPGRADE_SELF_XP if is_plus else settings.PRO_UPGRADE_SELF_XP
+            xp_before = float(partner.xp)
+            partner.xp = Partner.xp + upgrade_xp # Atomic
+            xp_after = xp_before + upgrade_xp
+            
             # Record promotion details in payment_details
             promo_details = {
                 "currency": currency,
@@ -372,12 +378,36 @@ class PaymentService:
 
             lang = partner.language_code or "en"
 
-            # 4.1 Welcome Message
+            # 4.1 Welcome Message & XP Notice
             welcome_msg = get_msg(lang, "pro_welcome")
+            xp_msg = get_msg(lang, "upgrade_xp_bonus", xp=int(upgrade_xp))
+            
             await notification_service.send_standard(
                 chat_id=int(partner.telegram_id),
-                text=welcome_msg
+                text=f"{welcome_msg}\n\n{xp_msg}"
             )
+            
+            # Record XP Transaction and Audit for Buyer
+            from app.models.partner import XPTransaction
+            session.add(XPTransaction(
+                partner_id=partner.id, amount=upgrade_xp,
+                type="UPGRADE_BONUS",
+                description=f"{'PRO+' if is_plus else 'PRO'} Upgrade Reward"
+            ))
+            
+            from app.services.audit_service import audit_service
+            await audit_service.log_xp_award(
+                session=session, partner_id=partner.id, 
+                xp_amount=upgrade_xp, level=partner.level, is_pro=True,
+                xp_before=xp_before, xp_after=xp_after
+            )
+
+            # Check level up for buyer
+            from app.services.referral_service import _check_level_up
+            temp_notifs = []
+            await _check_level_up(partner, temp_notifs, xp_after)
+            if temp_notifs:
+                await asyncio.gather(*temp_notifs, return_exceptions=True)
 
             # 4.2 Viral Congrats Message (Instruction to user to share)
             ref_link = f"{settings.FRONTEND_URL}?startapp={partner.referral_code}"

@@ -82,6 +82,17 @@ MESSAGES = {
             "• Earn USDT from every PRO upgrade in your team\n"
             "• Get **Fast XP** boost\n\n"
             "Don't leave money on the table. Build your empire today! 🏰"
+        ),
+        "commission_fomo_missed": (
+            "⚠️ *MISSED COMMISSION!* ⚠️\n\n"
+            "You just missed a **${amount} USDT** commission from Level {level}!\n\n"
+            "Someone in your network upgraded, but you are not qualified to receive this reward due to your current plan.\n\n"
+            "🚀 *Upgrade to PRO/PRO+* now to stop losing passive income and unlock the full potential of your tree! 💸"
+        ),
+        "upgrade_xp_bonus": (
+            "⚡️ *XP BOOST UNLOCKED!* ⚡️\n\n"
+            "Congratulations on your upgrade! You've been awarded **+{xp} XP** to accelerate your ranking.\n\n"
+            "You are now closer to the *Platinum Metal Card*! 🏆"
         )
     },
     "ru": {
@@ -167,6 +178,17 @@ MESSAGES = {
             "• Получать USDT с каждого PRO-апгрейда в команде\n"
             "• Получить ускорение **Fast XP**\n\n"
             "Не оставляйте деньги на столе. Стройте свою империю сегодня! 🏰"
+        ),
+        "commission_fomo_missed": (
+            "⚠️ *УПУЩЕННАЯ КОМИССИЯ!* ⚠️\n\n"
+            "Вы только что упустили комиссию **${amount} USDT** с {level}-го уровня!\n\n"
+            "Кто-то в вашей сети сделал апгрейд, но вы не квалифицированы для получения этой награды на вашем текущем плане.\n\n"
+            "🚀 *Перейдите на PRO/PRO+* прямо сейчас, чтобы перестать терять пассивный доход и открыть весь потенциал вашей сети! 💸"
+        ),
+        "upgrade_xp_bonus": (
+            "⚡️ *XP БУСТ АКТИВИРОВАН!* ⚡️\n\n"
+            "Поздравляем с апгрейдом! Вам начислено **+{xp} XP** для ускорения вашего ранга.\n\n"
+            "Вы стали ещё ближе к легендарной *Платиновой Карте*! 🏆"
         )
     }
 }

@@ -305,6 +305,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
 
     earnings_to_add = []
     deferred_notifications = []
+    notified_fomo = set()
     
     # Pointer for the current ancestor being evaluated
     curr_lineage_idx = 0
@@ -319,6 +320,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             commission = round(total_amount * pct, 4)
             recipient = None
             found_qualified_partner = False
+            first_skipped_partner = None
             
             # Find the NEXT available partner in the chain who qualifies for this level
             while curr_lineage_idx < len(ancestors_at_dist):
@@ -344,6 +346,20 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                     recipient = referrer
                     found_qualified_partner = True
                     break
+                else:
+                    # Capture the first person who misses this slice for the audit log
+                    if not first_skipped_partner:
+                        first_skipped_partner = referrer
+                    
+                    # FOMO Notification (once per upgrade)
+                    if referrer.id not in notified_fomo:
+                        notified_fomo.add(referrer.id)
+                        lang = referrer.language_code or "en"
+                        fomo_msg = get_msg(lang, "commission_fomo_missed", amount=round(commission, 2), level=comm_level)
+                        deferred_notifications.append(notification_service.send_critical(
+                            chat_id=int(referrer.telegram_id), text=fomo_msg,
+                            buttons=[[{"text": "👑 Upgrade Plan", "web_app": {"url": settings.FRONTEND_URL}}]]
+                        ))
             
             # If no more qualified partners in lineage, commission leaks to Company
             if not recipient:
@@ -369,7 +385,8 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             
             description = f"{'PRO+' if is_pro_plus else 'PRO'} Commission (L{comm_level})"
             if not found_qualified_partner:
-                description = f"Missed Tree Revenue: Compression Leakage (L{comm_level} via User {partner.telegram_id})"
+                skipped_info = f" (Skipped {first_skipped_partner.telegram_id})" if first_skipped_partner else f" (from {partner.telegram_id})"
+                description = f"Missed Tree Revenue: Compression Leakage (L{comm_level}{skipped_info})"
                 
             earnings_to_add.append(Earning(
                 partner_id=recipient.id,
