@@ -889,6 +889,8 @@ body {
 .dark .vibing-crystal-text {
   background: linear-gradient(135deg, #0066FF 0%, #3B82F6 20%, #FFFFFF 40%, #60A5FA 60%, #FFFFFF 80%, #0052D9 100%);
   background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .liquid-red-premium {
