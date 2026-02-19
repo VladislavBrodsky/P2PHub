@@ -79,13 +79,18 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
             )}
 
             {/* Central Node (Always centered for perfect proportions) */}
-            <div className={cn(
-                "relative z-20 w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 border-2 overflow-hidden",
-                isCurrent ? "branding-liquid-gradient border-blue-400 shadow-[0_0_30px_rgba(37,99,235,0.4)]" :
-                    isCompleted ? "bg-emerald-500/10 border-emerald-500/30" :
-                        isLocked ? "bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10" :
-                            "bg-white dark:bg-white/10 border-slate-200 dark:border-white/20 shadow-md"
-            )} style={{}}>
+            <div
+                onClick={(e) => {
+                    e.stopPropagation();
+                    if (!isLocked) onClick(stage);
+                }}
+                className={cn(
+                    "relative z-20 w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 border-2 cursor-pointer",
+                    isCurrent ? "branding-liquid-gradient border-blue-400 shadow-[0_0_30px_rgba(37,99,235,0.4)]" :
+                        isCompleted ? "bg-emerald-500/10 border-emerald-500/30" :
+                            isLocked ? "bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 cursor-not-allowed" :
+                                "bg-white dark:bg-white/10 border-slate-200 dark:border-white/20 shadow-md"
+                )} style={{}}>
                 {/* Visual indicator for current stage */}
                 {isCurrent && (
                     <motion.div
