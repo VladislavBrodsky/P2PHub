@@ -277,14 +277,17 @@ export default function SubscriptionPage() {
                 <AnimatePresence mode="wait">
                     <motion.div key={selectedPlan} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mb-4 px-2">
                         <div className="bg-white/3 border border-white/5 rounded-3xl p-4 grid grid-cols-2 gap-2">
-                            {(selectedPlan === 'PRO' ? (t('subscription.upgrade.benefits_pro', { returnObjects: true }) as string[]) : (t('subscription.upgrade.benefits_pro_plus', { returnObjects: true }) as string[])).map((b, i) => (
-                                <div key={i} className="flex items-center gap-2">
-                                    <div className={`w-3 h-3 rounded-full flex items-center justify-center shrink-0 ${selectedPlan === 'PRO' ? 'bg-indigo-500/20 text-indigo-400' : 'bg-amber-500/20 text-amber-400'}`}>
-                                        <Check size={8} strokeWidth={4} />
+                            {(() => {
+                                const benefits = t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true });
+                                return Array.isArray(benefits) ? benefits.map((b, i) => (
+                                    <div key={i} className="flex items-center gap-2">
+                                        <div className={`w-3 h-3 rounded-full flex items-center justify-center shrink-0 ${selectedPlan === 'PRO' ? 'bg-indigo-500/20 text-indigo-400' : 'bg-amber-500/20 text-amber-400'}`}>
+                                            <Check size={8} strokeWidth={4} />
+                                        </div>
+                                        <span className="text-[8px] font-black text-white/50 uppercase tracking-tight line-clamp-1">{b}</span>
                                     </div>
-                                    <span className="text-[8px] font-black text-white/50 uppercase tracking-tight line-clamp-1">{b}</span>
-                                </div>
-                            ))}
+                                )) : null;
+                            })()}
                         </div>
                     </motion.div>
                 </AnimatePresence>

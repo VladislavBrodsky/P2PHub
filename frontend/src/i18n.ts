@@ -23,8 +23,9 @@ import ruOther from './locales/ru/other.json';
 
 
 const deepMerge = (target: any, source: any) => {
-    const output = { ...target };
-    if (source instanceof Object && target instanceof Object) {
+    if (Array.isArray(source)) return source;
+    if (source instanceof Object && target instanceof Object && !Array.isArray(target)) {
+        const output = { ...target };
         Object.keys(source).forEach(key => {
             if (source[key] instanceof Object) {
                 if (!(key in target)) {
@@ -36,8 +37,9 @@ const deepMerge = (target: any, source: any) => {
                 output[key] = source[key];
             }
         });
+        return output;
     }
-    return output;
+    return source;
 };
 
 const en = [

@@ -131,6 +131,11 @@
     "coming_soon": {
       "title": "Coming Soon",
       "desc": "We're building something amazing for our partners. Stay tuned!"
+    },
+    "error": {
+      "unavailable": "{{feature}} is temporarily unavailable",
+      "desc": "A synchronization error occurred in the global protocol. Our team has been notified.",
+      "retry": "Initialize Retry"
     }
   },
   "support": {
