@@ -61,11 +61,17 @@ interface DashboardStats {
     financials: {
         total_revenue: number;
         total_revenue_ton: number;
+        current_ton_value: number;
         total_revenue_usdt: number;
         total_commissions: number;
         net_profit: number;
         gross_margin: number;
         commissions_breakdown: CommissionLine[];
+    };
+    performance?: {
+        avg_manual_approval_min: number;
+        pro_slots_actual: number;
+        pro_slots_display: number;
     };
     tasks: Record<string, number>;
     top_partners: { username: string; telegram_id: string; earnings: number }[];
@@ -441,6 +447,35 @@ export const AdminPage = () => {
                             </div>
                         </div>
 
+                        {/* System Efficiency & Adoption */}
+                        {stats?.performance && (
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Manual Approval Time</div>
+                                        <div className="p-1 bg-amber-500/10 rounded-lg text-amber-500">
+                                            <Clock size={10} />
+                                        </div>
+                                    </div>
+                                    <div className="text-lg font-black text-amber-500">{stats.performance.avg_manual_approval_min} min</div>
+                                    <div className="text-[8px] font-bold text-slate-500 uppercase">Avg response efficiency</div>
+                                </div>
+                                <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Slot Adoption (FOMO)</div>
+                                        <div className="p-1 bg-blue-500/10 rounded-lg text-blue-500">
+                                            <Zap size={10} />
+                                        </div>
+                                    </div>
+                                    <div className="text-lg font-black text-blue-500">
+                                        {stats.performance.pro_slots_display}
+                                        <span className="text-[10px] text-slate-500 font-bold ml-1.5 opacity-60">/ {stats.performance.pro_slots_actual} REAL</span>
+                                    </div>
+                                    <div className="text-[8px] font-bold text-slate-500 uppercase">Calculated Traction Base</div>
+                                </div>
+                            </div>
+                        )}
+
                         {/* Task Completion Breakdown */}
                         <div className="p-6 rounded-[2rem] glass-panel-premium border border-white/5 space-y-6 shadow-sm">
                             <div className="flex items-center justify-between">
@@ -609,7 +644,10 @@ export const AdminPage = () => {
                                 </div>
                                 <div>
                                     <div className="text-slate-500 text-[9px] font-black uppercase">Revenue TON</div>
-                                    <div className="text-lg font-black text-blue-400">{stats?.financials.total_revenue_ton} TON</div>
+                                    <div className="text-lg font-black text-blue-400">
+                                        {stats?.financials.total_revenue_ton} TON
+                                        <span className="text-[10px] text-slate-500 block">(${stats?.financials.current_ton_value})</span>
+                                    </div>
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-white/5">
