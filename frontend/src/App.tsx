@@ -100,11 +100,11 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
     useEffect(() => {
         const handlePathSync = () => {
             const path = window.location.pathname.replace(/^\//, '');
-            const validTabs = ['pro', 'admin', 'cards', 'partner', 'earn', 'league', 'blog', 'subscription', 'faq'];
-            if (validTabs.includes(path)) {
-                setActiveTab(path);
-            } else if (path === '' || path === 'home') {
+            const validTabs = ['pro', 'admin', 'cards', 'partner', 'earn', 'league', 'blog', 'subscription', 'faq', 'home'];
+            if (path === '' || path === 'home') {
                 setActiveTab('home');
+            } else if (validTabs.includes(path)) {
+                setActiveTab(path);
             }
         };
 
@@ -243,7 +243,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                     <div className={`h-full ${activeTab === 'cards' ? 'block' : 'hidden'}`}>
                         {(visitedTabs.has('cards') || activeTab === 'cards') && (
                             <FeatureErrorBoundary featureName={t('system.features.cards')}>
-                                <CardsPage setActiveTab={setActiveTab} />
+                                <CardsPage setActiveTab={navigateTo} />
                             </FeatureErrorBoundary>
                         )}
                     </div>
@@ -278,7 +278,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                     <div className={`h-full ${activeTab === 'blog' ? 'block' : 'hidden'}`}>
                         {(visitedTabs.has('blog') || activeTab === 'blog') && (
                             <FeatureErrorBoundary featureName={t('system.features.blog')}>
-                                <BlogPage setActiveTab={setActiveTab} currentTab={activeTab} />
+                                <BlogPage setActiveTab={navigateTo} currentTab={activeTab} />
                             </FeatureErrorBoundary>
                         )}
                     </div>

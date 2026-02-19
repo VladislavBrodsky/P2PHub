@@ -81,9 +81,10 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 style={{ overscrollBehaviorY: 'none' }}
             >
                 <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} safe-pb`}>
-                    <AnimatePresence mode="wait" initial={false}>
+                    {/* #comment: Removed key={activeTab} and mode="wait" to prevent full unmount of all tabs on switch. 
+                        This ensures visitedTabs logic in App.tsx works correctly and prevents white-screen deadlocks. */}
+                    <AnimatePresence initial={false}>
                         <motion.div
-                            key={activeTab}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -6 }}
