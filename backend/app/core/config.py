@@ -137,6 +137,15 @@ class Settings(BaseSettings):
         validation_alias="VIRAL_AUDIENCES"
     )
 
+    ALLOWED_ORIGINS: List[str] = Field(
+        default_factory=lambda: [
+            "https://p2phub-frontend.up.railway.app",
+            "http://localhost:3000",
+            "http://localhost:5173",
+        ],
+        validation_alias="ALLOWED_ORIGINS"
+    )
+
     # Helper property for asyncpg
     @property
     def async_database_url(self) -> str:
