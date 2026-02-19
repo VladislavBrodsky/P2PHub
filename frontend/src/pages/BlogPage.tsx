@@ -530,7 +530,7 @@ const BlogDetail = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 relative"
+            className="flex flex-col min-h-screen bg-(--color-bg-app) relative"
         >
             <div className="fixed top-0 left-0 w-full h-1.5 z-100 bg-slate-100 dark:bg-white/5">
                 <motion.div

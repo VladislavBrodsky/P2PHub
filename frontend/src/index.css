@@ -286,7 +286,7 @@
   /* Core Colors */
   --color-surface: #FFFFFF;
   --color-bg-app: #F9FAFB;
-  --color-bg-deep: #F3F4F6;
+  --color-bg-deep: #F9FAFB;
   --color-text-primary: #0F172A;
   --color-text-secondary: #64748B;
 
@@ -345,7 +345,7 @@
 
 /* Dark Mode Overrides - Subtle & High Fidelity */
 .dark {
-  --color-bg-deep: #020617;
+  --color-bg-deep: #030712;
   /* Deeper slate for elite feel */
   --color-bg-app: #030712;
   --color-surface: #0f172a;

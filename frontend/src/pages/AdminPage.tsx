@@ -399,36 +399,36 @@ export const AdminPage = () => {
                             <div className="grid grid-cols-3 gap-4 relative z-10 pt-4 border-t border-white/10">
                                 <div>
                                     <div className="text-[9px] font-black uppercase opacity-60 flex items-center gap-1">
-                                        <Zap size={10} /> PRO Members
+                                        <Zap size={10} /> PRO
                                     </div>
                                     <div className="text-lg font-black">{stats?.events.total_pro}</div>
                                 </div>
                                 <div>
                                     <div className="text-[9px] font-black uppercase opacity-60 flex items-center gap-1">
-                                        <Users size={10} /> 24h Active
+                                        <Users size={10} /> 24h
                                     </div>
                                     <div className="text-lg font-black">{stats?.events.active_24h}</div>
                                 </div>
                                 <div>
                                     <div className="text-[9px] font-black uppercase opacity-60 flex items-center gap-1">
-                                        <Clock size={10} /> Interested (24h)
+                                        Revenue
                                     </div>
-                                    <div className="text-lg font-black">{stats?.events.pending_payments_24h || 0}</div>
+                                    <div className="text-lg font-black">${stats?.financials.total_revenue || 0}</div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Core KPI Grid */}
                         <div className="grid grid-cols-3 gap-3">
-                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
                                 <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Engagement</div>
                                 <div className="text-sm font-black text-blue-500">{stats?.kpis.engagement_rate}%</div>
                             </div>
-                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
                                 <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Conv. Rate</div>
                                 <div className="text-sm font-black text-emerald-500">{stats?.kpis.conversion_rate}%</div>
                             </div>
-                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
                                 <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">ARPU</div>
                                 <div className="text-sm font-black text-violet-500">${stats?.kpis.arpu}</div>
                             </div>
@@ -436,7 +436,7 @@ export const AdminPage = () => {
 
                         {/* Viral Intelligence Row */}
                         <div className="grid grid-cols-2 gap-3">
-                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-2">
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
                                 <div className="flex items-center justify-between">
                                     <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Viral K-Factor</div>
                                     <div className="p-1 bg-indigo-500/10 rounded-lg text-indigo-500">
@@ -446,7 +446,7 @@ export const AdminPage = () => {
                                 <div className="text-lg font-black text-indigo-500">{stats?.kpis.k_factor}</div>
                                 <div className="text-[8px] font-bold text-slate-500 uppercase">Avg Referrals per User</div>
                             </div>
-                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-2">
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
                                 <div className="flex items-center justify-between">
                                     <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ref. Participation</div>
                                     <div className="p-1 bg-pink-500/10 rounded-lg text-pink-500">
@@ -460,19 +460,19 @@ export const AdminPage = () => {
 
                         {/* Retention Benchmarks Row */}
                         <div className="grid grid-cols-4 gap-3">
-                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
                                 <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (7d)</div>
                                 <div className="text-sm font-black text-amber-500">{stats?.kpis.retention_7d}%</div>
                             </div>
-                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
                                 <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (30d)</div>
                                 <div className="text-sm font-black text-slate-400">{stats?.kpis.retention_30d}%</div>
                             </div>
-                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
                                 <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (90d)</div>
                                 <div className="text-sm font-black text-slate-400">{stats?.kpis.retention_90d}%</div>
                             </div>
-                            <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-1">
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
                                 <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (180d)</div>
                                 <div className="text-sm font-black text-slate-400">{stats?.kpis.retention_180d}%</div>
                             </div>
@@ -481,7 +481,7 @@ export const AdminPage = () => {
                         {/* System Efficiency & Adoption */}
                         {stats?.performance && (
                             <div className="grid grid-cols-2 gap-3">
-                                <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-2">
+                                <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
                                     <div className="flex items-center justify-between">
                                         <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Manual Approval Time</div>
                                         <div className="p-1 bg-amber-500/10 rounded-lg text-amber-500">
@@ -491,7 +491,7 @@ export const AdminPage = () => {
                                     <div className="text-lg font-black text-amber-500">{stats.performance.avg_manual_approval_min} min</div>
                                     <div className="text-[8px] font-bold text-slate-500 uppercase">Avg response efficiency</div>
                                 </div>
-                                <div className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-2">
+                                <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
                                     <div className="flex items-center justify-between">
                                         <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Slot Adoption (FOMO)</div>
                                         <div className="p-1 bg-blue-500/10 rounded-lg text-blue-500">
@@ -508,7 +508,7 @@ export const AdminPage = () => {
                         )}
 
                         {/* Task Completion Breakdown */}
-                        <div className="p-6 rounded-[2rem] glass-panel-premium border border-white/5 space-y-6 shadow-sm">
+                        <div className="p-6 rounded-[2rem] glass-panel-premium border border-black/5 dark:border-white/5 space-y-6 shadow-sm">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Task Performance Breakdown</h2>
                                 <div className="p-2 bg-blue-500/10 rounded-xl">
@@ -540,7 +540,7 @@ export const AdminPage = () => {
                         </div>
 
                         {/* Top Partners Leaderboard */}
-                        <div className="p-6 rounded-[2rem] glass-panel-premium border border-white/5 space-y-6 shadow-sm">
+                        <div className="p-6 rounded-[2rem] glass-panel-premium border border-black/5 dark:border-white/5 space-y-6 shadow-sm">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Elite Earners Leaderboard</h2>
                                 <div className="p-2 bg-blue-500/10 rounded-xl">
@@ -575,7 +575,7 @@ export const AdminPage = () => {
                         </div>
 
                         {/* Performance Chart: User Growth */}
-                        <div className="p-5 rounded-3xl glass-panel-premium border border-white/5 space-y-4">
+                        <div className="p-5 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-4">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Network Growth (14d)</h2>
                                 <Calendar size={14} className="text-slate-500" />
@@ -623,7 +623,7 @@ export const AdminPage = () => {
                         <div className="space-y-3">
                             <div className="grid grid-cols-2 gap-3">
                                 {Object.entries(stats?.growth || {}).map(([period, data]) => (
-                                    <div key={period} className="p-4 rounded-3xl glass-panel-premium border border-white/5 space-y-2">
+                                    <div key={period} className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
                                         <div className="flex items-center justify-between">
                                             <span className="text-[10px] font-black uppercase text-slate-500">{period}</span>
                                             <div className={`flex items-center gap-0.5 text-[10px] font-bold ${data.percent_change >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
@@ -649,12 +649,12 @@ export const AdminPage = () => {
                         className="space-y-6"
                     >
                         {/* Total Clear Income */}
-                        <div className="p-6 rounded-[2.5rem] bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/10 space-y-6 relative overflow-hidden">
+                        <div className="p-6 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 space-y-6 relative overflow-hidden">
                             <div className="absolute top-0 right-0 p-8 opacity-5 dark:opacity-10 pointer-events-none text-slate-900 dark:text-white">
                                 <Wallet size={120} />
                             </div>
                             <div className="space-y-1 relative z-10">
-                                <span className="text-blue-600 dark:text-blue-400 text-[10px] font-black uppercase tracking-widest">Company Net Profit</span>
+                                <span className="text-blue-600 dark:text-blue-400 text-[10px] font-black uppercase tracking-widest">Profit Income to Company (Net)</span>
                                 <div className="flex items-end justify-between">
                                     <div className="text-4xl font-black text-slate-900 dark:text-white flex items-baseline gap-1">
                                         <span className="text-2xl text-blue-500 font-black">$</span>
@@ -670,12 +670,12 @@ export const AdminPage = () => {
 
                             <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-slate-200 dark:border-white/5">
                                 <div>
-                                    <div className="text-slate-500 text-[9px] font-black uppercase">Network Payout (Actual)</div>
+                                    <div className="text-slate-500 text-[9px] font-black uppercase">Paid to Referral Network (Actual)</div>
                                     <div className="text-lg font-black text-slate-900 dark:text-white">${stats?.financials.total_commissions}</div>
                                     <div className="text-[10px] text-blue-600 dark:text-blue-400 font-bold">{stats?.financials.actual_payout_ratio}% of Revenue</div>
                                 </div>
                                 <div>
-                                    <div className="text-slate-500 text-[9px] font-black uppercase">Payout Target (Theoretical)</div>
+                                    <div className="text-slate-500 text-[9px] font-black uppercase">Referral Network Target Split (56/44)</div>
                                     <div className="text-lg font-black text-slate-400 dark:text-slate-400">{stats?.financials.theoretical_payout_ratio}%</div>
                                     <div className="text-[10px] text-slate-400 dark:text-slate-600 font-bold italic">Max possible distribution</div>
                                 </div>
@@ -699,7 +699,7 @@ export const AdminPage = () => {
                         </div>
 
                         {/* Revenue Performance Chart */}
-                        <div className="p-5 rounded-3xl glass-panel-premium border border-white/5 space-y-4">
+                        <div className="p-5 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-4">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Revenue Performance</h2>
                                 <PieChart size={14} className="text-slate-500" />
@@ -739,7 +739,7 @@ export const AdminPage = () => {
                             <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 px-1">Recent Successful Sales</h2>
                             <div className="space-y-2">
                                 {stats?.recent_sales.map((sale) => (
-                                    <div key={sale.id} className="p-3 rounded-2xl glass-panel-premium border border-white/5 flex items-center justify-between">
+                                    <div key={sale.id} className="p-3 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 flex items-center justify-between">
                                         <div className="flex items-center gap-3">
                                             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
                                                 <Zap size={20} />
@@ -842,7 +842,7 @@ export const AdminPage = () => {
                                         initial={{ opacity: 0, scale: 0.95 }}
                                         animate={{ opacity: 1, scale: 1 }}
                                         exit={{ opacity: 0, x: -100 }}
-                                        className="p-5 rounded-[2rem] glass-panel-premium border border-white/5 space-y-4 relative overflow-hidden"
+                                        className="p-5 rounded-[2rem] glass-panel-premium border border-black/5 dark:border-white/5 space-y-4 relative overflow-hidden"
                                     >
                                         <div className="flex items-start justify-between relative z-10">
                                             <div className="flex items-center gap-4">
@@ -869,7 +869,7 @@ export const AdminPage = () => {
                                             </div>
                                         </div>
 
-                                        <div className="p-3 rounded-2xl bg-black/20 font-mono text-[10px] break-all flex items-start justify-between gap-3 border border-white/5">
+                                        <div className="p-3 rounded-2xl bg-black/20 font-mono text-[10px] break-all flex items-start justify-between gap-3 border border-black/5 dark:border-white/5">
                                             <span className="text-slate-500 shrink-0 uppercase font-black">TX Hash:</span>
                                             <span className={`select-all flex-1 ${!tx.tx_hash ? "text-red-400 italic" : "text-slate-500 dark:text-slate-400"}`}>
                                                 {tx.tx_hash || "Manual Verification Required"}
@@ -938,7 +938,7 @@ export const AdminPage = () => {
                                             onClick={() => fetchNetworkMembers(depth)}
                                             className={`p-4 rounded-3xl border transition-all text-left space-y-1 ${isSelected
                                                 ? 'bg-blue-500 border-blue-400 text-white shadow-lg shadow-blue-500/20'
-                                                : 'glass-panel-premium border-white/5 text-slate-500 hover:border-blue-500/30'
+                                                : 'glass-panel-premium border-black/5 dark:border-white/5 text-slate-500 hover:border-blue-500/30'
                                                 }`}
                                         >
                                             <div className={`text-[10px] font-black uppercase ${isSelected ? 'opacity-80' : 'text-slate-400'}`}>Gen {depth}</div>
@@ -968,7 +968,7 @@ export const AdminPage = () => {
                                             <button
                                                 key={p.telegram_id}
                                                 onClick={() => fetchPartnerDetails(p.id || p.telegram_id)}
-                                                className="w-full p-4 rounded-2xl glass-panel-premium border border-white/5 flex items-center justify-between text-left group hover:border-blue-500/30 transition-all"
+                                                className="w-full p-4 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 flex items-center justify-between text-left group hover:border-blue-500/30 transition-all"
                                             >
                                                 <div className="flex items-center gap-3">
                                                     <div className="relative">
@@ -1014,12 +1014,12 @@ export const AdminPage = () => {
                         exit={{ opacity: 0, y: -10 }}
                         className="space-y-6"
                     >
-                        <div className="p-6 rounded-[2.5rem] bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/10 space-y-6 relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-8 opacity-5 dark:opacity-10 pointer-events-none text-slate-900 dark:text-white">
+                        <div className="p-6 rounded-[2.5rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-6 relative overflow-hidden shadow-sm">
+                            <div className="absolute top-0 right-0 p-8 opacity-5 dark:opacity-10 pointer-events-none text-slate-400 dark:text-white">
                                 <Database size={120} />
                             </div>
                             <div className="space-y-2 relative z-10">
-                                <h3 className="text-xl font-black text-slate-900 dark:text-white">System Maintenance</h3>
+                                <h3 className="text-xl font-black text-slate-900 dark:text-slate-100">System Maintenance</h3>
                                 <p className="text-slate-500 dark:text-slate-400 text-xs">Critical tools for database consistency and performance optimization.</p>
                             </div>
 
@@ -1041,7 +1041,7 @@ export const AdminPage = () => {
                                 </div>
                             </div>
 
-                            <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-white/5 relative z-10">
+                            <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-black/5 dark:border-white/5 relative z-10">
                                 <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-3">
                                     <div className="flex items-center gap-2 text-amber-500 font-bold text-[10px] uppercase tracking-widest">
                                         <AlertTriangle size={14} />
@@ -1126,7 +1126,7 @@ export const AdminPage = () => {
                         exit={{ opacity: 0, y: -10 }}
                         className="space-y-6"
                     >
-                        <div className="p-5 rounded-3xl glass-panel-premium border border-white/5 space-y-4">
+                        <div className="p-5 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-4">
                             <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Partner Search</h2>
                             <form onSubmit={handleSearch} className="relative">
                                 <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
@@ -1148,7 +1148,7 @@ export const AdminPage = () => {
                                     <button
                                         key={p.id}
                                         onClick={() => fetchPartnerDetails(p.id)}
-                                        className="w-full text-left p-4 rounded-2xl glass-panel-premium border border-white/5 space-y-2 hover:border-blue-500/30 transition-all group"
+                                        className="w-full text-left p-4 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2 hover:border-blue-500/30 transition-all group"
                                     >
                                         <div className="flex items-center justify-between">
                                             <div>
@@ -1159,7 +1159,7 @@ export const AdminPage = () => {
                                                 {p.is_pro ? 'PRO MEMBER' : 'FREE USER'}
                                             </div>
                                         </div>
-                                        <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5">
+                                        <div className="grid grid-cols-3 gap-2 pt-2 border-t border-black/5 dark:border-white/5">
                                             <div className="text-center">
                                                 <div className="text-[8px] text-slate-500 font-black uppercase">Level</div>
                                                 <div className="text-xs font-black text-slate-900 dark:text-slate-100">{p.level}</div>
@@ -1302,6 +1302,6 @@ export const AdminPage = () => {
                     </div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     );
 };
