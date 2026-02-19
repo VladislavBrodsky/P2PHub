@@ -80,7 +80,7 @@ async def create_payment_session(
         raise HTTPException(status_code=401, detail="Unauthorized: Telegram authentication required")
 
     try:
-        from app.core.security import get_tg_user
+
         tg_user = get_tg_user(user_data)
         tg_id = str(tg_user.get("id"))
     except Exception as e:
@@ -183,7 +183,7 @@ async def submit_manual_payment(
         raise HTTPException(status_code=401, detail="Unauthorized: Telegram authentication required")
 
     try:
-        from app.core.security import get_tg_user
+
         tg_user = get_tg_user(user_data)
         tg_id = str(tg_user.get("id"))
     except Exception as e:

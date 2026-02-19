@@ -105,6 +105,17 @@ async def list_posts(
     # Use cache for list (short TTL 60s for list to keep it fresh)
     return await redis_service.get_or_compute(cache_key, fetch_posts, expire=60)
 
+@router.get("/stats")
+async def get_blog_stats(
+    session: AsyncSession = Depends(get_session)
+):
+    """Get total likes for all posts."""
+    statement = select(BlogPostEngagement)
+    result = await session.exec(statement)
+    stats = result.all()
+
+    return {s.post_slug: {"likes": s.base_likes + s.user_likes} for s in stats}
+
 @router.get("/{slug}", response_model=BlogPostDetail)
 async def get_post_detail(
     slug: str,
@@ -181,16 +192,6 @@ async def get_post_detail(
     return {**post_data, "liked": liked}
 
 
-@router.get("/stats")
-async def get_blog_stats(
-    session: AsyncSession = Depends(get_session)
-):
-    """Get total likes for all posts."""
-    statement = select(BlogPostEngagement)
-    result = await session.exec(statement)
-    stats = result.all()
-
-    return {s.post_slug: {"likes": s.base_likes + s.user_likes} for s in stats}
 
 @router.get("/{slug}/engagement")
 async def get_post_engagement(

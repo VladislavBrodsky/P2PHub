@@ -206,30 +206,6 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Pintopay Partner Hub API", lifespan=lifespan)
 
-@app.get("/health")
-async def health_check():
-    """
-    Rapid health check for system monitoring.
-    Verify Redis connectivity and general availability.
-    """
-    try:
-        from datetime import UTC, datetime
-
-        from app.services.redis_service import redis_service
-        is_redis_ok = await redis_service.client.ping()
-        return {
-            "status": "healthy",
-            "redis": "online" if is_redis_ok else "offline",
-            "timestamp": datetime.now(UTC).isoformat()
-        }
-    except Exception as e:
-        logger.error(f"💥 Health check failed: {e}")
-        from fastapi.responses import JSONResponse
-        return JSONResponse(
-            status_code=503,
-            content={"status": "unhealthy", "error": str(e)}
-        )
-
 @app.get("/")
 async def root_health():
     return {"status": "healthy", "service": "P2PHub Backend"}
@@ -347,23 +323,6 @@ app.add_middleware(
 # #comment: Enable GZip compression for all responses > 500 bytes.
 # This significantly reduces payload size for leaderboard, transaction history, etc.
 app.add_middleware(GZipMiddleware, minimum_size=500)
-
-@app.middleware("http")
-async def add_request_id(request: Request, call_next):
-    """
-    Middleware to add a unique request ID to every request.
-    This helps in tracing logs for a single request across workers.
-    """
-    request_id = str(uuid.uuid4())
-    # Add to request state for access in endpoints
-    request.state.request_id = request_id
-    
-    # Process request
-    response: Response = await call_next(request)
-    
-    # Return request-id in headers for client-side tracing/reporting
-    response.headers["X-Request-ID"] = request_id
-    return response
 
 app.include_router(partner.router, prefix="/api/partner", tags=["partner"])
 app.include_router(earnings.router, prefix="/api/earnings", tags=["earnings"])

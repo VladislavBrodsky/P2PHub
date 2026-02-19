@@ -167,6 +167,19 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
         }
     }, [resetInactivityTimer, t, isOpen, messages.length]);
 
+    // Keep server session alive while chat is open
+    React.useEffect(() => {
+        let timer: any;
+        if (isOpen && !sessionClosed) {
+            timer = setInterval(() => {
+                apiClient.post('/api/support/ping').catch(() => { });
+            }, 60 * 1000); // Ping every 60s
+        }
+        return () => {
+            if (timer) clearInterval(timer);
+        };
+    }, [isOpen, sessionClosed]);
+
     const intelligenceLabels = React.useMemo(() => [
         'Syncing Neural Intel v4.2...',
         'Scanning Knowledge Protocol...',

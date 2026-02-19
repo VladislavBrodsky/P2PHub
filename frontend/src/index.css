@@ -1149,11 +1149,12 @@ body {
 /* === NEW VIBING PREMIUM UI === */
 .vibing-premium-panel {
   @apply relative overflow-hidden rounded-[2.5rem] border border-slate-200 dark:border-white/10 backdrop-blur-3xl transition-all duration-500;
-  background: light-dark(rgba(255, 255, 255, 0.95), rgba(15, 23, 42, 0.9));
+  background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05), inset 0 0 20px rgba(99, 102, 241, 0.05);
 }
 
 .dark .vibing-premium-panel {
+  background: rgba(15, 23, 42, 0.9);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(99, 102, 241, 0.1);
 }
 

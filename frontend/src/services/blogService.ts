@@ -119,9 +119,9 @@ export const blogService = {
         // Prefetch first 3 posts content in background
         const lang = i18n.language?.split('-')[0] || 'en';
         posts.slice(0, 3).forEach(post => {
-            const detailKey = `${lang}:${post.id}`;
+            const detailKey = `${lang}:${post.slug}`;
             if (!cache.details[detailKey]) {
-                apiClient.get(`/api/blog/${post.id}`).then(res => {
+                apiClient.get(`/api/blog/${post.slug}`).then(res => {
                     cache.details[detailKey] = { data: res.data, timestamp: Date.now() };
                 }).catch(() => { /* silent fail for prefetch */ });
             }

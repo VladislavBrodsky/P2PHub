@@ -373,16 +373,16 @@ export default function SubscriptionPage() {
                     {!paymentMethod ? (
                         <div className="space-y-8">
                             <div className="text-center relative">
-                                <div className="text-[9px] font-black text-slate-400 dark:text-white/20 uppercase tracking-[0.3em] mb-4">
+                                <div className="text-[9px] font-black text-slate-500 dark:text-white/30 uppercase tracking-[0.3em] mb-4">
                                     {t('subscription.upgrade.secure_encryption_active')}
                                 </div>
                                 <div className="flex items-baseline justify-center gap-1.5 mb-1">
                                     <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">${planPrice}</span>
-                                    <span className="text-[10px] font-black text-slate-400 dark:text-white/30 uppercase italic font-mono">
+                                    <span className="text-[10px] font-black text-slate-500 dark:text-white/40 uppercase italic font-mono">
                                         / {selectedPlan === 'PRO_PLUS' ? t('subscription.upgrade.lifetime_label') : t('subscription.upgrade.monthly_label')}
                                     </span>
                                 </div>
-                                <p className="text-[9px] text-slate-400 dark:text-white/30 font-black uppercase tracking-widest mb-3">
+                                <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-3">
                                     {selectedPlan === 'PRO' ? t('subscription.upgrade.pro_title') : t('subscription.upgrade.pro_plus_title')}
                                 </p>
                                 <div className="w-16 h-1 bg-linear-to-r from-indigo-500 to-fuchsia-500 mx-auto rounded-full" />
@@ -407,15 +407,15 @@ export default function SubscriptionPage() {
                                     <span className="text-[9px] font-black text-slate-900 dark:text-white tracking-widest uppercase">{t('subscription.upgrade.usdt_trc20_address')}</span>
                                 </button>
                             </div>
-                            <div className="flex items-center justify-center gap-2 opacity-30">
-                                <Shield size={10} className="text-indigo-500" />
-                                <p className="text-[8px] text-slate-500 dark:text-white font-black uppercase tracking-[0.2em]">{t('subscription.upgrade.protocol_initialized')}</p>
+                            <div className="flex items-center justify-center gap-2 opacity-50 dark:opacity-30">
+                                <Shield size={10} className="text-indigo-600 dark:text-indigo-400" />
+                                <p className="text-[8px] text-slate-600 dark:text-white font-black uppercase tracking-[0.2em]">{t('subscription.upgrade.protocol_initialized')}</p>
                             </div>
                         </div>
                     ) : (
                         <div className="space-y-6">
                             <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-white/5">
-                                <button onClick={() => setPaymentMethod(null)} className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 dark:text-white/40 dark:hover:text-white transition-colors">
+                                <button onClick={() => setPaymentMethod(null)} className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 dark:text-white/50 dark:hover:text-white transition-colors">
                                     <ChevronLeft size={14} /> {t('subscription.upgrade.change_method')}
                                 </button>
                                 {formattedTime && (
@@ -444,7 +444,7 @@ export default function SubscriptionPage() {
                                             <span className="text-[8px] font-black text-emerald-600 dark:text-emerald-400 uppercase group-hover:animate-pulse">CLICK TO COPY</span>
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[8px] font-black text-slate-400 dark:text-white/30 uppercase tracking-widest ml-1">{t('subscription.upgrade.paste_tx_hash')}</label>
+                                            <label className="text-[8px] font-black text-slate-500 dark:text-white/40 uppercase tracking-widest ml-1">{t('subscription.upgrade.paste_tx_hash')}</label>
                                             <input value={manualHash} onChange={(e) => setManualHash(e.target.value)} placeholder="0x..." className="w-full h-12 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs text-slate-900 dark:text-white text-center font-mono focus:border-indigo-500/50 outline-none transition-colors" />
                                         </div>
                                         <button onClick={handleManualSubmit} disabled={isLoading || !manualHash} className="w-full h-12 bg-linear-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg active:scale-95 transition-all disabled:opacity-40">
@@ -525,13 +525,13 @@ export default function SubscriptionPage() {
                             {status === 'pending' && <Loader2 size={48} className="text-amber-500 animate-spin mx-auto mb-6" />}
                             {status === 'success' && <Trophy size={48} className="text-emerald-500 mx-auto mb-6" />}
                             {status === 'manual_review' && <CheckCircle2 size={48} className="text-blue-500 mx-auto mb-6" />}
-                            <h2 className="text-xl font-black text-white uppercase italic mb-2">
+                            <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase italic mb-2">
                                 {status === 'pending' ? 'VERIFYING...' : status === 'success' ? 'WELCOME TO PRO' : 'SUBMITTED'}
                             </h2>
-                            <p className="text-[9px] text-white/40 uppercase font-black tracking-widest mb-8">
+                            <p className="text-[9px] text-slate-500 dark:text-white/40 uppercase font-black tracking-widest mb-8">
                                 {status === 'pending' ? 'SCANNING BLOCKCHAIN FOR TRANSACTION' : 'YOUR ACCOUNT ACCESS IS BEING PROVISIONED'}
                             </p>
-                            <button onClick={() => setStatus('idle')} className="w-full h-12 bg-white text-indigo-900 rounded-xl font-black text-[10px] uppercase tracking-widest">GOT IT</button>
+                            <button onClick={() => setStatus('idle')} className="w-full h-12 bg-indigo-600 text-white dark:bg-white dark:text-indigo-900 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl">GOT IT</button>
                         </div>
                     </motion.div>
                 )}

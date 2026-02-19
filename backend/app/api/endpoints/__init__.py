@@ -8,5 +8,7 @@ from . import (
     leaderboard,
     partner,
     payment,
+    pro,
+    support,
     tools,
 )
