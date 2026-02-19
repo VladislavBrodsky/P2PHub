@@ -57,7 +57,7 @@ class AdminService:
                 if cached: return cached
 
             # Heavy Computation Start
-            now = datetime.now(UTC)
+            now = datetime.now(UTC).replace(tzinfo=None)
             
             # 1. Growth Stats
             growth = await self._calculate_growth_metrics(session, now)

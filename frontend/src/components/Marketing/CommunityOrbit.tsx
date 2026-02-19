@@ -147,6 +147,9 @@ export const CommunityOrbit = memo(() => {
             {/* Central Logic */}
             <CentralLogo />
 
+            {/* Floating Profits */}
+            <FractalProfits />
+
             {/* Orbiting Avatars & Crypto Icons */}
             {displayItems.map((item, i) => (
                 <OrbitingItem
@@ -168,68 +171,69 @@ const CentralLogo = memo(() => {
     const isUserPhoto = !!user?.photo_url;
 
     return (
-        <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.5)] overflow-hidden"
-            style={{ willChange: 'transform' }}
-        >
-            <FractalProfits />
-            <div className="absolute inset-0 z-0 rounded-full bg-blue-500 blur-3xl opacity-40 animate-pulse" />
-            <div className="absolute inset-0 z-10 rounded-full border border-white/30" />
+        <div className="relative z-10 flex h-24 w-24 items-center justify-center">
+            <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="relative z-10 flex h-full w-full items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.5)] overflow-hidden"
+                style={{ willChange: 'transform' }}
+            >
+                <div className="absolute inset-0 z-0 rounded-full bg-blue-500 blur-3xl opacity-40 animate-pulse" />
+                <div className="absolute inset-0 z-10 rounded-full border border-white/30" />
 
-            {isUserPhoto ? (
-                <motion.img
-                    animate={{
-                        scale: [1, 1.05, 1],
-                    }}
-                    transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                    src={logoSrc}
-                    alt="User Profile"
-                    className="relative z-20 w-full h-full object-cover rounded-full"
-                    loading="eager"
-                    onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = LOGO_DATA;
-                    }}
-                />
-            ) : (
-                <motion.img
-                    animate={{
-                        scale: [1, 1.08, 1],
-                    }}
-                    transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                    src={logoSrc}
-                    alt="Pintopay Logo"
-                    width="56"
-                    height="56"
-                    loading="eager"
-                    className="relative z-20 w-14 h-14 object-contain"
-                    onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        if (!target.src.includes('raw.githubusercontent.com')) {
-                            // High-reliability fallback to remote asset
-                            target.src = 'https://raw.githubusercontent.com/VladislavBrodsky/P2PHub/main/frontend/public/logo.svg';
-                        }
-                    }}
-                />
-            )}
-        </motion.div>
+                {isUserPhoto ? (
+                    <motion.img
+                        animate={{
+                            scale: [1, 1.05, 1],
+                        }}
+                        transition={{
+                            duration: 4,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                        src={logoSrc}
+                        alt="User Profile"
+                        className="relative z-20 w-full h-full object-cover rounded-full"
+                        loading="eager"
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = LOGO_DATA;
+                        }}
+                    />
+                ) : (
+                    <motion.img
+                        animate={{
+                            scale: [1, 1.08, 1],
+                        }}
+                        transition={{
+                            duration: 4,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                        src={logoSrc}
+                        alt="Pintopay Logo"
+                        width="56"
+                        height="56"
+                        loading="eager"
+                        className="relative z-20 w-14 h-14 object-contain"
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            if (!target.src.includes('raw.githubusercontent.com')) {
+                                // High-reliability fallback to remote asset
+                                target.src = 'https://raw.githubusercontent.com/VladislavBrodsky/P2PHub/main/frontend/public/logo.svg';
+                            }
+                        }}
+                    />
+                )}
+            </motion.div>
+        </div>
     );
 });
 
 const FractalProfits = memo(() => {
     return (
-        <div className="absolute inset-0 pointer-events-none z-0 overflow-visible">
+        <div className="absolute inset-0 pointer-events-none z-20 overflow-visible">
             {[...Array(12)].map((_, i) => {
                 const isTon = i % 2 !== 0;
                 const amount = isTon
@@ -246,23 +250,25 @@ const FractalProfits = memo(() => {
                         key={i}
                         initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
                         animate={{
-                            scale: [0, 1.2, 0.8],
-                            opacity: [0, 0.8, 0],
+                            scale: [0, 1.2, 0.9],
+                            opacity: [0, 1, 0],
                             x: targetX,
                             y: targetY,
                         }}
                         transition={{
                             duration: 10 + Math.random() * 10,
                             repeat: Infinity,
-                            delay: i * 2,
+                            delay: i * 1.5,
                             ease: "easeOut"
                         }}
-                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 whitespace-nowrap z-0"
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 whitespace-nowrap"
                     >
-                        <div className={`flex items-center justify-center w-4 h-4 rounded-full ${isTon ? 'bg-blue-500/80 shadow-[0_0_10px_rgba(59,130,246,0.2)]' : 'bg-emerald-500/80 shadow-[0_0_10px_rgba(16,185,129,0.2)]'}`}>
-                            <CryptoIcon name={isTon ? 'TON' : 'USDT'} />
+                        <div className={`flex items-center justify-center w-5 h-5 rounded-full ${isTon ? 'bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.4)]' : 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]'}`}>
+                            <div className="p-1">
+                                <CryptoIcon name={isTon ? 'TON' : 'USDT'} />
+                            </div>
                         </div>
-                        <span className={`text-[10px] font-black tracking-tighter ${isTon ? 'text-blue-500/80' : 'text-emerald-500/80'}`}>
+                        <span className={`text-[12px] font-black tracking-tight drop-shadow-md ${isTon ? 'text-blue-400' : 'text-emerald-400'}`}>
                             +{isTon ? `${amount} TON` : `$${amount}.00`}
                         </span>
                     </motion.div>
