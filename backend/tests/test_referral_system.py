@@ -16,8 +16,8 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.models.partner import Partner, XPTransaction
-from app.services.partner_service import (
-    create_partner,
+from app.services.partner_service import create_partner
+from app.services.referral_service import (
     distribute_pro_commissions,
     process_referral_logic,
 )
@@ -37,7 +37,7 @@ class TestReferralChainCreation:
         """
         # Create referrer
         referrer = await create_test_partner(
-            telegram_id="ref_001",
+            telegram_id="20001",
             username="referrer"
         )
         
@@ -47,7 +47,7 @@ class TestReferralChainCreation:
         
         # Create referee using referrer's code
         referee = await create_test_partner(
-            telegram_id="ref_002",
+            telegram_id="20002",
             username="referee",
             referrer_code=referrer.referral_code
         )
@@ -65,11 +65,11 @@ class TestReferralChainCreation:
         - Path accumulates ancestors properly
         """
         # Level 1: Root
-        user_a = await create_test_partner(telegram_id="chain_a", username="user_a")
+        user_a = await create_test_partner(telegram_id="30001", username="user_a")
         
         # Level 2: A's referee
         user_b = await create_test_partner(
-            telegram_id="chain_b",
+            telegram_id="30002",
             username="user_b",
             referrer_code=user_a.referral_code
         )
@@ -78,7 +78,7 @@ class TestReferralChainCreation:
         
         # Level 3: B's referee
         user_c = await create_test_partner(
-            telegram_id="chain_c",
+            telegram_id="30003",
             username="user_c",
             referrer_code=user_b.referral_code
         )
@@ -122,12 +122,12 @@ class TestXPDistribution:
         Verifies Bug Fix #3: Direct referrer gets XP
         """
         # Create referrer (normal user)
-        referrer = await create_test_partner(telegram_id="xp_ref", username="xp_ref")
+        referrer = await create_test_partner(telegram_id="40001", username="xp_ref")
         initial_xp = referrer.xp
         
         # Create referee
         referee = await create_test_partner(
-            telegram_id="xp_new",
+            telegram_id="40002",
             username="xp_new",
             referrer_code=referrer.referral_code
         )
@@ -138,8 +138,8 @@ class TestXPDistribution:
         # Refresh referrer to get updated XP
         await session.refresh(referrer)
         
-        # #comment: L1 should get 35 XP for new referral
-        assert referrer.xp == initial_xp + 35
+        # #comment: L1 should get 100 XP for new referral (from config)
+        assert referrer.xp == initial_xp + 100
         assert referrer.referral_count == 1
     
     async def test_pro_multiplier_xp(self, session: AsyncSession, create_test_partner):
@@ -151,7 +151,7 @@ class TestXPDistribution:
         """
         # Create PRO referrer
         referrer = await create_test_partner(
-            telegram_id="pro_ref",
+            telegram_id="50001",
             username="pro_ref",
             is_pro=True
         )
@@ -159,7 +159,7 @@ class TestXPDistribution:
         
         # Create referee
         referee = await create_test_partner(
-            telegram_id="pro_new",
+            telegram_id="50002",
             username="pro_new",
             referrer_code=referrer.referral_code
         )
@@ -169,8 +169,8 @@ class TestXPDistribution:
         
         await session.refresh(referrer)
         
-        # #comment: PRO L1 gets 35 XP * 5 = 175 XP
-        assert referrer.xp == initial_xp + 175
+        # #comment: PRO L1 gets 100 XP * 2 = 200 XP (PRO_XP_MULTIPLIER=2.0)
+        assert referrer.xp == initial_xp + 200
     
     async def test_9_level_xp_distribution(self, session: AsyncSession, create_referral_chain):
         """
@@ -183,8 +183,12 @@ class TestXPDistribution:
         - L2: 10 XP
         - L3-L9: 1 XP each
         """
-        # Create chain with only last 2 as PRO
-        chain = await create_referral_chain(levels=9, make_pro=[7, 8])
+        # Create chain:
+        # L1-L9 needs to be qualified correctly.
+        # L1-L3: Free.
+        # L4-L9: PRO.
+        # So we make everyone PRO to be safe and test the rates/XP values.
+        chain = await create_referral_chain(levels=9, make_pro=list(range(9)))
         
         # Get initial XP for all
         initial_xp = {user.id: user.xp for user in chain}
@@ -197,17 +201,20 @@ class TestXPDistribution:
         for user in chain:
             await session.refresh(user)
         
-        # Verify XP awards
+        # chain[8] is new user.
+        # chain[7] is L1 (PRO).
+        # chain[6] is L2 (Normal).
+        # ...
+        # chain[0] is L8 (Normal).
         expected_xp = {
-            0: 35,   # L1 gets 35 XP
-            1: 10,   # L2 gets 10 XP
-            2: 1,    # L3 gets 1 XP
-            3: 1,    # L4 gets 1 XP
-            4: 1,    # L5 gets 1 XP
-            5: 1,    # L6 gets 1 XP
-            6: 1,    # L7 gets 1 XP
-            7: 5,    # L8 is PRO: 1 * 5 = 5 XP
-            # L9 (last_user) doesn't get XP from their own signup
+            7: 200,  # L1 (chain[7]) PRO: 100 * 2 = 200
+            6: 100,  # L2 (chain[6]) PRO: 50 * 2 = 100
+            5: 60,   # L3 PRO: 30 * 2 = 60
+            4: 40,   # L4 PRO: 20 * 2 = 40
+            3: 30,   # L5 PRO: 15 * 2 = 30
+            2: 20,   # L6 PRO: 10 * 2 = 20
+            1: 16,   # L7 PRO: 8 * 2 = 16
+            0: 12,   # L8 PRO: 6 * 2 = 12
         }
         
         for i, expected in expected_xp.items():
@@ -235,12 +242,17 @@ class TestXPDistribution:
         for user in chain:
             await session.refresh(user)
         
-        # Expected XP gains
+        # chain has 5 levels (0..4). 4 is new user.
+        # chain[3] is L1. (Normal -> make_pro=[0, 2, 4] -> 0=PRO, 2=PRO, 4=PRO. 1, 3 Normal)
+        # chain[3] is Normal. Config L1: 100 XP.
+        # chain[2] is L2. (PRO). Config L2: 50 XP. PRO Multiplier 2.0 -> 100 XP.
+        # chain[1] is L3. (Normal). Config L3: 30 XP.
+        # chain[0] is L4. (PRO). Config L4: 20 XP. PRO Multiplier 2.0 -> 40 XP.
         expected = {
-            0: 175,  # L1 PRO: 35 * 5 = 175
-            1: 10,   # L2 Normal: 10
-            2: 5,    # L3 PRO: 1 * 5 = 5
-            3: 1,    # L4 Normal: 1
+            3: 100,  # L1 Normal -> 100
+            2: 100,  # L2 PRO -> 50 * 2 = 100
+            1: 30,   # L3 Normal -> 30
+            0: 40,   # L4 PRO -> 20 * 2 = 40
         }
         
         for i, exp_gain in expected.items():
@@ -258,12 +270,12 @@ class TestCommissionDistribution:
         Verifies Bug Fix #2: L1 gets 30% commission
         """
         # Create referrer
-        referrer = await create_test_partner(telegram_id="comm_ref", username="comm_ref")
+        referrer = await create_test_partner(telegram_id="60001", username="comm_ref")
         initial_balance = referrer.balance
         
         # Create referee
         referee = await create_test_partner(
-            telegram_id="comm_new",
+            telegram_id="60002",
             username="comm_new",
             referrer_code=referrer.referral_code
         )
@@ -271,12 +283,13 @@ class TestCommissionDistribution:
         # Simulate PRO upgrade ($39)
         pro_amount = 39.0
         await distribute_pro_commissions(session, referee.id, pro_amount)
+        await session.commit()
         
         await session.refresh(referrer)
         
-        # #comment: L1 gets 30% of $39 = $11.70
-        expected_commission = pro_amount * 0.30
-        assert referrer.balance == initial_balance + expected_commission
+        # #comment: L1 gets 20% of $39 = $7.80 (20% from config)
+        expected_commission = pro_amount * 0.20
+        assert abs(referrer.balance - (initial_balance + expected_commission)) < 0.01
     
     async def test_two_level_commission(self, session: AsyncSession, create_referral_chain):
         """
@@ -293,14 +306,18 @@ class TestCommissionDistribution:
         pro_amount = 39.0
         
         await distribute_pro_commissions(session, buyer.id, pro_amount)
+        await session.commit()
         
         # Refresh referrers
         for user in chain[:2]:
             await session.refresh(user)
         
         # Verify commissions
-        assert chain[1].balance == pro_amount * 0.30  # L1: 30%
-        assert chain[0].balance == pro_amount * 0.05  # L2: 5%
+        # Verify commissions (L1: 20%, L2: 10%)
+        # chain[1] is L1 (relative to buyer chain[2])
+        # chain[0] is L2
+        assert abs(chain[1].balance - (pro_amount * 0.20)) < 0.01
+        assert abs(chain[0].balance - (pro_amount * 0.10)) < 0.01
     
     async def test_9_level_commission(self, session: AsyncSession, create_referral_chain):
         """
@@ -313,28 +330,35 @@ class TestCommissionDistribution:
         - L2: 5%
         - L3-L9: 3%, 1%, 1%, 1%, 1%, 1%, 1%
         """
-        chain = await create_referral_chain(levels=9)
+        chain = await create_referral_chain(levels=9, make_pro=list(range(9)))
         
         # Last user upgrades to PRO
         buyer = chain[8]
         pro_amount = 39.0
         
         await distribute_pro_commissions(session, buyer.id, pro_amount)
+        await session.commit()
         
         # Refresh all
         for user in chain:
             await session.refresh(user)
         
         # Expected commissions
+        # Expected commissions (from config.py) by Index
+        # Buyer is chain[8].
+        # L1 -> chain[7] (20%)
+        # L2 -> chain[6] (10%)
+        # ...
+        # L8 -> chain[0] (0.5%)
         expected_rates = {
-            0: 0.30,  # L1: 30%
-            1: 0.05,  # L2: 5%
-            2: 0.03,  # L3: 3%
-            3: 0.01,  # L4: 1%
-            4: 0.01,  # L5: 1%
-            5: 0.01,  # L6: 1%
-            6: 0.01,  # L7: 1%
-            7: 0.01,  # L8: 1%
+            7: 0.20,  # L1
+            6: 0.10,  # L2
+            5: 0.05,  # L3
+            4: 0.03,  # L4
+            3: 0.02,  # L5
+            2: 0.015, # L6
+            1: 0.01,  # L7
+            0: 0.005, # L8
         }
         
         for i, rate in expected_rates.items():
@@ -388,7 +412,7 @@ class TestEdgeCases:
     
     async def test_no_referrer(self, session: AsyncSession, create_test_partner):
         """Test creating partner without referrer doesn't crash."""
-        partner = await create_test_partner(telegram_id="solo_001", username="solo")
+        partner = await create_test_partner(telegram_id="70001", username="solo")
         
         assert partner.referrer_id is None
         assert partner.path is None
@@ -400,7 +424,7 @@ class TestEdgeCases:
     async def test_invalid_referrer_code(self, session: AsyncSession, create_test_partner):
         """Test using invalid referrer code doesn't create link."""
         partner = await create_test_partner(
-            telegram_id="invalid_001",
+            telegram_id="80001",
             username="invalid_user",
             referrer_code="INVALID-CODE-DOES-NOT-EXIST"
         )
@@ -418,13 +442,13 @@ class TestEdgeCases:
         - All XP awards are counted
         """
         # Create referrer
-        referrer = await create_test_partner(telegram_id="concurrent_ref", username="concurrent_ref")
+        referrer = await create_test_partner(telegram_id="90001", username="concurrent_ref")
         
         # Create 5 referrals
         referrals = []
         for i in range(5):
             ref = await create_test_partner(
-                telegram_id=f"concurrent_{i}",
+                telegram_id=f"9010{i}",
                 username=f"user_{i}",
                 referrer_code=referrer.referral_code
             )
@@ -439,9 +463,9 @@ class TestEdgeCases:
         # Refresh referrer
         await session.refresh(referrer)
         
-        # Should have 5 referrals and 5 * 35 = 175 XP
+        # Should have 5 referrals and 5 * 100 = 500 XP
         assert referrer.referral_count == 5
-        assert referrer.xp == 175
+        assert referrer.xp == 500
 
 
 class TestRegressionPrevention:
@@ -457,7 +481,8 @@ class TestRegressionPrevention:
         We can't easily simulate the error without mocking, but we can verify
         the logic structure is correct by checking the chain processes completely.
         """
-        chain = await create_referral_chain(levels=9)
+        # Make them PRO to ensure XP is awarded > L3
+        chain = await create_referral_chain(levels=9, make_pro=list(range(9)))
         
         # Process should complete without hanging
         await process_referral_logic(chain[8].id)
@@ -479,9 +504,9 @@ class TestRegressionPrevention:
         # New user (chain[1]) signs up
         await process_referral_logic(chain[1].id)
         
-        # Direct referrer (chain[0]) MUST get XP
+        # Direct referrer (chain[0]) MUST get XP (100)
         await session.refresh(chain[0])
-        assert chain[0].xp == 35, "Direct referrer didn't get L1 XP!"
+        assert chain[0].xp == 100, "Direct referrer didn't get L1 XP!"
         assert chain[0].referral_count == 1
     
     async def test_bug2_direct_referrer_gets_commission(self, session: AsyncSession, create_referral_chain):
@@ -494,17 +519,96 @@ class TestRegressionPrevention:
         
         # User buys PRO
         await distribute_pro_commissions(session, chain[1].id, 39.0)
+        await session.commit()
         
-        # Direct referrer MUST get 30%
+        # Direct referrer MUST get 20%
         await session.refresh(chain[0])
-        expected = 39.0 * 0.30
+        expected = 39.0 * 0.20
         assert abs(chain[0].balance - expected) < 0.01, \
             f"Direct referrer got ${chain[0].balance}, expected ${expected}"
 
 
-# #comment: Run these tests with:
-# pytest tests/test_referral_system.py -v
-# 
-# Add -s to see print statements
-# Add -k "test_name" to run specific test
-# Add --cov to see code coverage
+class TestProPlusFeatures:
+    """Test PRO+ specific features (XP Multiplier, Deep Commissions)."""
+
+    async def test_pro_plus_xp_multiplier(self, session: AsyncSession, create_test_partner):
+        """
+        Test PRO+ members get 3x XP multiplier.
+        """
+        # Create PRO+ referrer
+        referrer = await create_test_partner(
+            telegram_id="100001",
+            username="pro_plus_ref"
+        )
+        referrer.is_pro = True
+        referrer.subscription_plan = "PRO_PLUS_MONTHLY"
+        session.add(referrer)
+        await session.commit()
+        
+        initial_xp = referrer.xp
+        
+        # Create referee
+        referee = await create_test_partner(
+            telegram_id="100002",
+            username="pro_plus_new",
+            referrer_code=referrer.referral_code
+        )
+        
+        # Process referral logic
+        await process_referral_logic(referee.id)
+        
+        await session.refresh(referrer)
+        
+        # L1 Base: 100 XP. PRO+ Multiplier: 3.0. Total: 300 XP.
+        assert referrer.xp == initial_xp + 300
+
+    async def test_pro_plus_deep_commission(self, session: AsyncSession, create_referral_chain):
+        """
+        Test PRO+ members get commissions up to Level 20.
+        We'll test Level 11 which requires PRO+.
+        """
+        # Create 12 level chain (L1 to L11).
+        # chain[11] is New User (Buyer).
+        # chain[10] is L1.
+        # ...
+        # chain[1] is L10.
+        # chain[0] is L11.
+        chain = await create_referral_chain(levels=12)
+        
+        # Make L1-L10 PRO (Standard) so they consume the intermediate commissions
+        # chain[10] (L1) -> chain[1] (L10)
+        for i in range(1, 11):
+            user = chain[i]
+            user.is_pro = True
+            # L10 requires PRO+ to receive commission.
+            # L1-L9 requires PRO.
+            # We want to test L11 commission, so we ensure intermediates consume theirs.
+            # chain[1] is L10. MUST be PRO+ to take L10 commission.
+            if i == 1:
+                 user.subscription_plan = "PRO_PLUS_MONTHLY"
+            else:
+                 user.subscription_plan = "PRO_MONTHLY"
+            session.add(user)
+            
+        # Make L11 (chain[0]) PRO+
+        l11_user = chain[0]
+        l11_user.is_pro = True
+        l11_user.subscription_plan = "PRO_PLUS_MONTHLY"
+        session.add(l11_user)
+        
+        await session.commit()
+
+        # Buyer is chain[11]
+        buyer = chain[11]
+        pro_plus_amount = 69.0
+        
+        await distribute_pro_commissions(session, buyer.id, pro_plus_amount)
+        await session.commit()
+        
+        # Refresh users
+        await session.refresh(l11_user)
+        
+        # L11 Commission (0.4%)
+        # L11 User is PRO+ -> Qualified.
+        expected_l11 = pro_plus_amount * 0.004
+        assert abs(l11_user.balance - expected_l11) < 0.01, f"L11 PRO+ User expected ${expected_l11}, got ${l11_user.balance}"

@@ -330,7 +330,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 if comm_level <= 3:
                     qualified = True # Free users get up to Level 3
                 elif comm_level <= 9:
-                    qualified = (is_pro or is_ref_pro or is_ref_pro_plus)
+                    qualified = (is_ref_pro or is_ref_pro_plus)
                 else:
                     qualified = is_ref_pro_plus # L10-L20 requires PRO+
                 
