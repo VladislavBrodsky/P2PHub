@@ -437,31 +437,23 @@ export const ProDashboard = () => {
                             </h1>
                             <div className="flex items-center gap-1.5 px-0.5">
                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                                <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-500/80 uppercase tracking-widest leading-none">
-                                    {t('pro_dashboard.status_online')}
+                                <Zap size={10} className="text-indigo-500 animate-pulse" />
+                                <span className="text-[9px] font-black text-slate-700 dark:text-slate-300 tabular-nums leading-none tracking-tight">
+                                    {status?.pro_tokens ?? 0}
+                                </span>
+                                <span className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none">
+                                    {t('pro_dashboard.tokens_left').split(' ')[1] || 'tokens'}
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5 p-1 bg-white/40 dark:bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/40 dark:border-white/10 shadow-premium-sm shrink-0">
-                        <div className="flex items-center gap-2.5 px-3 py-1.5 sm:px-4 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/20 dark:border-indigo-500/30 group/tokens relative overflow-hidden">
-                            <div className="absolute inset-0 bg-linear-to-r from-indigo-500/10 to-transparent opacity-0 group-hover/tokens:opacity-100 transition-opacity duration-500" />
-                            <Zap size={14} className="text-indigo-600 dark:text-indigo-400 relative z-10 animate-pulse w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                            <div className="flex flex-col relative z-10">
-                                <span className="text-[7px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-[0.2em] leading-none mb-0.5 hidden sm:block">{t('pro_dashboard.tokens_left').split(' ')[1]}</span>
-                                <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white tabular-nums leading-none tracking-tight">
-                                    {status?.pro_tokens || 0}
-                                </span>
-                            </div>
-                        </div>
-                        <button
-                            onClick={() => { selection(); setShowSetup(true); }}
-                            className="w-8 h-8 sm:w-10 sm:h-10 bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 rounded-xl border border-white/60 dark:border-white/10 transition-all group active:scale-90 flex items-center justify-center shadow-xs"
-                        >
-                            <Settings size={16} className="text-slate-500 dark:text-slate-400 group-hover:text-indigo-500 group-hover:rotate-45 transition-all duration-500 w-4 h-4 sm:w-4 sm:h-4" />
-                        </button>
-                    </div>
+                    <button
+                        onClick={() => { selection(); setShowSetup(true); }}
+                        className="w-9 h-9 sm:w-10 sm:h-10 bg-white/40 dark:bg-white/5 backdrop-blur-2xl hover:bg-white dark:hover:bg-white/10 rounded-xl border border-white/40 dark:border-white/10 transition-all group active:scale-90 flex items-center justify-center shadow-premium-sm shrink-0"
+                    >
+                        <Settings size={16} className="text-slate-500 dark:text-slate-400 group-hover:text-indigo-500 group-hover:rotate-45 transition-all duration-500 w-4 h-4 sm:w-4 sm:h-4" />
+                    </button>
                 </div>
 
                 <div className="flex p-1 bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl rounded-[1.25rem] border border-white/60 dark:border-white/10 shadow-premium relative group/nav mt-4 mx-auto max-w-md w-full">
