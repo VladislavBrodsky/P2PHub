@@ -548,58 +548,69 @@ async def get_recent_partners(
     partners_list = []
     last_hour_count = 0
 
-    # Check if we need to refresh partners list (every 5m)
-    refresh_partners = True
-    if snapshot_setting:
-        if now - snapshot_setting.updated_at < partners_refresh_window:
-            refresh_partners = False
+    # Combined check for refresh (both list and count refresh every 60m as requested)
+    refresh_needed = True
+    if snapshot_setting and count_setting:
+        # Check if both are within the 60m window
+        is_snapshot_fresh = (now - snapshot_setting.updated_at < count_refresh_window)
+        is_count_fresh = (now - count_setting.updated_at < count_refresh_window)
+        if is_snapshot_fresh and is_count_fresh:
+            refresh_needed = False
             try:
                 partners_list = json.loads(snapshot_setting.value)
-            except Exception as e:
-                # #comment: Invalid JSON in DB snapshot, force refresh.
-                logger.warning(f"Failed to parse partner snapshot: {e}")
-                refresh_partners = True
+                last_hour_count = int(count_setting.value)
+            except:
+                refresh_needed = True
 
-    # Check if we need to refresh the randomized count (every 60m)
-    refresh_count = True
-    if count_setting and now - count_setting.updated_at < count_refresh_window:
-        refresh_count = False
-        try:
-            last_hour_count = int(count_setting.value)
-        except:
-            refresh_count = True
+    if refresh_needed:
+        # #comment: Real-time data match as requested by user.
+        # Avatars and count are now synchronized to the same 60-minute window.
+        delta_1h = now - timedelta(hours=1)
+        
+        # 1. Fetch Count
+        count_stmt = select(func.count(Partner.id)).where(Partner.created_at >= delta_1h)
+        last_hour_count = (await session.exec(count_stmt)).one() or 0
 
-    if refresh_partners:
-        # 3. Fetch Fresh from Partner Table
-        # #comment: Prioritize partners with photos and recency to ensure the social proof 
-        # badge looks "populated" with real faces as requested.
-        statement = select(
+        # 2. Fetch Partners (Top 10 from the SAME window)
+        # We still prioritize photos to keep the UI beautiful, but ONLY from the new joins.
+        partners_stmt = select(
             Partner.id,
             Partner.first_name,
             Partner.username,
             Partner.photo_file_id,
             Partner.created_at
+        ).where(
+            Partner.created_at >= delta_1h
         ).order_by(
             Partner.photo_file_id.isnot(None).desc(), # Photos first
             Partner.created_at.desc()
         ).limit(limit)
 
-        result = await session.exec(statement)
+        result = await session.exec(partners_stmt)
         partners = result.all()
 
         partners_list = []
         for p_id, p_first_name, p_username, p_photo_file_id, p_created_at in partners:
-            p_dict = {
+            partners_list.append({
                 "id": p_id,
                 "first_name": p_first_name,
                 "username": p_username,
                 "photo_file_id": p_photo_file_id,
                 "photo_url": None,
                 "created_at": p_created_at.isoformat() if p_created_at else None
-            }
-            partners_list.append(p_dict)
+            })
 
-        # Update/Create Snapshot
+        # Upgrade social proof: If count is 0, we fallback to showing the last 10 users 
+        # overall so the UI doesn't look broken, but the count remains 0 for honesty.
+        # User requested "matched", but "+0" with no avatars might look like a bug.
+        # However, the requirement "matched" is priority.
+        if last_hour_count == 0:
+            # Re-fetch without time limit to keep UI "peopled" if requested, 
+            # but user said "matched", so let's stick to the window.
+            # If they want fallbacks, we can add them later.
+            pass
+
+        # Update Snapshot
         if not snapshot_setting:
             snapshot_setting = SystemSetting(key=db_settings_key, value=json.dumps(partners_list))
         else:
@@ -607,32 +618,7 @@ async def get_recent_partners(
             snapshot_setting.updated_at = now
         session.add(snapshot_setting)
 
-    if refresh_count:
-        # #comment: CRITICAL FIX for Logical Consistency
-        # Previously hardcoded to 680-780, which broke logic if total partners < 700.
-        # NOW: We fetch actual total count and make hourly join count a reasonable % of it.
-        try:
-            total_partners = (await session.exec(select(func.count(Partner.id)))).one() or 1
-            
-            # Real joins in the last hour
-            delta_1h = now - timedelta(hours=1)
-            real_joins_1h = (await session.exec(select(func.count(Partner.id)).where(Partner.created_at >= delta_1h))).one() or 0
-            
-            # Dynamic momentum: 3-7% of total network + real joins
-            # This simulates a "rolling window" of activity that scales with the project.
-            momentum_percent = 0.03 + (secrets.randbelow(4) / 100.0) # 3-7%
-            momentum_base = int(total_partners * momentum_percent)
-            
-            # Ensure at least some number is shown for social proof even in early stages
-            last_hour_count = max(real_joins_1h + momentum_base, (total_partners // 20) + 1)
-            
-            # If total is very small, cap it logically
-            if last_hour_count > total_partners:
-                last_hour_count = max(1, real_joins_1h)
-        except Exception as e:
-            logger.warning(f"Failed to calc dynamic hourly count: {e}")
-            last_hour_count = 12 # Safe fallback
-        
+        # Update Count
         if not count_setting:
             count_setting = SystemSetting(key=count_settings_key, value=str(last_hour_count))
         else:
@@ -640,7 +626,6 @@ async def get_recent_partners(
             count_setting.updated_at = now
         session.add(count_setting)
 
-    if refresh_partners or refresh_count:
         await session.commit()
 
     partners_data = {
@@ -650,7 +635,7 @@ async def get_recent_partners(
 
     # 4.5. EAGER Photo Cache Warming (Background for first 4 images)
     # This ensures photos are ready BEFORE the frontend requests them without blocking the response
-    if refresh_partners and partners_list:
+    if refresh_needed and partners_list:
         try:
             from app.services.partner_service import ensure_photo_cached
             # Warm first 4 photos eagerly (these show in the UI immediately)
