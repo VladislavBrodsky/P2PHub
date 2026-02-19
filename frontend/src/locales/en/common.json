@@ -244,6 +244,10 @@
       {
         "q": "What happens if I stop paying PRO?",
         "a": "You can't stop paying because you only pay ONCE. It's a lifetime license. You own your status forever."
+      },
+      {
+        "q": "How to add Partner Center to my Home Screen?",
+        "a": "For iPhone: Open the app in Safari, tap the 'Share' icon (square with arrow), then select 'Add to Home Screen'. For Android: Open in Chrome, tap the three dots in the corner, and select 'Install app' or 'Add to Home screen'. This allows you to open the app instantly without going through Telegram."
       }
     ],
     "categories": {

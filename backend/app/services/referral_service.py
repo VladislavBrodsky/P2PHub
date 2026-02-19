@@ -364,9 +364,10 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                         notified_fomo.add(referrer.id)
                         lang = referrer.language_code or "en"
                         fomo_msg = get_msg(lang, "commission_fomo_missed", amount=round(commission, 2), level=comm_level)
+                        btn_text = get_msg(lang, "btn_upgrade")
                         deferred_notifications.append(notification_service.send_critical(
                             chat_id=int(referrer.telegram_id), text=fomo_msg,
-                            buttons=[[{"text": "👑 Upgrade Plan", "web_app": {"url": settings.FRONTEND_URL}}]]
+                            buttons=[[{"text": btn_text, "web_app": {"url": settings.FRONTEND_URL}}]]
                         ))
             
             # If no more qualified partners in lineage, commission leaks to Company

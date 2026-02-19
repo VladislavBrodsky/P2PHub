@@ -211,6 +211,37 @@ export const EARN_TASKS: Task[] = [
         type: 'referral',
         requirement: 500,
         minLevel: 25
+    },
+    {
+        id: 'add_to_home_screen',
+        title: 'Pin to Home Screen',
+        description: 'Install Partner Center to your phone for 1-tap access.',
+        platform: 'internal',
+        icon: Zap,
+        reward: 50,
+        type: 'action',
+        link: '/faq?q=home',
+        minLevel: 1
+    },
+    {
+        id: 'network_catalyst',
+        title: 'Network Catalyst',
+        description: 'First partner in your network upgrades to PRO.',
+        platform: 'internal',
+        icon: Diamond,
+        reward: 1000,
+        type: 'milestone',
+        minLevel: 1
+    },
+    {
+        id: 'sprint_master_3',
+        title: 'Sprint Master',
+        description: 'Recruit 3 active partners in a single week.',
+        platform: 'internal',
+        icon: Flame,
+        reward: 300,
+        type: 'action',
+        minLevel: 1
     }
 ];
 

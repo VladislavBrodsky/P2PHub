@@ -362,6 +362,44 @@ class PaymentService:
             from app.services.referral_service import distribute_pro_commissions
             await distribute_pro_commissions(session, partner.id, amount)
             
+            # 3.1 Trigger "Network Catalyst" milestone for direct referrer (L1)
+            # This fires the first time ANY of their direct referrals upgrades to PRO.
+            if partner.referrer_id:
+                try:
+                    from sqlmodel import select as sql_select
+                    referrer_stmt = sql_select(Partner).where(Partner.id == partner.referrer_id)
+                    referrer_res = await session.exec(referrer_stmt)
+                    referrer_partner = referrer_res.first()
+                    
+                    if referrer_partner:
+                        from app.models.partner import PartnerTask
+                        from app.core.tasks import get_task_config
+                        catalyst_task_id = "network_catalyst"
+                        catalyst_config = get_task_config(catalyst_task_id)
+                        
+                        # Check if referrer already has this milestone
+                        existing_catalyst = next(
+                            (t for t in (referrer_partner.completed_task_records or []) if t.task_id == catalyst_task_id and t.status == "COMPLETED"),
+                            None
+                        )
+                        
+                        if not existing_catalyst and catalyst_config:
+                            catalyst_xp = catalyst_config.get('reward', 1000)
+                            from sqlalchemy import update as sql_update
+                            stmt_update = sql_update(Partner).where(Partner.id == referrer_partner.id).values(xp=Partner.xp + catalyst_xp)
+                            await session.execute(stmt_update)
+                            
+                            session.add(PartnerTask(
+                                partner_id=referrer_partner.id,
+                                task_id=catalyst_task_id,
+                                status="COMPLETED",
+                                reward_xp=catalyst_xp,
+                                completed_at=now
+                            ))
+                            logger.info(f"✅ Network Catalyst awarded to referrer {referrer_partner.telegram_id}: +{catalyst_xp} XP")
+                except Exception as e:
+                    logger.error(f"Network Catalyst trigger failed for referrer {partner.referrer_id}: {e}")
+
             # Commit everything atomically
             await session.commit()
 

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     HelpCircle, Search, ChevronRight, MessageCircle,
     Shield, Zap, CreditCard, Users, Star, ArrowLeft,
-    Newspaper, BookOpen, Clock, Sparkles, Crown
+    Newspaper, BookOpen, Clock, Sparkles, Crown, Smartphone
 } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
@@ -21,9 +21,24 @@ export default function FAQPage() {
     const { t } = useTranslation();
     const { selection, notification } = useHaptic();
     const { setSupportOpen } = useUI();
+
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [selectedFaq, setSelectedFaq] = useState<number | null>(null);
+
+    // Listen for faq-search events dispatched by the task system
+    React.useEffect(() => {
+        const handleFaqSearch = (e: CustomEvent) => {
+            const query = e.detail === 'home' ? 'Home Screen' : e.detail;
+            setSearchQuery(query);
+            // Auto-expand the first matching result after a short delay
+            setTimeout(() => {
+                setSelectedFaq(0);
+            }, 300);
+        };
+        window.addEventListener('faq-search', handleFaqSearch as EventListener);
+        return () => window.removeEventListener('faq-search', handleFaqSearch as EventListener);
+    }, []);
 
     const categories = [
         { id: 'all', label: t('faq.categories.all', 'All'), icon: <Newspaper size={14} /> },
@@ -125,6 +140,13 @@ export default function FAQPage() {
             category: 'pro',
             icon: <Sparkles className="text-purple-500" />,
             readTime: '1 min'
+        },
+        {
+            q: t('faq.questions.13.q'),
+            a: t('faq.questions.13.a'),
+            category: 'general',
+            icon: <Smartphone className="text-blue-500" />,
+            readTime: '2 min'
         }
     ], [t]);
 

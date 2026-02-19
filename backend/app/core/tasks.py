@@ -26,6 +26,14 @@ TASK_CONFIG = {
     'invite_100_friends': {'reward': 1200, 'type': 'referral', 'requirement': 100},
     'invite_250_friends': {'reward': 2500, 'type': 'referral', 'requirement': 250},
     'invite_500_friends': {'reward': 5000, 'type': 'referral', 'requirement': 500},
+    
+    # Growth & Accessibility
+    'add_to_home_screen': {'reward': 50, 'type': 'action'},
+    
+    # Performance & Conversion
+    'network_catalyst': {'reward': 1000, 'type': 'milestone'}, # First direct PRO upgrade
+    'sprint_master_3': {'reward': 300, 'type': 'performance'},  # 3 referrals in 7 days
+    'empire_builder': {'reward': 2000, 'type': 'performance'},  # 10 partners total reach L5
 }
 
 def get_task_reward(task_id: str) -> int:

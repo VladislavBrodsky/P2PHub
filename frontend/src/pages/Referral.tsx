@@ -209,11 +209,25 @@ export default function ReferralPage() {
                     window.dispatchEvent(new Event('nav-academy'));
                 }
                 window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'partner' }));
+            } else if (task.link.startsWith('/faq')) {
+                // Navigate to FAQ tab and pre-fill search
+                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'faq' }));
+                // Also pass the search query for FAQ to pick up
+                const searchParam = new URL(task.link, 'http://x').searchParams.get('q');
+                if (searchParam) {
+                    setTimeout(() => {
+                        window.dispatchEvent(new CustomEvent('faq-search', { detail: searchParam }));
+                    }, 300); // Small delay to let the tab render
+                }
+                // Start the task in background so user can claim after reading
+                if (!completedTaskIds.includes(task.id)) {
+                    handleTaskStart(task);
+                }
             } else {
                 window.open(task.link, '_blank');
             }
 
-            if (!completedTaskIds.includes(task.id) && !verifyingTasks[task.id] && !claimableTasks.includes(task.id) && task.type !== 'academy') {
+            if (!completedTaskIds.includes(task.id) && !verifyingTasks[task.id] && !claimableTasks.includes(task.id) && task.type !== 'academy' && !task.link.startsWith('/faq')) {
                 setVerifyingTasks(prev => ({ ...prev, [task.id]: 15 }));
             }
         } else if (task.type === 'referral' || task.type === 'action' || task.type === 'academy') {

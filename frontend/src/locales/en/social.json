@@ -214,6 +214,18 @@
     "invite_500_friends": {
       "title": "Network Legend",
       "desc": "Reach the ultimate goal: 500 referrals."
+    },
+    "add_to_home_screen": {
+      "title": "Pin to Home Screen",
+      "desc": "Add 'My Partner Center' to your phone Home Screen for 1-tap access."
+    },
+    "network_catalyst": {
+      "title": "Network Catalyst",
+      "desc": "First partner in your network upgrades to PRO."
+    },
+    "sprint_master_3": {
+      "title": "Sprint Master",
+      "desc": "Recruit 3 active partners in a single week."
     }
   },
   "milestones": {

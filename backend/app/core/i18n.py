@@ -93,7 +93,8 @@ MESSAGES = {
             "⚡️ *XP BOOST UNLOCKED!* ⚡️\n\n"
             "Congratulations on your upgrade! You've been awarded **+{xp} XP** to accelerate your ranking.\n\n"
             "You are now closer to the *Platinum Metal Card*! 🏆"
-        )
+        ),
+        "btn_upgrade": "👑 Upgrade Plan"
     },
     "ru": {
         "welcome": (
@@ -189,7 +190,9 @@ MESSAGES = {
             "⚡️ *XP БУСТ АКТИВИРОВАН!* ⚡️\n\n"
             "Поздравляем с апгрейдом! Вам начислено **+{xp} XP** для ускорения вашего ранга.\n\n"
             "Вы стали ещё ближе к легендарной *Платиновой Карте*! 🏆"
-        )
+        ),
+        "btn_upgrade": "👑 Повысить План"
+    }
     }
 }
 
