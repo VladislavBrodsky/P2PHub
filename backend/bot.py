@@ -46,7 +46,6 @@ async def cmd_start(message: types.Message):
 
     from app.core.keyboards import get_main_menu_keyboard
     from app.services.partner_service import create_partner, get_partner_by_telegram_id
-    from app.services.referral_service import process_referral_notifications
 
     # Extract referral code from /start link if any
     referrer_code = None
@@ -100,8 +99,6 @@ async def cmd_start(message: types.Message):
             # If it's an existing partner, ensure we use their stored preference (in case create_partner logic overrode it with request_lang)
             if not is_new and partner.language_code:
                 lang = partner.language_code
-
-            await process_referral_notifications(bot, session, partner, is_new)
 
             # Personal referral link
             bot_info = await bot.get_me()

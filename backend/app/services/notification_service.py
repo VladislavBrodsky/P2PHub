@@ -55,7 +55,6 @@ async def send_telegram_task(payload_dict: dict):
         logger.warning(f"⏳ Rate limit hit for {payload.chat_id}, re-queueing...")
         raise Exception("Rate limit hit - retry via broker")
 
-    # 3. Execute Dispatch
     try:
         reply_markup = notification_service._build_keyboard(payload.buttons) if payload.buttons else None
         
@@ -104,7 +103,7 @@ async def send_telegram_task(payload_dict: dict):
                 chat_id=payload.chat_id,
                 text=payload.text,
                 parse_mode=payload.parse_mode,
-                buttons=payload.buttons,
+                buttons=payload.model_dump(exclude_none=True).get("buttons"),
                 last_error=f"Runtime Error: {str(e)[:100]}",
                 status="pending"
             )

@@ -23,23 +23,6 @@ logger = logging.getLogger(__name__)
 # #comment: Background tasks tracking to prevent garbage collection (RUF006)
 _background_tasks: set[asyncio.Task] = set()
 
-async def process_referral_notifications(bot, session: AsyncSession, partner: Partner, is_new: bool):
-    """
-    Wrapper to trigger the recursive referral logic for new signups.
-    """
-    if is_new and partner.referrer_id:
-        try:
-            # #comment: CRITICAL FIX for Production (Audit Compliance)
-            # Switch to Broker-backed execution (.kiq) to prevent task loss on container restart.
-            # While create_task is faster, it risks data loss for critical referral logic.
-            logger.info(f"🚀 Triggering referral logic via TaskIQ broker for partner {partner.id}")
-            await process_referral_logic.kiq(partner.id)
-        except Exception as e:
-            logger.error(f"⚠️ Failed to trigger referral logic task: {e}")
-            # Fallback only if broker fails completely
-            task = asyncio.create_task(process_referral_logic(partner.id))
-            _background_tasks.add(task)
-            task.add_done_callback(_background_tasks.discard)
 
 def format_partner_name(p: Partner) -> str:
     """Construct Full Name: First Last (@username)"""
@@ -98,7 +81,7 @@ async def process_referral_logic(partner_id: int):
 async def _is_already_awarded(session: AsyncSession, partner_id: int) -> bool:
     check_stmt = select(XPTransaction).where(
         XPTransaction.reference_id == str(partner_id),
-        XPTransaction.type.in_(["REFERRAL_L1", "REFERRAL_DEEP"])
+        XPTransaction.type.in_(["REFERRAL_L1", "REFERRAL_DEEP", "REFERRAL_SIGNUP"])
     ).limit(1)
     return (await session.exec(check_stmt)).first() is not None
 
@@ -190,8 +173,15 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
                 xp_before=xp_before, xp_after=xp_after
             )
 
-            await _check_level_up(referrer, deferred_tasks, xp_after)
-            await _stage_redis_invalidation(referrer, level, xp_gain=xp_gain)
+            try:
+                await _check_level_up(referrer, deferred_tasks, xp_after)
+            except Exception as e_lvl:
+                logger.error(f"Level up check failed for {referrer.id}: {e_lvl}")
+
+            try:
+                await _stage_redis_invalidation(referrer, level, xp_gain=xp_gain)
+            except Exception as e_redis:
+                logger.error(f"Redis invalidation failed for {referrer.id}: {e_redis}")
             
             msg_task = _prepare_referral_notification(referrer, level, xp_gain, new_partner_name, chain_list)
             deferred_tasks.append(msg_task)
@@ -426,20 +416,34 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             ))
 
             # Audit & Notify
-            await audit_service.log_commission(
-                session=session, partner_id=recipient.id, buyer_id=partner.id,
-                amount=commission, level=comm_level,
-                balance_before=balance_before, balance_after=balance_after,
-            )
-            await audit_service.log_xp_award(
-                session=session, partner_id=recipient.id, buyer_id=partner.id,
-                xp_amount=xp_gain, level=comm_level, is_pro=recipient.is_pro,
-                xp_before=xp_before, xp_after=xp_after
-            )
-            await _check_level_up(recipient, deferred_notifications, xp_after)
+            try:
+                await audit_service.log_commission(
+                    session=session, partner_id=recipient.id, buyer_id=partner.id,
+                    amount=commission, level=comm_level,
+                    balance_before=balance_before, balance_after=balance_after,
+                )
+            except Exception as e:
+                logger.error(f"Audit log_commission error for {recipient.id}: {e}")
+
+            try:
+                await audit_service.log_xp_award(
+                    session=session, partner_id=recipient.id, buyer_id=partner.id,
+                    xp_amount=xp_gain, level=comm_level, is_pro=recipient.is_pro,
+                    xp_before=xp_before, xp_after=xp_after
+                )
+            except Exception as e:
+                logger.error(f"Audit log_xp_award error for {recipient.id}: {e}")
+
+            try:
+                await _check_level_up(recipient, deferred_notifications, xp_after)
+            except Exception as e:
+                logger.error(f"Level up check error for {recipient.id}: {e}")
 
             # Stage Redis Invalidation (Leaderboard, Profile, Earnings)
-            await _stage_redis_invalidation(recipient, comm_level, xp_gain=xp_gain)
+            try:
+                await _stage_redis_invalidation(recipient, comm_level, xp_gain=xp_gain)
+            except Exception as e:
+                logger.error(f"Redis invalidation error for {recipient.id}: {e}")
 
             if found_qualified_partner:
                 try:

@@ -121,9 +121,7 @@ async def get_my_profile(
     except Exception as e:
         logger.warning(f"Profile cache read failed: {e}")
 
-    # 2. Query DB and/or Register
     from app.services.partner_service import create_partner
-    from app.services.referral_service import process_referral_notifications
 
     # Check if photo exists in DB first to avoid blocking Telegram API calls during every /me request
     # Eagerly load all required relations to skip the refetch later
