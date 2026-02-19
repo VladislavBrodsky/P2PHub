@@ -227,8 +227,13 @@ export default function ReferralPage() {
                 window.open(task.link, '_blank');
             }
 
-            if (!completedTaskIds.includes(task.id) && !verifyingTasks[task.id] && !claimableTasks.includes(task.id) && task.type !== 'academy' && !task.link.startsWith('/faq')) {
-                setVerifyingTasks(prev => ({ ...prev, [task.id]: 15 }));
+            if (!completedTaskIds.includes(task.id) && !verifyingTasks[task.id] && !claimableTasks.includes(task.id) && task.type !== 'academy') {
+                if (task.link.startsWith('/faq')) {
+                    // Short timer so user has time to read the guide
+                    setVerifyingTasks(prev => ({ ...prev, [task.id]: 8 }));
+                } else {
+                    setVerifyingTasks(prev => ({ ...prev, [task.id]: 15 }));
+                }
             }
         } else if (task.type === 'referral' || task.type === 'action' || task.type === 'academy') {
             selection();

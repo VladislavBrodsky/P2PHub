@@ -193,7 +193,6 @@ MESSAGES = {
         ),
         "btn_upgrade": "👑 Повысить План"
     }
-    }
 }
 
 def get_msg(code: str, key: str, **kwargs) -> str:

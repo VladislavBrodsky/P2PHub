@@ -28,11 +28,11 @@ TASK_CONFIG = {
     'invite_500_friends': {'reward': 5000, 'type': 'referral', 'requirement': 500},
     
     # Growth & Accessibility
-    'add_to_home_screen': {'reward': 50, 'type': 'action'},
+    'add_to_home_screen': {'reward': 50, 'type': 'social'},
     
     # Performance & Conversion
     'network_catalyst': {'reward': 1000, 'type': 'milestone'}, # First direct PRO upgrade
-    'sprint_master_3': {'reward': 300, 'type': 'performance'},  # 3 referrals in 7 days
+    'sprint_master_3': {'reward': 300, 'type': 'referral', 'requirement': 3},  # 3 referrals total
     'empire_builder': {'reward': 2000, 'type': 'performance'},  # 10 partners total reach L5
 }
 

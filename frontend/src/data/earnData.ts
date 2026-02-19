@@ -219,7 +219,7 @@ export const EARN_TASKS: Task[] = [
         platform: 'internal',
         icon: Zap,
         reward: 50,
-        type: 'action',
+        type: 'social',
         link: '/faq?q=home',
         minLevel: 1
     },
@@ -240,7 +240,8 @@ export const EARN_TASKS: Task[] = [
         platform: 'internal',
         icon: Flame,
         reward: 300,
-        type: 'action',
+        type: 'referral',
+        requirement: 3,
         minLevel: 1
     }
 ];
