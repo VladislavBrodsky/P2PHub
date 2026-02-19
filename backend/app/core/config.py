@@ -118,6 +118,25 @@ class Settings(BaseSettings):
     PRO_PLUS_PRICE_USD: float = 69.0
     ADMIN_USER_IDS: List[str] = Field(default_factory=lambda: ["716720099", "537873096"], validation_alias="ADMIN_USER_IDS")
 
+    # --- VIRAL STUDIO (PRO Features) ---
+    PRO_TOKENS_MONTHLY: int = Field(default=250, validation_alias="PRO_TOKENS_MONTHLY")
+    PRO_PLUS_TOKENS_MONTHLY: int = Field(default=500, validation_alias="PRO_PLUS_TOKENS_MONTHLY")
+    
+    VIRAL_POST_TYPES: List[str] = Field(
+        default_factory=lambda: [
+            "Product Launch", "FOMO Builder", "System Authority", 
+            "Lifestyle Flex", "Passive Income Proof", "Network Growth", "Web3 Tutorial"
+        ],
+        validation_alias="VIRAL_POST_TYPES"
+    )
+    VIRAL_AUDIENCES: List[str] = Field(
+        default_factory=lambda: [
+            "Cryptocurrency Traders", "Digital Nomads", "Affiliate Marketers", 
+            "Network Builders", "Stay-at-home Parents", "Student Hustlers", "Corporate Burnouts"
+        ],
+        validation_alias="VIRAL_AUDIENCES"
+    )
+
     # Helper property for asyncpg
     @property
     def async_database_url(self) -> str:
