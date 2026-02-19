@@ -176,7 +176,7 @@ const CentralLogo = memo(() => {
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
-                className="relative z-10 flex h-full w-full items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.5)] overflow-hidden"
+                className="relative z-10 flex h-full w-full items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.5)] overflow-hidden border-2 border-white"
                 style={{ willChange: 'transform' }}
             >
                 <div className="absolute inset-0 z-0 rounded-full bg-blue-500 blur-3xl opacity-40 animate-pulse" />
