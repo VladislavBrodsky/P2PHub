@@ -67,7 +67,8 @@ async def audit_admin_scenarios():
                 is_pro=False,
                 level=1,
                 xp=0,
-                balance=0.0
+                balance=0.0,
+                referral_code=f"AUDIT-{test_tg_id[:8].upper()}"
             )
             session.add(test_user)
             await session.commit()
