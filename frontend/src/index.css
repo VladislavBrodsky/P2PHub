@@ -1147,7 +1147,7 @@ body {
 
 .vibing-premium-panel::before {
   content: "";
-  @apply absolute -inset-full bg-linear-to-br from-indigo-500/10 via-fuchsia-500/10 to-indigo-500/10 dark:from-indigo-500/20 dark:via-fuchsia-500/20 dark:to-indigo-500/20 opacity-30 blur-[100px];
+  @apply absolute -inset-full bg-linear-to-br from-indigo-500/10 via-fuchsia-500/10 to-indigo-500/10 dark:from-indigo-500/20 dark:via-fuchsia-500/20 dark:to-indigo-500/20 opacity-30 blur-[100px] pointer-events-none;
   animation: liquid 15s linear infinite;
 }
 
