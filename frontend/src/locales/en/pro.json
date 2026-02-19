@@ -670,5 +670,92 @@
     "a2": "You get 250 tokens (PRO) or 500 tokens (PRO+) monthly. Tokens reset on the 1st of every month.",
     "q3": "Can I use multiple accounts?",
     "a3": "The license is tied to your Telegram ID. One purchase per account."
+  },
+  "subscription": {
+    "pro_active": {
+      "title": "PRO ACTIVE",
+      "title_plus": "PRO+ EMPIRE",
+      "desc": "Elite status confirmed. Your network is now scaling on autopilot.",
+      "desc_plus": "Global dominance active. You have full access to the elite marketing engine.",
+      "plan_pro_monthly": "30-DAY PRO PLAN",
+      "plan_pro_plus": "PRO+ EMPIRE PLAN",
+      "plan_pro_lifetime": "LIFETIME PRO PLAN",
+      "lifetime": "LIFETIME ACCESS",
+      "command_center": "COMMAND CENTER"
+    },
+    "upgrade": {
+      "protocol_initialized": "PROTOCOL INITIALIZED",
+      "dominate_network": "DOMINATE THE NETWORK",
+      "desc": "Select the level of growth automation that suits your ambition. Both plans unlock lifetime commissions.",
+      "lifetime_slots": "LIFETIME PRO SLOTS",
+      "pro_title": "PRO PLAN",
+      "pro_plus_title": "PRO+ EMPIRE",
+      "best_badge": "BEST VALUE",
+      "lifetime_pro": "LIFETIME ACCESS",
+      "viral_studio_label": "VIRAL STUDIO",
+      "viral_studio_desc_pro": "Access to AI Viral Content Generation and Lead Hooks.",
+      "viral_studio_desc_pro_plus": "Unlimited access to all AI models and advanced cross-platform sync.",
+      "benefits_pro": [
+        "250 Tokens Monthly",
+        "9-Level Rewards",
+        "AI Viral Studio",
+        "Lifetime Commissions"
+      ],
+      "benefits_pro_plus": [
+        "500 Tokens Monthly",
+        "20-Level Rewards",
+        "Multi-Channel Sync",
+        "Priority AI Processing"
+      ],
+      "initialize_studio": "INITIALIZE STUDIO",
+      "content_factory_label": "NETWORK FACTORY",
+      "content_factory_desc_pro": "Unlock deep referral levels and passive transaction cashback.",
+      "content_factory_desc_pro_plus": "Maximize your reach with 20 levels of deep network insights.",
+      "deploy_factory": "DEPLOY FACTORY",
+      "complete_payment": "COMPLETE PAYMENT",
+      "monthly_label": "30 DAYS",
+      "lifetime_label": "LIFETIME",
+      "ton_wallet": "TON WALLET",
+      "secure_encryption_active": "SECURE ENCRYPTED TRANSACTION",
+      "change_method": "CHANGE METHOD",
+      "connect_and_pay": "Connect and pay via TON",
+      "usdt_trc20_address": "USDT (TRC20) ADDRESS",
+      "tap_to_copy": "TAP TO COPY",
+      "open_wallet_app": "OPEN WALLET APP",
+      "then_verify": "THEN VERIFY",
+      "paste_tx_hash": "PASTE TRANSACTION HASH",
+      "verify_transaction": "VERIFY TRANSACTION",
+      "trc20_warning": "USE TRC20 NETWORK ONLY",
+      "transfer_exact": "SEND EXACTLY ${{amount}} USDT",
+      "extend_membership": "EXTEND MEMBERSHIP"
+    },
+    "status": {
+      "verifying": "Verifying...",
+      "welcome_pro": "WELCOME TO ELITE",
+      "submitted": "SUBMITTED",
+      "verifying_p": "Our nodes are confirming your transaction on the blockchain.",
+      "welcome_pro_p": "Your PRO status has been activated. The system is ready.",
+      "submitted_p": "Your request is under manual review. This usually takes 5-15 minutes.",
+      "got_it": "GOT IT"
+    },
+    "faq": {
+      "teaser_badge": "KNOWLEDGE BASE",
+      "header_pre": "COMMON",
+      "header_highlight": "QUESTIONS",
+      "q1": "Is it really lifetime?",
+      "a1": "Yes. The current 'Lifetime' slots are limited. Once sold, we will switch to a yearly model. Secure your permanent status now.",
+      "q2": "How do tokens work?",
+      "a2": "Tokens are required for AI content synthesis and neural marketing audits. They reset every 30 days. PRO+ members get double the capacity.",
+      "q3": "Why TON Network?",
+      "a3": "TON is the official blockchain of Telegram, offering the fastest and cheapest transactions for our ecosystem.",
+      "q4": "How many accounts?",
+      "a4": "One license is valid for one Telegram ID. Professional nodes require unique identities for security.",
+      "q5": "What is Network Factory?",
+      "a5": "It's our multi-level commission engine. Standard PRO unlocks 9 levels, while PRO+ goes up to 20 deep levels.",
+      "view_faq_center": "VIEW FAQ CENTER"
+    },
+    "alerts": {
+      "expired": "Payment window expired. Please try again."
+    }
   }
 }
