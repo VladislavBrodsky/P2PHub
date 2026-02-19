@@ -530,7 +530,7 @@ async def get_recent_partners(
     db_settings_key = "partners_recent_snapshot"
     count_settings_key = "partners_recent_last_hour_count"
     partners_refresh_window = timedelta(minutes=5)
-    count_refresh_window = timedelta(hours=1)
+    count_refresh_window = timedelta(minutes=5)
 
     # 1. Try Redis Cache (Fastest)
     try:
@@ -548,13 +548,11 @@ async def get_recent_partners(
     partners_list = []
     last_hour_count = 0
 
-    # Combined check for refresh (both list and count refresh every 60m as requested)
+    # Combined check for refresh (every 5m to keep UI "live")
     refresh_needed = True
     if snapshot_setting and count_setting:
-        # Check if both are within the 60m window
-        is_snapshot_fresh = (now - snapshot_setting.updated_at < count_refresh_window)
-        is_count_fresh = (now - count_setting.updated_at < count_refresh_window)
-        if is_snapshot_fresh and is_count_fresh:
+        if (now - snapshot_setting.updated_at < partners_refresh_window) and \
+           (now - count_setting.updated_at < count_refresh_window):
             refresh_needed = False
             try:
                 partners_list = json.loads(snapshot_setting.value)
@@ -563,16 +561,14 @@ async def get_recent_partners(
                 refresh_needed = True
 
     if refresh_needed:
-        # #comment: Real-time data match as requested by user.
-        # Avatars and count are now synchronized to the same 60-minute window.
+        # 1. Fetch Actual Count (last 1h)
         delta_1h = now - timedelta(hours=1)
-        
-        # 1. Fetch Count
         count_stmt = select(func.count(Partner.id)).where(Partner.created_at >= delta_1h)
         last_hour_count = (await session.exec(count_stmt)).one() or 0
 
-        # 2. Fetch Partners (Top 10 from the SAME window)
-        # We still prioritize photos to keep the UI beautiful, but ONLY from the new joins.
+        # 2. Fetch Partners
+        # We prioritize photos to keep the UI beautiful.
+        # Try fetching from the last 1h first (as originally intended)
         partners_stmt = select(
             Partner.id,
             Partner.first_name,
@@ -582,12 +578,28 @@ async def get_recent_partners(
         ).where(
             Partner.created_at >= delta_1h
         ).order_by(
-            Partner.photo_file_id.isnot(None).desc(), # Photos first
+            Partner.photo_file_id.isnot(None).desc(),
             Partner.created_at.desc()
         ).limit(limit)
 
         result = await session.exec(partners_stmt)
         partners = result.all()
+
+        # Fallback: If no partners joined in the last hour, fetch the latest overall
+        # to ensure the UI is never empty ("do not keep them empty").
+        if not partners:
+            partners_stmt = select(
+                Partner.id,
+                Partner.first_name,
+                Partner.username,
+                Partner.photo_file_id,
+                Partner.created_at
+            ).order_by(
+                Partner.photo_file_id.isnot(None).desc(),
+                Partner.created_at.desc()
+            ).limit(limit)
+            result = await session.exec(partners_stmt)
+            partners = result.all()
 
         partners_list = []
         for p_id, p_first_name, p_username, p_photo_file_id, p_created_at in partners:
@@ -600,15 +612,19 @@ async def get_recent_partners(
                 "created_at": p_created_at.isoformat() if p_created_at else None
             })
 
-        # Upgrade social proof: If count is 0, we fallback to showing the last 10 users 
-        # overall so the UI doesn't look broken, but the count remains 0 for honesty.
-        # User requested "matched", but "+0" with no avatars might look like a bug.
-        # However, the requirement "matched" is priority.
-        if last_hour_count == 0:
-            # Re-fetch without time limit to keep UI "peopled" if requested, 
-            # but user said "matched", so let's stick to the window.
-            # If they want fallbacks, we can add them later.
-            pass
+        # 3. Deterministic Social Proof for Count (as requested: 133 to 637)
+        # Use a seed based on day/hour/5-min-slot so it's stable but rotates
+        seed_5m = (now.hour * 12 + now.minute // 5) + (now.day * 288)
+        # Boost factor: (seed * prime) % (max - min + 1) + min
+        boosted_count = 133 + ((seed_5m * 19) % (637 - 133 + 1))
+        
+        # User said "always show amount more then 133 up to 637"
+        if last_hour_count < boosted_count:
+            last_hour_count = boosted_count
+        
+        # Ensure it doesn't exceed 637
+        if last_hour_count > 637:
+            last_hour_count = 637
 
         # Update Snapshot
         if not snapshot_setting:

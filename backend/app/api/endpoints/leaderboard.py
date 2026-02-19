@@ -19,21 +19,21 @@ from app.middleware.rate_limit import limiter
 logger = logging.getLogger(__name__)
 
 @router.get("/global")
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 async def get_global_leaderboard(
     request: Request,
     limit: int = 20,
+    timeframe: str = "all",
     session: AsyncSession = Depends(get_session)
 ):
     """
     Fetches the top partners from Redis for high-speed delivery.
-    Hydrates with partner details from PostgreSQL.
+    Timeframes: all (global), monthly, weekly.
     """
     from app.services.redis_service import redis_service
 
-    # #comment Versioned cache key (v4) to immediately apply glitch-free profiles 
-    # and corrected member counts for ranks 13, 14, 15, 16, and 24.
-    cache_key = f"leaderboard:global_hydrated_v4:{limit}"
+    # #comment Versioned cache key (v5) to separate Seasons
+    cache_key = f"leaderboard:{timeframe}_hydrated_v5:{limit}"
     try:
         cached = await redis_service.get_json(cache_key)
         if cached:
@@ -44,23 +44,20 @@ async def get_global_leaderboard(
     # 1. Get IDs from Redis
     top_data = None
     try:
-        top_data = await leaderboard_service.get_top_partners(limit)
+        top_data = await leaderboard_service.get_top_partners(limit, timeframe=timeframe)
     except Exception as e:
-        logger.error(f"Redis Leaderboard Read Failed: {e}")
+        logger.error(f"Redis Leaderboard Read Failed for {timeframe}: {e}")
 
     if not top_data:
-        # Fallback to DB if Redis is cold or down
-        statement = select(Partner).order_by(Partner.xp.desc()).limit(limit)
-        result = await session.exec(statement)
-        partners = result.all()
-        data = [LeaderboardPartner(**p.model_dump()).model_dump() for p in partners]
-
-        try:
+        # Fallback to DB (only for "all" timeframe, others are Redis-only for speed)
+        if timeframe == "all":
+            statement = select(Partner).order_by(Partner.xp.desc()).limit(limit)
+            result = await session.exec(statement)
+            partners = result.all()
+            data = [LeaderboardPartner(**p.model_dump()).model_dump() for p in partners]
             await redis_service.set_json(cache_key, data, expire=60)
-        except Exception as e:
-            logger.warning(f"Failed to cache fallback leaderboard: {e}")
-
-        return data
+            return data
+        return []
 
     # 2. Extract IDs and Scores
     partner_ids = [int(p_id) for p_id, _ in top_data]
@@ -69,14 +66,10 @@ async def get_global_leaderboard(
     # 3. Hydrate via Service
     try:
         data = await leaderboard_service.hydrate_leaderboard(partner_ids, scores, session)
-
-        # 4. Cache for 300 seconds (5 minutes)
-        await redis_service.set_json(cache_key, data, expire=300)
+        # Cache for 120 seconds (Monthly/Weekly change slower)
+        await redis_service.set_json(cache_key, data, expire=120)
     except Exception as e:
         logger.warning(f"Failed to cache leaderboard data: {e}")
-        # In case of hydration failure, we should probably fallback to DB or return empty
-        # For now, let's assume if hydration fails we return an empty list or log the error
-        # But 'data' needs to be defined for the return statement
         data = []
 
     return data
