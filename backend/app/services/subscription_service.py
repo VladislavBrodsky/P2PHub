@@ -7,6 +7,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.broker import broker
 from app.core.config import settings
+from app.core.i18n import get_msg
 from app.models.partner import Partner
 from app.services.notification_service import notification_service
 
@@ -70,29 +71,28 @@ class SubscriptionService:
         await session.commit()
 
     async def send_expiration_warning(self, partner: Partner, days_left: int):
-        text = (
-            f"⚠️ *PRO Subscription Notice*\n\n"
-            f"Your PRO membership will expire in *{days_left} day{'s' if days_left > 1 else ''}*.\n\n"
-            f"💰 *Price to Extend:* ${settings.PRO_PRICE_USD}\n\n"
-            f"Extend it now to keep all your premium benefits and affiliate bonuses!"
-        )
+        lang = partner.language_code or "en"
+        text = get_msg(lang, "sub_warning_body", days=days_left, price=settings.PRO_PRICE_USD)
+        title = get_msg(lang, "sub_warning_title")
+        full_text = f"{title}\n\n{text}"
+        
         buttons = [[
-            {"text": "💎 Extend Subscription", "web_app": {"url": settings.FRONTEND_URL}},
-            {"text": "🚀 Open App", "web_app": {"url": settings.FRONTEND_URL}}
+            {"text": get_msg(lang, "btn_extend_sub"), "web_app": {"url": settings.FRONTEND_URL}},
+            {"text": get_msg(lang, "btn_open_app"), "web_app": {"url": settings.FRONTEND_URL}}
         ]]
-        await notification_service.send_standard(int(partner.telegram_id), text, buttons=buttons)
+        await notification_service.send_standard(int(partner.telegram_id), full_text, buttons=buttons)
 
     async def send_expired_notification(self, partner: Partner):
-        text = (
-            "❌ *Subscription Expired*\n\n"
-            "Your PRO membership has expired. You have lost access to premium features.\n\n"
-            "Re-activate your PRO status now to continue earning."
-        )
+        lang = partner.language_code or "en"
+        text = get_msg(lang, "sub_expired_body")
+        title = get_msg(lang, "sub_expired_title")
+        full_text = f"{title}\n\n{text}"
+        
         buttons = [[
-            {"text": "👑 Reactivate PRO", "web_app": {"url": settings.FRONTEND_URL}},
-            {"text": "🚀 Open App", "web_app": {"url": settings.FRONTEND_URL}}
+            {"text": get_msg(lang, "btn_reactivate_sub"), "web_app": {"url": settings.FRONTEND_URL}},
+            {"text": get_msg(lang, "btn_open_app"), "web_app": {"url": settings.FRONTEND_URL}}
         ]]
-        await notification_service.send_critical(int(partner.telegram_id), text, buttons=buttons)
+        await notification_service.send_critical(int(partner.telegram_id), full_text, buttons=buttons)
 
     async def run_checker_task(self):
         """

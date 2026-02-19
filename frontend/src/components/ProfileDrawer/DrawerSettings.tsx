@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Sun, Moon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/ThemeContext';
+import { apiClient } from '../../api/client';
 
 interface DrawerSettingsProps {
     selection: () => void;
@@ -10,6 +11,18 @@ interface DrawerSettingsProps {
 export function DrawerSettings({ selection }: DrawerSettingsProps) {
     const { i18n } = useTranslation();
     const { theme, setTheme } = useTheme();
+
+    const handleLanguageChange = async (lang: string) => {
+        i18n.changeLanguage(lang);
+        selection();
+
+        // Sync with backend so Bot notifications also switch language
+        try {
+            await apiClient.post('/api/partner/language', { language_code: lang });
+        } catch (error) {
+            console.warn('Failed to sync language to backend:', error);
+        }
+    };
 
     return (
         <div className="mt-0 space-y-4 pt-1">
@@ -22,7 +35,7 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
                 ].map((option) => (
                     <button
                         key={option.id}
-                        onClick={() => { i18n.changeLanguage(option.id); selection(); }}
+                        onClick={() => handleLanguageChange(option.id)}
                         className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2 transition-all relative z-10 ${i18n.language.startsWith(option.id)
                             ? 'bg-white/10 dark:bg-white/5 border border-white/10 shadow-lg text-(--color-text-primary) overflow-hidden'
                             : 'text-(--color-text-secondary) hover:bg-white/5'

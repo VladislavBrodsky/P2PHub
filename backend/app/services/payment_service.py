@@ -452,11 +452,12 @@ class PaymentService:
 
             # 4.2 Viral Congrats Message (Instruction to user to share)
             ref_link = f"{settings.FRONTEND_URL}?startapp={partner.referral_code}"
+            viral_intro = get_msg(lang, "viralkit_intro")
             viral_msg = get_msg(lang, "pro_viral_announcement", referral_link=ref_link)
             # We send it to them so they can forward/copy it
             await notification_service.send_low_prio(
                 chat_id=int(partner.telegram_id),
-                text=f"🎁 *VIRAL KIT UNLOCKED!*\n\nShare this message to announce your PRO status and attract more partners:\n\n---\n{viral_msg}"
+                text=f"{viral_intro}\n{viral_msg}"
             )
 
 
@@ -465,15 +466,28 @@ class PaymentService:
             try:
                 username_display = f"@{partner.username}" if partner.username else "No Username"
                 admin_id = "537873096" # @uslincoln
-                admin_notify_msg = (
-                    f"✅ *SUCCESSFUL {'PRO+' if is_plus else 'PRO'} PURCHASE*\n\n"
-                    f"👤 *User:* {username_display} (`{partner.telegram_id}`)\n"
-                    f"💰 *Amount:* ${amount} {currency}\n"
-                    f"🔗 *Hash:* `{tx_hash or 'MANUAL'}`\n"
-                    f"📊 *Plan:* {partner.subscription_plan}\n"
-                    f"⌛ *Expires:* {partner.pro_expires_at.strftime('%Y-%m-%d') if partner.pro_expires_at else 'LIFETIME'}\n\n"
-                    "Verified and commissions distributed."
+                
+                # Try to fetch admin language
+                stmt_admin = select(Partner).where(Partner.telegram_id == admin_id)
+                res_admin = await session.exec(stmt_admin)
+                admin_partner = res_admin.first()
+                admin_lang = admin_partner.language_code if admin_partner else "en"
+                
+                plan_name = 'PRO+' if is_plus else 'PRO'
+                expires_str = partner.pro_expires_at.strftime('%Y-%m-%d') if partner.pro_expires_at else 'LIFETIME'
+                
+                admin_notify_msg = get_msg(
+                    admin_lang, "admin_payment_success",
+                    plan=plan_name,
+                    user=username_display,
+                    user_id=partner.telegram_id,
+                    amount=amount,
+                    currency=currency,
+                    hash=tx_hash or 'MANUAL',
+                    plan_type=partner.subscription_plan,
+                    expires=expires_str
                 )
+                
                 await notification_service.send_critical(
                     chat_id=int(admin_id),
                     text=admin_notify_msg

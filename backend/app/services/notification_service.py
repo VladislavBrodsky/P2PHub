@@ -303,24 +303,36 @@ async def notify_admin_payment_task(
             return
             
         safe_username = f"@{partner.username}" if partner.username else "No Username"
-        admin_msg = (
-            "🚨 *NEW MANUAL PAYMENT PENDING REVIEW* 🚨\n\n"
-            f"👤 *User:* {safe_username} (`{partner.telegram_id}`)\n"
-            f"💰 *Amount:* ${amount} {currency}\n"
-            f"🌐 *Network:* {network}\n"
-            f"📝 *TX Hash:* `{tx_hash or 'Not Provided'}`\n\n"
-            f"🆔 *Trans ID:* `{transaction_id}`\n\n"
-            "👉 *Action Required:* Please verify this transaction in the Admin Panel or use /admin commands."
-        )
-        
         admin_targets = ["537873096"] 
         for a_id in settings.ADMIN_USER_IDS:
             if str(a_id) not in admin_targets:
                 admin_targets.append(str(a_id))
+        
+        # Fetch admin partners to respect their language preference
+        stmt_admins = select(Partner).where(Partner.telegram_id.in_(admin_targets))
+        res_admins = await session.exec(stmt_admins)
+        admin_map = {p.telegram_id: p for p in res_admins.all()}
+        
+        from app.core.i18n import get_msg
                 
         for chat_id in admin_targets:
             try:
+                lang = "en"
+                if chat_id in admin_map and admin_map[chat_id].language_code:
+                    lang = admin_map[chat_id].language_code
+                
+                msg = get_msg(
+                    lang, "admin_manual_payment",
+                    user=safe_username,
+                    user_id=partner.telegram_id,
+                    amount=amount,
+                    currency=currency,
+                    network=network,
+                    hash=tx_hash or 'Not Provided',
+                    trans_id=transaction_id
+                )
+                
                 # Admin alerts are HIGH priority
-                await notification_service.send_critical(chat_id=int(chat_id), text=admin_msg)
+                await notification_service.send_critical(chat_id=int(chat_id), text=msg)
             except Exception as e:
                 logger.error(f"Failed to enqueue admin notify: {e}")

@@ -149,7 +149,8 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
             if level in [4, 10]:
                 lang = referrer.language_code or "en"
                 fomo_msg = get_msg(lang, "pro_fomo_missed", level=level)
-                buttons = [[{"text": "👑 Upgrade Plan", "web_app": {"url": settings.FRONTEND_URL}}]]
+                btn_text = get_msg(lang, "btn_upgrade")
+                buttons = [[{"text": btn_text, "web_app": {"url": settings.FRONTEND_URL}}]]
                 await notification_service.send_critical(
                     chat_id=int(referrer.telegram_id), text=fomo_msg, buttons=buttons
                 )
@@ -250,8 +251,8 @@ def _prepare_referral_notification(referrer: Partner, level: int, xp: int, name:
     chain.append(format_partner_name(referrer))
     lang = referrer.language_code or "en"
     buttons = [[
-        {"text": "📊 View Network", "web_app": {"url": f"{settings.FRONTEND_URL}?start_param=network"}},
-        {"text": "🚀 Open App", "web_app": {"url": settings.FRONTEND_URL}}
+        {"text": get_msg(lang, "btn_view_network"), "web_app": {"url": f"{settings.FRONTEND_URL}?start_param=network"}},
+        {"text": get_msg(lang, "btn_open_app"), "web_app": {"url": settings.FRONTEND_URL}}
     ]]
     if level == 1: msg = get_msg(lang, "referral_l1_congrats", name=name, xp=xp)
     elif level == 2: msg = get_msg(lang, "referral_l2_congrats", referral_chain=chain_text, xp=xp)
@@ -446,7 +447,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                     msg = get_msg(lang, "commission_received", amount=round(commission, 2), level=comm_level, from_user=buyer_name)
                     deferred_notifications.append(notification_service.send_standard(
                         chat_id=int(recipient.telegram_id), text=msg,
-                        buttons=[[{"text": "💰 Check Balance", "web_app": {"url": settings.FRONTEND_URL}}]]
+                        buttons=[[{"text": get_msg(lang, "btn_check_balance"), "web_app": {"url": settings.FRONTEND_URL}}]]
                     ))
                 except Exception as e:
                     logger.error(f"Notification error for {recipient.id}: {e}")
