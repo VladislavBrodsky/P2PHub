@@ -150,7 +150,7 @@
     "start": "Initiate Mission",
     "status": "Status",
     "level_short": "Lvl.",
-    "pro_multiplier": "Bonus x5 XP",
+    "pro_multiplier": "PRO x1.5 / PRO+ x3.0 XP Boost",
     "telegram_bot": {
       "title": "Open Pintopay Bot",
       "desc": "Start your journey with the official bot."

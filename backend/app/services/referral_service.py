@@ -168,8 +168,8 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
             
             xp_txs.append(XPTransaction(
                 partner_id=referrer.id, amount=xp_gain,
-                type="REFERRAL_L1" if level == 1 else "REFERRAL_DEEP",
-                description=f"Referral XP Reward (L{level})", reference_id=str(partner.id)
+                type="REFERRAL_SIGNUP",
+                description=f"Referral Partner Joined (L{level})", reference_id=str(partner.id)
             ))
 
             # 1.3 Unified Transaction: Log Referral XP as an Earning
@@ -379,6 +379,23 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 level=comm_level,
                 currency="USDT",
                 reference_id=f"upg_{partner.id}_{comm_level}"
+            ))
+            
+            # Record XP Earning & Transaction for History
+            earnings_to_add.append(Earning(
+                partner_id=recipient.id,
+                amount=xp_gain,
+                description=f"Active Referral: {buyer_name} (L{comm_level})",
+                type="REFERRAL_XP",
+                currency="XP"
+            ))
+            
+            from app.models.partner import XPTransaction
+            session.add(XPTransaction(
+                partner_id=recipient.id, amount=xp_gain,
+                type="ACTIVE_REFERRAL",
+                description=f"Active Referral XP (L{comm_level})",
+                reference_id=f"upg_xp_{partner.id}_{comm_level}"
             ))
 
             # Audit & Notify
