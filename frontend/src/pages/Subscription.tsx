@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Crown, CheckCircle2, Wallet, CreditCard, ChevronRight,
+    Crown, CheckCircle2, Wallet, CreditCard,
     Loader2, Sparkles, Zap, ChevronDown, Trophy, Users,
-    HelpCircle, Clock, BookOpen, Check, Globe, Shield, Share2, ChevronLeft
+    HelpCircle, Clock, Check, Globe, Shield, Share2, ChevronLeft
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
@@ -314,9 +314,17 @@ export default function SubscriptionPage() {
                         </div>
                     ) : (
                         <div className="space-y-6">
-                            <button onClick={() => setPaymentMethod(null)} className="flex items-center gap-2 text-[9px] font-black text-white/40 uppercase tracking-widest hover:text-white transition-colors">
-                                <ChevronLeft size={14} /> {t('subscription.upgrade.change_method')}
-                            </button>
+                            <div className="flex justify-between items-center text-white/40 pb-2 border-b border-white/5">
+                                <button onClick={() => setPaymentMethod(null)} className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest hover:text-white transition-colors">
+                                    <ChevronLeft size={14} /> {t('subscription.upgrade.change_method')}
+                                </button>
+                                {formattedTime && (
+                                    <div className="flex items-center gap-1.5 bg-white/5 px-2 py-0.5 rounded-lg border border-white/10">
+                                        <Clock size={10} className="text-indigo-400" />
+                                        <span className="text-[10px] font-black font-mono text-indigo-400">{formattedTime}</span>
+                                    </div>
+                                )}
+                            </div>
                             <div className="mt-4">
                                 {paymentMethod === 'TON' ? (
                                     <div className="space-y-6 text-center">
