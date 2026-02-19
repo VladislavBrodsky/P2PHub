@@ -18,41 +18,41 @@ const useLeagueConfig = () => {
     return {
         wooden: {
             name: t('leaderboard.levels.wooden', 'Wooden League'),
-            color: 'from-amber-800/80 to-amber-900',
-            textColor: 'text-amber-200',
-            borderColor: 'border-amber-700/30',
+            color: 'from-amber-700/90 via-amber-800 to-amber-950',
+            textColor: 'text-amber-50',
+            borderColor: 'border-amber-500/30',
             icon: Shield,
             description: t('league.wooden_desc', 'New Partner. Just getting started on the journey.')
         },
         silver: {
             name: t('leaderboard.levels.silver', 'Silver League'),
-            color: 'from-slate-300 to-slate-500',
-            textColor: 'text-slate-100',
-            borderColor: 'border-slate-400/30',
+            color: 'from-slate-400 via-slate-500 to-slate-700',
+            textColor: 'text-white',
+            borderColor: 'border-white/20',
             icon: Trophy,
             description: t('league.silver_desc', 'Active Partner. Building momentum and gaining traction.')
         },
         metal: {
             name: t('leaderboard.levels.metal', 'Metal League'),
-            color: 'from-zinc-600 to-zinc-900',
-            textColor: 'text-zinc-100',
-            borderColor: 'border-zinc-500/30',
+            color: 'from-zinc-700 via-zinc-800 to-zinc-950',
+            textColor: 'text-zinc-50',
+            borderColor: 'border-zinc-500/40',
             icon: Shield,
             description: t('league.metal_desc', 'Serious Partner. Consistent performance and steady growth.')
         },
         gold: {
             name: t('leaderboard.levels.gold', 'Gold League'),
-            color: 'from-yellow-400 to-amber-600',
-            textColor: 'text-yellow-50',
-            borderColor: 'border-yellow-500/30',
+            color: 'from-amber-400 via-yellow-500 to-orange-600',
+            textColor: 'text-white',
+            borderColor: 'border-yellow-400/40',
             icon: Star,
             description: t('league.gold_desc', 'Elite Partner. High impact and strong influence.')
         },
         platinum: {
-            name: t('leaderboard.levels.platinum', 'Platinum League'),
-            color: 'from-indigo-400 via-purple-500 to-pink-500',
+            name: t('leaderboard.levels.platinum', 'Platinum Tier'),
+            color: 'from-[#6366f1] via-[#a855f7] to-[#ec4899]',
             textColor: 'text-white',
-            borderColor: 'border-white/20',
+            borderColor: 'border-white/30',
             icon: Flame,
             description: t('league.platinum_desc', 'Legendary Status. Top 10 Partners compete here.')
         }
@@ -80,47 +80,48 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, ref
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.15),transparent)] pointer-events-none" />
 
             <div className="relative z-10">
-                <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/10">
-                        <Icon className={`h-6 w-6 ${config.textColor}`} />
+                <div className="flex items-center gap-5">
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-xl border border-white/20 shadow-inner">
+                        <Icon className={`h-8 w-8 ${config.textColor}`} />
                     </div>
                     <div>
-                        <span className="text-[8px] font-black uppercase tracking-wider opacity-50 text-white leading-none block">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60 leading-none block">
                             {t('leaderboard.current_league')}
                         </span>
-                        <h2 className={`text-2xl font-black tracking-tighter ${config.textColor} mt-0.5`}>{config.name}</h2>
+                        <h2 className={`text-3xl font-black tracking-tighter ${config.textColor} mt-1 drop-shadow-sm`}>{config.name}</h2>
                     </div>
                 </div>
 
-                <p className={`mt-4 text-[11px] font-medium ${config.textColor} opacity-70 leading-relaxed max-w-[90%]`}>
+                <p className={`mt-5 text-[13px] font-bold ${config.textColor} text-white/90 leading-relaxed max-w-[95%] italic`}>
                     {config.description}
                 </p>
 
-                <div className="mt-8 grid grid-cols-3 gap-4 border-t border-white/10 pt-6">
+                <div className="mt-8 grid grid-cols-3 gap-6 border-t border-white/20 pt-8">
                     <div className="min-w-0">
-                        <p className="text-[8px] font-black uppercase tracking-wider opacity-50 text-white mb-1.5 truncate">
+                        <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white/50 mb-2 truncate">
                             {t('leaderboard.global_rank')}
                         </p>
-                        <p className={`text-xl font-black tracking-tighter ${config.textColor}`}>#{rank}</p>
+                        <p className={`text-2xl font-black tracking-tighter ${config.textColor} drop-shadow-md`}>#{rank}</p>
                     </div>
                     <div className="min-w-0">
-                        <p className="text-[8px] font-black uppercase tracking-wider opacity-50 text-white mb-1.5 truncate">
+                        <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white/50 mb-2 truncate">
                             {t('leaderboard.xp_score')}
                         </p>
-                        <p className={`text-xl font-black tracking-tighter ${config.textColor}`}>{score.toLocaleString()}</p>
+                        <p className={`text-2xl font-black tracking-tighter ${config.textColor} drop-shadow-md font-mono tracking-tighter`}>{score.toLocaleString()}</p>
                     </div>
                     <div className="min-w-0">
-                        <p className="text-[8px] font-black uppercase tracking-wider opacity-50 text-white mb-1.5 truncate">
+                        <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white/50 mb-2 truncate">
                             {t('leaderboard.referrals')}
                         </p>
-                        <p className={`text-xl font-black tracking-tighter ${config.textColor}`}>{referrals}</p>
+                        <p className={`text-2xl font-black tracking-tighter ${config.textColor} drop-shadow-md`}>{referrals}</p>
                     </div>
                 </div>
 
                 {league === 'platinum' && (
-                    <div className="mt-8 flex items-center gap-3 rounded-2xl bg-black/20 p-4 backdrop-blur-sm border border-white/5">
-                        <Zap className="h-4 w-4 text-amber-300" />
-                        <span className="text-[10px] font-black uppercase tracking-wider text-amber-100">
+                    <div className="mt-8 flex items-center gap-3 rounded-[1.25rem] bg-black/30 p-4 backdrop-blur-md border border-white/10 shadow-lg group overflow-hidden relative">
+                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                        <Zap className="h-5 w-5 text-yellow-400 animate-pulse drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" />
+                        <span className="text-[11px] font-black uppercase tracking-widest text-white">
                             Competing for TOP 10 rewards
                         </span>
                     </div>

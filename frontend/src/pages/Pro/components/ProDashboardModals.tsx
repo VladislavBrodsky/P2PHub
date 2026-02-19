@@ -317,130 +317,129 @@ export const ProDashboardModals = ({
                                     </div>
                                 ) : (
                                     <div className="space-y-6">
-                                        <div className="space-y-6">
-                                            <div className="p-5 bg-sky-500/10 dark:bg-sky-500/10 rounded-3xl border border-sky-500/20 flex items-start gap-4 group transition-all">
-                                                <div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-sky-500/20 group-hover:scale-110 transition-transform">
-                                                    <Send size={20} />
-                                                </div>
-                                                <div>
-                                                    <h4 className="text-[11px] font-black text-sky-900 dark:text-sky-300 uppercase tracking-[0.15em]">{t('pro_dashboard.setup.tg_sync_multi.title')}</h4>
-                                                    <p className="text-[10px] font-medium text-sky-700/70 dark:text-sky-400/70 leading-relaxed mt-1">
-                                                        {status?.is_pro_plus ? t('pro_dashboard.setup.tg_sync_multi.desc_plus') : t('pro_dashboard.setup.tg_sync_multi.desc_pro')}
-                                                        <button onClick={() => { selection(); setShowManual('setup_tg'); }} className="ml-1.5 text-sky-600 dark:text-sky-400 underline font-black hover:text-sky-500">{t('pro_dashboard.setup.tg_manual.title')}</button>
-                                                    </p>
-                                                </div>
+                                        <div className="p-5 bg-sky-500/10 dark:bg-sky-500/10 rounded-3xl border border-sky-500/20 flex items-start gap-4 group transition-all">
+                                            <div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-sky-500/20 group-hover:scale-110 transition-transform">
+                                                <Send size={20} />
                                             </div>
-
-                                            <div className="space-y-4">
-                                                <div className="flex items-center justify-between px-1">
-                                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.setup.channel_id')}</label>
-                                                    <button
-                                                        onClick={handleTestTG}
-                                                        disabled={isTesting || tgChannels.every(c => !c)}
-                                                        className="text-[9px] font-black text-sky-600 dark:text-sky-400 uppercase tracking-widest hover:underline flex items-center gap-1.5 disabled:opacity-50"
-                                                    >
-                                                        {isTesting ? <Loader2 size={10} className="animate-spin" /> : <Zap size={10} />}
-                                                        {t('pro_dashboard.setup.tg_sync_multi.verify_btn')}
-                                                    </button>
-                                                </div>
-
-                                                <div className="space-y-3">
-                                                    {tgChannels.map((ch, idx) => (
-                                                        <div key={idx} className="relative group/input">
-                                                            <div className="space-y-2">
-                                                                <input
-                                                                    type="text"
-                                                                    value={ch}
-                                                                    onChange={(e) => {
-                                                                        const newChannels = [...tgChannels];
-                                                                        newChannels[idx] = e.target.value;
-                                                                        setTgChannels(newChannels);
-                                                                    }}
-                                                                    className="w-full h-14 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl px-5 pr-14 text-[13px] font-mono focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/10 shadow-sm"
-                                                                    placeholder="@your_channel_username"
-                                                                />
-
-                                                                {tgTestResults[ch.trim()] && (
-                                                                    <motion.div
-                                                                        initial={{ opacity: 0, y: -5 }}
-                                                                        animate={{ opacity: 1, y: 0 }}
-                                                                        className={`absolute left-3 -top-2.5 px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-lg border ${tgTestResults[ch.trim()] === 'active'
-                                                                            ? 'bg-emerald-500 border-emerald-400/50 text-white'
-                                                                            : 'bg-rose-500 border-rose-400/50 text-white'}`}
-                                                                    >
-                                                                        {tgTestResults[ch.trim()] === 'active' ? <CheckCircle2 size={10} /> : <AlertCircle size={10} />}
-                                                                        {tgTestResults[ch.trim()] === 'active' ? t('pro_dashboard.setup.tg_sync_multi.active') : t('pro_dashboard.setup.tg_sync_multi.error')}
-                                                                    </motion.div>
-                                                                )}
-
-                                                                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
-                                                                    {tgChannels.length > 1 && (
-                                                                        <button
-                                                                            onClick={() => {
-                                                                                selection();
-                                                                                const newChannels = tgChannels.filter((_, i) => i !== idx);
-                                                                                setTgChannels(newChannels);
-                                                                            }}
-                                                                            className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 transition-all opacity-0 group-hover/input:opacity-100"
-                                                                        >
-                                                                            <Trash2 size={16} />
-                                                                        </button>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-
-                                                    {tgChannels.length < (status?.is_pro_plus ? 5 : 1) && (
-                                                        <button
-                                                            onClick={() => { selection(); setTgChannels([...tgChannels, '']); }}
-                                                            className="w-full h-14 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-2xl flex items-center justify-center gap-3 text-slate-400 hover:border-indigo-500/50 hover:text-indigo-500 hover:bg-indigo-500/5 transition-all group"
-                                                        >
-                                                            <Plus size={18} className="group-hover:rotate-90 transition-transform" />
-                                                            <span className="text-[11px] font-black uppercase tracking-widest">
-                                                                {t('pro_dashboard.setup.tg_sync_multi.add_channel', { count: tgChannels.length, total: (status?.is_pro_plus ? 5 : 1) })}
-                                                            </span>
-                                                        </button>
-                                                    )}
-                                                </div>
-
-                                                <div className="p-4 bg-amber-500/5 dark:bg-amber-500/5 rounded-2xl border border-amber-500/10 flex items-start gap-4 shadow-sm">
-                                                    <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
-                                                        <Info size={16} className="text-amber-500" />
-                                                    </div>
-                                                    <p className="text-[10px] text-amber-700 dark:text-amber-400/80 leading-relaxed font-bold uppercase tracking-tight">
-                                                        {status?.is_pro_plus
-                                                            ? t('pro_dashboard.setup.tg_sync_multi.plan_plus')
-                                                            : t('pro_dashboard.setup.tg_sync_multi.plan_pro')}
-                                                    </p>
-                                                </div>
+                                            <div>
+                                                <h4 className="text-[11px] font-black text-sky-900 dark:text-sky-300 uppercase tracking-[0.15em]">{t('pro_dashboard.setup.tg_sync_multi.title')}</h4>
+                                                <p className="text-[10px] font-medium text-sky-700/70 dark:text-sky-400/70 leading-relaxed mt-1">
+                                                    {status?.is_pro_plus ? t('pro_dashboard.setup.tg_sync_multi.desc_plus') : t('pro_dashboard.setup.tg_sync_multi.desc_pro')}
+                                                    <button onClick={() => { selection(); setShowManual('setup_tg'); }} className="ml-1.5 text-sky-600 dark:text-sky-400 underline font-black hover:text-sky-500">{t('pro_dashboard.setup.tg_manual.title')}</button>
+                                                </p>
                                             </div>
                                         </div>
-                                )}
+
+                                        <div className="space-y-4">
+                                            <div className="flex items-center justify-between px-1">
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.setup.channel_id')}</label>
+                                                <button
+                                                    onClick={handleTestTG}
+                                                    disabled={isTesting || tgChannels.every(c => !c)}
+                                                    className="text-[9px] font-black text-sky-600 dark:text-sky-400 uppercase tracking-widest hover:underline flex items-center gap-1.5 disabled:opacity-50"
+                                                >
+                                                    {isTesting ? <Loader2 size={10} className="animate-spin" /> : <Zap size={10} />}
+                                                    {t('pro_dashboard.setup.tg_sync_multi.verify_btn')}
+                                                </button>
+                                            </div>
+
+                                            <div className="space-y-3">
+                                                {tgChannels.map((ch, idx) => (
+                                                    <div key={idx} className="relative group/input">
+                                                        <div className="space-y-2">
+                                                            <input
+                                                                type="text"
+                                                                value={ch}
+                                                                onChange={(e) => {
+                                                                    const newChannels = [...tgChannels];
+                                                                    newChannels[idx] = e.target.value;
+                                                                    setTgChannels(newChannels);
+                                                                }}
+                                                                className="w-full h-14 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl px-5 pr-14 text-[13px] font-mono focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/10 shadow-sm"
+                                                                placeholder="@your_channel_username"
+                                                            />
+
+                                                            {tgTestResults[ch.trim()] && (
+                                                                <motion.div
+                                                                    initial={{ opacity: 0, y: -5 }}
+                                                                    animate={{ opacity: 1, y: 0 }}
+                                                                    className={`absolute left-3 -top-2.5 px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-lg border ${tgTestResults[ch.trim()] === 'active'
+                                                                        ? 'bg-emerald-500 border-emerald-400/50 text-white'
+                                                                        : 'bg-rose-500 border-rose-400/50 text-white'}`}
+                                                                >
+                                                                    {tgTestResults[ch.trim()] === 'active' ? <CheckCircle2 size={10} /> : <AlertCircle size={10} />}
+                                                                    {tgTestResults[ch.trim()] === 'active' ? t('pro_dashboard.setup.tg_sync_multi.active') : t('pro_dashboard.setup.tg_sync_multi.error')}
+                                                                </motion.div>
+                                                            )}
+
+                                                            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                                                                {tgChannels.length > 1 && (
+                                                                    <button
+                                                                        onClick={() => {
+                                                                            selection();
+                                                                            const newChannels = tgChannels.filter((_, i) => i !== idx);
+                                                                            setTgChannels(newChannels);
+                                                                        }}
+                                                                        className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 transition-all opacity-0 group-hover/input:opacity-100"
+                                                                    >
+                                                                        <Trash2 size={16} />
+                                                                    </button>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+
+                                                {tgChannels.length < (status?.is_pro_plus ? 5 : 1) && (
+                                                    <button
+                                                        onClick={() => { selection(); setTgChannels([...tgChannels, '']); }}
+                                                        className="w-full h-14 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-2xl flex items-center justify-center gap-3 text-slate-400 hover:border-indigo-500/50 hover:text-indigo-500 hover:bg-indigo-500/5 transition-all group"
+                                                    >
+                                                        <Plus size={18} className="group-hover:rotate-90 transition-transform" />
+                                                        <span className="text-[11px] font-black uppercase tracking-widest">
+                                                            {t('pro_dashboard.setup.tg_sync_multi.add_channel', { count: tgChannels.length, total: (status?.is_pro_plus ? 5 : 1) })}
+                                                        </span>
+                                                    </button>
+                                                )}
+                                            </div>
+
+                                            <div className="p-4 bg-amber-500/5 dark:bg-amber-500/5 rounded-2xl border border-amber-500/10 flex items-start gap-4 shadow-sm">
+                                                <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
+                                                    <Info size={16} className="text-amber-500" />
+                                                </div>
+                                                <p className="text-[10px] text-amber-700 dark:text-amber-400/80 leading-relaxed font-bold uppercase tracking-tight">
+                                                    {status?.is_pro_plus
+                                                        ? t('pro_dashboard.setup.tg_sync_multi.plan_plus')
+                                                        : t('pro_dashboard.setup.tg_sync_multi.plan_pro')}
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
+                                )}
+                            </div>
 
                             {/* Sticky Footer */}
-                                <div className="p-6 sm:p-8 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-white/5 relative z-20">
-                                    <button
-                                        onClick={handleSaveSetup}
-                                        disabled={isSaving}
-                                        className="w-full h-15 bg-linear-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.25em] shadow-2xl shadow-indigo-500/30 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale group"
-                                    >
-                                        {isSaving ? (
-                                            <>
-                                                <Loader2 className="animate-spin" size={20} />
-                                                {t('pro_dashboard.tools.trends.scanning')}...
-                                            </>
-                                        ) : (
-                                            <>
-                                                {t('pro_dashboard.setup.save_btn')} <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
-                                            </>
-                                        )}
-                                    </button>
-                                    <p className="text-[8px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.3em] text-center mt-4">
-                                        P2PHUB PROTOCOL • V2.2 • SECURE SYNC
-                                    </p>
-                                </div>
+                            <div className="p-6 sm:p-8 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-white/5 relative z-20">
+                                <button
+                                    onClick={handleSaveSetup}
+                                    disabled={isSaving}
+                                    className="w-full h-15 bg-linear-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.25em] shadow-2xl shadow-indigo-500/30 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale group"
+                                >
+                                    {isSaving ? (
+                                        <>
+                                            <Loader2 className="animate-spin" size={20} />
+                                            {t('pro_dashboard.tools.trends.scanning')}...
+                                        </>
+                                    ) : (
+                                        <>
+                                            {t('pro_dashboard.setup.save_btn')} <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
+                                        </>
+                                    )}
+                                </button>
+                                <p className="text-[8px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.3em] text-center mt-4">
+                                    P2PHUB PROTOCOL • V2.2 • SECURE SYNC
+                                </p>
+                            </div>
                         </motion.div>
                     </motion.div>
                 )}

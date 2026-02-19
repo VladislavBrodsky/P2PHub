@@ -353,6 +353,8 @@
     "expand_sub": "Достигните скорости $1/минуту",
     "qr_modal_title": "Ваш Персональный QR",
     "qr_modal_desc": "Сканируйте для мгновенного входа в сеть",
-    "no_earnings": "Доходов пока нет"
+    "no_earnings": "Доходов пока нет",
+    "xp_tab": "XP",
+    "crypto_tab": "Crypto"
   }
 }

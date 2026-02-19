@@ -25,6 +25,7 @@ export const PartnerDashboard = () => {
     const [isQrOpen, setIsQrOpen] = React.useState(false);
     const [isBriefingOpen, setIsBriefingOpen] = React.useState(false);
     const [isProWelcomeOpen, setIsProWelcomeOpen] = React.useState(false);
+    const [isEarningsExpanded, setIsEarningsExpanded] = React.useState(false);
 
     React.useEffect(() => {
         const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
@@ -259,10 +260,15 @@ export const PartnerDashboard = () => {
                 <div className="space-y-4">
                     <div className="flex items-center justify-between">
                         <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('partner_dashboard.recent_earnings')}</h2>
-                        <button className="text-slate-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors">{t('common.view_all')}</button>
+                        <button
+                            onClick={() => setIsEarningsExpanded(!isEarningsExpanded)}
+                            className="text-slate-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors"
+                        >
+                            {isEarningsExpanded ? t('common.show_less') : t('common.view_all')}
+                        </button>
                     </div>
 
-                    <EarningsList />
+                    <EarningsList isExpanded={isEarningsExpanded} />
                 </div>
 
                 {/* 4. Integrated Action Button */}
@@ -352,15 +358,18 @@ export const PartnerDashboard = () => {
 
 
 
-const EarningsList = () => {
+const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
     const [earnings, setEarnings] = React.useState<any[]>([]);
     const [loading, setLoading] = React.useState(true);
+    const [activeTab, setActiveTab] = React.useState<'XP' | 'CRYPTO'>('XP');
     const { t } = useTranslation();
 
     React.useEffect(() => {
         const fetchEarnings = async () => {
             try {
-                const res = await apiClient.get('/api/partner/earnings');
+                // Fetch more when expanded
+                const limit = isExpanded ? 50 : 12;
+                const res = await apiClient.get(`/api/partner/earnings?limit=${limit}`);
                 setEarnings(res.data);
             } catch (error) {
                 console.error('Failed to fetch earnings:', error);
@@ -369,28 +378,23 @@ const EarningsList = () => {
             }
         };
         fetchEarnings();
-    }, []);
+    }, [isExpanded]);
 
     const formatEarningDescription = (desc: string) => {
         if (!desc) return '';
 
-        // Handle "Task Reward: invite_10_friends" -> "Task Reward: Network Builder"
         if (desc.startsWith('Task Reward: ')) {
             const taskId = desc.replace('Task Reward: ', '').trim();
-            // Try to find translation for task title
             const taskTitleKey = `tasks.${taskId}.title`;
             const translatedTitle = t(taskTitleKey);
 
-            // If translation exists and is different from key, use it
             if (translatedTitle && translatedTitle !== taskTitleKey) {
                 return `${translatedTitle}`;
             }
 
-            // Fallback: prettier format of the key
             return taskId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         }
 
-        // Handle "(Level X)" -> "(LX)"
         return desc.replace('(Level ', '(L');
     };
 
@@ -403,14 +407,10 @@ const EarningsList = () => {
         );
     }
 
-    if (earnings.length === 0) {
-        return (
-            <div className="py-8 text-center bg-white/40 dark:bg-white/5 rounded-2xl border border-dashed border-slate-300 dark:border-white/10">
-                <Gift className="w-8 h-8 mx-auto text-slate-300 dark:text-white/20 mb-2" />
-                <p className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('partner_dashboard.no_earnings')}</p>
-            </div>
-        );
-    }
+    const xpEarnings = earnings.filter(e => e.currency === 'XP');
+    const cryptoEarnings = earnings.filter(e => e.currency !== 'XP');
+
+    const displayEarnings = activeTab === 'XP' ? xpEarnings : cryptoEarnings;
 
     const getTypeStyles = (type: string) => {
         switch (type) {
@@ -446,47 +446,84 @@ const EarningsList = () => {
     };
 
     return (
-        <div className="space-y-1 animate-in fade-in duration-500">
-            {earnings.map((earning, idx) => {
-                const styles = getTypeStyles(earning.type);
-                return (
-                    <div key={earning.id || idx} className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-xl p-2 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                        <div className="flex items-center gap-2">
-                            <div className={`w-6.5 h-6.5 rounded-lg ${styles.bg} ${styles.border} flex items-center justify-center ${styles.text}`}>
-                                {React.cloneElement(styles.icon as React.ReactElement, { className: 'w-3 h-3' })}
-                            </div>
-                            <div className='flex flex-col'>
-                                <span className="font-bold text-slate-900 dark:text-white text-[10.5px] leading-tight">
-                                    {formatEarningDescription(earning.description)}
-                                </span>
-                                <span className="text-[7.5px] text-slate-500 opacity-50 font-medium">
-                                    {new Date(earning.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                                </span>
-                            </div>
-                        </div>
+        <div className="space-y-3 animate-in fade-in duration-500">
+            {/* Tab Switcher */}
+            <div className="flex p-1 bg-slate-100 dark:bg-white/5 rounded-xl w-fit mx-auto shadow-inner border border-slate-200/50 dark:border-white/5">
+                <button
+                    onClick={() => setActiveTab('XP')}
+                    className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'XP'
+                            ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-sm'
+                            : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
+                        }`}
+                >
+                    {t('partner_dashboard.xp_tab')}
+                </button>
+                <button
+                    onClick={() => setActiveTab('CRYPTO')}
+                    className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'CRYPTO'
+                            ? 'bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-sm'
+                            : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
+                        }`}
+                >
+                    {t('partner_dashboard.crypto_tab')}
+                </button>
+            </div>
 
-                        <div className="flex items-center gap-2">
-                            {earning.level && (
-                                <div className="relative group">
-                                    <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-md blur-[2px] group-hover:blur-[3px] transition-all" />
-                                    <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-1 py-0.5 rounded-md border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[28px] shadow-sm backdrop-blur-sm">
-                                        <span className="text-[5.5px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">{t('common.lvl')}</span>
-                                        <span className="text-[11px] font-black bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{earning.level}</span>
+            <div className="space-y-1">
+                {displayEarnings.length === 0 ? (
+                    <div className="py-8 text-center bg-white/40 dark:bg-white/5 rounded-2xl border border-dashed border-slate-300 dark:border-white/10">
+                        <Gift className="w-8 h-8 mx-auto text-slate-300 dark:text-white/20 mb-2" />
+                        <p className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('partner_dashboard.no_earnings')}</p>
+                    </div>
+                ) : (
+                    displayEarnings.map((earning, idx) => {
+                        const styles = getTypeStyles(earning.type);
+                        return (
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: idx * 0.03 }}
+                                key={earning.id || idx}
+                                className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-xl p-2 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <div className={`w-6.5 h-6.5 rounded-lg ${styles.bg} ${styles.border} flex items-center justify-center ${styles.text}`}>
+                                        {React.cloneElement(styles.icon as React.ReactElement, { className: 'w-3 h-3' })}
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <span className="font-bold text-slate-900 dark:text-white text-[10.5px] leading-tight">
+                                            {formatEarningDescription(earning.description)}
+                                        </span>
+                                        <span className="text-[7.5px] text-slate-500 opacity-50 font-medium">
+                                            {new Date(earning.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                        </span>
                                     </div>
                                 </div>
-                            )}
-                            <div className="flex items-center gap-1">
-                                <span className={`font-black ${styles.text} text-sm tracking-tight leading-none`}>
-                                    +{earning.currency === 'XP' ? earning.amount : earning.amount.toFixed(earning.amount < 1 ? 3 : 2)}
-                                </span>
-                                <span className={`text-[7.5px] font-black ${styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
-                                    {earning.currency}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                );
-            })}
+
+                                <div className="flex items-center gap-2">
+                                    {earning.level && (
+                                        <div className="relative group">
+                                            <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-md blur-[2px] group-hover:blur-[3px] transition-all" />
+                                            <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-1 py-0.5 rounded-md border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[28px] shadow-sm backdrop-blur-sm">
+                                                <span className="text-[5.5px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">{t('common.lvl')}</span>
+                                                <span className="text-[11px] font-black bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{earning.level}</span>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className="flex items-center gap-1">
+                                        <span className={`font-black ${styles.text} text-sm tracking-tight leading-none`}>
+                                            +{earning.currency === 'XP' ? earning.amount : earning.amount.toFixed(earning.amount < 1 ? 3 : 2)}
+                                        </span>
+                                        <span className={`text-[7.5px] font-black ${styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
+                                            {earning.currency}
+                                        </span>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        );
+                    })
+                )}
+            </div>
         </div>
     );
 };

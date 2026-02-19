@@ -353,6 +353,8 @@
     "expand_sub": "Reach $1/minute velocity",
     "qr_modal_title": "Your Personal QR",
     "qr_modal_desc": "Scan to join your network instantly",
-    "no_earnings": "No earnings yet"
+    "no_earnings": "No earnings yet",
+    "xp_tab": "XP",
+    "crypto_tab": "Crypto"
   }
 }
