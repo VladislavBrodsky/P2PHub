@@ -1,0 +1,121 @@
+@layer utilities {
+  /* Animation Performance */
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+
+  .animate-shimmer {
+    /* Manual override to prevent opaque background glitches in dark mode.
+       The background-image should be provided by the component (e.g., bg-linear-to-r) */
+    background-size: 1000px 100% !important;
+    animation: shimmer-loading 2s infinite linear !important;
+  }
+
+  .text-animate-shimmer {
+    background-size: 200% auto;
+    animation: text-shimmer 4s linear infinite;
+  }
+
+  /* Premium Shimmers */
+  /* Optimized Shimmer using Transform (GPU) */
+  @keyframes shimmer-swipe {
+    0% {
+      transform: translateX(-100%) skewX(-15deg);
+    }
+
+    100% {
+      transform: translateX(200%) skewX(-15deg);
+    }
+  }
+
+  .shimmer-platinum {
+    position: relative;
+    overflow: hidden;
+    /* Remove expensive gradient background animation */
+    background: transparent;
+  }
+
+  .shimmer-platinum::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    /* Narrower beam */
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    transform: translateX(-200%) skewX(-15deg);
+    animation: shimmer-swipe 3s infinite;
+    pointer-events: none;
+  }
+
+  .shimmer-gold {
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .shimmer-gold::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.6), transparent);
+    transform: translateX(-200%) skewX(-15deg);
+    animation: shimmer-swipe 3s infinite;
+    pointer-events: none;
+  }
+
+  .glow-pulse-blue {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    animation: pulse-glow-blue 2s infinite ease-in-out;
+  }
+
+  @keyframes pulse-glow-blue {
+
+    0%,
+    100% {
+      opacity: 0.6;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  }
+}
+.animate-scan {
+  animation: scan 2s linear infinite;
+}
+
+.animate-liquid {
+  /* Using opacity and scale for liquid-like feel instead of background-position */
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+.animate-gradient-xy {
+  animation: liquid 3s ease infinite;
+  background-size: 200% 200%;
+}
+
+.animate-vibing {
+  /* Simplified vibing */
+  animation: pulse-glow 4s ease-in-out infinite;
+}

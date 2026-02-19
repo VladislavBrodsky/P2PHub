@@ -1,0 +1,76 @@
+@utility bg-glow-pro-animated {
+  background: linear-gradient(-45deg, var(--color-bg-app), var(--color-bg-deep), #061e4a, var(--color-bg-app));
+  background-size: 400% 400%;
+  animation: pro-liquid-glow 15s ease infinite;
+  position: relative;
+}
+
+@utility mesh-gradient-dark {
+  background-image:
+    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+  will-change: opacity;
+}
+
+@utility glass-panel-premium {
+  background: var(--color-bg-glass);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--color-border-glass);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(255, 255, 255, 0.05) 100%);
+    pointer-events: none;
+  }
+}
+
+@utility border-gradient-pro {
+  border-image-source: linear-gradient(135deg, #6366f1, #ec4899, #10b981);
+  border-image-slice: 1;
+}
+
+@utility cyber-grid {
+  background-image:
+    linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+@utility noise-overlay {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+}
+
+@utility bg-glow-indigo {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.05) 0%, rgba(124, 58, 237, 0.05) 100%);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 100% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+  }
+}
+
+@utility content-main-padding {
+  padding-top: calc(var(--header-total-height) + 8px) !important;
+}
+
+@utility staging-offset {
+  padding-top: calc(var(--header-total-height) + 32px) !important;
+}

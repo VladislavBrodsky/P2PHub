@@ -1,0 +1,317 @@
+/* Enable Class-Based Theme Support for v4 */
+@variant dark (&:where(.dark, .dark *));
+@variant light (&:where(.light, .light *));
+
+@theme {
+  /* === PINTOPAY DESIGN SYSTEM 2026 - v1.7.0 (Stable) === */
+  /* Apple-esque Aesthetic - High Fidelity, Depth, Micro-interactions */
+
+  /* Spacing & Safe Areas */
+  --spacing-safe-top: env(safe-area-inset-top, 20px);
+  --spacing-safe-bottom: env(safe-area-inset-bottom, 20px);
+  --spacing-safe-left: env(safe-area-inset-left, 0px);
+  --spacing-safe-right: env(safe-area-inset-right, 0px);
+
+  --header-height: 64px;
+  --bottom-nav-height: 80px;
+  --spacing-telegram-header: 60px;
+  /* Safe Areas + Telegram Header padding for bot buttons visibility */
+  --header-total-height: calc(var(--header-height) + var(--spacing-safe-top) + var(--spacing-telegram-header));
+
+
+  /* Typography Scale */
+  --font-sans: "Inter", "Onest", system-ui, -apple-system, sans-serif;
+  --font-display-family: "Inter", "Onest", system-ui, sans-serif;
+
+  --font-display: 34px;
+  --font-heading: 20px;
+  --font-body: 15px;
+  --font-button: 16px;
+  --font-caption: 12px;
+  --font-label: 10px;
+
+  /* Spacing Units */
+  --space-normal: 1rem;
+  --space-relaxed: 1.5rem;
+  --space-loose: 2rem;
+
+  /* Spacing Radii */
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+
+  /* Shadows - Layered for Depth */
+  --shadow-premium-sm: 0 2px 10px rgba(0, 0, 0, 0.05), 0 1px 4px rgba(0, 0, 0, 0.02);
+  --shadow-premium: 0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 5px 15px -5px rgba(0, 0, 0, 0.02);
+  --shadow-premium-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.1), 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+  --shadow-premium-xl: 0 30px 60px -15px rgba(0, 102, 255, 0.15), 0 15px 30px -10px rgba(0, 0, 0, 0.05);
+  --shadow-float: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
+
+  @keyframes spring-up {
+    0% {
+      transform: translateY(20px) scale(0.95);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes text-shimmer {
+    0% {
+      opacity: 0.8;
+      transform: translateX(-5%);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(5%);
+    }
+  }
+
+  @keyframes pulse-glow {
+
+    0%,
+    100% {
+      opacity: 0.5;
+    }
+
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes shimmer-slide {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: translateX(200%);
+    }
+  }
+
+  @keyframes premium-pulse {
+
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
+    }
+
+    50% {
+      opacity: 0.98;
+      transform: scale(0.995);
+      box-shadow: 0 0 40px rgba(16, 185, 129, 0.3);
+    }
+  }
+
+  @keyframes shimmer-loading {
+    0% {
+      background-position: -1000px 0;
+    }
+
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  @keyframes liquid {
+
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes vibing-gradient {
+
+    0%,
+    100% {
+      background-position: 0% 50%;
+      filter: brightness(1);
+    }
+
+    50% {
+      background-position: 100% 50%;
+      filter: brightness(1.15);
+    }
+  }
+
+  @keyframes scan {
+    0% {
+      transform: translateY(0%);
+      opacity: 0;
+    }
+
+    10% {
+      opacity: 1;
+    }
+
+    90% {
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateY(200px);
+      opacity: 0;
+    }
+  }
+
+  /* Core Animations */
+  --animate-spring: spring-up 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-shimmer: shimmer-loading 2s infinite linear;
+  --animate-shimmer-slide: shimmer-slide 2.5s infinite linear;
+  --animate-premium-pulse: premium-pulse 3s infinite ease-in-out;
+  --animate-scan: scan 2s linear infinite;
+
+  @keyframes pro-liquid-glow {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  --animate-pro-glow: pro-liquid-glow 15s ease infinite;
+}
+
+/* Base Variable Definitions (Light Mode) */
+:root,
+.light {
+  /* Core Colors */
+  --color-surface: #FFFFFF;
+  --color-bg-app: #F9FAFB;
+  --color-bg-deep: #F9FAFB;
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #64748B;
+
+  --color-brand-primary: #2563EB;
+  --color-brand-blue: #3B82F6;
+  --color-brand-blue-deep: #1D4ED8;
+  --color-action-black: #0F172A;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+
+  /* Semantic - Light */
+  --color-brand-border: rgba(15, 23, 42, 0.08);
+  --color-bg-surface: #FFFFFF;
+  --color-bg-glass: rgba(255, 255, 255, 0.75);
+  --color-border-glass: rgba(0, 0, 0, 0.08);
+  /* Darker for better definition in light mode */
+  --color-glass-highlight: rgba(255, 255, 255, 0.5);
+
+  /* Card Semantic */
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-border: rgba(0, 0, 0, 0.05);
+  --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 5px 15px -5px rgba(0, 0, 0, 0.02);
+
+  /* Input Semantic */
+  --input-bg: rgba(0, 0, 0, 0.03);
+  --input-border: rgba(0, 0, 0, 0.05);
+  --input-text: #0F172A;
+  --input-placeholder: #94A3B8;
+
+  /* Button Semantic */
+  --btn-primary-bg: #0F172A;
+  --btn-primary-text: #FFFFFF;
+  --btn-primary-hover: #1E293B;
+  --btn-secondary-bg: rgba(15, 23, 42, 0.05);
+  --btn-secondary-text: #0F172A;
+  --btn-secondary-hover: rgba(15, 23, 42, 0.08);
+
+  /* Status Colors Semantic */
+  --color-success-bg: rgba(16, 185, 129, 0.1);
+  --color-success-text: #059669;
+  --color-warning-bg: rgba(245, 158, 11, 0.1);
+  --color-warning-text: #B45309;
+  --color-error-bg: rgba(239, 68, 64, 0.1);
+  --color-error-text: #DC2626;
+
+  /* Interaction and Depth */
+  --focus-ring: rgba(37, 99, 235, 0.3);
+  --overlay-bg: rgba(0, 0, 0, 0.3);
+  --divider: rgba(0, 0, 0, 0.05);
+
+  --nav-active: #0F172A;
+  --nav-inactive: #94A3B8;
+  --bg-image: none;
+}
+
+/* Dark Mode Overrides - Subtle & High Fidelity */
+.dark {
+  --color-bg-deep: #030712;
+  /* Deeper slate for elite feel */
+  --color-bg-app: #030712;
+  --color-surface: #0f172a;
+  --color-bg-surface: #0f172a;
+  --color-text-primary: #F9FAFB;
+  --color-text-secondary: #cbd5e1;
+  /* Increased contrast for WCAG (formerly #94a3b8) */
+  --color-bg-glass: rgba(15, 23, 42, 0.8);
+  --color-border-glass: rgba(255, 255, 255, 0.1);
+  --color-glass-highlight: rgba(255, 255, 255, 0.05);
+
+  /* Card Semantic */
+  --card-bg: rgba(15, 23, 42, 0.6);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+
+  /* Input Semantic */
+  --input-bg: rgba(255, 255, 255, 0.05);
+  --input-border: rgba(255, 255, 255, 0.1);
+  --input-text: #F9FAFB;
+  --input-placeholder: #64748B;
+
+  /* Button Semantic */
+  --btn-primary-bg: #FFFFFF;
+  --btn-primary-text: #0F172A;
+  --btn-primary-hover: #F3F4F6;
+  --btn-secondary-bg: rgba(255, 255, 255, 0.1);
+  --btn-secondary-text: #FFFFFF;
+  --btn-secondary-hover: rgba(255, 255, 255, 0.15);
+
+  /* Status Colors Semantic */
+  --color-success-bg: rgba(16, 185, 129, 0.15);
+  --color-success-text: #34D399;
+  --color-warning-bg: rgba(245, 158, 11, 0.15);
+  --color-warning-text: #FBBF24;
+  --color-error-bg: rgba(239, 68, 64, 0.15);
+  --color-error-text: #F87171;
+
+  /* Interaction and Depth */
+  --focus-ring: rgba(255, 255, 255, 0.2);
+  --overlay-bg: rgba(0, 0, 0, 0.5);
+  --divider: rgba(255, 255, 255, 0.05);
+
+  --nav-active: #FFFFFF;
+  --nav-inactive: #64748b;
+  --color-brand-primary: #FFFFFF;
+  --bg-image: none;
+}

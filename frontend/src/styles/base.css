@@ -1,0 +1,157 @@
+html {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  font-family:
+    'Onest',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background-color: var(--color-bg-deep);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  background-image: var(--bg-image);
+  background-attachment: fixed;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+  border-radius: 20px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+@layer utilities {
+  /* Semantic Text Utility */
+  .text-brand-text {
+    color: var(--color-text-primary);
+  }
+
+  .text-brand-muted {
+    color: var(--color-text-secondary);
+  }
+
+  .text-gradient-primary {
+    background-image: linear-gradient(to right, #0f172a, #334155, #0f172a);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .dark .text-gradient-primary {
+    background-image: linear-gradient(to right, #f8fafc, #cbd5e1, #f8fafc);
+  }
+
+  /* Typography Utilities - Phase 1 Enhancement */
+  .leading-tight {
+    line-height: var(--leading-tight);
+  }
+
+  .leading-snug {
+    line-height: var(--leading-snug);
+  }
+
+  .leading-normal {
+    line-height: var(--leading-normal);
+  }
+
+  .leading-relaxed {
+    line-height: var(--leading-relaxed);
+  }
+
+  .leading-loose {
+    line-height: var(--leading-loose);
+  }
+
+  /* Readable Text - Optimized for body content */
+  .text-readable {
+    line-height: var(--leading-normal);
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Display Text - Large headings */
+  .text-display {
+    font-size: var(--font-display);
+    line-height: var(--leading-tight);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.02em;
+  }
+
+  /* Heading Text - Section headers */
+  .text-heading {
+    font-size: var(--font-heading);
+    line-height: var(--leading-snug);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /* Caption Text - Metadata, labels */
+  .text-caption {
+    font-size: var(--font-caption);
+    line-height: var(--leading-loose);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .safe-pt {
+    padding-top: var(--spacing-safe-top);
+  }
+
+  .safe-pb {
+    padding-bottom: var(--spacing-safe-bottom);
+  }
+
+  .center-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .safe-pb {
+    padding-bottom: calc(var(--spacing-safe-bottom) + 80px);
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+}
