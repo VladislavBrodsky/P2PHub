@@ -41,7 +41,20 @@ export default function SubscriptionPage() {
                 console.error("Failed to fetch pro stats", e);
             }
         };
+        const fetchMyTransactions = async () => {
+            try {
+                const res = await apiClient.get('/api/payment/my-transactions');
+                const transactions = res.data;
+                const manualPending = transactions.find((t: any) => t.status === 'manual_review');
+                if (manualPending) {
+                    setStatus('manual_review');
+                }
+            } catch (e) {
+                console.error("Failed to fetch my transactions", e);
+            }
+        };
         fetchStats();
+        fetchMyTransactions();
     }, []);
 
     useEffect(() => {

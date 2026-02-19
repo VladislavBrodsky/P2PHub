@@ -28,17 +28,37 @@ async def get_admin_stats(
     """
     return await admin_service.get_dashboard_stats(force_refresh=force_refresh)
 
-@router.get("/pending-payments", response_model=list[PartnerTransaction])
+@router.get("/pending-payments")
 async def list_pending_payments(
     admin: dict = Depends(get_current_admin),
     session: AsyncSession = Depends(get_session)
 ):
     """
-    Lists all transactions awaiting manual review.
+    Lists all transactions awaiting manual review with partner details.
     """
-    statement = select(PartnerTransaction).where(PartnerTransaction.status == "manual_review")
+    from sqlalchemy.orm import selectinload
+    statement = (
+        select(PartnerTransaction)
+        .where(PartnerTransaction.status == "manual_review")
+        .options(selectinload(PartnerTransaction.partner))
+    )
     result = await session.exec(statement)
-    return result.all()
+    txs = result.all()
+    
+    return [
+        {
+            "id": t.id,
+            "partner_id": t.partner_id,
+            "username": t.partner.username if t.partner else None,
+            "telegram_id": t.partner.telegram_id if t.partner else "Unknown",
+            "amount": t.amount,
+            "currency": t.currency,
+            "network": t.network,
+            "tx_hash": t.tx_hash,
+            "status": t.status,
+            "created_at": t.created_at.isoformat()
+        } for t in txs
+    ]
 
 @router.post("/approve-payment/{transaction_id}")
 async def approve_payment(

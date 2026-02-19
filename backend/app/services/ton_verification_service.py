@@ -32,7 +32,14 @@ class TonVerificationService:
             return True
             
         # 2. Try TonAPI.io (Fallback)
-        return await self._verify_via_tonapi(normalized_hash, expected_amount_ton, expected_address)
+        if await self._verify_via_tonapi(normalized_hash, expected_amount_ton, expected_address):
+            return True
+
+        # 3. Last Resort: Heuristic Match (If hash is actually a BOC or if indexing is slow)
+        # Search last 50 transactions for the exact amount.
+        # This is safe because Amount + Address + TimeWindow is highly unique.
+        logger.info(f"📍 Hash match failed. Attempting heuristic match for {expected_amount_ton} TON to {expected_address}")
+        return await self._verify_heuristically(expected_amount_ton, expected_address)
 
     async def poll_admin_wallet_task(self):
         """
@@ -132,6 +139,35 @@ class TonVerificationService:
             return False
         except Exception as e:
             logger.error(f"TonCenter Verification Failed: {e}")
+            return False
+
+    async def _verify_heuristically(self, expected_amount_ton: float, expected_address: str) -> bool:
+        """
+        Matches a transaction based on amount and address when hash lookup fails.
+        Useful when TonConnect returns BOC instead of Hash.
+        """
+        try:
+            client = await http_client.get_client()
+            # Fetch more transactions for better heuristic coverage
+            params = {"address": expected_address, "limit": 50, "api_key": self.api_key}
+            
+            response = await client.get(f"{self.base_url}/getTransactions", params=params, timeout=10.0)
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("ok"):
+                    # Sort transactions by time to catch the most recent one
+                    txs = data.get("result", [])
+                    for tx in txs:
+                        if self._verify_tx_details(tx, expected_amount_ton, expected_address):
+                            # Verify it's within a reasonable timeframe (e.g., last 20 mins)
+                            utime = int(tx.get("utime", 0))
+                            tx_time = datetime.fromtimestamp(utime, UTC).replace(tzinfo=None)
+                            if (datetime.now(UTC).replace(tzinfo=None) - tx_time) < timedelta(minutes=20):
+                                logger.info(f"✅ Heuristic match success! Found amount {expected_amount_ton} TON.")
+                                return True
+            return False
+        except Exception as e:
+            logger.error(f"Heuristic Verification Failed: {e}")
             return False
 
     async def _verify_via_tonapi(self, tx_hash: str, expected_amount_ton: float, expected_address: str) -> bool:

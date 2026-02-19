@@ -239,9 +239,36 @@ async def submit_manual_payment(
 
         return {"status": "submitted", "message": "Payment submitted for manual review. Admins have been notified."}
 
-    except HTTPException:
-        raise
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e!s}")
+@router.get("/my-transactions")
+async def get_my_transactions(
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    """Returns the latest transactions for the current user."""
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
+    
+    partner = (await session.exec(select(Partner).where(Partner.telegram_id == tg_id))).first()
+    if not partner:
+        raise HTTPException(status_code=404, detail="Partner not found")
+        
+    stmt = (
+        select(PartnerTransaction)
+        .where(PartnerTransaction.partner_id == partner.id)
+        .order_by(PartnerTransaction.created_at.desc())
+        .limit(5)
+    )
+    result = await session.exec(stmt)
+    txs = result.all()
+    
+    return [
+        {
+            "id": t.id,
+            "amount": t.amount,
+            "currency": t.currency,
+            "network": t.network,
+            "status": t.status,
+            "tx_hash": t.tx_hash,
+            "created_at": t.created_at.isoformat()
+        } for t in txs
+    ]

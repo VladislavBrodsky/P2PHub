@@ -4,7 +4,7 @@ import {
     CheckCircle, Clock, AlertTriangle, ShieldCheck, RefreshCw,
     User, ExternalLink, TrendingUp, TrendingDown, Users,
     Zap, PieChart, Wallet, Calendar, Search, X, Trash, Plus,
-    Activity, Database, Layers
+    Activity, Database, Layers, Bell
 } from 'lucide-react';
 import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -111,6 +111,7 @@ export const AdminPage = () => {
     const [approvingIds, setApprovingIds] = useState<Set<number>>(new Set());
     const [health, setHealth] = useState<{ status: string; latency_ms: number; orphaned_count: number; timestamp: string } | null>(null);
     const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'search' | 'network' | 'maintenance'>('kpis');
+    const [notifStats, setNotifStats] = useState<{ sent: number; pending: number; failed: number; total: number } | null>(null);
     const [selectedPartnerId, setSelectedPartnerId] = useState<number | null>(null);
     const [partnerDetails, setPartnerDetails] = useState<any | null>(null);
     const [isDetailsLoading, setIsDetailsLoading] = useState(false);
@@ -202,6 +203,28 @@ export const AdminPage = () => {
         }
     };
 
+    const fetchNotifStats = async () => {
+        try {
+            const res = await apiClient.get('/api/admin/maintenance/notification-stats');
+            setNotifStats(res.data);
+        } catch (err) {
+            console.error('Failed to fetch notification stats:', err);
+        }
+    };
+
+    const handleRetryNotifications = async () => {
+        setIsRefreshing(true);
+        try {
+            await apiClient.post('/api/admin/maintenance/retry-notifications');
+            alert('Notification retry process triggered!');
+            await fetchNotifStats();
+        } catch (err) {
+            alert('Failed to trigger retries');
+        } finally {
+            setIsRefreshing(false);
+        }
+    };
+
     useEffect(() => {
         if (viewMode === 'network') fetchNetworkStats();
     }, [viewMode]);
@@ -223,6 +246,12 @@ export const AdminPage = () => {
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if (viewMode === 'maintenance') {
+            fetchNotifStats();
+        }
+    }, [viewMode]);
 
     const handleApprove = async (txId: number) => {
         if (approvingIds.has(txId)) return;
@@ -1046,6 +1075,42 @@ export const AdminPage = () => {
                                         className="w-full py-3 rounded-xl bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20"
                                     >
                                         {isRefreshing ? 'Clearing...' : 'Flush System Cache'}
+                                    </button>
+                                </div>
+
+                                <div className="p-4 rounded-2xl bg-white/5 space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2 text-emerald-500 font-bold text-[10px] uppercase tracking-widest">
+                                            <Bell size={14} />
+                                            Notification System
+                                        </div>
+                                        <div className="text-[9px] font-bold text-slate-500">
+                                            {notifStats ? `${notifStats.pending} PENDING` : 'Checking...'}
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-2">
+                                        <div className="p-2 rounded-xl bg-white/5 text-center">
+                                            <div className="text-[7px] text-slate-500 font-black uppercase">Sent</div>
+                                            <div className="text-xs font-black text-emerald-500">{notifStats?.sent ?? 0}</div>
+                                        </div>
+                                        <div className="p-2 rounded-xl bg-white/5 text-center">
+                                            <div className="text-[7px] text-slate-500 font-black uppercase">Pending</div>
+                                            <div className="text-xs font-black text-amber-500">{notifStats?.pending ?? 0}</div>
+                                        </div>
+                                        <div className="p-2 rounded-xl bg-white/5 text-center">
+                                            <div className="text-[7px] text-slate-500 font-black uppercase">Failed</div>
+                                            <div className="text-xs font-black text-red-500">{notifStats?.failed ?? 0}</div>
+                                        </div>
+                                    </div>
+                                    <p className="text-[10px] text-slate-500 font-medium">
+                                        Monitor Global Notification System health. If "Pending" is high, trigger a manual retry cycle.
+                                    </p>
+                                    <button
+                                        onClick={handleRetryNotifications}
+                                        disabled={isRefreshing || (notifStats?.pending ?? 0) === 0}
+                                        className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-emerald-500/20"
+                                    >
+                                        {isRefreshing ? 'Retrying...' : 'Trigger Notif Retries'}
                                     </button>
                                 </div>
                             </div>
