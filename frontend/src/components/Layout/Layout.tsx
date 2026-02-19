@@ -13,7 +13,7 @@ interface LayoutProps {
 }
 
 export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: LayoutProps) => {
-    const { isHeaderVisible, isFooterVisible } = useUI();
+    const { isHeaderVisible, isFooterVisible, isKeyboardOpen } = useUI();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [hasOpened, setHasOpened] = useState(false);
 
@@ -109,7 +109,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
             )}
 
             {/* Integrated Footer Stack */}
-            {isFooterVisible && (
+            {(isFooterVisible && !isKeyboardOpen) && (
                 <div className="fixed bottom-0 left-1/2 z-50 flex w-full max-w-lg -translate-x-1/2 flex-col items-center pointer-events-none pb-safe-bottom">
                     <div className="flex w-full justify-center pb-4 pointer-events-auto">
                         <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} prefetchPages={prefetchPages} />
