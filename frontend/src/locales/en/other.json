@@ -16,6 +16,11 @@
     "user_label": "Operator",
     "score_label": "Network Strength",
     "top_partners": "Top Partners",
+    "timeframes": {
+      "all": "Overall",
+      "monthly": "Monthly",
+      "weekly": "Weekly"
+    },
     "xp": "XP",
     "global_rank": "GLOBAL RANK",
     "xp_score": "XP SCORE",

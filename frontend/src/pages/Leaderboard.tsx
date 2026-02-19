@@ -35,24 +35,25 @@ export default function LeaderboardPage() {
     const { t } = useTranslation();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showAll, setShowAll] = useState(false);
+    const [timeframe, setTimeframe] = useState<'all' | 'monthly' | 'weekly'>('all');
     const { selection } = useHaptic();
 
     const { data: leaderboard = [], isLoading: isLeaderboardLoading } = useQuery<LeaderboardUser[]>({
-        queryKey: ['leaderboard', 'global'],
+        queryKey: ['leaderboard', timeframe],
         queryFn: async () => {
-            const res = await apiClient.get('/api/leaderboard/global?limit=50');
+            const res = await apiClient.get(`/api/leaderboard/global?timeframe=${timeframe}&limit=50`);
             return Array.isArray(res.data) ? res.data : [];
         },
-        staleTime: 60 * 1000, // Fresh for 1 minute
+        staleTime: 30 * 1000,
     });
 
     const { data: userStats, isLoading: isStatsLoading } = useQuery<UserStats>({
-        queryKey: ['leaderboard', 'me'],
+        queryKey: ['leaderboard', 'me', timeframe],
         queryFn: async () => {
-            const res = await apiClient.get('/api/leaderboard/me');
+            const res = await apiClient.get(`/api/leaderboard/me?timeframe=${timeframe}`);
             return res.data;
         },
-        staleTime: 60 * 1000,
+        staleTime: 30 * 1000,
     });
 
     const isLoading = isLeaderboardLoading || isStatsLoading;
@@ -88,9 +89,36 @@ export default function LeaderboardPage() {
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
                     <span className="text-[9px] font-black uppercase tracking-[0.25em] text-emerald-500">Live Rankings</span>
                 </div>
-                <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase text-center">
+                <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase text-center leading-none">
                     {t('leaderboard.title')}
                 </h1>
+
+                {/* Timeframe Toggle */}
+                <div className="flex bg-slate-100 dark:bg-white/5 p-1 rounded-xl mt-2 w-full max-w-[300px] border border-slate-200/50 dark:border-white/5 shadow-inner">
+                    {(['weekly', 'monthly', 'all'] as const).map((tf) => (
+                        <button
+                            key={tf}
+                            onClick={() => {
+                                selection();
+                                setTimeframe(tf);
+                                setShowAll(false);
+                            }}
+                            className={`flex-1 py-2 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all relative ${timeframe === tf
+                                ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
+                                : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+                                }`}
+                        >
+                            {t(`leaderboard.timeframes.${tf}`)}
+                            {timeframe === tf && (
+                                <motion.div
+                                    layoutId="activeTab"
+                                    className="absolute inset-0 bg-white dark:bg-white/10 rounded-lg -z-10"
+                                    transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                                />
+                            )}
+                        </button>
+                    ))}
+                </div>
             </motion.div>
 
             {userStats && (

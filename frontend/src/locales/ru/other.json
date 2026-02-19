@@ -16,6 +16,11 @@
     "user_label": "Оператор",
     "score_label": "Сила сети",
     "top_partners": "Топ Партнеров",
+    "timeframes": {
+      "all": "Все время",
+      "monthly": "Месяц",
+      "weekly": "Неделя"
+    },
     "xp": "XP",
     "global_rank": "ГЛОБАЛЬНЫЙ РАНГ",
     "xp_score": "СЧЕТ XP",
