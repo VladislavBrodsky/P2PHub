@@ -11,6 +11,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.config import settings
 from app.core.security import get_current_user
 from app.models.partner import Partner, get_session
+from app.models.transaction import PartnerTransaction
+from app.core.security import get_tg_user
 from app.services.audit_service import audit_service
 from app.services.notification_service import notification_service
 from app.services.payment_service import payment_service
@@ -239,14 +241,24 @@ async def submit_manual_payment(
 
         return {"status": "submitted", "message": "Payment submitted for manual review. Admins have been notified."}
 
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in submit_manual_payment: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error processing payment")
+
 @router.get("/my-transactions")
 async def get_my_transactions(
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
     """Returns the latest transactions for the current user."""
-    tg_user = get_tg_user(user_data)
-    tg_id = str(tg_user.get("id"))
+    try:
+        tg_user = get_tg_user(user_data)
+        tg_id = str(tg_user.get("id"))
+    except Exception as e:
+        logger.warning(f"Invalid user data in get_my_transactions: {e}")
+        raise HTTPException(status_code=400, detail="Invalid user data")
     
     partner = (await session.exec(select(Partner).where(Partner.telegram_id == tg_id))).first()
     if not partner:
