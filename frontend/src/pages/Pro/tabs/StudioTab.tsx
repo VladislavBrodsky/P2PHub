@@ -311,7 +311,7 @@ export const StudioTab = ({
                             <PremiumSelect
                                 label={t('pro_dashboard.studio.strategy_label')}
                                 value={postType}
-                                onChange={(val) => { setPostType(val); setOpenDropdown(null); }}
+                                onChange={(val) => setPostType(val)}
                                 options={defaultPostTypes.map(pt => ({
                                     id: pt.id,
                                     label: i18n.language === 'ru' ? pt.ru : pt.en
@@ -320,6 +320,7 @@ export const StudioTab = ({
                                 color="indigo"
                                 isOpen={openDropdown === 'strategy'}
                                 onToggle={() => handleToggle('strategy')}
+                                onClose={() => setOpenDropdown(null)}
                                 indexStr="01"
                             />
 
@@ -327,7 +328,7 @@ export const StudioTab = ({
                             <PremiumSelect
                                 label={t('pro_dashboard.studio.target_label')}
                                 value={audience}
-                                onChange={(val) => { setAudience(val); setOpenDropdown(null); }}
+                                onChange={(val) => setAudience(val)}
                                 options={defaultAudiences.map(a => ({
                                     id: a.id,
                                     label: i18n.language === 'ru' ? a.ru : a.en
@@ -336,6 +337,7 @@ export const StudioTab = ({
                                 color="purple"
                                 isOpen={openDropdown === 'audience'}
                                 onToggle={() => handleToggle('audience')}
+                                onClose={() => setOpenDropdown(null)}
                                 indexStr="02"
                             />
 
@@ -343,7 +345,7 @@ export const StudioTab = ({
                             <PremiumSelect
                                 label={t('pro_dashboard.studio.tone_label', 'Tone of Voice')}
                                 value={tone}
-                                onChange={(val) => { setTone(val); setOpenDropdown(null); }}
+                                onChange={(val) => setTone(val)}
                                 options={defaultTones.map(t => ({
                                     id: t.id,
                                     label: i18n.language === 'ru' ? t.ru : t.en
@@ -352,6 +354,7 @@ export const StudioTab = ({
                                 color="amber"
                                 isOpen={openDropdown === 'tone'}
                                 onToggle={() => handleToggle('tone')}
+                                onClose={() => setOpenDropdown(null)}
                                 indexStr="03"
                             />
 
@@ -359,7 +362,7 @@ export const StudioTab = ({
                             <PremiumSelect
                                 label={t('pro_dashboard.studio.language_label')}
                                 value={language}
-                                onChange={(val) => { setLanguage(val); setOpenDropdown(null); }}
+                                onChange={(val) => setLanguage(val)}
                                 options={defaultLanguages.map(l => ({
                                     id: l.id,
                                     label: l.label
@@ -368,6 +371,7 @@ export const StudioTab = ({
                                 color="emerald"
                                 isOpen={openDropdown === 'language'}
                                 onToggle={() => handleToggle('language')}
+                                onClose={() => setOpenDropdown(null)}
                                 indexStr="04"
                             />
                         </div>

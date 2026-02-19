@@ -14,10 +14,12 @@ import { getApiUrl } from '../../utils/api';
 import { PartnerBriefingModal } from './PartnerBriefingModal';
 import { TopPartnersList } from '../Community/TopPartnersList';
 import { ProWelcomeCard } from './ProWelcomeCard';
+import { useUI } from '../../context/UIContext';
 
 export const PartnerDashboard = () => {
     const { t } = useTranslation();
     const { notification, selection } = useHaptic();
+    const { setFooterVisible } = useUI();
     const { user, updateUser } = useUser();
     const [isExplorerOpen, setIsExplorerOpen] = React.useState(false);
     const [isQrOpen, setIsQrOpen] = React.useState(false);
@@ -30,6 +32,14 @@ export const PartnerDashboard = () => {
             setIsExplorerOpen(true);
         }
     }, []);
+
+    // #comment: Manage app footer visibility when explorer is open to prevent UI overlap
+    React.useEffect(() => {
+        if (isExplorerOpen) {
+            setFooterVisible(false);
+            return () => setFooterVisible(true);
+        }
+    }, [isExplorerOpen, setFooterVisible]);
 
     // Show Pro Welcome if user is pro but hasn't seen the notification
     React.useEffect(() => {
@@ -284,7 +294,7 @@ export const PartnerDashboard = () => {
             {/* Network Explorer Overlay */}
             <AnimatePresence>
                 {isExplorerOpen && (
-                    <div className="fixed inset-0 z-1000 flex items-end sm:items-center justify-center sm:p-4">
+                    <div className="fixed inset-0 z-1000 flex items-stretch justify-center">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -296,8 +306,8 @@ export const PartnerDashboard = () => {
                             initial={{ y: '100%' }}
                             animate={{ y: 0 }}
                             exit={{ y: '100%' }}
-                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="w-full max-w-lg h-[85vh] sm:h-[600px] relative z-10"
+                            transition={{ type: 'spring', damping: 30, stiffness: 250 }}
+                            className="w-full relative z-10 flex flex-col"
                         >
                             <NetworkExplorer onClose={() => setIsExplorerOpen(false)} initialTotalCount={totalNetworkSize} />
                         </motion.div>

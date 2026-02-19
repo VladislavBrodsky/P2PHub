@@ -100,6 +100,7 @@ You are a PROFESSIONAL, not a hype artist. You're the trusted advisor who happen
    - Hook: 1-2 lines, <15 words first sentence
    - Body: 3-5 paragraphs, each 1-3 sentences
    - CTA: Final paragraph with bold CTA and hyperlink
+   - TOTAL LENGTH: Keep content under 900 characters to ensure it fits on all platforms (Telegram caption limit).
 
 5. **EMOJIS:** Use 2-4 strategically based on audience (crypto: 💎🚀, nomads: 🌍✈️, etc.)
 
@@ -456,6 +457,8 @@ Referral Link: {ref_link}
 7. End with compelling CTA using this link: {ref_link}
 8. Write 3-5 short paragraphs (1-3 sentences each)
 9. Add 3-5 trending hashtags for {target_audience}
+10. CRITICAL: Total content length must be UNDER 900 characters (including spaces and tags).
+11. Content MUST be a single complete story that fits Telegram caption limits.
 
 **IMAGE DESCRIPTION:**
 Describe a 4K Ultra-Realistic Cinematic quality scene:
@@ -705,7 +708,7 @@ Desires: {', '.join(psycho.get('desires', [])[:3])}
 Values: {', '.join(psycho.get('values', []))}
 Language Style: {tov.get('style', 'Professional')}
 Formality: {tov.get('formality', 'Balanced')}
-Power Words: {', '.join(tov.get('power_words', [])[:5])}
+Power Words: {', '. join(tov.get('power_words', [])[:5])}
 Emojis: {tov.get('emojis', '🚀')}
 Sentence Structure: {tov.get('sentence_length', 'Varied')}
 Key Triggers: {', '.join(psycho.get('triggers', [])[:3])}
@@ -1171,16 +1174,10 @@ Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
 
         if full_image_path and os.path.exists(full_image_path):
             for channel_id in channels:
-                # If content is too long for a caption (1024 chars), send photo first, then text
-                if len(formatted_content) > 1000:
-                    # Send photo with a short intro teaser
-                    teaser = formatted_content[:200].rsplit(' ', 1)[0] + "..."
-                    await self._send_telegram_photo(channel_id, full_image_path, teaser)
-                    # Then send the full formatted message immediately after
-                    success = await self._send_telegram_message(channel_id, formatted_content)
-                else:
-                    success = await self._send_telegram_photo(channel_id, full_image_path, formatted_content)
-
+                # Always send as photo with caption to ensure "one and completed" look
+                # Telegram captions are limited to 1024 chars. Our prompt enforces 900.
+                success = await self._send_telegram_photo(channel_id, full_image_path, formatted_content)
+                
                 if success: success_count += 1
                 results.append(f"{'✅' if success else '❌'} {channel_id}")
         else:

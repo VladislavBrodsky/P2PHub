@@ -18,6 +18,7 @@ interface PremiumSelectProps {
     color?: 'indigo' | 'purple' | 'amber' | 'emerald';
     isOpen: boolean;
     onToggle: () => void;
+    onClose?: () => void;
     indexStr: string;
 }
 
@@ -30,6 +31,7 @@ export const PremiumSelect = ({
     color = 'indigo',
     isOpen,
     onToggle,
+    onClose,
     indexStr
 }: PremiumSelectProps) => {
     const { selection } = useHaptic();
@@ -86,11 +88,11 @@ export const PremiumSelect = ({
             const maxH = Math.min(spaceBelow - 8, viewportHeight * 0.55);
 
             setDropdownStyle({
-                position: 'fixed',
-                top: rect.bottom + 6,
-                left: rect.left,
+                position: 'absolute',
+                top: rect.bottom + window.scrollY + 6,
+                left: rect.left + window.scrollX,
                 width: rect.width,
-                maxHeight: maxH,
+                maxHeight: maxH < 200 ? 250 : maxH, // ensure minimum comfortable reading height
                 zIndex: 9999,
             });
         };
@@ -134,7 +136,7 @@ export const PremiumSelect = ({
                 <div
                     className="fixed inset-0 bg-transparent"
                     style={{ zIndex: 9998 }}
-                    onClick={(e) => { e.stopPropagation(); onToggle(); }}
+                    onClick={(e) => { e.stopPropagation(); onClose ? onClose() : onToggle(); }}
                 />,
                 document.body
             )}
@@ -149,7 +151,7 @@ export const PremiumSelect = ({
                             exit={{ opacity: 0, y: -8, scale: 0.98 }}
                             transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
                             style={dropdownStyle}
-                            className="bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-y-auto"
+                            className="bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-y-auto overscroll-contain"
                         >
                             <div className="p-1.5 space-y-0.5">
                                 {options.map((option) => {
@@ -157,10 +159,15 @@ export const PremiumSelect = ({
                                     return (
                                         <button
                                             key={option.id}
-                                            onClick={() => {
+                                            onClick={(e) => {
+                                                e.stopPropagation();
                                                 selection();
                                                 onChange(option.id);
-                                                onToggle();
+                                                if (onClose) {
+                                                    onClose();
+                                                } else {
+                                                    onToggle();
+                                                }
                                             }}
                                             className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left group/item
                                                 ${isSelected

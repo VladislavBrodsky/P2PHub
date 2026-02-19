@@ -201,210 +201,246 @@ export const ProDashboardModals = ({
                             onClick={(e) => e.stopPropagation()}
                             className="w-full max-w-lg rounded-[2.5rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[85vh] relative"
                         >
-                            {/* Header */}
-                            <div className="p-6 sm:p-8 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-indigo-500/5 to-transparent">
+                            {/* Header Section */}
+                            <div className="px-6 py-5 sm:px-8 sm:py-6 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-indigo-500/5 to-transparent relative z-20">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                                        <Sliders size={24} className="text-white" />
+                                    <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-600/30">
+                                        <Network size={24} className="text-white" />
                                     </div>
-                                    <div>
-                                        <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">{t('pro_dashboard.setup.title')}</h3>
-                                        <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-70">
-                                            {t('pro_dashboard.setup.subtitle')}
-                                        </p>
+                                    <div className="min-w-0">
+                                        <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1 truncate">
+                                            {t('pro_dashboard.setup.title')}
+                                        </h3>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-sm" />
+                                            <span className="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest truncate">
+                                                {t('pro_dashboard.setup.subtitle')}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                                 <button
                                     onClick={() => setShowSetup(false)}
-                                    className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
+                                    className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/10 transition-all border border-slate-200 dark:border-white/10 group"
                                 >
-                                    <X size={20} className="text-slate-900 dark:text-white/60" />
+                                    <X size={20} className="text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors" />
                                 </button>
                             </div>
 
-                            {/* Tabs */}
-                            <div className="flex p-1 mx-6 mt-6 bg-slate-100 dark:bg-white/5 rounded-xl">
-                                <button
-                                    onClick={() => setSetupTab('x')}
-                                    className={`flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${setupTab === 'x' ? 'bg-white dark:bg-white/10 text-indigo-600 dark:text-white shadow-sm' : 'text-slate-400'}`}
-                                >
-                                    {t('pro_dashboard.setup.x_broadcast')}
-                                </button>
-                                <button
-                                    onClick={() => setSetupTab('tg')}
-                                    className={`flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${setupTab === 'tg' ? 'bg-white dark:bg-white/10 text-indigo-600 dark:text-white shadow-sm' : 'text-slate-400'}`}
-                                >
-                                    {t('pro_dashboard.setup.tg_sync')}
-                                </button>
+                            {/* Sub Tabs Selection */}
+                            <div className="mx-6 sm:mx-8 mt-6">
+                                <div className="flex p-1.5 bg-slate-100 dark:bg-black/40 rounded-2xl border border-slate-200 dark:border-white/5">
+                                    <button
+                                        onClick={() => { selection(); setSetupTab('x'); }}
+                                        className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 ${setupTab === 'x'
+                                            ? 'bg-white dark:bg-white/10 text-indigo-600 dark:text-white shadow-xl shadow-indigo-500/5 ring-1 ring-slate-100 dark:ring-white/10'
+                                            : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+                                    >
+                                        <Network size={14} className={setupTab === 'x' ? 'text-indigo-500' : 'opacity-40'} />
+                                        {t('pro_dashboard.setup.x_broadcast')}
+                                    </button>
+                                    <button
+                                        onClick={() => { selection(); setSetupTab('tg'); }}
+                                        className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 ${setupTab === 'tg'
+                                            ? 'bg-white dark:bg-white/10 text-sky-600 dark:text-white shadow-xl shadow-sky-500/5 ring-1 ring-slate-100 dark:ring-white/10'
+                                            : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+                                    >
+                                        <Send size={14} className={setupTab === 'tg' ? 'text-sky-500' : 'opacity-40'} />
+                                        {t('pro_dashboard.setup.tg_sync')}
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Body */}
                             <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-6">
                                 {setupTab === 'x' ? (
-                                    <div className="space-y-4">
-                                        <div className="p-4 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl border border-indigo-100 dark:border-indigo-500/20 flex items-start gap-3">
-                                            <Network className="w-5 h-5 text-indigo-500 mt-0.5" />
+                                    <div className="space-y-6">
+                                        <div className="p-5 bg-indigo-500/10 dark:bg-indigo-500/10 rounded-3xl border border-indigo-500/20 flex items-start gap-4 group transition-all">
+                                            <div className="w-10 h-10 rounded-xl bg-indigo-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform">
+                                                <Network size={20} />
+                                            </div>
                                             <div>
-                                                <h4 className="text-xs font-black text-indigo-900 dark:text-indigo-300 uppercase tracking-wide">Direct API Protocol</h4>
-                                                <p className="text-[10px] text-indigo-700 dark:text-indigo-400 leading-relaxed mt-1">
+                                                <h4 className="text-[11px] font-black text-indigo-900 dark:text-indigo-300 uppercase tracking-[0.15em]">Direct API Protocol</h4>
+                                                <p className="text-[10px] font-medium text-indigo-700/70 dark:text-indigo-400/70 leading-relaxed mt-1">
                                                     Enter your X Developer keys to enable autonomous posting. Need help?
-                                                    <button onClick={() => setShowManual('setup_x')} className="ml-1 underline font-bold hover:text-indigo-500">View Guide</button>
+                                                    <button onClick={() => { selection(); setShowManual('setup_x'); }} className="ml-1.5 text-indigo-600 dark:text-indigo-400 underline font-black hover:text-indigo-500">View Guide</button>
                                                 </p>
                                             </div>
                                         </div>
 
-                                        <div className="space-y-3">
-                                            <div className="space-y-1">
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.api_key')}</label>
-                                                <input
-                                                    type="text"
-                                                    value={xApiKey}
-                                                    onChange={(e) => setXApiKey(e.target.value)}
-                                                    className="w-full h-12 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-mono focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
-                                                    placeholder="Enter Consumer Key (API Key)"
-                                                />
-                                            </div>
-                                            <div className="space-y-1">
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.api_secret')}</label>
-                                                <input
-                                                    type="password"
-                                                    value={xApiSecret}
-                                                    onChange={(e) => setXApiSecret(e.target.value)}
-                                                    className="w-full h-12 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-mono focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
-                                                    placeholder="Enter Consumer Secret"
-                                                />
-                                            </div>
-                                            <div className="space-y-1">
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.access_token')}</label>
-                                                <input
-                                                    type="text"
-                                                    value={xAccToken}
-                                                    onChange={(e) => setXAccToken(e.target.value)}
-                                                    className="w-full h-12 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-mono focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
-                                                    placeholder="Enter Access Token"
-                                                />
-                                            </div>
-                                            <div className="space-y-1">
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.access_token_secret')}</label>
-                                                <input
-                                                    type="password"
-                                                    value={xAccSecret}
-                                                    onChange={(e) => setXAccSecret(e.target.value)}
-                                                    className="w-full h-12 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs font-mono focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
-                                                    placeholder="Enter Access Token Secret"
-                                                />
+                                        <div className="space-y-4 pt-2">
+                                            <div className="grid grid-cols-1 gap-4">
+                                                <div className="space-y-2">
+                                                    <div className="flex justify-between items-center px-1">
+                                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.setup.api_key')}</label>
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        value={xApiKey}
+                                                        onChange={(e) => setXApiKey(e.target.value)}
+                                                        className="w-full h-14 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl px-5 text-[13px] font-mono focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/10 shadow-sm"
+                                                        placeholder="Enter Consumer Key (API Key)"
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.api_secret')}</label>
+                                                    <input
+                                                        type="password"
+                                                        value={xApiSecret}
+                                                        onChange={(e) => setXApiSecret(e.target.value)}
+                                                        className="w-full h-14 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl px-5 text-[13px] font-mono focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/10 shadow-sm"
+                                                        placeholder="Enter Consumer Secret"
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.access_token')}</label>
+                                                    <input
+                                                        type="text"
+                                                        value={xAccToken}
+                                                        onChange={(e) => setXAccToken(e.target.value)}
+                                                        className="w-full h-14 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl px-5 text-[13px] font-mono focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/10 shadow-sm"
+                                                        placeholder="Enter Access Token"
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.access_token_secret')}</label>
+                                                    <input
+                                                        type="password"
+                                                        value={xAccSecret}
+                                                        onChange={(e) => setXAccSecret(e.target.value)}
+                                                        className="w-full h-14 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl px-5 text-[13px] font-mono focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/10 shadow-sm"
+                                                        placeholder="Enter Token Secret"
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 ) : (
                                     <div className="space-y-6">
-                                        <div className="p-4 bg-sky-50 dark:bg-sky-500/10 rounded-2xl border border-sky-100 dark:border-sky-500/20 flex items-start gap-3">
-                                            <Send className="w-5 h-5 text-sky-500 mt-0.5" />
-                                            <div>
-                                                <h4 className="text-xs font-black text-sky-900 dark:text-sky-300 uppercase tracking-wide">{t('pro_dashboard.setup.tg_sync_multi.title')}</h4>
-                                                <p className="text-[10px] text-sky-700 dark:text-sky-400 leading-relaxed mt-1">
-                                                    {status?.is_pro_plus ? t('pro_dashboard.setup.tg_sync_multi.desc_plus') : t('pro_dashboard.setup.tg_sync_multi.desc_pro')}
-                                                    <button onClick={() => setShowManual('setup_tg')} className="ml-1 underline font-bold hover:text-sky-500">{t('pro_dashboard.setup.tg_manual.title')}</button>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div className="space-y-4">
-                                            <div className="flex items-center justify-between px-1">
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.setup.channel_id')}</label>
-                                                <button
-                                                    onClick={handleTestTG}
-                                                    disabled={isTesting || tgChannels.every(c => !c)}
-                                                    className="text-[9px] font-black text-sky-600 dark:text-sky-400 uppercase tracking-widest hover:underline flex items-center gap-1.5 disabled:opacity-50"
-                                                >
-                                                    {isTesting ? <Loader2 size={10} className="animate-spin" /> : <Zap size={10} />}
-                                                    {t('pro_dashboard.setup.tg_sync_multi.verify_btn')}
-                                                </button>
+                                        <div className="space-y-6">
+                                            <div className="p-5 bg-sky-500/10 dark:bg-sky-500/10 rounded-3xl border border-sky-500/20 flex items-start gap-4 group transition-all">
+                                                <div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-sky-500/20 group-hover:scale-110 transition-transform">
+                                                    <Send size={20} />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-[11px] font-black text-sky-900 dark:text-sky-300 uppercase tracking-[0.15em]">{t('pro_dashboard.setup.tg_sync_multi.title')}</h4>
+                                                    <p className="text-[10px] font-medium text-sky-700/70 dark:text-sky-400/70 leading-relaxed mt-1">
+                                                        {status?.is_pro_plus ? t('pro_dashboard.setup.tg_sync_multi.desc_plus') : t('pro_dashboard.setup.tg_sync_multi.desc_pro')}
+                                                        <button onClick={() => { selection(); setShowManual('setup_tg'); }} className="ml-1.5 text-sky-600 dark:text-sky-400 underline font-black hover:text-sky-500">{t('pro_dashboard.setup.tg_manual.title')}</button>
+                                                    </p>
+                                                </div>
                                             </div>
 
-                                            <div className="space-y-3">
-                                                {tgChannels.map((ch, idx) => (
-                                                    <div key={idx} className="relative group">
-                                                        <input
-                                                            type="text"
-                                                            value={ch}
-                                                            onChange={(e) => {
-                                                                const newChannels = [...tgChannels];
-                                                                newChannels[idx] = e.target.value;
-                                                                setTgChannels(newChannels);
-                                                            }}
-                                                            className="w-full h-12 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 pr-12 text-xs font-mono focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
-                                                            placeholder="@your_channel_username"
-                                                        />
+                                            <div className="space-y-4">
+                                                <div className="flex items-center justify-between px-1">
+                                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.setup.channel_id')}</label>
+                                                    <button
+                                                        onClick={handleTestTG}
+                                                        disabled={isTesting || tgChannels.every(c => !c)}
+                                                        className="text-[9px] font-black text-sky-600 dark:text-sky-400 uppercase tracking-widest hover:underline flex items-center gap-1.5 disabled:opacity-50"
+                                                    >
+                                                        {isTesting ? <Loader2 size={10} className="animate-spin" /> : <Zap size={10} />}
+                                                        {t('pro_dashboard.setup.tg_sync_multi.verify_btn')}
+                                                    </button>
+                                                </div>
 
-                                                        {tgTestResults[ch.trim()] && (
-                                                            <div className={`absolute left-3 -top-2 px-1.5 py-0.5 rounded text-[7px] font-black uppercase tracking-widest flex items-center gap-1 ${tgTestResults[ch.trim()] === 'active' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}`}>
-                                                                {tgTestResults[ch.trim()] === 'active' ? <CheckCircle2 size={8} /> : <AlertCircle size={8} />}
-                                                                {tgTestResults[ch.trim()] === 'active' ? t('pro_dashboard.setup.tg_sync_multi.active') : t('pro_dashboard.setup.tg_sync_multi.error')}
-                                                            </div>
-                                                        )}
-
-                                                        <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                                                            {tgChannels.length > 1 && (
-                                                                <button
-                                                                    onClick={() => {
-                                                                        const newChannels = tgChannels.filter((_, i) => i !== idx);
+                                                <div className="space-y-3">
+                                                    {tgChannels.map((ch, idx) => (
+                                                        <div key={idx} className="relative group/input">
+                                                            <div className="space-y-2">
+                                                                <input
+                                                                    type="text"
+                                                                    value={ch}
+                                                                    onChange={(e) => {
+                                                                        const newChannels = [...tgChannels];
+                                                                        newChannels[idx] = e.target.value;
                                                                         setTgChannels(newChannels);
                                                                     }}
-                                                                    className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 transition-all opacity-0 group-hover:opacity-100"
-                                                                >
-                                                                    <Trash2 size={14} />
-                                                                </button>
-                                                            )}
+                                                                    className="w-full h-14 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl px-5 pr-14 text-[13px] font-mono focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/10 shadow-sm"
+                                                                    placeholder="@your_channel_username"
+                                                                />
+
+                                                                {tgTestResults[ch.trim()] && (
+                                                                    <motion.div
+                                                                        initial={{ opacity: 0, y: -5 }}
+                                                                        animate={{ opacity: 1, y: 0 }}
+                                                                        className={`absolute left-3 -top-2.5 px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-lg border ${tgTestResults[ch.trim()] === 'active'
+                                                                            ? 'bg-emerald-500 border-emerald-400/50 text-white'
+                                                                            : 'bg-rose-500 border-rose-400/50 text-white'}`}
+                                                                    >
+                                                                        {tgTestResults[ch.trim()] === 'active' ? <CheckCircle2 size={10} /> : <AlertCircle size={10} />}
+                                                                        {tgTestResults[ch.trim()] === 'active' ? t('pro_dashboard.setup.tg_sync_multi.active') : t('pro_dashboard.setup.tg_sync_multi.error')}
+                                                                    </motion.div>
+                                                                )}
+
+                                                                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                                                                    {tgChannels.length > 1 && (
+                                                                        <button
+                                                                            onClick={() => {
+                                                                                selection();
+                                                                                const newChannels = tgChannels.filter((_, i) => i !== idx);
+                                                                                setTgChannels(newChannels);
+                                                                            }}
+                                                                            className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 transition-all opacity-0 group-hover/input:opacity-100"
+                                                                        >
+                                                                            <Trash2 size={16} />
+                                                                        </button>
+                                                                    )}
+                                                                </div>
+                                                            </div>
                                                         </div>
+                                                    ))}
+
+                                                    {tgChannels.length < (status?.is_pro_plus ? 5 : 1) && (
+                                                        <button
+                                                            onClick={() => { selection(); setTgChannels([...tgChannels, '']); }}
+                                                            className="w-full h-14 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-2xl flex items-center justify-center gap-3 text-slate-400 hover:border-indigo-500/50 hover:text-indigo-500 hover:bg-indigo-500/5 transition-all group"
+                                                        >
+                                                            <Plus size={18} className="group-hover:rotate-90 transition-transform" />
+                                                            <span className="text-[11px] font-black uppercase tracking-widest">
+                                                                {t('pro_dashboard.setup.tg_sync_multi.add_channel', { count: tgChannels.length, total: (status?.is_pro_plus ? 5 : 1) })}
+                                                            </span>
+                                                        </button>
+                                                    )}
+                                                </div>
+
+                                                <div className="p-4 bg-amber-500/5 dark:bg-amber-500/5 rounded-2xl border border-amber-500/10 flex items-start gap-4 shadow-sm">
+                                                    <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
+                                                        <Info size={16} className="text-amber-500" />
                                                     </div>
-                                                ))}
-
-                                                {tgChannels.length < (status?.is_pro_plus ? 5 : 1) && (
-                                                    <button
-                                                        onClick={() => setTgChannels([...tgChannels, ''])}
-                                                        className="w-full h-10 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-xl flex items-center justify-center gap-2 text-slate-400 hover:border-indigo-500/50 hover:text-indigo-500 transition-all"
-                                                    >
-                                                        <Plus size={14} />
-                                                        <span className="text-[10px] font-black uppercase tracking-widest">
-                                                            {t('pro_dashboard.setup.tg_sync_multi.add_channel', { count: tgChannels.length, total: (status?.is_pro_plus ? 5 : 1) })}
-                                                        </span>
-                                                    </button>
-                                                )}
-                                            </div>
-
-                                            <div className="p-3 bg-amber-500/5 rounded-xl border border-amber-500/10 flex items-start gap-2.5">
-                                                <Info size={14} className="text-amber-500 shrink-0 mt-0.5" />
-                                                <p className="text-[9px] text-amber-700 dark:text-amber-400 leading-relaxed font-medium">
-                                                    {status?.is_pro_plus
-                                                        ? t('pro_dashboard.setup.tg_sync_multi.plan_plus')
-                                                        : t('pro_dashboard.setup.tg_sync_multi.plan_pro')}
-                                                </p>
+                                                    <p className="text-[10px] text-amber-700 dark:text-amber-400/80 leading-relaxed font-bold uppercase tracking-tight">
+                                                        {status?.is_pro_plus
+                                                            ? t('pro_dashboard.setup.tg_sync_multi.plan_plus')
+                                                            : t('pro_dashboard.setup.tg_sync_multi.plan_pro')}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                 )}
-                            </div>
+                                    </div>
 
-                            {/* Footer */}
-                            <div className="p-6 sm:p-8 bg-slate-50 dark:bg-black/40 border-t border-slate-100 dark:border-white/5">
-                                <button
-                                    onClick={handleSaveSetup}
-                                    disabled={isSaving}
-                                    className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale"
-                                >
-                                    {isSaving ? (
-                                        <>
-                                            <Loader2 className="animate-spin" size={18} />
-                                            {t('pro_dashboard.tools.trends.scanning')}...
-                                        </>
-                                    ) : (
-                                        <>
-                                            {t('pro_dashboard.setup.save_btn')} <CheckCircle2 size={18} />
-                                        </>
-                                    )}
-                                </button>
-                            </div>
+                            {/* Sticky Footer */}
+                                <div className="p-6 sm:p-8 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-white/5 relative z-20">
+                                    <button
+                                        onClick={handleSaveSetup}
+                                        disabled={isSaving}
+                                        className="w-full h-15 bg-linear-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.25em] shadow-2xl shadow-indigo-500/30 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale group"
+                                    >
+                                        {isSaving ? (
+                                            <>
+                                                <Loader2 className="animate-spin" size={20} />
+                                                {t('pro_dashboard.tools.trends.scanning')}...
+                                            </>
+                                        ) : (
+                                            <>
+                                                {t('pro_dashboard.setup.save_btn')} <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
+                                            </>
+                                        )}
+                                    </button>
+                                    <p className="text-[8px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.3em] text-center mt-4">
+                                        P2PHUB PROTOCOL • V2.2 • SECURE SYNC
+                                    </p>
+                                </div>
                         </motion.div>
                     </motion.div>
                 )}

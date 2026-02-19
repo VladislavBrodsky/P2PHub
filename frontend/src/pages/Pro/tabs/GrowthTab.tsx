@@ -164,8 +164,8 @@ export const GrowthTab = ({
                                             </div>
                                         )}
                                     </div>
-                                    <h5 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
-                                    <p className="text-[11px] font-normal text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 mb-4 opacity-80 italic">"{article.desc}"</p>
+                                    <h5 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{article.title}</h5>
+                                    <p className="text-[11px] font-normal text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2 mb-4 opacity-100 dark:opacity-80 italic">"{article.desc}"</p>
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2 text-[8px] font-black text-indigo-500 uppercase tracking-widest group-hover:gap-3 transition-all">
                                             {t('pro_dashboard.academy.articles.btn_read')} <ArrowRight size={10} />
@@ -283,15 +283,15 @@ export const GrowthTab = ({
                                             onClick={toggleExpand}
                                             className="px-4 py-3 sm:px-5 sm:py-3.5 flex items-center justify-between cursor-pointer group/header"
                                         >
-                                            <div className="flex flex-col gap-0.5">
-                                                <div className="flex items-center gap-2">
-                                                    <span className={`px-1.5 py-0.5 rounded-md text-[7px] font-black uppercase tracking-widest ${module.diff === 'hard' ? 'bg-red-500/10 text-red-500' :
+                                            <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+                                                <div className="flex items-center gap-2 min-w-0">
+                                                    <span className={`px-1.5 py-0.5 rounded-md text-[7px] font-black uppercase tracking-widest shrink-0 ${module.diff === 'hard' ? 'bg-red-500/10 text-red-500' :
                                                         module.diff === 'medium' ? 'bg-amber-500/10 text-amber-500' :
                                                             'bg-emerald-500/10 text-emerald-500'
                                                         }`}>
                                                         {t(`pro_dashboard.academy.protocols.difficulty_levels.${module.diff}`).split(' ')[0]}
                                                     </span>
-                                                    <h4 className={`text-xs sm:text-sm font-black uppercase tracking-tight leading-none transition-colors ${isExpanded ? 'text-indigo-500' : 'text-slate-900 dark:text-white'}`}>
+                                                    <h4 className={`text-[10px] sm:text-xs font-black uppercase tracking-tight leading-none transition-colors truncate ${isExpanded ? 'text-indigo-500' : 'text-slate-900 dark:text-white'}`}>
                                                         {module.title}
                                                     </h4>
                                                 </div>
@@ -400,7 +400,7 @@ export const GrowthTab = ({
             </div>
 
             {/* Lifehacks & Strategy Dossier - Compact Grid-ready */}
-            <div className="pro-card-extreme p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] border border-white/10 relative overflow-hidden group bg-white/40 dark:bg-slate-950/40 shadow-xl">
+            <div className="pro-card-extreme p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] border border-white/10 relative overflow-hidden group bg-white/40 dark:bg-slate-950/40 shadow-xl">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-pink-500/5 blur-[80px] pointer-events-none group-hover:opacity-20 transition-opacity" />
 
                 <div className="flex items-center justify-between mb-8 relative z-10">
@@ -442,24 +442,24 @@ export const GrowthTab = ({
                 </div>
             </div>
 
-            <div className="glass-panel-premium p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200 dark:border-white/10 relative overflow-hidden group bg-white dark:bg-slate-950 shadow-2xl">
+            <div className="glass-panel-premium p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200 dark:border-white/10 relative overflow-hidden group bg-white dark:bg-slate-950 shadow-2xl">
                 <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none" />
-                <div className="flex items-center justify-between mb-6 relative z-10 font-sans">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-lg group-hover:rotate-6 transition-transform">
+                <div className="flex items-center justify-between gap-4 mb-6 relative z-10 font-sans">
+                    <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-lg group-hover:rotate-6 transition-transform shrink-0">
                             <Globe size={20} className="text-indigo-500" />
                         </div>
-                        <div>
-                            <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white leading-none mb-1">{t('pro_dashboard.academy.social_setup.title')}</h4>
-                            <p className="text-[8px] font-black text-indigo-400 uppercase tracking-[0.2em]">{t('pro_dashboard.academy.social_setup.subtitle')}</p>
+                        <div className="min-w-0">
+                            <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white leading-none mb-1 truncate">{t('pro_dashboard.academy.social_setup.title')}</h4>
+                            <p className="text-[8px] font-black text-indigo-400 uppercase tracking-[0.2em] truncate">{t('pro_dashboard.academy.social_setup.subtitle')}</p>
                         </div>
                     </div>
                     {/* Multi-Sync Status Display */}
-                    <div className="flex flex-col items-end">
-                        <span className={`text-[7px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${status?.is_pro_plus ? 'bg-indigo-500/10 text-indigo-500' : 'bg-slate-500/10 text-slate-400'}`}>
+                    <div className="flex flex-col items-end shrink-0 text-right">
+                        <span className={`text-[7px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full whitespace-nowrap ${status?.is_pro_plus ? 'bg-indigo-500/10 text-indigo-500' : 'bg-slate-500/10 text-slate-400'}`}>
                             {status?.is_pro_plus ? t('pro_dashboard.setup.tg_sync_multi.plan_plus') : t('pro_dashboard.setup.tg_sync_multi.plan_pro')}
                         </span>
-                        <p className="text-[6px] font-black text-slate-400 uppercase tracking-widest mt-1">{t('pro_dashboard.setup.tg_sync_multi.multi_node_capacity', { val: status?.is_pro_plus ? '5/5' : '1/1' })}</p>
+                        <p className="text-[6px] font-black text-slate-400 uppercase tracking-widest mt-1.5 whitespace-nowrap">{t('pro_dashboard.setup.tg_sync_multi.multi_node_capacity', { val: status?.is_pro_plus ? '5/5' : '1/1' })}</p>
                     </div>
                 </div>
 
@@ -507,7 +507,7 @@ export const GrowthTab = ({
 
                 return (
                     <div className={`relative rounded-[1.5rem] sm:rounded-[2rem] border transition-all duration-500 overflow-hidden ${isSetupComplete
-                        ? 'bg-slate-900 text-white border-indigo-500/30 shadow-2xl shadow-indigo-500/10'
+                        ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-indigo-500/30 shadow-2xl shadow-indigo-500/10'
                         : 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/5'
                         }`}>
 
@@ -563,10 +563,10 @@ export const GrowthTab = ({
                                         <Brain size={20} />
                                     </div>
                                     <div>
-                                        <h4 className={`text-sm font-black uppercase tracking-[0.25em] leading-none mb-1.5 ${isSetupComplete ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                                        <h4 className={`text-sm font-black uppercase tracking-[0.25em] leading-none mb-1.5 ${isSetupComplete ? 'text-slate-900 dark:text-white' : 'text-slate-900 dark:text-white'}`}>
                                             {t('pro_dashboard.academy.psych_strategies.title')}
                                         </h4>
-                                        <p className={`text-[8px] font-black uppercase tracking-[0.3em] ${isSetupComplete ? 'text-indigo-400' : 'text-slate-500'}`}>
+                                        <p className={`text-[8px] font-black uppercase tracking-[0.3em] ${isSetupComplete ? 'text-indigo-500 dark:text-indigo-400' : 'text-slate-500'}`}>
                                             {t('pro_dashboard.academy.psych_strategies.subtitle')}
                                         </p>
                                     </div>
@@ -579,29 +579,29 @@ export const GrowthTab = ({
                                     const stratsList = Array.isArray(strats) ? strats : [];
                                     return stratsList.map((item: any, i: number) => (
                                         <div key={i} className={`p-5 rounded-2xl border relative overflow-hidden group/card ${isSetupComplete
-                                            ? 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-indigo-500/50'
+                                            ? 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/10 hover:border-indigo-500/50'
                                             : 'bg-white/50 dark:bg-black/20 border-slate-200 dark:border-white/5'
                                             }`}>
-                                            <div className="absolute top-0 right-0 px-2 py-1 bg-indigo-500/20 rounded-bl-xl border-l border-b border-indigo-500/20">
-                                                <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">{item.trigger}</span>
+                                            <div className="absolute top-0 right-0 px-2 py-1 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-bl-xl border-l border-b border-indigo-500/20 dark:border-indigo-500/20">
+                                                <span className="text-[7px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{item.trigger}</span>
                                             </div>
 
                                             <div className="flex items-start gap-3 mb-3 pt-2">
-                                                <div className="w-6 h-6 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-[10px] font-bold shrink-0 border border-indigo-500/20">
+                                                <div className="w-6 h-6 rounded-full bg-indigo-500/10 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-[10px] font-bold shrink-0 border border-indigo-500/30 dark:border-indigo-500/20">
                                                     {i + 1}
                                                 </div>
-                                                <h5 className={`text-xs font-black uppercase tracking-tight leading-snug mt-1 ${isSetupComplete ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                                                <h5 className={`text-xs font-black uppercase tracking-tight leading-snug mt-1 ${isSetupComplete ? 'text-slate-900 dark:text-white' : 'text-slate-900 dark:text-white'}`}>
                                                     {item.title}
                                                 </h5>
                                             </div>
 
-                                            <p className="text-[10px] font-medium text-slate-400 leading-relaxed mb-4 min-h-[40px]">
+                                            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-4 min-h-[40px]">
                                                 {item.desc}
                                             </p>
 
-                                            <div className="p-3 bg-black/20 rounded-lg border border-white/5 flex items-start gap-2">
-                                                <Play size={10} className="text-emerald-500 mt-0.5 shrink-0" />
-                                                <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wide leading-tight">
+                                            <div className="p-3 bg-slate-100 dark:bg-black/30 rounded-lg border border-slate-200 dark:border-white/5 flex items-start gap-2">
+                                                <Play size={10} className="text-emerald-600 dark:text-emerald-500 mt-0.5 shrink-0" />
+                                                <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide leading-tight">
                                                     {item.action}
                                                 </span>
                                             </div>
