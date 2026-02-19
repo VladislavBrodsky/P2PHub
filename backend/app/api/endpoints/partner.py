@@ -1047,7 +1047,7 @@ async def claim_task_reward(
         # #comment: Ensure the notification reflects the ACTUAL XP awarded (including PRO multipliers) 
         # to satisfy elite users and provide immediate positive reinforcement.
         msg = get_msg(lang, "task_completed", reward=int(effective_xp))
-        await notification_service.enqueue_notification(chat_id=int(tg_id), text=msg)
+        await notification_service.send_low_prio(chat_id=int(tg_id), text=msg)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.error(f"Failed to send task notification: {e}")

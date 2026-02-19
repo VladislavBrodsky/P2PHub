@@ -4,6 +4,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { useUI } from '../../context/UIContext';
 import { useEffect } from 'react';
 import { useTMALock } from '../../hooks/useTMALock';
+import { renderInline } from '../../utils/renderMarkdown';
 
 interface BriefTermsModalProps {
     isOpen: boolean;
@@ -145,7 +146,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                                         {t('referral.brief.motivation_title')}
                                     </h3>
                                     <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 relative z-10 leading-relaxed">
-                                        {t('referral.brief.motivation_desc')}
+                                        {renderInline(t('referral.brief.motivation_desc'))}
                                     </p>
                                     <button
                                         onClick={onClose}

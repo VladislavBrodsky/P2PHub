@@ -158,8 +158,9 @@ class Settings(BaseSettings):
         },
         validation_alias="REFERRAL_XP_MAP"
     )
-    PRO_XP_MULTIPLIER: float = 2.0
+    PRO_XP_MULTIPLIER: float = 1.5
     PRO_PLUS_XP_MULTIPLIER: float = 3.0
+    FREE_REFERRAL_XP: float = 35.0  # Flat XP for Free users per qualified referral (L1-L3)
 
     COMMISSION_MAP_EMPIRE: Dict[int, float] = Field(
         default_factory=lambda: {

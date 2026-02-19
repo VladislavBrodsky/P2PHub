@@ -4,7 +4,7 @@ import React from 'react';
  * Lightweight inline-markdown renderer.
  * Supports: **bold**, _italic_, `code`, and plain text.
  */
-function renderInline(text: string): React.ReactNode[] {
+export function renderInline(text: string): React.ReactNode[] {
     const parts: React.ReactNode[] = [];
     // Regex that matches **bold**, _italic_, or `code`
     const pattern = /(\*\*(.+?)\*\*|_(.+?)_|`(.+?)`)/g;

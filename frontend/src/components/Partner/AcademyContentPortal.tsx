@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
 import { useUI } from '../../context/UIContext';
 import { useTMALock } from '../../hooks/useTMALock';
-import { renderMarkdown } from '../../utils/renderMarkdown';
+import { renderMarkdown, renderInline } from '../../utils/renderMarkdown';
 
 interface AcademyContentPortalProps {
     stage: AcademyStage;
@@ -225,7 +225,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                 {/* Main Article Content */}
                                 <div className="space-y-7 text-slate-600 dark:text-slate-400 text-[15px] leading-relaxed font-medium">
                                     <div className="text-[15px] text-slate-900 dark:text-white font-bold leading-snug">
-                                        {renderMarkdown(t(`academy_content.stage_${stage.id}_lesson_intro`, { defaultValue: t('academy.elite_training') }))}
+                                        {renderInline(t(`academy_content.stage_${stage.id}_lesson_intro`, { defaultValue: t('academy.elite_training') }))}
                                     </div>
 
                                     <div className="p-5 rounded-[1.5rem] bg-blue-50 dark:bg-blue-500/5 border border-blue-100 dark:border-blue-500/20 space-y-3 relative overflow-hidden group">
@@ -243,7 +243,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                             </button>
                                         </div>
                                         <p className="text-[14px] italic leading-relaxed text-slate-700 dark:text-slate-200 relative z-10 font-bold">
-                                            &ldquo;{renderMarkdown(t(`academy_content.stage_${stage.id}_lesson_secret`, { defaultValue: t('academy.profit_quote') }))}&rdquo;
+                                            &ldquo;{renderInline(t(`academy_content.stage_${stage.id}_lesson_secret`, { defaultValue: t('academy.profit_quote') }))}&rdquo;
                                         </p>
                                     </div>
 
@@ -274,7 +274,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                     {t('academy.viral_psychology')}
                                                 </div>
                                                 <p className="text-[13px] leading-relaxed font-bold italic text-slate-800 dark:text-slate-200">
-                                                    &ldquo;{t(`academy_content.stage_${stage.id}_lesson_viral_rule`)}&rdquo;
+                                                    &ldquo;{renderInline(t(`academy_content.stage_${stage.id}_lesson_viral_rule`))}&rdquo;
                                                 </p>
                                             </div>
                                         )}
@@ -310,7 +310,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                 {missionAccomplished ? <CheckCircle2 className="w-4 h-4 text-white" /> : <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />}
                                             </div>
                                             <span className="text-[13px] font-bold leading-tight">
-                                                {t(`academy_content.stage_${stage.id}_lesson_mission`, { defaultValue: t('academy.apply_knowledge') })}
+                                                {renderInline(t(`academy_content.stage_${stage.id}_lesson_mission`, { defaultValue: t('academy.apply_knowledge') }))}
                                             </span>
                                         </div>
 

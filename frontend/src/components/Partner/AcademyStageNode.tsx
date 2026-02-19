@@ -4,6 +4,7 @@ import { Lock, CheckCircle2, Play, Zap } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { AcademyStage } from '../../data/academyData';
 import { useTranslation } from 'react-i18next';
+import { renderInline } from '../../utils/renderMarkdown';
 
 interface AcademyStageNodeProps {
     stage: AcademyStage;
@@ -149,12 +150,12 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                 <h4 className={cn(
                     "text-[10px] font-black uppercase tracking-tight leading-tight",
                     isLocked ? "text-slate-500" : "text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors"
-                )}>{title}</h4>
+                )}>{renderInline(title)}</h4>
 
                 <p className={cn(
                     "text-[8px] font-medium leading-[1.3] mt-1.5 opacity-80 line-clamp-2",
                     isLocked ? "text-slate-600" : "text-slate-600 dark:text-slate-300"
-                )}>{description}</p>
+                )}>{renderInline(description)}</p>
 
                 {stage.duration && !isLocked && (
                     <div className={cn(

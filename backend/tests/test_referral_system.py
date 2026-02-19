@@ -138,16 +138,16 @@ class TestXPDistribution:
         # Refresh referrer to get updated XP
         await session.refresh(referrer)
         
-        # #comment: L1 should get 100 XP for new referral (from config)
-        assert referrer.xp == initial_xp + 100
+        # #comment: Free L1 gets flat 35 XP (FREE_REFERRAL_XP)
+        assert referrer.xp == initial_xp + 35
         assert referrer.referral_count == 1
     
     async def test_pro_multiplier_xp(self, session: AsyncSession, create_test_partner):
         """
-        Test PRO members get 5x XP multiplier.
+        Test PRO members get 1.5x XP multiplier (vs flat 35 XP for Free).
         
         Verifies:
-        - PRO referrer gets 175 XP (35 * 5) for L1
+        - PRO referrer gets 150 XP (100 * 1.5) for L1
         """
         # Create PRO referrer
         referrer = await create_test_partner(
@@ -169,8 +169,8 @@ class TestXPDistribution:
         
         await session.refresh(referrer)
         
-        # #comment: PRO L1 gets 100 XP * 2 = 200 XP (PRO_XP_MULTIPLIER=2.0)
-        assert referrer.xp == initial_xp + 200
+        # #comment: PRO L1 gets 100 XP * 1.5 = 150 XP (PRO_XP_MULTIPLIER=1.5)
+        assert referrer.xp == initial_xp + 150
     
     async def test_9_level_xp_distribution(self, session: AsyncSession, create_referral_chain):
         """
@@ -206,15 +206,16 @@ class TestXPDistribution:
         # chain[6] is L2 (Normal).
         # ...
         # chain[0] is L8 (Normal).
+        # PRO x1.5 multiplier applied
         expected_xp = {
-            7: 200,  # L1 (chain[7]) PRO: 100 * 2 = 200
-            6: 100,  # L2 (chain[6]) PRO: 50 * 2 = 100
-            5: 60,   # L3 PRO: 30 * 2 = 60
-            4: 40,   # L4 PRO: 20 * 2 = 40
-            3: 30,   # L5 PRO: 15 * 2 = 30
-            2: 20,   # L6 PRO: 10 * 2 = 20
-            1: 16,   # L7 PRO: 8 * 2 = 16
-            0: 12,   # L8 PRO: 6 * 2 = 12
+            7: 150,   # L1 PRO: 100 * 1.5 = 150
+            6: 75,    # L2 PRO: 50  * 1.5 = 75
+            5: 45,    # L3 PRO: 30  * 1.5 = 45
+            4: 30,    # L4 PRO: 20  * 1.5 = 30
+            3: 22.5,  # L5 PRO: 15  * 1.5 = 22.5
+            2: 15,    # L6 PRO: 10  * 1.5 = 15
+            1: 12,    # L7 PRO: 8   * 1.5 = 12
+            0: 9,     # L8 PRO: 6   * 1.5 = 9
         }
         
         for i, expected in expected_xp.items():
@@ -242,17 +243,15 @@ class TestXPDistribution:
         for user in chain:
             await session.refresh(user)
         
-        # chain has 5 levels (0..4). 4 is new user.
-        # chain[3] is L1. (Normal -> make_pro=[0, 2, 4] -> 0=PRO, 2=PRO, 4=PRO. 1, 3 Normal)
-        # chain[3] is Normal. Config L1: 100 XP.
-        # chain[2] is L2. (PRO). Config L2: 50 XP. PRO Multiplier 2.0 -> 100 XP.
-        # chain[1] is L3. (Normal). Config L3: 30 XP.
-        # chain[0] is L4. (PRO). Config L4: 20 XP. PRO Multiplier 2.0 -> 40 XP.
+        # chain[3]=L1 Free → 35 XP (flat)
+        # chain[2]=L2 PRO  → 50 * 1.5 = 75 XP
+        # chain[1]=L3 Free → 35 XP (flat)
+        # chain[0]=L4 PRO  → 20 * 1.5 = 30 XP
         expected = {
-            3: 100,  # L1 Normal -> 100
-            2: 100,  # L2 PRO -> 50 * 2 = 100
-            1: 30,   # L3 Normal -> 30
-            0: 40,   # L4 PRO -> 20 * 2 = 40
+            3: 35,    # L1 Free  → flat 35
+            2: 75,    # L2 PRO   → 50 * 1.5
+            1: 35,    # L3 Free  → flat 35
+            0: 30,    # L4 PRO   → 20 * 1.5
         }
         
         for i, exp_gain in expected.items():
@@ -457,9 +456,9 @@ class TestEdgeCases:
         # Refresh referrer
         await session.refresh(referrer)
         
-        # Should have 5 referrals and 5 * 100 = 500 XP
+        # Should have 5 referrals and 5 * 35 = 175 XP
         assert referrer.referral_count == 5
-        assert referrer.xp == 500
+        assert referrer.xp == 175
 
 
 class TestRegressionPrevention:
@@ -498,9 +497,9 @@ class TestRegressionPrevention:
         # New user (chain[1]) signs up
         await process_referral_logic(chain[1].id)
         
-        # Direct referrer (chain[0]) MUST get XP (100)
+        # Direct referrer (chain[0]) MUST get XP (35)
         await session.refresh(chain[0])
-        assert chain[0].xp == 100, "Direct referrer didn't get L1 XP!"
+        assert chain[0].xp == 35, "Direct referrer didn't get L1 XP!"
         assert chain[0].referral_count == 1
     
     async def test_bug2_direct_referrer_gets_commission(self, session: AsyncSession, create_referral_chain):

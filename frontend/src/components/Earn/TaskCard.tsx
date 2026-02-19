@@ -4,6 +4,7 @@ import { CheckCircle2, ArrowRight } from 'lucide-react';
 import { Task } from '../../data/earnData';
 import { useTranslation } from 'react-i18next';
 import { Haptic } from '../../utils/tma';
+import { renderInline } from '../../utils/renderMarkdown';
 
 interface TaskCardProps {
     task: Task;
@@ -137,7 +138,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                     {/* Description */}
                     <div className="pt-3">
                         <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
-                            {t(`tasks.${task.id}.desc`, task.description)}
+                            {renderInline(t(`tasks.${task.id}.desc`, task.description))}
                         </p>
                     </div>
 

@@ -374,7 +374,7 @@ class PaymentService:
 
             # 4.1 Welcome Message
             welcome_msg = get_msg(lang, "pro_welcome")
-            await notification_service.enqueue_notification(
+            await notification_service.send_standard(
                 chat_id=int(partner.telegram_id),
                 text=welcome_msg
             )
@@ -383,7 +383,7 @@ class PaymentService:
             ref_link = f"{settings.FRONTEND_URL}?startapp={partner.referral_code}"
             viral_msg = get_msg(lang, "pro_viral_announcement", referral_link=ref_link)
             # We send it to them so they can forward/copy it
-            await notification_service.enqueue_notification(
+            await notification_service.send_low_prio(
                 chat_id=int(partner.telegram_id),
                 text=f"🎁 *VIRAL KIT UNLOCKED!*\n\nShare this message to announce your PRO status and attract more partners:\n\n---\n{viral_msg}"
             )
@@ -403,7 +403,7 @@ class PaymentService:
                     f"⌛ *Expires:* {partner.pro_expires_at.strftime('%Y-%m-%d') if partner.pro_expires_at else 'LIFETIME'}\n\n"
                     "Verified and commissions distributed."
                 )
-                await notification_service.enqueue_notification(
+                await notification_service.send_critical(
                     chat_id=int(admin_id),
                     text=admin_notify_msg
                 )

@@ -23,7 +23,26 @@ We moved from a **Reactive** to a **Proactive** caching strategy.
 -   The `get_partner_photo` endpoint now uses the optimized `ensure_photo_cached` function, reducing code duplication and ensuring consistent caching behavior.
 -   Images are served with long-lived `Cache-Control` headers (1 year) and are cached in Redis for 24 hours.
 
-## Impact
--   **First Load**: Users might see a brief loading state for the very first time a new partner appears, but subsequent users (and even the first user, thanks to background concurrency) will experience near-instant image loading.
--   **Network**: Reduced repeated calls to Telegram API.
--   **UX**: The "Recent Partners" section should now populate visually much faster.
+## Notification System High-Volume Optimization
+
+### Issue
+The notification system was identified as a potential failure point for 100K+ user bursts. Audit revealed that TaskIQ broker failures were causing message loss, and identical messages (duplicates) were being sent during concurrency bursts.
+
+### Audit Findings
+1.  **Broker Dependency**: The retry system was dependent on the broker being healthy; if the broker was down, retries also stopped.
+2.  **Duplicate Flooding**: High-concurrency referral loops enqueued multiple identical "Commission Alert" messages for the same event.
+3.  **Telegram Limits**: Lacked strict global and per-user rate limiting, risking 429 errors during mass broadcasts.
+
+### Implemented Solution (High-Performance V3)
+1.  **Redis sliding-window Rate Limiting**: Implemented in `RateLimitService` to ensure compliance with Telegram Bot API limits (30/s global).
+2.  **Deterministic Deduplication**: Added a 60-second Redis guard key (`set nx`) based on `chat_id:message_hash`. This prevents identical sequential alerts.
+3.  **Tiered Priority Queues**:
+    -   **HIGH**: Security & Payments (Bypasses dedup).
+    -   **MEDIUM**: Standard Referrals (Deduplicated).
+    -   **LOW**: Social XP updates (Lower priority, backgrounded).
+4.  **Back-pressure Handling**: Introduced `wait_for_slot` logic in workers to pause execution before a 429 occurs, rather than failing the task.
+
+### Impact
+-   **Stability**: The system can now handle massive bursts without DDoSing the Telegram API or flooding users with duplicate "You received XP" messages.
+-   **Reliability**: Critical payment alerts jump to the front of the queue, while background social notifications process as capacity allows.
+-   **Scaling**: Support for 100K+ messages/5m window through asynchronous broker-worker distribution.

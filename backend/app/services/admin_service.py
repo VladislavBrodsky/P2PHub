@@ -37,7 +37,7 @@ class AdminService:
             for tg_id, _lang in partners:
                 if tg_id:
                     # Enqueue for each user
-                    await notification_service.enqueue_notification(
+                    await notification_service.send_low_prio(
                         chat_id=int(tg_id),
                         text=text
                     )

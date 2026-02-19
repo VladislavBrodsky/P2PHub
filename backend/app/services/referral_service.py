@@ -150,7 +150,7 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
                 lang = referrer.language_code or "en"
                 fomo_msg = get_msg(lang, "pro_fomo_missed", level=level)
                 buttons = [[{"text": "👑 Upgrade Plan", "web_app": {"url": settings.FRONTEND_URL}}]]
-                await notification_service.enqueue_notification(
+                await notification_service.send_critical(
                     chat_id=int(referrer.telegram_id), text=fomo_msg, buttons=buttons
                 )
             
@@ -204,12 +204,18 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
     return xp_txs, deferred_tasks
 
 def _calculate_referral_xp(level: int, partner: Partner) -> float:
-    xp = settings.REFERRAL_XP_MAP.get(level, 0)
+    """
+    XP per referral level by plan:
+      Free  → flat 35 XP (for qualified levels L1-L3)
+      PRO   → REFERRAL_XP_MAP[level] × 1.5
+      PRO+  → REFERRAL_XP_MAP[level] × 3.0
+    """
     if partner.is_pro_plus:
-        return xp * settings.PRO_PLUS_XP_MULTIPLIER
+        return settings.REFERRAL_XP_MAP.get(level, 0) * settings.PRO_PLUS_XP_MULTIPLIER
     if partner.is_pro:
-        return xp * settings.PRO_XP_MULTIPLIER
-    return xp
+        return settings.REFERRAL_XP_MAP.get(level, 0) * settings.PRO_XP_MULTIPLIER
+    # Free users: flat bonus regardless of level (qualification gate in _process_referral_awards)
+    return settings.FREE_REFERRAL_XP
 
 async def _check_level_up(referrer: Partner, deferred_tasks: list, current_xp: float):
     new_level = get_level(current_xp)
@@ -243,7 +249,7 @@ def _prepare_referral_notification(referrer: Partner, level: int, xp: int, name:
     elif level == 2: msg = get_msg(lang, "referral_l2_congrats", referral_chain=chain_text, xp=xp)
     else: msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=chain_text, xp=xp)
     
-    return notification_service.enqueue_notification(chat_id=int(referrer.telegram_id), text=msg, buttons=buttons)
+    return notification_service.send_low_prio(chat_id=int(referrer.telegram_id), text=msg, buttons=buttons)
 
 async def _finalize_referral_logic(deferred_tasks: list):
     if deferred_tasks:
@@ -383,7 +389,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 try:
                     lang = recipient.language_code or "en"
                     msg = get_msg(lang, "commission_received", amount=round(commission, 2), level=comm_level, from_user=buyer_name)
-                    deferred_notifications.append(notification_service.enqueue_notification(
+                    deferred_notifications.append(notification_service.send_standard(
                         chat_id=int(recipient.telegram_id), text=msg,
                         buttons=[[{"text": "💰 Check Balance", "web_app": {"url": settings.FRONTEND_URL}}]]
                     ))

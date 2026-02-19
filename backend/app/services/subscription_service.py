@@ -80,7 +80,7 @@ class SubscriptionService:
             {"text": "💎 Extend Subscription", "web_app": {"url": settings.FRONTEND_URL}},
             {"text": "🚀 Open App", "web_app": {"url": settings.FRONTEND_URL}}
         ]]
-        await notification_service.enqueue_notification(int(partner.telegram_id), text, buttons=buttons)
+        await notification_service.send_standard(int(partner.telegram_id), text, buttons=buttons)
 
     async def send_expired_notification(self, partner: Partner):
         text = (
@@ -92,7 +92,7 @@ class SubscriptionService:
             {"text": "👑 Reactivate PRO", "web_app": {"url": settings.FRONTEND_URL}},
             {"text": "🚀 Open App", "web_app": {"url": settings.FRONTEND_URL}}
         ]]
-        await notification_service.enqueue_notification(int(partner.telegram_id), text, buttons=buttons)
+        await notification_service.send_critical(int(partner.telegram_id), text, buttons=buttons)
 
     async def run_checker_task(self):
         """

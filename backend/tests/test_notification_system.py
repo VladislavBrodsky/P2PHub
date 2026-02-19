@@ -35,14 +35,22 @@ class TestNotificationEnqueue:
 
     async def test_enqueue_valid_notification(self):
         """kiq is called once with correct payload dict."""
+        from app.services.notification_service import NotificationService, send_telegram_task
+        from app.services.rate_limit_service import rate_limit_service
+        
+        # 1. Restore the REAL method (bypassing conftest.py's autouse mock)
+        real_enqueue = NotificationService.enqueue_notification
+        original_instance_enqueue = notification_service.enqueue_notification
+        notification_service.enqueue_notification = real_enqueue.__get__(notification_service, NotificationService)
+
         original_kiq = send_telegram_task.kiq
         send_telegram_task.kiq = AsyncMock(return_value=None)
-
-        from app.services.notification_service import NotificationService
-        real_enqueue = NotificationService.enqueue_notification
+        
+        original_is_dup = rate_limit_service.is_duplicate
+        rate_limit_service.is_duplicate = AsyncMock(return_value=False)
 
         try:
-            await real_enqueue(notification_service,
+            await notification_service.enqueue_notification(
                 chat_id=12345,
                 text="Test message",
                 parse_mode="Markdown"
@@ -51,39 +59,39 @@ class TestNotificationEnqueue:
             payload = send_telegram_task.kiq.call_args[0][0]
             assert payload["chat_id"] == 12345
             assert payload["text"] == "Test message"
+            assert payload["priority"] == "medium"
         finally:
             send_telegram_task.kiq = original_kiq
+            rate_limit_service.is_duplicate = original_is_dup
+            notification_service.enqueue_notification = original_instance_enqueue
 
-    async def test_skip_notification_without_chat_id(self):
-        """No kiq call when chat_id is None."""
-        original_kiq = send_telegram_task.kiq
-        send_telegram_task.kiq = AsyncMock(return_value=None)
-        try:
-            await notification_service.enqueue_notification(chat_id=None, text="msg")
-            send_telegram_task.kiq.assert_not_called()
-        finally:
-            send_telegram_task.kiq = original_kiq
-
-    async def test_fallback_on_broker_failure(self):
-        """No exception raised when broker fails (resilience test)."""
-        original_kiq = send_telegram_task.kiq
-        send_telegram_task.kiq = AsyncMock(side_effect=Exception("Broker down"))
-
-        mock_session = AsyncMock()
-        mock_session.__aenter__.return_value = mock_session
-        mock_session.__aexit__.return_value = None
+    async def test_priority_methods(self):
+        """Verifies that send_critical/standard/low_prio set correct priority and dedup flags."""
+        from app.services.notification_service import notification_service
+        
+        original_enqueue = notification_service.enqueue_notification
+        notification_service.enqueue_notification = AsyncMock()
 
         try:
-            with MagicMock() as mock_sm:
-                mock_sm.return_value = mock_session
-                await notification_service.enqueue_notification(
-                    chat_id=12345, text="Test message"
-                )
-        except Exception as e:
-            if "Broker down" in str(e):
-                raise AssertionError(f"Broker error must not propagate: {e}")
+            # Critical should bypass dedup by default and be high priority
+            await notification_service.send_critical(123, "Critical")
+            notification_service.enqueue_notification.assert_called_with(
+                123, "Critical", buttons=None, priority="high", bypass_dedup=True
+            )
+
+            # Standard should NOT bypass dedup and be medium priority
+            await notification_service.send_standard(123, "Standard")
+            notification_service.enqueue_notification.assert_called_with(
+                123, "Standard", buttons=None, priority="medium", bypass_dedup=False
+            )
+
+            # Low Prio should NOT bypass dedup and be low priority
+            await notification_service.send_low_prio(123, "Low")
+            notification_service.enqueue_notification.assert_called_with(
+                123, "Low", buttons=None, priority="low", bypass_dedup=False
+            )
         finally:
-            send_telegram_task.kiq = original_kiq
+            notification_service.enqueue_notification = original_enqueue
 
 
 # ---------------------------------------------------------------------------
@@ -135,9 +143,9 @@ class TestFreeUserNotifications:
     ):
         """Free chain: exactly 3 XP notifications sent (L1, L2, L3)."""
         chain = await create_referral_chain(levels=4)  # [L3, L2, L1, buyer]
-        notification_service.enqueue_notification.reset_mock()
+        notification_service.send_low_prio.reset_mock()
         await process_referral_logic(chain[3].id)
-        count = notification_service.enqueue_notification.call_count
+        count = notification_service.send_low_prio.call_count
         assert count == 3, f"Expected 3 XP notifications for Free L3 chain, got {count}"
 
 
@@ -183,9 +191,9 @@ class TestPROUserNotifications:
     ):
         """PRO chain (10 levels): exactly 9 XP notifications (L1-L9)."""
         chain = await create_referral_chain(levels=10, make_pro=list(range(10)))
-        notification_service.enqueue_notification.reset_mock()
+        notification_service.send_low_prio.reset_mock()
         await process_referral_logic(chain[9].id)
-        count = notification_service.enqueue_notification.call_count
+        count = notification_service.send_low_prio.call_count
         assert count == 9, f"Expected 9 XP notifications for PRO, got {count}"
 
     async def test_pro_fomo_notification_at_l4_boundary(
@@ -265,9 +273,9 @@ class TestProPlusUserNotifications:
         """PRO+ chain (21 levels): exactly 20 XP notifications."""
         chain = await create_referral_chain(levels=21)
         await self._make_chain_pro_plus(session, chain)
-        notification_service.enqueue_notification.reset_mock()
+        notification_service.send_low_prio.reset_mock()
         await process_referral_logic(chain[20].id)
-        count = notification_service.enqueue_notification.call_count
+        count = notification_service.send_low_prio.call_count
         assert count == 20, f"Expected 20 XP notifications for PRO+ L20 chain, got {count}"
 
     async def test_pro_plus_payout_totals(

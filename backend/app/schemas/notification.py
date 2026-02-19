@@ -22,3 +22,4 @@ class NotificationPayload(ShadowBaseModel):
     text: str
     parse_mode: str = "Markdown"
     buttons: list[list[InlineButton]] | None = None
+    priority: str = "medium"  # low, medium, high (critical)

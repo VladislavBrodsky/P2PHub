@@ -78,7 +78,7 @@ async def approve_payment(
         try:
             lang = partner.language_code or "en"
             user_msg = get_msg(lang, "pro_welcome")
-            await notification_service.enqueue_notification(
+            await notification_service.send_standard(
                 chat_id=partner.telegram_id,
                 text=f"✅ *PAYMENT APPROVED!*\n\n{user_msg}"
             )
@@ -128,7 +128,7 @@ async def reject_payment(
     # Notify the User
     if partner:
         try:
-            await notification_service.enqueue_notification(
+            await notification_service.send_standard(
                 chat_id=partner.telegram_id,
                 text="❌ *PAYMENT REJECTED*\n\nYour manual payment confirmation was rejected. Please try again or contact support."
             )

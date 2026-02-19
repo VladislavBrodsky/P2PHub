@@ -276,12 +276,17 @@ async def mock_redis():
     referral_service._check_level_up = noop_check_level_up
     
     # Patch Notification Service to avoid Event Loop errors
-    from app.services.notification_service import notification_service
     original_enqueue = notification_service.enqueue_notification
     original_send_level = notification_service.send_level_up_notification
+    original_send_standard = notification_service.send_standard
+    original_send_low_prio = notification_service.send_low_prio
+    original_send_critical = notification_service.send_critical
     
     notification_service.enqueue_notification = AsyncMock(return_value=True)
     notification_service.send_level_up_notification = AsyncMock(return_value=True)
+    notification_service.send_standard = AsyncMock(return_value=True)
+    notification_service.send_low_prio = AsyncMock(return_value=True)
+    notification_service.send_critical = AsyncMock(return_value=True)
     
     yield mock_client
     
@@ -290,6 +295,9 @@ async def mock_redis():
     referral_service._check_level_up = original_check_level_up
     notification_service.enqueue_notification = original_enqueue
     notification_service.send_level_up_notification = original_send_level
+    notification_service.send_standard = original_send_standard
+    notification_service.send_low_prio = original_send_low_prio
+    notification_service.send_critical = original_send_critical
 
 
 @pytest.fixture(autouse=True)
