@@ -13,7 +13,7 @@ from collections.abc import AsyncGenerator
 # #comment: Set required environment variables BEFORE importing any app modules.
 # This prevents pydantic validation errors when Settings() tries to load DATABASE_URL.
 os.environ.setdefault("DATABASE_URL", "sqlite+aiosqlite:///:memory:")
-os.environ.setdefault("BOT_TOKEN", "test_token")
+os.environ.setdefault("BOT_TOKEN", "12345678:ABC-DEF1234ghIkl-zyx57W2v1u123ew11")
 os.environ.setdefault("WEBHOOK_SECRET", "test_secret")
 
 import pytest
@@ -276,6 +276,7 @@ async def mock_redis():
     referral_service._check_level_up = noop_check_level_up
     
     # Patch Notification Service to avoid Event Loop errors
+    from app.services.notification_service import notification_service
     original_enqueue = notification_service.enqueue_notification
     original_send_level = notification_service.send_level_up_notification
     original_send_standard = notification_service.send_standard

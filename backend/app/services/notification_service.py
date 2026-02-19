@@ -255,12 +255,12 @@ class NotificationService:
             from app.core.i18n import get_msg
             for lvl in range(old_level + 1, new_level + 1):
                 msg = get_msg(lang, "level_up", level=lvl)
-                await self.enqueue_notification(chat_id=chat_id, text=msg, priority="medium")
+                await self.send_standard(chat_id=chat_id, text=msg)
 
     async def send_system_message(self, chat_id: int, title: str, content: str):
         """Sends a standardized system announcement."""
         text = f"📢 *{title}*\n\n{content}"
-        await self.enqueue_notification(chat_id=chat_id, text=text, priority="medium")
+        await self.send_standard(chat_id=chat_id, text=text)
 
     # High-performance priority wrappers
     async def send_critical(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = True):
