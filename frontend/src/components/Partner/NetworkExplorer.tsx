@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
     Users, X, UserPlus, AlertCircle, TrendingUp, Award, Zap,
-    Search, RefreshCw
+    Search, RefreshCw, Lock
 } from 'lucide-react';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
@@ -59,6 +59,14 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
+
+    const maxLevel = useMemo(() => {
+        if (!user) return 3;
+        if (isGlobalMode && user.is_admin) return 20;
+        if (user.subscription_plan?.includes('PLUS')) return 20;
+        if (user.is_pro) return 9;
+        return 3;
+    }, [user, isGlobalMode]);
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         setIsScrolled(e.currentTarget.scrollTop > 10);
@@ -237,28 +245,40 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                 <div className="relative mb-2">
                     <div className="flex items-center gap-2 overflow-x-auto pb-3 scrollbar-none px-0.5" ref={scrollContainerRef}>
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((l) => {
-                            const count = treeStats[`level_${l}`] || treeStats[l.toString()] || 0;
+                            const isLocked = l > maxLevel;
+                            const count = isLocked ? 0 : (treeStats[`level_${l}`] || treeStats[l.toString()] || 0);
                             const isActive = level === l;
+
                             return (
                                 <button
                                     key={l}
-                                    onClick={() => { selection(); setLevel(l); }}
+                                    onClick={() => {
+                                        selection();
+                                        setLevel(l);
+                                    }}
                                     className={cn(
                                         "relative flex flex-col items-center justify-center min-w-[38px] h-[38px] rounded-2xl transition-all duration-300 active:scale-90 shrink-0",
                                         isActive
                                             ? "text-white shadow-lg shadow-blue-500/25"
-                                            : "text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 hover:border-blue-400/30"
+                                            : isLocked
+                                                ? "text-slate-300 dark:text-slate-700 bg-slate-100/50 dark:bg-white/5 border border-dashed border-slate-300 dark:border-white/10"
+                                                : "text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 hover:border-blue-400/30"
                                     )}
                                 >
                                     {isActive && (
                                         <motion.div
                                             layoutId="activeLevelBubble"
-                                            className="absolute inset-0 bg-linear-to-br from-blue-500 to-indigo-600 rounded-2xl"
+                                            className={cn(
+                                                "absolute inset-0 rounded-2xl",
+                                                isLocked
+                                                    ? "bg-linear-to-br from-slate-400 to-slate-600"
+                                                    : "bg-linear-to-br from-blue-500 to-indigo-600"
+                                            )}
                                             transition={{ type: "spring", stiffness: 400, damping: 32 }}
                                         />
                                     )}
                                     <span className={cn("text-xs font-black relative z-10", isActive ? "text-white" : "")}>
-                                        {l}
+                                        {isLocked ? <Lock size={10} className={isActive ? "text-white" : "text-slate-400 dark:text-white/20"} /> : l}
                                     </span>
                                     {count > 0 && !isActive && (
                                         <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-blue-500 rounded-full border-2 border-[#f8fafc] dark:border-[#0b1120]" />
@@ -287,6 +307,37 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                     <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500">
                                         {members.length} {t('network.explorer.partners_at_depth')}
                                     </p>
+                                </motion.div>
+                            ) : level > maxLevel ? (
+                                <motion.div
+                                    key="locked-cta"
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="flex flex-col items-center justify-center py-12 px-6 text-center bg-slate-50/50 dark:bg-white/2 border border-dashed border-slate-200 dark:border-white/5 rounded-[2.5rem]"
+                                >
+                                    <div className="w-16 h-16 rounded-[1.8rem] bg-linear-to-br from-slate-400 to-slate-600 dark:from-slate-700 dark:to-slate-900 flex items-center justify-center shadow-xl mb-6 ring-4 ring-white dark:ring-white/5">
+                                        <Lock size={28} className="text-white" />
+                                    </div>
+                                    <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase italic mb-2 tracking-tighter">
+                                        {t('network.explorer.unlock_more_streams')}
+                                    </h3>
+                                    <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-8 max-w-[220px] uppercase tracking-[0.1em] leading-relaxed">
+                                        {user?.is_pro
+                                            ? t('network.explorer.locked_levels_desc_pro')
+                                            : t('network.explorer.locked_levels_desc_free')
+                                        }
+                                    </p>
+                                    <button
+                                        onClick={() => {
+                                            selection();
+                                            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                                            if (onClose) onClose();
+                                        }}
+                                        className="w-full max-w-[200px] h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-blue-600/20 transition-all active:scale-95 flex items-center justify-center gap-2"
+                                    >
+                                        <Zap size={14} className="fill-white" />
+                                        {t('network.explorer.upgrade_now')}
+                                    </button>
                                 </motion.div>
                             ) : (
                                 <motion.div

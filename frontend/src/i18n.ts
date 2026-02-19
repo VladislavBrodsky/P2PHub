@@ -43,11 +43,11 @@ const deepMerge = (target: any, source: any) => {
 };
 
 const en = [
-    enCommon, enDashboard, enMarketing, enAcademy, enPro, enSocial, enCards, enOther
+    enCommon, enDashboard, enMarketing, enAcademy, enPro, enCards, enOther, enSocial
 ].reduce((acc: any, curr: any) => deepMerge(acc, curr), {} as any);
 
 const ru = [
-    ruCommon, ruDashboard, ruMarketing, ruAcademy, ruPro, ruSocial, ruCards, ruOther
+    ruCommon, ruDashboard, ruMarketing, ruAcademy, ruPro, ruCards, ruOther, ruSocial
 ].reduce((acc: any, curr: any) => deepMerge(acc, curr), {} as any);
 
 i18n

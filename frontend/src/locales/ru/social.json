@@ -125,7 +125,11 @@
       "share_invitation": "Пригласить Партнёра",
       "global_strength": "Глобальная Мощь",
       "active_nodes": "Активных Узлов",
-      "invite_btn": "Пригласить"
+      "invite_btn": "Пригласить",
+      "unlock_more_streams": "Открыть больше уровней",
+      "locked_levels_desc_free": "Улучшите до PRO, чтобы открыть 9 уровней",
+      "locked_levels_desc_pro": "Улучшите до PRO+, чтобы открыть 20 уровней",
+      "upgrade_now": "Активировать"
     }
   },
   "tasks": {

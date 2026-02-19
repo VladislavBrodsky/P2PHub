@@ -200,9 +200,9 @@ export default function SubscriptionPage() {
                         <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 animate-pulse" />
                     </div>
 
-                    <div className="px-4 py-1.5 rounded-full bg-indigo-950/40 border border-indigo-500/30 flex items-center gap-2.5 backdrop-blur-md shadow-inner">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse" />
-                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-100/90">{t('subscription.upgrade.protocol_initialized')}</span>
+                    <div className="px-4 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-500/30 flex items-center gap-2.5 backdrop-blur-md shadow-inner">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)] animate-pulse" />
+                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-700 dark:text-indigo-100/90">{t('subscription.upgrade.protocol_initialized')}</span>
                     </div>
                 </div>
 
@@ -211,28 +211,28 @@ export default function SubscriptionPage() {
 
                 {proStats && (
                     <div className="mt-6 w-full max-w-[220px] mx-auto">
-                        <div className="flex justify-between text-[8px] font-black mb-1 opacity-50">
+                        <div className="flex justify-between text-[8px] font-black mb-1 text-slate-400 dark:text-white/50">
                             <span>{t('subscription.upgrade.lifetime_slots')}</span>
                             <span>{proStats.sold}/{proStats.total}</span>
                         </div>
-                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                            <motion.div initial={{ width: 0 }} animate={{ width: `${(proStats.sold / proStats.total) * 100}%` }} className="h-full bg-linear-to-r from-amber-400 to-orange-500" />
+                        <div className="h-1 bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden">
+                            <motion.div initial={{ width: 0 }} animate={{ width: `${(proStats.sold / proStats.total) * 100}%` }} className="h-full bg-linear-to-r from-indigo-500 to-fuchsia-500" />
                         </div>
                     </div>
                 )}
             </motion.div>
 
-            <div className="p-1.5 bg-slate-950/20 rounded-[1.8rem] mb-6 flex shadow-inner border border-white/5 mx-auto w-full max-w-[320px] relative">
+            <div className="p-1.5 bg-slate-100 dark:bg-slate-950/20 rounded-[1.8rem] mb-6 flex shadow-inner border border-slate-200 dark:border-white/5 mx-auto w-full max-w-[320px] relative">
                 <motion.div
                     className="absolute inset-y-1.5 rounded-[1.6rem] bg-indigo-600 shadow-xl z-0"
                     animate={{ x: selectedPlan === 'PRO' ? 0 : '100%', width: '50%' }}
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
-                <button onClick={() => { selection(); setSelectedPlan('PRO'); }} className={`flex-1 relative z-10 py-2.5 rounded-[1.6rem] flex flex-col items-center justify-center ${selectedPlan === 'PRO' ? 'text-white' : 'text-white/30'}`}>
+                <button onClick={() => { selection(); setSelectedPlan('PRO'); }} className={`flex-1 relative z-10 py-2.5 rounded-[1.6rem] flex flex-col items-center justify-center ${selectedPlan === 'PRO' ? 'text-white' : 'text-slate-400 dark:text-white/30'}`}>
                     <span className="text-[7px] font-black uppercase tracking-widest mb-0.5">STANDARD PRO</span>
                     <span className="text-lg font-black">$39</span>
                 </button>
-                <button onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }} className={`flex-1 relative z-10 py-2.5 rounded-[1.6rem] flex flex-col items-center justify-center ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-white/30'}`}>
+                <button onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }} className={`flex-1 relative z-10 py-2.5 rounded-[1.6rem] flex flex-col items-center justify-center ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-400 dark:text-white/30'}`}>
                     <span className="text-[7px] font-black uppercase tracking-widest mb-0.5">ELITE PRO+</span>
                     <span className="text-lg font-black">$69</span>
                 </button>
@@ -254,21 +254,21 @@ export default function SubscriptionPage() {
                                             {isTokens ? <Zap size={20} className={active ? 'text-white' : 'text-indigo-400'} /> : <Users size={20} className={active ? 'text-white' : 'text-emerald-400'} />}
                                         </div>
                                         <div className="text-left">
-                                            <p className={`text-[8px] font-black uppercase tracking-widest ${active ? 'text-indigo-200' : 'text-white/30'}`}>
+                                            <p className={`text-[8px] font-black uppercase tracking-widest ${active ? 'text-indigo-100' : 'text-slate-400 dark:text-white/30'}`}>
                                                 {isTokens ? (selectedPlan === 'PRO' ? '250 TOKENS' : '500 TOKENS') : (selectedPlan === 'PRO' ? '9 LEVELS' : '20 LEVELS')}
                                             </p>
-                                            <h3 className="text-sm font-black uppercase text-white">{isTokens ? t('subscription.upgrade.viral_studio_label') : t('subscription.upgrade.content_factory_label')}</h3>
+                                            <h3 className={`text-sm font-black uppercase ${active ? 'text-white' : 'text-slate-900 dark:text-white'}`}>{isTokens ? t('subscription.upgrade.viral_studio_label') : t('subscription.upgrade.content_factory_label')}</h3>
                                         </div>
                                     </div>
-                                    <ChevronDown size={14} className={`transition-transform duration-300 ${active ? 'rotate-180 text-white' : 'text-white/20'}`} />
+                                    <ChevronDown size={14} className={`transition-transform duration-300 ${active ? 'rotate-180 text-white' : 'text-slate-300 dark:text-white/20'}`} />
                                 </div>
                                 <AnimatePresence>
                                     {active && (
-                                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden mt-4 pt-4 border-t border-white/10">
-                                            <p className="text-[10px] text-white/60 leading-relaxed italic mb-4">
+                                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden mt-4 pt-4 border-t border-white/10 dark:border-white/10">
+                                            <p className="text-[10px] text-indigo-50 dark:text-white/60 leading-relaxed italic mb-4">
                                                 {isTokens ? t(selectedPlan === 'PRO' ? 'subscription.upgrade.viral_studio_desc_pro' : 'subscription.upgrade.viral_studio_desc_pro_plus') : t(selectedPlan === 'PRO' ? 'subscription.upgrade.content_factory_desc_pro' : 'subscription.upgrade.content_factory_desc_pro_plus')}
                                             </p>
-                                            <button onClick={scrollToPayment} className="w-full py-3 bg-white text-indigo-600 rounded-xl font-black text-[9px] uppercase tracking-widest">{t('subscription.upgrade.initialize_studio')}</button>
+                                            <button onClick={scrollToPayment} className="w-full py-3 bg-white text-indigo-600 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg">{t('subscription.upgrade.initialize_studio')}</button>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
@@ -281,15 +281,15 @@ export default function SubscriptionPage() {
             <motion.div ref={paymentRef} className="mb-10">
                 <AnimatePresence mode="wait">
                     <motion.div key={selectedPlan} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mb-4 px-2">
-                        <div className="bg-white/3 border border-white/5 rounded-3xl p-4 grid grid-cols-2 gap-2">
+                        <div className="bg-slate-50 dark:bg-white/3 border border-slate-200 dark:border-white/5 rounded-3xl p-4 grid grid-cols-2 gap-2">
                             {(() => {
                                 const benefits = t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true });
                                 return Array.isArray(benefits) ? benefits.map((b, i) => (
                                     <div key={i} className="flex items-center gap-2">
-                                        <div className={`w-3 h-3 rounded-full flex items-center justify-center shrink-0 ${selectedPlan === 'PRO' ? 'bg-indigo-500/20 text-indigo-400' : 'bg-amber-500/20 text-amber-400'}`}>
+                                        <div className={`w-3 h-3 rounded-full flex items-center justify-center shrink-0 ${selectedPlan === 'PRO' ? 'bg-indigo-500/20 text-indigo-500 dark:text-indigo-400' : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'}`}>
                                             <Check size={8} strokeWidth={4} />
                                         </div>
-                                        <span className="text-[8px] font-black text-white/50 uppercase tracking-tight line-clamp-1">{b}</span>
+                                        <span className="text-[8px] font-black text-slate-500 dark:text-white/50 uppercase tracking-tight line-clamp-1">{b}</span>
                                     </div>
                                 )) : null;
                             })()}
@@ -360,27 +360,27 @@ export default function SubscriptionPage() {
             </motion.div>
 
             <section className="mt-10 mb-10 text-center">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-4">
-                    <HelpCircle size={10} className="text-indigo-400" />
-                    <span className="text-[9px] font-black uppercase tracking-widest text-indigo-400">{t('subscription.faq.teaser_badge')}</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-white/5 border border-indigo-100 dark:border-white/10 mb-4">
+                    <HelpCircle size={10} className="text-indigo-600 dark:text-indigo-400" />
+                    <span className="text-[9px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400">{t('subscription.faq.teaser_badge')}</span>
                 </div>
-                <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-6 italic">{t('subscription.faq.header_pre')} <span className="text-indigo-500">{t('subscription.faq.header_highlight')}</span></h2>
+                <h2 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-6 italic">{t('subscription.faq.header_pre')} <span className="text-indigo-600 dark:text-indigo-500">{t('subscription.faq.header_highlight')}</span></h2>
                 <div className="space-y-2">
                     {[1, 2, 3, 4, 5].map((idx) => (
-                        <div key={idx} className="bg-white/3 border border-white/5 rounded-2xl overflow-hidden">
+                        <div key={idx} className="bg-slate-50 dark:bg-white/3 border border-slate-200 dark:border-white/5 rounded-2xl overflow-hidden">
                             <button onClick={() => { selection(); setExpandedFaq(expandedFaq === idx ? null : idx); }} className="w-full p-4 flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center">
-                                        {idx === 1 ? <Clock size={14} className="text-amber-500" /> : idx === 2 ? <Zap size={14} className="text-indigo-400" /> : idx === 3 ? <Globe size={14} className="text-emerald-400" /> : idx === 4 ? <Shield size={14} className="text-purple-400" /> : <Share2 size={14} className="text-fuchsia-400" />}
+                                    <div className="w-8 h-8 rounded-xl bg-indigo-500/5 dark:bg-white/5 flex items-center justify-center">
+                                        {idx === 1 ? <Clock size={14} className="text-indigo-600 dark:text-amber-500" /> : idx === 2 ? <Zap size={14} className="text-indigo-600 dark:text-indigo-400" /> : idx === 3 ? <Globe size={14} className="text-indigo-600 dark:text-emerald-400" /> : idx === 4 ? <Shield size={14} className="text-indigo-600 dark:text-purple-400" /> : <Share2 size={14} className="text-indigo-600 dark:text-fuchsia-400" />}
                                     </div>
-                                    <span className="text-[10px] font-black text-white uppercase tracking-tight text-left">{t(`subscription.faq.q${idx}`)}</span>
+                                    <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tight text-left">{t(`subscription.faq.q${idx}`)}</span>
                                 </div>
-                                <ChevronDown size={14} className={`transition-transform ${expandedFaq === idx ? 'rotate-180' : ''}`} />
+                                <ChevronDown size={14} className={`transition-transform ${expandedFaq === idx ? 'rotate-180' : ''} text-slate-400 dark:text-white/40`} />
                             </button>
                             <AnimatePresence>
                                 {expandedFaq === idx && (
                                     <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
-                                        <p className="p-4 pt-0 text-[10px] text-white/50 leading-relaxed font-bold uppercase tracking-tight italic border-t border-white/5">{t(`subscription.faq.a${idx}`)}</p>
+                                        <p className="p-4 pt-0 text-[10px] text-slate-500 dark:text-white/50 leading-relaxed font-bold uppercase tracking-tight italic border-t border-slate-100 dark:border-white/5">{t(`subscription.faq.a${idx}`)}</p>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
