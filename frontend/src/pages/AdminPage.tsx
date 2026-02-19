@@ -649,14 +649,14 @@ export const AdminPage = () => {
                         className="space-y-6"
                     >
                         {/* Total Clear Income */}
-                        <div className="p-6 rounded-[2.5rem] bg-slate-900 border border-white/10 space-y-6 relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                        <div className="p-6 rounded-[2.5rem] bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/10 space-y-6 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-8 opacity-5 dark:opacity-10 pointer-events-none text-slate-900 dark:text-white">
                                 <Wallet size={120} />
                             </div>
                             <div className="space-y-1 relative z-10">
-                                <span className="text-blue-400 text-[10px] font-black uppercase tracking-widest">Company Net Profit</span>
+                                <span className="text-blue-600 dark:text-blue-400 text-[10px] font-black uppercase tracking-widest">Company Net Profit</span>
                                 <div className="flex items-end justify-between">
-                                    <div className="text-4xl font-black text-white flex items-baseline gap-1">
+                                    <div className="text-4xl font-black text-slate-900 dark:text-white flex items-baseline gap-1">
                                         <span className="text-2xl text-blue-500 font-black">$</span>
                                         {stats?.financials.net_profit}
                                     </div>
@@ -665,33 +665,33 @@ export const AdminPage = () => {
                                         <div className="text-xl font-black text-emerald-500">{stats?.financials.gross_margin}%</div>
                                     </div>
                                 </div>
-                                <p className="text-slate-500 text-[10px] font-bold">Total revenue retained by the company</p>
+                                <p className="text-slate-500 dark:text-slate-500 text-[10px] font-bold">Total revenue retained by the company</p>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-white/5">
+                            <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-slate-200 dark:border-white/5">
                                 <div>
                                     <div className="text-slate-500 text-[9px] font-black uppercase">Network Payout (Actual)</div>
-                                    <div className="text-lg font-black text-white">${stats?.financials.total_commissions}</div>
-                                    <div className="text-[10px] text-blue-400 font-bold">{stats?.financials.actual_payout_ratio}% of Revenue</div>
+                                    <div className="text-lg font-black text-slate-900 dark:text-white">${stats?.financials.total_commissions}</div>
+                                    <div className="text-[10px] text-blue-600 dark:text-blue-400 font-bold">{stats?.financials.actual_payout_ratio}% of Revenue</div>
                                 </div>
                                 <div>
                                     <div className="text-slate-500 text-[9px] font-black uppercase">Payout Target (Theoretical)</div>
-                                    <div className="text-lg font-black text-slate-400">{stats?.financials.theoretical_payout_ratio}%</div>
-                                    <div className="text-[10px] text-slate-600 font-bold italic">Max possible distribution</div>
+                                    <div className="text-lg font-black text-slate-400 dark:text-slate-400">{stats?.financials.theoretical_payout_ratio}%</div>
+                                    <div className="text-[10px] text-slate-400 dark:text-slate-600 font-bold italic">Max possible distribution</div>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-white/5">
+                            <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-slate-200 dark:border-white/5">
                                 <div>
                                     <div className="text-slate-500 text-[9px] font-black uppercase">Gross Revenue (Total)</div>
-                                    <div className="text-lg font-black text-white">${stats?.financials.total_revenue}</div>
+                                    <div className="text-lg font-black text-slate-900 dark:text-white">${stats?.financials.total_revenue}</div>
                                 </div>
                                 <div>
                                     <div className="text-slate-500 text-[9px] font-black uppercase">Revenue USDT / TON</div>
-                                    <div className="text-xs font-bold text-white">
+                                    <div className="text-xs font-bold text-slate-700 dark:text-white">
                                         USDT: ${stats?.financials.total_revenue_usdt}
                                     </div>
-                                    <div className="text-xs font-bold text-blue-400">
+                                    <div className="text-xs font-bold text-blue-600 dark:text-blue-400">
                                         TON: {stats?.financials.total_revenue_ton} (${stats?.financials.current_ton_value})
                                     </div>
                                 </div>
@@ -1014,24 +1014,24 @@ export const AdminPage = () => {
                         exit={{ opacity: 0, y: -10 }}
                         className="space-y-6"
                     >
-                        <div className="p-6 rounded-[2.5rem] bg-slate-900 border border-white/10 space-y-6 relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                        <div className="p-6 rounded-[2.5rem] bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/10 space-y-6 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-8 opacity-5 dark:opacity-10 pointer-events-none text-slate-900 dark:text-white">
                                 <Database size={120} />
                             </div>
                             <div className="space-y-2 relative z-10">
-                                <h3 className="text-xl font-black text-white">System Maintenance</h3>
+                                <h3 className="text-xl font-black text-slate-900 dark:text-white">System Maintenance</h3>
                                 <p className="text-slate-500 dark:text-slate-400 text-xs">Critical tools for database consistency and performance optimization.</p>
                             </div>
 
                             {/* System Health Cards */}
                             <div className="grid grid-cols-2 gap-3 relative z-10">
-                                <div className="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-2">
+                                <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-2">
                                     <div className="text-[9px] font-black text-slate-500 uppercase">DB Latency</div>
                                     <div className={`text-lg font-black ${health && health.latency_ms > 200 ? 'text-amber-500' : 'text-emerald-500'}`}>
                                         {health ? `${health.latency_ms}ms` : '--'}
                                     </div>
                                 </div>
-                                <div className="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-2">
+                                <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-2">
                                     <div className="space-y-1">
                                         <div className="text-[8px] font-black text-slate-500 uppercase">Orphaned Partners</div>
                                         <div className={`text-xl font-black ${stats?.events.audit?.orphaned_count === 0 ? 'text-emerald-500' : 'text-red-500'}`}>
@@ -1041,8 +1041,8 @@ export const AdminPage = () => {
                                 </div>
                             </div>
 
-                            <div className="space-y-4 pt-4 border-t border-white/5 relative z-10">
-                                <div className="p-4 rounded-2xl bg-white/5 space-y-3">
+                            <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-white/5 relative z-10">
+                                <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-3">
                                     <div className="flex items-center gap-2 text-amber-500 font-bold text-[10px] uppercase tracking-widest">
                                         <AlertTriangle size={14} />
                                         Data Consistency Fix
@@ -1060,7 +1060,7 @@ export const AdminPage = () => {
                                     </button>
                                 </div>
 
-                                <div className="p-4 rounded-2xl bg-white/5 space-y-3">
+                                <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-3">
                                     <div className="flex items-center gap-2 text-blue-500 font-bold text-[10px] uppercase tracking-widest">
                                         <RefreshCw size={14} />
                                         System Cache Flush
@@ -1078,7 +1078,7 @@ export const AdminPage = () => {
                                     </button>
                                 </div>
 
-                                <div className="p-4 rounded-2xl bg-white/5 space-y-3">
+                                <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-3">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2 text-emerald-500 font-bold text-[10px] uppercase tracking-widest">
                                             <Bell size={14} />
@@ -1089,15 +1089,15 @@ export const AdminPage = () => {
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-3 gap-2">
-                                        <div className="p-2 rounded-xl bg-white/5 text-center">
+                                        <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
                                             <div className="text-[7px] text-slate-500 font-black uppercase">Sent</div>
                                             <div className="text-xs font-black text-emerald-500">{notifStats?.sent ?? 0}</div>
                                         </div>
-                                        <div className="p-2 rounded-xl bg-white/5 text-center">
+                                        <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
                                             <div className="text-[7px] text-slate-500 font-black uppercase">Pending</div>
                                             <div className="text-xs font-black text-amber-500">{notifStats?.pending ?? 0}</div>
                                         </div>
-                                        <div className="p-2 rounded-xl bg-white/5 text-center">
+                                        <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
                                             <div className="text-[7px] text-slate-500 font-black uppercase">Failed</div>
                                             <div className="text-xs font-black text-red-500">{notifStats?.failed ?? 0}</div>
                                         </div>
