@@ -146,7 +146,9 @@ class Settings(BaseSettings):
         validation_alias="ALLOWED_ORIGINS"
     )
 
-    # --- REFERRAL & REWARDS ---
+    # --- REWARDS & XP ---
+    DAILY_CHECKIN_XP: float = 10.0
+    STREAK_7DAY_XP_BONUS: float = 50.0
     REFERRAL_XP_MAP: Dict[int, float] = Field(
         default_factory=lambda: {
             1: 100.0, 2: 50.0, 3: 30.0, 4: 20.0, 5: 15.0, 
