@@ -150,19 +150,8 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 initial={{ width: 0 }}
                                 animate={{ width: `${xpProgress.percent}%` }}
                                 transition={{ duration: 1.5, ease: 'circOut' }}
-                                className="h-full rounded-full relative overflow-hidden"
-                                style={{
-                                    backgroundColor: currentRank.badgeColor,
-                                    boxShadow: `0 0 12px ${currentRank.badgeColor}60`
-                                }}
-                            >
-                                <div className="absolute inset-0 bg-linear-to-b from-white/30 to-transparent" />
-                                <motion.div
-                                    animate={{ x: ['-100%', '200%'] }}
-                                    transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-                                    className="absolute inset-0 bg-linear-to-r from-transparent via-white/50 to-transparent"
-                                />
-                            </motion.div>
+                                className="h-full rounded-full progress-bar-liquid"
+                            />
                         </div>
                     </div>
                 </div>

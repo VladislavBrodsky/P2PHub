@@ -153,12 +153,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                             </div>
                             <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800/80 rounded-full overflow-hidden p-px border border-slate-200 dark:border-white/5">
                                 <motion.div
-                                    className="h-full rounded-full relative"
-                                    style={{
-                                        background: task.type === 'referral'
-                                            ? 'linear-gradient(90deg, #3b82f6, #60a5fa)'
-                                            : 'linear-gradient(90deg, #10b981, #34d399)',
-                                    }}
+                                    className="h-full rounded-full progress-bar-liquid"
                                     initial={{ width: 0 }}
                                     animate={{
                                         width: `${Math.min((currentProgress / (task.requirement || 1)) * 100, 100)}%`
