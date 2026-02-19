@@ -80,14 +80,24 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
             case 'community':
                 return (
                     <div className="grid grid-cols-2 gap-2 pt-2">
-                        <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-(--card-bg) hover:bg-blue-500/10 transition-colors border border-(--card-border)">
+                        <a
+                            href="https://t.me/pintopaygrowth"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex flex-col items-center gap-2 p-3 rounded-xl bg-(--card-bg) hover:bg-blue-500/10 transition-colors border border-(--card-border)"
+                        >
                             <MessageCircle className="h-5 w-5 text-[#0088cc]" />
                             <span className="text-[10px] font-black uppercase text-(--color-text-primary)">{t('menu.channel')}</span>
-                        </button>
-                        <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-(--card-bg) hover:bg-blue-500/10 transition-colors border border-(--card-border)">
+                        </a>
+                        <a
+                            href="https://t.me/pintopayworld"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex flex-col items-center gap-2 p-3 rounded-xl bg-(--card-bg) hover:bg-blue-500/10 transition-colors border border-(--card-border)"
+                        >
                             <Users className="h-5 w-5 text-[#0088cc]" />
                             <span className="text-[10px] font-black uppercase text-(--color-text-primary)">{t('menu.chat')}</span>
-                        </button>
+                        </a>
                     </div>
                 );
             case 'faq':
