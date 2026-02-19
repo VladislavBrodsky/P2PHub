@@ -195,11 +195,11 @@
     "questions": [
       {
         "q": "What is Pintopay Partner Club?",
-        "a": "A global P2P network where you earn from your card usage and your team's activity across 5 levels. Build your financial empire with crypto cards and automated rewards."
+        "a": "A global P2P network where you earn from your card usage and your team's activity. Free plan: 3 commission levels. PRO: 9 levels. PRO+: 20 levels. Build your financial empire with crypto cards and automated rewards."
       },
       {
         "q": "How do I earn with my Pintopay card?",
-        "a": "Every transaction on your card generates cashback. Plus, you earn bonuses from your partner network (5 levels deep). The more you and your team use cards, the more passive income flows to you."
+        "a": "Every transaction on your card generates cashback. Plus, you earn commissions from your partner network (Free: 3 levels, PRO: 9 levels, PRO+: 20 levels deep). The more you and your team use cards, the more passive income flows to you."
       },
       {
         "q": "What are the card limits?",
@@ -207,7 +207,7 @@
       },
       {
         "q": "How does the referral network work?",
-        "a": "You earn from partners across different depths. Free tier: 5 levels. PRO: 9 levels. PRO+: 20 levels. Each level provides passive commissions from card usage and network growth."
+        "a": "You earn commissions from partners across different depths. Free plan: 3 levels (L1=30%, L2=10%, L3=3%). PRO: 9 levels (L4-L9 = 1% each). PRO+: 20 levels (L10-L20 = 0.6% each). Each level provides passive commissions from network growth."
       },
       {
         "q": "What is PRO subscription?",
