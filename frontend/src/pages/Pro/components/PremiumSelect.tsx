@@ -1,3 +1,5 @@
+import { useRef, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, Check } from 'lucide-react';
 import { useHaptic } from '../../../hooks/useHaptic';
@@ -31,6 +33,8 @@ export const PremiumSelect = ({
     indexStr
 }: PremiumSelectProps) => {
     const { selection } = useHaptic();
+    const triggerRef = useRef<HTMLButtonElement>(null);
+    const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
 
     const config = {
         indigo: {
@@ -70,8 +74,38 @@ export const PremiumSelect = ({
     const theme = config[color];
     const selectedLabel = options.find(o => o.id === value)?.label;
 
+    // Recalculate dropdown position whenever it opens or the window scrolls/resizes
+    useEffect(() => {
+        if (!isOpen || !triggerRef.current) return;
+
+        const calcPos = () => {
+            if (!triggerRef.current) return;
+            const rect = triggerRef.current.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            const spaceBelow = viewportHeight - rect.bottom;
+            const maxH = Math.min(spaceBelow - 8, viewportHeight * 0.55);
+
+            setDropdownStyle({
+                position: 'fixed',
+                top: rect.bottom + 6,
+                left: rect.left,
+                width: rect.width,
+                maxHeight: maxH,
+                zIndex: 9999,
+            });
+        };
+
+        calcPos();
+        window.addEventListener('scroll', calcPos, true);
+        window.addEventListener('resize', calcPos);
+        return () => {
+            window.removeEventListener('scroll', calcPos, true);
+            window.removeEventListener('resize', calcPos);
+        };
+    }, [isOpen]);
+
     return (
-        <div className="space-y-1.5 relative z-20">
+        <div className="space-y-1.5">
             <div className="flex items-center justify-between px-1">
                 <label className={`text-[9px] font-black uppercase tracking-widest ${theme.text}`}>
                     {indexStr}. {label}
@@ -79,6 +113,7 @@ export const PremiumSelect = ({
             </div>
 
             <button
+                ref={triggerRef}
                 onClick={() => { selection(); onToggle(); }}
                 className={`w-full relative h-12 sm:h-14 bg-slate-50 dark:bg-slate-900/50 border transition-all duration-300 rounded-xl sm:rounded-2xl px-5 text-left flex items-center justify-between group outline-none
                     ${isOpen
@@ -94,56 +129,60 @@ export const PremiumSelect = ({
                 </div>
             </button>
 
-            <AnimatePresence>
-                {isOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -10, scale: 0.98 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -10, scale: 0.98 }}
-                        transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-                        className="absolute left-0 right-0 top-full mt-2 bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden z-50 max-h-[60vh] overflow-y-auto"
-                    >
-                        <div className="p-1.5 space-y-0.5">
-                            {options.map((option) => {
-                                const isSelected = option.id === value;
-                                return (
-                                    <button
-                                        key={option.id}
-                                        onClick={() => {
-                                            selection();
-                                            onChange(option.id);
-                                            onToggle(); // Close after selection
-                                        }}
-                                        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left group/item
-                                            ${isSelected
-                                                ? theme.active
-                                                : 'hover:bg-slate-50 dark:hover:bg-white/5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                                            }
-                                        `}
-                                    >
-                                        <span className="text-[12px] sm:text-[13px] font-bold">
-                                            {option.label}
-                                        </span>
-                                        {isSelected && (
-                                            <Check className={`w-4 h-4 ${theme.text}`} />
-                                        )}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Click-away listener backdrop */}
-            {isOpen && (
+            {/* Click-away backdrop */}
+            {isOpen && typeof document !== 'undefined' && createPortal(
                 <div
-                    className="fixed inset-0 z-40 bg-transparent"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onToggle();
-                    }}
-                />
+                    className="fixed inset-0 bg-transparent"
+                    style={{ zIndex: 9998 }}
+                    onClick={(e) => { e.stopPropagation(); onToggle(); }}
+                />,
+                document.body
+            )}
+
+            {/* Dropdown list — rendered in portal to escape stacking contexts */}
+            {typeof document !== 'undefined' && createPortal(
+                <AnimatePresence>
+                    {isOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                            transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
+                            style={dropdownStyle}
+                            className="bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-y-auto"
+                        >
+                            <div className="p-1.5 space-y-0.5">
+                                {options.map((option) => {
+                                    const isSelected = option.id === value;
+                                    return (
+                                        <button
+                                            key={option.id}
+                                            onClick={() => {
+                                                selection();
+                                                onChange(option.id);
+                                                onToggle();
+                                            }}
+                                            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left group/item
+                                                ${isSelected
+                                                    ? theme.active
+                                                    : 'hover:bg-slate-50 dark:hover:bg-white/5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                                                }
+                                            `}
+                                        >
+                                            <span className="text-[12px] sm:text-[13px] font-bold">
+                                                {option.label}
+                                            </span>
+                                            {isSelected && (
+                                                <Check className={`w-4 h-4 ${theme.text}`} />
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>,
+                document.body
             )}
         </div>
     );
