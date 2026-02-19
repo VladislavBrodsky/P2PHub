@@ -67,10 +67,24 @@ class TestNotificationEnqueue:
 
     async def test_priority_methods(self):
         """Verifies that send_critical/standard/low_prio set correct priority and dedup flags."""
-        from app.services.notification_service import notification_service
+        from app.services.notification_service import NotificationService, notification_service
         
-        original_enqueue = notification_service.enqueue_notification
+        # 1. Restore REAL methods (bypassing conftest.py) for testing the internal logic
+        r_enqueue  = NotificationService.enqueue_notification
+        r_critical = NotificationService.send_critical
+        r_standard = NotificationService.send_standard
+        r_low      = NotificationService.send_low_prio
+
+        orig_enqueue = notification_service.enqueue_notification
+        orig_crit    = notification_service.send_critical
+        orig_std     = notification_service.send_standard
+        orig_low     = notification_service.send_low_prio
+
+        # Patch instance with REAL logic but mock the destination (enqueue_notification)
         notification_service.enqueue_notification = AsyncMock()
+        notification_service.send_critical = r_critical.__get__(notification_service, NotificationService)
+        notification_service.send_standard = r_standard.__get__(notification_service, NotificationService)
+        notification_service.send_low_prio = r_low.__get__(notification_service, NotificationService)
 
         try:
             # Critical should bypass dedup by default and be high priority
@@ -91,7 +105,10 @@ class TestNotificationEnqueue:
                 123, "Low", buttons=None, priority="low", bypass_dedup=False
             )
         finally:
-            notification_service.enqueue_notification = original_enqueue
+            notification_service.enqueue_notification = orig_enqueue
+            notification_service.send_critical = orig_crit
+            notification_service.send_standard = orig_std
+            notification_service.send_low_prio = orig_low
 
 
 # ---------------------------------------------------------------------------
@@ -202,11 +219,14 @@ class TestPROUserNotifications:
         """Free user at L4 boundary receives FOMO upgrade notification."""
         # 5-level chain, no one is PRO → chain[0] is L4 (Free, locked)
         chain = await create_referral_chain(levels=5)
-        notification_service.enqueue_notification.reset_mock()
+        notification_service.send_low_prio.reset_mock()
+        notification_service.send_critical.reset_mock()
         await process_referral_logic(chain[4].id)
-        # L4 free user gets a FOMO notification (level=4 triggers fomo_msg)
-        assert notification_service.enqueue_notification.call_count >= 3, \
-            "At minimum L1-L3 XP + L4 FOMO notification should fire"
+        
+        xp_notifs = notification_service.send_low_prio.call_count
+        fomo_notifs = notification_service.send_critical.call_count
+        assert xp_notifs >= 3, f"Expected at least 3 XP notifications, got {xp_notifs}"
+        assert fomo_notifs >= 1, f"Expected at least 1 FOMO notification, got {fomo_notifs}"
 
 
 # ---------------------------------------------------------------------------

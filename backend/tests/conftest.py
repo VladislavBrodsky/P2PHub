@@ -277,12 +277,15 @@ async def mock_redis():
     
     # Patch Notification Service to avoid Event Loop errors
     from app.services.notification_service import notification_service
+    
+    # Save original methods for restoration
     original_enqueue = notification_service.enqueue_notification
     original_send_level = notification_service.send_level_up_notification
     original_send_standard = notification_service.send_standard
     original_send_low_prio = notification_service.send_low_prio
     original_send_critical = notification_service.send_critical
     
+    # Mock all methods so tests can call .reset_mock() and check .call_count
     notification_service.enqueue_notification = AsyncMock(return_value=True)
     notification_service.send_level_up_notification = AsyncMock(return_value=True)
     notification_service.send_standard = AsyncMock(return_value=True)

@@ -358,6 +358,13 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             
             recipient.balance = Partner.balance + commission
             recipient.total_earned_usdt = Partner.total_earned_usdt + commission
+            
+            # --- XP COMMISSION FOR ACTIVE REFERRAL ---
+            xp_gain = _calculate_referral_xp(comm_level, recipient)
+            xp_before = float(recipient.xp)
+            recipient.xp = Partner.xp + xp_gain
+            xp_after = xp_before + xp_gain
+            
             session.add(recipient)
             
             description = f"{'PRO+' if is_pro_plus else 'PRO'} Commission (L{comm_level})"
@@ -380,6 +387,12 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 amount=commission, level=comm_level,
                 balance_before=balance_before, balance_after=balance_after,
             )
+            await audit_service.log_xp_award(
+                session=session, partner_id=recipient.id, buyer_id=partner.id,
+                xp_amount=xp_gain, level=comm_level, is_pro=recipient.is_pro,
+                xp_before=xp_before, xp_after=xp_after
+            )
+            await _check_level_up(recipient, deferred_notifications, xp_after)
 
             # Purge Caches
             redis_pipe.delete(f"partner:profile:{recipient.telegram_id}")
