@@ -36,6 +36,7 @@ export const PremiumSelect = ({
 }: PremiumSelectProps) => {
     const { selection } = useHaptic();
     const triggerRef = useRef<HTMLButtonElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
     const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
 
     const config = {
@@ -106,6 +107,28 @@ export const PremiumSelect = ({
         };
     }, [isOpen]);
 
+    // Handle click outside to close
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+            if (
+                triggerRef.current && !triggerRef.current.contains(e.target as Node) &&
+                dropdownRef.current && !dropdownRef.current.contains(e.target as Node)
+            ) {
+                onClose ? onClose() : onToggle();
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('touchstart', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('touchstart', handleClickOutside);
+        };
+    }, [isOpen, onClose, onToggle]);
+
     return (
         <div className="space-y-1.5">
             <div className="flex items-center justify-between px-1">
@@ -131,27 +154,20 @@ export const PremiumSelect = ({
                 </div>
             </button>
 
-            {/* Click-away backdrop */}
-            {isOpen && typeof document !== 'undefined' && createPortal(
-                <div
-                    className="fixed inset-0 bg-transparent"
-                    style={{ zIndex: 9998 }}
-                    onClick={(e) => { e.stopPropagation(); onClose ? onClose() : onToggle(); }}
-                />,
-                document.body
-            )}
+
 
             {/* Dropdown list — rendered in portal to escape stacking contexts */}
             {typeof document !== 'undefined' && createPortal(
                 <AnimatePresence>
                     {isOpen && (
                         <motion.div
+                            ref={dropdownRef}
                             initial={{ opacity: 0, y: -8, scale: 0.98 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -8, scale: 0.98 }}
                             transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
                             style={dropdownStyle}
-                            className="bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-y-auto overscroll-contain"
+                            className="bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-y-auto overscroll-contain z-9999"
                         >
                             <div className="p-1.5 space-y-0.5">
                                 {options.map((option) => {

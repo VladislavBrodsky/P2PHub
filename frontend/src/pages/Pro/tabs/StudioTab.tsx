@@ -253,14 +253,14 @@ export const StudioTab = ({
                                     scale: externalStep === s ? 1.15 : 1,
                                     backgroundColor: externalStep === s ? 'rgb(255, 255, 255)' : externalStep > s ? 'rgb(16, 185, 129)' : 'rgb(241, 245, 249)'
                                 }}
-                                className={`w-9 h-9 rounded-2xl flex items-center justify-center text-[10px] font-black transition-all shadow-xl ${externalStep === s
-                                    ? 'vibing-blue-animated text-white ring-4 ring-indigo-500/10'
+                                className={`w-8 h-8 rounded-2xl flex items-center justify-center text-[10px] font-black transition-all shadow-xl ${externalStep === s
+                                    ? 'vibing-blue-animated text-white ring-4 ring-indigo-500/5'
                                     : externalStep > s
                                         ? 'bg-emerald-500 text-white'
-                                        : 'bg-slate-50 dark:bg-slate-900 text-slate-400 dark:text-slate-600 border border-slate-200 dark:border-white/5'
+                                        : 'bg-slate-50 dark:bg-slate-900 text-slate-400 dark:text-slate-700 border border-slate-200 dark:border-white/10'
                                     }`}
                             >
-                                {externalStep > s ? <CheckCircle2 size={16} /> : (
+                                {externalStep > s ? <CheckCircle2 size={14} /> : (
                                     <span className={externalStep === s ? 'animate-pulse' : ''}>{s}</span>
                                 )}
                             </motion.div>
@@ -381,11 +381,11 @@ export const StudioTab = ({
                             <button
                                 onClick={() => { selection(); setExternalStep(2); }}
                                 disabled={!postType || !audience}
-                                className="w-full h-14 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale sm:hidden"
+                                className="w-full h-12 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale sm:hidden"
                             >
-                                <Sparkles size={16} className="animate-pulse" />
+                                <Sparkles size={14} className="animate-pulse" />
                                 {t('pro_dashboard.studio.initiate_btn')}
-                                <ChevronRight size={16} />
+                                <ChevronRight size={14} />
                             </button>
                             <p className="text-[9px] font-black text-slate-400 text-center mt-4 uppercase tracking-widest opacity-40">
                                 Powered by Claude 3.5 & Flux PRO
@@ -535,12 +535,12 @@ export const StudioTab = ({
                                 <div className="flex flex-col gap-3 pt-4 max-w-sm mx-auto">
                                     <button
                                         onClick={handleGenerate}
-                                        className="group relative w-full h-14 sm:h-16 bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 rounded-2xl font-black text-white text-[11px] sm:text-[12px] uppercase tracking-[0.2em] active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl shadow-indigo-500/30 dark:shadow-indigo-500/20 overflow-hidden"
+                                        className="group relative w-full h-12 sm:h-14 bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 rounded-2xl font-black text-white text-[10px] sm:text-[11px] uppercase tracking-[0.2em] active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl shadow-indigo-500/30 dark:shadow-indigo-500/20 overflow-hidden"
                                     >
                                         <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                                        <Sparkles size={18} className="animate-pulse" />
+                                        <Sparkles size={16} className="animate-pulse" />
                                         GO VIRAL
-                                        <Send size={16} className="group-active:translate-x-1 group-active:-translate-y-1 transition-transform" />
+                                        <Send size={14} className="group-active:translate-x-1 group-active:-translate-y-1 transition-transform" />
                                     </button>
                                     <button
                                         onClick={() => { selection(); setExternalStep(1); }}
@@ -622,11 +622,11 @@ export const StudioTab = ({
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-3 pb-4">
-                        <button onClick={() => { selection(); setShowPublishModal(true); }} className="h-12 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20">
-                            {t('pro_dashboard.studio.publish_btn')} <Send size={14} className="animate-pulse" />
+                        <button onClick={() => { selection(); setShowPublishModal(true); }} className="h-11 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20">
+                            {t('pro_dashboard.studio.publish_btn')} <Send size={12} className="animate-pulse" />
                         </button>
-                        <button onClick={() => { impact('light'); handleSharePost(); }} className="h-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-slate-900 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm">
-                            {t('pro_dashboard.studio.share_btn')} <Share size={14} />
+                        <button onClick={() => { impact('light'); handleSharePost(); }} className="h-11 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-slate-900 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm">
+                            {t('pro_dashboard.studio.share_btn')} <Share size={12} />
                         </button>
                     </div>
                 </motion.div>

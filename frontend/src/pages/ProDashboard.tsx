@@ -450,28 +450,28 @@ export const ProDashboard = () => {
 
                     <button
                         onClick={() => { selection(); setShowSetup(true); }}
-                        className="w-9 h-9 sm:w-10 sm:h-10 bg-white/40 dark:bg-white/5 backdrop-blur-2xl hover:bg-white dark:hover:bg-white/10 rounded-xl border border-white/40 dark:border-white/10 transition-all group active:scale-90 flex items-center justify-center shadow-premium-sm shrink-0"
+                        className="w-8 h-8 sm:w-10 sm:h-10 bg-white/40 dark:bg-white/5 backdrop-blur-2xl hover:bg-white dark:hover:bg-white/10 rounded-xl border border-white/40 dark:border-white/10 transition-all group active:scale-90 flex items-center justify-center shadow-premium-sm shrink-0"
                     >
-                        <Settings size={16} className="text-slate-500 dark:text-slate-400 group-hover:text-indigo-500 group-hover:rotate-45 transition-all duration-500 w-4 h-4 sm:w-4 sm:h-4" />
+                        <Settings size={14} className="text-slate-500 dark:text-slate-400 group-hover:text-indigo-500 group-hover:rotate-45 transition-all duration-500 w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </button>
                 </div>
 
-                <div className="flex p-1 bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl rounded-[1.25rem] border border-white/60 dark:border-white/10 shadow-premium relative group/nav mt-4 mx-auto max-w-md w-full">
+                <div className="flex p-1 bg-white/40 dark:bg-slate-900/20 backdrop-blur-3xl rounded-[1.25rem] border border-white/40 dark:border-white/5 shadow-premium mt-4 mx-auto max-w-[360px] w-full">
                     {(['studio', 'tools', 'growth'] as const).map((tab) => {
                         const tabConfig = {
                             studio: {
                                 gradient: 'from-blue-600 via-indigo-500 to-blue-600',
-                                shadow: 'shadow-indigo-500/20',
+                                shadow: 'shadow-indigo-500/10',
                                 icon: 'text-indigo-100'
                             },
                             tools: {
                                 gradient: 'from-amber-500 via-orange-500 to-amber-500',
-                                shadow: 'shadow-orange-500/20',
+                                shadow: 'shadow-orange-500/10',
                                 icon: 'text-orange-100'
                             },
                             growth: {
                                 gradient: 'from-emerald-500 via-teal-500 to-emerald-500',
-                                shadow: 'shadow-emerald-500/20',
+                                shadow: 'shadow-emerald-500/10',
                                 icon: 'text-emerald-100'
                             }
                         };
@@ -480,24 +480,24 @@ export const ProDashboard = () => {
                             <button
                                 key={tab}
                                 onClick={() => { selection(); setActiveTab(tab); impact('light'); }}
-                                className={`flex-1 relative py-2.5 rounded-xl transition-all duration-500 ${activeTab === tab
+                                className={`flex-1 relative py-2 rounded-xl transition-all duration-500 ${activeTab === tab
                                     ? 'text-white'
-                                    : 'text-slate-400 dark:text-slate-500 hover:text-indigo-500'}`}
+                                    : 'text-slate-400 dark:text-slate-600 hover:text-indigo-500'}`}
                             >
                                 {activeTab === tab && (
                                     <motion.div
                                         layoutId="activeTab"
                                         className={`absolute inset-0 bg-linear-to-r ${tabConfig[tab].gradient} bg-size-[200%_auto] animate-gradient-xy rounded-xl ${tabConfig[tab].shadow}`}
-                                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                        transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
                                     >
-                                        <div className="absolute inset-0 bg-white/10 backdrop-blur-[1px] rounded-xl" />
+                                        <div className="absolute inset-0 bg-white/5 backdrop-blur-[1px] rounded-xl" />
                                     </motion.div>
                                 )}
                                 <span className="relative z-10 flex items-center justify-center gap-1.5">
-                                    {tab === 'studio' && <Cpu size={15} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : 'group-hover/nav:rotate-12'}`} />}
-                                    {tab === 'tools' && <Settings size={15} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : 'group-hover/nav:rotate-12'}`} />}
-                                    {tab === 'growth' && <Users size={15} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : 'group-hover/nav:rotate-12'}`} />}
-                                    <span className="text-[10px] font-black uppercase tracking-[0.15em]">{t(`pro_dashboard.tab_${tab}`)}</span>
+                                    {tab === 'studio' && <Cpu size={14} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
+                                    {tab === 'tools' && <Settings size={14} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
+                                    {tab === 'growth' && <Users size={14} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
+                                    <span className="text-[9px] font-black uppercase tracking-[0.12em]">{t(`pro_dashboard.tab_${tab}`)}</span>
                                 </span>
                             </button>
                         );

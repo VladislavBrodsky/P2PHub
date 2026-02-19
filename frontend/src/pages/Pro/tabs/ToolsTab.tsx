@@ -50,7 +50,7 @@ export const ToolsTab = ({
                         whileHover={{ y: -3 }}
                         className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-7 border border-slate-200 dark:border-white/10 group relative flex flex-col shadow-xl h-full"
                     >
-                        <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                         <div className="flex items-center justify-between mb-5">
                             <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 flex items-center justify-center text-indigo-500 group-hover:scale-110 transition-all duration-500 shadow-sm shrink-0">
                                 <Zap size={18} />
@@ -81,10 +81,10 @@ export const ToolsTab = ({
                         </p>
                         <button
                             onClick={() => { selection(); setShowHeadlineModal(true); }}
-                            className="mt-auto w-full h-11 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-[9px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-indigo-500/20 shrink-0"
+                            className="mt-auto w-full h-9 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-[8.5px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-indigo-500/20 shrink-0 relative z-20 shadow-premium-sm"
                         >
                             {t('pro_dashboard.tools.headline.btn')}
-                            <ChevronRight size={12} />
+                            <ChevronRight size={10} />
                         </button>
                     </motion.div>
 
@@ -93,7 +93,7 @@ export const ToolsTab = ({
                         whileHover={{ y: -3 }}
                         className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-7 border border-slate-200 dark:border-white/10 group relative flex flex-col shadow-xl h-full"
                     >
-                        <div className="absolute inset-0 bg-linear-to-br from-amber-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="absolute inset-0 bg-linear-to-br from-amber-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                         <div className="flex items-center justify-between mb-5">
                             <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20 flex items-center justify-center text-amber-500 group-hover:scale-110 transition-all duration-500 shadow-sm shrink-0">
                                 <Sparkles size={18} />
@@ -124,10 +124,10 @@ export const ToolsTab = ({
                         </p>
                         <button
                             onClick={() => { selection(); setShowBioModal(true); }}
-                            className="mt-auto w-full h-11 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-[9px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-amber-500/20 shrink-0"
+                            className="mt-auto w-full h-9 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-[8.5px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-amber-500/20 shrink-0 relative z-20 shadow-premium-sm"
                         >
                             {t('pro_dashboard.tools.bio.btn')}
-                            <ChevronRight size={12} />
+                            <ChevronRight size={10} />
                         </button>
                     </motion.div>
                 </div>
@@ -137,7 +137,7 @@ export const ToolsTab = ({
                     whileHover={{ y: -3 }}
                     className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-7 border border-slate-200 dark:border-white/10 group relative h-full flex flex-col shadow-xl"
                 >
-                    <div className="absolute inset-0 bg-linear-to-br from-orange-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-linear-to-br from-orange-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     <div className="flex items-center justify-between mb-5 relative z-10">
                         <div className="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-500/10 border border-orange-100 dark:border-orange-500/20 flex items-center justify-center text-orange-600 dark:text-orange-500 group-hover:scale-110 transition-all duration-500 shadow-sm shrink-0">
                             <Flame size={18} />
@@ -182,12 +182,12 @@ export const ToolsTab = ({
                     <button
                         onClick={() => { selection(); handleFetchTrends(); }}
                         disabled={isFetchingTrends}
-                        className="mt-auto w-full h-11 vibing-blue-animated rounded-xl font-black text-[9px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/10 disabled:grayscale shrink-0 relative z-10"
+                        className="mt-auto w-full h-9 bg-linear-to-r from-orange-600 to-amber-500 text-white rounded-xl font-black text-[8.5px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-orange-500/10 disabled:grayscale shrink-0 relative z-20"
                     >
-                        {isFetchingTrends ? <Loader2 className="animate-spin w-3.5 h-3.5" /> : (
+                        {isFetchingTrends ? <Loader2 className="animate-spin w-3 h-3" /> : (
                             <>
                                 {trends.length > 0 ? t('pro_dashboard.tools.trends.btn_refresh') : t('pro_dashboard.tools.trends.btn')}
-                                <Compass size={12} className="animate-[spin_6s_linear_infinite]" />
+                                <Compass size={10} className="animate-[spin_6s_linear_infinite]" />
                             </>
                         )}
                     </button>
@@ -246,12 +246,12 @@ export const ToolsTab = ({
                                 handleRunMarketingAudit();
                             }}
                             disabled={isAuditing}
-                            className="w-full sm:w-auto px-5 h-11 vibing-blue-animated rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 text-white shrink-0 disabled:grayscale"
+                            className="w-full sm:w-auto px-4 h-9 vibing-blue-animated rounded-xl font-black text-[8.5px] uppercase tracking-widest shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 text-white shrink-0 disabled:grayscale relative z-20"
                         >
-                            {isAuditing ? <Loader2 className="animate-spin w-3.5 h-3.5" /> : (
+                            {isAuditing ? <Loader2 className="animate-spin w-3 h-3" /> : (
                                 <>
                                     {t('pro_dashboard.tools.audit.btn')}
-                                    <ChevronRight size={12} />
+                                    <ChevronRight size={10} />
                                 </>
                             )}
                         </button>

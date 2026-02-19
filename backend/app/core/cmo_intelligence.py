@@ -21,7 +21,8 @@ class AudienceProfile:
     """Deep psychological profile for each target audience."""
     
     PROFILES = {
-        "Cryptocurrency Traders": {
+        "traders": {
+            "name": "Cryptocurrency Traders",
             "psychographics": {
                 "pain_points": [
                     "High fees eating into profits",
@@ -55,10 +56,12 @@ class AudienceProfile:
                 "This card trick bypassed {obstacle} (used by top 1%)",
                 "The {specific metric} most traders ignore (costs you ${amount}/month)"
             ],
+            "visual_base": "A focused crypto trader, mid-30s, tech-wear aesthetic, clean grooming, subtle luxury wrist-wear, in a high-end multi-monitor trading command center.",
             "cta_style": "Urgent, exclusive, data-backed"
         },
         
-        "Digital Nomads": {
+        "nomads": {
+            "name": "Digital Nomads",
             "psychographics": {
                 "pain_points": [
                     "Blocked accounts when traveling",
@@ -92,10 +95,12 @@ class AudienceProfile:
                 "Why digital nomads are ditching traditional banks (and what they use instead)",
                 "From {location} to {location}: My financial setup for the laptop lifestyle"
             ],
+            "visual_base": "A free-spirited digital nomad, minimalist high-end street-wear, working on a premium laptop at a luxury beach club or mountain resort in Bali context.",
             "cta_style": "Lifestyle-based, community-driven"
         },
         
-        "Affiliate Marketers": {
+        "affiliates": {
+            "name": "Affiliate Marketers",
             "psychographics": {
                 "pain_points": [
                     "Payment processor holds/delays",
@@ -129,10 +134,12 @@ class AudienceProfile:
                 "{Number} ways to cut {percentage}% from your payout costs",
                 "I tested {number} payment methods. Only one scaled past ${amount}/month."
             ],
+            "visual_base": "A charismatic marketing entrepreneur, energetic presence, modern casual luxury attire, holding a high-end smartphone in a sun-drenched urban loft.",
             "cta_style": "ROI-focused, A/B tested language"
         },
         
-        "Network Builders": {
+        "builders": {
+            "name": "Network Builders",
             "psychographics": {
                 "pain_points": [
                     "Slow team payments",
@@ -166,10 +173,12 @@ class AudienceProfile:
                 "Why top leaders are migrating to crypto-based compensation",
                 "From {starting point} to {achievement}: The infrastructure that changed everything"
             ],
+            "visual_base": "A visionary leader, authoritative and inspiring, sophisticated tailored clothing, collaborating in a premium glass-walled corporate innovation suite.",
             "cta_style": "Vision-driven, team-focused"
         },
         
-        "Stay-at-home Parents": {
+        "parents": {
+            "name": "Stay-at-home Parents",
             "psychographics": {
                 "pain_points": [
                     "Financial dependence",
@@ -203,10 +212,12 @@ class AudienceProfile:
                 "Why {percentage}% of stay-at-home parents are using this card (and you should too)",
                 "From dependent to partner: My journey to financial contribution"
             ],
+            "visual_base": "A successful, elegant parent, cozy high-end leisurewear, in a sun-drenched, modern minimalist luxury home with warm lighting.",
             "cta_style": "Gentle, reassuring, empowering"
         },
         
-        "Student Hustlers": {
+        "hustlers": {
+            "name": "Student Hustlers",
             "psychographics": {
                 "pain_points": [
                     "Student loan debt",
@@ -240,10 +251,12 @@ class AudienceProfile:
                 "While your friends get rejected by banks, you're already scaling",
                 "From broke student to ${amount}/month: The financial cheat code"
             ],
+            "visual_base": "An ambitious Gen-Z student/hustler, premium street-wear, working with intense focus on a tablet in a vibrant, futuristic tech-cafe hub.",
             "cta_style": "High-energy, FOMO-driven, peer-proof"
         },
         
-        "Corporate Burnouts": {
+        "burnouts": {
+            "name": "Corporate Burnouts",
             "psychographics": {
                 "pain_points": [
                     "Golden handcuffs syndrome",
@@ -277,16 +290,19 @@ class AudienceProfile:
                 "How {number} ex-corporate refugees are building their exit strategy",
                 "You're one financial system away from saying 'I quit'"
             ],
+            "visual_base": "A relieved former corporate professional, relaxed premium linen clothing, peaceful and happy, enjoying a luxury balcony view during sunrise.",
             "cta_style": "Empowering, strategic, transformational"
-        }
+        },
     }
+
 
 
 class ContentCategory:
     """Strategic frameworks for each post category."""
     
     STRATEGIES = {
-        "Product Launch": {
+        "launch": {
+            "name": "Product Launch",
             "technique": CopywritingTechnique.AIDA,
             "structure": {
                 "hook": "NEW + EXCLUSIVE + SCARCITY",
@@ -303,10 +319,12 @@ class ContentCategory:
                 "bold": ["NEW", "EXCLUSIVE", "LAUNCH", "LIMITED", "key benefits"],
                 "italic": ["Subtle urgency phrases", "timestamps"],
                 "hyperlink": ["Product link", "Waitlist", "Early access"]
-            }
+            },
+            "visual_scene": "celebrating a major product breakthrough, holding a sleek matte-black Pintopay crypto card with gold laser-etched details."
         },
         
-        "FOMO Builder": {
+        "fomo": {
+            "name": "FOMO Builder",
             "technique": CopywritingTechnique.PAS,
             "structure": {
                 "hook": "SHOCKING STAT or MISSED OPPORTUNITY",
@@ -323,10 +341,12 @@ class ContentCategory:
                 "bold": ["WARNING", "stats", "DON'T WAIT", "CLOSING SOON"],
                 "italic": ["Whispers of insider info"],
                 "hyperlink": ["Join now", "Secure spot", "Limited access"]
-            }
+            },
+            "visual_scene": "experiencing an intense 'don't miss out' moment, looking at a screen with rapid upward growth curves, dramatic cinematic side-lighting."
         },
         
-        "System Authority": {
+        "authority": {
+            "name": "System Authority",
             "technique": CopywritingTechnique.PASTOR,
             "structure": {
                 "hook": "INDUSTRY PROBLEM everyone accepts",
@@ -343,10 +363,12 @@ class ContentCategory:
                 "bold": ["TRUTH", "statistics", "expert quotes", "THE REAL PROBLEM"],
                 "italic": ["Industry myths", "common assumptions"],
                 "hyperlink": ["Case study", "Whitepaper", "Proof"]
-            }
+            },
+            "visual_scene": "sharing elite financial insights, poised and knowledgeable, surrounded by holographic-style clean digital data on glass screens."
         },
         
-        "Lifestyle Flex": {
+        "lifestyle": {
+            "name": "Lifestyle Flex",
             "technique": CopywritingTechnique.BAB,
             "structure": {
                 "hook": "BEFORE: relatable struggle",
@@ -363,10 +385,12 @@ class ContentCategory:
                 "bold": ["FROM", "TO", "transformation keywords", "lifestyle benefits"],
                 "italic": ["Personal reflections", "quotes"],
                 "hyperlink": ["Start your journey", "See how", "Transform now"]
-            }
+            },
+            "visual_scene": "enjoying the rewards of decentralization, a sunset view from a luxury car interior or private marina, symbols of ultimate freedom."
         },
         
-        "Passive Income Proof": {
+        "income": {
+            "name": "Passive Income Proof",
             "technique": CopywritingTechnique.FAB,
             "structure": {
                 "hook": "SPECIFIC INCOME CLAIM with proof",
@@ -383,10 +407,12 @@ class ContentCategory:
                 "bold": ["Income figures", "PASSIVE", "MONTHLY", "RECURRING", "key mechanisms"],
                 "italic": ["Disclaimers", "personal journey"],
                 "hyperlink": ["See my results", "Start earning", "Join network"]
-            }
+            },
+            "visual_scene": "viewing a notification on a premium smartphone showing a large successful USDT deposit from P2PHub system."
         },
         
-        "Network Growth": {
+        "network": {
+            "name": "Network Growth",
             "technique": CopywritingTechnique.QUEST,
             "structure": {
                 "hook": "QUALIFY: Are you ready to scale?",
@@ -403,10 +429,12 @@ class ContentCategory:
                 "bold": ["SCALE", "growth metrics", "TEAM", "EXPONENTIAL", "multiplication factors"],
                 "italic": ["Visionary statements"],
                 "hyperlink": ["Build your network", "Join movement", "Partner program"]
-            }
+            },
+            "visual_scene": "surrounded by a high-energy collaborative team in a modern premium co-working space, high-fives and shared success energy."
         },
         
-        "Web3 Tutorial": {
+        "tutorial": {
+            "name": "Web3 Tutorial",
             "technique": CopywritingTechnique.SSS,
             "structure": {
                 "hook": "STAR: This changed everything for [audience]",
@@ -423,9 +451,11 @@ class ContentCategory:
                 "bold": ["STEP 1", "STEP 2", "action items", "key concepts"],
                 "italic": ["Pro tips", "warnings"],
                 "hyperlink": ["Tutorial", "Resources", "Start here", "Guide"]
-            }
+            },
+            "visual_scene": "explaining a simple 1-click wealth protocol on a user-friendly mobile app, pointing at a clear 'Activate' button on the screen."
         }
     }
+
 
 
 class NativeLanguageOptimization:

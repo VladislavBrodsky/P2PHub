@@ -203,16 +203,16 @@ export const ProDashboardModals = ({
                         >
                             {/* Header Section */}
                             <div className="px-6 py-5 sm:px-8 sm:py-6 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-indigo-500/5 to-transparent relative z-20">
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-3">
                                     <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-600/30">
-                                        <Network size={24} className="text-white" />
+                                        <Network size={22} className="text-white" />
                                     </div>
                                     <div className="min-w-0">
-                                        <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1 truncate">
+                                        <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1 truncate">
                                             {t('pro_dashboard.setup.title')}
                                         </h3>
                                         <div className="flex items-center gap-2">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-sm" />
+                                            <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse shadow-sm" />
                                             <span className="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest truncate">
                                                 {t('pro_dashboard.setup.subtitle')}
                                             </span>
@@ -229,23 +229,23 @@ export const ProDashboardModals = ({
 
                             {/* Sub Tabs Selection */}
                             <div className="mx-6 sm:mx-8 mt-6">
-                                <div className="flex p-1.5 bg-slate-100 dark:bg-black/40 rounded-2xl border border-slate-200 dark:border-white/5">
+                                <div className="flex p-1 bg-slate-100 dark:bg-black/40 rounded-2xl border border-slate-200 dark:border-white/5">
                                     <button
                                         onClick={() => { selection(); setSetupTab('x'); }}
-                                        className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 ${setupTab === 'x'
+                                        className={`flex-1 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-[0.15em] transition-all duration-300 flex items-center justify-center gap-2 ${setupTab === 'x'
                                             ? 'bg-white dark:bg-white/10 text-indigo-600 dark:text-white shadow-xl shadow-indigo-500/5 ring-1 ring-slate-100 dark:ring-white/10'
                                             : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                                     >
-                                        <Network size={14} className={setupTab === 'x' ? 'text-indigo-500' : 'opacity-40'} />
+                                        <Network size={12} className={setupTab === 'x' ? 'text-indigo-500' : 'opacity-40'} />
                                         {t('pro_dashboard.setup.x_broadcast')}
                                     </button>
                                     <button
                                         onClick={() => { selection(); setSetupTab('tg'); }}
-                                        className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 ${setupTab === 'tg'
+                                        className={`flex-1 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-[0.15em] transition-all duration-300 flex items-center justify-center gap-2 ${setupTab === 'tg'
                                             ? 'bg-white dark:bg-white/10 text-sky-600 dark:text-white shadow-xl shadow-sky-500/5 ring-1 ring-slate-100 dark:ring-white/10'
                                             : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                                     >
-                                        <Send size={14} className={setupTab === 'tg' ? 'text-sky-500' : 'opacity-40'} />
+                                        <Send size={12} className={setupTab === 'tg' ? 'text-sky-500' : 'opacity-40'} />
                                         {t('pro_dashboard.setup.tg_sync')}
                                     </button>
                                 </div>
@@ -423,16 +423,16 @@ export const ProDashboardModals = ({
                                 <button
                                     onClick={handleSaveSetup}
                                     disabled={isSaving}
-                                    className="w-full h-15 bg-linear-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.25em] shadow-2xl shadow-indigo-500/30 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale group"
+                                    className="w-full h-13 bg-linear-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white rounded-[1.25rem] font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale group"
                                 >
                                     {isSaving ? (
                                         <>
-                                            <Loader2 className="animate-spin" size={20} />
+                                            <Loader2 className="animate-spin" size={18} />
                                             {t('pro_dashboard.tools.trends.scanning')}...
                                         </>
                                     ) : (
                                         <>
-                                            {t('pro_dashboard.setup.save_btn')} <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
+                                            {t('pro_dashboard.setup.save_btn')} <CheckCircle2 size={16} className="group-hover:scale-110 transition-transform" />
                                         </>
                                     )}
                                 </button>
@@ -645,9 +645,9 @@ export const ProDashboardModals = ({
                             <div className="p-6 sm:p-8 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-white/5 space-y-4 sticky bottom-0 z-20">
                                 <button
                                     onClick={() => { selection(); setShowAuditModal(false); setActiveTab('studio'); }}
-                                    className="w-full h-15 vibing-blue-animated rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.25em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 hover:gap-5 group"
+                                    className="w-full h-13 vibing-blue-animated rounded-2xl font-black text-white text-[10px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 hover:gap-5 group"
                                 >
-                                    Initiate Viral Protocol <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                                    Initiate Viral Protocol <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                                 </button>
                                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-1">
                                     <div className="flex items-center gap-2 text-emerald-500 font-black text-[8px] uppercase tracking-[0.2em]">
@@ -944,16 +944,16 @@ export const ProDashboardModals = ({
                                 <button
                                     onClick={onFixHeadline}
                                     disabled={isFixingHeadline || !headlineInput}
-                                    className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale"
+                                    className="w-full h-13 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.15em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale"
                                 >
                                     {isFixingHeadline ? (
                                         <>
-                                            <Loader2 className="animate-spin" size={18} />
+                                            <Loader2 className="animate-spin" size={16} />
                                             Synthesizing...
                                         </>
                                     ) : (
                                         <>
-                                            {t('pro_dashboard.tools.headline.btn').toUpperCase()} <Sparkles size={18} />
+                                            {t('pro_dashboard.tools.headline.btn').toUpperCase()} <Sparkles size={16} />
                                         </>
                                     )}
                                 </button>
@@ -1050,16 +1050,16 @@ export const ProDashboardModals = ({
                                 <button
                                     onClick={onGenerateBio}
                                     disabled={isGeneratingBio || !bioInput}
-                                    className="w-full h-14 bg-amber-600 hover:bg-amber-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-amber-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale"
+                                    className="w-full h-13 bg-amber-600 hover:bg-amber-700 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.15em] shadow-xl shadow-amber-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale"
                                 >
                                     {isGeneratingBio ? (
                                         <>
-                                            <Loader2 className="animate-spin" size={18} />
+                                            <Loader2 className="animate-spin" size={16} />
                                             Synthesizing...
                                         </>
                                     ) : (
                                         <>
-                                            {t('pro_dashboard.tools.bio.btn').toUpperCase()} <Sparkles size={18} />
+                                            {t('pro_dashboard.tools.bio.btn').toUpperCase()} <Sparkles size={16} />
                                         </>
                                     )}
                                 </button>

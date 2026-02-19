@@ -309,7 +309,7 @@ Use FRESH, audience-specific language that feels authentic.
         user_prompt = self._build_viral_user_prompt(
             target_audience, post_type, language, tone_of_voice, ref_link, intel
         )
-        base_image_prompt = self._build_viral_image_prompt(target_audience, post_type)
+        base_image_prompt = self._build_viral_image_prompt(intel)
 
         generation_start = datetime.now(UTC)
         tokens_openai = 0
@@ -434,6 +434,8 @@ Referral Link (MUST INCLUDE): {ref_link}
         audience_intel = intel["audience"]
         category_strategy = intel["strategy"]
         hook_examples = audience_intel.get("hooks", []) if audience_intel else []
+        visual_base = audience_intel.get("visual_base", "A successful person")
+        visual_scene = category_strategy.get("visual_scene", "experiencing a transformation")
         
         return f"""
 EXECUTE CMO AGENT MODE.
@@ -453,36 +455,46 @@ Referral Link: {ref_link}
 3. Weave in Pintopay Card as the natural solution (not pushy)
 4. Include ONE specific number/stat for credibility
 5. Use psychological triggers: {', '.join(category_strategy.get('psychological_triggers', ['FOMO', 'Social Proof'])[:3])}
-6. Format with <b>bold</b> (4-6x), <i>italic</i> (2-3x), and <a href='{ref_link}'>descriptive link</a> in CTA
+6. Format with **bold** (4-6x), _italic_ (2-3x), and [descriptive link]({ref_link}) in CTA
 7. End with compelling CTA using this link: {ref_link}
 8. Write 3-5 short paragraphs (1-3 sentences each)
 9. Add 3-5 trending hashtags for {target_audience}
 10. CRITICAL: Total content length must be UNDER 900 characters (including spaces and tags).
 11. Content MUST be a single complete story that fits Telegram caption limits.
 
+**VISUAL STORYTELLING (for context):**
+The generated image for this post will feature: {visual_base} {visual_scene}. Ensure your copy resonates with this visual aesthetic.
+
 **IMAGE DESCRIPTION:**
-Describe a 4K Ultra-Realistic Cinematic quality scene:
-- Real person from {target_audience} demographic
-- Emotional moment related to {post_type}
-- Setting: Ultra-modern 2026, luxury lifestyle or digital workspace
-- Mood: Success, transformation, financial freedom
-- Technical: Professional photography, natural lighting, sharp detail
+Create a 4K Ultra-Realistic Cinematic quality prompt for this scene. 
+Incorporate the identity: {visual_base}
+Incorporate the scene: {visual_scene}
+Add technical details: 35mm lens, f/1.8, cinematic lighting, 8K textures, professional color grading.
+Atmosphere: {tone.upper()}, authoritative, aspirational.
 
 RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
 """
 
-    def _build_viral_image_prompt(self, target_audience: str, post_type: str) -> str:
+    def _build_viral_image_prompt(self, intel: dict) -> str:
+        """
+        Refines the image generation prompt based on specific audience and category rules
+        to achieve maximum viral resonance and premium aesthetics.
+        """
+        audience_intel = intel.get("audience", {})
+        category_strategy = intel.get("strategy", {})
+        
+        audience_desc = audience_intel.get("visual_base", "A successful and authoritative person.")
+        scene_desc = category_strategy.get("visual_scene", "experiencing a breakthrough moment of financial freedom.")
+
         return (
-            f"PROFESSIONAL STUDIO PHOTOGRAPHY - 4K ULTRA-REALISTIC CINEMATIC QUALITY: A real person from {target_audience} demographic, "
-            f"captured in an authentic, high-fidelity cinematic moment illustrating '{post_type}'. "
-            f"The scene must be grounded in realism with complex lighting, shallow depth of field, and 4K detail. "
-            f"Subject: A confidence-inspiring individual from {target_audience} expressing peak success, financial freedom, and transformation. "
-            f"Setting: Ultra-modern 2026 digital infrastructure, luxury co-working space, or premium lifestyle environment. "
-            f"Atmosphere: Sophisticated, authoritative, aspirational, warm ambient lighting. "
-            f"Technical specs: 35mm lens, f/2.8 aperture, sharp focus on eyes/face, natural skin textures, film grain texture, cinematic color grading. "
-            f"Creative Rule: Subtly integrate 'Pintopay' branding elements or '{post_type.replace('_', ' ').title()}' concept on a digital screen, card, or background element in a photorealistic way. "
-            f"NEGATIVE PROMPT: cartoon, CGI, anime, illustration, drawing, painting, 3d render, stock photo smile, distorted faces, extra limbs, blurry, "
-            f"futuristic sci-fi, neon cyberpunk, flying cars, unrealistic proportions, oversaturated colors, generic poses, misspelled text, gibberish, watermark, low quality"
+            f"PROFESSIONAL STUDIO PHOTOGRAPHY - 4K ULTRA-REALISTIC CINEMATIC QUALITY: {audience_desc} "
+            f"The subject is {scene_desc} "
+            f"The scene is grounded in absolute realism with complex volumetric lighting, shallow depth of field (f/1.8), and rich 8K textures. "
+            f"Atmosphere: Sophisticated, authoritative, aspirational, and warm. "
+            f"Technical Specs: 35mm lens, sharp focus on eyes, natural skin textures, subtle film grain, professional cinematic color grading (teals and warm golds). "
+            f"Visual Anchor: Subtly integrate a 'Pintopay' logo or a sleek physical crypto card in the scene in a non-distracting, photorealistic way. "
+            f"STRICT NEGATIVE PROMPT: cartoon, CGI, anime, 3D render, illustration, drawing, painting, stock photo style, fake smile, distorted hands, extra fingers, "
+            f"blurry background, futuristic sci-fi, neon cyberpunk, flying cars, unrealistic proportions, oversaturated colors, generic poses, misspelled text, low quality"
         )
 
     async def _get_viral_text_content(self, system_prompt: str, user_prompt: str) -> tuple[dict[str, Any] | None, tuple[int, str] | int]:
@@ -712,6 +724,7 @@ Power Words: {', '. join(tov.get('power_words', [])[:5])}
 Emojis: {tov.get('emojis', '🚀')}
 Sentence Structure: {tov.get('sentence_length', 'Varied')}
 Key Triggers: {', '.join(psycho.get('triggers', [])[:3])}
+Visual Identity: {audience_intel.get('visual_base', 'Professional and authoritative')}
 """
 
     def _build_strategy_context(self, post_type: str, category_strategy: dict) -> str:
@@ -732,6 +745,7 @@ Psychological Triggers to Activate: {', '.join(triggers[:4])}
 Bold Text For: {', '.join(formatting.get('bold', [])[:3]) if isinstance(formatting.get('bold'), list) else 'Key benefits, stats, CTAs'}
 Italic Text For: {', '.join(formatting.get('italic', [])[:2]) if isinstance(formatting.get('italic'), list) else 'Subtle emphasis'}
 Hyperlink Strategy: {', '.join(formatting.get('hyperlink', [])[:2]) if isinstance(formatting.get('hyperlink'), list) else 'Primary CTA in final paragraph'}
+Visual Scene: {category_strategy.get('visual_scene', 'High-impact breakthrough')}
 """
 
     def _build_language_context(self, language: str, language_dna: dict) -> str:
