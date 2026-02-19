@@ -78,12 +78,12 @@ async def get_global_leaderboard(
 @limiter.limit("30/minute")
 async def get_my_leaderboard_stats(
     request: Request,
+    timeframe: str = "all",
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
     """
-    Returns the current user's rank and relative position.
-    Cached for 60 seconds to improve performance.
+    Returns the current user's rank and relative position for a timeframe.
     """
     try:
         if not user_data:
@@ -91,16 +91,10 @@ async def get_my_leaderboard_stats(
         tg_user = get_tg_user(user_data)
         tg_id = str(tg_user.get("id"))
     except (HTTPException, ValueError, AttributeError):
-        # Return guest stats so the UI doesn't break
-        return {
-            "rank": 0,
-            "xp": 0,
-            "level": 1,
-            "referrals": 0
-        }
+        return {"rank": 0, "xp": 0, "level": 1, "referrals": 0}
 
     from app.services.redis_service import redis_service
-    cache_key = f"leaderboard:me:{tg_id}"
+    cache_key = f"leaderboard:me:{timeframe}:{tg_id}"
 
     async def fetch_user_stats():
         # Get partner from DB
@@ -109,29 +103,35 @@ async def get_my_leaderboard_stats(
         partner = result.first()
 
         if not partner:
-            return {
-                "rank": -1,
-                "xp": 0,
-                "level": 1,
-                "referrals": 0
-            }
+            return {"rank": -1, "xp": 0, "level": 1, "referrals": 0}
 
         # Get rank from Redis (0-indexed, so add 1)
         try:
-            rank = await leaderboard_service.get_partner_rank(partner.id)
+            rank = await leaderboard_service.get_partner_rank(partner.id, timeframe=timeframe)
             rank_val = (rank + 1) if rank is not None else -1
+            
+            # Get specific XP for this timeframe from Redis directly
+            now = datetime.now(UTC)
+            if timeframe == "weekly":
+                key = f"leaderboard:weekly:{now.year}-{now.isocalendar()[1]}"
+            elif timeframe == "monthly":
+                key = f"leaderboard:monthly:{now.year}-{now.month}"
+            else:
+                key = leaderboard_service.LEADERBOARD_KEY
+                
+            season_xp = await redis_service.client.zscore(key, str(partner.id))
+            display_xp = float(season_xp) if season_xp is not None else 0.0
         except Exception as e:
-            logger.error(f"Rank Read Failed: {e}")
+            logger.error(f"Rank/XP Read Failed for {timeframe}: {e}")
             rank_val = -1
-
-        # Get total referral count
-        referral_count = partner.referral_count
+            display_xp = partner.xp if timeframe == "all" else 0.0
 
         return {
             "rank": rank_val,
-            "xp": partner.xp,
+            "xp": display_xp,
             "level": partner.level,
-            "referrals": referral_count
+            "referrals": partner.referral_count
         }
 
+    from datetime import UTC, datetime # Ensure imported for local function
     return await redis_service.get_or_compute(cache_key, fetch_user_stats, expire=60)

@@ -619,6 +619,10 @@ class AdminService:
                 partner.xp += increment
                 from app.utils.ranking import get_level
                 partner.level = get_level(partner.xp)
+                
+                # Update Leaderboard (Incremental for Seasons)
+                from app.services.leaderboard_service import leaderboard_service
+                await leaderboard_service.increment_score(partner.id, increment)
                 # Log XP transaction
                 from app.models.partner import XPTransaction
                 new_xp_tx = XPTransaction(

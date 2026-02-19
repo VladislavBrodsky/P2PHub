@@ -395,12 +395,15 @@ class PaymentService:
                 description=f"{'PRO+' if is_plus else 'PRO'} Upgrade Reward"
             ))
             
-            from app.services.audit_service import audit_service
             await audit_service.log_xp_award(
                 session=session, partner_id=partner.id, 
                 xp_amount=upgrade_xp, level=partner.level, is_pro=True,
                 xp_before=xp_before, xp_after=xp_after
             )
+
+            # Update Leaderboard (Incremental for Seasons)
+            from app.services.leaderboard_service import leaderboard_service
+            await leaderboard_service.increment_score(partner.id, upgrade_xp)
 
             # Check level up for buyer
             from app.services.referral_service import _check_level_up

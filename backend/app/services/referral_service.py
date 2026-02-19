@@ -190,7 +190,7 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
             )
 
             await _check_level_up(referrer, deferred_tasks, xp_after)
-            await _stage_redis_invalidation(referrer, level)
+            await _stage_redis_invalidation(referrer, level, xp_gain=xp_gain)
             
             msg_task = _prepare_referral_notification(referrer, level, xp_gain, new_partner_name, chain_list)
             deferred_tasks.append(msg_task)
@@ -226,8 +226,16 @@ async def _check_level_up(referrer: Partner, deferred_tasks: list, current_xp: f
         ))
         referrer.level = new_level
 
-async def _stage_redis_invalidation(referrer: Partner, level: int):
-    await leaderboard_service.update_score(referrer.id, referrer.xp)
+async def _stage_redis_invalidation(referrer: Partner, level: int, xp_gain: float = 0.0):
+    if xp_gain > 0:
+        await leaderboard_service.increment_score(referrer.id, xp_gain)
+    else:
+        # Fallback to absolute sync for Global only
+        try:
+            val = float(referrer.xp)
+            await leaderboard_service.update_score(referrer.id, val)
+        except Exception:
+            pass
     async with redis_service.client.pipeline(transaction=False) as pipe:
         pipe.delete(f"partner:profile:{referrer.telegram_id}")
         pipe.delete(f"partner:earnings:{referrer.telegram_id}")
@@ -428,9 +436,8 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             )
             await _check_level_up(recipient, deferred_notifications, xp_after)
 
-            # Purge Caches
-            redis_pipe.delete(f"partner:profile:{recipient.telegram_id}")
-            redis_pipe.delete(f"partner:earnings:{recipient.telegram_id}")
+            # Stage Redis Invalidation (Leaderboard, Profile, Earnings)
+            await _stage_redis_invalidation(recipient, comm_level, xp_gain=xp_gain)
 
             if found_qualified_partner:
                 try:

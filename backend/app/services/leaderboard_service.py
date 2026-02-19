@@ -20,18 +20,21 @@ class LeaderboardService:
         return [self.LEADERBOARD_KEY, monthly_key, weekly_key]
 
     async def update_score(self, partner_id: int, xp: float):
-        """Updates or sets a partner's score in ALL active Redis leaderboards."""
+        """
+        Updates the GLOBAL total score. 
+        Note: This is usually for sync/full-set operations. 
+        For seasonal accuracy, use increment_score for rewards.
+        """
         try:
-            keys = self._get_active_keys()
-            async with redis_service.client.pipeline(transaction=False) as pipe:
-                for key in keys:
-                    pipe.zadd(key, {str(partner_id): xp})
-                await pipe.execute()
+            await redis_service.client.zadd(self.LEADERBOARD_KEY, {str(partner_id): xp})
         except Exception as e:
-            logger.error(f"Failed to update leaderboard score for {partner_id}: {e}")
+            logger.error(f"Failed to update global score for {partner_id}: {e}")
 
     async def increment_score(self, partner_id: int, amount: float):
-        """Increments a partner's score in ALL active Redis leaderboards."""
+        """
+        Increments a partner's score in ALL active Redis leaderboards (Global + Seasons).
+        This is the preferred method for rewards.
+        """
         try:
             keys = self._get_active_keys()
             async with redis_service.client.pipeline(transaction=False) as pipe:
@@ -39,7 +42,7 @@ class LeaderboardService:
                     pipe.zincrby(key, amount, str(partner_id))
                 await pipe.execute()
         except Exception as e:
-            logger.error(f"Failed to increment leaderboard score for {partner_id}: {e}")
+            logger.error(f"Failed to increment score for {partner_id}: {e}")
 
     async def get_top_partners(self, limit: int = 50, timeframe: str = "all") -> list[tuple[bytes, float]]:
         """Fetches the top partners for a specific timeframe (all, monthly, weekly)."""
