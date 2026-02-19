@@ -69,59 +69,77 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
         <motion.div
             layout
             initial={false}
-            className={`relative rounded-3xl border transition-all duration-500 overflow-hidden ${variants[status]} ${isExpanded ? 'ring-2 ring-blue-500/20' : ''}`}
+            whileHover={{ y: -2, scale: 1.01 }}
+            className={`relative rounded-[2rem] border transition-all duration-500 overflow-hidden ${variants[status]} ${isExpanded ? 'ring-2 ring-blue-500/20 shadow-xl' : ''}`}
             onClick={handleCardClick}
         >
+            {/* Premium Mesh Background - Visible on Hover */}
+            <div className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 pointer-events-none">
+                <div className="absolute inset-0 bg-linear-to-br from-blue-500/10 via-transparent to-purple-500/10" />
+                <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-blue-400/15 blur-[60px] rounded-full animate-pulse" />
+            </div>
+
             {/* Header - Always Visible, Compact */}
             <div className="p-4 flex items-center justify-between gap-3 relative z-10">
                 <div className="flex items-center gap-3 min-w-0">
-                    {/* Icon */}
-                    <div className="shrink-0">
-                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center border transition-all duration-700 ${isClaimable
-                            ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.4)]'
+                    {/* Icon Container with Glow */}
+                    <div className="shrink-0 relative">
+                        {isClaimable && (
+                            <div className="absolute inset-0 bg-emerald-500 blur-md opacity-40 animate-pulse rounded-xl" />
+                        )}
+                        <div className={`relative w-10 h-10 rounded-[14px] flex items-center justify-center border transition-all duration-700 ${isClaimable
+                            ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_4px_12px_rgba(16,185,129,0.3)]'
                             : isCompleted
-                                ? 'bg-emerald-500/10 text-emerald-500/30 border-emerald-500/10'
-                                : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 text-slate-500 dark:text-slate-400 group-hover/card:border-blue-500/40'
+                                ? 'bg-emerald-500/5 text-emerald-500/30 border-emerald-500/10'
+                                : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 text-slate-500 dark:text-slate-400 group-hover/card:border-blue-500/40 group-hover/card:scale-105'
                             }`}>
                             {status === 'VERIFYING' ? (
-                                <div className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
                             ) : isCompleted ? (
-                                <CheckCircle2 className="w-4 h-4" />
+                                <CheckCircle2 className="w-5 h-5" />
                             ) : (
-                                <task.icon className="w-4 h-4" />
+                                <task.icon className="w-5 h-5 group-hover/card:rotate-6 transition-transform" />
                             )}
                         </div>
                     </div>
 
                     {/* Title & Reward */}
                     <div className="flex flex-col min-w-0">
-                        <h4 className="text-sm font-black text-slate-900 dark:text-white tracking-tight truncate">
+                        <h4 className="text-[13px] font-black text-slate-900 dark:text-white tracking-tight truncate leading-tight">
                             {t(`tasks.${task.id}.title`, task.title)}
                         </h4>
                         {!isCompleted && (
-                            <div className="flex items-center gap-1.5">
-                                <span className={`text-[10px] font-black ${isClaimable ? 'text-emerald-500' : 'text-slate-400 dark:text-slate-500'}`}>
+                            <div className="flex items-center gap-1.5 mt-0.5">
+                                <div className={`px-1.5 py-0.5 rounded-md text-[9px] font-black tracking-wide uppercase ${isClaimable
+                                    ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                                    : 'bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-white/10'}`}>
                                     +{reward} XP
-                                </span>
+                                </div>
                                 {isPro && (
-                                    <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                                    <div className="flex items-center gap-1">
+                                        <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                                        <span className="text-[8px] font-black text-emerald-500/80 uppercase tracking-tighter">x5 BOOST</span>
+                                    </div>
                                 )}
                             </div>
                         )}
                         {isCompleted && (
-                            <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-wide">{t('tasks.done', 'Done')}</span>
+                            <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest mt-0.5 flex items-center gap-1">
+                                <CheckCircle2 className="w-2.5 h-2.5" />
+                                {t('tasks.done', 'Done')}
+                            </span>
                         )}
                     </div>
                 </div>
 
                 {/* Expansion Toggle / Status Icon */}
-                <div className="shrink-0 flex items-center justify-center w-6 h-6">
+                <div className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 transition-colors">
                     <motion.div
                         animate={{ rotate: isExpanded ? 180 : 0 }}
-                        transition={{ duration: 0.2 }}
+                        transition={{ duration: 0.3, type: 'spring', damping: 20 }}
                     >
-                        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-slate-400">
-                            <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-slate-400 group-hover/card:text-blue-500 transition-colors">
+                            <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </motion.div>
                 </div>

@@ -80,8 +80,16 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
                                 <h2 className="text-[12px] font-black tracking-[0.4em] text-yellow-600 dark:text-yellow-500 uppercase">
                                     {t('referral.levelup.title')}
                                 </h2>
-                                <h3 className="text-5xl font-black tracking-tighter text-slate-900 dark:text-white mt-2">
-                                    {t('referral.levelup.rank')} <span className="text-yellow-500">{level}</span>
+                                <h3 className="text-5xl font-black tracking-tighter text-slate-900 dark:text-white mt-2 relative inline-block">
+                                    {t('referral.levelup.rank')}
+                                    <span className="text-yellow-500 relative ml-2">
+                                        {level}
+                                        <motion.div
+                                            animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0, 0.2] }}
+                                            transition={{ duration: 2, repeat: Infinity }}
+                                            className="absolute inset-0 bg-yellow-400 blur-xl rounded-full -z-10"
+                                        />
+                                    </span>
                                 </h3>
                             </motion.div>
 
@@ -89,21 +97,22 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.4 }}
-                                className="text-slate-600 dark:text-slate-400 font-bold leading-relaxed max-w-[200px] mx-auto"
+                                className="text-slate-600 dark:text-slate-400 font-bold leading-relaxed max-w-[200px] mx-auto italic"
                             >
                                 {t('referral.levelup.reached', { level: level })}
                             </motion.p>
                         </div>
 
-                        {/* Action Button */}
+                        {/* Action Button - Vibing Gradient */}
                         <motion.button
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.6 }}
                             onClick={onClose}
-                            className="w-full py-5 rounded-2xl bg-yellow-500 active:scale-95 transition-transform shadow-[0_10px_20px_-5px_rgba(234,179,8,0.4)]"
+                            className="w-full py-5 rounded-2xl bg-linear-to-r from-yellow-500 via-orange-500 to-yellow-500 bg-size-[200%_100%] hover:bg-right transition-all duration-700 active:scale-95 shadow-[0_10px_25px_-5px_rgba(234,179,8,0.5)] relative overflow-hidden group/btn"
                         >
-                            <span className="text-lg font-black text-white tracking-tight">{t('referral.levelup.awesome')}</span>
+                            <div className="absolute inset-x-0 top-0 h-1/2 bg-white/20 -skew-y-12 -translate-y-full group-hover/btn:translate-y-[200%] transition-transform duration-700" />
+                            <span className="text-lg font-black text-white tracking-tight relative z-10">{t('referral.levelup.awesome')}</span>
                         </motion.button>
 
                         {/* Close button (top right) */}

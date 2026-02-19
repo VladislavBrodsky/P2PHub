@@ -94,51 +94,76 @@ export const MilestonePath = () => {
                         <motion.div
                             key={`${item.id || item.level}-${item.level}`}
                             onClick={() => handleItemClick(item)}
-                            whileHover={isUnlocked ? { y: -4, scale: 1.02 } : {}}
-                            whileTap={{ scale: 0.95 }}
+                            whileHover={isUnlocked ? { y: -6, scale: 1.03 } : {}}
+                            whileTap={{ scale: 0.96 }}
                             className={`
-                                relative flex flex-col items-center p-3.5 rounded-[22px] border transition-all duration-500 cursor-pointer overflow-hidden group
+                                relative flex flex-col items-center p-4 rounded-[26px] border transition-all duration-500 cursor-pointer overflow-hidden group
                                 ${isUnlocked
-                                    ? 'bg-white/95 dark:bg-slate-900/90 border-slate-100 dark:border-white/10 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.06)] dark:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]'
+                                    ? 'bg-white dark:bg-slate-900/90 border-slate-100 dark:border-white/10 shadow-[0_12px_24px_-8px_rgba(0,0,0,0.08)] dark:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.4)]'
                                     : 'bg-slate-50/50 dark:bg-white/2 border-slate-100 dark:border-white/5 opacity-60'}
                             `}
                         >
                             {/* Premium Background Mesh for Unlocked */}
                             {isUnlocked && (
-                                <div className="absolute inset-0 bg-linear-to-br from-indigo-500/2 via-transparent to-purple-500/2 pointer-events-none" />
+                                <>
+                                    <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                                    <motion.div
+                                        animate={{
+                                            scale: [1, 1.2, 1],
+                                            opacity: [0.1, 0.2, 0.1]
+                                        }}
+                                        transition={{ duration: 4, repeat: Infinity }}
+                                        className="absolute -top-1/2 -left-1/2 w-full h-full bg-indigo-500/10 blur-3xl rounded-full pointer-events-none"
+                                    />
+                                </>
                             )}
 
-                            {/* Status Indicator Dot */}
+                            {/* Status Indicator Dot with Glow */}
                             {isUnlocked && (
-                                <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)] z-20" />
+                                <div className="absolute top-4 right-4 z-20">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)]" />
+                                    <div className="absolute inset-0 bg-emerald-400 blur-[2px] animate-pulse rounded-full" />
+                                </div>
                             )}
 
                             <div className={`
-                                relative w-11 h-11 rounded-[16px] flex items-center justify-center mb-3 border shadow-xs transition-all duration-500
+                                relative w-12 h-12 rounded-[18px] flex items-center justify-center mb-3 border shadow-xs transition-all duration-700
                                 ${iconBgClass}
-                                ${isUnlocked ? 'group-hover:scale-110 group-hover:rotate-3 shadow-indigo-100/50 dark:shadow-none' : ''}
+                                ${isUnlocked ? 'group-hover:shadow-[0_8px_20px_-4px_rgba(99,102,241,0.2)]' : ''}
                             `}>
-                                <div className={`relative z-10 transition-all duration-500 ${isUnlocked ? `${iconColorClass} scale-110 drop-shadow-sm` : 'scale-90'}`}>
+                                <motion.div
+                                    animate={isUnlocked ? { y: [0, -2, 0] } : {}}
+                                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                                    className={`relative z-10 transition-all duration-500 ${isUnlocked ? `${iconColorClass} scale-110 drop-shadow-md` : 'scale-90 text-slate-400 dark:text-slate-600'}`}
+                                >
                                     {isUnlocked ? (
-                                        <item.icon className="w-5 h-5" strokeWidth={2.5} />
+                                        <item.icon className="w-6 h-6" strokeWidth={2.5} />
                                     ) : (
-                                        <Lock className="w-4 h-4 text-slate-400 dark:text-slate-600" />
+                                        <Lock className="w-5 h-5" />
                                     )}
-                                </div>
+                                </motion.div>
+
+                                {isUnlocked && (
+                                    <div className="absolute inset-0 rounded-[18px] bg-linear-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                )}
                             </div>
 
-                            <div className="text-center space-y-0.5 relative z-10 w-full">
-                                <span className={`text-[7px] font-black uppercase tracking-[0.2em] block ${isUnlocked ? 'text-indigo-500/80' : 'text-slate-400 dark:text-slate-700'}`}>
+                            <div className="text-center space-y-1 relative z-10 w-full">
+                                <span className={`text-[8px] font-black uppercase tracking-[0.25em] block transition-colors duration-300 ${isUnlocked ? 'text-indigo-500/80 group-hover:text-indigo-600' : 'text-slate-400 dark:text-slate-700'}`}>
                                     {t('common.lvl')} {item.level}
                                 </span>
-                                <h5 className={`text-[10px] font-extrabold leading-tight line-clamp-2 w-full px-0.5 transition-colors duration-300 ${isUnlocked ? 'text-slate-900 dark:text-white group-hover:text-indigo-500' : 'text-slate-400 dark:text-slate-700'}`}>
-                                    {isLocked ? '???' : t(item.reward, { level: item.level })}
+                                <h5 className={`text-[11px] font-black leading-tight line-clamp-2 w-full px-0.5 transition-colors duration-300 ${isUnlocked ? 'text-slate-900 dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-indigo-500 group-hover:to-purple-500' : 'text-slate-400 dark:text-slate-700'}`}>
+                                    {isLocked ? (
+                                        <span className="opacity-40 italic tracking-widest text-[10px]">LOCKED</span>
+                                    ) : (
+                                        t(item.reward, { level: item.level })
+                                    )}
                                 </h5>
                             </div>
 
                             {/* Hover Shine Effect */}
                             {isUnlocked && (
-                                <div className="absolute inset-0 bg-linear-to-tr from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
+                                <div className="absolute inset-0 bg-linear-to-tr from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
                             )}
                         </motion.div>
                     );
@@ -365,49 +390,84 @@ export const MilestonePath = () => {
 
                                 <div className="flex-1 overflow-y-auto overscroll-none no-scrollbar p-6 pb-12 sm:p-8 pt-10 sm:pt-12" style={{ overscrollBehavior: 'none' }}>
                                     <div className="relative z-10 flex flex-col items-center">
-                                        {/* Dynamic Icon Hero */}
-                                        <motion.div
-                                            initial={{ scale: 0.5, rotate: -20 }}
-                                            animate={{ scale: 1, rotate: 0 }}
-                                            transition={{ delay: 0.1, type: 'spring' }}
-                                            className={`relative mb-8 p-8 rounded-[2.5rem] ${selectedItem.color || 'text-indigo-500'} bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 shadow-2xl`}
-                                        >
-                                            <selectedItem.icon className="w-12 h-12" strokeWidth={2} />
-                                            {currentLevel >= selectedItem.level && (
-                                                <motion.div
-                                                    animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-                                                    transition={{ duration: 2, repeat: Infinity }}
-                                                    className="absolute inset-0 rounded-[2.5rem] bg-current blur-2xl"
-                                                />
-                                            )}
-                                        </motion.div>
+                                        {/* Dynamic Icon Hero with Vibing Effects */}
+                                        <div className="relative mb-10">
+                                            {/* Outer Glow Ring */}
+                                            <motion.div
+                                                animate={{
+                                                    scale: [1, 1.2, 1],
+                                                    opacity: [0.15, 0.3, 0.15],
+                                                }}
+                                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                                className={`absolute -inset-8 rounded-full blur-3xl ${selectedItem.color?.includes('orange') ? 'bg-orange-500' : selectedItem.color?.includes('red') ? 'bg-red-500' : 'bg-indigo-500'}`}
+                                            />
 
-                                        <div className="text-center space-y-2 mb-8">
-                                            <span className="px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-[9px] font-black text-indigo-500 uppercase tracking-widest">
+                                            <motion.div
+                                                initial={{ scale: 0.5, rotate: -20 }}
+                                                animate={{
+                                                    scale: 1,
+                                                    rotate: 0,
+                                                    y: [0, -10, 0]
+                                                }}
+                                                transition={{
+                                                    delay: 0.1,
+                                                    type: 'spring',
+                                                    y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+                                                }}
+                                                className={`relative p-9 rounded-[2.8rem] ${selectedItem.color || 'text-indigo-500'} bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 shadow-2xl backdrop-blur-md`}
+                                            >
+                                                <selectedItem.icon className="w-14 h-14 drop-shadow-lg" strokeWidth={2} />
+
+                                                {/* Orbital Lights */}
+                                                <motion.div
+                                                    animate={{ rotate: 360 }}
+                                                    transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                                                    className="absolute -inset-2 pointer-events-none"
+                                                >
+                                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_white]" />
+                                                </motion.div>
+                                            </motion.div>
+                                        </div>
+
+                                        <div className="text-center space-y-3 mb-10">
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                className="inline-flex items-center px-4 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-[10px] font-black text-indigo-500 uppercase tracking-[0.2em]"
+                                            >
+                                                <Zap className="w-3 h-3 mr-2 animate-pulse" />
                                                 {t('achievements_path.mission', { level: selectedItem.level })}
-                                            </span>
-                                            <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tighter uppercase leading-[1.1]">
+                                            </motion.div>
+                                            <h3 className="text-3xl sm:text-4xl font-black tracking-tighter uppercase leading-[0.95] text-transparent bg-clip-text bg-linear-to-b from-slate-900 via-slate-800 to-slate-900 dark:from-white dark:via-slate-200 dark:to-white">
                                                 {currentLevel >= selectedItem.level ? t(selectedItem.reward, { level: selectedItem.level }) : '???'}
                                             </h3>
                                         </div>
 
-                                        {/* Tactical Instructions */}
-                                        <div className="w-full p-6 rounded-[2.2rem] bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 shadow-inner relative mb-8">
-                                            <div className="flex items-center gap-2 mb-4">
-                                                <Info className="w-4 h-4 text-indigo-500" />
-                                                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{t('achievements_path.how_to_unlock')}</span>
+                                        {/* Tactical Instructions - Premium Glassmorph Card */}
+                                        <div className="w-full relative group/inst mb-10">
+                                            <div className="absolute -inset-2 bg-linear-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-[2.5rem] blur-xl opacity-0 group-hover/inst:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                                            <div className="relative p-7 rounded-[2.2rem] bg-white/40 dark:bg-white/3 border border-white/20 dark:border-white/10 backdrop-blur-2xl shadow-xl overflow-hidden">
+                                                {/* Card Mesh Background */}
+                                                <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+
+                                                <div className="flex items-center gap-2.5 mb-5 relative z-10">
+                                                    <div className="p-1.5 rounded-lg bg-indigo-500/10">
+                                                        <Info className="w-4 h-4 text-indigo-500" />
+                                                    </div>
+                                                    <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">{t('achievements_path.how_to_unlock')}</span>
+                                                </div>
+                                                <p className="text-[16px] font-bold text-slate-800 dark:text-slate-200 leading-relaxed italic relative z-10">
+                                                    "{selectedItem.instruction ? t(selectedItem.instruction) : t('achievements_path.unlock_locked', { level: selectedItem.level })}"
+                                                </p>
                                             </div>
-                                            <p className="text-[14px] font-bold text-slate-700 dark:text-slate-300 leading-relaxed italic">
-                                                "{selectedItem.instruction ? t(selectedItem.instruction) : t('achievements_path.unlock_locked', { level: selectedItem.level })}"
-                                            </p>
                                         </div>
 
                                         {/* Actions Section */}
                                         {currentLevel < selectedItem.level ? (
-                                            <div className="w-full space-y-4">
+                                            <div className="w-full space-y-6">
                                                 <div className="flex items-center gap-3 px-1">
-                                                    <div className="w-2 h-2 rounded-full bg-indigo-500 shadow-[0_0_8px_indigo]" />
-                                                    <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">{t('achievements_path.pro_tip')}</span>
+                                                    <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 shadow-[0_0_12px_rgba(79,70,229,0.8)] animate-pulse" />
+                                                    <span className="text-[11px] font-black text-indigo-500 uppercase tracking-[0.2em]">{t('achievements_path.pro_tip')}</span>
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-4">
                                                     <button
@@ -419,10 +479,12 @@ export const MilestonePath = () => {
                                                                 navigator.clipboard.writeText(link);
                                                             }
                                                         }}
-                                                        className="h-16 rounded-[1.5rem] bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white flex flex-col items-center justify-center gap-1 shadow-lg shadow-indigo-600/20 transition-all"
+                                                        className="h-18 rounded-[1.8rem] bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white flex flex-col items-center justify-center gap-1 shadow-lg shadow-indigo-600/30 transition-all group/btn overflow-hidden relative"
                                                     >
-                                                        <Share2 size={20} />
-                                                        <span className="text-[10px] font-black uppercase tracking-widest">{t('achievements_path.share_link')}</span>
+                                                        {/* Shimmer Effect */}
+                                                        <div className="absolute inset-x-0 top-0 h-1/2 bg-white/10 -skew-y-12 -translate-y-full group-hover/btn:translate-y-[200%] transition-transform duration-700" />
+                                                        <Share2 size={24} className="group-hover:scale-110 transition-transform" />
+                                                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t('achievements_path.share_link')}</span>
                                                     </button>
                                                     <button
                                                         onClick={() => {
@@ -430,10 +492,10 @@ export const MilestonePath = () => {
                                                                 window.Telegram.WebApp.switchInlineQuery(user?.referral_code || '');
                                                             }
                                                         }}
-                                                        className="h-16 rounded-[1.5rem] bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/10 active:scale-95 text-slate-900 dark:text-white flex flex-col items-center justify-center gap-1 shadow-sm transition-all"
+                                                        className="h-18 rounded-[1.8rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/10 active:scale-95 text-slate-900 dark:text-white flex flex-col items-center justify-center gap-1 shadow-sm transition-all group/btn"
                                                     >
-                                                        <UserPlus size={20} />
-                                                        <span className="text-[10px] font-black uppercase tracking-widest">{t('achievements_path.invite')}</span>
+                                                        <UserPlus size={24} className="group-hover:scale-110 transition-transform" />
+                                                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t('achievements_path.invite')}</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -443,8 +505,14 @@ export const MilestonePath = () => {
                                                 animate={{ y: 0, opacity: 1 }}
                                                 className="w-full flex justify-center pt-4"
                                             >
-                                                <div className="px-8 py-4 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-black text-[11px] uppercase tracking-[0.25em] flex items-center gap-3 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
-                                                    <Sparkles className="w-4 h-4" />
+                                                <div className="px-10 py-5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-black text-[12px] uppercase tracking-[0.3em] flex items-center gap-3 shadow-[0_0_40px_rgba(16,185,129,0.15)] relative overflow-hidden group/success">
+                                                    {/* Success Shimmer */}
+                                                    <motion.div
+                                                        animate={{ x: ['-100%', '200%'] }}
+                                                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                                        className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent skew-x-12 pointer-events-none"
+                                                    />
+                                                    <Sparkles className="w-5 h-5 animate-bounce" />
                                                     {t('achievements_path.unlocked_badge')}
                                                 </div>
                                             </motion.div>

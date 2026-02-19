@@ -17,6 +17,27 @@ interface FAQItem {
     readTime: string;
 }
 
+const renderFormattedText = (text: string) => {
+    return text.split('\n').map((line, i) => {
+        // Handle bold and italic
+        const parts = line.split(/(\*\*.*?\*\*|\*.*?\*)/g);
+        return (
+            <React.Fragment key={i}>
+                {parts.map((part, j) => {
+                    if (part.startsWith('**') && part.endsWith('**')) {
+                        return <strong key={j} className="text-(--color-text-primary) font-bold">{part.slice(2, -2)}</strong>;
+                    }
+                    if (part.startsWith('*') && part.endsWith('*')) {
+                        return <span key={j} className="italic opacity-80">{part.slice(1, -1)}</span>;
+                    }
+                    return part;
+                })}
+                {i < text.split('\n').length - 1 && <br />}
+            </React.Fragment>
+        );
+    });
+};
+
 export default function FAQPage() {
     const { t } = useTranslation();
     const { selection, notification } = useHaptic();
@@ -272,7 +293,7 @@ export default function FAQPage() {
                                             >
                                                 <div className="mt-5 pt-5 border-t border-(--card-border)">
                                                     <p className="text-xs font-medium text-(--color-text-secondary) leading-relaxed">
-                                                        {faq.a}
+                                                        {renderFormattedText(faq.a)}
                                                     </p>
                                                     <div className="mt-4 flex gap-2">
                                                         <button
