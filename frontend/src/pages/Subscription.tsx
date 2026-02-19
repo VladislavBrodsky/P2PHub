@@ -206,76 +206,155 @@ export default function SubscriptionPage() {
                     </div>
                 </div>
 
-                <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic vibing-crystal-text mt-4">PRO STATUS</h1>
-                <p className="text-slate-500 dark:text-slate-400 text-[9px] font-bold max-w-[250px] mx-auto uppercase tracking-widest mt-2">{t('subscription.upgrade.desc')}</p>
+                <div className="mt-4 space-y-2">
+                    <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-linear-to-r from-red-500/10 to-amber-500/10 border border-red-500/20 mb-2 animate-pulse">
+                        <span className="text-[9px] font-black text-red-600 dark:text-red-400 uppercase tracking-[0.2em] font-mono">{t('subscription.upgrade.limited_offer')}</span>
+                    </div>
+                    <h1 className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic vibing-crystal-text leading-[0.8]">{t('common.pro_active')}</h1>
+                    <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold max-w-[250px] mx-auto uppercase tracking-widest mt-4 leading-tight">{t('subscription.upgrade.desc')}</p>
+                </div>
 
                 {proStats && (
-                    <div className="mt-6 w-full max-w-[220px] mx-auto">
-                        <div className="flex justify-between text-[8px] font-black mb-1 text-slate-400 dark:text-white/50">
+                    <div className="mt-8 w-full max-w-[240px] mx-auto group">
+                        <div className="flex justify-between text-[9px] font-black mb-2 text-slate-400 dark:text-white/40 uppercase tracking-tighter">
                             <span>{t('subscription.upgrade.lifetime_slots')}</span>
-                            <span>{proStats.sold}/{proStats.total}</span>
+                            <span className="text-slate-900 dark:text-white">{proStats.sold} / {proStats.total}</span>
                         </div>
-                        <div className="h-1 bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden">
-                            <motion.div initial={{ width: 0 }} animate={{ width: `${(proStats.sold / proStats.total) * 100}%` }} className="h-full bg-linear-to-r from-indigo-500 to-fuchsia-500" />
+                        <div className="h-2 bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-slate-300/50 dark:border-white/10">
+                            <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${(proStats.sold / proStats.total) * 100}%` }}
+                                className="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-fuchsia-500 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.5)]"
+                            />
                         </div>
                     </div>
                 )}
             </motion.div>
 
-            <div className="p-1.5 bg-slate-100 dark:bg-slate-950/20 rounded-[1.8rem] mb-6 flex shadow-inner border border-slate-200 dark:border-white/5 mx-auto w-full max-w-[320px] relative">
-                <motion.div
-                    className="absolute inset-y-1.5 rounded-[1.6rem] bg-indigo-600 shadow-xl z-0"
-                    animate={{ x: selectedPlan === 'PRO' ? 0 : '100%', width: '50%' }}
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
-                <button onClick={() => { selection(); setSelectedPlan('PRO'); }} className={`flex-1 relative z-10 py-2.5 rounded-[1.6rem] flex flex-col items-center justify-center ${selectedPlan === 'PRO' ? 'text-white' : 'text-slate-500 dark:text-white/30'}`}>
-                    <span className="text-[7px] font-black uppercase tracking-widest mb-0.5">STANDARD PRO</span>
-                    <span className="text-lg font-black">$39</span>
-                </button>
-                <button onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }} className={`flex-1 relative z-10 py-2.5 rounded-[1.6rem] flex flex-col items-center justify-center ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-500 dark:text-white/30'}`}>
-                    <span className="text-[7px] font-black uppercase tracking-widest mb-0.5">ELITE PRO+</span>
-                    <span className="text-lg font-black">$69</span>
-                </button>
+            <div className="flex flex-col gap-6">
+                <div className="text-center space-y-2 relative">
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-wider border border-indigo-500/20"
+                    >
+                        <Sparkles size={12} fill="currentColor" />
+                        {t('subscription.upgrade.badge')}
+                    </motion.div>
+                    <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                        {t('subscription.upgrade.dominate_network')}
+                    </h1>
+                </div>
+
+                <div className="relative bg-slate-100 dark:bg-white/5 p-1.5 rounded-[2.5rem] flex gap-1.5 border border-slate-200 dark:border-white/10 shadow-inner">
+                    <div
+                        className={`absolute inset-y-1.5 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-[2rem] shadow-xl ${selectedPlan === 'PRO'
+                            ? 'left-1.5 w-[calc(50%-0.375rem)] bg-white dark:bg-indigo-600'
+                            : 'left-[calc(50%+0.375rem)] w-[calc(50%-0.375rem)] bg-linear-to-br from-indigo-500 via-purple-500 to-fuchsia-500'
+                            }`}
+                    />
+                    <button
+                        onClick={() => { selection(); setSelectedPlan('PRO'); }}
+                        className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-colors duration-300 ${selectedPlan === 'PRO' ? 'text-indigo-600 dark:text-white' : 'text-slate-500 dark:text-white/30'}`}
+                    >
+                        <span className="text-[9px] font-black tracking-[0.2em] uppercase opacity-70">
+                            {t('subscription.upgrade.pro_title')}
+                        </span>
+                        <div className="flex items-baseline gap-1">
+                            <span className="text-[14px] font-bold opacity-50">$</span>
+                            <span className="text-3xl font-black tracking-tighter">39</span>
+                        </div>
+                    </button>
+                    <button
+                        onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }}
+                        className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-colors duration-300 ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-500 dark:text-white/30'}`}
+                    >
+                        <span className="text-[9px] font-black tracking-[0.2em] uppercase opacity-70">
+                            {t('subscription.upgrade.pro_plus_title')}
+                        </span>
+                        <div className="flex items-baseline gap-1">
+                            <span className="text-[14px] font-bold opacity-50">$</span>
+                            <span className="text-3xl font-black tracking-tighter">69</span>
+                        </div>
+                        {selectedPlan !== 'PRO_PLUS' && (
+                            <div className="absolute -top-1 -right-1 px-1.5 py-0.5 bg-linear-to-r from-amber-400 to-orange-500 text-[8px] font-black text-white rounded-full border-2 border-slate-100 dark:border-slate-800 shadow-lg">
+                                RECOMMENDED
+                            </div>
+                        )}
+                    </button>
+                </div>
             </div>
 
-            <div className="space-y-3 mb-8">
-                {['TOKENS', 'LEVELS'].map((feat) => {
-                    const isTokens = feat === 'TOKENS';
-                    const active = expandedFeature === feat;
-                    return (
-                        <div key={feat} className="relative">
-                            <button
-                                onClick={() => { selection(); setExpandedFeature(active ? null : (feat as any)); }}
-                                className={`w-full p-4 rounded-3xl border transition-all ${active ? 'bg-indigo-600 border-indigo-400 shadow-2xl scale-[1.02]' : 'bg-white/3 border-white/5'}`}
+            <div className="space-y-3 mb-8 my-8">
+                <div className="grid gap-3">
+                    {[
+                        {
+                            id: 'TOKENS',
+                            icon: Zap,
+                            label: t(selectedPlan === 'PRO' ? 'subscription.upgrade.tokens_info_pro' : 'subscription.upgrade.tokens_info_pro_plus'),
+                            title: t('subscription.upgrade.viral_studio_label'),
+                            desc: t(selectedPlan === 'PRO' ? 'subscription.upgrade.viral_studio_desc_pro' : 'subscription.upgrade.viral_studio_desc_pro_plus'),
+                            color: 'text-indigo-600 dark:text-indigo-400',
+                            bg: 'bg-indigo-500/10',
+                            gradient: 'from-indigo-500/20 to-purple-500/10'
+                        },
+                        {
+                            id: 'LEVELS',
+                            icon: Users,
+                            label: t(selectedPlan === 'PRO' ? 'subscription.upgrade.levels_info_pro' : 'subscription.upgrade.levels_info_pro_plus'),
+                            title: t('subscription.upgrade.content_factory_label'),
+                            desc: t(selectedPlan === 'PRO' ? 'subscription.upgrade.content_factory_desc_pro' : 'subscription.upgrade.content_factory_desc_pro_plus'),
+                            color: 'text-emerald-600 dark:text-emerald-400',
+                            bg: 'bg-emerald-500/10',
+                            gradient: 'from-emerald-500/20 to-teal-500/10'
+                        }
+                    ].map((feature) => {
+                        const isExpanded = expandedFeature === feature.id;
+                        return (
+                            <motion.button
+                                key={feature.id}
+                                onClick={() => { selection(); setExpandedFeature(isExpanded ? null : feature.id as any); }}
+                                className={`w-full text-left p-4 rounded-3xl border transition-all duration-300 relative overflow-hidden group ${isExpanded
+                                    ? `bg-linear-to-br ${feature.gradient} border-white/20 shadow-lg`
+                                    : 'bg-white/40 dark:bg-white/3 border-slate-200 dark:border-white/5 backdrop-blur-sm'
+                                    }`}
                             >
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${active ? 'bg-white/20' : 'bg-indigo-500/10'}`}>
-                                            {isTokens ? <Zap size={20} className={active ? 'text-white' : 'text-indigo-600 dark:text-indigo-400'} /> : <Users size={20} className={active ? 'text-white' : 'text-emerald-600 dark:text-emerald-400'} />}
+                                <div className="relative flex items-center justify-between z-10">
+                                    <div className="flex items-center gap-4">
+                                        <div className={`w-12 h-12 rounded-2xl ${feature.bg} flex items-center justify-center ${feature.color} shadow-inner`}>
+                                            <feature.icon size={24} strokeWidth={2.5} />
                                         </div>
-                                        <div className="text-left">
-                                            <p className={`text-[8px] font-black uppercase tracking-widest ${active ? 'text-indigo-100' : 'text-slate-500 dark:text-white/30'}`}>
-                                                {isTokens ? (selectedPlan === 'PRO' ? '250 TOKENS' : '500 TOKENS') : (selectedPlan === 'PRO' ? '9 LEVELS' : '20 LEVELS')}
-                                            </p>
-                                            <h3 className={`text-sm font-black uppercase ${active ? 'text-white' : 'text-slate-900 dark:text-white'}`}>{isTokens ? t('subscription.upgrade.viral_studio_label') : t('subscription.upgrade.content_factory_label')}</h3>
+                                        <div>
+                                            <div className="text-[10px] font-black opacity-50 uppercase tracking-widest">{feature.label}</div>
+                                            <div className="text-xl font-black text-slate-900 dark:text-white tracking-tight uppercase">{feature.title}</div>
                                         </div>
                                     </div>
-                                    <ChevronDown size={14} className={`transition-transform duration-300 ${active ? 'rotate-180 text-white' : 'text-slate-400 dark:text-white/20'}`} />
+                                    <ChevronDown
+                                        size={20}
+                                        className={`text-slate-400 dark:text-white/20 transition-transform duration-500 ${isExpanded ? 'rotate-180' : ''}`}
+                                    />
                                 </div>
+
                                 <AnimatePresence>
-                                    {active && (
-                                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden mt-4 pt-4 border-t border-white/10 dark:border-white/10">
-                                            <p className="text-[10px] text-indigo-50 dark:text-white/60 leading-relaxed italic mb-4">
-                                                {isTokens ? t(selectedPlan === 'PRO' ? 'subscription.upgrade.viral_studio_desc_pro' : 'subscription.upgrade.viral_studio_desc_pro_plus') : t(selectedPlan === 'PRO' ? 'subscription.upgrade.content_factory_desc_pro' : 'subscription.upgrade.content_factory_desc_pro_plus')}
-                                            </p>
-                                            <button onClick={scrollToPayment} className="w-full py-3 bg-white text-indigo-600 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg">{t('subscription.upgrade.initialize_studio')}</button>
+                                    {isExpanded && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: 'auto', opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            className="overflow-hidden"
+                                        >
+                                            <div className="pt-4 pb-1">
+                                                <p className="text-sm font-medium text-slate-600 dark:text-white/70 leading-snug">
+                                                    {feature.desc}
+                                                </p>
+                                            </div>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
-                            </button>
-                        </div>
-                    );
-                })}
+                            </motion.button>
+                        );
+                    })}
+                </div>
             </div>
 
             <motion.div ref={paymentRef} className="mb-10">
@@ -300,57 +379,82 @@ export default function SubscriptionPage() {
                 <div className="vibing-premium-panel p-6 shadow-premium-xl relative z-10 mx-auto max-w-[340px]">
                     {!paymentMethod ? (
                         <div className="space-y-8">
-                            <div className="text-center">
-                                <div className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em] mb-4">${planPrice} ACTIVE PROTOCOL</div>
-                                <div className="flex items-baseline justify-center gap-1.5 mb-1">
-                                    <span className="text-4xl font-black text-white">${planPrice}</span>
-                                    <span className="text-[8px] font-black text-white/30 uppercase italic">/ {selectedPlan === 'PRO_PLUS' ? 'LIFETIME' : '30 DAYS'}</span>
+                            <div className="text-center relative">
+                                <div className="text-[9px] font-black text-slate-400 dark:text-white/20 uppercase tracking-[0.3em] mb-4">
+                                    {t('subscription.upgrade.secure_encryption_active')}
                                 </div>
-                                <div className="w-12 h-0.5 bg-indigo-500/50 mx-auto" />
+                                <div className="flex items-baseline justify-center gap-1.5 mb-2">
+                                    <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">${planPrice}</span>
+                                    <span className="text-[10px] font-black text-slate-400 dark:text-white/30 uppercase italic font-mono">
+                                        / {selectedPlan === 'PRO_PLUS' ? t('subscription.upgrade.lifetime_label') : t('subscription.upgrade.monthly_label')}
+                                    </span>
+                                </div>
+                                <div className="w-16 h-1 bg-linear-to-r from-indigo-500 to-fuchsia-500 mx-auto rounded-full" />
                             </div>
-                            <div className="grid grid-cols-2 gap-3">
-                                <button onClick={() => { selection(); setPaymentMethod('TON'); }} className="h-16 bg-white text-indigo-600 rounded-2xl font-black text-[8px] flex flex-col items-center justify-center gap-1 active:scale-95 transition-all">
-                                    <Wallet size={18} />
-                                    <span>TON WALLET</span>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <button
+                                    onClick={() => { selection(); setPaymentMethod('TON'); }}
+                                    className="group relative h-20 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-95"
+                                >
+                                    <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                                        <Wallet size={20} />
+                                    </div>
+                                    <span className="text-[9px] font-black text-slate-900 dark:text-white tracking-widest uppercase">{t('subscription.upgrade.ton_wallet')}</span>
                                 </button>
-                                <button onClick={() => { selection(); setPaymentMethod('CRYPTO'); }} className="h-16 bg-white/5 text-white border border-white/10 rounded-2xl font-black text-[8px] flex flex-col items-center justify-center gap-1 active:scale-95 transition-all">
-                                    <CreditCard size={18} />
-                                    <span>USDT (TRC20)</span>
+                                <button
+                                    onClick={() => { selection(); setPaymentMethod('CRYPTO'); }}
+                                    className="group relative h-20 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-95"
+                                >
+                                    <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+                                        <CreditCard size={20} />
+                                    </div>
+                                    <span className="text-[9px] font-black text-slate-900 dark:text-white tracking-widest uppercase">{t('subscription.upgrade.usdt_trc20_address')}</span>
                                 </button>
                             </div>
-                            <p className="text-[7px] text-white/20 text-center uppercase tracking-widest">SECURE ENCRYPTED NETWORK ACTIVE</p>
+                            <div className="flex items-center justify-center gap-2 opacity-30">
+                                <Shield size={10} className="text-indigo-500" />
+                                <p className="text-[8px] text-slate-500 dark:text-white font-black uppercase tracking-[0.2em]">{t('subscription.upgrade.protocol_initialized')}</p>
+                            </div>
                         </div>
                     ) : (
                         <div className="space-y-6">
-                            <div className="flex justify-between items-center text-white/40 pb-2 border-b border-white/5">
-                                <button onClick={() => setPaymentMethod(null)} className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest hover:text-white transition-colors">
+                            <div className="flex justify-between items-center text-slate-400 dark:text-white/40 pb-2 border-b border-slate-200 dark:border-white/5">
+                                <button onClick={() => setPaymentMethod(null)} className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest hover:text-slate-900 dark:hover:text-white transition-colors">
                                     <ChevronLeft size={14} /> {t('subscription.upgrade.change_method')}
                                 </button>
                                 {formattedTime && (
-                                    <div className="flex items-center gap-1.5 bg-white/5 px-2 py-0.5 rounded-lg border border-white/10">
-                                        <Clock size={10} className="text-indigo-400" />
-                                        <span className="text-[10px] font-black font-mono text-indigo-400">{formattedTime}</span>
+                                    <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-white/10">
+                                        <Clock size={10} className="text-indigo-600 dark:text-indigo-400" />
+                                        <span className="text-[10px] font-black font-mono text-indigo-600 dark:text-indigo-400">{formattedTime}</span>
                                     </div>
                                 )}
                             </div>
                             <div className="mt-4">
                                 {paymentMethod === 'TON' ? (
                                     <div className="space-y-6 text-center">
-                                        <div className="p-6 bg-white/5 rounded-3xl border border-white/10">
-                                            <Wallet size={32} className="mx-auto text-indigo-400 mb-4" />
+                                        <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 shadow-inner">
+                                            <Wallet size={32} className="mx-auto text-indigo-600 dark:text-indigo-400 mb-4" />
                                             <div className="flex justify-center mb-4"><TonConnectButton /></div>
                                         </div>
-                                        <button disabled={isLoading} onClick={handleTonPayment} className="w-full h-14 bg-white text-indigo-600 rounded-2xl font-black text-[10px] uppercase tracking-widest">{isLoading ? <Loader2 className="animate-spin mx-auto" /> : 'COMPLETE PAYMENT'}</button>
+                                        <button disabled={isLoading} onClick={handleTonPayment} className="w-full h-14 bg-indigo-600 text-white dark:bg-white dark:text-indigo-600 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">
+                                            {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.complete_payment')}
+                                        </button>
                                     </div>
                                 ) : (
                                     <div className="space-y-4">
-                                        <div onClick={() => { navigator.clipboard.writeText(adminUsdt); selection(); notification('success'); }} className="p-4 bg-white/5 border border-white/10 rounded-2xl text-center cursor-pointer">
-                                            <p className="text-[8px] font-black text-white/30 mb-2 uppercase">TRC20 ADDRESS (TAP TO COPY)</p>
-                                            <code className="text-[9px] font-mono text-white/80 block bg-black/40 p-2 rounded-lg mb-2">{adminUsdt}</code>
-                                            <span className="text-[8px] font-black text-indigo-400 uppercase">COPY SUCCESSFUL</span>
+                                        <div onClick={() => { navigator.clipboard.writeText(adminUsdt); selection(); notification('success'); }} className="p-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl text-center cursor-pointer group hover:border-indigo-500/50 transition-colors">
+                                            <p className="text-[8px] font-black text-slate-400 dark:text-white/30 mb-2 uppercase tracking-widest">{t('subscription.upgrade.tap_to_copy')}</p>
+                                            <code className="text-[9px] font-mono text-slate-800 dark:text-white/80 block bg-slate-200/50 dark:bg-black/40 p-2 rounded-lg mb-2 break-all">{adminUsdt}</code>
+                                            <span className="text-[8px] font-black text-indigo-600 dark:text-indigo-400 uppercase group-hover:animate-pulse">CLICK TO COPY NODE</span>
                                         </div>
-                                        <input value={manualHash} onChange={(e) => setManualHash(e.target.value)} placeholder="PASTE TX HASH" className="w-full h-12 bg-black/40 border border-white/10 rounded-xl px-4 text-xs text-white text-center font-mono" />
-                                        <button onClick={handleManualSubmit} disabled={isLoading || !manualHash} className="w-full h-12 bg-indigo-600 text-white rounded-xl font-black text-[9px] uppercase tracking-widest">{isLoading ? <Loader2 className="animate-spin mx-auto" /> : 'VERIFY TRANSACTION'}</button>
+                                        <div className="space-y-2">
+                                            <label className="text-[8px] font-black text-slate-400 dark:text-white/20 uppercase tracking-widest ml-1">{t('subscription.upgrade.paste_tx_hash')}</label>
+                                            <input value={manualHash} onChange={(e) => setManualHash(e.target.value)} placeholder="0x..." className="w-full h-12 bg-slate-100 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs text-slate-900 dark:text-white text-center font-mono focus:border-indigo-500/50 outline-none transition-colors" />
+                                        </div>
+                                        <button onClick={handleManualSubmit} disabled={isLoading || !manualHash} className="w-full h-12 bg-indigo-600 text-white rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg active:scale-95 transition-all">
+                                            {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.verify_transaction')}
+                                        </button>
                                     </div>
                                 )}
                             </div>
@@ -367,15 +471,15 @@ export default function SubscriptionPage() {
                 <h2 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-6 italic">{t('subscription.faq.header_pre')} <span className="text-indigo-600 dark:text-indigo-500">{t('subscription.faq.header_highlight')}</span></h2>
                 <div className="space-y-2">
                     {[1, 2, 3, 4, 5].map((idx) => (
-                        <div key={idx} className="bg-slate-50 dark:bg-white/3 border border-slate-200 dark:border-white/5 rounded-2xl overflow-hidden">
-                            <button onClick={() => { selection(); setExpandedFaq(expandedFaq === idx ? null : idx); }} className="w-full p-4 flex items-center justify-between">
+                        <div key={idx} className="bg-slate-50 dark:bg-white/3 border border-slate-200 dark:border-white/5 rounded-2xl overflow-hidden shadow-sm">
+                            <button onClick={() => { selection(); setExpandedFaq(expandedFaq === idx ? null : idx); }} className="w-full p-4 flex items-center justify-between group">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-xl bg-indigo-500/5 dark:bg-white/5 flex items-center justify-center">
+                                    <div className="w-8 h-8 rounded-xl bg-indigo-500/5 dark:bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
                                         {idx === 1 ? <Clock size={14} className="text-indigo-600 dark:text-amber-500" /> : idx === 2 ? <Zap size={14} className="text-indigo-600 dark:text-indigo-400" /> : idx === 3 ? <Globe size={14} className="text-indigo-600 dark:text-emerald-400" /> : idx === 4 ? <Shield size={14} className="text-indigo-600 dark:text-purple-400" /> : <Share2 size={14} className="text-indigo-600 dark:text-fuchsia-400" />}
                                     </div>
                                     <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tight text-left">{t(`subscription.faq.q${idx}`)}</span>
                                 </div>
-                                <ChevronDown size={14} className={`transition-transform ${expandedFaq === idx ? 'rotate-180' : ''} text-slate-400 dark:text-white/40`} />
+                                <ChevronDown size={14} className={`transition-transform duration-300 ${expandedFaq === idx ? 'rotate-180' : ''} text-slate-400 dark:text-white/40`} />
                             </button>
                             <AnimatePresence>
                                 {expandedFaq === idx && (
