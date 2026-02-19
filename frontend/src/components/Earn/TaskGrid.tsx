@@ -15,6 +15,7 @@ interface TaskGridProps {
     checkinStreak: number;
     completedStages?: (string | number)[]; // New prop for Academy tracking
     isPro?: boolean;
+    isProPlus?: boolean;
     activeTasks?: ActiveTask[];
     onTaskClick: (task: Task) => void;
     onClaim: (task: Task) => void;
@@ -30,6 +31,7 @@ export const TaskGrid = ({
     checkinStreak,
     completedStages = [], // Default to empty array
     isPro,
+    isProPlus,
     activeTasks,
     onTaskClick,
     onClaim
@@ -126,6 +128,7 @@ export const TaskGrid = ({
                                 checkinStreak={checkinStreak}
                                 countdown={verifyingTasks[task.id]}
                                 isPro={!!isPro} // Pass pro status
+                                isProPlus={!!isProPlus} // Pass pro plus status
                                 onClick={() => onTaskClick(task)}
                                 onClaim={() => onClaim(task)}
                             />

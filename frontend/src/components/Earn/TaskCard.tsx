@@ -16,11 +16,12 @@ interface TaskCardProps {
     checkinStreak?: number;
     countdown?: number;
     isPro?: boolean; // #comment: Added isPro to show multiplied rewards
+    isProPlus?: boolean; // #comment: Distinguish PRO vs PRO+ for multipliers
     onClick?: () => void;
     onClaim?: () => void | Promise<void>;
 }
 
-export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak = 0, countdown, isPro, onClick, onClaim }: TaskCardProps) => {
+export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak = 0, countdown, isPro, isProPlus, onClick, onClaim }: TaskCardProps) => {
     const { t } = useTranslation();
     const [isExpanded, setIsExpanded] = useState(false);
     const [isClaiming, setIsClaiming] = useState(false);
@@ -32,7 +33,8 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
     // #comment: Added isStarted check for UI rendering
     const isStarted = status === 'STARTED';
 
-    const reward = isPro ? task.reward * 5 : task.reward;
+    const multiplier = isProPlus ? 3 : (isPro ? 1.5 : 1);
+    const reward = task.reward * multiplier;
 
     const variants = {
         LOCKED: 'opacity-40 grayscale-[0.8] cursor-not-allowed border-white/10 bg-slate-900/40',
@@ -115,10 +117,10 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                                     : 'xp-acid-badge'}`}>
                                     +{reward} XP
                                 </div>
-                                {isPro && (
+                                {(isPro || isProPlus) && (
                                     <div className="flex items-center gap-1">
                                         <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className="text-[8px] font-black text-emerald-500/80 uppercase tracking-tighter">x5 BOOST</span>
+                                        <span className={`text-[8px] font-black uppercase tracking-tighter ${isProPlus ? 'text-indigo-400' : 'text-emerald-500/80'}`}>x{multiplier} BOOST</span>
                                     </div>
                                 )}
                             </div>

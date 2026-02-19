@@ -925,43 +925,30 @@ body {
 @keyframes xp-acid-vibe {
   0% {
     background-position: 0% 50%;
-    filter: hue-rotate(0deg) brightness(1.1) saturate(1.5);
-    box-shadow: 0 0 8px 2px rgba(210, 255, 0, 0.55), 0 0 18px 4px rgba(163, 255, 0, 0.3);
-  }
-
-  25% {
-    background-position: 50% 0%;
-    filter: hue-rotate(20deg) brightness(1.25) saturate(1.7);
-    box-shadow: 0 0 10px 3px rgba(255, 240, 0, 0.65), 0 0 22px 5px rgba(210, 255, 0, 0.4);
+    filter: brightness(1.0) saturate(1.1);
+    box-shadow: 0 0 6px 1px rgba(210, 255, 0, 0.2), 0 0 10px 2px rgba(163, 255, 0, 0.1);
   }
 
   50% {
     background-position: 100% 50%;
-    filter: hue-rotate(-15deg) brightness(1.2) saturate(1.6);
-    box-shadow: 0 0 12px 3px rgba(163, 255, 0, 0.7), 0 0 26px 6px rgba(100, 255, 0, 0.35);
-  }
-
-  75% {
-    background-position: 50% 100%;
-    filter: hue-rotate(30deg) brightness(1.3) saturate(1.8);
-    box-shadow: 0 0 10px 3px rgba(240, 255, 0, 0.6), 0 0 22px 5px rgba(200, 255, 0, 0.4);
+    filter: brightness(1.1) saturate(1.2);
+    box-shadow: 0 0 8px 1px rgba(210, 255, 0, 0.3), 0 0 12px 2px rgba(163, 255, 0, 0.15);
   }
 
   100% {
     background-position: 0% 50%;
-    filter: hue-rotate(0deg) brightness(1.1) saturate(1.5);
-    box-shadow: 0 0 8px 2px rgba(210, 255, 0, 0.55), 0 0 18px 4px rgba(163, 255, 0, 0.3);
+    filter: brightness(1.0) saturate(1.1);
+    box-shadow: 0 0 6px 1px rgba(210, 255, 0, 0.2), 0 0 10px 2px rgba(163, 255, 0, 0.1);
   }
 }
 
 .xp-acid-badge {
-  background: linear-gradient(120deg, #d4ff00 0%, #aaff00 20%, #fff200 40%, #c8ff00 60%, #aaff00 80%, #d4ff00 100%);
-  background-size: 300% 300%;
-  animation: xp-acid-vibe 2.8s ease-in-out infinite;
+  background: linear-gradient(120deg, #d4ff00 0%, #aaff00 50%, #d4ff00 100%);
+  background-size: 200% 200%;
+  animation: xp-acid-vibe 4s ease-in-out infinite;
   color: #0a1000;
-  font-weight: 900;
-  border: none !important;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+  font-weight: 800;
+  border: 1px solid rgba(210, 255, 0, 0.4);
 }
 
 /* Emerald Liquid Theme */

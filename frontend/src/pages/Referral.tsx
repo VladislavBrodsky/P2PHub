@@ -554,6 +554,7 @@ export default function ReferralPage() {
                 referrals={referrals}
                 checkinStreak={user?.checkin_streak || 0}
                 isPro={user?.is_pro}
+                isProPlus={user?.subscription_plan?.includes('PLUS')}
                 // #comment: Pass active tasks to grid for status determination
                 activeTasks={user?.active_tasks}
                 onTaskClick={handleTaskClick}
