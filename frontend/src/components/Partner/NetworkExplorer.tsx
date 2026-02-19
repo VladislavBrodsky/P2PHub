@@ -321,7 +321,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                     <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase italic mb-2 tracking-tighter">
                                         {t('network.explorer.unlock_more_streams')}
                                     </h3>
-                                    <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-8 max-w-[220px] uppercase tracking-[0.1em] leading-relaxed">
+                                    <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-8 max-w-[220px] uppercase tracking-widest leading-relaxed">
                                         {user?.is_pro
                                             ? t('network.explorer.locked_levels_desc_pro')
                                             : t('network.explorer.locked_levels_desc_free')

@@ -307,7 +307,7 @@ export const PartnerDashboard = () => {
                             animate={{ y: 0 }}
                             exit={{ y: '100%' }}
                             transition={{ type: 'spring', damping: 30, stiffness: 250 }}
-                            className="w-full relative z-10 flex flex-col"
+                            className="w-full max-w-lg mx-auto relative z-10 flex flex-col"
                         >
                             <NetworkExplorer onClose={() => setIsExplorerOpen(false)} initialTotalCount={totalNetworkSize} />
                         </motion.div>
