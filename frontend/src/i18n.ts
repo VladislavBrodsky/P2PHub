@@ -50,6 +50,13 @@ const ru = [
     ruCommon, ruDashboard, ruMarketing, ruAcademy, ruPro, ruCards, ruOther, ruSocial
 ].reduce((acc: any, curr: any) => deepMerge(acc, curr), {} as any);
 
+// Ensure a default language is written to localStorage if the user hasn't
+// explicitly chosen one yet. This prevents auto-detection from Telegram's
+// system locale (e.g. Russian) overriding the app's default English UI.
+if (typeof window !== 'undefined' && !localStorage.getItem('i18nextLng')) {
+    localStorage.setItem('i18nextLng', 'en');
+}
+
 i18n
     // detect user language
     // learn more: https://github.com/i18next/i18next-browser-languageDetector
@@ -71,8 +78,10 @@ i18n
         },
 
         detection: {
-            // order and from where user language should be detected
-            order: ['querystring', 'localStorage', 'navigator'],
+            // Only use explicit user preference from localStorage or querystring.
+            // Do NOT use 'navigator' — Telegram's system locale would override
+            // the app's English default and cause blog content to load in Russian.
+            order: ['querystring', 'localStorage'],
             // keys or params to lookup language from
             lookupQuerystring: 'lang',
             lookupLocalStorage: 'i18nextLng',

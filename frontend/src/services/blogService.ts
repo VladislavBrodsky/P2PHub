@@ -1,5 +1,6 @@
 import { apiClient } from '../api/client';
 import { BlogPost } from '../data/blogPosts';
+import i18n from '../i18n';
 
 export interface BlogEngagement {
     likes: number;
@@ -49,7 +50,8 @@ const persistCache = () => {
 
 export const blogService = {
     getPosts: async (options: { offset?: number; limit?: number; category?: string; q?: string } = {}): Promise<BlogListResponse> => {
-        const cacheKey = JSON.stringify(options);
+        const lang = i18n.language?.split('-')[0] || 'en';
+        const cacheKey = `${lang}:${JSON.stringify(options)}`;
         const cached = cache.posts[cacheKey];
 
         // Return cached immediately if valid
@@ -72,7 +74,8 @@ export const blogService = {
 
     // Synchronous check for UI to avoid flickers
     getPostsSync: (options: { offset?: number; limit?: number; category?: string; q?: string } = {}): BlogListResponse | null => {
-        const cacheKey = JSON.stringify(options);
+        const lang = i18n.language?.split('-')[0] || 'en';
+        const cacheKey = `${lang}:${JSON.stringify(options)}`;
         const cached = cache.posts[cacheKey];
         if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
             return cached.data;
@@ -81,7 +84,9 @@ export const blogService = {
     },
 
     getPostDetail: async (slug: string): Promise<BlogPost & BlogEngagement & { content: string }> => {
-        const cached = cache.details[slug];
+        const lang = i18n.language?.split('-')[0] || 'en';
+        const detailKey = `${lang}:${slug}`;
+        const cached = cache.details[detailKey];
         if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
             return cached.data;
         }
@@ -89,7 +94,7 @@ export const blogService = {
         try {
             const response = await apiClient.get(`/api/blog/${slug}`);
             const data = response.data;
-            cache.details[slug] = { data, timestamp: Date.now() };
+            cache.details[detailKey] = { data, timestamp: Date.now() };
             persistCache();
             return data;
         } catch (error) {
@@ -100,7 +105,9 @@ export const blogService = {
     },
 
     getDetailSync: (slug: string): (BlogPost & BlogEngagement & { content: string }) | null => {
-        const cached = cache.details[slug];
+        const lang = i18n.language?.split('-')[0] || 'en';
+        const detailKey = `${lang}:${slug}`;
+        const cached = cache.details[detailKey];
         if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
             return cached.data;
         }
@@ -110,10 +117,12 @@ export const blogService = {
     // Background prefetcher to make transitions feel instant
     prefetchNext: (posts: BlogPost[]) => {
         // Prefetch first 3 posts content in background
+        const lang = i18n.language?.split('-')[0] || 'en';
         posts.slice(0, 3).forEach(post => {
-            if (!cache.details[post.id]) {
+            const detailKey = `${lang}:${post.id}`;
+            if (!cache.details[detailKey]) {
                 apiClient.get(`/api/blog/${post.id}`).then(res => {
-                    cache.details[post.id] = { data: res.data, timestamp: Date.now() };
+                    cache.details[detailKey] = { data: res.data, timestamp: Date.now() };
                 }).catch(() => { /* silent fail for prefetch */ });
             }
         });

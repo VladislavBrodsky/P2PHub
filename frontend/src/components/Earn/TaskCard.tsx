@@ -110,9 +110,9 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                         </h4>
                         {!isCompleted && (
                             <div className="flex items-center gap-1.5 mt-0.5">
-                                <div className={`px-1.5 py-0.5 rounded-md text-[9px] font-black tracking-wide uppercase ${isClaimable
-                                    ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
-                                    : 'bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-white/10'}`}>
+                                <div className={`px-1.5 py-0.5 rounded-md text-[9px] tracking-wide uppercase ${isClaimable
+                                    ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-black'
+                                    : 'xp-acid-badge'}`}>
                                     +{reward} XP
                                 </div>
                                 {isPro && (

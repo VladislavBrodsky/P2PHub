@@ -3,6 +3,7 @@ import { Sun, Moon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/ThemeContext';
 import { apiClient } from '../../api/client';
+import { blogService } from '../../services/blogService';
 
 interface DrawerSettingsProps {
     selection: () => void;
@@ -13,6 +14,8 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
     const { theme, setTheme } = useTheme();
 
     const handleLanguageChange = async (lang: string) => {
+        // Clear blog cache so next visit re-fetches in the new language
+        blogService.clearCache();
         i18n.changeLanguage(lang);
         selection();
 

@@ -14,6 +14,7 @@ import {
     Globe
 } from 'lucide-react';
 import { apiClient } from '../../api/client';
+import { blogService } from '../../services/blogService';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
 import { useUI } from '../../context/UIContext';
@@ -41,6 +42,8 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
 
     const toggleLanguage = async () => {
         const newLang = i18n.language.startsWith('ru') ? 'en' : 'ru';
+        // Clear blog cache so next visit re-fetches in the new language
+        blogService.clearCache();
         await i18n.changeLanguage(newLang);
         try {
             await apiClient.post('/api/partner/language', { language_code: newLang });
