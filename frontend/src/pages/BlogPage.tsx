@@ -19,6 +19,16 @@ import { PostCard } from '../components/Blog/PostCard';
 import { TopicDropdown } from '../components/Blog/TopicDropdown';
 import { MarkdownRenderer } from '../components/Blog/MarkdownRenderer';
 
+/** Renders inline markdown (bold, italic) to HTML for use in excerpt snippets. */
+function renderExcerpt(text: string): string {
+    if (!text) return '';
+    return text
+        .replace(/\*\*\s*(.*?)\s*\*\*/g, '<strong class="font-black text-slate-900 dark:text-white">$1</strong>')
+        .replace(/__(.*?)__/g, '<strong class="font-black text-slate-900 dark:text-white">$1</strong>')
+        .replace(/_(.*?)_/g, '<em>$1</em>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+
 interface BlogPageProps {
     setActiveTab?: (tab: string) => void;
     currentTab?: string;
@@ -349,9 +359,10 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                         <h3 className="text-2xl sm:text-3xl font-black leading-tight text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors line-clamp-3">
                                             {currentFeaturedPost.title}
                                         </h3>
-                                        <p className="text-sm sm:text-base font-medium text-slate-500 dark:text-slate-400 line-clamp-3 opacity-80 leading-relaxed">
-                                            {currentFeaturedPost.excerpt}
-                                        </p>
+                                        <p
+                                            className="text-sm sm:text-base font-medium text-slate-500 dark:text-slate-400 line-clamp-3 opacity-80 leading-relaxed"
+                                            dangerouslySetInnerHTML={{ __html: renderExcerpt(currentFeaturedPost.excerpt) }}
+                                        />
                                         <div className="pt-6 flex items-center justify-between border-t border-slate-200 dark:border-white/5">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shadow-inner">
@@ -641,9 +652,10 @@ const BlogDetail = ({
                         </div>
                     ) : (
                         <div className="space-y-6">
-                            <p className="text-lg font-medium leading-[1.8] text-slate-600 dark:text-slate-300 first-letter:text-6xl first-letter:font-black first-letter:mr-4 first-letter:float-left first-letter:text-blue-600 first-letter:leading-none first-letter:mt-2">
-                                {post.excerpt}
-                            </p>
+                            <p
+                                className="text-lg font-medium leading-[1.8] text-slate-600 dark:text-slate-300 first-letter:text-6xl first-letter:font-black first-letter:mr-4 first-letter:float-left first-letter:text-blue-600 first-letter:leading-none first-letter:mt-2"
+                                dangerouslySetInnerHTML={{ __html: renderExcerpt(post.excerpt) }}
+                            />
                             <MarketingBox type="card" />
                             <MarketingBox type="pro" />
                         </div>

@@ -22,6 +22,16 @@ const getCategoryKey = (cat: string) => {
     return `blog.categories.${key}`;
 };
 
+/** Converts inline markdown to HTML for excerpt display (bold, italic, backtick code). */
+function renderExcerpt(text: string): string {
+    if (!text) return '';
+    return text
+        .replace(/\*\*\s*(.*?)\s*\*\*/g, '<strong class="font-black text-slate-900 dark:text-white">$1</strong>')
+        .replace(/__(.*?)__/g, '<strong class="font-black text-slate-900 dark:text-white">$1</strong>')
+        .replace(/_(.*?)_/g, '<em>$1</em>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+
 export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogEngagement; index: number; onClick: () => void }) => {
     const { t } = useTranslation();
 
@@ -70,9 +80,10 @@ export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogE
                     <h4 className="text-[14px] sm:text-[15px] font-black leading-snug group-hover:text-blue-500 transition-colors line-clamp-2 text-slate-900 dark:text-white">
                         {post.title}
                     </h4>
-                    <p className="mt-1 text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400/70 line-clamp-2 leading-relaxed uppercase tracking-tight opacity-80">
-                        {post.excerpt}
-                    </p>
+                    <p
+                        className="mt-1 text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400/70 line-clamp-2 leading-relaxed uppercase tracking-tight opacity-80"
+                        dangerouslySetInnerHTML={{ __html: renderExcerpt(post.excerpt) }}
+                    />
                 </div>
             </div>
             <div className="relative shrink-0 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-500 transition-all duration-500 shadow-xs group-hover:shadow-lg group-hover:shadow-blue-500/30">
