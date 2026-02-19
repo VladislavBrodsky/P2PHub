@@ -5,7 +5,7 @@ import { useUI } from '../../context/UIContext';
 import { useTranslation, Trans } from 'react-i18next';
 
 export const PartnerAcademy = () => {
-    const { isFooterVisible } = useUI();
+    const { isFooterVisible, isKeyboardOpen } = useUI();
     const { t } = useTranslation();
 
     return (
@@ -63,7 +63,7 @@ export const PartnerAcademy = () => {
             </div>
 
             {/* Sticky Bottom Footer (Educational Callout) */}
-            {isFooterVisible && (
+            {(isFooterVisible && !isKeyboardOpen) && (
                 <div className="fixed bottom-32 left-1/2 -translate-x-1/2 z-40 w-full max-w-[260px] px-2 pointer-events-none">
                     <motion.div
                         initial={{ y: 50, opacity: 0 }}
