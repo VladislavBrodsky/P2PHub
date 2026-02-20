@@ -258,11 +258,11 @@
     "92": "Founder Access",
     "100": "Platinum Metal Card",
     "part_label": "Part {{part}}",
-    "tier_1": "Tier 1: Foundation",
-    "tier_2": "Tier 2: Momentum",
-    "tier_3": "Tier 3: Elite",
-    "tier_4": "Tier 4: Legend",
-    "tier_5": "Tier 5: Legacy",
+    "tier_1": "Foundation",
+    "tier_2": "Momentum",
+    "tier_3": "Elite",
+    "tier_4": "Legend",
+    "tier_5": "Legacy",
     "progression_phase": "Progression Phase"
   },
   "ranks": {
