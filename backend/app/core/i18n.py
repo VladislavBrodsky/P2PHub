@@ -106,8 +106,9 @@ MESSAGES = {
         "sub_expired_body": "Your PRO membership has expired. You have lost access to premium features.\n\nRe-activate your PRO status now to continue earning.",
         
         "viralkit_intro": "🎁 *VIRAL KIT UNLOCKED!*\n\nShare this message to announce your PRO status and attract more partners:\n\n---",
-        "admin_payment_success": "✅ *SUCCESSFUL {plan} PURCHASE*\n\n👤 *User:* {user} (`{user_id}`)\n💰 *Amount:* ${amount} {currency}\n🔗 *Hash:* `{hash}`\n📊 *Plan:* {plan_type}\n⌛ *Expires:* {expires}\n\nVerified and commissions distributed.",
-        "admin_manual_payment": "🚨 *NEW MANUAL PAYMENT PENDING REVIEW* 🚨\n\n👤 *User:* {user} (`{user_id}`)\n💰 *Amount:* ${amount} {currency}\n🌐 *Network:* {network}\n📝 *TX Hash:* `{hash}`\n\n🆔 *Trans ID:* `{trans_id}`\n\n👉 *Action Required:* Please verify this transaction in the Admin Panel or use /admin commands.",
+        "admin_payment_success": "✅ <b>SUCCESSFUL {plan} PURCHASE</b>\n\n👤 <b>User:</b> {user} (<code>{user_id}</code>)\n💰 <b>Amount:</b> ${amount} {currency}\n🔗 <b>Hash:</b> <code>{hash}</code>\n📊 <b>Plan:</b> {plan_type}\n⌛ <b>Expires:</b> {expires}\n\nVerified and commissions distributed.",
+        "admin_payment_success_parse_mode": "HTML",
+        "admin_manual_payment": "🚨 <b>NEW MANUAL PAYMENT PENDING REVIEW</b> 🚨\n\n👤 <b>User:</b> {user} (<code>{user_id}</code>)\n💰 <b>Amount:</b> ${amount} {currency}\n🌐 <b>Network:</b> {network}\n📝 <b>TX Hash:</b> <code>{hash}</code>\n\n🆔 <b>Trans ID:</b> <code>{trans_id}</code>\n\n👉 <b>Action Required:</b> Please verify this transaction in the Admin Panel or use /admin commands.",
         
         # Bot Commands & Messages
         "not_registered_error": "⚠️ You are not registered yet. Type /start to join!",
@@ -299,8 +300,9 @@ MESSAGES = {
         "sub_expired_body": "Ваш статус PRO истек. Вы потеряли доступ к премиум функциям.\n\nАктивируйте PRO снова, чтобы продолжить зарабатывать.",
         
         "viralkit_intro": "🎁 *ВИРУСНЫЙ НАБОР РАЗБЛОКИРОВАН!*\n\nПерешлите это сообщение, чтобы рассказать о статусе PRO и привлечь больше партнеров:\n\n---",
-        "admin_payment_success": "✅ *УСПЕШНАЯ ОПЛАТА {plan}*\n\n👤 *Пользователь:* {user} (`{user_id}`)\n💰 *Сумма:* ${amount} {currency}\n🔗 *Хеш:* `{hash}`\n📊 *План:* {plan_type}\n⌛ *Истекает:* {expires}\n\nПроверено и комиссии распределены.",
-        "admin_manual_payment": "🚨 *НОВЫЙ РУЧНОЙ ПЛАТЕЖ НА ПРОВЕРКЕ* 🚨\n\n👤 *Пользователь:* {user} (`{user_id}`)\n💰 *Сумма:* ${amount} {currency}\n🌐 *Сеть:* {network}\n📝 *Хеш:* `{hash}`\n\n🆔 *ID Транзакции:* `{trans_id}`\n\n👉 *Действие:* Проверьте транзакцию в Админ Панели.",
+        "admin_payment_success": "✅ <b>УСПЕШНАЯ ОПЛАТА {plan}</b>\n\n👤 <b>Пользователь:</b> {user} (<code>{user_id}</code>)\n💰 <b>Сумма:</b> ${amount} {currency}\n🔗 <b>Хеш:</b> <code>{hash}</code>\n📊 <b>План:</b> {plan_type}\n⌛ <b>Истекает:</b> {expires}\n\nПроверено и комиссии распределены.",
+        "admin_payment_success_parse_mode": "HTML",
+        "admin_manual_payment": "🚨 <b>НОВЫЙ РУЧНОЙ ПЛАТЕЖ НА ПРОВЕРКЕ</b> 🚨\n\n👤 <b>Пользователь:</b> {user} (<code>{user_id}</code>)\n💰 <b>Сумма:</b> ${amount} {currency}\n🌐 <b>Сеть:</b> {network}\n📝 <b>Хеш:</b> <code>{hash}</code>\n\n🆔 <b>ID Транзакции:</b> <code>{trans_id}</code>\n\n👉 <b>Действие:</b> Проверьте транзакцию в Админ Панели.",
 
         # Bot Commands & Messages
         "not_registered_error": "⚠️ Вы еще не зарегистрированы. Введите /start чтобы присоединиться!",

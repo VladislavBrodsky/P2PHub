@@ -262,17 +262,17 @@ class NotificationService:
         await self.send_standard(chat_id=chat_id, text=text)
 
     # High-performance priority wrappers
-    async def send_critical(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = True):
+    async def send_critical(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = True, parse_mode: str = "Markdown"):
         """Mission-critical messages (Security, Payments). Bypasses dedup by default."""
-        await self.enqueue_notification(chat_id, text, buttons=buttons, priority="high", bypass_dedup=bypass_dedup)
+        await self.enqueue_notification(chat_id, text, parse_mode=parse_mode, buttons=buttons, priority="high", bypass_dedup=bypass_dedup)
 
-    async def send_standard(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = False):
+    async def send_standard(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = False, parse_mode: str = "Markdown"):
         """Standard interaction messages (Referrals)."""
-        await self.enqueue_notification(chat_id, text, buttons=buttons, priority="medium", bypass_dedup=bypass_dedup)
+        await self.enqueue_notification(chat_id, text, parse_mode=parse_mode, buttons=buttons, priority="medium", bypass_dedup=bypass_dedup)
 
-    async def send_low_prio(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = False):
+    async def send_low_prio(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = False, parse_mode: str = "Markdown"):
         """Background messages (XP, Social tips)."""
-        await self.enqueue_notification(chat_id, text, buttons=buttons, priority="low", bypass_dedup=bypass_dedup)
+        await self.enqueue_notification(chat_id, text, parse_mode=parse_mode, buttons=buttons, priority="low", bypass_dedup=bypass_dedup)
 
 notification_service = NotificationService()
 
@@ -331,7 +331,7 @@ async def notify_admin_payment_task(
                     trans_id=transaction_id
                 )
                 
-                # Admin alerts are HIGH priority
-                await notification_service.send_critical(chat_id=int(chat_id), text=msg)
+                # Admin alerts are HIGH priority — send with HTML parse mode to avoid Markdown entity errors
+                await notification_service.send_critical(chat_id=int(chat_id), text=msg, parse_mode="HTML")
             except Exception as e:
                 logger.error(f"Failed to enqueue admin notify: {e}")

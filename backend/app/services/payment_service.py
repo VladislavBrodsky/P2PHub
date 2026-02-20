@@ -512,7 +512,8 @@ class PaymentService:
                 
                 await notification_service.send_critical(
                     chat_id=int(admin_id),
-                    text=admin_notify_msg
+                    text=admin_notify_msg,
+                    parse_mode="HTML"
                 )
             except Exception as e:
                 logger.error(f"Failed to notify admin about successful purchase: {e}")
