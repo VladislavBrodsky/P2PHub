@@ -60,6 +60,7 @@ export const StudioTab = ({
     const [publishedPlatforms, setPublishedPlatforms] = useState<string[]>([]);
     const [showShareModal, setShowShareModal] = useState(false);
     const [isSharingSystem, setIsSharingSystem] = useState(false);
+    const [selectedPublishPlatforms, setSelectedPublishPlatforms] = useState<('x' | 'telegram' | 'linkedin')[]>([]);
 
     // Personal Link State
     const [usePersonalLink, setUsePersonalLink] = useState(false);
@@ -355,13 +356,65 @@ export const StudioTab = ({
             const fullContent = `${generatedResult.title}\n\n${generatedResult.body}\n\n${hashtagsStr}`;
 
             await proService.publishContent(platform, fullContent, generatedResult.image_url, generatedResult.id);
-            setPublishedPlatforms([...publishedPlatforms, platform]);
-            notification({ title: t('pro_dashboard.notifications.published'), text: t('pro_dashboard.notifications.published_text', { platform: platform.toUpperCase() }), type: 'success' });
+            setPublishedPlatforms(prev => [...prev, platform]);
+            notification({ title: t('pro_dashboard.notifications.success'), text: t('pro_dashboard.notifications.published_text', { platform: platform.toUpperCase() }), type: 'success' });
         } catch (error: any) {
             notification({ title: t('pro_dashboard.notifications.publish_error'), text: error.response?.data?.detail || t('pro_dashboard.notifications.publish_failed'), type: 'error' });
         } finally {
             setIsPublishing(false);
         }
+    };
+
+    const handleOmniPublish = async () => {
+        if (!generatedResult || selectedPublishPlatforms.length === 0) return;
+        setIsPublishing(true);
+        impact('heavy');
+
+        const results: { success: string[], fail: string[] } = { success: [], fail: [] };
+
+        const hashtagsStr = generatedResult.hashtags?.map((t: string) => t.startsWith('#') ? t : `#${t}`).join(' ') || '';
+        const fullContent = `${generatedResult.title}\n\n${generatedResult.body}\n\n${hashtagsStr}`;
+
+        for (const platform of selectedPublishPlatforms) {
+            try {
+                await proService.publishContent(platform, fullContent, generatedResult.image_url, generatedResult.id);
+                results.success.push(platform);
+            } catch (error) {
+                results.fail.push(platform);
+            }
+        }
+
+        if (results.success.length > 0) {
+            setPublishedPlatforms(prev => [...prev, ...results.success]);
+            notification({
+                title: t('pro_dashboard.notifications.success'),
+                text: `Successfully published to: ${results.success.join(', ').toUpperCase()}`,
+                type: 'success'
+            });
+        }
+
+        if (results.fail.length > 0) {
+            notification({
+                title: t('pro_dashboard.notifications.publish_error'),
+                text: `Failed to publish to: ${results.fail.join(', ').toUpperCase()}`,
+                type: 'error'
+            });
+        }
+
+        setIsPublishing(false);
+        if (results.fail.length === 0) {
+            setShowPublishModal(false);
+        }
+    };
+
+    const togglePublishPlatform = (platform: 'x' | 'telegram' | 'linkedin') => {
+        if (publishedPlatforms.includes(platform)) return;
+        setSelectedPublishPlatforms(prev =>
+            prev.includes(platform)
+                ? prev.filter(p => p !== platform)
+                : [...prev, platform]
+        );
+        selection();
     };
 
     return (
@@ -942,35 +995,82 @@ export const StudioTab = ({
                                     </p>
 
                                     <div className="grid gap-2">
-                                        {(['x', 'telegram', 'linkedin'] as const).map((platform) => (
-                                            <button
-                                                key={platform}
-                                                onClick={() => handlePublishToPlatform(platform)}
-                                                disabled={isPublishing || publishedPlatforms.includes(platform)}
-                                                className={`w-full h-12 rounded-lg border transition-all flex items-center justify-between px-3 group ${publishedPlatforms.includes(platform)
-                                                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500'
-                                                    : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 active:scale-98'
-                                                    }`}
-                                            >
-                                                <div className="flex items-center gap-2.5">
-                                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${publishedPlatforms.includes(platform) ? 'bg-emerald-500 text-white' : 'bg-white dark:bg-white/10 text-slate-600 dark:text-slate-300'
-                                                        }`}>
-                                                        <Send size={14} />
+                                        {(['x', 'telegram', 'linkedin'] as const).map((platform) => {
+                                            const isSelected = selectedPublishPlatforms.includes(platform);
+                                            const isPublished = publishedPlatforms.includes(platform);
+                                            const isProPlus = status?.is_pro_plus;
+
+                                            return (
+                                                <button
+                                                    key={platform}
+                                                    onClick={() => isProPlus ? togglePublishPlatform(platform) : handlePublishToPlatform(platform)}
+                                                    disabled={isPublishing || isPublished}
+                                                    className={`w-full h-14 rounded-2xl border transition-all flex items-center justify-between px-4 group relative overflow-hidden ${isPublished
+                                                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500'
+                                                        : isSelected
+                                                            ? 'bg-indigo-500/10 border-indigo-500/40 text-indigo-600 dark:text-indigo-400 shadow-inner'
+                                                            : 'bg-white dark:bg-black/20 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 active:scale-[0.98]'
+                                                        }`}
+                                                >
+                                                    {isSelected && !isPublished && (
+                                                        <motion.div
+                                                            layoutId="selected-bg"
+                                                            className="absolute inset-0 bg-indigo-500/5 pointer-events-none"
+                                                            initial={{ opacity: 0 }}
+                                                            animate={{ opacity: 1 }}
+                                                        />
+                                                    )}
+                                                    <div className="flex items-center gap-3 relative z-10">
+                                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-500 ${isPublished ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : isSelected ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 group-hover:scale-110'
+                                                            }`}>
+                                                            {platform === 'x' ? <Network size={16} /> : platform === 'telegram' ? <Send size={16} className="-ml-0.5" /> : <Users size={16} />}
+                                                        </div>
+                                                        <div className="text-left min-w-0">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="block text-[11px] font-black uppercase tracking-widest leading-none mb-1 truncate">
+                                                                    {platform === 'x' ? 'Network X' : platform === 'telegram' ? 'Telegram' : 'LinkedIn'}
+                                                                </span>
+                                                                {!isProPlus && platform !== 'telegram' && (
+                                                                    <Lock size={10} className="text-slate-400" />
+                                                                )}
+                                                            </div>
+                                                            <span className="block text-[8px] font-black uppercase tracking-tighter opacity-60">
+                                                                {isPublished ? t('pro_dashboard.publish.platform_success') : (isProPlus ? (isSelected ? 'SELECTED FOR OMNI-SYNC' : 'TAP TO SELECT') : t('pro_dashboard.publish.platform_tap'))}
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                    <div className="text-left min-w-0">
-                                                        <span className="block text-[10px] font-black uppercase tracking-wider leading-none mb-0.5 truncate">
-                                                            {platform === 'x' ? 'X (TW)' : platform}
-                                                        </span>
-                                                        <span className="block text-[8px] font-bold opacity-60 truncate">
-                                                            {publishedPlatforms.includes(platform) ? t('pro_dashboard.publish.platform_success') : t('pro_dashboard.publish.platform_tap')}
-                                                        </span>
+                                                    <div className="relative z-10">
+                                                        {isPublished ? (
+                                                            <CheckCircle2 size={18} className="text-emerald-500" />
+                                                        ) : isProPlus ? (
+                                                            <div className={`w-5 h-5 rounded-full border-2 transition-all flex items-center justify-center ${isSelected ? 'bg-indigo-500 border-indigo-500' : 'border-slate-200 dark:border-white/10'}`}>
+                                                                {isSelected && <CheckCircle2 size={12} className="text-white" />}
+                                                            </div>
+                                                        ) : (
+                                                            <ChevronRight size={16} className="text-slate-400 group-hover:translate-x-1 transition-transform" />
+                                                        )}
                                                     </div>
-                                                </div>
-                                                {publishedPlatforms.includes(platform) ? <CheckCircle2 size={14} className="shrink-0" /> : <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-1 transition-transform shrink-0" />}
-                                            </button>
-                                        ))}
+                                                </button>
+                                            );
+                                        })}
                                     </div>
                                 </div>
+
+                                {status?.is_pro_plus && selectedPublishPlatforms.length > 0 && !isPublishing && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="px-1 pt-2"
+                                    >
+                                        <button
+                                            onClick={handleOmniPublish}
+                                            className="w-full h-13 vibing-blue-animated rounded-2xl font-black text-white text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 group"
+                                        >
+                                            <Zap size={16} className="group-hover:scale-125 transition-transform" />
+                                            OMNI-SYNC PUBLISH ({selectedPublishPlatforms.length})
+                                        </button>
+                                    </motion.div>
+                                )}
 
                                 {isPublishing && (
                                     <div className="flex items-center justify-center gap-2 pt-1">

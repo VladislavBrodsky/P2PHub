@@ -110,6 +110,7 @@
       "save_success_text": "Your API nodes are now online and verified.",
       "x_broadcast": "X Broadcast",
       "tg_sync": "TG Sync",
+      "omni_sync": "Omni-Channel",
       "direct_protocol": "Direct API protocol",
       "global_matrix": "Multi-Node Broadcasting",
       "save_error_title": "Sync Error",
