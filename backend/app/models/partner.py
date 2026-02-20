@@ -61,6 +61,7 @@ class Partner(SQLModel, table=True):
     x_access_token_secret: str | None = Field(default=None)
     telegram_channel_id: str | None = Field(default=None)
     linkedin_access_token: str | None = Field(default=None)
+    personal_referral_link: str | None = Field(default=None)
 
     # Daily Check-in Tracking
     last_checkin_at: datetime | None = Field(default=None, index=True)

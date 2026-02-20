@@ -12,6 +12,7 @@ from app.models.schemas import (
     SocialPostRequest,
     ViralGenerateRequest,
     ViralGenerateResponse,
+    ReferralLinkUpdate,
 )
 from app.services.viral_service import viral_studio
 from bot import bot
@@ -69,6 +70,7 @@ async def get_pro_status(
         "has_x_setup": bool(partner.x_api_key),
         "has_telegram_setup": bool(partner.telegram_channel_id),
         "has_linkedin_setup": bool(partner.linkedin_access_token),
+        "personal_referral_link": partner.personal_referral_link,
         "setup": {
             "x_api_key": partner.x_api_key or "",
             "x_api_secret": partner.x_api_secret or "",
@@ -213,6 +215,37 @@ async def setup_social_api(
     await session.refresh(partner)
     
     return {"status": "success"}
+
+@router.post("/referral-link")
+async def update_referral_link(
+    payload: ReferralLinkUpdate,
+    partner: Partner = Depends(get_current_partner),
+    session: AsyncSession = Depends(get_session)
+):
+    if not partner.is_pro:
+        raise HTTPException(status_code=403, detail="PRO membership required")
+    
+    link = payload.referral_link.strip()
+    
+    # Validation: Must match "https://t.me/pintopaybot?start=" or "t.me/pintopaybot?start="
+    is_valid = False
+    if link.startswith("https://t.me/pintopaybot?start=") or link.startswith("t.me/pintopaybot?start="):
+        is_valid = True
+    
+    if not is_valid:
+        # If link is invalid, we might still store it but we'll use fallback in generation
+        # However, the user said "check the link all the time, it has to match"
+        # So I will reject it if it doesn't match.
+        raise HTTPException(
+            status_code=400, 
+            detail="Invalid referral link. Must start with 'https://t.me/pintopaybot?start=' or 't.me/pintopaybot?start='"
+        )
+
+    partner.personal_referral_link = link
+    session.add(partner)
+    await session.commit()
+    
+    return {"status": "success", "personal_referral_link": link}
 
 @router.post("/generate", response_model=ViralGenerateResponse)
 async def generate_content(

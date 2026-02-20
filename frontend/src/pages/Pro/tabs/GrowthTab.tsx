@@ -37,6 +37,7 @@ export const GrowthTab = ({
 }: GrowthTabProps) => {
     const { t } = useTranslation();
     const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
+    const isSetupComplete = !!(status?.setup?.telegram_channel_id || status?.setup?.x_access_token);
 
     return (
         <motion.div
@@ -48,68 +49,108 @@ export const GrowthTab = ({
         >
             {/* Master Score Card - Intelligence Hub - Re-engineered for compactness */}
             {/* Master Score Card - Intelligence Hub - Re-engineered for maximum compactness */}
-            <div className="bg-white dark:bg-slate-900 rounded-[24px] p-4 sm:p-6 shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-slate-100 dark:border-slate-800 relative overflow-hidden group">
-                <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+            {/* Master Score Card - Intelligence Hub - Re-engineered for maximum premium vibe */}
+            <div className="bg-white dark:bg-slate-950/80 rounded-[32px] p-5 sm:p-7 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-slate-100 dark:border-white/10 relative overflow-hidden group">
+                {/* Tech Background Pattern */}
+                <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.07] pointer-events-none">
+                    <svg width="100%" height="100%">
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                        </pattern>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+                    </svg>
+                </div>
 
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 relative z-10">
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-500/20">
-                            <ShieldCheck className="w-6 h-6 sm:w-7 sm:h-7 text-indigo-500" />
-                        </div>
-                        <div className="flex flex-col gap-1 relative">
-                            <div className="flex flex-wrap items-center gap-2">
-                                <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">
-                                    {t('pro_dashboard.academy.protocols.title')}
-                                </h3>
-                                <div className="flex items-center gap-1.5">
-                                    <span className="px-2 py-1 bg-indigo-50 dark:bg-indigo-500/20 rounded-lg text-[9px] sm:text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest leading-none">
-                                        {academyScore < 300 ? t('pro_dashboard.academy.protocols.difficulty_levels.easy').split(' ')[0] :
-                                            academyScore < 800 ? t('pro_dashboard.academy.protocols.difficulty_levels.medium').split(' ')[0] :
-                                                t('pro_dashboard.academy.protocols.difficulty_levels.hard').split(' ')[0]}
-                                    </span>
-                                </div>
+                {/* Dynamic Glow Orbs */}
+                <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 dark:bg-indigo-600/20 blur-[100px] rounded-full pointer-events-none animate-pulse-slow" />
+                <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/10 dark:bg-blue-600/20 blur-[100px] rounded-full pointer-events-none animate-pulse-slow" style={{ animationDelay: '2s' }} />
+
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8 relative z-10">
+                    <div className="flex items-start gap-4 sm:gap-5">
+                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-[22px] bg-linear-to-br from-indigo-500 to-blue-600 p-px shadow-xl shadow-indigo-500/20 shrink-0 group-hover:rotate-3 transition-transform duration-500">
+                            <div className="w-full h-full rounded-[21px] bg-white dark:bg-slate-950 flex items-center justify-center">
+                                <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8 text-indigo-500 dark:text-indigo-400" />
                             </div>
-                            <button
-                                onClick={() => { selection(); setShowManual('academy'); }}
-                                className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-slate-400 hover:text-indigo-500 transition-colors uppercase tracking-widest mt-1"
-                            >
-                                <Info className="w-4 h-4" /> {t('pro_dashboard.academy.intel_label')}
-                            </button>
+                        </div>
+
+                        <div className="flex flex-col gap-1.5 pt-1">
+                            <div className="flex items-center gap-2">
+                                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">
+                                    {t('pro_dashboard.academy.protocols.title').split(' ')[0]} <span className="text-indigo-500">{t('pro_dashboard.academy.protocols.title').split(' ').slice(1).join(' ')}</span>
+                                </h3>
+                            </div>
+
+                            <div className="flex flex-wrap items-center gap-2 mt-1">
+                                <span className="px-2.5 py-0.5 bg-indigo-500 text-white dark:bg-indigo-500/20 dark:text-indigo-400 rounded-md text-[8px] font-black uppercase tracking-[0.2em] shadow-sm">
+                                    {academyScore < 300 ? t('pro_dashboard.academy.protocols.difficulty_levels.easy') :
+                                        academyScore < 800 ? t('pro_dashboard.academy.protocols.difficulty_levels.medium') :
+                                            t('pro_dashboard.academy.protocols.difficulty_levels.hard')}
+                                </span>
+                                <div className="h-3 w-px bg-slate-200 dark:bg-white/10" />
+                                <button
+                                    onClick={() => { selection(); setShowManual('academy'); }}
+                                    className="flex items-center gap-1 text-[9px] font-black text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors uppercase tracking-[0.15em]"
+                                >
+                                    <Info className="w-3 h-3" /> {t('pro_dashboard.academy.intel_label')}
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-start sm:items-end gap-1">
-                        <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                    <div className="flex flex-col items-start sm:items-end gap-0">
+                        <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-1">
                             {t('pro_dashboard.academy.protocols.stats_label')}
                         </p>
-                        <div className="text-4xl sm:text-5xl font-black text-indigo-500 tabular-nums leading-none tracking-tighter vibing-crystal-text">
-                            <LiquidCounter value={academyScore} />
+                        <div className="relative group/score">
+                            <div className="absolute inset-0 bg-indigo-500/20 blur-2xl opacity-0 group-hover/score:opacity-100 transition-opacity duration-700" />
+                            <div className="text-5xl sm:text-6xl font-black text-slate-900 dark:text-white tabular-nums leading-none tracking-tighter vibing-crystal-text flex items-baseline gap-1">
+                                <LiquidCounter value={academyScore} />
+                                <span className="text-xs text-indigo-500/60 dark:text-indigo-400/60 tracking-normal italic ml-1 font-bold">XP</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="space-y-2 relative z-10 w-full mt-2">
+                {/* Performance Visualizer - Segmented Bars */}
+                <div className="space-y-4 relative z-10 w-full mt-2 bg-slate-50 dark:bg-white/2 p-4 rounded-2xl border border-slate-100 dark:border-white/5">
                     {(() => {
                         const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
-                        const moduleCount = Array.isArray(modules) ? modules.length : 5;
-                        const uniqueCompleted = [...new Set(completedStages)].filter(id => Array.isArray(modules) && modules.some((m: any) => m.id === id));
-                        const progress = Math.min(Math.round((uniqueCompleted.length / moduleCount) * 100), 100);
+                        const moduleCount = Array.isArray(modules) ? modules.length : 6;
+                        const uniqueCompleted = [...new Set(completedStages)].filter(id => Array.isArray(modules) && modules.some((m: any) => m.id === id)).length;
+                        const progress = Math.min(Math.round((uniqueCompleted / moduleCount) * 100), 100);
 
                         return (
-                            <div className="flex items-center gap-4">
-                                <div className="flex-1 h-2 sm:h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner border border-slate-200 dark:border-slate-700 relative">
-                                    <motion.div
-                                        className="h-full bg-blue-500 dark:bg-blue-500 rounded-full relative overflow-hidden"
-                                        initial={{ width: "0%" }}
-                                        animate={{ width: `${progress}%` }}
-                                        transition={{ duration: 2, ease: "circOut" }}
-                                    >
-                                        <div className="absolute inset-0 bg-linear-to-r from-white/20 via-transparent to-transparent animate-shimmer-slide" />
-                                    </motion.div>
+                            <div className="flex flex-col gap-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">Synchronization Status</span>
+                                    <span className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-widest tabular-nums italic">
+                                        {progress}% DEPLOYED
+                                    </span>
                                 </div>
-                                <span className="text-[11px] sm:text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest tabular-nums shrink-0">
-                                    {progress}% SYNC
-                                </span>
+
+                                <div className="flex gap-1.5 h-3">
+                                    {Array.from({ length: 12 }).map((_, i) => {
+                                        const threshold = (i + 1) * (100 / 12);
+                                        const isActive = progress >= threshold;
+                                        return (
+                                            <div
+                                                key={i}
+                                                className={`flex-1 rounded-sm transition-all duration-700 relative overflow-hidden ${isActive
+                                                    ? 'bg-linear-to-t from-indigo-500 to-blue-400 shadow-[0_0_10px_rgba(79,70,229,0.3)]'
+                                                    : 'bg-slate-200 dark:bg-white/5'
+                                                    }`}
+                                            >
+                                                {isActive && (
+                                                    <motion.div
+                                                        className="absolute inset-0 bg-white/30"
+                                                        animate={{ opacity: [0, 0.5, 0] }}
+                                                        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
+                                                    />
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         );
                     })()}
@@ -238,6 +279,7 @@ export const GrowthTab = ({
                             const userTokens = status?.pro_tokens || 0;
                             const canAffordTokens = cost >= 0 || userTokens >= Math.abs(cost);
                             const canAffordXP = academyScore >= xpCost;
+                            const isPaid = cost < 0 || xpCost > 0;
                             const isLocked = !isCompleted && (!canAffordTokens || !canAffordXP);
 
                             const toggleExpand = () => {
@@ -295,7 +337,7 @@ export const GrowthTab = ({
                                                         }`}>
                                                         {t(`pro_dashboard.academy.protocols.difficulty_levels.${module.diff}`).split(' ')[0]}
                                                     </span>
-                                                    <h4 className={`text-xs sm:text-sm font-black uppercase tracking-tighter leading-none transition-colors truncate ${isExpanded ? 'text-indigo-600 dark:text-indigo-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
+                                                    <h4 className={`text-xs sm:text-sm font-black uppercase tracking-tighter leading-none transition-colors truncate ${isExpanded ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white'}`}>
                                                         {module.title}
                                                     </h4>
                                                 </div>
@@ -311,8 +353,10 @@ export const GrowthTab = ({
                                                         <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">{t('pro_dashboard.academy.synced')}</span>
                                                     </div>
                                                 ) : (
-                                                    <div className={`text-[10px] font-black uppercase tracking-widest ${cost > 0 ? 'text-emerald-500' : 'text-indigo-500'}`}>
-                                                        {cost > 0 ? `+${cost} T` : `${cost} T`}
+                                                    <div className={`text-[9px] font-black uppercase tracking-tight flex items-center gap-2 ${isPaid ? 'text-indigo-500' : 'text-emerald-500'}`}>
+                                                        {cost < 0 && <span>{cost} T</span>}
+                                                        {xpCost > 0 && <span className="text-red-500">-{xpCost} XP</span>}
+                                                        {!isPaid && <span>+{xpReward} XP</span>}
                                                     </div>
                                                 )}
                                                 <motion.div
@@ -336,27 +380,52 @@ export const GrowthTab = ({
                                                     <div className="px-4 pb-4 pt-1 sm:px-6 sm:pb-6 space-y-4 border-t border-slate-50 dark:border-white/5 bg-white dark:bg-slate-900">
                                                         <p className="text-[10px] sm:text-[11px] font-black text-indigo-500/80 uppercase tracking-widest border-b border-indigo-50 dark:border-indigo-500/10 pb-3">{module.hook}</p>
 
-                                                        <div className="bg-slate-50 dark:bg-black/20 p-4 sm:p-5 rounded-[16px] border border-slate-100 dark:border-white/5 text-[12px] sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-                                                            {renderMarkdown(module.content)}
-                                                        </div>
+                                                        {/* Content Logic: Hide if Paid and Not Completed */}
+                                                        {(!isCompleted && isPaid) ? (
+                                                            <div className="relative overflow-hidden rounded-[16px]">
+                                                                <div className="bg-slate-50 dark:bg-black/20 p-4 sm:p-5 blur-md select-none opacity-40 text-[12px]">
+                                                                    {module.content.substring(0, 150)}...
+                                                                </div>
+                                                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/10 dark:bg-black/10 backdrop-blur-[2px]">
+                                                                    <div className="bg-white/80 dark:bg-slate-900/80 p-3 rounded-2xl shadow-xl border border-indigo-500/20 flex flex-col items-center gap-1.5">
+                                                                        <Lock className="w-5 h-5 text-indigo-500" />
+                                                                        <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500">Protocol Locked</span>
+                                                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Unlock to access intelligence</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="bg-slate-50 dark:bg-black/20 p-4 sm:p-5 rounded-[16px] border border-slate-100 dark:border-white/5 text-[12px] sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                                                                {renderMarkdown(module.content)}
+                                                            </div>
+                                                        )}
 
-                                                        {/* Action / Task */}
+                                                        {/* Action / Task - Also hidden if Paid and Not Completed */}
                                                         {!isCompleted && !isLocked && (
-                                                            <div className="relative p-5 sm:p-6 rounded-[24px] border border-indigo-500/20 bg-indigo-50/50 dark:bg-indigo-500/5 space-y-4 overflow-hidden group/task">
+                                                            <div className={`relative p-5 sm:p-6 rounded-[24px] border border-indigo-500/20 bg-indigo-50/50 dark:bg-indigo-500/5 space-y-4 overflow-hidden group/task ${isPaid && 'pt-6'}`}>
                                                                 <div className="absolute inset-0 bg-linear-to-r from-indigo-500/5 to-purple-500/5 opacity-50" />
                                                                 <div className="relative z-10">
                                                                     <div className="flex items-center gap-2 mb-3">
                                                                         <Terminal size={14} className="text-indigo-500" />
                                                                         <span className="text-[9px] font-black uppercase tracking-widest text-indigo-500">Node Task</span>
                                                                     </div>
-                                                                    <p className="text-[13px] sm:text-[14px] font-bold text-slate-800 dark:text-slate-200 leading-relaxed mb-4">
-                                                                        {module.task}
-                                                                    </p>
 
-                                                                    {module.link && (
-                                                                        <a href={module.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-[11px] font-black uppercase tracking-widest hover:underline mb-4">
-                                                                            {module.cta || 'Initiate Sync'} <Share size={12} />
-                                                                        </a>
+                                                                    {!isPaid ? (
+                                                                        <>
+                                                                            <p className="text-[13px] sm:text-[14px] font-bold text-slate-800 dark:text-slate-200 leading-relaxed mb-4">
+                                                                                {module.task}
+                                                                            </p>
+
+                                                                            {module.link && (
+                                                                                <a href={module.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-[11px] font-black uppercase tracking-widest hover:underline mb-4">
+                                                                                    {module.cta || 'Initiate Sync'} <Share size={12} />
+                                                                                </a>
+                                                                            )}
+                                                                        </>
+                                                                    ) : (
+                                                                        <p className="text-[11px] font-bold text-slate-400 italic mb-4">
+                                                                            Task requirements will be revealed after synchronization.
+                                                                        </p>
                                                                     )}
 
                                                                     <button
@@ -367,13 +436,13 @@ export const GrowthTab = ({
                                                                         {isLoading ? <Loader2 size={16} className="animate-spin" /> : (
                                                                             <>
                                                                                 <span>
-                                                                                    {cost > 0 ? "Complete & Claim" : `Unlock (-${Math.abs(cost)})`}
+                                                                                    {!isPaid ? "Complete & Claim" : `Unlock Protocol (-${Math.abs(cost)} T)`}
                                                                                 </span>
                                                                                 {xpCost > 0 && (
                                                                                     <span className="opacity-80 text-red-400">(-{xpCost} XP)</span>
                                                                                 )}
                                                                                 <div className="w-px h-4 bg-current opacity-20 hidden sm:block mx-1" />
-                                                                                <span className="opacity-70">+{xpReward} XP</span>
+                                                                                <span className="opacity-70">+{xpReward} XP Reward</span>
                                                                             </>
                                                                         )}
                                                                     </button>
@@ -506,120 +575,149 @@ export const GrowthTab = ({
                 </button>
             </div>
 
-            {/* Elite Psychological Warfare (TOP 9) - Locked until Setup is done */}
-            {(() => {
-                const isSetupComplete = !!(status?.setup?.telegram_channel_id || status?.setup?.x_access_token);
-                // For demo purposes, we can uncomment this to test unlocked state if needed
-                // const isSetupComplete = true; 
+            {/* Elite Psychological Warfare (TOP 9) - Black Ops Intelligence Style */}
+            {/* Elite Psychological Warfare (TOP 9) - Black Ops Intelligence Style */}
+            <div className={`relative rounded-[32px] border transition-all duration-700 overflow-hidden ${isSetupComplete
+                ? 'bg-white dark:bg-slate-950 text-slate-900 dark:text-white border-indigo-500/20 shadow-[0_30px_60px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.6)]'
+                : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5'
+                }`}>
 
-                return (
-                    <div className={`relative rounded-[20px] border transition-all duration-500 overflow-hidden ${isSetupComplete
-                        ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-indigo-500/30 shadow-2xl shadow-indigo-500/10'
-                        : 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/5'
-                        }`}>
+                {/* Section Header with Scanning Signal */}
+                <div className="relative px-6 py-8 sm:px-8 border-b border-slate-100 dark:border-white/5 overflow-hidden">
+                    <div className="absolute inset-0 bg-linear-to-r from-indigo-500/5 via-transparent to-transparent pointer-events-none" />
+                    <motion.div
+                        className="absolute top-0 left-0 w-1 h-full bg-indigo-500/40 blur-sm z-10"
+                        animate={{ left: ["-10%", "110%"] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                    />
 
-                        {!isSetupComplete && (
-                            <div className="absolute inset-0 z-20 backdrop-blur-xl bg-white/40 dark:bg-black/60 flex flex-col items-center justify-center text-center p-6 sm:p-10">
+                    <div className="flex items-center gap-4 relative z-20">
+                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl transition-all duration-500 ${isSetupComplete
+                            ? 'bg-indigo-500 text-white border-indigo-400 shadow-indigo-500/40 rotate-12 scale-110'
+                            : 'bg-slate-200 dark:bg-white/10 text-slate-400 border-slate-300 dark:border-white/10'
+                            }`}>
+                            <Brain size={24} className={isSetupComplete ? 'animate-pulse' : ''} />
+                        </div>
+                        <div>
+                            <h4 className="text-xl sm:text-2xl font-black uppercase tracking-tighter leading-none mb-1.5 flex items-center gap-2 italic">
+                                {t('pro_dashboard.academy.psych_strategies.title')}
+                            </h4>
+                            <div className="flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-500 dark:text-indigo-400">
+                                    {t('pro_dashboard.academy.psych_strategies.subtitle')}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {!isSetupComplete && (
+                    <div className="absolute inset-x-0 bottom-0 top-[110px] z-20 backdrop-blur-2xl bg-white/40 dark:bg-black/60 flex flex-col items-center justify-center text-center p-6 sm:p-10">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="relative mb-8"
+                        >
+                            <div className="w-24 h-24 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shadow-2xl relative overflow-hidden group">
+                                <div className="absolute inset-0 bg-linear-to-t from-indigo-500/20 to-transparent animate-pulse" />
+                                <Lock size={40} className="text-indigo-500 relative z-10" />
                                 <motion.div
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    className="relative mb-6"
-                                >
-                                    <div className="w-20 h-20 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shadow-2xl relative overflow-hidden group">
-                                        <div className="absolute inset-0 bg-linear-to-t from-indigo-500/20 to-transparent animate-pulse" />
-                                        <Lock size={32} className="text-indigo-500 relative z-10" />
-                                        {/* Scanning line animation */}
-                                        <motion.div
-                                            className="absolute left-0 right-0 h-0.5 bg-indigo-400 shadow-[0_0_15px_rgba(129,140,248,0.8)] z-20"
-                                            animate={{ top: ["0%", "100%", "0%"] }}
-                                            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                                        />
-                                    </div>
-                                </motion.div>
+                                    className="absolute left-0 right-0 h-0.5 bg-indigo-400 shadow-[0_0_20px_rgba(129,140,248,0.8)] z-20"
+                                    animate={{ top: ["0%", "100%", "0%"] }}
+                                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                />
+                            </div>
+                        </motion.div>
 
-                                <div className="space-y-2 mb-8">
-                                    <span className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.4em] animate-pulse">
-                                        {t('pro_dashboard.academy.bio_auth')}
-                                    </span>
-                                    <h4 className="text-2xl font-black uppercase text-slate-900 dark:text-white tracking-widest leading-none">
-                                        {t('pro_dashboard.academy.psych_strategies.title')}
-                                    </h4>
-                                    <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 max-w-[280px] uppercase tracking-wider mx-auto">
-                                        {t('pro_dashboard.academy.psych_strategies.unlock_desc')}
+                        <div className="space-y-3 mb-10">
+                            <span className="text-[11px] font-black text-indigo-500 uppercase tracking-[0.5em] animate-pulse">
+                                {t('pro_dashboard.academy.bio_auth')}
+                            </span>
+                            <h4 className="text-2xl font-black uppercase text-slate-900 dark:text-white tracking-widest leading-none italic">
+                                {t('pro_dashboard.academy.psych_strategies.title')}
+                            </h4>
+                            <p className="text-[12px] font-bold text-slate-500 dark:text-slate-400 max-w-[320px] uppercase tracking-wider mx-auto leading-relaxed">
+                                {t('pro_dashboard.academy.psych_strategies.unlock_desc')}
+                            </p>
+                        </div>
+
+                        <motion.button
+                            whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(99,102,241,0.6)" }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => { selection(); setShowSetup(true); }}
+                            className="px-10 py-4 bg-indigo-500 hover:bg-indigo-400 text-white rounded-2xl font-black text-[12px] uppercase tracking-[0.3em] transition-all shadow-[0_20px_40px_rgba(99,102,241,0.4)] flex items-center gap-4 group/lock-btn"
+                        >
+                            {t('pro_dashboard.academy.social_sync')} <Terminal size={16} className="group-hover/lock-btn:rotate-12 transition-transform" />
+                        </motion.button>
+                    </div>
+                )}
+
+                <div className={`p-6 sm:p-8 relative z-10 ${!isSetupComplete ? 'blur-2xl pointer-events-none' : ''}`}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                        {(() => {
+                            const strats = t('pro_dashboard.academy.psych_strategies.items', { returnObjects: true });
+                            const stratsList = Array.isArray(strats) ? strats : [];
+                            return stratsList.map((item: any, i: number) => (
+                                <motion.div
+                                    key={i}
+                                    whileHover={{ y: -8 }}
+                                    className="p-6 rounded-[24px] border relative overflow-hidden group/card bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-indigo-500/40 transition-all duration-500 hover:shadow-[0_20px_40px_rgba(0,0,0,0.05)] dark:hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+                                >
+                                    {/* Tech Gradients */}
+                                    <div className="absolute -top-10 -right-10 w-24 h-24 bg-indigo-500/5 dark:bg-indigo-500/10 blur-xl rounded-full" />
+
+                                    {/* Trigger Badge - Premium Label */}
+                                    <div className="flex items-center justify-between mb-6">
+                                        <div className="w-8 h-8 rounded-xl bg-slate-200/50 dark:bg-white/10 flex items-center justify-center text-slate-800 dark:text-white text-[12px] font-black italic border border-slate-300 dark:border-white/10">
+                                            {i + 1}
+                                        </div>
+                                        <div className="px-3 py-1 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-lg border border-indigo-500/20">
+                                            <span className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-[0.2em]">{item.trigger}</span>
+                                        </div>
+                                    </div>
+
+                                    <h5 className="text-[15px] font-black uppercase tracking-tighter leading-snug mb-3 group-hover/card:text-indigo-500 transition-colors italic">
+                                        {item.title}
+                                    </h5>
+
+                                    <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-6 min-h-[48px]">
+                                        {item.desc}
                                     </p>
-                                </div>
 
-                                <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    onClick={() => { selection(); setShowSetup(true); }}
-                                    className="px-8 py-3.5 bg-indigo-500 hover:bg-indigo-400 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all shadow-[0_0_20px_rgba(99,102,241,0.4)] flex items-center gap-3 group/lock-btn"
-                                >
-                                    {t('pro_dashboard.academy.social_sync')} <Terminal size={14} className="group-hover/lock-btn:rotate-12 transition-transform" />
-                                </motion.button>
-                            </div>
-                        )}
-
-                        <div className={`p-4 sm:p-6 relative z-10 ${!isSetupComplete ? 'blur-md select-none' : ''}`}>
-                            <div className="flex items-center justify-between mb-6">
-                                <div className="flex items-center gap-2.5">
-                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center border shadow-lg ${isSetupComplete
-                                        ? 'bg-indigo-500 text-white border-indigo-400 shadow-indigo-500/20'
-                                        : 'bg-slate-200 dark:bg-white/10 text-slate-400 border-slate-300 dark:border-white/10'
-                                        }`}>
-                                        <Brain size={16} />
-                                    </div>
-                                    <div>
-                                        <h4 className={`text-[11px] font-black uppercase tracking-tighter leading-none mb-1 ${isSetupComplete ? 'text-slate-900 dark:text-white' : 'text-slate-900 dark:text-white'}`}>
-                                            {t('pro_dashboard.academy.psych_strategies.title')}
-                                        </h4>
-                                        <p className={`text-[9px] font-black uppercase tracking-widest ${isSetupComplete ? 'text-indigo-500 dark:text-indigo-400' : 'text-slate-500'}`}>
-                                            {t('pro_dashboard.academy.psych_strategies.subtitle')}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {(() => {
-                                    const strats = t('pro_dashboard.academy.psych_strategies.items', { returnObjects: true });
-                                    const stratsList = Array.isArray(strats) ? strats : [];
-                                    return stratsList.map((item: any, i: number) => (
-                                        <div key={i} className={`p-5 rounded-2xl border relative overflow-hidden group/card ${isSetupComplete
-                                            ? 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/10 hover:border-indigo-500/50'
-                                            : 'bg-white/50 dark:bg-black/20 border-slate-200 dark:border-white/5'
-                                            }`}>
-                                            <div className="absolute top-0 right-0 px-2 py-1 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-bl-xl border-l border-b border-indigo-500/20 dark:border-indigo-500/20">
-                                                <span className="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{item.trigger}</span>
+                                    {/* Tactical BluePrint Action Container */}
+                                    <div className="p-4 bg-white dark:bg-black/40 rounded-2xl border border-slate-100 dark:border-white/10 relative overflow-hidden group/blueprint">
+                                        <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-emerald-500/40 to-transparent" />
+                                        <div className="flex items-start gap-3">
+                                            <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/20">
+                                                <Play size={10} className="text-emerald-500 fill-emerald-500/20" />
                                             </div>
-
-                                            <div className="flex items-start gap-3 mb-3 pt-2">
-                                                <div className="w-6 h-6 rounded-full bg-indigo-500/10 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-[10px] font-bold shrink-0 border border-indigo-500/30 dark:border-indigo-500/20">
-                                                    {i + 1}
-                                                </div>
-                                                <h5 className={`text-[11px] font-black uppercase tracking-tighter leading-snug mt-1 ${isSetupComplete ? 'text-slate-900 dark:text-white' : 'text-slate-900 dark:text-white'}`}>
-                                                    {item.title}
-                                                </h5>
-                                            </div>
-
-                                            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-4 min-h-[40px]">
-                                                {item.desc}
-                                            </p>
-
-                                            <div className="p-3 bg-slate-100 dark:bg-black/30 rounded-lg border border-slate-200 dark:border-white/5 flex items-start gap-2">
-                                                <Play size={10} className="text-emerald-600 dark:text-emerald-500 mt-0.5 shrink-0" />
-                                                <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest leading-tight">
+                                            <div className="flex flex-col gap-1">
+                                                <span className="text-[8px] font-black text-emerald-500/60 uppercase tracking-widest">Tactical Directive</span>
+                                                <span className="text-[11px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-tight leading-tight">
                                                     {item.action}
                                                 </span>
                                             </div>
                                         </div>
-                                    ));
-                                })()}
-                            </div>
-                        </div>
+
+                                        {/* Copy/Share micro-action */}
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                navigator.clipboard.writeText(item.action);
+                                                impact('medium');
+                                            }}
+                                            className="absolute right-2 bottom-2 w-6 h-6 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center opacity-0 group-hover/blueprint:opacity-100 transition-opacity hover:bg-emerald-500/10 hover:text-emerald-500"
+                                        >
+                                            <Share size={10} />
+                                        </button>
+                                    </div>
+                                </motion.div>
+                            ));
+                        })()}
                     </div>
-                );
-            })()}
+                </div>
+            </div>
         </motion.div>
     );
 };

@@ -35,6 +35,7 @@ class PartnerResponse(PartnerBase):
     is_pro: bool
     pro_notification_seen: bool = False
     pro_tokens: int = 500
+    personal_referral_link: str | None = None
     total_earned_usdt: float = 0.0 # #comment: Raw value from DB for computation
     referral_count: int = 0
 # #comment: total_network_size is now a @computed_field derived from 'referral_count'
@@ -247,6 +248,13 @@ class OrbitMemberResponse(BaseModel):
 
 class LanguageUpdate(BaseModel):
     language_code: str
+    
+    # #comment: Standardized for audit.
+    class Config:
+        from_attributes = True
+
+class ReferralLinkUpdate(BaseModel):
+    referral_link: str
     
     # #comment: Standardized for audit.
     class Config:
