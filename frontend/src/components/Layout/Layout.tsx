@@ -56,9 +56,13 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 </div>
             )}
 
-            {/* Subtle Depth Effects - Background remain fixed */}
-            <div className="pointer-events-none fixed right-[-10%] top-[-20%] z-0 aspect-square w-[80%] rounded-full bg-slate-100/50 blur-[120px] dark:bg-slate-900/20" />
-            <div className="pointer-events-none fixed bottom-[-10%] left-[-20%] z-0 aspect-square w-[60%] rounded-full bg-blue-500/5 blur-[100px] dark:bg-blue-500/5" />
+            {/* Subtle Depth Effects - Consolidate global background orbs here */}
+            <div className="pointer-events-none fixed right-[-10%] top-[-20%] z-0 aspect-square w-[80%] rounded-full blur-[120px]" style={{ backgroundColor: 'color-mix(in srgb, var(--color-bg-app) 95%, var(--color-brand-primary) 5%)' }} />
+            <div className="pointer-events-none fixed bottom-[-10%] left-[-20%] z-0 aspect-square w-[60%] rounded-full bg-blue-500/5 blur-[100px]" />
+            <div className="pointer-events-none fixed top-[40%] left-[-10%] z-0 aspect-square w-[40%] rounded-full bg-indigo-500/5 blur-[120px] dark:opacity-40" />
+
+            {/* Mesh Background Overlay - Constant across pages for unity */}
+            <div className="mesh-gradient-dark fixed inset-0 opacity-20 pointer-events-none dark:block hidden z-0" />
 
             {/* Grainy Texture */}
             <div className="pointer-events-none fixed inset-0 z-0 bg-[url('/noise.svg')] opacity-[0.03] mix-blend-overlay" />
@@ -75,7 +79,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
             {/* Main Content Area - THE SCROLL LAYER */}
             <main
                 id="main-scroll-root"
-                className={`flex-1 overflow-x-hidden relative z-10 
+                className={`flex-1 overflow-x-hidden relative z-10 bg-(--color-bg-app)
                     overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]
                     ${!isHeaderVisible ? '' : (isStaging ? 'staging-offset' : 'content-main-padding')}`}
                 style={{ overscrollBehaviorY: 'none' }}

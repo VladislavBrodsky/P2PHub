@@ -32,11 +32,6 @@ export default function CommunityPage() {
 
     return (
         <div className="flex flex-col min-h-screen px-4 pb-32 relative bg-(--color-bg-app) transition-colors duration-300">
-            {/* Mesh Background Overlay - Dark Mode Only */}
-            <div className="mesh-gradient-dark fixed inset-0 opacity-30 pointer-events-none dark:block hidden" />
-            <div className="fixed top-20 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full pointer-events-none transition-colors duration-500" />
-            <div className="fixed bottom-40 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none transition-colors duration-500" />
-
 
 
 

@@ -403,3 +403,25 @@ async def get_partner_full(session: AsyncSession, telegram_id: str) -> Partner |
     )
     result = await session.exec(stmt)
     return result.first()
+
+
+async def find_partner_by_channel(session: AsyncSession, channel_id: str) -> Partner | None:
+    """
+    Finds a partner by their channel ID (username or numeric).
+    Handles both direct matches and JSON-encoded lists.
+    """
+    if not channel_id:
+        return None
+
+    # 1. Try direct match
+    stmt = select(Partner).where(Partner.telegram_channel_id == channel_id)
+    res = await session.exec(stmt)
+    partner = res.first()
+    if partner:
+        return partner
+
+    # 2. Try JSON match if it's a list (e.g. '["@ch1", "@ch2"]')
+    # We use a simple LIKE check for the stringified ID
+    stmt2 = select(Partner).where(Partner.telegram_channel_id.contains(f'"{channel_id}"'))
+    res2 = await session.exec(stmt2)
+    return res2.first()

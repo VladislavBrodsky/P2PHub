@@ -29,6 +29,7 @@ taskiq_fastapi.init(
 # Previously TASKS_TO_IMPORT was a dead list — the worker started without knowing
 # about any tasks, so ALL cron jobs and background tasks silently never ran.
 # These imports MUST happen at module level so the worker process registers them.
+import app.services.analytics_tasks
 import app.services.maintenance_service
 import app.services.notification_service
 import app.services.partner_service

@@ -51,7 +51,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.01 }}
-                className="relative overflow-hidden rounded-[3.5rem] bg-white dark:bg-neutral-950 text-slate-900 dark:text-white p-6 md:p-10 space-y-10 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
+                className="relative overflow-hidden rounded-[3.5rem] bg-white dark:bg-(--color-bg-app) text-slate-900 dark:text-white p-6 md:p-10 space-y-10 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
             >
                 {/* Background Glow */}
                 <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/30 blur-[120px] pointer-events-none animate-pulse" />

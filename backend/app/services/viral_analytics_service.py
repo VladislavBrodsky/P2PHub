@@ -101,29 +101,123 @@ class ViralAnalyticsService:
 
     async def _fetch_telegram_metrics(self, post: SocialPost) -> dict[str, Any] | None:
         """
-        Fetches Telegram metrics. Note: API restricted for bots.
-        We primarily track views if the channel is public or the bot is admin.
+        Fetches Telegram metrics.
+        Strategy: Use public web preview (t.me/s/...) to scrap view counts.
+        Reactions are harder to scrap but we'll try to find them if present.
         """
-        from bot import bot
+        import re
+
+        import httpx
+
         try:
-            # We can't directly get "likes" on a message via bot API easily 
-            # unless we use reactions (which require a separate API call).
-            # For now, we'll try to get views if available.
-            # Forwarding a message to a dummy channel can sometimes reveal views,
-            # but that's messy. Instead, we use the fact that some bots can see it.
+            # We need the channel public name or ID for the web preview.
+            # channel_id can be "@name" or "-100..."
+            chan = post.channel_id
+            if not chan:
+                return None
             
-            # Note: The standard Bot API doesn't provide "views" for a message_id.
-            # This would require MTProto (Telegram Client API).
-            # For this MVP, we will record 0 views/likes and mark for "Telegram Client Integration"
-            return {
-                "views": 0,
-                "likes": 0,
-                "reposts": 0,
-                "replies": 0,
-                "engagement_rate": 0.0
-            }
-        except Exception:
+            # If it's a numeric ID, we need to hope it's not strictly private 
+            # or use the t.me/c/ID/msg format (which requires login/not scrapable easily)
+            # However, t.me/s/ works for public channels.
+            
+            target_url = None
+            if chan.startswith("@"):
+                channel_name = chan[1:]
+                target_url = f"https://t.me/s/{channel_name}/{post.external_id}"
+            elif not chan.startswith("-"):
+                # Case where it might be just the name without @
+                channel_name = chan
+                target_url = f"https://t.me/s/{channel_name}/{post.external_id}"
+            
+            if not target_url:
+                # Private channel or numeric ID - we can't scrap via web preview.
+                # In this case, we default to 0 or return what we have.
+                return {
+                    "views": 0,
+                    "likes": 0,
+                    "reposts": 0,
+                    "replies": 0,
+                    "engagement_rate": 0.0
+                }
+
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                headers = {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                }
+                response = await client.get(target_url, headers=headers)
+                if response.status_code != 200:
+                    return None
+                
+                html = response.text
+                
+                # Scrap Views
+                # <span class="tgme_widget_message_views">...</span>
+                views = 0
+                views_match = re.search(r'class="tgme_widget_message_views">([^<]+)</span>', html)
+                if views_match:
+                    views_str = views_match.group(1).strip()
+                    # Handle K/M suffixes
+                    if 'K' in views_str:
+                        views = int(float(views_str.replace('K', '')) * 1000)
+                    elif 'M' in views_str:
+                        views = int(float(views_str.replace('M', '')) * 1000000)
+                    else:
+                        try:
+                            views = int(re.sub(r'[^\d]', '', views_str))
+                        except:
+                            pass
+                
+                # Scrap Reactions (if any)
+                # Reactions are tricky as they appear as separate nodes
+                # <div class="tgme_widget_message_reactions">...</div>
+                likes = 0
+                reactions_match = re.findall(r'class="tgme_widget_message_reaction_count">([^<]+)</span>', html)
+                for count_str in reactions_match:
+                    try:
+                        c_str = count_str.strip()
+                        if 'K' in c_str:
+                            likes += int(float(c_str.replace('K', '')) * 1000)
+                        elif 'M' in c_str:
+                            likes += int(float(c_str.replace('M', '')) * 1000000)
+                        else:
+                            likes += int(re.sub(r'[^\d]', '', c_str))
+                    except:
+                        continue
+
+                return {
+                    "views": views,
+                    "likes": likes,
+                    "reposts": 0, # reposts are not easily visible on web preview
+                    "replies": 0,
+                    "engagement_rate": (likes / views) if views > 0 else 0.0
+                }
+
+        except Exception as e:
+            logger.error(f"Telegram scraping failed: {e}")
             return None
+
+    async def refresh_post_metrics(self, post_id: int, session: AsyncSession):
+        """
+        Force immediate refresh of a single post's metrics.
+        """
+        post = await session.get(SocialPost, post_id)
+        if not post:
+            return
+        
+        metrics = await self.fetch_post_metrics(post, session)
+        if metrics:
+            metric_record = SocialPostMetric(
+                post_id=post.id,
+                views=metrics.get("views", 0),
+                likes=metrics.get("likes", 0),
+                reposts=metrics.get("reposts", 0),
+                replies=metrics.get("replies", 0),
+                engagement_rate=metrics.get("engagement_rate", 0.0)
+            )
+            session.add(metric_record)
+            post.last_metric_check = datetime.now(UTC).replace(tzinfo=None)
+            session.add(post)
+            await session.commit()
 
     async def get_partner_stats(self, partner_id: int, session: AsyncSession) -> dict[str, Any]:
         """

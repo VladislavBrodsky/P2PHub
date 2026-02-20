@@ -506,6 +506,63 @@ async def handle_support_chat(message: types.Message):
         lang = "en"
         if message.from_user.language_code == "ru": lang = "ru"
         await message.answer(get_msg(lang, "support_error"))
+        
+
+@dp.channel_post()
+@dp.edited_channel_post()
+async def handle_channel_post(message: types.Message):
+    """
+    Detects new or edited posts in partner channels and tracks them.
+    """
+    from datetime import UTC, datetime
+
+    from sqlmodel import select
+
+    from app.models.partner import SocialPost
+    from app.services.partner_service import find_partner_by_channel
+    from app.services.viral_analytics_service import viral_analytics
+
+    # Extract channel identification (username or ID)
+    channel_id = f"@{message.chat.username}" if message.chat.username else str(message.chat.id)
+    
+    try:
+        async for session in get_session():
+            partner = await find_partner_by_channel(session, channel_id)
+            if not partner:
+                # Small optimization: if no username, maybe it's the numeric ID that we have stored
+                partner = await find_partner_by_channel(session, str(message.chat.id))
+                if not partner:
+                    return # Not a tracked channel
+
+            # 1. Check if we already have this post
+            stmt = select(SocialPost).where(
+                SocialPost.platform == "telegram",
+                SocialPost.external_id == str(message.message_id),
+                SocialPost.channel_id == channel_id
+            )
+            res = await session.exec(stmt)
+            post = res.first()
+
+            if not post:
+                # New post detected!
+                post = SocialPost(
+                    partner_id=partner.id,
+                    platform="telegram",
+                    external_id=str(message.message_id),
+                    channel_id=channel_id,
+                    created_at=datetime.now(UTC).replace(tzinfo=None)
+                )
+                session.add(post)
+                await session.commit()
+                await session.refresh(post)
+                logging.info(f"📈 Started tracking new post {message.message_id} in {channel_id} (Partner: {partner.id})")
+            
+            # Trigger immediate metric scrape
+            # This ensures even a "just posted" entry has a baseline (usually 0, but good for tracking)
+            await viral_analytics.refresh_post_metrics(post.id, session)
+            break
+    except Exception as e:
+        logging.error(f"❌ Error tracking channel post in {channel_id}: {e}")
 
 async def main():
     logging.info("Starting bot...")

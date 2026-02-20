@@ -18,6 +18,12 @@
   /* Safe Areas + Telegram Header padding for bot buttons visibility */
   --header-total-height: calc(var(--header-height) + var(--spacing-safe-top) + var(--spacing-telegram-header));
 
+  /* Unify Dark Backgrounds PROJECT-WIDE */
+  --color-slate-950: #030712;
+  --color-neutral-950: #030712;
+  --color-slate-900: #0f172a;
+  /* Keep surface slightly lighter */
+
 
   /* Typography Scale */
   --font-sans: "Inter", "Onest", system-ui, -apple-system, sans-serif;

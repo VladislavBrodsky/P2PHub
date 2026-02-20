@@ -55,13 +55,6 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             initial="hidden"
             animate="show"
         >
-            {/* Ambient Background Glow for PRO */}
-            {user?.is_pro && (
-                <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-                    <div className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-blue-500/5 blur-[120px] rounded-full animate-pulse" />
-                    <div className="absolute bottom-1/4 right-0 w-1/3 h-1/3 bg-indigo-500/5 blur-[100px] rounded-full animate-pulse" />
-                </div>
-            )}
             {/* 1. Hero Section - Spacious & Centered Layout */}
             <motion.div variants={item} className="px-4 space-y-12">
                 {/* Orbit Container */}
