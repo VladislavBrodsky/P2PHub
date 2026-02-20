@@ -159,21 +159,35 @@ async def reject_payment(
 
 @router.get("/tree")
 async def get_global_tree_stats(
-    admin: dict = Depends(get_current_admin)
+    target_id: int = None,
+    admin: dict = Depends(get_current_admin),
+    session: AsyncSession = Depends(get_session)
 ):
     """
-    Returns the total number of partners at each level (1-9) globally.
+    Returns the total number of partners at each level (1-9) globally, 
+    or a specific partner's tree if target_id is provided.
     """
+    if target_id:
+        from app.services.analytics_service import get_referral_tree_stats
+        return await get_referral_tree_stats(session, target_id)
+        
     return await admin_service.get_global_network_stats()
 
 @router.get("/network/{level}")
 async def get_global_network_level(
     level: int,
-    admin: dict = Depends(get_current_admin)
+    target_id: int = None,
+    admin: dict = Depends(get_current_admin),
+    session: AsyncSession = Depends(get_session)
 ):
     """
-    Returns the list of top partners at a specific level in the whole system.
+    Returns the list of top partners at a specific level in the whole system,
+    or a specific partner's network level if target_id is provided.
     """
+    if target_id:
+        from app.services.analytics_service import get_referral_tree_members
+        return await get_referral_tree_members(session, target_id, level)
+        
     return await admin_service.get_global_network_members(level)
 
 @router.post("/recalculate-stats")

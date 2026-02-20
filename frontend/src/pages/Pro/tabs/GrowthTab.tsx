@@ -48,42 +48,47 @@ export const GrowthTab = ({
         >
             {/* Master Score Card - Intelligence Hub - Re-engineered for compactness */}
             {/* Master Score Card - Intelligence Hub - Re-engineered for maximum compactness */}
-            <div className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-3xl p-4 sm:p-6 border border-slate-200 dark:border-white/10 shadow-xl relative overflow-hidden group">
+            <div className="bg-white dark:bg-slate-900 rounded-[32px] p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-slate-100 dark:border-slate-800 relative overflow-hidden group">
                 <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
 
-                <div className="flex items-center justify-between gap-4 relative z-10 mb-4">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-500 shadow-inner">
-                            <ShieldCheck size={20} />
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8 relative z-10">
+                    <div className="flex items-center gap-5 sm:gap-6">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-500/20">
+                            <ShieldCheck className="w-8 h-8 sm:w-10 sm:h-10 text-indigo-500" />
                         </div>
-                        <div>
-                            <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none mb-1">
-                                {t('pro_dashboard.academy.protocols.title')}
-                                <span className="ml-2 px-1.5 py-0.5 bg-indigo-500/10 rounded-md text-[7px] font-black text-indigo-500 align-middle">
-                                    {academyScore < 300 ? t('pro_dashboard.academy.protocols.difficulty_levels.easy').split(' ')[0] :
-                                        academyScore < 800 ? t('pro_dashboard.academy.protocols.difficulty_levels.medium').split(' ')[0] :
-                                            t('pro_dashboard.academy.protocols.difficulty_levels.hard').split(' ')[0]}
-                                </span>
-                            </h3>
+                        <div className="flex flex-col gap-2 relative top-0.5">
+                            <div className="flex flex-wrap items-center gap-3">
+                                <h3 className="text-2xl sm:text-[28px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">
+                                    {t('pro_dashboard.academy.protocols.title')}
+                                </h3>
+                                <div className="flex items-center gap-2">
+                                    <span className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/20 rounded-full text-[10px] sm:text-[11px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest leading-none">
+                                        {academyScore < 300 ? t('pro_dashboard.academy.protocols.difficulty_levels.easy').split(' ')[0] :
+                                            academyScore < 800 ? t('pro_dashboard.academy.protocols.difficulty_levels.medium').split(' ')[0] :
+                                                t('pro_dashboard.academy.protocols.difficulty_levels.hard').split(' ')[0]}
+                                    </span>
+                                </div>
+                            </div>
                             <button
                                 onClick={() => { selection(); setShowManual('academy'); }}
-                                className="flex items-center gap-1 text-[8px] font-black text-slate-400 hover:text-indigo-500 transition-colors uppercase tracking-widest"
+                                className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-slate-400 hover:text-indigo-500 transition-colors uppercase tracking-widest mt-1"
                             >
-                                <Info size={10} /> {t('pro_dashboard.academy.intel_label')}
+                                <Info className="w-4 h-4" /> {t('pro_dashboard.academy.intel_label')}
                             </button>
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-end">
-                        <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.3em] mb-0.5">{t('pro_dashboard.academy.protocols.stats_label')}</p>
-                        <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tabular-nums leading-none flex items-baseline gap-0.5 vibing-crystal-text">
-                            <LiquidCounter value={academyScore} className="vibing-crystal-text" />
-                            <span className="text-indigo-500 text-xs opacity-50 font-black">PTS</span>
+                    <div className="flex flex-col items-start sm:items-end gap-1.5">
+                        <p className="text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                            {t('pro_dashboard.academy.protocols.stats_label')}
+                        </p>
+                        <div className="text-5xl sm:text-6xl font-black text-indigo-500 tabular-nums leading-none tracking-tighter vibing-crystal-text">
+                            <LiquidCounter value={academyScore} />
                         </div>
                     </div>
                 </div>
 
-                <div className="space-y-2 relative z-10">
+                <div className="space-y-2 relative z-10 w-full mt-2">
                     {(() => {
                         const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
                         const moduleCount = Array.isArray(modules) ? modules.length : 5;
@@ -92,9 +97,9 @@ export const GrowthTab = ({
 
                         return (
                             <div className="flex items-center gap-4">
-                                <div className="flex-1 h-1.5 bg-slate-100 dark:bg-black/40 rounded-full overflow-hidden shadow-inner border border-slate-200 dark:border-white/5 relative">
+                                <div className="flex-1 h-2 sm:h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner border border-slate-200 dark:border-slate-700 relative">
                                     <motion.div
-                                        className="h-full vibing-blue-animated rounded-full relative overflow-hidden"
+                                        className="h-full bg-blue-500 dark:bg-blue-500 rounded-full relative overflow-hidden"
                                         initial={{ width: "0%" }}
                                         animate={{ width: `${progress}%` }}
                                         transition={{ duration: 2, ease: "circOut" }}
@@ -102,7 +107,9 @@ export const GrowthTab = ({
                                         <div className="absolute inset-0 bg-linear-to-r from-white/20 via-transparent to-transparent animate-shimmer-slide" />
                                     </motion.div>
                                 </div>
-                                <span className="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tabular-nums">{progress}% SYNC</span>
+                                <span className="text-[11px] sm:text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest tabular-nums shrink-0">
+                                    {progress}% SYNC
+                                </span>
                             </div>
                         );
                     })()}
@@ -110,72 +117,69 @@ export const GrowthTab = ({
             </div>
 
             {/* Expert Intelligence Transmission - Sleek Ticker Style */}
-            <div className="px-4 py-3 bg-indigo-500/5 dark:bg-white/5 rounded-2xl border border-indigo-500/10 dark:border-white/5 flex items-center gap-3 relative overflow-hidden shadow-sm">
-                <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-500 shrink-0">
-                    <Bot size={16} className="animate-pulse" />
+            <div className="px-5 py-4 sm:px-6 sm:py-5 bg-indigo-50/50 dark:bg-indigo-900/10 rounded-full border border-indigo-100 dark:border-indigo-500/10 flex items-center gap-4 sm:gap-5 relative overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.02)] flex-wrap">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-[14px] sm:rounded-[16px] bg-indigo-100/80 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-500 shrink-0 shadow-inner">
+                    <Bot className="w-5 h-5 sm:w-6 sm:h-6 animate-pulse" />
                 </div>
                 <div className="flex-1 min-w-0">
-                    <p className="text-[10px] sm:text-[11px] font-bold text-slate-600 dark:text-slate-300 leading-tight italic truncate pr-4">
+                    <p className="text-[13px] sm:text-sm md:text-base font-bold text-slate-600 dark:text-slate-300 leading-snug italic truncate pr-4">
                         "{t('pro_dashboard.academy.desc')}"
                     </p>
                 </div>
-                <div className="flex items-center gap-1.5 shrink-0">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.academy.live_signal')}</span>
+                <div className="flex items-center gap-2 shrink-0 bg-white/50 dark:bg-black/20 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
+                    <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[8px] sm:text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none mt-0.5">{t('pro_dashboard.academy.live_signal')}</span>
                 </div>
             </div>
 
-            {/* Viral Content Hub - More Compact Snap-slider */}
-            <div className="space-y-4">
-                <div className="flex items-center justify-between px-1">
-                    <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-indigo-50 dark:bg-indigo-500/10 rounded-lg flex items-center justify-center text-indigo-500 border border-indigo-100 dark:border-indigo-500/20 shadow-sm">
-                            <TrendingUp size={16} />
-                        </div>
-                        <div>
-                            <h4 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.academy.articles.title')}</h4>
-                            <p className="text-[8px] font-black text-indigo-500/60 uppercase tracking-widest mt-0.5">{t('pro_dashboard.academy.dossier_label')}</p>
-                        </div>
+            {/* Viral Content Hub - Modules Component */}
+            <div className="space-y-5 sm:space-y-6">
+                <div className="flex flex-row items-center gap-4 px-2">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-indigo-50 dark:bg-blue-500/10 rounded-2xl flex items-center justify-center text-indigo-600 dark:text-blue-500 border border-indigo-100 dark:border-blue-500/20 shadow-sm shrink-0">
+                        <TrendingUp className="w-6 h-6 sm:w-7 sm:h-7" />
+                    </div>
+                    <div className="flex flex-col">
+                        <h4 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('pro_dashboard.academy.articles.title')}</h4>
+                        <p className="text-[10px] sm:text-[11px] font-black text-indigo-500/60 dark:text-indigo-400 uppercase tracking-[0.2em] mt-1">{t('pro_dashboard.academy.dossier_label')}</p>
                     </div>
                 </div>
 
-                <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
+                <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 pt-2 no-scrollbar -mx-4 px-4 snap-x">
                     {(() => {
                         const articles = t('pro_dashboard.academy.articles.items', { returnObjects: true });
                         const articlesList = Array.isArray(articles) ? articles : [];
                         return articlesList.map((article: any, i: number) => {
-                            // Simulated reading progress for visual flair
                             const mockProgress = [35, 72, 100, 15, 60][i % 5];
                             return (
                                 <motion.div
                                     key={article.id || i}
-                                    whileHover={{ y: -3 }}
+                                    whileHover={{ y: -4 }}
                                     onClick={() => { selection(); setSelectedArticle(article); impact('light'); }}
-                                    className="min-w-[260px] sm:min-w-[320px] snap-center pro-card-extreme p-5 sm:p-6 rounded-[1.25rem] border border-slate-200 dark:border-white/10 relative overflow-hidden group cursor-pointer active:scale-95 transition-all bg-white dark:bg-slate-900/50 shadow-sm"
+                                    className="min-w-[280px] sm:min-w-[340px] snap-center bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-[36px] border border-slate-100 dark:border-slate-800 relative overflow-hidden group cursor-pointer active:scale-95 transition-all shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] flex flex-col"
                                 >
-                                    <div className="flex items-center justify-between mb-3">
-                                        <div className="flex items-center gap-2">
-                                            <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-[7px] font-black text-indigo-500 uppercase tracking-widest border border-indigo-500/10">{article.category}</span>
-                                            <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">{article.readTime} MIN READ</span>
+                                    <div className="flex items-center justify-between mb-5">
+                                        <div className="flex items-center gap-3">
+                                            <span className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 rounded-full text-[9px] sm:text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{article.category}</span>
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{article.readTime} MIN READ</span>
                                         </div>
                                         {mockProgress === 100 && (
-                                            <div className="w-4 h-4 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                                                <CheckCircle2 size={10} />
+                                            <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                                                <CheckCircle2 size={14} />
                                             </div>
                                         )}
                                     </div>
-                                    <h5 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{article.title}</h5>
-                                    <p className="text-[11px] font-normal text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2 mb-4 opacity-100 dark:opacity-80 italic">"{article.desc}"</p>
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2 text-[8px] font-black text-indigo-500 uppercase tracking-widest group-hover:gap-3 transition-all">
-                                            {t('pro_dashboard.academy.articles.btn_read')} <ArrowRight size={10} />
+                                    <h5 className="text-xl sm:text-2xl font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tight mb-4 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
+                                    <p className="text-[13px] sm:text-[14px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic mb-8 flex-1">"{article.desc}"</p>
+
+                                    <div className="flex items-center justify-between mt-auto">
+                                        <div className="flex items-center gap-1.5 text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest group-hover:gap-2.5 transition-all">
+                                            {t('pro_dashboard.academy.articles.btn_read')} <ArrowRight className="w-3.5 h-3.5" />
                                         </div>
-                                        {/* Micro progress indicator */}
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-12 h-1 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
-                                                <div className="h-full bg-indigo-500/40" style={{ width: `${mockProgress}%` }} />
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-16 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                                <div className="h-full bg-indigo-300 dark:bg-indigo-500/50 rounded-full" style={{ width: `${mockProgress}%` }} />
                                             </div>
-                                            <span className="text-[6px] font-black text-slate-400">{mockProgress}%</span>
+                                            <span className="text-[9px] font-black text-slate-400">{mockProgress}%</span>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -251,60 +255,63 @@ export const GrowthTab = ({
                                     transition={{ delay: i * 0.05 }}
                                     className="pl-10 sm:pl-12 relative group"
                                 >
-                                    {/* Timeline Node - More Compact with Status Pulse */}
-                                    <div className={`absolute left-0 top-[18px] w-7 h-7 sm:w-8 sm:h-8 rounded-full border-[3px] border-slate-50 dark:border-slate-950 flex items-center justify-center transition-all duration-500 z-20 ${isCompleted
-                                        ? 'bg-emerald-500 text-white shadow-[0_0_10px_rgba(16,185,129,0.3)]'
+                                    {/* Timeline Node - Premium Style */}
+                                    <div className={`absolute left-0 top-6 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-500 z-20 ${isCompleted
+                                        ? 'bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] ring-4 ring-emerald-50 dark:ring-emerald-500/10'
                                         : isLocked
-                                            ? 'bg-slate-200 dark:bg-slate-800 text-slate-400'
-                                            : 'bg-indigo-500 text-white shadow-[0_0_10px_rgba(99,102,241,0.3)]'
+                                            ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 ring-4 ring-white dark:ring-slate-900'
+                                            : 'bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] ring-4 ring-emerald-50 dark:ring-emerald-500/10'
                                         }`}>
-                                        <span className="font-black text-[9px] sm:text-xs">{i + 1}</span>
+                                        <span className="font-black text-xs sm:text-sm">{i + 1}</span>
                                         {!isCompleted && !isLocked && (
                                             <motion.div
-                                                className="absolute inset-0 rounded-full bg-indigo-500 -z-10"
-                                                animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
+                                                className="absolute inset-0 rounded-full bg-emerald-500 -z-10"
+                                                animate={{ scale: [1, 1.4], opacity: [0.4, 0] }}
                                                 transition={{ duration: 2, repeat: Infinity }}
                                             />
                                         )}
                                     </div>
 
-                                    {/* Compact Card / Accordion */}
-                                    <div className={`pro-card-extreme rounded-2xl overflow-hidden relative transition-all duration-300 border ${isCompleted
-                                        ? 'opacity-90 border-emerald-500/10 bg-emerald-500/5'
+                                    {/* Premium Masterclass Card */}
+                                    <div className={`pro-card-extreme rounded-[32px] overflow-hidden relative transition-all duration-300 border ${isCompleted
+                                        ? 'opacity-90 border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-900/40'
                                         : isLocked
-                                            ? 'opacity-60 border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-white/5'
+                                            ? 'opacity-60 border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/5'
                                             : isExpanded
-                                                ? 'bg-white dark:bg-slate-900 border-indigo-500/40 shadow-xl shadow-indigo-500/10 scale-[1.01]'
-                                                : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-white/10 hover:border-indigo-500/30'
+                                                ? 'bg-white dark:bg-slate-900 border-indigo-500/20 shadow-2xl shadow-indigo-500/5'
+                                                : 'bg-white dark:bg-slate-900/80 border-slate-200 dark:border-white/10 hover:border-indigo-500/30 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)]'
                                         }`}>
 
                                         {/* Header - Clickable Area */}
                                         <div
                                             onClick={toggleExpand}
-                                            className="px-4 py-3 sm:px-5 sm:py-3.5 flex items-center justify-between cursor-pointer group/header"
+                                            className="px-6 py-5 sm:px-8 sm:py-6 flex items-center justify-between cursor-pointer group/header bg-white dark:bg-slate-900"
                                         >
-                                            <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-                                                <div className="flex items-center gap-2 min-w-0">
-                                                    <span className={`px-1.5 py-0.5 rounded-md text-[7px] font-black uppercase tracking-widest shrink-0 ${module.diff === 'hard' ? 'bg-red-500/10 text-red-500' :
-                                                        module.diff === 'medium' ? 'bg-amber-500/10 text-amber-500' :
-                                                            'bg-emerald-500/10 text-emerald-500'
+                                            <div className="flex flex-col gap-2 min-w-0 flex-1">
+                                                <div className="flex items-center gap-3 min-w-0">
+                                                    <span className={`px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest shrink-0 ${module.diff === 'hard' ? 'bg-red-50 text-red-500 dark:bg-red-500/10' :
+                                                        module.diff === 'medium' ? 'bg-amber-50 text-amber-500 dark:bg-amber-500/10' :
+                                                            'bg-emerald-50 text-emerald-500 dark:bg-emerald-500/10'
                                                         }`}>
                                                         {t(`pro_dashboard.academy.protocols.difficulty_levels.${module.diff}`).split(' ')[0]}
                                                     </span>
-                                                    <h4 className={`text-[10px] sm:text-xs font-black uppercase tracking-tight leading-none transition-colors truncate ${isExpanded ? 'text-indigo-500' : 'text-slate-900 dark:text-white'}`}>
+                                                    <h4 className={`text-sm sm:text-base font-black uppercase tracking-tight leading-none transition-colors truncate ${isExpanded ? 'text-indigo-600 dark:text-indigo-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
                                                         {module.title}
                                                     </h4>
                                                 </div>
+                                                <div className="flex items-center gap-3 ml-1 mt-1">
+                                                    <div className={`w-1.5 h-1.5 rounded-full ${isCompleted ? 'bg-emerald-500' : 'bg-indigo-500'} opacity-70`} />
+                                                </div>
                                             </div>
 
-                                            <div className="flex items-center gap-3">
+                                            <div className="flex items-center gap-4">
                                                 {isCompleted ? (
-                                                    <div className="flex items-center gap-1.5 text-emerald-500">
-                                                        <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                                                        <span className="text-[8px] font-black uppercase tracking-widest hidden sm:inline">{t('pro_dashboard.academy.synced')}</span>
+                                                    <div className="flex items-center gap-2 text-emerald-500">
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                                        <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">{t('pro_dashboard.academy.synced')}</span>
                                                     </div>
                                                 ) : (
-                                                    <div className={`text-[8px] font-black uppercase tracking-widest ${cost > 0 ? 'text-emerald-500' : 'text-indigo-500'}`}>
+                                                    <div className={`text-[10px] font-black uppercase tracking-widest ${cost > 0 ? 'text-emerald-500' : 'text-indigo-500'}`}>
                                                         {cost > 0 ? `+${cost} T` : `${cost} T`}
                                                     </div>
                                                 )}
@@ -312,7 +319,7 @@ export const GrowthTab = ({
                                                     animate={{ rotate: isExpanded ? 180 : 0 }}
                                                     className="text-slate-400 group-hover/header:text-indigo-500 transition-colors"
                                                 >
-                                                    <ChevronDown size={14} />
+                                                    <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
                                                 </motion.div>
                                             </div>
                                         </div>
@@ -326,38 +333,38 @@ export const GrowthTab = ({
                                                     exit={{ height: 0, opacity: 0 }}
                                                     transition={{ duration: 0.3, ease: "easeInOut" }}
                                                 >
-                                                    <div className="px-4 pb-4 sm:px-5 sm:pb-5 space-y-4 border-t border-slate-100 dark:border-white/5 pt-4">
-                                                        <p className="text-[9px] font-bold text-indigo-500/80 uppercase tracking-widest">{module.hook}</p>
+                                                    <div className="px-6 pb-6 pt-2 sm:px-8 sm:pb-8 space-y-5 border-t border-slate-50 dark:border-white/5 bg-white dark:bg-slate-900">
+                                                        <p className="text-[11px] sm:text-[12px] font-black text-indigo-500/80 uppercase tracking-widest border-b border-indigo-50 dark:border-indigo-500/10 pb-4">{module.hook}</p>
 
-                                                        <div className="bg-slate-50 dark:bg-black/20 p-4 rounded-xl border border-slate-100 dark:border-white/5 text-[11px] sm:text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                                                        <div className="bg-slate-50 dark:bg-black/20 p-5 sm:p-6 rounded-[24px] border border-slate-100 dark:border-white/5 text-[13px] sm:text-[14px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                                                             {renderMarkdown(module.content)}
                                                         </div>
 
                                                         {/* Action / Task */}
                                                         {!isCompleted && !isLocked && (
-                                                            <div className="relative p-3 sm:p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 space-y-3 overflow-hidden group/task">
+                                                            <div className="relative p-5 sm:p-6 rounded-[24px] border border-indigo-500/20 bg-indigo-50/50 dark:bg-indigo-500/5 space-y-4 overflow-hidden group/task">
                                                                 <div className="absolute inset-0 bg-linear-to-r from-indigo-500/5 to-purple-500/5 opacity-50" />
                                                                 <div className="relative z-10">
-                                                                    <div className="flex items-center gap-2 mb-2">
-                                                                        <Terminal size={12} className="text-indigo-500" />
-                                                                        <span className="text-[9px] font-black uppercase tracking-[0.15em] text-indigo-500">Node Task</span>
+                                                                    <div className="flex items-center gap-2 mb-3">
+                                                                        <Terminal size={14} className="text-indigo-500" />
+                                                                        <span className="text-[10px] font-black uppercase tracking-[0.15em] text-indigo-500">Node Task</span>
                                                                     </div>
-                                                                    <p className="text-[11px] font-bold text-slate-800 dark:text-slate-200 leading-relaxed mb-3">
+                                                                    <p className="text-[13px] sm:text-[14px] font-bold text-slate-800 dark:text-slate-200 leading-relaxed mb-4">
                                                                         {module.task}
                                                                     </p>
 
                                                                     {module.link && (
-                                                                        <a href={module.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-[9px] font-black uppercase tracking-widest hover:underline mb-3">
-                                                                            {module.cta || 'Initiate Sync'} <Share size={10} />
+                                                                        <a href={module.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-[11px] font-black uppercase tracking-widest hover:underline mb-4">
+                                                                            {module.cta || 'Initiate Sync'} <Share size={12} />
                                                                         </a>
                                                                     )}
 
                                                                     <button
                                                                         onClick={() => handleCompleteAcademyStage(module.id)}
                                                                         disabled={isLoading}
-                                                                        className="w-full min-h-[44px] h-auto py-2 bg-slate-900 dark:bg-white hover:scale-[1.02] active:scale-95 text-white dark:text-slate-900 rounded-xl font-black text-[10px] uppercase tracking-wider sm:tracking-widest transition-all flex items-center justify-center gap-2 flex-wrap text-center shadow-lg relative overflow-hidden"
+                                                                        className="w-full min-h-[50px] h-auto py-3 bg-slate-900 dark:bg-white hover:scale-[1.02] active:scale-95 text-white dark:text-slate-900 rounded-[16px] font-black text-[11px] uppercase tracking-wider sm:tracking-widest transition-all flex items-center justify-center gap-2 flex-wrap text-center shadow-lg relative overflow-hidden"
                                                                     >
-                                                                        {isLoading ? <Loader2 size={14} className="animate-spin" /> : (
+                                                                        {isLoading ? <Loader2 size={16} className="animate-spin" /> : (
                                                                             <>
                                                                                 <span>
                                                                                     {cost > 0 ? "Complete & Claim" : `Unlock (-${Math.abs(cost)})`}
@@ -365,7 +372,7 @@ export const GrowthTab = ({
                                                                                 {xpCost > 0 && (
                                                                                     <span className="opacity-80 text-red-400">(-{xpCost} XP)</span>
                                                                                 )}
-                                                                                <div className="w-px h-3 bg-current opacity-20 hidden sm:block" />
+                                                                                <div className="w-px h-4 bg-current opacity-20 hidden sm:block mx-1" />
                                                                                 <span className="opacity-70">+{xpReward} XP</span>
                                                                             </>
                                                                         )}
@@ -375,12 +382,12 @@ export const GrowthTab = ({
                                                         )}
 
                                                         {isLocked && !isCompleted && (
-                                                            <div className="p-4 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 text-center">
+                                                            <div className="p-5 bg-slate-100 dark:bg-white/5 rounded-[24px] border border-slate-200 dark:border-white/5 text-center">
                                                                 <div className="flex flex-col items-center gap-2 opacity-60">
-                                                                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                                                                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
                                                                         {!canAffordTokens ? "Insufficient Tokens" : "Insufficient XP Score"}
                                                                     </span>
-                                                                    <span className="text-[8px] font-medium text-slate-400">
+                                                                    <span className="text-[9px] font-medium text-slate-400">
                                                                         {xpCost > academyScore ? `Requires ${xpCost} XP (You have ${academyScore})` : "Earn more tokens or upgrade to PRO+"}
                                                                     </span>
                                                                 </div>

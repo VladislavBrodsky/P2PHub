@@ -15,6 +15,7 @@ import { useUser } from '../../context/UserContext';
 import { ShareSheet } from '../ShareSheet';
 
 interface NetworkMember {
+    id: number;
     telegram_id: string;
     username: string;
     first_name: string;
@@ -54,6 +55,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
     const [isScrolled, setIsScrolled] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [targetPartner, setTargetPartner] = useState<NetworkMember | null>(null);
 
     // Refs
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -75,19 +77,21 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
     // --- Data Fetching Logic (React Query) ---
 
     const { data: treeStats = {}, refetch: refetchStats } = useQuery({
-        queryKey: ['network', 'stats', isGlobalMode ? 'global' : 'partner'],
+        queryKey: ['network', 'stats', isGlobalMode ? 'global' : 'partner', targetPartner ? targetPartner.id : 'me'],
         queryFn: async () => {
-            const url = isGlobalMode ? '/api/admin/tree' : '/api/partner/tree';
+            let url = isGlobalMode ? '/api/admin/tree' : '/api/partner/tree';
+            if (targetPartner) url += `?target_id=${targetPartner.id}`;
             const res = await apiClient.get(url);
             return res.data as Record<string, number>;
         },
         staleTime: 1000 * 60 * 5,
     });
 
-    const fetchLevelData = async (lvl: number, global: boolean) => {
-        const url = global
+    const fetchLevelData = async (lvl: number, global: boolean, tId?: number) => {
+        let url = global
             ? `/api/admin/network/${lvl}`
             : `/api/partner/network/${lvl}`;
+        if (tId) url += `?target_id=${tId}`;
         const res = await apiClient.get(url);
         return Array.isArray(res.data) ? res.data : ([] as NetworkMember[]);
     };
@@ -100,8 +104,8 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
         isFetching,
         refetch: refetchMembers
     } = useQuery({
-        queryKey: ['network', 'level', level, isGlobalMode ? 'global' : 'partner'],
-        queryFn: () => fetchLevelData(level, isGlobalMode),
+        queryKey: ['network', 'level', level, isGlobalMode ? 'global' : 'partner', targetPartner ? targetPartner.id : 'me'],
+        queryFn: () => fetchLevelData(level, isGlobalMode, targetPartner?.id),
         staleTime: 1000 * 60 * 5,
     });
 
@@ -113,12 +117,12 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
 
         neighbors.forEach(bgLevel => {
             queryClient.prefetchQuery({
-                queryKey: ['network', 'level', bgLevel, isGlobalMode ? 'global' : 'partner'],
-                queryFn: () => fetchLevelData(bgLevel, isGlobalMode),
+                queryKey: ['network', 'level', bgLevel, isGlobalMode ? 'global' : 'partner', targetPartner ? targetPartner.id : 'me'],
+                queryFn: () => fetchLevelData(bgLevel, isGlobalMode, targetPartner?.id),
                 staleTime: 1000 * 60 * 5,
             });
         });
-    }, [level, isGlobalMode, queryClient]);
+    }, [level, isGlobalMode, targetPartner, queryClient]);
 
     // Derived Data: Filtered Members
     const filteredMembers = useMemo(() => {
@@ -188,7 +192,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
 
             {/* Premium Header */}
             <div className={cn(
-                "relative z-40 transition-all duration-300 px-5 pt-5 pb-3",
+                "relative z-40 transition-all duration-300 px-5 pt-[calc(env(safe-area-inset-top)+var(--spacing-telegram-header)+4rem)] pb-3",
                 isScrolled ? "bg-white/80 dark:bg-[#0b1120]/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-white/5" : ""
             )}>
                 <div className="flex items-center justify-between mb-4">
@@ -198,12 +202,23 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                         </div>
                         <div>
                             <h3 className="text-sm font-black text-slate-900 dark:text-white leading-tight">
-                                {t('network.explorer.title', 'Network')}
+                                {targetPartner ? `${targetPartner.first_name}'s Network` : t('network.explorer.title', 'Network')}
                             </h3>
-                            <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 flex items-center gap-1 uppercase tracking-wider">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                {isGlobalMode ? t('network.explorer.global_architecture') : t('network.explorer.your_ecosystem')}
-                            </p>
+                            <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 flex items-center gap-1 uppercase tracking-wider">
+                                {targetPartner ? (
+                                    <button
+                                        onClick={() => { selection(); setTargetPartner(null); setLevel(1); }}
+                                        className="text-blue-500 hover:text-blue-600 font-bold active:scale-95 transition-transform bg-blue-500/10 px-1.5 py-0.5 rounded-md"
+                                    >
+                                        &larr; {t('common.back', 'BACK')}
+                                    </button>
+                                ) : (
+                                    <>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                        {isGlobalMode ? t('network.explorer.global_architecture') : t('network.explorer.your_ecosystem')}
+                                    </>
+                                )}
+                            </div>
                         </div>
                     </div>
 
@@ -438,7 +453,12 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                     initial={{ opacity: 0, y: 10, scale: 0.98 }}
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     transition={{ duration: 0.2, delay: Math.min(index * 0.03, 0.3) }}
-                                    className="group flex items-center gap-3 p-2.5 bg-white dark:bg-[#ffffff03] border border-slate-200/50 dark:border-white/5 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/4 transition-all duration-300 relative"
+                                    onClick={() => {
+                                        selection();
+                                        setTargetPartner(member);
+                                        setLevel(1);
+                                    }}
+                                    className="group flex items-center gap-3 p-2.5 bg-white dark:bg-[#ffffff03] border border-slate-200/50 dark:border-white/5 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/4 transition-all duration-300 relative cursor-pointer"
                                 >
                                     <div className="relative shrink-0">
                                         <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/5 overflow-hidden ring-1 ring-slate-200/50 dark:ring-white/5 shadow-sm transform group-active:scale-95 transition-transform">

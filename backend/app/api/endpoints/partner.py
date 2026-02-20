@@ -697,11 +697,12 @@ async def get_public_stats():
 @limiter.limit("60/minute")
 async def get_my_referral_tree(
     request: Request,
+    target_id: int = None,
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
     """
-    Fetches the 20-level referral tree stats for the current user.
+    Fetches the 20-level referral tree stats for the current user or a specific downline partner.
     """
     if not user_data:
         raise HTTPException(status_code=401, detail="Authentication required")
@@ -717,19 +718,33 @@ async def get_my_referral_tree(
     if not partner:
         return {str(i): 0 for i in range(1, 21)}
 
+    query_id = partner.id
+    if target_id and target_id != partner.id:
+        target_partner = await session.get(Partner, target_id)
+        if not target_partner:
+            raise HTTPException(status_code=404, detail="Target partner not found")
+        
+        # Verify target is in user's downline
+        our_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
+        target_path = f"{target_partner.path or ''}.{target_partner.id}".lstrip(".")
+        if not target_path.startswith(our_path):
+            raise HTTPException(status_code=403, detail="Partner not in your downline")
+        query_id = target_id
+
     from app.services.analytics_service import get_referral_tree_stats
 
     # 2. Use Intelligent Caching (600s TTL) - V2 Cache Key
-    cache_key = f"ref_tree_stats_v2:{partner.id}"
+    cache_key = f"ref_tree_stats_v2:{query_id}"
     return await redis_service.get_or_compute(
         cache_key,
-        lambda: get_referral_tree_stats(session, partner.id),
+        lambda: get_referral_tree_stats(session, query_id),
         expire=600
     )
 
 @router.get("/network/{level}", response_model=list[PartnerResponse])
 async def get_network_level_members(
     level: int,
+    target_id: int = None,
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
@@ -753,13 +768,26 @@ async def get_network_level_members(
     if not (1 <= level <= 20):
          raise HTTPException(status_code=400, detail="Level must be between 1 and 20")
 
+    query_id = partner.id
+    if target_id and target_id != partner.id:
+        target_partner = await session.get(Partner, target_id)
+        if not target_partner:
+            raise HTTPException(status_code=404, detail="Target partner not found")
+        
+        # Verify target is in user's downline
+        our_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
+        target_path = f"{target_partner.path or ''}.{target_partner.id}".lstrip(".")
+        if not target_path.startswith(our_path):
+            raise HTTPException(status_code=403, detail="Partner not in your downline")
+        query_id = target_id
+
     from app.services.analytics_service import get_referral_tree_members
 
     # V2 Cache Key for robust data refresh
-    cache_key = f"ref_tree_members_v2:{partner.id}:{level}"
+    cache_key = f"ref_tree_members_v2:{query_id}:{level}"
     return await redis_service.get_or_compute(
         cache_key,
-        lambda: get_referral_tree_members(session, partner.id, level),
+        lambda: get_referral_tree_members(session, query_id, level),
         expire=600
     )
 
