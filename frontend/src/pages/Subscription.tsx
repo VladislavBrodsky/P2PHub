@@ -241,26 +241,26 @@ export default function SubscriptionPage() {
 
     // ─── PLAN BENEFITS ────────────────────────────────────────────────────────
     const proBenefits = [
-        { icon: Brain, label: t('subscription.benefits.ai_studio'), desc: t('subscription.benefits.ai_studio_desc_pro'), color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-indigo-500/10 dark:bg-indigo-500/20' },
-        { icon: Network, label: t('subscription.benefits.network_levels'), desc: t('subscription.benefits.network_levels_desc_pro'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
-        { icon: Zap, label: t('subscription.benefits.tokens'), desc: t('subscription.benefits.tokens_desc_pro'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
-        { icon: TrendingUp, label: t('subscription.benefits.cashback'), desc: t('subscription.benefits.cashback_desc_pro'), color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-500/10 dark:bg-purple-500/20' },
-        { icon: Bot, label: t('subscription.benefits.tools'), desc: t('subscription.benefits.tools_desc_pro'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
-        { icon: Target, label: t('subscription.benefits.growth_intel'), desc: t('subscription.benefits.growth_intel_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
+        { id: 'ai', icon: Brain, label: t('subscription.benefits.ai_studio'), desc: t('subscription.benefits.ai_studio_desc_pro'), color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-indigo-500/10 dark:bg-indigo-500/20' },
+        { id: 'network', icon: Network, label: t('subscription.benefits.network_levels'), desc: t('subscription.benefits.network_levels_desc_pro'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
+        { id: 'tokens', icon: Zap, label: t('subscription.benefits.tokens'), desc: t('subscription.benefits.tokens_desc_pro'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
+        { id: 'cashback', icon: TrendingUp, label: t('subscription.benefits.cashback'), desc: t('subscription.benefits.cashback_desc_pro'), color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-500/10 dark:bg-purple-500/20' },
+        { id: 'tools', icon: Bot, label: t('subscription.benefits.tools'), desc: t('subscription.benefits.tools_desc_pro'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
+        { id: 'intel', icon: Target, label: t('subscription.benefits.growth_intel'), desc: t('subscription.benefits.growth_intel_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
     ];
 
     const proPlusBenefits = [
-        { icon: Brain, label: t('subscription.benefits.ai_studio'), desc: t('subscription.benefits.ai_studio_desc_plus'), color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-indigo-500/10 dark:bg-indigo-500/20' },
-        { icon: Network, label: t('subscription.benefits.network_levels'), desc: t('subscription.benefits.network_levels_desc_plus'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
-        { icon: Zap, label: t('subscription.benefits.tokens'), desc: t('subscription.benefits.tokens_desc_plus'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
-        { icon: TrendingUp, label: t('subscription.benefits.cashback'), desc: t('subscription.benefits.cashback_desc_plus'), color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-500/10 dark:bg-purple-500/20' },
-        { icon: Bot, label: t('subscription.benefits.tools'), desc: t('subscription.benefits.tools_desc_plus'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
-        { icon: Infinity, label: t('subscription.benefits.omni_sync'), desc: t('subscription.benefits.omni_sync_desc'), color: 'text-fuchsia-600 dark:text-fuchsia-400', bg: 'bg-fuchsia-500/10 dark:bg-fuchsia-500/20' },
-        { icon: Star, label: t('subscription.benefits.priority_ai'), desc: t('subscription.benefits.priority_ai_desc'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
-        { icon: Rocket, label: t('subscription.benefits.empire_access'), desc: t('subscription.benefits.empire_access_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
-        { icon: Send, label: t('subscription.benefits.tg_multi_channel', '5 Telegram Channels'), desc: t('subscription.benefits.tg_multi_channel_desc', 'Add up to 5 Telegram channels and auto-broadcast to all of them simultaneously from one dashboard.'), color: 'text-sky-600 dark:text-sky-400', bg: 'bg-sky-500/10 dark:bg-sky-500/20' },
-        { icon: Radio, label: t('subscription.benefits.multi_broadcast', 'Multi-Channel Broadcasting'), desc: t('subscription.benefits.multi_broadcast_desc', 'Schedule and blast posts across all your connected channels in one click — maximum reach, zero effort.'), color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-500/10 dark:bg-violet-500/20' },
-        { icon: BarChart2, label: t('subscription.benefits.content_analytics', 'Content Performance Analytics'), desc: t('subscription.benefits.content_analytics_desc', 'Track reach, engagement, and conversion rates for every post across all channels with real-time insights.'), color: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-500/10 dark:bg-teal-500/20' },
+        { id: 'ai', icon: Brain, label: t('subscription.benefits.ai_studio'), desc: t('subscription.benefits.ai_studio_desc_plus'), color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-indigo-500/10 dark:bg-indigo-500/20' },
+        { id: 'network', icon: Network, label: t('subscription.benefits.network_levels'), desc: t('subscription.benefits.network_levels_desc_plus'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
+        { id: 'tokens', icon: Zap, label: t('subscription.benefits.tokens'), desc: t('subscription.benefits.tokens_desc_plus'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
+        { id: 'cashback', icon: TrendingUp, label: t('subscription.benefits.cashback'), desc: t('subscription.benefits.cashback_desc_plus'), color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-500/10 dark:bg-purple-500/20' },
+        { id: 'tools', icon: Bot, label: t('subscription.benefits.tools'), desc: t('subscription.benefits.tools_desc_plus'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
+        { id: 'omni', icon: Infinity, label: t('subscription.benefits.omni_sync'), desc: t('subscription.benefits.omni_sync_desc'), color: 'text-fuchsia-600 dark:text-fuchsia-400', bg: 'bg-fuchsia-500/10 dark:bg-fuchsia-500/20' },
+        { id: 'priority', icon: Star, label: t('subscription.benefits.priority_ai'), desc: t('subscription.benefits.priority_ai_desc'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
+        { id: 'empire', icon: Rocket, label: t('subscription.benefits.empire_access'), desc: t('subscription.benefits.empire_access_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
+        { id: 'channels', icon: Send, label: t('subscription.benefits.tg_multi_channel', '5 Telegram Channels'), desc: t('subscription.benefits.tg_multi_channel_desc', 'Add up to 5 Telegram channels and auto-broadcast to all of them simultaneously from one dashboard.'), color: 'text-sky-600 dark:text-sky-400', bg: 'bg-sky-500/10 dark:bg-sky-500/20' },
+        { id: 'broadcast', icon: Radio, label: t('subscription.benefits.multi_broadcast', 'Multi-Channel Broadcasting'), desc: t('subscription.benefits.multi_broadcast_desc', 'Schedule and blast posts across all your connected channels in one click — maximum reach, zero effort.'), color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-500/10 dark:bg-violet-500/20' },
+        { id: 'analytics', icon: BarChart2, label: t('subscription.benefits.content_analytics', 'Content Performance Analytics'), desc: t('subscription.benefits.content_analytics_desc', 'Track reach, engagement, and conversion rates for every post across all channels with real-time insights.'), color: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-500/10 dark:bg-teal-500/20' },
     ];
 
     const currentBenefits = selectedPlan === 'PRO' ? proBenefits : proPlusBenefits;
@@ -276,42 +276,52 @@ export default function SubscriptionPage() {
     ];
 
     return (
-        <div className="flex flex-col px-4 pb-32 pt-2 max-w-lg mx-auto overflow-x-hidden">
+        <div className="flex flex-col px-4 pb-32 pt-0 max-w-lg mx-auto overflow-x-hidden">
 
             {/* ── HERO SECTION ────────────────────────────────────────────── */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10 pt-6">
-                <div className="flex flex-col items-center gap-4 mb-2">
-                    <div className="relative">
-                        <div className="w-16 h-16 rounded-full bg-linear-to-br from-indigo-500 via-fuchsia-600 to-indigo-800 flex items-center justify-center shadow-[0_0_30px_rgba(79,70,229,0.3)] border-2 border-white/30 relative z-10">
-                            <Crown size={32} className="text-white fill-white/20" />
-                        </div>
-                        <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 animate-pulse" />
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center mb-8 pt-4">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="relative group">
+                        <motion.div
+                            animate={{ y: [0, -4, 0], rotate: [0, 2, 0, -2, 0] }}
+                            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                            className="w-14 h-14 rounded-2xl bg-linear-to-br from-indigo-500 via-purple-600 to-indigo-900 flex items-center justify-center shadow-2xl border border-white/20 relative z-10"
+                        >
+                            <Crown size={28} className="text-white fill-white/20 drop-shadow-lg" />
+                        </motion.div>
+                        <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity animate-pulse" />
                     </div>
-                    <div className="px-4 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-500/30 flex items-center gap-2.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)] animate-pulse" />
-                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-700 dark:text-indigo-300">{t('subscription.upgrade.protocol_initialized')}</span>
+
+                    <div className="flex flex-wrap items-center justify-center gap-1.5 px-1">
+                        <div className="px-3 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-1.5 backdrop-blur-sm">
+                            <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                            <span className="text-[8px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-400">{t('subscription.upgrade.protocol_initialized')}</span>
+                        </div>
+                        <div className="px-3 py-1 rounded-full bg-orange-500/10 dark:bg-orange-500/10 border border-orange-500/20 flex items-center gap-1.5 backdrop-blur-sm">
+                            <Flame size={9} className="text-orange-500" />
+                            <span className="text-[8px] font-black text-orange-600 dark:text-orange-400 uppercase tracking-widest font-mono">{t('subscription.upgrade.limited_offer')}</span>
+                        </div>
                     </div>
                 </div>
-                <div className="mt-4 space-y-2">
-                    <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-linear-to-r from-red-500/10 to-amber-500/10 border border-red-500/20 mb-2 animate-pulse">
-                        <Flame size={10} className="text-red-500 mr-1.5" />
-                        <span className="text-[9px] font-black text-red-600 dark:text-red-400 uppercase tracking-[0.2em] font-mono">{t('subscription.upgrade.limited_offer')}</span>
-                    </div>
-                    <h1 className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic vibing-crystal-text leading-[0.8]">{t('common.pro_active')}</h1>
-                    <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold max-w-[260px] mx-auto uppercase tracking-widest mt-4 leading-tight">{t('subscription.upgrade.desc')}</p>
+
+                <div className="mt-6 space-y-1.5">
+                    <h1 className="text-5xl font-black text-slate-900 dark:text-white tracking-[calc(-0.06em)] uppercase italic vibing-crystal-text leading-none">{t('common.pro_active')}</h1>
+                    <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold max-w-[240px] mx-auto uppercase tracking-[0.15em] pt-1 opacity-70 leading-relaxed font-mono">
+                        {t('subscription.upgrade.desc')}
+                    </p>
                 </div>
 
                 {proStats && (
-                    <div className="mt-8 w-full max-w-[240px] mx-auto">
-                        <div className="flex justify-between text-[9px] font-black mb-2 text-slate-500 dark:text-white/40 uppercase tracking-tighter">
-                            <span>{t('subscription.upgrade.lifetime_slots')}</span>
-                            <span className="text-slate-900 dark:text-white font-black">{proStats.sold} / {proStats.total}</span>
+                    <div className="mt-5 w-full max-w-[220px] mx-auto group">
+                        <div className="flex justify-between text-[8px] font-black mb-1.5 text-slate-400 dark:text-white/30 uppercase tracking-[0.1em]">
+                            <span className="group-hover:text-indigo-500 transition-colors">{t('subscription.upgrade.lifetime_slots')}</span>
+                            <span className="text-slate-900 dark:text-white">{proStats.sold} / {proStats.total}</span>
                         </div>
-                        <div className="h-2 bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-slate-300/50 dark:border-white/10">
+                        <div className="h-1.5 bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden border border-slate-300/30 dark:border-white/5 p-0.5">
                             <motion.div
                                 initial={{ width: 0 }}
                                 animate={{ width: `${(proStats.sold / proStats.total) * 100}%` }}
-                                className="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-fuchsia-500 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.5)]"
+                                className="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-fuchsia-500 rounded-full shadow-[0_0_12px_rgba(99,102,241,0.4)]"
                             />
                         </div>
                     </div>
@@ -319,55 +329,55 @@ export default function SubscriptionPage() {
             </motion.div>
 
             {/* ── PLAN SELECTOR ───────────────────────────────────────────── */}
-            <div className="flex flex-col gap-4 mb-8">
-                <div className="text-center space-y-2">
+            <div className="flex flex-col gap-3 mb-8 px-1">
+                <div className="text-center space-y-3 pt-4 border-t border-slate-100 dark:border-white/5">
                     <motion.div
                         initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-wider border border-indigo-500/20"
+                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-[9px] font-black uppercase tracking-[0.2em] border border-indigo-500/20"
                     >
-                        <Sparkles size={12} fill="currentColor" />
+                        <Sparkles size={11} fill="currentColor" />
                         {t('subscription.upgrade.badge')}
                     </motion.div>
-                    <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                    <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic leading-[0.85]">
                         {t('subscription.upgrade.dominate_network')}
                     </h2>
-                    <p className="text-slate-500 dark:text-slate-400 text-[11px] font-bold max-w-[280px] mx-auto leading-snug">
+                    <p className="text-slate-400 dark:text-slate-500 text-[10px] font-bold max-w-[280px] mx-auto leading-snug uppercase tracking-wider opacity-80">
                         {t('subscription.upgrade.subheadline')}
                     </p>
                 </div>
 
                 {/* Toggle */}
-                <div className="relative bg-slate-100 dark:bg-white/5 p-1.5 rounded-[2.5rem] flex gap-1.5 border border-slate-200 dark:border-white/10 shadow-inner mt-2">
+                <div className="relative bg-slate-100/50 dark:bg-white/5 p-1.5 rounded-3xl flex gap-1.5 border border-slate-200 dark:border-white/10 shadow-inner mt-2 backdrop-blur-xs">
                     <div
-                        className={`absolute inset-y-1.5 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-[2rem] shadow-xl ${selectedPlan === 'PRO'
+                        className={`absolute inset-y-1.5 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-2xl shadow-xl ${selectedPlan === 'PRO'
                             ? 'left-1.5 w-[calc(50%-0.375rem)] bg-white dark:bg-indigo-600 shadow-indigo-500/20'
                             : 'left-[calc(50%+0.375rem)] w-[calc(50%-0.375rem)] bg-linear-to-br from-indigo-500 via-purple-500 to-fuchsia-500 shadow-purple-500/30'
                             }`}
                     />
                     <button
                         onClick={() => { selection(); setSelectedPlan('PRO'); }}
-                        className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-colors duration-300 ${selectedPlan === 'PRO' ? 'text-indigo-600 dark:text-white' : 'text-slate-400 dark:text-white/30'}`}
+                        className={`relative flex-1 py-3 flex flex-col items-center gap-0.5 z-10 transition-colors duration-300 ${selectedPlan === 'PRO' ? 'text-indigo-600 dark:text-white' : 'text-slate-400 dark:text-white/30'}`}
                     >
-                        <span className="text-[9px] font-black tracking-[0.2em] uppercase opacity-70">{t('subscription.upgrade.pro_title')}</span>
+                        <span className="text-[8px] font-black tracking-[0.2em] uppercase opacity-70">{t('subscription.upgrade.pro_title')}</span>
                         <div className="flex items-baseline gap-1">
-                            <span className="text-[14px] font-bold opacity-50">$</span>
-                            <span className="text-3xl font-black tracking-tighter">39</span>
+                            <span className="text-[12px] font-bold opacity-50">$</span>
+                            <span className="text-2xl font-black tracking-tighter">39</span>
                         </div>
-                        <span className="text-[8px] font-black opacity-40 uppercase tracking-widest">{t('subscription.upgrade.monthly_label')}</span>
+                        <span className="text-[7px] font-black opacity-40 uppercase tracking-widest">{t('subscription.upgrade.monthly_label')}</span>
                     </button>
                     <button
                         onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }}
-                        className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-colors duration-300 ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-400 dark:text-white/30'}`}
+                        className={`relative flex-1 py-3 flex flex-col items-center gap-0.5 z-10 transition-colors duration-300 ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-400 dark:text-white/30'}`}
                     >
-                        <span className="text-[9px] font-black tracking-[0.2em] uppercase opacity-70">{isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title')}</span>
+                        <span className="text-[8px] font-black tracking-[0.2em] uppercase opacity-70">{isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title')}</span>
                         <div className="flex items-baseline gap-1">
-                            <span className="text-[14px] font-bold opacity-50">$</span>
-                            <span className="text-3xl font-black tracking-tighter">{isStandardPro ? upgradePrice : proPlusPrice}</span>
+                            <span className="text-[12px] font-bold opacity-50">$</span>
+                            <span className="text-2xl font-black tracking-tighter">{isStandardPro ? upgradePrice : proPlusPrice}</span>
                         </div>
-                        <span className="text-[8px] font-black opacity-60 uppercase tracking-widest">{isStandardPro ? t('subscription.upgrade.upgrade_label') || 'ONE-TIME UPGRADE' : t('subscription.upgrade.lifetime_label')}</span>
+                        <span className="text-[7px] font-black opacity-60 uppercase tracking-widest">{isStandardPro ? t('subscription.upgrade.upgrade_label') || 'ONE-TIME UPGRADE' : t('subscription.upgrade.lifetime_label')}</span>
                         {selectedPlan !== 'PRO_PLUS' && (
-                            <div className="absolute -top-1.5 -right-1 px-2 py-0.5 bg-linear-to-r from-amber-400 to-orange-500 text-[8px] font-black text-white rounded-full border-2 border-slate-100 dark:border-slate-800 shadow-lg">
-                                🔥 BEST
+                            <div className="absolute -top-1.5 -right-1 px-2 py-0.5 bg-linear-to-r from-amber-400 to-orange-500 text-[7px] font-black text-white rounded-full border-2 border-slate-100 dark:border-slate-800 shadow-lg animate-bounce">
+                                🔥 20X
                             </div>
                         )}
                     </button>
@@ -421,24 +431,28 @@ export default function SubscriptionPage() {
             </div>
 
             {/* ── PRIMARY CTA & CURRENCY PICKER ─────────────────────────── */}
-            <div className="mb-10 px-1">
+            <div className="mb-10 px-1 relative z-20">
                 <motion.button
-                    layoutId="main-cta"
-                    whileTap={{ scale: 0.97 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => {
                         selection();
                         const el = document.getElementById('currency-selector-anchor');
                         el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }}
-                    className={`w-full h-16 rounded-2xl font-black text-white text-[12px] uppercase tracking-[0.2em] shadow-2xl flex items-center justify-center gap-3 relative overflow-hidden group ${selectedPlan === 'PRO'
-                        ? 'bg-linear-to-r from-indigo-500 to-purple-600 shadow-indigo-500/30'
-                        : 'bg-linear-to-r from-purple-500 via-fuchsia-500 to-indigo-500 shadow-purple-500/30'
+                    className={`w-full h-16 rounded-2xl font-black text-white text-[13px] uppercase tracking-[0.2em] shadow-2xl flex items-center justify-center gap-3 relative overflow-hidden group ${selectedPlan === 'PRO'
+                        ? 'bg-gradient-to-r from-indigo-500 to-purple-600 active:from-indigo-600'
+                        : 'bg-gradient-to-r from-purple-500 via-fuchsia-500 to-indigo-500 active:from-purple-600'
                         }`}
                 >
-                    <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                    <Lock size={18} className="group-hover:scale-110 transition-transform" />
-                    {selectedPlan === 'PRO' ? t('subscription.upgrade.buy_pro_btn', 'BUY PRO') : (isStandardPro ? t('subscription.upgrade.upgrade_to_pro_plus_btn', 'UPGRADE TO PRO+') : t('subscription.upgrade.buy_pro_plus_btn', 'BUY PRO+'))}
-                    <div className="w-1.5 h-1.5 rounded-full bg-white opacity-40 group-hover:scale-150 transition-transform" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                    <Lock size={18} className="group-hover:scale-110 transition-transform relative z-10" />
+                    <span className="relative z-10">
+                        {selectedPlan === 'PRO'
+                            ? t('subscription.upgrade.buy_pro_btn', 'BUY PRO')
+                            : (isStandardPro ? t('subscription.upgrade.upgrade_to_pro_plus_btn', 'UPGRADE TO PRO+') : t('subscription.upgrade.buy_pro_plus_btn', 'BUY PRO+'))}
+                    </span>
+                    <div className="w-1.5 h-1.5 rounded-full bg-white opacity-40 group-hover:scale-150 transition-transform relative z-10" />
                 </motion.button>
 
                 <div id="currency-selector-anchor" className="mt-4">
@@ -492,10 +506,10 @@ export default function SubscriptionPage() {
                     {/* Benefits list */}
                     <div className="space-y-2">
                         {currentBenefits.map((b, i) => {
-                            const isExpanded = expandedBenefit === b.label;
+                            const isExpanded = expandedBenefit === b.id;
                             return (
                                 <motion.div
-                                    key={b.label}
+                                    key={b.id}
                                     initial={{ opacity: 0, x: -10 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: i * 0.04 }}
@@ -504,9 +518,9 @@ export default function SubscriptionPage() {
                                     <button
                                         onClick={() => {
                                             selection();
-                                            setExpandedBenefit(isExpanded ? null : b.label);
+                                            setExpandedBenefit(isExpanded ? null : b.id);
                                         }}
-                                        className="flex items-center gap-3.5 p-3 w-full text-left"
+                                        className="flex items-center gap-3.5 p-3.5 w-full text-left bg-transparent"
                                     >
                                         <div className={`w-9 h-9 rounded-xl ${b.bg} flex items-center justify-center shrink-0 ${b.color}`}>
                                             <b.icon size={18} strokeWidth={2.5} />
@@ -514,9 +528,12 @@ export default function SubscriptionPage() {
                                         <div className="flex-1 min-w-0">
                                             <div className={`text-[10px] font-black uppercase tracking-widest ${b.color}`}>{b.label}</div>
                                         </div>
-                                        <div className="flex items-center gap-3">
-                                            <Check size={14} className="text-emerald-500 shrink-0" strokeWidth={3} />
-                                            <ChevronDown size={14} className={`text-slate-400 dark:text-white/20 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                                        <div className="flex items-center gap-3 shrink-0">
+                                            <Check size={14} className="text-emerald-500" strokeWidth={3} />
+                                            <ChevronDown
+                                                size={16}
+                                                className={`text-slate-400 dark:text-white/20 transition-transform duration-300 block ${isExpanded ? 'rotate-180 text-indigo-500' : ''}`}
+                                            />
                                         </div>
                                     </button>
                                     <AnimatePresence>
@@ -525,10 +542,10 @@ export default function SubscriptionPage() {
                                                 initial={{ height: 0, opacity: 0 }}
                                                 animate={{ height: 'auto', opacity: 1 }}
                                                 exit={{ height: 0, opacity: 0 }}
-                                                transition={{ duration: 0.2, ease: "easeOut" }}
+                                                transition={{ duration: 0.3, ease: "easeInOut" }}
                                             >
-                                                <div className="px-4 pb-4 pt-0 ml-12">
-                                                    <p className="text-[11px] font-bold text-slate-700 dark:text-white/80 leading-snug">
+                                                <div className="px-5 pb-5 pt-0 ml-12">
+                                                    <p className="text-[11px] font-bold text-slate-700 dark:text-white/80 leading-relaxed">
                                                         {b.desc}
                                                     </p>
                                                 </div>
