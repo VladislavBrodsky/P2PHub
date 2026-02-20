@@ -10,22 +10,22 @@
       "title": "Mastercard Virtual USD",
       "desc": "Contactless payment in 180+ countries",
       "bonus_text": "on balance after activation",
-      "back_title": "GHOST PROTOCOL",
-      "back_desc": "Create disposable cards for subscriptions. Netflix, Amazon — they never get your real data. Delete in 1 click. You are a ghost in the system."
+      "back_title": "SECURE PRIVACY",
+      "back_desc": "Generate virtual cards for secure online subscriptions. Services like Netflix or Amazon never receive your primary data. Maintain complete control over your recurring payments."
     },
     "physical": {
       "title": "Mastercard Physical",
       "desc": "Premium PVC card with global delivery",
       "bonus_text": "Standard shipping included",
-      "back_title": "OFF-GRID ASSET",
-      "back_desc": "Looks like a bank card. Works like a card. But connected to your crypto liquidity. No bank account. Total separation of state and your money."
+      "back_title": "FLEXIBLE ASSETS",
+      "back_desc": "A card that combines the convenience of traditional payments with the benefits of digital assets. Use your funds at merchants and ATMs globally with total independence."
     },
     "platinum": {
       "title": "Platinum Metal",
       "desc": "Solid metal card and concierge service",
       "bonus_text": "Lounge access included",
-      "back_title": "BLACK KEY",
-      "back_desc": "Access to 1200+ lounges. Concierge answering in seconds. High limits. Zero questions. Not just a card, it's a diplomat's passport."
+      "back_title": "PREMIUM STATUS",
+      "back_desc": "Access to 1200+ airport lounges, a personal concierge, and enhanced limits. This card signifies success and provides direct entry to exclusive global services."
     },
     "terms": "Card Issuance Terms",
     "fees": {

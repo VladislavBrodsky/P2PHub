@@ -1,9 +1,9 @@
 {
   "community": {
-    "title": "Collective Intelligence",
-    "subtitle": "Join the Global Syndicate",
+    "title": "Partner Community",
+    "subtitle": "Join the Global Network",
     "join_btn": "Enter Discord",
-    "members": "Elite Members",
+    "members": "Total Partners",
     "tabs": {
       "dashboard": "Dashboard",
       "academy": "Academy"
@@ -13,8 +13,8 @@
     "title": "Elite Leaderboard",
     "subtitle": "Global Performance Ranking",
     "rank_label": "Rank",
-    "user_label": "Operator",
-    "score_label": "Network Strength",
+    "user_label": "Partner",
+    "score_label": "Points",
     "top_partners": "Top Partners",
     "timeframes": {
       "all": "Overall",
@@ -27,16 +27,16 @@
     "referrals": "REFERRALS",
     "current_league": "CURRENT LEAGUE",
     "levels": {
-      "wooden": "Bronze Sector",
-      "silver": "Silver Protocol",
-      "metal": "Metal Housing",
-      "gold": "Gold Standard",
-      "platinum": "Platinum Tier"
+      "wooden": "Bronze League",
+      "silver": "Silver League",
+      "metal": "Metal League",
+      "gold": "Gold League",
+      "platinum": "Platinum League"
     }
   },
   "earn_header": {
-    "title": "Reward Engine",
-    "subtitle": "Monetize Your Influence",
+    "title": "Your Progress",
+    "subtitle": "Earn Rewards for Growth",
     "level": "Level",
     "xp_progress": "XP Progress",
     "xp_to_next": "{{xp}} XP to next rewards",
@@ -44,8 +44,8 @@
     "total_xp": "Total XP"
   },
   "level_100": {
-    "title": "Apex Sovereign",
-    "desc": "Total automation, total freedom.",
+    "title": "Summit Achievement",
+    "desc": "Full automation and financial independence.",
     "apex": "HIGHEST ACHIEVEMENT",
     "fanocracy": "Fanocracy",
     "status_quote": "Superior status for those building the future of P2P.",
