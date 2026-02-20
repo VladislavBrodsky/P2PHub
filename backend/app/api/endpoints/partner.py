@@ -1457,8 +1457,13 @@ async def get_finance_stats(
     threshold_72h = now - timedelta(hours=72)
     start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     
-    # Query for enough data to cover BOTH 72h history and Monthly Stats
-    fetch_after = min(start_of_month, threshold_72h)
+    # Query for enough data to cover BOTH 72h history and 6 Months of Monthly Stats
+    # threshold_6m = start of month 5 months ago
+    start_of_6m = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    for _ in range(5):
+        start_of_6m = (start_of_6m - timedelta(days=1)).replace(day=1)
+        
+    fetch_after = min(start_of_6m, threshold_72h)
     
     # 1. Fetch Earnings (Income)
     earnings_stmt = select(Earning).where(
@@ -1493,7 +1498,6 @@ async def get_finance_stats(
     for t in transactions:
         if t.created_at >= threshold_72h:
             # We treat payments as outcome
-            # Optimization: Use amount_crypto for TON if available
             amt = t.amount_crypto if (t.currency == "TON" and t.amount_crypto) else t.amount
             
             description = f"Purchase: {t.currency}"
@@ -1516,24 +1520,43 @@ async def get_finance_stats(
     # Sort history
     history_72h.sort(key=lambda x: x["created_at"], reverse=True)
     
-    # 4. Calculate Monthly Stats
-    monthly_stats = {
-        "USDT": {"income": 0.0, "outcome": 0.0},
-        "TON": {"income": 0.0, "outcome": 0.0}
-    }
-    
+    # 4. Monthly History (Last 6 Months)
+    # Generate month buckets
+    monthly_history = []
+    temp_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    for _ in range(6):
+        monthly_history.append({
+            "month": temp_month.strftime("%B %Y"),
+            "timestamp": temp_month.isoformat(),
+            "USDT": {"income": 0.0, "outcome": 0.0},
+            "TON": {"income": 0.0, "outcome": 0.0}
+        })
+        temp_month = (temp_month - timedelta(days=1)).replace(day=1)
+
+    # Populate monthly history
     for e in earnings:
-        if e.created_at >= start_of_month and e.currency in ["USDT", "TON"]:
-            monthly_stats[e.currency]["income"] += e.amount
-            
+        e_month_start = e.created_at.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        for m in monthly_history:
+            if m["timestamp"] == e_month_start.isoformat():
+                m[e.currency]["income"] += e.amount
+                break
+                
     for t in transactions:
-        if t.created_at >= start_of_month and t.status == "completed" and t.currency in ["USDT", "TON"]:
-            amt = t.amount_crypto if (t.currency == "TON" and t.amount_crypto) else t.amount
-            monthly_stats[t.currency]["outcome"] += amt
+        if t.status != "completed": continue
+        t_month_start = t.created_at.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        for m in monthly_history:
+            if m["timestamp"] == t_month_start.isoformat():
+                amt = t.amount_crypto if (t.currency == "TON" and t.amount_crypto) else t.amount
+                m[t.currency]["outcome"] += amt
+                break
+
+    # 5. Current Monthly Stats (for backward compatibility if needed, though monthly_history[0] is current)
+    monthly_stats = monthly_history[0]
             
     return {
         "history_72h": history_72h,
         "monthly_stats": monthly_stats,
+        "monthly_history": monthly_history,
         "total_earned": partner.total_earned_usdt,
         "balance": partner.balance
     }

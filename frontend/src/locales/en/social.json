@@ -369,7 +369,9 @@
       "ton_stats": "TON Analytics",
       "usdt_stats": "USDT Analytics",
       "no_activity": "Quiet Perimeter",
-      "no_activity_desc": "No crypto events recorded in the last 72 hours."
+      "no_activity_desc": "No crypto events recorded in the last 72 hours.",
+      "performance_history": "Performance History",
+      "monthly_summary": "Monthly Summary"
     }
   }
 }

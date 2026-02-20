@@ -71,9 +71,9 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                 <Activity className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                                <h4 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight">
                                     {t('partner_dashboard.finance_stats.title', 'Finance Operations')}
-                                </h3>
+                                </h4>
                                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest opacity-60 leading-none mt-0.5">
                                     {t('partner_dashboard.finance_stats.live_data', 'Live Ledger Data')}
                                 </p>
@@ -215,8 +215,8 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                                     </span>
                                                                     {item.status && item.status !== 'completed' && (
                                                                         <span className={`px-1 rounded-[4px] text-[6px] font-black uppercase tracking-tighter ${item.status === 'pending' || item.status === 'manual_review'
-                                                                                ? 'bg-amber-500/20 text-amber-500'
-                                                                                : 'bg-red-500/20 text-red-500'
+                                                                            ? 'bg-amber-500/20 text-amber-500'
+                                                                            : 'bg-red-500/20 text-red-500'
                                                                             }`}>
                                                                             {item.status === 'manual_review' ? 'REVIEW' : item.status}
                                                                         </span>
@@ -251,6 +251,84 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                             </p>
                                         </div>
                                     )}
+                                </div>
+
+                                {/* Monthly Summary Section */}
+                                <div className="space-y-4 pt-4">
+                                    <div className="flex items-center gap-2 px-1">
+                                        <div className="w-6 h-6 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500 ring-1 ring-indigo-500/20">
+                                            <Calendar className="w-3.5 h-3.5" />
+                                        </div>
+                                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 dark:text-white/80">
+                                            {t('partner_dashboard.finance_stats.monthly_summary', 'Performance History')}
+                                        </h4>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 gap-3">
+                                        {(stats.monthly_history ?? []).map((m: any, idx: number) => (
+                                            <div
+                                                key={idx}
+                                                className={`p-4 rounded-3xl border transition-all ${idx === 0
+                                                    ? 'bg-indigo-50/50 dark:bg-indigo-500/5 border-indigo-200/50 dark:border-indigo-500/20 shadow-sm'
+                                                    : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 opacity-80'}`}
+                                            >
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                                                        {m.month}
+                                                    </span>
+                                                    {idx === 0 && (
+                                                        <span className="px-1.5 py-0.5 rounded-full bg-indigo-500 text-[6px] font-black text-white uppercase tracking-tighter">
+                                                            Current
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                <div className="grid grid-cols-2 gap-6">
+                                                    <div className="space-y-2">
+                                                        <div className="flex items-center gap-1.5 opacity-40">
+                                                            <DollarSign className="w-2.5 h-2.5" />
+                                                            <span className="text-[8px] font-black uppercase tracking-widest pt-0.5">USDT</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1.5">
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">In</span>
+                                                                <span className={`text-[11px] font-black tabular-nums ${m.USDT.income > 0 ? 'text-emerald-500' : 'text-slate-400 opacity-50'}`}>
+                                                                    +${m.USDT.income.toFixed(2)}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">Out</span>
+                                                                <span className={`text-[11px] font-black tabular-nums ${m.USDT.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'}`}>
+                                                                    -${m.USDT.outcome.toFixed(2)}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="space-y-2">
+                                                        <div className="flex items-center gap-1.5 opacity-40">
+                                                            <Activity className="w-2.5 h-2.5" />
+                                                            <span className="text-[8px] font-black uppercase tracking-widest pt-0.5">TON</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1.5">
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">In</span>
+                                                                <span className={`text-[11px] font-black tabular-nums ${m.TON.income > 0 ? 'text-blue-500' : 'text-slate-400 opacity-50'}`}>
+                                                                    +{m.TON.income.toFixed(2)}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">Out</span>
+                                                                <span className={`text-[11px] font-black tabular-nums ${m.TON.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'}`}>
+                                                                    -{m.TON.outcome.toFixed(2)}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </>
                         ) : (
