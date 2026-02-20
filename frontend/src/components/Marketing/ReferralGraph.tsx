@@ -66,7 +66,7 @@ export const ReferralGraph = () => {
 
     return (
         <div className={clsx(
-            "relative w-full h-[400px] flex items-center justify-center overflow-hidden rounded-[2.5rem] border transition-all duration-700 perspective-1000",
+            "relative w-full h-[480px] flex items-center justify-center overflow-hidden rounded-[2.5rem] border transition-all duration-700 perspective-1000",
             "bg-linear-to-b from-emerald-50/50 to-teal-50/30 border-emerald-500/20",
             "dark:bg-[#020805] dark:border-emerald-500/20",
             "shadow-[0_20px_50px_-15px_rgba(16,185,129,0.3)] dark:shadow-[inset_0_0_80px_rgba(16,185,129,0.05),0_0_40px_-10px_rgba(16,185,129,0.2)]",
@@ -100,7 +100,7 @@ export const ReferralGraph = () => {
             </div>
 
             {/* 2. 3D Atomic Orbitals */}
-            <div className="absolute inset-0 flex items-center justify-center preserve-3d">
+            <div className="absolute inset-0 flex items-center justify-center preserve-3d -translate-y-6">
                 {atomicOrbits.map((orbit) => (
                     <motion.div
                         key={orbit.id}
@@ -142,7 +142,7 @@ export const ReferralGraph = () => {
             </div>
 
             {/* Core Team (Atom Nucleus Support) */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none -translate-y-6">
                 {[...Array(3)].map((_, i) => (
                     <motion.div
                         key={`team-${i}`}
@@ -160,7 +160,7 @@ export const ReferralGraph = () => {
             </div>
 
             {/* 3. Center Nucleus (User) - Compacted */}
-            <div className="relative z-20 flex flex-col items-center">
+            <div className="relative z-20 flex flex-col items-center -translate-y-6">
                 <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
@@ -185,7 +185,7 @@ export const ReferralGraph = () => {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.8 }}
                     className={clsx(
-                        "mt-4 px-3 py-1 rounded-full border backdrop-blur-xl flex items-center gap-2",
+                        "mt-3 px-3 py-1 rounded-full border backdrop-blur-xl flex items-center gap-2",
                         "bg-emerald-500/10 border-emerald-500/30",
                         "dark:bg-emerald-500/5 dark:border-emerald-500/20"
                     )}

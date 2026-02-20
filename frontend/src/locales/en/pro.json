@@ -771,6 +771,12 @@
       "content_analytics": "CONTENT PERFORMANCE ANALYTICS",
       "content_analytics_desc": "Track reach, engagement, and conversion rates for every post across all channels with real-time data. Know exactly what's working and double down."
     },
+    "comparison": {
+      "title": "Key Differences",
+      "levels": "Levels",
+      "tokens": "Tokens",
+      "channels": "Nodes"
+    },
     "stats": {
       "partners": "ACTIVE PARTNERS",
       "growth": "FASTER GROWTH",
