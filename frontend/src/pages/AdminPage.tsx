@@ -100,6 +100,31 @@ interface RecentSale {
     telegram_id: string;
 }
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+        return (
+            <div className="bg-slate-900/95 backdrop-blur-2xl border border-white/10 p-4 rounded-[1.5rem] shadow-2xl relative overflow-hidden group ring-1 ring-white/10">
+                <div className="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors" />
+                <div className="relative z-10">
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">{label}</p>
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                            <Users size={18} />
+                        </div>
+                        <div>
+                            <div className="text-xl font-black text-white leading-none">
+                                {payload[0].value}
+                            </div>
+                            <div className="text-[9px] font-black text-blue-400 uppercase tracking-widest mt-1">New Partners</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+    return null;
+};
+
 export const AdminPage = () => {
     // #comment: Removed unused user variable from useUser as it is not needed in the AdminPage component
     useUser();
@@ -575,44 +600,64 @@ export const AdminPage = () => {
                         </div>
 
                         {/* Performance Chart: User Growth */}
-                        <div className="p-5 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-4">
-                            <div className="flex items-center justify-between">
-                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Network Growth (14d)</h2>
-                                <Calendar size={14} className="text-slate-500" />
+                        <div className="p-6 rounded-[2.5rem] vibing-premium-panel border border-black/5 dark:border-white/5 space-y-6 relative group bg-white/50 dark:bg-slate-900/50">
+                            <div className="circuit-decor opacity-30" />
+                            <div className="flex items-center justify-between relative z-10">
+                                <div className="space-y-1">
+                                    <h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                                        <div className="p-1.5 bg-blue-500/10 rounded-lg text-blue-500">
+                                            <TrendingUp size={14} />
+                                        </div>
+                                        Network Growth Matrix
+                                    </h2>
+                                    <div className="flex items-center gap-2">
+                                        <div className="h-1 w-8 bg-blue-500 rounded-full" />
+                                        <p className="text-[10px] font-black text-blue-500/60 uppercase tracking-widest">14-Day Tactical Trajectory</p>
+                                    </div>
+                                </div>
+                                <div className="p-2.5 bg-slate-100 dark:bg-white/5 rounded-2xl border border-black/5 dark:border-white/5 text-slate-500 shadow-sm">
+                                    <Calendar size={16} />
+                                </div>
                             </div>
-                            <div className="h-[180px] w-full mt-2">
+
+                            <div className="h-[220px] w-full mt-4 relative z-10">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <AreaChart data={stats?.daily_growth}>
                                         <defs>
                                             <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                                                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
+                                                <stop offset="50%" stopColor="#3b82f6" stopOpacity={0.1} />
                                                 <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                                             </linearGradient>
                                         </defs>
-                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
                                         <XAxis
                                             dataKey="date"
                                             axisLine={false}
                                             tickLine={false}
-                                            tick={{ fontSize: 9, fill: '#64748b' }}
+                                            tick={{ fontSize: 9, fill: '#64748b', fontWeight: 800 }}
+                                            dy={10}
                                         />
-                                        <YAxis hide />
+                                        <YAxis hide domain={['auto', 'auto']} />
                                         <Tooltip
-                                            contentStyle={{
-                                                backgroundColor: '#0f172a',
-                                                border: '1px solid rgba(255,255,255,0.1)',
-                                                borderRadius: '12px',
-                                                fontSize: '10px'
-                                            }}
-                                            itemStyle={{ color: '#3b82f6' }}
+                                            content={<CustomTooltip />}
+                                            cursor={{ stroke: '#3b82f6', strokeWidth: 2, strokeDasharray: '5 5' }}
                                         />
                                         <Area
                                             type="monotone"
                                             dataKey="count"
                                             stroke="#3b82f6"
-                                            strokeWidth={3}
+                                            strokeWidth={4}
                                             fillOpacity={1}
                                             fill="url(#colorCount)"
+                                            activeDot={{
+                                                r: 6,
+                                                fill: '#3b82f6',
+                                                stroke: '#fff',
+                                                strokeWidth: 2,
+                                                style: { filter: 'drop-shadow(0 0 8px rgba(59,130,246,0.5))' }
+                                            }}
+                                            animationDuration={2000}
                                         />
                                     </AreaChart>
                                 </ResponsiveContainer>
@@ -620,22 +665,43 @@ export const AdminPage = () => {
                         </div>
 
                         {/* Network Growth Stats Grid */}
-                        <div className="space-y-3">
-                            <div className="grid grid-cols-2 gap-3">
-                                {Object.entries(stats?.growth || {}).map(([period, data]) => (
-                                    <div key={period} className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-[10px] font-black uppercase text-slate-500">{period}</span>
-                                            <div className={`flex items-center gap-0.5 text-[10px] font-bold ${data.percent_change >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
-                                                {data.percent_change >= 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
-                                                {Math.abs(data.percent_change)}%
+                        <div className="grid grid-cols-2 gap-4">
+                            {Object.entries(stats?.growth || {}).map(([period, data]) => (
+                                <motion.div
+                                    key={period}
+                                    whileHover={{ y: -4 }}
+                                    className="group relative p-6 rounded-[2rem] premium-stat-card bg-white dark:bg-slate-900/50 border border-black/5 dark:border-white/10 space-y-4 overflow-hidden"
+                                >
+                                    {data.percent_change >= 0 && (
+                                        <div className="absolute -right-8 -top-8 w-24 h-24 bg-emerald-500/5 blur-3xl group-hover:bg-emerald-500/10 transition-all duration-500" />
+                                    )}
+                                    <div className="flex items-center justify-between relative z-10">
+                                        <div className="flex items-center gap-2">
+                                            <div className={`p-1.5 rounded-lg ${data.percent_change >= 0 ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'}`}>
+                                                <Activity size={12} />
                                             </div>
+                                            <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{period}</span>
                                         </div>
-                                        <div className="text-2xl font-black">{data.count}</div>
-                                        <div className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase">Prev: {data.previous}</div>
+                                        <div className={`px-2 py-1 rounded-full text-[9px] font-black flex items-center gap-1 shadow-sm ${data.percent_change >= 0
+                                            ? 'bg-emerald-500/10 text-emerald-500 ring-1 ring-emerald-500/20'
+                                            : 'bg-red-500/10 text-red-500 ring-1 ring-red-500/20'
+                                            }`}>
+                                            {data.percent_change >= 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
+                                            {Math.abs(data.percent_change)}%
+                                        </div>
                                     </div>
-                                ))}
-                            </div>
+                                    <div className="space-y-1 relative z-10">
+                                        <div className="text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-none">
+                                            {data.count}
+                                        </div>
+                                        <div className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Acquired Units</div>
+                                    </div>
+                                    <div className="flex items-center justify-between relative z-10 pt-4 border-t border-black/5 dark:border-white/5">
+                                        <div className="text-[9px] text-slate-500 font-black uppercase tracking-widest">Previous Era</div>
+                                        <div className="text-xs font-black text-slate-700 dark:text-slate-300">{data.previous}</div>
+                                    </div>
+                                </motion.div>
+                            ))}
                         </div>
                     </motion.div>
                 )}
