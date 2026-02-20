@@ -19,6 +19,7 @@ from app.core.i18n import get_msg
 from app.core.security import get_current_user, get_tg_user
 from app.middleware.rate_limit import limiter
 from app.models.partner import Earning, Partner, XPTransaction, get_session
+from app.models.transaction import PartnerTransaction
 from app.models.schemas import (
     ActiveTaskResponse,
     EarningSchema,
