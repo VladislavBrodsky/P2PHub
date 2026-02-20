@@ -24,8 +24,8 @@ export const ReferralGraph = () => {
                     clearInterval(interval);
                     if (!hasNotified) {
                         showNotification({
-                            title: t('income.network.viral_notification_title', 'Network Speed Unlocked'),
-                            message: t('income.network.viral_notification_msg', 'Your network generates $1+ per minute from 12.5% dividends and micro-commissions.'),
+                            title: t('income.network.viral_notification_title', 'СКОРОСТЬ СЕТИ АКТИВИРОВАНА'),
+                            message: t('income.network.viral_notification_msg', 'Ваша сеть генерирует $1+ в минуту. Каждый участник приносит % от комиссий, создавая бесконечный поток ликвидности.'),
                             type: 'success',
                             icon: <div className="p-1.5 rounded-lg bg-emerald-500/20"><Network className="w-4 h-4 text-emerald-500" /></div>
                         });
@@ -33,10 +33,10 @@ export const ReferralGraph = () => {
                     }
                     return 43200;
                 }
-                // Human eye can't track 20ms updates clearly. 100ms is much better for CPU.
-                return prev + 432;
+                // Slower increment for more anticipation
+                return prev + 216;
             });
-        }, 100);
+        }, 120); // Slightly slower interval too
         return () => clearInterval(interval);
     }, [hasNotified, showNotification, t]);
 
@@ -55,13 +55,13 @@ export const ReferralGraph = () => {
         { id: 'gamma', radius: 190, duration: 24, color: 'border-green-400/30', rx: 70, rz: 240, nodes: 8 },
     ], []);
 
-    // Income Pops Configuration (Fractal Dividends with USDT)
+    // Income Pops Configuration (Fractal Dividends with USDT) - Slowed down and more spaced out
     const pops = useMemo(() => [
         { id: 1, amount: "33.00", style: "top-[15%] left-[20%]", delay: 0, scale: 1.1 },
-        { id: 2, amount: "0.30", style: "bottom-[25%] right-[15%]", delay: 0.5, scale: 0.8 },
-        { id: 3, amount: "12.50", style: "top-[25%] right-[10%]", delay: 1.2, scale: 1.0 },
-        { id: 4, amount: "0.75", style: "bottom-[15%] left-[25%]", delay: 1.8, scale: 0.85 },
-        { id: 5, amount: "100.00", style: "top-[5%] right-[40%]", delay: 2.5, scale: 1.2 },
+        { id: 2, amount: "0.30", style: "bottom-[25%] right-[15%]", delay: 2, scale: 0.8 },
+        { id: 3, amount: "12.50", style: "top-[25%] right-[10%]", delay: 4.5, scale: 1.0 },
+        { id: 4, amount: "0.75", style: "bottom-[15%] left-[25%]", delay: 7, scale: 0.85 },
+        { id: 5, amount: "100.00", style: "top-[5%] right-[40%]", delay: 10, scale: 1.2 },
     ], []);
 
     return (
@@ -210,10 +210,10 @@ export const ReferralGraph = () => {
                             x: [0, Math.random() * 30 - 15, Math.random() * 60 - 30, 0]
                         }}
                         transition={{
-                            duration: 4,
+                            duration: 6,
                             delay: pop.delay,
                             repeat: Infinity,
-                            repeatDelay: 2
+                            repeatDelay: 5
                         }}
                         className={clsx(
                             "absolute z-30 flex items-center gap-2 px-2.5 py-1.5 rounded-xl backdrop-blur-2xl border transition-colors duration-500 shadow-[0_10px_30px_-10px_rgba(16,185,129,0.4)]",
