@@ -88,7 +88,7 @@
     "desc": "Your request is being processed. Please wait a moment."
   },
   "legal": {
-    "title": "Legal Protocols",
+    "title": "Legal Framework",
     "terms_title": "Terms of Service",
     "privacy_title": "Privacy Policy",
     "disclaimer_title": "DISCLAIMER",
@@ -102,7 +102,7 @@
       "2_title": "2. User Conduct",
       "2_desc": "Users are responsible for maintaining the confidentiality of their account and for all activities occurring under their node.",
       "3_title": "3. Risk Disclosure",
-      "3_desc": "Digital assets and P2P protocols involve significant risk. We do not provide financial advice.",
+      "3_desc": "Digital assets and P2P systems involve significant risk. We do not provide financial advice.",
       "4_title": "4. Intellectual Property",
       "4_desc": "All content and technologies on the platform are protected by intellectual property rights.",
       "5_title": "5. Limitation of Liability",
@@ -114,7 +114,7 @@
       "2_title": "2. Data Security",
       "2_desc": "We implement industry-standard security measures to protect your information and transaction history.",
       "3_title": "3. Third-party Sharing",
-      "3_desc": "We do not sell your data to third parties. Information is only shared when necessary for protocol execution.",
+      "3_desc": "We do not sell your data to third parties. Information is only shared when necessary for system operations.",
       "4_title": "4. Your Rights",
       "4_desc": "You have the right to access, correct, or request deletion of your personal data at any time."
     },
@@ -134,7 +134,7 @@
     },
     "error": {
       "unavailable": "{{feature}} is temporarily unavailable",
-      "desc": "A synchronization error occurred in the global protocol. Our team has been notified.",
+      "desc": "A synchronization error occurred in the global system. Our team has been notified.",
       "retry": "Initialize Retry"
     }
   },
@@ -231,7 +231,7 @@
       },
       {
         "q": "Is my data secure?",
-        "a": "Absolutely. We use bank-grade encryption, your funds are protected by blockchain protocols, and we never share your data. All transactions are monitored for fraud protection."
+        "a": "Absolutely. We use bank-grade encryption, your funds are protected by blockchain systems, and we never share your data. All transactions are monitored for fraud protection."
       },
       {
         "q": "Why upgrade if I can use it for free?",
