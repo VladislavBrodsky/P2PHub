@@ -41,7 +41,7 @@ jobs:
       env:
         # Mock env vars needed for tests to run without failing
         DATABASE_URL: sqlite+aiosqlite:///:memory:
-        BOT_TOKEN: "mock_token"
+        BOT_TOKEN: "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
         FRONTEND_URL: "http://localhost:3000"
         ADMIN_TON_ADDRESS: "test_ton_address"
         ADMIN_USDT_ADDRESS: "test_usdt_address"

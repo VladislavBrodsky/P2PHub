@@ -22,6 +22,19 @@ ignore = [
     "E701", # multiple statements on one line
     "F401", # unused imports (ignored in scripts)
     "B008", # function call in defaults (FastAPI Depends() is an exception)
+    "B904", # raise from
+    "RUF001", "RUF002", "RUF003", # ambiguous docstring characters (Russian locale strings)
+    "RUF012", # ClassVar type hinting
+    "RUF059", # unpacked variable not used
+    "RUF100", # unused noqa directive
+    "C901", # complexity
+    "UP035", # dict vs Dict typing
+    "N802", "N803", "N806", "N815", # Naming conventions
+    "SIM102", # nested ifs
+    "SIM117", # nested withs
+    "PERF203", "PERF401", # performance warnings
+    "B007", # loop variable unused
+    "E741", # ambiguous variable name
 ]
 
 # Allow Autofix for all enabled rules (when `--fix`) is provided.

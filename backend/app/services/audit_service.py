@@ -2,8 +2,8 @@ import logging
 
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.models.audit_log import ActionType, AuditLog
 from app.core.retry import async_retry
+from app.models.audit_log import ActionType, AuditLog
 
 logger = logging.getLogger(__name__)
 

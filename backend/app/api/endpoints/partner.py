@@ -358,8 +358,8 @@ async def get_my_profile(
     # #comment: CRITICAL - Use mode='json' to ensure datetime objects are serialized (isoformat)
     # before writing to Redis. Without this, json.dumps fails with a TypeError.
     try:
-        # Jittered: 300s +/- 30s
-        expire_time = 300 + random.randint(-30, 30)
+        # Jittered: 3600s +/- 360s (1 hour)
+        expire_time = 3600 + random.randint(-360, 360)
         await redis_service.set_json(cache_key, partner_response.model_dump(mode='json'), expire=expire_time)
     except Exception as e:
         logger.warning(f"Profile cache write failed: {e}")
@@ -733,7 +733,7 @@ async def get_my_referral_tree(
     return await redis_service.get_or_compute(
         cache_key,
         lambda: get_referral_tree_stats(session, query_id),
-        expire=600
+        expire=3600 # 1 hour
     )
 
 @router.get("/network/{level}", response_model=list[PartnerResponse])
@@ -783,7 +783,7 @@ async def get_network_level_members(
     return await redis_service.get_or_compute(
         cache_key,
         lambda: get_referral_tree_members(session, query_id, level),
-        expire=600
+        expire=3600 # 1 hour
     )
 
 @router.get("/growth/metrics", response_model=GrowthMetrics)
@@ -813,7 +813,7 @@ async def get_growth_metrics(
     return await redis_service.get_or_compute(
         cache_key,
         lambda: get_network_growth_metrics(session, partner.id, timeframe),
-        expire=300
+        expire=3600 # 1 hour
     )
 
 @router.get("/growth/chart")
@@ -843,7 +843,7 @@ async def get_growth_chart(
     return await redis_service.get_or_compute(
         cache_key,
         lambda: get_network_time_series(session, partner.id, timeframe),
-        expire=300
+        expire=3600 # 1 hour
     )
 
 @router.post("/language")

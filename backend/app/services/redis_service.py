@@ -131,8 +131,8 @@ class RedisService:
                     parsed[pid] = json.loads(data)
         return parsed
 
-    async def cache_profiles(self, profiles_map: dict[int, dict], expire_seconds: int = 900):
-        """Batch cache static user profiles (default 15 mins)."""
+    async def cache_profiles(self, profiles_map: dict[int, dict], expire_seconds: int = 86400):
+        """Batch cache static user profiles (default 24 hours)."""
         if not profiles_map:
             return
             

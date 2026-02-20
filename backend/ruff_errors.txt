@@ -1970,7 +1970,7 @@ PERF203 `try`-`except` within a loop incurs performance overhead
     | |____________________________________________________________________^
     |
 
-C901 `upgrade_to_pro` is too complex (23 > 10)
+C901 `upgrade_to_pro` is too complex (24 > 10)
    --> app/services/payment_service.py:224:15
     |
 223 |     @async_retry(max_attempts=3, base_delay=1.0)
@@ -1981,14 +1981,14 @@ C901 `upgrade_to_pro` is too complex (23 > 10)
     |
 
 F821 Undefined name `asyncio`
-   --> app/services/payment_service.py:483:23
+   --> app/services/payment_service.py:489:23
     |
-481 |             await _check_level_up(partner, temp_notifs, xp_after)
-482 |             if temp_notifs:
-483 |                 await asyncio.gather(*temp_notifs, return_exceptions=True)
+487 |             await _check_level_up(partner, temp_notifs, xp_after)
+488 |             if temp_notifs:
+489 |                 await asyncio.gather(*temp_notifs, return_exceptions=True)
     |                       ^^^^^^^
-484 |
-485 |             # 4.2 Viral Congrats Message (Instruction to user to share)
+490 |
+491 |             # 4.2 Viral Congrats Message (Instruction to user to share)
     |
 
 C901 `_process_referral_awards` is too complex (11 > 10)
