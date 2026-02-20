@@ -682,7 +682,7 @@ export default function SubscriptionPage() {
                                                     <Wallet size={32} className="mx-auto text-blue-600 dark:text-blue-400 mb-4" />
                                                     <div className="flex justify-center mb-4"><TonConnectButton /></div>
                                                 </div>
-                                                <button disabled={isLoading} onClick={handleTonPayment} className="w-full h-16 ${selectedPlan === 'PRO' ? 'bg-blue-600 hover:bg-blue-500' : 'bg-yellow-400 hover:bg-yellow-300 text-black'} rounded-[2rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(0,102,255,0.3)] active:scale-95 transition-all hover:scale-[1.02] disabled:opacity-50">
+                                                <button disabled={isLoading} onClick={handleTonPayment} className={`w-full h-16 ${selectedPlan === 'PRO' ? 'bg-blue-600 hover:bg-blue-500' : 'bg-yellow-400 hover:bg-yellow-300 text-black'} rounded-[2rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(0,102,255,0.3)] active:scale-95 transition-all hover:scale-[1.02] disabled:opacity-50`}>
                                                     {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.complete_payment')}
                                                 </button>
                                             </div>
@@ -697,7 +697,7 @@ export default function SubscriptionPage() {
                                                     <label className="text-[8px] font-black text-slate-500 dark:text-white/40 uppercase tracking-widest ml-1">{t('subscription.upgrade.paste_tx_hash')}</label>
                                                     <input value={manualHash} onChange={(e) => setManualHash(e.target.value)} placeholder="0x..." className="w-full h-12 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs text-slate-900 dark:text-white text-center font-mono focus:border-blue-500/50 outline-none transition-colors" />
                                                 </div>
-                                                <button onClick={handleManualSubmit} disabled={isLoading || !manualHash} className="w-full h-16 ${selectedPlan === 'PRO' ? 'bg-blue-600 hover:bg-blue-500' : 'bg-yellow-400 hover:bg-yellow-300 text-black'} rounded-[2rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(0,102,255,0.3)] active:scale-95 transition-all hover:scale-[1.02] disabled:opacity-40">
+                                                <button onClick={handleManualSubmit} disabled={isLoading || !manualHash} className={`w-full h-16 ${selectedPlan === 'PRO' ? 'bg-blue-600 hover:bg-blue-500' : 'bg-yellow-400 hover:bg-yellow-300 text-black'} rounded-[2rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(0,102,255,0.3)] active:scale-95 transition-all hover:scale-[1.02] disabled:opacity-40`}>
                                                     {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.verify_transaction')}
                                                 </button>
                                             </div>
@@ -768,7 +768,7 @@ export default function SubscriptionPage() {
                         </div>
                     </section>
 
-                    <div className="text-center opacity-10 text-[6px] font-mono tracking-[0.5em] mt-4">BUILD: 2026.02.20 | v1.8.1-ELITE</div>
+                    <div className="text-center opacity-10 text-[6px] font-mono tracking-[0.5em] mt-4">BUILD: 2026.02.20 | v1.8.2-ELITE</div>
 
                     {/* ── SUCCESS / STATUS MODAL ──────────────────────────────────── */}
                     <AnimatePresence>
