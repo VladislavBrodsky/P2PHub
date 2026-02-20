@@ -1145,6 +1145,11 @@ async def claim_task_reward(
     from app.models.schemas import PartnerResponse
     partner_response = PartnerResponse.from_orm(partner)
     partner_response.is_admin = tg_id in settings.ADMIN_USER_IDS
+    
+    from app.services.analytics_service import get_referral_tree_stats
+    tree_stats = await get_referral_tree_stats(session, partner.id)
+    partner_response._network_size_real = sum(tree_stats.values())
+    
     return partner_response.model_dump()
 
 @router.post("/academy/stages/{stage_id}/complete")
@@ -1263,6 +1268,11 @@ async def complete_academy_stage(
     from app.models.schemas import PartnerResponse
     partner_response = PartnerResponse.from_orm(partner)
     partner_response.is_admin = tg_id in settings.ADMIN_USER_IDS
+    
+    from app.services.analytics_service import get_referral_tree_stats
+    tree_stats = await get_referral_tree_stats(session, partner.id)
+    partner_response._network_size_real = sum(tree_stats.values())
+    
     return partner_response.model_dump()
 
 @router.get("/earnings", response_model=list[EarningSchema])
