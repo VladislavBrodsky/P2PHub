@@ -77,6 +77,27 @@ export default function SubscriptionPage() {
         return () => clearInterval(interval);
     }, [sessionData, t]);
 
+    // Handle Auto-Upgrade Flow from other parts of the app
+    useEffect(() => {
+        const checkAutoUpgrade = () => {
+            const flag = localStorage.getItem('auto_upgrade_pro_plus');
+            if (flag === 'true') {
+                localStorage.removeItem('auto_upgrade_pro_plus');
+                setSelectedPlan('PRO_PLUS');
+                setShowPaymentOptionsForPro(true);
+                // Delay scroll to ensure DOM is updated
+                setTimeout(() => {
+                    paymentRef.current?.scrollIntoView({ behavior: 'smooth' });
+                    impact('heavy');
+                }, 300);
+            }
+        };
+        checkAutoUpgrade();
+        // Also listen for potential storage events or tab focus
+        window.addEventListener('focus', checkAutoUpgrade);
+        return () => window.removeEventListener('focus', checkAutoUpgrade);
+    }, [impact]);
+
     const formattedTime = useMemo(() => {
         if (timeLeft === null) return null;
         const minutes = Math.floor(timeLeft / 60);

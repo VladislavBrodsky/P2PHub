@@ -473,55 +473,80 @@ export const ProDashboardModals = ({
                                     <motion.div
                                         initial={{ opacity: 0, x: 20 }}
                                         animate={{ opacity: 1, x: 0 }}
-                                        className="space-y-6"
+                                        className="space-y-6 pt-2"
                                     >
-                                        <div className="p-5 bg-emerald-500/10 dark:bg-emerald-500/10 rounded-3xl border border-emerald-500/20 flex items-start gap-4 group transition-all">
-                                            <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
-                                                <Blocks size={20} />
-                                            </div>
-                                            <div>
-                                                <h4 className="text-[11px] font-black text-emerald-900 dark:text-emerald-300 uppercase tracking-[0.15em]">{t('pro_dashboard.setup.tg_sync_multi.more_platforms')}</h4>
-                                                <p className="text-[10px] font-medium text-emerald-700/70 dark:text-emerald-400/70 leading-relaxed mt-1">
-                                                    {t('pro_dashboard.setup.tg_sync_multi.more_platforms_desc')}
+                                        {!status?.is_pro_plus ? (
+                                            <div className="flex flex-col items-center justify-center py-6 px-4 text-center space-y-6">
+                                                <motion.div
+                                                    animate={{
+                                                        boxShadow: ["0 0 0px rgba(16, 185, 129, 0)", "0 0 40px rgba(16, 185, 129, 0.2)", "0 0 0px rgba(16, 185, 129, 0)"]
+                                                    }}
+                                                    transition={{ duration: 3, repeat: Infinity }}
+                                                    className="w-24 h-24 rounded-[2rem] bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20 shadow-xl relative"
+                                                >
+                                                    <Blocks size={48} />
+                                                    <div className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center border-4 border-white dark:border-slate-900 shadow-xl">
+                                                        <Lock size={14} className="text-white" />
+                                                    </div>
+                                                </motion.div>
+
+                                                <div className="space-y-2">
+                                                    <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter italic leading-tight">
+                                                        Omni-Channel <span className="text-emerald-500">Protocol</span>
+                                                    </h4>
+                                                    <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 max-w-[240px] mx-auto leading-relaxed">
+                                                        Unlock the power of simultaneous multi-platform broadcasting. Post to 5+ networks at once with neural sync technology.
+                                                    </p>
+                                                </div>
+
+                                                <button
+                                                    onClick={() => {
+                                                        selection();
+                                                        localStorage.setItem('auto_upgrade_pro_plus', 'true');
+                                                        window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                                                        setShowSetup(false);
+                                                    }}
+                                                    className="w-full max-w-[280px] py-4 bg-linear-to-r from-emerald-500 to-teal-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 group relative overflow-hidden"
+                                                >
+                                                    <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:animate-shimmer" />
+                                                    <Zap size={18} className="group-hover:animate-pulse relative z-10" />
+                                                    <span className="relative z-10">Upgrade to PRO+ Empire</span>
+                                                </button>
+
+                                                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest opacity-60">
+                                                    Requires Active PRO+ Clearance
                                                 </p>
                                             </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-2 gap-3 pb-4">
-                                            {['Mastodon', 'BlueSky', 'Threads', 'LinkedIn', 'Pinterest', 'Unilive', 'Instagram', 'VK'].map((platform) => (
-                                                <div key={platform} className="relative group/social overflow-hidden">
-                                                    <div className={`p-4 rounded-2xl border flex flex-col gap-2 transition-all ${status?.is_pro_plus ? 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 hover:border-emerald-500/30' : 'bg-slate-50 dark:bg-white/2 border-slate-100 dark:border-white/5 opacity-50'}`}>
-                                                        <div className="flex items-center justify-between">
-                                                            <span className="text-[10px] font-bold text-slate-900 dark:text-slate-300">{platform}</span>
-                                                            {!status?.is_pro_plus ? (
-                                                                <Lock size={10} className="text-slate-400" />
-                                                            ) : (
-                                                                <div className="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[6px] font-black uppercase tracking-widest">{t('pro_dashboard.setup.tg_sync_multi.coming_soon')}</div>
-                                                            )}
-                                                        </div>
-                                                        <div className="h-1 w-full bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden">
-                                                            <div className={`h-full ${status?.is_pro_plus ? 'bg-emerald-500/20' : 'bg-slate-300/20'} w-1/3`} />
-                                                        </div>
+                                        ) : (
+                                            <>
+                                                <div className="p-5 bg-emerald-500/10 dark:bg-emerald-500/10 rounded-3xl border border-emerald-500/20 flex items-start gap-4 group transition-all">
+                                                    <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+                                                        <Blocks size={20} />
                                                     </div>
-                                                    {!status?.is_pro_plus && (
-                                                        <div className="absolute inset-0 bg-slate-900/5 backdrop-blur-[1px] dark:bg-slate-900/40 opacity-0 group-hover/social:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                                                            <span className="text-[7px] font-black text-white bg-indigo-600 px-2 py-1 rounded-md uppercase tracking-tighter shadow-lg">PRO+ ONLY</span>
-                                                        </div>
-                                                    )}
+                                                    <div>
+                                                        <h4 className="text-[11px] font-black text-emerald-900 dark:text-emerald-300 uppercase tracking-[0.15em]">{t('pro_dashboard.setup.tg_sync_multi.more_platforms')}</h4>
+                                                        <p className="text-[10px] font-medium text-emerald-700/70 dark:text-emerald-400/70 leading-relaxed mt-1">
+                                                            {t('pro_dashboard.setup.tg_sync_multi.more_platforms_desc')}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            ))}
-                                        </div>
 
-                                        {!status?.is_pro_plus && (
-                                            <div className="p-5 bg-linear-to-r from-emerald-500/10 via-teal-500/10 to-transparent rounded-[2rem] border border-emerald-500/10 text-center space-y-3">
-                                                <p className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">{t('pro_dashboard.setup.tg_sync_multi.unlock_social_nodes')}</p>
-                                                <button
-                                                    onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' })); }}
-                                                    className="w-full py-3 bg-emerald-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
-                                                >
-                                                    {t('pro_dashboard.setup.tg_sync_multi.upgrade_pro_plus_cta')}
-                                                </button>
-                                            </div>
+                                                <div className="grid grid-cols-2 gap-3 pb-4">
+                                                    {['Threads', 'Pinterest', 'Instagram', 'Facebook', 'Discord'].map((platform) => (
+                                                        <div key={platform} className="relative group/social overflow-hidden">
+                                                            <div className="p-4 rounded-2xl border flex flex-col gap-2 transition-all bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 hover:border-emerald-500/30">
+                                                                <div className="flex items-center justify-between">
+                                                                    <span className="text-[10px] font-bold text-slate-900 dark:text-slate-300">{platform}</span>
+                                                                    <div className="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[6px] font-black uppercase tracking-widest">{t('pro_dashboard.setup.tg_sync_multi.coming_soon')}</div>
+                                                                </div>
+                                                                <div className="h-1 w-full bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden">
+                                                                    <div className="h-full bg-emerald-500/20 w-1/3" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </>
                                         )}
                                     </motion.div>
                                 )}
