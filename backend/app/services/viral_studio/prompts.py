@@ -101,14 +101,15 @@ Available Episodes: {category_strategy.get('storytelling', {}).get('episodes', [
 **HOOK INSPIRATION (adapt, don't copy):**
 {hook_inspo}
 
-**CONTENT REQUIREMENTS (STRICT):**
-1. **CONVERSION HUB PROTOCOL:** Use the assigned copywriting framework ({category_strategy.get('technique', 'AIDA')}) to structure the post. Identify the pain point, agitate it, and present the Pintopay system as the solution.
-2. **SCROLL-STOPPING HOOK:** Use a thumb-stopping hook in <10 words. Incorporate a 'pattern interrupt' that contradicts common knowledge.
-3. **NATIVE FLUENCY:** Write with {language} native mastery. Adapt tone: {tov.get('style', 'Professional')}.
-4. **EPISODIC NARRATIVE:** Start with "**Chapter [X]: [High-Status Title]**".
-5. **INTELLIGENCE ASSET:** Mid-post, provide a genuine value-add (e.g., "Signal 'ALPHA' for the private node setup blueprint").
-6. **CTA SUPREMACY:** The final line MUST be a bold markdown link: **[Action Text]({ref_link})**.
-7. **BANNED:** No "Pintopay" in the hook. No "Don't miss out" or "Click here". No quadruple asterisks (****). No exclamation marks.
+**CONTENT REQUIREMENTS (2026 VIRAL PROTOCOL):**
+1. **KEYWORD INTELLIGENCE:** Identify and integrate the top 3 most performing keywords for 2026 for {target_audience} + {post_type}.
+2. **SALES BETWEEN THE LINES:** Master subtle persuasion. Do not pitch. Create a desire for the 'identity' of a {target_audience} leader.
+3. **EMPATHY & EMOTION:** Start by mirroring the audience's deep internal monologue. Make them feel 'seen'.
+4. **ENGAGEMENT ARCHITECTURE:** End or pivot with a provocative question or a call to 'Signal' for an asset to drive comments/interaction.
+5. **SEO VIRALITY:** Optimize the title and structure for high algorithm resonance.
+6. **EPISODIC NARRATIVE:** Start with "**Chapter [X]: [High-Status Title]**".
+7. **CTA SUPREMACY:** The final line MUST be a bold markdown link: **[Action Text]({ref_link})**.
+8. **BANNED:** No direct sales speak. No generic cliches. No exclamation marks.
 
 **VISUAL DIRECTION (for context):**
 The generated image will feature: {visual_base} {visual_scene}. 
