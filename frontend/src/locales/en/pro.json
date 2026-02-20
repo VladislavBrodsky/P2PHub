@@ -687,9 +687,9 @@
           {
             "id": "psy6",
             "trigger": "IDENTITY",
-            "title": "The Us vs. Them",
-            "desc": "Create a common enemy (Banks/Fees). 'They tax your sweat. We own our system.'",
-            "action": "Post a 'Declare Independence' manifesto."
+            "title": "Community Power",
+            "desc": "Define shared values (Freedom / Transparency). 'Traditional systems may limit your time. We build our own path'.",
+            "action": "Post a 'Sovereign Choice' manifesto."
           },
           {
             "id": "psy7",
@@ -793,7 +793,7 @@
       "tokens_info_pro": "250 TOKENS / MO",
       "tokens_info_pro_plus": "500 TOKENS / MO",
       "levels_info_pro": "9-LEVEL REWARDS",
-      "levels_info_pro_plus": "20-LEVEL EMPIRE",
+      "levels_info_pro_plus": "20-LEVEL NETWORK",
       "viral_studio_label": "VIRAL STUDIO",
       "viral_studio_desc_pro": "Deploy AI agents to craft hyper-viral content 24/7. 250 tokens monthly.",
       "viral_studio_desc_pro_plus": "Unlimited Elite AI models + Cross-Platform OMNI-Sync. 500 tokens monthly.",
@@ -809,7 +809,7 @@
       ],
       "benefits_pro_plus": [
         "500 Elite Tokens",
-        "20-Level Empire Income",
+        "20-Level Network Income",
         "OMNI-Sync 5 Channels",
         "Priority AI Compute",
         "Lifetime Access Forever",
