@@ -13,22 +13,27 @@ class FraudDetectionService:
     async def is_referral_velocity_ok(self, referrer_id: int) -> bool:
         """
         Implements a sliding window rate limit for referrals.
-        Limit: max 10 referrals per 5 minutes.
+        Limit: max 20 referrals per hour.
         """
         if not referrer_id:
             return True
             
-        key = f"fraud:ref_velocity:{referrer_id}"
+        key = f"fraud:ref_velocity_hr:{referrer_id}"
         try:
             # Atomic increment
             count = await redis_service.client.incr(key)
             
             if count == 1:
                 # Set TTL on first hit
-                await redis_service.client.expire(key, 300) # 5 minutes
+                await redis_service.client.expire(key, 3600) # 1 hour
                 
-            if count > 10:
-                logger.warning(f"🚨 FRAUD ALERT: High referral velocity for partner {referrer_id} ({count} refs/5min)")
+            if count > 20:
+                logger.warning(f"🚨 FRAUD ALERT: High referral velocity for partner {referrer_id} ({count} refs/1hr). Max allowed is 20/hr.")
+                from app.services.audit_service import audit_service
+                from app.models.audit_log import ActionType
+                
+                # Using a generic DB session may be tricky here, but we can just use logging or run a fire-and-forget task
+                # A simple log is sufficient per the requirement "Logging of violations"
                 return False
                 
             return True
