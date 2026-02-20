@@ -65,6 +65,11 @@ Persona Tone: {tone.upper()}
 Product: Pintopay Crypto Card + Partner Network
 Referral Link (MUST INCLUDE): {ref_link}
 
+**CRITICAL LANGUAGE INSTRUCTION:**
+All output (title, body, hashtags) MUST be in {language}. 
+Even if the provided 'inspiration', 'keywords', or 'hooks' are in English, you MUST translate them naturally into {language}. 
+DO NOT leave any English words in the final generation. Write as a high-status NATIVE {language} speaker.
+
 **OUTPUT FORMAT (JSON ONLY):**
 {{
   "title": "A high-status strategic title <10 words",

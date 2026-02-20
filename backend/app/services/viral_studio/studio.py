@@ -127,6 +127,9 @@ class ViralMarketingStudio:
         # CTA LINK REINFORCER...
         has_proper_link = f"({ref_link})" in body_text and "[" in body_text
         if not has_proper_link:
+            # Language aware fallback
+            cta_fallback = "Занимайте свое преимущество здесь" if language == "Russian" else "Secure Your Advantage Here"
+            
             lines = body_text.split("\n")
             cta_fixed = False
             for i in range(len(lines)-1, -1, -1):
@@ -134,12 +137,12 @@ class ViralMarketingStudio:
                 if not line: continue
                 if "**" in line and len(line) < 120 and "]" in line:
                     clean_text = line.replace("**", "").split("](")[0].replace("[", "").replace("]", "").strip()
-                    if not clean_text or len(clean_text) < 3: clean_text = "Secure Your Advantage Here"
+                    if not clean_text or len(clean_text) < 3: clean_text = cta_fallback
                     lines[i] = f"**[{clean_text}]({ref_link})**"
                     cta_fixed = True
                     break
             if not cta_fixed: 
-                body_text = body_text.strip() + f"\n\n👉 **[Secure Your Advantage Here]({ref_link})**"
+                body_text = body_text.strip() + f"\n\n👉 **[{cta_fallback}]({ref_link})**"
             else: 
                 body_text = "\n".join(lines)
 

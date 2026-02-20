@@ -852,7 +852,7 @@ export const StudioTab = ({
                                         <Copy size={12} />
                                     </button>
                                 </div>
-                                <div className="text-[11px] sm:text-[12px] font-medium leading-relaxed text-slate-600 dark:text-slate-300 whitespace-pre-wrap max-h-[160px] overflow-y-auto custom-scrollbar pr-2">
+                                <div className="text-[11px] sm:text-[12px] font-medium leading-relaxed text-slate-600 dark:text-slate-300 whitespace-pre-wrap">
                                     {renderMarkdown(generatedResult.body)}
                                 </div>
                             </div>
