@@ -18,7 +18,6 @@ select = [
 ]
 ignore = [
     "E402", # module level import not at top (needed for app structure)
-    "E722", # bare except (used in some bot fallbacks)
     "E701", # multiple statements on one line
     "F401", # unused imports (ignored in scripts)
     "B008", # function call in defaults (FastAPI Depends() is an exception)

@@ -574,7 +574,7 @@ async def get_recent_partners(
             try:
                 partners_list = json.loads(snapshot_setting.value)
                 last_hour_count = int(count_setting.value)
-            except:
+            except Exception:
                 refresh_needed = True
 
     if refresh_needed:
@@ -1027,7 +1027,7 @@ async def claim_task_reward(
             try:
                 completed_stages = json.loads(partner.completed_stages or "[]")
                 current_value = len(completed_stages) if isinstance(completed_stages, list) else 0
-            except:
+            except Exception:
                 current_value = 0
             
         if current_value < requirement:

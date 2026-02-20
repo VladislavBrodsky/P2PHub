@@ -89,7 +89,7 @@ class PartnerResponse(PartnerBase):
             # Parse completed stages
             try:
                 stages = json.loads(obj.completed_stages or "[]")
-            except:
+            except Exception:
                 stages = []
 
             result['completed_tasks'] = all_completed

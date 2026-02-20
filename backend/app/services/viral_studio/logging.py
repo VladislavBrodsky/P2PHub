@@ -63,7 +63,7 @@ class ViralLogger:
                     spreadsheet = self.gs_client.open_by_key(sheet_id)
                     try:
                         self._gs_sheet_cache[cache_key] = spreadsheet.worksheet("AI Marketing Studio Log")
-                    except:
+                    except Exception:
                         self._gs_sheet_cache[cache_key] = spreadsheet.get_worksheet_by_id(int(gid))
                 return self._gs_sheet_cache[cache_key]
 
@@ -118,7 +118,7 @@ class ViralLogger:
                 spreadsheet = self.gs_client.open_by_key(sheet_id)
                 try:
                     return spreadsheet.worksheet("RSS News")
-                except:
+                except Exception:
                     return spreadsheet.add_worksheet(title="RSS News", rows="1000", cols="5")
 
             sheet = await loop.run_in_executor(None, get_rss_sheet_sync)
@@ -151,7 +151,7 @@ class ViralLogger:
                 spreadsheet = self.gs_client.open_by_key(sheet_id)
                 try:
                     return spreadsheet.worksheet("Story Episodes")
-                except:
+                except Exception:
                     return spreadsheet.add_worksheet(title="Story Episodes", rows="1000", cols="6")
 
             sheet = await loop.run_in_executor(None, get_story_sheet_sync)
@@ -185,7 +185,7 @@ class ViralLogger:
                 spreadsheet = self.gs_client.open_by_key(sheet_id)
                 try:
                     return spreadsheet.worksheet("Story Episodes")
-                except:
+                except Exception:
                     return spreadsheet.add_worksheet(title="Story Episodes", rows="1000", cols="6")
 
             sheet = await loop.run_in_executor(None, get_story_sheet_sync)

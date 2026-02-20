@@ -59,7 +59,7 @@ async def get_pro_status(
                     tg_others = channels[1:]
             else:
                 tg_main = partner.telegram_channel_id
-        except:
+        except Exception:
             tg_main = partner.telegram_channel_id
 
     return {

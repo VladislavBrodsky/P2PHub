@@ -282,7 +282,7 @@ class ViralMarketingStudio:
                     )
                     self._last_used_text_model = model_name
                     return json.loads(res.choices[0].message.content), res.usage.total_tokens
-                except: 
+                except Exception: 
                     continue
         
         # SECONDARY/EMERGENCY: Google Gemini Tier
@@ -297,7 +297,7 @@ class ViralMarketingStudio:
                     )
                     self._last_used_text_model = model
                     return json.loads(res.text), 0
-                except: 
+                except Exception: 
                     continue
                 
         return None, 0
@@ -428,7 +428,7 @@ class ViralMarketingStudio:
                 try:
                     from .tasks import log_rss_to_sheets_task
                     await log_rss_to_sheets_task.kiq(news)
-                except: pass
+                except Exception: pass
             
             news_context = "\n".join([f"- [{n['source']}] {n['title']}" for n in news])
             prompt = f"ACT AS ELITE CMO. CONTEXT: {news_context}. Generate high-stakes JSON audit in {language}."
@@ -453,7 +453,7 @@ class ViralMarketingStudio:
                         soup = BeautifulSoup(res.text, 'xml')
                         for item in soup.find_all('item')[:5]:
                             news_items.append({"title": item.title.text, "link": item.link.text, "source": url.split('/')[2]})
-                except: continue
+                except Exception: continue
         return news_items
 
     async def fix_headline(self, headline: str) -> str:
@@ -463,7 +463,7 @@ class ViralMarketingStudio:
                 model="gpt-4o-mini", messages=[{"role": "system", "content": "Viral headline expert."}, {"role": "user", "content": headline}], max_tokens=60
             )
             return res.choices[0].message.content.strip()
-        except: return headline
+        except Exception: return headline
 
     async def generate_bio(self, bio: str) -> str:
         if not self.openai_client: return bio
@@ -472,7 +472,7 @@ class ViralMarketingStudio:
                 model="gpt-4o-mini", messages=[{"role": "system", "content": "Elite Persona Branding expert."}, {"role": "user", "content": bio}], max_tokens=150
             )
             return res.choices[0].message.content.strip()
-        except: return bio
+        except Exception: return bio
 
     async def fetch_trends(self) -> list[dict]:
         prompt = "Identify 3 top trending crypto narratives for 2026. Format as JSON list."
