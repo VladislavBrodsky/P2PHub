@@ -1,3 +1,4 @@
+import asyncio
 import contextlib
 import json
 import logging
@@ -233,9 +234,21 @@ class PaymentService:
     ):
         try:
             now = datetime.now(UTC).replace(tzinfo=None)
+            
+            # Re-fetch partner to prevent lazy-loading issues if there was a rollback in a prior retry attempt
+            from sqlalchemy import inspect
+            state = inspect(partner)
+            # state.identity is a tuple of primary keys, e.g., (1,)
+            # If state is transient, it might be None, so we fallback to partner.id (which won't be expired yet if it's new)
+            p_id = state.identity[0] if state and state.identity else partner.id
+            
+            fresh_partner = await session.get(Partner, p_id)
+            if fresh_partner:
+                partner = fresh_partner
+                
             sentry_sdk.add_breadcrumb(
                 category="payment",
-                message=f"Executing PRO upgrade for partner {partner.telegram_id} at {now}",
+                message=f"Executing PRO upgrade for partner {getattr(partner, 'telegram_id', 'unknown')} at {now}",
                 level="info"
             )
             # Determine Plan Details

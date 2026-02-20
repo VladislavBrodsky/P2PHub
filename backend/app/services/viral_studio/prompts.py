@@ -147,6 +147,11 @@ def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link
 
     cta_fallback = "Присоединиться к сети" if language == "Russian" else "Join the Network"
     
+    story_context = ""
+    if story_history:
+        recent_episodes = "\n".join([f"Ep {ep.get('Episode', '?')}: {ep.get('Title', '')} ({ep.get('Summary', '')})" for ep in story_history[-3:]])
+        story_context = f"**STORY CONTINUATION CONTEXT:**\n{recent_episodes}\n(Pick up seamlessly from here, progressing the narrative arc.)"
+        
     return f"""
 EXECUTE GLOBAL PARTNER ARCHITECT MODE.
 

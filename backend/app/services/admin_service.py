@@ -9,6 +9,7 @@ import contextlib
 from sqlalchemy.orm import selectinload
 from sqlmodel import func, select, text
 
+from app.core.config import settings
 from app.models.partner import Earning, Partner, PartnerTask, get_session
 from app.models.transaction import PartnerTransaction
 from app.services.audit_service import audit_service
