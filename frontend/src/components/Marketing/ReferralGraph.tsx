@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useUser } from '../../context/UserContext';
 import { USDTLogo } from '../ui/USDTLogo';
 import { useTranslation } from 'react-i18next';
+import { useNotificationStore } from '../../store/useNotificationStore';
 import clsx from 'clsx';
 
 export const ReferralGraph = () => {
@@ -12,12 +13,24 @@ export const ReferralGraph = () => {
     const [count, setCount] = useState(0);
     const [visibleNodes, setVisibleNodes] = useState(0);
 
+    const { showNotification } = useNotificationStore();
+    const [hasNotified, setHasNotified] = useState(false);
+
     // Optimized counter animation for income - reduced frequency
     useEffect(() => {
         const interval = setInterval(() => {
             setCount(prev => {
                 if (prev >= 43200) {
                     clearInterval(interval);
+                    if (!hasNotified) {
+                        showNotification({
+                            title: t('income.network.viral_notification_title', 'Network Speed Unlocked'),
+                            message: t('income.network.viral_notification_msg', 'Your network generates $1+ per minute from 12.5% dividends and micro-commissions.'),
+                            type: 'success',
+                            icon: <div className="p-1.5 rounded-lg bg-emerald-500/20"><Network className="w-4 h-4 text-emerald-500" /></div>
+                        });
+                        setHasNotified(true);
+                    }
                     return 43200;
                 }
                 // Human eye can't track 20ms updates clearly. 100ms is much better for CPU.
@@ -25,7 +38,7 @@ export const ReferralGraph = () => {
             });
         }, 100);
         return () => clearInterval(interval);
-    }, []);
+    }, [hasNotified, showNotification, t]);
 
     // "Fractal Growth" - Slowly add nodes to the network
     useEffect(() => {

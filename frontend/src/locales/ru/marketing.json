@@ -12,7 +12,7 @@
       "projector": "Проектор дохода",
       "active_partners": "Активные партнеры",
       "monthly_income": "Примерный месячный доход",
-      "unlock_btn": "АКТИВИРОВАТЬ ПРОТОКОЛ $1"
+      "unlock_btn": "НАЧАТЬ ЗАРАБАТЫВАТЬ $1"
     },
     "inaction": {
       "projector": "Ежедневные упущенные возможности",
@@ -29,12 +29,14 @@
       "exec": "Руководитель"
     },
     "network": {
-      "title": "Виральный сетевой эффект",
+      "title": "Виральный эффект",
       "desc": "Когда вы строите сеть, ваш доход отключается от времени.",
       "close": "ЗАКРЫТЬ",
       "core": "Ядро виральной сети",
       "received": "ПОЛУЧЕНО",
-      "yield": "Примерная доходность сети"
+      "yield": "Примерная доходность сети",
+      "viral_notification_title": "СКОРОСТЬ СЕТИ АКТИВИРОВАНА",
+      "viral_notification_msg": "Ваша сеть генерирует $1+ в минуту. Каждый участник приносит % от комиссий, создавая бесконечный поток ликвидности."
     },
     "stats": {
       "global_target": "Глобальная цель",
@@ -70,7 +72,7 @@
     "start_earning": "Начать получать дивиденды"
   },
   "blog": {
-    "title": "Интеллект-центр",
+    "title": "База Знаний",
     "categories": {
       "all": "Все",
       "tactical_blueprints": "Тактические чертежи",
@@ -80,11 +82,11 @@
       "global_trends": "Глобальные тренды",
       "financial_shift": "Финансовый сдвиг",
       "network_velocity": "Скорость сети",
-      "web3_intelligence": "Web3 Интеллект",
+      "web3_intelligence": "Web3",
       "innovation": "Инновации",
       "viral_marketing": "Виральный маркетинг",
       "problem_solution": "Проблема и решение",
-      "intelligence_culture": "Культура интеллекта",
+      "intelligence_culture": "Культура",
       "growth_mindset": "Мышление роста",
       "freedom": "Свобода",
       "financial_evolution": "Финансовая эволюция",
@@ -367,31 +369,31 @@
       "next": "Далее",
       "prev": "Предыдущая",
       "forward": "Следующая статья",
-      "search_placeholder": "Поиск идей...",
+      "search_placeholder": "Поиск статей...",
       "no_results": "Ничего не найдено",
       "no_results_desc": "Попробуйте изменить поиск или фильтры.",
       "support_article": "Нажмите, чтобы поддержать статью",
       "featured": "Главное",
-      "intelligence_reports": "Аналитических отчётов",
+      "intelligence_reports": "Статей",
       "search_label": "Поиск",
-      "intelligence_hub": "Интеллект-центр",
-      "analyst": "Аналитик",
+      "intelligence_hub": "База Знаний",
+      "analyst": "Автор",
       "updating": "Обновление данных...",
-      "scanning": "Сканирование...",
+      "scanning": "Поиск...",
       "back_to_blog": "Назад к блогу",
       "reading_progress": "Прогресс чтения",
-      "intel_archive": "Архив Аналитики",
-      "min_analysis": "МИН АНАЛИЗ",
-      "senior_analyst": "Старший Аналитик",
-      "impact": "Импакт",
+      "intel_archive": "Архив Статей",
+      "min_analysis": "МИН ЧТЕНИЯ",
+      "senior_analyst": "Ведущий Автор",
+      "impact": "Влияние",
       "feedback_loop": "Обратная связь активна",
       "next_reports": "Следующие материалы",
       "previous_label": "Предыдущая",
       "back_in_flow": "Назад",
       "next_intel": "Следующая",
       "forward_label": "Вперёд",
-      "live": "LIVE",
-      "intelligence": "АНАЛИТИКА:"
+      "live": "АКТУАЛЬНО",
+      "intelligence": "ТЕМА:"
     },
     "marketing": {
       "get_card": "Оформите карту Pintopay 💳",
@@ -401,9 +403,9 @@
     }
   },
   "referral_matrix": {
-    "nine_level": "20-уровневая сетевая матрица",
+    "nine_level": "20-уровневая партнерская сеть",
     "partners_suffix": "Партнеров",
-    "xp_info": "Вы зарабатываете XP от каждого активного партнера в вашей 20-уровневой матрице.",
-    "send_viral": "Отправить премиум виральную карту"
+    "xp_info": "Вы зарабатываете XP от каждого активного партнера в вашей 20-уровневой сети.",
+    "send_viral": "Отправить пригласительную ссылку"
   }
 }
