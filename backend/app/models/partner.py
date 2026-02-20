@@ -45,6 +45,7 @@ class Partner(SQLModel, table=True):
     pro_started_at: datetime | None = Field(default=None)
     pro_notification_seen: bool = Field(default=False)  # Track if user saw the "You are PRO" card
     subscription_plan: str | None = Field(default=None) # e.g. "PRO_LIFETIME", "PRO_YEARLY", "PRO_PLUS_MONTHLY"
+    notifications_paused: bool = Field(default=False, index=True) # Set to true if user blocks bot or opts out
     
     @property
     def is_pro_plus(self) -> bool:

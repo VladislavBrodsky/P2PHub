@@ -10,6 +10,7 @@ from app.core.cmo_intelligence import (
     AudienceProfile,
     ContentCategory,
     NativeLanguageOptimization,
+    ToneIntelligence,
 )
 
 def build_viral_audience_intel(target_audience: str, post_type: str, language: str) -> dict[str, Any]:
@@ -30,7 +31,23 @@ def build_viral_system_prompt(language, target_audience, post_type, tone, ref_li
     
     # Platform-specific and Language-specific calibration
     cta_text = "Присоединиться к сети" if language == "Russian" else "Join the Network"
-    hashtags = "#СтратегияРоста #ВиральнаяСтратегия #1долларавминуту #GrowthHack #1dollarperminute" if language == "Russian" else "#GrowthHack #1dollarperminute #ViralNetwork #GrowthStrategy"
+    
+    # 🎯 VIRAL HASHTAG ENGINE V2.0 (Dynamic & Multi-Parameter)
+    audience_tags = audience_intel.get("viral_hashtags", [])
+    strategy_tags = category_strategy.get("viral_hashtags", [])
+    tone_tags = ToneIntelligence.TONES.get(tone.lower(), {}).get("viral_hashtags", [])
+    
+    # Combine all relevant tags and ensure uniqueness
+    all_potential_hashtags = list(set(audience_tags + strategy_tags + tone_tags))
+    if not all_potential_hashtags:
+        # Fallback if none found
+        all_potential_hashtags = ["#PintopayPRO", "#FinancialFreedom", "#ViralGrowth"]
+    
+    # SEO Intelligence Calibration
+    audience_seo = audience_intel.get("performing_keywords_2026", [])
+    strategy_seo = category_strategy.get("seo_keywords", [])
+    tone_seo = ToneIntelligence.TONES.get(tone.lower(), {}).get("seo_keywords", [])
+    seo_keywords = list(set(audience_seo + strategy_seo + tone_seo))
 
     resonance_context = ""
     if resonance_data and "top_resonance_segments" in resonance_data:
@@ -81,8 +98,9 @@ Write as a high-status NATIVE {language} leader. Every word must feel earned and
 {{
   "title": "A high-status strategic title <10 words",
   "body": "**Chapter X: [Title]**\\n\\n[HUMANIZED ALPHA HOOK]\\n\\n[The 'Field Note' Insight - 3-5 short rhythmic paragraphs]\\n\\n**[{cta_text}]({ref_link})**",
-  "hashtags": {list(set(hashtags.split()))}
+  "hashtags": ["#Tag1", "#Tag2"] 
 }}
+(Choose 2-4 most viral hashtags from: {', '.join(all_potential_hashtags)})
 
 """
 
@@ -96,7 +114,16 @@ def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link
     
     hook_inspo = "\n".join(['- ' + hook for hook in hook_examples[:2]])
 
-    mandatory_hashtags = "#СтратегияРоста #ВиральнаяСтратегия #1долларавминуту #GrowthHack #1dollarperminute" if language == "Russian" else "#GrowthHack #1dollarperminute #ViralNetwork #GrowthStrategy"
+    # 🎯 SEO & VIRAL HASHTAG PROTOCOL (CRITICAL)
+    audience_tags = audience_intel.get("viral_hashtags", [])
+    strategy_tags = category_strategy.get("viral_hashtags", [])
+    tone_tags = ToneIntelligence.TONES.get(tone.lower(), {}).get("viral_hashtags", [])
+    all_potential_hashtags = list(set(audience_tags + strategy_tags + tone_tags))
+    
+    audience_seo = audience_intel.get("performing_keywords_2026", [])
+    strategy_seo = category_strategy.get("seo_keywords", [])
+    tone_seo = ToneIntelligence.TONES.get(tone.lower(), {}).get("seo_keywords", [])
+    seo_keywords = list(set(audience_seo + strategy_seo + tone_seo))
 
     return f"""
 EXECUTE GLOBAL PARTNER ARCHITECT MODE.
@@ -113,8 +140,9 @@ Referral Link: {ref_link}
 3. **SOUL & RHYTHM:** Use varying sentence lengths. Use silence/breaks for impact.
 4. **NO SPLITTING:** The final generation MUST be a complete, unified message. Title + Body + CTA + Hashtags in ONE JSON response.
 
-**MANDATORY HASHTAGS:**
-{mandatory_hashtags}
+**VIRAL & SEO CALIBRATION:**
+1. **HASHTAGS (STRICT LIMIT 2-4):** Choose the 2-4 most powerful hashtags from this list: {', '.join(all_potential_hashtags)}.
+2. **SEO OPTIMIZATION:** Naturally integrate these high-performing keywords/concepts: {', '.join(seo_keywords)}. 
 
 **STORYTELLING CONTEXT:**
 Arc: {category_strategy.get('storytelling', {}).get('arc', 'General Transformation')}

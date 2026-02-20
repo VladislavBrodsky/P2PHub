@@ -117,6 +117,14 @@ async def cmd_start(message: types.Message):
                 logging.info(f"✨ New partner registered: {partner.id}")
             else:
                 logging.info(f"👋 Returning partner: {partner.id}")
+                # Resumed after block - check if notifications were paused
+                if getattr(partner, "notifications_paused", False):
+                    partner.notifications_paused = False
+                    session.add(partner)
+                    await session.commit()
+                    from app.services.rate_limit_service import rate_limit_service
+                    await rate_limit_service.unmark_user_blocked(int(message.from_user.id))
+                    logging.info(f"🔓 Resumed notifications for partner {partner.id}")
 
             await message.answer(
                 welcome_text,
@@ -459,6 +467,16 @@ async def handle_support_chat(message: types.Message):
     try:
         async for session_db in get_session():
             partner = await get_partner_by_telegram_id(session_db, user_id)
+            
+            # Resume notifications if they were paused (user clearly unblocked bot)
+            if partner and getattr(partner, "notifications_paused", False):
+                partner.notifications_paused = False
+                session_db.add(partner)
+                await session_db.commit()
+                # Clear Redis cache
+                from app.services.rate_limit_service import rate_limit_service
+                await rate_limit_service.unmark_user_blocked(int(user_id))
+                logging.info(f"🔓 Resumed notifications for partner {partner.id} via support chat")
             user_metadata = {
                 "first_name": message.from_user.first_name,
                 "last_name": message.from_user.last_name,

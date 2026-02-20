@@ -53,7 +53,7 @@
     "modal": {
       "invite_image_alt": "Your financial ecosystem",
       "limited_tier": "Special Tier",
-      "recruit_title": "Assemble Your Inner Circle",
+      "recruit_title": "Connect Your Core Network",
       "share_telegram": "Share on Telegram",
       "viral_btn": "Send Card",
       "share_more": "Share...",
@@ -115,7 +115,7 @@
       "all_unlocked": "Full Achievement List",
       "instructions": {
         "early_1": "Start! Begin your journey in the Growth Hub.",
-        "ghost_share": "First step: Share your referral link.",
+        "ghost_share": "First step: Share your direct link.",
         "early_3": "Consistency: Open the app for 3 consecutive days.",
         "viral_blitz": "Top speed: Bring in 3 partners within 24 hours.",
         "early_5": "Confidence: Reach Level 5.",
@@ -126,7 +126,7 @@
         "legacy_44": "Recognition: Unlock the -10% Physical Card discount.",
         "milestone_60": "Grandmaster: Lead the network from Level 60.",
         "milestone_70": "VIP: Diamond status achieved.",
-        "milestone_80": "Titan: A strong network at Level 80.",
+        "milestone_80": "Global Leader: A robust network at Level 80.",
         "milestone_90": "Legendary: Your legacy is permanent.",
         "milestone_100": "Summit: The Physical Platinum Card is yours."
       },
@@ -229,8 +229,8 @@
       "desc": "Build a massive network of 250 partners."
     },
     "invite_500_friends": {
-      "title": "Network Legend",
-      "desc": "Reach the ultimate goal: 500 referrals."
+      "title": "Network Architect",
+      "desc": "Reach the ultimate goal: 500 partners."
     },
     "add_to_home_screen": {
       "title": "Pin to Home Screen",
@@ -242,7 +242,7 @@
     },
     "sprint_master_3": {
       "title": "Sprint Master",
-      "desc": "Recruit 3 active partners in a single week."
+      "desc": "Onboard 3 active partners in a single week."
     }
   },
   "milestones": {
@@ -262,7 +262,7 @@
     "tier_2": "Tier 2: Momentum",
     "tier_3": "Tier 3: Elite",
     "tier_4": "Tier 4: Legend",
-    "tier_5": "Tier 5: Immortality",
+    "tier_5": "Tier 5: Legacy",
     "progression_phase": "Progression Phase"
   },
   "ranks": {
@@ -294,17 +294,17 @@
     "Premium Plus": "Premium Plus",
     "PRO": "PRO",
     "PRO Max": "PRO Max",
-    "Immortal": "Immortal",
-    "Eternal": "Eternal"
+    "Immortal": "Legacy Leader",
+    "Eternal": "Visionary Founder"
   },
   "achievements_path": {
     "part": "PART {{index}}: {{title}}",
     "progression_phase": "Progression Phase",
     "ultimate_horizon": "GLOBAL HORIZON",
     "lvl_100_title": "LEVEL 100 ACHIEVEMENTS",
-    "lvl_100_desc": "Open your <1>Fanocracy Passport</1>. Get your Platinum Card and 0% fees forever.",
+    "lvl_100_desc": "Open your <1>Global Influence Passport</1>. Get your Platinum Card and 0% fees forever.",
     "discover_btn": "DISCOVER LEVEL 100 BENEFITS",
-    "fanocracy_stat": "Only 0.1% reach Fanocracy",
+    "fanocracy_stat": "Only 0.1% reach this level",
     "reveal_part": "Reveal part {{index}}",
     "unlock_horizons": "Unlock new level horizons",
     "show_less": "Hide",
@@ -323,9 +323,9 @@
   "level100": {
     "ultimate_horizon": "GLOBAL HORIZON",
     "achievements_title": "ELITE ACHIEVEMENTS UP TO LEVEL 100",
-    "achievements_desc": "Deploy the <1>Sovereignty Protocol</1>. Get your Platinum Card and 0% fees indefinitely.",
+    "achievements_desc": "Deploy the <1>Sovereignty Program</1>. Get your Platinum Card and 0% fees indefinitely.",
     "discover_btn": "EXPLORE LEVEL 100 PRIVILEGES",
-    "apex_achievement": "TOP PRIORITY",
+    "apex_achievement": "HIGHEST PRIORITY",
     "fanocracy_title": "LvL 100 <1>Sovereignty</1>",
     "fanocracy_quote": "Absolute status for architects of the decentralized future.",
     "claim_btn": "ACTIVATE LEVEL 100 FOCUS",
@@ -361,7 +361,7 @@
     "finance_stats": {
       "title": "Finance Operations",
       "live_data": "Live Ledger Data",
-      "history_72h": "Alpha Activity (72h)",
+      "history_72h": "Network Pulse (72h)",
       "monthly_income": "Monthly Income Velocity",
       "monthly_outcome": "Monthly Outflow",
       "income": "INFLOW",

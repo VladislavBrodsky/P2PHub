@@ -92,4 +92,19 @@ class RateLimitService:
         is_new = await redis.set(dup_key, "1", ex=60, nx=True)
         return not is_new
 
+    async def is_blocked(self, chat_id: int) -> bool:
+        """Checks if a user has blocked the bot or has notifications paused (cached in Redis)."""
+        redis = await self.get_redis()
+        return await redis.exists(f"blocked_user:{chat_id}") > 0
+
+    async def mark_user_blocked(self, chat_id: int, duration: int = 86400):
+        """Marks a user as blocked/paused in Redis (default 24h)."""
+        redis = await self.get_redis()
+        await redis.set(f"blocked_user:{chat_id}", "1", ex=duration)
+
+    async def unmark_user_blocked(self, chat_id: int):
+        """Removes the blocked/paused status from Redis."""
+        redis = await self.get_redis()
+        await redis.delete(f"blocked_user:{chat_id}")
+
 rate_limit_service = RateLimitService()

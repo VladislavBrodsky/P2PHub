@@ -89,7 +89,23 @@ async def send_telegram_task(payload_dict: dict):
         await asyncio.sleep(e.retry_after)
         raise e # Let TaskIQ retry
     except TelegramForbiddenError:
-        logger.error(f"🚫 User {payload.chat_id} blocked the bot. Skipping.")
+        logger.error(f"🚫 User {payload.chat_id} blocked the bot. Pausing notifications.")
+        # Mark user as paused to stop redundant background tasks
+        try:
+            from app.models.partner import Partner
+            async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+            async with async_session() as session:
+                # chat_id in payload is str/int telegram_id
+                stmt = select(Partner).where(Partner.telegram_id == str(payload.chat_id))
+                user = (await session.exec(stmt)).first()
+                if user:
+                    user.notifications_paused = True
+                    session.add(user)
+                    await session.commit()
+                    # Cache in Redis for fast skipping in enqueue_notification
+                    await rate_limit_service.mark_user_blocked(int(payload.chat_id))
+        except Exception as ue:
+            logger.error(f"Failed to pause notifications for {payload.chat_id}: {ue}")
         return True # Handled, don't retry
     except Exception as e:
         logger.error(f"💥 Dispatch Error: {e}")
@@ -146,6 +162,11 @@ class NotificationService:
             return
 
         try:
+            # 0. Check if user blocked the bot (Redis-cached check)
+            if await rate_limit_service.is_blocked(int(chat_id)):
+                logger.info(f"🚫 [BLOCKED] Skipping message for {chat_id} (notifications paused)")
+                return
+
             # High-performance Deduplication Check
             if not bypass_dedup and await rate_limit_service.is_duplicate(int(chat_id), text):
                 logger.info(f"🚫 [DEDUP] Skipping duplicate message for {chat_id}")
@@ -182,11 +203,12 @@ class NotificationService:
                 )
                 session.add(retry_item)
                 await session.commit()
+                retry_item_id = retry_item.id
             
-            # Emergency direct send fallback
-            await self._fallback_send(chat_id, text, parse_mode, buttons)
+            # Emergency direct send fallback - pass ID to update it if successful
+            await self._fallback_send(chat_id, text, parse_mode, buttons, retry_item_id=retry_item_id)
 
-    async def _fallback_send(self, chat_id, text, parse_mode, buttons):
+    async def _fallback_send(self, chat_id, text, parse_mode, buttons, retry_item_id: int | None = None):
         """Emergency direct send if broker fails."""
         try:
             from bot import bot
@@ -203,6 +225,14 @@ class NotificationService:
                     
                     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
                     async with async_session() as session:
+                        if retry_item_id:
+                            from app.models.notification_retry import NotificationRetry
+                            item = await session.get(NotificationRetry, retry_item_id)
+                            if item:
+                                item.status = "sent"
+                                item.last_error = None
+                                session.add(item)
+
                         await audit_service.log_event(
                             session=session,
                             entity_type="notification",
@@ -255,6 +285,21 @@ class NotificationService:
                     await bot.send_message(chat_id=item.chat_id, text=item.text, parse_mode=item.parse_mode, reply_markup=reply_markup)
                     item.status = "sent"
                     item.last_error = None # Clear error on success
+                except TelegramForbiddenError:
+                    logger.error(f"🚫 User {item.chat_id} blocked the bot during retry. Pausing.")
+                    item.status = "failed"
+                    item.last_error = "User Blocked"
+                    # Mark in DB and Redis
+                    try:
+                        from app.models.partner import Partner
+                        stmt_u = select(Partner).where(Partner.telegram_id == str(item.chat_id))
+                        usr = (await session.exec(stmt_u)).first()
+                        if usr:
+                            usr.notifications_paused = True
+                            session.add(usr)
+                        await rate_limit_service.mark_user_blocked(int(item.chat_id))
+                    except Exception as ue:
+                        logger.error(f"Failed to sync block for {item.chat_id}: {ue}")
                 except Exception as e:
                     item.attempts += 1
                     item.last_error = str(e)[:100]

@@ -149,10 +149,24 @@ class ViralMarketingStudio:
 
         # Append hashtags strictly (ensuring they are in the body)
         hashtags_list = res_json.get("hashtags", [])
-        if hashtags_list:
-            hashtag_str = " ".join(hashtags_list)
-            if hashtag_str not in body_text:
-                body_text = body_text.strip() + f"\n\n{hashtag_str}"
+        
+        # 🛡️ HASHTAG GUARDIAN (2-4 LIMIT)
+        if isinstance(hashtags_list, list):
+            if len(hashtags_list) > 4:
+                hashtags_list = hashtags_list[:4]
+            
+            if hashtags_list:
+                hashtag_str = " ".join(hashtags_list)
+                if hashtag_str not in body_text:
+                    body_text = body_text.strip() + f"\n\n{hashtag_str}"
+        elif isinstance(hashtags_list, str):
+            # Fallback if AI returns a string
+            tags = hashtags_list.split()
+            if len(tags) > 4:
+                hashtags_list = " ".join(tags[:4])
+            if hashtags_list not in body_text:
+                body_text = body_text.strip() + f"\n\n{hashtags_list}"
+            hashtags_list = hashtags_list.split()
 
         duration = (datetime.now() - start_time).total_seconds()
         

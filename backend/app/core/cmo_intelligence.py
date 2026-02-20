@@ -58,7 +58,8 @@ class AudienceProfile:
                 "Your asymmetric alpha isn't in the chart; it's in the infrastructure."
             ],
             "visual_base": "An elite Crypto Strategist and Alpha Whale, mid-30s, embodying 'Quiet Luxury' in a bespoke charcoal blazer. Captured in a moody, high-contrast private executive suite with a panoramic view of a foggy financial district. Atmosphere is thick with focus and strategic power. Shot on Leica M11, 35mm f/1.4.",
-            "cta_style": "Stealth, authoritative, high-stakes"
+            "cta_style": "Stealth, authoritative, high-stakes",
+            "viral_hashtags": ["#CryptoAlpha", "#WhaleStrategy", "#AsymmetricBeta", "#CapitalMobility"]
         },
         
         "nomads": {
@@ -98,11 +99,13 @@ class AudienceProfile:
                 "Chapter 7: Why your current bank is anchoring your global potential."
             ],
             "visual_base": "A high-status 'Global Sovereign' in the ultra-private lounge of a first-class aviation hub. Natural golden-hour light streaming through architectural windows, illuminating sophisticated neutral textures (cashmere, brushed aluminum). Expensive silence and absolute freedom.",
-            "cta_style": "Inspirational, high-status"
+            "cta_style": "Inspirational, high-status",
+            "viral_hashtags": ["#SovereignNomad", "#GlobalMobility", "#WealthArbitrage", "#DigitalEmpire"]
         },
         
         "affiliates": {
             "name": "Affiliate Marketers",
+            "performing_keywords_2026": ["Commission Scale", "Payout Infrastructure", "Traffic Sovereignty", "Conversion Alpha"],
             "psychographics": {
                 "pain_points": [
                     "Payment processor holds/delays",
@@ -138,7 +141,8 @@ class AudienceProfile:
             ],
             "visual_base": "A charismatic marketing visionary in a sun-drenched, high-ceiling urban loft. Modern casual-luxury attire, holding a sleek titanium smartphone. The background is a blurred tapestry of a vibrant, thriving metropolis.",
             "lead_magnets": ["The 2026 Conversion Cheat-Sheet", "Affiliate Alpha: The Margin Optimization Blueprint", "The Instant Payout Protocol"],
-            "cta_style": "ROI-focused, A/B tested language"
+            "cta_style": "ROI-focused, A/B tested language",
+            "viral_hashtags": ["#AffiliateMarketing", "#ROIHunter", "#ScalableIncome", "#ConversionMaster"]
         },
         
         "builders": {
@@ -179,7 +183,8 @@ class AudienceProfile:
             ],
             "visual_base": "An elite FinTech leader and Community Architect with magnetic energy. Captured in a high-level strategy session on a private luxury terrace overlooking a metropolitan financial district at twilight. Deep shadows, warm highlights, and an aura of visionary command. Shot on Leica M11.",
             "lead_magnets": ["The Duplication Masterclass: 0 to 10k", "The Team Retention Blueprint", "The Legacy Network Architecture (Video)"],
-            "cta_style": "Vision-driven, team-focused"
+            "cta_style": "Vision-driven, team-focused",
+            "viral_hashtags": ["#NetworkEmpire", "#GrowthLeader", "#LegacyWealth", "#P2PRevolution"]
         },
         
         "parents": {
@@ -220,11 +225,13 @@ class AudienceProfile:
             ],
             "visual_base": "A sophisticated 'Legacy Architect' parent in a serene, sun-drenched minimalist estate. Soft, ethereal lighting hitting expensive organic textures (linen, oak, marble). A moment of profound peace, control, and generational success. Shot on Leica M11.",
             "lead_magnets": ["The Family Sovereign Trust Setup", "Generational Yield: A Legacy Masterclass", "The 15-Minute Passive Abundance Guide"],
-            "cta_style": "Graceful, empowering, trust-focused"
+            "cta_style": "Graceful, empowering, trust-focused",
+            "viral_hashtags": ["#FamilyLegacy", "#PassiveWealth", "#SecureFuture", "#LegacyBuilding"]
         },
         
         "hustlers": {
             "name": "Student Hustlers",
+            "performing_keywords_2026": ["Side Hustle Alpha", "Student Wealth", "Independent Income", "Hustle Protocol"],
             "psychographics": {
                 "pain_points": [
                     "Student loan debt",
@@ -260,7 +267,8 @@ class AudienceProfile:
             ],
             "visual_base": "An ambitious Gen-Z visionary in premium streetwear-luxe. Collaborating in a vibrant, futuristic innovation hub where neon data-streams merge with brilliant natural light. High-energy, high-status, and unapologetically future-focused.",
             "lead_magnets": ["The Student Hustle Stack (2026)", "From Loan to Legacy: The Early Wealth Guide", "The 1-Click Independent Income Setup"],
-            "cta_style": "Visionary, inclusive, community-proof"
+            "cta_style": "Visionary, inclusive, community-proof",
+            "viral_hashtags": ["#StudentHustle", "#WealthCreation", "#FinancialIndependence", "#FutureCEO"]
         },
         
         "burnouts": {
@@ -301,11 +309,13 @@ class AudienceProfile:
             ],
             "visual_base": "A serene former executive in premium weekend-luxe (cashmere and silk). Enjoying a moment of absolute autonomy in a lush Mediterranean garden at the peak of the golden hour. A sense of ultimate liberation and quiet wealth. Shot on Leica M11.",
             "lead_magnets": ["The 18-Month Sovereign Exit Blueprint", "Identity Decoupling: The Boardroom to Freedom Guide", "Corporate Escape: The Liquidity Bridge Protocol"],
-            "cta_style": "Strategic, empowering, elite"
+            "cta_style": "Strategic, empowering, elite",
+            "viral_hashtags": ["#CorporateExit", "#FreedomProtocol", "#SovereignIdentity", "#ExitStrategy"]
         },
         
         "partners": {
             "name": "Global Network Architects",
+            "performing_keywords_2026": ["Geometric Network", "Viral Infrastructure", "Global Sovereignty", "Team Duplication"],
             "psychographics": {
                 "pain_points": [
                     "Manual marketing limitations",
@@ -341,7 +351,8 @@ class AudienceProfile:
             ],
             "visual_base": "A world-class Global Network Architect embodying the 'Investment Banking Traveler' aesthetic. Dressed in bespoke, sun-drenched luxury. Captured in a cinematic moment inside a sleek, futuristic private terminal. Atmosphere is international, elite, and expanding.",
             "lead_magnets": ["The Global Expansion Protocol", "Cross-Border Wealth: The 2026 Masterplan", "The Universal Viral Reach Guide"],
-            "cta_style": "High-status, visionary, collaborative"
+            "cta_style": "High-status, visionary, collaborative",
+            "viral_hashtags": ["#NetworkArchitect", "#GlobalGrowth", "#ViralLeadership", "#GeometricWealth"]
         },
         
         "passive_seekers": {
@@ -370,11 +381,13 @@ class AudienceProfile:
             ],
             "visual_base": "A world-class 'Liquidity Sovereign' relaxed in a high-end minimalist setting. Natural light casting soft shadows on rich textures (linen, stone, silk). Embodying effortless authority and the spirit of 'Sleep-Velocity' wealth. Shot on Leica M11.",
             "lead_magnets": ["The Autonomous Yield Protocol", "Geometric Cashflow: The 2026 Architecture", "Quiet Wealth: The 1-Click Setup"],
-            "cta_style": "Effortless, logical, high-value"
+            "cta_style": "Effortless, logical, high-value",
+            "viral_hashtags": ["#PassiveIncome", "#FinancialAutonomy", "#WealthDensity", "#SleepVelocity"]
         },
         
         "growth_masters": {
             "name": "Growth Masters",
+            "performing_keywords_2026": ["Scale Velocity", "Algorithmic Leverage", "Conversion Optimization", "Growth Protocol"],
             "psychographics": {
                 "pain_points": ["Saturation", "Low conversion rates", "Manual outreach burnout", "Ineffective funnels"],
                 "desires": ["Extreme scale", "Algorithmic advantage", "Market dominance", "Efficient duplication"],
@@ -398,11 +411,13 @@ class AudienceProfile:
             ],
             "visual_base": "A sharp, modern growth strategist analyzing high-resolution data visualizations on a sleek holographic interface in a luxury penthouse office.",
             "lead_magnets": ["The High-Conversion Funnel Blueprint", "Algorithmic Advantage: The Viral Loop Setup", "The 100x Growth Screener"],
-            "cta_style": "Data-backed, high-conversion"
+            "cta_style": "Data-backed, high-conversion",
+            "viral_hashtags": ["#GrowthMaster", "#ScaleExpert", "#MarketingAlpha", "#VelocityGrowth"]
         },
         
         "automation_kings": {
             "name": "Automation Kings",
+            "performing_keywords_2026": ["Autonomous Systems", "Neural Protocols", "Set-and-Forget Wealth", "Systemic Autonomy"],
             "psychographics": {
                 "pain_points": ["Manual overhead", "Human error", "Inconsistency", "Time drain"],
                 "desires": ["Full autonomy", "Perfect systems", "Set and forget income", "Infinite scalability"],
@@ -426,11 +441,13 @@ class AudienceProfile:
             ],
             "visual_base": "A tech-savvy entrepreneur relaxing in a futuristic high-tech lounge, while autonomous systems glow softly around them representing a network in motion.",
             "lead_magnets": ["The Hands-Free Wealth Protocol", "Infinite Scale: The Automation Stack", "The Set and Forget Setup Guide"],
-            "cta_style": "System-focused, efficiency-driven"
+            "cta_style": "System-focused, efficiency-driven",
+            "viral_hashtags": ["#AutomationKing", "#PassiveAutopilot", "#WealthTech", "#SystemMastery"]
         },
         
         "empire_builders": {
             "name": "Empire Builders",
+            "performing_keywords_2026": ["Global Empire", "Financial Dynasty", "Legacy Architecture", "Sovereign Dominance"],
             "psychographics": {
                 "pain_points": ["Small thinking", "Slow progression", "Lack of legacy", "Weak infrastructure"],
                 "desires": ["Generational wealth", "Global influence", "Massive team legacy", "The $1/minute lifestyle"],
@@ -454,7 +471,8 @@ class AudienceProfile:
             ],
             "visual_base": "A powerful and visionary leader overlooking a vast, modern city at dusk from a private infinity pool deck, embodying ultimate status and success.",
             "lead_magnets": ["The Empire Architecture Blueprint", "Generational Wealth Dynasty Guide", "The $1/Minute Roadmap"],
-            "cta_style": "Legacy-themed, visionary"
+            "cta_style": "Legacy-themed, visionary",
+            "viral_hashtags": ["#EmpireBuilder", "#DynastyWealth", "#GlobalLegacy", "#SovereignPower"]
         },
     }
 
@@ -483,7 +501,9 @@ class ContentCategory:
                 "italic": ["Subtle urgency phrases", "timestamps"],
                 "hyperlink": ["Product link", "Waitlist", "Early access"]
             },
-            "visual_scene": "In a moment of profound success, holding the matte-black, laser-etched Pintopay card. Warm lighting catches the metallic details, reflecting a new era of financial power."
+            "visual_scene": "In a moment of profound success, holding the matte-black, laser-etched Pintopay card. Warm lighting catches the metallic details, reflecting a new era of financial power.",
+            "viral_hashtags": ["#PostLaunch", "#NewAlpha", "#P2PRevolution"],
+            "seo_keywords": ["Product Launch", "Exclusive Access", "Financial Innovation"]
         },
         
         "fomo": {
@@ -505,7 +525,9 @@ class ContentCategory:
                 "italic": ["Whispers of insider info"],
                 "hyperlink": ["Join now", "Secure spot", "Limited access"]
             },
-            "visual_scene": "Observing a surge of geometric growth on a minimalist display. Cinematic side-lighting and a sense of high-stakes urgency and strategic realization."
+            "visual_scene": "Observing a surge of geometric growth on a minimalist display. Cinematic side-lighting and a sense of high-stakes urgency and strategic realization.",
+            "viral_hashtags": ["#CryptoFOMO", "#AlphaLeak", "#LimitedSlots"],
+            "seo_keywords": ["FOMO Marketing", "Urgent Opportunity", "Crypto Growth"]
         },
         
         "authority": {
@@ -527,7 +549,9 @@ class ContentCategory:
                 "italic": ["Industry myths", "common assumptions"],
                 "hyperlink": ["Case study", "Whitepaper", "Proof"]
             },
-            "visual_scene": "Sharing elite insights within a sophisticated digital sanctuary. Surrounded by clean, architectural data-visualizations reflecting intellectual mastery and calm authority."
+            "visual_scene": "Sharing elite insights within a sophisticated digital sanctuary. Surrounded by clean, architectural data-visualizations reflecting intellectual mastery and calm authority.",
+            "viral_hashtags": ["#ExpertInsight", "#SystemMastry", "#ThoughtLeader"],
+            "seo_keywords": ["Industry Trends", "Market Analysis", "Strategic Authority"]
         },
         
         "lifestyle": {
@@ -549,7 +573,9 @@ class ContentCategory:
                 "italic": ["Personal reflections", "quotes"],
                 "hyperlink": ["Start your journey", "See how", "Transform now"]
             },
-            "visual_scene": "Embodying modern freedom; a sunset reflection on the polished surfaces of a luxury environment, signifying a life decoupled from traditional constraints."
+            "visual_scene": "Embodying modern freedom; a sunset reflection on the polished surfaces of a luxury environment, signifying a life decoupled from traditional constraints.",
+            "viral_hashtags": ["#EliteLifestyle", "#FreedomGoals", "#WealthPivot"],
+            "seo_keywords": ["Financial Freedom", "Lifestyle Design", "Success Stories"]
         },
         
         "income": {
@@ -571,7 +597,9 @@ class ContentCategory:
                 "italic": ["Disclaimers", "personal journey"],
                 "hyperlink": ["See my results", "Start earning", "Join network"]
             },
-            "visual_scene": "A subtle, high-status notification on a premium device. The background is a blurred, sun-drenched sanctuary of success and quiet abundance."
+            "visual_scene": "A subtle, high-status notification on a premium device. The background is a blurred, sun-drenched sanctuary of success and quiet abundance.",
+            "viral_hashtags": ["#PassiveIncome", "#CryptoEarnings", "#WealthVelocity"],
+            "seo_keywords": ["Passive Income", "Crypto ROI", "Earning Potential"]
         },
         
         "network": {
@@ -593,7 +621,9 @@ class ContentCategory:
                 "italic": ["Visionary statements"],
                 "hyperlink": ["Build your network", "Join movement", "Partner program"]
             },
-            "visual_scene": "Inside a world-class architectural co-working space. An atmosphere of shared elite achievement and magnetic network energy."
+            "visual_scene": "Inside a world-class architectural co-working space. An atmosphere of shared elite achievement and magnetic network energy.",
+            "viral_hashtags": ["#TeamGrowth", "#NetworkScale", "#LeverageWealth"],
+            "seo_keywords": ["Network Marketing", "Team Building", "Exponential Growth"]
         },
         
         "tutorial": {
@@ -615,7 +645,9 @@ class ContentCategory:
                 "italic": ["Pro tips", "warnings"],
                 "hyperlink": ["Tutorial", "Resources", "Start here", "Guide"]
             },
-            "visual_scene": "Effortlessly navigating a sleek, 1-click wealth protocol on a high-end interface. The aesthetic is clean, fast, and empowering."
+            "visual_scene": "Effortlessly navigating a sleek, 1-click wealth protocol on a high-end interface. The aesthetic is clean, fast, and empowering.",
+            "viral_hashtags": ["#Web3Tutorial", "#CryptoGuide", "#WealthProtocol"],
+            "seo_keywords": ["Web3 Education", "Crypto How-To", "Financial Literacy"]
         },
         
         "partners_cards": {
@@ -648,7 +680,9 @@ class ContentCategory:
                 "italic": ["Chapter 1: The Escape", "Total control of your money"],
                 "hyperlink": ["Order Your Elite Card", "Get Early Access", "Secure My Card"]
             },
-            "visual_scene": "A macro shot of the bespoke Pintopay card resting on a marble surface in an elite lounge. The light catches the intricate etchings and the 'authorized' status pulse."
+            "visual_scene": "A macro shot of the bespoke Pintopay card resting on a marble surface in an elite lounge. The light catches the intricate etchings and the 'authorized' status pulse.",
+            "viral_hashtags": ["#CryptoCard", "#LiquidityFreedom", "#PintopayElite"],
+            "seo_keywords": ["Crypto Debit Card", "Financial Freedom", "Legacy Banking Exit"]
         },
         "partners_network": {
             "name": "Empire Scaling (Network Focus)",
@@ -680,7 +714,42 @@ class ContentCategory:
                 "italic": ["Episode 1: The Architecture", "Grow while you sleep"],
                 "hyperlink": ["Build My Empire", "Join Elite Partners", "Scale My Network"]
             },
-            "visual_scene": "Inside a high-stakes vision suite. A partner observes a 3D golden network expanding across continents—a minimalist, cinematic representation of global geometric scale."
+            "visual_scene": "Inside a high-stakes vision suite. A partner observes a 3D golden network expanding across continents—a minimalist, cinematic representation of global geometric scale.",
+            "viral_hashtags": ["#EmpireScaling", "#ViralLoops", "#WealthMachine"],
+            "seo_keywords": ["Network Architecture", "Passive Income Systems", "Geometric Scaling"]
+        }
+    }
+
+
+
+
+class ToneIntelligence:
+    """Psychological and viral markers for each Tone of Voice."""
+    
+    TONES = {
+        "provocative": {
+            "viral_hashtags": ["#GameChanger", "#MarketShift", "#UnpopularOpinion", "#RealityCheck"],
+            "seo_keywords": ["Transformation", "Market Disruption", "Shocking Truth"]
+        },
+        "authoritative": {
+            "viral_hashtags": ["#MarketInsights", "#ExpertAnalysis", "#FinancialStability", "#MarketAlpha"],
+            "seo_keywords": ["Strategic Analysis", "Data-Driven Wealth", "Institutional Quality"]
+        },
+        "empathetic": {
+            "viral_hashtags": ["#PersonalGrowth", "#CommunityFirst", "#SharedSuccess", "#HumanSide"],
+            "seo_keywords": ["Community Value", "Personal Journey", "Empowerment"]
+        },
+        "cynical": {
+            "viral_hashtags": ["#AntiHype", "#NoBS", "#MarketFilter", "#RealValue"],
+            "seo_keywords": ["Zero Fluff", "Market Integrity", "Transparent Finance"]
+        },
+        "minimalist": {
+            "viral_hashtags": ["#EliteStatus", "#PureAlpha", "#MinimalistWealth", "#HighSignal"],
+            "seo_keywords": ["Quiet Luxury", "High Signal Wealth", "Minimalist Success"]
+        },
+        "aggressive": {
+            "viral_hashtags": ["#DirectResults", "#ScaleNow", "#WealthVelocity", "#Execute"],
+            "seo_keywords": ["High Pressure Success", "Rapid Scaling", "Immediate Results"]
         }
     }
 
@@ -831,7 +900,7 @@ class KnowledgeInsights:
                 "Use _italic_ for subtle emphasis, whispers, insider info (2-3 times max)",
                 "Keep paragraphs 1-3 sentences for mobile readability",
                 "End with a question or CTA to drive engagement",
-                "Include 3-5 relevant hashtags that are trending in the niche",
+                "Include 2-4 relevant hashtags that are trending in the niche",
                 "Use emojis strategically (2-4) for visual scanning, aligned with audience",
                 "Create a 'scroll-stopping' first line under 10 words",
                 "Include specific numbers (not 'many' or 'some') for credibility",

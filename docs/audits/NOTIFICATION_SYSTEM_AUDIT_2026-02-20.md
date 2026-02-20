@@ -53,3 +53,20 @@ The notification system remains **fully operational**. Following a specific audi
 1. ✅ **Deploy immediately** — both the monitoring endpoint and the reliability fixes are production-ready.
 2. **Real-time Alerting:** Monitor the `/notifications-health` endpoint; a `stuck_pending_10m` count > 10 should trigger a manual investigation into the worker pods.
 3. **Burst Optimization:** For high-volume influencers, consider a dedicated high-priority queue that bypasses the sliding window if necessary, though current sliding window behavior (1 msg/sec) is compliant with Telegram safety.
+
+---
+
+## Technical Audit (Independent Test Suite)
+
+### Structured Test Suite
+Added a new comprehensive test suite in `backend/tests/test_notification_flow_v2.py`:
+- **Bottleneck Test**: Verified handling of 5 simultaneous messages for one user.
+- **Retry Mechanism**: Verified that `process_retries` correctly moves `pending` items to `sent`.
+- **Emergency Fallback**: Verified that if Redis/Broker fails, a DB record is created AND a direct send is triggered.
+- **Deduplication**: Verified identical messages are caught.
+- **Markdown Handling**: Verified syntax errors are captured.
+- **Health Monitoring**: Verified `/notifications-health` logic.
+
+### Critical Bug Fixed
+- **Issue**: Double-send during emergency fallback.
+- **Fix**: Updated `_fallback_send` to mark `retry_item` as `sent` immediately upon successful direct delivery.
