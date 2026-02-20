@@ -1,8 +1,8 @@
 {
   "pro_dashboard": {
-    "title_studio": "Viral Studio",
-    "title_tools": "Elite Tools",
-    "title_growth": "Growth Blueprint",
+    "title_studio": "Content Studio",
+    "title_tools": "Professional Tools",
+    "title_growth": "Growth Strategy",
     "status_online": "System online",
     "tab_studio": "Studio",
     "tab_tools": "Tools",
@@ -12,33 +12,33 @@
     "tokens_left": "{{count}} TOKENS",
     "system_offline": "System offline",
     "analytics": {
-      "cabinet_title": "Viral Analytics Cabinet",
-      "decrypting": "Decrypting Performance Data...",
+      "cabinet_title": "Analytics",
+      "decrypting": "Collecting performance data...",
       "total_views": "Total Views",
       "engagement": "Engagement",
       "viral_reach": "Viral Reach",
       "success_rate": "Success Rate",
       "resonance": {
-        "title": "Predictive Resonance",
-        "status": "Neural Engine Scaling",
+        "title": "Performance Forecast",
+        "status": "AI Algorithm Analysis",
         "confidence": "AI Confidence: {{percent}}%",
-        "action_btn": "Synthesize New Best Action"
+        "action_btn": "Suggest Best Action"
       },
       "raw_data": {
-        "title": "Raw Data Stream",
-        "source": "Source",
+        "title": "Detailed Statistics",
+        "source": "Platform",
         "reach": "Reach",
         "engagement": "Engagement",
-        "viral": "Viral",
-        "empty": "No social deployments detected."
+        "viral": "Virality",
+        "empty": "No posts yet."
       }
     },
     "locked": {
       "title": "FOR PRO MEMBERS ONLY",
-      "desc": "Unlock the Viral Marketing Studio and AI content generation by upgrading to PRO.",
+      "desc": "Unlock the advanced Content Studio and AI post generation by upgrading to PRO.",
       "upgrade_btn": "Upgrade Now",
-      "stage_20_lock_title": "THE GREAT FILTER",
-      "stage_20_lock_desc": "You have reached the Free Tier limit. 99% stop here. Unlock the Elite Academy and AI tools with PRO."
+      "stage_20_lock_title": "FREE TIER LIMIT REACHED",
+      "stage_20_lock_desc": "You've reached the free plan limit. Unlock the full Academy and AI tools with PRO."
     },
     "studio": {
       "matrix_title": "Content Studio",
@@ -51,13 +51,13 @@
       "tone_placeholder": "Select tone",
       "language_label": "Language",
       "initiate_btn": "Initiate AI Agent",
-      "cooking_title": "Synthesizing Viral Post...",
+      "cooking_title": "Crafting your post...",
       "cooking_remaining": "Analyzing trends • {{count}}s remaining",
       "ready_title": "AI AGENT READY",
       "ready_subtitle": "AI Engine Active",
-      "ready_p": "Our agent is prepared to craft viral stories tailored specifically for your audience.",
+      "ready_p": "Our agent is ready to create engaging content tailored specifically for your audience.",
       "back_btn": "BACK",
-      "go_viral_btn": "Synthesize Viral Post",
+      "go_viral_btn": "Create Post",
       "ai_generated_badge": "AI Generated",
       "publish_btn": "PUBLISH",
       "share_btn": "SHARE",
@@ -81,41 +81,41 @@
         "burnouts": "Corporate Burnouts",
         "passive_seekers": "Passive Income Seekers",
         "growth_masters": "Growth Masters",
-        "automation_kings": "Automation Kings",
-        "empire_builders": "Empire Builders",
-        "partners": "Wealth Hackers"
+        "automation_kings": "Automation Experts",
+        "empire_builders": "Network Builders",
+        "partners": "Smart Earners"
       },
       "share_modal": {
-        "title": "Viral Broadcast",
-        "subtitle": "Select platform to distribute",
+        "title": "Publish",
+        "subtitle": "Select platform to share",
         "more": "More Options"
       },
       "add_personal_link": "Your personal link",
-      "personal_link_subtitle": "Referral protocol injection",
+      "personal_link_subtitle": "Automatic link insertion",
       "personal_link_warning": "Supported format:",
-      "link_saved": "Referral link updated successfully",
+      "link_saved": "Link updated successfully",
       "link_error": "Invalid link format",
       "partners_strategy": {
-        "title": "Active: Wealth Hacker Strategy",
+        "title": "Active: Growth Strategy",
         "mode": "PRO mode",
-        "desc": "Using geometric growth protocols and specialized Web App referral links for <1>maximum geometric scaling</1>."
+        "desc": "Using advanced algorithms and partner links for <1>maximum reach</1>."
       },
       "generate_new_btn": "Generate New Post"
     },
     "setup": {
-      "title": "Protocol Configuration",
-      "subtitle": "Global Network Nodes",
+      "title": "Social Networks Setup",
+      "subtitle": "Channel Management",
       "professional_network": "Professional Network",
-      "save_success_title": "Settings Synced",
-      "save_success_text": "Your API nodes are now online and verified.",
-      "x_broadcast": "X Broadcast",
-      "tg_sync": "TG Sync",
-      "omni_sync": "Omni-Channel",
-      "direct_protocol": "Direct API protocol",
-      "global_matrix": "Multi-Node Broadcasting",
-      "save_error_title": "Sync Error",
-      "save_error_text": "Failed to verify nodes. Check your credentials.",
-      "social_title": "Social Matrix",
+      "save_success_title": "Successfully Connected",
+      "save_success_text": "Your channels are connected and ready to use.",
+      "x_broadcast": "Post to X",
+      "tg_sync": "Connect TG",
+      "omni_sync": "Multi-Channel",
+      "direct_protocol": "Direct API connection",
+      "global_matrix": "Multi-platform posting",
+      "save_error_title": "Connection Error",
+      "save_error_text": "Failed to connect channels. Please verify your credentials.",
+      "social_title": "Your Social Networks",
       "api_key": "API Key",
       "api_secret": "API Secret",
       "access_token": "Access Token",
@@ -234,13 +234,13 @@
       "success": "Success",
       "error": "Error",
       "copied": "Copied",
-      "viral_synthesized": "Viral content synthesized.",
+      "viral_synthesized": "Content generated successfully.",
       "gen_failed": "Generation failed",
       "text_copied": "Text copied to clipboard.",
       "tokens_required": "Insufficient Tokens",
       "tokens_required_text": "You need at least 2 tokens to generate content. Tokens reset monthly.",
       "pro_required": "PRO Required",
-      "pro_required_text": "Upgrade to PRO to access the Viral Studio.",
+      "pro_required_text": "Upgrade to PRO to access the Content Studio.",
       "image_saved": "Saved",
       "image_saved_text": "Image saved to device.",
       "published": "Published",
@@ -292,20 +292,20 @@
       }
     },
     "academy": {
-      "title": "Growth Intelligence Center",
-      "desc": "Master the art of high-velocity branding and viral cycles. These protocols are designed to scale your network to 100k+ partners on autopilot.",
-      "understand_btn": "I Understand the Protocol",
+      "title": "Knowledge Base",
+      "desc": "Learn effective social media growth strategies. These materials will help you attract partners consistently and sustainably.",
+      "understand_btn": "Start Learning",
       "read_time": "{{time}} min read",
-      "protocol_rank": "Protocol Efficiency: 98.4%",
-      "rank_name": "ELITE VANGUARD GRANDMASTER",
-      "intel_label": "PROTOCOL INTEL",
-      "dossier_label": "Intelligence Dossier",
-      "growth_protocol": "Growth Protocol",
-      "node_capabilities": "Unlock Node Capabilities",
-      "bio_auth": "Biometric Authorization Required",
-      "social_sync": "Initiate Social Sync",
-      "live_signal": "LIVE SIGNAL",
-      "synced": "SYNCED",
+      "protocol_rank": "Course Rating: 98.4%",
+      "rank_name": "EXPERT",
+      "intel_label": "MATERIALS",
+      "dossier_label": "Detailed Breakdown",
+      "growth_protocol": "Growth Strategy",
+      "node_capabilities": "Advanced Features",
+      "bio_auth": "Authorization Required",
+      "social_sync": "Connect Social Networks",
+      "live_signal": "ACTIVE",
+      "synced": "CONNECTED",
       "hook_rule": {
         "title": "The Hook Rule",
         "desc": "STOP THE SCROLL",
@@ -318,8 +318,8 @@
       },
       "psycho": {
         "title": "Sales Psychology",
-        "desc": "TRIGGER THE BUY",
-        "content": "People buy on emotion and justify with logic. Use FOMO and social proof to bypass skepticism and build authority instantly."
+        "desc": "ENGAGEMENT TRIGGER",
+        "content": "People buy on emotion and justify with logic. Use FOMO and social proof to build trust and credibility."
       },
       "hooks": {
         "title": "Elite Hook Library",
@@ -343,33 +343,33 @@
         ]
       },
       "studio_manual": {
-        "title": "Viral Studio Manual",
-        "subtitle": "Quantum Content Synthesis",
+        "title": "Studio User Guide",
+        "subtitle": "Content Creation Automation",
         "steps": [
           {
-            "title": "Define Strategy",
-            "desc": "Select the post type (FOMO, Launch, Tutorial) to calibrate the AI persona for your current growth objective."
+            "title": "Define Your Strategy",
+            "desc": "Select the post type (FOMO, Launch, Tutorial) to configure the AI persona for your current growth goal."
           },
           {
             "title": "Audience Calibration",
-            "desc": "Choose your target market. The AI will adjust tone, vocabulary, and cultural hooks for maximum resonance."
+            "desc": "Choose your target market. The AI will adjust tone, vocabulary, and cultural references for best results."
           },
           {
-            "title": "Synthesis & Refinement",
-            "desc": "Deploy the AI agent. Use the 'Rewrite' button if you need a different angle. Perfect content often takes 2-3 iterations."
+            "title": "Create & Refine",
+            "desc": "Generate content. Use the 'Rewrite' button for a different angle. The best results come from 2-3 iterations."
           },
           {
-            "title": "OmniPublish Deployment",
-            "desc": "Broadcast to all connected channels simultaneously. Consistency is the only multiplier that matters."
+            "title": "One-Click Publishing",
+            "desc": "Share content across all connected channels simultaneously. Consistency is the key to network success."
           }
         ]
       },
       "social_setup": {
-        "title": "Channel Architecture",
-        "subtitle": "Step-by-step Deployment",
+        "title": "Channel Setup",
+        "subtitle": "Step-by-step Guide",
         "platforms": [
           {
-            "name": "Telegram Empire",
+            "name": "Telegram Channel",
             "icon": "Send",
             "steps": [
               "Create a public channel",
@@ -389,13 +389,13 @@
             ]
           },
           {
-            "name": "LinkedIn Authority",
+            "name": "LinkedIn Presence",
             "icon": "Linkedin",
             "steps": [
               "Optimize profile: 'Growth Specialist'",
               "Connect via our OAuth protocol",
-              "Focus on B2B income proof",
-              "Engage with 5 posts/day for reach"
+              "Focus on B2B value sharing",
+              "Engage with posts daily for reach"
             ]
           }
         ]
@@ -511,10 +511,10 @@
         ]
       },
       "articles": {
-        "title": "Viral Article Vault",
-        "subtitle": "100+ GROWTH SECRETS",
+        "title": "Strategy Library",
+        "subtitle": "GROWTH INSIGHTS",
         "read_time": "min read",
-        "btn_read": "Study Protocol",
+        "btn_read": "Read Article",
         "items": [
           {
             "id": "a1",
@@ -535,8 +535,8 @@
           {
             "id": "a3",
             "title": "Psychological Triggers 2.0",
-            "desc": "Why the 'Digital Gold Rush' narrative converts at 42%.",
-            "content": "Fear of irrelevance is the strongest trigger in 2026. Position Pintopay not as a 'crypto card' but as a 'survival tool for fiscal shift'. Use terms like 'Legacy Exit' and 'Protocol Ownership'.",
+            "desc": "Why the 'Digital Gold Rush' narrative resonates at 42%.",
+            "content": "The desire to stay current with financial trends is a strong motivator in 2026. Position Pintopay not as a 'crypto card' but as a tool for adapting to new financial realities. Use concepts like asset management freedom and ownership of modern financial solutions.",
             "category": "Psychology",
             "readTime": 4
           },
@@ -559,14 +559,14 @@
         ]
       },
       "protocols": {
-        "title": "Elite Growth Protocols",
-        "subtitle": "2026 MASTERCLASS SERIES",
+        "title": "Learning Programs",
+        "subtitle": "TRAINING MATERIALS",
         "stats_label": "ACADEMIC SCORE",
         "progress_label": "MASTERY",
         "difficulty_levels": {
-          "easy": "Tactical Foundation",
-          "medium": "Viral Engineering",
-          "hard": "Ecosystem Dominance"
+          "easy": "Foundation",
+          "medium": "Growth Engineering",
+          "hard": "Ecosystem Leadership"
         },
         "modules": [
           {
@@ -631,23 +631,23 @@
           {
             "id": "m6",
             "diff": "hard",
-            "title": "OMEGA SYNCHRONIZATION",
-            "hook": "The ultimate node intelligence.",
-            "content": "You have reached the peak of the Growth Protocol. Mastery of kinetic branding and viral memetics is now your primary weapon. Deploy cross-node intelligence to dominate the entire multi-vector ecosystem.",
+            "title": "ADVANCED SYNCHRONIZATION",
+            "hook": "Advanced analytics for your entire network.",
+            "content": "You've reached the top of the Growth Program. You now have mastery of content branding and network growth strategy. Apply cross-channel insights to lead effectively across your network.",
             "task": "Request a Global Marketing Audit and execute the recommended CMO strategy.",
             "points": 50000,
             "tokens": -5,
             "xp_cost": 10000
           }
         ],
-        "growth_promo": "PRO Members grow their network <1>x5 faster</1> using these elite protocols.",
-        "methodology_title": "Quantum Methodology",
-        "methodology_desc": "Follow the elite protocols to maximize your reach. Every asset and lesson is designed for 2026 algorithmic dominance. We analyze multi-vector data points to ensure your content bypasses standard filters."
+        "growth_promo": "PRO Members grow their network <1>x5 faster</1> using these advanced programs.",
+        "methodology_title": "Our Methodology",
+        "methodology_desc": "Follow the proven programs to maximize your reach. Every asset and lesson is designed for today's social algorithms. We analyze trend data to ensure your content stands out and attracts attention."
       },
       "psych_strategies": {
-        "title": "Elite Psychological Warfare",
-        "subtitle": "TOP 9 VIRAL TRIGGERS",
-        "unlock_desc": "Architecture Setup Complete. Unlocking Advanced Memetic Weaponry...",
+        "title": "Marketing Psychology",
+        "subtitle": "TOP 9 ENGAGEMENT TRIGGERS",
+        "unlock_desc": "Advanced engagement techniques unlocked. Use these methods to attract and retain attention...",
         "items": [
           {
             "id": "psy1",
@@ -709,8 +709,8 @@
             "id": "psy9",
             "trigger": "NOVELTY",
             "title": "The Pattern Interrupt",
-            "desc": "Use a completely unrelated, high-contrast image (e.g., a neon skull) to stop the scroll. Then pitch.",
-            "action": "Create a 'Glitch' aesthetic post."
+            "desc": "Use a bold, visually distinct image to stop the scroll and grab attention before making your point.",
+            "action": "Create a visually bold post."
           }
         ]
       }
@@ -728,18 +728,18 @@
   "subscription": {
     "pro_active": {
       "title": "PRO ACTIVE",
-      "title_plus": "PRO+ EMPIRE",
-      "desc": "Elite status confirmed. Your network is now scaling on autopilot.",
-      "desc_plus": "Global dominance active. You have full access to the elite marketing engine.",
+      "title_plus": "PRO+ STATUS",
+      "desc": "Your PRO status is confirmed. Your network is growing steadily.",
+      "desc_plus": "Full PRO+ access active. You have the complete set of marketing and growth tools at your disposal.",
       "plan_pro_monthly": "30-DAY PRO PLAN",
-      "plan_pro_plus": "PRO+ EMPIRE PLAN",
+      "plan_pro_plus": "PRO+ PLAN",
       "plan_pro_lifetime": "LIFETIME PRO PLAN",
       "lifetime": "YOUR PLAN",
-      "command_center": "COMMAND CENTER"
+      "command_center": "CONTROL CENTER"
     },
     "plan_headline": "WHAT YOU UNLOCK",
-    "plan_desc_pro": "Your unfair advantage starts now. PRO gives you the AI content machine, 9-level passive income, and all tools to grow your team ×10 faster than free members.",
-    "plan_desc_plus": "The ultimate empire blueprint. PRO+ is for serious network builders who want 20-level deep passive income, unlimited AI power, and total multi-platform domination.",
+    "plan_desc_pro": "Your competitive advantage starts now. PRO gives you the AI content tools, 9-level passive income, and everything to grow your team ×10 faster than free members.",
+    "plan_desc_plus": "The complete growth toolkit. PRO+ is for serious network builders who want 20-level deep passive income, advanced AI features, and seamless multi-platform publishing.",
     "benefits": {
       "ai_studio": "VIRAL STUDIO AI",
       "ai_studio_desc_pro": "Deploy your personal AI content agent 24/7. Generate scroll-stopping posts, viral hooks, and high-conversion copy in seconds. 250 tokens/month — enough to post daily and dominate every feed.",
@@ -747,23 +747,23 @@
       "network_levels": "NETWORK INCOME ENGINE",
       "network_levels_desc_pro": "Earn passive cashback from 9 deep levels of your network. Every time a partner in your downline makes a transaction — you earn automatically, around the clock.",
       "network_levels_desc_plus": "Unlock ALL 20 levels of the network income engine. Your passive income grows exponentially as your team scales — this is where real wealth is built, while you sleep.",
-      "tokens": "AI POWER TOKENS",
-      "tokens_desc_pro": "250 tokens reset every month. Each token powers a content generation, headline rewrite, bio optimization, or market audit. Never run out of content ideas again.",
-      "tokens_desc_plus": "500 elite tokens monthly — double the firepower. Stack trend hunts, viral content, and bio optimizations every single day. Your competitors won't keep up.",
-      "cashback": "ELITE CASHBACK SYSTEM",
-      "cashback_desc_pro": "Earn cashback on every transaction your network makes. Stack it with referral rewards for a compounding income system that grows while your team grows.",
-      "cashback_desc_plus": "Maximum cashback rates across all 20 levels. PRO+ partners consistently rank in the top 1% of earners — the math compounds in your favor every day.",
-      "tools": "ELITE MARKETING TOOLKIT",
-      "tools_desc_pro": "Headline Engineer, Viral Bio Generator, Trend Hunter, Global Marketing Audit — all unlocked. These tools turn any partner into a top-performing content machine.",
-      "tools_desc_plus": "All PRO tools + priority access to new elite tools as they launch. Stay permanently ahead of the curve with the most advanced marketing arsenal on the platform.",
-      "growth_intel": "GROWTH INTELLIGENCE CENTER",
-      "growth_intel_desc": "Access the full Academy protocol vault — 100+ viral growth secrets, elite psychological triggers, daily roadmaps, and master-class protocols proven to scale networks to 100k+ partners.",
-      "omni_sync": "OMNI-SYNC MULTI-BROADCAST",
-      "omni_sync_desc": "Publish simultaneously to up to 5 Telegram channels + X (Twitter) + LinkedIn with one click. What takes others 3 hours of manual work — you do in 30 seconds.",
-      "priority_ai": "PRIORITY AI COMPUTE",
-      "priority_ai_desc": "PRO+ members jump the queue. Your AI requests process first, with zero throttling even at peak hours. Your viral machine never goes offline.",
-      "empire_access": "LIFETIME EMPIRE STATUS",
-      "empire_access_desc": "Pay once. Own it forever. PRO+ is a one-time investment that scales with the platform — every new feature, every new AI model, every new tool added is yours automatically.",
+      "tokens": "AI CONTENT TOKENS",
+      "tokens_desc_pro": "250 tokens reset every month. Each token powers a content generation, headline rewrite, bio optimization, or market analysis. Stay consistent with your content.",
+      "tokens_desc_plus": "500 tokens monthly — double the capacity. Trend research, content creation, and bio optimization every day. Stay ahead of the curve.",
+      "cashback": "CASHBACK REWARDS",
+      "cashback_desc_pro": "Earn cashback on every transaction your network makes. Combine with referral rewards for a growing income stream.",
+      "cashback_desc_plus": "Maximum cashback rates across all 20 levels. PRO+ partners consistently achieve top results — the math works in your favor.",
+      "tools": "PROFESSIONAL MARKETING TOOLKIT",
+      "tools_desc_pro": "Headline Generator, Bio Optimizer, Trend Hunter, Global Marketing Audit — all unlocked. These tools help any partner create engaging, high-quality content.",
+      "tools_desc_plus": "All PRO tools + priority access to new features as they launch. Always stay ahead with the most advanced toolkit on the platform.",
+      "growth_intel": "GROWTH KNOWLEDGE CENTER",
+      "growth_intel_desc": "Access the full Academy — 100+ growth strategies, marketing psychology insights, daily action plans, and proven methods for scaling your network.",
+      "omni_sync": "MULTI-PLATFORM PUBLISHING",
+      "omni_sync_desc": "Publish simultaneously to up to 5 Telegram channels + X (Twitter) + LinkedIn in one click. What takes others hours of manual work, you do in 30 seconds.",
+      "priority_ai": "PRIORITY AI PROCESSING",
+      "priority_ai_desc": "PRO+ members get priority AI processing, even during peak hours. Your content pipeline stays uninterrupted.",
+      "empire_access": "LIFETIME ACCESS",
+      "empire_access_desc": "Pay once. Own it forever. PRO+ is a one-time investment that scales with the platform — every new feature and AI model added is automatically yours.",
       "tg_multi_channel": "5 TELEGRAM CHANNELS",
       "tg_multi_channel_desc": "Add up to 5 Telegram channels and auto-broadcast to all of them simultaneously from one dashboard — grow multiple audiences at once.",
       "multi_broadcast": "MULTI-CHANNEL BROADCASTING",
@@ -777,17 +777,17 @@
       "ai_active": "AI ACTIVE"
     },
     "upgrade": {
-      "protocol_initialized": "NEURAL LINK ESTABLISHED",
-      "badge": "UNLOCK YOUR EMPIRE",
-      "limited_offer": "LIMITED LIFETIME OFFER",
-      "subheadline": "Choose your level of domination. Partners who upgrade grow their network ×100 faster.",
-      "dominate_network": "DOMINATE THE MATRIX",
-      "desc": "Lifetime slots are strictly limited. Once sold out, pricing switches to annual subscriptions.",
-      "lifetime_slots": "GLOBAL LIFETIME SLOTS",
-      "pro_title": "PRO VANGUARD",
-      "pro_plus_title": "PRO+ EMPIRE",
-      "pro_plus_upgrade_title": "PRO+ UPGRADE",
-      "best_badge": "MOST VIRAL",
+      "protocol_initialized": "SECURE CONNECTION",
+      "badge": "SCALE YOUR INCOME",
+      "limited_offer": "LIMITED OFFER",
+      "subheadline": "Choose your plan. PRO members grow their network and income faster.",
+      "dominate_network": "GET THE MOST FROM YOUR NETWORK",
+      "desc": "Lifetime access is available for a limited time. Pricing may switch to annual subscriptions after this period.",
+      "lifetime_slots": "LIFETIME SLOTS REMAINING",
+      "pro_title": "PRO ACCESS",
+      "pro_plus_title": "PRO+ ACCESS",
+      "pro_plus_upgrade_title": "UPGRADE TO PRO+",
+      "best_badge": "TOP CHOICE",
       "upgrade_label": "ONE-TIME UPGRADE",
       "lifetime_pro": "LIFETIME ALPHA STATUS",
       "tokens_info_pro": "250 TOKENS / MO",

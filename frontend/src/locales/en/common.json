@@ -84,8 +84,8 @@
     "join_now": "JOIN NOW"
   },
   "waiting": {
-    "title": "AWAITING VALIDATION",
-    "desc": "Your request is being processed by blockchain nodes."
+    "title": "PROCESSING",
+    "desc": "Your request is being processed. Please wait a moment."
   },
   "legal": {
     "title": "Legal Protocols",
@@ -139,17 +139,17 @@
     }
   },
   "support": {
-    "manager": "VIP Manager",
+    "manager": "Personal Manager",
     "online": "ONLINE",
-    "priority_badge": "ELITE SUPPORT",
-    "welcome": "Welcome, **Partner**. I am your personal **VIP Manager**. My mission is to make your Pintopay journey **seamless** and **high-speed**. How can I help you **dominate the market** today?",
-    "input_placeholder": "Enter your command...",
-    "user_context": "On line: {{name}} • Lvl {{level}}",
-    "session_closed": "Protocol complete • History saved",
-    "still_here": "Partner, our mission continues. Are you still with us? I'm ready to eliminate any obstacle.",
-    "error_technical": "Network interference detected. Reconnecting... Meanwhile, explore our Priority Data (FAQ) section.",
-    "suggested_topics": "OPERATIONAL INTELLIGENCE",
-    "powered_by": "PINTOPAY TACTICAL SUITE • NEURAL INTEL v4.0",
+    "priority_badge": "VIP SUPPORT",
+    "welcome": "Welcome! I'm your personal manager at Pintopay. My goal is to help you get the most out of the platform simply and effectively. How can I help you today?",
+    "input_placeholder": "Your question...",
+    "user_context": "Active: {{name}} • Lvl {{level}}",
+    "session_closed": "Chat closed • History saved",
+    "still_here": "Still here? I'm ready to help with any question.",
+    "error_technical": "Connection error. Please try again later or check the FAQ section.",
+    "suggested_topics": "FREQUENTLY ASKED QUESTIONS",
+    "powered_by": "Pintopay Support Service",
     "categories": {
       "card_details": "Card Issuance",
       "issue_setup": "Configuration",
@@ -162,11 +162,11 @@
     }
   },
   "faq": {
-    "title": "Intelligence Base (FAQ)",
-    "subtitle": "Knowledge is Power",
+    "title": "Knowledge Base (FAQ)",
+    "subtitle": "Your Questions, Answered",
     "knowledge_base": "KNOWLEDGE BASE",
     "header_title": "HELP <0>CENTER</0>",
-    "header_desc": "Everything you need to know about scaling your P2P Empire.",
+    "header_desc": "Everything you need to know to grow with the Pintopay partner network.",
     "search_placeholder": "Search for answers...",
     "still_have_questions": "STILL HAVE <0>QUESTIONS?</0>",
     "still_have_questions_desc": "Can't find what you're looking for? Join our community or contact 24/7 support.",
@@ -180,8 +180,8 @@
     "limits": "What are my card limits?",
     "pro_promo": {
       "badge": "PRO Upgrade",
-      "title": "Unlock Viral Marketing Studio",
-      "desc": "Scale your network 100x faster with AI-powered automation. Your team grows together while you sleep.",
+      "title": "Unlock the Content Studio",
+      "desc": "Scale your network faster with AI-powered automation. Your team grows while you focus on what matters.",
       "features": [
         "250-500 Tokens/Month",
         "3 Posts Daily (Auto)",
@@ -226,8 +226,8 @@
         "a": "A 100-stage marketing mastery program teaching you to build a $1/minute income using AI automation, viral growth tactics, and P2P strategies. Free stages 1-20, PRO unlocks all 100."
       },
       {
-        "q": "How does AI Content Factory work?",
-        "a": "PRO members get an autonomous AI agent that creates and schedules posts 24/7. It researches viral topics, writes hooks, generates CTAs, and auto-posts to X, Telegram, Instagram & LinkedIn with 98% confidence scoring."
+        "q": "How does the AI Content Studio work?",
+        "a": "PRO members get access to an AI assistant that helps create and schedule posts. It analyzes trending topics, helps write engaging content and calls to action for X, Telegram, Instagram and other platforms."
       },
       {
         "q": "Is my data secure?",
@@ -235,11 +235,11 @@
       },
       {
         "q": "Why upgrade if I can use it for free?",
-        "a": "Free is for users. PRO is for owners. Owners earn from the network. Users just pay fees. Choose which side you want to be on."
+        "a": "The free version is great for getting started. PRO gives you automation tools that save time and help you earn more — it's for those who are serious about building their network."
       },
       {
         "q": "Is the income guaranteed?",
-        "a": "No. The Protocol works if YOU work. The AI Studio amplifies your effort by 100x, but you must still push the button."
+        "a": "Income depends on your activity. The AI Studio amplifies your efforts, but getting started is still up to you."
       },
       {
         "q": "What happens if I stop paying PRO?",
@@ -266,19 +266,19 @@
     "stories": [
       {
         "title": "Welcome, Partner",
-        "desc": "You are now part of the Pintopay elite. Start your journey to financial freedom through P2P automation."
+        "desc": "You are now part of the Pintopay partner network. Begin your journey toward financial independence through P2P."
       },
       {
-        "title": "Strategic Nodes",
-        "desc": "Build your own network of active cards. Every transaction in your team generates rewards for you."
+        "title": "Build Your Network",
+        "desc": "Grow your network of active cards. Every transaction in your team generates rewards for you."
       },
       {
-        "title": "Elite Security",
-        "desc": "Your assets are protected by bank-grade protocols and blockchain technology. Trade with 100% confidence."
+        "title": "Bank-Grade Security",
+        "desc": "Your assets are protected by modern encryption and blockchain technology. Grow with confidence."
       },
       {
-        "title": "AI Growth",
-        "desc": "Activate PRO to unlock the AI Content Factory. Scale your network 100x faster while you sleep."
+        "title": "AI-Powered Growth",
+        "desc": "Activate PRO to unlock the AI Content Studio. Scale your network faster while you focus on your goals."
       }
     ]
   }
