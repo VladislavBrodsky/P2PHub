@@ -67,8 +67,15 @@
         "more": "More Options"
       },
       "add_personal_link": "Add your personal link",
+      "personal_link_subtitle": "Injection Protocol",
+      "personal_link_warning": "Must start with:",
       "link_saved": "Referral link updated successfully",
-      "link_error": "Invalid link format"
+      "link_error": "Invalid link format",
+      "partners_strategy": {
+        "title": "Active: Wealth Hacker Strategy",
+        "mode": "PRO MODE",
+        "desc": "Using geometric growth protocols and specialized Web App referral links for <1>maximum geometric scaling</1>."
+      }
     },
     "setup": {
       "title": "Protocol Configuration",

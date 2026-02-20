@@ -6,7 +6,7 @@ import {
     CheckCircle2, Loader2, Copy, Download, RefreshCw, Undo2, Share, ArrowLeft, X,
     Zap, Users, Link as LinkIcon, Info
 } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { proService, PROStatus } from '../../../services/proService';
 import { getApiUrl } from '../../../utils/api';
 import { renderMarkdown } from '../utils/renderMarkdown';
@@ -484,11 +484,15 @@ export const StudioTab = ({
                                         </div>
                                         <div>
                                             <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-tight mb-1 flex items-center gap-2">
-                                                Active: Wealth Hacker Strategy
-                                                <span className="px-1.5 py-0.5 bg-indigo-500 rounded text-[7px] text-white">PRO MODE</span>
+                                                {t('pro_dashboard.studio.partners_strategy.title')}
+                                                <span className="px-1.5 py-0.5 bg-indigo-500 rounded text-[7px] text-white">
+                                                    {t('pro_dashboard.studio.partners_strategy.mode')}
+                                                </span>
                                             </h4>
                                             <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed pr-8">
-                                                Using geometric growth protocols and specialized Web App referral links for <span className="text-indigo-500 font-bold">maximum geometric scaling</span>.
+                                                <Trans i18nKey="pro_dashboard.studio.partners_strategy.desc">
+                                                    Using geometric growth protocols and specialized Web App referral links for <span className="text-indigo-500 font-bold">maximum geometric scaling</span>.
+                                                </Trans>
                                             </p>
                                         </div>
                                     </div>
@@ -511,10 +515,10 @@ export const StudioTab = ({
                                             </div>
                                             <div>
                                                 <h4 className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight">
-                                                    {t('pro_dashboard.studio.add_personal_link', 'Personal Link')}
+                                                    {t('pro_dashboard.studio.add_personal_link')}
                                                 </h4>
                                                 <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">
-                                                    Injection Protocol
+                                                    {t('pro_dashboard.studio.personal_link_subtitle')}
                                                 </p>
                                             </div>
                                         </div>
@@ -563,7 +567,7 @@ export const StudioTab = ({
                                                 <div className="flex items-center gap-2 p-3 bg-amber-500/5 rounded-xl border border-amber-500/10">
                                                     <Info size={12} className="text-amber-500 shrink-0" />
                                                     <p className="text-[8px] font-bold text-amber-700 dark:text-amber-500 uppercase tracking-tight">
-                                                        Must start with: <span className="font-black text-slate-900 dark:text-white">https://t.me/pintopaybot?start=</span>
+                                                        {t('pro_dashboard.studio.personal_link_warning')} <span className="font-black text-slate-900 dark:text-white">https://t.me/pintopaybot?start=</span>
                                                     </p>
                                                 </div>
                                             </motion.div>
