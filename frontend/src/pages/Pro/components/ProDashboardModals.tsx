@@ -333,34 +333,35 @@ export const ProDashboardModals = ({
                                             <div className="relative group overflow-hidden rounded-[2.5rem] p-0.5">
                                                 <div className="absolute inset-0 bg-linear-to-br from-sky-400 via-indigo-500 to-purple-600 opacity-20 group-hover:opacity-30 transition-opacity" />
                                                 <div className="relative bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl p-6 rounded-[2.4rem] border border-white/20 dark:border-white/5 transition-all">
-                                                    <div className="flex items-start gap-5">
+                                                    <div className="flex flex-col items-center text-center gap-4">
                                                         <div className="relative shrink-0">
-                                                            <div className="w-14 h-14 rounded-2xl bg-sky-500 flex items-center justify-center text-white shadow-2xl shadow-sky-500/30 group-hover:scale-110 transition-transform duration-500 rotate-3 group-hover:rotate-6">
-                                                                <Send size={24} />
+                                                            <div className="w-16 h-16 rounded-[1.25rem] bg-linear-to-br from-sky-400 to-sky-600 flex items-center justify-center text-white shadow-xl shadow-sky-500/30 group-hover:scale-110 transition-transform duration-500">
+                                                                <Send size={28} className="-ml-1" />
                                                             </div>
-                                                            <div className="absolute -bottom-2 -right-2 w-6 h-6 rounded-lg bg-indigo-600 border-2 border-white dark:border-slate-900 flex items-center justify-center text-white shadow-lg">
-                                                                <Network size={12} />
+                                                            <div className="absolute -bottom-2 -right-2 w-7 h-7 rounded-xl bg-indigo-600 border-[2.5px] border-white dark:border-slate-900 flex items-center justify-center text-white shadow-lg">
+                                                                <Network size={14} />
                                                             </div>
                                                         </div>
-                                                        <div className="flex-1 space-y-1">
-                                                            <div className="flex items-center justify-between">
-                                                                <h4 className="text-[13px] font-black text-slate-900 dark:text-white uppercase tracking-[0.1em]">{t('pro_dashboard.setup.tg_sync_multi.title')}</h4>
-                                                                <span className={`text-[8px] font-black px-2 py-0.5 rounded-md uppercase tracking-widest ${status?.is_pro_plus ? 'bg-indigo-500/20 text-indigo-500' : 'bg-amber-500/20 text-amber-500'}`}>
-                                                                    {status?.is_pro_plus ? 'ELITE+ NODE' : 'STANDARD NODE'}
-                                                                </span>
-                                                            </div>
-                                                            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed pr-4">
+                                                        <div className="flex flex-col items-center space-y-2.5 w-full">
+                                                            <span className={`text-[9px] font-black px-3 py-1 rounded-md uppercase tracking-[0.15em] ${status?.is_pro_plus ? 'bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 shadow-inner' : 'bg-amber-500/10 text-amber-500 border border-amber-500/20 shadow-inner'}`}>
+                                                                {status?.is_pro_plus ? 'ELITE+ NODE ACTIVE' : 'STANDARD NODE'}
+                                                            </span>
+                                                            <h4 className="text-[14px] sm:text-[16px] font-black text-slate-900 dark:text-white uppercase tracking-[0.1em]">{t('pro_dashboard.setup.tg_sync_multi.title')}</h4>
+                                                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed max-w-[320px]">
                                                                 {status?.is_pro_plus ? t('pro_dashboard.setup.tg_sync_multi.desc_plus') : t('pro_dashboard.setup.tg_sync_multi.desc_pro')}
-                                                                <button onClick={() => { selection(); setShowManual('setup_tg'); }} className="ml-1.5 text-sky-600 dark:text-sky-400 underline font-black hover:text-sky-500">{t('pro_dashboard.setup.tg_manual.title')}</button>
+                                                                <button onClick={() => { selection(); setShowManual('setup_tg'); }} className="block mt-2 text-sky-600 dark:text-sky-400 underline font-black hover:text-sky-500 transition-colors w-full text-center">{t('pro_dashboard.setup.tg_manual.title')}</button>
                                                             </p>
                                                             {!status?.is_pro_plus && (
-                                                                <button
-                                                                    onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' })); }}
-                                                                    className="mt-3 w-full py-2.5 bg-linear-to-r from-indigo-500 to-purple-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-xl shadow-indigo-500/20 hover:shadow-indigo-500/40 active:scale-95 transition-all flex items-center justify-center gap-2 group-hover:gap-3"
-                                                                >
-                                                                    <Lock size={12} className="group-hover:rotate-12 transition-transform" />
-                                                                    {t('pro_dashboard.setup.tg_sync_multi.upgrade_pro_plus_cta')}
-                                                                </button>
+                                                                <div className="flex justify-center w-full mt-2">
+                                                                    <button
+                                                                        onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' })); }}
+                                                                        className="w-full sm:w-[85%] py-3.5 bg-linear-to-r from-indigo-500 via-purple-500 to-indigo-600 text-white rounded-[1rem] text-[10px] font-black uppercase tracking-[0.15em] shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 group-hover:gap-3 relative overflow-hidden"
+                                                                    >
+                                                                        <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:animate-shimmer" />
+                                                                        <Lock size={12} className="group-hover:-rotate-12 transition-transform" />
+                                                                        {t('pro_dashboard.setup.tg_sync_multi.upgrade_pro_plus_cta')}
+                                                                    </button>
+                                                                </div>
                                                             )}
                                                         </div>
                                                     </div>
@@ -450,7 +451,7 @@ export const ProDashboardModals = ({
                                                     </div>
 
                                                     <div className="grid grid-cols-2 gap-3">
-                                                        {['Mastodon', 'BlueSky', 'Threads', 'LinkedIn'].map((platform) => (
+                                                        {['Mastodon', 'BlueSky', 'Threads', 'LinkedIn', 'Pinterest', 'Unilive', 'Instagram', 'VK'].map((platform) => (
                                                             <div key={platform} className="relative group/social overflow-hidden">
                                                                 <div className="p-4 rounded-2xl bg-slate-50 dark:bg-white/2 border border-slate-200 dark:border-white/5 flex flex-col gap-2 transition-all">
                                                                     <div className="flex items-center justify-between">

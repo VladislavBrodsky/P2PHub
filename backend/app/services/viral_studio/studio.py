@@ -71,7 +71,15 @@ class ViralMarketingStudio:
 
         start_time = datetime.now()
         bot_username = getattr(settings, 'BOT_USERNAME', 'pintopaybot')
-        ref_link = referral_link or f"https://t.me/{bot_username}?start=r_{partner.id}"
+        
+        # Link Setup Strategy
+        if post_type == "partners":
+            ref_link = f"https://t.me/pintopay_probot?start={partner.referral_code}"
+        else:
+            if referral_link and referral_link.strip():
+                ref_link = referral_link.strip()
+            else:
+                ref_link = "https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3"
         
         intel = prompts.build_viral_audience_intel(target_audience, post_type, language)
         
@@ -124,14 +132,16 @@ class ViralMarketingStudio:
             for i in range(len(lines)-1, -1, -1):
                 line = lines[i].strip()
                 if not line: continue
-                if "**" in line and len(line) < 120:
+                if "**" in line and len(line) < 120 and "]" in line:
                     clean_text = line.replace("**", "").split("](")[0].replace("[", "").replace("]", "").strip()
                     if not clean_text or len(clean_text) < 3: clean_text = "Secure Your Advantage Here"
                     lines[i] = f"**[{clean_text}]({ref_link})**"
                     cta_fixed = True
                     break
-            if not cta_fixed: body_text = body_text.strip() + f"\n\n**[Start Your Journey Here]({ref_link})**"
-            else: body_text = "\n".join(lines)
+            if not cta_fixed: 
+                body_text = body_text.strip() + f"\n\n👉 **[Secure Your Advantage Here]({ref_link})**"
+            else: 
+                body_text = "\n".join(lines)
 
         duration = (datetime.now() - start_time).total_seconds()
         
