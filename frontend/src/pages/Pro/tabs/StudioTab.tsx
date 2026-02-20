@@ -174,14 +174,23 @@ export const StudioTab = ({
     useEffect(() => {
         const handleGen = () => handleGenerate();
         const handlePublish = () => setShowPublishModal(true);
+        const handleParams = (e: CustomEvent) => {
+            const params = e.detail;
+            if (params?.postType) setPostType(params.postType);
+            if (params?.audience) setAudience(params.audience);
+            setExternalStep(1);
+        };
 
         window.addEventListener('trigger-studio-gen', handleGen);
         window.addEventListener('trigger-studio-publish', handlePublish);
+        window.addEventListener('studio-params', handleParams as EventListener);
+
         return () => {
             window.removeEventListener('trigger-studio-gen', handleGen);
             window.removeEventListener('trigger-studio-publish', handlePublish);
+            window.removeEventListener('studio-params', handleParams as EventListener);
         };
-    }, [handleGenerate]);
+    }, [handleGenerate, setExternalStep]);
 
     const getCleanShareText = () => {
         if (!generatedResult) return '';

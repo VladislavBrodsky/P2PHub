@@ -220,7 +220,9 @@ class ViralAnalyticsService:
                 "type": "discovery",
                 "headline": "Start with Curiosity Hooks",
                 "reason": "New account baseline—curiosity generates 40% more 'Comments' in early stages.",
-                "resonance_score": 0.85
+                "resonance_score": 0.85,
+                "post_type": "lifestyle",
+                "target_audience": "passive_seekers"
             })
         else:
             for gen, score in results:
@@ -228,7 +230,9 @@ class ViralAnalyticsService:
                     "type": "scaling",
                     "headline": f"Double down on {gen.topic} for {gen.audience}",
                     "reason": f"Your previous post on this topic achieved {score} engagement points. High resonance detected.",
-                    "resonance_score": min(0.99, 0.8 + (score / 1000))
+                    "resonance_score": min(0.99, 0.8 + (score / 1000)),
+                    "post_type": gen.topic,
+                    "target_audience": gen.audience
                 })
 
         # Calculate confidence based on data availability

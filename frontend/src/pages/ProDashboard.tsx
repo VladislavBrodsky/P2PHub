@@ -393,9 +393,15 @@ export const ProDashboard = () => {
     // Handle deep linking for Pro Tabs
     useEffect(() => {
         const handleNav = (e: CustomEvent) => {
-            const tab = e.detail;
-            if (['studio', 'tools', 'growth'].includes(tab)) {
-                setActiveTab(tab as Tab);
+            const data = e.detail;
+            if (typeof data === 'string' && ['studio', 'tools', 'growth'].includes(data)) {
+                setActiveTab(data as Tab);
+            } else if (data && typeof data === 'object' && ['studio', 'tools', 'growth'].includes(data.tab)) {
+                setActiveTab(data.tab as Tab);
+                if (data.action === 'set_studio_params') {
+                    // Slight delay to ensure StudioTab is mounted
+                    setTimeout(() => window.dispatchEvent(new CustomEvent('studio-params', { detail: data.params })), 50);
+                }
             }
         };
         window.addEventListener('nav-pro-tab', handleNav as EventListener);

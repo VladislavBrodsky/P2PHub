@@ -125,7 +125,10 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                     <button
                         onClick={() => {
                             impact('heavy');
-                            window.dispatchEvent(new CustomEvent('nav-pro-tab', { detail: 'studio' }));
+                            const detail = resonance?.next_best_action
+                                ? { tab: 'studio', action: 'set_studio_params', params: { postType: resonance.next_best_action.post_type, audience: resonance.next_best_action.target_audience } }
+                                : { tab: 'studio' };
+                            window.dispatchEvent(new CustomEvent('nav-pro-tab', { detail }));
                         }}
                         className="w-full h-12 vibing-blue-animated text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                     >
