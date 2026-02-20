@@ -71,27 +71,23 @@ export const TopPartnersList = () => {
                     >
                         <div className="flex items-center gap-3">
                             <div className="relative">
-                                <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center overflow-hidden">
+                                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center overflow-hidden relative">
+                                    <User className="absolute w-5 h-5 text-slate-400 z-0" />
                                     {partner.photo_file_id || partner.photo_url ? (
                                         <img
                                             src={partner.photo_file_id
                                                 ? `${getApiUrl()}/api/partner/photo/${partner.photo_file_id}`
                                                 : partner.photo_url
                                             }
-                                            className="w-full h-full object-cover"
+                                            className="absolute w-full h-full object-cover z-10 transition-opacity duration-300"
                                             alt=""
                                             onError={(e) => {
                                                 const target = e.target as HTMLImageElement;
-                                                target.style.display = 'none';
-                                                // The parent will show the fallback Icon if display: none works, 
-                                                // but since we check for src in the parent, we should probably 
-                                                // just replace with a known good fallback or set a flag.
-                                                target.parentElement?.insertAdjacentHTML('afterbegin', '<div class="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-white/5"><svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>');
+                                                target.style.opacity = '0';
+                                                setTimeout(() => { target.style.display = 'none'; }, 300);
                                             }}
                                         />
-                                    ) : (
-                                        <User className="w-5 h-5 text-slate-400" />
-                                    )}
+                                    ) : null}
                                 </div>
                                 {index < 3 && (
                                     <div className={`absolute -top-1.5 -right-1.5 p-0.5 rounded-full shadow-lg ${index === 0 ? 'bg-amber-400' :

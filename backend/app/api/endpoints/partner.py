@@ -401,7 +401,8 @@ async def get_top_partners(
         safe_photo_url = p.photo_url
         if safe_photo_url and (
             safe_photo_url.startswith("/images/avatars/") or
-            safe_photo_url.startswith("/images/")
+            safe_photo_url.startswith("/images/") or
+            safe_photo_url.startswith("/avatars/")
         ):
             safe_photo_url = None
 
