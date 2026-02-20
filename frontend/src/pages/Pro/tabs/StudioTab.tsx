@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Sparkles, Send, ChevronRight, Terminal, Bot, Image as ImageIcon,
-    CheckCircle2, Loader2, Copy, Download, RefreshCw, Undo2, Share, ArrowLeft, X,
+    CheckCircle2, Loader2, Copy, Download, RefreshCw, Undo2, Share, ArrowLeft, ArrowRight, X,
     Zap, Users, Link as LinkIcon, Info
 } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
@@ -636,157 +636,96 @@ export const StudioTab = ({
 
             {externalStep === 2 && (
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
+                    initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem]"
+                    className="relative overflow-hidden rounded-[2.5rem] bg-white dark:bg-slate-900 shadow-3xl border border-slate-200 dark:border-white/10"
                 >
-                    {/* Premium Gradient Border */}
-                    <div className="absolute inset-0 bg-linear-to-br from-indigo-500 via-purple-500 to-pink-500 opacity-20 dark:opacity-30 blur-xl" />
-                    <div className="absolute inset-px bg-white dark:bg-slate-900 rounded-[2rem] sm:rounded-[2.5rem]" />
+                    <div className="circuit-decor opacity-10" />
 
-                    <div className="relative p-6 sm:p-10 text-center space-y-6 sm:space-y-8">
+                    <div className="relative p-8 sm:p-12 text-center space-y-8">
                         {isGenerating ? (
-                            <div className="py-8 sm:py-12 flex flex-col items-center justify-center space-y-8 sm:space-y-12">
-                                {/* Orbital Loader Animation */}
-                                <div className="relative w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center">
-                                    {/* Outer spinning ring */}
+                            <div className="py-4 flex flex-col items-center justify-center space-y-8">
+                                {/* Compact Premium Loader */}
+                                <div className="relative w-28 h-28 flex items-center justify-center scanning-glow rounded-3xl">
+                                    <div className="absolute inset-0 bg-indigo-500/5 backdrop-blur-3xl rounded-3xl border border-indigo-500/20" />
                                     <motion.div
-                                        className="absolute inset-0 rounded-[2rem] sm:rounded-[2.5rem] border-2 border-transparent border-t-indigo-500/50 border-b-purple-500/50 mix-blend-overlay"
+                                        className="absolute inset-0 rounded-3xl border-2 border-indigo-500/30"
                                         animate={{ rotate: 360 }}
-                                        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                                        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                                     />
-                                    {/* Inner spinning ring */}
-                                    <motion.div
-                                        className="absolute inset-4 rounded-3xl border-2 border-transparent border-l-pink-500/50 border-r-indigo-500/50 mix-blend-overlay"
-                                        animate={{ rotate: -360 }}
-                                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                                    />
-
-                                    {/* Glow beneath icon */}
-                                    <motion.div
-                                        className="absolute inset-8 bg-indigo-500/20 blur-xl rounded-full"
-                                        animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
-                                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                                    />
-
-                                    {/* Core Icon */}
-                                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-[0_0_40px_rgba(99,102,241,0.2)] flex items-center justify-center border border-white dark:border-white/10 z-10">
-                                        <Bot className="w-10 h-10 sm:w-12 sm:h-12 text-indigo-500 dark:text-indigo-400 drop-shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
+                                    <div className="relative z-10 w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-xl flex items-center justify-center border border-indigo-500/20 pulse-ring-indigo">
+                                        <Bot className="w-8 h-8 text-indigo-500" />
                                     </div>
                                 </div>
 
-                                <div className="space-y-6 w-full max-w-[320px] sm:max-w-md">
-                                    {/* Status Display */}
-                                    <div className="text-center space-y-3">
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            className="inline-flex items-center gap-2.5 bg-indigo-50 dark:bg-indigo-500/10 py-2.5 px-6 rounded-full border border-indigo-100 dark:border-indigo-500/20 shadow-sm"
-                                        >
-                                            <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_10px_rgba(99,102,241,0.8)]" />
-                                            <h3 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.25em] text-indigo-600 dark:text-indigo-400">
-                                                AI ENGINE PROCESSING
+                                <div className="space-y-4 w-full max-w-[280px]">
+                                    <div className="text-center space-y-2">
+                                        <div className="inline-flex items-center gap-2 bg-indigo-500/10 py-1.5 px-4 rounded-full border border-indigo-500/20">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                                            <h3 className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-500">
+                                                SYNTHESIZING VIRAL CORE
                                             </h3>
-                                        </motion.div>
-                                        <p className="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] opacity-80 animate-pulse">
-                                            {t('pro_dashboard.studio.cooking_title', 'Synthesizing Viral Post...')}
-                                        </p>
+                                        </div>
                                     </div>
 
-                                    {/* Progress Card - Glassmorphism */}
-                                    <div className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-[2rem] p-6 sm:p-8 border border-white/40 dark:border-white/10 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] dark:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] relative overflow-hidden group">
-                                        <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-purple-500/5" />
-
-                                        <div className="space-y-6 relative z-10">
-                                            {/* Percentage Display */}
-                                            <div className="flex items-center justify-center">
-                                                <div className="flex items-baseline gap-1">
-                                                    <span className="text-6xl sm:text-7xl font-black bg-linear-to-br from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent drop-shadow-sm tabular-nums tracking-tighter">
-                                                        {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}
-                                                    </span>
-                                                    <span className="text-2xl font-black text-indigo-500/40">%</span>
-                                                </div>
+                                    {/* Compact Progress Bar */}
+                                    <div className="bg-slate-50 dark:bg-black/20 backdrop-blur-xl rounded-2xl p-5 border border-slate-200 dark:border-white/10 shadow-premium-sm">
+                                        <div className="space-y-4">
+                                            <div className="flex justify-between items-end">
+                                                <span className="text-[32px] font-black text-slate-900 dark:text-white leading-none tabular-nums">
+                                                    {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-lg opacity-30">%</span>
+                                                </span>
+                                                <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{countdown}s ETA</span>
                                             </div>
-
-                                            {/* Progress Bar Container */}
-                                            <div className="space-y-3">
-                                                <div className="h-4 w-full bg-slate-100 dark:bg-black/40 rounded-full overflow-hidden relative shadow-inner border border-slate-200/50 dark:border-white/5">
-                                                    <motion.div
-                                                        className="absolute top-0 left-0 bottom-0 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_20px_rgba(99,102,241,0.5)]"
-                                                        initial={{ width: "0%" }}
-                                                        animate={{ width: `${Math.min(((30 - countdown) / 30) * 100, 99)}%` }}
-                                                        transition={{ duration: 0.5, ease: "easeOut" }}
-                                                    >
-                                                        <div className="absolute inset-0 bg-linear-to-r from-white/30 via-transparent to-transparent animate-shimmer-slide" />
-                                                    </motion.div>
-                                                </div>
-
-                                                <div className="flex justify-between items-center px-1">
-                                                    <div className="flex items-center gap-2">
-                                                        <Terminal size={12} className="text-indigo-500" />
-                                                        <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.15em]">Neural Sync Active</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-1.5 opacity-60 bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-md border border-slate-200 dark:border-white/5">
-                                                        <span className="w-1.5 h-1.5 rounded-full bg-pink-500 animate-ping" />
-                                                        <span className="text-[9px] font-black text-slate-700 dark:text-slate-300 uppercase tracking-widest tabular-nums">{countdown}s remaining</span>
-                                                    </div>
-                                                </div>
+                                            <div className="h-2 w-full bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden relative">
+                                                <motion.div
+                                                    className="absolute top-0 left-0 bottom-0 vibing-blue-animated"
+                                                    initial={{ width: "0%" }}
+                                                    animate={{ width: `${Math.min(((30 - countdown) / 30) * 100, 99)}%` }}
+                                                />
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* Dynamic Info Text */}
-                                    <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed px-4 text-center">
-                                        Synthesizing context, molding narrative architecture, and optimizing for maximum viral resonance.
+                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed opacity-60">
+                                        Architecting narrative resonance...
                                     </p>
                                 </div>
                             </div>
                         ) : (
                             <>
-                                {/* Top Accent Line */}
-                                <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-transparent via-indigo-500 to-transparent" />
-
-                                {/* Icon */}
-                                <div className="relative inline-flex">
-                                    <div className="absolute -inset-3 bg-linear-to-br from-indigo-500/20 to-purple-500/20 rounded-3xl blur-xl" />
-                                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-linear-to-br from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/20 dark:to-purple-500/20 rounded-3xl flex items-center justify-center border border-indigo-500/20 dark:border-indigo-500/30 shadow-xl group cursor-pointer">
-                                        <Bot className="w-9 h-9 sm:w-11 sm:h-11 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform duration-500" />
+                                <div className="relative inline-flex mb-2">
+                                    <div className="absolute -inset-4 bg-indigo-500/10 blur-2xl rounded-full" />
+                                    <div className="relative w-20 h-20 bg-linear-to-br from-indigo-500/10 to-purple-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-xl pulse-ring-indigo">
+                                        <Sparkles className="w-9 h-9 text-indigo-500" />
                                     </div>
                                 </div>
 
-                                {/* Title */}
-                                <div className="space-y-2">
-                                    <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight bg-linear-to-br from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
+                                <div className="space-y-1.5">
+                                    <h3 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
                                         {t('pro_dashboard.studio.ready_title')}
                                     </h3>
-                                    <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.25em] text-indigo-600 dark:text-indigo-400">
+                                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-500">
                                         {t('pro_dashboard.studio.ready_subtitle')}
                                     </p>
                                 </div>
 
-                                {/* Description */}
-                                <div className="max-w-sm mx-auto">
-                                    <p className="text-[11px] sm:text-[12px] font-medium leading-relaxed text-slate-700 dark:text-slate-300 bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-sm px-5 py-4 rounded-2xl border border-slate-200/50 dark:border-white/10 shadow-sm">
-                                        {t('pro_dashboard.studio.ready_p')}
-                                    </p>
-                                </div>
+                                <p className="text-[11px] font-medium leading-relaxed text-slate-500 dark:text-slate-400 max-w-[280px] mx-auto">
+                                    {t('pro_dashboard.studio.ready_p')}
+                                </p>
 
-                                {/* Action Buttons */}
-                                <div className="flex flex-col gap-3 pt-4 max-w-sm mx-auto">
+                                <div className="flex flex-col gap-2.5 pt-4 w-full max-w-[260px] mx-auto">
                                     <button
                                         onClick={handleGenerate}
-                                        className="group relative w-full h-12 sm:h-14 bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 rounded-2xl font-black text-white text-[10px] sm:text-[11px] uppercase tracking-[0.2em] active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl shadow-indigo-500/30 dark:shadow-indigo-500/20 overflow-hidden"
+                                        className="h-12 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2 shadow-xl shadow-indigo-500/20"
                                     >
-                                        <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                                        <Sparkles size={16} className="animate-pulse" />
-                                        {t('pro_dashboard.studio.go_viral_btn')}
-                                        <Send size={14} className="group-active:translate-x-1 group-active:-translate-y-1 transition-transform" />
+                                        {t('pro_dashboard.studio.go_viral_btn')} <ArrowRight size={14} />
                                     </button>
                                     <button
                                         onClick={() => { selection(); setExternalStep(1); }}
-                                        className="w-full h-11 rounded-xl font-bold text-[10px] uppercase tracking-widest text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-slate-100/50 dark:bg-slate-800/50 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 transition-all flex items-center justify-center gap-2 border border-slate-200/50 dark:border-white/10"
+                                        className="h-10 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                                     >
-                                        <ArrowLeft size={14} /> {t('pro_dashboard.studio.back_btn')}
+                                        {t('pro_dashboard.studio.back_btn')}
                                     </button>
                                 </div>
                             </>
@@ -801,255 +740,297 @@ export const StudioTab = ({
                     animate={{ opacity: 1, y: 0 }}
                     className="space-y-4"
                 >
-                    <div className="glass-panel-premium rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl">
-                        <div className="aspect-square sm:aspect-video bg-slate-900 relative flex items-center justify-center overflow-hidden group/img">
-                            <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/80 z-1" />
+                    <div className="glass-panel-premium rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-3xl overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl">
+                        {/* Image Section */}
+                        <div className="aspect-16/10 bg-slate-900 relative flex items-center justify-center overflow-hidden group/img scanning-glow">
+                            <div className="circuit-decor opacity-20" />
+                            <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/60 z-1" />
                             {generatedResult.image_url ? (
-                                <img src={generatedResult.image_url.startsWith('http') ? generatedResult.image_url : `${getApiUrl().replace(/\/api$/, '')}${generatedResult.image_url}`} alt="Viral" className="w-full h-full object-cover" />
+                                <img
+                                    src={generatedResult.image_url.startsWith('http') ? generatedResult.image_url : `${getApiUrl().replace(/\/api$/, '')}${generatedResult.image_url}`}
+                                    alt="Viral"
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110"
+                                />
                             ) : (
-                                <div className="p-6 text-center z-2">
-                                    <ImageIcon className="w-10 h-10 text-indigo-500 mx-auto mb-3 opacity-50" />
-                                    <p className="text-[10px] uppercase tracking-[0.2em] text-indigo-300 font-bold">{generatedResult.image_prompt}</p>
+                                <div className="p-8 text-center z-10">
+                                    <div className="w-16 h-16 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-center mx-auto mb-4 animate-pulse">
+                                        <ImageIcon className="w-8 h-8 text-indigo-400" />
+                                    </div>
+                                    <p className="text-[9px] uppercase tracking-[0.2em] text-indigo-300 font-bold max-w-[200px] leading-relaxed">
+                                        {generatedResult.image_prompt}
+                                    </p>
                                 </div>
                             )}
+
+                            {/* Badge */}
+                            <div className="absolute top-4 left-4 z-10">
+                                <span className="bg-indigo-500/90 backdrop-blur-md text-white text-[8px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.2em] border border-indigo-400/30">
+                                    {t('pro_dashboard.studio.ai_generated_badge')}
+                                </span>
+                            </div>
 
                             {/* Image Actions Overlay */}
                             <div className="absolute inset-x-0 bottom-0 z-10 opacity-0 group-hover/img:opacity-100 transition-all duration-300 bg-linear-to-t from-black/90 to-transparent p-6 translate-y-4 group-hover/img:translate-y-0">
                                 <div className="flex items-center justify-center gap-4">
-                                    <button onClick={() => { selection(); handleSaveImageToDevice(); }} className="p-4 bg-white/10 hover:bg-emerald-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90">
+                                    <button
+                                        onClick={() => { selection(); handleSaveImageToDevice(); }}
+                                        className="p-4 bg-white/10 hover:bg-emerald-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90"
+                                        title="Download"
+                                    >
                                         <Download size={20} />
                                     </button>
-                                    <button onClick={handleGenerate} className="p-4 bg-white/10 hover:bg-indigo-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90">
+                                    <button
+                                        onClick={handleGenerate}
+                                        className="p-4 bg-white/10 hover:bg-indigo-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90"
+                                        title="Regenerate"
+                                    >
                                         <RefreshCw size={20} />
                                     </button>
                                     {historyIndex > 0 && (
-                                        <button onClick={handleUndoVersion} className="p-4 bg-white/10 hover:bg-amber-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90">
+                                        <button
+                                            onClick={handleUndoVersion}
+                                            className="p-4 bg-white/10 hover:bg-amber-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90"
+                                            title="Undo"
+                                        >
                                             <Undo2 size={20} />
                                         </button>
                                     )}
                                 </div>
                             </div>
-
-                            <div className="absolute top-6 right-6 z-2">
-                                <span className="bg-indigo-500/90 backdrop-blur-md text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.2em] border border-indigo-400/30">{t('pro_dashboard.studio.ai_generated_badge')}</span>
-                            </div>
                         </div>
-                        <div className="p-5 sm:p-7 space-y-4 relative">
-                            <div className="flex justify-between items-start gap-4">
-                                <div className="space-y-2">
-                                    <h4 className="text-lg font-black leading-tight text-slate-900 dark:text-white uppercase tracking-tight">
-                                        {renderMarkdown(generatedResult.title, true)}
-                                    </h4>
-                                    <div className="h-1 w-12 vibing-blue-animated rounded-full" />
-                                </div>
-                                <div className="flex gap-2 shrink-0">
-                                    <button onClick={() => { selection(); handleCopyText(); }} className="p-2.5 bg-white/60 dark:bg-slate-900/60 hover:bg-indigo-500/10 rounded-xl border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-indigo-500 transition-all active:scale-90">
-                                        <Copy size={14} />
-                                    </button>
-                                    <button onClick={handleGenerate} className="p-2.5 bg-white/60 dark:bg-slate-900/60 hover:bg-indigo-500/10 rounded-xl border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-indigo-500 transition-all active:scale-90">
-                                        <RefreshCw size={14} className={isGenerating ? "animate-spin" : ""} />
-                                    </button>
+
+                        {/* Content Section */}
+                        <div className="p-5 sm:p-7 space-y-4">
+                            <div className="space-y-1">
+                                <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white uppercase tracking-tight leading-tight">
+                                    {generatedResult.title}
+                                </h3>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em]">Viral Synthesis Optimized</span>
                                 </div>
                             </div>
-                            <div className="text-[13px] font-medium leading-relaxed text-slate-900 dark:text-white/80 whitespace-pre-wrap selection:bg-indigo-500/20">
-                                {renderMarkdown(generatedResult.body)}
+
+                            <div className="bg-slate-50 dark:bg-black/20 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-white/5 relative group/content overflow-hidden">
+                                <div className="absolute top-0 right-0 p-3 opacity-0 group-hover/content:opacity-100 transition-opacity">
+                                    <button
+                                        onClick={handleCopyText}
+                                        className="p-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-100 dark:border-white/10 text-slate-400 hover:text-indigo-500 transition-colors"
+                                    >
+                                        <Copy size={12} />
+                                    </button>
+                                </div>
+                                <div className="text-[11px] sm:text-[12px] font-medium leading-relaxed text-slate-600 dark:text-slate-300 whitespace-pre-wrap max-h-[160px] overflow-y-auto custom-scrollbar pr-2">
+                                    {renderMarkdown(generatedResult.body)}
+                                </div>
                             </div>
-                            <div className="flex flex-wrap gap-2 pt-2">
-                                {generatedResult.hashtags?.map((t: string) => (
-                                    <span key={t} className="text-[9px] font-black text-indigo-500 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/10">{t.startsWith('#') ? t : `#${t}`}</span>
+
+                            <div className="flex flex-wrap gap-2">
+                                {generatedResult.hashtags?.map((tag: string, i: number) => (
+                                    <span key={i} className="px-3 py-1 rounded-full bg-indigo-500/5 dark:bg-indigo-500/10 border border-indigo-500/10 text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">
+                                        #{tag.replace(/^#/, '')}
+                                    </span>
                                 ))}
                             </div>
                         </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-3 pb-4">
-                        <button onClick={() => { selection(); setShowPublishModal(true); }} className="h-11 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20">
-                            {t('pro_dashboard.studio.publish_btn')} <Send size={12} className="animate-pulse" />
+
+                    {/* Action Area */}
+                    <div className="grid grid-cols-2 gap-3 pb-2 pt-2">
+                        <button
+                            onClick={() => { selection(); setShowPublishModal(true); }}
+                            className="h-12 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20"
+                        >
+                            {t('pro_dashboard.studio.publish_btn')} <Send size={14} className="animate-pulse" />
                         </button>
-                        <button onClick={() => { impact('light'); setShowShareModal(true); }} className="h-11 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-slate-900 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm">
-                            {t('pro_dashboard.studio.share_btn')} <Share size={12} />
+                        <button
+                            onClick={() => { impact('light'); setShowShareModal(true); }}
+                            className="h-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-slate-900 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm"
+                        >
+                            {t('pro_dashboard.studio.share_btn')} <Share size={14} />
                         </button>
                     </div>
                 </motion.div>
-            )
-            } {/* Local Publishing Modal */} {
-                typeof document !== 'undefined' && createPortal(
-                    <AnimatePresence>
-                        {showPublishModal && (
+            )}
+
+            {/* Portals for Modals */}
+            {typeof document !== 'undefined' && createPortal(
+                <AnimatePresence>
+                    {showPublishModal && (
+                        <motion.div
+                            key="publish-modal"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-xl overflow-y-auto"
+                            onClick={() => setShowPublishModal(false)}
+                        >
                             <motion.div
-                                key="publish-modal"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-xl overflow-y-auto"
-                                onClick={() => setShowPublishModal(false)}
+                                initial={{ scale: 0.95, y: 20, opacity: 0 }}
+                                animate={{ scale: 1, y: 0, opacity: 1 }}
+                                exit={{ scale: 0.95, y: 20, opacity: 0 }}
+                                onClick={(e) => e.stopPropagation()}
+                                className="bg-white dark:bg-slate-900 w-full max-w-[340px] rounded-[1.5rem] p-5 space-y-3 relative border border-slate-200 dark:border-white/10 shadow-3xl mx-4 my-auto"
                             >
-                                <motion.div
-                                    initial={{ scale: 0.95, y: 20, opacity: 0 }}
-                                    animate={{ scale: 1, y: 0, opacity: 1 }}
-                                    exit={{ scale: 0.95, y: 20, opacity: 0 }}
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="bg-white dark:bg-slate-900 w-full max-w-[340px] rounded-[1.5rem] p-5 space-y-3 relative border border-slate-200 dark:border-white/10 shadow-3xl mx-4 my-auto"
+                                <button
+                                    onClick={() => setShowPublishModal(false)}
+                                    className="absolute top-3 right-3 p-1.5 text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white transition-colors z-10"
                                 >
-                                    <button
-                                        onClick={() => setShowPublishModal(false)}
-                                        className="absolute top-3 right-3 p-1.5 text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white transition-colors z-10"
-                                    >
-                                        <X size={18} />
-                                    </button>
+                                    <X size={18} />
+                                </button>
 
-                                    <div className="flex flex-col items-center text-center space-y-2 pt-1">
-                                        <div className="w-12 h-12 bg-linear-to-br from-indigo-500/10 to-purple-500/10 rounded-xl flex items-center justify-center text-indigo-500 border border-indigo-500/20 shadow-lg">
-                                            <Send size={20} />
-                                        </div>
-                                        <div className="space-y-0.5">
-                                            <h3 className="text-[15px] font-black uppercase tracking-tight text-slate-900 dark:text-white">
-                                                {t('pro_dashboard.publish.title')}
-                                            </h3>
-                                            <p className="text-[9px] font-black uppercase tracking-[0.15em] text-indigo-500">
-                                                {t('pro_dashboard.publish.subtitle')}
-                                            </p>
-                                        </div>
+                                <div className="flex flex-col items-center text-center space-y-2 pt-1">
+                                    <div className="w-12 h-12 bg-linear-to-br from-indigo-500/10 to-purple-500/10 rounded-xl flex items-center justify-center text-indigo-500 border border-indigo-500/20 shadow-lg">
+                                        <Send size={20} />
                                     </div>
-
-                                    <div className="space-y-2.5">
-                                        <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 text-center leading-relaxed px-1">
-                                            {t('pro_dashboard.publish.mgmt_p')}
+                                    <div className="space-y-0.5">
+                                        <h3 className="text-[15px] font-black uppercase tracking-tight text-slate-900 dark:text-white">
+                                            {t('pro_dashboard.publish.title')}
+                                        </h3>
+                                        <p className="text-[9px] font-black uppercase tracking-[0.15em] text-indigo-500">
+                                            {t('pro_dashboard.publish.subtitle')}
                                         </p>
+                                    </div>
+                                </div>
 
-                                        <div className="grid gap-2">
-                                            {(['x', 'telegram', 'linkedin'] as const).map((platform) => (
-                                                <button
-                                                    key={platform}
-                                                    onClick={() => handlePublishToPlatform(platform)}
-                                                    disabled={isPublishing || publishedPlatforms.includes(platform)}
-                                                    className={`w-full h-12 rounded-lg border transition-all flex items-center justify-between px-3 group ${publishedPlatforms.includes(platform)
-                                                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500'
-                                                        : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 active:scale-98'
-                                                        }`}
-                                                >
-                                                    <div className="flex items-center gap-2.5">
-                                                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${publishedPlatforms.includes(platform) ? 'bg-emerald-500 text-white' : 'bg-white dark:bg-white/10 text-slate-600 dark:text-slate-300'
-                                                            }`}>
-                                                            <Send size={14} />
-                                                        </div>
-                                                        <div className="text-left min-w-0">
-                                                            <span className="block text-[10px] font-black uppercase tracking-wider leading-none mb-0.5 truncate">
-                                                                {platform === 'x' ? 'X (TW)' : platform}
-                                                            </span>
-                                                            <span className="block text-[8px] font-bold opacity-60 truncate">
-                                                                {publishedPlatforms.includes(platform) ? t('pro_dashboard.publish.platform_success') : t('pro_dashboard.publish.platform_tap')}
-                                                            </span>
-                                                        </div>
+                                <div className="space-y-2.5">
+                                    <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 text-center leading-relaxed px-1">
+                                        {t('pro_dashboard.publish.mgmt_p')}
+                                    </p>
+
+                                    <div className="grid gap-2">
+                                        {(['x', 'telegram', 'linkedin'] as const).map((platform) => (
+                                            <button
+                                                key={platform}
+                                                onClick={() => handlePublishToPlatform(platform)}
+                                                disabled={isPublishing || publishedPlatforms.includes(platform)}
+                                                className={`w-full h-12 rounded-lg border transition-all flex items-center justify-between px-3 group ${publishedPlatforms.includes(platform)
+                                                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500'
+                                                    : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 active:scale-98'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center gap-2.5">
+                                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${publishedPlatforms.includes(platform) ? 'bg-emerald-500 text-white' : 'bg-white dark:bg-white/10 text-slate-600 dark:text-slate-300'
+                                                        }`}>
+                                                        <Send size={14} />
                                                     </div>
-                                                    {publishedPlatforms.includes(platform) ? <CheckCircle2 size={14} className="shrink-0" /> : <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-1 transition-transform shrink-0" />}
-                                                </button>
-                                            ))}
-                                        </div>
+                                                    <div className="text-left min-w-0">
+                                                        <span className="block text-[10px] font-black uppercase tracking-wider leading-none mb-0.5 truncate">
+                                                            {platform === 'x' ? 'X (TW)' : platform}
+                                                        </span>
+                                                        <span className="block text-[8px] font-bold opacity-60 truncate">
+                                                            {publishedPlatforms.includes(platform) ? t('pro_dashboard.publish.platform_success') : t('pro_dashboard.publish.platform_tap')}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                {publishedPlatforms.includes(platform) ? <CheckCircle2 size={14} className="shrink-0" /> : <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-1 transition-transform shrink-0" />}
+                                            </button>
+                                        ))}
                                     </div>
+                                </div>
 
-                                    {isPublishing && (
-                                        <div className="flex items-center justify-center gap-2 pt-1">
-                                            <Loader2 className="animate-spin text-indigo-500" size={16} />
-                                            <span className="text-[8px] font-black uppercase tracking-[0.2em] text-indigo-400">Processing...</span>
-                                        </div>
-                                    )}
+                                {isPublishing && (
+                                    <div className="flex items-center justify-center gap-2 pt-1">
+                                        <Loader2 className="animate-spin text-indigo-500" size={16} />
+                                        <span className="text-[8px] font-black uppercase tracking-[0.2em] text-indigo-400">Processing...</span>
+                                    </div>
+                                )}
 
-                                    <button
-                                        onClick={() => setShowPublishModal(false)}
-                                        className="w-full py-2.5 text-[8px] font-black uppercase tracking-[0.25em] text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
-                                    >
-                                        {t('pro_dashboard.studio.back_btn')}
-                                    </button>
-                                </motion.div>
-                            </motion.div>
-                        )}
-
-                        {showShareModal && (
-                            <motion.div
-                                key="share-modal"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xl"
-                                onClick={() => setShowShareModal(false)}
-                            >
-                                <motion.div
-                                    initial={{ scale: 0.95, y: 20, opacity: 0 }}
-                                    animate={{ scale: 1, y: 0, opacity: 1 }}
-                                    exit={{ scale: 0.95, y: 20, opacity: 0 }}
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="bg-white dark:bg-slate-900 w-full max-w-[340px] rounded-[1.5rem] p-5 space-y-4 relative border border-slate-200 dark:border-white/10 shadow-3xl mx-4 my-auto"
+                                <button
+                                    onClick={() => setShowPublishModal(false)}
+                                    className="w-full py-2.5 text-[8px] font-black uppercase tracking-[0.25em] text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                                 >
-                                    <button
-                                        onClick={() => setShowShareModal(false)}
-                                        className="absolute top-3 right-3 p-1.5 text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white transition-colors z-10"
-                                    >
-                                        <X size={18} />
-                                    </button>
-
-                                    <div className="flex flex-col items-center text-center space-y-2 pt-2">
-                                        <div className="w-12 h-12 bg-linear-to-br from-blue-500/10 to-indigo-500/10 rounded-xl flex items-center justify-center text-blue-500 border border-blue-500/20 shadow-lg">
-                                            <Share size={20} />
-                                        </div>
-                                        <div className="space-y-0.5">
-                                            <h3 className="text-[15px] font-black uppercase tracking-tight text-slate-900 dark:text-white">
-                                                {t('pro_dashboard.studio.share_modal.title')}
-                                            </h3>
-                                            <p className="text-[9px] font-black uppercase tracking-[0.15em] text-blue-500">
-                                                {t('pro_dashboard.studio.share_modal.subtitle')}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-2 mt-4">
-                                        <button
-                                            onClick={() => handleSharePlatform('telegram')}
-                                            className="h-12 bg-[#0088cc]/10 hover:bg-[#0088cc]/20 border border-[#0088cc]/20 rounded-xl flex items-center justify-center gap-2 transition-all group active:scale-95"
-                                        >
-                                            <Send size={14} className="text-[#0088cc] -rotate-45 translate-x-0.5" />
-                                            <span className="text-[10px] font-black uppercase text-[#0088cc]">Telegram</span>
-                                        </button>
-                                        <button
-                                            onClick={() => handleSharePlatform('whatsapp')}
-                                            className="h-12 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/20 rounded-xl flex items-center justify-center gap-2 transition-all group active:scale-95"
-                                        >
-                                            <div className="w-4 h-4 rounded-full bg-[#25D366] shrink-0" />
-                                            <span className="text-[10px] font-black uppercase text-[#25D366]">WhatsApp</span>
-                                        </button>
-                                        <button
-                                            onClick={() => handleSharePlatform('x')}
-                                            className="h-12 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 rounded-xl flex items-center justify-center gap-2 transition-all group active:scale-95"
-                                        >
-                                            <span className="text-sm font-bold text-slate-900 dark:text-white leading-none mb-0.5">𝕏</span>
-                                            <span className="text-[10px] font-black uppercase text-slate-900 dark:text-white">Twitter</span>
-                                        </button>
-                                        <button
-                                            onClick={handleSystemShare}
-                                            disabled={isSharingSystem}
-                                            className="h-12 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 rounded-xl flex items-center justify-center gap-2 transition-all group active:scale-95 disabled:opacity-50"
-                                        >
-                                            {isSharingSystem ? (
-                                                <Loader2 size={14} className="text-indigo-500 animate-spin" />
-                                            ) : (
-                                                <Share size={14} className="text-indigo-500 group-hover:scale-110 transition-transform" />
-                                            )}
-                                            <span className="text-[10px] font-black uppercase text-indigo-500">{t('pro_dashboard.studio.share_modal.more')}</span>
-                                        </button>
-                                    </div>
-
-                                    <button
-                                        onClick={() => setShowShareModal(false)}
-                                        className="w-full mt-2 py-2.5 text-[8px] font-black uppercase tracking-[0.25em] text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
-                                    >
-                                        {t('pro_dashboard.studio.back_btn')}
-                                    </button>
-                                </motion.div>
+                                    {t('pro_dashboard.studio.back_btn')}
+                                </button>
                             </motion.div>
-                        )}
-                    </AnimatePresence>,
-                    document.body
-                )
-            }
-        </motion.div >
+                        </motion.div>
+                    )}
+
+                    {showShareModal && (
+                        <motion.div
+                            key="share-modal"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xl"
+                            onClick={() => setShowShareModal(false)}
+                        >
+                            <motion.div
+                                initial={{ scale: 0.95, y: 20, opacity: 0 }}
+                                animate={{ scale: 1, y: 0, opacity: 1 }}
+                                exit={{ scale: 0.95, y: 20, opacity: 0 }}
+                                onClick={(e) => e.stopPropagation()}
+                                className="bg-white dark:bg-slate-900 w-full max-w-[340px] rounded-[1.5rem] p-5 space-y-4 relative border border-slate-200 dark:border-white/10 shadow-3xl mx-4 my-auto"
+                            >
+                                <button
+                                    onClick={() => setShowShareModal(false)}
+                                    className="absolute top-3 right-3 p-1.5 text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white transition-colors z-10"
+                                >
+                                    <X size={18} />
+                                </button>
+
+                                <div className="flex flex-col items-center text-center space-y-2 pt-2">
+                                    <div className="w-12 h-12 bg-linear-to-br from-blue-500/10 to-indigo-500/10 rounded-xl flex items-center justify-center text-blue-500 border border-blue-500/20 shadow-lg">
+                                        <Share size={20} />
+                                    </div>
+                                    <div className="space-y-0.5">
+                                        <h3 className="text-[15px] font-black uppercase tracking-tight text-slate-900 dark:text-white">
+                                            {t('pro_dashboard.studio.share_modal.title')}
+                                        </h3>
+                                        <p className="text-[9px] font-black uppercase tracking-[0.15em] text-blue-500">
+                                            {t('pro_dashboard.studio.share_modal.subtitle')}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-2 mt-4">
+                                    <button
+                                        onClick={() => handleSharePlatform('telegram')}
+                                        className="h-12 bg-[#0088cc]/10 hover:bg-[#0088cc]/20 border border-[#0088cc]/20 rounded-xl flex items-center justify-center gap-2 transition-all group active:scale-95"
+                                    >
+                                        <Send size={14} className="text-[#0088cc] -rotate-45 translate-x-0.5" />
+                                        <span className="text-[10px] font-black uppercase text-[#0088cc]">Telegram</span>
+                                    </button>
+                                    <button
+                                        onClick={() => handleSharePlatform('whatsapp')}
+                                        className="h-12 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/20 rounded-xl flex items-center justify-center gap-2 transition-all group active:scale-95"
+                                    >
+                                        <div className="w-4 h-4 rounded-full bg-[#25D366] shrink-0" />
+                                        <span className="text-[10px] font-black uppercase text-[#25D366]">WhatsApp</span>
+                                    </button>
+                                    <button
+                                        onClick={() => handleSharePlatform('x')}
+                                        className="h-12 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 rounded-xl flex items-center justify-center gap-2 transition-all group active:scale-95"
+                                    >
+                                        <span className="text-sm font-bold text-slate-900 dark:text-white leading-none mb-0.5">𝕏</span>
+                                        <span className="text-[10px] font-black uppercase text-slate-900 dark:text-white">Twitter</span>
+                                    </button>
+                                    <button
+                                        onClick={handleSystemShare}
+                                        disabled={isSharingSystem}
+                                        className="h-12 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 rounded-xl flex items-center justify-center gap-2 transition-all group active:scale-95 disabled:opacity-50"
+                                    >
+                                        {isSharingSystem ? (
+                                            <Loader2 size={14} className="text-indigo-500 animate-spin" />
+                                        ) : (
+                                            <Share size={14} className="text-indigo-500 group-hover:scale-110 transition-transform" />
+                                        )}
+                                        <span className="text-[10px] font-black uppercase text-indigo-500">{t('pro_dashboard.studio.share_modal.more')}</span>
+                                    </button>
+                                </div>
+
+                                <button
+                                    onClick={() => setShowShareModal(false)}
+                                    className="w-full mt-2 py-2.5 text-[8px] font-black uppercase tracking-[0.25em] text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                                >
+                                    {t('pro_dashboard.studio.back_btn')}
+                                </button>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
+        </motion.div>
     );
 };

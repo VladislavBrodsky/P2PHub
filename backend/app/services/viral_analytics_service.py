@@ -157,12 +157,27 @@ class ViralAnalyticsService:
             total_likes += likes
             total_reposts += reposts
             
+            # Construct post link
+            post_link = None
+            if post.platform == "x":
+                post_link = f"https://x.com/i/status/{post.external_id}"
+            elif post.platform == "telegram":
+                chan = post.channel_id or partner.telegram_channel_id
+                if chan and chan.startswith("@"):
+                    channel_name = chan[1:]
+                    post_link = f"https://t.me/{channel_name}/{post.external_id}"
+                elif chan:
+                    # For private channels -100... or numeric IDs, t.me/c/ID/msg_id
+                    clean_id = str(chan).replace("-100", "")
+                    post_link = f"https://t.me/c/{clean_id}/{post.external_id}"
+
             post_details.append({
                 "id": post.id,
                 "platform": post.platform,
                 "views": views,
                 "likes": likes,
                 "reposts": reposts,
+                "link": post_link,
                 "created_at": post.created_at.isoformat()
             })
 
@@ -216,8 +231,16 @@ class ViralAnalyticsService:
                     "resonance_score": min(0.99, 0.8 + (score / 1000))
                 })
 
+        # Calculate confidence based on data availability
+        confidence = 65 # Base confidence
+        if len(results) > 0:
+            confidence = min(98, 70 + (len(results) * 5) + (results[0][1] / 100))
+        elif total_gens > 0:
+            confidence = 72
+
         return {
             "resonance_engine_status": "active",
+            "confidence": round(confidence, 1),
             "next_best_action": recommendations[0] if recommendations else None,
             "top_resonance_segments": recommendations
         }

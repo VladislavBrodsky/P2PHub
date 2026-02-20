@@ -381,7 +381,7 @@ class PaymentService:
 
             # 3. Distribute Commissions to Ancestors (BEFORE commit for transaction atomicity)
             from app.services.referral_service import distribute_pro_commissions
-            await distribute_pro_commissions(session, partner.id, amount)
+            await distribute_pro_commissions(session, partner.id, amount, plan_type=partner.subscription_plan)
             
             # 3.1 Trigger "Network Catalyst" milestone for direct referrer (L1)
             # This fires the first time ANY of their direct referrals upgrades to PRO.

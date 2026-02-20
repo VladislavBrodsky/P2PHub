@@ -1442,3 +1442,90 @@ async def mark_notification_seen(
     await redis_service.client.delete(f"partner:profile:{tg_id}")
 
     return {"status": "ok"}
+
+@router.get("/finance/stats")
+async def get_finance_stats(
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Returns detailed finance stats: 72h history (income/outcome) 
+    and monthly totals for TON and USDT.
+    """
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
+    
+    partner = (await session.exec(select(Partner).where(Partner.telegram_id == tg_id))).first()
+    if not partner:
+        raise HTTPException(status_code=404, detail="Partner not found")
+        
+    now = datetime.now(UTC).replace(tzinfo=None)
+    threshold_72h = now - timedelta(hours=72)
+    start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    
+    # 1. Fetch Earnings (Income)
+    # We include USDT and potentially TON if it exists
+    earnings_stmt = select(Earning).where(
+        Earning.partner_id == partner.id,
+        Earning.currency.in_(["USDT", "TON"]),
+        Earning.created_at >= start_of_month
+    ).order_by(Earning.created_at.desc())
+    earnings = (await session.exec(earnings_stmt)).all()
+    
+    # 2. Fetch Transactions (Outcome/Spending)
+    tx_stmt = select(PartnerTransaction).where(
+        PartnerTransaction.partner_id == partner.id,
+        PartnerTransaction.status == "completed",
+        PartnerTransaction.created_at >= start_of_month
+    ).order_by(PartnerTransaction.created_at.desc())
+    transactions = (await session.exec(tx_stmt)).all()
+    
+    # 3. Combined 72h History
+    history_72h = []
+    
+    # Add Earnings
+    for e in earnings:
+        if e.created_at >= threshold_72h:
+            history_72h.append({
+                "type": "INCOME",
+                "amount": e.amount,
+                "currency": e.currency,
+                "description": e.description,
+                "created_at": e.created_at.isoformat()
+            })
+            
+    # Add Spent Transactions
+    for t in transactions:
+        if t.created_at >= threshold_72h:
+            # We treat completed payments as outcome
+            history_72h.append({
+                "type": "OUTCOME",
+                "amount": t.amount,
+                "currency": t.currency,
+                "description": f"Purchase: {t.currency}",
+                "created_at": t.created_at.isoformat()
+            })
+            
+    # Sort history
+    history_72h.sort(key=lambda x: x["created_at"], reverse=True)
+    
+    # 4. Calculate Monthly Stats
+    monthly_stats = {
+        "USDT": {"income": 0.0, "outcome": 0.0},
+        "TON": {"income": 0.0, "outcome": 0.0}
+    }
+    
+    for e in earnings:
+        if e.currency in ["USDT", "TON"]:
+            monthly_stats[e.currency]["income"] += e.amount
+            
+    for t in transactions:
+        if t.currency in ["USDT", "TON"]:
+            monthly_stats[t.currency]["outcome"] += t.amount
+            
+    return {
+        "history_72h": history_72h,
+        "monthly_stats": monthly_stats,
+        "total_earned": partner.total_earned_usdt,
+        "balance": partner.balance
+    }

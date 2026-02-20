@@ -213,18 +213,19 @@ export const ProDashboardModals = ({
                             className="w-full max-w-lg rounded-[2.5rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[85vh] relative"
                         >
                             {/* Header Section */}
-                            <div className="px-6 py-5 sm:px-8 sm:py-6 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-indigo-500/5 to-transparent relative z-20">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-600/30">
-                                        <Network size={22} className="text-white" />
+                            <div className="px-6 py-5 sm:px-8 sm:py-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-indigo-500/5 to-transparent relative z-20 scanning-glow">
+                                <div className="circuit-decor" />
+                                <div className="flex items-center gap-3 relative z-10">
+                                    <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-600/30 pulse-ring-indigo">
+                                        <Network size={20} className="text-white" />
                                     </div>
                                     <div className="min-w-0">
-                                        <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1 truncate">
+                                        <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1 truncate">
                                             {t('pro_dashboard.setup.title')}
                                         </h3>
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse shadow-sm" />
-                                            <span className="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest truncate">
+                                        <div className="flex items-center gap-1.5">
+                                            <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                                            <span className="text-[8px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest truncate">
                                                 {t('pro_dashboard.setup.subtitle')}
                                             </span>
                                         </div>
@@ -232,9 +233,9 @@ export const ProDashboardModals = ({
                                 </div>
                                 <button
                                     onClick={() => setShowSetup(false)}
-                                    className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/10 transition-all border border-slate-200 dark:border-white/10 group"
+                                    className="w-9 h-9 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/10 transition-all border border-slate-200 dark:border-white/10 group relative z-10"
                                 >
-                                    <X size={20} className="text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors" />
+                                    <X size={18} className="text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors" />
                                 </button>
                             </div>
 

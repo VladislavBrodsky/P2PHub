@@ -14,6 +14,7 @@ import { getApiUrl } from '../../utils/api';
 import { PartnerBriefingModal } from './PartnerBriefingModal';
 import { TopPartnersList } from '../Community/TopPartnersList';
 import { ProWelcomeCard } from './ProWelcomeCard';
+import { FinanceStatsModal } from './FinanceStatsModal';
 import { useUI } from '../../context/UIContext';
 
 export const PartnerDashboard = () => {
@@ -26,6 +27,7 @@ export const PartnerDashboard = () => {
     const [isBriefingOpen, setIsBriefingOpen] = React.useState(false);
     const [isProWelcomeOpen, setIsProWelcomeOpen] = React.useState(false);
     const [isEarningsExpanded, setIsEarningsExpanded] = React.useState(false);
+    const [isFinanceOpen, setIsFinanceOpen] = React.useState(false);
 
     React.useEffect(() => {
         const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
@@ -125,8 +127,14 @@ export const PartnerDashboard = () => {
 
                 {/* Quick Stats Row */}
                 <div className="grid grid-cols-2 gap-2">
-                    <div className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm flex flex-col">
-                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">{t('partner_dashboard.total_earned')}</div>
+                    <div
+                        onClick={() => { selection(); setIsFinanceOpen(true); }}
+                        className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm flex flex-col cursor-pointer active:scale-[0.98] transition-all hover:bg-white/80 dark:hover:bg-slate-800/50"
+                    >
+                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1 flex items-center justify-between">
+                            <span>{t('partner_dashboard.total_earned')}</span>
+                            <ChevronRight className="w-3 h-3 opacity-30" />
+                        </div>
                         <div className="text-2xl font-black text-slate-900 dark:text-white">${(user?.total_earned || 0).toFixed(2)}</div>
                         {!user?.is_pro && (user?.balance || 0) >= 39 && (
                             <button
@@ -327,6 +335,11 @@ export const PartnerDashboard = () => {
 
             <PartnerBriefingModal isOpen={isBriefingOpen} onClose={() => setIsBriefingOpen(false)} />
             <ProWelcomeCard isOpen={isProWelcomeOpen} onClose={handleCloseProWelcome} />
+            <AnimatePresence>
+                {isFinanceOpen && (
+                    <FinanceStatsModal isOpen={isFinanceOpen} onClose={() => setIsFinanceOpen(false)} />
+                )}
+            </AnimatePresence>
 
             {/* Network Explorer Overlay */}
             <AnimatePresence>

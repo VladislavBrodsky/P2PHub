@@ -255,7 +255,7 @@ async def _finalize_referral_logic(deferred_tasks: list):
         await asyncio.gather(*deferred_tasks, return_exceptions=True)
 
 @async_retry(max_attempts=3, base_delay=1.0)
-async def distribute_pro_commissions(session: AsyncSession, partner_id: int, total_amount: float):
+async def distribute_pro_commissions(session: AsyncSession, partner_id: int, total_amount: float, plan_type: str | None = None):
     """
     Distributes commissions for PRO ($39) or PRO+ ($69) subscription purchase.
     Implements DYNAMIC COMPRESSION: If an intermediary is not PRO, the commission 
@@ -266,8 +266,12 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
         return
 
     # Determine Model: PRO ($39) or PRO+ ($69)
-    # Default to PRO if amount doesn't match PRO+ exactly
-    is_pro_plus = total_amount >= (settings.PRO_PLUS_PRICE_USD - 0.1)
+    # Use plan_type if provided, else fallback to amount-based detection
+    if plan_type:
+        is_pro_plus_purchase = "PRO_PLUS" in plan_type
+    else:
+        is_pro_plus_purchase = total_amount >= (settings.PRO_PLUS_PRICE_USD - 0.1)
+    
     comm_map = settings.COMMISSION_MAP_EMPIRE
     _max_recipients = 20
 
@@ -383,7 +387,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             
             session.add(recipient)
             
-            description = f"{'PRO+' if is_pro_plus else 'PRO'} Commission (L{comm_level})"
+            description = f"{'PRO+' if is_pro_plus_purchase else 'PRO'} Commission (L{comm_level})"
             if not found_qualified_partner:
                 skipped_info = f" (Skipped {first_skipped_partner.telegram_id})" if first_skipped_partner else f" (from {partner.telegram_id})"
                 description = f"Missed Tree Revenue: Compression Leakage (L{comm_level}{skipped_info})"

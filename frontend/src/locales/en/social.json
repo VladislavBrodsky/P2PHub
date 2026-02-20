@@ -357,6 +357,19 @@
     "xp_tab": "XP",
     "crypto_tab": "Crypto",
     "upgrade_pro_btn": "UPGRADE PRO",
-    "upgrade_plus_btn": "UPGRADE PRO+"
+    "upgrade_plus_btn": "UPGRADE PRO+",
+    "finance_stats": {
+      "title": "Finance Operations",
+      "live_data": "Live Ledger Data",
+      "history_72h": "Alpha Activity (72h)",
+      "monthly_income": "Monthly Income Velocity",
+      "monthly_outcome": "Monthly Outflow",
+      "income": "INFLOW",
+      "outcome": "OUTFLOW",
+      "ton_stats": "TON Analytics",
+      "usdt_stats": "USDT Analytics",
+      "no_activity": "Quiet Perimeter",
+      "no_activity_desc": "No crypto events recorded in the last 72 hours."
+    }
   }
 }

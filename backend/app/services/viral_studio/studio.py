@@ -184,15 +184,20 @@ class ViralMarketingStudio:
         return None, 0
 
     async def _generate_image(self, prompt: str, partner_id: int) -> str | None:
+        """Sequential image generation trying Google then OpenAI."""
+        # 1. Google Imagen (Fastest & Usually Best)
         if self.genai_client:
-            # Prioritizing Gemini 3 Pro (Nano Banana) and Imagen 3.0
-            models = ['gemini-3-pro-nano-banana', 'gemini-3-pro', 'imagen-3.0-generate-001', 'imagen-3.0-fast-generate-001']
+            models = ['imagen-3.0-generate-001', 'imagen-3.0-fast-generate-001', 'imagen-3.0-capability-001']
             for m in models:
-                success, url = await self._try_imagen(m, prompt, partner_id)
-                if success:
-                    self._last_working_imagen_model = m
-                    return url
+                try:
+                    success, url = await self._try_imagen(m, prompt, partner_id)
+                    if success:
+                        self._last_working_imagen_model = m
+                        return url
+                except Exception as e:
+                    logger.warning(f"Imagen model {m} failed: {e}")
         
+        # 2. OpenAI DALL-E 3
         if self.openai_client:
             try:
                 res = await self.openai_client.images.generate(model="dall-e-3", prompt=prompt, n=1)
@@ -206,25 +211,46 @@ class ViralMarketingStudio:
                         with open(save_path, 'wb') as f: f.write(img_res.content)
                         return f"/generated_media/{filename}"
                 return img_url
-            except: pass
+            except Exception as e:
+                logger.error(f"DALL-E 3 failed: {e}")
+        
+        if not self.openai_client and not self.genai_client:
+            logger.error("🛑 CRITICAL: No Image AI client initialized. Check API keys.")
+            
         return None
 
-    async def _try_imagen(self, model, prompt, partner_id) -> tuple[bool, str | None]:
+    async def _try_imagen(self, model: str, prompt: str, partner_id: int) -> tuple[bool, str | None]:
+        """Attempt to generate an image using a specific Google model."""
         try:
+            # Using new google-genai SDK awaitable method
             res = await asyncio.wait_for(
                 self.genai_client.aio.models.generate_images(
-                    model=model, prompt=prompt, config=genai_types.GenerateImagesConfig(number_of_images=1)
-                ), timeout=25.0
+                    model=model, 
+                    prompt=prompt, 
+                    config=genai_types.GenerateImagesConfig(number_of_images=1)
+                ), 
+                timeout=45.0 # Imagen 3 can be slow
             )
+            
             if res and res.generated_images:
                 img_obj = res.generated_images[0].image
                 filename = f"viral_{partner_id}_{secrets.token_hex(4)}.png"
                 save_path = self._get_save_path(filename)
-                if hasattr(img_obj, 'save'): img_obj.save(save_path)
+                
+                # Check format
+                if hasattr(img_obj, 'save'): 
+                    img_obj.save(save_path)
                 elif hasattr(img_obj, 'image_bytes'): 
                     with open(save_path, 'wb') as f: f.write(img_obj.image_bytes)
+                else:
+                    # Some versions return raw bytes vs PIL Image
+                    with open(save_path, 'wb') as f: f.write(img_obj)
+                    
                 return True, f"/generated_media/{filename}"
-        except: pass
+            
+            logger.warning(f"Imagen {model} returned no images.")
+        except Exception as e:
+            logger.debug(f"Imagen {model} error: {e}")
         return False, None
 
     def _get_save_path(self, filename: str) -> str:
