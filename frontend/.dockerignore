@@ -7,7 +7,6 @@ dist_backup_*
 .env
 public_deprecated
 public_corrupted
-public_EPERM_SHIT
 tmp
 avatars_tmp
 build.log

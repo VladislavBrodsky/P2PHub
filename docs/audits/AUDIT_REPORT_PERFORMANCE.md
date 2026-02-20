@@ -5,14 +5,14 @@
 
 ## Executive Summary
 
-The reported **10-16s startup time** and **EPERM build failures** have been successfully addressed.
+The reported **10-16s startup time** and build failures have been successfully addressed.
 The application bundle size was optimized from a monolithic **2.8MB** (approx) initial download to a lightweight **425KB** core bundle by aggressively splitting heavy dependencies and assets.
 
 **Impact of Fixes applied**:
 - **Core Bundle Size**: Reduced `index.js` from **~1.5MB** to **425KB** (-72%).
 - **Heavy Assets**: `avatars.ts` (558KB) is now a separate chunk, improving caching.
 - **Libraries**: `recharts` (496KB), `@tonconnect` (419KB), and `@sentry` (451KB) are now split into separate parallel-loadable files.
-- **Build Stability**: Fixed persistent `EPERM` errors by safeguarding the public assets folder.
+- **Build Stability**: Resolved asset permission issues by safeguarding the public assets folder.
 - **Network**: Added `<link rel="preconnect">` for the API server to shave ~300ms off request latency.
 
 ---
@@ -43,7 +43,7 @@ The application bundle size was optimized from a monolithic **2.8MB** (approx) i
 - **Fix Applied**: Moved photo fetching to a background task (`partner_service.py`). The API now returns user data instantly.
 
 ### 5. Build System Stability
-- **Problem**: `EPERM: operation not permitted` on `favicon.webp`.
+- **Problem**: Permission errors on `favicon.webp`.
 - **Fix Applied**: Migrated compliant assets to `public_safe/` and updated `vite.config.ts` to use it as the public directory.
 
 ### 6. Mobile Performance (PageSpeed)

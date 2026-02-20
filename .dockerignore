@@ -7,7 +7,6 @@ node_modules
 dist
 build
 # Junk / Corrupted Folders
-frontend/public_EPERM_SHIT
 frontend/public_corrupted
 frontend/public_deprecated
 frontend/dist_backup_*

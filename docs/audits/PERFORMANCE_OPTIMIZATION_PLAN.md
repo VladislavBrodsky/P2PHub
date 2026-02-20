@@ -24,7 +24,7 @@ Improve the PageSpeed Insights score (currently 56/100 Mobile) by addressing key
 **Fix**:
 - Re-install and configure `vite-plugin-compression`.
 - Update `server.cjs` to prefer serving `.br` or `.gz` files if they exist and the client supports them.
-- Ensure build permissions are handled correctly to avoid `EPERM` errors.
+- Ensure build permissions are handled correctly.
 
 ### 3. ✂️ Advanced Code Splitting
 **Problem**: "Reduce unused JavaScript" (~800 KiB unused).
@@ -47,5 +47,5 @@ Improve the PageSpeed Insights score (currently 56/100 Mobile) by addressing key
 ## 📅 Execution Strategy
 1. **Modify `server.cjs`**: Add headers and compression serving logic.
 2. **Update `vite.config.ts`**: Restore optimization plugins and refine chunks.
-3. **Build & Verify**: Run a local build to ensure no `EPERM` errors.
+3. **Build & Verify**: Run a local build to ensure no more permission errors.
 4. **Deploy**: Push to Railway and re-audit.

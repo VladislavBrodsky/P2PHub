@@ -54,6 +54,11 @@
         "parents": "Stay-at-home Parents",
         "hustlers": "Student Hustlers",
         "burnouts": "Corporate Burnouts"
+      },
+      "share_modal": {
+        "title": "Viral Broadcast",
+        "subtitle": "Select platform to distribute",
+        "more": "More Options"
       }
     },
     "setup": {
