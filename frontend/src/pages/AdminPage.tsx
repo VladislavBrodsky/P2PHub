@@ -57,6 +57,7 @@ interface DashboardStats {
         k_factor: number;
         ref_participation: number;
         engagement_rate: number;
+        avg_depth: number;
     };
     financials: {
         total_revenue: number;
@@ -480,6 +481,16 @@ export const AdminPage = () => {
                                 </div>
                                 <div className="text-lg font-black text-pink-500">{stats?.kpis.ref_participation}%</div>
                                 <div className="text-[8px] font-bold text-slate-500 uppercase">Active referrers share</div>
+                            </div>
+                            <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Network Density</div>
+                                    <div className="p-1 bg-emerald-500/10 rounded-lg text-emerald-500">
+                                        <Layers size={10} />
+                                    </div>
+                                </div>
+                                <div className="text-lg font-black text-emerald-500">{stats?.kpis.avg_depth} <span className="text-[10px] opacity-60">Gen</span></div>
+                                <div className="text-[8px] font-bold text-slate-500 uppercase">Avg Generation Depth</div>
                             </div>
                         </div>
 
