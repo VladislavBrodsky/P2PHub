@@ -212,8 +212,8 @@ class Settings(BaseSettings):
             logger.warning(f"⚠️ WARNING: BOT_TOKEN has unusual format: {self.BOT_TOKEN[:10]}...")
             
         # 2. Check DATABASE_URL
-        if not self.DATABASE_URL or "postgresql" not in self.DATABASE_URL:
-            logger.error("🛑 CRITICAL: DATABASE_URL is missing or not a Postgres URL!")
+        if not self.DATABASE_URL or ("postgresql" not in self.DATABASE_URL and "sqlite" not in self.DATABASE_URL):
+            logger.error("🛑 CRITICAL: DATABASE_URL is missing or not a Postgres/SQLite URL!")
             
         return self
 
