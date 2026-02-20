@@ -431,12 +431,12 @@ export const StudioTab = ({
                                     <Terminal size={18} className="text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="text-[11px] sm:text-[13px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white leading-none mb-1">
+                                    <h4 className="text-[13px] sm:text-[15px] font-bold text-slate-900 dark:text-white leading-none mb-1.5">
                                         {t('pro_dashboard.studio.matrix_title')}
-                                    </h3>
+                                    </h4>
                                     <div className="flex items-center gap-1.5">
                                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none">
+                                        <span className="text-[9px] font-medium text-slate-400 leading-none">
                                             {t('pro_dashboard.studio.matrix_subtitle')}
                                         </span>
                                     </div>
@@ -537,10 +537,10 @@ export const StudioTab = ({
                                                 <LinkIcon size={16} />
                                             </div>
                                             <div>
-                                                <h4 className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                                                <h4 className="text-[12px] font-bold text-slate-900 dark:text-white">
                                                     {t('pro_dashboard.studio.add_personal_link')}
                                                 </h4>
-                                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">
+                                                <p className="text-[9px] font-medium text-slate-400 leading-tight mt-0.5">
                                                     {t('pro_dashboard.studio.personal_link_subtitle')}
                                                 </p>
                                             </div>
@@ -576,12 +576,11 @@ export const StudioTab = ({
                                                         value={personalLink}
                                                         onChange={(e) => setPersonalLink(e.target.value)}
                                                         placeholder="https://t.me/pintopaybot?start=..."
-                                                        className="w-full h-11 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-[10px] font-medium text-slate-900 dark:text-white placeholder:text-slate-400/50 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 outline-hidden transition-all shadow-inner"
+                                                        className="w-full h-11 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl pl-4 pr-24 text-[11px] font-medium text-slate-900 dark:text-white placeholder:text-slate-400/50 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 outline-hidden transition-all shadow-inner"
                                                     />
                                                     <button
                                                         onClick={() => handleUpdatePersonalLink(personalLink)}
-                                                        disabled={isUpdatingLink || !personalLink || personalLink === status.personal_referral_link}
-                                                        className="absolute right-1.5 top-1.5 h-8 px-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg text-[8px] font-black uppercase tracking-widest disabled:opacity-30 transition-all active:scale-95 shadow-lg"
+                                                        className="absolute right-1 top-1 bottom-1 px-4 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-[9px] font-bold uppercase tracking-wider disabled:opacity-30 transition-all active:scale-95 shadow-md"
                                                     >
                                                         {isUpdatingLink ? <Loader2 size={10} className="animate-spin" /> : t('common.save', 'Save')}
                                                     </button>
@@ -589,8 +588,8 @@ export const StudioTab = ({
 
                                                 <div className="flex items-center gap-2 p-3 bg-amber-500/5 rounded-xl border border-amber-500/10">
                                                     <Info size={12} className="text-amber-500 shrink-0" />
-                                                    <p className="text-[8px] font-bold text-amber-700 dark:text-amber-500 uppercase tracking-tight">
-                                                        {t('pro_dashboard.studio.personal_link_warning')} <span className="font-black text-slate-900 dark:text-white">https://t.me/pintopaybot?start=</span>
+                                                    <p className="text-[9px] font-medium text-slate-600 dark:text-slate-400 leading-tight">
+                                                        {t('pro_dashboard.studio.personal_link_warning')} <span className="font-bold text-indigo-500 break-all">https://t.me/pintopaybot?start=...</span>
                                                     </p>
                                                 </div>
                                             </motion.div>

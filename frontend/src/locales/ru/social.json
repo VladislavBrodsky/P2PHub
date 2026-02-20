@@ -357,6 +357,19 @@
     "xp_tab": "XP",
     "crypto_tab": "Crypto",
     "upgrade_pro_btn": "КАЧНУТЬ PRO",
-    "upgrade_plus_btn": "КАЧНУТЬ PRO+"
+    "upgrade_plus_btn": "КАЧНУТЬ PRO+",
+    "finance_stats": {
+      "title": "Финансовые Операции",
+      "live_data": "Актуальные данные реестра",
+      "history_72h": "Альфа-Активность (72ч)",
+      "monthly_income": "Скорость дохода за месяц",
+      "monthly_outcome": "Расход за месяц",
+      "income": "ПРИТОК",
+      "outcome": "ОТТОК",
+      "ton_stats": "TON Аналитика",
+      "usdt_stats": "USDT Аналитика",
+      "no_activity": "Тихий периметр",
+      "no_activity_desc": "За последние 72 часа крипто-событий не зафиксировано."
+    }
   }
 }

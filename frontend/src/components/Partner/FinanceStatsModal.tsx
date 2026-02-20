@@ -118,7 +118,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                 </span>
                                                 <div className="flex items-center gap-1.5">
                                                     <span className="text-xl font-black text-emerald-500">
-                                                        +${stats.monthly_stats?.USDT?.income.toFixed(2)}
+                                                        +${(stats.monthly_stats?.USDT?.income ?? 0).toFixed(2)}
                                                     </span>
                                                     <ArrowUpRight className="w-3.5 h-3.5 text-emerald-500 opacity-50" />
                                                 </div>
@@ -129,7 +129,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                 </span>
                                                 <div className="flex items-center gap-1.5">
                                                     <span className="text-xl font-black text-slate-400">
-                                                        -${stats.monthly_stats?.USDT?.outcome.toFixed(2)}
+                                                        -${(stats.monthly_stats?.USDT?.outcome ?? 0).toFixed(2)}
                                                     </span>
                                                     <ArrowDownRight className="w-3.5 h-3.5 text-slate-400 opacity-50" />
                                                 </div>
@@ -157,7 +157,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                 </span>
                                                 <div className="flex items-center gap-1.5">
                                                     <span className="text-xl font-black text-blue-500">
-                                                        +{stats.monthly_stats?.TON?.income.toFixed(2)} TON
+                                                        +{(stats.monthly_stats?.TON?.income ?? 0).toFixed(2)} TON
                                                     </span>
                                                     <ArrowUpRight className="w-3.5 h-3.5 text-blue-500 opacity-50" />
                                                 </div>
@@ -168,7 +168,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                 </span>
                                                 <div className="flex items-center gap-1.5">
                                                     <span className="text-xl font-black text-slate-400">
-                                                        -{stats.monthly_stats?.TON?.outcome.toFixed(2)} TON
+                                                        -{(stats.monthly_stats?.TON?.outcome ?? 0).toFixed(2)} TON
                                                     </span>
                                                     <ArrowDownRight className="w-3.5 h-3.5 text-slate-400 opacity-50" />
                                                 </div>
@@ -209,9 +209,19 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                                 {isIncome ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
                                                             </div>
                                                             <div className="flex flex-col">
-                                                                <span className="text-[11.5px] font-bold text-slate-900 dark:text-white leading-tight">
-                                                                    {item.description}
-                                                                </span>
+                                                                <div className="flex items-center gap-2">
+                                                                    <span className="text-[11.5px] font-bold text-slate-900 dark:text-white leading-tight">
+                                                                        {item.description}
+                                                                    </span>
+                                                                    {item.status && item.status !== 'completed' && (
+                                                                        <span className={`px-1 rounded-[4px] text-[6px] font-black uppercase tracking-tighter ${item.status === 'pending' || item.status === 'manual_review'
+                                                                                ? 'bg-amber-500/20 text-amber-500'
+                                                                                : 'bg-red-500/20 text-red-500'
+                                                                            }`}>
+                                                                            {item.status === 'manual_review' ? 'REVIEW' : item.status}
+                                                                        </span>
+                                                                    )}
+                                                                </div>
                                                                 <span className="text-[8.5px] font-bold text-slate-400 uppercase tracking-tight mt-0.5">
                                                                     {new Date(item.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                                                 </span>
@@ -219,7 +229,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                         </div>
                                                         <div className="text-right">
                                                             <div className={`text-sm font-black tabular-nums ${isIncome ? 'text-emerald-500' : 'text-slate-400'}`}>
-                                                                {isIncome ? '+' : '-'}{item.amount.toFixed(2)}
+                                                                {isIncome ? '+' : '-'}{(item.amount ?? 0).toFixed(2)}
                                                                 <span className="text-[8px] ml-1 uppercase opacity-60 font-black">{item.currency}</span>
                                                             </div>
                                                             <div className="text-[8px] font-black uppercase tracking-widest text-slate-400 mt-0.5">

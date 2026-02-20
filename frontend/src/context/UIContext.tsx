@@ -24,14 +24,26 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     React.useEffect(() => {
         const handleResize = () => {
-            // Virtual viewport is reduced when keyboard opens on mobile devices
             if (window.visualViewport) {
                 const diff = window.innerHeight - window.visualViewport.height;
-                setIsKeyboardOpen(diff > 150); // Threshold to detect keyboard vs normal top-bar shrink
+                // Threshold of 160px is safer for modern mobile keyboards
+                setIsKeyboardOpen(diff > 160);
+            } else {
+                // Fallback for browsers without visualViewport
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                if (isMobile) {
+                    setIsKeyboardOpen(window.innerHeight < 500); // Simple height-based heuristic
+                }
             }
         };
+
         window.visualViewport?.addEventListener('resize', handleResize);
-        return () => window.visualViewport?.removeEventListener('resize', handleResize);
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.visualViewport?.removeEventListener('resize', handleResize);
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
     const value = useMemo(() => ({

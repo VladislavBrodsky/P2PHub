@@ -278,6 +278,7 @@ async def get_my_transactions(
         {
             "id": t.id,
             "amount": t.amount,
+            "amount_crypto": t.amount_crypto,
             "currency": t.currency,
             "network": t.network,
             "status": t.status,

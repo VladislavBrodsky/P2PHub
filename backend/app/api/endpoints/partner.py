@@ -1463,20 +1463,21 @@ async def get_finance_stats(
     threshold_72h = now - timedelta(hours=72)
     start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     
+    # Query for enough data to cover BOTH 72h history and Monthly Stats
+    fetch_after = min(start_of_month, threshold_72h)
+    
     # 1. Fetch Earnings (Income)
-    # We include USDT and potentially TON if it exists
     earnings_stmt = select(Earning).where(
         Earning.partner_id == partner.id,
         Earning.currency.in_(["USDT", "TON"]),
-        Earning.created_at >= start_of_month
+        Earning.created_at >= fetch_after
     ).order_by(Earning.created_at.desc())
     earnings = (await session.exec(earnings_stmt)).all()
     
     # 2. Fetch Transactions (Outcome/Spending)
     tx_stmt = select(PartnerTransaction).where(
         PartnerTransaction.partner_id == partner.id,
-        PartnerTransaction.status == "completed",
-        PartnerTransaction.created_at >= start_of_month
+        PartnerTransaction.created_at >= fetch_after
     ).order_by(PartnerTransaction.created_at.desc())
     transactions = (await session.exec(tx_stmt)).all()
     
@@ -1497,12 +1498,24 @@ async def get_finance_stats(
     # Add Spent Transactions
     for t in transactions:
         if t.created_at >= threshold_72h:
-            # We treat completed payments as outcome
+            # We treat payments as outcome
+            # Optimization: Use amount_crypto for TON if available
+            amt = t.amount_crypto if (t.currency == "TON" and t.amount_crypto) else t.amount
+            
+            description = f"Purchase: {t.currency}"
+            if t.status == "manual_review":
+                description = f"Review: {t.currency} Payment"
+            elif t.status == "pending":
+                description = f"Pending: {t.currency} Payment"
+            elif t.status == "failed":
+                description = f"Failed: {t.currency} Payment"
+
             history_72h.append({
                 "type": "OUTCOME",
-                "amount": t.amount,
+                "amount": amt,
                 "currency": t.currency,
-                "description": f"Purchase: {t.currency}",
+                "description": description,
+                "status": t.status,
                 "created_at": t.created_at.isoformat()
             })
             
@@ -1516,12 +1529,13 @@ async def get_finance_stats(
     }
     
     for e in earnings:
-        if e.currency in ["USDT", "TON"]:
+        if e.created_at >= start_of_month and e.currency in ["USDT", "TON"]:
             monthly_stats[e.currency]["income"] += e.amount
             
     for t in transactions:
-        if t.currency in ["USDT", "TON"]:
-            monthly_stats[t.currency]["outcome"] += t.amount
+        if t.created_at >= start_of_month and t.status == "completed" and t.currency in ["USDT", "TON"]:
+            amt = t.amount_crypto if (t.currency == "TON" and t.amount_crypto) else t.amount
+            monthly_stats[t.currency]["outcome"] += amt
             
     return {
         "history_72h": history_72h,

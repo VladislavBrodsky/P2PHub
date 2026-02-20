@@ -469,7 +469,8 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
             ...t,
             isTransaction: true,
             description: t.description || `${t.currency} ${t.status.toUpperCase()}`,
-            amount: t.amount,
+            // Use crypto amount for TON transactions, else USD amount
+            amount: (t.currency === 'TON' && t.amount_crypto) ? t.amount_crypto : t.amount,
             currency: t.currency,
             type: 'TRANSACTION',
             date: new Date(t.created_at)
@@ -575,6 +576,14 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                                 </div>
 
                                 <div className="flex items-center gap-2">
+                                    {item.status && item.status !== 'completed' && (
+                                        <div className={`px-1 rounded text-[6px] font-black uppercase tracking-tighter ${item.status === 'pending' || item.status === 'manual_review'
+                                                ? 'bg-amber-500/20 text-amber-500'
+                                                : 'bg-red-500/20 text-red-500'
+                                            }`}>
+                                            {item.status === 'manual_review' ? 'REVIEW' : item.status}
+                                        </div>
+                                    )}
                                     {item.level && (
                                         <div className="relative group">
                                             <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-md blur-[2px] group-hover:blur-[3px] transition-all" />
@@ -585,10 +594,10 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                                         </div>
                                     )}
                                     <div className="flex items-center gap-1">
-                                        <span className={`font-black ${styles.text} text-sm tracking-tight leading-none`}>
-                                            +{item.currency === 'XP' ? item.amount : item.amount.toFixed(item.amount < 1 ? 3 : 2)}
+                                        <span className={`font-black ${item.isTransaction ? 'text-slate-400' : styles.text} text-sm tracking-tight leading-none`}>
+                                            {item.isTransaction ? '-' : '+'}{item.currency === 'XP' ? (item.amount ?? 0) : (item.amount ?? 0).toFixed((item.amount ?? 0) < 1 ? 3 : 2)}
                                         </span>
-                                        <span className={`text-[7.5px] font-black ${styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
+                                        <span className={`text-[7.5px] font-black ${item.isTransaction ? 'text-slate-400' : styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
                                             {item.currency}
                                         </span>
                                     </div>
