@@ -398,19 +398,15 @@ class AdminService:
         Calculates viral growth indicators (K-Factor, Velocity).
         """
         # K-Factor = (Total Referrals) / (Total Partners)
-        # In our system, every partner except the very first one is a referral
-        # So K-Factor is roughly (total - 1) / total, but we want to see 
-        # active referrers vs observers.
-        
         referring_partners = (await session.exec(select(func.count(func.distinct(Partner.referrer_id))))).one() or 1
         k_factor = round(total_partners / referring_partners, 2) if referring_partners > 0 else 0
         
-        # Velocity: Average time to first referral (last 30 days)
-        # Logic: Find users who joined in last 30d and have at least 1 referral.
-        # Calc avg(min(referral.created_at) - user.created_at)
+        # Network Density (Phase 4): Average generation depth across entire network
+        avg_depth = (await session.exec(select(func.avg(Partner.depth)))).one() or 1.0
         
         return {
             "k_factor": k_factor,
+            "avg_depth": round(float(avg_depth), 2),
             "ref_participation": round((referring_partners / total_partners * 100), 1) if total_partners > 0 else 0
         }
 
