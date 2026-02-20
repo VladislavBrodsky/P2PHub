@@ -68,7 +68,7 @@ Referral Link (MUST INCLUDE): {ref_link}
 **OUTPUT FORMAT (JSON ONLY):**
 {{
   "title": "A high-status strategic title <10 words",
-  "body": "**Chapter X: [Title]**\\n\\n[THE ALPHA HOOK]\\n\\n[Value/Strategy Context]\\n\\n[LEAD MAGNET OFFER: Offer a blueprint/setup for a comment]\\n\\n**[Action Oriented CTA]({ref_link})** (Replace {ref_link} with the actual URL: {ref_link})",
+  "body": "**Chapter X: [Title]**\\n\\n[THE ALPHA HOOK]\\n\\n[Value/Strategy Context]\\n\\n[LEAD MAGNET OFFER: Offer a blueprint/setup for a comment]\\n\\n**[Action Oriented CTA]({ref_link})**",
   "hashtags": ["#Sovereignty", "#Fintech", "#DeFi", "#ExitStrategy"],
   "image_description": "Elite Leica M11 prompt following the SPECIFICATION."
 }}
@@ -106,9 +106,9 @@ Available Episodes: {category_strategy.get('storytelling', {}).get('episodes', [
 2. **SALES BETWEEN THE LINES:** Master subtle persuasion. Do not pitch. Create a desire for the 'identity' of a {target_audience} leader.
 3. **EMPATHY & EMOTION:** Start by mirroring the audience's deep internal monologue. Make them feel 'seen'.
 4. **ENGAGEMENT ARCHITECTURE:** End or pivot with a provocative question or a call to 'Signal' for an asset to drive comments/interaction. **CHOOSE ONE LEAD MAGNET TO TEASE:** {', '.join(audience_intel.get('lead_magnets', []))}.
-5. **SEO VIRALITY:** Optimize the title and structure for high algorithm resonance.
+5. **SEO VIRALITY & COMPLETELY UNIQUE VOICE (CRITICAL!!):** Optimize the title and structure for high algorithm resonance. DO NOT USE GENERIC TEMPLATES. Ensure the generation is 100% unique for this EXACT combination: Audience=[{target_audience}] + Strategy=[{post_type}] + Tone=[{tone.upper()}].
 6. **EPISODIC NARRATIVE:** Start with "**Chapter [X]: [High-Status Title]**".
-7. **CTA SUPREMACY:** The final line MUST be a bold markdown link: **[Action Text]({ref_link})**.
+7. **CTA SUPREMACY:** The final line MUST be exactly the markdown link: **[Compelling Action Text Here]({ref_link})**.
 8. **BANNED:** No direct sales speak. No generic cliches. No exclamation marks.
 
 **VISUAL DIRECTION (for context):**

@@ -99,7 +99,8 @@
         "title": "Active: Wealth Hacker Strategy",
         "mode": "PRO MODE",
         "desc": "Using geometric growth protocols and specialized Web App referral links for <1>maximum geometric scaling</1>."
-      }
+      },
+      "generate_new_btn": "Generate New Post"
     },
     "setup": {
       "title": "Protocol Configuration",

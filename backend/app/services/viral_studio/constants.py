@@ -107,7 +107,7 @@ TEXT_RULES: Final[str] = """
 IMAGE_RULES: Final[str] = """
 ULTRA-REALISTIC CINEMATIC IMAGE SPECIFICATION:
 - Photography Style: Professional DSLR shot, 35mm lens, f/2.8 aperture, natural lighting with subtle rim light
-- Quality: 4K resolution, photorealistic rendering, film grain texture, cinematic color grading
+- Quality: 1K (1024x1024) resolution optimized for extreme speed, photorealistic rendering, film grain texture, cinematic color grading
 - Composition: Rule of thirds, balanced depth of field, professional framing
 - Subject Matter: Real people in authentic settings (modern offices, luxury co-working spaces, rooftop cafes, premium lifestyle)
 - Environment: Contemporary 2025-2026 aesthetics - sleek minimalism, natural materials, warm ambient lighting

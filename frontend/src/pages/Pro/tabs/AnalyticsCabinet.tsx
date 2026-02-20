@@ -67,58 +67,75 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                 ))}
             </div>
 
-            <div className="relative bg-white dark:bg-slate-900/80 backdrop-blur-2xl p-6 rounded-[2rem] border border-white/40 dark:border-white/10 shadow-2xl overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 blur-3xl rounded-full -mr-16 -mt-16" />
+            <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[1.5rem] sm:rounded-[2rem] p-6 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
+                <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+                <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[80px] rounded-full -mr-32 -mt-32 animate-pulse" />
 
-                <div className="flex items-center justify-between mb-6 relative z-10">
+                <div className="circuit-decor opacity-10" />
+
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 relative z-10">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">
-                            <BrainCircuit size={20} className="animate-pulse" />
+                        <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-500 shadow-xl shadow-indigo-500/10 border border-indigo-500/10 shrink-0 pulse-ring-indigo">
+                            <BrainCircuit size={24} className="animate-pulse" />
                         </div>
                         <div>
-                            <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{t('pro_dashboard.analytics.resonance.title')}</h3>
-                            <div className="flex items-center gap-1.5 mt-0.5">
-                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest leading-none">
+                            <h3 className="text-[14px] sm:text-[16px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">
+                                {t('pro_dashboard.analytics.resonance.title')}
+                            </h3>
+                            <div className="flex items-center gap-1.5 mt-1">
+                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
+                                <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest leading-none">
                                     {t('pro_dashboard.analytics.resonance.status')}
                                 </span>
                             </div>
                         </div>
                     </div>
-                    <div className="bg-slate-100 dark:bg-white/5 px-3 py-1.5 rounded-full border border-slate-200 dark:border-white/10 shrink-0">
+                    <div className="bg-slate-50 dark:bg-indigo-500/5 px-4 py-2 rounded-2xl border border-slate-100 dark:border-indigo-500/10 shrink-0 shadow-sm flex items-center justify-center">
                         <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tighter whitespace-nowrap">
                             {t('pro_dashboard.analytics.resonance.confidence', { percent: resonance?.confidence || 94 })}
                         </span>
                     </div>
                 </div>
 
-                <div className="space-y-3 relative z-10">
+                <div className="space-y-4 relative z-10">
                     {resonance?.top_resonance_segments?.map((rec: any, i: number) => (
                         <motion.div
                             key={i}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0, scale: 0.98 }}
+                            animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.3 + i * 0.1 }}
-                            className="flex items-start gap-3 p-3 rounded-[1.25rem] bg-slate-50/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 transition-all border border-transparent hover:border-indigo-500/20 group/item"
+                            className="flex items-center gap-4 p-4 rounded-3xl bg-slate-50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 transition-all duration-300 border border-transparent hover:border-indigo-500/20 group/item shadow-inner hover:shadow-xl hover:shadow-indigo-500/5"
                         >
-                            <div className="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 flex items-center justify-center shadow-premium-sm text-indigo-500 group-hover/item:scale-110 transition-transform shrink-0">
-                                {rec.type === 'scaling' ? <Target size={14} /> : <Sparkles size={14} />}
+                            <div className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center shadow-premium-sm text-indigo-500 group-hover/item:scale-110 transition-transform shrink-0 border border-slate-100 dark:border-white/5">
+                                {rec.type === 'scaling' ? <Target size={18} /> : <Sparkles size={18} />}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <h4 className="text-[11px] font-black text-slate-800 dark:text-white uppercase tracking-tight mb-0.5 truncate">{rec.headline}</h4>
+                                <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-tight mb-1 truncate">{rec.headline}</h4>
                                 <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-snug line-clamp-1">{rec.reason}</p>
                             </div>
-                            <div className="text-right shrink-0">
-                                <span className="text-[10px] font-black text-indigo-500 tabular-nums">{(rec.resonance_score * 100).toFixed(0)}%</span>
-                                <p className="text-[7px] font-bold text-slate-400 uppercase tracking-widest leading-none">Reso</p>
+                            <div className="text-right shrink-0 flex flex-col items-end">
+                                <span className="text-[12px] font-black text-indigo-600 dark:text-indigo-400 tabular-nums">{(rec.resonance_score * 100).toFixed(0)}%</span>
+                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">Reso</p>
                             </div>
                         </motion.div>
                     ))}
                 </div>
 
-                <button className="w-full mt-6 py-3.5 vibing-blue-animated text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-500/20 transition-all active:scale-[0.98] relative z-10">
-                    {t('pro_dashboard.analytics.resonance.action_btn')}
-                </button>
+                <div className="pt-6 relative z-10">
+                    <button
+                        onClick={() => {
+                            impact('heavy');
+                            window.dispatchEvent(new CustomEvent('nav-pro-tab', { detail: 'studio' }));
+                        }}
+                        className="w-full h-12 vibing-blue-animated text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                    >
+                        <Zap size={14} className="animate-pulse" />
+                        {t('pro_dashboard.analytics.resonance.action_btn')}
+                    </button>
+                    <p className="text-center text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-3 opacity-60">
+                        Neural Engine 2.0
+                    </p>
+                </div>
             </div>
             {/* Platform Performance Table */}
             <div className="bg-white/40 dark:bg-white/5 backdrop-blur-3xl rounded-[2rem] border border-white/40 dark:border-white/10 shadow-premium overflow-hidden">

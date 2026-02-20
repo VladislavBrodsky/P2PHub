@@ -327,6 +327,16 @@ export const StudioTab = ({
         }
     };
 
+    const handleReset = () => {
+        setExternalStep(1);
+        setPostType('');
+        setAudience('');
+        setGeneratedResult(null);
+        setHistory([]);
+        setHistoryIndex(-1);
+        impact('heavy');
+    };
+
     const handlePublishToPlatform = async (platform: 'x' | 'telegram' | 'linkedin') => {
         if (!generatedResult) return;
         setIsPublishing(true);
@@ -763,10 +773,17 @@ export const StudioTab = ({
                             )}
 
                             {/* Badge */}
-                            <div className="absolute top-4 left-4 z-10">
-                                <span className="bg-indigo-500/90 backdrop-blur-md text-white text-[8px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.2em] border border-indigo-400/30">
+                            <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
+                                <span className="bg-indigo-500/90 backdrop-blur-md text-white text-[8px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.2em] border border-indigo-400/30 shadow-lg">
                                     {t('pro_dashboard.studio.ai_generated_badge')}
                                 </span>
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); handleGenerate(); }}
+                                    className="p-1.5 bg-white/10 hover:bg-indigo-500 rounded-lg border border-white/20 text-white backdrop-blur-md transition-all active:scale-90 shadow-lg"
+                                    title="Regenerate Image"
+                                >
+                                    <RefreshCw size={12} className={isGenerating ? "animate-spin" : ""} />
+                                </button>
                             </div>
 
                             {/* Image Actions Overlay */}
@@ -812,7 +829,14 @@ export const StudioTab = ({
                             </div>
 
                             <div className="bg-slate-50 dark:bg-black/20 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-white/5 relative group/content overflow-hidden">
-                                <div className="absolute top-0 right-0 p-3 opacity-0 group-hover/content:opacity-100 transition-opacity">
+                                <div className="absolute top-0 right-0 p-3 flex items-center gap-2 opacity-100 sm:opacity-0 group-hover/content:opacity-100 transition-opacity">
+                                    <button
+                                        onClick={handleGenerate}
+                                        className="p-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-100 dark:border-white/10 text-slate-400 hover:text-indigo-500 transition-colors"
+                                        title="Regenerate Text"
+                                    >
+                                        <RefreshCw size={12} className={isGenerating ? "animate-spin" : ""} />
+                                    </button>
                                     <button
                                         onClick={handleCopyText}
                                         className="p-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-100 dark:border-white/10 text-slate-400 hover:text-indigo-500 transition-colors"
@@ -836,18 +860,28 @@ export const StudioTab = ({
                     </div>
 
                     {/* Action Area */}
-                    <div className="grid grid-cols-2 gap-3 pb-2 pt-2">
+                    <div className="space-y-3 pb-4">
+                        <div className="grid grid-cols-2 gap-3">
+                            <button
+                                onClick={() => { selection(); setShowPublishModal(true); }}
+                                className="h-12 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20"
+                            >
+                                {t('pro_dashboard.studio.publish_btn')} <Send size={14} className="animate-pulse" />
+                            </button>
+                            <button
+                                onClick={() => { impact('light'); setShowShareModal(true); }}
+                                className="h-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-slate-900 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm"
+                            >
+                                {t('pro_dashboard.studio.share_btn')} <Share size={14} />
+                            </button>
+                        </div>
+
                         <button
-                            onClick={() => { selection(); setShowPublishModal(true); }}
-                            className="h-12 vibing-blue-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20"
+                            onClick={handleReset}
+                            className="w-full h-11 bg-slate-100 dark:bg-white/5 border border-dashed border-slate-300 dark:border-white/10 rounded-xl font-black text-[9px] uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 hover:text-indigo-500 dark:hover:text-indigo-400 hover:border-indigo-500/50 transition-all flex items-center justify-center gap-2"
                         >
-                            {t('pro_dashboard.studio.publish_btn')} <Send size={14} className="animate-pulse" />
-                        </button>
-                        <button
-                            onClick={() => { impact('light'); setShowShareModal(true); }}
-                            className="h-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-slate-900 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm"
-                        >
-                            {t('pro_dashboard.studio.share_btn')} <Share size={14} />
+                            <Undo2 size={14} />
+                            {t('pro_dashboard.studio.generate_new_btn', 'Generate New Post')}
                         </button>
                     </div>
                 </motion.div>

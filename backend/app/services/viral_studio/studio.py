@@ -84,11 +84,29 @@ class ViralMarketingStudio:
             except Exception as e:
                 logger.warning(f"Resonance sync failed: {e}")
 
+        # Prepare Prompts
         system_prompt = prompts.build_viral_system_prompt(language, target_audience, post_type, tone_of_voice, ref_link, intel, {}, resonance_data=resonance_data)
         user_prompt = prompts.build_viral_user_prompt(target_audience, post_type, language, tone_of_voice, ref_link, intel)
+        
+        # 🚀 TURBO EXECUTION V6.0 (10-15s Target)
+        # We eliminate the secondary AI roundtrip for image prompt engineering.
+        # Instead, we use a high-fidelity static builder and prioritize 'Fast' AI models.
 
-        # 1. Text Generation
-        res_json, tokens_openai = await self._get_text_content(system_prompt, user_prompt)
+        async def get_text():
+            return await self._get_text_content(system_prompt, user_prompt)
+
+        async def get_image():
+            # Use elite static builder (Zero Latency)
+            refined_prompt = prompts.build_viral_image_prompt(intel, "")
+            # Force 'Fast' priority in the image generation method
+            return refined_prompt, await self._generate_image(refined_prompt, partner.id, turbo_mode=True)
+
+        # TRIGGER CONCURRENT FLOW
+        text_task = asyncio.create_task(get_text())
+        image_task = asyncio.create_task(get_image())
+        
+        (res_json, tokens_openai), (image_prompt, image_url) = await asyncio.gather(text_task, image_task)
+
         if not res_json or "error" in res_json: return res_json or {"error": "Generation failed", "status": "failed"}
 
         # Use 'body' or 'text' from response (consistency fix)
@@ -98,32 +116,22 @@ class ViralMarketingStudio:
         if "{ref_link}" in body_text:
             body_text = body_text.replace("{ref_link}", ref_link)
             
-        # CTA LINK REINFORCER: Ensure a PROPER markdown link exists.
+        # CTA LINK REINFORCER...
         has_proper_link = f"({ref_link})" in body_text and "[" in body_text
-        
         if not has_proper_link:
             lines = body_text.split("\n")
             cta_fixed = False
-            # Look for the last bold line that might be a CTA
             for i in range(len(lines)-1, -1, -1):
                 line = lines[i].strip()
                 if not line: continue
                 if "**" in line and len(line) < 120:
-                    # Clean the line and wrap it properly
                     clean_text = line.replace("**", "").split("](")[0].replace("[", "").replace("]", "").strip()
                     if not clean_text or len(clean_text) < 3: clean_text = "Secure Your Advantage Here"
                     lines[i] = f"**[{clean_text}]({ref_link})**"
                     cta_fixed = True
                     break
-            
-            if not cta_fixed:
-                body_text = body_text.strip() + f"\n\n**[Start Your Journey Here]({ref_link})**"
-            else:
-                body_text = "\n".join(lines)
-
-        # 2. Image Generation
-        image_prompt = res_json.get("image_description") or prompts.build_viral_image_prompt(intel, body_text)
-        image_url = await self._generate_image(image_prompt, partner.id)
+            if not cta_fixed: body_text = body_text.strip() + f"\n\n**[Start Your Journey Here]({ref_link})**"
+            else: body_text = "\n".join(lines)
 
         duration = (datetime.now() - start_time).total_seconds()
         
@@ -165,10 +173,27 @@ class ViralMarketingStudio:
 
         return output
 
-    async def _get_text_content(self, system_prompt: str, user_prompt: str) -> tuple[dict | None, int]:
-        # Priority: Google Ultra-Advanced (exp-02-05 often has 2.0 Pro)
+    async def _get_text_content(self, system_prompt: str, user_prompt: str, fast_mode: bool = False) -> tuple[dict | None, int]:
+        # PRIORITY: OpenAI Flagship Tier (Top-notch text generation as requested)
+        if self.openai_client:
+            # For fast_mode (like internal prompt engineering), we go straight to mini
+            models = ["gpt-4o-mini"] if fast_mode else ["gpt-4o", "gpt-4o-mini"]
+            for model_name in models:
+                try:
+                    res = await self.openai_client.chat.completions.create(
+                        model=model_name, 
+                        messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
+                        response_format={"type": "json_object"}
+                    )
+                    self._last_used_text_model = model_name
+                    return json.loads(res.choices[0].message.content), res.usage.total_tokens
+                except: 
+                    continue
+        
+        # SECONDARY/EMERGENCY: Google Gemini Tier
         if self.genai_client:
-            models = ['gemini-2.0-pro-exp-02-05', 'gemini-1.5-pro', 'gemini-2.0-flash']
+            # In fast mode, we go straight to Flash
+            models = ['gemini-2.0-flash'] if fast_mode else ['gemini-2.0-pro-exp-02-05', 'gemini-1.5-pro', 'gemini-2.0-flash']
             for model in models:
                 try:
                     res = await self.genai_client.aio.models.generate_content(
@@ -177,31 +202,31 @@ class ViralMarketingStudio:
                     )
                     self._last_used_text_model = model
                     return json.loads(res.text), 0
-                except: continue
-        
-        # Emergency Alternative: OpenAI GPT-4o
-        if self.openai_client:
-            try:
-                model_name = "gpt-4o" # Use flagship for "advanced" content
-                res = await self.openai_client.chat.completions.create(
-                    model=model_name, messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
-                    response_format={"type": "json_object"}
-                )
-                self._last_used_text_model = model_name
-                return json.loads(res.choices[0].message.content), res.usage.total_tokens
-            except: pass
+                except: 
+                    continue
+                
         return None, 0
 
-    async def _generate_image(self, prompt: str, partner_id: int) -> str | None:
+    async def _generate_image(self, prompt: str, partner_id: int, turbo_mode: bool = False) -> str | None:
         """Sequential image generation trying Google then OpenAI."""
         # 1. Google Imagen (Fastest & Usually Best)
         if self.genai_client:
-            models = [
-                'imagen-4.0-ultra-generate-001', # Flagship priority
-                'imagen-4.0-generate-001', 
-                'imagen-3.0-generate-001', 
-                'imagen-3.0-fast-generate-001'
-            ]
+            # TURBO PRIORITY: Use fast models first to hit 10-15s target
+            if turbo_mode:
+                models = [
+                    'imagen-4.0-fast-generate-001',
+                    'imagen-3.0-fast-generate-001',
+                    'imagen-4.0-ultra-generate-001',
+                    'imagen-3.0-generate-001'
+                ]
+            else:
+                models = [
+                    'imagen-4.0-ultra-generate-001', 
+                    'imagen-4.0-generate-001', 
+                    'imagen-3.0-generate-001', 
+                    'imagen-3.0-fast-generate-001'
+                ]
+
             for m in models:
                 try:
                     success, url = await self._try_imagen(m, prompt, partner_id)
