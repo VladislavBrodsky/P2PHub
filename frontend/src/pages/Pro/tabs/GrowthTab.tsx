@@ -192,12 +192,12 @@ export const GrowthTab = ({
             {/* Viral Content Hub - Modules Component */}
             <div className="space-y-5 sm:space-y-6">
                 <div className="flex flex-row items-center gap-3 px-1">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-indigo-50 dark:bg-blue-500/10 rounded-xl flex items-center justify-center text-indigo-600 dark:text-blue-500 border border-indigo-100 dark:border-blue-500/20 shadow-sm shrink-0">
-                        <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-50 dark:bg-blue-500/10 rounded-lg flex items-center justify-center text-indigo-600 dark:text-blue-500 border border-indigo-100 dark:border-blue-500/20 shadow-sm shrink-0">
+                        <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div className="flex flex-col">
-                        <h4 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('pro_dashboard.academy.articles.title')}</h4>
-                        <p className="text-[9px] font-black text-indigo-500/60 dark:text-indigo-400 uppercase tracking-widest mt-0.5">{t('pro_dashboard.academy.dossier_label')}</p>
+                        <h4 className="text-base sm:text-lg font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('pro_dashboard.academy.articles.title')}</h4>
+                        <p className="text-[8px] font-black text-indigo-500/60 dark:text-indigo-400 uppercase tracking-widest mt-0.5">{t('pro_dashboard.academy.dossier_label')}</p>
                     </div>
                 </div>
 
@@ -212,7 +212,7 @@ export const GrowthTab = ({
                                     key={article.id || i}
                                     whileHover={{ y: -4 }}
                                     onClick={() => { selection(); setSelectedArticle(article); impact('light'); }}
-                                    className="min-w-[240px] sm:min-w-[300px] snap-center bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-[24px] border border-slate-100 dark:border-slate-800 relative overflow-hidden group cursor-pointer active:scale-95 transition-all shadow-[0_4px_15px_rgb(0,0,0,0.03)] flex flex-col"
+                                    className="min-w-[220px] sm:min-w-[280px] snap-center bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-[20px] border border-slate-100 dark:border-slate-800 relative overflow-hidden group cursor-pointer active:scale-95 transition-all shadow-[0_4px_15px_rgb(0,0,0,0.03)] flex flex-col"
                                 >
                                     <div className="flex items-center justify-between mb-5">
                                         <div className="flex items-center gap-3">
@@ -225,8 +225,8 @@ export const GrowthTab = ({
                                             </div>
                                         )}
                                     </div>
-                                    <h5 className="text-lg sm:text-xl font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tighter mb-3 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
-                                    <p className="text-[12px] sm:text-[13px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic mb-6 flex-1 line-clamp-2">"{article.desc}"</p>
+                                    <h5 className="text-base sm:text-lg font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tighter mb-2 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
+                                    <p className="text-[11px] sm:text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic mb-4 flex-1 line-clamp-2">"{article.desc}"</p>
 
                                     <div className="flex items-center justify-between mt-auto">
                                         <div className="flex items-center gap-1.5 text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest group-hover:gap-2.5 transition-all">
@@ -508,14 +508,14 @@ export const GrowthTab = ({
             <div className="pro-card-extreme p-4 sm:p-6 rounded-[20px] border border-white/10 relative overflow-hidden group bg-white/40 dark:bg-slate-950/40 shadow-xl">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/5 blur-[60px] pointer-events-none group-hover:opacity-20 transition-opacity" />
 
-                <div className="flex items-center justify-between mb-5 relative z-10">
+                <div className="flex items-center justify-between mb-4 relative z-10">
                     <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 bg-pink-500/10 rounded-lg flex items-center justify-center border border-pink-500/20 shadow-lg group-hover:rotate-12 transition-transform">
-                            <Flame size={16} className="text-pink-500" />
+                        <div className="w-7 h-7 bg-pink-500/10 rounded-lg flex items-center justify-center border border-pink-500/20 shadow-lg group-hover:rotate-12 transition-transform">
+                            <Flame size={14} className="text-pink-500" />
                         </div>
                         <div>
-                            <h4 className="text-[11px] font-black uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1">{t('pro_dashboard.academy.lifehacks.title')}</h4>
-                            <p className="text-[9px] font-black text-pink-500/60 uppercase tracking-widest">{t('pro_dashboard.academy.lifehacks.subtitle')}</p>
+                            <h4 className="text-[10px] font-black uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1">{t('pro_dashboard.academy.lifehacks.title')}</h4>
+                            <p className="text-[8px] font-black text-pink-500/60 uppercase tracking-widest">{t('pro_dashboard.academy.lifehacks.subtitle')}</p>
                         </div>
                     </div>
                 </div>
@@ -549,14 +549,14 @@ export const GrowthTab = ({
 
             <div className="glass-panel-premium p-4 sm:p-6 rounded-[20px] border border-slate-200 dark:border-white/10 relative overflow-hidden group bg-white dark:bg-slate-950 shadow-2xl">
                 <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-indigo-500/10 blur-[60px] rounded-full pointer-events-none" />
-                <div className="flex items-center justify-between gap-4 mb-5 relative z-10 font-sans">
+                <div className="flex items-center justify-between gap-4 mb-4 relative z-10 font-sans">
                     <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-lg group-hover:rotate-6 transition-transform shrink-0">
-                            <Globe size={20} className="text-indigo-500" />
+                        <div className="w-8 h-8 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20 shadow-lg group-hover:rotate-6 transition-transform shrink-0">
+                            <Globe size={16} className="text-indigo-500" />
                         </div>
                         <div className="min-w-0">
-                            <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1 truncate">{t('pro_dashboard.academy.social_setup.title')}</h4>
-                            <p className="text-[9px] font-black text-indigo-400 uppercase tracking-widest truncate">{t('pro_dashboard.academy.social_setup.subtitle')}</p>
+                            <h4 className="text-[9px] sm:text-[10px] font-black uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1 truncate">{t('pro_dashboard.academy.social_setup.title')}</h4>
+                            <p className="text-[8px] font-black text-indigo-400 uppercase tracking-widest truncate">{t('pro_dashboard.academy.social_setup.subtitle')}</p>
                         </div>
                     </div>
                     {/* Multi-Sync Status Display */}
