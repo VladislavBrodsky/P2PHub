@@ -266,69 +266,85 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                     </div>
 
                                     <div className="grid grid-cols-1 gap-3">
-                                        {(stats.monthly_history ?? []).map((m: any, idx: number) => (
-                                            <div
-                                                key={idx}
-                                                className={`p-4 rounded-3xl border transition-all ${idx === 0
-                                                    ? 'bg-indigo-50/50 dark:bg-indigo-500/5 border-indigo-200/50 dark:border-indigo-500/20 shadow-sm'
-                                                    : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 opacity-80'}`}
-                                            >
-                                                <div className="flex items-center justify-between mb-4">
-                                                    <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight">
-                                                        {m.month}
-                                                    </span>
-                                                    {idx === 0 && (
-                                                        <span className="px-1.5 py-0.5 rounded-full bg-indigo-500 text-[6px] font-black text-white uppercase tracking-tighter">
-                                                            {t('partner_dashboard.finance_stats.current', 'Current')}
-                                                        </span>
+                                        {(stats.monthly_history ?? []).map((m: any, idx: number) => {
+                                            const isActive = idx === 0;
+                                            return (
+                                                <div
+                                                    key={idx}
+                                                    className={`group relative p-4 rounded-[2rem] border transition-all duration-300 overflow-hidden ${isActive
+                                                        ? 'bg-linear-to-br from-indigo-50/80 to-purple-50/80 dark:from-indigo-500/10 dark:to-purple-500/5 border-indigo-200/60 dark:border-indigo-500/30 shadow-sm'
+                                                        : 'bg-white/40 dark:bg-white/[0.02] border-slate-200/60 dark:border-white/5 hover:bg-white/80 dark:hover:bg-white/[0.04] opacity-80 hover:opacity-100 hover:border-slate-300 dark:hover:border-white/10'
+                                                        }`}
+                                                >
+                                                    {/* Glow behind active card */}
+                                                    {isActive && (
+                                                        <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 dark:bg-indigo-500/20 blur-3xl -mr-10 -mt-10 pointer-events-none" />
                                                     )}
-                                                </div>
 
-                                                <div className="grid grid-cols-2 gap-6">
-                                                    <div className="space-y-2">
-                                                        <div className="flex items-center gap-1.5 opacity-40">
-                                                            <DollarSign className="w-2.5 h-2.5" />
-                                                            <span className="text-[8px] font-black uppercase tracking-widest pt-0.5">USDT</span>
+                                                    <div className="flex items-center justify-between mb-4 relative z-10">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className={`text-[11px] font-black uppercase tracking-tight ${isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white'}`}>
+                                                                {m.month}
+                                                            </span>
                                                         </div>
-                                                        <div className="flex flex-col gap-1.5">
-                                                            <div className="flex items-center justify-between">
-                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">{t('partner_dashboard.finance_stats.inflow_short', 'In')}</span>
-                                                                <span className={`text-[11px] font-black tabular-nums ${m.USDT.income > 0 ? 'text-emerald-500' : 'text-slate-400 opacity-50'}`}>
-                                                                    +${m.USDT.income.toFixed(2)}
+                                                        {isActive && (
+                                                            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/20 shadow-inner">
+                                                                <div className="w-1 h-1 rounded-full bg-indigo-500 animate-pulse" />
+                                                                <span className="text-[7.5px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tighter">
+                                                                    {t('partner_dashboard.finance_stats.current', 'Current')}
                                                                 </span>
                                                             </div>
-                                                            <div className="flex items-center justify-between">
-                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">{t('partner_dashboard.finance_stats.outflow_short', 'Out')}</span>
-                                                                <span className={`text-[11px] font-black tabular-nums ${m.USDT.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'}`}>
-                                                                    -${m.USDT.outcome.toFixed(2)}
-                                                                </span>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="grid grid-cols-2 gap-3 relative z-10">
+                                                        {/* USDT Month Stats */}
+                                                        <div className={`p-3 rounded-2xl border transition-colors ${isActive ? 'bg-white/60 dark:bg-black/20 border-indigo-100 dark:border-indigo-500/10' : 'bg-white/50 dark:bg-black/20 border-slate-100 dark:border-white/5'}`}>
+                                                            <div className="flex items-center gap-1.5 mb-2.5 opacity-60">
+                                                                <DollarSign className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                                                                <span className="text-[8.5px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-400 pt-0.5">USDT</span>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1.5">
+                                                                <div className="flex items-center justify-between">
+                                                                    <span className="text-[8.5px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">{t('partner_dashboard.finance_stats.inflow_short', 'In')}</span>
+                                                                    <span className={`text-xs font-black tabular-nums ${m.USDT.income > 0 ? 'text-emerald-500' : 'text-slate-400 opacity-50'}`}>
+                                                                        +${m.USDT.income.toFixed(2)}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="flex items-center justify-between">
+                                                                    <span className="text-[8.5px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">{t('partner_dashboard.finance_stats.outflow_short', 'Out')}</span>
+                                                                    <span className={`text-[10px] font-black tabular-nums ${m.USDT.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'}`}>
+                                                                        -${m.USDT.outcome.toFixed(2)}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* TON Month Stats */}
+                                                        <div className={`p-3 rounded-2xl border transition-colors ${isActive ? 'bg-white/60 dark:bg-black/20 border-indigo-100 dark:border-indigo-500/10' : 'bg-white/50 dark:bg-black/20 border-slate-100 dark:border-white/5'}`}>
+                                                            <div className="flex items-center gap-1.5 mb-2.5 opacity-60">
+                                                                <Activity className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+                                                                <span className="text-[8.5px] font-black uppercase tracking-widest text-blue-700 dark:text-blue-400 pt-0.5">TON</span>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1.5">
+                                                                <div className="flex items-center justify-between">
+                                                                    <span className="text-[8.5px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">{t('partner_dashboard.finance_stats.inflow_short', 'In')}</span>
+                                                                    <span className={`text-xs font-black tabular-nums ${m.TON.income > 0 ? 'text-blue-500' : 'text-slate-400 opacity-50'}`}>
+                                                                        +{m.TON.income.toFixed(2)}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="flex items-center justify-between">
+                                                                    <span className="text-[8.5px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">{t('partner_dashboard.finance_stats.outflow_short', 'Out')}</span>
+                                                                    <span className={`text-[10px] font-black tabular-nums ${m.TON.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'}`}>
+                                                                        -{m.TON.outcome.toFixed(2)}
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <div className="space-y-2">
-                                                        <div className="flex items-center gap-1.5 opacity-40">
-                                                            <Activity className="w-2.5 h-2.5" />
-                                                            <span className="text-[8px] font-black uppercase tracking-widest pt-0.5">TON</span>
-                                                        </div>
-                                                        <div className="flex flex-col gap-1.5">
-                                                            <div className="flex items-center justify-between">
-                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">{t('partner_dashboard.finance_stats.inflow_short', 'In')}</span>
-                                                                <span className={`text-[11px] font-black tabular-nums ${m.TON.income > 0 ? 'text-blue-500' : 'text-slate-400 opacity-50'}`}>
-                                                                    +{m.TON.income.toFixed(2)}
-                                                                </span>
-                                                            </div>
-                                                            <div className="flex items-center justify-between">
-                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">{t('partner_dashboard.finance_stats.outflow_short', 'Out')}</span>
-                                                                <span className={`text-[11px] font-black tabular-nums ${m.TON.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'}`}>
-                                                                    -{m.TON.outcome.toFixed(2)}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             </>
