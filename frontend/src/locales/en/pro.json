@@ -811,6 +811,9 @@
         "VIP Growth Protocols"
       ],
       "secure_slot_btn": "SECURE MY SLOT NOW",
+      "buy_pro_btn": "BUY PRO",
+      "buy_pro_plus_btn": "BUY PRO+",
+      "upgrade_to_pro_plus_btn": "UPGRADE TO PRO+",
       "initialize_studio": "DEPLOY VIRAL AGENT",
       "content_factory_label": "NETWORK FACTORY",
       "content_factory_desc_pro": "Unlock passive liquidity streams from 9 deep levels.",

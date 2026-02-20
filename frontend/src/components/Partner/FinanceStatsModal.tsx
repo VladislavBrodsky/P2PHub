@@ -188,7 +188,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                             </h4>
                                         </div>
                                         <div className="px-2 py-0.5 bg-blue-500/10 rounded-full border border-blue-500/20">
-                                            <span className="text-[8px] font-black text-blue-500 uppercase">{stats.history_72h?.length || 0} EVENTS</span>
+                                            <span className="text-[8px] font-black text-blue-500 uppercase">{stats.history_72h?.length || 0} {t('partner_dashboard.finance_stats.events', 'EVENTS')}</span>
                                         </div>
                                     </div>
 
@@ -279,7 +279,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                     </span>
                                                     {idx === 0 && (
                                                         <span className="px-1.5 py-0.5 rounded-full bg-indigo-500 text-[6px] font-black text-white uppercase tracking-tighter">
-                                                            Current
+                                                            {t('partner_dashboard.finance_stats.current', 'Current')}
                                                         </span>
                                                     )}
                                                 </div>
@@ -292,13 +292,13 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                         </div>
                                                         <div className="flex flex-col gap-1.5">
                                                             <div className="flex items-center justify-between">
-                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">In</span>
+                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">{t('partner_dashboard.finance_stats.inflow_short', 'In')}</span>
                                                                 <span className={`text-[11px] font-black tabular-nums ${m.USDT.income > 0 ? 'text-emerald-500' : 'text-slate-400 opacity-50'}`}>
                                                                     +${m.USDT.income.toFixed(2)}
                                                                 </span>
                                                             </div>
                                                             <div className="flex items-center justify-between">
-                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">Out</span>
+                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">{t('partner_dashboard.finance_stats.outflow_short', 'Out')}</span>
                                                                 <span className={`text-[11px] font-black tabular-nums ${m.USDT.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'}`}>
                                                                     -${m.USDT.outcome.toFixed(2)}
                                                                 </span>
@@ -313,13 +313,13 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                         </div>
                                                         <div className="flex flex-col gap-1.5">
                                                             <div className="flex items-center justify-between">
-                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">In</span>
+                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">{t('partner_dashboard.finance_stats.inflow_short', 'In')}</span>
                                                                 <span className={`text-[11px] font-black tabular-nums ${m.TON.income > 0 ? 'text-blue-500' : 'text-slate-400 opacity-50'}`}>
                                                                     +{m.TON.income.toFixed(2)}
                                                                 </span>
                                                             </div>
                                                             <div className="flex items-center justify-between">
-                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">Out</span>
+                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">{t('partner_dashboard.finance_stats.outflow_short', 'Out')}</span>
                                                                 <span className={`text-[11px] font-black tabular-nums ${m.TON.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'}`}>
                                                                     -{m.TON.outcome.toFixed(2)}
                                                                 </span>
@@ -334,7 +334,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                             </>
                         ) : (
                             <div className="text-center py-12">
-                                <p className="text-sm text-slate-500">Failed to load stats.</p>
+                                <p className="text-sm text-slate-500">{t('partner_dashboard.finance_stats.failed_load', 'Failed to load stats.')}</p>
                             </div>
                         )}
                     </div>

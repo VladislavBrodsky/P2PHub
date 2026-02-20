@@ -371,7 +371,12 @@
       "no_activity": "Quiet Perimeter",
       "no_activity_desc": "No crypto events recorded in the last 72 hours.",
       "performance_history": "Performance History",
-      "monthly_summary": "Monthly Summary"
+      "monthly_summary": "Monthly Summary",
+      "events": "EVENTS",
+      "current": "Current",
+      "inflow_short": "In",
+      "outflow_short": "Out",
+      "failed_load": "Failed to load stats."
     }
   }
 }

@@ -371,7 +371,12 @@
       "no_activity": "Тихий периметр",
       "no_activity_desc": "За последние 72 часа крипто-событий не зафиксировано.",
       "performance_history": "История Эффективности",
-      "monthly_summary": "Сводка по месяцам"
+      "monthly_summary": "Сводка по месяцам",
+      "events": "СОБЫТИЙ",
+      "current": "Текущий",
+      "inflow_short": "Вход",
+      "outflow_short": "Выход",
+      "failed_load": "Не удалось загрузить данные."
     }
   }
 }

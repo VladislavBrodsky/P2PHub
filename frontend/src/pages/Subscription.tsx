@@ -393,7 +393,7 @@ export default function SubscriptionPage() {
                             }`}
                     >
                         <Lock size={14} />
-                        {t('subscription.upgrade.secure_slot_btn')} →
+                        {selectedPlan === 'PRO' ? t('subscription.upgrade.buy_pro_btn', 'BUY PRO') : (isStandardPro ? t('subscription.upgrade.upgrade_to_pro_plus_btn', 'UPGRADE TO PRO+') : t('subscription.upgrade.buy_pro_plus_btn', 'BUY PRO+'))} →
                     </motion.button>
                 </motion.div>
             </AnimatePresence>
