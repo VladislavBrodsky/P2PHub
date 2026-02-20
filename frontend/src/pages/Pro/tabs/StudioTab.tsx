@@ -3,7 +3,8 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Sparkles, Send, ChevronRight, Terminal, Bot, Image as ImageIcon,
-    CheckCircle2, Loader2, Copy, Download, RefreshCw, Undo2, Share, ArrowLeft, X
+    CheckCircle2, Loader2, Copy, Download, RefreshCw, Undo2, Share, ArrowLeft, X,
+    Zap, Users, Link as LinkIcon, Info
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { proService, PROStatus } from '../../../services/proService';
@@ -60,6 +61,11 @@ export const StudioTab = ({
     const [showShareModal, setShowShareModal] = useState(false);
     const [isSharingSystem, setIsSharingSystem] = useState(false);
 
+    // Personal Link State
+    const [usePersonalLink, setUsePersonalLink] = useState(false);
+    const [personalLink, setPersonalLink] = useState(status?.personal_referral_link || '');
+    const [isUpdatingLink, setIsUpdatingLink] = useState(false);
+
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
     const handleToggle = (key: string) => {
@@ -68,6 +74,14 @@ export const StudioTab = ({
 
     useEffect(() => {
         setExternalReady(!!postType && !!audience);
+
+        // Auto-switch audience if partners strategy is chosen and current audience is not in the partners set
+        if (postType === 'partners') {
+            const partnerAudiences = ['passive_seekers', 'growth_masters', 'automation_kings', 'empire_builders', 'partners'];
+            if (!partnerAudiences.includes(audience)) {
+                setAudience('partners');
+            }
+        }
     }, [postType, audience, setExternalReady]);
 
 
@@ -134,6 +148,28 @@ export const StudioTab = ({
         }
     }, [postType, audience, language, tone, history, historyIndex, status, t, notification, impact, setHistory, setHistoryIndex, setGeneratedResult, setStatus, setExternalStep]);
 
+    const handleUpdatePersonalLink = async (link: string) => {
+        if (!status?.is_pro) return;
+        setIsUpdatingLink(true);
+        try {
+            await proService.updateReferralLink(link);
+            setStatus({ ...status, personal_referral_link: link });
+            notification({
+                title: t('common.success'),
+                text: t('pro_dashboard.studio.link_saved', 'Referral link updated successfully'),
+                type: 'success'
+            });
+        } catch (error: any) {
+            notification({
+                title: t('common.error'),
+                text: error.response?.data?.detail || t('pro_dashboard.studio.link_error', 'Invalid link format'),
+                type: 'error'
+            });
+        } finally {
+            setIsUpdatingLink(false);
+        }
+    };
+
     useEffect(() => {
         const handleGen = () => handleGenerate();
         const handlePublish = () => setShowPublishModal(true);
@@ -146,10 +182,26 @@ export const StudioTab = ({
         };
     }, [handleGenerate]);
 
-    const handleCopyText = () => {
-        if (!generatedResult) return;
+    const getCleanShareText = () => {
+        if (!generatedResult) return '';
+        // Convert Markdown links [text](url) to "text: url" for plain text sharing
+        const cleanBody = generatedResult.body.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1: $2');
         const hashtagsStr = generatedResult.hashtags?.map((t: string) => t.startsWith('#') ? t : `#${t}`).join(' ') || '';
-        const text = `${generatedResult.title}\n\n${generatedResult.body}\n\n${hashtagsStr}`;
+
+        let text = `🔥 ${generatedResult.title} 🔥\n\n${cleanBody}`;
+
+        // Append hashtags if they exist
+        if (hashtagsStr) text += `\n\n${hashtagsStr}`;
+
+        // Ensure #PintopayPRO tag
+        if (!hashtagsStr.includes('PintopayPRO')) text += ' #PintopayPRO';
+
+        return text;
+    };
+
+    const handleCopyText = () => {
+        const text = getCleanShareText();
+        if (!text) return;
 
         navigator.clipboard.writeText(text);
         notification({ title: t('pro_dashboard.notifications.copied'), text: t('pro_dashboard.notifications.text_copied'), type: 'success' });
@@ -159,7 +211,7 @@ export const StudioTab = ({
         if (!generatedResult) return;
         setIsSharingSystem(true);
         impact('light');
-        const textToShare = `${generatedResult.title}\n\n${generatedResult.body}\n\n#PintopayPRO`;
+        const textToShare = getCleanShareText();
         const shareData: ShareData = {
             title: generatedResult.title,
             text: textToShare,
@@ -180,6 +232,8 @@ export const StudioTab = ({
 
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     shareData.files = [file];
+                    // On some platforms sharing both files and text is tricky,
+                    // but most modern browsers handle it well.
                 }
             } catch (error) {
                 console.error('Failed to fetch image for sharing', error);
@@ -204,12 +258,28 @@ export const StudioTab = ({
     const handleSharePlatform = (platform: 'telegram' | 'whatsapp' | 'x') => {
         if (!generatedResult) return;
         impact('light');
-        const textToShare = `${generatedResult.title}\n\n${generatedResult.body}\n\n#PintopayPRO`;
+        const textToShare = getCleanShareText();
         const encodedText = encodeURIComponent(textToShare);
+
+        // For better previews, we can try to pass the image as the URL parameter
+        // if the platform supports it and it unfurls correctly.
+        let imageUrl = '';
+        if (generatedResult.image_url) {
+            imageUrl = generatedResult.image_url;
+            if (!imageUrl.startsWith('http')) {
+                const baseUrl = getApiUrl().replace(/\/api$/, '');
+                imageUrl = `${baseUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
+            }
+        }
 
         switch (platform) {
             case 'telegram':
-                window.open(`https://t.me/share/url?url=&text=${encodedText}`, '_blank');
+                // Using t.me/share/url?url={link}&text={text}
+                // If we have an image, we can use it as the 'url' to get a preview, 
+                // but usually the referral link is more important.
+                // However, the text already contains the referral link if synthesized correctly.
+                const tgUrl = imageUrl ? encodeURIComponent(imageUrl) : '';
+                window.open(`https://t.me/share/url?url=${tgUrl}&text=${encodedText}`, '_blank');
                 break;
             case 'whatsapp':
                 window.open(`https://wa.me/?text=${encodedText}`, '_blank');
@@ -379,10 +449,17 @@ export const StudioTab = ({
                                 label={t('pro_dashboard.studio.target_label')}
                                 value={audience}
                                 onChange={(val) => setAudience(val)}
-                                options={defaultAudiences.map(a => ({
-                                    id: a.id,
-                                    label: i18n.language === 'ru' ? a.ru : a.en
-                                }))}
+                                options={defaultAudiences
+                                    .filter(a => {
+                                        if (postType === 'partners') {
+                                            return ['passive_seekers', 'growth_masters', 'automation_kings', 'empire_builders', 'partners'].includes(a.id);
+                                        }
+                                        return !['passive_seekers', 'growth_masters', 'automation_kings', 'empire_builders', 'partners'].includes(a.id);
+                                    })
+                                    .map(a => ({
+                                        id: a.id,
+                                        label: i18n.language === 'ru' ? a.ru : a.en
+                                    }))}
                                 placeholder={t('pro_dashboard.studio.target_placeholder')}
                                 color="purple"
                                 isOpen={openDropdown === 'audience'}
@@ -390,6 +467,110 @@ export const StudioTab = ({
                                 onClose={() => setOpenDropdown(null)}
                                 indexStr="02"
                             />
+
+                            {/* Partner Strategy Special Indicator */}
+                            {postType === 'partners' && (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="p-5 rounded-3xl bg-linear-to-br from-indigo-500/10 via-purple-500/10 to-transparent border border-indigo-500/20 relative overflow-hidden group shadow-lg"
+                                >
+                                    <div className="absolute top-0 right-0 p-4 opacity-20 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform duration-700">
+                                        <Zap size={60} className="text-indigo-500" />
+                                    </div>
+                                    <div className="flex items-start gap-4 relative z-10">
+                                        <div className="w-12 h-12 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-xl shadow-indigo-500/30 shrink-0">
+                                            <Users size={24} className="text-white" />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-tight mb-1 flex items-center gap-2">
+                                                Active: Wealth Hacker Strategy
+                                                <span className="px-1.5 py-0.5 bg-indigo-500 rounded text-[7px] text-white">PRO MODE</span>
+                                            </h4>
+                                            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed pr-8">
+                                                Using geometric growth protocols and specialized Web App referral links for <span className="text-indigo-500 font-bold">maximum geometric scaling</span>.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {/* Personal Link Option - Visible for PRO/PRO+ */}
+                            {status?.is_pro && postType !== 'partners' && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="p-5 rounded-[2rem] bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 space-y-4 shadow-premium-sm relative overflow-hidden group/link"
+                                >
+                                    <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500" />
+
+                                    <div className="flex items-center justify-between relative z-10">
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-500 ${usePersonalLink ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-100 dark:bg-white/5 text-slate-400'}`}>
+                                                <LinkIcon size={16} />
+                                            </div>
+                                            <div>
+                                                <h4 className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                                                    {t('pro_dashboard.studio.add_personal_link', 'Personal Link')}
+                                                </h4>
+                                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">
+                                                    Injection Protocol
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <label className="relative inline-flex items-center cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={usePersonalLink}
+                                                onChange={(e) => {
+                                                    setUsePersonalLink(e.target.checked);
+                                                    if (e.target.checked && status.personal_referral_link) {
+                                                        setPersonalLink(status.personal_referral_link);
+                                                    }
+                                                }}
+                                                className="sr-only peer"
+                                            />
+                                            <div className="w-11 h-6 bg-slate-200 dark:bg-white/10 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500 shadow-inner"></div>
+                                        </label>
+                                    </div>
+
+                                    <AnimatePresence>
+                                        {usePersonalLink && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0, marginTop: 0 }}
+                                                animate={{ height: 'auto', opacity: 1, marginTop: 12 }}
+                                                exit={{ height: 0, opacity: 0, marginTop: 0 }}
+                                                className="overflow-hidden space-y-3 pt-1 border-t border-slate-100 dark:border-white/5"
+                                            >
+                                                <div className="relative group/input">
+                                                    <input
+                                                        type="text"
+                                                        value={personalLink}
+                                                        onChange={(e) => setPersonalLink(e.target.value)}
+                                                        placeholder="https://t.me/pintopaybot?start=..."
+                                                        className="w-full h-11 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-[10px] font-medium text-slate-900 dark:text-white placeholder:text-slate-400/50 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 outline-hidden transition-all shadow-inner"
+                                                    />
+                                                    <button
+                                                        onClick={() => handleUpdatePersonalLink(personalLink)}
+                                                        disabled={isUpdatingLink || !personalLink || personalLink === status.personal_referral_link}
+                                                        className="absolute right-1.5 top-1.5 h-8 px-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg text-[8px] font-black uppercase tracking-widest disabled:opacity-30 transition-all active:scale-95 shadow-lg"
+                                                    >
+                                                        {isUpdatingLink ? <Loader2 size={10} className="animate-spin" /> : t('common.save', 'Save')}
+                                                    </button>
+                                                </div>
+
+                                                <div className="flex items-center gap-2 p-3 bg-amber-500/5 rounded-xl border border-amber-500/10">
+                                                    <Info size={12} className="text-amber-500 shrink-0" />
+                                                    <p className="text-[8px] font-bold text-amber-700 dark:text-amber-500 uppercase tracking-tight">
+                                                        Must start with: <span className="font-black text-slate-900 dark:text-white">https://t.me/pintopaybot?start=</span>
+                                                    </p>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </motion.div>
+                            )}
 
                             {/* Tone of Voice */}
                             <PremiumSelect

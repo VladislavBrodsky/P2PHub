@@ -5,7 +5,8 @@ export const postTypes = [
     { id: 'lifestyle', icon: '📸', en: 'Elite Lifestyle', ru: 'Элитный Лайфстайл' },
     { id: 'income', icon: '💰', en: 'Income Results', ru: 'Результаты дохода' },
     { id: 'network', icon: '👑', en: 'Team Growth', ru: 'Рост команды' },
-    { id: 'tutorial', icon: '📖', en: 'Web3 Education', ru: 'Обучение Web3' }
+    { id: 'tutorial', icon: '📖', en: 'Web3 Education', ru: 'Обучение Web3' },
+    { id: 'partners', icon: '🤝', en: 'For Partners', ru: 'Для партнеров' }
 ];
 
 export const audiences = [
@@ -15,7 +16,12 @@ export const audiences = [
     { id: 'builders', en: 'Network Leaders', ru: 'Сетевые Лидеры' },
     { id: 'parents', en: 'Stay-at-home Parents', ru: 'Родители в декрете' },
     { id: 'hustlers', en: 'Student Hustlers', ru: 'Студенты-хастлеры' },
-    { id: 'burnouts', en: 'Corporate Burnouts', ru: 'Выгоревшие офисные' }
+    { id: 'burnouts', en: 'Corporate Burnouts', ru: 'Выгоревшие офисные' },
+    { id: 'passive_seekers', en: 'Passive Income Seekers', ru: 'Искатели пассивного дохода' },
+    { id: 'growth_masters', en: 'Growth Masters', ru: 'Мастера роста' },
+    { id: 'automation_kings', en: 'Automation Kings', ru: 'Короли автоматизации' },
+    { id: 'empire_builders', en: 'Empire Builders', ru: 'Строители империй' },
+    { id: 'partners', en: 'Wealth Hackers', ru: 'Хакеры богатства' }
 ];
 
 export const languages = [

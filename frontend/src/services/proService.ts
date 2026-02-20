@@ -11,6 +11,7 @@ export interface PROStatus {
         text_generation: boolean;
         image_generation: boolean;
     };
+    personal_referral_link?: string;
     academy_score?: number;
     completed_stages?: string; // JSON string from backend
     bot_username?: string;
@@ -107,6 +108,11 @@ export const proService = {
             language,
             force_refresh
         });
+        return response.data;
+    },
+
+    updateReferralLink: async (referral_link: string) => {
+        const response = await apiClient.post('/api/pro/referral-link', { referral_link });
         return response.data;
     }
 };

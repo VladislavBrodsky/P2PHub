@@ -164,6 +164,7 @@ export const ProDashboardModals = ({
 
     const onFixHeadline = async () => {
         if (!handleFixHeadline || !headlineInput) return;
+        setHeadlineResult(''); // Clear old result first
         try {
             const result = await handleFixHeadline(headlineInput);
             if (result) setHeadlineResult(result);
@@ -174,6 +175,7 @@ export const ProDashboardModals = ({
 
     const onGenerateBio = async () => {
         if (!handleGenerateBio || !bioInput) return;
+        setBioResult(''); // Clear old result first
         try {
             const result = await handleGenerateBio(bioInput);
             if (result) setBioResult(result);
@@ -181,6 +183,15 @@ export const ProDashboardModals = ({
             // Error handled in parent
         }
     };
+
+    // Auto-clear result when input changes
+    React.useEffect(() => {
+        setHeadlineResult('');
+    }, [headlineInput]);
+
+    React.useEffect(() => {
+        setBioResult('');
+    }, [bioInput]);
 
     return (
         <>
@@ -883,9 +894,16 @@ export const ProDashboardModals = ({
                                     </div>
                                     <div>
                                         <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">{t('pro_dashboard.tools.headline.title')}</h3>
-                                        <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-70">
-                                            Curiosity Loop Engineering
-                                        </p>
+                                        <div className="flex items-center gap-2">
+                                            <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-80">
+                                                Curiosity Loop Engineering
+                                            </p>
+                                            <div className="hidden sm:block w-1 h-1 rounded-full bg-slate-300 dark:bg-white/20" />
+                                            <div className="flex items-center gap-1.5">
+                                                <Zap size={10} className="text-indigo-500 animate-pulse" />
+                                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest tabular-nums">{status?.pro_tokens ?? 0}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <button
@@ -897,12 +915,19 @@ export const ProDashboardModals = ({
                             </div>
 
                             <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-6">
-                                <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.tools.headline.placeholder')}</label>
+                                <div className="space-y-3 relative group/field">
+                                    <div className="flex justify-between items-center px-1">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.tools.headline.label', 'Input Headline')}</label>
+                                        {headlineInput && (
+                                            <button onClick={() => setHeadlineInput('')} className="text-[10px] font-black text-rose-500 uppercase tracking-widest hover:opacity-70 transition-opacity flex items-center gap-1">
+                                                <X size={10} /> {t('common.delete')}
+                                            </button>
+                                        )}
+                                    </div>
                                     <textarea
                                         value={headlineInput}
                                         onChange={(e) => setHeadlineInput(e.target.value)}
-                                        className="w-full h-24 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-xs font-medium focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400 resize-none"
+                                        className="w-full h-32 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-xs font-medium focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400/50 resize-none shadow-inner"
                                         placeholder={t('pro_dashboard.tools.headline.placeholder')}
                                     />
                                 </div>
@@ -989,9 +1014,16 @@ export const ProDashboardModals = ({
                                     </div>
                                     <div>
                                         <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">{t('pro_dashboard.tools.bio.title')}</h3>
-                                        <p className="text-[10px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-[0.2em] opacity-70">
-                                            High-Conversion Persona Sync
-                                        </p>
+                                        <div className="flex items-center gap-2">
+                                            <p className="text-[10px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-[0.2em] opacity-80">
+                                                High-Conversion Persona Sync
+                                            </p>
+                                            <div className="hidden sm:block w-1 h-1 rounded-full bg-slate-300 dark:bg-white/20" />
+                                            <div className="flex items-center gap-1.5">
+                                                <Zap size={10} className="text-amber-500 animate-pulse" />
+                                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest tabular-nums">{status?.pro_tokens ?? 0}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <button
@@ -1003,12 +1035,19 @@ export const ProDashboardModals = ({
                             </div>
 
                             <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-6">
-                                <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.tools.bio.desc')}</label>
+                                <div className="space-y-3 relative group/field">
+                                    <div className="flex justify-between items-center px-1">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.tools.bio.label', 'Your Current Bio')}</label>
+                                        {bioInput && (
+                                            <button onClick={() => setBioInput('')} className="text-[10px] font-black text-rose-500 uppercase tracking-widest hover:opacity-70 transition-opacity flex items-center gap-1">
+                                                <X size={10} /> {t('common.delete')}
+                                            </button>
+                                        )}
+                                    </div>
                                     <textarea
                                         value={bioInput}
                                         onChange={(e) => setBioInput(e.target.value)}
-                                        className="w-full h-24 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-xs font-medium focus:border-amber-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400 resize-none"
+                                        className="w-full h-32 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-xs font-medium focus:border-amber-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400/50 resize-none shadow-inner"
                                         placeholder={t('pro_dashboard.tools.bio.placeholder')}
                                     />
                                 </div>

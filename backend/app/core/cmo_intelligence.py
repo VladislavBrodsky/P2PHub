@@ -293,6 +293,153 @@ class AudienceProfile:
             "visual_base": "A relieved former corporate professional, relaxed premium linen clothing, peaceful and happy, enjoying a luxury balcony view during sunrise.",
             "cta_style": "Empowering, strategic, transformational"
         },
+        
+        "partners": {
+            "name": "Wealth Hackers",
+            "psychographics": {
+                "pain_points": [
+                    "Slow network growth",
+                    "Lower referral commissions",
+                    "Complexity of manual marketing",
+                    "Limited reach",
+                    "Team stagnation"
+                ],
+                "desires": [
+                    "Grow network 100x faster",
+                    "Turn $1 into $1000",
+                    "Automated viral loops",
+                    "Geometric team expansion",
+                    "Elite partner status"
+                ],
+                "values": ["Leverage", "Velocity", "Automation", "Synergy"],
+                "language_patterns": ["High-energy", "Visionary", "System-focused", "Growth-obsessed"],
+                "triggers": ["100x Speed", "Exponential Profit", "Viral Powerhouse", "Partner Success"]
+            },
+            "tov": {
+                "style": "Electrifying, visionary, elite",
+                "formality": "Professional speaker energy",
+                "humor": "Arrogantly confident (in a good way)",
+                "emojis": "⚡🚀💎👑🤝💹",
+                "sentence_length": "Punchy and rhythmic.",
+                "power_words": ["100x", "powerhouse", "velocity", "geometric", "synergy", "dominate"]
+            },
+            "hooks": [
+                "What if your network grew 100x faster while you slept?",
+                "The $1 per minute strategy the elite 1% of partners use",
+                "How to turn one partner into a viral empire in 30 days",
+                "STOP chasing referrals. START architecting a viral powerhouse."
+            ],
+            "visual_base": "An elite wealth hacker, presence of a tech visionary, standing in a high-tech glass-walled operations center with global networking maps glowing in the background.",
+            "cta_style": "High-velocity, exclusive, visionary"
+        },
+        
+        "passive_seekers": {
+            "name": "Passive Income Seekers",
+            "psychographics": {
+                "pain_points": ["Trading time for money", "Inflation", "Lack of scalable systems", "Complex investment tools"],
+                "desires": ["Sleep income", "Financial freedom", "Simple automation", "Secure returns"],
+                "values": ["Freedom", "Simplicity", "Security", "Time"],
+                "language_patterns": ["Ease-focused", "Results-oriented", "Relatable"],
+                "triggers": ["Automatic", "Quiet wealth", "Time freedom", "Low effort"]
+            },
+            "tov": {
+                "style": "Calm, reassuring, authoritative",
+                "formality": "Casual but professional",
+                "humor": "Relatable about 9-5 grind",
+                "emojis": "📈🛌💰🏝️✨",
+                "sentence_length": "Clear and flowing.",
+                "power_words": ["passive", "automated", "sleep", "freedom", "residual", "leverage"]
+            },
+            "hooks": [
+                "The 'Sleep Income' protocol that runs on autopilot",
+                "How to build a $1/minute residual income stream",
+                "Why smart money is moving to automated referral networks",
+                "Escape the time-for-money trap with this one system"
+            ],
+            "visual_base": "A serene individual enjoying a luxury breakfast on a sun-drenched terrace, looking at a tablet showing consistent passive earnings growth.",
+            "cta_style": "Ease-oriented, trust-based"
+        },
+        
+        "growth_masters": {
+            "name": "Growth Masters",
+            "psychographics": {
+                "pain_points": ["Saturation", "Low conversion rates", "Manual outreach burnout", "Ineffective funnels"],
+                "desires": ["Extreme scale", "Algorithmic advantage", "Market dominance", "Efficient duplication"],
+                "values": ["Efficiency", "Metrics", "Speed", "Innovation"],
+                "language_patterns": ["Data-driven", "Strategic", "Direct"],
+                "triggers": ["Scale", "Optimization", "Competitive edge", "Viral loops"]
+            },
+            "tov": {
+                "style": "Tactical, sharp, results-obsessed",
+                "formality": "Direct and semi-formal",
+                "humor": "Minimal, focused on 'winning'",
+                "emojis": "📊🔥🚀🎯💎",
+                "sentence_length": "Short and action-heavy.",
+                "power_words": ["scale", "optimize", "dominate", "leverage", "metrics", "velocity"]
+            },
+            "hooks": [
+                "The algorithmic hack for 100x team growth",
+                "Scale your partner network with surgical precision",
+                "Why manual outreach is dead (and what replaced it)",
+                "The blueprint for market dominance in the P2P space"
+            ],
+            "visual_base": "A sharp, modern growth strategist analyzing high-resolution data visualizations on a sleek holographic interface in a luxury penthouse office.",
+            "cta_style": "Data-backed, high-conversion"
+        },
+        
+        "automation_kings": {
+            "name": "Automation Kings",
+            "psychographics": {
+                "pain_points": ["Manual overhead", "Human error", "Inconsistency", "Time drain"],
+                "desires": ["Full autonomy", "Perfect systems", "Set and forget income", "Infinite scalability"],
+                "values": ["Logic", "Productivity", "Freedom", "Consistency"],
+                "language_patterns": ["Technical", "Logical", "System-oriented"],
+                "triggers": ["Hands-free", "Systematic", "Zero effort", "Infinite scale"]
+            },
+            "tov": {
+                "style": "Cool, logical, precise",
+                "formality": "Semi-formal",
+                "humor": "Irony about 'working hard'",
+                "emojis": "🤖⚙️📡💎🔋",
+                "sentence_length": "Logical steps, concise.",
+                "power_words": ["automate", "system", "autonomy", "hands-free", "logic", "protocol"]
+            },
+            "hooks": [
+                "Build a partner empire that runs 100% on autopilot",
+                "Zero manual work. Infinite referral growth.",
+                "The 'Set and Forget' system for global network expansion",
+                "How I automated the growth of 1,000+ partners"
+            ],
+            "visual_base": "A tech-savvy entrepreneur relaxing in a futuristic high-tech lounge, while autonomous systems glow softly around them representing a network in motion.",
+            "cta_style": "System-focused, efficiency-driven"
+        },
+        
+        "empire_builders": {
+            "name": "Empire Builders",
+            "psychographics": {
+                "pain_points": ["Small thinking", "Slow progression", "Lack of legacy", "Weak infrastructure"],
+                "desires": ["Generational wealth", "Global influence", "Massive team legacy", "The $1/minute lifestyle"],
+                "values": ["Legacy", "Power", "Ambition", "Sustainability"],
+                "language_patterns": ["Visionary", "Grand", "Inspirational"],
+                "triggers": ["Legacy", "Empire", "Financial Dynasty", "Global Reach"]
+            },
+            "tov": {
+                "style": "Grand, authoritative, magnetic",
+                "formality": "Formal and inspiring",
+                "humor": "Sophisticated",
+                "emojis": "👑🏰🌍💎🔥",
+                "sentence_length": "Varied, powerful cadence.",
+                "power_words": ["empire", "legacy", "dynasty", "global", "unlimited", "sovereign"]
+            },
+            "hooks": [
+                "Stop building a business. Start architecting an empire.",
+                "The architecture of a global $1/minute financial dynasty",
+                "How the new elite are building legacies through P2P networks",
+                "Transform your network into an unstoppable global powerhouse"
+            ],
+            "visual_base": "A powerful and visionary leader overlooking a vast, modern city at dusk from a private infinity pool deck, embodying ultimate status and success.",
+            "cta_style": "Legacy-themed, visionary"
+        },
     }
 
 
@@ -453,6 +600,28 @@ class ContentCategory:
                 "hyperlink": ["Tutorial", "Resources", "Start here", "Guide"]
             },
             "visual_scene": "explaining a simple 1-click wealth protocol on a user-friendly mobile app, pointing at a clear 'Activate' button on the screen."
+        },
+        
+        "partners": {
+            "name": "For Partners",
+            "technique": CopywritingTechnique.PASTOR,
+            "structure": {
+                "hook": "THE 100X GROWTH PROMISE",
+                "body": "Viral Powerhouse reveal + Team duplication leverage + Profit velocity",
+                "close": "Join the Elite Partner Circle"
+            },
+            "psychological_triggers": [
+                "Leverage",
+                "Exponential growth",
+                "Group identity",
+                "Wealth creation speed"
+            ],
+            "formatting_rules": {
+                "bold": ["100x FASTER", "POWERHOUSE", "PROFIT", "$1 PER MINUTE", "GEOMETRIC GROWTH"],
+                "italic": ["The secret of the top 1%", "Viral duplication"],
+                "hyperlink": ["Start Your Powerhouse", "Join Elite Partners", "Scale Now"]
+            },
+            "visual_scene": "demonstrating a viral growth powerhouse system on a sleek glass interface, showing network lines expanding exponentially in real-time."
         }
     }
 

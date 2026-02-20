@@ -44,7 +44,8 @@
         "lifestyle": "Elite Lifestyle",
         "income": "Income Results",
         "network": "Team Growth",
-        "tutorial": "Web3 Education"
+        "tutorial": "Web3 Education",
+        "partners": "For Partners"
       },
       "audiences": {
         "traders": "Crypto Traders",
@@ -53,13 +54,21 @@
         "builders": "Network Leaders",
         "parents": "Stay-at-home Parents",
         "hustlers": "Student Hustlers",
-        "burnouts": "Corporate Burnouts"
+        "burnouts": "Corporate Burnouts",
+        "passive_seekers": "Passive Income Seekers",
+        "growth_masters": "Growth Masters",
+        "automation_kings": "Automation Kings",
+        "empire_builders": "Empire Builders",
+        "partners": "Wealth Hackers"
       },
       "share_modal": {
         "title": "Viral Broadcast",
         "subtitle": "Select platform to distribute",
         "more": "More Options"
-      }
+      },
+      "add_personal_link": "Add your personal link",
+      "link_saved": "Referral link updated successfully",
+      "link_error": "Invalid link format"
     },
     "setup": {
       "title": "Protocol Configuration",
@@ -205,6 +214,7 @@
       "headline": {
         "title": "Headline Engineer",
         "desc": "Make a headline hyper-viral (1 Token)",
+        "label": "Input Headline",
         "placeholder": "e.g., How to buy Bitcoin",
         "btn": "Rewrite Headline",
         "neural_desc": "Our neural engine analyzes current high-performing hooks and adapts your headline to trigger curiosity loops.",
@@ -213,6 +223,7 @@
       "bio": {
         "title": "Viral Bio Generator",
         "desc": "Optimize your profile for maximum conversion. (2 Tokens)",
+        "label": "Your Current Bio",
         "placeholder": "Enter your current bio or short description...",
         "btn": "Synthesize Bio",
         "neural_desc": "Optimizes your social identity for conversion. High-converters focus on the 'Benefit' first, not the 'Feature'."

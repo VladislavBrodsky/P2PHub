@@ -298,7 +298,23 @@ Use FRESH, audience-specific language that feels authentic.
                 "status": "failed"
             }
 
-        ref_link = referral_link or f"https://t.me/pintopaybot?start={partner.referral_code}"
+        if post_type == "partners":
+            # For Partners strategy, use the Pro Bot link
+            ref_link = f"https://t.me/pintopay_probot?start={partner.referral_code}"
+        else:
+            # Use personal referral link if it exists and is valid, otherwise fallback to standard bot
+            if partner.personal_referral_link:
+                # Basic validation again just to be sure
+                link = partner.personal_referral_link.strip()
+                if link.startswith("https://t.me/pintopaybot?start=") or link.startswith("t.me/pintopaybot?start="):
+                    ref_link = link
+                else:
+                    # Invalid stored link fallback
+                    ref_link = "https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3"
+            elif referral_link:
+                ref_link = referral_link
+            else:
+                ref_link = f"https://t.me/pintopaybot?start={partner.referral_code}"
         
         intel = self._build_viral_audience_intel(target_audience, post_type, language)
         best_practices = await KnowledgeInsights.get_best_practices(session)
