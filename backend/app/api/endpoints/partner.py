@@ -347,6 +347,14 @@ async def get_my_profile(
     partner_response = PartnerResponse.from_orm(partner)
     partner_response.is_admin = tg_id in settings.ADMIN_USER_IDS
 
+    # #comment: Elite Stats Optimization (Phase 4 Scaling)
+    # referral_count is optimized for L1 (Direct). 
+    # For the total dashboard stat, we fetch the 20-level aggregate.
+    from app.services.analytics_service import get_referral_tree_stats
+    tree_stats = await get_referral_tree_stats(session, partner.id)
+    partner_response._network_size_real = sum(tree_stats.values())
+
+
     # #comment: CRITICAL - Use mode='json' to ensure datetime objects are serialized (isoformat)
     # before writing to Redis. Without this, json.dumps fails with a TypeError.
     try:

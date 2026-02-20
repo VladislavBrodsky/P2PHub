@@ -1,6 +1,8 @@
 # Sentry Setup Guide for P2PHub
-**Date:** 2026-02-12  
-**Status:** Ready to Configure
+**Version:** 1.0.0  
+**Status:** Ready to Configure  
+**Created:** 2026-02-12  
+**Last Updated:** 2026-02-20
 
 ---
 

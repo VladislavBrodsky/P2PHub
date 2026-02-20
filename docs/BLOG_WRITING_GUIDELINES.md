@@ -1,4 +1,10 @@
 # Pintopay Blog Writing Guidelines
+**Version:** 1.0.0  
+**Status:** Active  
+**Created:** 2026-02-10  
+**Last Updated:** 2026-02-20  
+
+---
 
 To maintain the high quality and "viral" nature of the Pintopay blog, all new articles must adhere to the following guidelines. Our goal is not just to inform, but to **persuade, inspire, and mobilize**.
 

@@ -50,6 +50,8 @@ class PartnerResponse(PartnerBase):
     completed_tasks: list[str] = []
     completed_stages: list[int | str] = []
     is_admin: bool = False
+    # #comment: Support for dynamic injection of network size from endpoint
+    _network_size_real: int | None = None
 
     model_config = {"from_attributes": True}
 
@@ -122,6 +124,8 @@ class PartnerResponse(PartnerBase):
     @computed_field
     @property
     def total_network_size(self) -> int:
+        if hasattr(self, "_network_size_real") and self._network_size_real is not None:
+            return self._network_size_real
         return getattr(self, "referral_count", 0)
 
 class PROSetupRequest(BaseModel):

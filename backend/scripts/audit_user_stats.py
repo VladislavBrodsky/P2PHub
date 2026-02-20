@@ -79,8 +79,12 @@ async def main():
     if len(sys.argv) < 2:
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
         async with async_session() as session:
-            res = await session.exec(select(Partner).limit(1))
+            # Find someone with referrals
+            res = await session.exec(select(Partner).where(Partner.referral_count > 0).limit(1))
             p = res.first()
+            if not p:
+                res = await session.exec(select(Partner).limit(1))
+                p = res.first()
             tid = p.telegram_id if p else None
         
         if not tid:

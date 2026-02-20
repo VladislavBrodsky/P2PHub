@@ -87,8 +87,9 @@ Product: Partner Center (Центр Партнеров) + Sovereign Ecosystem
 Referral Link (MUST INCLUDE): {ref_link}
 
 **CRITICAL INSTRUCTION: NO SPLITTING & CAPTION LIMIT.**
-Generate the entire content (title, chapter, body, CTA, hashtags) as a single coherent narrative. DO NOT split the message.
+Generate the entire content (title, body, CTA, hashtags) as a single coherent narrative. DO NOT split the message.
 The TOTAL length of the 'body' MUST be under 950 characters to fit perfectly in a Telegram photo caption.
+DO NOT write 'Chapter X' anywhere in the output. Use the best copywriting techniques (e.g., the 'Between the Lines' sales technique: be valuable/educational, while subtly positioning Pintopay as the 'secret weapon' or 'smart money move').
 
 **CRITICAL LANGUAGE INSTRUCTION:**
 All output (title, body, hashtags) MUST be in {language}. 
@@ -97,10 +98,10 @@ Write as a high-status NATIVE {language} leader. Every word must feel earned and
 **OUTPUT FORMAT (JSON ONLY):**
 {{
   "title": "A high-status strategic title <10 words",
-  "body": "**Chapter X: [Title]**\\n\\n[HUMANIZED ALPHA HOOK]\\n\\n[The 'Field Note' Insight - 3-5 short rhythmic paragraphs]\\n\\n**[{cta_text}]({ref_link})**",
-  "hashtags": ["#Tag1", "#Tag2"] 
+  "body": "**[Strategic Title]**\\n\\n[HUMANIZED ALPHA HOOK]\\n\\n[The 'Field Note' Insight - 3-5 short rhythmic paragraphs]\\n\\n**[{cta_text}]({ref_link})**",
+  "hashtags": "#Tag1 #Tag2 #Tag3 #Tag4" 
 }}
-(Choose 2-4 most viral hashtags from: {', '.join(all_potential_hashtags)})
+(Choose carefully 2-4 most viral, strictly unique hashtags from: {', '.join(all_potential_hashtags)}. DO NOT repeat them. Write them in 1 line EXACTLY like the example: #fintech #web3 #cryptocard #cryptopayments)
 
 """
 
@@ -125,6 +126,8 @@ def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link
     tone_seo = ToneIntelligence.TONES.get(tone.lower(), {}).get("seo_keywords", [])
     seo_keywords = list(set(audience_seo + strategy_seo + tone_seo))
 
+    cta_fallback = "Присоединиться к сети" if language == "Russian" else "Join the Network"
+    
     return f"""
 EXECUTE GLOBAL PARTNER ARCHITECT MODE.
 
@@ -139,9 +142,10 @@ Referral Link: {ref_link}
 2. **PERSONAL VOICE:** Write as if you are sending a note to a trusted partner. Use "I discovered...", "We are building...", "This is why I moved...".
 3. **SOUL & RHYTHM:** Use varying sentence lengths. Use silence/breaks for impact.
 4. **NO SPLITTING:** The final generation MUST be a complete, unified message. Title + Body + CTA + Hashtags in ONE JSON response.
+5. **NO CHAPTER HEADINGS:** DO NOT write 'Chapter 1:' or 'Chapter X:' or any other chapter headings. This is absolutely forbidden.
 
 **VIRAL & SEO CALIBRATION:**
-1. **HASHTAGS (STRICT LIMIT 2-4):** Choose the 2-4 most powerful hashtags from this list: {', '.join(all_potential_hashtags)}.
+1. **HASHTAGS (STRICT LIMIT 2-4 UNIQUE):** Choose exactly 2-4 UNIQUE hashtags. Write them on one line separated by spaces (e.g., #Pintopay #Crypto #Wealth). DO NOT repeat them. List to pick from: {', '.join(all_potential_hashtags)}.
 2. **SEO OPTIMIZATION:** Naturally integrate these high-performing keywords/concepts: {', '.join(seo_keywords)}. 
 
 **STORYTELLING CONTEXT:**
@@ -150,11 +154,11 @@ Focus: {category_strategy.get('storytelling', {}).get('chapter_focus', 'None')}
 
 **CONTENT REQUIREMENTS (2026 HUMANIZED PROTOCOL):**
 1. **KEYWORD INTELLIGENCE:** Integrate high-performing keywords for {target_audience}: {', '.join(audience_intel.get('performing_keywords_2026', []))}. Use them naturally.
-2. **SALES BETWEEN THE LINES:** Master subtle persuasion. Do not pitch. Create a desire for the 'identity' of a {target_audience} leader.
-3. **EMOTION:** Start by mirroring the audience's deep internal monologue.
-4. **ENGAGEMENT architecture:** End with a provocative thought or a "Signal Request".
-5. **CTA:** The final line MUST be: **[Join the Network]({ref_link})** (or the {language} equivalent).
-6. **CHARACTERS:** Keep the entire response under 950 characters.
+2. **SALES BETWEEN THE LINES (Copywriter Strategy):** Master subtle persuasion. Do not pitch directly. Instead, provide immense value, and subtly weave in the "Pintopay Crypto Card" or "Partner Center" as the *obvious* tool or 'secret weapon' to solve the problem. Position it as a smart money move.
+3. **EMOTION:** Start by mirroring the audience's deep internal monologue or pain point.
+4. **ENGAGEMENT architecture:** End with a provocative thought, FOMO, or a "Signal Request".
+5. **CTA:** The final line MUST be: **[{cta_fallback}]({ref_link})**
+6. **CHARACTERS:** Keep the entire body under 950 characters.
 
 RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
 """
