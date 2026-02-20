@@ -19,7 +19,7 @@ def build_viral_audience_intel(target_audience: str, post_type: str, language: s
         "dna": NativeLanguageOptimization.LANGUAGE_DNA.get(language, {})
     }
 
-def build_viral_system_prompt(language, target_audience, post_type, tone, ref_link, intel, best_practices) -> str:
+def build_viral_system_prompt(language, target_audience, post_type, tone, ref_link, intel, best_practices, resonance_data=None) -> str:
     audience_intel = intel["audience"]
     category_strategy = intel["strategy"]
     language_dna = intel["dna"]
@@ -28,6 +28,16 @@ def build_viral_system_prompt(language, target_audience, post_type, tone, ref_li
     strategy_context = _build_strategy_context(post_type, category_strategy)
     lang_context = _build_language_context(language, language_dna)
     
+    resonance_context = ""
+    if resonance_data and "top_resonance_segments" in resonance_data:
+        recs = resonance_data["top_resonance_segments"][:2]
+        if recs:
+            resonance_context = "**PREDICTIVE RESONANCE CALIBRATION (CRITICAL):**\n"
+            resonance_context += "The following patterns have shown high engagement for this user:\n"
+            for r in recs:
+                resonance_context += f"- Hook Pattern: {r['headline']} (Engagement Boost: {r['resonance_score']})\n"
+            resonance_context += "\nCalibrate your content specifically to mimic these winners while maintaining novelty."
+
     universal_rules_str = ""
     if best_practices and 'universal_rules' in best_practices:
         universal_rules_str = "\n".join(['- ' + rule for rule in best_practices['universal_rules'][:8]])
@@ -39,6 +49,7 @@ def build_viral_system_prompt(language, target_audience, post_type, tone, ref_li
 {strategy_context}
 
 {lang_context}
+{resonance_context}
 
 {FORMATTING_MASTERY}
 
@@ -56,10 +67,10 @@ Referral Link (MUST INCLUDE): {ref_link}
 
 **OUTPUT FORMAT (JSON ONLY):**
 {{
-  "title": "Viral headline <15 words",
-  "body": "Full post with **bold**, _italic_, and [hyperlink]({ref_link}) formatting",
-  "hashtags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "image_description": "Detailed scene description for 4K Ultra-Realistic Cinematic quality"
+  "title": "A high-status strategic title <10 words",
+  "body": "**Chapter X: [Title]**\\n\\n[THE ALPHA HOOK]\\n\\n[Value/Strategy Context]\\n\\n[LEAD MAGNET OFFER: Offer a blueprint/setup for a comment]\\n\\n**[Action Oriented CTA]({ref_link})** (Replace {ref_link} with the actual URL: {ref_link})",
+  "hashtags": ["#Sovereignty", "#Fintech", "#DeFi", "#ExitStrategy"],
+  "image_description": "Elite Leica M11 prompt following the SPECIFICATION."
 }}
 """
 
@@ -89,44 +100,42 @@ Available Episodes: {category_strategy.get('storytelling', {}).get('episodes', [
 **HOOK INSPIRATION (adapt, don't copy):**
 {hook_inspo}
 
-**CONTENT REQUIREMENTS:**
-1. **NARRATIVE ARC:** Select ONE Episode from the 'Available Episodes' list (matching the output language) and write the post as that specific Chapter.
-2. **STORY-DRIVEN HOOK:** The first sentence MUST be the chosen Episode Title (e.g. "Chapter 2: No Banks, No Limits").
-3. **EPISODIC CLIFFHANGER:** End the text with a 'cliffhanger' that hints at the next chapter (e.g. "Tomorrow, I'll reveal why most traders fail at this step...").
-4. **USER INVOLVEMENT CTA:** Ask followers to comment a specific word (e.g. "Comment 'MATRIX' for the full strategy") to keep the story alive.
-5. **PRODUCT WEAVING:** Naturally weave in Pintopay Card/Network as the 'Key' to the story's transformation.
-6. **PSYCHOLOGICAL TRIGGERS:** {', '.join(category_strategy.get('psychological_triggers', ['FOMO', 'Social Proof'])[:3])}
-7. **FORMATTING:** Format with **bold** (4-6x), _italic_ (2-3x), and [descriptive link]({ref_link}) in the story bridge.
-8. **LENGTH:** Keep content UNDER 900 characters total.
-9. **AUTHENTICITY:** Write as if you are living this story right now in {language}.
+**CONTENT REQUIREMENTS (STRICT):**
+1. **VISIONARY TONE:** Be professional, friendly, and inspiring. Talk about the "Global Financial Shift" and "Digital Gold Rush" as positive opportunities for everyone to grow together.
+2. **NO BLAME:** Do NOT mention or blame banks, the government, or 'the system'. Do not be aggressive or rebellious.
+3. **GLOBAL LEADERSHIP:** Write as a Professional Native Speaker and Global Leader. Use sophisticated, high-status yet inclusive language.
+4. **EPISODIC ANCHOR:** The first line of the 'body' MUST be: "**Chapter [X]: [Visionary Title]**".
+5. **OPPORTUNITY ASSET:** Mid-post, offer a 'Growth Asset' (e.g., "Signal 'GOLD' for the blueprint to geometric networking").
+6. **CTA SUPREMACY:** The final line MUST be a bold markdown link: **[Action Text]({ref_link})**.
+7. **BANNED:** Never use "Pintopay" in the hook. No exclamations. No aggresive 'Red Pill' terminology.
 
 **VISUAL STORYTELLING (for context):**
 The generated image for this post will feature: {visual_base} {visual_scene}. Ensure your copy resonates with this visual aesthetic.
 
-**IMAGE DESCRIPTION:**
-Create a 4K prompt for this specific chapter. 
+**IMAGE SPECIFICATION (CRITICAL):**
+Generate a prompt for a Leica M11 editorial shot. 
 Base: {visual_base}
 Scene: {visual_scene}
-Note: Add a 'Cinematic Narrative' flair—high contrast, dramatic shadows, mysterious but premium atmosphere. Technical: 35mm, f/1.4, Unreal Engine 5 render style.
+Note: Absolutely NO neon, NO screens, NO cash. Focus on Chiaroscuro lighting, luxury textures (stone, silk, walnut), and a sense of 'Expensive Silence'. Subject must look thoughtful and high-status, not 'posing'.
 
 RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
 """
 
-def build_viral_image_prompt(intel: dict) -> str:
+def build_viral_image_prompt(intel: dict, post_content: str = "") -> str:
     audience_intel = intel.get("audience", {})
     category_strategy = intel.get("strategy", {})
     
-    audience_desc = audience_intel.get("visual_base", "A successful and authoritative person.")
-    scene_desc = category_strategy.get("visual_scene", "experiencing a breakthrough moment of financial freedom.")
+    audience_desc = audience_intel.get("visual_base", "An authoritative and sophisticated individual of undeniable status.")
+    scene_desc = category_strategy.get("visual_scene", "navigating a moment of high-stakes breakthrough in a private, ultra-modern setting.")
 
     return (
-        f"PROFESSIONAL CINEMATIC PHOTOGRAPHY - NARRATIVE 4K QUALITY: {audience_desc} "
-        f"The subject is {scene_desc} "
-        f"Atmosphere: Cinematic Narrative, high contrast, dramatic shadows, mysterious but premium atmosphere, storytelling vibes. "
-        f"Technical Specs: 35mm lens, f/1.4 wide aperture, masterful cinematic lighting, 8K textures, Unreal Engine 5 render style, professional color grading. "
-        f"Visual Anchor: The image tells a story of transformation and elite status, incorporating a 'Pintopay' element with photorealistic precision. "
-        f"STRICT NEGATIVE PROMPT: cartoon, CGI, anime, 3D render, illustration, drawing, painting, stock photo style, fake smile, distorted hands, extra fingers, "
-        f"unrealistic proportions, oversaturated colors, generic poses, misspelled text, low quality"
+        f"{IMAGE_RULES}\n\n"
+        f"CONTEXTUAL SYNERGY: The image must visually represent the core emotion of this content: \"{post_content[:200]}\"\n"
+        f"SCENE SETUP: {audience_desc} {scene_desc}. \n"
+        f"EMOTION: High-stakes tension, quiet confidence, or profound relief. \n"
+        f"LIGHTING: Deep Chiaroscuro with Rembrandt highlights on the face. \n"
+        f"BRANDING/TEXT: If any title/text is visible on background elements (like a premium dossier or screen), it must be in the 'Onest' font style and 100% grammatically correct. \n"
+        f"SPECS: Photorealistic 8K, cinematic depth of field, Leica M11 rendering."
     )
 
 def _build_audience_context(target_audience: str, audience_intel: dict) -> str:

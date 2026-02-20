@@ -7,9 +7,32 @@
     "tab_studio": "Studio",
     "tab_tools": "Tools",
     "tab_growth": "Growth",
+    "tab_analytics": "Analytics",
     "tab_setup": "Setup",
     "tokens_left": "{{count}} TOKENS",
     "system_offline": "SYSTEM OFFLINE",
+    "analytics": {
+      "cabinet_title": "Viral Analytics Cabinet",
+      "decrypting": "Decrypting Performance Data...",
+      "total_views": "Total Views",
+      "engagement": "Engagement",
+      "viral_reach": "Viral Reach",
+      "success_rate": "Success Rate",
+      "resonance": {
+        "title": "Predictive Resonance",
+        "status": "Neural Engine Scaling",
+        "confidence": "AI Confidence: {{percent}}%",
+        "action_btn": "Synthesize New Best Action"
+      },
+      "raw_data": {
+        "title": "Raw Data Stream",
+        "source": "Source",
+        "reach": "Reach",
+        "engagement": "Engagement",
+        "viral": "Viral",
+        "empty": "No social deployments detected."
+      }
+    },
     "locked": {
       "title": "FOR PRO MEMBERS ONLY",
       "desc": "Unlock the Viral Marketing Studio and AI content generation by upgrading to PRO.",

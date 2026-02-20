@@ -70,10 +70,21 @@ class ViralMarketingStudio:
             return {"error": "Elite AI engine offline.", "status": "failed"}
 
         start_time = datetime.now()
-        ref_link = referral_link or f"https://t.me/{partner.bot_username or 'pintopaybot'}?start=r_{partner.id}"
+        bot_username = getattr(settings, 'BOT_USERNAME', 'pintopaybot')
+        ref_link = referral_link or f"https://t.me/{bot_username}?start=r_{partner.id}"
         
         intel = prompts.build_viral_audience_intel(target_audience, post_type, language)
-        system_prompt = prompts.build_viral_system_prompt(language, target_audience, post_type, tone_of_voice, ref_link, intel, {})
+        
+        # Sync with Predictive Resonance Engine
+        resonance_data = None
+        if session:
+            try:
+                from app.services.viral_analytics_service import viral_analytics
+                resonance_data = await viral_analytics.get_predictive_insights(partner.id, session)
+            except Exception as e:
+                logger.warning(f"Resonance sync failed: {e}")
+
+        system_prompt = prompts.build_viral_system_prompt(language, target_audience, post_type, tone_of_voice, ref_link, intel, {}, resonance_data=resonance_data)
         user_prompt = prompts.build_viral_user_prompt(target_audience, post_type, language, tone_of_voice, ref_link, intel)
 
         # 1. Text Generation
@@ -82,9 +93,31 @@ class ViralMarketingStudio:
 
         # Use 'body' or 'text' from response (consistency fix)
         body_text = res_json.get("text") or res_json.get("body") or ""
+        
+        # Safety fallback for ref_link placeholder
+        if "{ref_link}" in body_text:
+            body_text = body_text.replace("{ref_link}", ref_link)
+            
+        # CTA LINK REINFORCER: Ensure a link exists. If not, append one.
+        if ref_link not in body_text:
+            # Check if there is a bold line that looks like a CTA
+            lines = body_text.split("\n")
+            cta_line_found = False
+            for i in range(len(lines)-1, -1, -1):
+                if "**" in lines[i] and len(lines[i]) < 100:
+                    # Transform existing bold line to link
+                    clean_text = lines[i].replace("**", "").replace("[", "").replace("]", "").strip()
+                    lines[i] = f"**[{clean_text}]({ref_link})**"
+                    cta_line_found = True
+                    break
+            
+            if not cta_line_found:
+                body_text += f"\n\n**[Start Your Journey Here]({ref_link})**"
+            else:
+                body_text = "\n".join(lines)
 
         # 2. Image Generation
-        image_prompt = res_json.get("image_description") or prompts.build_viral_image_prompt(intel)
+        image_prompt = res_json.get("image_description") or prompts.build_viral_image_prompt(intel, body_text)
         image_url = await self._generate_image(image_prompt, partner.id)
 
         duration = (datetime.now() - start_time).total_seconds()
@@ -114,17 +147,19 @@ class ViralMarketingStudio:
 
         # TaskIQ Logging
         try:
-            log_task = broker.task("log_viral_generation_task")
-            await log_task.kiq(partner_id=partner.id, topic=post_type, audience=target_audience, language=language,
-                             openai_prompt=user_prompt, gemini_prompt=image_prompt, duration=duration,
-                             tokens_openai=tokens_openai, tokens_gemini=0, title=output["title"], body=body_text, image_url=image_url)
+            from .tasks import log_viral_generation_task
+            await log_viral_generation_task.kiq(
+                partner_id=partner.id, topic=post_type, audience=target_audience, language=language,
+                openai_prompt=user_prompt, gemini_prompt=image_prompt, duration=duration,
+                tokens_openai=tokens_openai, tokens_gemini=0, title=output["title"], body=body_text, image_url=image_url
+            )
         except Exception as e: logger.warning(f"TaskIQ Log Fail: {e}")
 
         return output
 
     async def _get_text_content(self, system_prompt: str, user_prompt: str) -> tuple[dict | None, int]:
         if self.genai_client:
-            for model in ['gemini-2.0-flash', 'gemini-1.5-flash']:
+            for model in ['gemini-3-pro', 'gemini-2.0-pro', 'gemini-2.0-flash']:
                 try:
                     res = await self.genai_client.aio.models.generate_content(
                         model=model, contents=f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}",
@@ -145,7 +180,8 @@ class ViralMarketingStudio:
 
     async def _generate_image(self, prompt: str, partner_id: int) -> str | None:
         if self.genai_client:
-            models = [self._last_working_imagen_model, 'imagen-3.0-generate-001', 'imagen-3.0-fast-generate-001']
+            # Prioritizing Gemini 3 Pro (Nano Banana) and Imagen 3.0
+            models = ['gemini-3-pro-nano-banana', 'gemini-3-pro', 'imagen-3.0-generate-001', 'imagen-3.0-fast-generate-001']
             for m in models:
                 success, url = await self._try_imagen(m, prompt, partner_id)
                 if success:
@@ -221,8 +257,8 @@ class ViralMarketingStudio:
             news = await self._fetch_rss_global_news()
             if news: 
                 try:
-                    log_task = broker.task("log_rss_to_sheets_task")
-                    await log_task.kiq(news)
+                    from .tasks import log_rss_to_sheets_task
+                    await log_rss_to_sheets_task.kiq(news)
                 except: pass
             
             news_context = "\n".join([f"- [{n['source']}] {n['title']}" for n in news])

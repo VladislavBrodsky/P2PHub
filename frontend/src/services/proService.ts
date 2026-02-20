@@ -117,5 +117,15 @@ export const proService = {
     updateReferralLink: async (referral_link: string) => {
         const response = await apiClient.post('/api/pro/referral-link', { referral_link });
         return response.data;
+    },
+
+    getAnalyticsCabinet: async () => {
+        const response = await apiClient.get('/api/pro/analytics/cabinet');
+        return response.data;
+    },
+
+    getPredictiveResonance: async () => {
+        const response = await apiClient.get('/api/pro/analytics/resonance');
+        return response.data;
     }
 };

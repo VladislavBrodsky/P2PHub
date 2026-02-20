@@ -51,13 +51,13 @@ class AudienceProfile:
                 "power_words": ["alpha", "degen", "moon", "ape", "diamond hands", "stack sats"]
             },
             "hooks": [
-                "The {number}% fee you're paying is crushing your alpha",
-                "Why whales never use traditional banks for crypto",
-                "This card trick bypassed {obstacle} (used by top 1%)",
-                "The {specific metric} most traders ignore (costs you ${amount}/month)"
+                "The {number}% optimization you're missing is the key to your alpha",
+                "Why visionaries are choosing decentralized paths for the Global Shift",
+                "The strategy that unlocked geometric growth (shared by top 1%)",
+                "The {specific metric} most traders overlook in the Digital Gold Rush"
             ],
-            "visual_base": "A focused crypto trader, mid-30s, tech-wear aesthetic, clean grooming, subtle luxury wrist-wear, in a high-end multi-monitor trading command center.",
-            "cta_style": "Urgent, exclusive, data-backed"
+            "visual_base": "A visionary crypto strategist, mid-30s, sophisticated 'New Wealth' aesthetic, enjoying a calm, high-tech environment that radiates success and clarity.",
+            "cta_style": "Visionary, exclusive, opportunity-backed"
         },
         
         "nomads": {
@@ -90,13 +90,13 @@ class AudienceProfile:
                 "power_words": ["freedom", "remote", "escape", "adventure", "anywhere", "passport"]
             },
             "hooks": [
-                "I've lived in {number} countries this year. Here's how I manage money.",
-                "The banking hack that saved me ${amount} while traveling full-time",
-                "Why digital nomads are ditching traditional banks (and what they use instead)",
-                "From {location} to {location}: My financial setup for the laptop lifestyle"
+                "I've embraced the Global Shift in {number} countries. Here's my blueprint.",
+                "The financial infrastructure that empowers my full-time travel lifestyle",
+                "How digital nomads are leading the way in the New Financial Era",
+                "From {location} to {location}: My visionary setup for the Global Financial Shift"
             ],
-            "visual_base": "A free-spirited digital nomad, minimalist high-end street-wear, working on a premium laptop at a luxury beach club or mountain resort in Bali context.",
-            "cta_style": "Lifestyle-based, community-driven"
+            "visual_base": "A world-class 'Cool and Rich' Digital Nomad, radiating high-status and global mobility. Dressed in premium travel-luxe attire (Loro Piana style). Captured in a private jet cabin or a first-class lounge in an exotic tech-hub, working on a sleek device with a focus on 'Borderless Freedom'.",
+            "cta_style": "Growth-based, community-driven"
         },
         
         "affiliates": {
@@ -173,7 +173,7 @@ class AudienceProfile:
                 "Why top leaders are migrating to crypto-based compensation",
                 "From {starting point} to {achievement}: The infrastructure that changed everything"
             ],
-            "visual_base": "A visionary leader, authoritative and inspiring, sophisticated tailored clothing, collaborating in a premium glass-walled corporate innovation suite.",
+            "visual_base": "An elite FinTech Partnership leader and community architect, possessing magnetic visionary energy. Dressed in a sharp 'Investment Banking' style but with a modern, relaxed edge. Captured in a high-stakes strategy session on a luxury terrace overlooking a metropolitan financial district.",
             "cta_style": "Vision-driven, team-focused"
         },
         
@@ -246,13 +246,13 @@ class AudienceProfile:
                 "power_words": ["hustle", "grind", "stack", "escape", "future", "retire early"]
             },
             "hooks": [
-                "How gen-Z is bypassing banks (and stacking wealth early)",
-                "The {tool} that let me quit my part-time job (still in school)",
-                "While your friends get rejected by banks, you're already scaling",
-                "From broke student to ${amount}/month: The financial cheat code"
+                "How Gen-Z is leading the Digital Gold Rush (and building wealth together)",
+                "The {tool} that empowered me to build my own future while in school",
+                "The new era of finance is here, and we're leading the charge",
+                "From student to {amount}/month: My journey in the Global Financial Shift"
             ],
-            "visual_base": "An ambitious Gen-Z student/hustler, premium street-wear, working with intense focus on a tablet in a vibrant, futuristic tech-cafe hub.",
-            "cta_style": "High-energy, FOMO-driven, peer-proof"
+            "visual_base": "An ambitious Gen-Z visionary, premium modern attire, collaborating with peers in a vibrant, futuristic innovation hub filled with light and energy.",
+            "cta_style": "Visionary, inclusive, community-proof"
         },
         
         "burnouts": {
@@ -285,52 +285,52 @@ class AudienceProfile:
                 "power_words": ["escape", "freedom", "reclaim", "bridge", "transition", "awaken"]
             },
             "hooks": [
-                "I left my ${salary} job using this financial tool (here's the plan)",
-                "The bridge between corporate prison and entrepreneurial freedom",
-                "How {number} ex-corporate refugees are building their exit strategy",
-                "You're one financial system away from saying 'I quit'"
+                "I transitioned into the New Era using this visionary tool (here's the path)",
+                "The bridge between tradition and the Global Financial Shift",
+                "How {number} professionals are embracing the new era of autonomy",
+                "You're one strategic shift away from your second act success"
             ],
-            "visual_base": "A relieved former corporate professional, relaxed premium linen clothing, peaceful and happy, enjoying a luxury balcony view during sunrise.",
-            "cta_style": "Empowering, strategic, transformational"
+            "visual_base": "A serene former professional, elegant premium clothing, radiating peace and fulfillment, enjoying a sun-drenched luxury terrace during a beautiful sunrise.",
+            "cta_style": "Empowering, strategic, visionary"
         },
         
         "partners": {
-            "name": "Wealth Hackers",
+            "name": "Global Network Architects",
             "psychographics": {
                 "pain_points": [
-                    "Slow network growth",
-                    "Lower referral commissions",
-                    "Complexity of manual marketing",
-                    "Limited reach",
-                    "Team stagnation"
+                    "Manual marketing limitations",
+                    "Network stagnation",
+                    "Low duplication velocity",
+                    "Lack of global viral infrastructure",
+                    "Centralized payment bottlenecks"
                 ],
                 "desires": [
-                    "Grow network 100x faster",
-                    "Turn $1 into $1000",
-                    "Automated viral loops",
-                    "Geometric team expansion",
-                    "Elite partner status"
+                    "Geometric network expansion",
+                    "Global team authority",
+                    "Automated viral growth loops",
+                    "High-status leadership positioning",
+                    "Synergistic revenue acceleration"
                 ],
-                "values": ["Leverage", "Velocity", "Automation", "Synergy"],
-                "language_patterns": ["High-energy", "Visionary", "System-focused", "Growth-obsessed"],
-                "triggers": ["100x Speed", "Exponential Profit", "Viral Powerhouse", "Partner Success"]
+                "values": ["Universal Growth", "Velocity of Trust", "Leveraged Leadership", "Visionary Abundance"],
+                "language_patterns": ["Professional Native Mastery", "Authoritative yet Inspiring", "Global Context", "Viral Dynamics"],
+                "triggers": ["Exponential Opportunity", "Global Financial Shift", "Team Empowerment", "Systemic Mastery"]
             },
             "tov": {
-                "style": "Electrifying, visionary, elite",
-                "formality": "Professional speaker energy",
-                "humor": "Arrogantly confident (in a good way)",
-                "emojis": "⚡🚀💎👑🤝💹",
-                "sentence_length": "Punchy and rhythmic.",
-                "power_words": ["100x", "powerhouse", "velocity", "geometric", "synergy", "dominate"]
+                "style": "Global Leader, Professional Native Speaker, Viral Influencer",
+                "formality": "High-status professional with magnetic visionary energy",
+                "humor": "Sophisticated, global, empowering",
+                "emojis": "✨🌍🤝💎👑",
+                "sentence_length": "Rhythmic, powerful, and impeccably structured.",
+                "power_words": ["velocity", "transformation", "geometric", "synergy", "global", "ecosystem"]
             },
             "hooks": [
-                "What if your network grew 100x faster while you slept?",
-                "The $1 per minute strategy the elite 1% of partners use",
-                "How to turn one partner into a viral empire in 30 days",
-                "STOP chasing referrals. START architecting a viral powerhouse."
+                "The Global Financial Shift isn't a challenge; it's our greatest shared opportunity.",
+                "How to architect a viral powerhouse that scales across borders while you inspire.",
+                "The 100x Growth Blueprint: Turning geometric networking into a global standard.",
+                "Universal Abundance: The leadership strategy for the Digital Gold Rush."
             ],
-            "visual_base": "An elite wealth hacker, presence of a tech visionary, standing in a high-tech glass-walled operations center with global networking maps glowing in the background.",
-            "cta_style": "High-velocity, exclusive, visionary"
+            "visual_base": "A world-class Global Network Architect and Community Leader, embodying the ultimate 'Investment Banking Traveler' aesthetic. Dressed in bespoke, sun-drenched luxury. Captured in a cinematic moment of high-level partnership inside a sleek, futuristic aviation hub or a private Mediterranean lounge.",
+            "cta_style": "High-status, visionary, collaborative"
         },
         
         "passive_seekers": {

@@ -15,6 +15,7 @@ from app.models.schemas import (
     ReferralLinkUpdate,
 )
 from app.services.viral_studio import viral_studio
+from app.services.viral_analytics_service import viral_analytics
 from bot import bot
 
 logger = logging.getLogger(__name__)
@@ -453,3 +454,25 @@ async def get_marketing_audit_api(
         force_refresh=payload.force_refresh
     )
     return {"audit": audit, "tokens_remaining": partner.pro_tokens}
+
+@router.get("/analytics/cabinet")
+async def get_analytics_cabinet(
+    partner: Partner = Depends(get_current_partner),
+    session: AsyncSession = Depends(get_session)
+):
+    if not partner.is_pro:
+        raise HTTPException(status_code=403, detail="PRO membership required")
+    
+    stats = await viral_analytics.get_partner_stats(partner.id, session)
+    return stats
+
+@router.get("/analytics/resonance")
+async def get_predictive_resonance(
+    partner: Partner = Depends(get_current_partner),
+    session: AsyncSession = Depends(get_session)
+):
+    if not partner.is_pro:
+        raise HTTPException(status_code=403, detail="PRO membership required")
+    
+    insights = await viral_analytics.get_predictive_insights(partner.id, session)
+    return insights

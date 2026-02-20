@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Zap, Settings, Cpu, Users, Shield
+    Zap, Settings, Cpu, Users, Shield, BarChart3
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -20,9 +20,10 @@ import { useNotificationStore } from '../store/useNotificationStore';
 import { StudioTab } from './Pro/tabs/StudioTab';
 import { ToolsTab } from './Pro/tabs/ToolsTab';
 import { GrowthTab } from './Pro/tabs/GrowthTab';
+import { AnalyticsCabinet } from './Pro/tabs/AnalyticsCabinet';
 import { ProDashboardModals } from './Pro/components/ProDashboardModals';
 
-type Tab = 'studio' | 'tools' | 'growth';
+type Tab = 'studio' | 'tools' | 'growth' | 'analytics';
 
 export const ProDashboard = () => {
     const { t, i18n } = useTranslation();
@@ -456,8 +457,8 @@ export const ProDashboard = () => {
                     </button>
                 </div>
 
-                <div className="flex p-1 bg-white/40 dark:bg-slate-900/20 backdrop-blur-3xl rounded-[1.25rem] border border-white/40 dark:border-white/5 shadow-premium mt-4 mx-auto max-w-[360px] w-full">
-                    {(['studio', 'tools', 'growth'] as const).map((tab) => {
+                <div className="flex p-1 bg-white/40 dark:bg-slate-900/20 backdrop-blur-3xl rounded-[1.25rem] border border-white/40 dark:border-white/5 shadow-premium mt-4 mx-auto max-w-[420px] w-full">
+                    {(['studio', 'tools', 'growth', 'analytics'] as const).map((tab) => {
                         const tabConfig = {
                             studio: {
                                 gradient: 'from-blue-600 via-indigo-500 to-blue-600',
@@ -473,6 +474,11 @@ export const ProDashboard = () => {
                                 gradient: 'from-emerald-500 via-teal-500 to-emerald-500',
                                 shadow: 'shadow-emerald-500/10',
                                 icon: 'text-emerald-100'
+                            },
+                            analytics: {
+                                gradient: 'from-purple-600 via-fuchsia-500 to-purple-600',
+                                shadow: 'shadow-purple-500/10',
+                                icon: 'text-purple-100'
                             }
                         };
 
@@ -497,6 +503,7 @@ export const ProDashboard = () => {
                                     {tab === 'studio' && <Cpu size={14} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
                                     {tab === 'tools' && <Settings size={14} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
                                     {tab === 'growth' && <Users size={14} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
+                                    {tab === 'analytics' && <BarChart3 size={14} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
                                     <span className="text-[9px] font-black uppercase tracking-[0.12em]">{t(`pro_dashboard.tab_${tab}`)}</span>
                                 </span>
                             </button>
@@ -589,6 +596,12 @@ export const ProDashboard = () => {
                                         setShowSetup={setShowSetup}
                                         setShowManual={setShowManual}
                                         selection={selection}
+                                        impact={impact}
+                                    />
+                                )}
+
+                                {activeTab === 'analytics' && (
+                                    <AnalyticsCabinet
                                         impact={impact}
                                     />
                                 )}
