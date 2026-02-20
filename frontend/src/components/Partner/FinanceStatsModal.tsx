@@ -111,24 +111,27 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                     <div className="relative p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/[0.07] border border-emerald-500/15 dark:border-emerald-500/20 overflow-hidden">
                                         <motion.div
                                             animate={{
-                                                y: [0, -4, 0],
-                                                rotate: [0, 2, 0]
+                                                y: [0, -6, 0],
+                                                rotate: [0, 3, 0]
                                             }}
                                             transition={{
                                                 duration: 4,
                                                 repeat: Infinity,
                                                 ease: "easeInOut"
                                             }}
-                                            className="absolute top-3 right-3 opacity-[0.1] text-emerald-500 pointer-events-none"
+                                            className="absolute top-3 right-3 pointer-events-none"
+                                            style={{ color: '#10b981', opacity: 0.22 }}
                                         >
-                                            <DollarSign className="w-12 h-12" />
+                                            <DollarSign className="w-14 h-14" />
                                         </motion.div>
                                         <div className="flex items-center gap-2 mb-3">
                                             <motion.div
-                                                whileHover={{ scale: 1.1 }}
-                                                className="w-5.5 h-5.5 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-500/30"
+                                                animate={{ boxShadow: ['0 0 0px #10b98100', '0 0 8px #10b98155', '0 0 0px #10b98100'] }}
+                                                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                                                className="w-6 h-6 rounded-lg flex items-center justify-center ring-1"
+                                                style={{ background: 'rgba(16,185,129,0.18)', color: '#10b981' }}
                                             >
-                                                <DollarSign className="w-3 h-3" />
+                                                <DollarSign className="w-3.5 h-3.5" style={{ color: '#10b981' }} />
                                             </motion.div>
                                             <span className="text-[9.5px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-400">
                                                 {t('partner_dashboard.finance_stats.usdt_stats', 'USDT Analytics')}
@@ -164,24 +167,27 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                     <div className="relative p-4 rounded-2xl bg-blue-500/5 dark:bg-blue-500/[0.07] border border-blue-500/15 dark:border-blue-500/20 overflow-hidden">
                                         <motion.div
                                             animate={{
-                                                scale: [1, 1.05, 1],
-                                                opacity: [0.08, 0.12, 0.08]
+                                                scale: [1, 1.08, 1],
+                                                opacity: [0.18, 0.28, 0.18]
                                             }}
                                             transition={{
                                                 duration: 3,
                                                 repeat: Infinity,
                                                 ease: "easeInOut"
                                             }}
-                                            className="absolute top-3 right-3 text-blue-500 pointer-events-none"
+                                            className="absolute top-3 right-3 pointer-events-none"
+                                            style={{ color: '#3b82f6' }}
                                         >
-                                            <Activity className="w-12 h-12" />
+                                            <Activity className="w-14 h-14" />
                                         </motion.div>
                                         <div className="flex items-center gap-2 mb-3">
                                             <motion.div
-                                                whileHover={{ scale: 1.1 }}
-                                                className="w-5.5 h-5.5 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 ring-1 ring-blue-500/30"
+                                                animate={{ boxShadow: ['0 0 0px #3b82f600', '0 0 8px #3b82f655', '0 0 0px #3b82f600'] }}
+                                                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                                                className="w-6 h-6 rounded-lg flex items-center justify-center ring-1"
+                                                style={{ background: 'rgba(59,130,246,0.18)', color: '#3b82f6' }}
                                             >
-                                                <Activity className="w-3 h-3" />
+                                                <Activity className="w-3.5 h-3.5" style={{ color: '#3b82f6' }} />
                                             </motion.div>
                                             <span className="text-[9.5px] font-black uppercase tracking-widest text-blue-700 dark:text-blue-400">
                                                 {t('partner_dashboard.finance_stats.ton_stats', 'TON Analytics')}
