@@ -76,7 +76,8 @@ export const StudioTab = ({
         setExternalReady(!!postType && !!audience);
 
         // Auto-switch audience if partners strategy is chosen and current audience is not in the partners set
-        if (postType === 'partners') {
+        const isPartnerStrategy = ['partners', 'partners_cards', 'partners_network'].includes(postType);
+        if (isPartnerStrategy) {
             const partnerAudiences = ['passive_seekers', 'growth_masters', 'automation_kings', 'empire_builders', 'partners'];
             if (!partnerAudiences.includes(audience)) {
                 setAudience('partners');
@@ -451,10 +452,13 @@ export const StudioTab = ({
                                 onChange={(val) => setAudience(val)}
                                 options={defaultAudiences
                                     .filter(a => {
-                                        if (postType === 'partners') {
-                                            return ['passive_seekers', 'growth_masters', 'automation_kings', 'empire_builders', 'partners'].includes(a.id);
+                                        const isPartnerStrategy = ['partners', 'partners_cards', 'partners_network'].includes(postType);
+                                        const partnerAudiences = ['passive_seekers', 'growth_masters', 'automation_kings', 'empire_builders', 'partners'];
+
+                                        if (isPartnerStrategy) {
+                                            return partnerAudiences.includes(a.id);
                                         }
-                                        return !['passive_seekers', 'growth_masters', 'automation_kings', 'empire_builders', 'partners'].includes(a.id);
+                                        return !partnerAudiences.includes(a.id);
                                     })
                                     .map(a => ({
                                         id: a.id,

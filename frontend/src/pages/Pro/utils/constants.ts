@@ -6,7 +6,8 @@ export const postTypes = [
     { id: 'income', icon: '💰', en: 'Income Results', ru: 'Результаты дохода' },
     { id: 'network', icon: '👑', en: 'Team Growth', ru: 'Рост команды' },
     { id: 'tutorial', icon: '📖', en: 'Web3 Education', ru: 'Обучение Web3' },
-    { id: 'partners', icon: '🤝', en: 'For Partners', ru: 'Для партнеров' }
+    { id: 'partners_cards', icon: '💳', en: 'Card Specialist', ru: 'Специалист по Картам' },
+    { id: 'partners_network', icon: '🏛️', en: 'Empire Builder', ru: 'Строитель Империи' }
 ];
 
 export const audiences = [

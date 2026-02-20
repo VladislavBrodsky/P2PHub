@@ -602,26 +602,69 @@ class ContentCategory:
             "visual_scene": "explaining a simple 1-click wealth protocol on a user-friendly mobile app, pointing at a clear 'Activate' button on the screen."
         },
         
-        "partners": {
-            "name": "For Partners",
+        "partners_cards": {
+            "name": "Card Authority (Product Focus)",
+            "technique": CopywritingTechnique.BAB,
+            "structure": {
+                "hook": "THE LIQUIDITY REVOLUTION",
+                "body": "Daily crypto spending reality + Freedom from banks + The physical card flex",
+                "close": "Join the Elite Cardholders"
+            },
+            "storytelling": {
+                "arc": "The Journey to Financial Sovereignty",
+                "chapter_focus": "Eliminating the middleman and holding the keys to your own liquidity.",
+                "episodes": [
+                    {"en": "Chapter 1: The Liquidity Escape", "ru": "Глава 1: Побег в Ликвидность"},
+                    {"en": "Chapter 2: No Banks, No Limits", "ru": "Глава 2: Без Банков, Без Границ"},
+                    {"en": "Chapter 3: Holding the Master Key", "ru": "Глава 3: Владение Мастер-Ключом"},
+                    {"en": "Chapter 4: Global Spending Power", "ru": "Глава 4: Глобальная Покупательная Способность"},
+                    {"en": "Chapter 5: Absolute Sovereignty", "ru": "Глава 5: Абсолютный Суверенитет"}
+                ]
+            },
+            "psychological_triggers": [
+                "Status",
+                "Utility",
+                "Freedom",
+                "Tangibility"
+            ],
+            "formatting_rules": {
+                "bold": ["FINANCIAL SOVEREIGNTY", "NO BANKS", "INSTANT PAYMENTS", "CRYPTO CARD", "GLOBAL ACCEPTANCE"],
+                "italic": ["Chapter 1: The Escape", "Total control of your money"],
+                "hyperlink": ["Order Your Elite Card", "Get Early Access", "Secure My Card"]
+            },
+            "visual_scene": "A close-up of a matte black, laser-etched Pintopay card being used at a high-end luxury boutique or a private airport lounge, glowing with an 'authorized' neon pulse."
+        },
+        "partners_network": {
+            "name": "Empire Scaling (Network Focus)",
             "technique": CopywritingTechnique.PASTOR,
             "structure": {
-                "hook": "THE 100X GROWTH PROMISE",
-                "body": "Viral Powerhouse reveal + Team duplication leverage + Profit velocity",
-                "close": "Join the Elite Partner Circle"
+                "hook": "THE GEOMETRIC GROWTH PROTOCOL",
+                "body": "Viral loops reveal + Automated team scaling + The $1/minute vision",
+                "close": "Initiate My Partner Empire"
+            },
+            "storytelling": {
+                "arc": "The Architect's Blueprint",
+                "chapter_focus": "Building an autonomous wealth machine that outlives your effort.",
+                "episodes": [
+                    {"en": "Episode 1: The Architecture of Wealth", "ru": "Эпизод 1: Архитектура Богатства"},
+                    {"en": "Episode 2: Geometric Scaling Protocol", "ru": "Эпизод 2: Протокол Геометрического Масштабирования"},
+                    {"en": "Episode 3: The $1/Minute Vision", "ru": "Эпизод 3: Видение $1 в Минуту"},
+                    {"en": "Episode 4: Autonomous Empire", "ru": "Эпизод 4: Автономная Империя"},
+                    {"en": "Episode 5: The Legacy Protocol", "ru": "Эпизод 5: Протокол Наследия"}
+                ]
             },
             "psychological_triggers": [
                 "Leverage",
-                "Exponential growth",
-                "Group identity",
-                "Wealth creation speed"
+                "Exponential scaling",
+                "Legacy",
+                "Wealth velocity"
             ],
             "formatting_rules": {
-                "bold": ["100x FASTER", "POWERHOUSE", "PROFIT", "$1 PER MINUTE", "GEOMETRIC GROWTH"],
-                "italic": ["The secret of the top 1%", "Viral duplication"],
-                "hyperlink": ["Start Your Powerhouse", "Join Elite Partners", "Scale Now"]
+                "bold": ["GEOMETRIC SCALING", "VIRAL LOOPS", "RESIDUAL INCOME", "NETWORK EMPIRE", "AUTOMATED GROWTH"],
+                "italic": ["Episode 1: The Architecture", "Grow while you sleep"],
+                "hyperlink": ["Build My Empire", "Join Elite Partners", "Scale My Network"]
             },
-            "visual_scene": "demonstrating a viral growth powerhouse system on a sleek glass interface, showing network lines expanding exponentially in real-time."
+            "visual_scene": "A futuristic operations center where a partner is watching a 3D hologram of their global network expanding in real-time, nodes connecting across continents in a web of golden light."
         }
     }
 

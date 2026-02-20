@@ -35,6 +35,16 @@ class ViralMarketingStudio:
     TARGET_AUDIENCES: ClassVar[list[str]] = settings.VIRAL_AUDIENCES
     LANGUAGES: ClassVar[list[str]] = ["English", "Russian", "Spanish", "French", "German"]
 
+    STORYTELLING_EPISODES = """
+**EPISODIC STORYTELLING PROTOCOL:**
+
+1. **CHEVRON STRUCTURE:** Think of content as chapters in the user's personal 'Exit Strategy' or 'Empire Build'.
+2. **THE HOOK (EPISODE X):** Start with "Chapter X: [Title]" or similar narrative indicators to build anticipation.
+3. **THE CLIFFHANGER:** End with a "To be continued..." style sentence that hints at what's coming in the next post (e.g., "In my next post, I'll reveal how I bypassed the [Obstacle] for good...").
+4. **USER INVOLVEMENT:** Explicitly prompt the user to "follow along" and "watch the story unfold" as they build their financial sovereignty.
+5. **NARRATIVE ARC:** Move from "The Realization" to "The Tool" to "The Result" to "The Legacy".
+"""
+
     CMO_PERSONA = """
 You are the ELITE CMO of Pintopay — a world-class Marketing Strategist, Viral Growth Hacker, and Digital Nomad Influencer.
 
@@ -44,38 +54,29 @@ You are the ELITE CMO of Pintopay — a world-class Marketing Strategist, Viral 
 - Mastered viral psychology and neuromarketing
 - Fluent in crypto culture, affiliate marketing, and digital nomad lifestyle
 - Generated $10M+ in revenue through content alone
-- Named "Top 50 Marketing Minds" by Forbes (fictional but believable)
 
 **YOUR VOICE:**
-You write like a close friend sharing a million-dollar secret over coffee—authoritative yet approachable, 
-data-driven yet deeply empathetic. You understand the precise psychology of each audience and adapt your 
-tone perfectly: technical with crypto traders, inspirational with nomads, tactical with marketers, 
-visionary with network builders.
+You are a master storyteller. You don't just sell, you narrate an irresistible journey of transformation. Your voice is authoritative yet approachable, data-driven yet deeply empathetic. You understand that people buy stories, not products.
 
 **YOUR EXPERTISE:**
-- Master of AIDA, PAS, BAB, PASTOR, and all advanced copywriting frameworks
-- Expert in psychological triggers: FOMO, scarcity, authority, social proof, reciprocity
-- Viral formula architect: You know exactly what makes content spread
-- Native-level fluency in English, Russian, Spanish, French, German
-- Deep understanding of cultural nuances and linguistic subtleties
+- Master of Episodic Storytelling: You know how to build anticipation through chapters and cliffhangers.
+- Expert in psychological triggers: FOMO, scarcity, authority, social proof, reciprocity.
+- Viral formula architect: You know exactly what makes content spread.
 
 **YOUR MISSION:**
-Create viral, high-conversion content that doesn't feel like marketing. Your copy should:
-1. Stop the scroll immediately (hook in <10 words)
-2. Build irresistible desire through psychological triggers
-3. Provide genuine value before asking for action
-4. Feel like it was written BY the target audience FOR the target audience
-5. Drive measurable action through strategic CTAs
+Create viral, high-conversion content that follows a narrative arc. Your copy should:
+1. Frame the content as an ongoing story or 'Chapter' in a series.
+2. Involve the audience in the narrative, encouraging them to 'follow the series'.
+3. Present Pintopay as the 'Magical Object' or 'Secret Protocol' that enables the transformation.
+4. Drive measurable action while leaving them wanting the next chapter.
 
 ### NEURAL STRATEGY V4.2 (CONVERSION HUB):
 
+- **NARRATIVE ANCHOR:** Give the post a chapter/episode title that sounds like a movie or high-stakes mission.
+- **EPISODIC LOOP:** Create a reason for people to come back and read your next post.
 - **PATTERN INTERRUPT:** Use a hook that contradicts common knowledge.
-- **ELITE SOCIAL PROOF:** Reference "The 1%" or "Top Tier" success patterns.
-- **FUTURE PACING:** Describe the user's life 3 months AFTER using the Pintopay system.
 - **VELOCITY DRIFT:** Start with high speed/energy, transition to calm authority in the bridge.
-
-You are a PROFESSIONAL, not a hype artist. You're the trusted advisor who happens to be brilliant at sales.
-    """
+"""
 
     FORMATTING_MASTERY = """
 **CRITICAL FORMATTING RULES (MUST FOLLOW EXACTLY):**
@@ -298,18 +299,28 @@ Use FRESH, audience-specific language that feels authentic.
                 "status": "failed"
             }
 
-        if post_type == "partners":
-            # For Partners strategy, use the Pro Bot link
+        if post_type == "partners_network":
+            # For Networking strategy, use the Pro Bot link
             ref_link = f"https://t.me/pintopay_probot?start={partner.referral_code}"
-        else:
-            # Use personal referral link if it exists and is valid, otherwise fallback to standard bot
+        elif post_type == "partners_cards":
+            # For Card strategy, use the main bot link (or personal link if set)
             if partner.personal_referral_link:
-                # Basic validation again just to be sure
                 link = partner.personal_referral_link.strip()
                 if link.startswith("https://t.me/pintopaybot?start=") or link.startswith("t.me/pintopaybot?start="):
                     ref_link = link
                 else:
-                    # Invalid stored link fallback
+                    ref_link = f"https://t.me/pintopaybot?start={partner.referral_code}"
+            else:
+                ref_link = f"https://t.me/pintopaybot?start={partner.referral_code}"
+        elif post_type == "partners": # Fallback for old key
+            ref_link = f"https://t.me/pintopay_probot?start={partner.referral_code}"
+        else:
+            # Standard logic for other post types
+            if partner.personal_referral_link:
+                link = partner.personal_referral_link.strip()
+                if link.startswith("https://t.me/pintopaybot?start=") or link.startswith("t.me/pintopaybot?start="):
+                    ref_link = link
+                else:
                     ref_link = "https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3"
             elif referral_link:
                 ref_link = referral_link
@@ -427,6 +438,7 @@ Use FRESH, audience-specific language that feels authentic.
 {self.FORMATTING_MASTERY}
 
 {self.TEXT_RULES}
+{self.STORYTELLING_EPISODES}
 
 **UNIVERSAL BEST PRACTICES:**
 {chr(10).join(['- ' + rule for rule in best_practices['universal_rules'][:8]]) if best_practices and 'universal_rules' in best_practices else ""}
@@ -462,31 +474,33 @@ Style/Tone: {tone.upper()}
 Language: {language} (write as NATIVE speaker)
 Referral Link: {ref_link}
 
+**STORYTELLING CONTEXT:**
+Arc: {category_strategy.get('storytelling', {}).get('arc', 'General Transformation')}
+Focus: {category_strategy.get('storytelling', {}).get('chapter_focus', 'None')}
+Available Episodes: {category_strategy.get('storytelling', {}).get('episodes', [])}
+
 **HOOK INSPIRATION (adapt, don't copy):**
 {chr(10).join(['- ' + hook for hook in hook_examples[:2]])}
 
 **CONTENT REQUIREMENTS:**
-1. First sentence MUST stop the scroll (<10 words, shocking or curious)
-2. Tell a micro-story or present a problem they FEEL
-3. Weave in Pintopay Card as the natural solution (not pushy)
-4. Include ONE specific number/stat for credibility
-5. Use psychological triggers: {', '.join(category_strategy.get('psychological_triggers', ['FOMO', 'Social Proof'])[:3])}
-6. Format with **bold** (4-6x), _italic_ (2-3x), and [descriptive link]({ref_link}) in CTA
-7. End with compelling CTA using this link: {ref_link}
-8. Write 3-5 short paragraphs (1-3 sentences each)
-9. Add 3-5 trending hashtags for {target_audience}
-10. CRITICAL: Total content length must be UNDER 900 characters (including spaces and tags).
-11. Content MUST be a single complete story that fits Telegram caption limits.
+1. **NARRATIVE ARC:** Select ONE Episode from the 'Available Episodes' list (matching the output language) and write the post as that specific Chapter.
+2. **STORY-DRIVEN HOOK:** The first sentence MUST be the chosen Episode Title (e.g. "Chapter 2: No Banks, No Limits").
+3. **EPISODIC CLIFFHANGER:** End the text with a 'cliffhanger' that hints at the next chapter (e.g. "Tomorrow, I'll reveal why most traders fail at this step...").
+4. **USER INVOLVEMENT CTA:** Ask followers to comment a specific word (e.g. "Comment 'MATRIX' for the full strategy") to keep the story alive.
+5. **PRODUCT WEAVING:** Naturally weave in Pintopay Card/Network as the 'Key' to the story's transformation.
+6. **PSYCHOLOGICAL TRIGGERS:** {', '.join(category_strategy.get('psychological_triggers', ['FOMO', 'Social Proof'])[:3])}
+7. **FORMATTING:** Format with **bold** (4-6x), _italic_ (2-3x), and [descriptive link]({ref_link}) in the story bridge.
+8. **LENGTH:** Keep content UNDER 900 characters total.
+9. **AUTHENTICITY:** Write as if you are living this story right now in {language}.
 
 **VISUAL STORYTELLING (for context):**
 The generated image for this post will feature: {visual_base} {visual_scene}. Ensure your copy resonates with this visual aesthetic.
 
 **IMAGE DESCRIPTION:**
-Create a 4K Ultra-Realistic Cinematic quality prompt for this scene. 
-Incorporate the identity: {visual_base}
-Incorporate the scene: {visual_scene}
-Add technical details: 35mm lens, f/1.8, cinematic lighting, 8K textures, professional color grading.
-Atmosphere: {tone.upper()}, authoritative, aspirational.
+Create a 4K prompt for this specific chapter. 
+Base: {visual_base}
+Scene: {visual_scene}
+Note: Add a 'Cinematic Narrative' flair—high contrast, dramatic shadows, mysterious but premium atmosphere. Technical: 35mm, f/1.4, Unreal Engine 5 render style.
 
 RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
 """
@@ -503,14 +517,13 @@ RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
         scene_desc = category_strategy.get("visual_scene", "experiencing a breakthrough moment of financial freedom.")
 
         return (
-            f"PROFESSIONAL STUDIO PHOTOGRAPHY - 4K ULTRA-REALISTIC CINEMATIC QUALITY: {audience_desc} "
+            f"PROFESSIONAL CINEMATIC PHOTOGRAPHY - NARRATIVE 4K QUALITY: {audience_desc} "
             f"The subject is {scene_desc} "
-            f"The scene is grounded in absolute realism with complex volumetric lighting, shallow depth of field (f/1.8), and rich 8K textures. "
-            f"Atmosphere: Sophisticated, authoritative, aspirational, and warm. "
-            f"Technical Specs: 35mm lens, sharp focus on eyes, natural skin textures, subtle film grain, professional cinematic color grading (teals and warm golds). "
-            f"Visual Anchor: Subtly integrate a 'Pintopay' logo or a sleek physical crypto card in the scene in a non-distracting, photorealistic way. "
+            f"Atmosphere: Cinematic Narrative, high contrast, dramatic shadows, mysterious but premium atmosphere, storytelling vibes. "
+            f"Technical Specs: 35mm lens, f/1.4 wide aperture, masterful cinematic lighting, 8K textures, Unreal Engine 5 render style, professional color grading. "
+            f"Visual Anchor: The image tells a story of transformation and elite status, incorporating a 'Pintopay' element with photorealistic precision. "
             f"STRICT NEGATIVE PROMPT: cartoon, CGI, anime, 3D render, illustration, drawing, painting, stock photo style, fake smile, distorted hands, extra fingers, "
-            f"blurry background, futuristic sci-fi, neon cyberpunk, flying cars, unrealistic proportions, oversaturated colors, generic poses, misspelled text, low quality"
+            f"unrealistic proportions, oversaturated colors, generic poses, misspelled text, low quality"
         )
 
     async def _get_viral_text_content(self, system_prompt: str, user_prompt: str) -> tuple[dict[str, Any] | None, tuple[int, str] | int]:
