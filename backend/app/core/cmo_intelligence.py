@@ -22,81 +22,83 @@ class AudienceProfile:
     
     PROFILES = {
         "traders": {
-            "name": "Cryptocurrency Traders",
+            "name": "Alpha Strategists & Crypto Whales",
+            "performing_keywords_2026": ["Sovereign Velocity", "Liquidity Density", "Asymmetric Alpha", "Basis-Point Dominance"],
             "psychographics": {
                 "pain_points": [
-                    "High fees eating into profits",
-                    "Exchange restrictions and KYC hell",
-                    "Fiat off-ramp friction",
-                    "Tax complexity",
-                    "Fear of missing the next 100x"
+                    "High slippage and execution tax",
+                    "Institutional KYC barriers",
+                    "Off-ramp bottleneck fatigue",
+                    "Regulatory overreach",
+                    "Missing the exponential curve"
                 ],
                 "desires": [
-                    "Financial sovereignty",
-                    "Quick liquidity without slippage",
-                    "Tax optimization",
-                    "Status in crypto communities",
-                    "Early access to opportunities"
+                    "Elite financial sovereignty",
+                    "Frictionless asset mobility",
+                    "Stealth wealth execution",
+                    "High-status peer networks",
+                    "Absolute capital autonomy"
                 ],
-                "values": ["Decentralization", "Privacy", "Risk-taking", "Innovation"],
-                "language_patterns": ["Technical precision", "Data-driven", "Skeptical of hype", "Insider jargon"],
-                "triggers": ["FOMO", "Social proof from whales", "Alpha leaks", "Arbitrage opportunities"]
+                "values": ["Decentralization", "Capital Efficiency", "Privacy", "Velocity"],
+                "language_patterns": ["Technical precision", "Minimalist authority", "Data-centric", "Skeptical of hype"],
+                "triggers": ["Exponential Alpha", "Institutional bypass", "Liquidity leaks", "Elite social proof"]
             },
             "tov": {
-                "style": "Sharp, analytical, insider",
-                "formality": "Semi-formal with crypto slang",
-                "humor": "Dry, meme-aware",
-                "emojis": "💎🚀📈⚡🔥",
-                "sentence_length": "Short, punchy. Data-heavy.",
-                "power_words": ["alpha", "degen", "moon", "ape", "diamond hands", "stack sats"]
+                "style": "Sharp, authoritative, minimal",
+                "formality": "Professional mastery",
+                "humor": "Dry, insider wit",
+                "emojis": "💎♟️🌊⚡",
+                "sentence_length": "Short. Lethal. Data-packed.",
+                "power_words": ["velocity", "density", "sovereign", "asymmetric", "alpha", "execution"]
             },
             "hooks": [
-                "The {number}% optimization you're missing is the key to your alpha",
-                "Why visionaries are choosing decentralized paths for the Global Shift",
-                "The strategy that unlocked geometric growth (shared by top 1%)",
-                "The {specific metric} most traders overlook in the Digital Gold Rush"
+                "The 3% liquidity leak most whales are ignoring.",
+                "Why the elite 1% move their assets outside the 'Legacy Box'.",
+                "Sovereign Velocity: The standard for 2026 capital execution.",
+                "Your asymmetric alpha isn't in the chart; it's in the infrastructure."
             ],
-            "visual_base": "A visionary crypto strategist, mid-30s, sophisticated 'New Wealth' aesthetic, enjoying a calm, high-tech environment that radiates success and clarity.",
-            "cta_style": "Visionary, exclusive, opportunity-backed"
+            "visual_base": "A world-class Crypto Strategist, mid-30s, embodying 'Quiet Luxury'. Captured in a desaturated, high-contrast private office with subtle holographic data ambient glow. Shot on Leica M11.",
+            "cta_style": "Stealth, authoritative, high-stakes"
         },
         
         "nomads": {
-            "name": "Digital Nomads",
+            "name": "Global Mobility Sovereigns",
+            "performing_keywords_2026": ["Borderless Wealth", "Lifestyle Arbitrage", "Digital Sovereignty", "Global Mobility Nodes"],
             "psychographics": {
                 "pain_points": [
-                    "Blocked accounts when traveling",
-                    "Currency conversion fees",
-                    "No fixed address for banking",
-                    "Income volatility",
-                    "Isolation from traditional finance"
+                    "Banking geofencing",
+                    "Currency conversion erosion",
+                    "Lack of high-status financial tools",
+                    "Travel friction and blocked access",
+                    "Disconnected community hubs"
                 ],
                 "desires": [
-                    "Location independence",
-                    "Seamless global payments",
-                    "Community and belonging",
-                    "Freedom from 9-5",
-                    "Lifestyle optimization"
+                    "Unrestricted global movement",
+                    "Seamless multi-currency liquidity",
+                    "Elite digital nomad status",
+                    "Financial independence 2.0",
+                    "Belonging to a sovereign elite"
                 ],
-                "values": ["Freedom", "Adventure", "Flexibility", "Experiences over things"],
-                "language_patterns": ["Aspirational", "Story-driven", "Visual", "Community-focused"],
-                "triggers": ["Lifestyle imagery", "Time freedom", "Remote work tools", "Exotic locations"]
+                "values": ["Freedom", "Mobility", "Experiences", "Autonomy"],
+                "language_patterns": ["Inspirational", "Sophisticated", "Global-aware", "Minimalist"],
+                "triggers": ["Lifestyle arbitrage", "Freedom metrics", "Private travel hacks", "Status signals"]
             },
             "tov": {
-                "style": "Inspirational, conversational, friend-to-friend",
-                "formality": "Casual, warm",
-                "humor": "Light, relatable",
-                "emojis": "🌍✈️🏝️💻🌴☕",
-                "sentence_length": "Medium. Storytelling flow.",
-                "power_words": ["freedom", "remote", "escape", "adventure", "anywhere", "passport"]
+                "style": "Sophisticated, global, magnetic",
+                "formality": "Elevated and casual",
+                "humor": "Cultured, world-traveler wit",
+                "emojis": "🌍✈️🏝️✨",
+                "sentence_length": "Rhythmic. Evocative.",
+                "power_words": ["borderless", "sovereign", "mobility", "freedom", "global", "arbitrage"]
             },
             "hooks": [
-                "I've embraced the Global Shift in {number} countries. Here's my blueprint.",
-                "The financial infrastructure that empowers my full-time travel lifestyle",
-                "How digital nomads are leading the way in the New Financial Era",
-                "From {location} to {location}: My visionary setup for the Global Financial Shift"
+                "The borderless protocol for the new global elite.",
+                "How I unlocked 100% financial mobility across 5 continents.",
+                "Lifestyle Arbitrage: The hidden math of the modern sovereign.",
+                "Chapter 7: Why your current bank is anchoring your global potential."
             ],
-            "visual_base": "A world-class 'Cool and Rich' Digital Nomad, radiating high-status and global mobility. Dressed in premium travel-luxe attire (Loro Piana style). Captured in a private jet cabin or a first-class lounge in an exotic tech-hub, working on a sleek device with a focus on 'Borderless Freedom'.",
-            "cta_style": "Growth-based, community-driven"
+            "visual_base": "A high-status 'Global Sovereign' in a first-class private lounge, 35mm f/2.8 lens. Natural light, sophisticated neutral tones, expensive silence. Embodying the ultimate freedom lifestyle.",
+            "cta_style": "Inspirational, high-status"
         },
         
         "affiliates": {
@@ -135,11 +137,13 @@ class AudienceProfile:
                 "I tested {number} payment methods. Only one scaled past ${amount}/month."
             ],
             "visual_base": "A charismatic marketing entrepreneur, energetic presence, modern casual luxury attire, holding a high-end smartphone in a sun-drenched urban loft.",
+            "lead_magnets": ["The 2026 Conversion Cheat-Sheet", "Affiliate Alpha: The Margin Optimization Blueprint", "The Instant Payout Protocol"],
             "cta_style": "ROI-focused, A/B tested language"
         },
         
         "builders": {
             "name": "Network Builders",
+            "performing_keywords_2026": ["Duplication Velocity", "Network Architecture", "Sovereign Yield", "Exponential Nodes"],
             "psychographics": {
                 "pain_points": [
                     "Slow team payments",
@@ -173,47 +177,50 @@ class AudienceProfile:
                 "Why top leaders are migrating to crypto-based compensation",
                 "From {starting point} to {achievement}: The infrastructure that changed everything"
             ],
-            "visual_base": "An elite FinTech Partnership leader and community architect, possessing magnetic visionary energy. Dressed in a sharp 'Investment Banking' style but with a modern, relaxed edge. Captured in a high-stakes strategy session on a luxury terrace overlooking a metropolitan financial district.",
+            "visual_base": "An elite FinTech Partnership leader and community architect, possessing magnetic visionary energy. Captured in a high-stakes strategy session on a luxury terrace overlooking a metropolitan financial district. Shot on Leica M11, desaturated tones, realistic lighting.",
+            "lead_magnets": ["The Duplication Masterclass: 0 to 10k", "The Team Retention Blueprint", "The Legacy Network Architecture (Video)"],
             "cta_style": "Vision-driven, team-focused"
         },
         
         "parents": {
-            "name": "Stay-at-home Parents",
+            "name": "Legacy Matriarchs & Patriarchs",
+            "performing_keywords_2026": ["Generational Wealth", "Legacy Yield", "Family Sovereignty", "Automated Abundance"],
             "psychographics": {
                 "pain_points": [
-                    "Financial dependence",
-                    "Limited time for complex systems",
-                    "Need for security/stability",
-                    "Guilt over spending",
-                    "Isolation from professional world"
+                    "Financial dependence fragility",
+                    "Time poverty",
+                    "Security concerns for the future",
+                    "Complex systems overwhelm",
+                    "Identity erosion in domestic roles"
                 ],
                 "desires": [
-                    "Financial contribution to household",
-                    "Simple, trustworthy systems",
-                    "Time with family",
-                    "Personal achievement",
-                    "Future security for kids"
+                    "Generational financial security",
+                    "Simple, autonomous wealth systems",
+                    "High-status contribution to family",
+                    "Legacy building for children",
+                    "Personal professional awakening"
                 ],
-                "values": ["Family", "Security", "Simplicity", "Trustworthiness"],
-                "language_patterns": ["Empathetic", "Practical", "Supportive", "Non-technical"],
-                "triggers": ["Family benefits", "Time-saving", "Safety", "Success stories from peers"]
+                "values": ["Legacy", "Security", "Simplicity", "Connection"],
+                "language_patterns": ["Empathetic", "Graceful", "Visionary", "Clear"],
+                "triggers": ["Future security", "Simplicity hacks", "Quiet confidence", "Legacy stories"]
             },
             "tov": {
-                "style": "Warm, supportive, empowering",
-                "formality": "Conversational, like a friend over coffee",
-                "humor": "Gentle, relatable",
-                "emojis": "💕👨‍👩‍👧‍👦✨🏡💪🌸",
-                "sentence_length": "Medium. Easy to digest.",
-                "power_words": ["simple", "family", "secure", "peace of mind", "deserve", "empower"]
+                "style": "Graceful, supportive, visionary",
+                "formality": "Elegant and warm",
+                "humor": "Gentle, wise",
+                "emojis": "✨🏡🤍🧸",
+                "sentence_length": "Balanced. Flowing.",
+                "power_words": ["legacy", "abundance", "secure", "generations", "simple", "sovereign"]
             },
             "hooks": [
-                "How I contribute ${amount}/month to our family while staying home",
-                "The {number}-minute-a-day financial tool I wish I'd discovered sooner",
-                "Why {percentage}% of stay-at-home parents are using this card (and you should too)",
-                "From dependent to partner: My journey to financial contribution"
+                "The quiet system I use to architect my family's financial legacy.",
+                "Simple, autonomous, and generational. This is the new family standard.",
+                "How to build a financial fortress for your children while staying present.",
+                "Chapter 3: The transition from domestic stability to financial sovereignty."
             ],
-            "visual_base": "A successful, elegant parent, cozy high-end leisurewear, in a sun-drenched, modern minimalist luxury home with warm lighting.",
-            "cta_style": "Gentle, reassuring, empowering"
+            "visual_base": "An elegant, successful 'Legacy Architect' parent in a sun-drenched, high-end minimalist kitchen or reading nook. Soft lighting, expensive textures, a sense of profound peace and control. Shot on Leica M11.",
+            "lead_magnets": ["The Family Sovereign Trust Setup", "Generational Yield: A Legacy Masterclass", "The 15-Minute Passive Abundance Guide"],
+            "cta_style": "Graceful, empowering, trust-focused"
         },
         
         "hustlers": {
@@ -252,46 +259,49 @@ class AudienceProfile:
                 "From student to {amount}/month: My journey in the Global Financial Shift"
             ],
             "visual_base": "An ambitious Gen-Z visionary, premium modern attire, collaborating with peers in a vibrant, futuristic innovation hub filled with light and energy.",
+            "lead_magnets": ["The Student Hustle Stack (2026)", "From Loan to Legacy: The Early Wealth Guide", "The 1-Click Independent Income Setup"],
             "cta_style": "Visionary, inclusive, community-proof"
         },
         
         "burnouts": {
-            "name": "Corporate Burnouts",
+            "name": "Corporate Escape Architects",
+            "performing_keywords_2026": ["Autonomy Pivot", "Sovereign Exit", "Identity Decoupling", "Liquidity Bridges"],
             "psychographics": {
                 "pain_points": [
-                    "Golden handcuffs syndrome",
-                    "Soul-crushing routine",
-                    "Limited upside potential",
-                    "Inability to escape due to bills",
-                    "Identity crisis"
+                    "Golden handcuff suffocation",
+                    "Soul-eroding corporate cycles",
+                    "Upside stagnation",
+                    "Identity tied to a title, not a person",
+                    "Fear of the bridge into freedom"
                 ],
                 "desires": [
-                    "Escape the 9-5",
-                    "Reclaim autonomy",
-                    "Build something meaningful",
-                    "Financial bridge to freedom",
-                    "Second act success"
+                    "Full autonomy exit strategy",
+                    "Purpose-driven entrepreneurship",
+                    "High-status second act",
+                    "Liquidity bridge to independence",
+                    "Legacy beyond the boardroom"
                 ],
-                "values": ["Autonomy", "Purpose", "Courage", "Authenticity"],
-                "language_patterns": ["Reflective", "Liberation-focused", "Strategic", "Wisdom-based"],
-                "triggers": ["Escape stories", "Second chances", "Life's too short", "Regret avoidance"]
+                "values": ["Autonomy", "Purpose", "Courage", "Strategic Mastery"],
+                "language_patterns": ["Strategic", "Reflective", "Analytical", "Liberation-focused"],
+                "triggers": ["Exit blueprints", "Second acts", "Autonomy metrics", "Identity shifts"]
             },
             "tov": {
-                "style": "Reflective, strategic, empowering",
-                "formality": "Mature, thoughtful",
-                "humor": "Dry, ironic about corporate life",
-                "emojis": "💼🔓🌅✨🚪🗝️",
-                "sentence_length": "Longer. Thoughtful.",
-                "power_words": ["escape", "freedom", "reclaim", "bridge", "transition", "awaken"]
+                "style": "Strategic, reflective, magnetic",
+                "formality": "Senior leadership energy",
+                "humor": "Dry, boardroom wit",
+                "emojis": "🚪🗝️🌅✨",
+                "sentence_length": "Deliberate. Powerful.",
+                "power_words": ["exit", "sovereign", "autonomy", "bridge", "identity", "pivot"]
             },
             "hooks": [
-                "I transitioned into the New Era using this visionary tool (here's the path)",
-                "The bridge between tradition and the Global Financial Shift",
-                "How {number} professionals are embracing the new era of autonomy",
-                "You're one strategic shift away from your second act success"
+                "I decoupling my identity from my title. Here is the liquidity bridge I used.",
+                "The Corporate Exit: How to flip the script on golden handcuffs.",
+                "Why strategic autonomy is the ultimate 2026 career luxury.",
+                "Chapter 5: The blueprint for your high-status second act."
             ],
-            "visual_base": "A serene former professional, elegant premium clothing, radiating peace and fulfillment, enjoying a sun-drenched luxury terrace during a beautiful sunrise.",
-            "cta_style": "Empowering, strategic, visionary"
+            "visual_base": "A serene former executive, dressed in premium weekend-luxe (Cashmere, silk), enjoying an expensive silence in a Mediterranean garden. Shot on Leica M11. Natural golden-hour light.",
+            "lead_magnets": ["The 18-Month Sovereign Exit Blueprint", "Identity Decoupling: The Boardroom to Freedom Guide", "Corporate Escape: The Liquidity Bridge Protocol"],
+            "cta_style": "Strategic, empowering, elite"
         },
         
         "partners": {
@@ -330,34 +340,37 @@ class AudienceProfile:
                 "Universal Abundance: The leadership strategy for the Digital Gold Rush."
             ],
             "visual_base": "A world-class Global Network Architect and Community Leader, embodying the ultimate 'Investment Banking Traveler' aesthetic. Dressed in bespoke, sun-drenched luxury. Captured in a cinematic moment of high-level partnership inside a sleek, futuristic aviation hub or a private Mediterranean lounge.",
+            "lead_magnets": ["The Global Expansion Protocol", "Cross-Border Wealth: The 2026 Masterplan", "The Universal Viral Reach Guide"],
             "cta_style": "High-status, visionary, collaborative"
         },
         
         "passive_seekers": {
-            "name": "Passive Income Seekers",
+            "name": "Liquidity Sovereigns",
+            "performing_keywords_2026": ["Passive Density", "Autonomous Yield", "Geometric Cashflow", "Velocity of Trust"],
             "psychographics": {
-                "pain_points": ["Trading time for money", "Inflation", "Lack of scalable systems", "Complex investment tools"],
-                "desires": ["Sleep income", "Financial freedom", "Simple automation", "Secure returns"],
-                "values": ["Freedom", "Simplicity", "Security", "Time"],
-                "language_patterns": ["Ease-focused", "Results-oriented", "Relatable"],
-                "triggers": ["Automatic", "Quiet wealth", "Time freedom", "Low effort"]
+                "pain_points": ["Time-exchange friction", "Inflationary decay", "Systemic complexity", "Manual outreach burnout"],
+                "desires": ["Sleep-velocity income", "Unrestricted time-wealth", "Systemic automation", "Resilient capital abundance"],
+                "values": ["Freedom", "Efficiency", "Logic", "Legacy"],
+                "language_patterns": ["Ease-focused", "Metrics-driven", "Visionary"],
+                "triggers": ["Geometric scaling", "Autonomous yield", "Life-optimization", "Quiet wealth"]
             },
             "tov": {
-                "style": "Calm, reassuring, authoritative",
-                "formality": "Casual but professional",
-                "humor": "Relatable about 9-5 grind",
-                "emojis": "📈🛌💰🏝️✨",
-                "sentence_length": "Clear and flowing.",
-                "power_words": ["passive", "automated", "sleep", "freedom", "residual", "leverage"]
+                "style": "Calm, magnetic, logical",
+                "formality": "Casual mastery",
+                "humor": "Minimalist, effortless",
+                "emojis": "🌊🏖️💎⛲",
+                "sentence_length": "Clear. Flowing. Rhythmic.",
+                "power_words": ["sovereign", "autonomous", "geometric", "velocity", "yield", "density"]
             },
             "hooks": [
-                "The 'Sleep Income' protocol that runs on autopilot",
-                "How to build a $1/minute residual income stream",
-                "Why smart money is moving to automated referral networks",
-                "Escape the time-for-money trap with this one system"
+                "The protocol for building passive density in an inflationary era.",
+                "How to decouple your time from your wealth velocity.",
+                "Geometric cashflow: Why the new elite don't trade hours for dollars.",
+                "Chapter 2: The architecture of an autonomous wealth machine."
             ],
-            "visual_base": "A serene individual enjoying a luxury breakfast on a sun-drenched terrace, looking at a tablet showing consistent passive earnings growth.",
-            "cta_style": "Ease-oriented, trust-based"
+            "visual_base": "A world-class 'Liquidity Sovereign' relaxed in a high-end minimalist setting, embodying effortless authority. Natural light hitting expensive textures (linen, stone). Shot on Leica M11.",
+            "lead_magnets": ["The Autonomous Yield Protocol", "Geometric Cashflow: The 2026 Architecture", "Quiet Wealth: The 1-Click Setup"],
+            "cta_style": "Effortless, logical, high-value"
         },
         
         "growth_masters": {
@@ -384,6 +397,7 @@ class AudienceProfile:
                 "The blueprint for market dominance in the P2P space"
             ],
             "visual_base": "A sharp, modern growth strategist analyzing high-resolution data visualizations on a sleek holographic interface in a luxury penthouse office.",
+            "lead_magnets": ["The High-Conversion Funnel Blueprint", "Algorithmic Advantage: The Viral Loop Setup", "The 100x Growth Screener"],
             "cta_style": "Data-backed, high-conversion"
         },
         
@@ -411,6 +425,7 @@ class AudienceProfile:
                 "How I automated the growth of 1,000+ partners"
             ],
             "visual_base": "A tech-savvy entrepreneur relaxing in a futuristic high-tech lounge, while autonomous systems glow softly around them representing a network in motion.",
+            "lead_magnets": ["The Hands-Free Wealth Protocol", "Infinite Scale: The Automation Stack", "The Set and Forget Setup Guide"],
             "cta_style": "System-focused, efficiency-driven"
         },
         
@@ -438,6 +453,7 @@ class AudienceProfile:
                 "Transform your network into an unstoppable global powerhouse"
             ],
             "visual_base": "A powerful and visionary leader overlooking a vast, modern city at dusk from a private infinity pool deck, embodying ultimate status and success.",
+            "lead_magnets": ["The Empire Architecture Blueprint", "Generational Wealth Dynasty Guide", "The $1/Minute Roadmap"],
             "cta_style": "Legacy-themed, visionary"
         },
     }

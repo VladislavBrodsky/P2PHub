@@ -102,10 +102,10 @@ Available Episodes: {category_strategy.get('storytelling', {}).get('episodes', [
 {hook_inspo}
 
 **CONTENT REQUIREMENTS (2026 VIRAL PROTOCOL):**
-1. **KEYWORD INTELLIGENCE:** Identify and integrate the top 3 most performing keywords for 2026 for {target_audience} + {post_type}.
+1. **KEYWORD INTELLIGENCE:** Integrate these high-performing keywords for {target_audience}: {', '.join(audience_intel.get('performing_keywords_2026', []))}. Use them naturally.
 2. **SALES BETWEEN THE LINES:** Master subtle persuasion. Do not pitch. Create a desire for the 'identity' of a {target_audience} leader.
 3. **EMPATHY & EMOTION:** Start by mirroring the audience's deep internal monologue. Make them feel 'seen'.
-4. **ENGAGEMENT ARCHITECTURE:** End or pivot with a provocative question or a call to 'Signal' for an asset to drive comments/interaction.
+4. **ENGAGEMENT ARCHITECTURE:** End or pivot with a provocative question or a call to 'Signal' for an asset to drive comments/interaction. **CHOOSE ONE LEAD MAGNET TO TEASE:** {', '.join(audience_intel.get('lead_magnets', []))}.
 5. **SEO VIRALITY:** Optimize the title and structure for high algorithm resonance.
 6. **EPISODIC NARRATIVE:** Start with "**Chapter [X]: [High-Status Title]**".
 7. **CTA SUPREMACY:** The final line MUST be a bold markdown link: **[Action Text]({ref_link})**.
@@ -148,6 +148,8 @@ def _build_audience_context(target_audience: str, audience_intel: dict) -> str:
     tov = audience_intel.get("tov", {})
     return f"""
 **AUDIENCE DEEP DIVE: {target_audience}**
+Performing Keywords (2026): {', '.join(audience_intel.get('performing_keywords_2026', []))}
+Lead Magnets to Tease: {', '.join(audience_intel.get('lead_magnets', []))}
 Pain Points: {', '.join(psycho.get('pain_points', [])[:3])}
 Desires: {', '.join(psycho.get('desires', [])[:3])}
 Values: {', '.join(psycho.get('values', []))}
