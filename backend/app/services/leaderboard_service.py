@@ -91,11 +91,7 @@ class LeaderboardService:
         # Map to schema and sort by score
         hydrated = []
         for p in partners:
-            # #comment: Deterministic realism injection for social proof (user request)
-            # Ensures top partners always appear to have 133-437 members if actual count is low.
             display_refs = p.referral_count
-            if display_refs < 133:
-                display_refs = 133 + ((p.id * 17) % (437 - 133 + 1))
 
             item = LeaderboardPartner(
                 id=p.id,

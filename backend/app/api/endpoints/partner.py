@@ -381,11 +381,7 @@ async def get_top_partners(
 
     top_data = []
     for p in partners:
-        # #comment: Deterministic realism injection for social proof (user request)
-        # Ensures top partners always appear to have 133-437 members if actual count is low.
         display_refs = p.referral_count
-        if display_refs < 133:
-            display_refs = 133 + ((p.id * 17) % (437 - 133 + 1))
 
         # #comment: Sanitize stale legacy photo_url values (e.g. /images/avatars/leader_X.webp)
         # These were written by the old polish_top_leaders.py script to Railway's ephemeral FS.
@@ -624,19 +620,8 @@ async def get_recent_partners(
                 "created_at": p_created_at.isoformat() if p_created_at else None
             })
 
-        # 3. Deterministic Social Proof for Count (as requested: 133 to 637)
-        # Use a seed based on day/hour/5-min-slot so it's stable but rotates
-        seed_5m = (now.hour * 12 + now.minute // 5) + (now.day * 288)
-        # Boost factor: (seed * prime) % (max - min + 1) + min
-        boosted_count = 133 + ((seed_5m * 19) % (637 - 133 + 1))
-        
-        # User said "always show amount more then 133 up to 637"
-        if last_hour_count < boosted_count:
-            last_hour_count = boosted_count
-        
-        # Ensure it doesn't exceed 637
-        if last_hour_count > 637:
-            last_hour_count = 637
+        # Use actual count for partners joined in the last hour
+        pass
 
         # Update Snapshot
         if not snapshot_setting:

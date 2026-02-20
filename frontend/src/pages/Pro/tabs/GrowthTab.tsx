@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Info, CheckCircle2, Bot, TrendingUp, ArrowRight, ShieldCheck,
@@ -37,7 +37,23 @@ export const GrowthTab = ({
 }: GrowthTabProps) => {
     const { t } = useTranslation();
     const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
+    const hasInitialAutoExpanded = useRef(false);
     const isSetupComplete = !!(status?.setup?.telegram_channel_id || status?.setup?.x_access_token);
+
+    // Initial auto-expand of the first uncompleted module
+    useEffect(() => {
+        if (!hasInitialAutoExpanded.current) {
+            const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
+            const modulesList = Array.isArray(modules) ? modules : [];
+            if (modulesList.length > 0) {
+                const firstUncompletedId = modulesList.find((m: any) => !completedStages.includes(m.id))?.id;
+                if (firstUncompletedId) {
+                    setExpandedModuleId(firstUncompletedId);
+                    hasInitialAutoExpanded.current = true;
+                }
+            }
+        }
+    }, [completedStages, t]);
 
     return (
         <motion.div
@@ -50,7 +66,7 @@ export const GrowthTab = ({
             {/* Master Score Card - Intelligence Hub - Re-engineered for compactness */}
             {/* Master Score Card - Intelligence Hub - Re-engineered for maximum compactness */}
             {/* Master Score Card - Intelligence Hub - Re-engineered for maximum premium vibe */}
-            <div className="bg-white dark:bg-slate-950/80 rounded-[32px] p-5 sm:p-7 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-slate-100 dark:border-white/10 relative overflow-hidden group">
+            <div className="bg-white dark:bg-slate-950/80 rounded-[24px] p-4 sm:p-6 shadow-[0_15px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_15px_40px_rgba(0,0,0,0.4)] border border-slate-100 dark:border-white/10 relative overflow-hidden group">
                 {/* Tech Background Pattern */}
                 <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.07] pointer-events-none">
                     <svg width="100%" height="100%">
@@ -65,17 +81,17 @@ export const GrowthTab = ({
                 <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 dark:bg-indigo-600/20 blur-[100px] rounded-full pointer-events-none animate-pulse-slow" />
                 <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/10 dark:bg-blue-600/20 blur-[100px] rounded-full pointer-events-none animate-pulse-slow" style={{ animationDelay: '2s' }} />
 
-                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8 relative z-10">
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 relative z-10">
                     <div className="flex items-start gap-4 sm:gap-5">
-                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-[22px] bg-linear-to-br from-indigo-500 to-blue-600 p-px shadow-xl shadow-indigo-500/20 shrink-0 group-hover:rotate-3 transition-transform duration-500">
-                            <div className="w-full h-full rounded-[21px] bg-white dark:bg-slate-950 flex items-center justify-center">
-                                <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8 text-indigo-500 dark:text-indigo-400" />
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[18px] bg-linear-to-br from-indigo-500 to-blue-600 p-px shadow-lg shadow-indigo-500/20 shrink-0 group-hover:rotate-3 transition-transform duration-500">
+                            <div className="w-full h-full rounded-[17px] bg-white dark:bg-slate-950 flex items-center justify-center">
+                                <ShieldCheck className="w-6 h-6 sm:w-7 sm:h-7 text-indigo-500 dark:text-indigo-400" />
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-1.5 pt-1">
                             <div className="flex items-center gap-2">
-                                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">
+                                <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">
                                     {t('pro_dashboard.academy.protocols.title').split(' ')[0]} <span className="text-indigo-500">{t('pro_dashboard.academy.protocols.title').split(' ').slice(1).join(' ')}</span>
                                 </h3>
                             </div>
@@ -103,16 +119,16 @@ export const GrowthTab = ({
                         </p>
                         <div className="relative group/score">
                             <div className="absolute inset-0 bg-indigo-500/20 blur-2xl opacity-0 group-hover/score:opacity-100 transition-opacity duration-700" />
-                            <div className="text-5xl sm:text-6xl font-black text-indigo-600 dark:text-indigo-400 drop-shadow-md tabular-nums leading-none tracking-tighter flex items-baseline gap-1">
+                            <div className="text-4xl sm:text-5xl font-black text-indigo-600 dark:text-indigo-400 drop-shadow-sm tabular-nums leading-none tracking-tighter flex items-baseline gap-1">
                                 <LiquidCounter value={academyScore} />
-                                <span className="text-xs text-indigo-500/80 dark:text-indigo-400/80 tracking-normal italic ml-1 font-bold">XP</span>
+                                <span className="text-[10px] text-indigo-500/80 dark:text-indigo-400/80 tracking-normal italic ml-0.5 font-bold">XP</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Performance Visualizer - Segmented Bars */}
-                <div className="space-y-4 relative z-10 w-full mt-2 bg-slate-50 dark:bg-white/2 p-4 rounded-2xl border border-slate-100 dark:border-white/5">
+                <div className="space-y-3 relative z-10 w-full mt-0 bg-slate-50 dark:bg-white/2 p-3 sm:p-4 rounded-2xl border border-slate-100 dark:border-white/5">
                     {(() => {
                         const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
                         const moduleCount = Array.isArray(modules) ? modules.length : 6;
@@ -128,7 +144,7 @@ export const GrowthTab = ({
                                     </span>
                                 </div>
 
-                                <div className="flex gap-1.5 h-3">
+                                <div className="flex gap-1 h-2">
                                     {Array.from({ length: 12 }).map((_, i) => {
                                         const threshold = (i + 1) * (100 / 12);
                                         const isActive = progress >= threshold;
@@ -264,11 +280,7 @@ export const GrowthTab = ({
                         const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
                         const modulesList = Array.isArray(modules) ? modules : [];
 
-                        // Auto-expand first uncompleted if none expanded
-                        if (expandedModuleId === null && modulesList.length > 0) {
-                            const firstUncompletedId = modulesList.find((m: any) => !completedStages.includes(m.id))?.id;
-                            if (firstUncompletedId) setExpandedModuleId(firstUncompletedId);
-                        }
+
 
                         return modulesList.map((module: any, i: number) => {
                             const isCompleted = completedStages.includes(module.id);
