@@ -585,7 +585,7 @@ export const StudioTab = ({
                                     id: t.id,
                                     label: i18n.language === 'ru' ? t.ru : t.en
                                 }))}
-                                placeholder="Select Tone"
+                                placeholder={t('pro_dashboard.studio.tone_placeholder')}
                                 color="amber"
                                 isOpen={openDropdown === 'tone'}
                                 onToggle={() => handleToggle('tone')}

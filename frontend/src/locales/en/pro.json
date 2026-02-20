@@ -25,6 +25,7 @@
       "target_label": "Target Audience",
       "target_placeholder": "Select audience",
       "tone_label": "Tone of Voice",
+      "tone_placeholder": "Select tone",
       "language_label": "Language",
       "initiate_btn": "INITIATE AI AGENT",
       "cooking_title": "Synthesizing Viral Post...",
