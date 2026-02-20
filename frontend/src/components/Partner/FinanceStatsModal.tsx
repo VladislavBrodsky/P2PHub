@@ -67,13 +67,13 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                     maxHeight: '88vh',
                 }}
             >
-                <div className="bg-white/97 dark:bg-[#0f1624]/97 backdrop-blur-2xl rounded-[2.5rem] flex flex-col overflow-hidden shadow-[0_-8px_60px_-8px_rgba(0,0,0,0.4)] border border-white/20 dark:border-white/[0.06]">
+                <div className="bg-white/97 dark:bg-[#0f1624]/97 backdrop-blur-2xl rounded-[2.5rem] flex flex-col overflow-hidden shadow-[0_-8px_60px_-8px_rgba(0,0,0,0.4)] border border-white/20 dark:border-white/6">
 
                     {/* Drag handle */}
                     <div className="w-10 h-1.5 bg-slate-300/50 dark:bg-white/10 rounded-full mx-auto mt-3 mb-1 shrink-0" />
 
                     {/* ── Header ── */}
-                    <div className="px-5 py-3.5 flex items-center justify-between border-b border-slate-200/60 dark:border-white/[0.06] shrink-0">
+                    <div className="px-5 py-3.5 flex items-center justify-between border-b border-slate-200/60 dark:border-white/6 shrink-0">
                         <div className="flex items-center gap-3">
                             <div className="w-9 h-9 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-500 ring-1 ring-indigo-500/20">
                                 <Activity className="w-4.5 h-4.5" />
@@ -109,13 +109,27 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                 <div className="grid grid-cols-1 gap-3">
                                     {/* USDT */}
                                     <div className="relative p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/[0.07] border border-emerald-500/15 dark:border-emerald-500/20 overflow-hidden">
-                                        <div className="absolute top-3 right-3 opacity-[0.06] pointer-events-none">
+                                        <motion.div
+                                            animate={{
+                                                y: [0, -4, 0],
+                                                rotate: [0, 2, 0]
+                                            }}
+                                            transition={{
+                                                duration: 4,
+                                                repeat: Infinity,
+                                                ease: "easeInOut"
+                                            }}
+                                            className="absolute top-3 right-3 opacity-[0.1] text-emerald-500 pointer-events-none"
+                                        >
                                             <DollarSign className="w-12 h-12" />
-                                        </div>
+                                        </motion.div>
                                         <div className="flex items-center gap-2 mb-3">
-                                            <div className="w-5.5 h-5.5 rounded-lg bg-emerald-500/15 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                                            <motion.div
+                                                whileHover={{ scale: 1.1 }}
+                                                className="w-5.5 h-5.5 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-500/30"
+                                            >
                                                 <DollarSign className="w-3 h-3" />
-                                            </div>
+                                            </motion.div>
                                             <span className="text-[9.5px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-400">
                                                 {t('partner_dashboard.finance_stats.usdt_stats', 'USDT Analytics')}
                                             </span>
@@ -147,15 +161,29 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                     </div>
 
                                     {/* TON */}
-                                    <div className="relative p-4 rounded-2xl bg-indigo-500/5 dark:bg-indigo-500/[0.07] border border-indigo-500/15 dark:border-indigo-500/20 overflow-hidden">
-                                        <div className="absolute top-3 right-3 opacity-[0.06] pointer-events-none">
+                                    <div className="relative p-4 rounded-2xl bg-blue-500/5 dark:bg-blue-500/[0.07] border border-blue-500/15 dark:border-blue-500/20 overflow-hidden">
+                                        <motion.div
+                                            animate={{
+                                                scale: [1, 1.05, 1],
+                                                opacity: [0.08, 0.12, 0.08]
+                                            }}
+                                            transition={{
+                                                duration: 3,
+                                                repeat: Infinity,
+                                                ease: "easeInOut"
+                                            }}
+                                            className="absolute top-3 right-3 text-blue-500 pointer-events-none"
+                                        >
                                             <Activity className="w-12 h-12" />
-                                        </div>
+                                        </motion.div>
                                         <div className="flex items-center gap-2 mb-3">
-                                            <div className="w-5.5 h-5.5 rounded-lg bg-indigo-500/15 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                                            <motion.div
+                                                whileHover={{ scale: 1.1 }}
+                                                className="w-5.5 h-5.5 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 ring-1 ring-blue-500/30"
+                                            >
                                                 <Activity className="w-3 h-3" />
-                                            </div>
-                                            <span className="text-[9.5px] font-black uppercase tracking-widest text-indigo-700 dark:text-indigo-400">
+                                            </motion.div>
+                                            <span className="text-[9.5px] font-black uppercase tracking-widest text-blue-700 dark:text-blue-400">
                                                 {t('partner_dashboard.finance_stats.ton_stats', 'TON Analytics')}
                                             </span>
                                         </div>
@@ -165,10 +193,10 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                     {t('partner_dashboard.finance_stats.monthly_income', 'Monthly Income')}
                                                 </p>
                                                 <div className="flex items-baseline gap-1">
-                                                    <span className="text-lg font-black text-indigo-500 tabular-nums leading-none">
+                                                    <span className="text-lg font-black text-blue-500 tabular-nums leading-none">
                                                         +{(stats.monthly_stats?.TON?.income ?? 0).toFixed(2)} TON
                                                     </span>
-                                                    <ArrowUpRight className="w-3 h-3 text-indigo-500 shrink-0" />
+                                                    <ArrowUpRight className="w-3 h-3 text-blue-500 shrink-0" />
                                                 </div>
                                             </div>
                                             <div>
@@ -212,7 +240,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                         initial={{ opacity: 0, x: -8 }}
                                                         animate={{ opacity: 1, x: 0 }}
                                                         transition={{ delay: idx * 0.04 }}
-                                                        className="flex items-center justify-between p-3.5 bg-white dark:bg-white/[0.03] border border-slate-200/70 dark:border-white/[0.06] rounded-2xl hover:bg-slate-50 dark:hover:bg-white/[0.06] transition-colors"
+                                                        className="flex items-center justify-between p-3.5 bg-white dark:bg-white/3 border border-slate-200/70 dark:border-white/6 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/6 transition-colors"
                                                     >
                                                         <div className="flex items-center gap-3">
                                                             <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${isIncome
@@ -293,7 +321,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                         <div className="relative">
                                             <button
                                                 onClick={() => { selection(); setDropdownOpen(o => !o); }}
-                                                className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08] hover:bg-slate-50 dark:hover:bg-white/[0.07] transition-all active:scale-[0.98]"
+                                                className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white dark:bg-white/4 border border-slate-200 dark:border-white/8 hover:bg-slate-50 dark:hover:bg-white/7 transition-all active:scale-[0.98]"
                                             >
                                                 <div className="flex items-center gap-2.5">
                                                     <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight">
@@ -331,8 +359,8 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                             key={idx}
                                                             onClick={() => { selection(); setSelectedMonthIdx(idx); setDropdownOpen(false); }}
                                                             className={`w-full flex items-center justify-between px-4 py-3 text-left transition-colors ${idx === selectedMonthIdx
-                                                                    ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400'
-                                                                    : 'hover:bg-slate-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300'
+                                                                ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400'
+                                                                : 'hover:bg-slate-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300'
                                                                 } ${idx > 0 ? 'border-t border-slate-100 dark:border-white/5' : ''}`}
                                                         >
                                                             <span className="text-[11px] font-black uppercase tracking-tight">{m.month}</span>
@@ -359,8 +387,8 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{ duration: 0.2 }}
                                                 className={`relative p-4 rounded-2xl border overflow-hidden ${isActive
-                                                        ? 'bg-indigo-50/60 dark:bg-indigo-500/[0.07] border-indigo-200/60 dark:border-indigo-500/25'
-                                                        : 'bg-white/50 dark:bg-white/[0.03] border-slate-200/60 dark:border-white/[0.06]'
+                                                    ? 'bg-indigo-50/60 dark:bg-indigo-500/[0.07] border-indigo-200/60 dark:border-indigo-500/25'
+                                                    : 'bg-white/50 dark:bg-white/3 border-slate-200/60 dark:border-white/6'
                                                     }`}
                                             >
                                                 {isActive && (
@@ -384,7 +412,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
 
                                                 <div className="grid grid-cols-2 gap-2.5 relative z-10">
                                                     {/* USDT */}
-                                                    <div className="p-3 rounded-xl border bg-white/70 dark:bg-black/20 border-slate-100 dark:border-white/[0.06] space-y-2">
+                                                    <div className="p-3 rounded-xl border bg-white/70 dark:bg-black/20 border-slate-100 dark:border-white/6 space-y-2">
                                                         <div className="flex items-center gap-1.5 opacity-70">
                                                             <DollarSign className="w-3 h-3 text-emerald-500" />
                                                             <span className="text-[8px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">USDT</span>
@@ -404,10 +432,10 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                         </div>
                                                     </div>
                                                     {/* TON */}
-                                                    <div className="p-3 rounded-xl border bg-white/70 dark:bg-black/20 border-slate-100 dark:border-white/[0.06] space-y-2">
+                                                    <div className="p-3 rounded-xl border bg-white/70 dark:bg-black/20 border-slate-100 dark:border-white/6 space-y-2">
                                                         <div className="flex items-center gap-1.5 opacity-70">
-                                                            <Activity className="w-3 h-3 text-indigo-500" />
-                                                            <span className="text-[8px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400">TON</span>
+                                                            <Activity className="w-3 h-3 text-blue-500" />
+                                                            <span className="text-[8px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">TON</span>
                                                         </div>
                                                         <div className="space-y-1.5">
                                                             <div className="flex items-center justify-between">
