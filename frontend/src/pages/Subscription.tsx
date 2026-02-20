@@ -4,7 +4,7 @@ import {
     Crown, CheckCircle2, Wallet, CreditCard,
     Loader2, Sparkles, Zap, ChevronDown, Trophy, Users,
     HelpCircle, Clock, Check, Globe, Shield, Share2, ChevronLeft,
-    Flame, Brain, Rocket, Network, Star, Lock, Infinity, Target, TrendingUp, Bot,
+    Flame, Brain, Rocket, Network, Star, Lock, Infinity as InfinityIcon, Target, TrendingUp, Bot,
     Send, BarChart2, Radio
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -255,7 +255,7 @@ export default function SubscriptionPage() {
         { id: 'tokens', icon: Zap, label: t('subscription.benefits.tokens'), desc: t('subscription.benefits.tokens_desc_plus'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
         { id: 'cashback', icon: TrendingUp, label: t('subscription.benefits.cashback'), desc: t('subscription.benefits.cashback_desc_plus'), color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-500/10 dark:bg-purple-500/20' },
         { id: 'tools', icon: Bot, label: t('subscription.benefits.tools'), desc: t('subscription.benefits.tools_desc_plus'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
-        { id: 'omni', icon: Infinity, label: t('subscription.benefits.omni_sync'), desc: t('subscription.benefits.omni_sync_desc'), color: 'text-fuchsia-600 dark:text-fuchsia-400', bg: 'bg-fuchsia-500/10 dark:bg-fuchsia-500/20' },
+        { id: 'omni', icon: InfinityIcon, label: t('subscription.benefits.omni_sync'), desc: t('subscription.benefits.omni_sync_desc'), color: 'text-fuchsia-600 dark:text-fuchsia-400', bg: 'bg-fuchsia-500/10 dark:bg-fuchsia-500/20' },
         { id: 'priority', icon: Star, label: t('subscription.benefits.priority_ai'), desc: t('subscription.benefits.priority_ai_desc'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
         { id: 'empire', icon: Rocket, label: t('subscription.benefits.empire_access'), desc: t('subscription.benefits.empire_access_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
         { id: 'channels', icon: Send, label: t('subscription.benefits.tg_multi_channel', '5 Telegram Channels'), desc: t('subscription.benefits.tg_multi_channel_desc', 'Add up to 5 Telegram channels and auto-broadcast to all of them simultaneously from one dashboard.'), color: 'text-sky-600 dark:text-sky-400', bg: 'bg-sky-500/10 dark:bg-sky-500/20' },
@@ -313,7 +313,7 @@ export default function SubscriptionPage() {
 
                 {proStats && (
                     <div className="mt-5 w-full max-w-[220px] mx-auto group">
-                        <div className="flex justify-between text-[8px] font-black mb-1.5 text-slate-400 dark:text-white/30 uppercase tracking-[0.1em]">
+                        <div className="flex justify-between text-[8px] font-black mb-1.5 text-slate-400 dark:text-white/30 uppercase tracking-widest">
                             <span className="group-hover:text-indigo-500 transition-colors">{t('subscription.upgrade.lifetime_slots')}</span>
                             <span className="text-slate-900 dark:text-white">{proStats.sold} / {proStats.total}</span>
                         </div>
@@ -577,43 +577,62 @@ export default function SubscriptionPage() {
             </AnimatePresence>
 
             {/* ── PAYMENT SECTION ─────────────────────────────────────────── */}
-            <motion.div ref={paymentRef} className="mb-10">
-                <div className="vibing-premium-panel p-6 shadow-premium-xl relative z-10 mx-auto max-w-[340px]">
+            <motion.div ref={paymentRef} className="mb-12 relative px-2">
+                {/* Background Glows to match Home Style */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-indigo-500/20 blur-[100px] pointer-events-none animate-pulse" />
+
+                <div className="relative z-10 bg-white dark:bg-(--color-bg-app) border border-slate-200 dark:border-white/10 rounded-[2.5rem] p-8 shadow-premium overflow-hidden group">
+                    {/* Inner liquid background layer */}
+                    <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-fuchsia-500/5 opacity-40 pointer-events-none" />
+
                     {!paymentMethod ? (
-                        <div className="space-y-8">
-                            <div className="text-center relative">
-                                <div className="text-[9px] font-black text-slate-500 dark:text-white/30 uppercase tracking-[0.3em] mb-4">
-                                    {t('subscription.upgrade.secure_encryption_active')}
-                                </div>
-                                <div className="flex items-baseline justify-center gap-1.5 mb-1">
-                                    <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">${planPrice}</span>
-                                    <span className="text-[10px] font-black text-slate-500 dark:text-white/40 uppercase italic font-mono">
-                                        / {selectedPlan === 'PRO_PLUS' ? t('subscription.upgrade.lifetime_label') : t('subscription.upgrade.monthly_label')}
+                        <div className="space-y-8 relative z-10">
+                            <div className="text-center">
+                                <motion.div
+                                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 mb-4"
+                                    animate={{ boxShadow: ["0 0 0px rgba(99,102,241,0)", "0 0 15px rgba(99,102,241,0.3)", "0 0 0px rgba(99,102,241,0)"] }}
+                                    transition={{ duration: 3, repeat: Infinity }}
+                                >
+                                    <Shield size={10} className="text-indigo-500" />
+                                    <span className="text-[8px] font-black text-indigo-500 uppercase tracking-widest">
+                                        {t('subscription.upgrade.secure_encryption_active')}
                                     </span>
+                                </motion.div>
+
+                                <div className="flex flex-col items-center gap-1 mb-6">
+                                    <div className="flex items-baseline gap-1.5">
+                                        <span className="text-6xl font-black text-slate-900 dark:text-white tracking-tighter drop-shadow-sm">
+                                            ${planPrice}
+                                        </span>
+                                        <span className="text-[10px] font-black text-slate-400 dark:text-white/30 uppercase italic font-mono">
+                                            / {selectedPlan === 'PRO_PLUS' ? t('subscription.upgrade.lifetime_label') : t('subscription.upgrade.monthly_label')}
+                                        </span>
+                                    </div>
+                                    <h4 className="text-[10px] font-black text-slate-900 dark:text-transparent dark:bg-clip-text dark:bg-linear-to-r dark:from-indigo-400 dark:via-fuchsia-400 dark:to-indigo-400 dark:text-animate-shimmer uppercase tracking-[0.2em]">
+                                        {selectedPlan === 'PRO' ? t('subscription.upgrade.pro_title') : (isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title'))}
+                                    </h4>
                                 </div>
-                                <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-3">
-                                    {selectedPlan === 'PRO' ? t('subscription.upgrade.pro_title') : (isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title'))}
-                                </p>
-                                <div className="w-16 h-1 bg-linear-to-r from-indigo-500 to-fuchsia-500 mx-auto rounded-full" />
+                                <div className="w-12 h-1 bg-linear-to-r from-indigo-500 to-fuchsia-500 mx-auto rounded-full opacity-60" />
                             </div>
+
                             <div className="grid grid-cols-2 gap-4">
                                 <button
                                     onClick={() => { selection(); setPaymentMethod('TON'); }}
-                                    className="group relative h-20 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:border-indigo-500/40 hover:shadow-xl active:scale-95 shadow-lg"
+                                    className="group relative h-24 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.03] hover:bg-indigo-500/5 hover:border-indigo-500/30 hover:shadow-xl active:scale-95"
                                 >
-                                    <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
-                                        <Wallet size={20} />
+                                    <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
+                                        <Wallet size={22} strokeWidth={2.5} />
                                     </div>
-                                    <span className="text-[9px] font-black text-slate-900 dark:text-white tracking-widest uppercase">{t('subscription.upgrade.ton_wallet')}</span>
+                                    <span className="text-[9px] font-black text-slate-500 dark:text-white/40 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.ton_wallet')}</span>
                                 </button>
                                 <button
                                     onClick={() => { selection(); setPaymentMethod('CRYPTO'); }}
-                                    className="group relative h-20 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:border-emerald-500/40 hover:shadow-xl active:scale-95 shadow-lg"
+                                    className="group relative h-24 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.03] hover:bg-emerald-500/5 hover:border-emerald-500/30 hover:shadow-xl active:scale-95"
                                 >
-                                    <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
-                                        <CreditCard size={20} />
+                                    <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+                                        <CreditCard size={22} strokeWidth={2.5} />
                                     </div>
-                                    <span className="text-[9px] font-black text-slate-900 dark:text-white tracking-widest uppercase">{t('subscription.upgrade.usdt_trc20_address')}</span>
+                                    <span className="text-[9px] font-black text-slate-500 dark:text-white/40 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.usdt_trc20_address')}</span>
                                 </button>
                             </div>
                             <div className="flex items-center justify-center gap-2 opacity-50 dark:opacity-30">
@@ -668,19 +687,21 @@ export default function SubscriptionPage() {
             </motion.div>
 
             {/* ── SOCIAL PROOF STATS ──────────────────────────────────────── */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-10">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-12 px-2">
                 <div className="grid grid-cols-3 gap-3">
                     {[
-                        { value: '5,000+', label: t('subscription.stats.partners'), icon: Users, color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-indigo-500/10' },
-                        { value: '×100', label: t('subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
-                        { value: '24/7', label: t('subscription.stats.ai_active'), icon: Bot, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10' },
+                        { value: '5,000+', label: t('subscription.stats.partners'), icon: Users, color: 'text-indigo-500 dark:text-blue-400', bg: 'bg-indigo-500/10' },
+                        { value: '×100', label: t('subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-500 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
+                        { value: '24/7', label: t('subscription.stats.ai_active'), icon: Bot, color: 'text-amber-500 dark:text-amber-400', bg: 'bg-amber-500/10' },
                     ].map((stat) => (
-                        <div key={stat.label} className="bg-white dark:bg-white/3 border border-slate-100 dark:border-white/8 rounded-2xl p-3 text-center shadow-sm shadow-indigo-500/5">
-                            <div className={`w-8 h-8 rounded-xl ${stat.bg} flex items-center justify-center mx-auto mb-2 ${stat.color}`}>
-                                <stat.icon size={16} />
+                        <div key={stat.label} className="p-4 rounded-[1.5rem] bg-slate-50/50 dark:bg-slate-900/80 border border-slate-200 dark:border-white/10 backdrop-blur-xl space-y-2 group transition-all hover:bg-slate-100 dark:hover:bg-white/10 shadow-sm">
+                            <div className={`w-8 h-8 rounded-xl shrink-0 ${stat.bg} flex items-center justify-center ${stat.color} group-hover:scale-110 transition-transform`}>
+                                <stat.icon size={16} strokeWidth={2.5} />
                             </div>
-                            <div className={`text-lg font-black tracking-tighter ${stat.color}`}>{stat.value}</div>
-                            <div className="text-[8px] font-black text-slate-400 dark:text-white/30 uppercase tracking-widest leading-tight">{stat.label}</div>
+                            <div className="flex flex-col">
+                                <div className={`text-xl font-black tabular-nums tracking-tighter ${stat.color} dark:drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]`}>{stat.value}</div>
+                                <div className="text-[8px] font-black text-slate-400 dark:text-white/30 uppercase tracking-widest leading-tight mt-0.5">{stat.label}</div>
+                            </div>
                         </div>
                     ))}
                 </div>
