@@ -403,8 +403,8 @@ export const PartnerDashboard = () => {
 
 
 const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
-    const [earnings, setEarnings] = React.useState<any[]>([]);
-    const [transactions, setTransactions] = React.useState<any[]>([]);
+    const [xpEarnings, setXpEarnings] = React.useState<any[]>([]);
+    const [cryptoItems, setCryptoItems] = React.useState<any[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [activeTab, setActiveTab] = React.useState<'XP' | 'CRYPTO'>('XP');
     const { t } = useTranslation();
@@ -412,16 +412,38 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch more when expanded
-                const limit = isExpanded ? 50 : 30;
-                const [earnRes, txRes] = await Promise.all([
-                    apiClient.get(`/api/partner/earnings?limit=${limit}`),
+                const limit = isExpanded ? 50 : 20;
+
+                // Fetch XP and Crypto separately using new backend filters
+                const [xpRes, cryptoEarnRes, txRes] = await Promise.all([
+                    apiClient.get(`/api/partner/earnings?limit=${limit}&currency=XP`),
+                    apiClient.get(`/api/partner/earnings?limit=${limit}&exclude_xp=true`),
                     apiClient.get('/api/payment/my-transactions')
                 ]);
-                setEarnings(earnRes.data);
-                setTransactions(txRes.data);
+
+                setXpEarnings(xpRes.data);
+
+                // Merge crypto commissions with direct transactions
+                const mergedCrypto = [
+                    ...cryptoEarnRes.data.map((e: any) => ({
+                        ...e,
+                        isTransaction: false,
+                        date: new Date(e.created_at)
+                    })),
+                    ...txRes.data.map((t: any) => ({
+                        ...t,
+                        isTransaction: true,
+                        description: t.description || `${t.currency} ${t.status.toUpperCase()}`,
+                        amount: (t.currency === 'TON' && t.amount_crypto) ? t.amount_crypto : t.amount,
+                        currency: t.currency,
+                        type: 'TRANSACTION',
+                        date: new Date(t.created_at)
+                    }))
+                ].sort((a, b) => b.date.getTime() - a.date.getTime());
+
+                setCryptoItems(mergedCrypto);
             } catch (error) {
-                console.error('Failed to fetch data:', error);
+                console.error('Failed to fetch earnings data:', error);
             } finally {
                 setLoading(false);
             }
@@ -455,27 +477,6 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
             </div>
         );
     }
-
-    const xpEarnings = earnings.filter(e => e.currency === 'XP');
-
-    // Merge crypto earnings (USDT commissions) with actual transactions (TON, USDT, etc.)
-    const cryptoItems = [
-        ...earnings.filter(e => e.currency !== 'XP').map(e => ({
-            ...e,
-            isTransaction: false,
-            date: new Date(e.created_at)
-        })),
-        ...transactions.map(t => ({
-            ...t,
-            isTransaction: true,
-            description: t.description || `${t.currency} ${t.status.toUpperCase()}`,
-            // Use crypto amount for TON transactions, else USD amount
-            amount: (t.currency === 'TON' && t.amount_crypto) ? t.amount_crypto : t.amount,
-            currency: t.currency,
-            type: 'TRANSACTION',
-            date: new Date(t.created_at)
-        }))
-    ].sort((a, b) => b.date.getTime() - a.date.getTime());
 
     const displayItems = activeTab === 'XP' ? xpEarnings : cryptoItems;
 

@@ -269,7 +269,7 @@ async def get_my_transactions(
         select(PartnerTransaction)
         .where(PartnerTransaction.partner_id == partner.id)
         .order_by(PartnerTransaction.created_at.desc())
-        .limit(5)
+        .limit(20)
     )
     result = await session.exec(stmt)
     txs = result.all()

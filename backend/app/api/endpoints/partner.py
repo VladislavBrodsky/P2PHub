@@ -1227,6 +1227,8 @@ async def complete_academy_stage(
 @router.get("/earnings", response_model=list[EarningSchema])
 async def get_my_earnings(
     limit: int = 10,
+    currency: str | None = None,
+    exclude_xp: bool = False,
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
@@ -1246,7 +1248,14 @@ async def get_my_earnings(
 
     from app.models.partner import Earning
     # Query Earnings table
-    stmt = select(Earning).where(Earning.partner_id == partner.id).order_by(Earning.created_at.desc()).limit(limit)
+    stmt = select(Earning).where(Earning.partner_id == partner.id)
+    
+    if currency:
+        stmt = stmt.where(Earning.currency == currency)
+    elif exclude_xp:
+        stmt = stmt.where(Earning.currency != "XP")
+        
+    stmt = stmt.order_by(Earning.created_at.desc()).limit(limit)
     result = await session.exec(stmt)
     earnings = result.all()
 
