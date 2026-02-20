@@ -386,20 +386,19 @@ export const GrowthTab = ({
 
                                                         {/* Content Reveal */}
                                                         {(isPaid && !isCompleted) ? (
-                                                            <div className="relative group/locked-overlay">
-                                                                <div className="bg-slate-50/50 dark:bg-black/40 p-5 rounded-3xl blur-md select-none opacity-40 border border-slate-100 dark:border-white/5">
-                                                                    <div className="space-y-3">
-                                                                        <div className="h-4 w-3/4 bg-slate-200 dark:bg-white/10 rounded-full" />
-                                                                        <div className="h-4 w-1/2 bg-slate-200 dark:bg-white/10 rounded-full" />
-                                                                        <div className="h-4 w-2/3 bg-slate-200 dark:bg-white/10 rounded-full" />
-                                                                    </div>
+                                                            <div className="relative overflow-hidden rounded-[1.5rem] bg-slate-100/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 p-5 flex items-center gap-4 group/locked_module">
+                                                                <div className="absolute inset-0 bg-linear-to-r from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover/locked_module:opacity-100 transition-opacity duration-500" />
+                                                                <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center border border-slate-200 dark:border-white/5 shrink-0 shadow-sm relative z-10 group-hover/locked_module:scale-105 transition-transform duration-500">
+                                                                    <Lock className="w-5 h-5 text-indigo-500" />
+                                                                    <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-indigo-500 rounded-full border-2 border-slate-50 dark:border-slate-900 shadow-xs" />
                                                                 </div>
-                                                                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-                                                                    <div className="w-16 h-16 rounded-[22px] bg-linear-to-br from-slate-800 to-slate-900 flex items-center justify-center shadow-2xl mb-4 border border-white/10">
-                                                                        <Lock className="w-8 h-8 text-indigo-400" />
-                                                                    </div>
-                                                                    <h5 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest mb-1">{t('pro_dashboard.academy.bio_auth')}</h5>
-                                                                    <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('pro_dashboard.academy.psych_strategies.unlock_desc').split('.')[0]}</p>
+                                                                <div className="flex-1 min-w-0 relative z-10">
+                                                                    <h5 className="text-[11px] font-black uppercase tracking-widest leading-none mb-1 text-indigo-600 dark:text-indigo-400 truncate">
+                                                                        {t('pro_dashboard.academy.node_capabilities')}
+                                                                    </h5>
+                                                                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">
+                                                                        {t('pro_dashboard.academy.psych_strategies.unlock_desc').split('.')[0]}
+                                                                    </p>
                                                                 </div>
                                                             </div>
                                                         ) : (
@@ -596,22 +595,28 @@ export const GrowthTab = ({
             {/* Elite Psychological Warfare (TOP 9) - Black Ops Intelligence Style */}
             {/* Elite Psychological Warfare (TOP 9) - Black Ops Intelligence Style */}
             <div className={`relative rounded-[32px] border transition-all duration-700 overflow-hidden ${isSetupComplete
-                ? 'bg-white dark:bg-slate-950 text-slate-900 dark:text-white border-indigo-500/20 shadow-[0_30px_60px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.6)]'
+                ? 'bg-white dark:bg-slate-950 text-slate-900 dark:text-white border-emerald-500/20 shadow-[0_30px_60px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.6)]'
                 : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5'
                 }`}>
 
                 {/* Section Header with Scanning Signal */}
                 <div className="relative px-6 py-8 sm:px-8 border-b border-slate-100 dark:border-white/5 overflow-hidden">
-                    <div className="absolute inset-0 bg-linear-to-r from-indigo-500/5 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 bg-linear-to-r from-emerald-500/10 via-teal-400/5 to-transparent pointer-events-none" />
                     <motion.div
-                        className="absolute top-0 left-0 w-1 h-full bg-indigo-500/40 blur-sm z-10"
+                        className="absolute inset-0 opacity-30"
+                        style={{ background: 'linear-gradient(-45deg, #10b98110, #34d39910, #05966910, #10b98110)', backgroundSize: '300% 300%' }}
+                        animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+                        transition={{ duration: 6, ease: "linear", repeat: Infinity }}
+                    />
+                    <motion.div
+                        className="absolute top-0 left-0 w-1 h-full bg-emerald-500/40 blur-sm z-10"
                         animate={{ left: ["-10%", "110%"] }}
                         transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                     />
 
                     <div className="flex items-center gap-4 relative z-20">
                         <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl transition-all duration-500 ${isSetupComplete
-                            ? 'bg-indigo-500 text-white border-indigo-400 shadow-indigo-500/40 rotate-12 scale-110'
+                            ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)] rotate-12 scale-110'
                             : 'bg-slate-200 dark:bg-white/10 text-slate-400 border-slate-300 dark:border-white/10'
                             }`}>
                             <Brain size={24} className={isSetupComplete ? 'animate-pulse' : ''} />
@@ -621,8 +626,8 @@ export const GrowthTab = ({
                                 {t('pro_dashboard.academy.psych_strategies.title')}
                             </h4>
                             <div className="flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-500 dark:text-indigo-400">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
+                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600 dark:text-emerald-400">
                                     {t('pro_dashboard.academy.psych_strategies.subtitle')}
                                 </p>
                             </div>
@@ -631,43 +636,53 @@ export const GrowthTab = ({
                 </div>
 
                 {!isSetupComplete && (
-                    <div className="absolute inset-x-0 bottom-0 top-[110px] z-20 backdrop-blur-2xl bg-white/40 dark:bg-black/60 flex flex-col items-center justify-center text-center p-6 sm:p-10">
+                    <div className="absolute inset-x-0 bottom-0 top-[110px] z-20 backdrop-blur-3xl bg-white/60 dark:bg-slate-900/80 flex items-center justify-center p-6">
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="relative mb-8"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[2rem] p-6 sm:p-8 max-w-sm w-full text-center border border-emerald-500/20 shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),10px_10px_30px_4px_rgba(16,185,129,0.15)] relative overflow-hidden group/locked-card"
                         >
-                            <div className="w-24 h-24 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shadow-2xl relative overflow-hidden group">
-                                <div className="absolute inset-0 bg-linear-to-t from-indigo-500/20 to-transparent animate-pulse" />
-                                <Lock size={40} className="text-indigo-500 relative z-10" />
-                                <motion.div
-                                    className="absolute left-0 right-0 h-0.5 bg-indigo-400 shadow-[0_0_20px_rgba(129,140,248,0.8)] z-20"
-                                    animate={{ top: ["0%", "100%", "0%"] }}
-                                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                                />
+                            {/* Liquid Gradient Background Animation */}
+                            <motion.div
+                                className="absolute inset-0 opacity-20 pointer-events-none z-0"
+                                style={{ background: 'linear-gradient(120deg, #10b981, #34d399, #0ea5e9, #10b981)', backgroundSize: '300% 300%' }}
+                                animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+                                transition={{ duration: 7, ease: "easeInOut", repeat: Infinity }}
+                            />
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/20 blur-[50px] rounded-full -mr-16 -mt-16 pointer-events-none animate-pulse z-0" />
+                            <div className="circuit-decor opacity-20 pointer-events-none z-0" />
+
+                            <div className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-white/5 flex items-center justify-center mx-auto mb-6 relative z-10 shadow-[0_10px_20px_rgba(16,185,129,0.15)] group-hover/locked-card:scale-105 transition-transform duration-500">
+                                <Lock size={24} className="text-emerald-500" />
+                                <div className="absolute -bottom-1.5 -right-1.5 w-5 h-5 bg-emerald-500 rounded-full border-[3px] border-slate-50 dark:border-slate-800 flex items-center justify-center shadow-sm">
+                                    <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+                                </div>
                             </div>
+
+                            <div className="space-y-2 mb-6 relative z-10">
+                                <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-[0.3em]">
+                                    {t('pro_dashboard.academy.node_capabilities', 'SYSTEM LOCKED')}
+                                </span>
+                                <h4 className="text-xl font-black uppercase text-slate-900 dark:text-white tracking-widest leading-none italic">
+                                    {t('pro_dashboard.academy.psych_strategies.title')}
+                                </h4>
+                                <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 max-w-[260px] mx-auto uppercase tracking-widest leading-relaxed">
+                                    {t('pro_dashboard.academy.psych_strategies.unlock_desc')}
+                                </p>
+                            </div>
+
+                            <button
+                                onClick={() => { selection(); setShowSetup(true); }}
+                                className="w-full h-12 bg-emerald-500 hover:bg-emerald-400 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all sm:active:scale-95 shadow-[0_10px_20px_rgba(16,185,129,0.4)] flex items-center justify-center gap-2 relative z-10 overflow-hidden group/btn border border-emerald-400/50"
+                            >
+                                <motion.div
+                                    className="absolute inset-0 bg-white/20 -skew-x-12"
+                                    animate={{ left: ["-100%", "200%"] }}
+                                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
+                                />
+                                <span className="relative z-10 flex gap-2 items-center drop-shadow-sm">{t('pro_dashboard.academy.social_sync')} <Terminal size={14} className="animate-pulse" /></span>
+                            </button>
                         </motion.div>
-
-                        <div className="space-y-3 mb-10">
-                            <span className="text-[11px] font-black text-indigo-500 uppercase tracking-[0.5em] animate-pulse">
-                                {t('pro_dashboard.academy.bio_auth')}
-                            </span>
-                            <h4 className="text-2xl font-black uppercase text-slate-900 dark:text-white tracking-widest leading-none italic">
-                                {t('pro_dashboard.academy.psych_strategies.title')}
-                            </h4>
-                            <p className="text-[12px] font-bold text-slate-500 dark:text-slate-400 max-w-[320px] uppercase tracking-wider mx-auto leading-relaxed">
-                                {t('pro_dashboard.academy.psych_strategies.unlock_desc')}
-                            </p>
-                        </div>
-
-                        <motion.button
-                            whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(99,102,241,0.6)" }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => { selection(); setShowSetup(true); }}
-                            className="px-10 py-4 bg-indigo-500 hover:bg-indigo-400 text-white rounded-2xl font-black text-[12px] uppercase tracking-[0.3em] transition-all shadow-[0_20px_40px_rgba(99,102,241,0.4)] flex items-center gap-4 group/lock-btn"
-                        >
-                            {t('pro_dashboard.academy.social_sync')} <Terminal size={16} className="group-hover/lock-btn:rotate-12 transition-transform" />
-                        </motion.button>
                     </div>
                 )}
 
