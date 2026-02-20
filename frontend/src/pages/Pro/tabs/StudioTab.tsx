@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -12,6 +12,7 @@ import { getApiUrl } from '../../../utils/api';
 import { renderMarkdown } from '../utils/renderMarkdown';
 import { postTypes as defaultPostTypes, audiences as defaultAudiences, languages as defaultLanguages, tones as defaultTones } from '../utils/constants';
 import { PremiumSelect } from '../components/PremiumSelect';
+import { applyGlitchOverlay } from '../../../utils/glitchImageOverlay';
 
 interface StudioTabProps {
     status: PROStatus | null;
@@ -70,6 +71,12 @@ export const StudioTab = ({
 
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
+    // Glitch image overlay state
+    const [glitchImageSrc, setGlitchImageSrc] = useState<string | null>(null);
+    const [isApplyingGlitch, setIsApplyingGlitch] = useState(false);
+    // Track which result the glitch was built for (avoid redundant work)
+    const glitchResultId = useRef<string | null>(null);
+
     const handleToggle = (key: string) => {
         setOpenDropdown(prev => prev === key ? null : key);
     };
@@ -86,6 +93,43 @@ export const StudioTab = ({
             }
         }
     }, [postType, audience, setExternalReady]);
+
+    // --- Glitch overlay effect ---
+    // Runs whenever a new result arrives with an image_url & title.
+    useEffect(() => {
+        if (!generatedResult?.image_url || !generatedResult?.title) {
+            setGlitchImageSrc(null);
+            return;
+        }
+        // Avoid reprocessing the same result
+        const resultId = `${generatedResult.id ?? ''}_${generatedResult.image_url}`;
+        if (glitchResultId.current === resultId) return;
+        glitchResultId.current = resultId;
+
+        let cancelled = false;
+        setIsApplyingGlitch(true);
+        const baseUrl = getApiUrl().replace(/\/api\/?$/, '');
+
+        applyGlitchOverlay({
+            text: generatedResult.title,
+            imageUrl: generatedResult.image_url,
+            baseUrl,
+            fontSizeFraction: 0.06,
+            glitchPasses: 3,
+            minReadableRatio: 0.015,
+        })
+            .then((src) => {
+                if (!cancelled) setGlitchImageSrc(src);
+            })
+            .catch(() => {
+                if (!cancelled) setGlitchImageSrc(generatedResult.image_url);
+            })
+            .finally(() => {
+                if (!cancelled) setIsApplyingGlitch(false);
+            });
+
+        return () => { cancelled = true; };
+    }, [generatedResult]);
 
 
     useEffect(() => {
@@ -304,6 +348,18 @@ export const StudioTab = ({
 
     const handleSaveImageToDevice = async () => {
         if (!generatedResult?.image_url) return;
+
+        // If we have a glitch-composited data URL, download it directly (no fetch needed)
+        if (glitchImageSrc && glitchImageSrc.startsWith('data:')) {
+            const link = document.createElement('a');
+            link.href = glitchImageSrc;
+            link.download = `viral_p2p_${Date.now()}.jpg`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            notification({ title: t('pro_dashboard.notifications.image_saved'), text: t('pro_dashboard.notifications.image_saved_text'), type: 'success' });
+            return;
+        }
 
         let finalUrl = generatedResult.image_url;
         if (!finalUrl.startsWith('http')) {
@@ -827,11 +883,37 @@ export const StudioTab = ({
                             <div className="circuit-decor opacity-20" />
                             <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/60 z-1" />
                             {generatedResult.image_url ? (
-                                <img
-                                    src={generatedResult.image_url.startsWith('http') ? generatedResult.image_url : `${getApiUrl().replace(/\/api$/, '')}${generatedResult.image_url}`}
-                                    alt="Viral"
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110"
-                                />
+                                <>
+                                    <img
+                                        src={
+                                            glitchImageSrc
+                                                ? glitchImageSrc
+                                                : (generatedResult.image_url.startsWith('http')
+                                                    ? generatedResult.image_url
+                                                    : `${getApiUrl().replace(/\/api$/, '')}${generatedResult.image_url}`)
+                                        }
+                                        alt="Viral"
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110"
+                                    />
+                                    {/* Glitch processing indicator */}
+                                    {isApplyingGlitch && (
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none"
+                                        >
+                                            <div className="flex flex-col items-center gap-2">
+                                                <div className="w-10 h-10 rounded-xl bg-black/60 backdrop-blur-md border border-indigo-500/30 flex items-center justify-center">
+                                                    <Sparkles size={16} className="text-indigo-400 animate-pulse" />
+                                                </div>
+                                                <span className="text-[8px] font-black uppercase tracking-widest text-white/70 bg-black/50 backdrop-blur-sm px-2 py-0.5 rounded-full">
+                                                    Rendering
+                                                </span>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </>
                             ) : (
                                 <div className="p-8 text-center z-10">
                                     <div className="w-16 h-16 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-center mx-auto mb-4 animate-pulse">
