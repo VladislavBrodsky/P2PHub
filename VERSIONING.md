@@ -1,5 +1,11 @@
 # Version Control Flow & Best Practices
 
+**Maintained by:** Antigravity (AI Agent)  
+**Last Updated:** 2026-02-20  
+**Status:** ✅ ACTIVE
+
+---
+
 This project follows [Semantic Versioning (SemVer)](https://semver.org/) and uses `git` tags to mark specific releases.
 
 ## Workflow for Updates

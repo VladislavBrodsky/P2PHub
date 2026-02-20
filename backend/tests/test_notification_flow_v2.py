@@ -39,12 +39,13 @@ class TestNotificationStructuredSuite:
         
         with patch("app.services.notification_service.send_telegram_task.kiq", new_callable=AsyncMock) as mock_kiq:
             with patch("app.services.rate_limit_service.rate_limit_service.is_duplicate", return_value=False):
-                tasks = [
-                    notification_service.send_standard(chat_id, f"{text} {i}") 
-                    for i in range(5)
-                ]
-                await asyncio.gather(*tasks)
-                assert mock_kiq.call_count == 5
+                with patch("app.services.rate_limit_service.rate_limit_service.is_blocked", return_value=False):
+                    tasks = [
+                        notification_service.send_standard(chat_id, f"{text} {i}") 
+                        for i in range(5)
+                    ]
+                    await asyncio.gather(*tasks)
+                    assert mock_kiq.call_count == 5
 
     async def test_broken_logic_retry_mechanism(self, session: AsyncSession):
         """
@@ -77,17 +78,18 @@ class TestNotificationStructuredSuite:
             with patch("bot.bot.send_message", new_callable=AsyncMock) as mock_send:
                 with patch("app.services.audit_service.audit_service.log_event", new_callable=AsyncMock) as mock_audit:
                     with patch("app.services.rate_limit_service.rate_limit_service.is_duplicate", return_value=False):
-                        await notification_service.enqueue_notification(chat_id, text)
-                        
-                        await session.flush()
-                        stmt = select(NotificationRetry).where(NotificationRetry.chat_id == chat_id)
-                        res = await session.execute(stmt)
-                        item = res.scalars().first()
-                        assert item is not None
-                        assert "Queue Error" in item.last_error
-                        
-                        await asyncio.sleep(0.5)
-                        assert mock_send.called
+                        with patch("app.services.rate_limit_service.rate_limit_service.is_blocked", return_value=False):
+                            await notification_service.enqueue_notification(chat_id, text)
+                            
+                            await session.flush()
+                            stmt = select(NotificationRetry).where(NotificationRetry.chat_id == chat_id)
+                            res = await session.execute(stmt)
+                            item = res.scalars().first()
+                            assert item is not None
+                            assert "Queue Error" in item.last_error
+                            
+                            await asyncio.sleep(0.5)
+                            assert mock_send.called
 
     async def test_health_check_endpoint_logic(self, session: AsyncSession):
         """
@@ -119,12 +121,13 @@ class TestNotificationStructuredSuite:
         
         with patch("app.services.notification_service.send_telegram_task.kiq", new_callable=AsyncMock) as mock_kiq:
             with patch("app.services.rate_limit_service.rate_limit_service.is_duplicate") as mock_dup:
-                mock_dup.side_effect = [False, True]
-                
-                await notification_service.send_standard(chat_id, text)
-                await notification_service.send_standard(chat_id, text)
-                
-                assert mock_kiq.call_count == 1
+                with patch("app.services.rate_limit_service.rate_limit_service.is_blocked", return_value=False):
+                    mock_dup.side_effect = [False, True]
+                    
+                    await notification_service.send_standard(chat_id, text)
+                    await notification_service.send_standard(chat_id, text)
+                    
+                    assert mock_kiq.call_count == 1
 
     async def test_double_send_bug_in_fallback(self, session: AsyncSession):
         """
@@ -137,19 +140,20 @@ class TestNotificationStructuredSuite:
         with patch("app.services.notification_service.send_telegram_task.kiq", side_effect=Exception("Broker Dead")):
             with patch("bot.bot.send_message", new_callable=AsyncMock) as mock_send:
                 with patch("app.services.rate_limit_service.rate_limit_service.is_duplicate", return_value=False):
-                    
-                    await notification_service.enqueue_notification(chat_id, text)
-                    
-                    # Wait for background fallback task
-                    await asyncio.sleep(0.5)
-                    
-                    # Check DB
-                    stmt = select(NotificationRetry).where(NotificationRetry.chat_id == chat_id)
-                    res = await session.execute(stmt)
-                    item = res.scalars().first()
-                    
-                    assert item is not None
-                    assert item.status == "sent", f"BUG FOUND: Item status is {item.status}, expected 'sent' to prevent double send!"
+                    with patch("app.services.rate_limit_service.rate_limit_service.is_blocked", return_value=False):
+                        
+                        await notification_service.enqueue_notification(chat_id, text)
+                        
+                        # Wait for background fallback task
+                        await asyncio.sleep(0.5)
+                        
+                        # Check DB
+                        stmt = select(NotificationRetry).where(NotificationRetry.chat_id == chat_id)
+                        res = await session.execute(stmt)
+                        item = res.scalars().first()
+                        
+                        assert item is not None
+                        assert item.status == "sent", f"BUG FOUND: Item status is {item.status}, expected 'sent' to prevent double send!"
 
     async def test_markdown_parse_failure_handling(self, session: AsyncSession):
         """
@@ -235,15 +239,18 @@ class TestNotificationStructuredSuite:
         mock_msg.from_user.language_code = "en"
         mock_msg.text = "/start"
         mock_msg.answer = AsyncMock()
+
+        async def get_test_session():
+            yield session
         
         with patch("bot.bot.get_me", new_callable=AsyncMock) as mock_get_me:
             mock_get_me.return_value.username = "test_bot"
             with patch("app.services.partner_service.create_partner", return_value=(partner, False)):
                 with patch("app.services.rate_limit_service.rate_limit_service.unmark_user_blocked", new_callable=AsyncMock) as mock_unmark:
-                    
-                    await cmd_start(mock_msg)
-                    
-                    # Verify DB updated
-                    await session.refresh(partner)
-                    assert partner.notifications_paused is False
-                    mock_unmark.assert_called_once_with(chat_id)
+                    with patch("bot.get_session", new=get_test_session):
+                        await cmd_start(mock_msg)
+                        
+                        # Verify DB updated
+                        await session.refresh(partner)
+                        assert partner.notifications_paused is False
+                        mock_unmark.assert_called_once_with(chat_id)

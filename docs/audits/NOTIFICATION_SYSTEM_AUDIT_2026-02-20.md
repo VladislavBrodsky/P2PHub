@@ -66,6 +66,8 @@ Added a new comprehensive test suite in `backend/tests/test_notification_flow_v2
 - **Deduplication**: Verified identical messages are caught.
 - **Markdown Handling**: Verified syntax errors are captured.
 - **Health Monitoring**: Verified `/notifications-health` logic.
+- **Graceful Block Handling**: Verified that if a user blocks the bot, they are marked as paused in the DB and cached in Redis silently.
+- **Auto-Resume**: Verified that if a blocked user later re-engages with the bot (e.g., via `/start`), their notification status is auto-resumed seamlessly.
 
 ### Critical Bug Fixed
 - **Issue**: Double-send during emergency fallback.

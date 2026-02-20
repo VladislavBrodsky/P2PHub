@@ -1,5 +1,11 @@
 # P2PHub - Railway Deployment Guide
 
+**Maintained by:** Antigravity (AI Agent)  
+**Last Updated:** 2026-02-20  
+**Status:** ✅ ACTIVE
+
+---
+
 This guide covers deploying the P2PHub application to Railway.
 
 ## Architecture

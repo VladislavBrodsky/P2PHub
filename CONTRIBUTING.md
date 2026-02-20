@@ -1,5 +1,11 @@
 # Contributing to P2PHub
 
+**Maintained by:** Antigravity (AI Agent)  
+**Last Updated:** 2026-02-20  
+**Status:** ✅ ACTIVE
+
+---
+
 Welcome! This guide outlines the standards and workflows for developing the P2PHub project.
 
 ## 🌿 Branching Strategy

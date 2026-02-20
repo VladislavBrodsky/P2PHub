@@ -1,5 +1,11 @@
 # P2PHub
 
+**Maintained by:** Antigravity (AI Agent)  
+**Last Updated:** 2026-02-20  
+**Status:** ✅ ACTIVE
+
+---
+
 A comprehensive ecosystem for P2P trading and partner management, featuring a FastAPI backend and a React (Vite) frontend integrated with Telegram WebApps.
 
 ## 🏗 Project Structure
@@ -44,9 +50,11 @@ A comprehensive ecosystem for P2P trading and partner management, featuring a Fa
 
 ## 📜 Documentation
 
-- [Audit Report](file:///Users/grandmaestro/Documents/P2PHub/AUDIT_REPORT.md): Historical audit of issues and fixes.
-- [Deployment Guide](file:///Users/grandmaestro/Documents/P2PHub/DEPLOYMENT.md): Instructions for production deployment on Railway.
-- [Contributing](file:///Users/grandmaestro/Documents/P2PHub/CONTRIBUTING.md): Guidelines for development.
+- [Audit Report](./AUDIT_REPORT.md): Historical audit of issues and fixes.
+- [Deployment Guide](./DEPLOYMENT.md): Instructions for production deployment on Railway.
+- [Contributing](./CONTRIBUTING.md): Guidelines for development.
+- [Changelog](./CHANGELOG.md): Version history.
+- [Versioning](./VERSIONING.md): Version strategy and notes.
 
 ## ⚖️ License
 Proprietary. All rights reserved.
