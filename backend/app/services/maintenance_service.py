@@ -38,6 +38,51 @@ async def process_notification_retries():
     await notification_service.process_retries()
     logger.info("✅ Notification retries processing complete.")
 
+@broker.task(schedule=[{"cron": "*/10 * * * *"}]) # Every 10 minutes
+async def monitor_notification_health():
+    """
+    Automated health monitoring for the notification system.
+    Alerts admins if pending notifications are stuck for more than 10 minutes.
+    """
+    from datetime import datetime, UTC, timedelta
+    from sqlalchemy import func
+    from app.models.notification_retry import NotificationRetry
+    from app.services.notification_service import notification_service
+    from app.core.config import settings
+
+    logger.info("📡 Scheduled Task: Checking Notification System Health...")
+    
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    async with async_session() as session:
+        now = datetime.now(UTC).replace(tzinfo=None)
+        ten_mins_ago = now - timedelta(minutes=10)
+        
+        stmt_stuck = select(func.count(NotificationRetry.id)).where(
+            NotificationRetry.status == "pending",
+            NotificationRetry.created_at <= ten_mins_ago
+        )
+        result_stuck = await session.execute(stmt_stuck)
+        stuck_count = result_stuck.scalar() or 0
+        
+        if stuck_count >= 10:
+            logger.error(f"🚨 NOTIFICATION SYSTEM CONGESTION: {stuck_count} stuck messages detected!")
+            
+            # Notify admins
+            alert_msg = (
+                "🚨 **NOTIFICATION SYSTEM CONGESTION**\n\n"
+                f"Detected **{stuck_count}** pending notifications stuck for >10 minutes.\n\n"
+                "Please check worker logs and `/notifications-health` for details."
+            )
+            
+            for admin_id in settings.ADMIN_USER_IDS:
+                # Use bypass_dedup=True for system alerts to ensure they arrive
+                try:
+                    await notification_service.send_critical(chat_id=int(admin_id), text=alert_msg, bypass_dedup=True)
+                except Exception as e:
+                    logger.error(f"Failed to send health alert to admin {admin_id}: {e}")
+        else:
+            logger.info(f"✅ Notification health check: {stuck_count} stuck messages. Status: Healthy.")
+
 @broker.task(task_name="restore_names_task")
 async def restore_names_task():
     """Distributed task for user name restoration from Telegram archives."""

@@ -12,8 +12,8 @@
         "title_2": "We Build a Brand That Unites"
       },
       "2": {
-        "title_1": "Financial Freedom",
-        "title_2": "Through Velocity"
+        "title_1": "Capital Evolution",
+        "title_2": "Through Technology"
       }
     },
     "hero_desc": "Traditional finance is slow, closed, and failing. <1>Pintopay</1> is the bridge to a borderless era where you earn from the flow of world money.",
@@ -41,8 +41,8 @@
     "start": "Initialize Your Path",
     "stories": [
       {
-        "title": "Era of Speed",
-        "desc": "Traditional finance is slow and restricted. We are building the bridge to limitless, instant P2P wealth."
+        "title": "Capital Velocity",
+        "desc": "Traditional finance is constrained by legacy speed. We are building the bridge to limitless, efficient P2P scaling."
       },
       {
         "title": "$1 Strategy",
@@ -53,8 +53,8 @@
         "desc": "Build a multi-level matrix. Your network is your capitalization 5 levels deep of true sovereignty."
       },
       {
-        "title": "Ready for Growth",
-        "desc": "Your journey starts now. Scale your network, earn XP, and reach Platinum level excellence."
+        "title": "Strategic Path",
+        "desc": "Your journey starts now. Scale your network, develop your infrastructure, and reach Platinum level excellence."
       }
     ],
     "terms": "By tapping 'Get Started', you confirm you have read and agree to our <1>Terms of Service</1>, <3>Cookie Policy</3> and consent to our <5>Marketing Activities</5>.",
@@ -94,18 +94,18 @@
         "back_desc": "Mobile payments popularized digital transactions, offering convenience. However, they usually rely on traditional banking rails. The next step is a truly decentralized financial layer."
       },
       "3": {
-        "title": "Financial Reset",
+        "title": "Financial Sovereignty",
         "subtitle": "Crypto & Web3",
-        "desc": "True ownership and global liquidity 24/7. The bridge to freedom.",
-        "status": "FREEDOM",
+        "desc": "True ownership and borderless access 24/7. The ultimate bridge to financial autonomy.",
+        "status": "SOVEREIGNTY",
         "back_title": "DECENTRALIZED FUTURE",
         "back_desc": "Blockchain technology unlocks true digital ownership and global 24/7 liquidity. It's a fundamental shift in how value is stored and transferred, providing users with absolute transparency and control."
       },
       "4": {
-        "title": "ELITE VELOCITY",
+        "title": "GLOBAL STANDARD",
         "subtitle": "Pintopay QR",
-        "desc": "Instant, global P2P settlements at $1/min speed. The ultimate infrastructure.",
-        "status": "ELITE",
+        "desc": "Instant, global P2P settlements. The ultimate infrastructure for your digital business.",
+        "status": "LEADER",
         "back_title": "GLOBAL P2P NETWORK",
         "back_desc": "Pintopay leverages the power of decentralized networks for instant, borderless settlements. By participating in the ecosystem, partners contribute to a faster and more inclusive global financial community."
       }
@@ -121,8 +121,8 @@
     }
   },
   "onboarding_finish": {
-    "title": "SYNC COMPLETE",
-    "desc": "Your node is now active. The market is waiting.",
+    "title": "SYSTEM READY",
+    "desc": "Your environment is fully initialized. The market awaits your leadership.",
     "cta": "Enter Dashboard"
   }
 }

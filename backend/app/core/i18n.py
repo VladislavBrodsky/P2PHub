@@ -2,45 +2,45 @@ MESSAGES = {
     "en": {
         "welcome": (
             "💎 **Welcome, {name}!**\n\n"
-            "🔥 *Stop being just a user. Become an owner.*\n\n"
-            "You are officially **Elite Partner**! You are early 🚀\n\n"
-            "You’ve just entered the *future of decentralized finance*. While others wait, you’re already building an empire.\n\n"
-            "💰 *Earn XP. Grow your influence. Unlock limitless rewards.*\n\n"
+            "🔥 *Transition from consumer to architect.*\n\n"
+            "You are officially a **Core Partner**! You are early 🚀\n\n"
+            "You’ve just entered the *future of decentralized finance*. While others observe, you’re already building a sovereign legacy.\n\n"
+            "💰 *Earn XP. Grow your influence. Secure strategic rewards.*\n\n"
             "🔗 **Your Personal Gateway:**\n`{referral_link}`\n\n"
             "👇 **Tap below to start your journey**"
         ),
         "welcome_back": (
             "👋 **Welcome Back, {name}!**\n\n"
-            "Your network never sleeps. Check your latest growth and earnings in the Partner App below!\n\n"
-            "🚀 Let's reach the next tier today."
+            "Your network efficiency remains stable. Review your latest growth and rewards in the Partner App below!\n\n"
+            "🚀 Let's achieve the next milestone today."
         ),
         "referral_l1_congrats": (
-            "🤝 *New Direct Partner!* (L1)\n\n"
+            "🤝 *Direct Connection Established!* (L1)\n\n"
             "👤 {name}\n"
-            "📈 *Status:* Just joined your first line!\n"
-            "💰 *Reward:* `+{xp} XP` credited.\n\n"
-            "🚀 *Keep going!* Every direct invite builds your foundation."
+            "📈 *Status:* Successfully integrated into your first line!\n"
+            "💰 *Recognition:* `+{xp} XP` awarded.\n\n"
+            "🚀 *Strategic Growth:* Every direct connection strengthens your network foundation."
         ),
         "referral_l2_congrats": (
-            "👥 *Team Expansion!* (L2)\n\n"
-            "Someone just joined your *2nd level*!\n\n"
-            "📊 *Referral Line:*\n"
+            "👥 *Network Expansion!* (L2)\n\n"
+            "A new partner has joined your *2nd level*!\n\n"
+            "📊 *Network Path:*\n"
             "{referral_chain}\n\n"
-            "💰 *Reward:* `+{xp} XP` credited.\n"
-            "🚀 Your network is growing automatically!"
+            "💰 *Recognition:* `+{xp} XP` awarded.\n"
+            "🚀 Your network is scaling efficiently!"
         ),
         "referral_deep_activity": (
             "🌐 *Network Pulse* (L{level})\n\n"
             "New partner joined at *Level {level}*!\n\n"
-            "📊 *Referral Line:*\n"
+            "📊 *Network Path:*\n"
             "{referral_chain}\n\n"
-            "💰 *Reward:* `+{xp} XP` credited.\n"
-            "🏰 Your empire is expanding deep! 🌍"
+            "💰 *Recognition:* `+{xp} XP` awarded.\n"
+            "🏰 Your global influence is reaching new depths! 🌍"
         ),
         "level_up": (
-            "🏆 *Level Up!* 🏆\n\n"
-            "You've reached *Level {level}*!\n\n"
-            "Keep going to unlock the Platinum Tier and earn more rewards! 🚀"
+            "🏆 *Milestone Achieved!* 🏆\n\n"
+            "You have reached *Level {level}*!\n\n"
+            "Continue your development to unlock advanced tiers and optimize your rewards! 🚀"
         ),
         "task_completed": (
             "✅ *Task Completed!*\n\n"
@@ -49,13 +49,13 @@ MESSAGES = {
         ),
         "share_text": "🚀 Join me on Pintopay and earn $1 per minute! Join the revolution in decentralized payments. 💎",
         "pro_welcome": (
-            "👑 *WELCOME TO THE ELITE!* 👑\n\n"
-            "You have just unlocked the *Full Power* of the Pintopay Partner Network!\n\n"
-            "🚀 *Why this is a game-changer for you:*\n"
-            "• *20-Level Network:* You now earn from every single person in your structure down to Level 20. The build-up is insane! 📈\n"
-            "• *X3 Fast XP:* Your progression is now hyper-accelerated. Reach top tiers faster than anyone else.\n"
-            "• *Empower Your Network:* You are now a leader. Help your team grow and watch your passive income skyrocket.\n\n"
-            "✨ *Your Marketing efforts just got x10 stronger.* Go build your empire! 🏰"
+            "👑 *WELCOME TO THE CORE!* 👑\n\n"
+            "You have just unlocked the *Advanced Infrastructure* of the Pintopay Partner Network!\n\n"
+            "🚀 *Key Strategic Advantages:*\n"
+            "• *20-Level Network:* You now earn from every participant in your structure down to Level 20. The scaling potential is immense! 📈\n"
+            "• *X3 Fast XP:* Your professional progression is now hyper-accelerated. Reach top tiers with maximum efficiency.\n"
+            "• *Network Leadership:* You are now a recognized leader. Drive your community's growth and optimize your long-term rewards.\n\n"
+            "✨ *Your marketing influence is now significantly enhanced.* Build your sovereign legacy! 🏰"
         ),
         "pro_viral_announcement": (
             "🔥 *MEGA ANNOUNCEMENT!* 🔥\n\n"
@@ -65,29 +65,29 @@ MESSAGES = {
             "🔗 *Join my structure now:* {referral_link}"
         ),
         "commission_received": (
-            "💰 *COMMISSION ALERT!* (Level {level})\n\n"
-            "You just received `${amount} USDT`! 💸\n"
-            "Partner **{from_user}** in your network (Level {level}) just upgraded to PRO.\n\n"
-            "🌟 *The Power of Passivity:* Your network is working for you 24/7. This is just the beginning of your profit journey! 📈"
+            "💰 *REWARD PROCESSED!* (Level {level})\n\n"
+            "You have received `${amount} USDT`! 💸\n"
+            "Partner **{from_user}** in your network (Level {level}) has upgraded to PRO.\n\n"
+            "🌟 *Network Efficiency:* Your infrastructure is generating value 24/7. This is the foundation of your professional growth! 📈"
         ),
         "viral_share_caption": (
-            "🛑 STOP FEEDING THE BANKS! \n"
-            "Join FinTech Partner Network and earn like a bank. $1 Every Minute"
+            "🛑 EVOLVE BEYOND TRADITIONAL BANKING! \n"
+            "Join the Global Partner Network and achieve financial sovereignty. $1 Every Minute"
         ),
         "pro_fomo_missed": (
-            "🚀 *Growth Detected!* (Level {level})\n\n"
-            "Someone just joined your deep network, but your rewards are currently **LOCKED** 🔒.\n\n"
+            "🚀 *Potential Detected!* (Level {level})\n\n"
+            "A new member has joined your deep network, but your advanced rewards are currently **UNCLAIMED** 🔒.\n\n"
             "👑 *Upgrade to PRO to:* \n"
-            "• Unlock **Deep Levels** of passive rewards\n"
-            "• Earn USDT from every PRO upgrade in your team\n"
-            "• Get **Fast XP** boost\n\n"
-            "Don't leave money on the table. Build your empire today! 🏰"
+            "• Unlock **20 Levels** of strategic rewards\n"
+            "• Secure USDT from PRO upgrades in your community\n"
+            "• Activate **Fast XP** acceleration\n\n"
+            "Don't leave potential unclaimed. Secure your future growth today! 🏰"
         ),
         "commission_fomo_missed": (
-            "⚠️ *MISSED COMMISSION!* ⚠️\n\n"
-            "You just missed a **${amount} USDT** commission from Level {level}!\n\n"
-            "Someone in your network upgraded, but you are not qualified to receive this reward due to your current plan.\n\n"
-            "🚀 *Upgrade to PRO/PRO+* now to stop losing passive income and unlock the full potential of your tree! 💸"
+            "⚠️ *UNCLAIMED REWARD!* ⚠️\n\n"
+            "You have missed a **${amount} USDT** reward from Level {level}!\n\n"
+            "An upgrade occurred in your network, but your current plan does not include levels at this depth.\n\n"
+            "🚀 *Upgrade to PRO/PRO+* now to optimize your reward structure and unlock the full potential of your ecosystem! 💸"
         ),
         "upgrade_xp_bonus": (
             "⚡️ *XP BOOST UNLOCKED!* ⚡️\n\n"
@@ -101,9 +101,9 @@ MESSAGES = {
         "btn_reactivate_sub": "👑 Reactivate PRO",
         
         "sub_warning_title": "⚠️ *PRO Subscription Notice*",
-        "sub_warning_body": "Your PRO membership will expire in *{days} days*.\n\n💰 *Price to Extend:* ${price}\n\nExtend it now to keep all your premium benefits and affiliate bonuses!",
+        "sub_warning_body": "Your PRO membership status will adjust in *{days} days*.\n\n💰 *Price to Maintain Status:* ${price}\n\nExtend now to maintain your advanced infrastructure and network rewards!",
         "sub_expired_title": "❌ *Subscription Expired*",
-        "sub_expired_body": "Your PRO membership has expired. You have lost access to premium features.\n\nRe-activate your PRO status now to continue earning.",
+        "sub_expired_body": "Your PRO membership status has been reset. Access to advanced features is now limited.\n\nRe-activate your PRO status to restore your reward depth and infrastructure tools.",
         
         "viralkit_intro": "🎁 *VIRAL KIT UNLOCKED!*\n\nShare this message to announce your PRO status and attract more partners:\n\n---",
         "admin_payment_success": "✅ <b>SUCCESSFUL {plan} PURCHASE</b>\n\n👤 <b>User:</b> {user} (<code>{user_id}</code>)\n💰 <b>Amount:</b> ${amount} {currency}\n🔗 <b>Hash:</b> <code>{hash}</code>\n📊 <b>Plan:</b> {plan_type}\n⌛ <b>Expires:</b> {expires}\n\nVerified and commissions distributed.",
@@ -196,24 +196,24 @@ MESSAGES = {
     "ru": {
         "welcome": (
             "💎 **Добро пожаловать, {name}!**\n\n"
-            "🔥 *Хватит быть просто пользователем. Станьте владельцем.*\n\n"
-            "Вы официально — **Элитный Партнер**! Вы в числе первых 🚀\n\n"
-            "Вы только что вошли в *будущее децентрализованных финансов*. Пока другие ждут, вы уже строите свою империю.\n\n"
-            "💰 *Зарабатывайте XP. Растите влияние. Открывайте безграничные награды.*\n\n"
+            "🔥 *Путь от пользователя к архитектору экосистемы.*\n\n"
+            "Вы официально — **Ключевой Партнер**! Вы в числе первых 🚀\n\n"
+            "Вы только что вошли в *будущее децентрализованных финансов*. Пока другие наблюдают, вы уже строите свое суверенное наследие.\n\n"
+            "💰 *Зарабатывайте XP. Растите влияние. Создавайте стратегические активы.*\n\n"
             "🔗 **Ваш персональный вход:**\n`{referral_link}`\n\n"
             "👇 **Нажмите ниже, чтобы начать путь**"
         ),
         "welcome_back": (
             "👋 **С возвращением, {name}!**\n\n"
-            "Ваша сеть никогда не спит. Проверьте последние обновления и рост вашей структуры в приложении!\n\n"
-            "🚀 Время достичь новых вершин сегодня."
+            "Узлы вашей сети функционируют стабильно. Проверьте новые вехи и показатели вашей структуры в приложении!\n\n"
+            "🚀 Время достичь новых стратегических вершин."
         ),
         "referral_l1_congrats": (
-            "🤝 *Новый прямой партнер!* (L1)\n\n"
+            "🤝 *Прямое подключение установлено!* (L1)\n\n"
             "👤 {name}\n"
-            "📈 *Статус:* Присоединился к вашей первой линии!\n"
-            "💰 *Награда:* `+{xp} XP` зачислено.\n\n"
-            "🚀 *Так держать!* Каждое приглашение укрепляет ваш фундамент."
+            "📈 *Статус:* Успешно интегрирован в вашу первую линию!\n"
+            "💰 *Признание:* `+{xp} XP` зачислено.\n\n"
+            "🚀 *Стратегический рост:* Каждое прямое соединение укрепляет ваш фундамент."
         ),
         "referral_l2_congrats": (
             "👥 *Расширение команды!* (L2)\n\n"
@@ -226,15 +226,15 @@ MESSAGES = {
         "referral_deep_activity": (
             "🌐 *Пульс Сети* (L{level})\n\n"
             "Новый партнер на *Уровне {level}*!\n\n"
-            "📊 *Цепочка приглашений:*\n"
+            "📊 *Цепочка соединений:*\n"
             "{referral_chain}\n\n"
-            "💰 *Награда:* `+{xp} XP` зачислено.\n"
-            "🏰 Ваша империя растет вглубь! 🌍"
+            "💰 *Признание:* `+{xp} XP` зачислено.\n"
+            "🏰 Ваше глобальное влияние достигло новой глубины! 🌍"
         ),
         "level_up": (
-            "🏆 *Новый Уровень!* 🏆\n\n"
+            "🏆 *Новая Веха Достигнута!* 🏆\n\n"
             "Вы достигли *Уровня {level}*!\n\n"
-            "Продолжайте движение, чтобы открыть Платиновый тир и новые награды! 🚀"
+            "Продолжайте развитие, чтобы открыть премиальные тиры и оптимизировать свои награды! 🚀"
         ),
         "task_completed": (
             "✅ *Задание выполнено!*\n\n"
@@ -259,29 +259,29 @@ MESSAGES = {
             "🔗 *Присоединяйся к моей структуре:* {referral_link}"
         ),
         "commission_received": (
-            "💰 *АЛЕРТ О КОМИССИИ!* (Уровень {level})\n\n"
-            "Вы только что получили `${amount} USDT`! 💸\n"
-            "Партнер **{from_user}** из вашей сети (Уровень {level}) только что перешел на PRO.\n\n"
-            "🌟 *Сила Пассивности:* Ваша сеть работает на вас 24/7. Это только начало вашего пути к x10 прибыли! 📈"
+            "💰 *ВОЗНАГРАЖДЕНИЕ ОБРАБОТАНО!* (Уровень {level})\n\n"
+            "Вы получили `${amount} USDT`! 💸\n"
+            "Партнер **{from_user}** из вашей сети (Уровень {level}) перешел на статус PRO.\n\n"
+            "🌟 *Эффективность Инфраструктуры:* Ваша сеть генерирует ценность 24/7. Это основа вашего профессионального роста! 📈"
         ),
         "viral_share_caption": (
-            "🛑 STOP FEEDING THE BANKS! 🛑\n"
-            "Зарабатывай как банк. $1 каждую минуту. 🚀"
+            "🛑 ЭВОЛЮЦИЯ ВНЕ ТРАДИЦИОННОГО БАНКИНГА! 🛑\n"
+            "Присоединяйся к Глобальной Сети и достигни финансового суверенитета. $1 в минуту. 🚀"
         ),
         "pro_fomo_missed": (
-            "🚀 *Обнаружен рост!* (Уровень {level})\n\n"
-            "Кто-то присоединился к вашей сети в глубине, но ваши награды сейчас **ЗАБЛОКИРОВАНЫ** 🔒.\n\n"
+            "🚀 *Обнаружен потенциал роста!* (Уровень {level})\n\n"
+            "Новый участник присоединился к вашей сети, но ваши расширенные награды сейчас **НЕ АКТИВИРОВАНЫ** 🔒.\n\n"
             "👑 *Перейдите на PRO/PRO+, чтобы:* \n"
-            "• Открыть **все 20 уровней** пассивных наград\n"
-            "• Получать USDT с каждого PRO-апгрейда в команде\n"
-            "• Получить ускорение **Fast XP**\n\n"
-            "Не оставляйте деньги на столе. Стройте свою империю сегодня! 🏰"
+            "• Открыть **все 20 уровней** стратегических наград\n"
+            "• Получать USDT с PRO-апгрейдов в вашем сообществе\n"
+            "• Активировать ускорение **Fast XP**\n\n"
+            "Обеспечьте свой будущий рост уже сегодня! 🏰"
         ),
         "commission_fomo_missed": (
-            "⚠️ *УПУЩЕННАЯ КОМИССИЯ!* ⚠️\n\n"
-            "Вы только что упустили комиссию **${amount} USDT** с {level}-го уровня!\n\n"
-            "Кто-то в вашей сети сделал апгрейд, но вы не квалифицированы для получения этой награды на вашем текущем плане.\n\n"
-            "🚀 *Перейдите на PRO/PRO+* прямо сейчас, чтобы перестать терять пассивный доход и открыть весь потенциал вашей сети! 💸"
+            "⚠️ *НЕПОДТВЕРЖДЕННОЕ ВОЗНАГРАЖДЕНИЕ!* ⚠️\n\n"
+            "Вы упустили вознаграждение в размере **${amount} USDT** с {level}-го уровня!\n\n"
+            "В вашей сети произошел апгрейд, но ваш текущий план не включает уровни на этой глубине.\n\n"
+            "🚀 *Перейдите на PRO/PRO+* прямо сейчас, чтобы оптимизировать структуру наград и раскрыть весь потенциал вашей экосистемы! 💸"
         ),
         "upgrade_xp_bonus": (
             "⚡️ *XP БУСТ АКТИВИРОВАН!* ⚡️\n\n"
@@ -295,9 +295,9 @@ MESSAGES = {
         "btn_reactivate_sub": "👑 Активировать PRO",
 
         "sub_warning_title": "⚠️ *Внимание: Подписка*",
-        "sub_warning_body": "Ваш статус PRO истекает через *{days} дн.*\n\n💰 *Цена продления:* ${price}\n\nПродлите сейчас, чтобы сохранить все бонусы!",
-        "sub_expired_title": "❌ *Подписка Истекла*",
-        "sub_expired_body": "Ваш статус PRO истек. Вы потеряли доступ к премиум функциям.\n\nАктивируйте PRO снова, чтобы продолжить зарабатывать.",
+        "sub_warning_body": "Ваш статус PRO изменится через *{days} дн.*\n\n💰 *Цена сохранения статуса:* ${price}\n\nПродлите сейчас, чтобы сохранить инфраструктуру и все бонусы!",
+        "sub_expired_title": "❌ *Статус Изменен*",
+        "sub_expired_body": "Ваш статус PRO был сброшен. Доступ к расширенным функциям ограничен.\n\nАктивируйте PRO снова, чтобы восстановить глубину вознаграждений.",
         
         "viralkit_intro": "🎁 *ВИРУСНЫЙ НАБОР РАЗБЛОКИРОВАН!*\n\nПерешлите это сообщение, чтобы рассказать о статусе PRO и привлечь больше партнеров:\n\n---",
         "admin_payment_success": "✅ <b>УСПЕШНАЯ ОПЛАТА {plan}</b>\n\n👤 <b>Пользователь:</b> {user} (<code>{user_id}</code>)\n💰 <b>Сумма:</b> ${amount} {currency}\n🔗 <b>Хеш:</b> <code>{hash}</code>\n📊 <b>План:</b> {plan_type}\n⌛ <b>Истекает:</b> {expires}\n\nПроверено и комиссии распределены.",

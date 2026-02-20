@@ -175,3 +175,75 @@ class TestNotificationStructuredSuite:
                 assert item is not None
                 assert item.status == "pending"
                 assert "parse entities" in item.last_error
+
+    async def test_user_blocked_detection(self, session: AsyncSession):
+        """
+        Critical Flow: Detect and handle user blocking the bot.
+        """
+        from app.models.partner import Partner
+        from aiogram.exceptions import TelegramForbiddenError
+        
+        chat_id = 12345
+        partner = Partner(telegram_id=str(chat_id), referral_code="TESTBLOCK", username="blocked_user")
+        session.add(partner)
+        await session.commit()
+        
+        # 1. Simulate a send that fails with Forbidden (User blocked Bot)
+        with patch("bot.bot.send_message", side_effect=TelegramForbiddenError(method=MagicMock(), message="forbidden")):
+            # Mock rate_limit_service to avoid redis and set dummy state
+            with patch("app.services.rate_limit_service.rate_limit_service.is_allowed", return_value=True):
+                with patch("app.services.rate_limit_service.rate_limit_service.mark_user_blocked", new_callable=AsyncMock) as mock_mark:
+                    
+                    from app.services.notification_service import NotificationPayload
+                    payload = NotificationPayload(chat_id=chat_id, text="Hello", priority="medium")
+                    await send_telegram_task(payload.model_dump())
+                    
+                    # 2. Verify Partner updated in DB
+                    await session.refresh(partner)
+                    assert partner.notifications_paused is True
+                    mock_mark.assert_called_once_with(chat_id)
+
+                    # 3. Verify subsequent enqueue is skipped
+                    with patch("app.services.rate_limit_service.rate_limit_service.is_blocked", return_value=True):
+                        with patch("app.services.notification_service.send_telegram_task.kiq", new_callable=AsyncMock) as mock_kiq:
+                            await notification_service.enqueue_notification(chat_id, "Silent skip")
+                            assert mock_kiq.call_count == 0
+
+    async def test_notification_resume_on_engagement(self, session: AsyncSession):
+        """
+        Flow: Notifications should resume when user sends /start or interacts.
+        """
+        from app.models.partner import Partner
+        from bot import cmd_start
+        
+        chat_id = 67890
+        # Start as paused
+        partner = Partner(
+            telegram_id=str(chat_id), 
+            referral_code="RESUME_ME", 
+            notifications_paused=True
+        )
+        session.add(partner)
+        await session.commit()
+        
+        # Mock message for /start
+        mock_msg = MagicMock()
+        mock_msg.from_user.id = chat_id
+        mock_msg.from_user.username = "resumer"
+        mock_msg.from_user.first_name = "Test"
+        mock_msg.from_user.last_name = "User"
+        mock_msg.from_user.language_code = "en"
+        mock_msg.text = "/start"
+        mock_msg.answer = AsyncMock()
+        
+        with patch("bot.bot.get_me", new_callable=AsyncMock) as mock_get_me:
+            mock_get_me.return_value.username = "test_bot"
+            with patch("app.services.partner_service.create_partner", return_value=(partner, False)):
+                with patch("app.services.rate_limit_service.rate_limit_service.unmark_user_blocked", new_callable=AsyncMock) as mock_unmark:
+                    
+                    await cmd_start(mock_msg)
+                    
+                    # Verify DB updated
+                    await session.refresh(partner)
+                    assert partner.notifications_paused is False
+                    mock_unmark.assert_called_once_with(chat_id)
