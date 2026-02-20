@@ -103,7 +103,7 @@ export const GrowthTab = ({
                         </p>
                         <div className="relative group/score">
                             <div className="absolute inset-0 bg-indigo-500/20 blur-2xl opacity-0 group-hover/score:opacity-100 transition-opacity duration-700" />
-                            <div className="text-5xl sm:text-6xl font-black text-slate-900 dark:text-white tabular-nums leading-none tracking-tighter vibing-crystal-text flex items-baseline gap-1">
+                            <div className="text-5xl sm:text-6xl font-black text-indigo-600 dark:text-indigo-400 drop-shadow-md tabular-nums leading-none tracking-tighter flex items-baseline gap-1">
                                 <LiquidCounter value={academyScore} />
                                 <span className="text-xs text-indigo-500/80 dark:text-indigo-400/80 tracking-normal italic ml-1 font-bold">XP</span>
                             </div>

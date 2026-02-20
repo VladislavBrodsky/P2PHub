@@ -30,8 +30,8 @@ export const LiquidCounter = ({ value, className = "" }: LiquidCounterProps) => 
             className={`inline-block tabular-nums ${className}`}
             initial={false}
             animate={{
-                filter: value !== displayValue ? "blur(1px)" : "blur(0px)",
                 scale: value !== displayValue ? 1.05 : 1,
+                opacity: value !== displayValue ? 0.8 : 1
             }}
             transition={{ duration: 0.2 }}
         >
