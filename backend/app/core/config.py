@@ -125,15 +125,15 @@ class Settings(BaseSettings):
     
     VIRAL_POST_TYPES: List[str] = Field(
         default_factory=lambda: [
-            "Product Launch", "FOMO Builder", "System Authority", 
-            "Lifestyle Flex", "Passive Income Proof", "Network Growth", "Web3 Tutorial"
+            "Strategic Launch", "Market Resonance", "Expert Leadership", 
+            "Professional Lifestyle", "Financial Insights", "Community Scaling", "Web3 Intelligence"
         ],
         validation_alias="VIRAL_POST_TYPES"
     )
     VIRAL_AUDIENCES: List[str] = Field(
         default_factory=lambda: [
-            "Cryptocurrency Traders", "Digital Nomads", "Affiliate Marketers", 
-            "Network Builders", "Stay-at-home Parents", "Student Hustlers", "Corporate Burnouts"
+            "Crypto Professionals", "Digital Entrepreneurs", "Network Partners", 
+            "Community Architects", "Family Investors", "Strategic Growth Tiers", "Career Professionals"
         ],
         validation_alias="VIRAL_AUDIENCES"
     )
@@ -166,7 +166,7 @@ class Settings(BaseSettings):
     PRO_UPGRADE_SELF_XP: float = 750.0   # XP for upgrading to PRO
     PRO_PLUS_UPGRADE_SELF_XP: float = 1250.0  # XP for upgrading to PRO+
 
-    COMMISSION_MAP_EMPIRE: Dict[int, float] = Field(
+    COMMISSION_MAP_GROWTH_STRATEGY: Dict[int, float] = Field(
         default_factory=lambda: {
             # Free: L1-L3 | PRO: L4-L9 | PRO+: L10-L20
             1: 0.30, 2: 0.10, 3: 0.03,
@@ -174,7 +174,7 @@ class Settings(BaseSettings):
             11: 0.006, 12: 0.006, 13: 0.006, 14: 0.006, 15: 0.006,
             16: 0.006, 17: 0.006, 18: 0.006, 19: 0.006, 20: 0.006
         },
-        validation_alias="COMMISSION_MAP_EMPIRE"
+        validation_alias="COMMISSION_MAP_GROWTH_STRATEGY"
     )
 
     # --- INFRASTRUCTURE ---

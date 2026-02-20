@@ -107,15 +107,12 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
         if not referrer: break
 
         # #comment: Network Growth Tracking (Milestone logic)
-        # We increment referral_count for ALL levels to ensure "Network Size" stats 
-        # are accurate and tasks can be completed.
-        # However, L1 is now incremented synchronously in partner_service.create_partner
-        # to ensure immediate feedback for "Invite 1 friend" tasks.
-        if level > 1:
-            referrer.referral_count = Partner.referral_count + 1
-            session.add(referrer)
+        # referral_count is optimized for "Invite X friends" (L1) tasks.
+        # It is set synchronously in partner_service.create_partner for L1.
+        # We NO LONGER increment it for level > 1 to avoid task cheating.
+        pass
 
-        # #comment: ELITE COMPRESSION LOGIC (XP Rewards)
+        # #comment: PROFESSIONAL COMPRESSION LOGIC (XP Rewards)
         # Free users get rewards up to Level 3. 
         # L4-L9 require Standard PRO.
         # L10-L20 require PRO+ exclusively.
@@ -282,7 +279,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     else:
         is_pro_plus_purchase = total_amount >= (settings.PRO_PLUS_PRICE_USD - 0.1)
     
-    comm_map = settings.COMMISSION_MAP_EMPIRE
+    comm_map = settings.COMMISSION_MAP_GROWTH_STRATEGY
     _max_recipients = 20
 
     # Resolve ALL Ancestors for compression logic
@@ -296,7 +293,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     result = await session.exec(statement)
     ancestor_map = {p.id: p for p in result.all()}
 
-    # --- ELITE DYNAMIC COMPRESSION MODEL ---
+    # --- PROFESSIONAL DYNAMIC COMPRESSION MODEL ---
     # Goal: Award each commission slice (L1-L20) to the NEXT qualified upline leader.
     # If a partner is not qualified for their expected level, we skip them and 
     # look for the next person in the lineage who is.
