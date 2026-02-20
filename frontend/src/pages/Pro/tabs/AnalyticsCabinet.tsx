@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { BarChart3, TrendingUp, Eye, ThumbsUp, Share2, BrainCircuit, Target, Sparkles, Zap, Send, X } from 'lucide-react';
+import { BarChart3, TrendingUp, Eye, ThumbsUp, Share2, BrainCircuit, Target, Sparkles, Zap, Send, X, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { proService } from '../../../services/proService';
 
@@ -83,57 +83,80 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                 {t('pro_dashboard.analytics.resonance.title')}
                             </h3>
                             <div className="flex items-center gap-1.5 mt-1">
-                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
-                                <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest leading-none">
-                                    {t('pro_dashboard.analytics.resonance.status')}
+                                <div className={`w-1.5 h-1.5 rounded-full ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]'} animate-pulse`} />
+                                <span className={`text-[9px] font-black ${resonance?.resonance_engine_status === 'gathering_data' ? 'text-amber-500' : 'text-emerald-500'} uppercase tracking-widest leading-none`}>
+                                    {resonance?.resonance_engine_status === 'gathering_data' ? 'GATHERING DATA...' : t('pro_dashboard.analytics.resonance.status')}
                                 </span>
                             </div>
                         </div>
                     </div>
-                    <div className="bg-slate-50 dark:bg-indigo-500/5 px-4 py-2 rounded-2xl border border-slate-100 dark:border-indigo-500/10 shrink-0 shadow-sm flex items-center justify-center">
-                        <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tighter whitespace-nowrap">
-                            {t('pro_dashboard.analytics.resonance.confidence', { percent: resonance?.confidence || 94 })}
+                    <div className={`px-4 py-2 rounded-2xl border shrink-0 shadow-sm flex items-center justify-center ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-amber-50 dark:bg-amber-500/5 border-amber-100 dark:border-amber-500/10' : 'bg-slate-50 dark:bg-indigo-500/5 border-slate-100 dark:border-indigo-500/10'}`}>
+                        <span className={`text-[10px] font-black uppercase tracking-tighter whitespace-nowrap ${resonance?.resonance_engine_status === 'gathering_data' ? 'text-amber-600 dark:text-amber-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
+                            {resonance?.resonance_engine_status === 'gathering_data' ? `NEEDS ${resonance?.generations_needed || 10} POSTS` : t('pro_dashboard.analytics.resonance.confidence', { percent: resonance?.confidence || 94 })}
                         </span>
                     </div>
                 </div>
 
                 <div className="space-y-4 relative z-10">
-                    {resonance?.top_resonance_segments?.map((rec: any, i: number) => (
-                        <motion.div
-                            key={i}
-                            initial={{ opacity: 0, scale: 0.98 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.3 + i * 0.1 }}
-                            className="flex items-center gap-4 p-4 rounded-3xl bg-slate-50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 transition-all duration-300 border border-transparent hover:border-indigo-500/20 group/item shadow-inner hover:shadow-xl hover:shadow-indigo-500/5"
-                        >
-                            <div className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center shadow-premium-sm text-indigo-500 group-hover/item:scale-110 transition-transform shrink-0 border border-slate-100 dark:border-white/5">
-                                {rec.type === 'scaling' ? <Target size={18} /> : <Sparkles size={18} />}
+                    {resonance?.resonance_engine_status === 'gathering_data' ? (
+                        <div className="flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl text-center">
+                            <Lock size={24} className="text-slate-400 mb-3" />
+                            <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2">Insufficient Data</h4>
+                            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-snug max-w-[200px] mb-4">
+                                Publish {resonance?.generations_needed || 10} more high-quality posts to calibrate the AI properly.
+                            </p>
+
+                            <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden flex items-center shadow-inner">
+                                <motion.div
+                                    className="bg-indigo-500 h-full rounded-full"
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${(Math.max(0, 10 - (resonance?.generations_needed || 10)) / 10) * 100}%` }}
+                                    transition={{ duration: 1, ease: 'easeOut' }}
+                                />
                             </div>
-                            <div className="flex-1 min-w-0">
-                                <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-tight mb-1 truncate">{rec.headline}</h4>
-                                <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-snug line-clamp-1">{rec.reason}</p>
-                            </div>
-                            <div className="text-right shrink-0 flex flex-col items-end">
-                                <span className="text-[12px] font-black text-indigo-600 dark:text-indigo-400 tabular-nums">{(rec.resonance_score * 100).toFixed(0)}%</span>
-                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">Reso</p>
-                            </div>
-                        </motion.div>
-                    ))}
+                        </div>
+                    ) : (
+                        resonance?.top_resonance_segments?.map((rec: any, i: number) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, scale: 0.98 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: 0.3 + i * 0.1 }}
+                                className="flex items-center gap-4 p-4 rounded-3xl bg-slate-50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 transition-all duration-300 border border-transparent hover:border-indigo-500/20 group/item shadow-inner hover:shadow-xl hover:shadow-indigo-500/5"
+                            >
+                                <div className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center shadow-premium-sm text-indigo-500 group-hover/item:scale-110 transition-transform shrink-0 border border-slate-100 dark:border-white/5">
+                                    {rec.type === 'scaling' ? <Target size={18} /> : <Sparkles size={18} />}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-tight mb-1 truncate">{rec.headline}</h4>
+                                    <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-snug line-clamp-1">{rec.reason}</p>
+                                </div>
+                                <div className="text-right shrink-0 flex flex-col items-end">
+                                    <span className="text-[12px] font-black text-indigo-600 dark:text-indigo-400 tabular-nums">{(rec.resonance_score * 100).toFixed(0)}%</span>
+                                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">Reso</p>
+                                </div>
+                            </motion.div>
+                        ))
+                    )}
                 </div>
 
                 <div className="pt-6 relative z-10">
                     <button
                         onClick={() => {
                             impact('heavy');
-                            const detail = resonance?.next_best_action
-                                ? { tab: 'studio', action: 'set_studio_params', params: { postType: resonance.next_best_action.post_type, audience: resonance.next_best_action.target_audience } }
-                                : { tab: 'studio' };
-                            window.dispatchEvent(new CustomEvent('nav-pro-tab', { detail }));
+                            if (resonance?.resonance_engine_status === 'gathering_data') {
+                                window.dispatchEvent(new CustomEvent('nav-pro-tab', { detail: 'studio' }));
+                            } else {
+                                const detail = resonance?.next_best_action
+                                    ? { tab: 'studio', action: 'set_studio_params', params: { postType: resonance.next_best_action.post_type, audience: resonance.next_best_action.target_audience } }
+                                    : { tab: 'studio' };
+                                window.dispatchEvent(new CustomEvent('nav-pro-tab', { detail }));
+                            }
                         }}
-                        className="w-full h-12 vibing-blue-animated text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                        className={`w-full h-12 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-slate-300 shadow-xl' : 'vibing-blue-animated shadow-xl shadow-indigo-500/20'}`}
                     >
-                        <Zap size={14} className="animate-pulse" />
-                        {t('pro_dashboard.analytics.resonance.action_btn')}
+                        <Zap size={14} className={resonance?.resonance_engine_status === 'gathering_data' ? '' : 'animate-pulse'} />
+                        {resonance?.resonance_engine_status === 'gathering_data' ? 'GOTO STUDIO TO PUBLISH' : t('pro_dashboard.analytics.resonance.action_btn')}
                     </button>
                     <p className="text-center text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-3 opacity-60">
                         Neural Engine 2.0

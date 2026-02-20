@@ -248,10 +248,12 @@ class ViralAnalyticsService:
             confidence = 72
 
         return {
-            "resonance_engine_status": "active",
+            "resonance_engine_status": "gathering_data" if total_gens < 10 else "active",
             "confidence": round(confidence, 1),
             "next_best_action": recommendations[0] if recommendations else None,
-            "top_resonance_segments": recommendations
+            "top_resonance_segments": recommendations,
+            "total_generations": total_gens,
+            "generations_needed": max(0, 10 - total_gens)
         }
 
 viral_analytics = ViralAnalyticsService()
