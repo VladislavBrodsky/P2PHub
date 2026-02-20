@@ -15,7 +15,7 @@ router = APIRouter()
 from app.services.redis_service import redis_service
 
 
-@router.get("/", response_model=BlogListResponse)
+@router.get("", response_model=BlogListResponse)
 async def list_posts(
     offset: int = 0,
     limit: int = 10,

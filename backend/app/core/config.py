@@ -10,7 +10,11 @@ from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # --- SETUP LOGGING ---
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s:%(name)s:%(message)s",
+    stream=sys.stdout
+)
 logger = logging.getLogger(__name__)
 
 def find_backend_root() -> Path:

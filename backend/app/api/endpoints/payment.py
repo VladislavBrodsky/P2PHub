@@ -261,16 +261,19 @@ async def submit_manual_payment(
 
 @router.get("/my-transactions")
 async def get_my_transactions(
-    user_data: dict = Depends(get_current_user),
+    user_data: dict | None = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
     """Returns the latest transactions for the current user."""
+    if not user_data:
+        raise HTTPException(status_code=401, detail="Authentication required")
+
     try:
         tg_user = get_tg_user(user_data)
         tg_id = str(tg_user.get("id"))
     except Exception as e:
         logger.warning(f"Invalid user data in get_my_transactions: {e}")
-        raise HTTPException(status_code=400, detail="Invalid user data")
+        raise HTTPException(status_code=400, detail="Malformed user data")
     
     partner = (await session.exec(select(Partner).where(Partner.telegram_id == tg_id))).first()
     if not partner:

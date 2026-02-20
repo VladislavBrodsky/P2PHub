@@ -59,12 +59,23 @@ async def get_current_user(x_telegram_init_data: str | None = Header(None, alias
 
 def get_tg_user(user_data: dict) -> dict:
     """Helper to parse the 'user' JSON field from initData."""
+    if not user_data:
+        raise HTTPException(status_code=401, detail="Authentication required")
+        
+    user_field = user_data.get("user")
+    if not user_field:
+        # If user is already at top level (supports some legacy or internal calls)
+        if "id" in user_data:
+            return user_data
+        raise HTTPException(status_code=400, detail="User field missing in initData")
+        
     try:
-        user_json = user_data.get("user")
-        if not user_json:
-            raise ValueError("User field missing")
-        return json.loads(user_json)
-    except Exception:
+        if isinstance(user_field, str):
+            return json.loads(user_field)
+        return user_field
+    except Exception as e:
+        from bot import logger
+        logger.error(f"Failed to parse user JSON: {e}")
         raise HTTPException(status_code=400, detail="Malformed user data")
 
 async def get_current_admin(user_data: dict = Depends(get_current_user)):
