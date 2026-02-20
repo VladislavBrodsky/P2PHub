@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
@@ -43,12 +44,12 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
         return () => {
             if (interval) clearInterval(interval);
         };
-    }, [isOpen]);
+    }, [isOpen, stats]);
 
     if (!isOpen) return null;
 
-    return (
-        <div className="fixed inset-0 z-1000 flex items-stretch justify-center">
+    return createPortal(
+        <div className="fixed inset-0 z-[1001] flex items-stretch justify-center pb-safe-bottom">
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -339,6 +340,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                     </div>
                 </div>
             </motion.div>
-        </div>
+        </div>,
+        document.body
     );
 };
