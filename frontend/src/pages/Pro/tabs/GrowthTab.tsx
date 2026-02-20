@@ -612,7 +612,7 @@ export const GrowthTab = ({
                 }`}>
 
                 {/* Section Header with Scanning Signal */}
-                <div className="relative px-6 py-8 sm:px-8 border-b border-slate-100 dark:border-white/5 overflow-hidden">
+                <div className="relative px-5 py-5 sm:px-6 border-b border-slate-100 dark:border-white/5 overflow-hidden">
                     <div className="absolute inset-0 bg-linear-to-r from-emerald-500/10 via-teal-400/5 to-transparent pointer-events-none" />
                     <motion.div
                         className="absolute inset-0 opacity-30"
@@ -627,19 +627,19 @@ export const GrowthTab = ({
                     />
 
                     <div className="flex items-center gap-4 relative z-20">
-                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl transition-all duration-500 ${isSetupComplete
-                            ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)] rotate-12 scale-110'
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shadow-xl transition-all duration-500 ${isSetupComplete
+                            ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)] rotate-6 scale-105'
                             : 'bg-slate-200 dark:bg-white/10 text-slate-400 border-slate-300 dark:border-white/10'
                             }`}>
-                            <Brain size={24} className={isSetupComplete ? 'animate-pulse' : ''} />
+                            <Brain size={20} className={isSetupComplete ? 'animate-pulse' : ''} />
                         </div>
                         <div>
-                            <h4 className="text-xl sm:text-2xl font-black uppercase tracking-tighter leading-none mb-1.5 flex items-center gap-2 italic">
+                            <h4 className="text-lg sm:text-xl font-black uppercase tracking-tighter leading-none mb-1 flex items-center gap-2 italic">
                                 {t('pro_dashboard.academy.psych_strategies.title')}
                             </h4>
                             <div className="flex items-center gap-2">
                                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
-                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600 dark:text-emerald-400">
+                                <p className="text-[9px] font-black uppercase tracking-[0.25em] text-emerald-600 dark:text-emerald-400">
                                     {t('pro_dashboard.academy.psych_strategies.subtitle')}
                                 </p>
                             </div>
@@ -698,48 +698,48 @@ export const GrowthTab = ({
                     </div>
                 )}
 
-                <div className={`p-6 sm:p-8 relative z-10 ${!isSetupComplete ? 'blur-2xl pointer-events-none' : ''}`}>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <div className={`p-4 sm:p-6 relative z-10 ${!isSetupComplete ? 'blur-2xl pointer-events-none' : ''}`}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                         {(() => {
                             const strats = t('pro_dashboard.academy.psych_strategies.items', { returnObjects: true });
                             const stratsList = Array.isArray(strats) ? strats : [];
                             return stratsList.map((item: any, i: number) => (
                                 <motion.div
                                     key={i}
-                                    whileHover={{ y: -8 }}
-                                    className="p-6 rounded-[24px] border relative overflow-hidden group/card bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-indigo-500/40 transition-all duration-500 hover:shadow-[0_20px_40px_rgba(0,0,0,0.05)] dark:hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+                                    whileHover={{ y: -4 }}
+                                    className="p-4 sm:p-5 rounded-[20px] border relative overflow-hidden group/card bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-indigo-500/40 transition-all duration-500 hover:shadow-[0_15px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_15px_35px_rgba(0,0,0,0.3)] flex flex-col"
                                 >
                                     {/* Tech Gradients */}
-                                    <div className="absolute -top-10 -right-10 w-24 h-24 bg-indigo-500/5 dark:bg-indigo-500/10 blur-xl rounded-full" />
+                                    <div className="absolute -top-10 -right-10 w-20 h-20 bg-indigo-500/5 dark:bg-indigo-500/10 blur-xl rounded-full" />
 
                                     {/* Trigger Badge - Premium Label */}
-                                    <div className="flex items-center justify-between mb-6">
-                                        <div className="w-8 h-8 rounded-xl bg-slate-200/50 dark:bg-white/10 flex items-center justify-center text-slate-800 dark:text-white text-[12px] font-black italic border border-slate-300 dark:border-white/10">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <div className="w-7 h-7 rounded-lg bg-slate-200/50 dark:bg-white/10 flex items-center justify-center text-slate-800 dark:text-white text-[11px] font-black italic border border-slate-300 dark:border-white/10">
                                             {i + 1}
                                         </div>
-                                        <div className="px-3 py-1 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-lg border border-indigo-500/20">
-                                            <span className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-[0.2em]">{item.trigger}</span>
+                                        <div className="px-2.5 py-1 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-lg border border-indigo-500/20">
+                                            <span className="text-[9px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-[0.15em]">{item.trigger}</span>
                                         </div>
                                     </div>
 
-                                    <h5 className="text-[15px] font-black uppercase tracking-tighter leading-snug mb-3 group-hover/card:text-indigo-500 transition-colors italic">
+                                    <h5 className="text-[14px] font-black uppercase tracking-tighter leading-snug mb-2 group-hover/card:text-indigo-500 transition-colors italic">
                                         {item.title}
                                     </h5>
 
-                                    <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-6 min-h-[48px]">
+                                    <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-4 min-h-[40px] opacity-80">
                                         {item.desc}
                                     </p>
 
                                     {/* Tactical BluePrint Action Container */}
-                                    <div className="p-4 bg-white dark:bg-black/40 rounded-2xl border border-slate-100 dark:border-white/10 relative overflow-hidden group/blueprint">
-                                        <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-emerald-500/40 to-transparent" />
-                                        <div className="flex items-start gap-3">
-                                            <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/20">
-                                                <Play size={10} className="text-emerald-500 fill-emerald-500/20" />
+                                    <div className="mt-auto p-3 bg-white dark:bg-black/30 rounded-xl border border-slate-100 dark:border-white/10 relative overflow-hidden group/blueprint">
+                                        <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-emerald-500/30 to-transparent" />
+                                        <div className="flex items-start gap-2.5">
+                                            <div className="w-4 h-4 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/20">
+                                                <Play size={8} className="text-emerald-500 fill-emerald-500/20" />
                                             </div>
-                                            <div className="flex flex-col gap-1">
-                                                <span className="text-[8px] font-black text-emerald-500/60 uppercase tracking-widest">Tactical Directive</span>
-                                                <span className="text-[11px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-tight leading-tight">
+                                            <div className="flex flex-col">
+                                                <span className="text-[7px] font-black text-emerald-500/60 uppercase tracking-widest leading-none mb-1">Direct Action</span>
+                                                <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-tight leading-tight">
                                                     {item.action}
                                                 </span>
                                             </div>
@@ -752,9 +752,9 @@ export const GrowthTab = ({
                                                 navigator.clipboard.writeText(item.action);
                                                 impact('medium');
                                             }}
-                                            className="absolute right-2 bottom-2 w-6 h-6 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center opacity-0 group-hover/blueprint:opacity-100 transition-opacity hover:bg-emerald-500/10 hover:text-emerald-500"
+                                            className="absolute right-1.5 bottom-1.5 w-5 h-5 rounded-md bg-slate-100 dark:bg-white/5 flex items-center justify-center opacity-0 group-hover/blueprint:opacity-100 transition-opacity hover:bg-emerald-500/10 hover:text-emerald-500"
                                         >
-                                            <Share size={10} />
+                                            <Share size={9} />
                                         </button>
                                     </div>
                                 </motion.div>
