@@ -48,7 +48,7 @@ async def give_free_pro():
         await session.commit()
 
         # ── Verify ───────────────────────────────────────────────────────
-        print(f"\n  Verification:")
+        print("\n  Verification:")
         for username in GIFT_USERNAMES:
             stmt = select(Partner).where(Partner.username == username)
             user = (await session.exec(stmt)).first()

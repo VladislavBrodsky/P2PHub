@@ -1,8 +1,8 @@
 from aiogram import types
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-
 from app.core.i18n import get_msg
+
 
 def get_main_menu_keyboard(url: str, referral_link: str = "", referral_code: str = "", lang: str = "en"):
     builder = InlineKeyboardBuilder()

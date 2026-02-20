@@ -3,11 +3,12 @@ import asyncio
 import logging
 import os
 import sys
-from datetime import datetime, timedelta, UTC
-from sqlalchemy import text, String
+from datetime import UTC, datetime, timedelta
+
+from sqlalchemy import String, text
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
-from sqlmodel import select, func
+from sqlmodel import func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 # Configure logging for script output
@@ -17,8 +18,9 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 sys.path.append(os.getcwd())
 
 # Force load .env.backend using robust relative paths
-from dotenv import load_dotenv
 import os
+
+from dotenv import load_dotenv
 
 # Possible paths relative to current execution context
 env_targets = [
@@ -64,7 +66,7 @@ DB_URL = settings.async_database_url
 url = DB_URL or os.getenv("DATABASE_URL")
 
 async def check_systems():
-    print(f"🔍 Starting Production System Health Audit...")
+    print("🔍 Starting Production System Health Audit...")
     
     if not url:
         print("❌ ERROR: DATABASE_URL not found. Audit aborted.")
@@ -76,9 +78,9 @@ async def check_systems():
     # We need to import models here to ensure they are registered
     # Safely importing from the backend structure
     try:
-        from app.models.partner import Partner, Earning, XPTransaction, PartnerTask
-        from app.models.transaction import PartnerTransaction
         from app.models.audit_log import AuditLog
+        from app.models.partner import Earning, Partner, PartnerTask, XPTransaction
+        from app.models.transaction import PartnerTransaction
     except ImportError as e:
         print(f"❌ Failed to import models: {e}")
         return
@@ -92,7 +94,7 @@ async def check_systems():
         total_partners = (await session.exec(select(func.count(Partner.id)))).one()
         new_partners_24h = (await session.exec(select(func.count(Partner.id)).where(Partner.created_at >= last_24h))).one()
         active_partners_24h = (await session.exec(select(func.count(Partner.id)).where(Partner.updated_at >= last_24h))).one()
-        pro_partners = (await session.exec(select(func.count(Partner.id)).where(Partner.is_pro == True))).one()
+        pro_partners = (await session.exec(select(func.count(Partner.id)).where(Partner.is_pro))).one()
         
         print(f"Total Partners: {total_partners}")
         print(f"New Partners (24h): {new_partners_24h}")
@@ -163,13 +165,13 @@ async def check_systems():
 
         print("\n--- 🕸️ Network & Structural Health ---")
         orphaned_partners = (await session.exec(select(func.count(Partner.id)).where(
-            Partner.referrer_id != None,
-            Partner.path == None
+            Partner.referrer_id is not None,
+            Partner.path is None
         ))).one()
         
         broken_depth = (await session.exec(select(func.count(Partner.id)).where(
             Partner.depth == 0,
-            Partner.referrer_id != None
+            Partner.referrer_id is not None
         ))).one()
 
         print(f"Orphaned Partners (no path): {orphaned_partners}")

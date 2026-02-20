@@ -1,8 +1,11 @@
 import asyncio
-from sqlmodel import select, func
-from app.models.partner import engine
-from app.models.notification_retry import NotificationRetry
+
+from sqlmodel import func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.notification_retry import NotificationRetry
+from app.models.partner import engine
+
 
 async def main():
     async with AsyncSession(engine) as session:

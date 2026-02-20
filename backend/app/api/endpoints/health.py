@@ -113,8 +113,9 @@ async def notifications_health_check(
     Exposes notification_retry status counts for real-time monitoring.
     """
     from sqlalchemy import func
-    from app.models.notification_retry import NotificationRetry
     from sqlmodel import select
+
+    from app.models.notification_retry import NotificationRetry
     
     # Check Database connection via NotificationRetry table
     try:
@@ -130,7 +131,7 @@ async def notifications_health_check(
                 counts[s] = 0
                 
         # 2. Check for stale pending items (stuck)
-        from datetime import datetime, UTC, timedelta
+        from datetime import UTC, datetime, timedelta
         now = datetime.now(UTC).replace(tzinfo=None)
         ten_mins_ago = now - timedelta(minutes=10)
         

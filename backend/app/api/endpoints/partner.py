@@ -19,19 +19,19 @@ from app.core.i18n import get_msg
 from app.core.security import get_current_user, get_tg_user
 from app.middleware.rate_limit import limiter
 from app.models.partner import Earning, Partner, XPTransaction, get_session
-from app.models.transaction import PartnerTransaction
 from app.models.schemas import (
     ActiveTaskResponse,
     EarningSchema,
     GrowthMetrics,
     LanguageUpdate,
-    NotificationsUpdate,
     NetworkStats,
+    NotificationsUpdate,
     OrbitMemberResponse,
     PartnerResponse,
     PartnerTopResponse,
     TaskClaimRequest,
 )
+from app.models.transaction import PartnerTransaction
 from app.services.notification_service import notification_service
 from app.services.redis_service import redis_service
 from app.utils.ranking import get_level
@@ -488,7 +488,7 @@ async def get_orbit_members(
     orbit_data = []
     _base_url = get_api_url()
     
-    for i, p in enumerate(partners[:8]):
+    for _i, p in enumerate(partners[:8]):
         # Construct the optimized picture_url
         picture_url = None
         if p.photo_file_id:
@@ -692,7 +692,7 @@ async def get_public_stats():
 @limiter.limit("60/minute")
 async def get_my_referral_tree(
     request: Request,
-    target_id: int = None,
+    target_id: int | None = None,
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
@@ -739,7 +739,7 @@ async def get_my_referral_tree(
 @router.get("/network/{level}", response_model=list[PartnerResponse])
 async def get_network_level_members(
     level: int,
-    target_id: int = None,
+    target_id: int | None = None,
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
@@ -1506,7 +1506,7 @@ async def get_finance_stats(
         
     now = datetime.now(UTC).replace(tzinfo=None)
     threshold_72h = now - timedelta(hours=72)
-    start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     
     # Query for enough data to cover BOTH 72h history and 6 Months of Monthly Stats
     # threshold_6m = start of month 5 months ago

@@ -2,7 +2,9 @@
 import asyncio
 import json
 import logging
+
 from sqlmodel import select
+
 from app.models.partner import Partner, PartnerTask, async_session_maker, engine
 
 logging.basicConfig(level=logging.INFO)
@@ -55,7 +57,7 @@ async def migrate_tasks():
                 logger.info(f"⏳ Progress: {migrated_count} tasks migrated...")
 
         await session.commit()
-        logger.info(f"✅ Migration complete!")
+        logger.info("✅ Migration complete!")
         logger.info(f"📊 Summary: {migrated_count} tasks created, {skipped_count} already existed.")
 
 if __name__ == "__main__":

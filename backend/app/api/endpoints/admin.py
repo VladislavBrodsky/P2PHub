@@ -159,7 +159,7 @@ async def reject_payment(
 
 @router.get("/tree")
 async def get_global_tree_stats(
-    target_id: int = None,
+    target_id: int | None = None,
     admin: dict = Depends(get_current_admin),
     session: AsyncSession = Depends(get_session)
 ):
@@ -176,7 +176,7 @@ async def get_global_tree_stats(
 @router.get("/network/{level}")
 async def get_global_network_level(
     level: int,
-    target_id: int = None,
+    target_id: int | None = None,
     admin: dict = Depends(get_current_admin),
     session: AsyncSession = Depends(get_session)
 ):
@@ -261,10 +261,11 @@ async def get_notification_stats(
     admin: dict = Depends(get_current_admin)
 ):
     """Returns statistics about pending/sent notifications."""
-    from app.models.notification_retry import NotificationRetry
-    from sqlmodel import select, func
-    from app.models.partner import engine
+    from sqlmodel import func, select
     from sqlmodel.ext.asyncio.session import AsyncSession
+
+    from app.models.notification_retry import NotificationRetry
+    from app.models.partner import engine
     
     async with AsyncSession(engine) as session:
         sent = (await session.exec(select(func.count(NotificationRetry.id)).where(NotificationRetry.status == "sent"))).one() or 0

@@ -1,18 +1,20 @@
 import asyncio
+from typing import List, Optional
+
 from pydantic import BaseModel
-from typing import Optional, List
+
 
 class InlineButton(BaseModel):
     text: str
-    url: Optional[str] = None
-    callback_data: Optional[str] = None
-    web_app: Optional[dict] = None
+    url: str | None = None
+    callback_data: str | None = None
+    web_app: dict | None = None
 
 class NotificationPayload(BaseModel):
     chat_id: int
     text: str
     parse_mode: str = "Markdown"
-    buttons: Optional[List[List[InlineButton]]] = None
+    buttons: list[list[InlineButton]] | None = None
     priority: str = "medium"
 
 payload = NotificationPayload(

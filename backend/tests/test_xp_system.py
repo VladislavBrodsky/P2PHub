@@ -20,8 +20,8 @@ import pytest
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
-from app.services.referral_service import process_referral_logic
 from app.models.partner import Partner
+from app.services.referral_service import process_referral_logic
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -242,7 +242,7 @@ class TestXPMultiplierHierarchy:
     async def test_all_20_levels_xp_snapshot(self):
         """Snapshot test: all 20 levels expected XP values for each plan."""
         # Free: flat 35 for L1-L3
-        for lv in range(1, 4):
+        for _lv in range(1, 4):
             assert FREE_XP == 35.0
 
         # PRO: spot check key levels

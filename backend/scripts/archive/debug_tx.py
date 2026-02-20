@@ -20,7 +20,7 @@ async def debug_transactions():
             print(f"ID: {tx.id}, Partner: {tx.partner_id}, Amount: {tx.amount}, Status: {tx.status}, Created: {tx.created_at}")
             
         print("\n--- All PRO Partners ---")
-        p_stmt = select(Partner).where(Partner.is_pro == True)
+        p_stmt = select(Partner).where(Partner.is_pro)
         pro_partners = (await session.exec(p_stmt)).all()
         for p in pro_partners:
             print(f"ID: {p.id}, Username: {p.username}, PRO Since: {p.pro_purchased_at}, Last TX: {p.last_transaction_id}")

@@ -1,13 +1,13 @@
 import asyncio
 import os
 import sys
-from datetime import datetime, UTC
+from datetime import UTC, datetime
+
+from dotenv import load_dotenv
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
-from dotenv import load_dotenv
 
 # Force load .env from P2PHub root or backend
-import os
 root_env = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.env"))
 backend_env = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.env"))
 
@@ -23,11 +23,12 @@ else:
 # Add the backend directory to sys.path so we can import app
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+# MOCK REDIS SERVICE to prevent connection errors in script
+from unittest.mock import AsyncMock, MagicMock
+
+import app.services.redis_service
 from app.models.partner import Partner, async_session_maker
 
-# MOCK REDIS SERVICE to prevent connection errors in script
-from unittest.mock import MagicMock, AsyncMock
-import app.services.redis_service
 mock_redis = MagicMock()
 mock_redis.client = MagicMock()
 mock_redis.client.pipeline.return_value.__aenter__.return_value = AsyncMock()

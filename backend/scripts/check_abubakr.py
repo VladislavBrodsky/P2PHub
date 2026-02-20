@@ -1,15 +1,15 @@
 import asyncio
 import os
 import sys
+
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-import sys
-import os
 # Add the backend directory to sys.path so we can import app
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from app.models.partner import Partner, async_session_maker
+
 
 async def check_user():
     async with async_session_maker() as session:

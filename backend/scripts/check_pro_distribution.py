@@ -1,6 +1,9 @@
 import asyncio
-from sqlmodel import select, func
+
+from sqlmodel import func, select
+
 from app.models.partner import Partner, get_session
+
 
 async def check_pro_distribution():
     async for session in get_session():

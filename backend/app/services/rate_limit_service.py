@@ -1,7 +1,8 @@
 import asyncio
-import time
-from app.core.config import settings
 import logging
+import time
+
+from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -59,10 +60,7 @@ class RateLimitService:
             results = await pipe.execute()
             
         user_count = results[1]
-        if user_count >= self.USER_LIMIT_PER_SEC:
-            return False
-
-        return True
+        return not user_count >= self.USER_LIMIT_PER_SEC
 
     async def wait_for_slot(self, chat_id: int, priority: str = "medium", timeout: int = 30):
         """

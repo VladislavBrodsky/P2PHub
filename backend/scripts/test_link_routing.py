@@ -1,18 +1,21 @@
 import asyncio
 import os
 import sys
+
 from dotenv import load_dotenv
 
 load_dotenv("backend/.env")
 sys.path.append(os.path.join(os.getcwd(), "backend"))
 
-from app.core.config import settings
-from app.models.partner import Partner
-from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.core.config import settings
+from app.models.partner import Partner
 from app.services.viral_studio.studio import ViralMarketingStudio
+
 
 async def run_test():
     url = settings.DATABASE_URL

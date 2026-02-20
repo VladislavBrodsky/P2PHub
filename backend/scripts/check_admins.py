@@ -1,6 +1,9 @@
 import asyncio
+
 from sqlmodel import select
+
 from app.models.partner import Partner, get_session
+
 
 async def check_admins():
     async for session in get_session():

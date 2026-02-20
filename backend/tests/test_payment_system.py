@@ -1,14 +1,16 @@
-import pytest
-from unittest.mock import AsyncMock, patch
 from datetime import UTC, datetime, timedelta
+from unittest.mock import AsyncMock, patch
+
+import pytest
 from sqlmodel import select
 
+from app.core.config import settings
+from app.models.audit_log import ActionType, AuditLog
 from app.models.partner import Partner
 from app.models.transaction import PartnerTransaction
-from app.models.audit_log import AuditLog, ActionType
 from app.services.payment_service import payment_service
 from app.services.referral_service import distribute_pro_commissions
-from app.core.config import settings
+
 
 @pytest.mark.asyncio
 async def test_create_payment_session(session, create_test_partner):
@@ -52,7 +54,7 @@ async def test_upgrade_to_pro_logic(session, create_test_partner):
     await session.commit()
     
     # Upgrade to PRO
-    success = await payment_service.upgrade_to_pro(
+    await payment_service.upgrade_to_pro(
         session=session,
         partner=partner,
         amount=39.0,
@@ -189,7 +191,6 @@ async def test_commission_skip_logic_beyond_l3(session, create_referral_chain):
     await session.commit()
     
     # Add Company Account (required for leaks)
-    from app.models.partner import Partner
     import secrets
     company = Partner(
         telegram_id="537873096", 

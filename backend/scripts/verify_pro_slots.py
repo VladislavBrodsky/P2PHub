@@ -1,6 +1,9 @@
 import asyncio
+
 from sqlmodel import select
-from app.models.partner import SystemSetting, Partner, get_session
+
+from app.models.partner import Partner, SystemSetting, get_session
+
 
 async def verify_slots():
     async for session in get_session():

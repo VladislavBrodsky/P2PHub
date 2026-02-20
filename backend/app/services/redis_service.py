@@ -1,3 +1,4 @@
+import contextlib
 import json
 import logging
 
@@ -124,12 +125,10 @@ class RedisService:
         raw_data = await self.client.mget(keys)
         
         parsed = {}
-        for pid, data in zip(partner_ids, raw_data):
+        for pid, data in zip(partner_ids, raw_data, strict=False):
             if data:
-                try:
+                with contextlib.suppress(Exception):
                     parsed[pid] = json.loads(data)
-                except Exception:
-                    pass
         return parsed
 
     async def cache_profiles(self, profiles_map: dict[int, dict], expire_seconds: int = 900):

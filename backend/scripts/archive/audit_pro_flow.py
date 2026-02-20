@@ -28,7 +28,7 @@ async def audit_pro_flow():
     
     async with async_session_maker() as session:
         # 1. Find PRO sessions in the last 24 hours
-        stmt = select(Partner).where(Partner.is_pro == True, Partner.pro_purchased_at >= datetime.now(UTC) - timedelta(hours=24))
+        stmt = select(Partner).where(Partner.is_pro, Partner.pro_purchased_at >= datetime.now(UTC) - timedelta(hours=24))
         result = await session.exec(stmt)
         pro_partners = result.all()
         
@@ -46,7 +46,7 @@ async def audit_pro_flow():
                 print(f"    TX ID: {tx.id}, Amount: {tx.amount} {tx.currency}, Hash: {tx.tx_hash}")
                 
             # 3. Check for Commissions
-            comm_stmt = select(Earning).where(Earning.description.like("%PRO Commission%"), Earning.created_at >= p.pro_purchased_at - timedelta(minutes=5))
+            select(Earning).where(Earning.description.like("%PRO Commission%"), Earning.created_at >= p.pro_purchased_at - timedelta(minutes=5))
             # We need to filter earnings that were triggered by THIS partner.
             # The current Earning model doesn't store 'trigger_partner_id'.
             # But the audit_log table should.

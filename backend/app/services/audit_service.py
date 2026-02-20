@@ -3,10 +3,12 @@ import logging
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.models.audit_log import ActionType, AuditLog
+from app.core.retry import async_retry
 
 logger = logging.getLogger(__name__)
 
 class AuditService:
+    @async_retry(max_attempts=3, base_delay=1.0)
     async def log_event(
         self,
         session: AsyncSession,

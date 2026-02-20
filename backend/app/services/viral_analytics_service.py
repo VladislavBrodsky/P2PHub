@@ -2,12 +2,13 @@ import asyncio
 import logging
 from datetime import UTC, datetime, timedelta
 from typing import Any
-from sqlmodel import select
+
 from sqlalchemy import func
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.models.partner import SocialPost, SocialPostMetric, Partner
 from app.core.config import settings
+from app.models.partner import Partner, SocialPost, SocialPostMetric
 
 logger = logging.getLogger(__name__)
 
@@ -129,6 +130,7 @@ class ViralAnalyticsService:
         Aggregates stats for the "Viral Analytics Cabinet".
         """
         from sqlalchemy import func
+
         from app.models.partner import ViralGeneration
         
         # 1. Total Generations

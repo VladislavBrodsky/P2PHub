@@ -23,8 +23,10 @@ import pytest
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.services.notification_service import notification_service, send_telegram_task
-from app.services.referral_service import distribute_pro_commissions, process_referral_logic
-
+from app.services.referral_service import (
+    distribute_pro_commissions,
+    process_referral_logic,
+)
 
 # ---------------------------------------------------------------------------
 # 1. Core Notification Service
@@ -35,7 +37,7 @@ class TestNotificationEnqueue:
 
     async def test_enqueue_valid_notification(self):
         """kiq is called once with correct payload dict."""
-        from app.services.notification_service import NotificationService, send_telegram_task
+        from app.services.notification_service import NotificationService
         from app.services.rate_limit_service import rate_limit_service
         
         # 1. Restore the REAL method (bypassing conftest.py's autouse mock)
@@ -70,10 +72,12 @@ class TestNotificationEnqueue:
 
     async def test_priority_methods(self):
         """Verifies that send_critical/standard/low_prio set correct priority and dedup flags."""
-        from app.services.notification_service import NotificationService, notification_service
+        from app.services.notification_service import (
+            NotificationService,
+            notification_service,
+        )
         
         # 1. Restore REAL methods (bypassing conftest.py) for testing the internal logic
-        r_enqueue  = NotificationService.enqueue_notification
         r_critical = NotificationService.send_critical
         r_standard = NotificationService.send_standard
         r_low      = NotificationService.send_low_prio

@@ -1,6 +1,8 @@
 from app.core.broker import broker
-from .studio import viral_studio
+
 from .logging import viral_logger
+from .studio import viral_studio
+
 
 @broker.task(task_name="log_viral_generation_task")
 async def log_viral_generation_task(
@@ -22,6 +24,7 @@ async def log_viral_generation_task(
     """Background task to log viral content generation to Google Sheets."""
     from sqlalchemy.orm import sessionmaker
     from sqlmodel.ext.asyncio.session import AsyncSession
+
     from app.models.partner import Partner, engine
     
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)

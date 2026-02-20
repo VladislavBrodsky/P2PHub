@@ -45,11 +45,13 @@ async def monitor_notification_health():
     Alerts admins if pending notifications are stuck for more than 10 minutes.
 
     """
-    from datetime import datetime, UTC, timedelta
+    from datetime import UTC, datetime, timedelta
+
     from sqlalchemy import func
+
+    from app.core.config import settings
     from app.models.notification_retry import NotificationRetry
     from app.services.notification_service import notification_service
-    from app.core.config import settings
 
     logger.info("📡 Scheduled Task: Checking Notification System Health...")
     

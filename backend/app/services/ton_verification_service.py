@@ -79,7 +79,7 @@ class TonVerificationService:
                 blockchain_txs = response.json().get("result", [])
                 
                 # 3. Correlation Loop
-                for ptx in pending_txs:
+                for _ptx in pending_txs:
                     # Search hash in blockchain response
                     for btx in blockchain_txs:
                         _btx_hash = self._normalize_hash(btx.get("hash", ""))

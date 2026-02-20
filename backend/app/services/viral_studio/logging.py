@@ -3,8 +3,10 @@ import json
 import logging
 import os
 from datetime import UTC, datetime
+
 import gspread
 from google.oauth2.service_account import Credentials
+
 from app.models.partner import Partner
 
 logger = logging.getLogger(__name__)

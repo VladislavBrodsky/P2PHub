@@ -6,10 +6,12 @@ from datetime import UTC, datetime
 # Add backend to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import logging
+
+from sqlmodel import select
+
 from app.models.partner import Partner, get_session
 from app.services.referral_service import distribute_pro_commissions
-from sqlmodel import select
-import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -47,7 +49,7 @@ async def test_fomo_logic():
         # distribute_pro_commissions(session, partner, total_amount, is_pro_plus=False)
         
         # We need a buyer whose lineage includes our referrer at distance 4.
-        buyer = Partner(
+        Partner(
             telegram_id="999_buyer_test",
             first_name="Buyer",
             referral_code="BUYER_TEST",

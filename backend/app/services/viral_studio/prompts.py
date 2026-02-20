@@ -1,17 +1,20 @@
 from typing import Any
-from .constants import (
-    CMO_PERSONA, 
-    FORMATTING_MASTERY, 
-    TEXT_RULES, 
-    STORYTELLING_PROTOCOL,
-    IMAGE_RULES
-)
+
 from app.core.cmo_intelligence import (
     AudienceProfile,
     ContentCategory,
     NativeLanguageOptimization,
     ToneIntelligence,
 )
+
+from .constants import (
+    CMO_PERSONA,
+    FORMATTING_MASTERY,
+    IMAGE_RULES,
+    STORYTELLING_PROTOCOL,
+    TEXT_RULES,
+)
+
 
 def build_viral_audience_intel(target_audience: str, post_type: str, language: str) -> dict[str, Any]:
     return {
@@ -47,7 +50,7 @@ def build_viral_system_prompt(language, target_audience, post_type, tone, ref_li
     audience_seo = audience_intel.get("performing_keywords_2026", [])
     strategy_seo = category_strategy.get("seo_keywords", [])
     tone_seo = ToneIntelligence.TONES.get(tone.lower(), {}).get("seo_keywords", [])
-    seo_keywords = list(set(audience_seo + strategy_seo + tone_seo))
+    list(set(audience_seo + strategy_seo + tone_seo))
 
     resonance_context = ""
     if resonance_data and "top_resonance_segments" in resonance_data:
@@ -125,11 +128,11 @@ def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link
     audience_intel = intel["audience"]
     category_strategy = intel["strategy"]
     hook_examples = audience_intel.get("hooks", []) if audience_intel else []
-    tov = audience_intel.get("tov", {}) if audience_intel else {}
-    visual_base = audience_intel.get("visual_base", "A successful person")
-    visual_scene = category_strategy.get("visual_scene", "experiencing a transformation")
+    audience_intel.get("tov", {}) if audience_intel else {}
+    audience_intel.get("visual_base", "A successful person")
+    category_strategy.get("visual_scene", "experiencing a transformation")
     
-    hook_inspo = "\n".join(['- ' + hook for hook in hook_examples[:2]])
+    "\n".join(['- ' + hook for hook in hook_examples[:2]])
 
     # 🎯 SEO & VIRAL HASHTAG PROTOCOL (CRITICAL)
     audience_tags = audience_intel.get("viral_hashtags", [])

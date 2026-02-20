@@ -5,7 +5,15 @@ from alembic import context
 from sqlalchemy import pool
 from sqlmodel import SQLModel
 
-from app.models import AuditLog, Partner, PartnerTransaction, NotificationRetry, KnowledgeBaseItem, BlogPostEngagement, PartnerBlogLike
+from app.models import (
+    AuditLog,
+    BlogPostEngagement,
+    KnowledgeBaseItem,
+    NotificationRetry,
+    Partner,
+    PartnerBlogLike,
+    PartnerTransaction,
+)
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -133,5 +133,5 @@ async def get_my_leaderboard_stats(
             "referrals": partner.referral_count
         }
 
-    from datetime import UTC, datetime # Ensure imported for local function
+    from datetime import UTC, datetime  # Ensure imported for local function
     return await redis_service.get_or_compute(cache_key, fetch_user_stats, expire=60)

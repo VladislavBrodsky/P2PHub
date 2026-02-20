@@ -1,25 +1,26 @@
 import asyncio
+import email.utils
 import json
 import logging
 import os
-import secrets
-import email.utils
 import re
+import secrets
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
+import httpx
+from bs4 import BeautifulSoup
 from google import genai as google_genai
 from google.genai import types as genai_types
 from sqlmodel.ext.asyncio.session import AsyncSession
-from bs4 import BeautifulSoup
-import httpx
 
+from app.core.broker import broker
 from app.core.config import settings
 from app.core.errors import ViralStudioErrorCode
 from app.models.partner import Partner, ViralGeneration
-from app.core.broker import broker
 
-from . import constants, prompts, adapters, logging as viral_log
+from . import adapters, constants, prompts
+from . import logging as viral_log
 
 logger = logging.getLogger(__name__)
 
@@ -96,7 +97,7 @@ class ViralMarketingStudio:
             return {"error": "Elite AI engine offline.", "status": "failed"}
 
         start_time = datetime.now()
-        bot_username = getattr(settings, 'BOT_USERNAME', 'pintopaybot')
+        getattr(settings, 'BOT_USERNAME', 'pintopaybot')
         
         # Link Setup Strategy
         if post_type == "partners":

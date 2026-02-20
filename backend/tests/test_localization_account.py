@@ -1,11 +1,14 @@
 
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
-from unittest.mock import AsyncMock, patch, MagicMock
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.models.partner import Partner
-from app.services.notification_service import notification_service
+
 from app.core.config import settings
 from app.core.i18n import get_msg
+from app.models.partner import Partner
+from app.services.notification_service import notification_service
+
 
 @pytest.mark.asyncio
 async def test_uslincoln_localization(session: AsyncSession):
@@ -13,7 +16,10 @@ async def test_uslincoln_localization(session: AsyncSession):
     Test ensuring that account @uslincoln with Russian language receives Russian notifications.
     """
     # Restore the REAL method (bypassing conftest.py's autouse mock)
-    from app.services.notification_service import NotificationService, send_telegram_task
+    from app.services.notification_service import (
+        NotificationService,
+        send_telegram_task,
+    )
     real_send_level = NotificationService.send_level_up_notification
     real_send_standard = NotificationService.send_standard
     real_enqueue = NotificationService.enqueue_notification
@@ -62,7 +68,7 @@ async def test_uslincoln_localization(session: AsyncSession):
             
             # 4. Verify the message content passed to kiq
             assert mock_kiq.call_count == 1
-            args, kwargs = mock_kiq.call_args
+            args, _kwargs = mock_kiq.call_args
             payload = args[0] # send_telegram_task.kiq(payload.model_dump())
             
             sent_text = payload.get("text", "")

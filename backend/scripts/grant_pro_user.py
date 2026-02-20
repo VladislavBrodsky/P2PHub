@@ -68,12 +68,12 @@ async def grant_pro(username: str, distribute_commissions: bool = True):
             )
             rows = (await session.exec(stmt_earn)).all()
             if rows:
-                print(f"\n  Commission Breakdown:")
+                print("\n  Commission Breakdown:")
                 total = 0.0
                 for lvl, pid, amt, desc in rows:
                     print(f"    L{lvl}: Partner {pid} → ${float(amt):.2f}  ({desc})")
                     total += float(amt)
-                print(f"    ─────────────────────────────")
+                print("    ─────────────────────────────")
                 print(f"    Total Distributed: ${total:.2f} / ${PRO_PRICE_USD:.2f}")
             else:
                 print("  ⚠️  No commissions found (user may have no upline).")

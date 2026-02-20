@@ -285,7 +285,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     # Resolve ALL Ancestors for compression logic
     # partner.path contains ancestors from root down to direct referrer.
     path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-    lineage_ids = path_ids + [partner.referrer_id] if partner.referrer_id else path_ids
+    lineage_ids = [*path_ids, partner.referrer_id] if partner.referrer_id else path_ids
     lineage_ids = list(dict.fromkeys(lineage_ids))
     
     # Fetch all ancestors in bulk

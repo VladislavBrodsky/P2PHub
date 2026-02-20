@@ -1,17 +1,17 @@
 
 import asyncio
 import logging
-import sys
 import os
+import sys
 
 # Setting up the path to include the backend directory
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 
-from app.models.partner import Partner, get_session
+from sqlmodel import delete, select
+
+from app.models.partner import Partner, SystemSetting, get_session
 from app.models.transaction import PartnerTransaction
-from app.models.partner import SystemSetting
 from app.services.admin_service import admin_service
-from sqlmodel import select, delete
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

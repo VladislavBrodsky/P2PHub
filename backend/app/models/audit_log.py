@@ -1,5 +1,5 @@
-from enum import Enum
 from datetime import UTC, datetime
+from enum import Enum
 
 from sqlalchemy import JSON, Column
 from sqlmodel import Field, SQLModel

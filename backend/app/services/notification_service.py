@@ -5,7 +5,7 @@ import time
 from typing import List, Optional
 
 import sentry_sdk
-from aiogram.exceptions import TelegramRetryAfter, TelegramForbiddenError
+from aiogram.exceptions import TelegramForbiddenError, TelegramRetryAfter
 
 from app.core.broker import broker
 from app.schemas.notification import InlineButton, NotificationPayload
@@ -92,8 +92,9 @@ async def send_telegram_task(payload_dict: dict):
         logger.error(f"🚫 User {payload.chat_id} blocked the bot. Pausing notifications.")
         # Mark user as paused to stop redundant background tasks
         try:
-            from app.models.partner import Partner
             from sqlmodel import select
+
+            from app.models.partner import Partner
             async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
             async with async_session() as session:
                 # chat_id in payload is str/int telegram_id
@@ -190,6 +191,7 @@ class NotificationService:
             # Record in DB if broker fails
             from sqlalchemy.orm import sessionmaker
             from sqlmodel.ext.asyncio.session import AsyncSession
+
             from app.models.notification_retry import NotificationRetry
             from app.models.partner import engine
             
@@ -220,10 +222,11 @@ class NotificationService:
                 try:
                     await bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode, reply_markup=reply_markup)
                     # Add audit log for fallback success so we know what happened
-                    from app.models.partner import engine
-                    from app.services.audit_service import audit_service
                     from sqlalchemy.orm import sessionmaker
                     from sqlmodel.ext.asyncio.session import AsyncSession
+
+                    from app.models.partner import engine
+                    from app.services.audit_service import audit_service
                     
                     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
                     async with async_session() as session:
@@ -256,9 +259,11 @@ class NotificationService:
     async def process_retries(self):
         """High-efficiency batch retry processor."""
         from datetime import UTC, datetime, timedelta
+
         from sqlalchemy.orm import sessionmaker
         from sqlmodel import select
         from sqlmodel.ext.asyncio.session import AsyncSession
+
         from app.models.notification_retry import NotificationRetry
         from app.models.partner import engine
         from bot import bot

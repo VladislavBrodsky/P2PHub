@@ -7,13 +7,15 @@ from datetime import datetime
 # Add backend to path
 sys.path.append(os.path.join(os.getcwd(), 'backend'))
 
+import contextlib
+
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.models.partner import Partner, engine, XPTransaction
-from app.utils.ranking import get_level
+from app.models.partner import Partner, XPTransaction, engine
 from app.services.redis_service import redis_service
+from app.utils.ranking import get_level
 
 
 async def reconcile_all_partners():
@@ -73,10 +75,8 @@ async def reconcile_all_partners():
                 updated_count += 1
                 
                 # Invalidate profile cache
-                try:
+                with contextlib.suppress(BaseException):
                     await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
-                except:
-                    pass
             
             # Periodically commit and log progress
             if updated_count > 0 and updated_count % 100 == 0:

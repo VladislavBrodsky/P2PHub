@@ -59,9 +59,8 @@ async def engine():
     )
     
     # Create all tables
-    from app.models.partner import Partner, Earning, PartnerTask, XPTransaction
     from app.models.notification_retry import NotificationRetry
-    from app.models.partner import SQLModel
+    from app.models.partner import Partner, SQLModel
     async with test_engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
     
@@ -198,9 +197,9 @@ async def mock_broker():
     await mock_broker.startup()
     
     # Import tasks that need patching
+    from app.services.maintenance_service import migrate_blog_task, restore_names_task
     from app.services.partner_service import handle_partner_creation_task
     from app.services.referral_service import process_referral_logic
-    from app.services.maintenance_service import migrate_blog_task, restore_names_task
     from app.services.support_service import warm_up_kb_task
     
     # Save original brokers
@@ -311,8 +310,9 @@ async def mock_audit_service():
     """
     Patch audit service to avoid detailed logging and potential DB conflicts during tests.
     """
-    from app.services.audit_service import audit_service
     from unittest.mock import AsyncMock
+
+    from app.services.audit_service import audit_service
     
     original_log_xp = audit_service.log_xp_award
     original_log_comm = audit_service.log_commission
@@ -331,8 +331,9 @@ async def mock_leaderboard_service():
     """
     Mock leaderboard service.
     """
-    from app.services.leaderboard_service import leaderboard_service
     from unittest.mock import AsyncMock
+
+    from app.services.leaderboard_service import leaderboard_service
     
     original_update = leaderboard_service.update_score
     leaderboard_service.update_score = AsyncMock(return_value=None)

@@ -5,10 +5,12 @@ import sys
 # Add backend to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import logging
+
+from sqlmodel import select
+
 from app.models.partner import Partner, get_session
 from app.services.leaderboard_service import leaderboard_service
-from sqlmodel import select
-import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

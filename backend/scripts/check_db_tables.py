@@ -1,6 +1,9 @@
 import asyncio
+
 from sqlalchemy import inspect
+
 from app.models.partner import engine
+
 
 async def main():
     async with engine.connect() as conn:

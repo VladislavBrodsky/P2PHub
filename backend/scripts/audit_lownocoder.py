@@ -1,6 +1,7 @@
 import asyncio
 import os
 import sys
+
 from sqlmodel import select, text
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -8,6 +9,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from app.models.partner import Partner, async_session_maker
+
 
 async def check_audit():
     async with async_session_maker() as session:

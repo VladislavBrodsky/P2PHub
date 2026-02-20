@@ -3,7 +3,7 @@ import os
 import sys
 import time
 from pathlib import Path
-from typing import Optional, List, Dict
+from typing import Dict, List, Optional
 
 from dotenv import load_dotenv
 from pydantic import Field, model_validator
@@ -56,7 +56,7 @@ def find_and_load_env():
             try:
                 if env_path.exists() and env_path.is_file():
                     # Check readability
-                    with open(env_path, 'r') as f:
+                    with open(env_path) as f:
                         # Quick check for non-empty
                         if f.read(1):
                             load_dotenv(dotenv_path=str(env_path), override=False)
@@ -94,7 +94,7 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = Field(default="https://p2phub-frontend.up.railway.app", validation_alias="FRONTEND_URL")
     
     # --- WEBHOOKS ---
-    WEBHOOK_URL: Optional[str] = Field(default=None, validation_alias="WEBHOOK_URL")
+    WEBHOOK_URL: str | None = Field(default=None, validation_alias="WEBHOOK_URL")
     WEBHOOK_PATH: str = "/api/bot/webhook"
     WEBHOOK_SECRET: str = Field(default="P2PHubSecret2026SecureToken", validation_alias="WEBHOOK_SECRET")
 
@@ -104,33 +104,33 @@ class Settings(BaseSettings):
     GOOGLE_SERVICE_ACCOUNT_JSON: str = Field(default="{}", validation_alias="GOOGLE_SERVICE_ACCOUNT_JSON")
 
     # --- SENTRY ---
-    SENTRY_DSN: Optional[str] = Field(default=None, validation_alias="SENTRY_DSN")
+    SENTRY_DSN: str | None = Field(default=None, validation_alias="SENTRY_DSN")
     SENTRY_ENVIRONMENT: str = Field(default="production", validation_alias="SENTRY_ENVIRONMENT")
     SENTRY_TRACES_SAMPLE_RATE: float = Field(default=0.1, validation_alias="SENTRY_TRACES_SAMPLE_RATE")
 
     # --- BLOCKCHAIN & PAYMENTS ---
     ADMIN_TON_ADDRESS: str = "UQD_n02bdxQxFztKTXpWBaFDxo713qIuETyefIeK7wiUB0DN"
     ADMIN_USDT_ADDRESS: str = "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM"
-    TON_API_KEY: Optional[str] = Field(default=None, validation_alias="TON_API_KEY")
+    TON_API_KEY: str | None = Field(default=None, validation_alias="TON_API_KEY")
     TON_MANIFEST_URL: str = Field(default="https://p2phub-frontend.up.railway.app/tonconnect-manifest.json", validation_alias="TON_MANIFEST_URL")
 
     # --- BUSINESS LOGIC ---
     PRO_PRICE_USD: float = 39.0
     PRO_PLUS_PRICE_USD: float = 69.0
-    ADMIN_USER_IDS: List[str] = Field(default_factory=lambda: ["716720099", "537873096"], validation_alias="ADMIN_USER_IDS")
+    ADMIN_USER_IDS: list[str] = Field(default_factory=lambda: ["716720099", "537873096"], validation_alias="ADMIN_USER_IDS")
 
     # --- VIRAL STUDIO (PRO Features) ---
     PRO_TOKENS_MONTHLY: int = Field(default=250, validation_alias="PRO_TOKENS_MONTHLY")
     PRO_PLUS_TOKENS_MONTHLY: int = Field(default=500, validation_alias="PRO_PLUS_TOKENS_MONTHLY")
     
-    VIRAL_POST_TYPES: List[str] = Field(
+    VIRAL_POST_TYPES: list[str] = Field(
         default_factory=lambda: [
             "Strategic Launch", "Market Resonance", "Expert Leadership", 
             "Professional Lifestyle", "Financial Insights", "Community Scaling", "Web3 Intelligence"
         ],
         validation_alias="VIRAL_POST_TYPES"
     )
-    VIRAL_AUDIENCES: List[str] = Field(
+    VIRAL_AUDIENCES: list[str] = Field(
         default_factory=lambda: [
             "Crypto Professionals", "Digital Entrepreneurs", "Network Partners", 
             "Community Architects", "Family Investors", "Strategic Growth Tiers", "Career Professionals"
@@ -138,7 +138,7 @@ class Settings(BaseSettings):
         validation_alias="VIRAL_AUDIENCES"
     )
 
-    ALLOWED_ORIGINS: List[str] = Field(
+    ALLOWED_ORIGINS: list[str] = Field(
         default_factory=lambda: [
             "https://p2phub-frontend.up.railway.app",
             "http://localhost:3000",
@@ -150,7 +150,7 @@ class Settings(BaseSettings):
     # --- REWARDS & XP ---
     DAILY_CHECKIN_XP: float = 10.0
     STREAK_7DAY_XP_BONUS: float = 50.0
-    REFERRAL_XP_MAP: Dict[int, float] = Field(
+    REFERRAL_XP_MAP: dict[int, float] = Field(
         default_factory=lambda: {
             1: 100.0, 2: 50.0, 3: 30.0, 4: 20.0, 5: 15.0, 
             6: 10.0, 7: 8.0, 8: 6.0, 9: 5.0, 10: 4.0,
@@ -166,7 +166,7 @@ class Settings(BaseSettings):
     PRO_UPGRADE_SELF_XP: float = 750.0   # XP for upgrading to PRO
     PRO_PLUS_UPGRADE_SELF_XP: float = 1250.0  # XP for upgrading to PRO+
 
-    COMMISSION_MAP_GROWTH_STRATEGY: Dict[int, float] = Field(
+    COMMISSION_MAP_GROWTH_STRATEGY: dict[int, float] = Field(
         default_factory=lambda: {
             # Free: L1-L3 | PRO: L4-L9 | PRO+: L10-L20
             1: 0.30, 2: 0.10, 3: 0.03,
@@ -178,7 +178,7 @@ class Settings(BaseSettings):
     )
 
     # --- INFRASTRUCTURE ---
-    SENTRY_FRONTEND_DSN: Optional[str] = Field(default=None, validation_alias="SENTRY_FRONTEND_DSN")
+    SENTRY_FRONTEND_DSN: str | None = Field(default=None, validation_alias="SENTRY_FRONTEND_DSN")
     PAYMENT_SERVICE_MODE: str = Field(default="live", validation_alias="PAYMENT_SERVICE_MODE")
 
     # Helper property for asyncpg
@@ -232,10 +232,10 @@ try:
 except Exception as e:
     logger.error(f"🔥 FATAL: Configuration failed to initialize: {e}")
     # Print diagnostics for Railway logs
-    print(f"--- CONFIG DIAGNOSTICS ---", file=sys.stderr)
+    print("--- CONFIG DIAGNOSTICS ---", file=sys.stderr)
     print(f"  CWD: {Path.cwd()}", file=sys.stderr)
     print(f"  Backend Root Found: {find_backend_root()}", file=sys.stderr)
     # Check if we can see the vars in the raw environment
     raw_token = os.environ.get("BOT_TOKEN")
-    print(f"  Raw BOT_TOKEN in os.environ: {repr(raw_token[:5] + '...' if raw_token else 'None')}", file=sys.stderr)
+    print(f"  Raw BOT_TOKEN in os.environ: {raw_token[:5] + '...' if raw_token else 'None'!r}", file=sys.stderr)
     sys.exit(1)

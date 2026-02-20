@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 from datetime import UTC, datetime
 
+
 class LeaderboardService:
     LEADERBOARD_KEY = "leaderboard:global"
 

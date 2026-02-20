@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlmodel import func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.models.partner import Partner, engine, XPTransaction
+from app.models.partner import Partner, XPTransaction, engine
 
 
 async def audit_user_stats(telegram_id: str):
@@ -31,7 +31,7 @@ async def audit_user_stats(telegram_id: str):
             print(f"❌ User {telegram_id} not found.")
             return
 
-        print(f"\n--- Current DB State ---")
+        print("\n--- Current DB State ---")
         print(f"Username: {partner.username}")
         print(f"XP: {partner.xp}")
         print(f"Level: {partner.level}")
@@ -42,12 +42,12 @@ async def audit_user_stats(telegram_id: str):
         stmt_xp = select(func.sum(XPTransaction.amount)).where(XPTransaction.partner_id == partner.id)
         calc_xp = (await session.exec(stmt_xp)).one() or 0.0
         
-        print(f"\n--- History Analysis ---")
+        print("\n--- History Analysis ---")
         print(f"Calculated XP (Sum of Txs): {calc_xp}")
         if partner.xp != calc_xp:
             print(f"⚠️ XP MISMATCH! Drift: {partner.xp - calc_xp}")
         else:
-            print(f"✅ XP is consistent.")
+            print("✅ XP is consistent.")
 
         # 3. Verify Referrals (Direct)
         stmt_ref = select(func.count(Partner.id)).where(Partner.referrer_id == partner.id)
@@ -61,9 +61,9 @@ async def audit_user_stats(telegram_id: str):
         print(f"Total Network Size (L1-L20): {total_network}")
         
         if partner.referral_count == direct_count:
-            print(f"ℹ️ referral_count matches Direct count (L1).")
+            print("ℹ️ referral_count matches Direct count (L1).")
         elif partner.referral_count == total_network:
-            print(f"ℹ️ referral_count matches Total Network (L1-L20).")
+            print("ℹ️ referral_count matches Total Network (L1-L20).")
         else:
             print(f"⚠️ referral_count ({partner.referral_count}) is inconsistent with both!")
 
@@ -73,7 +73,7 @@ async def audit_user_stats(telegram_id: str):
         if partner.level != correct_level:
             print(f"⚠️ Level mismatch! Stored: {partner.level}, Expected: {correct_level}")
         else:
-            print(f"✅ Level is correct.")
+            print("✅ Level is correct.")
 
 async def main():
     if len(sys.argv) < 2:

@@ -1,8 +1,8 @@
 import asyncio
+import json
 import logging
 import os
 import re
-import json
 from typing import Any
 
 from app.models.partner import Partner
@@ -141,6 +141,7 @@ def _resolve_image_path(image_path: str) -> str:
 
 async def _send_telegram_photo(channel_id: str, image_path: str, content: str) -> int | None:
     from aiogram.types import FSInputFile
+
     from bot import bot
     try:
         photo = FSInputFile(image_path)

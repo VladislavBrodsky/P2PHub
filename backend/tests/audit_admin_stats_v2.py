@@ -1,18 +1,20 @@
 
 import asyncio
 import logging
-import sys
 import os
+import sys
+
 from sqlalchemy import delete
 
 # Setting up the path to include the backend directory
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 
-from app.models.partner import Partner, get_session, SystemSetting
+from sqlmodel import select
+
+from app.models.partner import Partner, SystemSetting, get_session
 from app.models.transaction import PartnerTransaction
 from app.services.admin_service import admin_service
 from app.services.payment_service import payment_service
-from sqlmodel import select
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -47,7 +49,7 @@ async def audit_admin_scenarios():
             
             p_ids_start = [p.id for p in existing_partners]
             if p_ids_start:
-                from app.models.partner import XPTransaction, Earning, PartnerTask
+                from app.models.partner import Earning, PartnerTask, XPTransaction
                 await session.exec(delete(PartnerTransaction).where(PartnerTransaction.partner_id.in_(p_ids_start)))
                 await session.exec(delete(XPTransaction).where(XPTransaction.partner_id.in_(p_ids_start)))
                 await session.exec(delete(Earning).where(Earning.partner_id.in_(p_ids_start)))
@@ -175,7 +177,7 @@ async def audit_admin_scenarios():
             p_ids = [p.id for p in cleanup_partners]
             if p_ids:
                 # Delete all dependent records first
-                from app.models.partner import XPTransaction, Earning, PartnerTask
+                from app.models.partner import Earning, PartnerTask, XPTransaction
                 
                 await session.exec(delete(PartnerTransaction).where(PartnerTransaction.partner_id.in_(p_ids)))
                 await session.exec(delete(XPTransaction).where(XPTransaction.partner_id.in_(p_ids)))

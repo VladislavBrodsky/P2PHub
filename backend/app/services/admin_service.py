@@ -4,6 +4,8 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
+import contextlib
+
 from sqlalchemy.orm import selectinload
 from sqlmodel import func, select, text
 
@@ -171,9 +173,8 @@ class AdminService:
                     rows = results.all()
                     
                     ton_price = 5.0
-                    try:
+                    with contextlib.suppress(BaseException):
                         ton_price = await payment_service.get_ton_price()
-                    except: pass
                     
                     for currency, amount in rows:
                         if currency == "TON":
@@ -419,7 +420,7 @@ class AdminService:
         tx_map = {s: c for s, c in tx_stats.all()}
         
         # 2. Orphaned partners (referrer set but path null - infrastructure bug)
-        orphaned = (await session.exec(select(func.count(Partner.id)).where(Partner.referrer_id != None, Partner.path == None))).one() or 0
+        orphaned = (await session.exec(select(func.count(Partner.id)).where(Partner.referrer_id is not None, Partner.path is None))).one() or 0
         
         # 3. Economy Integrity: Negative Balances or XP/Level Mismatch
         neg_balance = (await session.exec(select(func.count(Partner.id)).where(Partner.balance < 0))).one() or 0

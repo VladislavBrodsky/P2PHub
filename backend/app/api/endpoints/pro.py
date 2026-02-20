@@ -9,13 +9,13 @@ from app.core.security import get_current_user, get_tg_user
 from app.models.partner import Partner, SystemSetting, get_session
 from app.models.schemas import (
     PROSetupRequest,
+    ReferralLinkUpdate,
     SocialPostRequest,
     ViralGenerateRequest,
     ViralGenerateResponse,
-    ReferralLinkUpdate,
 )
-from app.services.viral_studio import viral_studio
 from app.services.viral_analytics_service import viral_analytics
+from app.services.viral_studio import viral_studio
 from bot import bot
 
 logger = logging.getLogger(__name__)

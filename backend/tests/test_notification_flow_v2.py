@@ -1,13 +1,19 @@
 import asyncio
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
-from unittest.mock import AsyncMock, patch, MagicMock
+from sqlalchemy.orm import sessionmaker
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlalchemy.orm import sessionmaker
 
-from app.services.notification_service import NotificationService, notification_service, send_telegram_task
 from app.models.notification_retry import NotificationRetry
+from app.services.notification_service import (
+    NotificationService,
+    notification_service,
+    send_telegram_task,
+)
 from app.services.rate_limit_service import rate_limit_service
+
 
 @pytest.mark.asyncio
 class TestNotificationStructuredSuite:
@@ -76,7 +82,7 @@ class TestNotificationStructuredSuite:
 
         with patch("app.services.notification_service.send_telegram_task.kiq", side_effect=Exception("Redis Down")):
             with patch("bot.bot.send_message", new_callable=AsyncMock) as mock_send:
-                with patch("app.services.audit_service.audit_service.log_event", new_callable=AsyncMock) as mock_audit:
+                with patch("app.services.audit_service.audit_service.log_event", new_callable=AsyncMock):
                     with patch("app.services.rate_limit_service.rate_limit_service.is_duplicate", return_value=False):
                         with patch("app.services.rate_limit_service.rate_limit_service.is_blocked", return_value=False):
                             await notification_service.enqueue_notification(chat_id, text)
@@ -95,8 +101,9 @@ class TestNotificationStructuredSuite:
         """
         Logic: Verify health check flags Congested when > 10 items are stuck.
         """
+        from datetime import UTC, datetime, timedelta
+
         from app.api.endpoints.health import notifications_health_check
-        from datetime import datetime, UTC, timedelta
 
         now = datetime.now(UTC).replace(tzinfo=None)
         for i in range(11):
@@ -138,7 +145,7 @@ class TestNotificationStructuredSuite:
         text = "Fallback bug test"
 
         with patch("app.services.notification_service.send_telegram_task.kiq", side_effect=Exception("Broker Dead")):
-            with patch("bot.bot.send_message", new_callable=AsyncMock) as mock_send:
+            with patch("bot.bot.send_message", new_callable=AsyncMock):
                 with patch("app.services.rate_limit_service.rate_limit_service.is_duplicate", return_value=False):
                     with patch("app.services.rate_limit_service.rate_limit_service.is_blocked", return_value=False):
                         
@@ -184,8 +191,9 @@ class TestNotificationStructuredSuite:
         """
         Critical Flow: Detect and handle user blocking the bot.
         """
-        from app.models.partner import Partner
         from aiogram.exceptions import TelegramForbiddenError
+
+        from app.models.partner import Partner
         
         chat_id = 12345
         partner = Partner(telegram_id=str(chat_id), referral_code="TESTBLOCK", username="blocked_user")

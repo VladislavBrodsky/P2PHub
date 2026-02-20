@@ -15,9 +15,9 @@ Usage:
     import scripts._bootstrap  # noqa — must be first
 """
 
+import logging
 import os
 import sys
-import logging
 from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock
 
@@ -41,7 +41,7 @@ def _load_env():
     for p in candidates:
         try:
             # Use open() directly — avoids macOS sandbox blocking stat()/is_file()
-            with open(p, "r") as f:
+            with open(p) as f:
                 content = f.read()
             if content:
                 load_dotenv(p, override=True)
@@ -81,7 +81,6 @@ def _mock_broker():
 
         # Also patch taskiq_task.kiq so existing @broker.task functions don't enqueue
         import app.services.notification_service as notif_module
-        original_enqueue = notif_module.notification_service.enqueue_notification
 
         async def _silent_enqueue(chat_id, text, parse_mode="Markdown", buttons=None):
             logger.info(f"[MOCK NOTIF] Skipped notification to {chat_id}: {str(text)[:60]}...")

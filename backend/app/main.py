@@ -288,7 +288,6 @@ async def global_exception_handler(request: Request, exc: Exception):
 # and see all operations that happened during that request across all services.
 @app.middleware("http")
 async def add_request_id_middleware(request: Request, call_next):
-    import uuid
     
     request_id = str(uuid.uuid4())
     request.state.request_id = request_id

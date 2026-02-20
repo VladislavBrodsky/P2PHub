@@ -9,6 +9,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
 from app.core.http_client import http_client
+from app.core.retry import async_retry
 from app.models.partner import Partner, SystemSetting
 from app.models.transaction import PartnerTransaction
 from app.services.redis_service import redis_service
@@ -113,6 +114,7 @@ class PaymentService:
             logger.error(f"Error fetching TON price: {e}")
             return 5.5 # Fallback conservative price if API fails
             
+    @async_retry(max_attempts=3, base_delay=1.0)
     async def verify_ton_transaction(
         self,
         session: AsyncSession,
@@ -218,6 +220,7 @@ class PaymentService:
 
         return False
 
+    @async_retry(max_attempts=3, base_delay=1.0)
     async def upgrade_to_pro(
         self,
         session: AsyncSession,
@@ -400,8 +403,8 @@ class PaymentService:
                     referrer_partner = referrer_res.first()
                     
                     if referrer_partner:
-                        from app.models.partner import PartnerTask
                         from app.core.tasks import get_task_config
+                        from app.models.partner import PartnerTask
                         catalyst_task_id = "network_catalyst"
                         catalyst_config = get_task_config(catalyst_task_id)
                         
@@ -531,6 +534,7 @@ class PaymentService:
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.error(f"❌ PRO Upgrade Failed for {partner.telegram_id}: {e}")
+            await session.rollback()
             raise e
 
 payment_service = PaymentService()
