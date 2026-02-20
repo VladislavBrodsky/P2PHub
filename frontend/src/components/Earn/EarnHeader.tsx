@@ -1,115 +1,261 @@
 import { motion } from 'framer-motion';
-// #comment: Removed unused Star and CheckCircle2 icons from lucide-react
-// #comment: Removed unused Crown icon from lucide-react to clean up the import list
-import { Trophy, Zap, Users } from 'lucide-react';
-import { getRank, getXPProgress, getRankGradient } from '../../utils/ranking';
+import { Trophy, Zap, Users, TrendingUp } from 'lucide-react';
+import { getRank, getXPProgress } from '../../utils/ranking';
 import { useUser } from '../../context/UserContext';
-// #comment: Removed unused Trans import from react-i18next
 import { useTranslation } from 'react-i18next';
 
-// #comment: Removed unused onUpgrade prop to simplify component interface and clean up code
 export const EarnHeader = () => {
     const { t } = useTranslation();
     const { user } = useUser();
 
-    // Fallback or use real user data
     const level = user?.level || 1;
     const xp = user?.xp || 0;
     const rank = getRank(level);
     const progress = getXPProgress(level, xp);
+    const partners = user?.total_network_size || 0;
+
+    // SVG circle geometry
+    const RADIUS = 44;
+    const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+    const strokeDashoffset = CIRCUMFERENCE - (CIRCUMFERENCE * progress.percent) / 100;
+
+    // Determine gradient stops from rank badge colour
+    const badgeColor = rank.badgeColor;
 
     return (
-        <section className="mb-0 relative overflow-hidden rounded-[2rem] glass-panel border border-white/10 p-1 shadow-2xl z-30 transform-gpu">
-            {/* Immersive Mesh Background */}
-            <div className="absolute inset-0 bg-linear-to-br from-blue-600/10 via-purple-600/5 to-transparent pointer-events-none" />
+        <section className="relative overflow-hidden rounded-[2rem] p-px shadow-2xl z-30">
+            {/* Outer border gradient ring */}
+            <div
+                className="absolute inset-0 rounded-[2rem] opacity-70"
+                style={{
+                    background: `linear-gradient(135deg, ${badgeColor}60 0%, transparent 50%, ${badgeColor}40 100%)`,
+                }}
+            />
 
-            <div className="relative z-10 flex flex-col items-center text-center space-y-4 bg-white/2 backdrop-blur-3xl rounded-[1.9rem] p-5 border border-white/5">
+            {/* Card body */}
+            <div className="relative rounded-[1.95rem] bg-[#0d1117]/90 dark:bg-[#0d1117]/95 backdrop-blur-3xl overflow-hidden">
 
-                <div className="flex items-center justify-between w-full gap-4 pt-2">
-                    {/* Level Circle - Compact */}
-                    <div className="relative flex flex-col items-center justify-center shrink-0 min-w-max">
-                        <div className="relative w-24 h-24 flex items-center justify-center">
-                            <svg className="absolute inset-0 w-full h-full -rotate-90 scale-95" viewBox="0 0 96 96">
-                                <circle cx="48" cy="48" r="42" fill="none" stroke="currentColor" className="text-white/5" strokeWidth="6" />
+                {/* ── Ambient glows ── */}
+                <div
+                    className="absolute -top-16 -left-16 w-64 h-64 rounded-full blur-[80px] opacity-30 pointer-events-none"
+                    style={{ background: `radial-gradient(circle, ${badgeColor}80, transparent 70%)` }}
+                />
+                <div
+                    className="absolute -bottom-12 -right-12 w-48 h-48 rounded-full blur-[60px] opacity-20 pointer-events-none"
+                    style={{ background: `radial-gradient(circle, ${badgeColor}60, transparent 70%)` }}
+                />
 
+                {/* Subtle grid texture */}
+                <div
+                    className="absolute inset-0 opacity-[0.04] pointer-events-none"
+                    style={{
+                        backgroundImage: 'linear-gradient(rgba(255,255,255,.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.6) 1px, transparent 1px)',
+                        backgroundSize: '32px 32px',
+                    }}
+                />
+
+                <div className="relative z-10 flex items-center gap-4 p-4">
+
+                    {/* ────────── LEFT: Radial Ring + Rank Badge ────────── */}
+                    <div className="flex flex-col items-center shrink-0 gap-2">
+                        {/* Ring */}
+                        <div className="relative w-[96px] h-[96px]">
+                            <svg
+                                className="absolute inset-0 w-full h-full -rotate-90"
+                                viewBox="0 0 100 100"
+                            >
                                 <defs>
-                                    <linearGradient id="liquid-progress-stroke" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stopColor={rank.badgeColor}>
-                                            <animate attributeName="stop-color" values={`${rank.badgeColor};#ffffff;${rank.badgeColor}`} dur="3s" repeatCount="indefinite" />
-                                        </stop>
-                                        <stop offset="50%" stopColor={rank.badgeColor}>
-                                            <animate attributeName="stop-color" values={`#ffffff;${rank.badgeColor};#ffffff`} dur="3s" repeatCount="indefinite" />
-                                        </stop>
-                                        <stop offset="100%" stopColor={rank.badgeColor}>
-                                            <animate attributeName="stop-color" values={`${rank.badgeColor};#ffffff;${rank.badgeColor}`} dur="3s" repeatCount="indefinite" />
-                                        </stop>
+                                    <linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stopColor={badgeColor} />
+                                        <stop offset="100%" stopColor="#ffffff" stopOpacity="0.9" />
                                     </linearGradient>
+                                    <filter id="ring-glow">
+                                        <feGaussianBlur stdDeviation="2" result="blur" />
+                                        <feMerge>
+                                            <feMergeNode in="blur" />
+                                            <feMergeNode in="SourceGraphic" />
+                                        </feMerge>
+                                    </filter>
                                 </defs>
 
+                                {/* Track */}
+                                <circle
+                                    cx="50" cy="50" r={RADIUS}
+                                    fill="none"
+                                    stroke="rgba(255,255,255,0.07)"
+                                    strokeWidth="7"
+                                />
+                                {/* Filled arc */}
                                 <motion.circle
-                                    cx="48" cy="48" r="42" fill="none"
-                                    stroke="url(#liquid-progress-stroke)"
-                                    strokeWidth="6"
-                                    strokeDasharray="264"
-                                    strokeDashoffset={264 - (264 * progress.percent) / 100}
+                                    cx="50" cy="50" r={RADIUS}
+                                    fill="none"
+                                    stroke="url(#ring-grad)"
+                                    strokeWidth="7"
                                     strokeLinecap="round"
-                                    initial={{ strokeDashoffset: 264 }}
-                                    animate={{ strokeDashoffset: 264 - (264 * progress.percent) / 100 }}
-                                    transition={{ duration: 1.5, ease: "easeOut" }}
-                                    style={{ filter: `drop-shadow(0 0 8px ${rank.badgeColor}40)` }}
+                                    strokeDasharray={CIRCUMFERENCE}
+                                    strokeDashoffset={CIRCUMFERENCE}
+                                    animate={{ strokeDashoffset }}
+                                    transition={{ duration: 1.6, ease: 'circOut' }}
+                                    filter="url(#ring-glow)"
+                                    style={{ filter: `drop-shadow(0 0 6px ${badgeColor}90)` }}
                                 />
                             </svg>
-                            <div className="relative z-10 flex flex-col items-center justify-center">
-                                <span className="text-[8px] font-black text-text-secondary uppercase tracking-widest">{t('earn_header.level')}</span>
-                                <span className="text-3xl font-black text-text-primary leading-none">{level}</span>
+
+                            {/* Centre content */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                <span className="text-[7px] font-black uppercase tracking-[0.18em] text-white/40 leading-none">
+                                    {t('earn_header.level')}
+                                </span>
+                                <motion.span
+                                    key={level}
+                                    initial={{ scale: 0.6, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+                                    className="text-[2.1rem] font-black text-white leading-none tracking-tight"
+                                >
+                                    {level}
+                                </motion.span>
                             </div>
                         </div>
 
-                        {/* Rank Badge - Compact */}
-                        <div className={`mt-2 px-3 py-1 rounded-full border border-white/20 shadow-lg backdrop-blur-xl z-20 bg-linear-to-r text-white ${getRankGradient(level)}`}>
-                            <div className="flex items-center gap-1">
-                                <Trophy className="w-2.5 h-2.5" />
-                                <span className="text-[8px] font-black uppercase tracking-widest">
+                        {/* Rank badge pill */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 4 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="relative px-3 py-[4px] rounded-full overflow-hidden shadow-lg"
+                            style={{
+                                background: `linear-gradient(135deg, ${badgeColor}dd, ${badgeColor}99)`,
+                                boxShadow: `0 0 14px ${badgeColor}60`,
+                            }}
+                        >
+                            {/* Shine overlay */}
+                            <div className="absolute inset-0 bg-linear-to-r from-white/20 via-white/5 to-transparent pointer-events-none" />
+                            <div className="relative flex items-center gap-1">
+                                <Trophy className="w-2.5 h-2.5 text-white/90" />
+                                <span className="text-[7.5px] font-black uppercase tracking-[0.14em] text-white/95">
                                     {t(`ranks.${rank.name}`)}
                                 </span>
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
 
-                    {/* Stats and Progress - Right Column */}
-                    <div className="flex-1 flex flex-col justify-center space-y-3">
-                        {/* XP Stats */}
-                        <div className="space-y-1.5 pt-1">
-                            <div className="flex justify-between items-baseline">
-                                <span className="text-[8px] font-black text-text-secondary uppercase tracking-widest">{t('earn_header.xp_progress')}</span>
-                                <span className="text-[10px] font-black text-text-primary italic">{progress.current} / {progress.total} XP</span>
-                            </div>
-                            <div className="h-2 w-full bg-slate-200/30 dark:bg-white/5 rounded-full overflow-hidden border border-white/5 relative">
-                                <motion.div
-                                    initial={{ width: 0 }}
-                                    animate={{ width: `${progress.percent}%` }}
-                                    transition={{ duration: 1.5, ease: "backOut" }}
-                                    className={`h-full rounded-full progress-bar-liquid bg-linear-to-r ${getRankGradient(level)}`}
-                                />
-                            </div>
+                    {/* ────────── RIGHT: XP bar + stats ────────── */}
+                    <div className="flex-1 flex flex-col gap-2.5 min-w-0">
+
+                        {/* XP Progress header row */}
+                        <div className="flex items-baseline justify-between px-0.5">
+                            <span className="text-[8px] font-black uppercase tracking-[0.16em] text-white/40 leading-none">
+                                {t('earn_header.xp_progress')}
+                            </span>
+                            <motion.span
+                                key={progress.current}
+                                initial={{ opacity: 0, x: 6 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                className="text-[10px] font-black text-white/90 tabular-nums"
+                            >
+                                {progress.current.toLocaleString()} <span className="text-white/30">/</span> {progress.total.toLocaleString()} <span className="text-white/40 font-bold">XP</span>
+                            </motion.span>
                         </div>
 
-                        {/* Stats Row */}
+                        {/* Progress bar */}
+                        <div className="relative h-[9px] w-full rounded-full overflow-hidden"
+                            style={{ background: 'rgba(255,255,255,0.07)' }}>
+                            {/* Glow under bar */}
+                            <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${progress.percent}%` }}
+                                transition={{ duration: 1.5, ease: 'circOut' }}
+                                className="absolute inset-y-0 left-0 rounded-full blur-[6px] opacity-50"
+                                style={{ background: `linear-gradient(90deg, ${badgeColor}, white)` }}
+                            />
+                            {/* Actual bar */}
+                            <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${progress.percent}%` }}
+                                transition={{ duration: 1.5, ease: 'circOut' }}
+                                className="absolute inset-0 rounded-full"
+                                style={{
+                                    background: `linear-gradient(90deg, ${badgeColor}, ${badgeColor}cc, white)`,
+                                    boxShadow: `0 0 8px ${badgeColor}80`,
+                                }}
+                            >
+                                {/* Liquid shimmer */}
+                                <div className="absolute inset-0 rounded-full overflow-hidden">
+                                    <motion.div
+                                        animate={{ x: ['-100%', '200%'] }}
+                                        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1 }}
+                                        className="absolute inset-y-0 w-1/3 bg-linear-to-r from-transparent via-white/50 to-transparent"
+                                    />
+                                </div>
+                            </motion.div>
+                        </div>
+
+                        {/* Stats grid */}
                         <div className="grid grid-cols-2 gap-2">
-                            <div className="bg-white/5 border border-white/10 rounded-xl p-2 flex flex-col items-start gap-0.5">
-                                <div className="flex items-center gap-1">
-                                    <Users className="w-2.5 h-2.5 text-yellow-400" />
-                                    <span className="text-[7px] font-black text-text-secondary uppercase tracking-widest">{t('earn_header.partners')}</span>
+                            {/* Partners */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.2 }}
+                                className="relative overflow-hidden rounded-xl p-2.5 border"
+                                style={{
+                                    background: 'rgba(255,255,255,0.04)',
+                                    borderColor: 'rgba(255,255,255,0.08)',
+                                }}
+                            >
+                                <div className="flex items-center gap-1 mb-1">
+                                    <div className="w-4 h-4 rounded-md flex items-center justify-center"
+                                        style={{ background: 'rgba(251,191,36,0.15)' }}>
+                                        <Users className="w-2.5 h-2.5 text-amber-400" />
+                                    </div>
+                                    <span className="text-[6.5px] font-black uppercase tracking-[0.16em] text-white/35">
+                                        {t('earn_header.partners')}
+                                    </span>
                                 </div>
-                                <span className="text-sm font-black text-text-primary">{user?.total_network_size || 0}</span>
-                            </div>
-                            <div className="bg-white/5 border border-white/10 rounded-xl p-2 flex flex-col items-start gap-0.5">
-                                <div className="flex items-center gap-1">
-                                    <Zap className="w-2.5 h-2.5 text-emerald-400" />
-                                    <span className="text-[7px] font-black text-text-secondary uppercase tracking-widest">{t('earn_header.total_xp')}</span>
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-[1.15rem] font-black text-white leading-none tabular-nums">
+                                        {partners.toLocaleString()}
+                                    </span>
+                                    <TrendingUp className="w-2.5 h-2.5 text-amber-400/60 mb-0.5" />
                                 </div>
-                                <span className="text-sm font-black text-text-primary">{xp}</span>
-                            </div>
+                                {/* Corner glow */}
+                                <div className="absolute -bottom-3 -right-3 w-12 h-12 rounded-full blur-xl opacity-20"
+                                    style={{ background: '#fbbf24' }} />
+                            </motion.div>
+
+                            {/* Total XP */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.3 }}
+                                className="relative overflow-hidden rounded-xl p-2.5 border"
+                                style={{
+                                    background: 'rgba(255,255,255,0.04)',
+                                    borderColor: 'rgba(255,255,255,0.08)',
+                                }}
+                            >
+                                <div className="flex items-center gap-1 mb-1">
+                                    <div className="w-4 h-4 rounded-md flex items-center justify-center"
+                                        style={{ background: `${badgeColor}22` }}>
+                                        <Zap className="w-2.5 h-2.5" style={{ color: badgeColor }} />
+                                    </div>
+                                    <span className="text-[6.5px] font-black uppercase tracking-[0.16em] text-white/35">
+                                        {t('earn_header.total_xp')}
+                                    </span>
+                                </div>
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-[1.15rem] font-black leading-none tabular-nums"
+                                        style={{ color: 'white' }}>
+                                        {xp.toLocaleString()}
+                                    </span>
+                                    <span className="text-[7px] font-black uppercase mb-0.5"
+                                        style={{ color: `${badgeColor}cc` }}>xp</span>
+                                </div>
+                                {/* Corner glow */}
+                                <div className="absolute -bottom-3 -right-3 w-12 h-12 rounded-full blur-xl opacity-20"
+                                    style={{ background: badgeColor }} />
+                            </motion.div>
                         </div>
                     </div>
                 </div>

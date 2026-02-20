@@ -1,4 +1,5 @@
 import logging
+
 from app.core.broker import broker
 
 logger = logging.getLogger(__name__)
@@ -10,6 +11,7 @@ async def update_active_posts_metrics_task():
     """
     from sqlalchemy.orm import sessionmaker
     from sqlmodel.ext.asyncio.session import AsyncSession
+
     from app.models.partner import engine
     from app.services.viral_analytics_service import viral_analytics
     

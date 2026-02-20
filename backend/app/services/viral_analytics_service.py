@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import logging
 from datetime import UTC, datetime, timedelta
 from typing import Any
@@ -162,10 +163,8 @@ class ViralAnalyticsService:
                     elif 'M' in views_str:
                         views = int(float(views_str.replace('M', '')) * 1000000)
                     else:
-                        try:
+                        with contextlib.suppress(Exception):
                             views = int(re.sub(r'[^\d]', '', views_str))
-                        except:
-                            pass
                 
                 # Scrap Reactions (if any)
                 # Reactions are tricky as they appear as separate nodes
@@ -173,7 +172,7 @@ class ViralAnalyticsService:
                 likes = 0
                 reactions_match = re.findall(r'class="tgme_widget_message_reaction_count">([^<]+)</span>', html)
                 for count_str in reactions_match:
-                    try:
+                    with contextlib.suppress(Exception):
                         c_str = count_str.strip()
                         if 'K' in c_str:
                             likes += int(float(c_str.replace('K', '')) * 1000)
@@ -181,8 +180,6 @@ class ViralAnalyticsService:
                             likes += int(float(c_str.replace('M', '')) * 1000000)
                         else:
                             likes += int(re.sub(r'[^\d]', '', c_str))
-                    except:
-                        continue
 
                 return {
                     "views": views,

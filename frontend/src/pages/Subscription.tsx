@@ -169,11 +169,12 @@ export default function SubscriptionPage() {
         return (
             <div className={`flex flex-col items-center justify-center min-h-dvh w-screen sm:w-full -mx-4 sm:mx-0 px-6 pb-32 pt-10 text-center relative overflow-hidden font-sans`}>
                 {/* Fixed Background Layer to prevent clipping */}
-                <div className={`fixed inset-0 w-full h-full pointer-events-none z-0 bg-slate-950 ${isPlus ? 'bg-linear-to-b from-slate-900 via-indigo-950/40 to-slate-950' : 'bg-linear-to-b from-slate-900 via-amber-950/20 to-slate-950'}`} />
+                <div className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-(--color-bg-deep)" />
+                <div className={`fixed inset-0 w-full h-full pointer-events-none z-0 ${isPlus ? 'bg-linear-to-b from-(--color-bg-app) via-indigo-500/10 to-(--color-bg-deep)' : 'bg-linear-to-b from-(--color-bg-app) via-amber-500/8 to-(--color-bg-deep)'}`} />
 
                 {/* Glow Effects */}
-                <div className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] blur-[120px] opacity-30 z-0 pointer-events-none ${isPlus ? 'bg-yellow-500' : 'bg-blue-600'}`} />
-                <div className={`fixed top-1/4 left-1/2 -translate-x-1/2 w-[400px] h-[400px] blur-[100px] opacity-40 z-0 pointer-events-none animate-pulse ${isPlus ? 'bg-yellow-400' : 'bg-blue-500'}`} />
+                <div className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] blur-[120px] opacity-10 dark:opacity-30 z-0 pointer-events-none ${isPlus ? 'bg-yellow-500' : 'bg-blue-600'}`} />
+                <div className={`fixed top-1/4 left-1/2 -translate-x-1/2 w-[400px] h-[400px] blur-[100px] opacity-15 dark:opacity-40 z-0 pointer-events-none animate-pulse ${isPlus ? 'bg-yellow-400' : 'bg-blue-500'}`} />
 
                 <div className="relative z-10 w-full max-w-[320px] mx-auto flex flex-col items-center">
                     <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} className="relative mb-8 mt-[-5dvh]">
