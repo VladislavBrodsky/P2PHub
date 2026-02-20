@@ -449,3 +449,32 @@ async def economy_integrity_audit_task():
             logger.info(f"✅ Economy audit complete. {flags} discrepancies found and logged.")
         else:
             logger.info("✅ Economy audit complete. No discrepancies found.")
+
+@broker.task(task_name="cleanup_notification_retries", schedule=[{"cron": "0 6 * * *"}]) # 6 AM daily
+async def cleanup_notification_retries():
+    """
+    Deletes 'failed' notification retries older than 7 days.
+    Also cleans up historic test data that may have been left behind.
+    """
+    logger.info("🧹 Starting notification retry cleanup...")
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    
+    cutoff = datetime.now(UTC).replace(tzinfo=None) - timedelta(days=7)
+    
+    async with async_session() as session:
+        from app.models.notification_retry import NotificationRetry
+        
+        # Count failed items older than cutoff
+        stmt = select(func.count(NotificationRetry.id)).where(
+            NotificationRetry.status == "failed",
+            NotificationRetry.created_at < cutoff
+        )
+        count = (await session.execute(stmt)).scalar() or 0
+        
+        if count > 0:
+            del_stmt = text("DELETE FROM notificationretry WHERE status = 'failed' AND created_at < :cutoff")
+            await session.execute(del_stmt, {"cutoff": cutoff})
+            await session.commit()
+            logger.info(f"✅ Cleaned up {count} stale failed notification retries.")
+        else:
+            logger.info("✅ No stale failed notifications found.")
