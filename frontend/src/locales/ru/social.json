@@ -355,6 +355,8 @@
     "qr_modal_desc": "Сканируйте для мгновенного входа в сеть",
     "no_earnings": "Доходов пока нет",
     "xp_tab": "XP",
-    "crypto_tab": "Crypto"
+    "crypto_tab": "Crypto",
+    "upgrade_pro_btn": "КАЧНУТЬ PRO",
+    "upgrade_plus_btn": "КАЧНУТЬ PRO+"
   }
 }

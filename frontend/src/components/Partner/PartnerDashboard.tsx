@@ -20,7 +20,7 @@ export const PartnerDashboard = () => {
     const { t } = useTranslation();
     const { notification, selection } = useHaptic();
     const { setFooterVisible } = useUI();
-    const { user, updateUser } = useUser();
+    const { user, updateUser, refreshUser } = useUser();
     const [isExplorerOpen, setIsExplorerOpen] = React.useState(false);
     const [isQrOpen, setIsQrOpen] = React.useState(false);
     const [isBriefingOpen, setIsBriefingOpen] = React.useState(false);
@@ -97,6 +97,21 @@ export const PartnerDashboard = () => {
         setIsExplorerOpen(true);
     }, [selection]);
 
+    const handleUpgradeFromBalance = async (plan: 'PRO' | 'PRO_PLUS') => {
+        if (!user) return;
+        const price = plan === 'PRO' ? 39 : 69;
+        if (user.balance < price) return;
+
+        try {
+            notification('success');
+            await apiClient.post('/api/payment/upgrade-from-balance', { plan });
+            await refreshUser(true);
+        } catch (e) {
+            console.error('Upgrade failed', e);
+            notification('error');
+        }
+    };
+
 
     return (
         <>
@@ -110,9 +125,25 @@ export const PartnerDashboard = () => {
 
                 {/* Quick Stats Row */}
                 <div className="grid grid-cols-2 gap-2">
-                    <div className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm">
+                    <div className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm flex flex-col">
                         <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">{t('partner_dashboard.total_earned')}</div>
                         <div className="text-2xl font-black text-slate-900 dark:text-white">${(user?.total_earned || 0).toFixed(2)}</div>
+                        {!user?.is_pro && (user?.balance || 0) >= 39 && (
+                            <button
+                                onClick={(e) => { e.stopPropagation(); handleUpgradeFromBalance('PRO'); }}
+                                className="mt-2 w-full py-1.5 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-[8px] font-black uppercase tracking-widest rounded-lg transition-all shadow-md active:scale-95 animate-pulse"
+                            >
+                                {t('partner_dashboard.upgrade_pro_btn')}
+                            </button>
+                        )}
+                        {user?.is_pro && user?.subscription_plan !== 'PRO_PLUS_MONTHLY' && (user?.balance || 0) >= 69 && (
+                            <button
+                                onClick={(e) => { e.stopPropagation(); handleUpgradeFromBalance('PRO_PLUS'); }}
+                                className="mt-2 w-full py-1.5 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-[8px] font-black uppercase tracking-widest rounded-lg transition-all shadow-md active:scale-95"
+                            >
+                                {t('partner_dashboard.upgrade_plus_btn')}
+                            </button>
+                        )}
                     </div>
                     <div
                         className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm active:scale-95 transition-transform cursor-pointer relative group overflow-hidden"
@@ -360,24 +391,29 @@ export const PartnerDashboard = () => {
 
 const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
     const [earnings, setEarnings] = React.useState<any[]>([]);
+    const [transactions, setTransactions] = React.useState<any[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [activeTab, setActiveTab] = React.useState<'XP' | 'CRYPTO'>('XP');
     const { t } = useTranslation();
 
     React.useEffect(() => {
-        const fetchEarnings = async () => {
+        const fetchData = async () => {
             try {
                 // Fetch more when expanded
                 const limit = isExpanded ? 50 : 12;
-                const res = await apiClient.get(`/api/partner/earnings?limit=${limit}`);
-                setEarnings(res.data);
+                const [earnRes, txRes] = await Promise.all([
+                    apiClient.get(`/api/partner/earnings?limit=${limit}`),
+                    apiClient.get('/api/payment/my-transactions')
+                ]);
+                setEarnings(earnRes.data);
+                setTransactions(txRes.data);
             } catch (error) {
-                console.error('Failed to fetch earnings:', error);
+                console.error('Failed to fetch data:', error);
             } finally {
                 setLoading(false);
             }
         };
-        fetchEarnings();
+        fetchData();
     }, [isExpanded]);
 
     const formatEarningDescription = (desc: string) => {
@@ -408,18 +444,43 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
     }
 
     const xpEarnings = earnings.filter(e => e.currency === 'XP');
-    const cryptoEarnings = earnings.filter(e => e.currency !== 'XP');
 
-    const displayEarnings = activeTab === 'XP' ? xpEarnings : cryptoEarnings;
+    // Merge crypto earnings (USDT commissions) with actual transactions (TON, USDT, etc.)
+    const cryptoItems = [
+        ...earnings.filter(e => e.currency !== 'XP').map(e => ({
+            ...e,
+            isTransaction: false,
+            date: new Date(e.created_at)
+        })),
+        ...transactions.map(t => ({
+            ...t,
+            isTransaction: true,
+            description: t.description || `${t.currency} ${t.status.toUpperCase()}`,
+            amount: t.amount,
+            currency: t.currency,
+            type: 'TRANSACTION',
+            date: new Date(t.created_at)
+        }))
+    ].sort((a, b) => b.date.getTime() - a.date.getTime());
+
+    const displayItems = activeTab === 'XP' ? xpEarnings : cryptoItems;
 
     const getTypeStyles = (type: string) => {
         switch (type) {
             case 'PRO_COMMISSION':
+            case 'COMMISSION':
                 return {
                     icon: <DollarSign className="w-4 h-4" />,
                     bg: 'bg-emerald-500/10',
                     border: 'border-emerald-500/20',
                     text: 'text-emerald-600 dark:text-emerald-400'
+                };
+            case 'TRANSACTION':
+                return {
+                    icon: <DollarSign className="w-4 h-4" />,
+                    bg: 'bg-purple-500/10',
+                    border: 'border-purple-500/20',
+                    text: 'text-purple-600 dark:text-purple-400'
                 };
             case 'TASK_XP':
                 return {
@@ -452,8 +513,8 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                 <button
                     onClick={() => setActiveTab('XP')}
                     className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'XP'
-                            ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-sm'
-                            : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
+                        ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-sm'
+                        : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
                         }`}
                 >
                     {t('partner_dashboard.xp_tab')}
@@ -461,8 +522,8 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                 <button
                     onClick={() => setActiveTab('CRYPTO')}
                     className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'CRYPTO'
-                            ? 'bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-sm'
-                            : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
+                        ? 'bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-sm'
+                        : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
                         }`}
                 >
                     {t('partner_dashboard.crypto_tab')}
@@ -470,20 +531,20 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
             </div>
 
             <div className="space-y-1">
-                {displayEarnings.length === 0 ? (
+                {displayItems.length === 0 ? (
                     <div className="py-8 text-center bg-white/40 dark:bg-white/5 rounded-2xl border border-dashed border-slate-300 dark:border-white/10">
                         <Gift className="w-8 h-8 mx-auto text-slate-300 dark:text-white/20 mb-2" />
                         <p className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('partner_dashboard.no_earnings')}</p>
                     </div>
                 ) : (
-                    displayEarnings.map((earning, idx) => {
-                        const styles = getTypeStyles(earning.type);
+                    displayItems.map((item: any, idx: number) => {
+                        const styles = getTypeStyles(item.type);
                         return (
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: idx * 0.03 }}
-                                key={earning.id || idx}
+                                key={item.id || idx}
                                 className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-xl p-2 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
                             >
                                 <div className="flex items-center gap-2">
@@ -492,30 +553,30 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                                     </div>
                                     <div className='flex flex-col'>
                                         <span className="font-bold text-slate-900 dark:text-white text-[10.5px] leading-tight">
-                                            {formatEarningDescription(earning.description)}
+                                            {formatEarningDescription(item.description)}
                                         </span>
                                         <span className="text-[7.5px] text-slate-500 opacity-50 font-medium">
-                                            {new Date(earning.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                            {new Date(item.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div className="flex items-center gap-2">
-                                    {earning.level && (
+                                    {item.level && (
                                         <div className="relative group">
                                             <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-md blur-[2px] group-hover:blur-[3px] transition-all" />
                                             <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-1 py-0.5 rounded-md border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[28px] shadow-sm backdrop-blur-sm">
                                                 <span className="text-[5.5px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">{t('common.lvl')}</span>
-                                                <span className="text-[11px] font-black bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{earning.level}</span>
+                                                <span className="text-[11px] font-black bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{item.level}</span>
                                             </div>
                                         </div>
                                     )}
                                     <div className="flex items-center gap-1">
                                         <span className={`font-black ${styles.text} text-sm tracking-tight leading-none`}>
-                                            +{earning.currency === 'XP' ? earning.amount : earning.amount.toFixed(earning.amount < 1 ? 3 : 2)}
+                                            +{item.currency === 'XP' ? item.amount : item.amount.toFixed(item.amount < 1 ? 3 : 2)}
                                         </span>
                                         <span className={`text-[7.5px] font-black ${styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
-                                            {earning.currency}
+                                            {item.currency}
                                         </span>
                                     </div>
                                 </div>

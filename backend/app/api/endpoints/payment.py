@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+from datetime import UTC, datetime
 
 logger = logging.getLogger(__name__)
 
@@ -284,3 +285,58 @@ async def get_my_transactions(
             "created_at": t.created_at.isoformat()
         } for t in txs
     ]
+
+@router.post("/upgrade-from-balance")
+async def upgrade_from_balance(
+    plan: str = Body(..., embed=True), # "PRO" or "PRO_PLUS"
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Upgrades a user using their internal balance.
+    Minimum balance for PRO: $39, for PRO+: $69.
+    """
+    try:
+        tg_user = get_tg_user(user_data)
+        tg_id = str(tg_user.get("id"))
+    except Exception as e:
+        logger.warning(f"Invalid user data in upgrade_from_balance: {e}")
+        raise HTTPException(status_code=400, detail="Invalid user data")
+
+    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    result = await session.exec(statement)
+    partner = result.first()
+
+    if not partner:
+        raise HTTPException(status_code=404, detail="Partner not found")
+
+    # Determine Price
+    price = settings.PRO_PRICE_USD if plan == "PRO" else settings.PRO_PLUS_PRICE_USD
+    
+    # Check if already has the plan or better
+    if plan == "PRO" and partner.is_pro:
+         raise HTTPException(status_code=400, detail="User is already PRO or higher")
+    if plan == "PRO_PLUS" and partner.subscription_plan == "PRO_PLUS_MONTHLY":
+         raise HTTPException(status_code=400, detail="User is already PRO+")
+
+    # Check Balance
+    if partner.balance < price:
+        raise HTTPException(status_code=400, detail=f"Insufficient balance. Need ${price}")
+
+    # Deduct Balance
+    partner.balance = Partner.balance - price
+    session.add(partner)
+
+    # Process Upgrade
+    # We call upgrade_to_pro which handles the logic, commissions, and notifications
+    await payment_service.upgrade_to_pro(
+        session=session,
+        partner=partner,
+        amount=price,
+        currency="BALANCE",
+        network="INTERNAL",
+        tx_hash=f"BAL_UPG_{partner.id}_{int(datetime.now(UTC).timestamp())}"
+    )
+
+    # Note: upgrade_to_pro commits the session
+    return {"status": "success", "message": f"Upgraded to {plan} using balance"}

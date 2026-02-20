@@ -355,6 +355,8 @@
     "qr_modal_desc": "Scan to join your network instantly",
     "no_earnings": "No earnings yet",
     "xp_tab": "XP",
-    "crypto_tab": "Crypto"
+    "crypto_tab": "Crypto",
+    "upgrade_pro_btn": "UPGRADE PRO",
+    "upgrade_plus_btn": "UPGRADE PRO+"
   }
 }
