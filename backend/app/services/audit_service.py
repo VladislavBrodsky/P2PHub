@@ -2,7 +2,7 @@ import logging
 
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.models.audit_log import AuditLog
+from app.models.audit_log import ActionType, AuditLog
 
 logger = logging.getLogger(__name__)
 
@@ -10,18 +10,26 @@ class AuditService:
     async def log_event(
         self,
         session: AsyncSession,
-        entity_type: str,
-        entity_id: str,
-        action: str,
-        actor_id: str = "system",
+        entity_type: str | None = None,
+        entity_id: str | None = None,
+        action: str | None = None,
+        actor_id: str | None = "system",
         details: dict | None = None,
-        ip_address: str | None = None
-    ) -> AuditLog:
+        ip_address: str | None = None,
+        # New Phase 3 Architecture
+        partner_id: int | None = None,
+        action_type: ActionType = ActionType.MISC,
+        description: str | None = None
+    ) -> AuditLog | None:
         """
         Logs a system event to the audit table.
+        #comment Updated for Scaling Phase 3: Supports partner_id linking and strict ENUM action_types.
         """
         try:
             log_entry = AuditLog(
+                partner_id=partner_id,
+                action_type=action_type,
+                description=description,
                 entity_type=entity_type,
                 entity_id=entity_id,
                 action=action,
@@ -44,21 +52,27 @@ class AuditService:
         self,
         session: AsyncSession,
         partner_id: int,
-        new_user_id: int,
-        xp_amount: int,
-        level: int,
-        is_pro: bool,
-        xp_before: int,
-        xp_after: int
+        new_user_id: int | None = None,
+        xp_amount: int = 0,
+        level: int | None = None,
+        is_pro: bool = False,
+        xp_before: int = 0,
+        xp_after: int = 0,
+        buyer_id: int | None = None # Sometimes passed by referral_service
     ):
         """Logs an XP award event."""
+        # #comment Phase 3 mapped metrics
         await self.log_event(
             session=session,
+            partner_id=partner_id,
+            action_type=ActionType.COMMISSION,
+            description=f"XP Awarded: +{xp_amount}",
             entity_type="partner",
             entity_id=str(partner_id),
             action="xp_award",
             details={
                 "new_user_id": new_user_id,
+                "buyer_id": buyer_id,
                 "xp_amount": xp_amount,
                 "level": level,
                 "is_pro": is_pro,
@@ -80,6 +94,9 @@ class AuditService:
         """Logs a commission award event."""
         await self.log_event(
             session=session,
+            partner_id=partner_id,
+            action_type=ActionType.COMMISSION,
+            description=f"Commission Earned: ${amount:0.2f} from Level {level}",
             entity_type="partner",
             entity_id=str(partner_id),
             action="commission_award",
@@ -104,6 +121,9 @@ class AuditService:
         """Logs a task completion event."""
         await self.log_event(
             session=session,
+            partner_id=partner_id,
+            action_type=ActionType.SYSTEM,
+            description=f"Task Completed: {task_id}",
             entity_type="partner",
             entity_id=str(partner_id),
             action="task_completion",

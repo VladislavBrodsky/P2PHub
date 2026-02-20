@@ -100,8 +100,12 @@ async def create_payment_session(
     )
     
     # #comment: Log session creation so we can track conversion rates and abandoned carts.
+    from app.models.audit_log import ActionType
     await audit_service.log_event(
         session=session,
+        partner_id=partner.id,
+        action_type=ActionType.PAYMENT,
+        description=f"Transaction Pending: {amount} {currency}",
         entity_type="payment_session",
         entity_id=str(payment_data.get("transaction_id", "unknown")),
         action="payment_session_created",
@@ -148,8 +152,12 @@ async def verify_ton(
 
     # #comment: Log the verification result for audit purposes.
     # We record whether the verification succeeded or failed, and the hash used.
+    from app.models.audit_log import ActionType
     await audit_service.log_event(
         session=session,
+        partner_id=partner.id,
+        action_type=ActionType.PAYMENT,
+        description=f"TON Verification Attempted: {success}",
         entity_type="transaction",
         entity_id=tx_hash, # Using hash as ID for lookup since we might not have a txn ID yet if failed
         action="ton_verification_attempt",
@@ -210,8 +218,12 @@ async def submit_manual_payment(
         await session.refresh(transaction)
 
         # #comment: Log this action in the audit table for security and history tracking.
+        from app.models.audit_log import ActionType
         await audit_service.log_event(
             session=session,
+            partner_id=partner.id,
+            action_type=ActionType.PAYMENT,
+            description="Manual Payment Submitted for Review",
             entity_type="transaction",
             entity_id=str(transaction.id),
             action="manual_payment_submitted",

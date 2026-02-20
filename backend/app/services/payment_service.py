@@ -181,10 +181,13 @@ class PaymentService:
                 transaction_id=active_session.id
             )
             
-            # #comment: Service-level audit log (covers Bot & API)
+            from app.models.audit_log import ActionType
             from app.services.audit_service import audit_service
             await audit_service.log_event(
                 session=session,
+                partner_id=partner.id,
+                action_type=ActionType.PAYMENT,
+                description=f"TON Payment Verified: {active_session.amount} USD",
                 entity_type="transaction",
                 entity_id=tx_hash,
                 action="ton_verification_success",
@@ -199,9 +202,13 @@ class PaymentService:
         # but the 10-min check handles it.
         
         # #comment: Audit failure
+        from app.models.audit_log import ActionType
         from app.services.audit_service import audit_service
         await audit_service.log_event(
             session=session,
+            partner_id=partner.id,
+            action_type=ActionType.PENALTY,
+            description="TON Payment Verification Failed",
             entity_type="transaction",
             entity_id=tx_hash,
             action="ton_verification_failed",
