@@ -195,6 +195,22 @@ class NotificationService:
             async def wrap_send():
                 try:
                     await bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode, reply_markup=reply_markup)
+                    # Add audit log for fallback success so we know what happened
+                    from app.models.partner import engine
+                    from app.services.audit_service import audit_service
+                    from sqlalchemy.orm import sessionmaker
+                    from sqlmodel.ext.asyncio.session import AsyncSession
+                    
+                    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+                    async with async_session() as session:
+                        await audit_service.log_event(
+                            session=session,
+                            entity_type="notification",
+                            entity_id=str(chat_id),
+                            action="fallback_success",
+                            details={"prio": "emergency", "text_len": len(text)}
+                        )
+                        await session.commit()
                 except Exception as fe:
                     logger.error(f"💥 Fallback failed for {chat_id}: {fe}")
 
@@ -238,6 +254,7 @@ class NotificationService:
                     reply_markup = self._build_keyboard(item.buttons) if item.buttons else None
                     await bot.send_message(chat_id=item.chat_id, text=item.text, parse_mode=item.parse_mode, reply_markup=reply_markup)
                     item.status = "sent"
+                    item.last_error = None # Clear error on success
                 except Exception as e:
                     item.attempts += 1
                     item.last_error = str(e)[:100]

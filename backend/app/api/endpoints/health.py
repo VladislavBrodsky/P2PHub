@@ -104,3 +104,60 @@ async def payment_health_check(response: Response):
 
     health["latency_ms"] = round((time.time() - start) * 1000, 2)
     return health
+
+@router.get("/notifications-health", status_code=status.HTTP_200_OK)
+async def notifications_health_check(
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Exposes notification_retry status counts for real-time monitoring.
+    """
+    from sqlalchemy import func
+    from app.models.notification_retry import NotificationRetry
+    from sqlmodel import select
+    
+    # Check Database connection via NotificationRetry table
+    try:
+        # 1. Count items by status
+        stmt = select(NotificationRetry.status, func.count(NotificationRetry.id)).group_by(NotificationRetry.status)
+        result = await session.execute(stmt)
+        # result is a sequence of (status, count)
+        counts = {row[0]: row[1] for row in result.all()}
+        
+        # Add defaults for typical statuses
+        for s in ["pending", "sent", "failed"]:
+            if s not in counts:
+                counts[s] = 0
+                
+        # 2. Check for stale pending items (stuck)
+        from datetime import datetime, UTC, timedelta
+        now = datetime.now(UTC).replace(tzinfo=None)
+        ten_mins_ago = now - timedelta(minutes=10)
+        
+        stmt_stuck = select(func.count(NotificationRetry.id)).where(
+            NotificationRetry.status == "pending",
+            NotificationRetry.created_at <= ten_mins_ago
+        )
+        result_stuck = await session.execute(stmt_stuck)
+        stuck_count = result_stuck.scalar() or 0
+        
+        # 3. Get latest error if any
+        stmt_err = select(NotificationRetry.last_error).where(
+            NotificationRetry.status != "sent",
+            NotificationRetry.last_error.is_not(None)
+        ).order_by(NotificationRetry.created_at.desc()).limit(1)
+        res_err = await session.execute(stmt_err)
+        last_error = res_err.scalar()
+
+        return {
+            "status": "healthy" if stuck_count < 10 else "congested",
+            "counts": counts,
+            "stuck_pending_10m": stuck_count,
+            "last_error_sample": last_error,
+            "server_time": now.isoformat()
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "error": str(e)
+        }

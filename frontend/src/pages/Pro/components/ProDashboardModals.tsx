@@ -240,37 +240,37 @@ export const ProDashboardModals = ({
                             </div>
 
                             {/* Sub Tabs Selection */}
-                            <div className="mx-6 sm:mx-8 mt-6">
-                                <div className="flex p-1 bg-slate-100 dark:bg-black/40 rounded-2xl border border-slate-200 dark:border-white/5 relative overflow-hidden">
+                            <div className="mx-auto max-w-[90%] mt-5">
+                                <div className="flex p-0.5 bg-slate-100 dark:bg-black/60 rounded-full border border-slate-200 dark:border-white/5 relative overflow-hidden">
                                     <button
                                         onClick={() => { selection(); setSetupTab('x'); }}
-                                        className={`flex-1 py-3 rounded-xl text-[9px] font-black uppercase tracking-[0.15em] transition-all duration-500 flex items-center justify-center gap-2 relative z-10 ${setupTab === 'x'
-                                            ? 'bg-white dark:bg-white/10 text-indigo-600 dark:text-white shadow-xl shadow-indigo-500/10'
+                                        className={`flex-1 py-2 rounded-full text-[8px] font-black uppercase tracking-[0.12em] transition-all duration-300 flex items-center justify-center gap-1.5 relative z-10 ${setupTab === 'x'
+                                            ? 'bg-white dark:bg-white/10 text-indigo-600 dark:text-white shadow-lg shadow-indigo-500/5'
                                             : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                                     >
-                                        <Network size={12} className={setupTab === 'x' ? 'text-indigo-500' : 'opacity-40'} />
+                                        <Network size={11} className={setupTab === 'x' ? 'text-indigo-500' : 'opacity-40'} />
                                         {t('pro_dashboard.setup.x_broadcast')}
                                     </button>
                                     <button
                                         onClick={() => { selection(); setSetupTab('tg'); }}
-                                        className={`flex-1 py-3 rounded-xl text-[9px] font-black uppercase tracking-[0.15em] transition-all duration-500 flex items-center justify-center gap-2 relative z-10 ${setupTab === 'tg'
-                                            ? 'bg-white dark:bg-white/10 text-sky-600 dark:text-white shadow-xl shadow-sky-500/10'
+                                        className={`flex-1 py-2 rounded-full text-[8px] font-black uppercase tracking-[0.12em] transition-all duration-300 flex items-center justify-center gap-1.5 relative z-10 ${setupTab === 'tg'
+                                            ? 'bg-white dark:bg-white/10 text-sky-600 dark:text-white shadow-lg shadow-sky-500/5'
                                             : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                                     >
-                                        <Send size={12} className={setupTab === 'tg' ? 'text-sky-500' : 'opacity-40'} />
+                                        <Send size={11} className={setupTab === 'tg' ? 'text-sky-500' : 'opacity-40'} />
                                         {t('pro_dashboard.setup.tg_sync')}
                                     </button>
                                     <button
                                         onClick={() => { selection(); setSetupTab('omni'); }}
-                                        className={`flex-1 py-3 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-500 flex items-center justify-center gap-2 relative z-10 ${setupTab === 'omni'
-                                            ? 'bg-white dark:bg-white/10 text-emerald-600 dark:text-white shadow-xl shadow-emerald-500/10'
+                                        className={`flex-1 py-2 rounded-full text-[8px] font-black uppercase tracking-[0.15em] transition-all duration-300 flex items-center justify-center gap-1.5 relative z-10 ${setupTab === 'omni'
+                                            ? 'bg-white dark:bg-white/10 text-emerald-600 dark:text-white shadow-lg shadow-emerald-500/5'
                                             : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                                     >
-                                        <Blocks size={12} className={setupTab === 'omni' ? 'text-emerald-500' : 'opacity-40'} />
+                                        <Blocks size={11} className={setupTab === 'omni' ? 'text-emerald-500' : 'opacity-40'} />
                                         {t('pro_dashboard.setup.omni_sync')}
                                         {!status?.is_pro_plus && (
-                                            <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-amber-500 border-2 border-white dark:border-slate-900 flex items-center justify-center">
-                                                <Lock size={6} className="text-white" />
+                                            <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-amber-500 border border-white dark:border-slate-900 flex items-center justify-center">
+                                                <Lock size={5} className="text-white" />
                                             </div>
                                         )}
                                     </button>
@@ -285,15 +285,15 @@ export const ProDashboardModals = ({
                                         animate={{ opacity: 1, x: 0 }}
                                         className="space-y-4"
                                     >
-                                        <div className="p-4 bg-indigo-500/10 dark:bg-indigo-500/10 rounded-2xl border border-indigo-500/20 flex items-start gap-3 group transition-all">
-                                            <div className="w-9 h-9 rounded-xl bg-indigo-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform">
-                                                <Network size={18} />
+                                        <div className="p-5 bg-indigo-500/5 dark:bg-indigo-500/10 rounded-3xl border border-indigo-500/10 flex flex-col items-center text-center gap-3 group transition-all">
+                                            <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shrink-0 shadow-xl shadow-indigo-600/20 group-hover:scale-110 transition-transform">
+                                                <Network size={22} />
                                             </div>
-                                            <div>
-                                                <h4 className="text-[10px] font-black text-indigo-900 dark:text-indigo-300 uppercase tracking-[0.15em]">Direct API Protocol</h4>
-                                                <p className="text-[9px] font-medium text-indigo-700/70 dark:text-indigo-400/70 leading-relaxed mt-0.5">
-                                                    Enter your X Developer keys to enable autonomous posting.
-                                                    <button onClick={() => { selection(); setShowManual('setup_x'); }} className="ml-1.5 text-indigo-600 dark:text-indigo-400 underline font-black hover:text-indigo-500 italic">View Guide</button>
+                                            <div className="space-y-1">
+                                                <h4 className="text-[11px] font-black text-indigo-900 dark:text-indigo-300 uppercase tracking-[0.2em]">Direct API Protocol</h4>
+                                                <p className="text-[9px] font-medium text-indigo-700/70 dark:text-indigo-400/70 leading-relaxed max-w-[240px] mx-auto">
+                                                    Enter your X Developer keys to enable autonomous posting on your profile.
+                                                    <button onClick={() => { selection(); setShowManual('setup_x'); }} className="block mx-auto mt-1.5 text-indigo-600 dark:text-indigo-400 underline font-black hover:text-indigo-500 italic">View Connection Guide</button>
                                                 </p>
                                             </div>
                                         </div>
@@ -328,36 +328,36 @@ export const ProDashboardModals = ({
                                     >
                                         <div className="relative group overflow-hidden rounded-[2rem] p-0.5">
                                             <div className="absolute inset-0 bg-linear-to-br from-sky-400 via-indigo-500 to-purple-600 opacity-20 group-hover:opacity-30 transition-opacity" />
-                                            <div className="relative bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl p-4 rounded-[1.9rem] border border-white/20 dark:border-white/5 transition-all">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="relative shrink-0">
-                                                        <div className="w-12 h-12 rounded-[1rem] bg-linear-to-br from-sky-400 to-sky-600 flex items-center justify-center text-white shadow-xl shadow-sky-500/30">
-                                                            <Send size={22} className="-ml-0.5" />
+                                            <div className="relative bg-white/5 dark:bg-slate-900/40 backdrop-blur-xl p-6 rounded-[2.5rem] border border-slate-200 dark:border-white/5 transition-all flex flex-col items-center text-center">
+                                                <div className="flex flex-col items-center gap-4">
+                                                    <div className="relative">
+                                                        <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-sky-400 to-sky-600 flex items-center justify-center text-white shadow-2xl shadow-sky-500/40">
+                                                            <Send size={28} className="-ml-1" />
                                                         </div>
-                                                        <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-lg bg-indigo-600 border-2 border-white dark:border-slate-900 flex items-center justify-center text-white shadow-lg">
-                                                            <Network size={10} />
+                                                        <div className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-xl bg-indigo-600 border-[3px] border-white dark:border-slate-900 flex items-center justify-center text-white shadow-xl">
+                                                            <Network size={12} />
                                                         </div>
                                                     </div>
-                                                    <div className="flex flex-col flex-1 min-w-0">
-                                                        <div className="flex items-center gap-2 mb-1">
+                                                    <div className="flex flex-col items-center min-w-0">
+                                                        <div className="mb-2">
                                                             <span className={`text-[7px] font-black px-2 py-0.5 rounded-md uppercase tracking-[0.15em] ${status?.is_pro_plus ? 'bg-indigo-500/10 text-indigo-500 border border-indigo-500/20' : 'bg-amber-500/10 text-amber-500 border border-amber-500/20'}`}>
                                                                 {status?.is_pro_plus ? 'ELITE+ NODE' : 'STD NODE'}
                                                             </span>
                                                         </div>
-                                                        <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-[0.08em] leading-tight">{t('pro_dashboard.setup.tg_sync_multi.title')}</h4>
-                                                        <p className="text-[9px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mt-0.5 line-clamp-2">
+                                                        <h4 className="text-[14px] font-black text-slate-900 dark:text-white uppercase tracking-[0.08em] leading-tight mb-1">{t('pro_dashboard.setup.tg_sync_multi.title')}</h4>
+                                                        <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed max-w-[240px]">
                                                             {status?.is_pro_plus ? t('pro_dashboard.setup.tg_sync_multi.desc_plus') : t('pro_dashboard.setup.tg_sync_multi.desc_pro')}
                                                         </p>
+                                                        <button onClick={() => { selection(); setShowManual('setup_tg'); }} className="mt-3 text-[9px] text-sky-600 dark:text-sky-400 underline font-black hover:text-sky-500 transition-colors italic">{t('pro_dashboard.setup.tg_manual.title')}</button>
                                                     </div>
-                                                    <button onClick={() => { selection(); setShowManual('setup_tg'); }} className="shrink-0 text-[8px] text-sky-600 dark:text-sky-400 underline font-black hover:text-sky-500 transition-colors italic">{t('pro_dashboard.setup.tg_manual.title')}</button>
                                                 </div>
                                                 {!status?.is_pro_plus && (
                                                     <button
                                                         onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' })); }}
-                                                        className="w-full mt-3 py-3 bg-linear-to-r from-indigo-500 via-purple-500 to-indigo-600 text-white rounded-xl text-[9px] font-black uppercase tracking-[0.2em] shadow-lg shadow-indigo-500/25 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 relative overflow-hidden"
+                                                        className="w-full mt-5 py-3.5 bg-linear-to-r from-indigo-500 via-purple-500 to-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.25em] shadow-xl shadow-indigo-500/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 relative overflow-hidden"
                                                     >
                                                         <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:animate-shimmer" />
-                                                        <Lock size={10} className="transition-transform" />
+                                                        <Lock size={12} className="transition-transform" />
                                                         {t('pro_dashboard.setup.tg_sync_multi.upgrade_pro_plus_cta')}
                                                     </button>
                                                 )}
@@ -564,13 +564,13 @@ export const ProDashboardModals = ({
                                             </div>
                                         ) : (
                                             <>
-                                                <div className="p-5 bg-emerald-500/10 dark:bg-emerald-500/10 rounded-3xl border border-emerald-500/20 flex items-start gap-4 group transition-all">
-                                                    <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
-                                                        <Blocks size={20} />
+                                                <div className="p-6 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-[2rem] border border-emerald-500/10 flex flex-col items-center text-center gap-4 group transition-all">
+                                                    <div className="w-14 h-14 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shrink-0 shadow-xl shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+                                                        <Blocks size={28} />
                                                     </div>
-                                                    <div>
-                                                        <h4 className="text-[11px] font-black text-emerald-900 dark:text-emerald-300 uppercase tracking-[0.15em]">{t('pro_dashboard.setup.tg_sync_multi.more_platforms')}</h4>
-                                                        <p className="text-[10px] font-medium text-emerald-700/70 dark:text-emerald-400/70 leading-relaxed mt-1">
+                                                    <div className="space-y-1">
+                                                        <h4 className="text-[14px] font-black text-emerald-900 dark:text-emerald-300 uppercase tracking-[0.2em]">{t('pro_dashboard.setup.tg_sync_multi.more_platforms')}</h4>
+                                                        <p className="text-[10px] font-medium text-emerald-700/70 dark:text-emerald-400/70 leading-relaxed max-w-[280px] mx-auto">
                                                             {t('pro_dashboard.setup.tg_sync_multi.more_platforms_desc')}
                                                         </p>
                                                     </div>
