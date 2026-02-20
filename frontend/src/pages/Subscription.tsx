@@ -305,18 +305,70 @@ export default function SubscriptionPage() {
             </motion.div>
 
             {/* ── PLAN SELECTOR ───────────────────────────────────────────── */}
-        </div>
-            </div >
+            <div className="flex flex-col gap-4 mb-8">
+                <div className="text-center space-y-2">
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-wider border border-indigo-500/20"
+                    >
+                        <Sparkles size={12} fill="currentColor" />
+                        {t('subscription.upgrade.badge')}
+                    </motion.div>
+                    <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                        {t('subscription.upgrade.dominate_network')}
+                    </h2>
+                    <p className="text-slate-500 dark:text-slate-400 text-[11px] font-bold max-w-[280px] mx-auto leading-snug">
+                        {t('subscription.upgrade.subheadline')}
+                    </p>
+                </div>
 
-        {/* ── KEY COMPARISON GRID ───────────────────────────────────── */ }
-        < div className = "mb-10 px-1" >
+                {/* Toggle */}
+                <div className="relative bg-slate-100 dark:bg-white/5 p-1.5 rounded-[2.5rem] flex gap-1.5 border border-slate-200 dark:border-white/10 shadow-inner mt-2">
+                    <div
+                        className={`absolute inset-y-1.5 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-[2rem] shadow-xl ${selectedPlan === 'PRO'
+                            ? 'left-1.5 w-[calc(50%-0.375rem)] bg-white dark:bg-indigo-600 shadow-indigo-500/20'
+                            : 'left-[calc(50%+0.375rem)] w-[calc(50%-0.375rem)] bg-linear-to-br from-indigo-500 via-purple-500 to-fuchsia-500 shadow-purple-500/30'
+                            }`}
+                    />
+                    <button
+                        onClick={() => { selection(); setSelectedPlan('PRO'); }}
+                        className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-colors duration-300 ${selectedPlan === 'PRO' ? 'text-indigo-600 dark:text-white' : 'text-slate-400 dark:text-white/30'}`}
+                    >
+                        <span className="text-[9px] font-black tracking-[0.2em] uppercase opacity-70">{t('subscription.upgrade.pro_title')}</span>
+                        <div className="flex items-baseline gap-1">
+                            <span className="text-[14px] font-bold opacity-50">$</span>
+                            <span className="text-3xl font-black tracking-tighter">39</span>
+                        </div>
+                        <span className="text-[8px] font-black opacity-40 uppercase tracking-widest">{t('subscription.upgrade.monthly_label')}</span>
+                    </button>
+                    <button
+                        onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }}
+                        className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-colors duration-300 ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-400 dark:text-white/30'}`}
+                    >
+                        <span className="text-[9px] font-black tracking-[0.2em] uppercase opacity-70">{isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title')}</span>
+                        <div className="flex items-baseline gap-1">
+                            <span className="text-[14px] font-bold opacity-50">$</span>
+                            <span className="text-3xl font-black tracking-tighter">{isStandardPro ? upgradePrice : proPlusPrice}</span>
+                        </div>
+                        <span className="text-[8px] font-black opacity-60 uppercase tracking-widest">{isStandardPro ? t('subscription.upgrade.upgrade_label') || 'ONE-TIME UPGRADE' : t('subscription.upgrade.lifetime_label')}</span>
+                        {selectedPlan !== 'PRO_PLUS' && (
+                            <div className="absolute -top-1.5 -right-1 px-2 py-0.5 bg-linear-to-r from-amber-400 to-orange-500 text-[8px] font-black text-white rounded-full border-2 border-slate-100 dark:border-slate-800 shadow-lg">
+                                🔥 BEST
+                            </div>
+                        )}
+                    </button>
+                </div>
+            </div>
+
+            {/* ── KEY COMPARISON GRID ───────────────────────────────────── */}
+            <div className="mb-10 px-1">
                 <div className="flex items-center gap-2 mb-4 px-2">
                     <div className="w-1 h-4 bg-indigo-500 rounded-full" />
                     <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-white/40">
                         {t('subscription.comparison.title', 'Key Differences')}
                     </h3>
                 </div>
-                
+
                 <div className="grid grid-cols-3 gap-2">
                     {[
                         { icon: Network, label: t('subscription.comparison.levels', 'Levels'), pro: '9', plus: '20', color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
@@ -328,7 +380,7 @@ export default function SubscriptionPage() {
                                 <item.icon size={16} />
                             </div>
                             <span className="text-[9px] font-black text-slate-400 dark:text-white/30 uppercase tracking-widest">{item.label}</span>
-                            
+
                             <div className="flex items-center gap-2.5 mt-1">
                                 <div className="flex flex-col items-center">
                                     <span className="text-[12px] font-black text-slate-900 dark:text-white/60">{item.pro}</span>
@@ -342,7 +394,7 @@ export default function SubscriptionPage() {
                             </div>
 
                             {selectedPlan === 'PRO_PLUS' && (
-                                <motion.div 
+                                <motion.div
                                     layoutId={`glow-${idx}`}
                                     className="absolute inset-0 border border-indigo-500/40 rounded-2xl pointer-events-none"
                                     initial={{ opacity: 0 }}
@@ -352,200 +404,199 @@ export default function SubscriptionPage() {
                         </div>
                     ))}
                 </div>
-            </div >
-            </div >
+            </div>
 
-        {/* ── BENEFITS GRID ───────────────────────────────────────────── */ }
-        < AnimatePresence mode = "wait" >
-            <motion.div
-                key={selectedPlan}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.25 }}
-                className="mb-8"
-            >
-                {/* Plan headline */}
-                <div className={`rounded-2xl p-4 mb-4 border relative overflow-hidden ${selectedPlan === 'PRO'
-                    ? 'bg-linear-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/40 dark:to-purple-950/30 border-indigo-200 dark:border-indigo-500/30'
-                    : 'bg-linear-to-br from-purple-50 to-fuchsia-50 dark:from-purple-950/40 dark:to-fuchsia-950/30 border-purple-200 dark:border-purple-500/30'
-                    }`}>
-                    <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-30 -mr-8 -mt-8 bg-indigo-500" />
-                    <div className="relative">
-                        <div className={`text-[9px] font-black uppercase tracking-[0.25em] mb-1 ${selectedPlan === 'PRO' ? 'text-indigo-600 dark:text-indigo-400' : 'text-purple-600 dark:text-purple-400'}`}>
-                            {selectedPlan === 'PRO' ? t('subscription.upgrade.pro_title') : t('subscription.upgrade.pro_plus_title')} — {t('subscription.plan_headline')}
-                        </div>
-                        <p className="text-[12px] font-bold text-slate-700 dark:text-white/80 leading-snug">
-                            {selectedPlan === 'PRO' ? t('subscription.plan_desc_pro') : t('subscription.plan_desc_plus')}
-                        </p>
-                    </div>
-                </div>
-
-                {/* Benefits list */}
-                <div className="space-y-2.5">
-                    {currentBenefits.map((b, i) => (
-                        <motion.div
-                            key={b.label}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: i * 0.04 }}
-                            className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-white/8 shadow-sm"
-                        >
-                            <div className={`w-10 h-10 rounded-xl ${b.bg} flex items-center justify-center shrink-0 ${b.color}`}>
-                                <b.icon size={18} strokeWidth={2.5} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <div className={`text-[9px] font-black uppercase tracking-widest mb-0.5 ${b.color}`}>{b.label}</div>
-                                <div className="text-[11px] font-bold text-slate-700 dark:text-white/80 leading-snug">{b.desc}</div>
-                            </div>
-                            <Check size={14} className="text-emerald-500 shrink-0 mt-1" strokeWidth={3} />
-                        </motion.div>
-                    ))}
-                </div>
-
-                {/* Quick checklist from locale */}
-                <div className="mt-4 bg-slate-50 dark:bg-white/3 border border-slate-200 dark:border-white/8 rounded-2xl p-4 grid grid-cols-2 gap-2">
-                    {(() => {
-                        const benefits = t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true }) as string[];
-                        return Array.isArray(benefits) ? benefits.map((b: string, i: number) => (
-                            <div key={i} className="flex items-center gap-2">
-                                <div className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${selectedPlan === 'PRO' ? 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400' : 'bg-purple-500/15 text-purple-600 dark:text-purple-400'}`}>
-                                    <Check size={9} strokeWidth={4} />
-                                </div>
-                                <span className="text-[9px] font-black text-slate-600 dark:text-white/60 uppercase tracking-tight">{b}</span>
-                            </div>
-                        )) : null;
-                    })()}
-                </div>
-
-                {/* CTA inside benefits */}
-                <motion.button
-                    whileTap={{ scale: 0.97 }}
-                    onClick={scrollToPayment}
-                    className={`w-full mt-5 h-14 rounded-2xl font-black text-white text-[11px] uppercase tracking-widest shadow-xl flex items-center justify-center gap-2 ${selectedPlan === 'PRO'
-                        ? 'bg-linear-to-r from-indigo-500 to-purple-600 shadow-indigo-500/25'
-                        : 'bg-linear-to-r from-purple-500 via-fuchsia-500 to-indigo-500 shadow-purple-500/25'
-                        }`}
+            {/* ── BENEFITS GRID ───────────────────────────────────────────── */}
+            <AnimatePresence mode="wait">
+                <motion.div
+                    key={selectedPlan}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.25 }}
+                    className="mb-8"
                 >
-                    <Lock size={14} />
-                    {selectedPlan === 'PRO' ? t('subscription.upgrade.buy_pro_btn', 'BUY PRO') : (isStandardPro ? t('subscription.upgrade.upgrade_to_pro_plus_btn', 'UPGRADE TO PRO+') : t('subscription.upgrade.buy_pro_plus_btn', 'BUY PRO+'))} →
-                </motion.button>
-            </motion.div>
+                    {/* Plan headline */}
+                    <div className={`rounded-2xl p-4 mb-4 border relative overflow-hidden ${selectedPlan === 'PRO'
+                        ? 'bg-linear-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/40 dark:to-purple-950/30 border-indigo-200 dark:border-indigo-500/30'
+                        : 'bg-linear-to-br from-purple-50 to-fuchsia-50 dark:from-purple-950/40 dark:to-fuchsia-950/30 border-purple-200 dark:border-purple-500/30'
+                        }`}>
+                        <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-30 -mr-8 -mt-8 bg-indigo-500" />
+                        <div className="relative">
+                            <div className={`text-[9px] font-black uppercase tracking-[0.25em] mb-1 ${selectedPlan === 'PRO' ? 'text-indigo-600 dark:text-indigo-400' : 'text-purple-600 dark:text-purple-400'}`}>
+                                {selectedPlan === 'PRO' ? t('subscription.upgrade.pro_title') : t('subscription.upgrade.pro_plus_title')} — {t('subscription.plan_headline')}
+                            </div>
+                            <p className="text-[12px] font-bold text-slate-700 dark:text-white/80 leading-snug">
+                                {selectedPlan === 'PRO' ? t('subscription.plan_desc_pro') : t('subscription.plan_desc_plus')}
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Benefits list */}
+                    <div className="space-y-2.5">
+                        {currentBenefits.map((b, i) => (
+                            <motion.div
+                                key={b.label}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: i * 0.04 }}
+                                className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-white/8 shadow-sm"
+                            >
+                                <div className={`w-10 h-10 rounded-xl ${b.bg} flex items-center justify-center shrink-0 ${b.color}`}>
+                                    <b.icon size={18} strokeWidth={2.5} />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <div className={`text-[9px] font-black uppercase tracking-widest mb-0.5 ${b.color}`}>{b.label}</div>
+                                    <div className="text-[11px] font-bold text-slate-700 dark:text-white/80 leading-snug">{b.desc}</div>
+                                </div>
+                                <Check size={14} className="text-emerald-500 shrink-0 mt-1" strokeWidth={3} />
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {/* Quick checklist from locale */}
+                    <div className="mt-4 bg-slate-50 dark:bg-white/3 border border-slate-200 dark:border-white/8 rounded-2xl p-4 grid grid-cols-2 gap-2">
+                        {(() => {
+                            const benefits = t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true }) as string[];
+                            return Array.isArray(benefits) ? benefits.map((b: string, i: number) => (
+                                <div key={i} className="flex items-center gap-2">
+                                    <div className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${selectedPlan === 'PRO' ? 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400' : 'bg-purple-500/15 text-purple-600 dark:text-purple-400'}`}>
+                                        <Check size={9} strokeWidth={4} />
+                                    </div>
+                                    <span className="text-[9px] font-black text-slate-600 dark:text-white/60 uppercase tracking-tight">{b}</span>
+                                </div>
+                            )) : null;
+                        })()}
+                    </div>
+
+                    {/* CTA inside benefits */}
+                    <motion.button
+                        whileTap={{ scale: 0.97 }}
+                        onClick={scrollToPayment}
+                        className={`w-full mt-5 h-14 rounded-2xl font-black text-white text-[11px] uppercase tracking-widest shadow-xl flex items-center justify-center gap-2 ${selectedPlan === 'PRO'
+                            ? 'bg-linear-to-r from-indigo-500 to-purple-600 shadow-indigo-500/25'
+                            : 'bg-linear-to-r from-purple-500 via-fuchsia-500 to-indigo-500 shadow-purple-500/25'
+                            }`}
+                    >
+                        <Lock size={14} />
+                        {selectedPlan === 'PRO' ? t('subscription.upgrade.buy_pro_btn', 'BUY PRO') : (isStandardPro ? t('subscription.upgrade.upgrade_to_pro_plus_btn', 'UPGRADE TO PRO+') : t('subscription.upgrade.buy_pro_plus_btn', 'BUY PRO+'))} →
+                    </motion.button>
+                </motion.div>
             </AnimatePresence >
 
-        {/* ── PAYMENT SECTION ─────────────────────────────────────────── */ }
-        < motion.div ref = { paymentRef } className = "mb-10" >
-            <div className="vibing-premium-panel p-6 shadow-premium-xl relative z-10 mx-auto max-w-[340px]">
-                {!paymentMethod ? (
-                    <div className="space-y-8">
-                        <div className="text-center relative">
-                            <div className="text-[9px] font-black text-slate-500 dark:text-white/30 uppercase tracking-[0.3em] mb-4">
-                                {t('subscription.upgrade.secure_encryption_active')}
+            {/* ── PAYMENT SECTION ─────────────────────────────────────────── */}
+            < motion.div ref={paymentRef} className="mb-10" >
+                <div className="vibing-premium-panel p-6 shadow-premium-xl relative z-10 mx-auto max-w-[340px]">
+                    {!paymentMethod ? (
+                        <div className="space-y-8">
+                            <div className="text-center relative">
+                                <div className="text-[9px] font-black text-slate-500 dark:text-white/30 uppercase tracking-[0.3em] mb-4">
+                                    {t('subscription.upgrade.secure_encryption_active')}
+                                </div>
+                                <div className="flex items-baseline justify-center gap-1.5 mb-1">
+                                    <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">${planPrice}</span>
+                                    <span className="text-[10px] font-black text-slate-500 dark:text-white/40 uppercase italic font-mono">
+                                        / {selectedPlan === 'PRO_PLUS' ? t('subscription.upgrade.lifetime_label') : t('subscription.upgrade.monthly_label')}
+                                    </span>
+                                </div>
+                                <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-3">
+                                    {selectedPlan === 'PRO' ? t('subscription.upgrade.pro_title') : (isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title'))}
+                                </p>
+                                <div className="w-16 h-1 bg-linear-to-r from-indigo-500 to-fuchsia-500 mx-auto rounded-full" />
                             </div>
-                            <div className="flex items-baseline justify-center gap-1.5 mb-1">
-                                <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">${planPrice}</span>
-                                <span className="text-[10px] font-black text-slate-500 dark:text-white/40 uppercase italic font-mono">
-                                    / {selectedPlan === 'PRO_PLUS' ? t('subscription.upgrade.lifetime_label') : t('subscription.upgrade.monthly_label')}
-                                </span>
+                            <div className="grid grid-cols-2 gap-4">
+                                <button
+                                    onClick={() => { selection(); setPaymentMethod('TON'); }}
+                                    className="group relative h-20 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:border-indigo-500/40 hover:shadow-xl active:scale-95"
+                                >
+                                    <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                                        <Wallet size={20} />
+                                    </div>
+                                    <span className="text-[9px] font-black text-slate-900 dark:text-white tracking-widest uppercase">{t('subscription.upgrade.ton_wallet')}</span>
+                                </button>
+                                <button
+                                    onClick={() => { selection(); setPaymentMethod('CRYPTO'); }}
+                                    className="group relative h-20 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:border-emerald-500/40 hover:shadow-xl active:scale-95"
+                                >
+                                    <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+                                        <CreditCard size={20} />
+                                    </div>
+                                    <span className="text-[9px] font-black text-slate-900 dark:text-white tracking-widest uppercase">{t('subscription.upgrade.usdt_trc20_address')}</span>
+                                </button>
                             </div>
-                            <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-3">
-                                {selectedPlan === 'PRO' ? t('subscription.upgrade.pro_title') : (isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title'))}
-                            </p>
-                            <div className="w-16 h-1 bg-linear-to-r from-indigo-500 to-fuchsia-500 mx-auto rounded-full" />
+                            <div className="flex items-center justify-center gap-2 opacity-50 dark:opacity-30">
+                                <Shield size={10} className="text-indigo-600 dark:text-indigo-400" />
+                                <p className="text-[8px] text-slate-600 dark:text-white font-black uppercase tracking-[0.2em]">{t('subscription.upgrade.protocol_initialized')}</p>
+                            </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <button
-                                onClick={() => { selection(); setPaymentMethod('TON'); }}
-                                className="group relative h-20 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:border-indigo-500/40 hover:shadow-xl active:scale-95"
-                            >
-                                <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
-                                    <Wallet size={20} />
-                                </div>
-                                <span className="text-[9px] font-black text-slate-900 dark:text-white tracking-widest uppercase">{t('subscription.upgrade.ton_wallet')}</span>
-                            </button>
-                            <button
-                                onClick={() => { selection(); setPaymentMethod('CRYPTO'); }}
-                                className="group relative h-20 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:border-emerald-500/40 hover:shadow-xl active:scale-95"
-                            >
-                                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
-                                    <CreditCard size={20} />
-                                </div>
-                                <span className="text-[9px] font-black text-slate-900 dark:text-white tracking-widest uppercase">{t('subscription.upgrade.usdt_trc20_address')}</span>
-                            </button>
-                        </div>
-                        <div className="flex items-center justify-center gap-2 opacity-50 dark:opacity-30">
-                            <Shield size={10} className="text-indigo-600 dark:text-indigo-400" />
-                            <p className="text-[8px] text-slate-600 dark:text-white font-black uppercase tracking-[0.2em]">{t('subscription.upgrade.protocol_initialized')}</p>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="space-y-6">
-                        <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-white/5">
-                            <button onClick={() => setPaymentMethod(null)} className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 dark:text-white/50 dark:hover:text-white transition-colors">
-                                <ChevronLeft size={14} /> {t('subscription.upgrade.change_method')}
-                            </button>
-                            {formattedTime && (
-                                <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-white/10">
-                                    <Clock size={10} className="text-indigo-600 dark:text-indigo-400" />
-                                    <span className="text-[10px] font-black font-mono text-indigo-600 dark:text-indigo-400">{formattedTime}</span>
-                                </div>
-                            )}
-                        </div>
-                        <div className="mt-4">
-                            {paymentMethod === 'TON' ? (
-                                <div className="space-y-6 text-center">
-                                    <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 shadow-inner">
-                                        <Wallet size={32} className="mx-auto text-indigo-600 dark:text-indigo-400 mb-4" />
-                                        <div className="flex justify-center mb-4"><TonConnectButton /></div>
+                    ) : (
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-white/5">
+                                <button onClick={() => setPaymentMethod(null)} className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 dark:text-white/50 dark:hover:text-white transition-colors">
+                                    <ChevronLeft size={14} /> {t('subscription.upgrade.change_method')}
+                                </button>
+                                {formattedTime && (
+                                    <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-white/10">
+                                        <Clock size={10} className="text-indigo-600 dark:text-indigo-400" />
+                                        <span className="text-[10px] font-black font-mono text-indigo-600 dark:text-indigo-400">{formattedTime}</span>
                                     </div>
-                                    <button disabled={isLoading} onClick={handleTonPayment} className="w-full h-14 bg-linear-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all disabled:opacity-50">
-                                        {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.complete_payment')}
-                                    </button>
-                                </div>
-                            ) : (
-                                <div className="space-y-4">
-                                    <div onClick={() => { navigator.clipboard.writeText(adminUsdt); selection(); notification('success'); }} className="p-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl text-center cursor-pointer group hover:border-emerald-500/50 transition-colors">
-                                        <p className="text-[8px] font-black text-slate-400 dark:text-white/30 mb-2 uppercase tracking-widest">{t('subscription.upgrade.tap_to_copy')}</p>
-                                        <code className="text-[9px] font-mono text-slate-800 dark:text-white/80 block bg-slate-200/50 dark:bg-black/40 p-2 rounded-lg mb-2 break-all">{adminUsdt}</code>
-                                        <span className="text-[8px] font-black text-emerald-600 dark:text-emerald-400 uppercase group-hover:animate-pulse">CLICK TO COPY</span>
+                                )}
+                            </div>
+                            <div className="mt-4">
+                                {paymentMethod === 'TON' ? (
+                                    <div className="space-y-6 text-center">
+                                        <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 shadow-inner">
+                                            <Wallet size={32} className="mx-auto text-indigo-600 dark:text-indigo-400 mb-4" />
+                                            <div className="flex justify-center mb-4"><TonConnectButton /></div>
+                                        </div>
+                                        <button disabled={isLoading} onClick={handleTonPayment} className="w-full h-14 bg-linear-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all disabled:opacity-50">
+                                            {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.complete_payment')}
+                                        </button>
                                     </div>
-                                    <div className="space-y-2">
-                                        <label className="text-[8px] font-black text-slate-500 dark:text-white/40 uppercase tracking-widest ml-1">{t('subscription.upgrade.paste_tx_hash')}</label>
-                                        <input value={manualHash} onChange={(e) => setManualHash(e.target.value)} placeholder="0x..." className="w-full h-12 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs text-slate-900 dark:text-white text-center font-mono focus:border-indigo-500/50 outline-none transition-colors" />
+                                ) : (
+                                    <div className="space-y-4">
+                                        <div onClick={() => { navigator.clipboard.writeText(adminUsdt); selection(); notification('success'); }} className="p-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl text-center cursor-pointer group hover:border-emerald-500/50 transition-colors">
+                                            <p className="text-[8px] font-black text-slate-400 dark:text-white/30 mb-2 uppercase tracking-widest">{t('subscription.upgrade.tap_to_copy')}</p>
+                                            <code className="text-[9px] font-mono text-slate-800 dark:text-white/80 block bg-slate-200/50 dark:bg-black/40 p-2 rounded-lg mb-2 break-all">{adminUsdt}</code>
+                                            <span className="text-[8px] font-black text-emerald-600 dark:text-emerald-400 uppercase group-hover:animate-pulse">CLICK TO COPY</span>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[8px] font-black text-slate-500 dark:text-white/40 uppercase tracking-widest ml-1">{t('subscription.upgrade.paste_tx_hash')}</label>
+                                            <input value={manualHash} onChange={(e) => setManualHash(e.target.value)} placeholder="0x..." className="w-full h-12 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs text-slate-900 dark:text-white text-center font-mono focus:border-indigo-500/50 outline-none transition-colors" />
+                                        </div>
+                                        <button onClick={handleManualSubmit} disabled={isLoading || !manualHash} className="w-full h-12 bg-linear-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg active:scale-95 transition-all disabled:opacity-40">
+                                            {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.verify_transaction')}
+                                        </button>
                                     </div>
-                                    <button onClick={handleManualSubmit} disabled={isLoading || !manualHash} className="w-full h-12 bg-linear-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg active:scale-95 transition-all disabled:opacity-40">
-                                        {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.verify_transaction')}
-                                    </button>
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
-                    </div>
-                )}
-            </div>
-            </motion.div >
-
-        {/* ── SOCIAL PROOF STATS ──────────────────────────────────────── */ }
-        < motion.div initial = {{ opacity: 0, y: 20 }
-} animate = {{ opacity: 1, y: 0 }} transition = {{ delay: 0.3 }} className = "mb-10" >
-    <div className="grid grid-cols-3 gap-3">
-        {[
-            { value: '5,000+', label: t('subscription.stats.partners'), icon: Users, color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-indigo-500/10' },
-            { value: '×100', label: t('subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
-            { value: '24/7', label: t('subscription.stats.ai_active'), icon: Bot, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10' },
-        ].map((stat) => (
-            <div key={stat.label} className="bg-white dark:bg-white/3 border border-slate-100 dark:border-white/8 rounded-2xl p-3 text-center shadow-sm">
-                <div className={`w-8 h-8 rounded-xl ${stat.bg} flex items-center justify-center mx-auto mb-2 ${stat.color}`}>
-                    <stat.icon size={16} />
+                    )}
                 </div>
-                <div className={`text-lg font-black tracking-tighter ${stat.color}`}>{stat.value}</div>
-                <div className="text-[8px] font-black text-slate-400 dark:text-white/30 uppercase tracking-widest leading-tight">{stat.label}</div>
-            </div>
-        ))}
-    </div>
             </motion.div >
 
-    {/* ── FAQ SECTION ─────────────────────────────────────────────── */ }
-    < section className = "mb-10" >
+            {/* ── SOCIAL PROOF STATS ──────────────────────────────────────── */}
+            < motion.div initial={{ opacity: 0, y: 20 }
+            } animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-10" >
+                <div className="grid grid-cols-3 gap-3">
+                    {[
+                        { value: '5,000+', label: t('subscription.stats.partners'), icon: Users, color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-indigo-500/10' },
+                        { value: '×100', label: t('subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
+                        { value: '24/7', label: t('subscription.stats.ai_active'), icon: Bot, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10' },
+                    ].map((stat) => (
+                        <div key={stat.label} className="bg-white dark:bg-white/3 border border-slate-100 dark:border-white/8 rounded-2xl p-3 text-center shadow-sm">
+                            <div className={`w-8 h-8 rounded-xl ${stat.bg} flex items-center justify-center mx-auto mb-2 ${stat.color}`}>
+                                <stat.icon size={16} />
+                            </div>
+                            <div className={`text-lg font-black tracking-tighter ${stat.color}`}>{stat.value}</div>
+                            <div className="text-[8px] font-black text-slate-400 dark:text-white/30 uppercase tracking-widest leading-tight">{stat.label}</div>
+                        </div>
+                    ))}
+                </div>
+            </motion.div >
+
+            {/* ── FAQ SECTION ─────────────────────────────────────────────── */}
+            < section className="mb-10" >
                 <div className="text-center mb-6">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200 dark:border-indigo-500/30 mb-4">
                         <HelpCircle size={10} className="text-indigo-600 dark:text-indigo-400" />
@@ -582,27 +633,27 @@ export default function SubscriptionPage() {
                 </div>
             </section >
 
-    <div className="text-center opacity-10 text-[6px] font-mono tracking-[0.5em] mt-4">BUILD: 2026.02.18 | v1.8.0-ELITE</div>
+            <div className="text-center opacity-10 text-[6px] font-mono tracking-[0.5em] mt-4">BUILD: 2026.02.18 | v1.8.0-ELITE</div>
 
-{/* ── SUCCESS / STATUS MODAL ──────────────────────────────────── */ }
-<AnimatePresence>
-    {status !== 'idle' && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl">
-            <div className="vibing-premium-panel p-8 w-full max-w-sm text-center">
-                {status === 'pending' && <Loader2 size={48} className="text-amber-500 animate-spin mx-auto mb-6" />}
-                {status === 'success' && <Trophy size={48} className="text-emerald-500 mx-auto mb-6" />}
-                {status === 'manual_review' && <CheckCircle2 size={48} className="text-blue-500 mx-auto mb-6" />}
-                <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase italic mb-2">
-                    {status === 'pending' ? 'VERIFYING...' : status === 'success' ? 'WELCOME TO PRO' : 'SUBMITTED'}
-                </h2>
-                <p className="text-[9px] text-slate-500 dark:text-white/40 uppercase font-black tracking-widest mb-8">
-                    {status === 'pending' ? 'SCANNING BLOCKCHAIN FOR TRANSACTION' : 'YOUR ACCOUNT ACCESS IS BEING PROVISIONED'}
-                </p>
-                <button onClick={() => setStatus('idle')} className="w-full h-12 bg-indigo-600 text-white dark:bg-white dark:text-indigo-900 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl">GOT IT</button>
-            </div>
-        </motion.div>
-    )}
-</AnimatePresence>
+            {/* ── SUCCESS / STATUS MODAL ──────────────────────────────────── */}
+            <AnimatePresence>
+                {status !== 'idle' && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl">
+                        <div className="vibing-premium-panel p-8 w-full max-w-sm text-center">
+                            {status === 'pending' && <Loader2 size={48} className="text-amber-500 animate-spin mx-auto mb-6" />}
+                            {status === 'success' && <Trophy size={48} className="text-emerald-500 mx-auto mb-6" />}
+                            {status === 'manual_review' && <CheckCircle2 size={48} className="text-blue-500 mx-auto mb-6" />}
+                            <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase italic mb-2">
+                                {status === 'pending' ? 'VERIFYING...' : status === 'success' ? 'WELCOME TO PRO' : 'SUBMITTED'}
+                            </h2>
+                            <p className="text-[9px] text-slate-500 dark:text-white/40 uppercase font-black tracking-widest mb-8">
+                                {status === 'pending' ? 'SCANNING BLOCKCHAIN FOR TRANSACTION' : 'YOUR ACCOUNT ACCESS IS BEING PROVISIONED'}
+                            </p>
+                            <button onClick={() => setStatus('idle')} className="w-full h-12 bg-indigo-600 text-white dark:bg-white dark:text-indigo-900 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl">GOT IT</button>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div >
     );
 }
