@@ -30,6 +30,14 @@ export default function SubscriptionPage() {
     const [proStats, setProStats] = useState<{ sold: number; total: number } | null>(null);
     const [showPaymentOptionsForPro, setShowPaymentOptionsForPro] = useState(false);
 
+    const isPro = user?.is_pro;
+    const isProPlus = (user?.subscription_plan || "").includes('PLUS');
+    const isStandardPro = isPro && !isProPlus;
+
+    const proPrice = 39;
+    const proPlusPrice = 69;
+    const upgradePrice = proPlusPrice - proPrice; // 30
+
     const paymentRef = React.useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -76,7 +84,13 @@ export default function SubscriptionPage() {
         return `${minutes}:${seconds.toString().padStart(2, '0')}`;
     }, [timeLeft]);
 
-    const planPrice = selectedPlan === 'PRO_PLUS' ? 69 : 39;
+    const planPrice = useMemo(() => {
+        if (selectedPlan === 'PRO') return proPrice;
+        if (selectedPlan === 'PRO_PLUS') {
+            return isStandardPro ? upgradePrice : proPlusPrice;
+        }
+        return proPlusPrice;
+    }, [selectedPlan, isStandardPro, proPrice, proPlusPrice, upgradePrice]);
     const adminUsdt = globalConfig?.admin_usdt_address || "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM";
 
     const handleTonPayment = async () => {
@@ -274,12 +288,12 @@ export default function SubscriptionPage() {
                         onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }}
                         className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-colors duration-300 ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-400 dark:text-white/30'}`}
                     >
-                        <span className="text-[9px] font-black tracking-[0.2em] uppercase opacity-70">{t('subscription.upgrade.pro_plus_title')}</span>
+                        <span className="text-[9px] font-black tracking-[0.2em] uppercase opacity-70">{isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title')}</span>
                         <div className="flex items-baseline gap-1">
                             <span className="text-[14px] font-bold opacity-50">$</span>
-                            <span className="text-3xl font-black tracking-tighter">69</span>
+                            <span className="text-3xl font-black tracking-tighter">{isStandardPro ? upgradePrice : proPlusPrice}</span>
                         </div>
-                        <span className="text-[8px] font-black opacity-60 uppercase tracking-widest">{t('subscription.upgrade.lifetime_label')}</span>
+                        <span className="text-[8px] font-black opacity-60 uppercase tracking-widest">{isStandardPro ? t('subscription.upgrade.upgrade_label') || 'ONE-TIME UPGRADE' : t('subscription.upgrade.lifetime_label')}</span>
                         {selectedPlan !== 'PRO_PLUS' && (
                             <div className="absolute -top-1.5 -right-1 px-2 py-0.5 bg-linear-to-r from-amber-400 to-orange-500 text-[8px] font-black text-white rounded-full border-2 border-slate-100 dark:border-slate-800 shadow-lg">
                                 🔥 BEST
@@ -383,7 +397,7 @@ export default function SubscriptionPage() {
                                     </span>
                                 </div>
                                 <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-3">
-                                    {selectedPlan === 'PRO' ? t('subscription.upgrade.pro_title') : t('subscription.upgrade.pro_plus_title')}
+                                    {selectedPlan === 'PRO' ? t('subscription.upgrade.pro_title') : (isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title'))}
                                 </p>
                                 <div className="w-16 h-1 bg-linear-to-r from-indigo-500 to-fuchsia-500 mx-auto rounded-full" />
                             </div>

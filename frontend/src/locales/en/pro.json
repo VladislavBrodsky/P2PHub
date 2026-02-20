@@ -208,7 +208,12 @@
         "error": "Error",
         "plan_pro": "Standard PRO Plan",
         "plan_plus": "PRO+ Plan Active",
-        "multi_node_capacity": "Multi-Node Capacity: {{val}}"
+        "multi_node_capacity": "Multi-Node Capacity: {{val}}",
+        "upgrade_pro_plus_cta": "UNLOCK PRO+ SLOTS",
+        "unlock_social_nodes": "UNLOCK SOCIAL NODES",
+        "more_platforms": "Enhanced Social Reach",
+        "more_platforms_desc": "Expand your presence to Mastodon, BlueSky, and Threads via PRO+.",
+        "coming_soon": "COMING SOON"
       }
     },
     "publish": {
@@ -773,7 +778,9 @@
       "lifetime_slots": "GLOBAL LIFETIME SLOTS",
       "pro_title": "PRO VANGUARD",
       "pro_plus_title": "PRO+ EMPIRE",
+      "pro_plus_upgrade_title": "PRO+ UPGRADE",
       "best_badge": "MOST VIRAL",
+      "upgrade_label": "ONE-TIME UPGRADE",
       "lifetime_pro": "LIFETIME ALPHA STATUS",
       "tokens_info_pro": "250 TOKENS / MO",
       "tokens_info_pro_plus": "500 TOKENS / MO",

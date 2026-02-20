@@ -208,7 +208,12 @@
         "error": "Ошибка",
         "plan_pro": "Тариф Standard PRO",
         "plan_plus": "Тариф PRO+ Активен",
-        "multi_node_capacity": "Лимит узлов сети: {{val}}"
+        "multi_node_capacity": "Лимит узлов сети: {{val}}",
+        "upgrade_pro_plus_cta": "РАЗБЛОКИРОВАТЬ PRO+ КАНАЛЫ",
+        "unlock_social_nodes": "РАЗБЛОКИРОВАТЬ СОЦСЕТИ",
+        "more_platforms": "Дополнительные Платформы",
+        "more_platforms_desc": "Разверните свое присутствие в Mastodon, BlueSky и Threads через PRO+.",
+        "coming_soon": "СКОРО"
       }
     },
     "publish": {
@@ -773,7 +778,9 @@
       "lifetime_slots": "ГЛОБАЛЬНЫЕ LIFETIME СЛОТЫ",
       "pro_title": "PRO ВАНГАРД",
       "pro_plus_title": "ИМПЕРИЯ PRO+",
+      "pro_plus_upgrade_title": "АПГРЕЙД PRO+",
       "best_badge": "САМЫЙ ВИРАЛЬНЫЙ",
+      "upgrade_label": "РАЗОВОЕ ОБНОВЛЕНИЕ",
       "lifetime_pro": "ПОЖИЗНЕННЫЙ ALPHA СТАТУС",
       "tokens_info_pro": "250 ТОКЕНОВ / МЕС",
       "tokens_info_pro_plus": "500 ТОКЕНОВ / МЕС",

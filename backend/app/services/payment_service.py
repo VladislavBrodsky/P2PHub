@@ -229,7 +229,17 @@ class PaymentService:
                 level="info"
             )
             # Determine Plan Details
-            is_plus = amount >= (settings.PRO_PLUS_PRICE_USD - 0.1)
+            # Determine Plan Details
+            # Direct PRO+ purchase
+            is_direct_plus = amount >= (settings.PRO_PLUS_PRICE_USD - 0.1)
+            # Upgrade from PRO to PRO+ (paying the difference)
+            is_pro_to_plus_upgrade = (
+                partner.is_pro and 
+                not (partner.subscription_plan or "").startswith("PRO_PLUS") and 
+                abs(amount - (settings.PRO_PLUS_PRICE_USD - settings.PRO_PRICE_USD)) < 0.5
+            )
+            
+            is_plus = is_direct_plus or is_pro_to_plus_upgrade
             
             # Tiered PRO Logic: First 300 get Lifetime, others get 30 days.
             # PRO+ is unaffected by the 300 limit (usually remains lifetime or handled separately)
@@ -246,13 +256,16 @@ class PaymentService:
                 
                 sold_count = int(setting_sold.value) if setting_sold else 147
                 
-                # Increment the global counter
-                if setting_sold:
-                    setting_sold.value = str(sold_count + 1)
-                    session.add(setting_sold)
-                else:
-                    new_sold = SystemSetting(key="pro_slots_sold", value=str(sold_count + 1))
-                    session.add(new_sold)
+                # Increment the global counter (But only if it's a NEW purchase, 
+                # or if we want to count upgrades too. Typically upgrades don't consume a new slot if already PRO)
+                # However, the code previously always incremented. Let's keep consistency for now unless specified.
+                if not is_pro_to_plus_upgrade:
+                    if setting_sold:
+                        setting_sold.value = str(sold_count + 1)
+                        session.add(setting_sold)
+                    else:
+                        new_sold = SystemSetting(key="pro_slots_sold", value=str(sold_count + 1))
+                        session.add(new_sold)
 
                 # Monthly Subscription with Extension Logic
                 if partner.pro_expires_at and partner.pro_expires_at > now:
@@ -260,6 +273,7 @@ class PaymentService:
                 else:
                     partner.pro_expires_at = now + timedelta(days=30)
                 
+                # Award additional tokens
                 partner.pro_tokens = settings.PRO_PLUS_TOKENS_MONTHLY
             else:
                 # Standard PRO Plan
@@ -302,7 +316,13 @@ class PaymentService:
             partner.is_pro = True
             
             # --- AWARD XP TO BUYER ---
-            upgrade_xp = settings.PRO_PLUS_UPGRADE_SELF_XP if is_plus else settings.PRO_UPGRADE_SELF_XP
+            # If it's an upgrade, we give the difference in XP or full PRO+ XP? 
+            # Usually difference: 1250 - 750 = 500
+            if is_pro_to_plus_upgrade:
+                upgrade_xp = settings.PRO_PLUS_UPGRADE_SELF_XP - settings.PRO_UPGRADE_SELF_XP
+            else:
+                upgrade_xp = settings.PRO_PLUS_UPGRADE_SELF_XP if is_plus else settings.PRO_UPGRADE_SELF_XP
+            
             xp_before = float(partner.xp)
             partner.xp = Partner.xp + upgrade_xp # Atomic
             xp_after = xp_before + upgrade_xp
@@ -314,8 +334,9 @@ class PaymentService:
                 "tx_hash": tx_hash or "MANUAL_CONFIRMATION",
                 "amount": amount,
                 "verified_at": now.isoformat(),
-                "lifetime_granted": lifetime_granted,
-                "plan_type": partner.subscription_plan
+                "lifetime_granted": lifetime_granted if not is_plus else False, # PRO+ usually managed differently
+                "plan_type": partner.subscription_plan,
+                "is_upgrade": is_pro_to_plus_upgrade
             }
             if not is_plus:
                 promo_details["slots_sold_at_purchase"] = sold_count
@@ -430,7 +451,7 @@ class PaymentService:
             session.add(XPTransaction(
                 partner_id=partner.id, amount=upgrade_xp,
                 type="UPGRADE_BONUS",
-                description=f"{'PRO+' if is_plus else 'PRO'} Upgrade Reward"
+                description=f"{'PRO+ (Upgrade)' if is_pro_to_plus_upgrade else ('PRO+' if is_plus else 'PRO')} Upgrade Reward"
             ))
             
             await audit_service.log_xp_award(
@@ -473,7 +494,8 @@ class PaymentService:
                 admin_partner = res_admin.first()
                 admin_lang = admin_partner.language_code if admin_partner else "en"
                 
-                plan_name = 'PRO+' if is_plus else 'PRO'
+                base_plan = 'PRO+' if is_plus else 'PRO'
+                plan_name = f"{base_plan} Upgrade" if is_pro_to_plus_upgrade else base_plan
                 expires_str = partner.pro_expires_at.strftime('%Y-%m-%d') if partner.pro_expires_at else 'LIFETIME'
                 
                 admin_notify_msg = get_msg(
