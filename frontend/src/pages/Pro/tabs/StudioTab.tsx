@@ -781,43 +781,36 @@ export const StudioTab = ({
                             )}
 
                             {/* Badge */}
-                            <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
+                            <div className="absolute top-4 left-4 z-10">
                                 <span className="bg-indigo-500/90 backdrop-blur-md text-white text-[8px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.2em] border border-indigo-400/30 shadow-lg">
                                     {t('pro_dashboard.studio.ai_generated_badge')}
                                 </span>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); handleGenerate(); }}
-                                    className="p-1.5 bg-white/10 hover:bg-indigo-500 rounded-lg border border-white/20 text-white backdrop-blur-md transition-all active:scale-90 shadow-lg"
-                                    title="Regenerate Image"
-                                >
-                                    <RefreshCw size={12} className={isGenerating ? "animate-spin" : ""} />
-                                </button>
                             </div>
 
                             {/* Image Actions Overlay */}
-                            <div className="absolute inset-x-0 bottom-0 z-10 opacity-0 group-hover/img:opacity-100 transition-all duration-300 bg-linear-to-t from-black/90 to-transparent p-6 translate-y-4 group-hover/img:translate-y-0">
-                                <div className="flex items-center justify-center gap-4">
+                            <div className="absolute inset-x-0 bottom-0 z-10 opacity-0 group-hover/img:opacity-100 transition-all duration-300 bg-linear-to-t from-black/60 to-transparent p-4 translate-y-2 group-hover/img:translate-y-0">
+                                <div className="flex items-center justify-end gap-2.5">
                                     <button
                                         onClick={() => { selection(); handleSaveImageToDevice(); }}
-                                        className="p-4 bg-white/10 hover:bg-emerald-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90"
+                                        className="p-2.5 bg-white/10 hover:bg-emerald-500 rounded-xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90"
                                         title="Download"
                                     >
-                                        <Download size={20} />
+                                        <Download size={16} />
                                     </button>
                                     <button
                                         onClick={handleGenerate}
-                                        className="p-4 bg-white/10 hover:bg-indigo-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90"
+                                        className="p-2.5 bg-white/10 hover:bg-indigo-500 rounded-xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90"
                                         title="Regenerate"
                                     >
-                                        <RefreshCw size={20} />
+                                        <RefreshCw size={16} className={isGenerating ? "animate-spin" : ""} />
                                     </button>
                                     {historyIndex > 0 && (
                                         <button
                                             onClick={handleUndoVersion}
-                                            className="p-4 bg-white/10 hover:bg-amber-500 rounded-2xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90"
+                                            className="p-2.5 bg-white/10 hover:bg-amber-500 rounded-xl border border-white/20 text-white backdrop-blur-xl transition-all active:scale-90"
                                             title="Undo"
                                         >
-                                            <Undo2 size={20} />
+                                            <Undo2 size={16} />
                                         </button>
                                     )}
                                 </div>
