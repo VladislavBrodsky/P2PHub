@@ -44,25 +44,25 @@ export const GrowthTab = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="space-y-6 sm:space-y-10 pb-12"
+            className="space-y-4 sm:space-y-6 pb-8"
         >
             {/* Master Score Card - Intelligence Hub - Re-engineered for compactness */}
             {/* Master Score Card - Intelligence Hub - Re-engineered for maximum compactness */}
-            <div className="bg-white dark:bg-slate-900 rounded-[32px] p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-slate-100 dark:border-slate-800 relative overflow-hidden group">
+            <div className="bg-white dark:bg-slate-900 rounded-[24px] p-4 sm:p-6 shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-slate-100 dark:border-slate-800 relative overflow-hidden group">
                 <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
 
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8 relative z-10">
-                    <div className="flex items-center gap-5 sm:gap-6">
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-500/20">
-                            <ShieldCheck className="w-8 h-8 sm:w-10 sm:h-10 text-indigo-500" />
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 relative z-10">
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-500/20">
+                            <ShieldCheck className="w-6 h-6 sm:w-7 sm:h-7 text-indigo-500" />
                         </div>
-                        <div className="flex flex-col gap-2 relative top-0.5">
-                            <div className="flex flex-wrap items-center gap-3">
-                                <h3 className="text-2xl sm:text-[28px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">
+                        <div className="flex flex-col gap-1 relative">
+                            <div className="flex flex-wrap items-center gap-2">
+                                <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">
                                     {t('pro_dashboard.academy.protocols.title')}
                                 </h3>
-                                <div className="flex items-center gap-2">
-                                    <span className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/20 rounded-full text-[10px] sm:text-[11px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest leading-none">
+                                <div className="flex items-center gap-1.5">
+                                    <span className="px-2 py-1 bg-indigo-50 dark:bg-indigo-500/20 rounded-lg text-[9px] sm:text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest leading-none">
                                         {academyScore < 300 ? t('pro_dashboard.academy.protocols.difficulty_levels.easy').split(' ')[0] :
                                             academyScore < 800 ? t('pro_dashboard.academy.protocols.difficulty_levels.medium').split(' ')[0] :
                                                 t('pro_dashboard.academy.protocols.difficulty_levels.hard').split(' ')[0]}
@@ -78,11 +78,11 @@ export const GrowthTab = ({
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-start sm:items-end gap-1.5">
-                        <p className="text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                    <div className="flex flex-col items-start sm:items-end gap-1">
+                        <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                             {t('pro_dashboard.academy.protocols.stats_label')}
                         </p>
-                        <div className="text-5xl sm:text-6xl font-black text-indigo-500 tabular-nums leading-none tracking-tighter vibing-crystal-text">
+                        <div className="text-4xl sm:text-5xl font-black text-indigo-500 tabular-nums leading-none tracking-tighter vibing-crystal-text">
                             <LiquidCounter value={academyScore} />
                         </div>
                     </div>
@@ -117,30 +117,30 @@ export const GrowthTab = ({
             </div>
 
             {/* Expert Intelligence Transmission - Sleek Ticker Style */}
-            <div className="px-5 py-4 sm:px-6 sm:py-5 bg-indigo-50/50 dark:bg-indigo-900/10 rounded-full border border-indigo-100 dark:border-indigo-500/10 flex items-center gap-4 sm:gap-5 relative overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.02)] flex-wrap">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-[14px] sm:rounded-[16px] bg-indigo-100/80 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-500 shrink-0 shadow-inner">
-                    <Bot className="w-5 h-5 sm:w-6 sm:h-6 animate-pulse" />
+            <div className="px-4 py-3 sm:px-6 sm:py-4 bg-indigo-50/50 dark:bg-indigo-900/10 rounded-2xl border border-indigo-100 dark:border-indigo-500/10 flex items-center gap-3 sm:gap-4 relative overflow-hidden shadow-[0_4px_15px_rgb(0,0,0,0.02)]">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-indigo-100/80 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-500 shrink-0">
+                    <Bot className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
                 </div>
                 <div className="flex-1 min-w-0">
-                    <p className="text-[13px] sm:text-sm md:text-base font-bold text-slate-600 dark:text-slate-300 leading-snug italic truncate pr-4">
+                    <p className="text-xs sm:text-[13px] font-bold text-slate-600 dark:text-slate-300 leading-snug italic truncate">
                         "{t('pro_dashboard.academy.desc')}"
                     </p>
                 </div>
-                <div className="flex items-center gap-2 shrink-0 bg-white/50 dark:bg-black/20 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
-                    <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[8px] sm:text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none mt-0.5">{t('pro_dashboard.academy.live_signal')}</span>
+                <div className="flex items-center gap-1.5 shrink-0 bg-white/50 dark:bg-black/20 px-2.5 py-1.5 rounded-full">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[8px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none mt-0.5">{t('pro_dashboard.academy.live_signal')}</span>
                 </div>
             </div>
 
             {/* Viral Content Hub - Modules Component */}
             <div className="space-y-5 sm:space-y-6">
-                <div className="flex flex-row items-center gap-4 px-2">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-indigo-50 dark:bg-blue-500/10 rounded-2xl flex items-center justify-center text-indigo-600 dark:text-blue-500 border border-indigo-100 dark:border-blue-500/20 shadow-sm shrink-0">
-                        <TrendingUp className="w-6 h-6 sm:w-7 sm:h-7" />
+                <div className="flex flex-row items-center gap-3 px-1">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-indigo-50 dark:bg-blue-500/10 rounded-xl flex items-center justify-center text-indigo-600 dark:text-blue-500 border border-indigo-100 dark:border-blue-500/20 shadow-sm shrink-0">
+                        <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
                     <div className="flex flex-col">
-                        <h4 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('pro_dashboard.academy.articles.title')}</h4>
-                        <p className="text-[10px] sm:text-[11px] font-black text-indigo-500/60 dark:text-indigo-400 uppercase tracking-[0.2em] mt-1">{t('pro_dashboard.academy.dossier_label')}</p>
+                        <h4 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('pro_dashboard.academy.articles.title')}</h4>
+                        <p className="text-[9px] font-black text-indigo-500/60 dark:text-indigo-400 uppercase tracking-widest mt-0.5">{t('pro_dashboard.academy.dossier_label')}</p>
                     </div>
                 </div>
 
@@ -155,12 +155,12 @@ export const GrowthTab = ({
                                     key={article.id || i}
                                     whileHover={{ y: -4 }}
                                     onClick={() => { selection(); setSelectedArticle(article); impact('light'); }}
-                                    className="min-w-[280px] sm:min-w-[340px] snap-center bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-[36px] border border-slate-100 dark:border-slate-800 relative overflow-hidden group cursor-pointer active:scale-95 transition-all shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] flex flex-col"
+                                    className="min-w-[240px] sm:min-w-[300px] snap-center bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-[24px] border border-slate-100 dark:border-slate-800 relative overflow-hidden group cursor-pointer active:scale-95 transition-all shadow-[0_4px_15px_rgb(0,0,0,0.03)] flex flex-col"
                                 >
                                     <div className="flex items-center justify-between mb-5">
                                         <div className="flex items-center gap-3">
                                             <span className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 rounded-full text-[9px] sm:text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{article.category}</span>
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{article.readTime} MIN READ</span>
+                                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{article.readTime} MIN READ</span>
                                         </div>
                                         {mockProgress === 100 && (
                                             <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
@@ -168,8 +168,8 @@ export const GrowthTab = ({
                                             </div>
                                         )}
                                     </div>
-                                    <h5 className="text-xl sm:text-2xl font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tight mb-4 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
-                                    <p className="text-[13px] sm:text-[14px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic mb-8 flex-1">"{article.desc}"</p>
+                                    <h5 className="text-lg sm:text-xl font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tighter mb-3 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
+                                    <p className="text-[12px] sm:text-[13px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic mb-6 flex-1 line-clamp-2">"{article.desc}"</p>
 
                                     <div className="flex items-center justify-between mt-auto">
                                         <div className="flex items-center gap-1.5 text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest group-hover:gap-2.5 transition-all">
@@ -191,10 +191,10 @@ export const GrowthTab = ({
 
             {/* Masterclass Modules - Academy Path */}
             <div className="space-y-6 relative">
-                {/* Timeline Line - Re-aligned for compact nodes with Energy Pulse */}
-                <div className="absolute left-[14px] sm:left-[16px] top-12 bottom-0 w-px bg-slate-200 dark:bg-white/10 z-0 overflow-hidden">
+                {/* Timeline Line - Re-aligned for compact nodes */}
+                <div className="absolute left-[12px] sm:left-[14px] top-10 bottom-0 w-px bg-slate-200 dark:bg-white/10 z-0 overflow-hidden">
                     <motion.div
-                        className="absolute top-0 left-0 w-full bg-linear-to-b from-transparent via-indigo-500 to-transparent h-32"
+                        className="absolute top-0 left-0 w-full bg-linear-to-b from-transparent via-indigo-500 to-transparent h-24"
                         animate={{
                             top: ["-10%", "110%"],
                         }}
@@ -207,16 +207,16 @@ export const GrowthTab = ({
                 </div>
 
                 <div className="flex items-center gap-2 px-1 relative z-10">
-                    <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-500 border border-indigo-100 dark:border-indigo-500/20 shadow-lg shadow-indigo-500/10">
-                        <ShieldCheck size={20} />
+                    <div className="w-8 h-8 bg-indigo-50 dark:bg-indigo-500/10 rounded-lg flex items-center justify-center text-indigo-500 border border-indigo-100 dark:border-indigo-500/20 shadow-lg shadow-indigo-500/10">
+                        <ShieldCheck size={16} />
                     </div>
                     <div>
-                        <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('pro_dashboard.academy.growth_protocol')}</h4>
-                        <p className="text-[9px] font-black text-indigo-500/60 uppercase tracking-[0.2em] mt-1">{t('pro_dashboard.academy.node_capabilities')}</p>
+                        <h4 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('pro_dashboard.academy.growth_protocol')}</h4>
+                        <p className="text-[9px] font-black text-indigo-500/60 uppercase tracking-widest mt-0.5">{t('pro_dashboard.academy.node_capabilities')}</p>
                     </div>
                 </div>
 
-                <div className="space-y-6 relative z-10">
+                <div className="space-y-4 relative z-10">
                     {(() => {
                         const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
                         const modulesList = Array.isArray(modules) ? modules : [];
@@ -256,13 +256,13 @@ export const GrowthTab = ({
                                     className="pl-10 sm:pl-12 relative group"
                                 >
                                     {/* Timeline Node - Premium Style */}
-                                    <div className={`absolute left-0 top-6 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-500 z-20 ${isCompleted
-                                        ? 'bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] ring-4 ring-emerald-50 dark:ring-emerald-500/10'
+                                    <div className={`absolute left-0 top-5 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-all duration-500 z-20 ${isCompleted
+                                        ? 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] ring-2 ring-emerald-50 dark:ring-emerald-500/10'
                                         : isLocked
-                                            ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 ring-4 ring-white dark:ring-slate-900'
-                                            : 'bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] ring-4 ring-emerald-50 dark:ring-emerald-500/10'
+                                            ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 ring-2 ring-white dark:ring-slate-900'
+                                            : 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] ring-2 ring-emerald-50 dark:ring-emerald-500/10'
                                         }`}>
-                                        <span className="font-black text-xs sm:text-sm">{i + 1}</span>
+                                        <span className="font-black text-[10px] sm:text-xs">{i + 1}</span>
                                         {!isCompleted && !isLocked && (
                                             <motion.div
                                                 className="absolute inset-0 rounded-full bg-emerald-500 -z-10"
@@ -273,29 +273,29 @@ export const GrowthTab = ({
                                     </div>
 
                                     {/* Premium Masterclass Card */}
-                                    <div className={`pro-card-extreme rounded-[32px] overflow-hidden relative transition-all duration-300 border ${isCompleted
+                                    <div className={`pro-card-extreme rounded-[20px] overflow-hidden relative transition-all duration-300 border ${isCompleted
                                         ? 'opacity-90 border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-900/40'
                                         : isLocked
                                             ? 'opacity-60 border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/5'
                                             : isExpanded
-                                                ? 'bg-white dark:bg-slate-900 border-indigo-500/20 shadow-2xl shadow-indigo-500/5'
-                                                : 'bg-white dark:bg-slate-900/80 border-slate-200 dark:border-white/10 hover:border-indigo-500/30 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)]'
+                                                ? 'bg-white dark:bg-slate-900 border-indigo-500/20 shadow-xl shadow-indigo-500/5'
+                                                : 'bg-white dark:bg-slate-900/80 border-slate-200 dark:border-white/10 hover:border-indigo-500/30 shadow-[0_4px_15px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.08)]'
                                         }`}>
 
                                         {/* Header - Clickable Area */}
                                         <div
                                             onClick={toggleExpand}
-                                            className="px-6 py-5 sm:px-8 sm:py-6 flex items-center justify-between cursor-pointer group/header bg-white dark:bg-slate-900"
+                                            className="px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between cursor-pointer group/header bg-white dark:bg-slate-900"
                                         >
                                             <div className="flex flex-col gap-2 min-w-0 flex-1">
                                                 <div className="flex items-center gap-3 min-w-0">
-                                                    <span className={`px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest shrink-0 ${module.diff === 'hard' ? 'bg-red-50 text-red-500 dark:bg-red-500/10' :
+                                                    <span className={`px-2 py-0.5 rounded-lg text-[8px] sm:text-[9px] font-black uppercase tracking-widest shrink-0 ${module.diff === 'hard' ? 'bg-red-50 text-red-500 dark:bg-red-500/10' :
                                                         module.diff === 'medium' ? 'bg-amber-50 text-amber-500 dark:bg-amber-500/10' :
                                                             'bg-emerald-50 text-emerald-500 dark:bg-emerald-500/10'
                                                         }`}>
                                                         {t(`pro_dashboard.academy.protocols.difficulty_levels.${module.diff}`).split(' ')[0]}
                                                     </span>
-                                                    <h4 className={`text-sm sm:text-base font-black uppercase tracking-tight leading-none transition-colors truncate ${isExpanded ? 'text-indigo-600 dark:text-indigo-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
+                                                    <h4 className={`text-xs sm:text-sm font-black uppercase tracking-tighter leading-none transition-colors truncate ${isExpanded ? 'text-indigo-600 dark:text-indigo-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
                                                         {module.title}
                                                     </h4>
                                                 </div>
@@ -333,10 +333,10 @@ export const GrowthTab = ({
                                                     exit={{ height: 0, opacity: 0 }}
                                                     transition={{ duration: 0.3, ease: "easeInOut" }}
                                                 >
-                                                    <div className="px-6 pb-6 pt-2 sm:px-8 sm:pb-8 space-y-5 border-t border-slate-50 dark:border-white/5 bg-white dark:bg-slate-900">
-                                                        <p className="text-[11px] sm:text-[12px] font-black text-indigo-500/80 uppercase tracking-widest border-b border-indigo-50 dark:border-indigo-500/10 pb-4">{module.hook}</p>
+                                                    <div className="px-4 pb-4 pt-1 sm:px-6 sm:pb-6 space-y-4 border-t border-slate-50 dark:border-white/5 bg-white dark:bg-slate-900">
+                                                        <p className="text-[10px] sm:text-[11px] font-black text-indigo-500/80 uppercase tracking-widest border-b border-indigo-50 dark:border-indigo-500/10 pb-3">{module.hook}</p>
 
-                                                        <div className="bg-slate-50 dark:bg-black/20 p-5 sm:p-6 rounded-[24px] border border-slate-100 dark:border-white/5 text-[13px] sm:text-[14px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                                                        <div className="bg-slate-50 dark:bg-black/20 p-4 sm:p-5 rounded-[16px] border border-slate-100 dark:border-white/5 text-[12px] sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                                                             {renderMarkdown(module.content)}
                                                         </div>
 
@@ -347,7 +347,7 @@ export const GrowthTab = ({
                                                                 <div className="relative z-10">
                                                                     <div className="flex items-center gap-2 mb-3">
                                                                         <Terminal size={14} className="text-indigo-500" />
-                                                                        <span className="text-[10px] font-black uppercase tracking-[0.15em] text-indigo-500">Node Task</span>
+                                                                        <span className="text-[9px] font-black uppercase tracking-widest text-indigo-500">Node Task</span>
                                                                     </div>
                                                                     <p className="text-[13px] sm:text-[14px] font-bold text-slate-800 dark:text-slate-200 leading-relaxed mb-4">
                                                                         {module.task}
@@ -362,7 +362,7 @@ export const GrowthTab = ({
                                                                     <button
                                                                         onClick={() => handleCompleteAcademyStage(module.id)}
                                                                         disabled={isLoading}
-                                                                        className="w-full min-h-[50px] h-auto py-3 bg-slate-900 dark:bg-white hover:scale-[1.02] active:scale-95 text-white dark:text-slate-900 rounded-[16px] font-black text-[11px] uppercase tracking-wider sm:tracking-widest transition-all flex items-center justify-center gap-2 flex-wrap text-center shadow-lg relative overflow-hidden"
+                                                                        className="w-full min-h-[44px] h-auto py-2.5 bg-slate-900 dark:bg-white hover:scale-[1.01] active:scale-95 text-white dark:text-slate-900 rounded-[12px] font-black text-[10px] uppercase tracking-wider transition-all flex items-center justify-center gap-2 flex-wrap text-center shadow-lg relative overflow-hidden"
                                                                     >
                                                                         {isLoading ? <Loader2 size={16} className="animate-spin" /> : (
                                                                             <>
@@ -384,10 +384,10 @@ export const GrowthTab = ({
                                                         {isLocked && !isCompleted && (
                                                             <div className="p-5 bg-slate-100 dark:bg-white/5 rounded-[24px] border border-slate-200 dark:border-white/5 text-center">
                                                                 <div className="flex flex-col items-center gap-2 opacity-60">
-                                                                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                                                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
                                                                         {!canAffordTokens ? "Insufficient Tokens" : "Insufficient XP Score"}
                                                                     </span>
-                                                                    <span className="text-[9px] font-medium text-slate-400">
+                                                                    <span className="text-[9px] font-medium text-slate-400 uppercase tracking-tight leading-none">
                                                                         {xpCost > academyScore ? `Requires ${xpCost} XP (You have ${academyScore})` : "Earn more tokens or upgrade to PRO+"}
                                                                     </span>
                                                                 </div>
@@ -407,17 +407,17 @@ export const GrowthTab = ({
             </div>
 
             {/* Lifehacks & Strategy Dossier - Compact Grid-ready */}
-            <div className="pro-card-extreme p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] border border-white/10 relative overflow-hidden group bg-white/40 dark:bg-slate-950/40 shadow-xl">
-                <div className="absolute top-0 right-0 w-48 h-48 bg-pink-500/5 blur-[80px] pointer-events-none group-hover:opacity-20 transition-opacity" />
+            <div className="pro-card-extreme p-4 sm:p-6 rounded-[20px] border border-white/10 relative overflow-hidden group bg-white/40 dark:bg-slate-950/40 shadow-xl">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/5 blur-[60px] pointer-events-none group-hover:opacity-20 transition-opacity" />
 
-                <div className="flex items-center justify-between mb-8 relative z-10">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-pink-500/10 rounded-xl flex items-center justify-center border border-pink-500/20 shadow-lg group-hover:rotate-12 transition-transform">
-                            <Flame size={20} className="text-pink-500" />
+                <div className="flex items-center justify-between mb-5 relative z-10">
+                    <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 bg-pink-500/10 rounded-lg flex items-center justify-center border border-pink-500/20 shadow-lg group-hover:rotate-12 transition-transform">
+                            <Flame size={16} className="text-pink-500" />
                         </div>
                         <div>
-                            <h4 className="text-sm font-black uppercase tracking-[0.25em] text-slate-900 dark:text-white leading-none mb-1.5">{t('pro_dashboard.academy.lifehacks.title')}</h4>
-                            <p className="text-[8px] font-black text-pink-500/60 uppercase tracking-[0.3em]">{t('pro_dashboard.academy.lifehacks.subtitle')}</p>
+                            <h4 className="text-[11px] font-black uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1">{t('pro_dashboard.academy.lifehacks.title')}</h4>
+                            <p className="text-[9px] font-black text-pink-500/60 uppercase tracking-widest">{t('pro_dashboard.academy.lifehacks.subtitle')}</p>
                         </div>
                     </div>
                 </div>
@@ -437,7 +437,7 @@ export const GrowthTab = ({
                             >
                                 <div className="w-7 h-7 rounded-lg bg-pink-500/10 flex items-center justify-center text-pink-500 font-black text-xs shrink-0 border border-pink-500/10 shadow-inner group-hover/hack:scale-110 transition-transform">{i + 1}</div>
                                 <div className="space-y-0.5 pr-6">
-                                    <h5 className="text-[10px] font-black uppercase text-slate-900 dark:text-white tracking-tight leading-tight">{hack.title}</h5>
+                                    <h5 className="text-[10px] font-black uppercase text-slate-900 dark:text-white tracking-tighter leading-tight">{hack.title}</h5>
                                     <p className="text-[9px] font-medium text-slate-500 dark:text-slate-400 leading-tight italic opacity-70 line-clamp-1">"{hack.desc}"</p>
                                 </div>
                                 <div className="absolute top-3.5 right-3.5 opacity-0 group-hover/hack:opacity-100 transition-opacity text-pink-500">
@@ -449,24 +449,24 @@ export const GrowthTab = ({
                 </div>
             </div>
 
-            <div className="glass-panel-premium p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200 dark:border-white/10 relative overflow-hidden group bg-white dark:bg-slate-950 shadow-2xl">
-                <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none" />
-                <div className="flex items-center justify-between gap-4 mb-6 relative z-10 font-sans">
+            <div className="glass-panel-premium p-4 sm:p-6 rounded-[20px] border border-slate-200 dark:border-white/10 relative overflow-hidden group bg-white dark:bg-slate-950 shadow-2xl">
+                <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-indigo-500/10 blur-[60px] rounded-full pointer-events-none" />
+                <div className="flex items-center justify-between gap-4 mb-5 relative z-10 font-sans">
                     <div className="flex items-center gap-3 min-w-0">
                         <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-lg group-hover:rotate-6 transition-transform shrink-0">
                             <Globe size={20} className="text-indigo-500" />
                         </div>
                         <div className="min-w-0">
-                            <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white leading-none mb-1 truncate">{t('pro_dashboard.academy.social_setup.title')}</h4>
-                            <p className="text-[8px] font-black text-indigo-400 uppercase tracking-[0.2em] truncate">{t('pro_dashboard.academy.social_setup.subtitle')}</p>
+                            <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1 truncate">{t('pro_dashboard.academy.social_setup.title')}</h4>
+                            <p className="text-[9px] font-black text-indigo-400 uppercase tracking-widest truncate">{t('pro_dashboard.academy.social_setup.subtitle')}</p>
                         </div>
                     </div>
                     {/* Multi-Sync Status Display */}
                     <div className="flex flex-col items-end shrink-0 text-right">
-                        <span className={`text-[7px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full whitespace-nowrap ${status?.is_pro_plus ? 'bg-indigo-500/10 text-indigo-500' : 'bg-slate-500/10 text-slate-400'}`}>
+                        <span className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full whitespace-nowrap ${status?.is_pro_plus ? 'bg-indigo-500/10 text-indigo-500' : 'bg-slate-500/10 text-slate-400'}`}>
                             {status?.is_pro_plus ? t('pro_dashboard.setup.tg_sync_multi.plan_plus') : t('pro_dashboard.setup.tg_sync_multi.plan_pro')}
                         </span>
-                        <p className="text-[6px] font-black text-slate-400 uppercase tracking-widest mt-1.5 whitespace-nowrap">{t('pro_dashboard.setup.tg_sync_multi.multi_node_capacity', { val: status?.is_pro_plus ? '5/5' : '1/1' })}</p>
+                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-1.5 whitespace-nowrap">{t('pro_dashboard.setup.tg_sync_multi.multi_node_capacity', { val: status?.is_pro_plus ? '5/5' : '1/1' })}</p>
                     </div>
                 </div>
 
@@ -482,13 +482,13 @@ export const GrowthTab = ({
                                         {platform.name && platform.name.includes('X') && <Twitter size={12} className="text-indigo-500" />}
                                         {platform.name && platform.name.includes('LinkedIn') && <Linkedin size={12} className="text-indigo-500" />}
                                     </div>
-                                    <span className="text-[9px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{platform.name}</span>
+                                    <span className="text-[9px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">{platform.name}</span>
                                 </div>
                                 <div className="grid grid-cols-1 gap-1 opacity-60">
                                     {Array.isArray(platform.steps) && platform.steps.slice(0, 2).map((step: string, j: number) => (
                                         <div key={j} className="flex items-center gap-2">
                                             <div className="w-1 h-1 rounded-full bg-indigo-500/30" />
-                                            <span className="text-[7.5px] font-medium text-slate-500 dark:text-slate-400 truncate">{step}</span>
+                                            <span className="text-[9px] font-medium text-slate-500 dark:text-slate-400 truncate tracking-tight">{step}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -499,7 +499,7 @@ export const GrowthTab = ({
 
                 <button
                     onClick={() => { selection(); setShowSetup(true); }}
-                    className="w-full h-10 vibing-blue-animated text-white font-black text-[8px] uppercase tracking-[0.15em] rounded-[1rem] shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 relative overflow-hidden group/btn"
+                    className="w-full h-10 vibing-blue-animated text-white font-black text-[10px] uppercase tracking-widest rounded-[1rem] shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 relative overflow-hidden group/btn"
                 >
                     <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
                     {t('pro_dashboard.tab_setup')} <ChevronRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
@@ -513,7 +513,7 @@ export const GrowthTab = ({
                 // const isSetupComplete = true; 
 
                 return (
-                    <div className={`relative rounded-[1.5rem] sm:rounded-[2rem] border transition-all duration-500 overflow-hidden ${isSetupComplete
+                    <div className={`relative rounded-[20px] border transition-all duration-500 overflow-hidden ${isSetupComplete
                         ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-indigo-500/30 shadow-2xl shadow-indigo-500/10'
                         : 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/5'
                         }`}>
@@ -560,20 +560,20 @@ export const GrowthTab = ({
                             </div>
                         )}
 
-                        <div className={`p-6 sm:p-8 relative z-10 ${!isSetupComplete ? 'blur-md select-none' : ''}`}>
-                            <div className="flex items-center justify-between mb-8">
-                                <div className="flex items-center gap-3">
-                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shadow-lg ${isSetupComplete
+                        <div className={`p-4 sm:p-6 relative z-10 ${!isSetupComplete ? 'blur-md select-none' : ''}`}>
+                            <div className="flex items-center justify-between mb-6">
+                                <div className="flex items-center gap-2.5">
+                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center border shadow-lg ${isSetupComplete
                                         ? 'bg-indigo-500 text-white border-indigo-400 shadow-indigo-500/20'
                                         : 'bg-slate-200 dark:bg-white/10 text-slate-400 border-slate-300 dark:border-white/10'
                                         }`}>
-                                        <Brain size={20} />
+                                        <Brain size={16} />
                                     </div>
                                     <div>
-                                        <h4 className={`text-sm font-black uppercase tracking-[0.25em] leading-none mb-1.5 ${isSetupComplete ? 'text-slate-900 dark:text-white' : 'text-slate-900 dark:text-white'}`}>
+                                        <h4 className={`text-[11px] font-black uppercase tracking-tighter leading-none mb-1 ${isSetupComplete ? 'text-slate-900 dark:text-white' : 'text-slate-900 dark:text-white'}`}>
                                             {t('pro_dashboard.academy.psych_strategies.title')}
                                         </h4>
-                                        <p className={`text-[8px] font-black uppercase tracking-[0.3em] ${isSetupComplete ? 'text-indigo-500 dark:text-indigo-400' : 'text-slate-500'}`}>
+                                        <p className={`text-[9px] font-black uppercase tracking-widest ${isSetupComplete ? 'text-indigo-500 dark:text-indigo-400' : 'text-slate-500'}`}>
                                             {t('pro_dashboard.academy.psych_strategies.subtitle')}
                                         </p>
                                     </div>
@@ -590,14 +590,14 @@ export const GrowthTab = ({
                                             : 'bg-white/50 dark:bg-black/20 border-slate-200 dark:border-white/5'
                                             }`}>
                                             <div className="absolute top-0 right-0 px-2 py-1 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-bl-xl border-l border-b border-indigo-500/20 dark:border-indigo-500/20">
-                                                <span className="text-[7px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{item.trigger}</span>
+                                                <span className="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{item.trigger}</span>
                                             </div>
 
                                             <div className="flex items-start gap-3 mb-3 pt-2">
                                                 <div className="w-6 h-6 rounded-full bg-indigo-500/10 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-[10px] font-bold shrink-0 border border-indigo-500/30 dark:border-indigo-500/20">
                                                     {i + 1}
                                                 </div>
-                                                <h5 className={`text-xs font-black uppercase tracking-tight leading-snug mt-1 ${isSetupComplete ? 'text-slate-900 dark:text-white' : 'text-slate-900 dark:text-white'}`}>
+                                                <h5 className={`text-[11px] font-black uppercase tracking-tighter leading-snug mt-1 ${isSetupComplete ? 'text-slate-900 dark:text-white' : 'text-slate-900 dark:text-white'}`}>
                                                     {item.title}
                                                 </h5>
                                             </div>
@@ -608,7 +608,7 @@ export const GrowthTab = ({
 
                                             <div className="p-3 bg-slate-100 dark:bg-black/30 rounded-lg border border-slate-200 dark:border-white/5 flex items-start gap-2">
                                                 <Play size={10} className="text-emerald-600 dark:text-emerald-500 mt-0.5 shrink-0" />
-                                                <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide leading-tight">
+                                                <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest leading-tight">
                                                     {item.action}
                                                 </span>
                                             </div>
