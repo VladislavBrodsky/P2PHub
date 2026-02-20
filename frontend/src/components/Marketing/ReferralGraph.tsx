@@ -259,10 +259,10 @@ export const ReferralGraph = () => {
                         </div>
                         <div className="w-full h-1.5 rounded-full mt-3 overflow-hidden bg-slate-200 dark:bg-emerald-950/50 shadow-inner block relative">
                             <motion.div
-                                className="h-full bg-linear-to-r from-emerald-500 via-teal-400 to-emerald-500 absolute top-0 left-0 w-full"
+                                className="h-full bg-linear-to-r from-emerald-500 via-teal-400 to-emerald-500 absolute top-0 left-0"
                                 initial={{ width: "0%" }}
-                                animate={{ width: "100%" }}
-                                transition={{ duration: 5, ease: "easeOut" }}
+                                animate={{ width: `${(count / 43200) * 100}%` }}
+                                transition={{ type: "spring", stiffness: 50, damping: 20 }}
                             />
                         </div>
                     </div>
