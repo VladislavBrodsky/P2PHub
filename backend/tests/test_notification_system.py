@@ -48,6 +48,8 @@ class TestNotificationEnqueue:
         
         original_is_dup = rate_limit_service.is_duplicate
         rate_limit_service.is_duplicate = AsyncMock(return_value=False)
+        original_is_blocked = rate_limit_service.is_blocked
+        rate_limit_service.is_blocked = AsyncMock(return_value=False)
 
         try:
             await notification_service.enqueue_notification(
@@ -63,6 +65,7 @@ class TestNotificationEnqueue:
         finally:
             send_telegram_task.kiq = original_kiq
             rate_limit_service.is_duplicate = original_is_dup
+            rate_limit_service.is_blocked = original_is_blocked
             notification_service.enqueue_notification = original_instance_enqueue
 
     async def test_priority_methods(self):
@@ -90,19 +93,19 @@ class TestNotificationEnqueue:
             # Critical should bypass dedup by default and be high priority
             await notification_service.send_critical(123, "Critical")
             notification_service.enqueue_notification.assert_called_with(
-                123, "Critical", buttons=None, priority="high", bypass_dedup=True
+                123, "Critical", parse_mode="Markdown", buttons=None, priority="high", bypass_dedup=True
             )
 
             # Standard should NOT bypass dedup and be medium priority
             await notification_service.send_standard(123, "Standard")
             notification_service.enqueue_notification.assert_called_with(
-                123, "Standard", buttons=None, priority="medium", bypass_dedup=False
+                123, "Standard", parse_mode="Markdown", buttons=None, priority="medium", bypass_dedup=False
             )
 
             # Low Prio should NOT bypass dedup and be low priority
             await notification_service.send_low_prio(123, "Low")
             notification_service.enqueue_notification.assert_called_with(
-                123, "Low", buttons=None, priority="low", bypass_dedup=False
+                123, "Low", parse_mode="Markdown", buttons=None, priority="low", bypass_dedup=False
             )
         finally:
             notification_service.enqueue_notification = orig_enqueue

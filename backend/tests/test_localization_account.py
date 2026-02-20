@@ -46,8 +46,10 @@ async def test_uslincoln_localization(session: AsyncSession):
     with patch("app.services.notification_service.send_telegram_task.kiq", new_callable=AsyncMock) as mock_kiq:
         
         # We also need to mock rate_limit_service because enqueue checks it
-        with patch("app.services.notification_service.rate_limit_service.is_duplicate", new_callable=AsyncMock) as mock_dedup:
+        with patch("app.services.notification_service.rate_limit_service.is_duplicate", new_callable=AsyncMock) as mock_dedup, \
+             patch("app.services.notification_service.rate_limit_service.is_blocked", new_callable=AsyncMock) as mock_blocked:
             mock_dedup.return_value = False
+            mock_blocked.return_value = False
             
             # 3. Trigger a level up notification (which uses get_msg)
             # Level 1 -> 2
@@ -70,7 +72,7 @@ async def test_uslincoln_localization(session: AsyncSession):
             
             # Verify it matches
             assert sent_text == expected_text
-            assert "Новый Уровень!" in sent_text
+            assert "Новая Веха" in sent_text
             assert "You've reached" not in sent_text
 
     # 5. Test Referral Notification (Standard message)

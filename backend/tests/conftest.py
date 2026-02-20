@@ -59,6 +59,8 @@ async def engine():
     )
     
     # Create all tables
+    from app.models.partner import Partner, Earning, PartnerTask, XPTransaction
+    from app.models.notification_retry import NotificationRetry
     from app.models.partner import SQLModel
     async with test_engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
