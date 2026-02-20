@@ -80,7 +80,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                             </div>
                             <div>
                                 <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight leading-tight">
-                                    {t('partner_dashboard.finance_stats.title', 'Finance Operations')}
+                                    {t('partner_dashboard.finance_stats.title', 'Finance Intelligence')}
                                 </h4>
                                 <p className="text-[9px] font-black text-indigo-500 uppercase tracking-[0.18em] opacity-80 leading-none mt-0.5">
                                     {t('partner_dashboard.finance_stats.live_data', 'Live Ledger Data')}
@@ -111,18 +111,19 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                     <div className="relative p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/[0.07] border border-emerald-500/15 dark:border-emerald-500/20 overflow-hidden">
                                         <motion.div
                                             animate={{
-                                                y: [0, -6, 0],
-                                                rotate: [0, 3, 0]
+                                                y: [0, -8, 0],
+                                                rotate: [0, 5, 0],
+                                                scale: [1, 1.05, 1]
                                             }}
                                             transition={{
-                                                duration: 4,
+                                                duration: 3,
                                                 repeat: Infinity,
                                                 ease: "easeInOut"
                                             }}
                                             className="absolute top-3 right-3 pointer-events-none"
-                                            style={{ color: '#10b981', opacity: 0.22 }}
+                                            style={{ color: '#10b981', opacity: 0.35, filter: 'drop-shadow(0 0 15px rgba(16,185,129,0.4))' }}
                                         >
-                                            <DollarSign className="w-14 h-14" />
+                                            <DollarSign className="w-16 h-16" stroke="#10b981" strokeWidth={2.5} />
                                         </motion.div>
                                         <div className="flex items-center gap-2 mb-3">
                                             <motion.div
@@ -167,18 +168,19 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                     <div className="relative p-4 rounded-2xl bg-blue-500/5 dark:bg-blue-500/[0.07] border border-blue-500/15 dark:border-blue-500/20 overflow-hidden">
                                         <motion.div
                                             animate={{
-                                                scale: [1, 1.08, 1],
-                                                opacity: [0.18, 0.28, 0.18]
+                                                scale: [1, 1.15, 1],
+                                                opacity: [0.25, 0.45, 0.25],
+                                                rotate: [0, -3, 0]
                                             }}
                                             transition={{
-                                                duration: 3,
+                                                duration: 2.5,
                                                 repeat: Infinity,
                                                 ease: "easeInOut"
                                             }}
                                             className="absolute top-3 right-3 pointer-events-none"
-                                            style={{ color: '#3b82f6' }}
+                                            style={{ color: '#3b82f6', filter: 'drop-shadow(0 0 15px rgba(59,130,246,0.4))' }}
                                         >
-                                            <Activity className="w-14 h-14" />
+                                            <Activity className="w-16 h-16" stroke="#3b82f6" strokeWidth={2.5} />
                                         </motion.div>
                                         <div className="flex items-center gap-2 mb-3">
                                             <motion.div
