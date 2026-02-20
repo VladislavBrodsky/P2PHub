@@ -232,6 +232,11 @@ class ViralAnalyticsService:
                 })
 
         # Calculate confidence based on data availability
+        # 1. Query total generations for the partner to avoid NameError
+        from app.models.partner import ViralGeneration
+        total_gens_stmt = select(func.count(ViralGeneration.id)).where(ViralGeneration.partner_id == partner_id)
+        total_gens = (await session.exec(total_gens_stmt)).first() or 0
+
         confidence = 65 # Base confidence
         if len(results) > 0:
             confidence = min(98, 70 + (len(results) * 5) + (results[0][1] / 100))

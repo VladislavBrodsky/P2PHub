@@ -254,7 +254,8 @@ class ViralMarketingStudio:
         return False, None
 
     def _get_save_path(self, filename: str) -> str:
-        backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        # Step back 4 levels: app/services/viral_studio/studio.py -> backend root
+        backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
         save_dir = os.path.join(backend_dir, "generated_media")
         os.makedirs(save_dir, exist_ok=True)
         return os.path.join(save_dir, filename)

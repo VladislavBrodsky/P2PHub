@@ -126,7 +126,8 @@ def _format_telegram_content(content: str) -> str:
     return content
 
 def _resolve_image_path(image_path: str) -> str:
-    backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    # Step back 4 levels: app/services/viral_studio/adapters.py -> backend root
+    backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     if "generated_media" in image_path:
         filename = image_path.split("/")[-1]
         return os.path.join(backend_dir, "generated_media", filename)
