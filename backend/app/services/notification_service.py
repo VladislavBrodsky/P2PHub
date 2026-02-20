@@ -93,6 +93,7 @@ async def send_telegram_task(payload_dict: dict):
         # Mark user as paused to stop redundant background tasks
         try:
             from app.models.partner import Partner
+            from sqlmodel import select
             async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
             async with async_session() as session:
                 # chat_id in payload is str/int telegram_id
