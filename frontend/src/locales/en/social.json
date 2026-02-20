@@ -84,16 +84,16 @@
       "achievements": "Exclusive achievements",
       "milestones": "Global goals",
       "items": {
-        "onboard_1": "Day 1 Vanguard",
-        "streak_3": "3-Day Warrior",
-        "streak_7": "Weekly Elite",
-        "viral_blitz": "Blitz 10 (24h)",
+        "onboard_1": "Early Adopter",
+        "streak_3": "Active Partner",
+        "streak_7": "Weekly Professional",
+        "viral_blitz": "Growth Sprint",
         "viral_tsunami": "Viral Tsunami",
         "ref_node": "Active Node",
         "free_virtual_card": "Free Virtual Card",
         "ref_star": "Rising Star",
         "ref_ambassador": "Global Ambassador",
-        "ref_monarch": "Network Monarch",
+        "ref_monarch": "Network Visionary",
         "founder_access": "Founder Access",
         "silver_badge": "Silver Badge",
         "fee_discount": "Card Fee -10%",
@@ -109,7 +109,7 @@
         "grandmaster": "Grandmaster Status",
         "vip_status": "VIP Status",
         "premium_access": "Premium Access",
-        "immortal_tier": "Immortal Tier",
+        "immortal_tier": "Elite Tier",
         "ambassador": "Ambassador Level"
       },
       "all_unlocked": "Full Achievement List",
@@ -185,12 +185,12 @@
       "desc": "Connect to the future of finance."
     },
     "community_chat": {
-      "title": "Tactical Chat",
-      "desc": "Sync with partners and exchange strategies."
+      "title": "Strategy Chat",
+      "desc": "Sync with partners and exchange techniques."
     },
     "ambassador_hub": {
-      "title": "Command Center",
-      "desc": "Priority instructions and system updates."
+      "title": "Partner Hub",
+      "desc": "Priority resources and system updates."
     },
     "invite_1_friend": {
       "title": "Invite 1 Friend",
@@ -201,7 +201,7 @@
       "desc": "Create your network for Level 2."
     },
     "invite_5_friends": {
-      "title": "Assemble a Five",
+      "title": "Team of Five",
       "desc": "Expand your circle to 5 partners."
     },
     "daily_checkin_5": {
@@ -368,7 +368,7 @@
       "outcome": "OUTFLOW",
       "ton_stats": "TON Analytics",
       "usdt_stats": "USDT Analytics",
-      "no_activity": "Quiet Perimeter",
+      "no_activity": "Initial Phase",
       "no_activity_desc": "No crypto events recorded in the last 72 hours.",
       "performance_history": "Performance History",
       "monthly_summary": "Monthly Summary",
