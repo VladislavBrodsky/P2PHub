@@ -455,6 +455,7 @@ class PaymentService:
             
             # Record XP Transaction and Audit for Buyer
             from app.models.partner import XPTransaction
+            from app.services.audit_service import audit_service
             session.add(XPTransaction(
                 partner_id=partner.id, amount=upgrade_xp,
                 type="UPGRADE_BONUS",
