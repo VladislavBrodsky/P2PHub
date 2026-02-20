@@ -29,8 +29,8 @@ class FraudDetectionService:
                 
             if count > 20:
                 logger.warning(f"🚨 FRAUD ALERT: High referral velocity for partner {referrer_id} ({count} refs/1hr). Max allowed is 20/hr.")
-                from app.services.audit_service import audit_service
                 from app.models.audit_log import ActionType
+                from app.services.audit_service import audit_service
                 
                 # Using a generic DB session may be tricky here, but we can just use logging or run a fire-and-forget task
                 # A simple log is sufficient per the requirement "Logging of violations"
