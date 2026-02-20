@@ -161,3 +161,7 @@ dependencies = [
     "taskiq-fastapi==0.4.0",
     "taskiq-redis==1.2.2",
 ]
+
+[tool.ruff]
+cache-dir = "/tmp/ruff_cache"
+exclude = [".tmp*", "node_modules", ".venv_new", "venv", ".venv"]

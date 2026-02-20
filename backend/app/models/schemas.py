@@ -14,6 +14,7 @@ class PartnerBase(BaseModel):
     photo_url: str | None = None
     photo_file_id: str | None = None
     language_code: str | None = None
+    notifications_paused: bool = False
 
     model_config = {"from_attributes": True}
 
@@ -258,6 +259,13 @@ class LanguageUpdate(BaseModel):
 
 class ReferralLinkUpdate(BaseModel):
     referral_link: str
+    
+    # #comment: Standardized for audit.
+    class Config:
+        from_attributes = True
+
+class NotificationsUpdate(BaseModel):
+    notifications_paused: bool
     
     # #comment: Standardized for audit.
     class Config:

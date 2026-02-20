@@ -114,4 +114,32 @@ class RedisService:
 
         return data
 
+    # User Profile Caching for Leaderboard/UI
+    async def get_cached_profiles(self, partner_ids: list[int]) -> dict[int, dict]:
+        """Batch fetch cached profiles for UI Leaderboard."""
+        if not partner_ids:
+            return {}
+        
+        keys = [f"profile_cache_v3:{pid}" for pid in partner_ids]
+        raw_data = await self.client.mget(keys)
+        
+        parsed = {}
+        for pid, data in zip(partner_ids, raw_data):
+            if data:
+                try:
+                    parsed[pid] = json.loads(data)
+                except Exception:
+                    pass
+        return parsed
+
+    async def cache_profiles(self, profiles_map: dict[int, dict], expire_seconds: int = 900):
+        """Batch cache static user profiles (default 15 mins)."""
+        if not profiles_map:
+            return
+            
+        async with self.client.pipeline(transaction=False) as pipe:
+            for pid, data in profiles_map.items():
+                pipe.set(f"profile_cache_v3:{pid}", json.dumps(data), ex=expire_seconds)
+            await pipe.execute()
+
 redis_service = RedisService()

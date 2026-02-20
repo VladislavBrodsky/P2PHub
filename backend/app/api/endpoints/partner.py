@@ -25,6 +25,7 @@ from app.models.schemas import (
     EarningSchema,
     GrowthMetrics,
     LanguageUpdate,
+    NotificationsUpdate,
     NetworkStats,
     OrbitMemberResponse,
     PartnerResponse,
@@ -858,6 +859,37 @@ async def update_language(
         await redis_service.client.delete(f"partner:profile:{tg_id}")
 
     return {"status": "ok", "language_code": payload.language_code}
+    
+@router.post("/notifications")
+async def update_notifications(
+    payload: NotificationsUpdate,
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Toggles the notification pause state.
+    """
+    tg_user = get_tg_user(user_data)
+    tg_id = str(tg_user.get("id"))
+
+    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    result = await session.exec(statement)
+    partner = result.first()
+    
+    if partner:
+        partner.notifications_paused = payload.notifications_paused
+        session.add(partner)
+        await session.commit()
+        await redis_service.client.delete(f"partner:profile:{tg_id}")
+        
+        # Sync with Rate Limit Service cache (Redis)
+        from app.services.rate_limit_service import rate_limit_service
+        if payload.notifications_paused:
+            await rate_limit_service.mark_user_blocked(int(tg_id))
+        else:
+            await rate_limit_service.clear_user_blocked(int(tg_id))
+
+    return {"status": "ok", "notifications_paused": payload.notifications_paused}
 
 
 @router.post("/tasks/{task_id}/start", response_model=ActiveTaskResponse)

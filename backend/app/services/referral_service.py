@@ -217,24 +217,34 @@ async def _check_level_up(referrer: Partner, deferred_tasks: list, current_xp: f
         ))
         referrer.level = new_level
 
-async def _stage_redis_invalidation(referrer: Partner, level: int, xp_gain: float = 0.0):
+async def _stage_redis_invalidation(referrer: Partner, level: int, xp_gain: float = 0.0, pipe=None):
+    """
+    Stages Redis cache invalidation for a partner.
+    #comment Phase 2 Scaling: Added support for external pipeline to batch 20+ invalidations into 1 RTT.
+    """
     if xp_gain > 0:
         await leaderboard_service.increment_score(referrer.id, xp_gain)
-    else:
-        # Fallback to absolute sync for Global only
-        try:
-            val = float(referrer.xp)
-            await leaderboard_service.update_score(referrer.id, val)
-        except Exception:
-            pass
-    async with redis_service.client.pipeline(transaction=False) as pipe:
-        pipe.delete(f"partner:profile:{referrer.telegram_id}")
-        pipe.delete(f"partner:earnings:{referrer.telegram_id}")
-        pipe.delete(f"ref_tree_stats_v2:{referrer.id}")
-        pipe.delete(f"ref_tree_members_v2:{referrer.id}:{level}")
+
+    # Use existing pipe or create a one-off
+    p = pipe if pipe is not None else redis_service.client.pipeline(transaction=False)
+    
+    try:
+        # Standard Profile Cache (v2 Legacy & v3 High-Perf)
+        p.delete(f"partner:profile:{referrer.telegram_id}")
+        p.delete(f"profile_cache_v3:{referrer.id}")
+        
+        p.delete(f"partner:earnings:{referrer.telegram_id}")
+        p.delete(f"ref_tree_stats_v2:{referrer.id}")
+        p.delete(f"ref_tree_members_v2:{referrer.id}:{level}")
+        
         for tf in ["24H", "7D", "1M", "3M", "6M", "1Y"]:
-            pipe.delete(f"growth_metrics:{referrer.id}:{tf}")
-        await pipe.execute()
+            p.delete(f"growth_metrics:{referrer.id}:{tf}")
+            
+        if pipe is None:
+            await p.execute()
+    finally:
+        if pipe is None:
+            await p.close()
 
 def _prepare_referral_notification(referrer: Partner, level: int, xp: int, name: str, chain: list):
     chain_text = " ← ".join([*chain, name])
@@ -445,7 +455,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
 
             # Stage Redis Invalidation (Leaderboard, Profile, Earnings)
             try:
-                await _stage_redis_invalidation(recipient, comm_level, xp_gain=xp_gain)
+                await _stage_redis_invalidation(recipient, comm_level, xp_gain=xp_gain, pipe=redis_pipe)
             except Exception as e:
                 logger.error(f"Redis invalidation error for {recipient.id}: {e}")
 

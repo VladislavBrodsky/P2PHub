@@ -10,6 +10,8 @@ if TYPE_CHECKING:
 class PartnerTransaction(SQLModel, table=True):
     __table_args__ = (
         Index("idx_tx_partner_status_created", "partner_id", "status", "created_at"),
+        # #comment Phase 2: Rapid lookup for active TON/USDT payment sessions
+        Index("idx_tx_active_session", "partner_id", "currency", "status", "created_at"),
         {"extend_existing": True}
     )
     id: int | None = Field(default=None, primary_key=True)

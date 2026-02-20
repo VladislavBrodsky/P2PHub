@@ -28,6 +28,7 @@ interface User {
     pro_notification_seen: boolean;
     last_checkin_at: string | null;
     checkin_streak: number;
+    notifications_paused: boolean;
     active_tasks?: ActiveTask[];
 }
 
@@ -177,7 +178,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         total_network_size: 0,
                         pro_notification_seen: false,
                         last_checkin_at: null,
-                        checkin_streak: 0
+                        checkin_streak: 0,
+                        notifications_paused: false
                     };
                 });
             }
@@ -213,7 +215,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         total_network_size: 25,
                         pro_notification_seen: false,
                         last_checkin_at: new Date().toISOString(),
-                        checkin_streak: 5
+                        checkin_streak: 5,
+                        notifications_paused: false
                     };
                     setUser(devUser);
                     setIsLoading(false);

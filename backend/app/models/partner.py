@@ -16,6 +16,9 @@ class Partner(SQLModel, table=True):
             "pro_expires_at", 
             postgresql_where=text("is_pro = true")
         ),
+        # #comment Phase 2: Optimized for batch notifications and leaderboard slicing
+        Index("idx_partner_pro_notif", "is_pro", "notifications_paused"),
+        Index("idx_partner_level_xp", "level", "xp"),
         {"extend_existing": True}
     )
     id: int | None = Field(default=None, primary_key=True)

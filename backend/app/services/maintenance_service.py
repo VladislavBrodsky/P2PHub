@@ -38,11 +38,12 @@ async def process_notification_retries():
     await notification_service.process_retries()
     logger.info("✅ Notification retries processing complete.")
 
-@broker.task(schedule=[{"cron": "*/10 * * * *"}]) # Every 10 minutes
+@broker.task(schedule=[{"cron": "*/5 * * * *"}]) # Every 5 minutes
 async def monitor_notification_health():
     """
     Automated health monitoring for the notification system.
     Alerts admins if pending notifications are stuck for more than 10 minutes.
+
     """
     from datetime import datetime, UTC, timedelta
     from sqlalchemy import func

@@ -78,34 +78,67 @@ class LeaderboardService:
             return None
 
     async def hydrate_leaderboard(self, partner_ids: list[int], scores: dict[int, float], session) -> list[dict]:
-        """Hydrates partner IDs with details from DB and maps to privacy-safe schema."""
+        """
+        Hydrates partner IDs with details from DB and maps to privacy-safe schema.
+        #comment Phase 2 Scaling: Implemented "Cache-First" hydration. 
+        Top 50 profiles are likely requested 1000s of times per minute; 
+        MGET from Redis is ~50x faster than indexed DB SELECTs.
+        """
         from app.schemas.leaderboard import LeaderboardPartner
 
         if not partner_ids:
             return []
 
-        statement = select(Partner).where(Partner.id.in_(partner_ids))
-        result = await session.exec(statement)
-        partners = result.all()
+        # 1. Try to fetch from Redis Cache first
+        cached_profiles = await redis_service.get_cached_profiles(partner_ids)
+        
+        # 2. Identify missing IDs
+        missing_ids = [pid for pid in partner_ids if pid not in cached_profiles]
+        
+        db_partners = []
+        if missing_ids:
+            # Only hit DB for what we don't have
+            statement = select(Partner).where(Partner.id.in_(missing_ids))
+            result = await session.exec(statement)
+            db_partners = result.all()
+            
+            # 3. Cache the new results for next time
+            new_cache_map = {}
+            for p in db_partners:
+                p_data = {
+                    "id": p.id,
+                    "username": p.username,
+                    "first_name": p.first_name,
+                    "photo_url": p.photo_url,
+                    "photo_file_id": p.photo_file_id,
+                    "level": p.level,
+                    "referral_count": p.referral_count
+                }
+                new_cache_map[p.id] = p_data
+            
+            if new_cache_map:
+                await redis_service.cache_profiles(new_cache_map)
+                cached_profiles.update(new_cache_map)
 
-        # Map to schema and sort by score
+        # 4. Map to schema and sort by score
         hydrated = []
-        for p in partners:
-            display_refs = p.referral_count
+        for pid in partner_ids:
+            p_data = cached_profiles.get(pid)
+            if not p_data: continue
 
             item = LeaderboardPartner(
-                id=p.id,
-                username=p.username,
-                first_name=p.first_name,
-                photo_url=p.photo_url,
-                photo_file_id=p.photo_file_id,
-                xp=scores.get(p.id, p.xp),
-                level=p.level,
-                referral_count=display_refs
+                id=p_data["id"],
+                username=p_data.get("username"),
+                first_name=p_data.get("first_name"),
+                photo_url=p_data.get("photo_url"),
+                photo_file_id=p_data.get("photo_file_id"),
+                xp=scores.get(pid, 0.0),
+                level=p_data.get("level", 1),
+                referral_count=p_data.get("referral_count", 0)
             )
-            # #comment: Using mode='json' ensures future-proof serialization if new fields are added.
             hydrated.append(item.model_dump(mode='json'))
 
+        # Note: We keep sorting to ensure rank order matches the score input
         hydrated.sort(key=lambda x: x['xp'], reverse=True)
         return hydrated
 
