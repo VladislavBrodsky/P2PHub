@@ -413,7 +413,7 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
         const fetchData = async () => {
             try {
                 // Fetch more when expanded
-                const limit = isExpanded ? 50 : 12;
+                const limit = isExpanded ? 50 : 30;
                 const [earnRes, txRes] = await Promise.all([
                     apiClient.get(`/api/partner/earnings?limit=${limit}`),
                     apiClient.get('/api/payment/my-transactions')
@@ -578,8 +578,8 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                                 <div className="flex items-center gap-2">
                                     {item.status && item.status !== 'completed' && (
                                         <div className={`px-1 rounded text-[6px] font-black uppercase tracking-tighter ${item.status === 'pending' || item.status === 'manual_review'
-                                                ? 'bg-amber-500/20 text-amber-500'
-                                                : 'bg-red-500/20 text-red-500'
+                                            ? 'bg-amber-500/20 text-amber-500'
+                                            : 'bg-red-500/20 text-red-500'
                                             }`}>
                                             {item.status === 'manual_review' ? 'REVIEW' : item.status}
                                         </div>
