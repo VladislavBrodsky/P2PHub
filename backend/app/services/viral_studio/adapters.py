@@ -139,8 +139,29 @@ async def _send_telegram_photo(channel_id: str, image_path: str, content: str) -
     from bot import bot
     try:
         photo = FSInputFile(image_path)
-        msg = await bot.send_photo(chat_id=channel_id, photo=photo, caption=content[:1024], parse_mode="HTML")
-        return msg.message_id
+        
+        # Telegram photo caption limit is 1024.
+        if len(content) <= 1024:
+            msg = await bot.send_photo(chat_id=channel_id, photo=photo, caption=content, parse_mode="HTML")
+            return msg.message_id
+        else:
+            # Smart truncation to avoid breaking HTML tags
+            safe_cut = content[:1000]
+            if '<' in safe_cut[safe_cut.rfind('>'):]: 
+                # Cut before the broken tag
+                safe_cut = safe_cut[:safe_cut.rfind('<')]
+            
+            msg = await bot.send_photo(chat_id=channel_id, photo=photo, caption=safe_cut + "...", parse_mode="HTML")
+            
+            # Send the rest as a follow-up message so it's not lost or split awkwardly
+            remaining = content[len(safe_cut):].strip()
+            if remaining:
+                # Clean stray closing tags if we cut weirdly, or just send raw text.
+                clean_remainder = re.sub(r'</?(b|i|a)[^>]*>', '', remaining)
+                await bot.send_message(chat_id=channel_id, text=clean_remainder[:4096])
+                
+            return msg.message_id
+
     except Exception as e:
         logger.error(f"Failed to post photo to {channel_id}: {e}")
         return None
