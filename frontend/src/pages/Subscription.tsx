@@ -190,9 +190,9 @@ export default function SubscriptionPage() {
                     </p>
 
                     <div className="w-full space-y-4">
-                        <div className="p-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl flex items-center justify-between shadow-2xl">
+                        <div className="p-5 bg-white/10 backdrop-blur-xl border border-white/20 rounded-[2rem] flex items-center justify-between shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]">
                             <div className="flex items-center gap-4">
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/10 shadow-inner shrink-0 ${isPlus ? 'text-indigo-300' : 'text-amber-400'}`}>
+                                <div className={`w-11 h-11 rounded-[1rem] flex items-center justify-center bg-white/5 border border-white/10 shadow-inner shrink-0 ${isPlus ? 'text-indigo-300' : 'text-amber-400'}`}>
                                     <Sparkles size={20} />
                                 </div>
                                 <div className="text-left">
@@ -200,14 +200,14 @@ export default function SubscriptionPage() {
                                     <p className="text-[14px] font-black text-white tracking-tight whitespace-nowrap">{isLifetime ? 'LIFETIME ACCESS' : new Date(user.pro_expires_at!).toLocaleDateString()}</p>
                                 </div>
                             </div>
-                            <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 shrink-0 shadow-lg md:ml-2">
+                            <div className="w-9 h-9 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 shrink-0 shadow-lg md:ml-2">
                                 <CheckCircle2 size={16} className="text-emerald-400" />
                             </div>
                         </div>
 
                         <button
                             onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' })); }}
-                            className={`w-full h-14 rounded-2xl font-black text-white text-[11px] uppercase tracking-[0.2em] shadow-xl flex items-center justify-center gap-2 transition-all active:scale-95 border ${isPlus ? 'bg-linear-to-r from-indigo-600 hover:from-indigo-500 to-purple-600 hover:to-purple-500 border-indigo-400/30 shadow-indigo-500/20' : 'bg-linear-to-r from-amber-500 hover:from-amber-400 to-orange-600 hover:to-orange-500 border-orange-400/30 shadow-orange-500/20'}`}
+                            className={`w-full h-16 rounded-[2rem] font-black text-white text-[12px] uppercase tracking-[0.2em] shadow-xl flex items-center justify-center gap-2 transition-all active:scale-95 border ${isPlus ? 'bg-linear-to-r from-indigo-600 hover:from-indigo-500 to-purple-600 hover:to-purple-500 border-indigo-400/30 shadow-indigo-500/20' : 'bg-linear-to-r from-amber-500 hover:from-amber-400 to-orange-600 hover:to-orange-500 border-orange-400/30 shadow-[0_20px_40px_-10px_rgba(245,158,11,0.3)]'}`}
                         >
                             <Trophy size={18} />
                             {t('subscription.pro_active.command_center', 'COMMAND CENTER')}
@@ -221,7 +221,7 @@ export default function SubscriptionPage() {
                                     setShowPaymentOptionsForPro(true);
                                     scrollToPayment();
                                 }}
-                                className="w-full h-14 bg-black/40 backdrop-blur-md border border-indigo-500/50 hover:border-indigo-400 hover:bg-indigo-900/40 text-indigo-300 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-indigo-500/10"
+                                className="w-full h-16 bg-black/40 backdrop-blur-xl border border-indigo-500/50 hover:border-indigo-400 hover:bg-indigo-900/40 text-indigo-300 rounded-[2rem] font-black text-[12px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_15px_30px_-5px_rgba(99,102,241,0.2)]"
                             >
                                 <Sparkles size={16} fill="currentColor" />
                                 {t('subscription.upgrade.pro_plus_upgrade_title', 'PRO+ UPGRADE')}
@@ -285,7 +285,7 @@ export default function SubscriptionPage() {
                         <motion.div
                             animate={{ y: [0, -4, 0], rotate: [0, 2, 0, -2, 0] }}
                             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                            className="w-14 h-14 rounded-2xl bg-linear-to-br from-indigo-500 via-purple-600 to-indigo-900 flex items-center justify-center shadow-2xl border border-white/20 relative z-10"
+                            className="w-16 h-16 rounded-[1.5rem] bg-linear-to-br from-indigo-500 via-purple-600 to-indigo-900 flex items-center justify-center shadow-2xl border border-white/20 relative z-10"
                         >
                             <Crown size={28} className="text-white fill-white/20 drop-shadow-lg" />
                         </motion.div>
@@ -463,16 +463,16 @@ export default function SubscriptionPage() {
                         <div className="grid grid-cols-2 gap-3 mt-4">
                             <button
                                 onClick={() => { selection(); setPaymentMethod('TON'); scrollToPayment(); }}
-                                className="group h-16 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all hover:border-indigo-500/50 hover:bg-indigo-500/5 active:scale-95 shadow-sm"
+                                className="group h-[4.5rem] bg-slate-50/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center gap-1.5 transition-all hover:border-indigo-500/50 hover:bg-indigo-500/5 active:scale-95 shadow-sm"
                             >
-                                <Wallet size={18} className="text-indigo-500 group-hover:scale-110 transition-transform" />
+                                <Wallet size={20} className="text-indigo-500 group-hover:scale-110 transition-transform" />
                                 <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">PAY WITH TON</span>
                             </button>
                             <button
                                 onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); }}
-                                className="group h-16 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
+                                className="group h-[4.5rem] bg-slate-50/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
                             >
-                                <CreditCard size={18} className="text-emerald-500 group-hover:scale-110 transition-transform" />
+                                <CreditCard size={20} className="text-emerald-500 group-hover:scale-110 transition-transform" />
                                 <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">PAY WITH USDT</span>
                             </button>
                         </div>
@@ -523,20 +523,24 @@ export default function SubscriptionPage() {
                                             selection();
                                             setExpandedBenefit(isExpanded ? null : b.id);
                                         }}
-                                        className="flex items-center gap-3.5 p-3.5 w-full text-left bg-transparent"
+                                        className="w-full text-left"
                                     >
-                                        <div className={`w-9 h-9 rounded-xl ${b.bg} flex items-center justify-center shrink-0 ${b.color}`}>
-                                            <b.icon size={18} strokeWidth={2.5} />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div className={`text-[10px] font-black uppercase tracking-widest ${b.color}`}>{b.label}</div>
-                                        </div>
-                                        <div className="flex items-center gap-3 shrink-0">
-                                            <Check size={14} className="text-emerald-500" strokeWidth={3} />
-                                            <ChevronDown
-                                                size={16}
-                                                className={`text-slate-400 dark:text-white/20 transition-transform duration-300 block ${isExpanded ? 'rotate-180 text-indigo-500' : ''}`}
-                                            />
+                                        <div className="p-5 flex items-center justify-between w-full">
+                                            <div className="flex items-center gap-3.5 flex-1 pr-4">
+                                                <div className={`w-10 h-10 rounded-[1rem] ${b.bg} flex items-center justify-center shrink-0 shadow-sm ${b.color}`}>
+                                                    <b.icon size={18} />
+                                                </div>
+                                                <div className="flex flex-col min-w-0">
+                                                    <span className={`text-[10px] font-black uppercase tracking-[0.1em] ${b.color}`}>{b.label}</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-3 shrink-0">
+                                                <Check size={14} className="text-emerald-500" strokeWidth={3} />
+                                                <ChevronDown
+                                                    size={16}
+                                                    className={`text-slate-400 dark:text-white/20 transition-transform duration-300 block ${isExpanded ? 'rotate-180 text-indigo-500' : ''}`}
+                                                />
+                                            </div>
                                         </div>
                                     </button>
                                     <AnimatePresence>
