@@ -14,7 +14,7 @@ from app.models.schemas import (
     ViralGenerateResponse,
     ReferralLinkUpdate,
 )
-from app.services.viral_service import viral_studio
+from app.services.viral_studio import viral_studio
 from bot import bot
 
 logger = logging.getLogger(__name__)

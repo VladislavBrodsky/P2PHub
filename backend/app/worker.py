@@ -35,5 +35,5 @@ import app.services.partner_service
 import app.services.referral_service
 import app.services.subscription_service
 import app.services.support_service
-import app.services.viral_service
+import app.services.viral_studio.tasks
 import app.services.warmup_service
