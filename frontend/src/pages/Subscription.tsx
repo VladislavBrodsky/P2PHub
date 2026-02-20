@@ -79,25 +79,38 @@ export default function SubscriptionPage() {
         return () => clearInterval(interval);
     }, [sessionData, t]);
 
-    // Handle Auto-Upgrade Flow from other parts of the app
+    // Handle Auto-Upgrade/Purchase Flow from other parts of the app
     useEffect(() => {
-        const checkAutoUpgrade = () => {
-            const flag = localStorage.getItem('auto_upgrade_pro_plus');
-            if (flag === 'true') {
+        const checkAutoActions = () => {
+            const plusFlag = localStorage.getItem('auto_upgrade_pro_plus');
+            const proFlag = localStorage.getItem('auto_purchase_pro');
+
+            if (plusFlag === 'true') {
                 localStorage.removeItem('auto_upgrade_pro_plus');
                 setSelectedPlan('PRO_PLUS');
                 setShowPaymentOptionsForPro(true);
-                // Delay scroll to ensure DOM is updated
                 setTimeout(() => {
-                    paymentRef.current?.scrollIntoView({ behavior: 'smooth' });
+                    paymentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    impact('heavy');
+                }, 300);
+            } else if (proFlag === 'true') {
+                localStorage.removeItem('auto_purchase_pro');
+                setSelectedPlan('PRO');
+                setShowPaymentOptionsForPro(true);
+                setTimeout(() => {
+                    const el = document.getElementById('currency-selector-anchor');
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else {
+                        paymentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
                     impact('heavy');
                 }, 300);
             }
         };
-        checkAutoUpgrade();
-        // Also listen for potential storage events or tab focus
-        window.addEventListener('focus', checkAutoUpgrade);
-        return () => window.removeEventListener('focus', checkAutoUpgrade);
+        checkAutoActions();
+        window.addEventListener('focus', checkAutoActions);
+        return () => window.removeEventListener('focus', checkAutoActions);
     }, [impact]);
 
     const formattedTime = useMemo(() => {
@@ -704,7 +717,7 @@ export default function SubscriptionPage() {
             {/* ── SUCCESS / STATUS MODAL ──────────────────────────────────── */}
             <AnimatePresence>
                 {status !== 'idle' && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl">
                         <div className="vibing-premium-panel p-8 w-full max-w-sm text-center">
                             {status === 'pending' && <Loader2 size={48} className="text-amber-500 animate-spin mx-auto mb-6" />}
                             {status === 'success' && <Trophy size={48} className="text-emerald-500 mx-auto mb-6" />}

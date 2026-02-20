@@ -147,8 +147,11 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                             {/* UNLOCK STRATEGY BUTTON REDESIGN (v3 - ACID BLUE LIQUID) */}
                                             <button
-                                                onClick={handleUnlock}
-                                                className="w-full group relative flex items-center justify-center gap-2 acid-blue-liquid h-11 rounded-full font-black text-[11px] tracking-widest active:scale-[0.98] transition-all overflow-hidden animate-vibing"
+                                                onClick={() => {
+                                                    handleUnlock();
+                                                    onNavigateToPartner?.();
+                                                }}
+                                                className="w-full group relative flex items-center justify-center gap-2 acid-blue-liquid h-11 rounded-full font-black text-[11px] tracking-widest active:scale-[0.98] transition-all overflow-hidden"
                                             >
                                                 <Lock className="w-3.5 h-3.5 mb-0.5 text-white" />
                                                 <span className="text-white">{t('income.profit.unlock_btn')}</span>
@@ -303,30 +306,31 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     </div>
                 </div>
 
-                <div className="relative z-10 mx-2 p-5 rounded-[2rem] bg-slate-50/80 dark:bg-slate-900/80 border border-rose-500/10 dark:border-white/10 backdrop-blur-2xl mt-4 overflow-hidden group shadow-sm dark:shadow-[0_20px_40px_-20px_rgba(244,63,94,0.15)]">
-                    {/* Inner Accent Glow */}
-                    <div className="absolute top-0 right-0 w-32 h-full bg-rose-500/5 blur-3xl rounded-full" />
+                <div className="relative z-10 mx-2 p-5 rounded-[2rem] bg-white dark:bg-slate-900 border border-rose-500/20 dark:border-white/10 backdrop-blur-2xl mt-4 overflow-hidden group shadow-sm dark:shadow-[0_20px_40px_-20px_rgba(244,63,94,0.15)]">
+                    {/* Liquid Background Layer */}
+                    <div className="absolute inset-0 bg-linear-to-br from-rose-500/10 via-transparent to-indigo-500/10 opacity-30 pointer-events-none animate-liquid-fast" />
+                    <div className="absolute -inset-full bg-linear-to-tr from-rose-500/5 via-fuchsia-500/5 to-indigo-500/5 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity animate-liquid" />
 
                     <div className="flex gap-4 relative z-10">
                         <div className="shrink-0 pt-1">
-                            <div className="w-1.5 h-12 rounded-full bg-linear-to-b from-rose-500 via-rose-600 to-indigo-600 shadow-[0_0_15px_rgba(244,63,94,0.4)] animate-pulse" />
+                            <div className="w-1.5 h-12 rounded-full bg-linear-to-b from-rose-500 via-rose-600 to-indigo-600 shadow-[0_0_15px_rgba(244,63,94,0.4)] animate-vibing" />
                         </div>
                         <div className="space-y-1.5">
                             <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-rose-500" />
+                                <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
                                 {t('income.waiting.title')}
                             </h4>
-                            <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-200 font-medium">
+                            <div className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-200 font-medium">
                                 <Trans i18nKey="income.waiting.desc">
                                     While you trade hours for a fixed wage, the Digital Economy generates value 24/7.
-                                    <span className="block my-3 bg-linear-to-r from-rose-500 via-fuchsia-500 to-rose-500 bg-clip-text text-transparent font-black bg-size-[200%_auto] text-animate-shimmer dark:drop-shadow-[0_0_8px_rgba(244,63,94,0.3)]">
+                                    <span className="block my-3 bg-linear-to-r from-rose-500 via-fuchsia-500 to-rose-500 bg-clip-text text-transparent font-black bg-size-[200%_auto] animate-text-shimmer dark:drop-shadow-[0_0_8px_rgba(244,63,94,0.3)]">
                                         Every minute you wait is a tax on your potential
                                     </span>
                                     <span className="block opacity-80 dark:text-slate-300">
                                         Unlock the strategy to stop calculating loss and start capturing value.
                                     </span>
                                 </Trans>
-                            </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -334,11 +338,19 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 {!isStrategyUnlocked ? (
                     <div className="pt-4 relative z-10">
                         <button
-                            onClick={onNavigateToPartner}
-                            className="group relative w-full flex items-center justify-center gap-2 bg-white text-black h-12 px-6 rounded-2xl font-black text-xs hover:bg-blue-50 transition-all active:scale-[0.98] shadow-[0_10px_20px_-5px_rgba(255,255,255,0.3)]"
+                            onClick={() => {
+                                localStorage.setItem('auto_purchase_pro', 'true');
+                                onNavigateToPartner?.();
+                            }}
+                            className="group relative w-full flex items-center justify-center gap-2 vibing-blue-animated h-14 px-8 rounded-full font-black text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] hover:brightness-110"
                         >
-                            {t('income.cta.join')}
-                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
+                            <span className="relative z-10 flex items-center gap-2 uppercase tracking-widest">
+                                {t('income.cta.join')}
+                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
+                            </span>
+                            {/* Glass overlay */}
+                            <div className="absolute inset-0 bg-linear-to-tr from-white/10 via-transparent to-white/5 pointer-events-none" />
+                            <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
                         </button>
                         <p className="text-center mt-6 text-[10px] font-bold text-neutral-500 uppercase tracking-[0.2em] opacity-60">
                             {t('income.cta.beta')}

@@ -1,4 +1,5 @@
 @layer utilities {
+
   /* Animation Performance */
   .will-change-transform {
     will-change: transform;
@@ -101,13 +102,19 @@
     }
   }
 }
+
 .animate-scan {
   animation: scan 2s linear infinite;
 }
 
 .animate-liquid {
-  /* Using opacity and scale for liquid-like feel instead of background-position */
-  animation: pulse-glow 4s ease-in-out infinite;
+  animation: liquid 8s ease-in-out infinite;
+  background-size: 200% 200%;
+}
+
+.animate-liquid-fast {
+  animation: liquid 4s linear infinite;
+  background-size: 200% 200%;
 }
 
 .animate-gradient-xy {

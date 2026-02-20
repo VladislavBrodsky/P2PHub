@@ -273,26 +273,33 @@ export const StudioTab = ({
             text: textToShare,
         };
 
-        if (generatedResult.image_url) {
+        if (glitchImageSrc || generatedResult.image_url) {
             try {
-                let finalUrl = generatedResult.image_url;
-                if (!finalUrl.startsWith('http')) {
-                    const baseUrl = getApiUrl().replace(/\/api\/?$/, '');
-                    finalUrl = `${baseUrl}${finalUrl.startsWith('/') ? '' : '/'}${finalUrl}`;
+                let file: File | null = null;
+
+                if (glitchImageSrc && glitchImageSrc.startsWith('data:')) {
+                    // Convert data-URL to File for sharing
+                    const res = await fetch(glitchImageSrc);
+                    const blob = await res.blob();
+                    file = new File([blob], 'viral_post.jpg', { type: 'image/jpeg' });
+                } else if (generatedResult.image_url) {
+                    let finalUrl = generatedResult.image_url;
+                    if (!finalUrl.startsWith('http')) {
+                        const baseUrl = getApiUrl().replace(/\/api\/?$/, '');
+                        finalUrl = `${baseUrl}${finalUrl.startsWith('/') ? '' : '/'}${finalUrl}`;
+                    }
+                    finalUrl = finalUrl.replace(/\/api\/images/, '/images');
+
+                    const response = await fetch(finalUrl);
+                    const blob = await response.blob();
+                    file = new File([blob], 'viral_post.png', { type: blob.type });
                 }
-                finalUrl = finalUrl.replace(/\/api\/images/, '/images');
 
-                const response = await fetch(finalUrl);
-                const blob = await response.blob();
-                const file = new File([blob], 'viral_post.png', { type: blob.type });
-
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
                     shareData.files = [file];
-                    // On some platforms sharing both files and text is tricky,
-                    // but most modern browsers handle it well.
                 }
             } catch (error) {
-                console.error('Failed to fetch image for sharing', error);
+                console.error('Failed to prepare image for sharing', error);
             }
         }
 

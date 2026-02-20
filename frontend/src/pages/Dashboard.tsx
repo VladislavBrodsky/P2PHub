@@ -153,7 +153,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             {/* 4. The Opportunity - Income Potential */}
             <motion.div variants={item}>
                 <Suspense fallback={<RevealSkeleton />}>
-                    <IncomePotential onNavigateToPartner={() => setActiveTab?.('partner')} />
+                    <IncomePotential onNavigateToPartner={() => setActiveTab?.('subscription')} />
                 </Suspense>
             </motion.div>
 
