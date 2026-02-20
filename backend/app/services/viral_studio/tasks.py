@@ -15,7 +15,9 @@ async def log_viral_generation_task(
     tokens_gemini: int,
     title: str,
     body: str,
-    image_url: str | None
+    image_url: str | None,
+    image_model: str = "unknown",
+    text_model: str = "unknown"
 ):
     """Background task to log viral content generation to Google Sheets."""
     from sqlalchemy.orm import sessionmaker
@@ -40,7 +42,9 @@ async def log_viral_generation_task(
             tokens_gemini=tokens_gemini,
             title=title,
             body=body,
-            image_url=image_url
+            image_url=image_url,
+            image_model=image_model,
+            text_model=text_model
         )
 
 @broker.task(task_name="log_rss_to_sheets_task")

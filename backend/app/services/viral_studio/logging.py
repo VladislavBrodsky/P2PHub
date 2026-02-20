@@ -42,7 +42,9 @@ class ViralLogger:
         tokens_gemini: int,
         title: str,
         body: str,
-        image_url: str | None
+        image_url: str | None,
+        image_model: str = "unknown",
+        text_model: str = "unknown"
     ):
         if not self.gs_client:
             return
@@ -66,9 +68,21 @@ class ViralLogger:
             sheet = await loop.run_in_executor(None, get_sheet_sync)
             
             if sheet:
-                openai_cost = (tokens_openai / 1000) * 0.015
-                google_cost = (tokens_gemini / 1000) * 0.005 if tokens_gemini > 0 else 0.004 # Imagen flat rate or tokens
-                
+                # Text Cost Calculation
+                if "gpt-4o" in text_model:
+                    openai_cost = (tokens_openai / 1000) * 0.005 if "mini" in text_model else (tokens_openai / 1000) * 0.015
+                else:
+                    openai_cost = 0.0 # Gemini/Other might be covered by API key or free tier
+
+                # Image Cost Calculation
+                if image_model == "dall-e-3":
+                    image_cost = 0.040
+                elif "imagen" in image_model:
+                    # Imagen 3.0/4.0 costs vary, usually ~$0.02-$0.04 or on-demand
+                    image_cost = 0.030 
+                else:
+                    image_cost = 0.0
+
                 row = [
                     datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S"),
                     partner.id,
@@ -77,10 +91,11 @@ class ViralLogger:
                     audience,
                     language,
                     f"${openai_cost:.4f}",
-                    f"${google_cost:.4f}",
+                    f"${image_cost:.4f}",
                     f"{duration:.2f}s",
+                    text_model,
+                    image_model,
                     tokens_openai,
-                    tokens_gemini,
                     title,
                     body[:500] + "..." if len(body) > 500 else body,
                     image_url or "N/A"

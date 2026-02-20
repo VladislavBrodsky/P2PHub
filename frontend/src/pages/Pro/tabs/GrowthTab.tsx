@@ -98,14 +98,14 @@ export const GrowthTab = ({
                     </div>
 
                     <div className="flex flex-col items-start sm:items-end gap-0">
-                        <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-1">
+                        <p className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.3em] mb-1">
                             {t('pro_dashboard.academy.protocols.stats_label')}
                         </p>
                         <div className="relative group/score">
                             <div className="absolute inset-0 bg-indigo-500/20 blur-2xl opacity-0 group-hover/score:opacity-100 transition-opacity duration-700" />
                             <div className="text-5xl sm:text-6xl font-black text-slate-900 dark:text-white tabular-nums leading-none tracking-tighter vibing-crystal-text flex items-baseline gap-1">
                                 <LiquidCounter value={academyScore} />
-                                <span className="text-xs text-indigo-500/60 dark:text-indigo-400/60 tracking-normal italic ml-1 font-bold">XP</span>
+                                <span className="text-xs text-indigo-500/80 dark:text-indigo-400/80 tracking-normal italic ml-1 font-bold">XP</span>
                             </div>
                         </div>
                     </div>
@@ -247,13 +247,15 @@ export const GrowthTab = ({
                     />
                 </div>
 
-                <div className="flex items-center gap-2 px-1 relative z-10">
-                    <div className="w-8 h-8 bg-indigo-50 dark:bg-indigo-500/10 rounded-lg flex items-center justify-center text-indigo-500 border border-indigo-100 dark:border-indigo-500/20 shadow-lg shadow-indigo-500/10">
-                        <ShieldCheck size={16} />
-                    </div>
-                    <div>
-                        <h4 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('pro_dashboard.academy.growth_protocol')}</h4>
-                        <p className="text-[9px] font-black text-indigo-500/60 uppercase tracking-widest mt-0.5">{t('pro_dashboard.academy.node_capabilities')}</p>
+                <div className="flex items-center justify-between px-1 relative z-10">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-linear-to-br from-indigo-500/20 to-blue-600/20 rounded-xl flex items-center justify-center text-indigo-500 border border-indigo-500/30 shadow-[0_0_20px_rgba(79,70,229,0.15)] group-hover:scale-110 transition-transform">
+                            <ShieldCheck size={20} />
+                        </div>
+                        <div>
+                            <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">{t('pro_dashboard.academy.growth_protocol')}</h4>
+                            <p className="text-[10px] font-black text-indigo-500/60 dark:text-indigo-400/60 uppercase tracking-[0.2em] mt-1">{t('pro_dashboard.academy.node_capabilities')}</p>
+                        </div>
                     </div>
                 </div>
 
@@ -295,154 +297,158 @@ export const GrowthTab = ({
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: i * 0.05 }}
-                                    className="pl-10 sm:pl-12 relative group"
+                                    className="pl-12 sm:pl-16 relative group"
                                 >
-                                    {/* Timeline Node - Premium Style */}
-                                    <div className={`absolute left-0 top-5 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-all duration-500 z-20 ${isCompleted
-                                        ? 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] ring-2 ring-emerald-50 dark:ring-emerald-500/10'
+                                    {/* Timeline Node - Re-engineered for perfect alignment */}
+                                    <div className={`absolute left-0 top-[18px] w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 z-20 border-2 ${isCompleted
+                                        ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]'
                                         : isLocked
-                                            ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 ring-2 ring-white dark:ring-slate-900'
-                                            : 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] ring-2 ring-emerald-50 dark:ring-emerald-500/10'
+                                            ? 'bg-slate-100 dark:bg-slate-900 text-slate-400 border-slate-200 dark:border-white/10'
+                                            : 'bg-white dark:bg-slate-950 text-indigo-600 dark:text-indigo-400 border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
                                         }`}>
-                                        <span className="font-black text-[10px] sm:text-xs">{i + 1}</span>
+                                        <span className="font-black text-xs italic">{i + 1}</span>
                                         {!isCompleted && !isLocked && (
                                             <motion.div
-                                                className="absolute inset-0 rounded-full bg-emerald-500 -z-10"
-                                                animate={{ scale: [1, 1.4], opacity: [0.4, 0] }}
+                                                className="absolute inset-0 rounded-full bg-indigo-500 -z-10"
+                                                animate={{ scale: [1, 1.6], opacity: [0.4, 0] }}
                                                 transition={{ duration: 2, repeat: Infinity }}
                                             />
                                         )}
                                     </div>
 
-                                    {/* Premium Masterclass Card */}
-                                    <div className={`pro-card-extreme rounded-[20px] overflow-hidden relative transition-all duration-300 border ${isCompleted
-                                        ? 'opacity-90 border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-900/40'
-                                        : isLocked
-                                            ? 'opacity-60 border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/5'
-                                            : isExpanded
-                                                ? 'bg-white dark:bg-slate-900 border-indigo-500/20 shadow-xl shadow-indigo-500/5'
-                                                : 'bg-white dark:bg-slate-900/80 border-slate-200 dark:border-white/10 hover:border-indigo-500/30 shadow-[0_4px_15px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.08)]'
+                                    {/* Card Container */}
+                                    <div className={`rounded-[24px] overflow-hidden transition-all duration-500 border font-sans ${isExpanded
+                                        ? 'bg-white dark:bg-slate-900 border-indigo-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] ring-1 ring-indigo-500/10'
+                                        : isCompleted
+                                            ? 'bg-slate-50/50 dark:bg-white/2 border-slate-100 dark:border-white/5 opacity-80'
+                                            : isLocked
+                                                ? 'bg-slate-50/30 dark:bg-white/1 border-dashed border-slate-200 dark:border-white/5'
+                                                : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-white/10 hover:border-indigo-500/30 shadow-sm'
                                         }`}>
 
-                                        {/* Header - Clickable Area */}
+                                        {/* Header - Clickable */}
                                         <div
                                             onClick={toggleExpand}
-                                            className="px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between cursor-pointer group/header bg-white dark:bg-slate-900"
+                                            className="px-5 py-4 sm:px-7 sm:py-5 flex items-center justify-between cursor-pointer gap-4"
                                         >
-                                            <div className="flex flex-col gap-2 min-w-0 flex-1">
-                                                <div className="flex items-center gap-3 min-w-0">
-                                                    <span className={`px-2 py-0.5 rounded-lg text-[8px] sm:text-[9px] font-black uppercase tracking-widest shrink-0 ${module.diff === 'hard' ? 'bg-red-50 text-red-500 dark:bg-red-500/10' :
-                                                        module.diff === 'medium' ? 'bg-amber-50 text-amber-500 dark:bg-amber-500/10' :
-                                                            'bg-emerald-50 text-emerald-500 dark:bg-emerald-500/10'
+                                            <div className="flex flex-col gap-2.5 min-w-0">
+                                                <div className="flex items-center gap-3 flex-wrap">
+                                                    <span className={`px-2.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.15em] ${module.diff === 'hard' ? 'bg-red-500 text-white dark:bg-red-500/20 dark:text-red-400' :
+                                                        module.diff === 'medium' ? 'bg-amber-500 text-white dark:bg-amber-500/20 dark:text-amber-400' :
+                                                            'bg-emerald-500 text-white dark:bg-emerald-500/20 dark:text-emerald-400'
                                                         }`}>
                                                         {t(`pro_dashboard.academy.protocols.difficulty_levels.${module.diff}`).split(' ')[0]}
                                                     </span>
-                                                    <h4 className={`text-xs sm:text-sm font-black uppercase tracking-tighter leading-none transition-colors truncate ${isExpanded ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white'}`}>
+                                                    <h4 className={`text-sm sm:text-base font-black uppercase tracking-tight leading-tight transition-colors ${isExpanded ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white'}`}>
                                                         {module.title}
                                                     </h4>
                                                 </div>
-                                                <div className="flex items-center gap-3 ml-1 mt-1">
-                                                    <div className={`w-1.5 h-1.5 rounded-full ${isCompleted ? 'bg-emerald-500' : 'bg-indigo-500'} opacity-70`} />
-                                                </div>
-                                            </div>
-
-                                            <div className="flex items-center gap-4">
-                                                {isCompleted ? (
-                                                    <div className="flex items-center gap-2 text-emerald-500">
-                                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                                        <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">{t('pro_dashboard.academy.synced')}</span>
-                                                    </div>
-                                                ) : (
-                                                    <div className={`text-[9px] font-black uppercase tracking-tight flex items-center gap-2 ${isPaid ? 'text-indigo-500' : 'text-emerald-500'}`}>
-                                                        {cost < 0 && <span>{cost} T</span>}
-                                                        {xpCost > 0 && <span className="text-red-500">-{xpCost} XP</span>}
-                                                        {!isPaid && <span>+{xpReward} XP</span>}
+                                                {!isExpanded && (
+                                                    <div className="flex items-center gap-3 opacity-60">
+                                                        <div className={`w-1 h-1 rounded-full ${isCompleted ? 'bg-emerald-500' : 'bg-indigo-500'}`} />
+                                                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none truncate max-w-[200px] italic">
+                                                            {module.hook}
+                                                        </span>
                                                     </div>
                                                 )}
-                                                <motion.div
-                                                    animate={{ rotate: isExpanded ? 180 : 0 }}
-                                                    className="text-slate-400 group-hover/header:text-indigo-500 transition-colors"
-                                                >
-                                                    <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
-                                                </motion.div>
+                                            </div>
+
+                                            <div className="flex items-center gap-3 shrink-0">
+                                                <div className="hidden sm:flex items-center gap-3 mr-2">
+                                                    {isCompleted ? (
+                                                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">{t('pro_dashboard.academy.synced')}</span>
+                                                    ) : (
+                                                        <div className="flex items-center gap-2">
+                                                            {cost < 0 && <span className="text-[10px] font-black text-indigo-500 bg-indigo-500/10 px-2 py-1 rounded-md">{cost} T</span>}
+                                                            {xpCost > 0 && <span className="text-[10px] font-black text-red-500 bg-red-500/10 px-2 py-1 rounded-md">-{xpCost} XP</span>}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${isExpanded ? 'rotate-180 text-indigo-500' : 'text-slate-300 dark:text-slate-600'}`} />
                                             </div>
                                         </div>
 
-                                        {/* Expandable Content */}
+                                        {/* Content */}
                                         <AnimatePresence>
                                             {isExpanded && (
                                                 <motion.div
                                                     initial={{ height: 0, opacity: 0 }}
                                                     animate={{ height: "auto", opacity: 1 }}
                                                     exit={{ height: 0, opacity: 0 }}
-                                                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                                                    transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
                                                 >
-                                                    <div className="px-4 pb-4 pt-1 sm:px-6 sm:pb-6 space-y-4 border-t border-slate-50 dark:border-white/5 bg-white dark:bg-slate-900">
-                                                        <p className="text-[10px] sm:text-[11px] font-black text-indigo-500/80 uppercase tracking-widest border-b border-indigo-50 dark:border-indigo-500/10 pb-3">{module.hook}</p>
+                                                    <div className="px-5 pb-6 sm:px-7 sm:pb-8 pt-2 space-y-6 border-t border-slate-50 dark:border-white/5">
+                                                        {/* Module Intel Badge */}
+                                                        <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5">
+                                                            <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+                                                            <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">{module.hook}</span>
+                                                        </div>
 
-                                                        {/* Content Logic: Hide if Paid and Not Completed */}
-                                                        {(!isCompleted && isPaid) ? (
-                                                            <div className="relative overflow-hidden rounded-[16px]">
-                                                                <div className="bg-slate-50 dark:bg-black/20 p-4 sm:p-5 blur-md select-none opacity-40 text-[12px]">
-                                                                    {module.content.substring(0, 150)}...
-                                                                </div>
-                                                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/10 dark:bg-black/10 backdrop-blur-[2px]">
-                                                                    <div className="bg-white/80 dark:bg-slate-900/80 p-3 rounded-2xl shadow-xl border border-indigo-500/20 flex flex-col items-center gap-1.5">
-                                                                        <Lock className="w-5 h-5 text-indigo-500" />
-                                                                        <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500">Protocol Locked</span>
-                                                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Unlock to access intelligence</span>
+                                                        {/* Content Reveal */}
+                                                        {(isPaid && !isCompleted) ? (
+                                                            <div className="relative group/locked-overlay">
+                                                                <div className="bg-slate-50/50 dark:bg-black/40 p-5 rounded-3xl blur-md select-none opacity-40 border border-slate-100 dark:border-white/5">
+                                                                    <div className="space-y-3">
+                                                                        <div className="h-4 w-3/4 bg-slate-200 dark:bg-white/10 rounded-full" />
+                                                                        <div className="h-4 w-1/2 bg-slate-200 dark:bg-white/10 rounded-full" />
+                                                                        <div className="h-4 w-2/3 bg-slate-200 dark:bg-white/10 rounded-full" />
                                                                     </div>
+                                                                </div>
+                                                                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                                                                    <div className="w-16 h-16 rounded-[22px] bg-linear-to-br from-slate-800 to-slate-900 flex items-center justify-center shadow-2xl mb-4 border border-white/10">
+                                                                        <Lock className="w-8 h-8 text-indigo-400" />
+                                                                    </div>
+                                                                    <h5 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest mb-1">{t('pro_dashboard.academy.bio_auth')}</h5>
+                                                                    <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('pro_dashboard.academy.psych_strategies.unlock_desc').split('.')[0]}</p>
                                                                 </div>
                                                             </div>
                                                         ) : (
-                                                            <div className="bg-slate-50 dark:bg-black/20 p-4 sm:p-5 rounded-[16px] border border-slate-100 dark:border-white/5 text-[12px] sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-                                                                {renderMarkdown(module.content)}
+                                                            <div className="prose prose-sm dark:prose-invert max-w-none">
+                                                                <div className="bg-slate-50/50 dark:bg-black/20 p-5 sm:p-6 rounded-3xl border border-slate-100 dark:border-white/5 text-[13px] sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                                                                    {renderMarkdown(module.content)}
+                                                                </div>
                                                             </div>
                                                         )}
 
-                                                        {/* Action / Task - Also hidden if Paid and Not Completed */}
+                                                        {/* Interactive Action Area */}
                                                         {!isCompleted && !isLocked && (
-                                                            <div className={`relative p-5 sm:p-6 rounded-[24px] border border-indigo-500/20 bg-indigo-50/50 dark:bg-indigo-500/5 space-y-4 overflow-hidden group/task ${isPaid && 'pt-6'}`}>
-                                                                <div className="absolute inset-0 bg-linear-to-r from-indigo-500/5 to-purple-500/5 opacity-50" />
-                                                                <div className="relative z-10">
-                                                                    <div className="flex items-center gap-2 mb-3">
-                                                                        <Terminal size={14} className="text-indigo-500" />
-                                                                        <span className="text-[9px] font-black uppercase tracking-widest text-indigo-500">Node Task</span>
-                                                                    </div>
-
-                                                                    {!isPaid ? (
-                                                                        <>
-                                                                            <p className="text-[13px] sm:text-[14px] font-bold text-slate-800 dark:text-slate-200 leading-relaxed mb-4">
+                                                            <div className="relative p-6 sm:p-8 rounded-[32px] border bg-linear-to-br from-indigo-50/50 to-white dark:from-indigo-950/20 dark:to-slate-900 border-indigo-500/20 shadow-xl shadow-indigo-500/5 overflow-hidden group/task-card">
+                                                                <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-500/10 blur-[60px] -mr-24 -mt-24 pointer-events-none" />
+                                                                <div className="relative z-10 flex flex-col gap-6">
+                                                                    <div className="space-y-2">
+                                                                        <div className="flex items-center gap-2">
+                                                                            <Terminal size={14} className="text-indigo-500" />
+                                                                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-500">Protocol Directive</span>
+                                                                        </div>
+                                                                        {!isPaid ? (
+                                                                            <p className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight leading-snug">
                                                                                 {module.task}
                                                                             </p>
+                                                                        ) : (
+                                                                            <p className="text-sm font-bold text-slate-400 italic">
+                                                                                Access granted upon synchronization.
+                                                                            </p>
+                                                                        )}
+                                                                    </div>
 
-                                                                            {module.link && (
-                                                                                <a href={module.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-[11px] font-black uppercase tracking-widest hover:underline mb-4">
-                                                                                    {module.cta || 'Initiate Sync'} <Share size={12} />
-                                                                                </a>
-                                                                            )}
-                                                                        </>
-                                                                    ) : (
-                                                                        <p className="text-[11px] font-bold text-slate-400 italic mb-4">
-                                                                            Task requirements will be revealed after synchronization.
-                                                                        </p>
+                                                                    {module.link && !isPaid && (
+                                                                        <a href={module.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 w-fit px-5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-indigo-600 dark:text-indigo-400 text-xs font-black uppercase tracking-widest hover:scale-[1.02] transition-transform shadow-sm">
+                                                                            {module.cta || 'Initiate Sync'} <ArrowRight size={14} />
+                                                                        </a>
                                                                     )}
 
                                                                     <button
                                                                         onClick={() => handleCompleteAcademyStage(module.id)}
                                                                         disabled={isLoading}
-                                                                        className="w-full min-h-[44px] h-auto py-2.5 bg-slate-900 dark:bg-white hover:scale-[1.01] active:scale-95 text-white dark:text-slate-900 rounded-[12px] font-black text-[10px] uppercase tracking-wider transition-all flex items-center justify-center gap-2 flex-wrap text-center shadow-lg relative overflow-hidden"
+                                                                        className="w-full h-16 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl relative overflow-hidden group/action flex items-center justify-center gap-3 active:scale-95 transition-all"
                                                                     >
-                                                                        {isLoading ? <Loader2 size={16} className="animate-spin" /> : (
+                                                                        {isLoading ? (
+                                                                            <Loader2 className="w-5 h-5 animate-spin" />
+                                                                        ) : (
                                                                             <>
-                                                                                <span>
-                                                                                    {!isPaid ? "Complete & Claim" : `Unlock Protocol (-${Math.abs(cost)} T)`}
-                                                                                </span>
-                                                                                {xpCost > 0 && (
-                                                                                    <span className="opacity-80 text-red-400">(-{xpCost} XP)</span>
-                                                                                )}
-                                                                                <div className="w-px h-4 bg-current opacity-20 hidden sm:block mx-1" />
-                                                                                <span className="opacity-70">+{xpReward} XP Reward</span>
+                                                                                <span>{!isPaid ? "CLAIM XP REWARD" : `SYNC NODE (-${Math.abs(cost)} TOKENS)`}</span>
+                                                                                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-indigo-400 animate-pulse" />
+                                                                                <span className="opacity-60">+{xpReward} XP</span>
                                                                             </>
                                                                         )}
                                                                     </button>
@@ -450,16 +456,28 @@ export const GrowthTab = ({
                                                             </div>
                                                         )}
 
+                                                        {/* Locked Policy Area */}
                                                         {isLocked && !isCompleted && (
-                                                            <div className="p-5 bg-slate-100 dark:bg-white/5 rounded-[24px] border border-slate-200 dark:border-white/5 text-center">
-                                                                <div className="flex flex-col items-center gap-2 opacity-60">
-                                                                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
-                                                                        {!canAffordTokens ? "Insufficient Tokens" : "Insufficient XP Score"}
-                                                                    </span>
-                                                                    <span className="text-[9px] font-medium text-slate-400 uppercase tracking-tight leading-none">
-                                                                        {xpCost > academyScore ? `Requires ${xpCost} XP (You have ${academyScore})` : "Earn more tokens or upgrade to PRO+"}
-                                                                    </span>
+                                                            <div className="p-6 bg-slate-50 dark:bg-black/30 rounded-[32px] border border-slate-200 dark:border-white/10 text-center space-y-3">
+                                                                <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-white/5 flex items-center justify-center mx-auto border border-slate-200 dark:border-white/10 text-slate-400">
+                                                                    <Info size={24} />
                                                                 </div>
+                                                                <div className="space-y-1">
+                                                                    <h6 className="text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                                                                        {!canAffordTokens ? "INSUFFICIENT TOKENS" : "INSUFFICIENT XP SCORE"}
+                                                                    </h6>
+                                                                    <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tight">
+                                                                        {xpCost > academyScore ? `REQUIRES ${xpCost} XP (YOU HAVE ${academyScore})` : "Earn more tokens or upgrade to PRO+"}
+                                                                    </p>
+                                                                </div>
+                                                                {!status?.is_pro_plus && (
+                                                                    <button
+                                                                        onClick={(e) => { e.stopPropagation(); selection(); setShowSetup(true); }}
+                                                                        className="text-[10px] font-black text-indigo-500 hover:text-indigo-400 uppercase tracking-widest mt-2 underline"
+                                                                    >
+                                                                        {t('pro_dashboard.setup.tg_sync_multi.upgrade_pro_plus_cta')}
+                                                                    </button>
+                                                                )}
                                                             </div>
                                                         )}
                                                     </div>

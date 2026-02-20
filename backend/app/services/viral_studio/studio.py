@@ -137,6 +137,8 @@ class ViralMarketingStudio:
             "status": "success",
             "tokens_openai": tokens_openai,
             "duration": duration,
+            "image_model": getattr(self, "_last_used_image_model", "unknown"),
+            "text_model": getattr(self, "_last_used_text_model", "unknown"),
         }
 
         # DB Tracking
@@ -156,29 +158,36 @@ class ViralMarketingStudio:
             await log_viral_generation_task.kiq(
                 partner_id=partner.id, topic=post_type, audience=target_audience, language=language,
                 openai_prompt=user_prompt, gemini_prompt=image_prompt, duration=duration,
-                tokens_openai=tokens_openai, tokens_gemini=0, title=output["title"], body=body_text, image_url=image_url
+                tokens_openai=tokens_openai, tokens_gemini=0, title=output["title"], body=body_text, image_url=image_url,
+                image_model=output["image_model"], text_model=output["text_model"]
             )
         except Exception as e: logger.warning(f"TaskIQ Log Fail: {e}")
 
         return output
 
     async def _get_text_content(self, system_prompt: str, user_prompt: str) -> tuple[dict | None, int]:
+        # Priority: Google Ultra-Advanced (exp-02-05 often has 2.0 Pro)
         if self.genai_client:
-            for model in ['gemini-3-pro', 'gemini-2.0-pro', 'gemini-2.0-flash']:
+            models = ['gemini-2.0-pro-exp-02-05', 'gemini-1.5-pro', 'gemini-2.0-flash']
+            for model in models:
                 try:
                     res = await self.genai_client.aio.models.generate_content(
                         model=model, contents=f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}",
                         config=genai_types.GenerateContentConfig(response_mime_type='application/json', temperature=0.7)
                     )
+                    self._last_used_text_model = model
                     return json.loads(res.text), 0
                 except: continue
         
+        # Emergency Alternative: OpenAI GPT-4o
         if self.openai_client:
             try:
+                model_name = "gpt-4o" # Use flagship for "advanced" content
                 res = await self.openai_client.chat.completions.create(
-                    model="gpt-4o-mini", messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
+                    model=model_name, messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
                     response_format={"type": "json_object"}
                 )
+                self._last_used_text_model = model_name
                 return json.loads(res.choices[0].message.content), res.usage.total_tokens
             except: pass
         return None, 0
@@ -187,21 +196,29 @@ class ViralMarketingStudio:
         """Sequential image generation trying Google then OpenAI."""
         # 1. Google Imagen (Fastest & Usually Best)
         if self.genai_client:
-            models = ['imagen-3.0-generate-001', 'imagen-3.0-fast-generate-001', 'imagen-3.0-capability-001']
+            models = [
+                'imagen-4.0-ultra-generate-001', # Flagship priority
+                'imagen-4.0-generate-001', 
+                'imagen-3.0-generate-001', 
+                'imagen-3.0-fast-generate-001'
+            ]
             for m in models:
                 try:
                     success, url = await self._try_imagen(m, prompt, partner_id)
                     if success:
                         self._last_working_imagen_model = m
+                        self._last_used_image_model = m
                         return url
                 except Exception as e:
                     logger.warning(f"Imagen model {m} failed: {e}")
         
-        # 2. OpenAI DALL-E 3
+        # 2. Emergency Alternative: OpenAI DALL-E 3
         if self.openai_client:
             try:
-                res = await self.openai_client.images.generate(model="dall-e-3", prompt=prompt, n=1)
+                model_name = "dall-e-3"
+                res = await self.openai_client.images.generate(model=model_name, prompt=prompt, n=1)
                 img_url = res.data[0].url
+                self._last_used_image_model = model_name
                 # Persistent local copy
                 filename = f"viral_dalle_{partner_id}_{secrets.token_hex(4)}.png"
                 save_path = self._get_save_path(filename)

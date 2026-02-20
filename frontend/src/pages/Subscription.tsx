@@ -130,7 +130,8 @@ export default function SubscriptionPage() {
         const isPlus = (user.subscription_plan?.includes('PLUS'));
         const isLifetime = !user.pro_expires_at || user.subscription_plan === 'PRO_LIFETIME';
         return (
-            <div className="flex flex-col items-center justify-center min-h-[85vh] px-8 text-center overflow-hidden relative">
+            <div className={`flex flex-col items-center justify-center min-h-screen px-8 pb-32 pt-10 text-center overflow-hidden relative ${isPlus ? 'bg-linear-to-b from-indigo-50/50 to-white dark:from-slate-950 dark:to-indigo-950/10' : 'bg-linear-to-b from-amber-50/80 via-white to-orange-100/30 dark:from-slate-950 dark:to-orange-950/10'}`}>
+                <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] blur-[150px] opacity-30 -z-10 animate-pulse-slow ${isPlus ? 'bg-indigo-500/20' : 'bg-orange-500/20'}`} />
                 <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] blur-[150px] opacity-20 -z-10 animate-pulse ${isPlus ? 'bg-indigo-600' : 'bg-amber-500'}`} />
                 <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} className="relative mb-8">
                     <div className={`w-24 h-24 rounded-[2rem] flex items-center justify-center shadow-2xl relative z-10 border border-white/30 backdrop-blur-sm bg-linear-to-br ${isPlus ? 'from-indigo-400 via-blue-600 to-indigo-800' : 'from-amber-300 via-orange-500 to-amber-700'}`}>
@@ -161,8 +162,24 @@ export default function SubscriptionPage() {
                         <Trophy size={16} />
                         {t('subscription.pro_active.command_center')}
                     </button>
+
+                    {!isPlus && (
+                        <button
+                            onClick={() => {
+                                selection();
+                                setSelectedPlan('PRO_PLUS');
+                                setShowPaymentOptionsForPro(true);
+                                scrollToPayment();
+                            }}
+                            className="w-full h-14 bg-white dark:bg-white/5 border-2 border-indigo-500/30 hover:border-indigo-500 text-indigo-600 dark:text-indigo-400 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg"
+                        >
+                            <Sparkles size={16} fill="currentColor" />
+                            {t('subscription.upgrade.pro_plus_upgrade_title')}
+                        </button>
+                    )}
+
                     {!isLifetime && (
-                        <button onClick={() => setShowPaymentOptionsForPro(true)} className="text-[8px] font-black text-slate-400 dark:text-white/30 uppercase tracking-widest hover:text-slate-900 dark:hover:text-white transition-colors">
+                        <button onClick={() => setShowPaymentOptionsForPro(true)} className="text-[8px] font-black text-slate-400 dark:text-white/30 uppercase tracking-widest hover:text-slate-900 dark:hover:text-white transition-colors block mx-auto mt-4">
                             {t('subscription.upgrade.extend_membership')}
                         </button>
                     )}
