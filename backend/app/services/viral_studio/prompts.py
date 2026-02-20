@@ -78,6 +78,7 @@ def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link
     audience_intel = intel["audience"]
     category_strategy = intel["strategy"]
     hook_examples = audience_intel.get("hooks", []) if audience_intel else []
+    tov = audience_intel.get("tov", {}) if audience_intel else {}
     visual_base = audience_intel.get("visual_base", "A successful person")
     visual_scene = category_strategy.get("visual_scene", "experiencing a transformation")
     
@@ -101,22 +102,23 @@ Available Episodes: {category_strategy.get('storytelling', {}).get('episodes', [
 {hook_inspo}
 
 **CONTENT REQUIREMENTS (STRICT):**
-1. **VISIONARY TONE:** Be professional, friendly, and inspiring. Talk about the "Global Financial Shift" and "Digital Gold Rush" as positive opportunities for everyone to grow together.
-2. **NO BLAME:** Do NOT mention or blame banks, the government, or 'the system'. Do not be aggressive or rebellious.
-3. **GLOBAL LEADERSHIP:** Write as a Professional Native Speaker and Global Leader. Use sophisticated, high-status yet inclusive language.
-4. **EPISODIC ANCHOR:** The first line of the 'body' MUST be: "**Chapter [X]: [Visionary Title]**".
-5. **OPPORTUNITY ASSET:** Mid-post, offer a 'Growth Asset' (e.g., "Signal 'GOLD' for the blueprint to geometric networking").
+1. **CONVERSION HUB PROTOCOL:** Use the assigned copywriting framework ({category_strategy.get('technique', 'AIDA')}) to structure the post. Identify the pain point, agitate it, and present the Pintopay system as the solution.
+2. **SCROLL-STOPPING HOOK:** Use a thumb-stopping hook in <10 words. Incorporate a 'pattern interrupt' that contradicts common knowledge.
+3. **NATIVE FLUENCY:** Write with {language} native mastery. Adapt tone: {tov.get('style', 'Professional')}.
+4. **EPISODIC NARRATIVE:** Start with "**Chapter [X]: [High-Status Title]**".
+5. **INTELLIGENCE ASSET:** Mid-post, provide a genuine value-add (e.g., "Signal 'ALPHA' for the private node setup blueprint").
 6. **CTA SUPREMACY:** The final line MUST be a bold markdown link: **[Action Text]({ref_link})**.
-7. **BANNED:** Never use "Pintopay" in the hook. No exclamations. No aggresive 'Red Pill' terminology.
+7. **BANNED:** No "Pintopay" in the hook. No "Don't miss out" or "Click here". No quadruple asterisks (****). No exclamation marks.
 
-**VISUAL STORYTELLING (for context):**
-The generated image for this post will feature: {visual_base} {visual_scene}. Ensure your copy resonates with this visual aesthetic.
+**VISUAL DIRECTION (for context):**
+The generated image will feature: {visual_base} {visual_scene}. 
+Style: Professional DSLR, 35mm f/2.8, 4K rendering. Ensure the copy resonates with this premium, authentic aesthetic.
 
 **IMAGE SPECIFICATION (CRITICAL):**
-Generate a prompt for a Leica M11 editorial shot. 
-Base: {visual_base}
-Scene: {visual_scene}
-Note: Absolutely NO neon, NO screens, NO cash. Focus on Chiaroscuro lighting, luxury textures (stone, silk, walnut), and a sense of 'Expensive Silence'. Subject must look thoughtful and high-status, not 'posing'.
+Generate a prompt for a professional DSLR shot (35mm lens, f/2.8).
+Subject: {visual_base}
+Setting: {visual_scene}
+Note: Absolutely NO neon, NO screens, NO cash. Focus on realistic skin tones, natural lighting, and a 'Quiet Luxury' atmosphere. Subject must look like a real leader in a real setting.
 
 RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
 """
@@ -132,10 +134,10 @@ def build_viral_image_prompt(intel: dict, post_content: str = "") -> str:
         f"{IMAGE_RULES}\n\n"
         f"CONTEXTUAL SYNERGY: The image must visually represent the core emotion of this content: \"{post_content[:200]}\"\n"
         f"SCENE SETUP: {audience_desc} {scene_desc}. \n"
-        f"EMOTION: High-stakes tension, quiet confidence, or profound relief. \n"
-        f"LIGHTING: Deep Chiaroscuro with Rembrandt highlights on the face. \n"
-        f"BRANDING/TEXT: If any title/text is visible on background elements (like a premium dossier or screen), it must be in the 'Onest' font style and 100% grammatically correct. \n"
-        f"SPECS: Photorealistic 8K, cinematic depth of field, Leica M11 rendering."
+        f"EMOTION: Professional focus, calm authority, or visionary breakthrough. \n"
+        f"LIGHTING: Natural ambient lighting with subtle professional rim light. \n"
+        f"BRANDING/TEXT: If any title/text is visible on background elements (like a premium dossier), it must be in the 'Onest' font style and 100% grammatically correct. \n"
+        f"SPECS: Photorealistic 4K, realistic shadows, authentic materials and textures."
     )
 
 def _build_audience_context(target_audience: str, audience_intel: dict) -> str:

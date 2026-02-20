@@ -98,21 +98,26 @@ class ViralMarketingStudio:
         if "{ref_link}" in body_text:
             body_text = body_text.replace("{ref_link}", ref_link)
             
-        # CTA LINK REINFORCER: Ensure a link exists. If not, append one.
-        if ref_link not in body_text:
-            # Check if there is a bold line that looks like a CTA
+        # CTA LINK REINFORCER: Ensure a PROPER markdown link exists.
+        has_proper_link = f"({ref_link})" in body_text and "[" in body_text
+        
+        if not has_proper_link:
             lines = body_text.split("\n")
-            cta_line_found = False
+            cta_fixed = False
+            # Look for the last bold line that might be a CTA
             for i in range(len(lines)-1, -1, -1):
-                if "**" in lines[i] and len(lines[i]) < 100:
-                    # Transform existing bold line to link
-                    clean_text = lines[i].replace("**", "").replace("[", "").replace("]", "").strip()
+                line = lines[i].strip()
+                if not line: continue
+                if "**" in line and len(line) < 120:
+                    # Clean the line and wrap it properly
+                    clean_text = line.replace("**", "").split("](")[0].replace("[", "").replace("]", "").strip()
+                    if not clean_text or len(clean_text) < 3: clean_text = "Secure Your Advantage Here"
                     lines[i] = f"**[{clean_text}]({ref_link})**"
-                    cta_line_found = True
+                    cta_fixed = True
                     break
             
-            if not cta_line_found:
-                body_text += f"\n\n**[Start Your Journey Here]({ref_link})**"
+            if not cta_fixed:
+                body_text = body_text.strip() + f"\n\n**[Start Your Journey Here]({ref_link})**"
             else:
                 body_text = "\n".join(lines)
 
