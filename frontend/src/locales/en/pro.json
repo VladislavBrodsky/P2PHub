@@ -763,7 +763,13 @@
       "priority_ai": "PRIORITY AI COMPUTE",
       "priority_ai_desc": "PRO+ members jump the queue. Your AI requests process first, with zero throttling even at peak hours. Your viral machine never goes offline.",
       "empire_access": "LIFETIME EMPIRE STATUS",
-      "empire_access_desc": "Pay once. Own it forever. PRO+ is a one-time investment that scales with the platform — every new feature, every new AI model, every new tool added is yours automatically."
+      "empire_access_desc": "Pay once. Own it forever. PRO+ is a one-time investment that scales with the platform — every new feature, every new AI model, every new tool added is yours automatically.",
+      "tg_multi_channel": "5 TELEGRAM CHANNELS",
+      "tg_multi_channel_desc": "Add up to 5 Telegram channels and auto-broadcast to all of them simultaneously from one dashboard — grow multiple audiences at once.",
+      "multi_broadcast": "MULTI-CHANNEL BROADCASTING",
+      "multi_broadcast_desc": "Schedule and blast posts across all your connected channels in one click — maximum reach, zero manual effort. One post, five audiences.",
+      "content_analytics": "CONTENT PERFORMANCE ANALYTICS",
+      "content_analytics_desc": "Track reach, engagement, and conversion rates for every post across all channels with real-time data. Know exactly what's working and double down."
     },
     "stats": {
       "partners": "ACTIVE PARTNERS",

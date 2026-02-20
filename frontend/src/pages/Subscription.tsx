@@ -4,7 +4,8 @@ import {
     Crown, CheckCircle2, Wallet, CreditCard,
     Loader2, Sparkles, Zap, ChevronDown, Trophy, Users,
     HelpCircle, Clock, Check, Globe, Shield, Share2, ChevronLeft,
-    Flame, Brain, Rocket, Network, Star, Lock, Infinity, Target, TrendingUp, Bot
+    Flame, Brain, Rocket, Network, Star, Lock, Infinity, Target, TrendingUp, Bot,
+    Send, BarChart2, Radio
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
@@ -243,6 +244,9 @@ export default function SubscriptionPage() {
         { icon: Infinity, label: t('subscription.benefits.omni_sync'), desc: t('subscription.benefits.omni_sync_desc'), color: 'text-fuchsia-600 dark:text-fuchsia-400', bg: 'bg-fuchsia-500/10 dark:bg-fuchsia-500/20' },
         { icon: Star, label: t('subscription.benefits.priority_ai'), desc: t('subscription.benefits.priority_ai_desc'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
         { icon: Rocket, label: t('subscription.benefits.empire_access'), desc: t('subscription.benefits.empire_access_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
+        { icon: Send, label: t('subscription.benefits.tg_multi_channel', '5 Telegram Channels'), desc: t('subscription.benefits.tg_multi_channel_desc', 'Add up to 5 Telegram channels and auto-broadcast to all of them simultaneously from one dashboard.'), color: 'text-sky-600 dark:text-sky-400', bg: 'bg-sky-500/10 dark:bg-sky-500/20' },
+        { icon: Radio, label: t('subscription.benefits.multi_broadcast', 'Multi-Channel Broadcasting'), desc: t('subscription.benefits.multi_broadcast_desc', 'Schedule and blast posts across all your connected channels in one click — maximum reach, zero effort.'), color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-500/10 dark:bg-violet-500/20' },
+        { icon: BarChart2, label: t('subscription.benefits.content_analytics', 'Content Performance Analytics'), desc: t('subscription.benefits.content_analytics_desc', 'Track reach, engagement, and conversion rates for every post across all channels with real-time insights.'), color: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-500/10 dark:bg-teal-500/20' },
     ];
 
     const currentBenefits = selectedPlan === 'PRO' ? proBenefits : proPlusBenefits;
