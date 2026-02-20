@@ -129,6 +129,44 @@ class PartnerTask(SQLModel, table=True):
 
     partner: Partner = Relationship(back_populates="completed_task_records")
 
+class ViralGeneration(SQLModel, table=True):
+    __table_args__ = (Index("idx_viral_gen_partner_created", "partner_id", "created_at"), {"extend_existing": True})
+    id: int | None = Field(default=None, primary_key=True)
+    partner_id: int = Field(foreign_key="partner.id", index=True)
+    topic: str
+    audience: str
+    language: str
+    tone: str
+    title: str
+    body: str
+    image_url: str | None = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None), index=True)
+
+class SocialPost(SQLModel, table=True):
+    __table_args__ = (
+        Index("idx_social_post_gen_platform", "generation_id", "platform"),
+        {"extend_existing": True}
+    )
+    id: int | None = Field(default=None, primary_key=True)
+    generation_id: int | None = Field(default=None, foreign_key="viralgeneration.id", index=True)
+    partner_id: int = Field(foreign_key="partner.id", index=True)
+    platform: str = Field(index=True) # "x", "telegram", "linkedin"
+    external_id: str = Field(index=True) 
+    channel_id: str | None = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None), index=True)
+    last_metric_check: datetime | None = None
+
+class SocialPostMetric(SQLModel, table=True):
+    __table_args__ = ({"extend_existing": True})
+    id: int | None = Field(default=None, primary_key=True)
+    post_id: int = Field(foreign_key="socialpost.id", index=True)
+    views: int = Field(default=0)
+    likes: int = Field(default=0)
+    reposts: int = Field(default=0)
+    replies: int = Field(default=0)
+    engagement_rate: float = Field(default=0.0)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None), index=True)
+
 class Earning(SQLModel, table=True):
     __table_args__ = (
         Index("idx_earning_partner_type_created", "partner_id", "type", "created_at"),

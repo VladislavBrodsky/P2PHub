@@ -291,6 +291,7 @@ async def generate_content(
         )
     
     return {
+        "id": result.get("id"),
         "title": result["title"],
         "body": result["text"],
         "hashtags": result["hashtags"],
@@ -302,7 +303,8 @@ async def generate_content(
 @router.post("/post")
 async def publish_content(
     payload: SocialPostRequest,
-    partner: Partner = Depends(get_current_partner)
+    partner: Partner = Depends(get_current_partner),
+    session: AsyncSession = Depends(get_session)
 ):
     if not partner.is_pro:
         raise HTTPException(status_code=403, detail="PRO membership required")
@@ -311,7 +313,9 @@ async def publish_content(
         partner=partner,
         platform=payload.platform,
         content=payload.content,
-        image_path=payload.image_path
+        image_path=payload.image_path,
+        generation_id=payload.generation_id,
+        session=session
     )
     
     if "error" in result:

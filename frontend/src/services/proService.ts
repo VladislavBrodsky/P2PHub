@@ -37,10 +37,12 @@ export interface PROSetupPayload {
 }
 
 export interface ViralGenerateResponse {
+    id?: number;
     title: string;
     body: string;
     hashtags?: string[];
     image_prompt: string;
+    image_url?: string;
     tokens_remaining: number;
 }
 
@@ -66,11 +68,12 @@ export const proService = {
         return response.data;
     },
 
-    publishContent: async (platform: 'x' | 'telegram' | 'linkedin', content: string, image_path?: string) => {
+    publishContent: async (platform: 'x' | 'telegram' | 'linkedin', content: string, image_path?: string, generation_id?: number) => {
         const response = await apiClient.post('/api/pro/post', {
             platform,
             content,
-            image_path
+            image_path,
+            generation_id
         });
         return response.data;
     },

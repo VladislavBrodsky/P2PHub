@@ -21,7 +21,7 @@ from app.core.cmo_intelligence import (
 )
 from app.core.config import settings
 from app.core.errors import ViralStudioErrorCode
-from app.models.partner import Partner
+from app.models.partner import Partner, SocialPost, SocialPostMetric, ViralGeneration
 
 logger = logging.getLogger(__name__)
 
@@ -385,6 +385,28 @@ Use FRESH, audience-specific language that feels authentic.
                 "model_text": "gpt-4o-mini",
                 "model_image": self._last_working_imagen_model
             }
+
+            # Save to Database for Analytics Tracking
+            generation_id = None
+            if session:
+                try:
+                    gen = ViralGeneration(
+                        partner_id=partner.id,
+                        topic=post_type,
+                        audience=target_audience,
+                        language=language,
+                        tone=tone_of_voice or "authoritative",
+                        title=result["title"],
+                        body=result["text"],
+                        image_url=image_url
+                    )
+                    session.add(gen)
+                    await session.commit()
+                    await session.refresh(gen)
+                    generation_id = gen.id
+                    result["id"] = generation_id
+                except Exception as db_err:
+                    logger.warning(f"⚠️ Failed to save ViralGeneration to DB: {db_err}")
 
             try:
                 # #comment: Move logging to persistent TaskIQ queue (Reliability Boost)
@@ -1093,19 +1115,62 @@ Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
             result = await redis_service.get_or_compute(cache_key, compute_and_check, expire=10800)
             return result or {"error": "Global Data Sync Failed. Refresh Node."}
 
-    async def post_to_social(self, partner: Partner, platform: str, content: str, image_path: str | None = None) -> dict[str, Any]:
+    async def post_to_social(
+        self, 
+        partner: Partner, 
+        platform: str, 
+        content: str, 
+        image_path: str | None = None,
+        generation_id: int | None = None,
+        session: AsyncSession | None = None
+    ) -> dict[str, Any]:
         """
         Autoposts to X, Telegram, or LinkedIn using partner's API keys.
         """
         platform = platform.lower().strip()
+        result = {"status": "failed"}
+
         if platform == "x":
-            return await self._post_to_x(partner, content, image_path)
+            result = await self._post_to_x(partner, content, image_path)
         elif platform == "telegram":
-            return await self._post_to_telegram(partner, content, image_path)
+            result = await self._post_to_telegram(partner, content, image_path)
         elif platform == "linkedin":
-            return await self._post_to_linkedin(partner, content, image_path)
+            result = await self._post_to_linkedin(partner, content, image_path)
         else:
             return {"error": f"Unsupported platform: {platform}"}
+
+        # Track Post in Database
+        if result.get("status") == "success" and session:
+            try:
+                # Multiple IDs can come from Telegram (multiple channels)
+                external_ids = result.get("message_ids", [])
+                if platform == "x" and result.get("tweet_id"):
+                    external_ids = [str(result["tweet_id"])]
+                elif platform == "linkedin" and result.get("post_id"):
+                    external_ids = [str(result["post_id"])]
+                
+                for ext_id in external_ids:
+                    # Parse out channel_id if possible (for Telegram it's in results)
+                    channel_id = None
+                    if platform == "telegram" and ":" in ext_id:
+                        # Format we'll use: "channel_id:message_id"
+                        channel_id, msg_id = ext_id.split(":", 1)
+                        ext_id = msg_id
+
+                    post = SocialPost(
+                        generation_id=generation_id,
+                        partner_id=partner.id,
+                        platform=platform,
+                        external_id=str(ext_id),
+                        channel_id=channel_id or partner.telegram_channel_id
+                    )
+                    session.add(post)
+                
+                await session.commit()
+            except Exception as db_err:
+                logger.warning(f"⚠️ Failed to log SocialPost to DB: {db_err}")
+
+        return result
 
     async def _post_to_x(self, partner: Partner, content: str, image_path: str | None) -> dict[str, Any]:
         if not (partner.x_api_key and partner.x_api_secret and partner.x_access_token and partner.x_access_token_secret):
@@ -1205,35 +1270,29 @@ Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
 
         formatted_content = self._format_telegram_content(content)
         results = []
+        message_ids = []
         success_count = 0
         
         full_image_path = self._resolve_image_path(image_path) if image_path else None
         
-        if full_image_path:
-            if not os.path.exists(full_image_path):
-                logger.error(f"❌ Image path resolved to {full_image_path} but file DOES NOT EXIST. Working dir: {os.getcwd()}")
-            else:
-                logger.info(f"✅ Image found at {full_image_path}")
-
         if full_image_path and os.path.exists(full_image_path):
             for channel_id in channels:
-                # Always send as photo with caption to ensure "one and completed" look
-                # Telegram captions are limited to 1024 chars. Our prompt enforces 900.
-                success = await self._send_telegram_photo(channel_id, full_image_path, formatted_content)
-                
-                if success: success_count += 1
-                results.append(f"{'✅' if success else '❌'} {channel_id}")
+                msg_id = await self._send_telegram_photo(channel_id, full_image_path, formatted_content)
+                if msg_id:
+                    success_count += 1
+                    message_ids.append(f"{channel_id}:{msg_id}")
+                results.append(f"{'✅' if msg_id else '❌'} {channel_id}")
         else:
-            if full_image_path:
-                logger.warning(f"⚠️ Image not found at {full_image_path}, sending text only.")
             for channel_id in channels:
-                success = await self._send_telegram_message(channel_id, formatted_content)
-                if success: success_count += 1
-                results.append(f"{'✅' if success else '❌'} {channel_id}")
+                msg_id = await self._send_telegram_message(channel_id, formatted_content)
+                if msg_id:
+                    success_count += 1
+                    message_ids.append(f"{channel_id}:{msg_id}")
+                results.append(f"{'✅' if msg_id else '❌'} {channel_id}")
 
         if success_count == 0:
             return {
-                "error": f"Failed to publish to any Telegram channels. Ensure Bot is Admin in {', '.join(channels)}.",
+                "error": f"Failed to publish to any Telegram channels. Ensure Bot is Admin.",
                 "details": results
             }
 
@@ -1241,7 +1300,8 @@ Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
             "status": "success",
             "platform": "telegram",
             "msg": f"Post attempt complete: {', '.join(results)}",
-            "details": results
+            "details": results,
+            "message_ids": message_ids
         }
 
     def _prepare_telegram_channels(self, channel_id_str: str) -> list[str]:
@@ -1281,35 +1341,35 @@ Sentence Structure: {language_dna.get('sentence_structure', 'Clear and direct')}
         filename = image_path.lstrip('/').replace("images/", "")
         return os.path.join(backend_dir, "app_images", filename)
 
-    async def _send_telegram_photo(self, channel_id: str, image_path: str, content: str) -> bool:
+    async def _send_telegram_photo(self, channel_id: str, image_path: str, content: str) -> int | None:
         from aiogram.types import FSInputFile
 
         from bot import bot
         try:
             photo = FSInputFile(image_path)
-            await bot.send_photo(
+            msg = await bot.send_photo(
                 chat_id=channel_id,
                 photo=photo,
                 caption=content[:1024],
                 parse_mode="HTML"
             )
-            return True
+            return msg.message_id
         except Exception as e:
             logger.error(f"Failed to post photo to {channel_id}: {e}")
-            return False
+            return None
 
-    async def _send_telegram_message(self, channel_id: str, content: str) -> bool:
+    async def _send_telegram_message(self, channel_id: str, content: str) -> int | None:
         from bot import bot
         try:
-            await bot.send_message(
+            msg = await bot.send_message(
                 chat_id=channel_id,
                 text=content[:4096],
                 parse_mode="HTML"
             )
-            return True
+            return msg.message_id
         except Exception as e:
             logger.error(f"Failed to post message to {channel_id}: {e}")
-            return False
+            return None
 
     async def _post_to_linkedin(self, partner: Partner, content: str, image_path: str | None) -> dict[str, Any]:
         if not partner.linkedin_access_token:

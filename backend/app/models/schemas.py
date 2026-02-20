@@ -148,6 +148,7 @@ class ViralGenerateRequest(BaseModel):
         from_attributes = True
 
 class ViralGenerateResponse(BaseModel):
+    id: int | None = None # Explicit generation ID for tracking
     title: str
     body: str
     hashtags: list[str] | None = None
@@ -164,6 +165,7 @@ class SocialPostRequest(BaseModel):
     platform: str # 'x', 'telegram', 'linkedin'
     content: str
     image_path: str | None = None
+    generation_id: int | None = None
     
     # #comment: Standardized for audit.
     class Config:

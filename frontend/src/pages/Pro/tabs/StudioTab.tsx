@@ -335,7 +335,7 @@ export const StudioTab = ({
             const hashtagsStr = generatedResult.hashtags?.map((t: string) => t.startsWith('#') ? t : `#${t}`).join(' ') || '';
             const fullContent = `${generatedResult.title}\n\n${generatedResult.body}\n\n${hashtagsStr}`;
 
-            await proService.publishContent(platform, fullContent, generatedResult.image_url);
+            await proService.publishContent(platform, fullContent, generatedResult.image_url, generatedResult.id);
             setPublishedPlatforms([...publishedPlatforms, platform]);
             notification({ title: t('pro_dashboard.notifications.published'), text: t('pro_dashboard.notifications.published_text', { platform: platform.toUpperCase() }), type: 'success' });
         } catch (error: any) {
